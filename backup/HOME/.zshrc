@@ -7,10 +7,6 @@ export LC_ALL=en_US.UTF-8  # 设置 LC_ALL, 其他 LC_* 强制等于 LC_ALL, 单
 # put brew path in front of others, use brew cmd first, if there are different version of same cmd line tool.
 export PATH=/usr/local/sbin:$PATH
 
-# vim path
-alias vim=$(brew --prefix)/bin/vim   # brew install vim 路径, 下面设置了 vim() 函数.
-#alias vim='/usr/bin/vim'            # macos 内置 vim 路径
-
 export EDITOR=nvim
 export VISUAL=$EDITOR
 
@@ -37,6 +33,10 @@ export GO111MODULE=on
 # --- [other setting] ------------------------------------------------------------------------------ {{{
 # python3 different version
 # export PATH=/usr/local/opt/python@3.8/bin:$PATH
+
+# vim path
+#alias vim=$(brew --prefix)/bin/vim   # brew install vim 路径, 下面设置了 vim() 函数.
+#alias vim='/usr/bin/vim'             # macos 内置 vim 路径
 
 # bat 主题颜色, 'bat --list-themes' 查看 theme 样式.
 export BAT_THEME="Visual Studio Dark+"
@@ -545,21 +545,6 @@ function backupConfigFiles() {
 	done
 
 	echo -e "\e[32mBackup Done! Happy Coding!\e[0m"
-}
-
-# }}}
-
-# backup Rime 输入法 ------------------------------------------------------- {{{
-function backupRime() {
-	# 备份文件夹地址
-	local backup_folder=~/notes/.configbak
-
-	# copy Rime 同步文件夹
-	# 同步文件夹位置 installation.yaml 文件中的 sync_dir=...
-	# 在另外的电脑上安装 Rime 的时候需要修改 installation.yaml 中的 installation_id 和 sync_dir
-	cp ~/Library/Mobile\ Documents/com~apple~CloudDocs/mySync/rime/mbp16/* $backup_folder/Rime/
-
-	echo -e "\e[32mBackup Rime Done! Happy Coding!\e[0m"
 }
 
 # }}}
