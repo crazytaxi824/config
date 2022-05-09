@@ -8,6 +8,7 @@ vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
   vim.lsp.handlers["textDocument/hover"],
   {
     border = {"▄","▄","▄","█","▀","▀","▀","█"},
+    -- CmdUndefined
     close_events = {"InsertLeavePre"},  -- event list, 什么情况下 close floating window
   }
 )

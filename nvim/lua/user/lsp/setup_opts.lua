@@ -11,8 +11,7 @@ local M = {}
 local function lsp_highlight(client)
   -- Set autocommands conditional on server_capabilities
   if client.resolved_capabilities.document_highlight then
-    vim.api.nvim_exec(
-      [[
+    vim.cmd [[
       augroup lsp_document_highlight
         autocmd! * <buffer>
         autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
@@ -20,9 +19,7 @@ local function lsp_highlight(client)
         autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
         autocmd CursorMovedI <buffer> lua vim.lsp.buf.clear_references()   -- insert mode
       augroup END
-    ]],
-      false
-    )
+    ]]
   end
 end
 
