@@ -125,16 +125,6 @@ require "user.plugin-settings.vimspector"
 require "user.colors"  -- vim highlight 设置
 
 
--- TODO
--- zshrc backup nvim
--- godebug -- "puremourning/vimspector"
--- 不同的 workspace 单独设置.
--- vimspector launch config / settings
--- js / ts - launch project
---
---
--- FIXME
--- lspconfig 设置. hover 在 cursor 左右移动的时候不消失. insert 模式的时候不消失.
 
 
 

@@ -1,0 +1,14 @@
+# '/*' 排除当前文件夹下所有文件(夹); '*' 排除所有文件(夹)以及递归文件(夹), 不要使用 '*'.
+/*
+
+# exclude file
+!/.gitignore
+
+# exclude folder
+!/alacritty
+!/backup
+
+# exclude folder and then include file & sub-folder
+!/nvim
+/nvim/plugin
+/nvim/todo.md
