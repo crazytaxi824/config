@@ -47,7 +47,7 @@ function checkGoEnv() {
 
 	# check go tools - $GOPATH/bin/xxx
 	echo -e "go tools check:\e[33m [[ -x \$GOPATH/bin/<tools> ]]\e[0m"
-	local go_tools_list=("gopkgs" "go-outline" "gotests" "gomodifytags" "impl" "dlv" "golangci-lint" "gopls")
+	local go_tools_list=("gotests" "gomodifytags" "impl" "dlv" "golangci-lint" "gopls" "goimports")
 	for go_tools in $go_tools_list
 	do
 		if [[ -x $GOPATH/bin/$go_tools ]]; then

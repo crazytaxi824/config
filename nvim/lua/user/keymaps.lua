@@ -151,8 +151,9 @@ local keymaps = {
   {'n', '<leader>0', '<Plug>AirlineSelectTab0', opt_silent, 'which_key_ignore'},
   {'n', '<lt>', '<Plug>AirlineSelectPrevTab'},
   {'n', '>', '<Plug>AirlineSelectNextTab'},
-  -- 关闭其他 buffer.
-  {'n', '<leader>d', ':execute "normal! \\<Plug>AirlineSelectPrevTab" <bar> :bdelete #<CR>', opt_silent, 'Close This Buffer'},
+
+  -- 关闭 buffers
+  {'n', '<leader>d', ':execute "normal! \\<Plug>AirlineSelectNextTab" <bar> :bdelete #<CR>', opt_silent, 'Close This Buffer'},
   {'n', '<leader>D', ':%bdelete <bar> :edit # <bar> :bwipeout #<CR>', opt, 'Close All Other Buffers'},
 
   --- telescope fzf --------------------

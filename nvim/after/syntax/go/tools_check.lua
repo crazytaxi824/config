@@ -14,9 +14,10 @@ local gotools = {
   gomodifytags = "go install github.com/fatih/gomodifytags@latest",
   gotests = "     go install github.com/cweill/gotests/gotests@latest",
   impl = "        go install github.com/josharian/impl@latest",
+  dlv = "         go install github.com/go-delve/delve/cmd/dlv@latest", -- vimspector
 }
 
-local result = {}
+local result = {"These Tools should be in the $PATH"}
 local count = 0
 for tool, install in pairs(gotools) do
   vim.fn.system('which '.. tool)

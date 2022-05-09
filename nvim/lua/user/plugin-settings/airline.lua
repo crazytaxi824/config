@@ -3,10 +3,10 @@ vim.g.airline_theme = "mydark"
 --vim.g.airline_theme = "dark"   -- 自带主题
 
 vim.g['airline#extensions#tabline#enabled'] = 1
-vim.g['airline#extensions#branch#enabled'] = 1
 vim.g['airline#extensions#whitespace#checks'] = {'indent', 'trailing', 'conflicts'}
 vim.g['airline#extensions#tabline#buffer_idx_mode'] = 1
 vim.g['airline#extensions#tabline#keymap_ignored_filetypes'] = {'vimfiler', 'nerdtree', 'tagbar', 'Nvimtree'}
+vim.g['airline#extensions#branch#enabled'] = 1  -- "tpope/vim-fugitive"
 
 -- `:help mode()` 显示所有模式.
 vim.g.airline_mode_map = {
