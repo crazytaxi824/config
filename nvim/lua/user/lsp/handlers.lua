@@ -8,8 +8,8 @@ vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
   vim.lsp.handlers["textDocument/hover"],
   {
     border = {"▄","▄","▄","█","▀","▀","▀","█"},
-    -- CmdUndefined
-    close_events = {"InsertLeavePre"},  -- event list, 什么情况下 close floating window
+    --- VVI: `set omnifunc?` 没有设置, 所以 <C-x><C-o> 不会触发 Completion.
+    close_events = {"CompleteDone"},  -- event list, 什么情况下 close floating window
   }
 )
 
