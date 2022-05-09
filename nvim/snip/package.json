@@ -1,0 +1,21 @@
+{
+  "engines": {
+    "vscode": "^1.11.0"
+  },
+  "contributes": {
+    "snippets": [
+      {
+        "language": "go",
+        "path": "./snippets/go.json"
+      },
+      {
+        "language": "markdown",
+        "path": "./snippets/markdown.json"
+      },
+      {
+        "language": "vim",
+        "path": "./snippets/vim.json"
+      }
+    ]
+  }
+}

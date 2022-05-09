@@ -1,0 +1,100 @@
+# 在 lazygit 界面中选中 Status 窗口，然后按下 'o' 键，打开 config.yml 文件
+# 本文件地址在 "~/Library/Application\ Support/lazygit/config.yml"
+
+# 需要安装 brew install git-delta; https://github.com/dandavison/delta
+# 配置教程 https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md
+# git log format: https://www.git-scm.com/docs/git-log#Documentation/git-log.txt-emnem
+
+gui:
+  # stuff relating to the UI
+  scrollHeight: 5                    # main pannel (右侧主窗口) pageup/pagedown 滚动 n 行, 不要超过 commandLogSize.
+  sidePanelWidth: 0.25               # 左侧边栏屏幕占比 (0~1)
+  expandFocusedSidePanel: true       # 选中的 pannel 会变高
+  mainPanelSplitMode: "horizontal"   # main pannel 分屏方式 'horizontal' | 'flexible' | 'vertical'
+  language: "en"                     # one of 'auto' | 'en' | 'zh' | 'pl' | 'nl'
+  commandLogSize: 8                  # 右下角 log 提示窗口所占行高
+  showFileTree: true                 # 左侧边栏文件显示使用 tree 模式(可折叠)
+  theme:
+    lightTheme: false # For terminals with a light background
+    activeBorderColor:
+      - yellow
+      - bold
+    inactiveBorderColor:  # 未选中窗口的文字和边框颜色, 241
+      - '#626262'
+    cherryPickedCommitFgColor:  # Commits window 中使用 'c' 选择 cherry pick 的文字颜色
+      - black
+    cherryPickedCommitBgColor:
+      - cyan
+
+git:
+  # merging:
+  #   args: '--no-ff'  # no-fast-forward
+  paging:
+    colorArg: always
+    # delta commands;
+    pager: delta --dark --line-numbers --paging=never
+      \--file-style="green" --file-decoration-style="green ol"
+      \--syntax-theme=none --width=variable
+      \--line-numbers-minus-style="#EA3223" --minus-style="normal \"#6F1313\"" --minus-emph-style="normal \"#EA3223\""
+      \--plus-style="normal \"#373D29\"" --plus-emph-style="normal \"#3B8424\""
+    # 256-color - 没有 gui 的 linux server 环境用
+    # pager: delta --dark --line-numbers --paging=never
+    #   \--file-style="green" --file-decoration-style="green ol"
+    #   \--syntax-theme=none --width=variable
+    #   \--line-numbers-minus-style="196" --minus-style="normal 88" --minus-emph-style="normal 196"
+    #   \--plus-style="normal 22" --plus-emph-style="normal 28"
+
+  # Commits window (window No.4) 显示 commit tree, 而不是 list.
+  log:
+    showGraph: 'always'  # always | never | when-maximised (当按 '+' 时显示 commit tree)
+
+  # Branchs window (window No.3) 右侧显示的 commit tree.
+  # git log format: https://www.git-scm.com/docs/git-log#Documentation/git-log.txt-emnem
+  # 最后的换行是为了让每一个 commit 都占2行位置. 如果不换行则有些占一行，有些占两行.
+  # 显示 current branch git log
+  branchLogCmd: "git log --graph {{branchName}} --format=format:'%C(green)%h%C(reset) -%C(magenta)%d%C(reset) %C(white)%s%C(reset) %C(242)(%ar)%C(reset)%n'' '"
+  # 显示 all branches git log
+  #branchLogCmd: "git log --graph --all --format=format:'%C(green)%h%C(reset) -%C(magenta)%d%C(reset) %C(white)%s%C(reset) %C(242)(%ar)%C(reset)%n'' '"
+
+  # Status window (window No.1) 按 'a' 键显示 all Branches commit tree.
+  # strftime format, --date=format:'', https://stackoverflow.com/questions/7853332/how-to-change-git-log-date-formats#34778736
+  # 第2行之前的空格是为了对齐.
+  allBranchesLogCmd: "git log --date=format:'%Y-%b-%d %H:%M:%S' --graph --all --format=format:'%C(green)%h%C(reset) -%C(magenta)%d%C(reset) %C(cyan)%ad%C(reset) %C(242)(%ar) - %an%C(reset)%n''          %C(white)%s%C(reset)%n'' '"
+
+# open & edit file
+# os:
+  # editCommand: 'nvim'
+  # editCommandTemplate: '{{editor}} {{filename}}'
+  # openCommand: 'open {{filename}}'
+
+# 打开 lazygit 的文件夹不是 git repository 文件夹时的 action
+# prompt - 选择是否创建 repository
+# create - 创建 git repository
+notARepository: 'skip' # one of: 'prompt' | 'create' | 'skip'
+
+# 这里 keybinding 设置主要是为了避免误操作, 将 key 绑定到不常用键上.
+# keybinding 的键是可以重复的.
+keybinding:
+  # 通用快捷键
+  universal:
+    undo: '<f12>'       # ctrl-z, 危险操作
+    redo: '<f12>'       # shift-z
+    pullFiles: '<f12>'  # use 'fetch' instead of 'pull'
+    gotoTop: 'g'        # go to top of list
+    gotoBottom: 'G'     # go to bottom of list
+  # file (window No.1)
+  submodules:
+    init: '<f12>'         # submodules 项目子仓库, 使用 'b' 打开 menu 操作
+  # branch (window No.3)
+  branches:
+    rebaseBranch: '<f12>' # use 'rebase-checkout' carefully.
+    fastForward: '<f12>'  # fast-forward this branch from its upstream
+  # commit (window No.4)
+  commits:
+    revertCommit: '<f12>' # use 'revert-commit' carefully. no confirm required
+    pickCommit: '<f12>'   # pick commit (when mid-rebase)
+    viewResetOptions: '<f12>'  # 默认为 'g', 这里是为了避免按键冲突
+  # stash (window No.5)
+  stash:
+    popStash: 'p'  # 默认为 'g', 这里是为了避免按键冲突
+

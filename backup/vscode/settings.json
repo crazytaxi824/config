@@ -1,0 +1,340 @@
+{
+  // 自动更新插件
+  // "extensions.autoUpdate": false,
+
+  // trust feature
+  "security.workspace.trust.enabled": false,
+
+  // ****************************
+  // *          editor          *
+  // ****************************
+  // "workbench.startupEditor": "newUntitledFile", // 打开vscode时显示空白
+  "editor.fontFamily": "Fira Code, Monaco, PingFang SC", // 下载 fira 字体
+  "editor.fontSize": 14.5,
+
+  // terminal 默认使用 editor 的字体，但是只支持 monospace 格式的字体。如果 editor
+  // 的字体设置不是 monospace 格式，这里会报错。所以这里单独设置 terminal 字体。
+  "terminal.integrated.fontFamily": "Fira Code, Monaco",
+  "terminal.integrated.fontSize": 13,
+  "editor.fontLigatures": true, // 连字，eg：>=
+  "editor.formatOnSave": true, // save 的时候格式化文件
+  "editor.defaultFormatter": "esbenp.prettier-vscode", // 默认所有类型的文件都采用 prettier 格式化
+  "editor.tabSize": 4,
+  "diffEditor.ignoreTrimWhitespace": false, // github copilot 用
+
+  // 代码提示最重要的选项
+  "editor.snippetSuggestions": "top", // 自定义 snippets 提示的时候显示在顶部
+  // "editor.wordBasedSuggestions": false, // 是否提示文档中出现的单词
+  "editor.wordBasedSuggestionsMode": "currentDocument",
+  "editor.inlineSuggest.enabled": true, // VVI, github copilot 用
+  "editor.suggest.snippetsPreventQuickSuggestions": false, // VVI
+  "editor.suggestSelection": "recentlyUsedByPrefix", // VVI
+  // NOTE if editor.suggestSelection is set to a value (recentlyUsed),
+  // that will result in IntelliCode suggested completion items not being visible.
+  // vsintellicode only works with python, java, TS, JS.
+  // "vsintellicode.modify.editor.suggestSelection": "disabled", // "enabled" when (recentlyUsed)
+
+  // 括号的颜色.
+  "editor.guides.bracketPairs": true,
+  // "editor.language.colorizedBracketPairs": [
+  //   ["[", "]"],
+  //   ["(", ")"],
+  //   ["{", "}"]
+  // ],
+  "workbench.colorCustomizations": {
+    "editor.lineHighlightBackground": "#333", // 光标所在行高亮
+    "editorBracketHighlight.foreground1": "#fac928",
+    "editorBracketHighlight.foreground2": "#c122e9",
+    "editorBracketHighlight.foreground3": "#057aff",
+    "editorBracketHighlight.foreground4": "#00e74d",
+    "editorBracketHighlight.foreground5": "#f51384",
+    "editorBracketHighlight.foreground6": "#19f9d8",
+    "editorBracketPairGuide.background1": "#fac9289E",
+    "editorBracketPairGuide.background2": "#c122e99E",
+    "editorBracketPairGuide.background3": "#057aff9E",
+    "editorBracketPairGuide.background4": "#00e74d9E",
+    "editorBracketPairGuide.background5": "#f513849E",
+    "editorBracketPairGuide.background6": "#19f9d89E",
+    "editorBracketPairGuide.activeBackground1": "#FAC9289E",
+    "editorBracketPairGuide.activeBackground2": "#C122E99E",
+    "editorBracketPairGuide.activeBackground3": "#057AFF9E",
+    "editorBracketPairGuide.activeBackground4": "#00E7499E",
+    "editorBracketPairGuide.activeBackground5": "#F513849E",
+    "editorBracketPairGuide.activeBackground6": "#19F9D89E"
+  },
+
+  // 根据文件名指定文件类型，jsonc —— json with comments
+  "files.associations": {
+    "*.json": "jsonc"
+  },
+
+  // ------------- 以下是插件设置 -------------
+  // ****************************
+  // *        TODO tree         *
+  // ****************************
+  "todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^\\s*(-|\\d+.))\\s*($TAGS)",
+  "todo-tree.general.tags": ["TODO", "FIXME", "DEBUG", "NOTE", "[VVI]", "[x]"],
+  // icons: https://primer.style/octicons/
+  "todo-tree.highlights.customHighlight": {
+    "FIXME": {
+      "background": "#FF00FF",
+      "foreground": "#000",
+      "icon": "x-circle-fill",
+      "iconColour": "#FF00FF",
+      "gutterIcon": true
+    },
+    "TODO": {
+      "background": "#008F00",
+      "foreground": "#FFF",
+      "icon": "list-unordered",
+      "iconColour": "#008F00",
+      "gutterIcon": true
+    },
+    "DEBUG": {
+      "background": "#FF6F00",
+      "foreground": "#000",
+      "icon": "alert",
+      "iconColour": "#FF6F00",
+      "gutterIcon": true
+    },
+    "NOTE": {
+      "background": "#5F5FFF",
+      "foreground": "#FFF",
+      "icon": "bookmark-fill",
+      "iconColour": "#5F5FFF",
+      "gutterIcon": true
+    },
+    "[VVI]": {
+      "background": "#FFFF00",
+      "foreground": "#000",
+      "icon": "star-fill",
+      "iconColour": "#FFFF00",
+      "gutterIcon": true
+    }
+  },
+
+  // ****************************
+  // *    ESLint-ts/js/html     *
+  // ****************************
+  // 在 OUTPUT -> ESlint 频道打印 debug 信息. 用于配置 eslint.
+  "eslint.debug": true,
+
+  // save 的时候运行 eslint
+  "eslint.run": "onSave",
+
+  // eslint 检查的文件类型
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+
+  // 这里需要使用 class API, eslint.options 中才能够使用 new ESLint API - overrideConfigFile
+  // https://eslint.org/docs/developer-guide/nodejs-api#eslint-class
+  "eslint.useESLintClass": true,
+  // "eslint.options": {
+  //   // 指定 eslintrc.json 配置文件的地址
+  //   // "overrideConfigFile": "/xxx/eslintrc-ts.json"  // 如果是绝对路径不能使用 "~/"
+  //   "overrideConfigFile": "eslintrc-ts.json"  // 如果是相对路径, 则相对的是项目根目录. 不需要 ${workspaceRoot}.
+  // },
+
+  // 文件移动的时候改变所有相关 import 路径
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+
+  // 代码提示设置
+  "typescript.inlayHints.parameterNames.enabled": "all", // 提示函数内的 params 名字
+  "javascript.inlayHints.parameterNames.enabled": "all", // 提示函数内的 params 名字
+
+  "typescript.inlayHints.functionLikeReturnTypes.enabled": true, // 提示函数 return 类型
+  "typescript.inlayHints.propertyDeclarationTypes.enabled": true, // 提示 class 属性类型
+  // "typescript.inlayHints.variableTypes.enabled": true, // 提示变量类型
+  "typescript.inlayHints.parameterTypes.enabled": true, // 提示函数 params 类型
+  "typescript.inlayHints.enumMemberValues.enabled": true, // 提示枚举数字 - 0,1,2
+
+  "javascript.inlayHints.parameterTypes.enabled": true, // 提示函数 params 类型
+
+  // 使用 eslint 作为 formatter, 不起作用
+  // "eslint.format.enable": true,
+
+  // 自动修复
+  "[typescript]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true // Auto Fix for ESLint only.
+      // "source.fixAll": false  // Auto Fix for all providers including ESLint.
+    }
+  },
+  "[typescriptreact]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    }
+    // 使用 eslint 作为 formatter, 不起作用
+    // "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[javascript]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    }
+  },
+  "[javascriptreact]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    }
+  },
+  // ****************************
+  // *          golang          *
+  // ****************************
+  // https://github.com/golang/vscode-go/blob/HEAD/docs/settings.md
+  // plugins:gopls,gopkgs,go-outline,gotests,gomodifytags,impl,dlv,dlv-dap,golangci-lint
+  "go.useLanguageServer": true,
+  "[go]": {
+    // "editor.formatOnSave": true, // 默认值
+    "editor.defaultFormatter": "golang.go", // go 不使用 prettier 格式化代码
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    }
+    // Optional: Disable snippets, as they conflict with completion ranking.
+    // "editor.snippetSuggestions": "none"
+  },
+  "[go.mod]": {
+    // "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    }
+  },
+
+  // golangci-lint 设置
+  "go.lintTool": "golangci-lint",
+  "go.lintFlags": [
+    // "--fast", // without --fast can freeze your editor.
+    "--config=~/.config/lints/golangci.yml" // golangci-lint 全局配置文件地址
+  ],
+  "go.lintOnSave": "package", // NOTE lint 整个 package，使用 file 检查可能有引用问题导致报错。
+
+  // go test 设置
+  "go.testFlags": ["-v"], // 影响 https://github.com/cweill/gotests tools 打印详请
+
+  // go language server 设置
+  // https://github.com/golang/tools/blob/master/gopls/doc/settings.md
+  "gopls": {
+    // Add parameter placeholders when completing a function.
+    "usePlaceholders": true,
+    // "ui.completion.usePlaceholders": true,
+
+    // If true, enable additional analyses with staticcheck.
+    // Warning: This will significantly increase memory usage.
+    // golangci-lint 中有 staticcheck
+    "staticcheck": false
+    // "ui.diagnostic.staticcheck": false
+  },
+
+  // debug 神器，可以通过访问 http://localhost:16060 查看性能参数
+  "go.languageServerFlags": [
+    "-rpc.trace", // for more detailed debug logging
+    "serve",
+    "--debug=localhost:16060" // to investigate memory usage, see profiles
+  ],
+
+  // dlv debug 设置, go 插件 v0.27.0 默认使用 dlv-dap
+  "go.delveConfig": {
+    // "debugAdapter": "legacy", // 新增 dlv-dap 是默认模式。选择 legacy 的话是 (dlv)
+    "showGlobalVariables": true // debug 时显示全局变量
+  },
+
+  // gomodifytags json 配置, 改之前看文档
+  // https://github.com/golang/vscode-go/blob/HEAD/docs/settings.md
+  "go.addTags": {
+    "tags": "json",
+    "options": "json=omitempty",
+    "promptForTags": true, // user tags
+    "template": "",
+    "transform": "camelcase"
+  },
+
+  // 自动更新 plugins:gopls,gopkgs,go-outline,gotests,gomodifytags,impl,dlv,dlv-dap,golangci-lint
+  "go.toolsManagement.autoUpdate": true,
+
+  // ****************************
+  // *       vscode-proto3      *
+  // ****************************
+  "protoc": {
+    "path": "protoc", // protoc 命令行工具的路径
+    "compile_on_save": false, // save文件时自动编译.proto文件
+    "options": [
+      // "--proto_path=protos/v3",
+      // "--proto_path=protos/v2",
+      "--proto_path=${workspaceRoot}/proto" // .proto文件的地址,用于import/include
+      // "--go_out=${workspaceRoot}/src/xxx"
+    ]
+  },
+
+  "[proto3]": {
+    // proto 文件格式化用
+    "editor.defaultFormatter": "zxh404.vscode-proto3"
+  },
+
+  // ****************************
+  // *          python          *
+  // ****************************
+  // 安装插件:
+  // pip3 install --upgrade autopep8  // 安装 autopep8
+  // pip3 install flake8
+  // pip3 install mypy
+  //
+  // python linter
+  "python.linting.flake8Enabled": true, // 语法错误 + 代码风格检查(style), 轻量级, 速度快
+  "python.linting.flake8Args": ["--max-line-length=120"], // python 默认单行不超过 79 字符.
+  "python.linting.pylintEnabled": false, // 代码风格检查(style), 要求苛刻, 速度慢
+  "python.linting.mypyEnabled": true, // 静态类型检查
+  "python.languageServer": "Pylance",
+  // "python.formatting.provider": "autopep8", // autopep8 (默认) | black | yapf
+  "[python]": {
+    // "editor.formatOnSave": true,
+    "editor.defaultFormatter": "ms-python.python" // python 不能用 prettier 格式化
+  },
+
+  // jupyter
+  // 读取 .ipynb 文件, jupyter.notebook 设置
+  "workbench.editorAssociations": {
+    "*.ipynb": "jupyter-notebook"
+  },
+  "notebook.lineNumbers": "on",
+
+  // ****************************
+  // *      github.copilot      *
+  // ****************************
+  "github.copilot.enable": {
+    "*": true,
+    "yaml": false,
+    "plaintext": false,
+    "markdown": false,
+    "json": false,
+    "jsonc": false
+  },
+
+  // ****************************
+  // *     tabsize/tabstop      *
+  // ****************************
+
+  // [VVI]
+  // 如果 editor.detectIndentation = true, 则根据 vscode 右下角的 Spaces/Tab Size 的设置宽度画 indent `|` 竖线.
+  // 如果 editor.detectIndentation = false, 这时 `|` 竖线会根据 "editor.tabSize" 来画. 可以按照语言分别设置 editor.tabSize.
+  //"editor.detectIndentation": false,
+  //"[jsonc]": { "editor.tabSize": 3 },
+
+  // 不使用 tab 来格式化, 而是 space.
+  "prettier.useTabs": false,
+  // 当 prettier.useTabs=true 时, 不起作用, 不会转换 leading '\t';
+  // 当 prettier.useTabs=false 时, 将 leading '\t' 转成相应的 space.
+  "prettier.tabWidth": 2, // 默认为 2.
+
+  "prettier.useEditorConfig": true, // 使用 .editorconfig 设置
+  "prettier.endOfLine": "lf", // lf = \n | cr = \r | crlf = \r\n
+  "prettier.printWidth": 120, // 换行长度, 和 golangci-lint lll 长度一样. 默认 80
+  // "prettier.singleQuote": true,  // 针对不同的项目设置
+
+  // ****************************
+  // *          others          *
+  // ****************************
+  // touchbar 设置
+  "keyboard.touchbar.ignored": ["workbench.action.debug.run"],
+
+  // 这是最后一行设置
+  "this.is.the.last.line.of.global.settings": "None"
+}

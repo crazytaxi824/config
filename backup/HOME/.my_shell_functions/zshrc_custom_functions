@@ -1,0 +1,211 @@
+# 这里是自定义 shell script 函数的文件.
+# 需要在 .zshrc 文件中使用命令 `source xxx` 加载函数
+
+# 批量修改文件名后缀 --------------------------------------------------------------------------------- {{{
+# renamePatchFiles jpeg jpg ./
+function renamePatchFiles() {
+	if (( ${#*[@]} != 2 )); then
+		echo -e "usage: \e[31mrenamePatchFiles [src_ext] [dst_ext]\e[0m"
+		echo -e "   eg: \e[31mrenamePatchFiles jpeg jpg\e[0m"
+		return 1
+	fi
+
+	# grep "\.xxx\$"                                             通过文件后缀名过滤文件.
+	# awk "system(\"fn=\'\"\$0\"\'; echo \${fn%.*}\")"           获取文件名(不带后缀)
+	# awk "{print \"mv \'\"\$0\".$1\'\", \"\'\"\$0\".$2\'\"}")   打印 mv 'foo.xx' 'bar.xxx'
+	local cmd=$(ls | grep "\.$1\$" | awk "system(\"fn=\'\"\$0\"\'; echo \${fn%.*}\")" | awk "{print \"mv \'\"\$0\".$1\'\", \"\'\"\$0\".$2\'\"}")
+
+	if [[ $cmd == "" ]]; then
+		echo "\e[33mNo '$1' Files, \e[31mRename Canceled!\e[0m"
+		return 2
+	fi
+
+	echo "\e[32mwill run following commands:\e[0m"
+	echo "\e[32m$(echo $cmd | awk '{print " ",$0}')\e[0m"  # DEBUG 用
+
+	# ask before proceed
+	echo -n "Rename ALL \e[33m'*.$1' -> '*.$2'\e[0m? [Y/n]: "
+	read input
+
+	case $input in
+		"y"|"Y"|"yes"|"Yes")
+			eval "$cmd"  # 执行命令
+			;;
+		*)
+			echo "\e[31mRename Canceled!\e[0m"
+			return
+			;;
+	esac
+
+	echo "\e[1;32mRename DONE! Happy Coding!\e[0m"
+}
+
+# }}}
+
+# --- test function --------------------------------------------
+# 获取函数入参
+function testArg() {
+	echo '$*' "\$*" "$*"  # echo 单引号打印 string, echo 双引号打印变量的值, 双引号中使用 \ 转义.
+
+	echo "length of args:" ${#*[@]}  # args 数量, 意思是 $* array 的数量.
+
+	# 当 $* 和 $@ 不被双引号" "包围时, 它们之间没有任何区别. 都是以 `\n` 来分隔.
+	echo 'for loop $*, no quotes:'
+	for v in $*
+	do
+		echo $v
+	done
+	echo 'for loop $@, no quotes:'
+	for k in $@
+	do
+		echo $k
+	done
+
+	# "$*" 是以 space 分隔
+	echo 'for loop "$*", has quotes:'
+	for v in "$*"
+	do
+		echo $v
+	done
+
+	# "$@" 是以 `\n` 分隔
+	echo 'for loop "$@", has quotes:'
+	for k in "$@"
+	do
+		echo $k
+	done
+}
+
+# list 操作.
+function testList() {
+	local list=()
+	list+=( 'a' )    # append to list
+	echo ${#list[@]}   # list length
+	echo $list
+}
+
+# 判断文件(夹)是否存在
+function testDir() {
+	# if [ -f "$1" ]; then  # 文件是否存在
+	# if [ -x "$1" ]; then  # 判断可执行文件是否存在
+	if [ ! -d "$1" ]; then  # 文件夹是否存在
+		echo "not"
+	else
+		echo "ok"
+	fi
+}
+
+function testSwitch() {
+	case $1 in
+		"foo"|"f")
+			echo foo
+			;;
+		"bar"|"b")
+			echo bar
+			;;
+		*)
+			echo "error"
+			;;
+	esac
+}
+
+# 打印文件名和后缀名, `testFileType a.b.c.jpg`
+function testFileType() {
+	echo "${1%.*}"   # 打印文件名, 不带后缀
+	echo "${1##*.}"  # 打印文件后缀名
+
+	# if 判断中 == 两边必须空格，否则变成赋值.
+	if [[ "${1##*.}" == "jpg" ]]; then
+		echo "ok"
+	else
+		echo "false"
+	fi
+}
+
+# shell 中输入 yes/no
+function testInput() {
+	echo -n "Choose [Y/n]: "
+	read input
+	echo $input
+
+	case $input in
+		"y"|"Y")
+			echo "choose yes"
+			;;
+	esac
+}
+
+function testForLoop() {
+	local list=(~/Desktop ~/Desktop/md)  # 这里不能使用 "", 否则无法解析 ~ 路径
+
+	for i in $list
+	do
+		ls $i
+	done
+}
+
+function testFnInsideFn() {
+	echo $1
+
+	local bar="abc"
+
+	# shell dynamic scope
+	# 如果直接执行 foo 报命令不存在
+	# 如果先执行 testFnInsideFn 再执行 foo 则可以
+	function foo() {
+		echo $1
+	}
+
+	foo $bar
+}
+
+# [[ ]] 是 string 判断, (( )) 是 数字判断.
+# if (( $foo > 0 )) 语法正确; if [[ $foo > 0 ]] 语法错误
+# if (( $foo == "foo" )) 语法错误; if [[ $foo == "foo" ]] 语法正确
+function testBool() {
+	local mark=$1
+
+	# `testBool false` - false; `testBool f` - true; `testBool 0` - true;
+	if [[ $mark == false ]]; then  # 这里不能使用 if [[ ! $mark ]]; then
+		echo "false"
+	else
+		echo "true"
+	fi
+
+	# ((1)) - true; ((0)) - false
+	if ((1)); then
+		echo "ok"
+	fi
+}
+
+# 测试用变量储存 output 内容, local foo=$(...)
+function testOutputToVar() {
+	local output=$(brew outdated)
+	if [[ output == "" ]]; then
+		echo $output
+	fi
+}
+
+function testReturnErrorCode() {
+	echo "exit code 2"
+	return 2
+}
+
+# 测试 string split in `zsh script`, `\n` 行 split 不能用.
+function testSplitString() {
+	# original string
+	local str="part1:part2:part3"
+	echo "original string:" $str
+
+	# split `:`, works in zsh only
+	local parts=(${(s/:/)str})
+
+	# print whole list
+	echo "after split:" ${parts[@]}
+
+	for elem in ${parts[@]}
+	do
+		echo "for range parts:" $elem
+	done
+}
+

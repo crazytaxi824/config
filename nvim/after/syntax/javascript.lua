@@ -1,0 +1,59 @@
+local status_ok, term = pcall(require, "toggleterm.terminal")
+if not status_ok then
+	return
+end
+
+local Terminal = term.Terminal
+
+local js_term_id = 1025   -- VVI: toggleterm count id
+
+--- Terminal options for js only ---
+local js_opts = {
+  hidden = true,          -- VVI: true - 不加入到 terminal list, 无法被 `:ToggleTerm` 找到.
+                          -- 用 :q 只能隐藏, 用 :q! exit job.
+  close_on_exit = false,  -- NOTE: 运行完成之后不要关闭 terminal.
+  count = js_term_id,     -- NOTE: 这里是指定 id, 类似 `:100ToggleTerm`,
+                          -- 就算是 hidden 状态也可以通过 `:100ToggleTerm` 重新打开.
+                          -- 如果两个 Terminal 有相同的 ID, 则会出现错误.
+  on_open = function()
+    vim.cmd('wincmd p')  -- move to previous window
+  end
+}
+
+--- node file --------------------------------------------------------------------------------------
+local function jsRun(file)
+  -- NOTE: 删除之前的 terminal.
+  vim.cmd('silent! bw! term://*toggleterm#'..js_term_id)
+  local js = Terminal:new(vim.tbl_deep_extend('force', js_opts, { cmd = "node " .. file }))
+  js:toggle()
+end
+
+--- jest file --------------------------------------------------------------------------------------
+local function jsJest(file, coverage)
+  -- check xxx.test.js file
+  if not string.match(file, ".*%.test%.js$") then
+    vim.api.nvim_echo({{' not a test file. ', "ErrorMsg"}}, false, {})
+    return
+  end
+
+  local cmd = ''
+  if coverage then
+    cmd = "jest --coverage " .. file
+  else
+    cmd = "jest " .. file
+  end
+
+  vim.cmd('silent! bw! term://*toggleterm#'..js_term_id)
+  local js = Terminal:new(vim.tbl_deep_extend('force', js_opts, { cmd = cmd }))
+  js:toggle()
+end
+
+
+--- keymap -----------------------------------------------------------------------------------------
+local opt = {noremap = true, buffer = true}
+
+--- run current_file ---
+vim.keymap.set('n', '<F5>', function() jsRun(vim.fn.expand('%')) end, opt)
+
+vim.keymap.set('n', '<F6>', function() jsJest(vim.fn.expand('%'), false) end, opt)
+vim.keymap.set('n', '<F18>', function() jsJest(vim.fn.expand('%'), true) end, opt)  -- <S-F6>

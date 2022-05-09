@@ -1,0 +1,8 @@
+# https://git-scm.com/docs/gitignore
+*~
+.DS_Store
+
+# custome setting
+**/node_modules
+**/*.bak
+**/*.swp
