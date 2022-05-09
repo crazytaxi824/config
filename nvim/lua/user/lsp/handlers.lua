@@ -1,11 +1,15 @@
 --- Overwrite handler 设置 -------------------------------------------------------------------------
 --- NOTE: 使用 with() 方法. `:help lsp-handler-configuration`
----     `:help lsp-api` lsp-method 显示 textDocument/... 列表
+---      `:help lsp-api` lsp-method 显示 textDocument/... 列表
+--- VVI: `:help vim.lsp.util.open_floating_preview` 中的 {opts} 所有属性都可以在 with() 中设置.
 
 --- 这里是修改 border 样式.
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
   vim.lsp.handlers["textDocument/hover"],
-  { border = {"▄","▄","▄","█","▀","▀","▀","█"} }
+  {
+    border = {"▄","▄","▄","█","▀","▀","▀","█"},
+    close_events = {"InsertLeavePre"},  -- event list, 什么情况下 close floating window
+  }
 )
 
 --- signatureHelp 是用来显示函数入参出参的.
