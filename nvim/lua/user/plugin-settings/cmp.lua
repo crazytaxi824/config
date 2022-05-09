@@ -105,12 +105,11 @@ cmp.setup {
     ["<CR>"] = cmp.mapping.confirm { select = true },
     ["<Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
-        -- cmp.select_next_item()  -- 选择下一个 item
         cmp.confirm { select = true }  -- confirm
       elseif luasnip.expand_or_jumpable() then
         luasnip.expand_or_jump()
       else
-        -- cmp.complete()  -- 手动触发 completion menu.
+        --cmp.complete()  -- 手动触发 completion menu.
         fallback()  -- 执行原本的功能
       end
     end, {"i","s"}), -- 在 insert select 模式下使用
