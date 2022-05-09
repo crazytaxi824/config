@@ -132,7 +132,8 @@ return packer.startup(function(use)
   --- LSP ------------------------------------------------------------------------------------------
   use "neovim/nvim-lspconfig"            -- enable LSP, 官方 LSP 引擎.
   --- Commands for "williamboman/nvim-lsp-installer" --- {{{
-  --- `:LspInstallInfo` -- 列出所有 lsp, <i>-install | <u>-update | <X>-uninstall
+  ---   命令 `:LspInstallInfo` -- 列出所有 lsp, <i>-install | <u>-update | <X>-uninstall
+  ---   安装位置 '~/.local/share/nvim/lsp_servers'
   --- }}}
   use "williamboman/nvim-lsp-installer"  -- simple to use language server installer
   use "jose-elias-alvarez/null-ls.nvim"  -- for formatters and linters, depends on "nvim-lua/plenary.nvim"
