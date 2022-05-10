@@ -30,7 +30,7 @@ local function lsp_keymaps(bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, "n", "<F2>", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
   vim.api.nvim_buf_set_keymap(bufnr, "i", "<F2>", "<C-o><cmd>lua vim.lsp.buf.rename()<CR>", opts)
   vim.api.nvim_buf_set_keymap(bufnr, "n", "<F4>", "<cmd>lua vim.lsp.buf.hover()<CR>", opts) -- NOTE: 连续两次 F4 会进入 floating window, q 退出 floating window.
-  vim.api.nvim_buf_set_keymap(bufnr, "i", "<F4>", "<C-o><cmd>lua vim.lsp.buf.hover()<CR>", opts)
+  vim.api.nvim_buf_set_keymap(bufnr, "i", "<F4>", "", {noremap = true, callback = HoverShort})  -- lua HoverShort()
   vim.api.nvim_buf_set_keymap(bufnr, "n", "<F16>", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)  -- <S-F4>
   vim.api.nvim_buf_set_keymap(bufnr, "n", "<F12>", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
   vim.api.nvim_buf_set_keymap(bufnr, "n", "<F24>", "<cmd>lua vim.lsp.buf.references()<CR>", opts)  -- <S-F12>
@@ -44,15 +44,7 @@ local function lsp_keymaps(bufnr)
   --vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>q", "<cmd>lua vim.diagnostic.setqflist({open=false})<CR>", opts)
 
   --- VVI: vim.lsp.handlers 中使用 CompleteDone event 来触发 close hover window.
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "<Up>", '<Up><cmd>doautocmd CompleteDone<CR>', opts) -- <S-F8>
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "<Down>", '<Down><cmd>doautocmd CompleteDone<CR>', opts) -- <S-F8>
   vim.api.nvim_buf_set_keymap(bufnr, "n", "<Esc>", '<Esc><cmd>doautocmd CompleteDone<CR>', opts) -- <S-F8>
-  vim.api.nvim_buf_set_keymap(bufnr, "i", "<Up>", '<Up><cmd>doautocmd CompleteDone<CR>', opts) -- <S-F8>
-  vim.api.nvim_buf_set_keymap(bufnr, "i", "<Down>", '<Down><cmd>doautocmd CompleteDone<CR>', opts) -- <S-F8>
-  vim.api.nvim_buf_set_keymap(bufnr, "i", "<Esc>", '<Esc><cmd>doautocmd CompleteDone<CR>', opts) -- <S-F8>
-  vim.api.nvim_buf_set_keymap(bufnr, "v", "<Up>", '<Up><cmd>doautocmd CompleteDone<CR>', opts) -- <S-F8>
-  vim.api.nvim_buf_set_keymap(bufnr, "v", "<Down>", '<Down><cmd>doautocmd CompleteDone<CR>', opts) -- <S-F8>
-  -- vim.api.nvim_buf_set_keymap(bufnr, "v", "<Esc>", '<Esc><cmd>doautocmd CompleteDone<CR>', opts) -- <S-F8>
 end
 
 --- NOTE: on_attach - 加载 Key mapping & highlight 设置

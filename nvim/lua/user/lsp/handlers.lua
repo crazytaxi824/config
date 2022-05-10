@@ -6,7 +6,7 @@
 --- signatureHelp 是用来显示函数入参出参的.
 -- vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
 --   vim.lsp.handlers["textDocument/signatureHelp"],
---   { border = {"▄","▄","▄","█","▀","▀","▀","█"} }
+--   { focusable = false, border = {"▄","▄","▄","█","▀","▀","▀","█"},  }
 -- )
 
 --- NOTE: 这里是修改输出到 location-list. 默认是 quickfix
@@ -45,9 +45,11 @@
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
   vim.lsp.handlers["textDocument/hover"],
   {
+    focusable = false,
     border = {"▄","▄","▄","█","▀","▀","▀","█"},
     --- VVI: `set omnifunc?` 没有设置, 所以 <C-x><C-o> 不会触发 Completion.
-    close_events = {"CompleteDone"},  -- event list, 什么情况下 close floating window
+    --- 使用 `:doautocmd CompleteDone` 手动触发 event.
+    close_events = {"CompleteDone", "WinScrolled"},  -- events, trigger close floating window
   }
 )
 
@@ -62,7 +64,8 @@ local function hoverShortHandler(_, result, ctx, config)
 
   -- NOTE: open_floating_preview() 设置
   config.border = {"▄","▄","▄","█","▀","▀","▀","█"}
-  config.close_events = {"CompleteDone"}
+  config.close_events = {"CompleteDone", "WinScrolled"}
+  config.focusable = false
 
   if not (result and result.contents) then
     vim.notify('No information available')
@@ -101,6 +104,7 @@ end
 
 
 -- HACK: Always Put popup window on Top of the cursor.
+-- 影响所有使用 vim.lsp.util.open_floating_preview() 的 popup window.
 -- https://github.com/neovim/neovim/blob/d30621064105d1f5e4e695fb09607269694f02d0/runtime/lua/vim/lsp/util.lua
 -- modify native function (global) - `vim.lsp.util.make_floating_popup_options` -------------------- {{{
 vim.lsp.util.make_floating_popup_options = function (width, height, opts)
