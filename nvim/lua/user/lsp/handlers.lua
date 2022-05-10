@@ -52,13 +52,14 @@ vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
     --- VVI: `set omnifunc?` 没有设置, 所以 <C-x><C-o> 不会触发 Completion.
     --- 使用 `:doautocmd CompleteDone` 手动触发 event.
     close_events = {"CompleteDone", "WinScrolled"},
+    --- https://github.com/neovim/neovim/ -> runtime/lua/vim/lsp/util.lua 默认设置.
     --close_events = {"CompleteDone", "CursorMoved", "CursorMovedI", "InsertCharPre", "WinScrolled"},
   }
 )
 
 -- VVI: 自定义 popup message -----------------------------------------------------------------------
 -- 主要函数: vim.lsp.buf_request(0, method, params, handlerFn)  -- 向 LSP server 发送请求, 通过 handler 处理结果.
--- https://github.com/neovim/neovim/blob/eecc6535eb5d0a6b9465489e69cbde1cbb8276e6/runtime/lua/vim/lsp/handlers.lua
+-- https://github.com/neovim/neovim/ -> runtime/lua/vim/lsp/handlers.lua
 
 -- copy from `function M.hover(_, result, ctx, config)`
 local function hoverShortHandler(_, result, ctx, config)
@@ -97,7 +98,7 @@ local function hoverShortHandler(_, result, ctx, config)
   return vim.lsp.util.open_floating_preview(markdown_lines, "markdown", config)
 end
 
--- https://github.com/neovim/neovim/blob/44a4af0ed02db7f4f1cce8c64935238b4efbee12/runtime/lua/vim/lsp/buf.lua
+-- https://github.com/neovim/neovim/ -> runtime/lua/vim/lsp/buf.lua
 function HoverShort()
   local method = 'textDocument/hover'
   local param = vim.lsp.util.make_position_params()  -- 这个函数生成 cursor position, 用于 lsp request.
@@ -108,7 +109,7 @@ end
 
 -- HACK: Always Put popup window on Top of the cursor.
 -- 影响所有使用 vim.lsp.util.open_floating_preview() 的 popup window.
--- https://github.com/neovim/neovim/blob/d30621064105d1f5e4e695fb09607269694f02d0/runtime/lua/vim/lsp/util.lua
+-- https://github.com/neovim/neovim/ -> runtime/lua/vim/lsp/util.lua
 -- modify native function (global) - `vim.lsp.util.make_floating_popup_options` -------------------- {{{
 vim.lsp.util.make_floating_popup_options = function (width, height, opts)
     vim.validate {
