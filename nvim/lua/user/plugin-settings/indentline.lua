@@ -83,7 +83,7 @@ vim.cmd [[highlight IndentBlanklineIndent2 ctermfg=25]]
 vim.cmd [[highlight IndentBlanklineIndent3 ctermfg=29]]
 vim.cmd [[highlight IndentBlanklineIndent4 ctermfg=128]]
 vim.cmd [[highlight IndentBlanklineIndent5 ctermfg=198]]
-vim.cmd [[highlight IndentBlanklineIndent6 ctermfg=117]]
+vim.cmd [[highlight IndentBlanklineIndent6 ctermfg=105]]
 --- }}}
 
 
