@@ -1,23 +1,13 @@
 --- Overwrite handler 设置 -------------------------------------------------------------------------
 --- NOTE: 使用 with() 方法. `:help lsp-handler-configuration`
 ---      `:help lsp-api` lsp-method 显示 textDocument/... 列表
---- VVI: `:help vim.lsp.util.open_floating_preview` 中的 {opts} 所有属性都可以在 with() 中设置.
 
---- 这里是修改 border 样式.
-vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
-  vim.lsp.handlers["textDocument/hover"],
-  {
-    border = {"▄","▄","▄","█","▀","▀","▀","█"},
-    --- VVI: `set omnifunc?` 没有设置, 所以 <C-x><C-o> 不会触发 Completion.
-    close_events = {"CompleteDone"},  -- event list, 什么情况下 close floating window
-  }
-)
-
+--- handler config examples ------------------------------------------------------------------------ {{{
 --- signatureHelp 是用来显示函数入参出参的.
-vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
-  vim.lsp.handlers["textDocument/signatureHelp"],
-  { border = {"▄","▄","▄","█","▀","▀","▀","█"} }
-)
+-- vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
+--   vim.lsp.handlers["textDocument/signatureHelp"],
+--   { border = {"▄","▄","▄","█","▀","▀","▀","█"} }
+-- )
 
 --- NOTE: 这里是修改输出到 location-list. 默认是 quickfix
 -- vim.lsp.handlers["textDocument/references"] = vim.lsp.with(
@@ -49,4 +39,128 @@ vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
 --   }
 -- )
 
+--- }}}
 
+--- 这里是修改 border 样式.
+vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
+  vim.lsp.handlers["textDocument/hover"],
+  {
+    border = {"▄","▄","▄","█","▀","▀","▀","█"},
+    --- VVI: `set omnifunc?` 没有设置, 所以 <C-x><C-o> 不会触发 Completion.
+    close_events = {"CompleteDone"},  -- event list, 什么情况下 close floating window
+  }
+)
+
+-- VVI: 自定义 popup message -----------------------------------------------------------------------
+-- 主要函数: vim.lsp.buf_request(0, method, params, handlerFn)
+-- https://github.com/neovim/neovim/blob/eecc6535eb5d0a6b9465489e69cbde1cbb8276e6/runtime/lua/vim/lsp/handlers.lua
+
+-- copy from `function M.hover(_, result, ctx, config)`
+local function hoverShortHandler(_, result, ctx, config)
+  config = config or {}
+  config.focus_id = ctx.method
+
+  -- open_floating_preview() 设置
+  config.border = {"▄","▄","▄","█","▀","▀","▀","█"}  -- add custom config
+  config.close_events = {"CompleteDone"}
+
+  if not (result and result.contents) then
+    vim.notify('No information available')
+    return
+  end
+
+  local markdown_lines = vim.lsp.util.convert_input_to_markdown_lines(result.contents)  -- split string to text list
+  markdown_lines = vim.lsp.util.trim_empty_lines(markdown_lines)  -- Removes empty lines from the beginning and end
+  markdown_lines = {unpack(markdown_lines, 1, 3)}
+  -- print(vim.inspect(markdown_lines))
+
+  if vim.tbl_isempty(markdown_lines) then
+    vim.notify('No information available')
+    return
+  end
+
+  return vim.lsp.util.open_floating_preview(markdown_lines, "markdown", config)
+end
+
+-- https://github.com/neovim/neovim/blob/44a4af0ed02db7f4f1cce8c64935238b4efbee12/runtime/lua/vim/lsp/buf.lua
+function HoverShort()
+  local method = 'textDocument/hover'
+  local param = vim.lsp.util.make_position_params()  -- 这个函数生成 cursor position, 用于 lsp request.
+
+  vim.lsp.buf_request(0, method, param, hoverShortHandler)  -- send request to LSP server
+end
+
+
+-- HACK Put popup window on Top of the cursor.
+-- https://github.com/neovim/neovim/blob/d30621064105d1f5e4e695fb09607269694f02d0/runtime/lua/vim/lsp/util.lua
+-- modify native function (global) - `vim.lsp.util.make_floating_popup_options` -------------------- {{{
+vim.lsp.util.make_floating_popup_options = function (width, height, opts)
+    vim.validate {
+    opts = { opts, 't', true };
+  }
+  opts = opts or {}
+  vim.validate {
+    ["opts.offset_x"] = { opts.offset_x, 'n', true };
+    ["opts.offset_y"] = { opts.offset_y, 'n', true };
+  }
+
+  local anchor = ''
+  local row, col
+
+  local lines_above = vim.fn.winline() - 1
+  local lines_below = vim.fn.winheight(0) - lines_above
+
+  -- if lines_above < lines_below then
+  --   anchor = anchor..'N'
+  --   height = math.min(lines_below, height)
+  --   row = 1
+  -- else
+  --   anchor = anchor..'S'
+  --   height = math.min(lines_above, height)
+  --   row = 0
+  -- end
+
+  if vim.fn.winline() < height+2 then  -- +2 border width
+    anchor = anchor..'N'
+    height = math.min(lines_below, height)
+    row = 1
+  else
+    anchor = anchor..'S'
+    height = math.min(lines_above, height)
+    row = 0
+  end
+
+  if vim.fn.wincol() + width + (opts.offset_x or 0) <= vim.api.nvim_get_option('columns') then
+    anchor = anchor..'W'
+    col = 0
+  else
+    anchor = anchor..'E'
+    col = 1
+  end
+
+  local default_border = {
+    {"", "NormalFloat"},
+    {"", "NormalFloat"},
+    {"", "NormalFloat"},
+    {" ", "NormalFloat"},
+    {"", "NormalFloat"},
+    {"", "NormalFloat"},
+    {"", "NormalFloat"},
+    {" ", "NormalFloat"},
+  }
+
+  return {
+    anchor = anchor,
+    col = col + (opts.offset_x or 0),
+    height = height,
+    focusable = opts.focusable,
+    relative = 'cursor',
+    row = row + (opts.offset_y or 0),
+    style = 'minimal',
+    width = width,
+    border = opts.border or default_border,
+    zindex = opts.zindex or 50,
+  }
+end
+
+--- }}}
