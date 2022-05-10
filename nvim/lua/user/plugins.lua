@@ -168,9 +168,10 @@ return packer.startup(function(use)
   use "akinsho/toggleterm.nvim"       -- terminal
   use "lukas-reineke/indent-blankline.nvim"  -- identline
   use "windwp/nvim-autopairs"         -- Autopairs, integrates with both cmp and treesitter
-  use "folke/which-key.nvim"          -- TODO 快捷键提醒功能, key mapping 的时候需要注册到 which-key
+  use "folke/which-key.nvim"          -- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   use "rcarriga/nvim-notify"          -- 通知功能
   use "windwp/nvim-ts-autotag"        -- auto close tag <div></div>
+  --use "p00f/nvim-ts-rainbow"
 
   --use "goolord/alpha-nvim"          -- neovim 启动页面
   --use "ahmedkhalf/project.nvim"     -- project manager

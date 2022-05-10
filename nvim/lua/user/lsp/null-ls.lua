@@ -61,7 +61,7 @@ local diag_opts = {
 }
 
 local linters_setting = {
-  diagnostics.flake8,  -- TODO python, flake8
+  diagnostics.flake8,  -- python, flake8
 
   --- golangci-lint
   diagnostics.golangci_lint.with(vim.tbl_deep_extend('keep', {
