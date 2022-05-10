@@ -52,5 +52,15 @@ configs.setup {
     --  show_help = '?',
     --},
   },
+
+  -- --- "p00f/nvim-ts-rainbow"
+  -- rainbow = {
+  --   enable = true,
+  --   --disable = { "jsx", "cpp" }, list of languages you want to disable the plugin for
+  --   extended_mode = false, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
+  --   max_file_lines = nil, -- Do not enable for files with more than n lines, int
+  --   colors = {'#fac928', '#c122e9', '#057aff', '#00e74d', '#f51384', '#19f9d8'}, -- table of hex strings
+  --   -- termcolors = {"Yellow","Magenta","Blue","Green","Red","Cyan"}, -- table of colour name strings
+  -- },
 }
 
