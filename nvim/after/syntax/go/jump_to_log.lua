@@ -21,9 +21,10 @@ local function gotoLogFile()
   end
 
   if #item > 0 then
-    vim.fn.setloclist(go_run_win_id, item, 'r')
-    vim.fn.win_gotoid(go_run_win_id)
-    vim.cmd('lfirst')
+    vim.fn.setloclist(go_run_win_id, item, 'r')  -- 给指定 window 设置 loclist
+    vim.fn.win_gotoid(go_run_win_id)  -- 必须在该 window 下才能打开 loclist
+    vim.cmd('lfirst')  -- jump to loclist first item
+    vim.fn.setloclist(go_run_win_id, {}, 'r')  -- clear loclist
   end
 end
 

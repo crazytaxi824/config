@@ -45,11 +45,14 @@
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
   vim.lsp.handlers["textDocument/hover"],
   {
-    focusable = false,
+    focusable = false,  -- false: 重复执行 vim.lsp.buf.hover() 时不会进入 floating window.
     border = {"▄","▄","▄","█","▀","▀","▀","█"},
+
+    --- events, to trigger close floating window
     --- VVI: `set omnifunc?` 没有设置, 所以 <C-x><C-o> 不会触发 Completion.
     --- 使用 `:doautocmd CompleteDone` 手动触发 event.
-    close_events = {"CompleteDone", "WinScrolled"},  -- events, trigger close floating window
+    close_events = {"CompleteDone", "WinScrolled"},
+    --close_events = {"CompleteDone", "CursorMoved", "CursorMovedI", "InsertCharPre", "WinScrolled"},
   }
 )
 
@@ -63,9 +66,9 @@ local function hoverShortHandler(_, result, ctx, config)
   config.focus_id = ctx.method
 
   -- NOTE: open_floating_preview() 设置
+  config.focusable = false
   config.border = {"▄","▄","▄","█","▀","▀","▀","█"}
   config.close_events = {"CompleteDone", "WinScrolled"}
-  config.focusable = false
 
   if not (result and result.contents) then
     vim.notify('No information available')

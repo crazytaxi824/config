@@ -896,17 +896,22 @@ key_bindings:
   - { key: Right,  mods: Option,                                   chars: "\x1b[1;5C"      }  # Ctrl-Right   forward-word
   - { key: Left,   mods: Option,                                   chars: "\x1b[1;5D"      }  # Ctrl-Left    backward-word
 
-  # 其他 key mapping ----------------------------------------------------------------------------------------
+  - { key: Return,  mods: Shift,                                   chars: "\x1b[13;2u"     }  # Shift-CR
+  - { key: Return,  mods: Control,                                 chars: "\x1b[13;5u"     }  # CTRL-CR
+  - { key: Return,  mods: Command,                                 chars: "\x1b[13;5u"     }  # CTRL-CR
+  - { key: Return,  mods: Control|Shift,                           chars: "\x1b[13;6u"     }  # CTRL-Shift-CR
+  - { key: Return,  mods: Command|Shift,                           chars: "\x1b[13;6u"     }  # CTRL-Shift-CR
+
   - { key: Left,   mods: Command,       mode: ~Vi|~Search,             chars: "\x1bOH"     }  # Home   - 替代 <fn - left>
   - { key: Right,  mods: Command,       mode: ~Vi|~Search,             chars: "\x1bOF"     }  # End    - 替代 <fn - right>
   - { key: Up,     mods: Command,       mode: ~Vi|~Search,             chars: "\x1b[5~"    }  # PageUp    - 替代 <fn - up>
   - { key: Down,   mods: Command,       mode: ~Vi|~Search,             chars: "\x1b[6~"    }  # PageDown  - 替代 <fn - down>
   #- { key: Up,     mods: Command,       mode: ~Vi|~Search,             chars: "\x1b[1;5H"  }  # Ctrl-Home - file start
   #- { key: Down,   mods: Command,       mode: ~Vi|~Search,             chars: "\x1b[1;5F"  }  # Ctrl-End  - file end
+
   - { key: S,      mods: Command,       mode: ~Vi|~Search,             chars: "\x13"       }  # Ctrl-S    - save file
   - { key: W,      mods: Command,       mode: ~Vi|~Search,             chars: "\x17"       }  # Ctrl-W    - switch vim window, alacritty 默认设置是 Quit.
   - { key: Z,      mods: Command,       mode: ~Vi|~Search,             chars: "\x1a"       }  # Ctrl-Z    - vim 中将 Ctrl-z map 到 u 上 undo.
-  - { key: Z,      mods: Command|Shift,       mode: ~Vi|~Search,       chars: "\x12"       }  # Ctrl-Shift-Z    - map 到 Ctrl-r 上 redo.
 
 # `alacritty --print-events` 打印 events/debug 信息.
 debug:
