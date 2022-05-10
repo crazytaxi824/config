@@ -50,12 +50,12 @@ local keymaps = {
   {'v', '<PageDown>', 'ztL', opt},
   {'i', '<PageDown>', '<C-o>zt<C-o>L', opt},
 
-  {'n', '<C-Up>', '3<C-u>', opt},
-  {'v', '<C-Up>', '3<C-u>', opt},
-  {'i', '<C-Up>', '<C-o>3<C-u>', opt},
-  {'n', '<C-Down>', '3<C-d>', opt},
-  {'v', '<C-Down>', '3<C-d>', opt},
-  {'i', '<C-Down>', '<C-o>3<C-d>', opt},
+  {'n', '<C-Up>', '3<C-y>', opt},
+  {'v', '<C-Up>', '3<C-y>', opt},
+  {'i', '<C-Up>', '<C-o>3<C-y>', opt},
+  {'n', '<C-Down>', '3<C-e>', opt},
+  {'v', '<C-Down>', '3<C-e>', opt},
+  {'i', '<C-Down>', '<C-o>3<C-e>', opt},
 
   {'n', 'G', 'Gzz', opt},  -- put last line in center
 
