@@ -52,7 +52,7 @@ vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
 )
 
 -- VVI: 自定义 popup message -----------------------------------------------------------------------
--- 主要函数: vim.lsp.buf_request(0, method, params, handlerFn)
+-- 主要函数: vim.lsp.buf_request(0, method, params, handlerFn)  -- 向 LSP server 发送请求, 通过 handler 处理结果.
 -- https://github.com/neovim/neovim/blob/eecc6535eb5d0a6b9465489e69cbde1cbb8276e6/runtime/lua/vim/lsp/handlers.lua
 
 -- copy from `function M.hover(_, result, ctx, config)`
@@ -60,8 +60,8 @@ local function hoverShortHandler(_, result, ctx, config)
   config = config or {}
   config.focus_id = ctx.method
 
-  -- open_floating_preview() 设置
-  config.border = {"▄","▄","▄","█","▀","▀","▀","█"}  -- add custom config
+  -- NOTE: open_floating_preview() 设置
+  config.border = {"▄","▄","▄","█","▀","▀","▀","█"}
   config.close_events = {"CompleteDone"}
 
   if not (result and result.contents) then
@@ -69,10 +69,19 @@ local function hoverShortHandler(_, result, ctx, config)
     return
   end
 
-  local markdown_lines = vim.lsp.util.convert_input_to_markdown_lines(result.contents)  -- split string to text list
-  markdown_lines = vim.lsp.util.trim_empty_lines(markdown_lines)  -- Removes empty lines from the beginning and end
-  markdown_lines = {unpack(markdown_lines, 1, 3)}
-  -- print(vim.inspect(markdown_lines))
+  local mls = vim.lsp.util.convert_input_to_markdown_lines(result.contents)  -- split string to text list
+  mls = vim.lsp.util.trim_empty_lines(mls)  -- Removes empty lines from the beginning and end
+
+  -- 寻找 "```" end line
+  local markdown_lines = {}
+  for _, line in ipairs(mls) do
+    table.insert(markdown_lines, line)
+    if line == '```' then
+      break
+    end
+  end
+
+  -- print(vim.inspect(markdown_lines))  -- DEBUG
 
   if vim.tbl_isempty(markdown_lines) then
     vim.notify('No information available')
@@ -87,11 +96,11 @@ function HoverShort()
   local method = 'textDocument/hover'
   local param = vim.lsp.util.make_position_params()  -- 这个函数生成 cursor position, 用于 lsp request.
 
-  vim.lsp.buf_request(0, method, param, hoverShortHandler)  -- send request to LSP server
+  vim.lsp.buf_request(0, method, param, hoverShortHandler)  -- NOTE: send request to LSP server
 end
 
 
--- HACK Put popup window on Top of the cursor.
+-- HACK: Always Put popup window on Top of the cursor.
 -- https://github.com/neovim/neovim/blob/d30621064105d1f5e4e695fb09607269694f02d0/runtime/lua/vim/lsp/util.lua
 -- modify native function (global) - `vim.lsp.util.make_floating_popup_options` -------------------- {{{
 vim.lsp.util.make_floating_popup_options = function (width, height, opts)
@@ -164,3 +173,7 @@ vim.lsp.util.make_floating_popup_options = function (width, height, opts)
 end
 
 --- }}}
+
+
+
+

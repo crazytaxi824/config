@@ -6,7 +6,7 @@ function CheckBackspace()
   return col == 0 or vim.fn.getline("."):sub(col, col):match("%s")
 end
 
---- 获取所有 window 的 filetype 和 syntax
+--- 获取所有 window 的 filetype 和 syntax ---------------------------------------------------------- {{{
 --    `:help winnr()`   " winnr()    - 当前 window_index
 --                      " winnr('#') - prev_window_index
 --                      " winnr('$') - total_window_number
@@ -22,6 +22,7 @@ end
 --    `:help getwininfo(win_id)`     " VVI: 获取 window 所有信息
 --    `:help getwininfo()`           " VVI: 获取所有 window 的所有信息
 --    `:help win_gettype(win_id)`    " 获取 window 类型
+--- }}}
 function GetWinInfo()
   local infos = {}
 
