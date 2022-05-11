@@ -90,7 +90,8 @@ null_ls.setup({
   --- VVI: 设置 formatter 和 linter. vim.list_extend() 合并两个 list-like table.
   sources = vim.list_extend(formatters_setting, linters_setting),
 
-  debug = false,   -- true:记录 log, `:NullLsLog` 打印 log.
+  debug = false,   -- 记录 log, `:NullLsLog` 打印 log. VVI: 非常耗资源, 调试完后设置为 false.
+
   update_in_insert = false,  -- 节省资源, 一边输入一边检查
   debounce = 600,            -- 节省资源, diagnostics 间隔时间, 默认 250
   diagnostics_format = "#{m} [null-ls]",  -- 错误信息显示格式, #{m} - message, #{s} - source, #{c} - err_code
