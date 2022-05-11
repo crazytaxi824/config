@@ -171,7 +171,7 @@ return packer.startup(function(use)
   use "folke/which-key.nvim"          -- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   use "rcarriga/nvim-notify"          -- 通知功能
   use "windwp/nvim-ts-autotag"        -- auto close tag <div></div>
-  --use "p00f/nvim-ts-rainbow"
+  use "p00f/nvim-ts-rainbow"          -- treesitter 解析, 有时候有问题.
 
   --use "goolord/alpha-nvim"          -- neovim 启动页面
   --use "ahmedkhalf/project.nvim"     -- project manager
