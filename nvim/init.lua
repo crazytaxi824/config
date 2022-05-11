@@ -8,7 +8,8 @@
 --- 1. neovim 会首先查找 runtimepath 中的 init.lua 文件. - `:set runtimepath?`
 ---
 --- 2. 我们的配置文件使用的是 vim.fn.stdpath("config") == "~/.config/nvim/".
----    vim.fn.stdpath("config") == "~/.local/share/nvim"
+---    vim.fn.stdpath("data") == "~/.local/share/nvim/"
+---    vim.fn.stdpath("cache") == "~/.cache/nvim/"
 ---    neovim 启动时会找到 "~/.config/nvim/init.lua" 文件.
 ---    然后根据 init.lua 文件中的 require() 在所有的 runtimepath 中查找对应的文件.
 ---

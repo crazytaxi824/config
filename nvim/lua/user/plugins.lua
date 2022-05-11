@@ -73,6 +73,8 @@ end
 
 --- Have packer use a popup window, "nvim-lua/popup.nvim"
 packer.init {
+  --snapshot = nil, -- Name of the snapshot you would like to load at startup
+  snapshot_path = vim.fn.stdpath('cache') .. '/packer_snapshot', -- Default save directory for snapshots
   display = {
     open_fn = function()
       -- Packer 面板 border 样式.
@@ -84,7 +86,7 @@ packer.init {
 
 --- NOTE: Install plugins here
 --- 官方文档 https://github.com/wbthomason/packer.nvim
---- 插件推荐 https://github.com/LunarVim/Neovim-from-scratch/blob/master/lua/user/plugins.lua
+--- 插件推荐 https://github.com/LunarVim/Neovim-from-scratch/ -> lua/user/plugins.lua
 --- `:echo stdpath("data")` == "~/.local/share/nvim"
 --- 插件的安装位置在 "~/.local/share/nvim/site/pack/packer/start/..."
 --- `:PackerSync` - install / update / clean 插件包.
@@ -171,7 +173,7 @@ return packer.startup(function(use)
   use "folke/which-key.nvim"          -- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   use "rcarriga/nvim-notify"          -- 通知功能
   use "windwp/nvim-ts-autotag"        -- auto close tag <div></div>
-  use "p00f/nvim-ts-rainbow"          -- treesitter 解析, 有时候有问题.
+  use "p00f/nvim-ts-rainbow"          -- 括号颜色. treesitter 解析
 
   --use "goolord/alpha-nvim"          -- neovim 启动页面
   --use "ahmedkhalf/project.nvim"     -- project manager
@@ -184,7 +186,7 @@ return packer.startup(function(use)
   use "preservim/tagbar"
 
   --- markdown preview
-  use "iamcco/markdown-preview.nvim"  -- NOTE: `:MarkdownPreviewToggle` 只能在 md 文件中使用.
+  use {"iamcco/markdown-preview.nvim", ft="markdown"}  -- NOTE: `:MarkdownPreviewToggle` 只能在 md 文件中使用.
 
   --- Git
   --use "lewis6991/gitsigns.nvim"
