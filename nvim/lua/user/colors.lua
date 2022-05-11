@@ -78,6 +78,19 @@ vim.cmd('hi link Float Number')          -- 10.02 float64, float32
 vim.cmd('hi Boolean ctermfg=75')         -- true / false
 vim.cmd('hi PreProc ctermfg=75')         -- tsxTSVariableBuiltin, tsxTSConstBuiltin ...
 
+--- diff 颜色 --------------------------------------------------------------------------------------
+vim.cmd('hi DiffAdd ctermfg=188 ctermbg=22')
+vim.cmd('hi DiffDelete ctermfg=188 ctermbg=52')
+vim.cmd('hi DiffChange cterm=None ctermfg=188')
+vim.cmd('hi DiffText cterm=None ctermfg=188 ctermbg=160')
+
+-- diff mode 模式下 CursorLine 样式
+vim.cmd [[
+  if &diff
+    highlight CursorLine cterm=underline
+  endif
+]]
+
 --- 其他常用颜色 -----------------------------------------------------------------------------------
 vim.cmd('hi Title cterm=bold ctermfg=114')      -- markdown Title
 vim.cmd('hi Conceal ctermfg=117 ctermbg=None')  -- markdown 特殊符号颜色
