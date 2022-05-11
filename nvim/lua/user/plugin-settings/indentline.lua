@@ -61,30 +61,28 @@ vim.g.indent_blankline_show_current_context = true
 indent_blankline.setup({
   --show_end_of_line = true,
   --space_char_blankline = " ",
-  show_current_context = false,  -- 默认 true 显示 indentLine 颜色; 不建议开启, 有 bug.
+  show_current_context = false,  -- 默认 true 显示 indentLine 颜色; 不建议开启, 有 BUG
   --show_current_context_start = true,
 
   --- NOTE: 加载下面定义的颜色设置 --- {{{
-  char_highlight_list = {
-   "IndentBlanklineIndent1",
-   "IndentBlanklineIndent2",
-   "IndentBlanklineIndent3",
-   "IndentBlanklineIndent4",
-   "IndentBlanklineIndent5",
-   "IndentBlanklineIndent6",
-  },
+  --char_highlight_list = {
+  -- "IndentBlanklineIndent1",
+  -- "IndentBlanklineIndent2",
+  -- "IndentBlanklineIndent3",
+  -- "IndentBlanklineIndent4",
+  -- "IndentBlanklineIndent5",
+  -- "IndentBlanklineIndent6",
+  --},
   --- }}}
 })
 
---- 设置颜色 --------------------------------------------------------------------------------------- {{{
---- same as vscode
+--- 设置颜色 ---------------------------------------------------------------------------------------
 vim.cmd [[highlight IndentBlanklineIndent1 ctermfg=172]]
 vim.cmd [[highlight IndentBlanklineIndent2 ctermfg=25]]
 vim.cmd [[highlight IndentBlanklineIndent3 ctermfg=29]]
 vim.cmd [[highlight IndentBlanklineIndent4 ctermfg=128]]
 vim.cmd [[highlight IndentBlanklineIndent5 ctermfg=198]]
-vim.cmd [[highlight IndentBlanklineIndent6 ctermfg=117]]
---- }}}
+vim.cmd [[highlight IndentBlanklineIndent6 ctermfg=105]]
 
 
 

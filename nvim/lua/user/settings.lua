@@ -220,5 +220,9 @@ vim.cmd [[au Filetype qf :wincmd J]]
 -- markdown 文件自动执行 SpellCheck 命令
 --vim.cmd [[au Filetype pandoc,markdown setlocal spell spelllang=en,cjk]]
 
+--- vim plugin settings ----------------------------------------------------------------------------
+
+
+
 
 

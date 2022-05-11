@@ -30,8 +30,8 @@ vim.cmd('hi Visual ctermbg=24')                    -- Visual 模式下 select �
 vim.cmd('hi Comment ctermfg=71')                   -- 注释颜色
 vim.cmd('hi Folded ctermbg=235 ctermfg=67')        -- 折叠行颜色
 vim.cmd('hi NonText ctermfg=238')                  -- 影响 listchars indentLine 颜色
-vim.cmd('hi MatchParen cterm=underline ctermfg=39 ctermbg=None')    -- 括号匹配颜色
-vim.cmd('hi VertSplit ctermfg=59 ctermbg=None cterm=None')          -- 屏幕分隔线颜色
+vim.cmd('hi VertSplit ctermfg=59 ctermbg=None cterm=None')   -- 屏幕分隔线颜色
+vim.cmd('hi MatchParen cterm=underline,bold ctermfg=220 ctermbg=None')    -- 括号匹配颜色
 
 vim.cmd('hi LineNr ctermfg=240')                   -- 行号颜色
 vim.cmd('hi CursorLine ctermbg=235 cterm=None')    -- 光标所在行颜色

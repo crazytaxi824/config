@@ -16,7 +16,7 @@ configs.setup {
   },
   indent = { enable = true, disable = { "yaml" } },
 
-  --- plugins settings -----------------------------
+  --- plugins settings -----------------------------------------------------------------------------
   --- "JoosepAlviste/nvim-ts-context-commentstring"
   context_commentstring = {
     enable = true,
@@ -53,14 +53,24 @@ configs.setup {
     --},
   },
 
-  -- --- "p00f/nvim-ts-rainbow"
-  -- rainbow = {
-  --   enable = true,
-  --   --disable = { "jsx", "cpp" }, list of languages you want to disable the plugin for
-  --   extended_mode = false, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
-  --   max_file_lines = nil, -- Do not enable for files with more than n lines, int
-  --   colors = {'#fac928', '#c122e9', '#057aff', '#00e74d', '#f51384', '#19f9d8'}, -- table of hex strings
-  --   -- termcolors = {"Yellow","Magenta","Blue","Green","Red","Cyan"}, -- table of colour name strings
-  -- },
+  --- "p00f/nvim-ts-rainbow"
+  rainbow = {
+    enable = true,
+    disable = { "cpp", "go" },  -- list of languages you want to disable the plugin for
+    extended_mode = false, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
+    max_file_lines = nil, -- Do not enable for files with more than n lines, int
+  },
 }
+
+--- rainbow colors ---------------------------------------------------------------------------------
+vim.cmd [[highlight rainbowcol1 ctermfg=220]]  -- yellow
+vim.cmd [[highlight rainbowcol2 ctermfg=33]]   -- blue
+vim.cmd [[highlight rainbowcol3 ctermfg=81]]   -- cyan
+vim.cmd [[highlight rainbowcol4 ctermfg=206]]  -- magenta
+vim.cmd [[highlight rainbowcol5 ctermfg=42]]   -- green
+vim.cmd [[highlight rainbowcol6 ctermfg=167]]  -- red
+vim.cmd [[highlight rainbowcol7 ctermfg=248]]  -- grey
+
+
+
 

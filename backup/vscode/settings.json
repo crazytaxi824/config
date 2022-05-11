@@ -34,8 +34,9 @@
   // vsintellicode only works with python, java, TS, JS.
   // "vsintellicode.modify.editor.suggestSelection": "disabled", // "enabled" when (recentlyUsed)
 
-  // 括号的颜色.
-  "editor.guides.bracketPairs": true,
+  // 括号的颜色. 可以给 "[lang]" 单独设置.
+  "editor.bracketPairColorization.enabled": false,
+  "editor.guides.bracketPairs": false,
   // "editor.language.colorizedBracketPairs": [
   //   ["[", "]"],
   //   ["(", ")"],
@@ -47,20 +48,20 @@
     "editorBracketHighlight.foreground2": "#057aff",
     "editorBracketHighlight.foreground3": "#06B574",
     "editorBracketHighlight.foreground4": "#c122e9",
-    "editorBracketHighlight.foreground5": "#f51384",
-    "editorBracketHighlight.foreground6": "#19f9d8",
+    "editorBracketHighlight.foreground5": "#19f9d8",
+    "editorBracketHighlight.foreground6": "#f51384",
     "editorBracketPairGuide.background1": "#fac9289E",
     "editorBracketPairGuide.background2": "#057aff9E",
     "editorBracketPairGuide.background3": "#06B5749E",
     "editorBracketPairGuide.background4": "#c122e99E",
-    "editorBracketPairGuide.background5": "#f513849E",
-    "editorBracketPairGuide.background6": "#19f9d89E",
+    "editorBracketPairGuide.background5": "#19f9d89E",
+    "editorBracketPairGuide.background6": "#f513849E",
     "editorBracketPairGuide.activeBackground1": "#FAC9289E",
     "editorBracketPairGuide.activeBackground2": "#057AFF9E",
     "editorBracketPairGuide.activeBackground3": "#06B5749E",
     "editorBracketPairGuide.activeBackground4": "#C122E99E",
-    "editorBracketPairGuide.activeBackground5": "#F513849E",
-    "editorBracketPairGuide.activeBackground6": "#19F9D89E"
+    "editorBracketPairGuide.activeBackground5": "#19F9D89E",
+    "editorBracketPairGuide.activeBackground6": "#F513849E"
   },
 
   // 根据文件名指定文件类型，jsonc —— json with comments

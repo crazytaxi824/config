@@ -8,7 +8,8 @@
 --- 1. neovim 会首先查找 runtimepath 中的 init.lua 文件. - `:set runtimepath?`
 ---
 --- 2. 我们的配置文件使用的是 vim.fn.stdpath("config") == "~/.config/nvim/".
----    vim.fn.stdpath("config") == "~/.local/share/nvim"
+---    vim.fn.stdpath("data") == "~/.local/share/nvim/"
+---    vim.fn.stdpath("cache") == "~/.cache/nvim/"
 ---    neovim 启动时会找到 "~/.config/nvim/init.lua" 文件.
 ---    然后根据 init.lua 文件中的 require() 在所有的 runtimepath 中查找对应的文件.
 ---
@@ -76,10 +77,19 @@
 -- 常用 Commands                     | 作用                             | package
 -------------------------------------+----------------------------------+------------------------------------
 -- `:PackerSync`                     | Clean, Install, Update packages. | "wbthomason/packer.nvim"
+-- `:PackerSnapshot foo`             | Clean, Install, Update packages. | "wbthomason/packer.nvim"
+-------------------------------------+----------------------------------+------------------------------------
+-- `:LspInfo`                        | 所有已启动的 LSP 列表.           | "neovim/nvim-lspconfig"
+-------------------------------------+----------------------------------+------------------------------------
 -- `:LspInstallInfo`                 | 所有 LSP 列表. 快捷键 - i, u, X  | "williamboman/nvim-lsp-installer"
+-------------------------------------+----------------------------------+------------------------------------
 -- `:TSInstallInfo`, `:TSUpdate`     | tree-sitter 安装列表.            | "nvim-treesitter/nvim-treesitter"
+-------------------------------------+----------------------------------+------------------------------------
 -- `:TSHighlightCapturesUnderCursor` | 查看当前 word tree-sitter 颜色.  | "nvim-treesitter/playground"
+-------------------------------------+----------------------------------+------------------------------------
 -- `:Notifications`                  | 查看 notify msg 列表             | "rcarriga/nvim-notify"
+-------------------------------------+----------------------------------+------------------------------------
+-- `:NullLsLog`                      | 查看 null-ls debug log           | "jose-elias-alvarez/null-ls.nvim"
 -------------------------------------+----------------------------------+------------------------------------
 
 --- 读取设置: ~/.config/nvim/lua/user/xxx.lua
