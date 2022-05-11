@@ -16,7 +16,7 @@ configs.setup {
   },
   indent = { enable = true, disable = { "yaml" } },
 
-  --- plugins settings -----------------------------
+  --- plugins settings -----------------------------------------------------------------------------
   --- "JoosepAlviste/nvim-ts-context-commentstring"
   context_commentstring = {
     enable = true,
@@ -56,7 +56,7 @@ configs.setup {
   --- "p00f/nvim-ts-rainbow"
   rainbow = {
     enable = true,
-    --disable = { "jsx", "cpp" }, list of languages you want to disable the plugin for
+    disable = { "cpp", "go" },  -- list of languages you want to disable the plugin for
     extended_mode = false, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
     max_file_lines = nil, -- Do not enable for files with more than n lines, int
   },

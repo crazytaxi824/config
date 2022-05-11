@@ -61,18 +61,18 @@ vim.g.indent_blankline_show_current_context = true
 indent_blankline.setup({
   --show_end_of_line = true,
   --space_char_blankline = " ",
-  show_current_context = false,  -- 默认 true 显示 indentLine 颜色; 不建议开启, 有 bug.
+  show_current_context = false,  -- 默认 true 显示 indentLine 颜色; 不建议开启, 有 BUG
   --show_current_context_start = true,
 
   --- NOTE: 加载下面定义的颜色设置 --- {{{
-  char_highlight_list = {
-   "IndentBlanklineIndent1",
-   "IndentBlanklineIndent2",
-   "IndentBlanklineIndent3",
-   "IndentBlanklineIndent4",
-   "IndentBlanklineIndent5",
-   "IndentBlanklineIndent6",
-  },
+  --char_highlight_list = {
+  -- "IndentBlanklineIndent1",
+  -- "IndentBlanklineIndent2",
+  -- "IndentBlanklineIndent3",
+  -- "IndentBlanklineIndent4",
+  -- "IndentBlanklineIndent5",
+  -- "IndentBlanklineIndent6",
+  --},
   --- }}}
 })
 
