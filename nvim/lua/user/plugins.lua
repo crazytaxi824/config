@@ -170,7 +170,7 @@ return packer.startup(function(use)
   --- delve 安装位置 vimspector_base_dir=~/.local/share/nvim/site/pack/packer/start/vimspector/gadgets/macos/...
   --- https://github.com/puremourning/vimspector
   --- https://pepa.holla.cz/2021/03/01/golang-debugging-application-in-neovim/
-  use "puremourning/vimspector" -- Debug Tool
+  use {"puremourning/vimspector", ft="go"}    -- Debug Tool. NOTE: for golang ONLY for now.
   -- use "mfussenegger/nvim-dap"   -- lua debug tool
 
   --- Useful Tools ---------------------------------------------------------------------------------
@@ -180,8 +180,14 @@ return packer.startup(function(use)
   use "windwp/nvim-autopairs"         -- Autopairs, integrates with both cmp and treesitter
   use "folke/which-key.nvim"          -- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   use "rcarriga/nvim-notify"          -- 通知功能
-  use "windwp/nvim-ts-autotag"        -- auto close tag <div></div>
   use "p00f/nvim-ts-rainbow"          -- 括号颜色. treesitter 解析
+
+  use {"windwp/nvim-ts-autotag",      -- auto close tag <div></div>
+    ft={'html', 'javascript', 'typescript',
+      'javascriptreact', 'typescriptreact',
+      'svelte', 'vue', 'tsx', 'jsx',
+      'rescript', 'xml', 'markdown'}
+  } 
 
   --use "goolord/alpha-nvim"          -- neovim 启动页面
   --use "ahmedkhalf/project.nvim"     -- project manager

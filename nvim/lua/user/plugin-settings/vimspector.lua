@@ -4,7 +4,7 @@
 
 local port = "54321"
 vim.g.vimspector_adapters = {
-  -- NOTE: adapter 名字用于 configuration
+  -- NOTE: 名字用于下面的 configuration - adapter
   go_delve = {
     command = { "dlv", "dap", "--listen", "localhost:"..port},
     tty = true,
