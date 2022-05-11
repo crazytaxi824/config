@@ -1,6 +1,10 @@
 -- Packer.nvim 设置 -------------------------------------------------------------------------------- {{{
 -- https://github.com/wbthomason/packer.nvim#specifying-plugins
 --
+-- opt 属性:
+--   当 plugin 有加载条件的时候, plugin 的安装地址会从 ~/.local/share/nvim/site/pack/packer/start -> opt
+--   plugin 的 opt 属性会被改为 true, `:PackerStatus`
+--
 -- use {
 --   'myusername/example',        -- The plugin location string
 --
@@ -46,6 +50,10 @@
 -- `:PackerClean`      -- Remove any disabled or unused plugins
 -- `:PackerInstall`    -- Clean, then install missing plugins
 -- `:PackerUpdate`     -- Clean, then update and install plugins
+--
+-- `:PackerSnapshot foo`     -- 创建一个 snapshot
+-- `:PackerSnapshotDelete foo`  -- 删除一个 snapshot
+-- `:PackerSnapshotRollback foo`  -- 回滚到指定 snapshot
 --
 -- `:PackerSync`       -- NOTE: 使用这一个命令就够了. Perform `PackerUpdate` and then `PackerCompile`
 -- NOTE: You must run this or `PackerSync` whenever you make changes to your plugin configuration.
