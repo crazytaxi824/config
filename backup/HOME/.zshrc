@@ -594,7 +594,7 @@ function restoreConfigFiles() {
 	case $restore in
 		"yes"|"Yes")
 			# copy 文件
-			cp -r $backup_folder/HOME ~/
+			cp -a $backup_folder/HOME/. ~/
 
 			# lazygit ~/Library/Application Support/lazygit/config.yml
 			cp $backup_folder/lazygit/config.yml ~/Library/Application\ Support/lazygit/
