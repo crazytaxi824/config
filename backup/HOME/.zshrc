@@ -593,7 +593,7 @@ function restoreConfigFiles() {
 
 	case $restore in
 		"yes"|"Yes")
-			# copy 文件
+			# NOTE: copy 隐藏文件使用 `cp -a src/. dst/` 注意最后有个点.
 			cp -a $backup_folder/HOME/. ~/
 
 			# lazygit ~/Library/Application Support/lazygit/config.yml
