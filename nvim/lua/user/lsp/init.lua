@@ -42,12 +42,14 @@ for _, LSP_server in pairs(LSP_servers) do
   ---      这里的 opts 获取到的是 require 文件中返回的 M.
   local opts = require("user.lsp.setup_opts")
 
-  --- 如果 ~/.config/nvim/lua/user/lsp/langs/ 文件存在, 则加载设置.
+  --- 如果 ~/.config/nvim/lua/user/lsp/langs/ 文件存在, 则加载自定义设置,
+  --- 如果没有自定义设置则加载默认设置.
   local has_custom_opts, server_custom_opts = pcall(require, "user.lsp.langs." .. LSP_server)
   if has_custom_opts then
     -- tbl_deep_extend() 合并两个 table.
     opts = vim.tbl_deep_extend("force", server_custom_opts, opts)
   end
+
   --- VVI: 这里就是 lspconfig.xxx.setup() 针对不同的 lsp 进行加载.
   lspconfig[LSP_server].setup(opts)
 end

@@ -20,12 +20,7 @@ configs.setup {
   --- "JoosepAlviste/nvim-ts-context-commentstring"
   context_commentstring = {
     enable = true,
-    enable_autocmd = false,
-  },
-
-  --- "windwp/nvim-autopairs", NOTE: 好像不需要设置了.
-  autopairs = {
-   enable = true,
+    enable_autocmd = false,  -- trigger commentstring updating on CursorHold
   },
 
   --- "windwp/nvim-ts-autotag", NOTE: auto close tag <div></div>

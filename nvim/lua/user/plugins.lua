@@ -12,7 +12,7 @@
 --   as = string,                 -- VVI: 别名
 --   installer = function,        -- Specifies custom installer. See "custom installers" below.
 --   updater = function,          -- Specifies custom updater. See "custom installers" below.
---   after = string or list,      -- VVI: 在加载指定 plugin 后, 加载自己.
+--   after = string or list,      -- 在加载指定 plugin 后, 加载自己. 使用 requires 最好.
 --   rtp = string,                -- Specifies a subdirectory of the plugin to add to runtimepath.
 --   opt = boolean,               -- Manually marks a plugin as optional.
 --
@@ -111,6 +111,7 @@ return packer.startup(function(use)
   use "antoinemadec/FixCursorHold.nvim"
 
   --- Treesitter -----------------------------------------------------------------------------------
+  --- NOTE: 下面大部分插件需要在 treesitter.setup() 中启用设置.
   --- Commands for "nvim-treesitter/nvim-treesitter" --- {{{
   --- `:help nvim-treesitter-commands`
   --- `:TSInstallInfo`        -- List all installed languages
@@ -118,26 +119,56 @@ return packer.startup(function(use)
   --- `:TSUninstall {lang}`   -- Uninstall languages
   --- `:TSUpdate`             -- Update the installed languages
   --- }}}
-  use {
-    "nvim-treesitter/nvim-treesitter",
+  use {"nvim-treesitter/nvim-treesitter",  -- NOTE: treesitter 主要插件
     run = ":TSUpdate",
   }
   --- Commands for "nvim-treesitter/playground" --- {{{
   --- `:TSPlaygroundToggle`  -- 查看 tree-sitter 对当前 word 的定义.
   --- `:TSHighlightCapturesUnderCursor`  -- 查看 tree-sitter 定义的 highlight group.
   --- }}}
-  use "nvim-treesitter/playground"  -- tree-sitter 插件, 用于获取 tree-sitter 信息, 调整颜色很有用
-  use "JoosepAlviste/nvim-ts-context-commentstring"  -- 注释, 配合 "numToStr/Comment.nvim" 使用
-  use "numToStr/Comment.nvim" -- 注释, 配合 "JoosepAlviste/nvim-ts-context-commentstring" 使用
+  use {"nvim-treesitter/playground",  -- tree-sitter 插件, 用于获取 tree-sitter 信息, 调整颜色很有用
+    requires = "nvim-treesitter/nvim-treesitter"
+  }
+  use {"JoosepAlviste/nvim-ts-context-commentstring",  -- 注释, 配合 "numToStr/Comment.nvim" 使用
+    requires = "nvim-treesitter/nvim-treesitter"
+  }
+  use {"numToStr/Comment.nvim",   -- 注释, 配合 "JoosepAlviste/nvim-ts-context-commentstring" 使用
+    requires = {
+      "JoosepAlviste/nvim-ts-context-commentstring",
+      "nvim-treesitter/nvim-treesitter"
+    }
+  }
+  use {"lukas-reineke/indent-blankline.nvim",  -- identline
+    requires = "nvim-treesitter/nvim-treesitter"
+  }
+  use {"p00f/nvim-ts-rainbow",   -- 括号颜色. treesitter 解析
+    requires = "nvim-treesitter/nvim-treesitter"
+  }
+  use {"windwp/nvim-ts-autotag",   -- auto close tag <div></div>
+    requires = "nvim-treesitter/nvim-treesitter",
+    ft = {'html', 'javascript', 'typescript',
+      'javascriptreact', 'typescriptreact',
+      'svelte', 'vue', 'tsx', 'jsx',
+      'rescript', 'xml', 'markdown'},
+  }
 
   --- Completion -----------------------------------------------------------------------------------
-  use "hrsh7th/nvim-cmp"          -- The completion plugin
-  -- 以下是 nvim-cmp 的组件.
-  use "hrsh7th/cmp-buffer"        -- buffer completions
-  use "hrsh7th/cmp-path"          -- path completions
-  use "hrsh7th/cmp-cmdline"       -- cmdline completions
-  use "saadparwaiz1/cmp_luasnip"  -- Snippets source for nvim-cmp
-  use "hrsh7th/cmp-nvim-lsp"      -- LSP source for nvim-cmp
+  use {"hrsh7th/nvim-cmp",         -- 主要的 completion plugin
+    -- 以下是 nvim-cmp 的组件.
+    requires = {
+      "hrsh7th/cmp-buffer",        -- buffer completions
+      "hrsh7th/cmp-path",          -- path completions
+      "hrsh7th/cmp-cmdline",       -- cmdline completions
+      "saadparwaiz1/cmp_luasnip",  -- Snippets source for nvim-cmp
+      "hrsh7th/cmp-nvim-lsp",      -- LSP source for nvim-cmp
+    },
+  }
+  use {"windwp/nvim-autopairs",   -- Autopairs, integrates with both cmp and treesitter
+    requires = {
+      "nvim-treesitter/nvim-treesitter",  -- 使用 treesitter 来确定 <CR> 后 cursor 是否应该 indent. NOTE: `ts_config`
+      "hrsh7th/nvim-cmp"  -- VVI: need to add mapping `CR` on nvim-cmp setup.
+    }
+  }
 
   --- LSP ------------------------------------------------------------------------------------------
   use "neovim/nvim-lspconfig"            -- enable LSP, 官方 LSP 引擎.
@@ -149,7 +180,9 @@ return packer.startup(function(use)
   use "jose-elias-alvarez/null-ls.nvim"  -- for formatters and linters, depends on "nvim-lua/plenary.nvim"
 
   --- Snippets -------------------------------------------------------------------------------------
-  use "L3MON4D3/LuaSnip"              -- snippet engine, provides content to "saadparwaiz1/cmp_luasnip"
+  use {"L3MON4D3/LuaSnip",   -- snippet engine, provides content to "saadparwaiz1/cmp_luasnip"
+    requires = "saadparwaiz1/cmp_luasnip"
+  }
   use "rafamadriz/friendly-snippets"  -- 已经写好的 snippets content, 可以参考结构. snippet json 不能有注释
 
   --- File Tree Display ----------------------------------------------------------------------------
@@ -157,8 +190,8 @@ return packer.startup(function(use)
   use "kyazdani42/nvim-tree.lua"  -- 类似 NerdTree
 
   --- Buffer & Status Line -------------------------------------------------------------------------
-  use "vim-airline/vim-airline"   -- vim-airline
-  use "tpope/vim-fugitive"        -- airline 中显示 git 状态
+  -- vim-fugitive: airline 中显示 git 状态
+  use {"vim-airline/vim-airline", requires="tpope/vim-fugitive"}
   --- TODO 以下插件可以替代 airline --- {{{
   --use "akinsho/bufferline.nvim"     -- top buffer list
   --use "nvim-lualine/lualine.nvim"   -- bottom status line
@@ -176,18 +209,8 @@ return packer.startup(function(use)
   --- Useful Tools ---------------------------------------------------------------------------------
   use "nvim-telescope/telescope.nvim" -- fzf rg fd, preview 使用的是 tree-sitter, 而不用 bat 了
   use "akinsho/toggleterm.nvim"       -- terminal
-  use "lukas-reineke/indent-blankline.nvim"  -- identline
-  use "windwp/nvim-autopairs"         -- Autopairs, integrates with both cmp and treesitter
   use "folke/which-key.nvim"          -- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   use "rcarriga/nvim-notify"          -- 通知功能
-  use "p00f/nvim-ts-rainbow"          -- 括号颜色. treesitter 解析
-
-  use {"windwp/nvim-ts-autotag",      -- auto close tag <div></div>
-    ft={'html', 'javascript', 'typescript',
-      'javascriptreact', 'typescriptreact',
-      'svelte', 'vue', 'tsx', 'jsx',
-      'rescript', 'xml', 'markdown'}
-  } 
 
   --use "goolord/alpha-nvim"          -- neovim 启动页面
   --use "ahmedkhalf/project.nvim"     -- project manager
