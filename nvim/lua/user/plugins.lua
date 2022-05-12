@@ -120,7 +120,7 @@ return packer.startup(function(use)
   --- `:TSUpdate`             -- Update the installed languages
   --- }}}
   use {"nvim-treesitter/nvim-treesitter",  -- NOTE: treesitter 主要插件
-    run = ":TSUpdate",
+    run = ":TSUpdate",   -- Post-update/install hook
   }
   --- Commands for "nvim-treesitter/playground" --- {{{
   --- `:TSPlaygroundToggle`  -- 查看 tree-sitter 对当前 word 的定义.
@@ -203,17 +203,14 @@ return packer.startup(function(use)
   --- delve 安装位置 vimspector_base_dir=~/.local/share/nvim/site/pack/packer/start/vimspector/gadgets/macos/...
   --- https://github.com/puremourning/vimspector
   --- https://pepa.holla.cz/2021/03/01/golang-debugging-application-in-neovim/
-  use {"puremourning/vimspector", ft="go"}    -- Debug Tool. NOTE: for golang ONLY for now.
-  -- use "mfussenegger/nvim-dap"   -- lua debug tool
+  use {"puremourning/vimspector", ft={"go"}}    -- Debug Tool. NOTE: for golang ONLY for now.
+  --use "mfussenegger/nvim-dap"   -- lua debug tool
 
   --- Useful Tools ---------------------------------------------------------------------------------
   use "nvim-telescope/telescope.nvim" -- fzf rg fd, preview 使用的是 tree-sitter, 而不用 bat 了
   use "akinsho/toggleterm.nvim"       -- terminal
   use "folke/which-key.nvim"          -- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   use "rcarriga/nvim-notify"          -- 通知功能
-
-  --use "goolord/alpha-nvim"          -- neovim 启动页面
-  --use "ahmedkhalf/project.nvim"     -- project manager
 
   --- tagbar --- {{{
   --- 函数/类型列表，需要安装 Universal Ctags - `brew info universal-ctags`, 注意不要安装错了.
@@ -224,6 +221,9 @@ return packer.startup(function(use)
 
   --- markdown preview
   use {"iamcco/markdown-preview.nvim", ft="markdown"}  -- NOTE: `:MarkdownPreviewToggle` 只能在 md 文件中使用.
+
+  --use "goolord/alpha-nvim"          -- neovim 启动页面
+  --use "ahmedkhalf/project.nvim"     -- project manager
 
   --- Git
   --use "lewis6991/gitsigns.nvim"
