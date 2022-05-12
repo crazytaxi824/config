@@ -5,6 +5,10 @@
   "contributes": {
     "snippets": [
       {
+        "language": "all",
+        "path": "./snippets/shell.json"
+      },
+      {
         "language": "go",
         "path": "./snippets/go.json"
       },
