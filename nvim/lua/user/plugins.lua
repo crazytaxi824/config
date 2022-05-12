@@ -23,20 +23,20 @@
 --   lock = boolean,              -- VVI: Skip updating this plugin in updates/syncs. Still cleans.
 --
 --   -- 类似 vim-plug { 'do' }
---   run = string, function, or table, -- VVI: Post-update/install hook. See "update/install hooks".
---   requires = string or list,   -- VVI: Specifies plugin dependencies. See "dependencies".
+--   run = string, function, or table, -- VVI: UPDATE 之后执行, 不是 loaded.
+--   requires = string or list,   -- VVI: 会先加载 requires 中的 plugin.
+--   config = string or function, -- VVI: after plugin loaded. `config = function() ... end`,
 --   rocks = string or list,      -- Specifies Luarocks dependencies for the plugin
---   config = string or function, -- VVI: Specifies code to run after this plugin is loaded.
 --
 --   -- The setup key implies opt = true
 --   setup = string or function,  -- Specifies code to run before this plugin is loaded.
 --
 --   -- The following keys all imply lazy-loading and imply opt = true
 --   -- plugin 加载条件.
---   cmd = string or list,        -- VVI: Specifies commands which load this plugin. Can be an autocmd pattern.
+--   cmd = string or list,        -- 有 BUG. Specifies commands which load this plugin. Can be an autocmd pattern.
 --   ft = string or list,         -- VVI: Specifies filetypes which load this plugin.
 --   keys = string or list,       -- Specifies maps which load this plugin. See "Keybindings".
---   event = string or list,      -- VVI: Specifies autocommand events which load this plugin.
+--   event = string or list,      -- Specifies autocommand events which load this plugin.
 --   fn = string or list          -- Specifies functions which load this plugin.
 --   cond = string, function, or list of strings/functions,   -- Specifies a conditional test to load this plugin
 --   module = string or list      -- Specifies Lua module names for require. When requiring a string which starts
