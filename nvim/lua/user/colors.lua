@@ -35,12 +35,13 @@ vim.cmd('hi MatchParen cterm=underline,bold ctermfg=220 ctermbg=None')    -- 括
 
 vim.cmd('hi LineNr ctermfg=240')                   -- 行号颜色
 vim.cmd('hi CursorLine ctermbg=235 cterm=None')    -- 光标所在行颜色
-vim.cmd('hi CursorLineNr cterm=None')              -- 光标所在行号的颜色
+vim.cmd('hi CursorLineNr cterm=bold ctermfg=191')  -- 光标所在行号的颜色
 vim.cmd('hi SignColumn ctermbg=None')              -- line_number 左边用来标记错误, 打断点的位置. 术语 gutter
 vim.cmd('hi ColorColumn ctermbg=235')              -- textwidth column 颜色
+vim.cmd('hi QuickFixLine cterm=bold ctermbg=237 ctermfg=75')  -- Quick Fix 选中行颜色
 
 vim.cmd('hi IncSearch ctermfg=0 ctermbg=213 cterm=None')  -- / ? 搜索颜色
-vim.cmd('hi Search ctermfg=0 ctermbg=3')                  -- / ? * # g* g# 搜索颜色
+vim.cmd('hi Search ctermfg=0 ctermbg=191')                  -- / ? * # g* g# 搜索颜色
 
 vim.cmd('hi ErrorMsg ctermfg=253 ctermbg=203')     -- echoerr 颜色
 vim.cmd('hi WarningMsg ctermfg=236 ctermbg=215')   -- echohl 颜色, XXX FIXME BUG 颜色

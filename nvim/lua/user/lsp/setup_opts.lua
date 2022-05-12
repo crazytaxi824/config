@@ -42,7 +42,7 @@ local function lsp_keymaps(bufnr)
 
   --- https://github.com/neovim/neovim/pull/16057
   --- 也可以使用 vim.diagnostic.setqflist({open = false}) 禁止打开 quickfix window
-  --vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>q", "<cmd>lua vim.diagnostic.setqflist({open=false})<CR>", opts)
+  vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>q", "<cmd>lua vim.diagnostic.setqflist()<CR>", opts)
 
   --- VVI: vim.lsp.handlers 中使用 CompleteDone event 来触发 close hover window.
   vim.api.nvim_buf_set_keymap(bufnr, "n", "<Esc>", '<Esc><cmd>doautocmd CompleteDone<CR>', opts)
