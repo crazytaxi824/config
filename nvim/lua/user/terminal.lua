@@ -62,22 +62,6 @@ function TerminalNormal()
   vim.fn.setwinvar(vim.fn.win_getid(), "reusable", "normal")
 end
 
--- function TerminalNormal2()
---   local win_index = -1
---   -- 获取 term win_id
---   for winnr = vim.fn.winnr('$'), 1, -1 do
---     if vim.fn.getwinvar(winnr, 'reusable') == 'normal' then
---       win_index = winnr
---     end
---   end
---
---   if win_index > 0 then
---     vim.cmd(win_index..'q!')  -- 关闭之前的 terminal window
---   end
---
---   vim.cmd('bot split term:///bin/zsh;\\#reusable\\#normal | setlocal winfixheight nobuflisted bufhidden=wipe')
---   vim.fn.setwinvar(vim.fn.win_getid(), "reusable", "normal")
--- end
 
 --- Terminal autocmd -------------------------------------------------------------------------------
 --- normal terminal 进入时打开 insert mode
@@ -90,4 +74,6 @@ vim.cmd('au BufEnter term://*#reusable#* resize '..reusable_term_size)  -- 必�
 
 --- 绑定 <ESC> 进入 terminal normal 模式, 只对本 buffer 有效.
 vim.cmd [[au TermOpen term://* tnoremap <buffer> <ESC> <C-\><C-n>]]
+
+
 
