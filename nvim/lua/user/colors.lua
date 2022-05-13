@@ -37,7 +37,7 @@ vim.cmd('hi LineNr ctermfg=240')                   -- 行号颜色
 vim.cmd('hi CursorLine ctermbg=235 cterm=None')    -- 光标所在行颜色
 vim.cmd('hi CursorLineNr cterm=bold ctermfg=191')  -- 光标所在行号的颜色
 vim.cmd('hi SignColumn ctermbg=None')              -- line_number 左边用来标记错误, 打断点的位置. 术语 gutter
-vim.cmd('hi ColorColumn ctermbg=235')              -- textwidth column 颜色
+vim.cmd('hi ColorColumn ctermbg=238')              -- textwidth column 颜色
 vim.cmd('hi QuickFixLine cterm=bold ctermbg=237 ctermfg=75')  -- Quick Fix 选中行颜色
 
 vim.cmd('hi IncSearch ctermfg=0 ctermbg=213 cterm=None')  -- / ? 搜索颜色
