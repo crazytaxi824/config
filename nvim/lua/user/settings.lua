@@ -169,7 +169,10 @@ vim.opt.cursorline = true    -- 突出显示当前行. 包括: 行号, 背景色
 vim.opt.signcolumn = 'yes:1'  -- 始终显示 signcolumn. line_number 左边用来标记错误, 打断点的位置. 术语 gutter.
 vim.opt.showmatch = true      -- 跳到匹配的括号上, 包括 () {} []
 vim.opt.cmdheight = 2         -- 底部状态栏高度, more space.
-vim.opt.colorcolumn = '+1'    -- :set cc=+1  " highlight column after 'textwidth'
+
+-- 只在超出 textwidth 的行中显示 ColorColumn. 可以替代 `set colorcolumn`
+vim.fn.matchadd('ColorColumn', '\\%'.. vim.bo.textwidth+1 .. 'v', 100)
+--vim.opt.colorcolumn = '+1'  -- :set cc=+1  " highlight column after 'textwidth'
                               -- :set cc=+1,+2,+3  " highlight three columns after 'textwidth'
 
 vim.opt.completeopt = { "menu", "menuone", "noselect" }    -- 为代码补全设置, mostly just for cmp
