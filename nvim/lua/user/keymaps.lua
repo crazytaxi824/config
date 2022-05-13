@@ -164,10 +164,9 @@ local keymaps = {
   {'n', '<leader>fb', "<cmd>lua require('telescope.builtin').buffers()<cr>", opt, 'Telescope - Buffer List'},
   {'n', '<leader>fh', "<cmd>lua require('telescope.builtin').help_tags()<cr>", opt, 'Telescope - Vim Help Doc'},
   {'n', '<leader>fc', "<cmd>lua require('telescope.builtin').command_history()<cr>", opt, 'Telescope - Command History'},
+  {'n', '<leader>fs', "<cmd>lua require('telescope.builtin').search_history()<cr>", opt, 'Telescope - Search History'},
   {'n', '<leader>fk', "<cmd>lua require('telescope.builtin').keymaps()<cr>", opt, 'Telescope - Keymap normal Mode'},
   {'n', 'z=', "<cmd>lua require('telescope.builtin').spell_suggest()<cr>", opt, 'Telescope - Spell Suggests'},  -- NOTE: 也可以使用 which-key 显示
-  -- {'n', 'q:', "<cmd>lua require('telescope.builtin').command_history()<cr>", opt, 'Telescope - Command History'},
-  {'n', 'q:', "<Nop>", opt},
 
   --- Vimspector -----------------------
   {'n', '<leader>cs', '<Plug>VimspectorContinue', opt, 'Debug - Continue(Start)'},
