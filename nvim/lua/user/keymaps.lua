@@ -16,6 +16,22 @@ local function deleteAllTerm()
   end
 end
 
+--- VVI: for Search Highlight ----------------------------------------------------------------------
+function _HlNextSearch(key)
+  vim.cmd('normal! ' .. key)  -- 首先使用原本的功能
+
+  for _ = 1, 2, 1 do  -- 循环3次
+    local search_pat = '\\%#' .. vim.fn.getreg('/')
+    local blink_time = '30m'
+    local hl_id = vim.fn.matchadd('IncSearch', search_pat, 101)
+    vim.cmd[[redraw]]
+    vim.cmd('sleep '..blink_time)
+    vim.fn.matchdelete(hl_id)
+    vim.cmd[[redraw]]
+    vim.cmd('sleep '..blink_time)
+  end
+end
+
 -- vim.keymap.set() - option `:help :map-arguments`
 -- noremap = { noremap = true },
 -- nowait = { nowait = true },
@@ -62,6 +78,25 @@ local keymaps = {
   --- Tab ------------------------------------------------------------------------------------------
   {'n', '<Tab>', '<C-w><C-w>', opt},
 
+  --- Search ---------------------------------------------------------------------------------------
+  {'n','*', '<cmd>lua _HlNextSearch("*")<CR>', opt},
+  {'n','#', '<cmd>lua _HlNextSearch("#")<CR>', opt},
+  {'n','g*', '<cmd>lua _HlNextSearch("g*")<CR>', opt, 'Search <cword> Next'},
+  {'n','g#', '<cmd>lua _HlNextSearch("g#")<CR>', opt, 'Search <cword> Previous'},
+
+  --- NOTE: "fy - copy VISUAL selected text to register "f"
+  --    `let @/ = @f` - copy register "f" to register "/" (search register)
+  {'v', '*', '"fy<cmd>let @/ = @f <bar> lua _HlNextSearch("*")<CR>', opt},
+  {'v', '#', '"fy<cmd>let @/ = @f <bar> lua _HlNextSearch("#")<CR>', opt},
+  {'v', 'g*', '"fy<cmd>let @/ = @f <bar> lua _HlNextSearch("g*")<CR>', opt, 'Search <cword> Next'},
+  {'v', 'g#', '"fy<cmd>let @/ = @f <bar> lua _HlNextSearch("g#")<CR>', opt, 'Search <cword> Previous'},
+
+  {'n','n', '<cmd>lua _HlNextSearch("n")<CR>', opt},
+  {'n','N', '<cmd>lua _HlNextSearch("N")<CR>', opt},
+
+  {'n','?', '<cmd>nohlsearch<CR>?', {noremap=true}},  -- NOTE: 这里不能使用 silent, 否则 command line 中不显示 '?' 和 '/'
+  {'n','/', '<cmd>nohlsearch<CR>/', {noremap=true}},
+
   --- CTRL -----------------------------------------------------------------------------------------
   {'n', '<C-s>', ':update<CR>', opt},
   {'v', '<C-s>', '<C-c>:update<CR>', opt},
@@ -70,16 +105,6 @@ local keymaps = {
   {'n', '<C-z>', 'u', opt},
   {'v', '<C-z>', '<Nop>', opt},
   {'i', '<C-z>', '<C-o>u', opt},
-
-  --- Search ---------------------------------------------------------------------------------------
-  --- NOTE: using register "f
-  {'v', '*',  '"fy/\\<<C-r>=escape(@f, "/\")<CR>\\><CR>', opt},
-  {'v', 'g*', '"fy/<C-r>=escape(@f, "/\")<CR><CR>', opt, 'Search <cword> Next'},
-  {'v', '#',  '"fy?\\<<C-r>=escape(@f, "/\")<CR>\\><CR>', opt},
-  {'v', 'g#', '"fy?<C-r>=escape(@f, "/\")<CR><CR>', opt, 'Search <cword> Previous'},
-
-  {'n', '/', ':nohlsearch<CR>/', {noremap = true}},  -- NOTE: 这里不要 silent, 否则 / ? 在 command 行中显示不出来.
-  {'n', '?', ':nohlsearch<CR>?', {noremap = true}},
 
   --- fold -----------------------------------------------------------------------------------------
   {'n', '<leader>k1', 'zM', opt, "Close all folds"},
@@ -185,6 +210,7 @@ for _, kv in ipairs(keymaps) do
   vim.keymap.set(kv[1], kv[2], kv[3], kv[4])
 end
 
+
 --- which-key --------------------------------------------------------------------------------------
 --- 添加自定义属性
 --- https://github.com/folke/which-key.nvim#%EF%B8%8F-mappings
@@ -218,5 +244,7 @@ which_key.register({
   ['<F11>'] = "Debug - Step Into",
   ['<S-F11>'] = "Debug - Step Out",
 },{mode='n',prefix='<leader>c'})
+
+
 
 
