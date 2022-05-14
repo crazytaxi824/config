@@ -18,9 +18,13 @@ end
 
 --- VVI: for Search Highlight ----------------------------------------------------------------------
 function _HlNextSearch(key)
-  vim.cmd('normal! ' .. key)  -- 首先使用原本的功能
+  local status, errmsg = pcall(vim.cmd, 'normal! ' .. key)
+  if not status then
+    vim.api.nvim_echo({{errmsg, "ErrorMsg"}}, false, {})
+    return
+  end
 
-  for _ = 1, 2, 1 do  -- 循环3次
+  for _ = 1, 2, 1 do  -- 循环闪烁
     local search_pat = '\\%#' .. vim.fn.getreg('/')
     local blink_time = '30m'
     local hl_id = vim.fn.matchadd('IncSearch', search_pat, 101)

@@ -29,6 +29,7 @@
 ---           然后使用 require "user/lsp" 直接加载整个 lsp 文件夹.
 
 --- NOTE: 常用函数
+--    pcall(vim.cmd, "normal! n")         获取 command 返回信息
 ---   vim.inspect(table)                  打印 table 中的内容, 类似 fmt.Printf("%+v", struct)
 ---   table.insert({list}, elem)          向 list 中插入元素
 ---   table.concat({list}, "sep")         类似 string.join()
