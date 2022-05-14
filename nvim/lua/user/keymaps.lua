@@ -24,10 +24,10 @@ function _HlNextSearch(key)
     return
   end
 
+  local search_pat = '\\%#' .. vim.fn.getreg('/')
+  local blink_time = '40m'
   for _ = 1, 2, 1 do  -- 循环闪烁
-    local search_pat = '\\%#' .. vim.fn.getreg('/')
-    local blink_time = '30m'
-    local hl_id = vim.fn.matchadd('IncSearch', search_pat, 101)
+    local hl_id = vim.fn.matchadd('HLNextSearch', search_pat, 101)
     vim.cmd[[redraw]]
     vim.cmd('sleep '..blink_time)
     vim.fn.matchdelete(hl_id)

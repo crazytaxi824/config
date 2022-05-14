@@ -103,8 +103,7 @@ return packer.startup(function(use)
 
   --- Performence & Functions ----------------------------------------------------------------------
   use "lewis6991/impatient.nvim"  -- 加快 lua module 加载时间
-  use "nvim-lua/popup.nvim"       -- [必要] An implementation of the Popup API from vim in Neovim
-  use "nvim-lua/plenary.nvim"     -- [必要] Useful lua functions used ny lots of plugins
+  use "nvim-lua/plenary.nvim"     -- [必要] Useful lua functions used by lots of plugins
   -- [FIXME] Needed while issue https://github.com/neovim/neovim/issues/12587 is still open
   -- CursorHold and CursorHoldI are blocked by timer_start()
   -- FIX: updatetime 设置.
@@ -207,7 +206,9 @@ return packer.startup(function(use)
   --use "mfussenegger/nvim-dap"   -- lua debug tool
 
   --- Useful Tools ---------------------------------------------------------------------------------
-  use "nvim-telescope/telescope.nvim" -- fzf rg fd, preview 使用的是 tree-sitter, 而不用 bat 了
+  use {"nvim-telescope/telescope.nvim",  -- fzf rg fd, preview 使用的是 tree-sitter, 而不用 bat 了
+    requires="nvim-lua/plenary.nvim",
+  }
   use "akinsho/toggleterm.nvim"       -- terminal
   use "folke/which-key.nvim"          -- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   use "rcarriga/nvim-notify"          -- 通知功能
