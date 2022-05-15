@@ -66,7 +66,7 @@ local function hoverShortHandler(_, result, ctx, config)
   config = config or {}
   config.focus_id = ctx.method
 
-  -- NOTE: open_floating_preview() 设置
+  -- NOTE: open_floating_preview() 自定义设置
   config.focusable = false
   config.border = {"▄","▄","▄","█","▀","▀","▀","█"}
   config.close_events = {"CompleteDone", "WinScrolled"}
@@ -79,7 +79,7 @@ local function hoverShortHandler(_, result, ctx, config)
   local mls = vim.lsp.util.convert_input_to_markdown_lines(result.contents)  -- split string to text list
   mls = vim.lsp.util.trim_empty_lines(mls)  -- Removes empty lines from the beginning and end
 
-  -- 寻找 "```" end line
+  -- NOTE: 寻找 "```" end line, 忽略后面的所有内容.
   local markdown_lines = {}
   for _, line in ipairs(mls) do
     table.insert(markdown_lines, line)
@@ -98,14 +98,45 @@ local function hoverShortHandler(_, result, ctx, config)
   return vim.lsp.util.open_floating_preview(markdown_lines, "markdown", config)
 end
 
--- https://github.com/neovim/neovim/ -> runtime/lua/vim/lsp/buf.lua
-function HoverShort()
-  local method = 'textDocument/hover'
-  local param = vim.lsp.util.make_position_params()  -- 这个函数生成 cursor position, 用于 lsp request.
+--- 寻找 cursor 前最近的 '(' 的位置.
+local function findFuncCallBeforeCursor()
+  local pos = vim.fn.getpos('.')  -- [bufnum, lnum, col, off], off - virtualedit.
+  local lcontent = vim.fn.getline(pos[2])
 
-  vim.lsp.buf_request(0, method, param, hoverShortHandler)  -- NOTE: send request to LSP server
+  -- 从 cursor 的位置向前查找
+  local idx = -1  -- '(' 位置标记
+  for i=pos[3],1,-1 do
+    if string.sub(lcontent, i, i) == '(' then
+      idx = i
+      break
+    end
+  end
+
+  -- vim index 从 1 开始计算, 所以这里 -1
+  -- idx - pos[3] 计算 '(' 到 cursor 位置的偏移.
+  return idx-1, idx-pos[3]-1
 end
 
+-- https://github.com/neovim/neovim/ -> runtime/lua/vim/lsp/buf.lua
+function HoverShort()
+  local bracketCol, offset_x = findFuncCallBeforeCursor()
+
+  -- 如果行内没有 '(' 则返回.
+  if bracketCol < 0 then
+    return
+  end
+
+  local method = 'textDocument/hover'
+  local param = vim.tbl_deep_extend('force',
+    vim.lsp.util.make_position_params(),
+    { position = { character = bracketCol-1 } }  -- VVI: 传入 '(' 的前一个位置给 LSP.
+  )
+
+  vim.lsp.buf_request(0, method, param,
+    -- VVI: 添加 offset 设置到 handler, 用来偏移 open_floating_preview() window
+    vim.lsp.with(hoverShortHandler, {offset_x = offset_x})
+  )
+end
 
 -- HACK: Always Put popup window on Top of the cursor.
 -- 影响所有使用 vim.lsp.util.open_floating_preview() 的 popup window.

@@ -30,8 +30,9 @@ local function lsp_keymaps(bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, "n", "<F2>", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
   vim.api.nvim_buf_set_keymap(bufnr, "i", "<F2>", "<C-o><cmd>lua vim.lsp.buf.rename()<CR>", opts)
   vim.api.nvim_buf_set_keymap(bufnr, "n", "<F4>", "<cmd>lua vim.lsp.buf.hover()<CR>", opts) -- NOTE: 连续两次 F4 会进入 floating window, q 退出 floating window.
-  --vim.api.nvim_buf_set_keymap(bufnr, "i", "<F4>", "<C-o><cmd>lua vim.lsp.buf.hover()<CR>", opts)
-  vim.api.nvim_buf_set_keymap(bufnr, "i", "<F4>", "", {noremap = true, callback = HoverShort})  -- lua HoverShort()
+  vim.api.nvim_buf_set_keymap(bufnr, "i", "<F4>", "<C-o><cmd>lua vim.lsp.buf.hover()<CR>", opts)
+  --vim.api.nvim_buf_set_keymap(bufnr, "n", "<C-CR>", "", {noremap = true, callback = HoverShort})  -- lua HoverShort()
+  vim.api.nvim_buf_set_keymap(bufnr, "i", "<C-CR>", "", {noremap = true, callback = HoverShort})  -- lua HoverShort()
   vim.api.nvim_buf_set_keymap(bufnr, "n", "<F16>", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)  -- <S-F4>
   vim.api.nvim_buf_set_keymap(bufnr, "n", "<F12>", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
   vim.api.nvim_buf_set_keymap(bufnr, "n", "<F24>", "<cmd>lua vim.lsp.buf.references()<CR>", opts)  -- <S-F12>
