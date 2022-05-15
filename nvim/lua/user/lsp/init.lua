@@ -13,7 +13,7 @@ if not lsp_installer_ok then
 end
 
 --- VVI: 在 ~/.config/nvim/lua/user/lsp/langs/ 中的文件名.
-local LSP_servers = { "jsonls", "sumneko_lua", "gopls", "tsserver" }
+local LSP_servers = { "jsonls", "sumneko_lua", "gopls", "tsserver", "pyright" }
 
 --- lsp_installer settings -------------------------------------------------------------------------
 lsp_installer.setup {

@@ -120,7 +120,8 @@ local function findFuncCallBeforeCursor()
   local node = ts_utils.get_node_at_cursor()  -- 获取 node at cursor.
 
   while node do
-    if node:type() == 'argument_list' then
+    -- NOTE: 'go, py' use argument_list; 'js, ts, lua' use arguments
+    if node:type() == 'argument_list' or node:type() == 'arguments' then
       local _, col, _ = node:start()  -- argument_list start position, 即 '(' 的位置
       local pos = vim.fn.getpos('.')  -- cursor position [bufnum, lnum, col, off]
 
@@ -138,7 +139,7 @@ end
 function HoverShort()
   local bracketCol, offset_x = findFuncCallBeforeCursor()
 
-  -- 如果行内没有 '(' 则返回.
+  -- 如果 cursor 不在 'arguments' 内则返回.
   if bracketCol < 0 then
     return
   end
