@@ -66,7 +66,7 @@ local function hoverShortHandler(_, result, ctx, config)
   config = config or {}
   config.focus_id = ctx.method
 
-  -- NOTE: open_floating_preview() 设置
+  -- NOTE: open_floating_preview() 自定义设置
   config.focusable = false
   config.border = {"▄","▄","▄","█","▀","▀","▀","█"}
   config.close_events = {"CompleteDone", "WinScrolled"}
@@ -79,7 +79,7 @@ local function hoverShortHandler(_, result, ctx, config)
   local mls = vim.lsp.util.convert_input_to_markdown_lines(result.contents)  -- split string to text list
   mls = vim.lsp.util.trim_empty_lines(mls)  -- Removes empty lines from the beginning and end
 
-  -- 寻找 "```" end line
+  -- NOTE: 寻找 "```" end line, 忽略后面的所有内容.
   local markdown_lines = {}
   for _, line in ipairs(mls) do
     table.insert(markdown_lines, line)
@@ -98,14 +98,62 @@ local function hoverShortHandler(_, result, ctx, config)
   return vim.lsp.util.open_floating_preview(markdown_lines, "markdown", config)
 end
 
--- https://github.com/neovim/neovim/ -> runtime/lua/vim/lsp/buf.lua
-function HoverShort()
-  local method = 'textDocument/hover'
-  local param = vim.lsp.util.make_position_params()  -- 这个函数生成 cursor position, 用于 lsp request.
+--- NOTE: 使用 nvim-treesitter 寻找 cursor 前最近的 function call() 的位置 --- {{{
+-- `:help nvim-treesitter`
+-- `:help treesitter`
+--    node = ts_utils.get_node_at_cursor()  -- 获取 node at cursor.
+--    node:start()  -- start pos, return [row, (col), totalbytes]
+--    node:end_()   -- end pos
+--    node:parent() -- 父级 node
+--    node:type()   -- treesitter 分析
+--        selector_expression  -- '.'
+--        argument_list  -- func call '(xxx)' 中的所有内容, 包括括号 ().
+--        func call 名字 -- call_expression.function.field
+-- }}}
+local function findFuncCallBeforeCursor()
+  local ts_status, ts_utils = pcall(require, "nvim-treesitter.ts_utils")
+  if not ts_status then
+    vim.api.nvim_echo({{' tree-sitter is not loaded. ', "WarningMsg"}}, false, {})
+    return -1, -1
+  end
 
-  vim.lsp.buf_request(0, method, param, hoverShortHandler)  -- NOTE: send request to LSP server
+  local node = ts_utils.get_node_at_cursor()  -- 获取 node at cursor.
+
+  while node do
+    if node:type() == 'argument_list' then
+      local _, col, _ = node:start()  -- argument_list start position, 即 '(' 的位置
+      local pos = vim.fn.getpos('.')  -- cursor position [bufnum, lnum, col, off]
+
+      return col-1, col-pos[3]  -- 返回 '(' 前的一个位置, float_window offset 距离.
+    end
+
+    node = node:parent()  -- 向上查找
+  end
+
+  return -1, -1
 end
 
+-- https://github.com/neovim/neovim/ -> runtime/lua/vim/lsp/buf.lua
+-- vim.lsp.buf_request(0, method, params, handlerFn)  -- 向 LSP server 发送请求, 通过 handler 处理结果.
+function HoverShort()
+  local bracketCol, offset_x = findFuncCallBeforeCursor()
+
+  -- 如果行内没有 '(' 则返回.
+  if bracketCol < 0 then
+    return
+  end
+
+  local method = 'textDocument/hover'
+  local param = vim.tbl_deep_extend('force',
+    vim.lsp.util.make_position_params(),
+    { position = { character = bracketCol-1 } }  -- VVI: 传入 '(' 的前一个位置给 LSP.
+  )
+
+  vim.lsp.buf_request(0, method, param,
+    -- VVI: 添加 offset 设置到 handler, 用来偏移 open_floating_preview() window
+    vim.lsp.with(hoverShortHandler, {offset_x = offset_x})
+  )
+end
 
 -- HACK: Always Put popup window on Top of the cursor.
 -- 影响所有使用 vim.lsp.util.open_floating_preview() 的 popup window.
