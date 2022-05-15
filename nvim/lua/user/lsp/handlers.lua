@@ -98,26 +98,43 @@ local function hoverShortHandler(_, result, ctx, config)
   return vim.lsp.util.open_floating_preview(markdown_lines, "markdown", config)
 end
 
---- 寻找 cursor 前最近的 '(' 的位置.
+--- NOTE: 使用 nvim-treesitter 寻找 cursor 前最近的 function call() 的位置 --- {{{
+-- `:help nvim-treesitter`
+-- `:help treesitter`
+--    node = ts_utils.get_node_at_cursor()  -- 获取 node at cursor.
+--    node:start()  -- start pos, return [row, (col), totalbytes]
+--    node:end_()   -- end pos
+--    node:parent() -- 父级 node
+--    node:type()   -- treesitter 分析
+--        selector_expression  -- '.'
+--        argument_list  -- func call '(xxx)' 中的所有内容, 包括括号 ().
+--        func call 名字 -- call_expression.function.field
+-- }}}
 local function findFuncCallBeforeCursor()
-  local pos = vim.fn.getpos('.')  -- [bufnum, lnum, col, off], off - virtualedit.
-  local lcontent = vim.fn.getline(pos[2])
-
-  -- 从 cursor 的位置向前查找
-  local idx = -1  -- '(' 位置标记
-  for i=pos[3],1,-1 do
-    if string.sub(lcontent, i, i) == '(' then
-      idx = i
-      break
-    end
+  local ts_status, ts_utils = pcall(require, "nvim-treesitter.ts_utils")
+  if not ts_status then
+    vim.api.nvim_echo({{' tree-sitter is not loaded. ', "WarningMsg"}}, false, {})
+    return -1, -1
   end
 
-  -- vim index 从 1 开始计算, 所以这里 -1
-  -- idx - pos[3] 计算 '(' 到 cursor 位置的偏移.
-  return idx-1, idx-pos[3]-1
+  local node = ts_utils.get_node_at_cursor()  -- 获取 node at cursor.
+
+  while node do
+    if node:type() == 'argument_list' then
+      local _, col, _ = node:start()  -- argument_list start position, 即 '(' 的位置
+      local pos = vim.fn.getpos('.')  -- cursor position [bufnum, lnum, col, off]
+
+      return col-1, col-pos[3]  -- 返回 '(' 前的一个位置, float_window offset 距离.
+    end
+
+    node = node:parent()  -- 向上查找
+  end
+
+  return -1, -1
 end
 
 -- https://github.com/neovim/neovim/ -> runtime/lua/vim/lsp/buf.lua
+-- vim.lsp.buf_request(0, method, params, handlerFn)  -- 向 LSP server 发送请求, 通过 handler 处理结果.
 function HoverShort()
   local bracketCol, offset_x = findFuncCallBeforeCursor()
 
