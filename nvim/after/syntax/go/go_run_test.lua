@@ -4,7 +4,7 @@
 --    获取 go module, `go list -m`, 项目中的任何路径下都能获取到.
 --    lua regex - string.match(), https://fhug.org.uk/kb/kb-article/understanding-lua-patterns/
 --
---  操作方法:
+--  Go Test 操作方法:
 --    cursor 指向 Test Function Name Line, 使用 <F6> 执行 go test singleTestFunc
 --    <S-F6> go test -v -timeout 30s -run "^Test.*"
 --    <C-F6> go test -v -timeout 30s -run ^$ -benchmem -bench "^Benchmark.*"
@@ -45,6 +45,7 @@ local function goRun()
 
   -- NOTE: 删除之前的 terminal.
   vim.cmd('silent! bw! term://*toggleterm#'..go_term_id)
+  -- go run Package
   local go = Terminal:new(vim.tbl_deep_extend('force', go_opts, { cmd = "go run " .. import_path }))
   go:toggle()
 end

@@ -45,6 +45,10 @@ function GetWinInfo()
   print(vim.inspect(infos))
 end
 
+function TrimString(str)
+  return string.match(str, "^%s*(.-)%s*$")
+end
+
 --- TEST: test functions ---
 
 
