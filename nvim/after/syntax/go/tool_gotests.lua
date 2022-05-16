@@ -4,6 +4,8 @@
 --     -excl   exclude regex funcname
 --     -exported  all exported functions
 --     -all
+--
+--  操作方法: cursor 指向 funciton Name, 使用 Command `:GoTests`
 local status_ok, term = pcall(require, "toggleterm.terminal")
 if not status_ok then
     return

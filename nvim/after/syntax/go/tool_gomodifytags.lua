@@ -16,11 +16,12 @@
 --    -transform  snakecase(*) | camelcase | lispcase | pascalcase | titlecase | keep
 --
 -- NOTE: 本文件不准备实现 options 功能. 只实现 -add-tags -clear-tags -remove-tags 三个功能.
--- Commands:
---   GoAddTags json,xml camelcase
---   GoAddTags json,xml <omit>
---   GoRemoveAllTags
---   GoRemoveTags json,xml
+--
+-- 操作方法: cursor 在 struct 的 {} 内, 使用以下 Command
+--   :GoAddTags json,xml camelcase
+--   :GoAddTags json,xml <omit>
+--   :GoRemoveAllTags
+--   :GoRemoveTags json,xml
 
 --- GoAddTags --------------------------------------------------------------------------------------
 local function goAddTags(arglist)

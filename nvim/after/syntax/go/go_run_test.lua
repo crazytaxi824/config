@@ -3,6 +3,11 @@
 --    获取 go import path, `cd src/xxx && go list -f '{{.ImportPath}}'`
 --    获取 go module, `go list -m`, 项目中的任何路径下都能获取到.
 --    lua regex - string.match(), https://fhug.org.uk/kb/kb-article/understanding-lua-patterns/
+--
+--  操作方法:
+--    cursor 指向 Test Function Name Line, 使用 <F6> 执行 go test singleTestFunc
+--    <S-F6> go test -v -timeout 30s -run "^Test.*"
+--    <C-F6> go test -v -timeout 30s -run ^$ -benchmem -bench "^Benchmark.*"
 
 local status_ok, term = pcall(require, "toggleterm.terminal")
 if not status_ok then
@@ -129,22 +134,11 @@ end
 --- go test single function ------------------------------------------------------------------------ {{{
 --- 从 cursor 所在行向上查找, 返回函数定义行 "func Foo(param type) {"
 local function findFuncLine()  -- return (func_name: string|nil)
-  -- 获取当前 line_number
-  local lnum = vim.fn.line('.')
+  local lcontent = vim.fn.getline('.')  -- 获取行内容
 
-  -- 向上逆向查找 ^func.*
-  for i = lnum, 1, -1 do
-    local lcontent = vim.fn.getline(i)  -- 获取行内容
-
-    -- 除了 cursor 所在行之外, 如果向上直接找到 ^}$ 则说明自己在 {} 外, 返回 nil.
-    if i ~= lnum and string.match(lcontent, "^}$") ~= nil then
-      return nil
-    end
-
-    -- 如果找到 ^func.* 则返回整行内容.
-    if string.match(lcontent, "^func .*") ~= nil then
-      return lcontent
-    end
+  -- 如果找到 ^func.* 则返回整行内容.
+  if string.match(lcontent, "^func .*") ~= nil then
+    return lcontent
   end
 
   return nil  -- 如果都没找到则返回 nil
@@ -192,7 +186,7 @@ local function goTestCmd()   -- return (cmd: string|nil)
   -- 判断当前函数是否 TestXXX. 如果是则 获取 test function name.
   local testfn, mark = goTestFuncName()
   if mark == 0 then
-    vim.api.nvim_echo({{' not Test funciton ', "ErrorMsg"}}, false, {})
+    vim.api.nvim_echo({{' not a Test funciton ', "ErrorMsg"}}, false, {})
     return nil
   end
 
