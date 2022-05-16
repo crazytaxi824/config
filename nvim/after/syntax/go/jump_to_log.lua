@@ -1,7 +1,7 @@
 -- 利用 local list 跳转到 log 文件 -----------------------------------------------------------------
 
 -- 操作方法: cursor 需要在 filepath string 上, 然后使用 <CR> 跳转到文件.
-local function gotoLogFile()
+local function jumpToLogFile()
   local lcontent = vim.fn.expand('<cWORD>')  -- <cWORD> 以 %s 切分.
   local fp = vim.split(lcontent, ":")
 
@@ -15,14 +15,10 @@ local function gotoLogFile()
 
   -- 寻找和 log 打印的 filepath 相同的 win_id. 如果有则跳转到该 window.
   for _, win_info in ipairs(vim.fn.getwininfo()) do
-    local bufpath = vim.fn.fnamemodify(vim.fn.bufname(win_info.bufnr), ':p')  -- bufname full path
+    local bufpath = vim.fn.fnamemodify(vim.fn.bufname(win_info.bufnr), ':p')  -- convert bufname to absolute path
+    local logpath = vim.fn.fnamemodify(fp[1], ':p')  -- convert log path to absolute path
 
-    -- FIXME when `go test` could print absolute path
-    -- https://github.com/golang/vscode-go/issues/1875
-    -- https://github.com/golang/go/issues/47399
-    if string.match(bufpath, fp[1]) then  -- NOTE: 这里是临时措施, 主要是为 t.Log() 打印路径.
-    --local logpath = vim.fn.fnamemodify(fp[1], ':p')  -- log full path
-    --if bufpath == logpath then  -- 如果 bufpath 绝对路径和 logpath 绝对路径完全相同的情况下.
+    if bufpath == logpath then  -- bufpath 和 logpath 相同的情况下, 跳转到该 window.
       go_run_win_id = win_info.winid
       loc_items = {filename = bufpath, lnum = lnum, text='function gotoLogFile()'}
       break
@@ -57,10 +53,10 @@ local function gotoLogFile()
 end
 
 vim.api.nvim_create_autocmd('TermOpen', {
-  pattern = {"term://*toggleterm#*"},
+  pattern = {"term://*go run*toggleterm#*", "term://*go test*toggleterm#*"},
   callback = function()
     --- VVI: api.nvim_{buf}_set_keymap 需要使用 callback 来传入 local lua function
-    vim.api.nvim_buf_set_keymap(0, 'n', '<CR>', '', {noremap = true, callback = gotoLogFile})
+    vim.api.nvim_buf_set_keymap(0, 'n', '<CR>', '', {noremap = true, callback = jumpToLogFile})
   end,
 })
 

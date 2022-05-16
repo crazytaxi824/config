@@ -209,7 +209,7 @@
   "go.lintOnSave": "package", // NOTE lint 整个 package，使用 file 检查可能有引用问题导致报错。
 
   // go test 设置
-  "go.testFlags": ["-v"], // 影响 https://github.com/cweill/gotests tools 打印详请
+  "go.testFlags": ["-v"], // go test -v ...
 
   // go language server 设置
   // https://github.com/golang/tools/blob/master/gopls/doc/settings.md
@@ -217,6 +217,9 @@
     // Add parameter placeholders when completing a function.
     "usePlaceholders": true,
     // "ui.completion.usePlaceholders": true,
+
+    // syntax highlight 不好看
+    // "ui.semanticTokens": true,
 
     // If true, enable additional analyses with staticcheck.
     // Warning: This will significantly increase memory usage.
