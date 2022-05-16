@@ -24,7 +24,7 @@ local function gotoLogFile()
     --local logpath = vim.fn.fnamemodify(fp[1], ':p')  -- log full path
     --if bufpath == logpath then  -- 如果 bufpath 绝对路径和 logpath 绝对路径完全相同的情况下.
       go_run_win_id = win_info.winid
-      loc_items = {filename = bufpath, lnum = lnum}
+      loc_items = {filename = bufpath, lnum = lnum, text='function gotoLogFile()'}
       break
     elseif string.match(bufpath, ".*%.go$") then
       -- 如果所有的 win 中都没有 log 打印的 filepath, 则选择一个 .go 文件的 winid 用于跳转.
@@ -35,7 +35,7 @@ local function gotoLogFile()
   -- 如果所有的 win 中都没有 log 打印的 filepath, 则检查该 <cWORD> 是否是可以打开的文件.
   if not loc_items then
     if vim.fn.filereadable(fp[1]) == 1 then
-      loc_items = {filename = fp[1], lnum = lnum}
+      loc_items = {filename = fp[1], lnum = lnum, text='function gotoLogFile()'}
     end
   end
 
