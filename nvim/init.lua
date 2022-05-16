@@ -36,7 +36,8 @@
 ---   string.gsub("a b c", " ", "\\%%")   类似 string.replace()
 ---   vim.list_extend({list1}, {list2})   合并两个 list-like table
 ---   vim.tbl_deep_extend("force", {map1}, {map2})  合并两个 map-like table
---    vim.fn.split({list}, sep, keepempty)
+--    vim.split({string}, {sep}, {kwargs})
+--    vim.fn.split({string}, {pattern}, {keepempty})
 --    vim.fn.join({list}, sep)
 --
 --- NOTE: nvim 常用函数
@@ -94,10 +95,10 @@
 -------------------------------------+----------------------------------+------------------------------------
 
 --- 读取设置: ~/.config/nvim/lua/user/xxx.lua
+require "user.util"      -- [必要], 自定义函数, 很多设置用到的常用函数.
 require "user.settings"  -- vimrc 设置
 require "user.keymaps"   -- keymap 设置
 require "user.fold"      -- 代码折叠设置, NOTE: treesitter experimental function.
-require "user.util"      -- 自定义函数
 --require "user.terminal"  -- 自定义 terminal, 需要时可替代 toggle terminal.
 
 --- 加载 plugins ---

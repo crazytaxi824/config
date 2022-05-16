@@ -32,7 +32,7 @@ local function goImpl(arglist)
   end
 
   --- 写入当前文件
-  local msg = vim.list_extend({""}, vim.fn.split(result, '\n'))
+  local msg = vim.list_extend({""}, vim.split(result, '\n'))
   vim.fn.writefile(msg, vim.fn.expand('%'), 'a')
 
   --- checktime          刷新 buffer 显示
