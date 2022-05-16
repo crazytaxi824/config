@@ -33,7 +33,7 @@ toggleterm.setup({
   start_in_insert = false,   -- VVI: 全局模式, 不好用. 打开 terminal 时进入 insert 模式.
   direction = "horizontal",  -- vertical | horizontal | tab | float
 
-  hide_numbers = true,   -- 隐藏 teriminal 行号
+  hide_numbers = false,  -- 隐藏 teriminal 行号, 会影响后打开的 window 也没有 number.
   persist_size = true,   -- 保持 window size
   shade_terminals = false,  -- `set termguicolors` 用
   --shade_filetypes = {},
