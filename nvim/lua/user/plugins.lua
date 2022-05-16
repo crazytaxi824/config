@@ -221,7 +221,10 @@ return packer.startup(function(use)
   use "preservim/tagbar"
 
   --- markdown preview
-  use {"iamcco/markdown-preview.nvim", ft="markdown"}  -- NOTE: `:MarkdownPreviewToggle` 只能在 md 文件中使用.
+  use {"iamcco/markdown-preview.nvim",
+    run = function() vim.fn["mkdp#util#install"]() end,  -- 安装 preview 插件
+    ft = "markdown",  -- NOTE: `:MarkdownPreviewToggle` 只能在 md 文件中使用
+  }
 
   --use "goolord/alpha-nvim"          -- neovim 启动页面
   --use "ahmedkhalf/project.nvim"     -- project manager
