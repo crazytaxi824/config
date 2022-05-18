@@ -172,5 +172,10 @@
     "prefix": "omitempty",
     "body": "omitempty",
     "description": "Snippet for omitempty"
+  },
+  "comparable keyword": {
+    "prefix": "comparable",
+    "body": "comparable",
+    "description": "Snippet for comparable"
   }
 }

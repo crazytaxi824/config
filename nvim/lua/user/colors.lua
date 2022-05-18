@@ -13,6 +13,7 @@
 --    ctermfg=85        暗金色 - 函数名, 函数调用
 --    ctermfg=213       亮粉色 - return, if, else, break
 --    ctermfg=173       橙色   - String, ':hi String'
+--    ctermfg=179       亮橙色 - 星星颜色
 --    ctermfg=170       紫色   - onedark theme (主色调)
 --    ctermfg=117/81    淡蓝色 - goField, Special, fmt.Printf("%s \n")
 --    ctermfg=75        蓝色   - package, import, func
