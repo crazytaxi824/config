@@ -90,10 +90,10 @@ local keymaps = {
 
   --- NOTE: "fy - copy VISUAL selected text to register "f"
   --    `let @/ = @f` - copy register "f" to register "/" (search register)
-  {'v', '*', '"fy<cmd>let @/ = @f <bar> lua _HlNextSearch("*")<CR>', opt},
-  {'v', '#', '"fy<cmd>let @/ = @f <bar> lua _HlNextSearch("#")<CR>', opt},
-  {'v', 'g*', '"fy<cmd>let @/ = @f <bar> lua _HlNextSearch("g*")<CR>', opt, 'Search <cword> Next'},
-  {'v', 'g#', '"fy<cmd>let @/ = @f <bar> lua _HlNextSearch("g#")<CR>', opt, 'Search <cword> Previous'},
+  {'v', '*', '"fy<cmd>let @/ = "\\\\<"..@f.."\\\\>" <bar> lua _HlNextSearch("n")<CR>', opt},
+  {'v', '#', '"fy<cmd>let @/ = "\\\\<"..@f.."\\\\>" <bar> lua _HlNextSearch("N")<CR>', opt},
+  {'v', 'g*', '"fy<cmd>let @/ = @f <bar> lua _HlNextSearch("n")<CR>', opt, 'Search <cword> Next'},
+  {'v', 'g#', '"fy<cmd>let @/ = @f <bar> lua _HlNextSearch("N")<CR>', opt, 'Search <cword> Previous'},
 
   {'n','n', '<cmd>lua _HlNextSearch("n")<CR>', opt},
   {'n','N', '<cmd>lua _HlNextSearch("N")<CR>', opt},
