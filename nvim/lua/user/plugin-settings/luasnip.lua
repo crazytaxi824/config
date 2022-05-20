@@ -14,20 +14,9 @@ luasnip.config.set_config({
 --- 读取配置文件地址 --- {{{
 -- 默认加载 `:set runtimepath?` 中的 package.json 文件. NOTE: package.json, go.json ... 不能有注释 否则无法解析.
 -- 可以参照 https://github.com/rafamadriz/friendly-snippets 自己定义 snippets
---
--- require("luasnip/loaders/from_vscode").load({
---   paths = { "~/...", "./...", "/..." }, -- 这里的paths 里面只是 folder 地址, folder 中必须包含 package.json 文件.
---   exclude = {"python"},  -- 排除这些语言
---   include = {"go"},      -- VVI: 只加载某些 snippets
--- })
---
--- require("luasnip/loaders/from_vscode").lazy_load({
---   paths = { "~/...", "./...", "/..." }, -- NOTE: lazy_load 只有 paths 配置, 没有 exclude & include
--- })
---
 -- }}}
 --- vscode 指定读取 "~/.config/nvim/snip/package.json"
-require("luasnip.loaders.from_vscode").load({
+require("luasnip.loaders.from_vscode").lazy_load({
   -- paths = {},     -- NOTE: paths 缺省时自动加载 runtimepath. 这里是加载 friendly-snippets
   exclude = {"go"},  -- 排除 go, 使用下面自定义的 snippets
 })
