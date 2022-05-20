@@ -16,17 +16,17 @@
   },
   "fmt.Printf()": {
     "prefix": "fmtf",
-    "body": "fmt.Printf(\"${1:msg} %v\\n}\", ${2:value})",
+    "body": "fmt.Printf(\"${1:msg:} %v\\n\", ${2:value})",
     "description": "Snippets for fmt.Printf()"
   },
   "fmt.Sprintf()": {
     "prefix": "fmts",
-    "body": "fmt.Sprintf(\"${1:msg} %v\\n}\", ${2:value})",
+    "body": "fmt.Sprintf(\"${1:msg:} %s\", ${2:value})",
     "description": "Snippets for fmt.Sprintf()"
   },
   "fmt.Errorf()": {
     "prefix": "fmterr",
-    "body": "fmt.Errorf(\"${1:msg} %w}\", ${2:err})",
+    "body": "fmt.Errorf(\"${1:msg:} %w\", ${2:err})",
     "description": "Snippets for fmt.Errorf()"
   },
   "log.Println()": {
