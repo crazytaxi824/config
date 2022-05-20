@@ -98,8 +98,10 @@ local keymaps = {
   {'n','n', '<cmd>lua _HlNextSearch("n")<CR>', opt},
   {'n','N', '<cmd>lua _HlNextSearch("N")<CR>', opt},
 
-  {'n','?', '<cmd>nohlsearch<CR>?', {noremap=true}},  -- NOTE: 这里不能使用 silent, 否则 command line 中不显示 '?' 和 '/'
-  {'n','/', '<cmd>nohlsearch<CR>/', {noremap=true}},
+  -- NOTE: 这里不能使用 silent, 否则 command line 中不显示 '?' 和 '/'
+  -- ':echo v:hlsearch' 显示目前 hlsearch 状态.
+  {'n', '?', 'v:hlsearch ? ":nohlsearch<CR>" : "?"', {noremap=true, expr=true}},  -- 三元表达式
+  {'n', '/', 'v:hlsearch ? ":nohlsearch<CR>" : "/"', {noremap=true, expr=true}},
 
   --- CTRL -----------------------------------------------------------------------------------------
   {'n', '<C-s>', ':update<CR>', opt},
