@@ -79,7 +79,7 @@
 -- 常用 Commands                     | 作用                             | package
 -------------------------------------+----------------------------------+------------------------------------
 -- `:PackerSync`                     | Clean, Install, Update packages. | "wbthomason/packer.nvim"
--- `:PackerSnapshot foo`             | Clean, Install, Update packages. | "wbthomason/packer.nvim"
+-- `:PackerSnapshot foo`             | 拍摄快照记录 plugins 版本        |
 -------------------------------------+----------------------------------+------------------------------------
 -- `:LspInfo`                        | 所有已启动的 LSP 列表.           | "neovim/nvim-lspconfig"
 -------------------------------------+----------------------------------+------------------------------------
@@ -92,6 +92,7 @@
 -- `:Notifications`                  | 查看 notify msg 列表             | "rcarriga/nvim-notify"
 -------------------------------------+----------------------------------+------------------------------------
 -- `:NullLsLog`                      | 查看 null-ls debug log           | "jose-elias-alvarez/null-ls.nvim"
+-- `:NullLsInfo`                     | 查看 null-ls 加载信息            |
 -------------------------------------+----------------------------------+------------------------------------
 
 --- 读取设置: ~/.config/nvim/lua/user/xxx.lua
