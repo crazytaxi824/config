@@ -24,6 +24,7 @@ lsp_installer.setup {
   automatic_installation = false, -- 在 lspconfig.xxx.setup() 的 LSP 自动安装.
   max_concurrent_installers = 4,  -- 并发安装数量.
   ui = {
+    check_outdated_servers_on_open = true,  -- 打开面板时检查 outdated lsp
     icons = {
       server_installed = "✓",
       server_pending = "➜",
@@ -32,6 +33,8 @@ lsp_installer.setup {
     keymaps = {
       toggle_server_expand = "<CR>",  -- expand a server in the UI
       install_server = "i",           -- install a server
+      check_server_version = "c",     -- check LSP version under the cursor
+      check_outdated_servers = "C",   -- check all LSP version
       update_server = "u",            -- reinstall/update a server
       update_all_servers = "U",       -- update all installed servers
       uninstall_server = "D",         -- uninstall a server
