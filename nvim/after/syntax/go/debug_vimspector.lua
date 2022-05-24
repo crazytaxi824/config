@@ -1,8 +1,8 @@
 --- "puremourning/vimspector"
 --- https://github.com/puremourning/vimspector#go
 --- VVI:
---    adapter 定义在 vim.g.vimspector_adapters
---    config  定义在 vim.g.vimspector_configurations
+--    adapter 定义在 lua/user/plugin-settings/vimspector.lua -> vim.g.vimspector_adapters
+--    config  定义在 lua/user/plugin-settings/vimspector.lua -> vim.g.vimspector_configurations
 
 local function debug()
   if string.match(vim.fn.expand('%'), ".*_test%.go$") then
