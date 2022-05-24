@@ -3,13 +3,14 @@ if not null_ls_status_ok then
   return
 end
 
---- NOTE: https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/formatting
+--- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/formatting
 local formatting = null_ls.builtins.formatting
---- NOTE: https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
+--- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
 local diagnostics = null_ls.builtins.diagnostics
---- NOTE: https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/code_actions
+--- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/code_actions
 local code_actions = null_ls.builtins.code_actions
 
+--- diagnostics_opts 用于下面的 sources diagnostics 设置.
 local diagnostics_opts = {
   method = null_ls.methods.DIAGNOSTICS_ON_SAVE,  -- 只在 save 的时候执行 diagnostics.
   runtime_condition = function(params)  -- NOTE: 耗资源, 每次运行 linter 前都要运行该函数, 不要做太复杂的运算.
@@ -62,19 +63,19 @@ local sources = {
   }, diagnostics_opts)),
 
   --- formatter 设置 -------------------------------------------------------------------------------
-  --- VVI: lsp.setup(opts) 中的 on_attach 中排除 tsserver & sumneko_lua 的 formatting 功能,
+  --- NOTE: 需要在 lsp.setup(opts) 中的 on_attach 中排除 tsserver & sumneko_lua 的 formatting 功能
   formatting.prettier.with({
     --command = "/path/to/prettier",
     --env = { PRETTIERD_DEFAULT_CONFIG = vim.fn.expand("~/xxx/.prettierrc.json") }  -- 环境变量
-    --- VVI: prettier 默认支持 .editorconfig 文件.
+    --- NOTE: prettier 默认支持 .editorconfig 文件.
     extra_args = { "--single-quote", "--jsx-single-quote",
-      "--print-width=" .. vim.bo.textwidth,  -- VVI: 和 vim textwidth 相同.
+      "--print-width=" .. vim.bo.textwidth,  -- NOTE: 和 vim textwidth 相同.
       "--end-of-line=lf", "--tab-width=2" },
-    disabled_filetypes = { "yaml" },  -- NOTE: 不需要使用 prettier 格式化.
+    disabled_filetypes = { "yaml" },  -- 不需要使用 prettier 格式化.
   }),
 
   formatting.stylua.with({   -- lua, stylua
-    extra_args = { "--column-width=" .. vim.bo.textwidth },  -- VVI: 和 vim textwidth 相同.
+    extra_args = { "--column-width=" .. vim.bo.textwidth },  -- NOTE: 和 vim textwidth 相同.
   }),
 
   formatting.autopep8,  -- python, autopep8, black
@@ -84,7 +85,7 @@ local sources = {
   code_actions.eslint,
 }
 
---- NOTE: null-ls 在这里加载上面设置的 formatting & linter -----------------------------------------
+--- null-ls 在这里加载上面设置的 formatting & linter -----------------------------------------------
 --- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/CONFIG.md
 null_ls.setup({
   --- VVI: 设置 linter / formatter / code actions

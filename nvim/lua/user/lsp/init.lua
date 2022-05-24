@@ -17,9 +17,10 @@ local LSP_servers = { "jsonls", "sumneko_lua", "gopls", "tsserver", "pyright" }
 
 --- lsp_installer settings -------------------------------------------------------------------------
 lsp_installer.setup {
+  -- NOTE: 其实这里不需要通过 lsp-installer 安装 gopls, 因为 gopls 在 $PATH 中,
+  -- 所以 lspconfig 可以直接使用 gopls;
+  -- 如果 gopls 不在 $PATH 中, 则使用 lsp-installer 下载的 gopls.
   ensure_installed = LSP_servers,   -- list 中设置的 LSP 如果没有安装, 则自动安装.
-                            -- NOTE: 其实这里不需要安装 gopls, 因为 gopls 在 $PATH 中, 所以 lspconfig 可以
-                            -- 直接使用 gopls; 如果 gopls 不在 $PATH 中, 则使用 lsp-installer 下载的 gopls.
 
   automatic_installation = false, -- 在 lspconfig.xxx.setup() 的 LSP 自动安装.
   max_concurrent_installers = 4,  -- 并发安装数量.
@@ -44,7 +45,7 @@ lsp_installer.setup {
 
 --- lspconfig setup() ------------------------------------------------------------------------------
 for _, LSP_server in pairs(LSP_servers) do
-  --- VVI: opts 必须包含 on_attach, capabilities 两个属性.
+  --- NOTE: opts 必须包含 on_attach, capabilities 两个属性.
   ---      这里的 opts 获取到的是 require 文件中返回的 M.
   local opts = require("user.lsp.setup_opts")
 

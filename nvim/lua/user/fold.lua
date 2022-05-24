@@ -3,8 +3,8 @@
 --       space indent 的折叠显示正确.
 
 --- 根据不同情况设置不同的折叠方式.
--- [XXX] 不要在打开代码前设置 foldmethod=syntax, 会严重拖慢文件切换速度. eg: jump to definition.
--- NOTE: foldmethod -- treesitter experimental function.
+-- VVI: 不要在打开代码前设置 foldmethod=syntax, 会严重拖慢文件切换速度. eg: jump to definition.
+-- VVI: foldmethod -- treesitter experimental function.
 -- foldnestmax=1  只 fold function 最外层.
 --                VVI: 需要放在 foldlevel 之前设置, 否则可能不生效.
 --                每次执行 <leader>k1 都会重新设置该值.

@@ -8,7 +8,8 @@
 --
 -- gomodifytags 命令行工具.
 -- checktime - refresh buffer. 主要用于文件在 vim 外部被修改后刷新. eg: `gomodifytags`, `call writefile()` 等
---          NOTE: 文件被外部修改之后会重新加载所有针对该 <buffer> 的插件, eg: rundo - read undo file.
+--      NOTE: 文件被外部修改之后会重新加载所有针对该 <buffer> 的插件, eg: rundo - read undo file.
+--
 -- 可选填项:
 --    -file       filepath
 --    -offset     n (num, byte offset) VVI: 主要利用这个功能实现, vim.fn.line2byte() 获取 offset

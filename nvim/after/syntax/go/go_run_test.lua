@@ -16,14 +16,14 @@ end
 
 local Terminal = term.Terminal
 
-local go_term_id = 1024   -- VVI: toggleterm count id
+local go_term_id = 1024   -- NOTE: toggleterm count id
 
 --- Terminal options for go only ---
 local go_opts = {
   hidden = true,          -- VVI: true - 不加入到 terminal list, 无法被 `:ToggleTerm` 找到.
                           -- 用 :q 只能隐藏, 用 :q! exit job.
-  close_on_exit = false,  -- NOTE: 运行完成之后不要关闭 terminal.
-  count = go_term_id,     -- NOTE: 这里是指定 id, 类似 `:100ToggleTerm`,
+  close_on_exit = false,  -- 运行完成之后不要关闭 terminal.
+  count = go_term_id,     -- 这里是指定 id, 类似 `:100ToggleTerm`,
                           -- 就算是 hidden 状态也可以通过 `:100ToggleTerm` 重新打开.
                           -- 如果两个 Terminal 有相同的 ID, 则会出现错误.
   on_open = function()
@@ -43,7 +43,7 @@ local function goRun()
     return
   end
 
-  -- NOTE: 删除之前的 terminal.
+  -- VVI: 删除之前的 terminal.
   vim.cmd('silent! bw! term://*toggleterm#'..go_term_id)
   -- go run Package
   local go = Terminal:new(vim.tbl_deep_extend('force', go_opts, { cmd = "go run " .. import_path }))
@@ -69,7 +69,7 @@ local function goTestAll()
     return
   end
 
-  -- NOTE: 删除之前的 terminal.
+  -- VVI: 删除之前的 terminal.
   vim.cmd('silent! bw! term://*toggleterm#'..go_term_id)
   -- go test -v -timeout 30s -run "^Test.*" ImportPath
   local cmd = 'go test -v -timeout 30s -run "^Test.*" ' .. import_path
@@ -96,7 +96,7 @@ local function goBenchAll()
     return
   end
 
-  -- NOTE: 删除之前的 terminal.
+  -- VVI: 删除之前的 terminal.
   vim.cmd('silent! bw! term://*toggleterm#'..go_term_id)
   -- go test -v -timeout 30s -run ^$ -benchmem -bench "^Benchmark.*" ImportPath
   local cmd = 'go test -v -timeout 30s -run ^$ -benchmem -bench "^Benchmark.*" ' .. import_path
@@ -123,7 +123,7 @@ local function goFuzzAll()
     return
   end
 
-  -- NOTE: 删除之前的 terminal.
+  -- VVI: 删除之前的 terminal.
   vim.cmd('silent! bw! term://*toggleterm#'..go_term_id)
   -- go test -v -run ^$ -fuzztime 30s -fuzz "^Fuzz.*" ImportPath
   local cmd = 'go test -v -fuzztime 30s -run ^$ -fuzz "^Fuzz.*" ' .. import_path
@@ -229,7 +229,7 @@ local function goTestSingle()
     return
   end
 
-  -- NOTE: 删除之前的 terminal.
+  -- VVI: 删除之前的 terminal.
   vim.cmd('silent! bw! term://*toggleterm#'..go_term_id)
   local gotest = Terminal:new(vim.tbl_deep_extend('force', go_opts, { cmd = cmd }))
   gotest:toggle()

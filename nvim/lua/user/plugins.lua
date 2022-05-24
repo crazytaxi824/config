@@ -81,7 +81,7 @@ end
 
 --- Have packer use a popup window, "nvim-lua/popup.nvim"
 packer.init {
-  --snapshot = nil, -- Name of the snapshot you would like to load at startup
+  --snapshot = nil,   -- VVI: Name of the snapshot you would like to load at startup
   snapshot_path = vim.fn.stdpath('cache') .. '/packer_snapshot', -- Default save directory for snapshots
   display = {
     open_fn = function()
@@ -106,7 +106,6 @@ return packer.startup(function(use)
   use "nvim-lua/plenary.nvim"     -- [必要] Useful lua functions used by lots of plugins
   -- [FIXME] Needed while issue https://github.com/neovim/neovim/issues/12587 is still open
   -- CursorHold and CursorHoldI are blocked by timer_start()
-  -- FIX: updatetime 设置.
   use "antoinemadec/FixCursorHold.nvim"
 
   --- Treesitter -----------------------------------------------------------------------------------

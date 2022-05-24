@@ -27,7 +27,7 @@ local function lsp_highlight(client)
   end
 end
 
---- define Key mapping, VVI: 只在有 LSP 的时候生效, LSP 针对 buffer 加载 ---
+--- define Key mapping, NOTE: 只在有 LSP 的时候生效, LSP 针对 buffer 加载 ---
 local function lsp_keymaps(bufnr)
   local opts = { noremap = true }
   --- <S-F12> 在 neovim 中是 <F24>, <C-F12> 是 <F36>, <C-S-F12> 是 <F48>. 其他组合键都可以通过 insert 模式打印出来.
@@ -54,10 +54,10 @@ local function lsp_keymaps(bufnr)
 end
 
 --- NOTE: on_attach - 加载 Key mapping & highlight 设置
---- VVI:  这里传入的 client 是正在加载的 lsp_client, vim.inspect(client) 中可以看到 codeActionKind.
+---       这里传入的 client 是正在加载的 lsp_client, vim.inspect(client) 中可以看到 codeActionKind.
 M.on_attach = function(client, bufnr)
-  --- [XXX] 禁止使用 LSP 的 formatting 功能, 在 null-ls 中使用其他 format 工具
-  --- VVI: `:lua print(vim.inspect(vim.lsp.buf_get_clients()))` 查看启动的 lsp 和所有相关设置
+  --- VVI: 禁止使用 LSP 的 formatting 功能, 在 null-ls 中使用其他 format 工具
+  --- `:lua print(vim.inspect(vim.lsp.buf_get_clients()))` 查看启动的 lsp 和所有相关设置
   --- ts, js, html, json, jsonc ... 使用 'prettier'
   --- lua 使用 'stylua'
   --- go 使用 'goimports', 因为 gopls 默认不会处理 "source.organizeImports"
