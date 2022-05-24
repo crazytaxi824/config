@@ -53,8 +53,9 @@ toggleterm.setup({
 })
 
 --- terminal key mapping ---------------------------------------------------------------------------
---- [XXX] <leader>t 打开指定 id=99 的 terminal.
+--- VVI: <leader>t 打开指定 id=99 的 terminal.
 vim.keymap.set('n', '<leader>t', ':99ToggleTerm<CR>', {noremap = true, silent = true})
+
 --- VVI: toggleterm#60-99 自动进入 insert mode
 vim.cmd [[au TermOpen term://*toggleterm#[6-9][0-9] :startinsert]]
 

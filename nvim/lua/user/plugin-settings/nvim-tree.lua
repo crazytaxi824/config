@@ -41,7 +41,6 @@ end
 
 nvim_tree.setup {
   auto_reload_on_write = true,
-  -- hide_root_folder = false,  -- [FIXME] 弃用?
   disable_netrw = false,   -- completely disable netrw
   hijack_netrw = true,     -- hijack netrw windows (overriden if |disable_netrw| is `true`)
   hijack_cursor = false,   -- keeps the cursor on the first letter of the filename

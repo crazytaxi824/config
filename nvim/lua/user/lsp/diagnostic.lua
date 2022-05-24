@@ -13,7 +13,7 @@ for _, sign in ipairs(signs) do
   vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = "" })
 end
 
---- VVI: diagnostic config
+--- diagnostic config
 local config = {
   virtual_text = false,     -- VVI: 使用 virtual_text 显示 diagnostic_message
   --virtual_text = {source = true},     -- 使用 virtual_text 显示 diagnostic_message, 同时带上 linter 名字, 默认 false
@@ -22,7 +22,7 @@ local config = {
   underline = true,         -- 默认 true
   severity_sort = true,     -- 按照优先级显示 Error > Warn > Info > Hint
 
-  --- VVI: `:help vim.diagnostic.config()` 中说明 float 设置使用的 `:help vim.diagnostic.open_float()`
+  --- NOTE: `:help vim.diagnostic.config()` 中说明 float 设置使用的 `:help vim.diagnostic.open_float()`
   --- 而 vim.diagnostic.open_float() 使用的是 `:help vim.lsp.util.open_floating_preview()` + 一些属性.
   --- 而 vim.lsp.util.open_floating_preview() 使用的是 `:help nvim_open_win()` + 一些属性.
   float = {
@@ -37,7 +37,7 @@ local config = {
   },
 }
 
---- [XXX] 这里是加载配置的地方
+--- VVI: 这里是加载配置的地方
 vim.diagnostic.config(config)
 
 

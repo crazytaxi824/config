@@ -127,7 +127,7 @@ cmp.setup {
 }
 
 --- NOTE: command line completion, 分开设置. 因为不能使用自定义 key mapping.
---- NOTE: 不要设置 command line completion, keymap 不好用.
+---       不要设置 command line completion, keymap 不好用.
 --- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore). --- {{{
 -- cmp.setup.cmdline(':', {
 --   mapping = cmp.mapping.preset.cmdline(),
