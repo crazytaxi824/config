@@ -6,7 +6,8 @@
 -- <S-F12> 在 neovim 中是 <F24>, <C-F12> 是 <F36>, <C-S-F12> 是 <F48>. 其他组合键都可以通过 insert 模式打印出来.
 --- }}}
 
---- NOTE: Close all terminal window function. 给 <leader>T 使用.
+--- functions for key mapping ---------------------------------------------------------------------- {{{
+--- close all terminal window function. 给 <leader>T 使用.
 local function deleteAllTerm()
   -- 获取所有 bufnr, 判断 bufname 是否匹配 term://*
   for bufnr = vim.fn.bufnr('$'), 1, -1 do
@@ -16,7 +17,7 @@ local function deleteAllTerm()
   end
 end
 
---- VVI: for Search Highlight ----------------------------------------------------------------------
+--- for Search Highlight
 function _HlNextSearch(key)
   local status, errmsg = pcall(vim.cmd, 'normal! ' .. key)
   if not status then
@@ -35,6 +36,8 @@ function _HlNextSearch(key)
     vim.cmd('sleep '..blink_time)
   end
 end
+
+--- }}}
 
 -- vim.keymap.set() - option `:help :map-arguments`
 -- noremap = { noremap = true },
@@ -211,14 +214,13 @@ local keymaps = {
   {'n', '<F23>', '<Plug>VimspectorStepOut', opt, 'Debug - Step Out'},  -- <S-F11>
 }
 
---- 这里是设置所有 key binding 的地方.
+--- 这里是设置所有 key mapping 的地方 --------------------------------------------------------------
 for _, kv in ipairs(keymaps) do
   vim.keymap.set(kv[1], kv[2], kv[3], kv[4])
 end
 
 
 --- which-key --------------------------------------------------------------------------------------
---- 添加自定义属性
 --- https://github.com/folke/which-key.nvim#%EF%B8%8F-mappings
 local status_ok, which_key = pcall(require, "which-key")
 if not status_ok then
@@ -226,25 +228,26 @@ if not status_ok then
 end
 
 --- https://github.com/folke/which-key.nvim#%EF%B8%8F-mappings
---- NOTE: 只用 which key 只读取 description, keymapping 不在这里设置.
+--- NOTE: which-key 只用作显示 key description,
+---       如果 which-key 有 bug 也不会影响 key mapping 的功能.
 for _, keymap in ipairs(keymaps) do
   if keymap[5] then
     which_key.register({[keymap[2]] = keymap[5]},{mode = keymap[1]})
   end
 end
 
---- plugins 设置 -----------------------------------------------------------------------------------
---- group name -------------------------
+--- set group name manually ---
 which_key.register({
   k = {name = "Fold Method"},
   c = {name = "Code Action"},
   f = {name = "Telescope Find"},
 },{mode='n',prefix='<leader>'})
 
+--- set key description manually ---
 which_key.register({
   --- LSP ---
   ['a'] = "LSP - Code Action",  -- lsp/setup_opts.lua 中设置
-  --- Vimspector -------------------------
+  --- Vimspector ---
   ['<F9>'] = "Debug - Toggle Breakpoint",
   ['<F10>'] = "Debug - Step Over",
   ['<F11>'] = "Debug - Step Into",
