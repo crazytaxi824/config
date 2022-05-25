@@ -82,7 +82,7 @@ end
 --- Have packer use a popup window, "nvim-lua/popup.nvim"
 packer.init {
   --snapshot = nil,   -- VVI: Name of the snapshot you would like to load at startup
-  snapshot_path = vim.fn.stdpath('cache') .. '/packer_snapshot', -- Default save directory for snapshots
+  snapshot_path = vim.fn.stdpath('config') .. '/packer_snapshot', -- Default save directory for snapshots
   display = {
     open_fn = function()
       -- Packer 面板 border 样式.
