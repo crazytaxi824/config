@@ -167,6 +167,7 @@ vim.opt.cursorline = true    -- 突出显示当前行. 包括: 行号, 背景色
 --vim.opt.cursorcolumn = true       -- 突出显示当前列. 包括: 背景色...
 
 vim.opt.signcolumn = 'yes:1'  -- 始终显示 signcolumn. line_number 左边用来标记错误, 打断点的位置. 术语 gutter.
+                              -- '1' 表示 signcolumn 宽度. 宽度为 1*2=2 格; 如果设置为 2, 则宽度为 2*2=4 格.
 vim.opt.showmatch = true      -- 跳到匹配的括号上, 包括 () {} []
 vim.opt.cmdheight = 2         -- 底部状态栏高度, more space.
 

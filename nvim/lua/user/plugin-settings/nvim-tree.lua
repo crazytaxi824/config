@@ -1,5 +1,5 @@
 vim.g.nvim_tree_highlight_opened_files = 3
-vim.g.nvim_tree_symlink_arrow = ' -> '
+vim.g.nvim_tree_symlink_arrow = ' → '
 vim.g.nvim_tree_special_files = {  -- 标记特殊文件.
   ['README.md'] = true,
   ['.editorconfig'] = true,
@@ -13,13 +13,15 @@ vim.g.nvim_tree_show_icons = {
   folder_arrows = 0,
 }
 vim.g.nvim_tree_icons = {
+  default = '',
+  symlink = '',
   folder = {
     default = '▶︎',
     open = '▽',
     empty = '-',
     empty_open = '-',
-    symlink = 's',
-    symlink_open = 's'
+    symlink = '',
+    symlink_open = ''
   },
 }
 
@@ -28,10 +30,10 @@ vim.cmd('hi NvimTreeFolderIcon ctermfg=81 cterm=bold')
 vim.cmd('hi NvimTreeFolderName ctermfg=81 cterm=bold')
 vim.cmd('hi NvimTreeEmptyFolderName ctermfg=81 cterm=bold')
 vim.cmd('hi NvimTreeOpenedFolderName ctermfg=81 cterm=bold')  -- 已打开文件夹的颜色
-vim.cmd('hi NvimTreeOpenedFile ctermfg=226')   -- 已经打开文件的颜色
-vim.cmd('hi NvimTreeSymlink ctermfg=170')      -- 链接文件
-vim.cmd('hi NvimTreeExecFile ctermfg=167')     -- 可执行文件
-vim.cmd('hi NvimTreeSpecialFile ctermfg=179')  -- 自定义 Sepcial 文件
+vim.cmd('hi NvimTreeOpenedFile ctermbg=238')   -- 已经打开文件的颜色
+vim.cmd('hi NvimTreeSymlink ctermfg=207')      -- 链接文件, magenta
+vim.cmd('hi NvimTreeExecFile ctermfg=167')     -- 可执行文件, red
+vim.cmd('hi NvimTreeSpecialFile ctermfg=179')  -- 自定义 Sepcial 文件, orange
 vim.cmd('hi NvimTreeIndentMarker ctermfg=242')
 
 local status_ok, nvim_tree = pcall(require, "nvim-tree")
@@ -40,10 +42,10 @@ if not status_ok then
 end
 
 nvim_tree.setup {
-  auto_reload_on_write = true,
+  auto_reload_on_write = true,  -- VVI: `:w` 时刷新 nvim-tree.
   disable_netrw = false,   -- completely disable netrw
-  hijack_netrw = true,     -- hijack netrw windows (overriden if |disable_netrw| is `true`)
   hijack_cursor = false,   -- keeps the cursor on the first letter of the filename
+  hijack_netrw = true,     -- hijack netrw windows (overriden if |disable_netrw| is `true`)
   hijack_directories = {   -- hijacks new directory buffers when they are opened (`:e dir`)
     enable = true,
     auto_open = true,
@@ -60,9 +62,9 @@ nvim_tree.setup {
     height = 30,
     side = "left",
     preserve_window_proportions = false,
-    number = false,
-    relativenumber = false,
-    signcolumn = "yes",
+    number = false,          -- 显示 line number
+    relativenumber = false,  -- 显示 relative number
+    signcolumn = "yes",      -- 显示 signcolumn
     mappings = {
       custom_only = true,  -- 只使用 custom key mapping
       list = {   -- user mappings go here
@@ -106,24 +108,24 @@ nvim_tree.setup {
     cmd = nil,  -- Mac 中可以改为 "open"
     args = {},
   },
-  diagnostics = {
-    enable = false,  -- 不开启
-    show_on_dirs = false,
+  diagnostics = {    -- VVI: 显示 vim diagnostics result
+    enable = true,
+    show_on_dirs = true,
     icons = {
-      hint = "H>",
-      info = "I>",
-      warning = "W>",
+      hint = "⚑ ",
+      info = "ℹ︎ ",
+      warning = "⚠️ ",
       error = "❌",
     },
   },
   filters = {
-    dotfiles = false,
+    dotfiles = false,  -- true:不显示隐藏文件, false:显示隐藏文件.
     custom = { '^\\.DS_Store$', '^\\.git$', '.*\\.swp$' },    -- 不显示指定文件
     exclude = {},
   },
   git = {
-    enable = true,   -- 开启
-    ignore = false,  -- ignore gitignore files
+    enable = false, -- 不开启
+    ignore = true,  -- ignore gitignore files
     timeout = 400,
   },
   actions = {
@@ -136,7 +138,7 @@ nvim_tree.setup {
       quit_on_open = false,  -- VVI: 打开文件后自动关闭 Nvimtree
       resize_window = true,  -- VVI: 重新渲染 nvimtree 窗口大小.
       window_picker = {
-        enable = true,       -- VVI: 如果禁用则总会在 vsplit 窗口中打开新文件.
+        enable = true,       -- VVI: false:总在 vsplit 窗口中打开新文件.
         chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
         exclude = {
           filetype = { "notify", "packer", "qf", "diff", "fugitive", "fugitiveblame" },

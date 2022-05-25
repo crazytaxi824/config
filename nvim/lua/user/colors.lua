@@ -118,9 +118,9 @@ vim.cmd('hi LspReferenceRead ctermbg=238')
 vim.cmd('hi LspReferenceWrite ctermbg=238')
 
 --- diagnostics virtual_text 颜色设置 ---
-vim.cmd('hi DiagnosticError ctermfg=1')
-vim.cmd('hi DiagnosticWarn ctermfg=3')
-vim.cmd('hi DiagnosticInfo ctermfg=4')
+vim.cmd('hi DiagnosticError ctermfg=167')
+vim.cmd('hi DiagnosticWarn ctermfg=191')
+vim.cmd('hi DiagnosticInfo ctermfg=75')
 vim.cmd('hi DiagnosticHint ctermfg=242')
 
 
