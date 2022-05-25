@@ -5,8 +5,6 @@ if not lspconfig_ok then
 end
 
 --- "nvim-lsp-installer" 插件
---- README: 加载 lsp 配置文件, "~/.config/nvim/lua/user/lsp/langs/..."
----         安装 lsp, 命令 `:LspInstallInfo`, 下载地址在 "~/.local/share/nvim/lsp_servers/..."
 local lsp_installer_ok, lsp_installer = pcall(require, "nvim-lsp-installer")
 if not lsp_installer_ok then
   return
@@ -21,6 +19,9 @@ lsp_installer.setup {
   -- 所以 lspconfig 可以直接使用 gopls;
   -- 如果 gopls 不在 $PATH 中, 则使用 lsp-installer 下载的 gopls.
   ensure_installed = LSP_servers,   -- list 中设置的 LSP 如果没有安装, 则自动安装.
+
+  -- LSP server 安装下载位置. 默认在 "~/.local/share/nvim/lsp_servers/..."
+  --install_root_dir = vim.fn.stdpath("data") .. "/lsp_servers",
 
   automatic_installation = false, -- 在 lspconfig.xxx.setup() 的 LSP 自动安装.
   max_concurrent_installers = 4,  -- 并发安装数量.
@@ -40,7 +41,9 @@ lsp_installer.setup {
       update_all_servers = "U",       -- update all installed servers
       uninstall_server = "D",         -- uninstall a server
     },
-  }
+  },
+
+  log_level = vim.log.levels.ERROR,  -- `:help vim.log.levels`
 }
 
 --- lspconfig setup() ------------------------------------------------------------------------------
@@ -49,8 +52,8 @@ for _, LSP_server in pairs(LSP_servers) do
   ---      这里的 opts 获取到的是 require 文件中返回的 M.
   local opts = require("user.lsp.setup_opts")
 
-  --- 如果 ~/.config/nvim/lua/user/lsp/langs/ 文件存在, 则加载自定义设置,
-  --- 如果没有自定义设置则加载默认设置.
+  --- NOTE: 加载 lsp 配置文件, "~/.config/nvim/lua/user/lsp/langs/..."
+  --- 如果文件存在, 则加载自定义设置, 如果没有自定义设置则加载默认设置.
   local has_custom_opts, server_custom_opts = pcall(require, "user.lsp.langs." .. LSP_server)
   if has_custom_opts then
     -- tbl_deep_extend() 合并两个 table.
