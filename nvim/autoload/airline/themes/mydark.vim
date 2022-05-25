@@ -39,7 +39,7 @@ let g:airline#themes#mydark#palette.inactive_modified = {
 function! s:update_highlights()
     """ tabline 颜色, 最上面一行文件名不同状态下的颜色.
     hi airline_tabsel ctermfg=17 ctermbg=190
-    hi airline_tab ctermfg=239 ctermbg=236
+    hi airline_tab ctermfg=255 ctermbg=236
     hi airline_tabmod ctermfg=17 ctermbg=45
     hi airline_tabmod_unsel ctermfg=255 ctermbg=53
 endfunction

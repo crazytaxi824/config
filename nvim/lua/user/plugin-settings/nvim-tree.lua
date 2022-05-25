@@ -3,8 +3,14 @@ vim.g.nvim_tree_symlink_arrow = ' → '
 vim.g.nvim_tree_special_files = {  -- 标记特殊文件.
   ['README.md'] = true,
   ['.editorconfig'] = true,
-  Makefile = true,
+  ['Makefile'] = true,
+  ['MAKEFILE'] = true,
   ['.gitignore'] = true,
+  ['go.mod'] = true,
+  ['go.sum'] = true,
+  ['package.json'] = true,
+  ['package-lock.json'] = true,
+  ['tsconfig.json'] = true,
 }
 vim.g.nvim_tree_show_icons = {
   git = 0,
