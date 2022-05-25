@@ -102,7 +102,7 @@ return packer.startup(function(use)
   use "wbthomason/packer.nvim" -- Have packer manage itself
 
   --- Performence & Functions ----------------------------------------------------------------------
-  use "lewis6991/impatient.nvim"  -- 加快 lua module 加载时间
+  use "lewis6991/impatient.nvim"  -- 加快 lua module 加载时间, 生成 ~/.cache/nvim/luacache_chunks & luacache_modpaths
   use "nvim-lua/plenary.nvim"     -- [必要] Useful lua functions used by lots of plugins
   -- [FIXME] Needed while issue https://github.com/neovim/neovim/issues/12587 is still open
   -- CursorHold and CursorHoldI are blocked by timer_start()
