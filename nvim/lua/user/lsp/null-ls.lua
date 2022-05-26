@@ -82,7 +82,9 @@ local sources = {
   formatting.goimports, -- go, gofmt, goimports, gofumpt
 
   --- code actions 设置 ----------------------------------------------------------------------------
-  code_actions.eslint,
+  --- NOTE: null-ls 不是 autostart 的, 需要触发操作后才会加载, 所以在 js/ts 中
+  --- 第一次使用 code action 时会导致速度变慢.
+  --code_actions.eslint,  -- 不建议开启. eslint 的 code_action 的主要作用是提示 disable 相应的 lint.
 }
 
 --- null-ls 在这里加载上面设置的 formatting & linter -----------------------------------------------

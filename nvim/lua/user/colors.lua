@@ -121,6 +121,6 @@ vim.cmd('hi LspReferenceWrite ctermbg=238')
 vim.cmd('hi DiagnosticError ctermfg=167')
 vim.cmd('hi DiagnosticWarn ctermfg=191')
 vim.cmd('hi DiagnosticInfo ctermfg=75')
-vim.cmd('hi DiagnosticHint ctermfg=246')
+vim.cmd('hi DiagnosticHint ctermfg=245')
 
 
