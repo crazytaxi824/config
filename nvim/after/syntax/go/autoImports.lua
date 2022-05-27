@@ -1,3 +1,4 @@
+--- NOTE: 以下并没有用到, 作为 go Auto Format 备选方案.
 --- Auto goimports ---------------------------------------------------------------------------------
 --- README: 使用 code_action 执行 organizeImports, 不会询问.
 ---         该方法只针对 golang 有效, 其他语言无法使用该方法进行 OrganizeImports, eg: tsx
@@ -19,10 +20,10 @@ function OrganizeImports(wait_ms)
   end
 end
 
---- NOTE: BufWritePre 在写入文件之前执行.
---autocmd BufWritePre *.go :lua OrganizeImports(1000)
+--- BufWritePre 在写入文件之前执行上面的函数.
+--autocmd BufWritePre *.go :lua OrganizeImports(3000)
 
---- NOTE: 以下设置 always prompt, 总是会提示选择. 但是可以用在 tsx 上.
+--- 以下设置 always prompt, 总是会提示选择.
 --autocmd BufWritePre *.go :silent lua vim.lsp.buf.code_action({ only = { "source.organizeImports" } })
 
 

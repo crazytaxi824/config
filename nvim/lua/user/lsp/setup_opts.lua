@@ -60,8 +60,7 @@ M.on_attach = function(client, bufnr)
   --- `:lua print(vim.inspect(vim.lsp.buf_get_clients()))` 查看启动的 lsp 和所有相关设置
   --- ts, js, html, json, jsonc ... 使用 'prettier'
   --- lua 使用 'stylua'
-  --- go 使用 'goimports', 因为 gopls 默认不会处理 "source.organizeImports"
-  local disable_format = {"tsserver", "html", "sumneko_lua", "gopls", "jsonls"}
+  local disable_format = {"tsserver", "html", "sumneko_lua", "jsonls"}
   for _, server in ipairs(disable_format) do
     if client.name == server then
       client.resolved_capabilities.document_formatting = false

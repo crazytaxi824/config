@@ -79,6 +79,9 @@ local sources = {
   }),
 
   formatting.autopep8,  -- python, autopep8, black
+
+  --- go 需要在这里使用 'goimports', 因为 gopls 默认不会处理 "source.organizeImports",
+  --- 但是需要 gopls 格式化 go.mod 文件.
   formatting.goimports, -- go, gofmt, goimports, gofumpt
 
   --- code actions 设置 ----------------------------------------------------------------------------

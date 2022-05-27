@@ -69,20 +69,7 @@ end
 require("user.lsp.null-ls")     -- 启动 null-ls
 require("user.lsp.diagnostic")  -- 加载 diagnostic 设置
 require("user.lsp.handlers")    -- overwrite 默认 handlers 设置
-
---- Auto Format
---- NOTE: save 时格式化文件. 自动格式化放在 Lsp 加载成功后.
----       如果没有安装相应的 LSP, null-ls 也可以通过 vim.lsp.buf.formatting_sync() 进行 format
---- 定义 `:Format` command
--- vim.cmd [[command! Format lua vim.lsp.buf.formatting_seq_sync(nil, 1000, {"null-ls"})]]  -- 列表中的 lsp 最后执行.
-vim.cmd [[command! Format lua vim.lsp.buf.formatting_sync()]]
-
---- NOTE: BufWritePre 在写入文件之前执行 Format.
---- yaml, markdown, lua 不在内.
-vim.cmd [[
-  autocmd BufWritePre *go,*.js,*.jsx,*.mjs,*.cjs,*.ts,*.tsx,*.cts,*.ctsx,*.mts,*.mtsx,*.css,
-    \*.less,*.scss,*.json,*.jsonc,*.graphql,*.vue,*.svelte,*.html,*.htm,*.py Format
-]]
+require("user.lsp.auto_format") -- save 时 format
 
 
 
