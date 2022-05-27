@@ -50,9 +50,6 @@ vim.g.indent_blankline_show_current_context = true
 --}
 --- }}}
 
---- HACK: work-around for https://github.com/lukas-reineke/indent-blankline.nvim/issues/59
---- vim.wo.colorcolumn = "99999"
-
 --- set list & set listchars, NOTE: 在 settings.lua 中设置.
 --vim.opt.list = true
 --vim.opt.listchars:append("space:⋅")
