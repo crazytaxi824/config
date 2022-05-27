@@ -154,11 +154,16 @@ return packer.startup(function(use)
   use {"hrsh7th/nvim-cmp",         -- 主要的 completion plugin
     -- 以下是 nvim-cmp 的组件.
     requires = {
+      "hrsh7th/cmp-nvim-lsp",      -- LSP source for nvim-cmp
       "hrsh7th/cmp-buffer",        -- buffer completions
       "hrsh7th/cmp-path",          -- path completions
-      "hrsh7th/cmp-cmdline",       -- cmdline completions
-      "saadparwaiz1/cmp_luasnip",  -- Snippets source for nvim-cmp
-      "hrsh7th/cmp-nvim-lsp",      -- LSP source for nvim-cmp
+      {"saadparwaiz1/cmp_luasnip", -- Snippets source for nvim-cmp
+        requires = {
+          {"L3MON4D3/LuaSnip",     -- snippet engine, for "cmp_luasnip"
+          requires = "rafamadriz/friendly-snippets"},  -- snippets content, 自定义 snippets 可以借鉴这个结构.
+        },
+      },
+      --"hrsh7th/cmp-cmdline",     -- cmdline completions, 不好用.
     },
   }
 
@@ -170,12 +175,6 @@ return packer.startup(function(use)
   --- }}}
   use "williamboman/nvim-lsp-installer"  -- simple to use language server installer
   use "jose-elias-alvarez/null-ls.nvim"  -- for formatters and linters, depends on "nvim-lua/plenary.nvim"
-
-  --- Snippets -------------------------------------------------------------------------------------
-  use {"L3MON4D3/LuaSnip",   -- snippet engine, provides content to "saadparwaiz1/cmp_luasnip"
-    requires = "saadparwaiz1/cmp_luasnip",
-  }
-  use "rafamadriz/friendly-snippets"  -- 已经写好的 snippets content, 可以参考结构. snippet json 不能有注释
 
   --- File Tree Display ----------------------------------------------------------------------------
   --use "kyazdani42/nvim-web-devicons"  -- 提供 icons 需要 patch 字体 (Nerd Fonts)

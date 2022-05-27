@@ -42,10 +42,12 @@ local kind_icons = {  --- {{{
 
 cmp.setup {
   preselect = cmp.PreselectMode.None,  -- NOTE: cmp.PreselectMode.None | cmp.PreselectMode.Item
-  -- 设置 snippet engine, "saadparwaiz1/cmp_luasnip" 插件
-  snippet = {
+  snippet = {  -- 给 "saadparwaiz1/cmp_luasnip" 设置 snippet
     expand = function(args)
       luasnip.lsp_expand(args.body) -- For "L3MON4D3/LuaSnip" users.
+      --require('snippy').expand_snippet(args.body) -- For `snippy` users.
+      --vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+      --vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
     end,
   },
   sources = {
