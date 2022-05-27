@@ -118,10 +118,10 @@ nvim_tree.setup {
     enable = true,
     show_on_dirs = true,
     icons = {
-      hint = "⚑ ",
-      info = "ℹ︎ ",
+      hint    = "⚑ ",
+      info    = "𝖎 ",
       warning = "⚠️ ",
-      error = "❌",
+      error   = "❌",
     },
   },
   filters = {

@@ -6,7 +6,7 @@
 local signs = {
   { name = "DiagnosticSignError", text = "❌" },
   { name = "DiagnosticSignWarn", text = "⚠️ " },
-  { name = "DiagnosticSignInfo", text = "ℹ︎ " },
+  { name = "DiagnosticSignInfo", text = "𝖎 " },
   { name = "DiagnosticSignHint", text = "⚑ " },
 }
 for _, sign in ipairs(signs) do
