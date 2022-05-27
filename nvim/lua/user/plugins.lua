@@ -22,18 +22,16 @@
 --   commit = string,             -- VVI: Specifies a git commit to use
 --   lock = boolean,              -- VVI: Skip updating this plugin in updates/syncs. Still cleans.
 --
---   -- 类似 vim-plug { 'do' }
---   run = string, function, or table, -- VVI: UPDATE 之后执行, 不是 loaded.
+--   run = string, function, or table, -- VVI: UPDATE 之后执行, 不是 loaded. 类似 vim-plug { 'do' }
 --   requires = string or list,   -- VVI: 会先加载 requires 中的 plugin.
 --   config = string or function, -- VVI: after plugin loaded. `config = function() ... end`,
---   rocks = string or list,      -- Specifies Luarocks dependencies for the plugin
+--   rocks = string or list,      -- Specifies `Luarocks` dependencies for the plugin
+--   -- NOTE: The `setup` implies `opt = true`
+--   setup = string or function,  -- VVI: Specifies code to run before this plugin is loaded.
 --
---   -- The setup key implies opt = true
---   setup = string or function,  -- Specifies code to run before this plugin is loaded.
---
---   -- The following keys all imply lazy-loading and imply opt = true
+--   -- NOTE: The following keys all imply `lazy-loading` and imply `opt = true`
 --   -- plugin 加载条件.
---   cmd = string or list,        -- 有 BUG. Specifies commands which load this plugin. Can be an autocmd pattern.
+--   cmd = string or list,        -- Specifies commands which load this plugin. Can be an autocmd pattern.
 --   ft = string or list,         -- VVI: Specifies filetypes which load this plugin.
 --   keys = string or list,       -- Specifies maps which load this plugin. See "Keybindings".
 --   event = string or list,      -- Specifies autocommand events which load this plugin.
@@ -125,22 +123,24 @@ return packer.startup(function(use)
   --- `:TSHighlightCapturesUnderCursor`  -- 查看 tree-sitter 定义的 highlight group.
   --- }}}
   use {"nvim-treesitter/playground",  -- tree-sitter 插件, 用于获取 tree-sitter 信息, 调整颜色很有用
-    requires = "nvim-treesitter/nvim-treesitter"
+    requires = "nvim-treesitter/nvim-treesitter",
+    cmd = {"TSPlaygroundToggle", "TSHighlightCapturesUnderCursor"},  -- NOTE: 需要时再加载 playground.
   }
-  use {"JoosepAlviste/nvim-ts-context-commentstring",  -- 注释, 配合 "numToStr/Comment.nvim" 使用
-    requires = "nvim-treesitter/nvim-treesitter"
-  }
-  use {"numToStr/Comment.nvim",   -- 注释, 配合 "JoosepAlviste/nvim-ts-context-commentstring" 使用
+  use {"numToStr/Comment.nvim",   -- 注释
     requires = {
-      "JoosepAlviste/nvim-ts-context-commentstring",
-      "nvim-treesitter/nvim-treesitter"
-    }
+      {"JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
+        requires = "nvim-treesitter/nvim-treesitter", -- commentstring 依赖 treesitter.
+      },
+    },
   }
   use {"lukas-reineke/indent-blankline.nvim",  -- identline
-    requires = "nvim-treesitter/nvim-treesitter"
+    requires = "nvim-treesitter/nvim-treesitter",
+  }
+  use {"windwp/nvim-autopairs",   -- 自动括号
+    requires = "nvim-treesitter/nvim-treesitter",  -- setup() 中 `check_ts`, `ts_config` 需要 treesitter 支持.
   }
   use {"p00f/nvim-ts-rainbow",   -- 括号颜色. treesitter 解析
-    requires = "nvim-treesitter/nvim-treesitter"
+    requires = "nvim-treesitter/nvim-treesitter",
   }
   use {"windwp/nvim-ts-autotag",   -- auto close tag <div></div>
     requires = "nvim-treesitter/nvim-treesitter",
@@ -161,12 +161,6 @@ return packer.startup(function(use)
       "hrsh7th/cmp-nvim-lsp",      -- LSP source for nvim-cmp
     },
   }
-  use {"windwp/nvim-autopairs",   -- Autopairs, integrates with both cmp and treesitter
-    requires = {
-      "nvim-treesitter/nvim-treesitter",  -- 使用 treesitter 来确定 <CR> 后 cursor 是否应该 indent. NOTE: `ts_config`
-      "hrsh7th/nvim-cmp"  -- VVI: need to add mapping `CR` on nvim-cmp setup.
-    }
-  }
 
   --- LSP ------------------------------------------------------------------------------------------
   use "neovim/nvim-lspconfig"            -- enable LSP, 官方 LSP 引擎.
@@ -179,7 +173,7 @@ return packer.startup(function(use)
 
   --- Snippets -------------------------------------------------------------------------------------
   use {"L3MON4D3/LuaSnip",   -- snippet engine, provides content to "saadparwaiz1/cmp_luasnip"
-    requires = "saadparwaiz1/cmp_luasnip"
+    requires = "saadparwaiz1/cmp_luasnip",
   }
   use "rafamadriz/friendly-snippets"  -- 已经写好的 snippets content, 可以参考结构. snippet json 不能有注释
 
@@ -201,7 +195,7 @@ return packer.startup(function(use)
   --- delve 安装位置 vimspector_base_dir=~/.local/share/nvim/site/pack/packer/start/vimspector/gadgets/macos/...
   --- https://github.com/puremourning/vimspector
   --- https://pepa.holla.cz/2021/03/01/golang-debugging-application-in-neovim/
-  use {"puremourning/vimspector", ft={"go"}}    -- Debug Tool. NOTE: for golang ONLY for now.
+  use {"puremourning/vimspector", ft={"go"}}    -- Debug Tool. NOTE: golang ONLY for now.
   --use "mfussenegger/nvim-dap"   -- lua debug tool
 
   --- Useful Tools ---------------------------------------------------------------------------------
@@ -221,8 +215,9 @@ return packer.startup(function(use)
 
   --- markdown preview
   use {"iamcco/markdown-preview.nvim",
-    run = function() vim.fn["mkdp#util#install"]() end,  -- 安装 preview 插件
-    ft = "markdown",  -- NOTE: `:MarkdownPreviewToggle` 只能在 md 文件中使用
+    -- VVI: Update 后需要重新安装 preview 插件, 否则可能出现无法运行的情况.
+    run = function() vim.fn["mkdp#util#install"]() end,
+    ft = "markdown",  -- `:MarkdownPreviewToggle` 只能在 md 文件中使用
   }
 
   --use "goolord/alpha-nvim"          -- neovim 启动页面
