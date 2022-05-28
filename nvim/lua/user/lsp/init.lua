@@ -13,7 +13,7 @@ end
 --- VVI: 在 ~/.config/nvim/lua/user/lsp/langs/ 中的文件名.
 local LSP_servers = { "jsonls", "sumneko_lua", "gopls", "tsserver", "pyright" }
 
---- lsp_installer settings -------------------------------------------------------------------------
+--- nvim-lsp-installer settings --------------------------------------------------------------------
 lsp_installer.setup {
   -- NOTE: 其实这里不需要通过 lsp-installer 安装 gopls, 因为 gopls 在 $PATH 中,
   -- 所以 lspconfig 可以直接使用 gopls;
@@ -47,7 +47,8 @@ lsp_installer.setup {
 }
 
 --- lspconfig setup() ------------------------------------------------------------------------------
-vim.lsp.set_log_level("warn")  -- `:help vim.log.levels` 影响 `:LspLog`
+vim.lsp.set_log_level("WARN")  -- `:help vim.lsp.set_log_level` 影响 `:LspLog`
+
 for _, LSP_server in pairs(LSP_servers) do
   --- NOTE: opts 必须包含 on_attach, capabilities 两个属性.
   ---      这里的 opts 获取到的是 require 文件中返回的 M.
