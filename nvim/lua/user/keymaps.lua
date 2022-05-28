@@ -4,7 +4,7 @@
 -- vim.api.nvim_buf_set_keymap() & vim.api.nvim_buf_del_keymap()
 -- vim.keymap.set() 可以同时设置多个模式, vim.api.nvim_set_keymap() 每次只能设置一个模式
 -- <S-F12> 在 neovim 中是 <F24>, <C-F12> 是 <F36>, <C-S-F12> 是 <F48>. 其他组合键都可以通过 insert 模式打印出来.
---- }}}
+-- -- }}}
 
 --- functions for key mapping ---------------------------------------------------------------------- {{{
 --- close all terminal window function. 给 <leader>T 使用.
@@ -37,7 +37,7 @@ function _HlNextSearch(key)
   end
 end
 
---- }}}
+-- -- }}}
 
 -- vim.keymap.set() - option `:help :map-arguments`
 -- noremap = { noremap = true },

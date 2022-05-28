@@ -48,7 +48,7 @@ vim.g.indent_blankline_show_current_context = true
 --  "import_statement",
 --  "operation_type",
 --}
---- }}}
+-- -- }}}
 
 --- set list & set listchars, NOTE: 在 settings.lua 中设置.
 --vim.opt.list = true
@@ -70,7 +70,7 @@ indent_blankline.setup({
   -- "IndentBlanklineIndent5",
   -- "IndentBlanklineIndent6",
   --},
-  --- }}}
+  -- -- }}}
 })
 
 --- 设置颜色 ---------------------------------------------------------------------------------------

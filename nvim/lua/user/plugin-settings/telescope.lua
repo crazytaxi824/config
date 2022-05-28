@@ -105,7 +105,7 @@ telescope.setup {
       -- -E=.git                  不显示名为 .git 的文件(夹)
       -- -E=**/.*/**              显示隐藏文件夹, 但不列出其中的文件.
       -- -E=**/node_modules/**    显示 node_modules 文件夹, 但不列出其中的文件.
-      ---- }}}
+      -- -- }}}
       find_command = {"fd", "--follow",
         -- NOTE: 这里不搜索隐藏文件, 也不显示被 .gitignore 忽略的文件
         -- "--hidden", "--no-ignore", "-E=.DS_Store", "-E=.git", "-E=**/.*/**",

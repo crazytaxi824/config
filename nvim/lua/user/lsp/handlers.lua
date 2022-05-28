@@ -38,8 +38,7 @@
 --     update_in_insert = false,
 --   }
 -- )
-
---- }}}
+-- -- }}}
 
 --- 这里是修改 'textDocument/hover' handler 的 border 样式.
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
@@ -258,7 +257,7 @@ vim.lsp.util.make_floating_popup_options = function (width, height, opts)
   }
 end
 
---- }}}
+-- -- }}}
 
 
 

@@ -19,7 +19,7 @@
 --    ctermfg=75        蓝色   - package, import, func
 --    ctermfg=43        淡绿色 - 数据类型, 数字(int, bool)
 --    ctermfg=71        绿色   - comment 注释 (:hi Comment)
---- }}}
+-- -- }}}
 
 --- vim.api.nvim_set_hl()
 --- `:help nvim_set_hl`

@@ -49,7 +49,7 @@ local function goRun()
   local go = Terminal:new(vim.tbl_deep_extend('force', go_opts, { cmd = "go run " .. import_path }))
   go:toggle()
 end
---- }}}
+-- -- }}}
 
 --- go test run all -------------------------------------------------------------------------------- {{{
 local function goTestAll()
@@ -76,7 +76,7 @@ local function goTestAll()
   local go = Terminal:new(vim.tbl_deep_extend('force', go_opts, { cmd = cmd }))
   go:toggle()
 end
---- }}}
+-- -- }}}
 
 --- go test bench all ------------------------------------------------------------------------------ {{{
 local function goBenchAll()
@@ -103,7 +103,7 @@ local function goBenchAll()
   local go = Terminal:new(vim.tbl_deep_extend('force', go_opts, { cmd = cmd }))
   go:toggle()
 end
---- }}}
+-- -- }}}
 
 --- go test fuzz all ------------------------------------------------------------------------------- {{{
 local function goFuzzAll()
@@ -130,7 +130,7 @@ local function goFuzzAll()
   local go = Terminal:new(vim.tbl_deep_extend('force', go_opts, { cmd = cmd }))
   go:toggle()
 end
---- }}}
+-- -- }}}
 
 --- go test single function ------------------------------------------------------------------------ {{{
 --- 从 cursor 所在行向上查找, 返回函数定义行 "func Foo(param type) {"
@@ -234,7 +234,7 @@ local function goTestSingle()
   local gotest = Terminal:new(vim.tbl_deep_extend('force', go_opts, { cmd = cmd }))
   gotest:toggle()
 end
---- }}}
+-- -- }}}
 
 --- key mapping ------------------------------------------------------------------------------------
 local opt = {noremap = true, buffer = true}

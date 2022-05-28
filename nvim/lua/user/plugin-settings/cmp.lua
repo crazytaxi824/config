@@ -163,6 +163,6 @@ vim.cmd [[highlight! CmpItemKindText ctermfg=246]]
 -- light blue
 vim.cmd [[hi! CmpItemKindSnippet ctermfg=75]]
 
---- }}}
+-- -- }}}
 
 

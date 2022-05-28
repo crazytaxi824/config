@@ -56,7 +56,7 @@
 -- `:PackerSync`       -- NOTE: 使用这一个命令就够了. Perform `PackerUpdate` and then `PackerCompile`
 -- NOTE: You must run this or `PackerSync` whenever you make changes to your plugin configuration.
 
----- }}}
+-- -- }}}
 
 --- Only required if you have packer configured as `opt`
 vim.cmd [[packadd packer.nvim]]
@@ -69,7 +69,7 @@ vim.cmd [[packadd packer.nvim]]
 --    autocmd BufWritePost plugins.lua source <afile> | PackerSync
 --  augroup end
 --]]
---- }}}
+-- -- }}}
 
 --- Use a protected call so we don't error out on first use
 local status_ok, packer = pcall(require, "packer")
@@ -114,14 +114,14 @@ return packer.startup(function(use)
   --- `:TSInstall {lang}`     -- Install languages
   --- `:TSUninstall {lang}`   -- Uninstall languages
   --- `:TSUpdate`             -- Update the installed languages
-  --- }}}
+  -- -- }}}
   use {"nvim-treesitter/nvim-treesitter",  -- NOTE: treesitter 主要插件
     run = ":TSUpdate",   -- Post-update/install hook
   }
   --- Commands for "nvim-treesitter/playground" --- {{{
   --- `:TSPlaygroundToggle`  -- 查看 tree-sitter 对当前 word 的定义.
   --- `:TSHighlightCapturesUnderCursor`  -- 查看 tree-sitter 定义的 highlight group.
-  --- }}}
+  -- -- }}}
   use {"nvim-treesitter/playground",  -- tree-sitter 插件, 用于获取 tree-sitter 信息, 调整颜色很有用
     requires = "nvim-treesitter/nvim-treesitter",
     cmd = {"TSPlaygroundToggle", "TSHighlightCapturesUnderCursor"},  -- NOTE: 需要时再加载 playground.
@@ -172,7 +172,7 @@ return packer.startup(function(use)
   --- Commands for "williamboman/nvim-lsp-installer" --- {{{
   ---   命令 `:LspInstallInfo` -- 列出所有 lsp, <i>-install | <u>-update | <X>-uninstall
   ---   安装位置 '~/.local/share/nvim/lsp_servers'
-  --- }}}
+  -- -- }}}
   use "williamboman/nvim-lsp-installer"  -- simple to use language server installer
   use "jose-elias-alvarez/null-ls.nvim"  -- for formatters and linters, depends on "nvim-lua/plenary.nvim"
 
@@ -209,7 +209,7 @@ return packer.startup(function(use)
   --- 函数/类型列表，需要安装 Universal Ctags - `brew info universal-ctags`, 注意不要安装错了.
   --- https://github.com/universal-ctags/ctags/blob/master/docs/news.rst#new-parsers
   --- `ctags --list-languages` 查看支持的语言. 不支持 jsx/tsx, 支持 typescript, 勉强支持 javascript
-  --- }}}
+  -- -- }}}
   use "preservim/tagbar"
 
   --- markdown preview
