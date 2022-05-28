@@ -1,47 +1,3 @@
-vim.g.nvim_tree_highlight_opened_files = 3
-vim.g.nvim_tree_symlink_arrow = ' → '
-vim.g.nvim_tree_special_files = {  -- 标记特殊文件.
-  ['README.md'] = true,
-  ['.editorconfig'] = true,
-  ['Makefile'] = true,
-  ['MAKEFILE'] = true,
-  ['.gitignore'] = true,
-  ['go.mod'] = true,
-  ['go.sum'] = true,
-  ['package.json'] = true,
-  ['package-lock.json'] = true,
-  ['tsconfig.json'] = true,
-}
-vim.g.nvim_tree_show_icons = {
-  git = 0,
-  folders = 1,
-  files = 0,
-  folder_arrows = 0,
-}
-vim.g.nvim_tree_icons = {
-  default = '',
-  symlink = '',
-  folder = {
-    default = '▶︎',
-    open = '▽',
-    empty = '-',
-    empty_open = '-',
-    symlink = '',
-    symlink_open = ''
-  },
-}
-
---- `:help nvim_tree_highlight`
-vim.cmd('hi NvimTreeFolderIcon ctermfg=81 cterm=bold')
-vim.cmd('hi NvimTreeFolderName ctermfg=81 cterm=bold')
-vim.cmd('hi NvimTreeEmptyFolderName ctermfg=81 cterm=bold')
-vim.cmd('hi NvimTreeOpenedFolderName ctermfg=81 cterm=bold')  -- 已打开文件夹的颜色
-vim.cmd('hi NvimTreeOpenedFile ctermbg=238')   -- 已经打开文件的颜色
-vim.cmd('hi NvimTreeSymlink ctermfg=207')      -- 链接文件, magenta
-vim.cmd('hi NvimTreeExecFile ctermfg=167')     -- 可执行文件, red
-vim.cmd('hi NvimTreeSpecialFile ctermfg=179')  -- 自定义 Sepcial 文件, orange
-vim.cmd('hi NvimTreeIndentMarker ctermfg=242')
-
 local status_ok, nvim_tree = pcall(require, "nvim-tree")
 if not status_ok then
   return
@@ -92,6 +48,8 @@ nvim_tree.setup {
     },
   },
   renderer = {
+    highlight_git = false,
+    highlight_opened_files = "all",  -- NOTE: "none" | "icon" | "name" | "all"
     indent_markers = {
       enable = true,
       icons = {
@@ -102,6 +60,30 @@ nvim_tree.setup {
     },
     icons = {
       webdev_colors = false,
+      symlink_arrow = " → ",
+      show = {
+        git = false,
+        folder = true, -- VVI: 只显示 folder icon
+        file = false,
+        folder_arrow = false,
+      },
+      glyphs = {
+        default = '',
+        symlink = '',
+        folder = {
+          default = '▶︎',
+          open = '▽',
+          empty = '-',
+          empty_open = '-',
+          symlink = '',
+          symlink_open = ''
+        },
+      },
+    },
+    special_files = {
+      "Cargo.toml", "Makefile", "MAKEFILE", "README.md", "readme.md",
+      ".editorconfig", ".gitignore", "go.mod", "go.sum",
+      "package-lock.json", "package.json", "tsconfig.json"
     },
   },
   update_focused_file = {
@@ -176,5 +158,15 @@ nvim_tree.setup {
 --- automatically close the tab/vim when nvim-tree is the last window in the tab
 vim.cmd [[autocmd BufEnter * ++nested if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpagenr() | quit | endif]]
 
-
+--- `:help nvim_tree_highlight` -------------------------------------------------------------------- {{{
+vim.cmd('hi NvimTreeFolderIcon ctermfg=81 cterm=bold')
+vim.cmd('hi NvimTreeFolderName ctermfg=81 cterm=bold')
+vim.cmd('hi NvimTreeEmptyFolderName ctermfg=81 cterm=bold')
+vim.cmd('hi NvimTreeOpenedFolderName ctermfg=81 cterm=bold')  -- 已打开文件夹的颜色
+vim.cmd('hi NvimTreeOpenedFile ctermbg=238')   -- 已经打开文件的颜色
+vim.cmd('hi NvimTreeSymlink ctermfg=207')      -- 链接文件, magenta
+vim.cmd('hi NvimTreeExecFile ctermfg=167')     -- 可执行文件, red
+vim.cmd('hi NvimTreeSpecialFile ctermfg=179')  -- 自定义 Sepcial 文件, orange
+vim.cmd('hi NvimTreeIndentMarker ctermfg=242')
+-- -- }}}
 
