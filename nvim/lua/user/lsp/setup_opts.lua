@@ -71,12 +71,13 @@ M.on_attach = function(client, bufnr)
   lsp_keymaps(bufnr)
   lsp_highlight(client)
 
-  --- NOTIFY: 加载某个 lsp 的时候通知.
-  local notify_status_ok, notify = pcall(require, "notify")
-  if not notify_status_ok then
-    return
-  end
-  notify("LSP loaded: " .. client.name, "INFO", {title = {"LSP", "handlers.lua"}, timeout=2000})
+  --- NOTIFY: 加载某个 lsp 的时候通知 --- {{{
+  -- local notify_status_ok, notify = pcall(require, "notify")
+  -- if not notify_status_ok then
+  --   return
+  -- end
+  -- notify("LSP loaded: " .. client.name, "INFO", {title = {"LSP", "handlers.lua"}, timeout=2000})
+  -- -- }}}
 end
 
 --- NOTE: capabilities - Provides content to "hrsh7th/cmp-nvim-lsp" Completion

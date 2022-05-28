@@ -107,25 +107,26 @@ null_ls.setup({
   -- on_exit =
   -- on_init = function(client, unused)
 
-  --- NOTIFY: 加载某些 linter 的时候通知.
-  on_attach = function(diag_client, unused)  -- NOTE: unused 是一个保留入参.
-    local notify_status_ok, notify = pcall(require, "notify")
-    if not notify_status_ok then
-      return
-    end
-
-    local linters = {}   -- list of linter enabled
-    local count = 0  -- for len(msg)
-    for _, value in ipairs(diag_client.messages.progress) do
-      if value.message ~= nil then
-        table.insert(linters, value.message)
-        count = count + 1
-      end
-    end
-    if count > 0 then  -- 为了 len(msg)
-      notify("Linter Loaded: " .. vim.fn.join(linters,","), "INFO", {title={"LSP", "null-ls.lua"}, timeout = 2000})
-    end
-  end,
+  --- NOTIFY: 加载某些 linter 的时候通知 --- {{{
+  -- on_attach = function(diag_client, unused)  -- NOTE: unused 是一个保留入参.
+  --   local notify_status_ok, notify = pcall(require, "notify")
+  --   if not notify_status_ok then
+  --     return
+  --   end
+  --
+  --   local linters = {}   -- list of linter enabled
+  --   local count = 0  -- for len(msg)
+  --   for _, value in ipairs(diag_client.messages.progress) do
+  --     if value.message ~= nil then
+  --       table.insert(linters, value.message)
+  --       count = count + 1
+  --     end
+  --   end
+  --   if count > 0 then  -- 为了 len(msg)
+  --     notify("Linter Loaded: " .. vim.fn.join(linters,","), "INFO", {title={"LSP", "null-ls.lua"}, timeout = 2000})
+  --   end
+  -- end,
+  -- -- }}}
 
   -- null-ls 退出的时候提醒.
   on_exit = function()
@@ -133,7 +134,7 @@ null_ls.setup({
     if not notify_status_ok then
       return
     end
-    notify("Null-ls exit. Please check ...", "WARN", {title = {"Null-ls"}, timeout = false})
+    notify("Null-ls exit. Please check ':NullLsInfo' & ':NullLsLog'", "WARN", {title = {"LSP", "null-ls"}, timeout = false})
   end
 })
 
