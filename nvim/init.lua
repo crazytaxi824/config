@@ -136,8 +136,10 @@ require "user.plugin-settings.vimspector"
 --- 放在最后 overwirte 其他颜色设置.
 require "user.colors"  -- vim highlight 设置
 
-
-
+--- test function ----------------------------------------------------------------------------------
+--- NOTE: after enabling 'exrc', neovim will execute any '.nvimrc' or '.exrc' at project's root directory.
+--- https://github.com/neovim/nvim-lspconfig/wiki/Project-local-settings
+--vim.opt.exrc = true
 
 
 

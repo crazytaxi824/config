@@ -89,6 +89,29 @@ end
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 M.capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
 
+--- NOTE: LSP settings Hook, not necessary. 这里是为了能单独给 project 设置 LSP setting.
+M.on_init = function(client, init_capabilities)
+  --print(vim.inspect(init_capabilities))
+
+  --- read project root directory '.nvim/lsp.lua' file if it exists.
+  if vim.fn.filereadable('.nvim/lsp.lua') == 0 then
+    --print(".nvim/lsp.lua file is not exist.")
+    return true
+  end
+
+  --print(".nvim/lsp.lua file exists.")
+  local proj = dofile('.nvim/lsp.lua')  -- execute lua file, and get return value.
+
+  --- overwrite LSP settings.
+  --- lua print(vim.inspect(vim.tbl_values(vim.lsp.buf_get_clients())))
+  client.config.settings = vim.tbl_deep_extend('force', client.config.settings, proj.settings)
+
+  -- VVI: tell LSP configs are changed.
+  client.notify("workspace/didChangeConfiguration")
+
+  return true
+end
+
 return M
 
 
