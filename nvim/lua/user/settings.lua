@@ -224,8 +224,10 @@ vim.cmd [[au Filetype qf :wincmd J]]
 -- markdown 文件自动执行 SpellCheck 命令
 --vim.cmd [[au Filetype pandoc,markdown setlocal spell spelllang=en,cjk]]
 
---- vim plugin settings ----------------------------------------------------------------------------
-
+--- test function ----------------------------------------------------------------------------------
+--- NOTE: after enabling 'exrc', neovim will execute any '.nvimrc' or '.exrc' at project's root directory.
+--- https://github.com/neovim/nvim-lspconfig/wiki/Project-local-settings
+--vim.opt.exrc = true
 
 
 

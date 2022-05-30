@@ -53,7 +53,7 @@ local function lsp_keymaps(bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, "n", "<Esc>", '<Esc><cmd>doautocmd CompleteDone<CR>', opts)
 end
 
---- NOTE: on_attach - 加载 Key mapping & highlight 设置
+--- NOTE: on_attach - 加载 Key mapping & highlight 设置 --------------------------------------------
 ---       这里传入的 client 是正在加载的 lsp_client, vim.inspect(client) 中可以看到 codeActionKind.
 M.on_attach = function(client, bufnr)
   --- VVI: 禁止使用 LSP 的 formatting 功能, 在 null-ls 中使用其他 format 工具
@@ -80,7 +80,7 @@ M.on_attach = function(client, bufnr)
   -- -- }}}
 end
 
---- NOTE: capabilities - Provides content to "hrsh7th/cmp-nvim-lsp" Completion
+--- NOTE: capabilities - Provides content to "hrsh7th/cmp-nvim-lsp" Completion ---------------------
 local status_ok, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
 if not status_ok then
   return
@@ -89,10 +89,10 @@ end
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 M.capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
 
---- NOTE: LSP settings Hook, not necessary. 这里是为了能单独给 project 设置 LSP setting.
-M.on_init = function(client, init_capabilities)
-  --print(vim.inspect(init_capabilities))
-
+--- https://github.com/neovim/nvim-lspconfig/wiki/Project-local-settings
+--- NOTE: LSP settings Hook, 不是必要设置 ---------------------------------------------------------
+--- 这里是为了能单独给 project 设置 LSP setting
+M.on_init = function(client)
   --- read project root directory '.nvim/lsp.lua' file if it exists.
   if vim.fn.filereadable('.nvim/lsp.lua') == 0 then
     --print(".nvim/lsp.lua file is not exist.")
