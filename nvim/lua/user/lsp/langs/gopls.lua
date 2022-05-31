@@ -3,7 +3,7 @@
 -- https://github.com/golang/tools/blob/master/gopls/doc/vim.md#neovim-config
 
 --- NOTE: ignore following folds as workspace root directory.
-local ignore_workspace_folders = { "$GOROOT", "$GOPATH/pkg/mod/github.com/hashicorp/consul/api@v1.12.0" }
+local ignore_workspace_folders = { "$GOROOT", "$GOPATH/pkg/mod" }
 
 return {
   --cmd = { "gopls" },
