@@ -16,7 +16,7 @@ alias e="vimExistFile --"   # edit file, vimExistFile() 函数定义在下面.
 
 # --- [golang setting] ----------------------------------------------------------------------------- {{{
 # `go env` 查看
-#export GOROOT=/usr/local/go  # 'echo $PATH' should already have $GOROOT/bin
+export GOROOT=/usr/local/go
 export GOPATH=$HOME/gopath
 export GOBIN=$GOPATH/bin
 export PATH=$PATH:$GOBIN

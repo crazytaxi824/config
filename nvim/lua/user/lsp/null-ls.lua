@@ -33,24 +33,41 @@ local diagnostics_opts = {
   --diagnostics_format = "#{m} [null-ls:#{s}]",  -- 只对该 linter 生效.
 }
 
---- VVI: linter / formatter / code action 设置 -----------------------------------------------------
+--- linter / formatter / code action 设置 ----------------------------------------------------------
 -- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/MAIN.md  -- runtime_condition function 中的 params
 -- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/CONFIG.md    -- setup 设置
 -- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md  -- formatter & linter 列表
 -- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTIN_CONFIG.md  -- with() 设置
+-- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/HELPERS.md -- $FILENAME, $DIRNAME, $ROOT ...
+local util = require("null-ls/utils")
 local sources = {
   --- linters 设置 ---------------------------------------------------------------------------------
   diagnostics.flake8,  -- python, flake8
 
   --- golangci-lint
   diagnostics.golangci_lint.with(vim.tbl_deep_extend('keep', {
-      extra_args = { "--config", ".golangci.yml" },  -- 相对项目根目录, 也可以用 vim.fn.expand("~/...") 等地址.
+      -- VVI: 执行 golangci-lint 的 pwd. 默认是 params.root 即: null_ls.setup() 中的 root_dir / $ROOT
+      cwd = function(params)
+        local new_root = util.root_pattern('go.work','go.mod','.git')(params.bufname)
+        return new_root
+      end,
+
+      args = function(params)  -- NOTE: golangci-lint 命令的参数
+        local new_root = util.root_pattern('go.work','go.mod','.git')(params.bufname)
+        --- VVI: 这里必须要使用 $DIRNAME.
+        ---  如果使用 $FILENAME, 则别的文件中定义的 var 无法被 golangci 找到.
+        ---  如果缺省设置, 即不设置 $FILENAME 也不设置 $DIRNAME, 则每次 golangci 都会 lint 整个 project.
+        return { "run", "--fix=false", "--fast", "--out-format=json", "--path-prefix", new_root, "$DIRNAME" }
+      end,
+
+      extra_args = { '--config', ".golangci.yml"},  -- NOTE: 相对 cwd 的路径, 也可以用 vim.fn.expand("~/...") 等地址.
+
       --filetypes = { "go" },  -- 只对 go 文件生效.
     }, diagnostics_opts)),
 
   --- NOTE: eslint 分别对不同的 filetype 做不同的设置
   diagnostics.eslint.with(vim.tbl_deep_extend('keep', {
-    extra_args = { "--config","eslintrc-ts.json" },
+    extra_args = { "--config","eslintrc-ts.json" },  -- 这里不适用 readConfigFile(), 因为 eslint 必须提供 config 文件.
     filetypes = {"typescript"},
   }, diagnostics_opts)),
   diagnostics.eslint.with(vim.tbl_deep_extend('keep', {
@@ -96,7 +113,15 @@ null_ls.setup({
   --- VVI: 设置 linter / formatter / code actions
   sources = sources,
 
-  debug = false,   -- 记录 log, `:NullLsLog` 打印 log. VVI: 非常耗资源, 调试完后设置为 false.
+  --- VVI: project root, 影响 linter 执行. root_dir 传入一个 function.
+  root_dir = require("null-ls/utils").root_pattern(
+    '.git', 'go.mod', 'go.work',
+    'tsconfig.json', 'package.json', 'jsconfig.json'
+  ),
+
+  -- NOTE: 非常耗资源, 调试完后设置为 false.
+  -- is the same as setting log.level to "trace" 记录 log, `:NullLsLog` 打印 log.
+  debug = false,
 
   update_in_insert = false,  -- 节省资源, 一边输入一边检查
   debounce = 600,            -- 节省资源, diagnostics 间隔时间, 默认 250
