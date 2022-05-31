@@ -46,7 +46,7 @@ local function goRun()
   -- VVI: 删除之前的 terminal.
   vim.cmd('silent! bw! term://*toggleterm#'..go_term_id)
   -- go run Package
-  local go = Terminal:new(vim.tbl_deep_extend('force', go_opts, { cmd = "go run " .. import_path }))
+  local go = Terminal:new(vim.tbl_deep_extend('force', go_opts, { cmd = "cd " .. dir .. " && go run " .. import_path }))
   go:toggle()
 end
 -- -- }}}
@@ -72,7 +72,7 @@ local function goTestAll()
   -- VVI: 删除之前的 terminal.
   vim.cmd('silent! bw! term://*toggleterm#'..go_term_id)
   -- go test -v -timeout 30s -run "^Test.*" ImportPath
-  local cmd = 'go test -v -timeout 30s -run "^Test.*" ' .. import_path
+  local cmd = 'cd ' .. dir .. ' && go test -v -timeout 30s -run "^Test.*" ' .. import_path
   local go = Terminal:new(vim.tbl_deep_extend('force', go_opts, { cmd = cmd }))
   go:toggle()
 end
@@ -99,7 +99,7 @@ local function goBenchAll()
   -- VVI: 删除之前的 terminal.
   vim.cmd('silent! bw! term://*toggleterm#'..go_term_id)
   -- go test -v -timeout 30s -run ^$ -benchmem -bench "^Benchmark.*" ImportPath
-  local cmd = 'go test -v -timeout 30s -run ^$ -benchmem -bench "^Benchmark.*" ' .. import_path
+  local cmd = 'cd ' .. dir .. ' && go test -v -timeout 30s -run ^$ -benchmem -bench "^Benchmark.*" ' .. import_path
   local go = Terminal:new(vim.tbl_deep_extend('force', go_opts, { cmd = cmd }))
   go:toggle()
 end
@@ -126,7 +126,7 @@ local function goFuzzAll()
   -- VVI: 删除之前的 terminal.
   vim.cmd('silent! bw! term://*toggleterm#'..go_term_id)
   -- go test -v -run ^$ -fuzztime 30s -fuzz "^Fuzz.*" ImportPath
-  local cmd = 'go test -v -fuzztime 30s -run ^$ -fuzz "^Fuzz.*" ' .. import_path
+  local cmd = 'cd ' .. dir .. ' && go test -v -fuzztime 30s -run ^$ -fuzz "^Fuzz.*" ' .. import_path
   local go = Terminal:new(vim.tbl_deep_extend('force', go_opts, { cmd = cmd }))
   go:toggle()
 end
@@ -206,17 +206,17 @@ local function goTestCmd()   -- return (cmd: string|nil)
 
   if mark == 1 then
     -- go test -v -timeout 10s -run TestXxx ImportPath
-    cmd = "go test -v -timeout 10s -run " .. testfn .. " " .. import_path
+    cmd = 'cd ' .. dir .. " && go test -v -timeout 10s -run " .. testfn .. " " .. import_path
   end
 
   if mark == 2 then
     -- go test -v -timeout 10s -run ^$ -benchmem -bench BenchmarkXxx ImportPath
-    cmd = "go test -v -timeout 10s -run ^$ -benchmem -bench " .. testfn .. " " .. import_path
+    cmd = 'cd ' .. dir .. " && go test -v -timeout 10s -run ^$ -benchmem -bench " .. testfn .. " " .. import_path
   end
 
   if mark == 3 then
     -- go test -v -run ^$ -fuzztime 10s -fuzz FuzzXxx ImportPath
-    cmd = "go test -v -fuzztime 10s -run ^$ -fuzz " .. testfn .. " " .. import_path
+    cmd = 'cd ' .. dir .. " && go test -v -fuzztime 10s -run ^$ -fuzz " .. testfn .. " " .. import_path
   end
 
   return cmd

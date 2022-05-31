@@ -136,6 +136,7 @@ require "user.plugin-settings.vimspector"
 --- 放在最后 overwirte 其他颜色设置.
 require "user.colors"  -- vim highlight 设置
 
-
-
+--- TODO -------------------------------------------------------------------------------------------
+-- lsp/langs/gopls.lua root_dir 不设置 multi workspace 的情况下设置 go.work 工作区模式.
+-- null-ls golangci-lint root_dir error
 
