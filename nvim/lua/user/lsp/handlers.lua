@@ -51,8 +51,8 @@ vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
     --- VVI: `set omnifunc?` 没有设置, 所以 <C-x><C-o> 不会触发 Completion.
     --- 使用 `:doautocmd CompleteDone` 手动触发 event.
     close_events = {"CompleteDone", "WinScrolled"},
-    --- https://github.com/neovim/neovim/ -> runtime/lua/vim/lsp/util.lua 默认设置.
-    --close_events = {"CompleteDone", "CursorMoved", "CursorMovedI", "InsertCharPre", "WinScrolled"},
+    --- 以下是 close_events 默认设置. https://github.com/neovim/neovim/ -> runtime/lua/vim/lsp/util.lua
+    --close_events = {"CursorMoved", "CursorMovedI", "InsertCharPre"},
   }
 )
 
