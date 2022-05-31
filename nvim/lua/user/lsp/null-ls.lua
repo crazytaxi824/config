@@ -67,15 +67,15 @@ local sources = {
 
   --- NOTE: eslint 分别对不同的 filetype 做不同的设置
   diagnostics.eslint.with(vim.tbl_deep_extend('keep', {
-    extra_args = { "--config","eslintrc-ts.json" },  -- 这里不适用 readConfigFile(), 因为 eslint 必须提供 config 文件.
+    extra_args = { "--config", "eslintrc-ts.json" },
     filetypes = {"typescript"},
   }, diagnostics_opts)),
   diagnostics.eslint.with(vim.tbl_deep_extend('keep', {
-    extra_args = { "--config","eslintrc-react.json" },
+    extra_args = { "--config", "eslintrc-react.json" },
     filetypes = {"typescriptreact"},
   }, diagnostics_opts)),
   diagnostics.eslint.with(vim.tbl_deep_extend('keep', {
-    extra_args = { "--config","eslintrc-js.json" },
+    extra_args = { "--config", "eslintrc-js.json" },
     filetypes = {"javascript", "javascriptreact", "vue"},
   }, diagnostics_opts)),
 

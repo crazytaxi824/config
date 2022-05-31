@@ -45,6 +45,7 @@ function GetWinInfo()
   print(vim.inspect(infos))
 end
 
+--- 去掉 string prefix suffix whitespace -----------------------------------------------------------
 function TrimString(str)
   return string.match(str, "^%s*(.-)%s*$")
 end

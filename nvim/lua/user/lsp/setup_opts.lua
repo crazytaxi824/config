@@ -3,7 +3,7 @@
 --  capabilities 给 cmp 自动补全提供内容.
 local M = {}
 
---- work like Same_ID, `:help vim.lsp.buf.document_highlight()`
+--- work like Same_ID, `:help vim.lsp.buf.document_highlight()` ------------------------------------ {{{
 --    NOTE: Usage of |vim.lsp.buf.document_highlight()| requires the
 --    following highlight groups to be defined or you won't be able
 --    to see the actual highlights. |LspReferenceText|
@@ -26,8 +26,9 @@ local function lsp_highlight(client)
     ]]
   end
 end
+-- -- }}}
 
---- define Key mapping, NOTE: 只在有 LSP 的时候生效. 针对 buffer 设置 keymap ---
+--- define Key mapping, NOTE: 只在有 LSP 的时候生效. 针对 buffer 设置 keymap ----------------------- {{{
 --- <S-F12> 在 neovim 中是 <F24>, <C-F12> 是 <F36>, <C-S-F12> 是 <F48>. 其他组合键都可以通过 insert 模式打印出来.
 local function lsp_keymaps(bufnr)
   local opts = { noremap = true }
@@ -65,6 +66,15 @@ local function lsp_keymaps(bufnr)
   --- VVI: vim.lsp.handlers 中使用 CompleteDone event 来触发 close hover window.
   vim.api.nvim_buf_set_keymap(bufnr, "n", "<Esc>", '<Esc><cmd>doautocmd CompleteDone<CR>', opts)
 end
+-- -- }}}
+
+--- 常用功能函数 ----------------------------------------------------------------------------------- {{{
+local function lsp_user_commands()
+  vim.api.nvim_buf_create_user_command(0, "GetLspClientsInfo", function()
+    print(vim.inspect(vim.tbl_values(vim.lsp.buf_get_clients())))
+  end, {bang=true, bar=true})
+end
+-- -- }}}
 
 --- NOTE: on_attach - 加载 Key mapping & highlight 设置 --------------------------------------------
 ---       这里传入的 client 是正在加载的 lsp_client, vim.inspect(client) 中可以看到 codeActionKind.
@@ -80,9 +90,10 @@ M.on_attach = function(client, bufnr)
     end
   end
 
-  --- 加载 Key mapping & highlight 设置
+  --- NOTE: 加载自定义设置
   lsp_keymaps(bufnr)
   lsp_highlight(client)
+  lsp_user_commands()
 
   --- NOTIFY: 加载某个 lsp 的时候通知 --- {{{
   -- local notify_status_ok, notify = pcall(require, "notify")
@@ -108,11 +119,10 @@ M.capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
 M.on_init = function(client)
   --- read project root directory '.nvim/lsp.lua' file if it exists.
   if vim.fn.filereadable('.nvim/lsp.lua') == 0 then
-    --print(".nvim/lsp.lua file is not exist.")
     return true
   end
 
-  --- local result = dofile('.nvim/lsp.lua')  -- execute lua file, and get return value.
+  --- local result = dofile('.nvim/lsp.lua') - execute lua file, and get return value.
   local proj_lsp_status, proj_local_lsp_config = pcall(dofile, '.nvim/lsp.lua')
   if not proj_lsp_status then
     return true
