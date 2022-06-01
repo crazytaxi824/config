@@ -103,8 +103,10 @@ local keymaps = {
 
   -- NOTE: 这里不能使用 silent, 否则 command line 中不显示 '?' 和 '/'
   -- ':echo v:hlsearch' 显示目前 hlsearch 状态.
-  {'n', '?', 'v:hlsearch ? ":nohlsearch<CR>" : "?"', {noremap=true, expr=true}},  -- 三元表达式
-  {'n', '/', 'v:hlsearch ? ":nohlsearch<CR>" : "/"', {noremap=true, expr=true}},
+  --{'n', '?', 'v:hlsearch ? ":nohlsearch<CR>" : "?"', {noremap=true, expr=true}},  -- 三元表达式
+  --{'n', '/', 'v:hlsearch ? ":nohlsearch<CR>" : "/"', {noremap=true, expr=true}},
+  {'n', '?', ":nohlsearch<CR>?", {noremap=true}},  -- 三元表达式
+  {'n', '/', ":nohlsearch<CR>/", {noremap=true}},
 
   --- CTRL -----------------------------------------------------------------------------------------
   {'n', '<C-s>', ':update<CR>', opt},
