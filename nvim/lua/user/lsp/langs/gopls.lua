@@ -21,7 +21,31 @@ return {
     end
 
     local util = require("lspconfig/util")
-    return util.root_pattern('go.work')(fname) or util.root_pattern('go.mod', '.git')(fname)
+    local root = util.root_pattern('go.work')(fname) or util.root_pattern('go.mod', '.git')(fname)
+
+    --- 如果没找到 root 则返回 pwd/cwd
+    if not root then
+      local notify_status_ok, notify = pcall(require, "notify")
+      if notify_status_ok then
+        --- 如果有 nvim-notify 插件则 notify()
+        notify({
+          "'go.mod' file not found in current directory or any parent directory.",
+          "",
+          "Please run 'go mod init xxx'."},
+          "WARN", {title={"LSP", "gopls.lua"}, timeout = false})
+      else
+        --- 如果没有 nvim-notify 插件则 vim.notify()
+        vim.notify(
+          "'go.mod' file not found in current directory or any parent directory. Please run 'go mod init xxx'.",
+          vim.log.levels.WARN
+        )
+      end
+
+      return vim.fn.getcwd()  -- 返回当前 current working directory = pwd
+    end
+
+    --- 如果找到 root 则返回 root
+    return root
   end,
 
   settings = {
