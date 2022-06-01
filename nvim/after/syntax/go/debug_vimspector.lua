@@ -17,13 +17,13 @@ local function debug()
     --- 获取 package name, `cd src/xxx && go list -f '{{.Name}}'`
     local pkg_name = string.match(vim.fn.system("cd " .. dir .. " && go list -f '{{.Name}}'"), "[%S ]*")
     if vim.v.shell_error ~= 0 then
-      vim.api.nvim_echo({{pkg_name, "ErrorMsg"}}, false, {})
+      Notify(pkg_name,"ERROR",{title={"debug()","debug_vimspector.lua"}})
       return
     end
 
     --- 如果不在 main package, 不运行 Debug
     if pkg_name ~= 'main' then
-      vim.api.nvim_echo({{' file is not in "main" package ', "WarningMsg"}}, false, {})
+      Notify('file is not in "main" package',"WARN",{title={"debug()","debug_vimspector.lua"}})
       return
     end
 

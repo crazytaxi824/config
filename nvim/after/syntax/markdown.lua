@@ -1,14 +1,16 @@
 -- 创建 markdown table
-local function markdownCreateTable (arglist)  -- args: 创建一个 row * col 的表.
+local function markdownCreateTable(arglist)  -- args: 创建一个 row * col 的表.
   if vim.bo.readonly then
-    vim.api.nvim_echo({{' this is a readonly file ', "ErrorMsg"}}, false, {})
+    Notify("this is a readonly file","ERROR",{title={"markdownCreateTable()", "markdown.lua"}})
     return
   end
 
   if #arglist ~= 2 then
-    vim.api.nvim_echo({
-      {' args error. eg: "MarkdownCreateTable row:number col:number" ', "ErrorMsg"}
-    }, false, {})
+    Notify(
+      'args error. eg: "MarkdownCreateTable row:number col:number"',
+      "ERROR",
+      {title={"markdownCreateTable()", "markdown.lua"}}
+    )
     return
   end
 
@@ -16,12 +18,12 @@ local function markdownCreateTable (arglist)  -- args: 创建一个 row * col �
   local row = tonumber(arglist[1])
   local col = tonumber(arglist[2])
   if row == nil or col == nil then
-    vim.api.nvim_echo({{' args need to be number ', "ErrorMsg"}}, false, {})
+    Notify("args need to be number","ERROR",{title={"markdownCreateTable()", "markdown.lua"}})
     return
   end
 
   if row < 1 or col < 1 then
-    vim.api.nvim_echo({{' row & col needs to > 0 ', "ErrorMsg"}}, false, {})
+    Notify("row & col needs to > 0","ERROR",{title={"markdownCreateTable()", "markdown.lua"}})
     return
   end
 

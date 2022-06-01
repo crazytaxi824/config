@@ -49,7 +49,7 @@ function TerminalNormal()
 
   if term_bufnr > 0 then
     if vim.fn.getbufinfo(term_bufnr)[1].hidden == 0 then
-      vim.api.nvim_echo({{' terminal normal is already opened ', "WarningMsg"}}, false, {})
+      Notify("terminal normal is already opened","WARN",{title={"TerminalNormal()","terminal.lua"}})
     else
       -- load 隐藏的 terminal normal
       vim.cmd('bot sbuffer '..term_bufnr ..' | setlocal winfixheight nobuflisted')

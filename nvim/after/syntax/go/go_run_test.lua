@@ -39,7 +39,7 @@ local function goRun()
   -- VVI: 获取 go import path, `cd src/xxx && go list -f '{{.ImportPath}}'`
   local import_path = string.match(vim.fn.system("cd " .. dir .. " && go list -f '{{.ImportPath}}'"), "[%S ]*")
   if vim.v.shell_error ~= 0 then
-    vim.api.nvim_echo({{import_path, "ErrorMsg"}}, false, {})
+    Notify(import_path,"ERROR",{title={"goRun()","go_run_test.lua"}})
     return
   end
 
@@ -55,7 +55,7 @@ end
 local function goTestAll()
   -- 判断当前文件是否是 _test.go
   if string.match(vim.fn.expand('%:t'), "_test%.go$") == nil then
-    vim.api.nvim_echo({{' not "_test.go" file ', "ErrorMsg"}}, false, {})
+    Notify('not "_test.go" file',"ERROR",{title={"goTestAll()","go_run_test.lua"}})
     return
   end
 
@@ -65,7 +65,7 @@ local function goTestAll()
   -- VVI: 获取 go import path, `cd src/xxx && go list -f '{{.ImportPath}}'`
   local import_path = string.match(vim.fn.system("cd " .. dir .. " && go list -f '{{.ImportPath}}'"), "[%S ]*")
   if vim.v.shell_error ~= 0 then
-    vim.api.nvim_echo({{import_path, "ErrorMsg"}}, false, {})
+    Notify(import_path,"ERROR",{title={"goTestAll()","go_run_test.lua"}})
     return
   end
 
@@ -82,7 +82,7 @@ end
 local function goBenchAll()
   -- 判断当前文件是否是 _test.go
   if string.match(vim.fn.expand('%:t'), "_test%.go$") == nil then
-    vim.api.nvim_echo({{' not "_test.go" file ', "ErrorMsg"}}, false, {})
+    Notify('not "_test.go" file',"ERROR",{title={"goBenchAll()","go_run_test.lua"}})
     return
   end
 
@@ -92,7 +92,7 @@ local function goBenchAll()
   -- VVI: 获取 go import path, `cd src/xxx && go list -f '{{.ImportPath}}'`
   local import_path = string.match(vim.fn.system("cd " .. dir .. " && go list -f '{{.ImportPath}}'"), "[%S ]*")
   if vim.v.shell_error ~= 0 then
-    vim.api.nvim_echo({{import_path, "ErrorMsg"}}, false, {})
+    Notify(import_path,"ERROR",{title={"goBenchAll()","go_run_test.lua"}})
     return
   end
 
@@ -109,7 +109,7 @@ end
 local function goFuzzAll()
   -- 判断当前文件是否是 _test.go
   if string.match(vim.fn.expand('%:t'), "_test%.go$") == nil then
-    vim.api.nvim_echo({{' not "_test.go" file ', "ErrorMsg"}}, false, {})
+    Notify('not "_test.go" file',"ERROR",{title={"goFuzzAll()","go_run_test.lua"}})
     return
   end
 
@@ -119,7 +119,7 @@ local function goFuzzAll()
   -- VVI: 获取 go import path, `cd src/xxx && go list -f '{{.ImportPath}}'`
   local import_path = string.match(vim.fn.system("cd " .. dir .. " && go list -f '{{.ImportPath}}'"), "[%S ]*")
   if vim.v.shell_error ~= 0 then
-    vim.api.nvim_echo({{import_path, "ErrorMsg"}}, false, {})
+    Notify(import_path,"ERROR",{title={"goFuzzAll()","go_run_test.lua"}})
     return
   end
 
@@ -180,14 +180,14 @@ end
 local function goTestCmd()   -- return (cmd: string|nil)
   -- 判断当前文件是否 _test.go
   if string.match(vim.fn.expand('%:t'), "_test%.go$") == nil then
-    vim.api.nvim_echo({{' not "_test.go" file ', "ErrorMsg"}}, false, {})
+    Notify('not "_test.go" file',"ERROR",{title={"goTestCmd()","go_run_test.lua"}})
     return nil
   end
 
   -- 判断当前函数是否 TestXXX. 如果是则 获取 test function name.
   local testfn, mark = goTestFuncName()
   if mark == 0 then
-    vim.api.nvim_echo({{' not a Test funciton ', "ErrorMsg"}}, false, {})
+    Notify('not a Test funciton',"ERROR",{title={"goTestCmd()","go_run_test.lua"}})
     return nil
   end
 
@@ -197,7 +197,7 @@ local function goTestCmd()   -- return (cmd: string|nil)
   -- VVI: 获取 go import path, `cd src/xxx && go list -f '{{.ImportPath}}'`
   local import_path = string.match(vim.fn.system("cd " .. dir .. " && go list -f '{{.ImportPath}}'"), "[%S ]*")
   if vim.v.shell_error ~= 0 then
-    vim.api.nvim_echo({{import_path, "ErrorMsg"}}, false, {})
+    Notify(import_path,"ERROR",{title={"goTestCmd()","go_run_test.lua"}})
     return nil
   end
 

@@ -114,7 +114,7 @@ end
 local function findFuncCallBeforeCursor()
   local ts_status, ts_utils = pcall(require, "nvim-treesitter.ts_utils")
   if not ts_status then
-    vim.api.nvim_echo({{' tree-sitter is not loaded. ', "WarningMsg"}}, false, {})
+    Notify("tree-sitter is not loaded.", "WARN", {title={"findFuncCallBeforeCursor()","handlers.lua"}})
     return nil
   end
 

@@ -32,7 +32,7 @@ end
 local function jsJest(file, coverage)
   -- check xxx.test.js file
   if not string.match(file, ".*%.test%.js$") then
-    vim.api.nvim_echo({{' not a test file. ', "ErrorMsg"}}, false, {})
+    Notify("not a test file.", "ERROR", {title={"jsJest()","javascript.lua"}})
     return
   end
 

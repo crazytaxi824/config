@@ -17,7 +17,14 @@ local function lspFormat()
     end
   end
   -- 如果没有任何 LSP 支持 formating 则提醒.
-  vim.api.nvim_echo({{" no LSP support Formatting this file. please check ':lua print(vim.inspect(vim.tbl_values(vim.lsp.buf_get_clients())))' ", "WarningMsg"}}, false, {})
+  Notify(
+    {
+      "no LSP support Formatting this file. please check:",
+      "':lua print(vim.inspect(vim.tbl_values(vim.lsp.buf_get_clients())))'"
+    },
+    "WARN",
+    {title={"lspFormat()","auto_format.lua"}}
+  )
 end
 
 --- 定义 `:Format` command. NOTE: 有些文件类型 (markdown, lua ...) 需要手动执行 Format 命令.
