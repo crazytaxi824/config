@@ -60,8 +60,8 @@
 
 -- -- }}}
 
---- Only required if you have packer configured as `opt`
-vim.cmd [[packadd packer.nvim]]
+--- VVI: Only required if you have packer configured as `opt`
+--vim.cmd [[packadd packer.nvim]]  -- 在 stdpath('cache') 中创建 "packer.nvim" 文件夹
 
 --- save plugins.lua 时自动运行 `:PackerSync` 命令. --- {{{
 -- NOTE: 这里的文件名是 plugins.lua, 是本文件的文件名.
