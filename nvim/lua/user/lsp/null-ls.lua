@@ -132,25 +132,13 @@ null_ls.setup({
   -- on_exit =
   -- on_init = function(client, unused)
 
-  --- NOTIFY: 加载某些 linter 的时候通知 --- {{{
-  -- on_attach = function(lsp_client, unused)  -- NOTE: unused 是一个保留入参.
-  --   local linters = {}   -- list of linter enabled
-  --   local count = 0  -- for len(msg)
-  --   for _, value in ipairs(lsp_client.messages.progress) do
-  --     if value.message ~= nil then
-  --       table.insert(linters, value.message)
-  --       count = count + 1
-  --     end
-  --   end
-  --   if count > 0 then  -- 为了 len(msg)
-  --     Notify("Linter Loaded: " .. vim.fn.join(linters,","), "INFO", {title={"LSP", "null-ls.lua"}, timeout = 3000})
-  --   end
-  -- end,
-  -- -- }}}
-
   -- null-ls 退出的时候提醒.
   on_exit = function()
-    Notify("Null-ls exit. Please check ':NullLsInfo' & ':NullLsLog'", "WARN", {title = {"LSP", "null-ls.lua"}, timeout = false})
+    Notify(
+      "Null-ls exit. Please check ':NullLsInfo' & ':NullLsLog'",
+      "WARN",
+      {title = {"LSP", "null-ls.lua"}, timeout = false}
+    )
   end
 })
 

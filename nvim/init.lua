@@ -139,11 +139,9 @@ require "user.plugin-settings.vimspector"
 require "user.colors"  -- vim highlight 设置
 
 --- FIXME ------------------------------------------------------------------------------------------
--- gopls workspace error:
+-- gopls workspace error:  https://bytemeta.vip/repo/golang/go/issues/52587
 -- tidy: diagnosing file:///home/rh/dev/gomodtest/test/test/go.mod: err: exit status 1: stderr: go: downloading github.com/rs/xid v1.5.0
 -- test imports github.com/rs/xid: module lookup disabled by GOPROXY=off
 
--- keymapping :nohlsearch, / ?
 
--- change vim.api.nvim_echo() -> vim.notify()
 

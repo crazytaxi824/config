@@ -94,10 +94,6 @@ M.on_attach = function(client, bufnr)
   lsp_keymaps(bufnr)
   lsp_highlight(client)
   lsp_user_commands()
-
-  --- NOTIFY: 加载某个 lsp 的时候通知 --- {{{
-  -- Notify("LSP loaded: " .. client.name, "INFO", {title = {"LSP", "handlers.lua"}, timeout=3000})
-  -- -- }}}
 end
 
 --- NOTE: capabilities - Provides content to "hrsh7th/cmp-nvim-lsp" Completion ---------------------
