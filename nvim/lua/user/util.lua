@@ -50,6 +50,42 @@ function TrimString(str)
   return string.match(str, "^%s*(.-)%s*$")
 end
 
+--- 提醒使用 notify 插件或者 vim.notify() 函数 -----------------------------------------------------
+--- msg - string|[]string
+--- lvl - string|number. "TRACE"-0, "DEBUG"-1, "INFO"-2, "WARN"-3, "ERROR"-4, `:help vim.log.levels`, `:help notify.setup`
+--- opt - table, nvim-notify 插件专用 `:help notify.Options`, title, timeout...
+function Notify(msg, lvl, opt)
+  --- switch to vim.log.levels
+  local l = nil
+  if type(lvl) == 'number' then
+    l = lvl
+  elseif type(lvl) == 'string' then
+    if string.upper(lvl) == "TRACE" then
+      l = 0
+    elseif string.upper(lvl) == "DEBUG" then
+      l = 1
+    elseif string.upper(lvl) == "INFO" then
+      l = 2
+    elseif string.upper(lvl) == "WARN" then
+      l = 3
+    elseif string.upper(lvl) == "ERROR" then
+      l = 4
+    end
+  end
+
+  local notify_status_ok, notify = pcall(require, "notify")
+  if notify_status_ok then
+    notify(msg, l, opt)
+  else
+    if type(msg) == 'table' then
+      --- msg should be table array, join message []string with '\n'
+      vim.notify(vim.fn.join(msg, '\n'), l)
+    else
+      vim.notify(msg, l)
+    end
+  end
+end
+
 --- TEST: test functions ---
 
 
