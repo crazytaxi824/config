@@ -96,7 +96,7 @@ M.on_attach = function(client, bufnr)
   lsp_user_commands()
 
   --- NOTIFY: 加载某个 lsp 的时候通知 --- {{{
-  -- Notify("LSP loaded: " .. client.name, "INFO", {title = {"LSP", "handlers.lua"}, timeout=2000})
+  -- Notify("LSP loaded: " .. client.name, "INFO", {title = {"LSP", "handlers.lua"}, timeout=3000})
   -- -- }}}
 end
 

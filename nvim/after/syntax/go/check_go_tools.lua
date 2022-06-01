@@ -23,7 +23,7 @@ for tool, install in pairs(gotools) do
 end
 
 if count > 0 then
-  Notify(result, "WARN", {title = {"GoTools missing", "go_tools.lua"}, timeout = false})
+  Notify(result, "WARN", {title = {"GoTools missing", "check_go_tools.lua"}, timeout = false})
 end
 
 

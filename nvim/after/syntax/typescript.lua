@@ -30,7 +30,7 @@ local function tsRun(file)
   -- check tsconfig.json file
   local pwd = vim.fn.getcwd()
   if vim.fn.filereadable(pwd..'/tsconfig.json') == 0 then
-    vim.api.nvim_echo({{' tsconfig is missing, please check your pwd. ', "ErrorMsg"}}, false, {})
+    Notify("tsconfig is missing, please check your pwd.", "ERROR", {title={"tsRun()","typescript.lua"}})
     return
   end
 

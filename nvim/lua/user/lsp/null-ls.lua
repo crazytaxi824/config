@@ -143,14 +143,14 @@ null_ls.setup({
   --     end
   --   end
   --   if count > 0 then  -- 为了 len(msg)
-  --     Notify("Linter Loaded: " .. vim.fn.join(linters,","), "INFO", {title={"LSP", "null-ls.lua"}, timeout = 2000})
+  --     Notify("Linter Loaded: " .. vim.fn.join(linters,","), "INFO", {title={"LSP", "null-ls.lua"}, timeout = 3000})
   --   end
   -- end,
   -- -- }}}
 
   -- null-ls 退出的时候提醒.
   on_exit = function()
-    Notify("Null-ls exit. Please check ':NullLsInfo' & ':NullLsLog'", "WARN", {title = {"LSP", "null-ls"}, timeout = false})
+    Notify("Null-ls exit. Please check ':NullLsInfo' & ':NullLsLog'", "WARN", {title = {"LSP", "null-ls.lua"}, timeout = false})
   end
 })
 
