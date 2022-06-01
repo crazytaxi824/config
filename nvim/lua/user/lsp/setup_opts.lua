@@ -68,14 +68,6 @@ local function lsp_keymaps(bufnr)
 end
 -- -- }}}
 
---- 常用功能函数 ----------------------------------------------------------------------------------- {{{
-local function lsp_user_commands()
-  vim.api.nvim_buf_create_user_command(0, "GetLspClientsInfo", function()
-    print(vim.inspect(vim.tbl_values(vim.lsp.buf_get_clients())))
-  end, {bang=true, bar=true})
-end
--- -- }}}
-
 --- NOTE: on_attach - 加载 Key mapping & highlight 设置 --------------------------------------------
 ---       这里传入的 client 是正在加载的 lsp_client, vim.inspect(client) 中可以看到 codeActionKind.
 M.on_attach = function(client, bufnr)
@@ -93,7 +85,6 @@ M.on_attach = function(client, bufnr)
   --- NOTE: 加载自定义设置
   lsp_keymaps(bufnr)
   lsp_highlight(client)
-  lsp_user_commands()
 end
 
 --- NOTE: capabilities - Provides content to "hrsh7th/cmp-nvim-lsp" Completion ---------------------

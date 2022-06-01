@@ -46,4 +46,5 @@ return {
       ["ui.diagnostic.staticcheck"] = false,
     },
   },
+  single_file_support = true,
 }
