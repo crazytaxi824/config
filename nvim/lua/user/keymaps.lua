@@ -21,7 +21,7 @@ end
 function _HlNextSearch(key)
   local status, errmsg = pcall(vim.cmd, 'normal! ' .. key)
   if not status then
-    vim.api.nvim_echo({{errmsg, "ErrorMsg"}}, false, {})
+    Notify(errmsg, "ERROR", {title={"HlNextSearch()","keymaps.lua"}})
     return
   end
 

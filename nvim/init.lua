@@ -45,6 +45,8 @@
 --    vim.cmd(command) -> vim.api.nvim_create_user_command(), nvim_buf_create_user_command()
 --    vim.keymap.set() -> 直接写 local function
 --    vim.api.nvim_echo({{"A warning message: blahblah", "WarningMsg"}}, true, {})
+--    vim.notify("msg", vim.log.levels.WARN) == vim.api.nvim_echo({{"A warning message: blahblah", "WarningMsg"}}, true, {})
+--    vim.notify_once("msg", vim.log.levels.WARN)  只显示一次.
 --    vim.lsp.buf.execute_command() && vim.lsp.util.apply_workspace_edit()
 --    print(vim.inspect(vim.lsp.buf_get_clients())) -- VVI: lsp on_attach.
 
@@ -136,7 +138,12 @@ require "user.plugin-settings.vimspector"
 --- 放在最后 overwirte 其他颜色设置.
 require "user.colors"  -- vim highlight 设置
 
---- TODO -------------------------------------------------------------------------------------------
--- lsp/langs/gopls.lua root_dir 不设置 multi workspace 的情况下设置 go.work 工作区模式.
--- null-ls golangci-lint root_dir error
+--- FIXME ------------------------------------------------------------------------------------------
+-- gopls workspace error:
+-- tidy: diagnosing file:///home/rh/dev/gomodtest/test/test/go.mod: err: exit status 1: stderr: go: downloading github.com/rs/xid v1.5.0
+-- test imports github.com/rs/xid: module lookup disabled by GOPROXY=off
+
+-- keymapping :nohlsearch, / ?
+
+-- change vim.api.nvim_echo() -> vim.notify()
 

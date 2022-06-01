@@ -27,14 +27,16 @@
 --- GoAddTags --------------------------------------------------------------------------------------
 local function goAddTags(arglist)
   if vim.bo.readonly then
-    vim.api.nvim_echo({{' this is a readonly file ', "ErrorMsg"}}, false, {})
+    Notify("this is a readonly file","ERROR",{title={"goAddTags()","tool_gomodifytags.lua"}})
     return
   end
 
   if #arglist > 2 then
-    vim.api.nvim_echo({
-      {' too many args \n eg: "GoAddTags json,xml | GoAddTags json,xml camelcase" ', "ErrorMsg"}
-    }, false, {})
+    Notify(
+      {"too many args",'eg: ":GoAddTags json,xml | :GoAddTags json,xml camelcase"'},
+      "ERROR",
+      {title={"goAddTags()","tool_gomodifytags.lua"}}
+    )
     return
   end
 
@@ -63,9 +65,14 @@ local function goAddTags(arglist)
   elseif arglist[2] == 'k' or arglist[2] == 'keep' then  -- 和 field name 一样
     transform = "keep"
   else
-    vim.api.nvim_echo({
-      {' transform error: snakecase(*) | camelcase | lispcase | pascalcase | titlecase | keep \n eg: "GoAddTags json,xml snakecase" ', "ErrorMsg"},
-    }, false, {})
+    Notify(
+      {
+        "transform error: snakecase(*) | camelcase | lispcase | pascalcase | titlecase | keep",
+        'eg: ":GoAddTags json,xml snakecase"'
+      },
+      "ERROR",
+      {title={"goAddTags()","tool_gomodifytags.lua"}}
+    )
     return
   end
 
@@ -81,7 +88,7 @@ local function goAddTags(arglist)
 
   --- 判断结果是否错误
   if vim.v.shell_error ~= 0 then
-    vim.api.nvim_echo({{result, "ErrorMsg"}}, false, {})
+    Notify(result, "ERROR", {title={"goAddTags()","tool_gomodifytags.lua"}})
     return
   end
 
@@ -103,14 +110,16 @@ vim.api.nvim_buf_create_user_command(
 --- GoRemoveTags -----------------------------------------------------------------------------------
 local function goRemoveTags(arglist)
   if vim.bo.readonly then
-    vim.api.nvim_echo({{' this is a readonly file ', "ErrorMsg"}}, false, {})
+    Notify("this is a readonly file","ERROR",{title={"goRemoveTags()", "tool_gomodifytags.too"}})
     return
   end
 
   if #arglist > 1 then
-    vim.api.nvim_echo({
-      {' too many args \n eg: "GoRemoveTags | GoRemoveTags json,xml" ', "ErrorMsg"},
-    }, false, {})
+    Notify(
+      {"too many args",'eg: ":GoRemoveTags | :GoRemoveTags json,xml"'},
+      "ERROR",
+      {title={"goRemoveTags()", "tool_gomodifytags.too"}}
+    )
     return
   end
 
@@ -135,7 +144,7 @@ local function goRemoveTags(arglist)
 
   --- 判断结果是否错误
   if vim.v.shell_error ~= 0 then
-    vim.api.nvim_echo({{result, "ErrorMsg"}}, false, {})
+    Notify(result,"ERROR",{title={"goRemoveTags()", "tool_gomodifytags.too"}})
     return
   end
 

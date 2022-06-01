@@ -21,7 +21,23 @@ return {
     end
 
     local util = require("lspconfig/util")
-    return util.root_pattern('go.work')(fname) or util.root_pattern('go.mod', '.git')(fname)
+    local root = util.root_pattern('go.work')(fname) or util.root_pattern('go.mod', '.git')(fname)
+
+    --- 如果没找到 root 则返回 pwd/cwd
+    if not root then
+      Notify(
+        {
+          "'go.mod' file not found in current directory or any parent directory.",
+          "Please run 'go mod init xxx'."
+        },
+        "WARN",
+        {title={"LSP", "gopls.lua"}, timeout = false}
+      )
+      return vim.fn.getcwd()  -- 返回当前 current working directory = pwd
+    end
+
+    --- 如果找到 root 则返回 root
+    return root
   end,
 
   settings = {
