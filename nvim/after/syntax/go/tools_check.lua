@@ -4,11 +4,6 @@
 --      go install github.com/fatih/gomodifytags@latest
 --      go install github.com/cweill/gotests/gotests@latest
 --      go install github.com/josharian/impl@latest
-local notify_status_ok, notify = pcall(require, "notify")
-if not notify_status_ok then
-  return
-end
-
 local gotools = {
   goimports = "   go install golang.org/x/tools/cmd/goimports@latest",  -- null-ls
   gomodifytags = "go install github.com/fatih/gomodifytags@latest",
@@ -28,7 +23,7 @@ for tool, install in pairs(gotools) do
 end
 
 if count > 0 then
-  notify.notify(result, "WARN", {title = {"GoTools missing", "go_tools.lua"}, timeout = false})
+  Notify(result, "WARN", {title = {"GoTools missing", "go_tools.lua"}, timeout = false})
 end
 
 

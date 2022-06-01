@@ -25,22 +25,14 @@ return {
 
     --- 如果没找到 root 则返回 pwd/cwd
     if not root then
-      local notify_status_ok, notify = pcall(require, "notify")
-      if notify_status_ok then
-        --- 如果有 nvim-notify 插件则 notify()
-        notify({
+      Notify(
+        {
           "'go.mod' file not found in current directory or any parent directory.",
-          "",
-          "Please run 'go mod init xxx'."},
-          "WARN", {title={"LSP", "gopls.lua"}, timeout = false})
-      else
-        --- 如果没有 nvim-notify 插件则 vim.notify()
-        vim.notify(
-          "'go.mod' file not found in current directory or any parent directory. Please run 'go mod init xxx'.",
-          vim.log.levels.WARN
-        )
-      end
-
+          "Please run 'go mod init xxx'."
+        },
+        "WARN",
+        {title={"LSP", "gopls.lua"}, timeout = false}
+      )
       return vim.fn.getcwd()  -- 返回当前 current working directory = pwd
     end
 
