@@ -32,7 +32,9 @@
 --   -- NOTE: The following keys all imply `lazy-loading` and imply `opt = true`
 --   -- plugin 加载条件.
 --   cmd = string or list,        -- Specifies commands which load this plugin. Can be an autocmd pattern.
---   ft = string or list,         -- VVI: Specifies filetypes which load this plugin.
+--   ft = string or list,         -- VVI: 指定 filetype 加载插件.
+--                                -- BUG 使用 ft 后, after/syntax, after/ftplugin 中的文件会被读取两次. 不推荐使用.
+--                                -- FIXME https://github.com/wbthomason/packer.nvim/issues/648
 --   keys = string or list,       -- Specifies maps which load this plugin. See "Keybindings".
 --   event = string or list,      -- Specifies autocommand events which load this plugin.
 --   fn = string or list          -- Specifies functions which load this plugin.
@@ -144,10 +146,6 @@ return packer.startup(function(use)
   }
   use {"windwp/nvim-ts-autotag",   -- auto close tag <div></div>
     requires = "nvim-treesitter/nvim-treesitter",
-    ft = {'html', 'javascript', 'typescript',
-      'javascriptreact', 'typescriptreact',
-      'svelte', 'vue', 'tsx', 'jsx',
-      'rescript', 'xml', 'markdown'},
   }
 
   --- Completion -----------------------------------------------------------------------------------
@@ -194,7 +192,7 @@ return packer.startup(function(use)
   --- delve 安装位置 vimspector_base_dir=~/.local/share/nvim/site/pack/packer/start/vimspector/gadgets/macos/...
   --- https://github.com/puremourning/vimspector
   --- https://pepa.holla.cz/2021/03/01/golang-debugging-application-in-neovim/
-  use {"puremourning/vimspector", ft={"go"}}    -- Debug Tool. NOTE: golang ONLY for now.
+  use {"puremourning/vimspector"}    -- Debug Tool.
   --use "mfussenegger/nvim-dap"   -- lua debug tool
 
   --- Useful Tools ---------------------------------------------------------------------------------
@@ -216,7 +214,6 @@ return packer.startup(function(use)
   use {"iamcco/markdown-preview.nvim",
     -- VVI: Update 后需要重新安装 preview 插件, 否则可能出现无法运行的情况.
     run = function() vim.fn["mkdp#util#install"]() end,
-    ft = "markdown",  -- `:MarkdownPreviewToggle` 只能在 md 文件中使用
   }
 
   --use "goolord/alpha-nvim"          -- neovim 启动页面

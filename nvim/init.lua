@@ -146,6 +146,4 @@ require "user.colors"  -- vim highlight 设置
 -- keymapping :nohlsearch, / ?
 
 -- change vim.api.nvim_echo() -> vim.notify()
--- util.lua -> notify() function use nvim-notify plugin OR vim.notify()
---
--- after/syntax/go  notify() run twice.
+
