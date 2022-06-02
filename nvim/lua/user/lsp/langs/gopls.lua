@@ -2,8 +2,13 @@
 -- https://github.com/golang/tools/blob/master/gopls/doc/settings.md
 -- https://github.com/golang/tools/blob/master/gopls/doc/vim.md#neovim-config
 
+-- go env GOROOT | go env GOMODCACHE
+local function goEnv(v)
+  return string.match(vim.fn.system('go env '..v),'[%S ]*')
+end
+
 --- NOTE: ignore following folds as workspace root directory.
-local ignore_workspace_folders = { "$GOROOT", "$GOPATH/pkg/mod" }
+local ignore_workspace_folders = { goEnv("GOROOT"), goEnv("GOMODCACHE") }
 
 return {
   --cmd = { "gopls" },

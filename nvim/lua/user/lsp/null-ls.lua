@@ -34,7 +34,8 @@ local sources = {
   diagnostics.flake8,  -- python, flake8
 
   --- golangci-lint
-  diagnostics.golangci_lint.with(vim.tbl_deep_extend('keep', {
+  diagnostics.golangci_lint.with(vim.tbl_deep_extend('keep',
+    {
       -- VVI: 执行 golangci-lint 的 pwd. 默认是 params.root 即: null_ls.setup() 中的 root_dir / $ROOT
       -- params 回调参数 --- {{{
       --     content,    -- current buffer content (table, split at newline)
@@ -64,7 +65,8 @@ local sources = {
       extra_args = { '--config', ".golangci.yml"},  -- NOTE: 相对上面 cwd 的路径, 也可以使用绝对地址.
 
       --filetypes = { "go" },  -- 只对 go 文件生效.
-    }, diagnostics_opts)),
+    }, diagnostics_opts)
+  ),
 
   --- NOTE: eslint 分别对不同的 filetype 做不同的设置
   diagnostics.eslint.with(vim.tbl_deep_extend('keep', {
