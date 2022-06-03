@@ -100,26 +100,19 @@ M.capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
 --- NOTE: LSP settings Hook, 不是必要设置 ---------------------------------------------------------
 --- 这里是为了能单独给 project 设置 LSP setting
 M.on_init = function(client)
-  --- read project root directory '.nvim/lsp.lua' file if it exists.
-  if vim.fn.filereadable('.nvim/lsp.lua') == 0 then
-    return true
+  --- local result = dofile('xxx.lua') - execute lua file, and get return value.
+  local proj_lsp_status_ok, proj_local_lsp_config = pcall(dofile, '.nvim/lsp.lua')
+  if proj_lsp_status_ok then
+    --- 使用项目本地 LSP 设置覆盖全局 LSP 设置.
+    --- lua print(vim.inspect(client.config))  -- 查看 on_init callback 函数中, lsp client 的设置.
+    --- lua print(vim.inspect(vim.tbl_values(vim.lsp.buf_get_clients())))  -- 查看当前 buffer 中 lsp cllient 设置.
+    client.config = vim.tbl_deep_extend('force', client.config, proj_local_lsp_config)
+
+    -- VVI: tell LSP configs are changed.
+    client.notify("workspace/didChangeConfiguration")
   end
 
-  --- local result = dofile('.nvim/lsp.lua') - execute lua file, and get return value.
-  local proj_lsp_status, proj_local_lsp_config = pcall(dofile, '.nvim/lsp.lua')
-  if not proj_lsp_status then
-    return true
-  end
-
-  --- Project local LSP config overwrites global LSP config.
-  --- lua print(vim.inspect(client.config))  -- 查看 on_init callback 函数中, lsp client 的设置.
-  --- lua print(vim.inspect(vim.tbl_values(vim.lsp.buf_get_clients())))  -- 查看当前 buffer 中 lsp cllient 设置.
-  client.config = vim.tbl_deep_extend('force', client.config, proj_local_lsp_config)
-
-  -- VVI: tell LSP configs are changed.
-  client.notify("workspace/didChangeConfiguration")
-
-  return true
+  return true  -- VVI: 如果 return false 则 LSP 不启动.
 end
 
 return M

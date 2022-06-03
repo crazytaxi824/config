@@ -50,25 +50,42 @@ local sources = {
       --
       -- }}}
       cwd = function(params)
-        return util.root_pattern('go.work','go.mod','.git')(params.bufname) or params.root
+        return util.root_pattern('go.work')(params.bufname) or
+          util.root_pattern('go.mod','.git')(params.bufname) or
+          params.root
       end,
 
       ---  可以通过设置 setup() 中的 debug = true, 打开 `:NullLsLog` 查看命令行默认参数.
       args = function(params)
-        local new_root = util.root_pattern('go.work','go.mod','.git')(params.bufname) or params.root
+        local new_root = util.root_pattern('go.work')(params.bufname) or
+          util.root_pattern('go.mod','.git')(params.bufname) or
+          params.root
         --- VVI: 这里必须要使用 $DIRNAME.
         ---  如果使用 $FILENAME 意思是 lint 单个文件. 别的文件中定义的 var 无法被 golangci 找到.
         ---  如果缺省设置, 即不设置 $FILENAME 也不设置 $DIRNAME, 则每次 golangci 都会 lint 整个 project.
         return { "run", "--fix=false", "--fast", "--out-format=json", "$DIRNAME", "--path-prefix", new_root }
       end,
 
-      extra_args = { '--config', ".golangci.yml"},  -- NOTE: 相对上面 cwd 的路径, 也可以使用绝对地址.
+      --- golangci-lint 配置文件设置 --- {{{
+      --- golangci-lint 会自动寻找 '.golangci.yml', '.golangci.yaml', '.golangci.toml', '.golangci.json'.
+      --- GolangCI-Lint also searches for config files in all directories from the directory of the first analyzed path up to the root.
+      --- https://golangci-lint.run/usage/configuration/#linters-configuration
+      -- -- }}}
+      --extra_args = { '--config', ".golangci.yml"},  -- NOTE: 相对上面 cwd 的路径, 也可以使用绝对地址.
 
       --filetypes = { "go" },  -- 只对 go 文件生效.
     }, diagnostics_opts)
   ),
 
-  --- NOTE: eslint 分别对不同的 filetype 做不同的设置
+  --- NOTE: eslint 分别对不同的 filetype 做不同的设置. --- {{{
+  --- eslint 运行必须有配置文件, 如果没有配置文件则 eslint 运行错误.
+  --- VVI: eslint 运行所需的插件下载时会生成 package.json 文件, package.json 文件必须和 .eslintrc.* 文件在同一个文件夹中.
+  --- 否则 eslint 无法找到运行所需的插件.
+  --- eslint 会自动寻找 .eslintrc.* 文件, '.eslintrc.js', '.eslintrc.cjs', '.eslintrc.yaml', '.eslintrc.yml', '.eslintrc.json'.
+  --- eslint will searches for directory of the file and successive parent directories all the way up to the root directory.
+  --- 可以使用 '--config /xxx' 指定配置文件位置.
+  --- https://eslint.org/docs/user-guide/configuring/configuration-files
+  -- -- }}}
   diagnostics.eslint.with(vim.tbl_deep_extend('keep', {
     extra_args = { "--config", "eslintrc-ts.json" },
     filetypes = {"typescript"},
