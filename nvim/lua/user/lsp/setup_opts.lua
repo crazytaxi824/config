@@ -97,7 +97,7 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 M.capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
 
 --- https://github.com/neovim/nvim-lspconfig/wiki/Project-local-settings
---- NOTE: LSP settings Hook, 不是必要设置 ---------------------------------------------------------
+--- NOTE: LSP settings Hook, 不是必要设置 --------------------------------------------------------- {{{
 --- 这里是为了能单独给 project 设置 LSP setting
 -- M.on_init = function(client)
 --   --- local result = dofile('xxx.lua') - execute lua file, and get return value.
@@ -114,6 +114,7 @@ M.capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
 --
 --   return true  -- VVI: 如果 return false 则 LSP 不启动.
 -- end
+-- -- }}}
 
 return M
 
