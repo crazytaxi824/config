@@ -15,6 +15,8 @@ __Proj_local_settings._lazyload = function()
   --- 第一次读取文件
   local ok, proj_settings = pcall(dofile,'.nvim/settings.lua')
   __Proj_local_settings._once = true  -- NOTE: 标记为已读.
+
+  -- 读取成功, 同时返回值不是 nil 的情况下赋值给 _content
   if ok and proj_settings then
     __Proj_local_settings._content = proj_settings  -- NOTE: 缓存数据.
   end

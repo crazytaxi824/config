@@ -10,6 +10,12 @@ if not lsp_installer_ok then
   return
 end
 
+--- 读取项目本地设置
+local ok = pcall(require, "user.lsp.load_proj_settings")
+if not ok then
+  return
+end
+
 --- VVI: 在 ~/.config/nvim/lua/user/lsp/langs/ 中的文件名.
 local LSP_servers = { "jsonls", "sumneko_lua", "gopls", "tsserver", "pyright" }
 
@@ -61,6 +67,9 @@ for _, LSP_server in pairs(LSP_servers) do
     -- tbl_deep_extend() 合并两个 table.
     opts = vim.tbl_deep_extend("force", server_custom_opts, opts)
   end
+
+  --- 加载项目本地设置
+  opts = __Proj_local_settings.keep_extend("lsp", opts)
 
   --- VVI: 这里就是 lspconfig.xxx.setup() 针对不同的 lsp 进行加载.
   lspconfig[LSP_server].setup(opts)

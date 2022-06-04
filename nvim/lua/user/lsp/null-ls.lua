@@ -11,7 +11,7 @@ local formatting = null_ls.builtins.formatting
 local diagnostics = null_ls.builtins.diagnostics
 --- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/code_actions
 --- NOTE: null-ls 不是 autostart 的, 需要触发操作后才会加载. 会导致第一次 code action 的时候速度慢.
-local code_actions = null_ls.builtins.code_actions
+--local code_actions = null_ls.builtins.code_actions
 
 --- diagnostics_opts 用于下面的 sources diagnostics 设置.
 local diagnostics_opts = {
@@ -29,12 +29,12 @@ local diagnostics_opts = {
 -- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md  -- formatter & linter 列表
 -- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTIN_CONFIG.md  -- with() 设置
 -- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/HELPERS.md -- $FILENAME, $DIRNAME, $ROOT ...
-local sources = {
-  --- linters 设置 ---------------------------------------------------------------------------------
+--- linters 设置 -----------------------------------------------------------------------------------
+local linter_settings = {
   diagnostics.flake8,  -- python, flake8
 
   --- golangci-lint
-  diagnostics.golangci_lint.with(vim.tbl_deep_extend('keep',
+  diagnostics.golangci_lint.with(__Proj_local_settings.keep_extend('lint',
     {
       -- VVI: 执行 golangci-lint 的 pwd. 默认是 params.root 即: null_ls.setup() 中的 root_dir / $ROOT
       -- params 回调参数 --- {{{
@@ -86,20 +86,22 @@ local sources = {
   --- 可以使用 '--config /xxx' 指定配置文件位置.
   --- https://eslint.org/docs/user-guide/configuring/configuration-files
   -- -- }}}
-  diagnostics.eslint.with(vim.tbl_deep_extend('keep', {
+  diagnostics.eslint.with(__Proj_local_settings.keep_extend('lint', {
     extra_args = { "--config", "eslintrc-ts.json" },
     filetypes = {"typescript"},
   }, diagnostics_opts)),
-  diagnostics.eslint.with(vim.tbl_deep_extend('keep', {
+  diagnostics.eslint.with(__Proj_local_settings.keep_extend('lint', {
     extra_args = { "--config", "eslintrc-react.json" },
     filetypes = {"typescriptreact"},
   }, diagnostics_opts)),
-  diagnostics.eslint.with(vim.tbl_deep_extend('keep', {
+  diagnostics.eslint.with(__Proj_local_settings.keep_extend('lint', {
     extra_args = { "--config", "eslintrc-js.json" },
     filetypes = {"javascript", "javascriptreact", "vue"},
   }, diagnostics_opts)),
+}
 
-  --- formatter 设置 -------------------------------------------------------------------------------
+--- formatter 设置 ---------------------------------------------------------------------------------
+local formatter_settings = {
   --- NOTE: 需要在 lsp.setup(opts) 中的 on_attach 中排除 tsserver & sumneko_lua 的 formatting 功能
   formatting.prettier.with({
     --command = "/path/to/prettier",
@@ -120,18 +122,13 @@ local sources = {
   --- go 需要在这里使用 'goimports', 因为 gopls 默认不会处理 "source.organizeImports",
   --- 但是需要 gopls 格式化 go.mod 文件.
   formatting.goimports, -- go, gofmt, goimports, gofumpt
-
-  --- code actions 设置 ----------------------------------------------------------------------------
-  --- NOTE: null-ls 不是 autostart 的, 需要触发操作后才会加载, 所以在 js/ts 中
-  --- 第一次使用 code action 时会导致速度变慢.
-  --code_actions.eslint,  -- 不建议开启. eslint 的 code_action 的主要作用是提示 disable 相应的 lint.
 }
 
 --- null-ls 在这里加载上面设置的 formatting & linter -----------------------------------------------
 --- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/CONFIG.md
 null_ls.setup({
   --- VVI: 设置 linter / formatter / code actions
-  sources = sources,
+  sources = vim.list_extend(linter_settings, formatter_settings),
 
   --- VVI: project root, 影响 linter 执行. root_dir 传入一个回调 func(fname).
   --- 如果想要改变 linter 执行的路径, 需要在 linter.with() 设置中设置 cwd. cwd 默认值为 root_dir.
@@ -150,7 +147,7 @@ null_ls.setup({
 
   -- on_attach =
   -- on_exit =
-  -- on_init = function(client, unused)
+  -- on_init = function(client, init_result)
 
   -- null-ls 退出的时候提醒.
   on_exit = function()
