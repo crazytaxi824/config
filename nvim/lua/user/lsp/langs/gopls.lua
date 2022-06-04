@@ -25,7 +25,7 @@ return {
       end
     end
 
-    local util = require("lspconfig/util")
+    local util = require("lspconfig.util")
     local root = util.root_pattern('go.work')(fname) or util.root_pattern('go.mod', '.git')(fname)
 
     --- 如果没找到 root 则返回 pwd/cwd

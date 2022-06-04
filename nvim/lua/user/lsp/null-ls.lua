@@ -3,7 +3,7 @@ if not null_ls_status_ok then
   return
 end
 
-local util = require("null-ls/utils")
+local util = require("null-ls.utils")
 
 --- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/formatting
 local formatting = null_ls.builtins.formatting
