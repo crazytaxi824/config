@@ -12,7 +12,8 @@
 --   as = string,                 -- VVI: 别名
 --   installer = function,        -- Specifies custom installer. See "custom installers" below.
 --   updater = function,          -- Specifies custom updater. See "custom installers" below.
---   after = string or list,      -- 在加载指定 plugin 后, 加载自己. 使用 requires 最好.
+--   after = string or list,      -- 在加载指定 plugin 后, 加载自己.
+--                                -- NOTE: after 插件名只写最后一部分, eg: after = "nvim-cmp", VVI: 不要写 after = "hrsh7th/nvim-cmp"
 --   rtp = string,                -- Specifies a subdirectory of the plugin to add to runtimepath.
 --   opt = boolean,               -- Manually marks a plugin as optional.
 --
@@ -23,7 +24,7 @@
 --   lock = boolean,              -- VVI: Skip updating this plugin in updates/syncs. Still cleans.
 --
 --   run = string, function, or table, -- VVI: UPDATE 之后执行, 不是 loaded. 类似 vim-plug { 'do' }
---   requires = string or list,   -- VVI: 会先加载 requires 中的 plugin.
+--   requires = string or list,   -- VVI: 会先加载 requires 中的 plugin. requires 插件名需要写全名, requires = "hrsh7th/nvim-cmp"
 --   config = string or function, -- VVI: after plugin loaded. `config = function() ... end`,
 --   rocks = string or list,      -- Specifies `Luarocks` dependencies for the plugin
 --   -- NOTE: The `setup` implies `opt = true`

@@ -147,6 +147,7 @@ require "user.colors"  -- vim highlight 设置
 -- global var & function start with '__'
 
 -- lazyload treesitter
+-- treesitter download path
 -- treesitter settings { run = "TSUpdate" , event = "BufReadPost", setup = function}
 -- other plugins settings { after = "treesitter" }
 
