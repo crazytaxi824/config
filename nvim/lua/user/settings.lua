@@ -120,7 +120,7 @@ vim.g.do_filetype_lua = 1     -- 读取 runtimepath/filetype.lua 中定义的 fi
 --    $VIMRUNTIME/filetype.lua
 --    $VIMRUNTIME/filetype.vim
 --vim.cmd('filetype on')   -- VVI: 默认开启, 不要手动设置.
---vim.cmd('syntax on')     -- 开启 vim 内置语法高亮. NOTE: 这里我们使用 treesitter, 所以不需要 syntax on.
+vim.cmd('syntax off')      -- vim 内置语法高亮. NOTE: 这里我们使用 treesitter, 所以不需要 syntax on.
 
 vim.opt.timeoutlen = 600   -- 组合键延迟时间, 默认1000ms. eg: <leader>w, <C-W><C-O>...
 vim.opt.ttimeoutlen = 0    -- <ESC> 延迟时间, 默认 50ms.  <ESC> 的主要作用是切换模式.

@@ -31,11 +31,11 @@ __Proj_local_settings.keep_extend = function(local_key, tbl, ...)
     return vim.tbl_deep_extend('keep', __Proj_local_settings._content[local_key], tbl, ...)
   end
 
-  -- 如果传入多个 config
+  -- 如果传入多个 tbl config
   if ... then
     return vim.tbl_deep_extend('keep', tbl, ...)
   end
 
-  -- 如果只有 tbl 一个 config 存在
+  -- 如果只有一个 tbl config
   return tbl
 end
