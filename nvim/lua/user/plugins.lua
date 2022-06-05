@@ -147,12 +147,6 @@ return packer.startup(function(use)
     config = function() require("user.plugin-settings.comment") end
   }
 
-  --- 自动括号
-  use {"windwp/nvim-autopairs",
-    requires = "nvim-treesitter/nvim-treesitter",  -- setup() 中 `check_ts`, `ts_config` 需要 treesitter 支持.
-    config = function() require("user.plugin-settings.autopairs") end
-  }
-
   --- identline
   use {"lukas-reineke/indent-blankline.nvim",
     requires = "nvim-treesitter/nvim-treesitter",  -- 设置 vim.g.indent_blankline_use_treesitter = "v:true"
@@ -177,6 +171,15 @@ return packer.startup(function(use)
       --"hrsh7th/cmp-cmdline",     -- cmdline completions, 不好用.
     },
     config = function() require("user.plugin-settings.cmp") end
+  }
+
+  --- 自动括号, 同时依赖 treesitter && cmp
+  use {"windwp/nvim-autopairs",
+    requires = {
+      "nvim-treesitter/nvim-treesitter",  -- setup() 中 `check_ts`, `ts_config` 需要 treesitter 支持.
+      "hrsh7th/nvim-cmp",  -- cmp.event:on() 设置.
+    },
+    config = function() require("user.plugin-settings.autopairs") end
   }
 
   --- LSP ------------------------------------------------------------------------------------------

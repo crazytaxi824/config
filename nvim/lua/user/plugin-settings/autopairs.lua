@@ -35,7 +35,7 @@ npairs.remove_rule('`')   -- 删除 `` 匹配
 
 --- NOTE: 自动补全 cmp 配合使用.
 --- If you want insert `(` after select function or method item
-local cmp_autopairs = require "nvim-autopairs.completion.cmp"
+local cmp_autopairs = require("nvim-autopairs.completion.cmp")
 local cmp_status_ok, cmp = pcall(require, "cmp")
 if not cmp_status_ok then
   return
