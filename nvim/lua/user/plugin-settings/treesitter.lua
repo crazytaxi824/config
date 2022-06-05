@@ -9,7 +9,7 @@ configs.setup {
   sync_install = false,      -- install languages synchronously (only applied to `ensure_installed`)
   ignore_install = {},  -- 黑名单, List of parsers to ignore installing
   highlight = {
-    enable = true,     -- false will disable the whole extension
+    enable = true,     -- VVI: `false` will disable the whole extension
     disable = { "" },  -- list of language that will be disabled
 
     -- NOTE: 同时使用 vim 自带 syntax,
@@ -25,7 +25,7 @@ configs.setup {
     enable_autocmd = false,  -- trigger commentstring updating on CursorHold
   },
 
-  --- "windwp/nvim-ts-autotag", NOTE: auto close tag <div></div>
+  --- "windwp/nvim-ts-autotag", auto close tag <div></div>
   autotag = {
     enable = true,
     filetypes = {'html', 'javascript', 'typescript',
@@ -60,7 +60,7 @@ configs.setup {
     enable = true,
     disable = { "cpp", "go" },  -- list of languages you want to disable the plugin for
     extended_mode = false, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
-    max_file_lines = nil, -- Do not enable for files with more than n lines, int
+    max_file_lines = 999, -- Do not enable for files with more than n lines, int
   },
 }
 

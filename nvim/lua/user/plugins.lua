@@ -66,12 +66,12 @@
 
 --- save plugins.lua 时自动运行 `:PackerSync` 命令. --- {{{
 --- NOTE: 这里的文件名是 plugins.lua, 是本文件的文件名.
-vim.cmd [[
- augroup packer_user_config
-   autocmd!
-   autocmd BufWritePost plugins.lua source <afile> | PackerSync
- augroup end
-]]
+-- vim.cmd [[
+--  augroup packer_user_config
+--    autocmd!
+--    autocmd BufWritePost plugins.lua source <afile> | PackerSync
+--  augroup end
+-- ]]
 -- -- }}}
 
 --- Use a protected call so we don't error out on first use
@@ -120,33 +120,31 @@ return packer.startup(function(use)
   -- -- }}}
   use {"nvim-treesitter/nvim-treesitter",  -- NOTE: treesitter 主要插件
     run = ":TSUpdate",   -- Post-update/install hook
+    requires = {
+      --- requests 中都是 treesitter modules 插件, 在 setup() 中启用的插件.
+      {"JoosepAlviste/nvim-ts-context-commentstring"}, -- Comment 依赖 commentstring.
+      {"windwp/nvim-ts-autotag"},   -- auto close tag <div></div>
+      {"p00f/nvim-ts-rainbow"},   -- 括号颜色. treesitter 解析
+      {"nvim-treesitter/playground",   -- tree-sitter 插件, 用于获取 tree-sitter 信息, 调整颜色很有用
+         cmd = {"TSPlaygroundToggle", "TSHighlightCapturesUnderCursor"},  -- NOTE: 需要时再加载 playground.
+      },
+    }
   }
-  --- Commands for "nvim-treesitter/playground" --- {{{
-  --- `:TSPlaygroundToggle`  -- 查看 tree-sitter 对当前 word 的定义.
-  --- `:TSHighlightCapturesUnderCursor`  -- 查看 tree-sitter 定义的 highlight group.
-  -- -- }}}
-  use {"nvim-treesitter/playground",  -- tree-sitter 插件, 用于获取 tree-sitter 信息, 调整颜色很有用
-    requires = "nvim-treesitter/nvim-treesitter",
-    cmd = {"TSPlaygroundToggle", "TSHighlightCapturesUnderCursor"},  -- NOTE: 需要时再加载 playground.
-  }
+
+  --- 以下是使用了 treesitter 功能的插件. (这些插件也可以不使用 treesitter 的功能)
   use {"numToStr/Comment.nvim",   -- 注释
     requires = {
-      {"JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
-        requires = "nvim-treesitter/nvim-treesitter", -- commentstring 依赖 treesitter.
-      },
+      "JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
+      "nvim-treesitter/nvim-treesitter",
     },
   }
-  use {"lukas-reineke/indent-blankline.nvim",  -- identline
-    requires = "nvim-treesitter/nvim-treesitter",
-  }
+
   use {"windwp/nvim-autopairs",   -- 自动括号
     requires = "nvim-treesitter/nvim-treesitter",  -- setup() 中 `check_ts`, `ts_config` 需要 treesitter 支持.
   }
-  use {"p00f/nvim-ts-rainbow",   -- 括号颜色. treesitter 解析
-    requires = "nvim-treesitter/nvim-treesitter",
-  }
-  use {"windwp/nvim-ts-autotag",   -- auto close tag <div></div>
-    requires = "nvim-treesitter/nvim-treesitter",
+
+  use {"lukas-reineke/indent-blankline.nvim",  -- identline
+    requires = "nvim-treesitter/nvim-treesitter",  -- 设置 vim.g.indent_blankline_use_treesitter = "v:true"
   }
 
   --- Completion -----------------------------------------------------------------------------------

@@ -1,4 +1,4 @@
---- indent line 和 set list & set listchars 配合使用.
+--- NOTE: indent line 和 set list & set listchars 配合使用.
 
 --- Use a protected call so we don't error out on first use
 local status_ok, indent_blankline = pcall(require, "indent_blankline")
@@ -6,7 +6,7 @@ if not status_ok then
   return
 end
 
--- vim.g.indent_blankline_use_treesitter = "v:true"  -- NOTE: use treesitter
+-- vim.g.indent_blankline_use_treesitter = "v:true"  -- NOTE: use treesitter, 默认 v:false.
 vim.g.indent_blankline_buftype_exclude = { "terminal", "nofile" }
 vim.g.indent_blankline_filetype_exclude = {
   "help",
