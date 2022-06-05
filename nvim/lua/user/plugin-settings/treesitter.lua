@@ -4,6 +4,7 @@ if not status_ok then
 end
 
 configs.setup {
+  --- supported langs, https://github.com/nvim-treesitter/nvim-treesitter#supported-languages
   --ensure_installed = { "go", "lua", "javascript", "typescript", "tsx", "html", "css", "scss" ... },
   ensure_installed = "all",  -- 白名单, "all" OR a list of languages
   sync_install = false,      -- install languages synchronously (only applied to `ensure_installed`)

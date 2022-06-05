@@ -21,7 +21,7 @@ end
 function _HlNextSearch(key)
   local status, errmsg = pcall(vim.cmd, 'normal! ' .. key)
   if not status then
-    Notify(errmsg, "ERROR", {title={"HlNextSearch()","keymaps.lua"}})
+    vim.notify(errmsg, vim.log.levels.ERROR) -- 这里不要使用 notify 插件, 显示错误信息.
     return
   end
 

@@ -164,7 +164,7 @@ null_ls.setup({
 
   -- null-ls 退出的时候提醒.
   on_exit = function()
-    Notify("Null-ls exit. Please check ':NullLsInfo' & ':NullLsLog'","WARN",
+    Notify("Null-Ls exit. Please check ':NullLsInfo' & ':NullLsLog'","WARN",
       {title = {"LSP", "null-ls.lua"}, timeout = false})
   end
 })
