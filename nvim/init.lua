@@ -106,35 +106,6 @@ require "user.fold"      -- 代码折叠设置, NOTE: treesitter experimental fu
 --- 加载 plugins ---
 require "user.plugins"  -- packer 加载 plugin
 
---- 以下是 plugins 设置, 位置在 ~/.config/nvim/lua/user/plugin-settings/ ---
-require "user.plugin-settings.impatient"   -- "lewis6991/impatient.nvim"
-require "user.plugin-settings.autopairs"   -- "windwp/nvim-autopairs"
-require "user.plugin-settings.indentline"  -- "lukas-reineke/indent-blankline.nvim"
-require "user.plugin-settings.comment"     -- "numToStr/Comment.nvim"
-require "user.plugin-settings.treesitter"  -- "nvim-treesitter/nvim-treesitter"
-require "user.plugin-settings.nvim-tree"   -- "kyazdani42/nvim-tree.lua"
-require "user.plugin-settings.airline"     -- "vim-airline/vim-airline"
-require "user.plugin-settings.tagbar"      -- "preservim/tagbar"
-require "user.plugin-settings.toggleterm"  -- "akinsho/toggleterm.nvim"
-require "user.plugin-settings.telescope"   -- "nvim-telescope/telescope.nvim"
-require "user.plugin-settings.notify"      -- "rcarriga/nvim-notify"
-require "user.plugin-settings.which-key"   -- "folke/which-key.nvim"
-
---- lsp setting ---
-require "user.lsp"    -- 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
-
---- 自动补全插件 cmp ---
-require "user.plugin-settings.luasnip"  -- "L3MON4D3/LuaSnip"          -- snip engine
-require "user.plugin-settings.cmp"      -- "hrsh7th/nvim-cmp"          -- The completion plugin
-                                        -- "hrsh7th/cmp-buffer"        -- buffer completions
-                                        -- "hrsh7th/cmp-path"          -- path completions
-                                        -- "hrsh7th/cmp-cmdline"       -- cmdline completions
-                                        -- "saadparwaiz1/cmp_luasnip"  -- snippet completions
-                                        -- "hrsh7th/cmp-nvim-lsp"      -- lsp comletions
-
---- debug tool ---
-require "user.plugin-settings.vimspector"
-
 --- 放在最后 overwirte 其他颜色设置.
 require "user.colors"  -- vim highlight 设置
 
@@ -143,6 +114,15 @@ require "user.colors"  -- vim highlight 设置
 -- tidy: diagnosing file:///home/rh/dev/gomodtest/test/test/go.mod: err: exit status 1: stderr: go: downloading github.com/rs/xid v1.5.0
 -- test imports github.com/rs/xid: module lookup disabled by GOPROXY=off
 
---- TODO ---
+--- TODO -------------------------------------------------------------------------------------------
 -- global var & function start with '__'
+
+-- lazyload treesitter
+-- treesitter download path
+-- treesitter settings { run = "TSUpdate" , event = "BufReadPost", config = function }
+-- other plugins settings { after = "treesitter" }
+
+
+
+
 

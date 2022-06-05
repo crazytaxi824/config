@@ -21,7 +21,6 @@ require("luasnip.loaders.from_vscode").lazy_load({
   exclude = {"go"},  -- 排除 go, 使用下面自定义的 snippets
 })
 require("luasnip.loaders.from_vscode").lazy_load({
-  -- NOTE: lazy_load 只有 paths 配置, 没有 exclude & include
   paths = {"./snip"},  -- runtimepath/snip, 这里是加载自定义 snippets
 })
 

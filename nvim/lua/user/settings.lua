@@ -119,16 +119,17 @@ vim.g.do_filetype_lua = 1     -- 读取 runtimepath/filetype.lua 中定义的 fi
 -- `:help :filetype on`, Detail: The ":filetype on" command will load these files:
 --    $VIMRUNTIME/filetype.lua
 --    $VIMRUNTIME/filetype.vim
---vim.cmd('filetype on')   -- VVI: 默认开启, 不要手动设置.
---vim.cmd('syntax on')     -- 开启 vim 内置语法高亮. NOTE: 这里我们使用 treesitter, 所以不需要 syntax on.
+--vim.cmd('filetype on')  -- VVI: 默认开启, 不要手动设置.
+--vim.cmd('syntax on')    -- vim 内置语法高亮.
+                          -- NOTE: syntax off 的情况下不会加载 after/syntax, 但是会加载 after/ftplugin
 
-vim.opt.timeoutlen = 600   -- 组合键延迟时间, 默认1000ms. eg: <leader>w, <C-W><C-O>...
-vim.opt.ttimeoutlen = 0    -- <ESC> 延迟时间, 默认 50ms.  <ESC> 的主要作用是切换模式.
-                           -- <ESC> 是发送 ^[ 相当于是 <C-[> 组合键.
-                           -- ttimeoutlen>0 的情况下, 其他模式转成 normal 模式需要 <ESC><ESC> 两次, 或者等待延迟结束;
-                           -- ttimeoutlen=0 的情况下, 其他模式转成 normal 模式只需要 <ESC> 一次.
-                           -- ttimeoutlen>0 的情况下, 从 insert 直接转成 visual 需要 <ESC>v, 中间不需要经过 normal 模式;
-                           -- ttimeoutlen=0 的情况下, 模式转换时肯定会经过 normal. 因为按下 <ESC> 时马上就会转成 normal 模式.
+vim.opt.timeoutlen = 600  -- 组合键延迟时间, 默认1000ms. eg: <leader>w, <C-W><C-O>...
+vim.opt.ttimeoutlen = 0   -- <ESC> 延迟时间, 默认 50ms.  <ESC> 的主要作用是切换模式.
+                          -- <ESC> 是发送 ^[ 相当于是 <C-[> 组合键.
+                          -- ttimeoutlen>0 的情况下, 其他模式转成 normal 模式需要 <ESC><ESC> 两次, 或者等待延迟结束;
+                          -- ttimeoutlen=0 的情况下, 其他模式转成 normal 模式只需要 <ESC> 一次.
+                          -- ttimeoutlen>0 的情况下, 从 insert 直接转成 visual 需要 <ESC>v, 中间不需要经过 normal 模式;
+                          -- ttimeoutlen=0 的情况下, 模式转换时肯定会经过 normal. 因为按下 <ESC> 时马上就会转成 normal 模式.
 
 -- 功能设置, 以下都是默认值
 vim.opt.backspace = 'indent,eol,start'  -- 设置 backspace 模式.
@@ -172,7 +173,15 @@ vim.opt.showmatch = true      -- 跳到匹配的括号上, 包括 () {} []
 vim.opt.cmdheight = 2         -- 底部状态栏高度, more space.
 
 -- 只在超出 textwidth 的行中显示 ColorColumn. 可以替代 `set colorcolumn`
-vim.cmd [[ au BufEnter * call matchadd('ColorColumn', '\%' .. (&textwidth+1) .. 'v', 100) ]]
+-- vim.cmd [[ au BufEnter * call matchadd('ColorColumn', '\%' .. (&textwidth+1) .. 'v', 100) ]]
+vim.api.nvim_create_autocmd("BufEnter", {
+  pattern = {"*"},
+  callback = function()
+    if vim.bo.textwidth > 0 then  -- 如果 buffer 没有设置 textwidth, 即 textwidth=0 则不执行.
+      vim.fn.matchadd('ColorColumn', '\\%' .. vim.bo.textwidth+1 .. 'v', 100)
+    end
+  end
+})
 --vim.opt.colorcolumn = '+1'  -- :set cc=+1  " highlight column after 'textwidth'
                               -- :set cc=+1,+2,+3  " highlight three columns after 'textwidth'
 

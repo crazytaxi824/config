@@ -12,7 +12,8 @@
 --   as = string,                 -- VVI: 别名
 --   installer = function,        -- Specifies custom installer. See "custom installers" below.
 --   updater = function,          -- Specifies custom updater. See "custom installers" below.
---   after = string or list,      -- 在加载指定 plugin 后, 加载自己. 使用 requires 最好.
+--   after = string or list,      -- 在加载指定 plugin 后, 加载自己.
+--                                -- NOTE: after 插件名只写最后一部分, eg: after = "nvim-cmp", VVI: 不要写 after = "hrsh7th/nvim-cmp"
 --   rtp = string,                -- Specifies a subdirectory of the plugin to add to runtimepath.
 --   opt = boolean,               -- Manually marks a plugin as optional.
 --
@@ -23,7 +24,7 @@
 --   lock = boolean,              -- VVI: Skip updating this plugin in updates/syncs. Still cleans.
 --
 --   run = string, function, or table, -- VVI: UPDATE 之后执行, 不是 loaded. 类似 vim-plug { 'do' }
---   requires = string or list,   -- VVI: 会先加载 requires 中的 plugin.
+--   requires = string or list,   -- VVI: 会先加载 requires 中的 plugin. requires 插件名需要写全名, requires = "hrsh7th/nvim-cmp"
 --   config = string or function, -- VVI: after plugin loaded. `config = function() ... end`,
 --   rocks = string or list,      -- Specifies `Luarocks` dependencies for the plugin
 --   -- NOTE: The `setup` implies `opt = true`
@@ -60,17 +61,17 @@
 
 -- -- }}}
 
---- VVI: Only required if you have packer configured as `opt`
+--- NOTE: Only required if you have packer configured as `opt`
 --vim.cmd [[packadd packer.nvim]]  -- 在 stdpath('cache') 中创建 "packer.nvim" 文件夹
 
 --- save plugins.lua 时自动运行 `:PackerSync` 命令. --- {{{
 --- NOTE: 这里的文件名是 plugins.lua, 是本文件的文件名.
-vim.cmd [[
- augroup packer_user_config
-   autocmd!
-   autocmd BufWritePost plugins.lua source <afile> | PackerSync
- augroup end
-]]
+-- vim.cmd [[
+--  augroup packer_user_config
+--    autocmd!
+--    autocmd BufWritePost plugins.lua source <afile> | PackerSync
+--  augroup end
+-- ]]
 -- -- }}}
 
 --- Use a protected call so we don't error out on first use
@@ -85,14 +86,13 @@ packer.init {
   snapshot_path = vim.fn.stdpath('config') .. '/packer_snapshot', -- Default save directory for snapshots
   display = {
     open_fn = function()
-      -- Packer 面板 border 样式.
-      -- return require("packer.util").float { border = "single" }  -- `:help nvim_open_win()`
+      --- Packer 面板 border 样式.
+      --- return require("packer.util").float { border = "single" }  -- `:help nvim_open_win()`
       return require("packer.util").float { border = {"▄","▄","▄","█","▀","▀","▀","█"} }  -- `:help nvim_open_win()`
     end,
   },
 }
 
---- NOTE: Install plugins here
 --- 官方文档 https://github.com/wbthomason/packer.nvim
 --- 插件推荐 https://github.com/LunarVim/Neovim-from-scratch/ -> lua/user/plugins.lua
 --- `:echo stdpath("data")` == "~/.local/share/nvim"
@@ -102,14 +102,20 @@ return packer.startup(function(use)
   use "wbthomason/packer.nvim" -- Have packer manage itself
 
   --- Performence & Functions ----------------------------------------------------------------------
-  use "lewis6991/impatient.nvim"  -- 加快 lua module 加载时间, 生成 ~/.cache/nvim/luacache_chunks & luacache_modpaths
-  use "nvim-lua/plenary.nvim"     -- [必要] Useful lua functions used by lots of plugins
-  -- [FIXME] Needed while issue https://github.com/neovim/neovim/issues/12587 is still open
-  -- CursorHold and CursorHoldI are blocked by timer_start()
+  --- 加快 lua module 加载时间, 生成 ~/.cache/nvim/luacache_chunks & luacache_modpaths
+  --- VVI: impatient needs to be setup before any other lua plugin is loaded.
+  use {"lewis6991/impatient.nvim",
+    config = function() require('impatient').enable_profile() end,
+  }
+
+  --- Useful lua functions used by lots of plugins
+  use "nvim-lua/plenary.nvim"
+
+  --- [FIXME] Needed while issue https://github.com/neovim/neovim/issues/12587 is still open
+  --- CursorHold and CursorHoldI are blocked by timer_start()
   use "antoinemadec/FixCursorHold.nvim"
 
   --- Treesitter -----------------------------------------------------------------------------------
-  --- NOTE: 下面大部分插件需要在 treesitter.setup() 中启用设置.
   --- Commands for "nvim-treesitter/nvim-treesitter" --- {{{
   --- `:help nvim-treesitter-commands`
   --- `:TSInstallInfo`        -- List all installed languages
@@ -117,40 +123,45 @@ return packer.startup(function(use)
   --- `:TSUninstall {lang}`   -- Uninstall languages
   --- `:TSUpdate`             -- Update the installed languages
   -- -- }}}
-  use {"nvim-treesitter/nvim-treesitter",  -- NOTE: treesitter 主要插件
-    run = ":TSUpdate",   -- Post-update/install hook
-  }
-  --- Commands for "nvim-treesitter/playground" --- {{{
-  --- `:TSPlaygroundToggle`  -- 查看 tree-sitter 对当前 word 的定义.
-  --- `:TSHighlightCapturesUnderCursor`  -- 查看 tree-sitter 定义的 highlight group.
-  -- -- }}}
-  use {"nvim-treesitter/playground",  -- tree-sitter 插件, 用于获取 tree-sitter 信息, 调整颜色很有用
-    requires = "nvim-treesitter/nvim-treesitter",
-    cmd = {"TSPlaygroundToggle", "TSHighlightCapturesUnderCursor"},  -- NOTE: 需要时再加载 playground.
-  }
-  use {"numToStr/Comment.nvim",   -- 注释
+  use {"nvim-treesitter/nvim-treesitter",
     requires = {
-      {"JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
-        requires = "nvim-treesitter/nvim-treesitter", -- commentstring 依赖 treesitter.
+      --- NOTE: 以下都是 treesitter modules 插件, 在 setup() 中启用的插件.
+      {"JoosepAlviste/nvim-ts-context-commentstring"}, -- Comment 依赖 commentstring.
+      {"windwp/nvim-ts-autotag"},   -- auto close tag <div></div>
+      {"p00f/nvim-ts-rainbow"},   -- 括号颜色. treesitter 解析
+      {"nvim-treesitter/playground",   -- tree-sitter 插件, 用于获取 tree-sitter 信息, 调整颜色很有用
+         cmd = {"TSPlaygroundToggle", "TSHighlightCapturesUnderCursor"},  -- NOTE: 需要时再加载 playground.
       },
     },
+    run = ":TSUpdate",   -- Post-update/install hook.
+    config = function() require("user.plugin-settings.treesitter") end,
   }
-  use {"lukas-reineke/indent-blankline.nvim",  -- identline
-    requires = "nvim-treesitter/nvim-treesitter",
+
+  --- 以下是使用了 treesitter 功能的插件. (这些插件也可以不使用 treesitter 的功能)
+  --- 注释
+  use {"numToStr/Comment.nvim",
+    requires = {
+      "JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
+      "nvim-treesitter/nvim-treesitter",
+    },
+    config = function() require("user.plugin-settings.comment") end
   }
-  use {"windwp/nvim-autopairs",   -- 自动括号
+
+  --- 自动括号
+  use {"windwp/nvim-autopairs",
     requires = "nvim-treesitter/nvim-treesitter",  -- setup() 中 `check_ts`, `ts_config` 需要 treesitter 支持.
+    config = function() require("user.plugin-settings.autopairs") end
   }
-  use {"p00f/nvim-ts-rainbow",   -- 括号颜色. treesitter 解析
-    requires = "nvim-treesitter/nvim-treesitter",
-  }
-  use {"windwp/nvim-ts-autotag",   -- auto close tag <div></div>
-    requires = "nvim-treesitter/nvim-treesitter",
+
+  --- identline
+  use {"lukas-reineke/indent-blankline.nvim",
+    requires = "nvim-treesitter/nvim-treesitter",  -- 设置 vim.g.indent_blankline_use_treesitter = "v:true"
+    config = function() require("user.plugin-settings.indentline") end
   }
 
   --- Completion -----------------------------------------------------------------------------------
-  use {"hrsh7th/nvim-cmp",         -- 主要的 completion plugin
-    -- 以下是 nvim-cmp 的组件.
+  use {"hrsh7th/nvim-cmp",
+    --- NOTE: 以下是 nvim-cmp module 插件, 在 setup() 中启用的插件.
     requires = {
       "hrsh7th/cmp-nvim-lsp",      -- LSP source for nvim-cmp
       "hrsh7th/cmp-buffer",        -- buffer completions
@@ -158,29 +169,41 @@ return packer.startup(function(use)
       {"saadparwaiz1/cmp_luasnip", -- Snippets source for nvim-cmp
         requires = {
           {"L3MON4D3/LuaSnip",     -- snippet engine, for "cmp_luasnip"
-          requires = "rafamadriz/friendly-snippets"},  -- snippets content, 自定义 snippets 可以借鉴这个结构.
+            requires = "rafamadriz/friendly-snippets",  -- snippets content, 自定义 snippets 可以借鉴这个结构.
+            config = function() require("user.plugin-settings.luasnip") end
+          },
         },
       },
       --"hrsh7th/cmp-cmdline",     -- cmdline completions, 不好用.
     },
+    config = function() require("user.plugin-settings.cmp") end
   }
 
   --- LSP ------------------------------------------------------------------------------------------
-  use "neovim/nvim-lspconfig"            -- enable LSP, 官方 LSP 引擎.
-  --- Commands for "williamboman/nvim-lsp-installer" --- {{{
-  ---   命令 `:LspInstallInfo` -- 列出所有 lsp, <i>-install | <u>-update | <X>-uninstall
-  ---   安装位置 '~/.local/share/nvim/lsp_servers'
-  -- -- }}}
-  use "williamboman/nvim-lsp-installer"  -- simple to use language server installer
-  use "jose-elias-alvarez/null-ls.nvim"  -- for formatters and linters, depends on "nvim-lua/plenary.nvim"
+  --- 官方 LSP 引擎.
+  use {"neovim/nvim-lspconfig",
+    --- NOTE: 这里的 requires 并不是正真的依赖关系, 只是用来 group 在一起便于 config 设置.
+    requires = {
+      "williamboman/nvim-lsp-installer",   -- simple to use language server installer
+      {"jose-elias-alvarez/null-ls.nvim",  -- for formatters and linters, depends on "nvim-lua/plenary.nvim"
+        requires="nvim-lua/plenary.nvim",
+      }
+    },
+    config = function() require("user.lsp") end,  -- 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
+  }
 
   --- File Tree Display ----------------------------------------------------------------------------
   --use "kyazdani42/nvim-web-devicons"  -- 提供 icons 需要 patch 字体 (Nerd Fonts)
-  use "kyazdani42/nvim-tree.lua"  -- 类似 NerdTree
+  use {"kyazdani42/nvim-tree.lua",      -- 类似 NerdTree
+    config = function() require("user.plugin-settings.nvim-tree") end
+  }
 
   --- Buffer & Status Line -------------------------------------------------------------------------
-  -- vim-fugitive: airline 中显示 git 状态
-  use {"vim-airline/vim-airline", requires="tpope/vim-fugitive"}
+  --- vim-fugitive: airline 中显示 git 状态
+  use {"vim-airline/vim-airline",
+    requires="tpope/vim-fugitive",
+    config = function() require("user.plugin-settings.airline") end
+  }
   --- TODO 以下插件可以替代 airline --- {{{
   --use "akinsho/bufferline.nvim"     -- top buffer list
   --use "nvim-lualine/lualine.nvim"   -- bottom status line
@@ -192,27 +215,45 @@ return packer.startup(function(use)
   --- delve 安装位置 vimspector_base_dir=~/.local/share/nvim/site/pack/packer/start/vimspector/gadgets/macos/...
   --- https://github.com/puremourning/vimspector
   --- https://pepa.holla.cz/2021/03/01/golang-debugging-application-in-neovim/
-  use {"puremourning/vimspector"}    -- Debug Tool.
-  --use "mfussenegger/nvim-dap"   -- lua debug tool
+  use {"puremourning/vimspector",
+    config = function() require("user.plugin-settings.vimspector") end
+  }
+  --use "mfussenegger/nvim-dap"      -- lua debug tool
 
   --- Useful Tools ---------------------------------------------------------------------------------
-  use {"nvim-telescope/telescope.nvim",  -- fzf rg fd, preview 使用的是 tree-sitter, 而不用 bat 了
+  --- fzf rg fd, preview 使用的是 tree-sitter, 而不用 bat 了
+  use {"nvim-telescope/telescope.nvim",
     requires="nvim-lua/plenary.nvim",
+    config = function() require("user.plugin-settings.telescope") end
   }
-  use "akinsho/toggleterm.nvim"       -- terminal
-  use "folke/which-key.nvim"          -- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
-  use "rcarriga/nvim-notify"          -- 通知功能
+
+  --- terminal
+  use {"akinsho/toggleterm.nvim",
+    config = function() require("user.plugin-settings.toggleterm") end
+  }
+
+  --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
+  use {"folke/which-key.nvim",
+    config = function() require("user.plugin-settings.which-key") end
+  }
+
+  --- 通知功能
+  use {"rcarriga/nvim-notify",
+    config = function() require("user.plugin-settings.notify") end
+  }
 
   --- tagbar --- {{{
   --- 函数/类型列表，需要安装 Universal Ctags - `brew info universal-ctags`, 注意不要安装错了.
   --- https://github.com/universal-ctags/ctags/blob/master/docs/news.rst#new-parsers
   --- `ctags --list-languages` 查看支持的语言. 不支持 jsx/tsx, 支持 typescript, 勉强支持 javascript
   -- -- }}}
-  use "preservim/tagbar"
+  use {"preservim/tagbar",
+    config = function() require("user.plugin-settings.tagbar") end
+  }
 
   --- markdown preview
   use {"iamcco/markdown-preview.nvim",
-    -- VVI: Update 后需要重新安装 preview 插件, 否则可能出现无法运行的情况.
+    --- VVI: Update 后需要重新安装 preview 插件, 否则可能出现无法运行的情况.
     run = function() vim.fn["mkdp#util#install"]() end,
   }
 
@@ -223,7 +264,7 @@ return packer.startup(function(use)
   --use "lewis6991/gitsigns.nvim"
 
   --- Colorschemes
-  --use "lunarvim/colorschemes"     -- A bunch of colorschemes you can try out
+  --use "lunarvim/colorschemes"       -- A bunch of colorschemes you can try out
   --use "lunarvim/darkplus.nvim"
   --use "Mofiqul/vscode.nvim"
 

@@ -10,7 +10,7 @@ comment.setup {
 
     local location = nil
     if ctx.ctype == U.ctype.block then
-      -- 配合 "JoosepAlviste/nvim-ts-context-commentstring" 设置.
+      -- NOTE: 配合 "JoosepAlviste/nvim-ts-context-commentstring" 设置.
       location = require("ts_context_commentstring.utils").get_cursor_location()
     elseif ctx.cmotion == U.cmotion.v or ctx.cmotion == U.cmotion.V then
       location = require("ts_context_commentstring.utils").get_visual_start_location()
