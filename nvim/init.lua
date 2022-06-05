@@ -143,6 +143,14 @@ require "user.colors"  -- vim highlight 设置
 -- tidy: diagnosing file:///home/rh/dev/gomodtest/test/test/go.mod: err: exit status 1: stderr: go: downloading github.com/rs/xid v1.5.0
 -- test imports github.com/rs/xid: module lookup disabled by GOPROXY=off
 
---- TODO ---
+--- TODO -------------------------------------------------------------------------------------------
 -- global var & function start with '__'
+
+-- lazyload treesitter
+-- treesitter settings { run = "TSUpdate" , event = "BufReadPost", setup = function}
+-- other plugins settings { after = "treesitter" }
+
+
+
+
 
