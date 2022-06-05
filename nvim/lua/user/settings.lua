@@ -108,7 +108,7 @@ vim.cmd [[
 vim.cmd [[au Filetype pandoc,markdown setlocal shiftwidth=2]]
 
 -- python 默认是 4 个 space indent. 所以这里不设置 shiftwidth.
-vim.cmd [[au Filetype python setlocal expandtab]]
+vim.cmd [[au Filetype python setlocal expandtab textwidth=79]]
 
 -- }}}
 
@@ -172,7 +172,7 @@ vim.opt.showmatch = true      -- 跳到匹配的括号上, 包括 () {} []
 vim.opt.cmdheight = 2         -- 底部状态栏高度, more space.
 
 -- 只在超出 textwidth 的行中显示 ColorColumn. 可以替代 `set colorcolumn`
-vim.fn.matchadd('ColorColumn', '\\%'.. vim.bo.textwidth+1 .. 'v', 100)
+vim.cmd [[ au BufEnter * call matchadd('ColorColumn', '\%' .. (&textwidth+1) .. 'v', 100) ]]
 --vim.opt.colorcolumn = '+1'  -- :set cc=+1  " highlight column after 'textwidth'
                               -- :set cc=+1,+2,+3  " highlight three columns after 'textwidth'
 
