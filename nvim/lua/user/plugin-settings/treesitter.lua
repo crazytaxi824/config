@@ -11,10 +11,12 @@ configs.setup {
   highlight = {
     enable = true,     -- false will disable the whole extension
     disable = { "" },  -- list of language that will be disabled
-    additional_vim_regex_highlighting = false,  -- NOTE: 同时使用 vim 自带 syntax,
-                                                -- 使得 vim syntax 和 tree-sitter 的颜色效果(underine, bold...)同时生效
+
+    -- NOTE: 同时使用 vim 自带 syntax,
+    -- 使得 vim syntax 和 tree-sitter 的颜色效果(underine, bold...)同时生效.
+    additional_vim_regex_highlighting = false,
   },
-  indent = { enable = true, disable = { "yaml" } },
+  indent = { enable = true, disable = { "yaml" } },  -- 不要自动给 yaml 进行 indent.
 
   --- plugins settings -----------------------------------------------------------------------------
   --- "JoosepAlviste/nvim-ts-context-commentstring"
@@ -38,7 +40,7 @@ configs.setup {
     disable = {},
     updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
     persist_queries = false, -- Whether the query persists across vim sessions
-    --keybindings = {
+    --keybindings = {  -- {{{
     --  toggle_query_editor = 'o',
     --  toggle_hl_groups = 'i',
     --  toggle_injected_languages = 't',
@@ -50,6 +52,7 @@ configs.setup {
     --  goto_node = '<cr>',
     --  show_help = '?',
     --},
+    -- -- }}}
   },
 
   --- "p00f/nvim-ts-rainbow"
