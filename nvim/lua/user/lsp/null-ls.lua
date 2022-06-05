@@ -43,7 +43,7 @@ local diagnostics_opts = {
 --- linters 设置 -----------------------------------------------------------------------------------
 local linter_settings = {
   -- python, flake8
-  diagnostics.flake8.with(__Proj_local_settings.keep_extend('lint',diagnostics_opts)),
+  diagnostics.flake8.with(__Proj_local_settings.keep_extend('lint', diagnostics_opts)),
 
   --- golangci-lint
   diagnostics.golangci_lint.with(__Proj_local_settings.keep_extend('lint',
@@ -119,17 +119,18 @@ local formatter_settings = {
     --env = { PRETTIERD_DEFAULT_CONFIG = vim.fn.expand("~/xxx/.prettierrc.json") }  -- 环境变量
     --- NOTE: prettier 默认支持 .editorconfig 文件.
     extra_args = { "--single-quote", "--jsx-single-quote",
-      "--print-width=" .. vim.bo.textwidth,  -- NOTE: 和 vim textwidth 相同.
+      "--print-width=" .. vim.bo.textwidth,  -- 和 vim textwidth 相同.
       "--end-of-line=lf", "--tab-width=2" },
     disabled_filetypes = { "yaml" },  -- 不需要使用 prettier 格式化.
   }),
 
   --- lua, stylua
   formatting.stylua.with({
-    extra_args = { "--column-width=" .. vim.bo.textwidth },  -- NOTE: 和 vim textwidth 相同.
+    extra_args = { "--column-width=" .. vim.bo.textwidth },  -- 和 vim textwidth 相同.
   }),
 
-  formatting.autopep8,  -- python, autopep8, black
+  --- python, autopep8, black, YAPF
+  formatting.autopep8,
 
   --- go 需要在这里使用 'goimports', 因为 gopls 默认不会处理 "source.organizeImports",
   --- 但是需要 gopls 格式化 go.mod 文件.
