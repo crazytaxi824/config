@@ -119,7 +119,7 @@ return packer.startup(function(use)
   --- `:TSUpdate`             -- Update the installed languages
   -- -- }}}
   use {"nvim-treesitter/nvim-treesitter",  -- NOTE: treesitter 主要插件
-    run = ":TSUpdate",   -- Post-update/install hook
+    --run = ":TSUpdate",   -- Post-update/install hook
     requires = {
       --- requests 中都是 treesitter modules 插件, 在 setup() 中启用的插件.
       {"JoosepAlviste/nvim-ts-context-commentstring"}, -- Comment 依赖 commentstring.
@@ -149,7 +149,7 @@ return packer.startup(function(use)
 
   --- Completion -----------------------------------------------------------------------------------
   use {"hrsh7th/nvim-cmp",         -- 主要的 completion plugin
-    -- 以下是 nvim-cmp 的组件.
+    --- 以下是 nvim-cmp 的组件.
     requires = {
       "hrsh7th/cmp-nvim-lsp",      -- LSP source for nvim-cmp
       "hrsh7th/cmp-buffer",        -- buffer completions

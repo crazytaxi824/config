@@ -63,7 +63,7 @@ vim.cmd [[au TermOpen term://*toggleterm#[6-9][0-9] :startinsert]]
 vim.cmd [[au TermOpen term://* tnoremap <buffer> <ESC> <C-\><C-n>]]
 
 -- 以下是通过 Terminal 运行 shell cmd --------------------------------------------------------------
--- NOTE: 可以参考 "~/.config/nvim/after/syntax/go/gorun_gotest.lua"
+-- NOTE: 可以参考 "~/.config/nvim/after/ftplugin/go/gorun_gotest.lua"
 
 local Terminal = require("toggleterm.terminal").Terminal
 
