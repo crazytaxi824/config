@@ -14,10 +14,21 @@ local diagnostics = null_ls.builtins.diagnostics
 --local code_actions = null_ls.builtins.code_actions
 
 --- diagnostics_opts 用于下面的 sources diagnostics 设置.
+local ignore_lint_folders = {"node_modules"}  -- 文件夹中的文件不进行 lint
 local diagnostics_opts = {
   method = null_ls.methods.DIAGNOSTICS_ON_SAVE,  -- 只在 save 的时候执行 diagnostics.
   runtime_condition = function(params)  -- NOTE: 耗资源, 每次运行 linter 前都要运行该函数, 不要做太复杂的运算.
-    return not vim.bo.readonly  -- do not lint readonly files
+    if vim.bo.readonly then
+      return false  -- do not lint readonly files
+    end
+
+    for _, ignored in ipairs(ignore_lint_folders) do
+      if string.match(params.bufname, ignored) then
+        return false  -- ignore 指定 folder 中的文件
+      end
+    end
+
+    return true
   end,
   --timeout = 3000,   -- linter 超时时间, 全局设置了 default_timeout.
   --diagnostics_format = "#{m} [null-ls:#{s}]",  -- 只对单个 linter 生效.
@@ -38,17 +49,16 @@ local linter_settings = {
     {
       -- VVI: 执行 golangci-lint 的 pwd. 默认是 params.root 即: null_ls.setup() 中的 root_dir / $ROOT
       -- params 回调参数 --- {{{
-      --     content,    -- current buffer content (table, split at newline)
-      --     lsp_method, -- lsp method that triggered request (string)
-      --     method,  -- null-ls method that triggered generator (string)
-      --     row,     -- cursor's current row (number, zero-indexed)
-      --     col,     -- cursor's current column (number)
-      --     bufnr,   -- current buffer's number (number)
-      --     bufname, -- current buffer's full path (string)
-      --     ft,   -- current buffer's filetype (string)
-      --     root, -- current buffer's root directory (string)
-      --
-      -- }}}
+      --   content,    -- current buffer content (table, split at newline)
+      --   lsp_method, -- lsp method that triggered request (string)
+      --   method,  -- null-ls method that triggered generator (string)
+      --   row,     -- cursor's current row (number, zero-indexed)
+      --   col,     -- cursor's current column (number)
+      --   bufnr,   -- current buffer's number (number)
+      --   bufname, -- current buffer's full path (string)
+      --   ft,   -- current buffer's filetype (string)
+      --   root, -- current buffer's root directory (string)
+      -- -- }}}
       cwd = function(params)
         return util.root_pattern('go.work')(params.bufname) or
           util.root_pattern('go.mod','.git')(params.bufname) or
