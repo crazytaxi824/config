@@ -120,7 +120,7 @@ vim.g.do_filetype_lua = 1     -- 读取 runtimepath/filetype.lua 中定义的 fi
 --    $VIMRUNTIME/filetype.lua
 --    $VIMRUNTIME/filetype.vim
 --vim.cmd('filetype on')  -- VVI: 默认开启, 不要手动设置.
-vim.cmd('syntax off')     -- vim 内置语法高亮. NOTE: 这里我们使用 treesitter, 所以不需要 syntax on.
+--vim.cmd('syntax on')    -- vim 内置语法高亮.
                           -- NOTE: syntax off 的情况下不会加载 after/syntax, 但是会加载 after/ftplugin
 
 vim.opt.timeoutlen = 600  -- 组合键延迟时间, 默认1000ms. eg: <leader>w, <C-W><C-O>...
@@ -173,7 +173,15 @@ vim.opt.showmatch = true      -- 跳到匹配的括号上, 包括 () {} []
 vim.opt.cmdheight = 2         -- 底部状态栏高度, more space.
 
 -- 只在超出 textwidth 的行中显示 ColorColumn. 可以替代 `set colorcolumn`
-vim.cmd [[ au BufEnter * call matchadd('ColorColumn', '\%' .. (&textwidth+1) .. 'v', 100) ]]
+-- vim.cmd [[ au BufEnter * call matchadd('ColorColumn', '\%' .. (&textwidth+1) .. 'v', 100) ]]
+vim.api.nvim_create_autocmd("BufEnter", {
+  pattern = {"*"},
+  callback = function()
+    if vim.bo.textwidth > 0 then  -- 如果 buffer 没有设置 textwidth, 即 textwidth=0 则不执行.
+      vim.fn.matchadd('ColorColumn', '\\%' .. vim.bo.textwidth+1 .. 'v', 100)
+    end
+  end
+})
 --vim.opt.colorcolumn = '+1'  -- :set cc=+1  " highlight column after 'textwidth'
                               -- :set cc=+1,+2,+3  " highlight three columns after 'textwidth'
 
