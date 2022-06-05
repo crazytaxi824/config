@@ -42,7 +42,8 @@ local diagnostics_opts = {
 -- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/HELPERS.md -- $FILENAME, $DIRNAME, $ROOT ...
 --- linters 设置 -----------------------------------------------------------------------------------
 local linter_settings = {
-  diagnostics.flake8,  -- python, flake8
+  -- python, flake8
+  diagnostics.flake8.with(__Proj_local_settings.keep_extend('lint',diagnostics_opts)),
 
   --- golangci-lint
   diagnostics.golangci_lint.with(__Proj_local_settings.keep_extend('lint',
@@ -123,7 +124,8 @@ local formatter_settings = {
     disabled_filetypes = { "yaml" },  -- 不需要使用 prettier 格式化.
   }),
 
-  formatting.stylua.with({   -- lua, stylua
+  --- lua, stylua
+  formatting.stylua.with({
     extra_args = { "--column-width=" .. vim.bo.textwidth },  -- NOTE: 和 vim textwidth 相同.
   }),
 
