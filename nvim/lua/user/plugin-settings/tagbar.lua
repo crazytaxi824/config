@@ -6,16 +6,17 @@ vim.g.tagbar_autoshowtag = 2      -- 打开 tagbar 时, 不要打开 folded tag,
 vim.g.tagbar_position = "vertical botright"         -- tagbar 打开位置.
 --vim.g.tagbar_width = max([25, winwidth(0) / 5])  -- tagbar 窗口大小, 默认40
 
+--- VVI: 注意这里不要改, 会影响 TagbarHightligh 显示.
 vim.g.tagbar_visibility_symbols = {
-  public    = ' + ',
-  protected = ' # ',
-  private   = ' - ',
+  public    = ' +',
+  protected = ' #',
+  private   = ' -',
 }
 
 --- `:TagbarGetTypeConfig go` - print tagbar configuration for 'lang' at cursor
 --- `:help tagbar-extend`, {short}:{long}[:{fold}[:{stl}]], 其中 {fold} 和 {stl} 可以省略, 默认值为0.
 --- fold: 1 - 默认折叠, 0 - 默认打开. 和 `g:tagbar_autoshowtag` 配合使用.
---- 这里是专为 go 设置的.
+--- 这里是专为 go 设置的. VVI: `$ ctags --list-kinds=go` 查看 kinds. {short} 对应名字不能错.
 vim.g.tagbar_type_go = {
   kinds = {
     'p:package:1',
@@ -23,14 +24,15 @@ vim.g.tagbar_type_go = {
     'c:constants',
     'v:variables',
     't:types',
+    's:structs',
     'n:intefaces',
-    'm:fields',
+    'w:fields',
     'e:embedded',
-    'f:methods',
+    'm:methods',
     'r:constructors',
-    'F:functions',
-    '?:unknown',
-   },
+    'f:functions',
+    'u:unknown',
+  },
 }
 
 --- Tagbar 颜色 ---
