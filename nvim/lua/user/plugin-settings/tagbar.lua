@@ -7,9 +7,9 @@ vim.g.tagbar_position = "vertical botright"         -- tagbar 打开位置.
 --vim.g.tagbar_width = max([25, winwidth(0) / 5])  -- tagbar 窗口大小, 默认40
 
 vim.g.tagbar_visibility_symbols = {
-  ["public"]    = ' +',
-  ["protected"] = ' #',
-  ["private"]   = ' -',
+  public    = ' + ',
+  protected = ' # ',
+  private   = ' - ',
 }
 
 --- `:TagbarGetTypeConfig go` - print tagbar configuration for 'lang' at cursor
@@ -17,19 +17,26 @@ vim.g.tagbar_visibility_symbols = {
 --- fold: 1 - 默认折叠, 0 - 默认打开. 和 `g:tagbar_autoshowtag` 配合使用.
 --- 这里是专为 go 设置的.
 vim.g.tagbar_type_go = {
-  ['kinds'] = {
+  kinds = {
     'p:package:1',
     'i:imports:1',
     'c:constants',
     'v:variables',
     't:types',
     'n:intefaces',
-    'w:fields',
+    'm:fields',
     'e:embedded',
-    'm:methods',
+    'f:methods',
     'r:constructors',
-    'f:functions',
+    'F:functions',
     '?:unknown',
    },
 }
+
+--- Tagbar 颜色 ---
+vim.cmd [[ hi link TagbarKind Keyword ]]  -- tag group name, "imports", "functions"
+vim.cmd [[ hi link TagbarNestedKind Identifier ]]  -- 内部颜色 [fields]
+vim.cmd [[ hi link TagbarScope Function ]]  -- class, struct name
+vim.cmd [[ hi link TagbarType Type ]]
+vim.cmd [[ hi link TagbarSignature Identifier ]]
 
