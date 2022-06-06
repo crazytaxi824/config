@@ -287,7 +287,7 @@
   "python.linting.pylintEnabled": false, // 代码风格检查(style), 要求苛刻, 速度慢
   "python.linting.mypyEnabled": true, // 静态类型检查
   "python.languageServer": "Pylance",
-  // "python.formatting.provider": "autopep8", // autopep8 (默认) | black | yapf
+  // "python.formatting.provider": "black", // autopep8 (默认) | black | yapf
   "[python]": {
     // "editor.formatOnSave": true,
     "editor.defaultFormatter": "ms-python.python" // python 不能用 prettier 格式化
