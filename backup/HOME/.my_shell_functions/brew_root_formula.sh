@@ -26,12 +26,13 @@
 # viu  - terminal 显示图片工具
 # w3m  - terminal 显示网页工具
 # youtube-dl
+# shfmt - shell format tool
 
 # 检查 brew 中所有不属于任何别的包依赖的包.
 function checkBrewRootFormula() {
 	local common_formula_list=(bat clang-format fd ffmpeg fzf git git-delta git-flow git-flow-avh graphviz grpcurl
 		lazygit pandoc prettier protobuf rclone ripgrep siege stylua tmux tree universal-ctags vim viu w3m youtube-dl
-		yarn neovim)
+		yarn neovim shfmt)
 
 	# brew list --formula   # 已经安装的所有 formula, 不包括 cask.
 	local formula_list=()
