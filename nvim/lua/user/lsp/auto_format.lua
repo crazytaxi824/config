@@ -18,10 +18,8 @@ local function lspFormat()
   end
   -- 如果没有任何 LSP 支持 formating 则提醒.
   Notify(
-    {
-      "no LSP support Formatting this file. please check:",
-      "':lua print(vim.inspect(vim.tbl_values(vim.lsp.buf_get_clients())))'"
-    },
+    {"no LSP support Formatting this file. please check:",
+      "':lua print(vim.inspect(vim.tbl_values(vim.lsp.buf_get_clients())))'"},
     "WARN",
     {title={"lspFormat()","auto_format.lua"}}
   )
