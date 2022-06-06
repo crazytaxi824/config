@@ -16,24 +16,28 @@ if not ok then
   return
 end
 
---- VVI: 需要启用的 LSP server ---------------------------------------------------------------------
+--- VVI: 需要启用的 LSP server --------------------------------------------------------------------- {{{
 --- 这里的 lsp server 都是通过 lsp-installer 安装的, 所以使用其提供的函数获取已安装列表.
 --- get_available_servers()  -- 所有可以安装的 lsp server.
 --- get_installed_servers()  -- 所有已安装的 lsp server.
 
 --- 获取所有通过 lsp-installer 安装的 lsp server.
-local function get_installed_server_names()
-  local svr_list = {}
-  for _, svr in ipairs(lsp_installer.get_installed_servers()) do
-    table.insert(svr_list, svr.name)  -- table.insert() 没有返回值.
-  end
-  return svr_list
-end
-
-local LSP_servers = get_installed_server_names()
-
---- 或者手动指定需要启用的 lsp server. 如果 lsp 已安装, 但是不在列表中也不会启动.
---local LSP_servers = { "jsonls", "sumneko_lua", "gopls", "tsserver", "pyright" }
+--- BUG: 第一次打开文件的时候 lsp_installer.get_installed_servers() 无法找到 gopls. 不知道为什么. 暂时警用该方法.
+-- local function get_installed_server_names()
+--   local svr_list = {}
+--   for _, svr in ipairs(lsp_installer.get_installed_servers()) do
+--     print(svr.name)
+--     table.insert(svr_list, svr.name)  -- table.insert() 没有返回值.
+--   end
+--   return svr_list
+-- end
+--
+-- local LSP_servers = get_installed_server_names()
+-- print(vim.inspect(LSP_servers))
+-- -- }}}
+--- 手动指定需要启用的 lsp server.
+--- 如果 lsp 已安装, 但是不在列表中也不会启动. 因为 lspconfig[LSP_server].setup() 也需要用到该 list.
+local LSP_servers = { "jsonls", "sumneko_lua", "gopls", "tsserver", "pyright", "html", "cssls" }
 
 --- nvim-lsp-installer settings --------------------------------------------------------------------
 lsp_installer.setup {
