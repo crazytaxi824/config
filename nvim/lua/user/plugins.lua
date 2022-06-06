@@ -127,7 +127,7 @@ return packer.startup(function(use)
     requires = {
       --- NOTE: 以下都是 treesitter modules 插件, 在 setup() 中启用的插件.
       {"JoosepAlviste/nvim-ts-context-commentstring"}, -- Comment 依赖 commentstring.
-      {"windwp/nvim-ts-autotag"},   -- auto close tag <div></div>
+      {"windwp/nvim-ts-autotag"}, -- auto close tag <div></div>
       {"p00f/nvim-ts-rainbow"},   -- 括号颜色. treesitter 解析
       {"nvim-treesitter/playground",   -- tree-sitter 插件, 用于获取 tree-sitter 信息, 调整颜色很有用
          cmd = {"TSPlaygroundToggle", "TSHighlightCapturesUnderCursor"},  -- NOTE: 需要时再加载 playground.
