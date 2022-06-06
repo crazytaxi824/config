@@ -4,25 +4,33 @@ if not status_ok then
 end
 
 configs.setup {
+  --- supported langs, https://github.com/nvim-treesitter/nvim-treesitter#supported-languages
   --ensure_installed = { "go", "lua", "javascript", "typescript", "tsx", "html", "css", "scss" ... },
   ensure_installed = "all",  -- 白名单, "all" OR a list of languages
   sync_install = false,      -- install languages synchronously (only applied to `ensure_installed`)
   ignore_install = {},  -- 黑名单, List of parsers to ignore installing
+
+  --- `:TSModuleInfo` 可以查看 module 设置.
+  --- treesitter 自带 modules 设置 -----------------------------------------------------------------
   highlight = {
     enable = true,     -- VVI: `false` will disable the whole extension
     disable = { "" },  -- list of language that will be disabled
 
-    -- NOTE: 同时使用 vim 自带 syntax,
-    -- 使得 vim syntax 和 tree-sitter 的颜色效果(underine, bold...)同时生效.
+    --- NOTE: 同时使用 vim 自带 syntax,
+    --- 使得 vim syntax 和 tree-sitter 的颜色效果(underine, bold...)同时生效.
     additional_vim_regex_highlighting = false,
   },
-  indent = { enable = true, disable = { "yaml" } },  -- 不要自动给 yaml 进行 indent.
 
-  --- plugins settings -----------------------------------------------------------------------------
+  indent = {
+    enable = true,
+    disable = { "yaml" },  -- 不要自动给 yaml 进行 indent.
+  },
+
+  --- 启用第三方插件 modules 设置 ------------------------------------------------------------------
   --- "JoosepAlviste/nvim-ts-context-commentstring"
   context_commentstring = {
     enable = true,
-    enable_autocmd = false,  -- trigger commentstring updating on CursorHold
+    enable_autocmd = false,  -- VVI: trigger commentstring updating on CursorHold
   },
 
   --- "windwp/nvim-ts-autotag", auto close tag <div></div>
