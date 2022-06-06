@@ -13,32 +13,33 @@ vim.g.tagbar_visibility_symbols = {
   private   = ' -',
 }
 
---- `:TagbarGetTypeConfig go` - print tagbar configuration for 'lang' at cursor
+--- 这里是专为 go 设置的 kinds --------------------------------------------------------------------- {{{
+--- VVI: `:TagbarGetTypeConfig go` - 将打印下面的 kinds 设置到文件中, 可根据需求修改.
 --- `:help tagbar-extend`, {short}:{long}[:{fold}[:{stl}]], 其中 {fold} 和 {stl} 可以省略, 默认值为0.
---- fold: 1 - 默认折叠, 0 - 默认打开. 和 `g:tagbar_autoshowtag` 配合使用.
---- 这里是专为 go 设置的. VVI: `$ ctags --list-kinds=go` 查看 kinds. {short} 对应名字不能错.
-vim.g.tagbar_type_go = {
-  kinds = {
-    'p:package:1',
-    'i:imports:1',
-    'c:constants',
-    'v:variables',
-    't:types',
-    's:structs',
-    'n:intefaces',
-    'w:fields',
-    'e:embedded',
-    'm:methods',
-    'r:constructors',
-    'f:functions',
-    'u:unknown',
-  },
-}
+--- {fold}: 1 - 默认折叠, 0 - 默认打开, 和 `g:tagbar_autoshowtag` 配合使用.
+--- {stl} 可以不用设置.
+-- let g:tagbar_type_go = {
+--     \ 'kinds' : [
+--         \ 'p:package:0:0',
+--         \ 'i:imports:1:0',
+--         \ 'c:constants:0:0',
+--         \ 'v:variables:0:0',
+--         \ 't:types:0:0',
+--         \ 'n:intefaces:0:0',
+--         \ 'w:fields:0:0',
+--         \ 'e:embedded:0:0',
+--         \ 'm:methods:0:0',
+--         \ 'r:constructors:0:0',
+--         \ 'f:functions:0:0',
+--         \ '?:unknown',
+--     \ ],
+-- \ }
+-- -- }}}
 
 --- Tagbar 颜色 ---
 vim.cmd [[ hi link TagbarKind Keyword ]]  -- tag group name, "imports", "functions"
-vim.cmd [[ hi link TagbarNestedKind Identifier ]]  -- 内部颜色 [fields]
-vim.cmd [[ hi link TagbarScope Function ]]  -- class, struct name
+vim.cmd [[ hi! TagbarNestedKind ctermfg=75 ]]  -- 内部颜色 [fields] [methods]
+vim.cmd [[ hi link TagbarScope Type ]]  -- class, struct name
 vim.cmd [[ hi link TagbarType Type ]]
-vim.cmd [[ hi link TagbarSignature Identifier ]]
+vim.cmd [[ hi! TagbarSignature ctermfg=220 ]]
 
