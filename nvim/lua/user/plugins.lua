@@ -126,12 +126,21 @@ return packer.startup(function(use)
   use {"nvim-treesitter/nvim-treesitter",
     requires = {
       --- NOTE: 以下都是 treesitter modules 插件, 在 setup() 中启用的插件.
+      --- 第一方 module 插件 ---
+      --- 顶部显示 cursor 所在 function 的定义.
+      --- https://github.com/lewis6991/nvim-treesitter-context#configuration
+      {"nvim-treesitter/nvim-treesitter-context"},
+
+      --- 用于获取 tree-sitter 信息, 调整颜色很有用.
+      {"nvim-treesitter/playground",
+        -- NOTE: 执行以下命令时再加载 playground.
+        cmd = {"TSPlaygroundToggle", "TSHighlightCapturesUnderCursor"},
+      },
+
+      --- 第三方 module 插件 ---
       {"JoosepAlviste/nvim-ts-context-commentstring"}, -- Comment 依赖 commentstring.
       {"windwp/nvim-ts-autotag"}, -- auto close tag <div></div>
       {"p00f/nvim-ts-rainbow"},   -- 括号颜色. treesitter 解析
-      {"nvim-treesitter/playground",   -- tree-sitter 插件, 用于获取 tree-sitter 信息, 调整颜色很有用
-         cmd = {"TSPlaygroundToggle", "TSHighlightCapturesUnderCursor"},  -- NOTE: 需要时再加载 playground.
-      },
     },
     run = ":TSUpdate",   -- Post-update/install hook.
     config = function() require("user.plugin-settings.treesitter") end,
