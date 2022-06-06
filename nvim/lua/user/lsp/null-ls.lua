@@ -135,6 +135,9 @@ local formatter_settings = {
   --- go 需要在这里使用 'goimports', 因为 gopls 默认不会处理 "source.organizeImports",
   --- 但是需要 gopls 格式化 go.mod 文件.
   formatting.goimports, -- go, gofmt, goimports, gofumpt
+
+  --- sh shell
+  formatting.shfmt,
 }
 
 --- null-ls 在这里加载上面设置的 formatting & linter -----------------------------------------------
