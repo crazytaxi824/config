@@ -82,7 +82,7 @@ end
 
 --- Have packer use a popup window, "nvim-lua/popup.nvim"
 packer.init {
-  --snapshot = nil,   -- VVI: Name of the snapshot you would like to load at startup
+  snapshot = "2022.06.07",   -- VVI: Name of the snapshot you would like to load at startup
   snapshot_path = vim.fn.stdpath('config') .. '/packer_snapshot', -- Default save directory for snapshots
   display = {
     open_fn = function()
@@ -195,13 +195,15 @@ return packer.startup(function(use)
   --- 官方 LSP 引擎.
   use {"neovim/nvim-lspconfig",
     --- NOTE: 这里的 requires 并不是正真的依赖关系, 只是用来 group 在一起便于 config 设置.
-    requires = {
-      "williamboman/nvim-lsp-installer",   -- simple to use language server installer
-      {"jose-elias-alvarez/null-ls.nvim",  -- for formatters and linters, depends on "nvim-lua/plenary.nvim"
-        requires="nvim-lua/plenary.nvim",
-      }
-    },
-    config = function() require("user.lsp") end,  -- 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
+    requires = "williamboman/nvim-lsp-installer", -- simple to use language server installer
+    config = function() require("user.lsp") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
+  }
+
+  --- null-ls 插件 formatters and linters, depends on "nvim-lua/plenary.nvim"
+  use {"jose-elias-alvarez/null-ls.nvim",
+    requires="nvim-lua/plenary.nvim",
+    after = "nvim-lspconfig",  -- VVI: 在 lsp 后面加载, 否则无法获取全局变量 __Proj_local_settings.
+    config = function() require("user.lsp.null-ls") end,
   }
 
   --- File Tree Display ----------------------------------------------------------------------------

@@ -100,9 +100,9 @@ end
 --- VVI: 必须放在 lspconfig 加载之后, 因为有些函数需要用到 lspconfig 设置值.
 require("user.lsp.handlers")    -- overwrite 默认 handlers 设置
 require("user.lsp.diagnostic")  -- 加载 diagnostic 设置
-require("user.lsp.null-ls")     -- 启动 null-ls
 require("user.lsp.auto_format") -- save 时 format
 require("user.lsp.user_command")  -- 自定义 lsp 相关 command
 
+--require("user.lsp.null-ls")  -- 现在设置 packer 中单独启动 null-ls.
 
 
