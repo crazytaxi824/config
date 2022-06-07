@@ -5,33 +5,46 @@
 
 ```lua
 -- 以下所有设置都可以缺省, 只用设置需要覆盖 default setting 的项.
+-- 如果一个项目中有多个不同的 filetype 对应多个不同的 lsp, linter, formatter, 可以在不同的 section 中设置多个 tool.
 return {
   -- nvim-lspconfig 设置
-  lsp = {
-    cmd = { "gopls" },
-    filetypes = { "go", "gomod", "gowork" },
-    root_dir = "",  -- 默认动态获取 go.mod, go.work. .git 所在文件夹, 忽略 $GOROOT, $GOMODCACHE 文件夹.
-    -- eg: gopls 设置
-    settings = {
-      gopls = {
-        ["ui.completion.usePlaceholders"] = true,
-        ["ui.diagnostic.staticcheck"] = false,
-      }
-    }
+  settings = {
+    gopls = {
+      ["ui.completion.usePlaceholders"] = true,
+      ["ui.diagnostic.staticcheck"] = false,
+    },
+    tsserver = {
+      ...
+    },
+    pyright = { ... },
+    sumneko_lua = { ... },
+    html = { ... },
+    cssls = { ... },
+    bashls = { ... },
   },
 
   -- null-ls linter/diagnostics 设置
-  -- eg: null_ls.diagnostics.golangci_lint.with() 设置.
+  -- eg: null_ls.diagnostics.xxx.with() 设置.
   lint = {
-    command = "/path/to/golangci-lint",
-    cwd = "path/to/current_working_dir",
-    args = { "run", ... },  -- overwrite default settings.
-    extra_args = { "--config", '~/.config/lints/.golangci.yml' },
-    filetypes = { "go" },
+    golangci_lint = {
+      command = "/path/to/golangci-lint",
+      cwd = "path/to/current_working_dir",
+      args = { "run", ... },  -- overwrite default settings.
+      extra_args = { "--config", '~/.config/lints/.golangci.yml' },
+      filetypes = { "go" },
+    },
+    eslint = { ... },
+    flake8 = { ... },
+    buf = { ... },
   },
 
-  -- TODO null-ls format 设置
-  -- eg: null_ls.formatting.prettier.with() 设置.
-  format = {},  -- 还未实现, 目前用不上.
+  -- null-ls formatter 设置
+  -- eg: null_ls.formatting.xxx.with() 设置.
+  format = {
+    prettier = { ... },
+    stylua = { ... },
+    autopep8 = { ... },
+    buf = { ... },
+  },
 }
 ```
