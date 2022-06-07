@@ -163,13 +163,14 @@ return packer.startup(function(use)
   }
 
   --- LSP ------------------------------------------------------------------------------------------
-  --- 读取项目本地设置, 如果读取成功则加载 lspconfig && null-ls
-  local proj_settings_status_ok = pcall(require, "user.lsp.load_proj_settings")
+  --- 读取项目本地设置, 如果读取成功则加载 lspconfig && null-ls.
+  --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
+  local proj_settings_status_ok = pcall(require, "user.lsp.util.load_proj_settings") -- NOTE: 加载 "__Proj_local_settings"
   if proj_settings_status_ok then
     --- 官方 LSP 引擎.
     use {"neovim/nvim-lspconfig",
       requires = "williamboman/nvim-lsp-installer", -- simple to use language server installer
-      config = function() require("user.lsp") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
+      config = function() require("user.lsp.lspconfig") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     }
 
     --- null-ls 插件 formatters && linters, depends on "nvim-lua/plenary.nvim"
@@ -177,6 +178,9 @@ return packer.startup(function(use)
       requires = "nvim-lua/plenary.nvim",
       config = function() require("user.lsp.null-ls") end,
     }
+
+    --- 加载其他 LSP 相关自定义设置
+    require("user.lsp.util")
   end
 
   --- Completion -----------------------------------------------------------------------------------

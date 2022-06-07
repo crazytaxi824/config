@@ -115,7 +115,7 @@ require "user.colors"  -- vim highlight 设置
 -- test imports github.com/rs/xid: module lookup disabled by GOPROXY=off
 
 --- TODO -------------------------------------------------------------------------------------------
--- global var & function start with '__'
+-- global var & function start with '__Fn()'
 
 -- lspconfig: Marksman markdown LSP, retire zeta-note, lsp-installer 还没提供下载.
 

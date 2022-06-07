@@ -1,5 +1,7 @@
---- 缓存 dofile 读取到的数据. 用于 lsp 使用.
---- 全局变量.
+--- 缓存 dofile 读取到的 project local settings 数据. 用于 lspconfig && null-ls 使用.
+--- 主要函数是 keep_extend('local_setting_name', {overwrite_settings_tbl})
+
+--- 全局变量
 __Proj_local_settings = {
   _once = nil,   -- 是否已经读取过 file. true - 已经读取过, false|nil - 未读取 file.
   _content = {}  -- 缓存 file 内容. VVI: 这里不要使用 nil, 因为 nil 无法 index [lsp] / [null-ls].

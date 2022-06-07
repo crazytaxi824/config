@@ -66,7 +66,7 @@ local linter_settings = {
 
   --- golangci-lint
   diagnostics.golangci_lint.with(__Proj_local_settings.keep_extend('lint',
-    require("user.lsp.null-ls.golangci"), diagnostics_opts)
+    require("user.lsp.null-ls.tools.golangci"), diagnostics_opts)
   ),
 
   --- NOTE: eslint 分别对不同的 filetype 做不同的设置. --- {{{
@@ -98,7 +98,7 @@ local linter_settings = {
 --- formatter 设置 ---------------------------------------------------------------------------------
 local formatter_settings = {
   --- NOTE: 需要在 lsp.setup(opts) 中的 on_attach 中排除 tsserver & sumneko_lua 的 formatting 功能
-  formatting.prettier.with(require("user.lsp.null-ls.prettier")),
+  formatting.prettier.with(require("user.lsp.null-ls.tools.prettier")),
 
   --- lua, stylua
   formatting.stylua.with({
@@ -141,6 +141,7 @@ null_ls.setup({
   diagnostics_format = "#{m} [null-ls]",  -- 错误信息显示格式, #{m} - message, #{s} - source, #{c} - err_code
   default_timeout = 5000,   -- lint 超时时间
 
+  --- NOTE: 以下 callback 函数中都会传入 on_init = function(client, init_result) 两个参数.
   --- null-ls 退出的时候提醒.
   on_exit = function()
     Notify("Null-Ls exit. Please check ':NullLsInfo' & ':NullLsLog'","WARN",
@@ -148,11 +149,10 @@ null_ls.setup({
   end,
 
   --- 设置 key_mapping vim.diagnostic.goto_next() ...
-  on_attach = function(client, init_result)
-    require("user.lsp.lsp_keymaps").diagnostic_keymaps(0)
+  on_attach = function()
+    require("user.lsp.util.lsp_keymaps").diagnostic_keymaps(0)
   end,
 
-  --- 其他设置
   --on_init = function(client, init_result)
 })
 

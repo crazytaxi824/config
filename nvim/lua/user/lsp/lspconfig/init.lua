@@ -73,11 +73,11 @@ vim.lsp.set_log_level("WARN")  -- `:help vim.lsp.set_log_level` 影响 `:LspLog`
 for _, LSP_server in pairs(LSP_servers) do
   --- NOTE: opts 必须包含 on_attach, capabilities 两个属性.
   ---      这里的 opts 获取到的是 require 文件中返回的 M.
-  local opts = require("user.lsp.setup_opts")
+  local opts = require("user.lsp.lspconfig.setup_opts")
 
-  --- NOTE: 加载 lsp 配置文件, "~/.config/nvim/lua/user/lsp/langs/..."
+  --- NOTE: 加载 lsp 配置文件, "~/.config/nvim/lua/user/lsp/lspconfig/langs/..."
   --- 如果文件存在, 则加载自定义设置, 如果没有自定义设置则加载默认设置.
-  local has_custom_opts, server_custom_opts = pcall(require, "user.lsp.langs." .. LSP_server)
+  local has_custom_opts, server_custom_opts = pcall(require, "user.lsp.lspconfig.langs." .. LSP_server)
   if has_custom_opts then
     -- tbl_deep_extend() 合并两个 table.
     opts = vim.tbl_deep_extend("force", opts, server_custom_opts)
@@ -92,11 +92,7 @@ end
 
 --- 其他 LSP 相关设置 ------------------------------------------------------------------------------
 --- VVI: 必须放在 lspconfig 加载之后, 因为有些函数需要用到 lspconfig 设置值.
-require("user.lsp.handlers")    -- overwrite 默认 handlers 设置
-require("user.lsp.diagnostic")  -- 加载 diagnostic 设置
-require("user.lsp.auto_format") -- save 时 format
-require("user.lsp.user_command")  -- 自定义 lsp 相关 command
+require("user.lsp.lspconfig.handlers")    -- overwrite 默认 handlers 设置
 
---require("user.lsp.null-ls")  -- 现在设置 packer 中单独启动 null-ls.
 
 
