@@ -1,18 +1,19 @@
 -- 官方文档
+-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#gopls
 -- https://github.com/golang/tools/blob/master/gopls/doc/settings.md
 -- https://github.com/golang/tools/blob/master/gopls/doc/vim.md#neovim-config
 
 -- go env GOROOT | go env GOMODCACHE
-local function goEnv(v)
+local function go_env(v)
   return string.match(vim.fn.system('go env '..v),'[%S ]*')
 end
 
 --- NOTE: ignore following folds as workspace root directory.
-local ignore_workspace_folders = { goEnv("GOROOT"), goEnv("GOMODCACHE") }
+local ignore_workspace_folders = { go_env("GOROOT"), go_env("GOMODCACHE") }
 
 return {
   --cmd = { "gopls" },
-  --filetypes = {"go", "gomod"},
+  filetypes = { "go", "gomod", "gowork", "gotmpl" },  -- 默认没有 gowork
 
   --- NOTE: lspconfig.util.root_pattern() 只能在这里使用, 不能在 project_lsp_config 中使用.
   --- project_lsp_config 中设置 root_dir 直接使用 string. eg: root_dir = "/a/b/c"; root_dir = vim.fn.getcwd().
