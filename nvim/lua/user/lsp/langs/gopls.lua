@@ -32,10 +32,8 @@ return {
     --- 如果没找到 root 则返回 pwd/cwd
     if not root then
       Notify(
-        {
-          "'go.mod' file not found in current directory or any parent directory.",
-          "Please run 'go mod init xxx'."
-        },
+        {"'go.mod' file not found in current directory or any parent directory.",
+          "Please run 'go mod init xxx'."},
         "WARN",
         {title={"LSP", "gopls.lua"}, timeout = false}
       )

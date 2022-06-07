@@ -86,7 +86,7 @@ for _, LSP_server in pairs(LSP_servers) do
   local has_custom_opts, server_custom_opts = pcall(require, "user.lsp.langs." .. LSP_server)
   if has_custom_opts then
     -- tbl_deep_extend() 合并两个 table.
-    opts = vim.tbl_deep_extend("force", server_custom_opts, opts)
+    opts = vim.tbl_deep_extend("force", opts, server_custom_opts)
   end
 
   --- 加载项目本地设置
