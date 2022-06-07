@@ -40,7 +40,7 @@ vim.cmd([[
     \*.js,*.jsx,*.cjs,*.mjs,
     \*.ts,*.tsx,*.cts,*.ctsx,*.mts,*.mtsx,
     \*.vue,*.svelte,*.graphql,
-    \*.json,*.jsonc,*.py,*.sh
+    \*.json,*.jsonc,*.py,*.sh,*.proto
     \ Format
 ]])
 

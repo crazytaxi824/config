@@ -5,26 +5,17 @@
 --      go install github.com/cweill/gotests/gotests@latest
 --      go install github.com/josharian/impl@latest
 local gotools = {
-  goimports = "   go install golang.org/x/tools/cmd/goimports@latest",  -- null-ls
-  gomodifytags = "go install github.com/fatih/gomodifytags@latest",
-  gotests = "     go install github.com/cweill/gotests/gotests@latest",
-  impl = "        go install github.com/josharian/impl@latest",
-  dlv = "         go install github.com/go-delve/delve/cmd/dlv@latest", -- vimspector
+  gotests = "  go install github.com/cweill/gotests/gotests@latest",
+  impl = "     go install github.com/josharian/impl@latest",
+  dlv = "      go install github.com/go-delve/delve/cmd/dlv@latest", -- vimspector
+  --goimports = "go install golang.org/x/tools/cmd/goimports@latest",  -- null-ls 中有检查.
+  --gopls = "    go install golang.org/x/tools/gopls@latest",  -- lsp-installer 安装
+
+  ["gomodifytags"] = " go install github.com/fatih/gomodifytags@latest",
+  --["golangci-lint"] = "go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest", -- null-ls 中有检查.
 }
 
-local result = {"These Tools should be in the $PATH"}
-local count = 0
-for tool, install in pairs(gotools) do
-  vim.fn.system('which '.. tool)
-  if vim.v.shell_error ~= 0 then
-    table.insert(result, tool .. ": " .. install)
-    count = count + 1
-  end
-end
-
-if count > 0 then
-  Notify(result, "WARN", {title = {"GoTools missing", "check_go_tools.lua"}, timeout = false})
-end
+Check_Cmd_Tools(gotools)
 
 
 

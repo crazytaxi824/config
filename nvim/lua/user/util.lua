@@ -86,9 +86,24 @@ function Notify(msg, lvl, opt)
   end
 end
 
+--- 使用 `$ which` 查看插件所需 tools 是否存在 ---------------------------------------------------------
+function Check_Cmd_Tools(tools)
+  local result = {"These Tools should be in the $PATH"}
+  local count = 0
+  for tool, install in pairs(tools) do
+    vim.fn.system('which '.. tool)
+    if vim.v.shell_error ~= 0 then
+      table.insert(result, tool .. ": " .. install)
+      count = count + 1
+    end
+  end
+
+  if count > 0 then
+    Notify(result, "WARN", {title = {"Check_Tools()", "util.lua"}, timeout = false})
+  end
+end
+
 --- TEST: test functions ---
-
-
 
 
 

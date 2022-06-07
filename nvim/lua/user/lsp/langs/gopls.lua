@@ -3,7 +3,7 @@
 -- https://github.com/golang/tools/blob/master/gopls/doc/settings.md
 -- https://github.com/golang/tools/blob/master/gopls/doc/vim.md#neovim-config
 
--- go env GOROOT | go env GOMODCACHE
+-- `$ go env GOROOT` | `$ go env GOMODCACHE`
 local function go_env(v)
   return string.match(vim.fn.system('go env '..v),'[%S ]*')
 end
@@ -32,10 +32,8 @@ return {
     --- 如果没找到 root 则返回 pwd/cwd
     if not root then
       Notify(
-        {
-          "'go.mod' file not found in current directory or any parent directory.",
-          "Please run 'go mod init xxx'."
-        },
+        {"'go.mod' file not found in current directory or any parent directory.",
+          "Please run 'go mod init xxx'."},
         "WARN",
         {title={"LSP", "gopls.lua"}, timeout = false}
       )

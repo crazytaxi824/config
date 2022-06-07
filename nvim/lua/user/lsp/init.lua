@@ -10,12 +10,6 @@ if not lsp_installer_ok then
   return
 end
 
---- 读取项目本地设置
-local ok = pcall(require, "user.lsp.load_proj_settings")
-if not ok then
-  return
-end
-
 --- VVI: 需要启用的 LSP server --------------------------------------------------------------------- {{{
 --- 这里的 lsp server 都是通过 lsp-installer 安装的, 所以使用其提供的函数获取已安装列表.
 --- get_available_servers()  -- 所有可以安装的 lsp server.
@@ -86,7 +80,7 @@ for _, LSP_server in pairs(LSP_servers) do
   local has_custom_opts, server_custom_opts = pcall(require, "user.lsp.langs." .. LSP_server)
   if has_custom_opts then
     -- tbl_deep_extend() 合并两个 table.
-    opts = vim.tbl_deep_extend("force", server_custom_opts, opts)
+    opts = vim.tbl_deep_extend("force", opts, server_custom_opts)
   end
 
   --- 加载项目本地设置
@@ -100,9 +94,9 @@ end
 --- VVI: 必须放在 lspconfig 加载之后, 因为有些函数需要用到 lspconfig 设置值.
 require("user.lsp.handlers")    -- overwrite 默认 handlers 设置
 require("user.lsp.diagnostic")  -- 加载 diagnostic 设置
-require("user.lsp.null-ls")     -- 启动 null-ls
 require("user.lsp.auto_format") -- save 时 format
 require("user.lsp.user_command")  -- 自定义 lsp 相关 command
 
+--require("user.lsp.null-ls")  -- 现在设置 packer 中单独启动 null-ls.
 
 

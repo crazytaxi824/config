@@ -82,7 +82,7 @@ end
 
 --- Have packer use a popup window, "nvim-lua/popup.nvim"
 packer.init {
-  --snapshot = nil,   -- VVI: Name of the snapshot you would like to load at startup
+  --snapshot = "2022.06.07",   -- VVI: Name of the snapshot you would like to load at startup
   snapshot_path = vim.fn.stdpath('config') .. '/packer_snapshot', -- Default save directory for snapshots
   display = {
     open_fn = function()
@@ -162,6 +162,23 @@ return packer.startup(function(use)
     config = function() require("user.plugin-settings.indentline") end
   }
 
+  --- LSP ------------------------------------------------------------------------------------------
+  --- 读取项目本地设置, 如果读取成功则加载 lspconfig && null-ls
+  local proj_settings_status_ok = pcall(require, "user.lsp.load_proj_settings")
+  if proj_settings_status_ok then
+    --- 官方 LSP 引擎.
+    use {"neovim/nvim-lspconfig",
+      requires = "williamboman/nvim-lsp-installer", -- simple to use language server installer
+      config = function() require("user.lsp") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
+    }
+
+    --- null-ls 插件 formatters && linters, depends on "nvim-lua/plenary.nvim"
+    use {"jose-elias-alvarez/null-ls.nvim",
+      requires = "nvim-lua/plenary.nvim",
+      config = function() require("user.lsp.null-ls") end,
+    }
+  end
+
   --- Completion -----------------------------------------------------------------------------------
   use {"hrsh7th/nvim-cmp",
     --- NOTE: 以下是 nvim-cmp module 插件, 在 setup() 中启用的插件.
@@ -191,19 +208,6 @@ return packer.startup(function(use)
     config = function() require("user.plugin-settings.autopairs") end
   }
 
-  --- LSP ------------------------------------------------------------------------------------------
-  --- 官方 LSP 引擎.
-  use {"neovim/nvim-lspconfig",
-    --- NOTE: 这里的 requires 并不是正真的依赖关系, 只是用来 group 在一起便于 config 设置.
-    requires = {
-      "williamboman/nvim-lsp-installer",   -- simple to use language server installer
-      {"jose-elias-alvarez/null-ls.nvim",  -- for formatters and linters, depends on "nvim-lua/plenary.nvim"
-        requires="nvim-lua/plenary.nvim",
-      }
-    },
-    config = function() require("user.lsp") end,  -- 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
-  }
-
   --- File Tree Display ----------------------------------------------------------------------------
   --use "kyazdani42/nvim-web-devicons"  -- 提供 icons 需要 patch 字体 (Nerd Fonts)
   use {"kyazdani42/nvim-tree.lua",      -- 类似 NerdTree
@@ -213,7 +217,7 @@ return packer.startup(function(use)
   --- Buffer & Status Line -------------------------------------------------------------------------
   --- vim-fugitive: airline 中显示 git 状态
   use {"vim-airline/vim-airline",
-    requires="tpope/vim-fugitive",
+    requires = "tpope/vim-fugitive",
     config = function() require("user.plugin-settings.airline") end
   }
   --- TODO 以下插件可以替代 airline --- {{{
@@ -235,7 +239,7 @@ return packer.startup(function(use)
   --- Useful Tools ---------------------------------------------------------------------------------
   --- fzf rg fd, preview 使用的是 tree-sitter, 而不用 bat 了
   use {"nvim-telescope/telescope.nvim",
-    requires="nvim-lua/plenary.nvim",
+    requires = "nvim-lua/plenary.nvim",
     config = function() require("user.plugin-settings.telescope") end
   }
 
