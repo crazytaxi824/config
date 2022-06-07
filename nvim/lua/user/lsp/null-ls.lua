@@ -141,6 +141,7 @@ null_ls.setup({
   diagnostics_format = "#{m} [null-ls]",  -- 错误信息显示格式, #{m} - message, #{s} - source, #{c} - err_code
   default_timeout = 5000,   -- lint 超时时间
 
+  --- NOTE: 以下 callback 函数中都会传入 on_init = function(client, init_result) 两个参数.
   --- null-ls 退出的时候提醒.
   on_exit = function()
     Notify("Null-Ls exit. Please check ':NullLsInfo' & ':NullLsLog'","WARN",
@@ -148,11 +149,10 @@ null_ls.setup({
   end,
 
   --- 设置 key_mapping vim.diagnostic.goto_next() ...
-  on_attach = function(client, init_result)
+  on_attach = function()
     require("user.lsp.lsp_keymaps").diagnostic_keymaps(0)
   end,
 
-  --- 其他设置
   --on_init = function(client, init_result)
 })
 

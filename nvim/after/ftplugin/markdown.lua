@@ -32,7 +32,7 @@ local function markdownCreateTable(arglist)  -- args: 创建一个 row * col 的
 
   local col_placeholder = ""   -- '|     |     |     |\<CR>'
   local table_split = ""       -- '| --- | --- | --- |\<CR>'
-  for i = 1, col, 1 do
+  for _ = 1, col, 1 do
     col_placeholder = col_placeholder .. _colspace
     table_split = table_split .. _rowsplit
   end
@@ -41,7 +41,7 @@ local function markdownCreateTable(arglist)  -- args: 创建一个 row * col 的
 
   local result = col_placeholder .. table_split
 
-  for i = 1, row, 1 do
+  for _ = 1, row, 1 do
     result = result .. col_placeholder
   end
 
