@@ -122,7 +122,7 @@ local formatter_settings = {
   formatting.buf.with(__Proj_local_settings.keep_extend('format', 'buf', {})),
 }
 
---- null-ls 在这里加载上面设置的 formatting & linter -----------------------------------------------
+--- null-ls setup() 在这里加载上面设置的 formatting & linter ---------------------------------------
 --- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/CONFIG.md
 null_ls.setup({
   --- VVI: 设置 linter / formatter / code actions

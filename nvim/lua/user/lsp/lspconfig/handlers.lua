@@ -40,7 +40,7 @@
 -- )
 -- -- }}}
 
---- 这里是修改 'textDocument/hover' handler 的 border 样式.
+--- 这里是修改 'textDocument/hover' handler 的 border 样式 -----------------------------------------
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
   vim.lsp.handlers["textDocument/hover"],
   {

@@ -1,4 +1,4 @@
---- NOTE: handlers.lua 主要返回一个类型实例, 带 "on_attach", "capabilities" 属性.
+--- NOTE: handlers.lua 主要返回一个 table, 带 "on_attach", "capabilities" 属性.
 --  - on_attach     当 LSP 存在时加载设置 key_mapping, highlight ... 等设置.
 --  - capabilities  给 cmp 自动补全提供内容.
 --

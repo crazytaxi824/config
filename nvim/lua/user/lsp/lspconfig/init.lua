@@ -33,7 +33,7 @@ end
 --- 如果 lsp 已安装, 但是不在列表中也不会启动. 因为 lspconfig[LSP_server].setup() 也需要用到该 list.
 local LSP_servers = { "jsonls", "sumneko_lua", "gopls", "tsserver", "pyright", "html", "cssls", "bashls" }
 
---- nvim-lsp-installer settings --------------------------------------------------------------------
+--- nvim-lsp-installer setup() ---------------------------------------------------------------------
 lsp_installer.setup {
   -- NOTE: 其实这里不需要通过 lsp-installer 安装 gopls, 因为 gopls 在 $PATH 中,
   -- 所以 lspconfig 可以直接使用 gopls;
