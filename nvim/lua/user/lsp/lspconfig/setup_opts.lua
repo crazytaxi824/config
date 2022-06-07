@@ -53,7 +53,7 @@ M.on_attach = function(client, bufnr)
   lsp_highlight(client)
 
   --- 设置 lsp 专用 keymaps
-  local lsp_keymaps = require("user.lsp.lsp_keymaps")
+  local lsp_keymaps = require("user.lsp.util.lsp_keymaps")
   lsp_keymaps.textDocument_keymaps(bufnr)
   lsp_keymaps.diagnostic_keymaps(bufnr)
 end

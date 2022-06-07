@@ -150,7 +150,7 @@ null_ls.setup({
 
   --- 设置 key_mapping vim.diagnostic.goto_next() ...
   on_attach = function()
-    require("user.lsp.lsp_keymaps").diagnostic_keymaps(0)
+    require("user.lsp.util.lsp_keymaps").diagnostic_keymaps(0)
   end,
 
   --on_init = function(client, init_result)
