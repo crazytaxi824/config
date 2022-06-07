@@ -83,9 +83,6 @@ for _, LSP_server in pairs(LSP_servers) do
     opts = vim.tbl_deep_extend("force", opts, server_custom_opts)
   end
 
-  --- 加载项目本地设置
-  opts = __Proj_local_settings.keep_extend("lsp", opts)
-
   --- VVI: 这里就是 lspconfig.xxx.setup() 针对不同的 lsp 进行加载.
   lspconfig[LSP_server].setup(opts)
 end

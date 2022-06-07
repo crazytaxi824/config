@@ -7,7 +7,7 @@ __Proj_local_settings = {
   _content = {}  -- 缓存 file 内容. VVI: 这里不要使用 nil, 因为 nil 无法 index [lsp] / [null-ls].
 }
 
---- lazyload() 保证只读取一次文件.
+--- 内部函数 lazyload() 保证只读取一次文件.
 __Proj_local_settings._lazyload = function()
   --- 如果已经读取文件则不重复执行.
   if __Proj_local_settings._once then
@@ -24,13 +24,14 @@ __Proj_local_settings._lazyload = function()
   end
 end
 
---- 用 project 设置覆盖 global 设置.
-__Proj_local_settings.keep_extend = function(local_key, tbl, ...)
+--- VVI: 主要函数 keep_extend() 用 project 设置覆盖 global 设置.
+--- 使用 tbl_deep_extend('keep', xx, xx, ...)
+__Proj_local_settings.keep_extend = function(section, tool, tbl, ...)
   __Proj_local_settings._lazyload()  -- 读取项目配置文件
 
   -- 如果项目本地设置存在
-  if __Proj_local_settings._content[local_key] then
-    return vim.tbl_deep_extend('keep', __Proj_local_settings._content[local_key], tbl, ...)
+  if __Proj_local_settings._content[section] and __Proj_local_settings._content[section][tool] then
+    return vim.tbl_deep_extend('keep', __Proj_local_settings._content[section][tool], tbl, ...)
   end
 
   -- 如果传入多个 tbl config

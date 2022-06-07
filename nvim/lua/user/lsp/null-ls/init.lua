@@ -61,11 +61,8 @@ local diagnostics_opts = {
 -- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/HELPERS.md -- $FILENAME, $DIRNAME, $ROOT ...
 --- linters 设置 -----------------------------------------------------------------------------------
 local linter_settings = {
-  -- python, flake8
-  diagnostics.flake8.with(__Proj_local_settings.keep_extend('lint', diagnostics_opts)),
-
   --- golangci-lint
-  diagnostics.golangci_lint.with(__Proj_local_settings.keep_extend('lint',
+  diagnostics.golangci_lint.with(__Proj_local_settings.keep_extend('lint', 'golangci_lint',
     require("user.lsp.null-ls.tools.golangci"), diagnostics_opts)
   ),
 
@@ -78,45 +75,51 @@ local linter_settings = {
   --- 可以使用 '--config /xxx' 指定配置文件位置.
   --- https://eslint.org/docs/user-guide/configuring/configuration-files
   -- -- }}}
-  diagnostics.eslint.with(__Proj_local_settings.keep_extend('lint', {
+  diagnostics.eslint.with(__Proj_local_settings.keep_extend('lint', 'eslint', {
     extra_args = { "--config", "eslintrc-ts.json" },
     filetypes = {"typescript"},
   }, diagnostics_opts)),
-  diagnostics.eslint.with(__Proj_local_settings.keep_extend('lint', {
+  diagnostics.eslint.with(__Proj_local_settings.keep_extend('lint', 'eslint', {
     extra_args = { "--config", "eslintrc-react.json" },
     filetypes = {"typescriptreact"},
   }, diagnostics_opts)),
-  diagnostics.eslint.with(__Proj_local_settings.keep_extend('lint', {
+  diagnostics.eslint.with(__Proj_local_settings.keep_extend('lint', 'eslint', {
     extra_args = { "--config", "eslintrc-js.json" },
     filetypes = {"javascript", "javascriptreact", "vue"},
   }, diagnostics_opts)),
 
+  -- python, flake8
+  diagnostics.flake8.with(__Proj_local_settings.keep_extend('lint', 'flake8', diagnostics_opts)),
+
   --- protobuf, buf
-  diagnostics.buf.with(diagnostics_opts),
+  diagnostics.buf.with(__Proj_local_settings.keep_extend('lint', 'buf', diagnostics_opts)),
 }
 
 --- formatter 设置 ---------------------------------------------------------------------------------
 local formatter_settings = {
   --- NOTE: 需要在 lsp.setup(opts) 中的 on_attach 中排除 tsserver & sumneko_lua 的 formatting 功能
-  formatting.prettier.with(require("user.lsp.null-ls.tools.prettier")),
+  formatting.prettier.with(__Proj_local_settings.keep_extend('format', 'prettier',
+    require("user.lsp.null-ls.tools.prettier")
+  )),
 
   --- lua, stylua
-  formatting.stylua.with({
+  formatting.stylua.with(__Proj_local_settings.keep_extend('format', 'stylua', {
     extra_args = { "--column-width=" .. vim.bo.textwidth },  -- 和 vim textwidth 相同.
-  }),
+  })),
 
   --- python, autopep8, black, YAPF
-  formatting.autopep8,
+  formatting.autopep8.with(__Proj_local_settings.keep_extend('format', 'autopep8', {})),
 
+  --- go, gofmt, goimports, gofumpt
   --- go 需要在这里使用 'goimports', 因为 gopls 默认不会处理 "source.organizeImports",
   --- 但是需要 gopls 格式化 go.mod 文件.
-  formatting.goimports, -- go, gofmt, goimports, gofumpt
+  formatting.goimports.with(__Proj_local_settings.keep_extend('format', 'goimports', {})),
 
   --- sh shell
-  formatting.shfmt,
+  formatting.shfmt.with(__Proj_local_settings.keep_extend('format', 'shfmt', {})),
 
   --- protobuf, buf
-  formatting.buf,
+  formatting.buf.with(__Proj_local_settings.keep_extend('format', 'buf', {})),
 }
 
 --- null-ls 在这里加载上面设置的 formatting & linter -----------------------------------------------

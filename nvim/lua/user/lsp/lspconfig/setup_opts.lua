@@ -68,24 +68,18 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 M.capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
 
 --- https://github.com/neovim/nvim-lspconfig/wiki/Project-local-settings
---- NOTE: LSP settings Hook, 不是必要设置 --------------------------------------------------------- {{{
+--- NOTE: LSP settings Hook, 不是必要设置 ----------------------------------------------------------
 --- 这里是为了能单独给 project 设置 LSP setting
--- M.on_init = function(client)
---   --- local result = dofile('xxx.lua') - execute lua file, and get return value.
---   local proj_lsp_status_ok, proj_local_lsp_config = pcall(dofile, '.nvim/lsp.lua')
---   if proj_lsp_status_ok then
---     --- 使用项目本地 LSP 设置覆盖全局 LSP 设置.
---     --- lua print(vim.inspect(client.config))  -- 查看 on_init callback 函数中, lsp client 的设置.
---     --- lua print(vim.inspect(vim.tbl_values(vim.lsp.buf_get_clients())))  -- 查看当前 buffer 中 lsp cllient 设置.
---     client.config = vim.tbl_deep_extend('force', client.config, proj_local_lsp_config)
---
---     -- VVI: tell LSP configs are changed.
---     client.notify("workspace/didChangeConfiguration")
---   end
---
---   return true  -- VVI: 如果 return false 则 LSP 不启动.
--- end
--- -- }}}
+M.on_init = function(client)
+  --- 加载项目本地设置, 覆盖 global settings.
+  client.config.settings[client.name] = __Proj_local_settings.keep_extend("settings", client.name,
+    client.config.settings[client.name])
+
+  -- VVI: tell LSP configs are changed.
+  client.notify("workspace/didChangeConfiguration")
+
+  return true  -- VVI: 如果 return false 则 LSP 不启动.
+end
 
 return M
 
