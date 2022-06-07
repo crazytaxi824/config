@@ -48,22 +48,20 @@ function cleanupPackages() {
 		echo -e "\e[32mrunning: $pip_clean\e[0m" && (eval $pip_clean)
 }
 
-
-
 # 执行函数 - 必须放在函数定义后面
 # main function
 case $1 in
-	"outdated")
-		brewOutdated
-		npmOutdated
-		pipOutdated
-		;;
+"outdated")
+	brewOutdated
+	npmOutdated
+	pipOutdated
+	;;
 
-	"clean")
-		cleanupPackages
-		;;
+"clean")
+	cleanupPackages
+	;;
 
-	*)
-		echo -e "\e[33mpackages [outdated | clean]\e[0m"
-		;;
+*)
+	echo -e "\e[33mpackages [outdated | clean]\e[0m"
+	;;
 esac
