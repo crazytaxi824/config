@@ -124,6 +124,6 @@ require "user.colors"  -- vim highlight 设置
 
 -- null-ls check linter/formatter tools
 -- 在单独的文件夹中设置 linter / formater settings.
-
+-- nill-ls packer 设置 {after=lspconfig}
 
 
