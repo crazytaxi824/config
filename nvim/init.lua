@@ -117,12 +117,7 @@ require "user.colors"  -- vim highlight 设置
 --- TODO -------------------------------------------------------------------------------------------
 -- global var & function start with '__'
 
--- lazyload treesitter
--- treesitter download path
--- treesitter settings { run = "TSUpdate" , event = "BufReadPost", config = function }
--- other plugins settings { after = "treesitter" }
-
--- lspconfig: Marksman markdown LSP, retire zeta-note
+-- lspconfig: Marksman markdown LSP, retire zeta-note, lsp-installer 还没提供下载.
 
 
 

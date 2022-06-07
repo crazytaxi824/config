@@ -10,12 +10,6 @@ if not lsp_installer_ok then
   return
 end
 
---- 读取项目本地设置
-local ok = pcall(require, "user.lsp.load_proj_settings")
-if not ok then
-  return
-end
-
 --- VVI: 需要启用的 LSP server --------------------------------------------------------------------- {{{
 --- 这里的 lsp server 都是通过 lsp-installer 安装的, 所以使用其提供的函数获取已安装列表.
 --- get_available_servers()  -- 所有可以安装的 lsp server.
