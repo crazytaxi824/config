@@ -82,7 +82,7 @@ end
 
 --- Have packer use a popup window, "nvim-lua/popup.nvim"
 packer.init {
-  snapshot = "2022.06.07",   -- VVI: Name of the snapshot you would like to load at startup
+  --snapshot = "2022.06.07",   -- VVI: Name of the snapshot you would like to load at startup
   snapshot_path = vim.fn.stdpath('config') .. '/packer_snapshot', -- Default save directory for snapshots
   display = {
     open_fn = function()
@@ -215,7 +215,9 @@ return packer.startup(function(use)
   --- Buffer & Status Line -------------------------------------------------------------------------
   --- vim-fugitive: airline 中显示 git 状态
   use {"vim-airline/vim-airline",
-    requires="tpope/vim-fugitive",
+    requires={"tpope/vim-fugitive",
+      commit = "5920f80",  -- BUG: b:git_dir
+    },
     config = function() require("user.plugin-settings.airline") end
   }
   --- TODO 以下插件可以替代 airline --- {{{
