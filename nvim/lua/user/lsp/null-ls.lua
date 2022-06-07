@@ -3,6 +3,25 @@ if not null_ls_status_ok then
   return
 end
 
+--- 检查 null-ls 所需 tools ------------------------------------------------------------------------ {{{
+local null_tools = {
+  ["golangci-lint"] = "go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest",
+  ["goimports"] = "    go install golang.org/x/tools/cmd/goimports@latest",
+  ["buf"] = "          go install github.com/bufbuild/buf/cmd/buf@latest",
+
+  prettier = " brew info prettier",
+  stylua = "   brew info stylua",
+  shfmt = "    brew info shfmt",
+
+  flake8 = "   pip3 install flake8",
+  autopep8 = " pip3 install autopep8",
+
+  eslint = "   npm install -g eslint",
+}
+
+Check_Cmd_Tools(null_tools)
+-- -- }}}
+
 --- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/formatting
 local formatting = null_ls.builtins.formatting
 --- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
@@ -36,7 +55,7 @@ local diagnostics_opts = {
 
 --- null-ls key_mapping 设置, 如果没有加载 lsp 没有启动, 则 keymap 可以从这里加载. ----------------- {{{
 --- NOTE: 这里的设置和 lspconfig 的设置一样, 主要是为了在 lsp 没有启动的情况下
----       可以在 null-ls 中使用 diagnostics.goto_next()
+---       可以在 null-ls 中使用 diagnostics.goto_next() 和 code_actions
 local function lsp_keymaps(bufnr)
   local opts = { noremap = true }
   --- jump to diagnostics next error.
@@ -146,8 +165,8 @@ null_ls.setup({
       {title = {"LSP", "null-ls.lua"}, timeout = false})
   end,
 
+  --- 设置 key_mapping vim.diagnostic.goto_next() ...
   on_attach = function(client, init_result)
-    --- 设置 key_mapping vim.diagnostic.goto_next() ...
     lsp_keymaps(0)
   end,
 
