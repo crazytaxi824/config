@@ -122,7 +122,8 @@ require "user.colors"  -- vim highlight 设置
 -- treesitter settings { run = "TSUpdate" , event = "BufReadPost", config = function }
 -- other plugins settings { after = "treesitter" }
 
-
+-- null-ls check linter/formatter tools
+-- 在单独的文件夹中设置 linter / formater settings.
 
 
 

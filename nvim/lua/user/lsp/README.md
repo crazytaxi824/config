@@ -32,6 +32,6 @@ return {
 
   -- TODO null-ls format 设置
   -- eg: null_ls.formatting.prettier.with() 设置.
-  format = {},  -- 还未实现.
+  format = {},  -- 还未实现, 目前用不上.
 }
 ```
