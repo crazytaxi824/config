@@ -164,7 +164,7 @@ return packer.startup(function(use)
 
   --- LSP ------------------------------------------------------------------------------------------
   --- 读取项目本地设置, 如果读取成功则加载 lspconfig && null-ls
-  local proj_settings_status_ok = pcall(require, "user.lsp.load_proj_settings")
+  local proj_settings_status_ok = pcall(require, "user.lsp.load_proj_settings") -- NOTE: 加载 "__Proj_local_settings"
   if proj_settings_status_ok then
     --- 官方 LSP 引擎.
     use {"neovim/nvim-lspconfig",
