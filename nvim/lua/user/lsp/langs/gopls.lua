@@ -3,7 +3,7 @@
 -- https://github.com/golang/tools/blob/master/gopls/doc/settings.md
 -- https://github.com/golang/tools/blob/master/gopls/doc/vim.md#neovim-config
 
--- go env GOROOT | go env GOMODCACHE
+-- `$ go env GOROOT` | `$ go env GOMODCACHE`
 local function go_env(v)
   return string.match(vim.fn.system('go env '..v),'[%S ]*')
 end
