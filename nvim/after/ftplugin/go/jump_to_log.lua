@@ -39,14 +39,14 @@ local function jumpToLogFile()
   if loc_items then
     if vim.fn.win_gotoid(go_run_win_id) == 1 then
       vim.fn.setloclist(go_run_win_id, {loc_items}, 'r')  -- 给指定 window 设置 loclist
-      vim.cmd('lfirst')  -- jump to loclist first item
+      vim.cmd('silent lfirst')  -- jump to loclist first item
       vim.fn.setloclist(go_run_win_id, {}, 'r')  -- clear loclist
     else
       -- 如果 go_run_win_id 不存在, 则创建一个新的 window.
       vim.cmd('botright vsplit ' .. loc_items.filename)
       go_run_win_id = vim.fn.win_getid()
       vim.fn.setloclist(go_run_win_id, {loc_items}, 'r')  -- 给指定 window 设置 loclist
-      vim.cmd('lfirst')  -- jump to loclist first item
+      vim.cmd('silent lfirst')  -- jump to loclist first item
       vim.fn.setloclist(go_run_win_id, {}, 'r')  -- clear loclist
     end
   end
