@@ -48,28 +48,29 @@ nvim_tree.setup {
     },
   },
   renderer = {
-    highlight_git = false,
+    highlight_git = false,  -- 开启 git 颜色.
     highlight_opened_files = "all",  -- NOTE: "none" | "icon" | "name" | "all"
     indent_markers = {
       enable = true,
       icons = {
         corner = "└ ",
         edge = "│ ",
+        item = "│ ",
         none = "  ",
       },
     },
     icons = {
       webdev_colors = false,
-      symlink_arrow = " → ",
+      symlink_arrow = " ➜ ",  -- old_name ➜ new_name
       show = {
-        git = false,
-        folder = true, -- VVI: 只显示 folder icon
-        file = false,
+        git = false,   -- 显示 git icon
+        folder = true, -- 显示 folder icon
+        file = false,  -- 显示 file icon
         folder_arrow = false,
       },
       glyphs = {
         default = '',
-        symlink = '',
+        symlink = '',  -- 这里的 symlink 和上面设置不一样, 这里是文件名前面的 icon.
         folder = {
           default = '▶︎',
           open = '▽',
@@ -77,6 +78,15 @@ nvim_tree.setup {
           empty_open = '-',
           symlink = '',
           symlink_open = ''
+        },
+        git = {
+          unstaged  = "✗",
+          staged    = "✓",
+          unmerged  = "u",
+          renamed   = "R",
+          untracked = "A",  -- untracked = new file.
+          deleted   = "D",
+          ignored   = "◌",
         },
       },
     },
@@ -112,14 +122,14 @@ nvim_tree.setup {
     exclude = {},
   },
   git = {
-    enable = false, -- 不开启
-    ignore = true,  -- ignore gitignore files
+    enable = false,
+    ignore = false,  -- ignore gitignore files
     timeout = 400,
   },
   actions = {
     use_system_clipboard = true,
     change_dir = {
-      enable = true,
+      enable = true,   -- change root dir
       global = false,
     },
     open_file = {
@@ -127,7 +137,6 @@ nvim_tree.setup {
       resize_window = true,  -- VVI: 重新渲染 nvimtree 窗口大小.
       window_picker = {
         enable = true,       -- VVI: false:总在 vsplit 窗口中打开新文件.
-        chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
         exclude = {
           filetype = { "notify", "packer", "qf", "diff", "fugitive", "fugitiveblame" },
           buftype = { "nofile", "terminal", "help" },
@@ -158,7 +167,7 @@ nvim_tree.setup {
 --- automatically close the tab/vim when nvim-tree is the last window in the tab
 vim.cmd [[autocmd BufEnter * ++nested if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpagenr() | quit | endif]]
 
---- `:help nvim_tree_highlight` -------------------------------------------------------------------- {{{
+--- `:help nvim-tree-highlight` -------------------------------------------------------------------- {{{
 vim.cmd('hi NvimTreeFolderIcon ctermfg=81 cterm=bold')
 vim.cmd('hi NvimTreeFolderName ctermfg=81 cterm=bold')
 vim.cmd('hi NvimTreeEmptyFolderName ctermfg=81 cterm=bold')
@@ -168,5 +177,22 @@ vim.cmd('hi NvimTreeSymlink ctermfg=207')      -- 链接文件, magenta
 vim.cmd('hi NvimTreeExecFile ctermfg=167')     -- 可执行文件, red
 vim.cmd('hi NvimTreeSpecialFile ctermfg=179')  -- 自定义 Sepcial 文件, orange
 vim.cmd('hi NvimTreeIndentMarker ctermfg=242')
+
+--- nvim-tree Git color, 需要开启 highlight_git=true, render={git={enable=true}}
+--- 这里设置了 git icon color
+vim.cmd('hi NvimTreeGitDirty   ctermfg=167')
+vim.cmd('hi NvimTreeGitStaged  ctermfg=71')
+vim.cmd('hi NvimTreeGitMerge   ctermfg=170')
+vim.cmd('hi NvimTreeGitRenamed ctermfg=170')
+vim.cmd('hi NvimTreeGitNew     ctermfg=71')
+vim.cmd('hi NvimTreeGitDeleted ctermfg=167')
+
+--- 以下默认是 link 上面 git icon color, 这里重置了颜色.
+vim.cmd('hi! link NvimTreeFileDirty   Normal')
+vim.cmd('hi! link NvimTreeFileStaged  Normal')
+vim.cmd('hi! link NvimTreeFileMerge   Normal')
+vim.cmd('hi! link NvimTreeFileRenamed Normal')
+vim.cmd('hi! link NvimTreeFileNew     Normal')
+vim.cmd('hi! link NvimTreeFileDeleted Normal')
 -- -- }}}
 
