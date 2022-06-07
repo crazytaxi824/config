@@ -53,24 +53,6 @@ local diagnostics_opts = {
 }
 -- -- }}}
 
---- null-ls key_mapping 设置, 如果没有加载 lsp 没有启动, 则 keymap 可以从这里加载. ----------------- {{{
---- NOTE: 这里的设置和 lspconfig 的设置一样, 主要是为了在 lsp 没有启动的情况下
----       可以在 null-ls 中使用 diagnostics.goto_next() 和 code_actions
-local function lsp_keymaps(bufnr)
-  local opts = { noremap = true }
-  --- jump to diagnostics next error.
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "<F8>", '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "<F20>", '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts) -- <S-F8>
-
-  --- 将 diagnostics error 放入 quickfix list.
-  --- 也可以使用 vim.diagnostic.setqflist({open = false}) 禁止打开 quickfix window
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>q", "<cmd>lua vim.diagnostic.setqflist()<CR>", opts)
-
-  --- code action
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
-end
--- -- }}}
-
 --- linter / formatter / code action 设置 ----------------------------------------------------------
 -- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/MAIN.md  -- runtime_condition function 中的 params
 -- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/CONFIG.md    -- setup 设置
@@ -167,7 +149,7 @@ null_ls.setup({
 
   --- 设置 key_mapping vim.diagnostic.goto_next() ...
   on_attach = function(client, init_result)
-    lsp_keymaps(0)
+    require("user.lsp.lsp_keymaps").diagnostic_keymaps(0)
   end,
 
   --- 其他设置
