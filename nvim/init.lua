@@ -129,7 +129,6 @@ require "user.colors"  -- vim highlight 设置
 --- TODO -------------------------------------------------------------------------------------------
 -- global var & function start with '__Fn()'
 
--- lspconfig: Marksman markdown LSP, retire zeta-note, lsp-installer 还没提供下载.
-
+-- lspconfig 依赖 "hrsh7th/cmp-nvim-lsp" 进行 cmp_nvim_lsp.update_capabilities(capabilities)
 
 

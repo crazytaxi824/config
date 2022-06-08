@@ -47,3 +47,27 @@ return {
   },
 }
 ```
+
+# LSP 插件关系
+
+## lspconfig 官方插件
+
+"neovim/nvim-lspconfig"
+
+主要作用:
+```lua
+lspconfig.{lsp_server}.setup({
+  on_init = function(lsp_client)  -- 在 lsp 启动的时候执行.
+  on_attach = function(lsp_client, bufnr)  -- 在 lsp client 成功 attach 到 buffer 的时候执行.
+  capabilities = cmp_nvim_lsp.update_capabilities()  -- 将 lsp completion 返回给 cmp-nvim-lsp.
+})
+```
+
+## cmp-nvim-lsp 是 nvim-cmp 的代码 completion 插件.
+
+"hrsh7th/nvim-cmp"
+
+"hrsh7th/cmp-nvim-lsp"
+
+
+
