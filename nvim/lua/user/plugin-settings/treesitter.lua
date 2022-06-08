@@ -17,7 +17,7 @@ configs.setup {
     disable = { "" },  -- list of language that will be disabled
 
     --- NOTE: 同时使用 vim 自带 syntax,
-    --- 使得 vim syntax 和 tree-sitter 的颜色效果(underine, bold...)同时生效.
+    --- 使得 vim syntax 和 treesitter 的颜色效果(underine, bold...)同时生效.
     additional_vim_regex_highlighting = false,
   },
 
@@ -25,6 +25,17 @@ configs.setup {
     enable = true,
     disable = { "yaml" },  -- 不要自动给 yaml 进行 indent.
   },
+
+  --- 作用不大.
+  --incremental_selection = {
+  --  enable = true,
+  --  keymaps = {
+  --    init_selection = "gnn",
+  --    node_incremental = "grn",
+  --    scope_incremental = "grc",
+  --    node_decremental = "grm",
+  --  },
+  --},
 
   --- 启用第三方插件 modules 设置 ------------------------------------------------------------------
   --- "JoosepAlviste/nvim-ts-context-commentstring"

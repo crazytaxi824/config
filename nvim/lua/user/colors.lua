@@ -100,7 +100,7 @@ vim.cmd('hi Title cterm=bold ctermfg=114')      -- markdown Title
 vim.cmd('hi Conceal ctermfg=117 ctermbg=None')  -- markdown 特殊符号颜色
 vim.cmd('hi Label ctermfg=117')                 -- json key color
 
---- tree-sitter 颜色 -------------------------------------------------------------------------------
+--- treesitter 颜色 --------------------------------------------------------------------------------
 vim.cmd('hi link TSProperty Normal')            -- struct/class field
 vim.cmd('hi link TSField Normal')
 vim.cmd('hi link TSParameter Normal')           -- 入参出参

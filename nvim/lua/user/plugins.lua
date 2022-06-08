@@ -131,7 +131,7 @@ return packer.startup(function(use)
       --- https://github.com/lewis6991/nvim-treesitter-context#configuration
       {"nvim-treesitter/nvim-treesitter-context"},
 
-      --- 用于获取 tree-sitter 信息, 调整颜色很有用.
+      --- 用于获取 treesitter 信息, 调整颜色很有用.
       {"nvim-treesitter/playground",
         -- NOTE: 执行以下命令时再加载 playground.
         cmd = {"TSPlaygroundToggle", "TSHighlightCapturesUnderCursor"},
@@ -244,7 +244,7 @@ return packer.startup(function(use)
   --use "mfussenegger/nvim-dap"      -- lua debug tool
 
   --- Useful Tools ---------------------------------------------------------------------------------
-  --- fzf rg fd, preview 使用的是 tree-sitter, 而不用 bat 了
+  --- fzf rg fd, preview 使用的是 treesitter, 而不用 bat
   use {"nvim-telescope/telescope.nvim",
     requires = "nvim-lua/plenary.nvim",
     config = function() require("user.plugin-settings.telescope") end

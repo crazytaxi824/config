@@ -101,8 +101,9 @@ end
 
 --- NOTE: 使用 nvim-treesitter 寻找 cursor 前最近的 function call() 的位置 --- {{{
 -- `:help nvim-treesitter`
--- `:help treesitter`
 --    node = ts_utils.get_node_at_cursor()  -- 获取 node at cursor.
+--
+-- `:help treesitter`
 --    node:start()  -- start pos, return [row, (col), totalbytes]
 --    node:end_()   -- end pos
 --    node:parent() -- 父级 node
@@ -114,33 +115,34 @@ end
 local function findFuncCallBeforeCursor()
   local ts_status, ts_utils = pcall(require, "nvim-treesitter.ts_utils")
   if not ts_status then
-    Notify("tree-sitter is not loaded.", "WARN", {title={"findFuncCallBeforeCursor()","handlers.lua"}})
+    Notify("treesitter is not loaded.", "WARN", {title={"findFuncCallBeforeCursor()","handlers.lua"}})
     return nil
   end
 
   local pos = vim.fn.getpos('.')  -- 光标位置, 返回 [bufnum, lnum, col, off]. lnum 和 col 都是从 1 开始计算.
   local node = ts_utils.get_node_at_cursor()  -- 获取 node at cursor.
 
-  -- 向上寻找 'argument_list' node.
+  --- 向上寻找 'argument_list' / 'arguments' node. 'go, py' use argument_list; 'js, ts, lua' use arguments.
+  --- NOTE: foo("bar") 中 `("bar")` 属于 arguments, 包括括号.
   while node do
-    -- NOTE: 'go, py' use argument_list; 'js, ts, lua' use arguments.
     if node:type() == 'argument_list' or node:type() == 'arguments' then
       local row, col, _ = node:start()  -- argument_list start position, 即 '(' 的位置. row, col 都是从 0 开始计算位置.
-      local func_call_last_char = col-1 -- col 是 '(' 的位置, func call() 是 '(' 前面的一个位置.
+      local func_call_last_char = col-1 -- VVI: col 是 '(' 的位置, func call() 是 '(' 前面的一个位置.
 
-      -- VVI: offset 中 \t 占4个字符位置, 而在 getpos() 和 node:start() 中只占1个字符.
-      -- strdisplaywidth() 会计算实际显示宽度, \t 会被计算在显示宽度之内.
-      -- argument_list 行 virtual column 位置.
+      --- VVI: offset 中 \t 占4个字符位置, 而在 getpos() 和 node:start() 中只占1个字符.
+      --- strdisplaywidth() 会计算实际显示宽度, \t 会被计算在显示宽度之内.
+      --- argument_list 行 virtual column 位置.
       local argDisplayCol = vim.fn.strdisplaywidth(string.sub(vim.fn.getline(row+1), 0, func_call_last_char))
-      -- cursor 行 virtual column 位置.
+      --- cursor 行 virtual column 位置.
       local curDisplayCol = vim.fn.strdisplaywidth(string.sub(vim.fn.getline(pos[2]), 0, pos[3]-1))
-      -- 计算 open_floating_preview() 横向偏移量
+      --- 计算 open_floating_preview() 横向偏移量
       local offsetX = argDisplayCol - curDisplayCol
 
-      -- char - '(' 前的一个位置.
-      -- offsetX - float_window 距离 cursor 的位置偏移.
-      -- offsetY - 同上, 由于 getpos() 返回的 lnum 是从 1 开始, 而 node:start() 返回的 row 是从 0 开始,
-      --           所以 offsetY 的结果需要 +1.
+      --- VVI:
+      --- char    - '(' arguments start() 的前一个位置.
+      --- offsetX - float_window 距离 cursor 的位置偏移.
+      --- offsetY - 同上, 由于 getpos() 返回的 lnum 是从 1 开始, 而 node:start() 返回的 row 是从 0 开始,
+      ---           所以 offsetY 的结果需要 +1.
       return {line=row, char=func_call_last_char, offsetX=offsetX, offsetY=row-pos[2]+1}
     end
 
@@ -155,7 +157,7 @@ end
 function HoverShort()
   local result = findFuncCallBeforeCursor()
 
-  -- 如果 cursor 不在 'arguments' 内则返回.
+  -- 如果 cursor 不在 'arguments' 内则结束.
   if not result then
     return
   end
