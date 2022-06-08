@@ -48,6 +48,8 @@ return {
 }
 ```
 
+<br />
+
 # LSP 插件关系
 
 ## lspconfig 官方插件
@@ -63,11 +65,39 @@ lspconfig.{lsp_server}.setup({
 })
 ```
 
-## cmp-nvim-lsp 是 nvim-cmp 的代码 completion 插件.
+### lspconfig 依赖
 
-"hrsh7th/nvim-cmp"
+"hrsh7th/cmp-nvim-lsp" 是 "hrsh7th/nvim-cmp" 的代码补全 (completion) 插件.
 
-"hrsh7th/cmp-nvim-lsp"
+cmp-nvim-lsp 向 nvim-cmp 提供 lsp 返回的代码补全 completion 内容.
+
+<br />
+
+## lsp-installer
+
+lsp-installer 是一个 lsp server 安装插件, 和 lspconfig 没有依赖关系.
+
+主要作用是可以很方便的管理 lsp server tools, 例如: gopls, tsserver, pyright ...
+
+功能:
+
+- 指定安装位置
+- 安装
+- 卸载
+- 更新
+
+<br />
+
+## null-ls
+
+null-ls 是一个 lsp client 接口, 将 LSP protocal 中的 diagnostic, format, code_action ... 等请求翻译成各种 linter,
+formatter 工具的命令并执行, 然后获取返回信息.
+
+简单来说是把 golangci, eslint ... 等工具变成了一个 lsp server, 通过 lsp protocal 的标准请求翻译成这些工具的命令.
+
+null-ls 和 lspconfig 是独立的两个 lsp client, 不存在依赖关系. 可以通过 `:LspInfo` 查看到两个 lsp client.
+
+<br />
 
 
 
