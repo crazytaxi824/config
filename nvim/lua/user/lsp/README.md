@@ -1,7 +1,6 @@
 # project local LSP settings
 
-设置文件地址
-`proj_root/.nvim/settings.lua`
+设置文件地址 `proj_root/.nvim/settings.lua`
 
 ```lua
 -- 以下所有设置都可以缺省, 只用设置需要覆盖 default setting 的项.
@@ -48,3 +47,57 @@ return {
   },
 }
 ```
+
+<br />
+
+# LSP 插件关系
+
+## lspconfig 官方插件
+
+"neovim/nvim-lspconfig"
+
+主要作用:
+```lua
+lspconfig.{lsp_server}.setup({
+  on_init = function(lsp_client)  -- 在 lsp 启动的时候执行.
+  on_attach = function(lsp_client, bufnr)  -- 在 lsp client 成功 attach 到 buffer 的时候执行.
+  capabilities = cmp_nvim_lsp.update_capabilities()  -- 将 lsp completion 返回给 cmp-nvim-lsp.
+})
+```
+
+### lspconfig 依赖
+
+"hrsh7th/cmp-nvim-lsp" 是 "hrsh7th/nvim-cmp" 的代码补全 (completion) 插件.
+
+cmp-nvim-lsp 向 nvim-cmp 提供 lsp 返回的代码补全 completion 内容.
+
+<br />
+
+## lsp-installer
+
+lsp-installer 是一个 lsp server 安装插件, 和 lspconfig 没有依赖关系.
+
+主要作用是可以很方便的管理 lsp server tools, 例如: gopls, tsserver, pyright ...
+
+功能:
+
+- 指定安装位置
+- 安装
+- 卸载
+- 更新
+
+<br />
+
+## null-ls
+
+null-ls 是一个 lsp client 接口, 将 LSP protocal 中的 diagnostic, format, code_action ... 等请求翻译成各种 linter,
+formatter 工具的命令并执行, 然后获取返回信息.
+
+简单来说是把 golangci, eslint ... 等工具变成了一个 lsp server, 通过 lsp protocal 的标准请求翻译成这些工具的命令.
+
+null-ls 和 lspconfig 是独立的两个 lsp client, 不存在依赖关系. 可以通过 `:LspInfo` 查看到两个 lsp client.
+
+<br />
+
+
+
