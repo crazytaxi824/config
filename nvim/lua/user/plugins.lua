@@ -88,7 +88,7 @@ packer.init {
     open_fn = function()
       --- Packer 面板 border 样式.
       --- return require("packer.util").float { border = "single" }  -- `:help nvim_open_win()`
-      return require("packer.util").float { border = {"▄","▄","▄","█","▀","▀","▀","█"} }  -- `:help nvim_open_win()`
+      return require("packer.util").float({ border = {"▄","▄","▄","█","▀","▀","▀","█"} })  -- `:help nvim_open_win()`
     end,
   },
 }

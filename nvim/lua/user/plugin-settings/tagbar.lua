@@ -3,7 +3,7 @@ vim.g.tagbar_sort = 0             -- tagbar 按照函数顺序排序, 使用 's'
 vim.g.tagbar_autoclose = 1        -- enter 选择后自动关闭 tagbar
 vim.g.tagbar_show_tag_count = 1   -- 显示 tag 数量, eg; functions (5)
 vim.g.tagbar_autoshowtag = 2      -- 打开 tagbar 时, 不要打开 folded tag, 例如: imports
-vim.g.tagbar_position = "vertical botright"         -- tagbar 打开位置.
+vim.g.tagbar_position = "vertical botright"        -- tagbar 打开位置.
 --vim.g.tagbar_width = max([25, winwidth(0) / 5])  -- tagbar 窗口大小, 默认40
 
 --- VVI: 注意这里不要改, 会影响 TagbarHightligh 显示.

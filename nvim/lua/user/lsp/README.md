@@ -1,7 +1,6 @@
 # project local LSP settings
 
-设置文件地址
-`proj_root/.nvim/settings.lua`
+设置文件地址 `proj_root/.nvim/settings.lua`
 
 ```lua
 -- 以下所有设置都可以缺省, 只用设置需要覆盖 default setting 的项.
