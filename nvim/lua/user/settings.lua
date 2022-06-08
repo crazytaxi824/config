@@ -149,7 +149,7 @@ vim.opt.hidden = true      -- NOTE: When off a buffer is unloaded when it is aba
 vim.opt.splitbelow = true  -- force all horizontal splits to go below current window
 vim.opt.splitright = true  -- force all vertical splits to go to the right of current window
 vim.opt.scrolloff = 2      -- 没有到达文件顶部/底部时, 光标留空 n 行. 同时会影响 H / L 键行为.
-vim.opt.sidescrolloff = 16 -- 超长行横向留空 n 列.
+vim.opt.sidescrolloff = 16 -- 和上面类似, 横向留空 n 列.
 
 -- search 设置，命令 `/` `?`
 vim.opt.incsearch = true   -- 开始实时搜索

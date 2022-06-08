@@ -26,6 +26,17 @@ configs.setup {
     disable = { "yaml" },  -- 不要自动给 yaml 进行 indent.
   },
 
+  --- 作用不大.
+  --incremental_selection = {
+  --  enable = true,
+  --  keymaps = {
+  --    init_selection = "gnn",
+  --    node_incremental = "grn",
+  --    scope_incremental = "grc",
+  --    node_decremental = "grm",
+  --  },
+  --},
+
   --- 启用第三方插件 modules 设置 ------------------------------------------------------------------
   --- "JoosepAlviste/nvim-ts-context-commentstring"
   context_commentstring = {
