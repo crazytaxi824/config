@@ -103,9 +103,9 @@
 -------------------------------------+----------------------------------+------------------------------------
 -- `:LspInstallInfo`                 | 所有 LSP 列表. 快捷键 - i, u, X  | "williamboman/nvim-lsp-installer"
 -------------------------------------+----------------------------------+------------------------------------
--- `:TSInstallInfo`, `:TSUpdate`     | tree-sitter 安装列表.            | "nvim-treesitter/nvim-treesitter"
+-- `:TSInstallInfo`, `:TSUpdate`     | treesitter 安装列表.             | "nvim-treesitter/nvim-treesitter"
 -------------------------------------+----------------------------------+------------------------------------
--- `:TSHighlightCapturesUnderCursor` | 查看当前 word tree-sitter 颜色.  | "nvim-treesitter/playground"
+-- `:TSHighlightCapturesUnderCursor` | 查看当前 word treesitter 颜色.   | "nvim-treesitter/playground"
 -------------------------------------+----------------------------------+------------------------------------
 -- `:Notifications`                  | 查看 notify msg 列表             | "rcarriga/nvim-notify"
 -------------------------------------+----------------------------------+------------------------------------
@@ -127,7 +127,7 @@ require "user.plugins"  -- packer 加载 plugin
 require "user.colors"  -- vim highlight 设置
 
 --- TODO -------------------------------------------------------------------------------------------
--- global var & function start with '__Fn()'
+-- global Var & Function start with '__Fn()'
 
-
+-- [[ jump to function first line or previous function first line, using treesitter.
 

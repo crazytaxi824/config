@@ -5,9 +5,9 @@ if not status_ok then
 end
 
 npairs.setup {
-  check_ts = true,  -- check tree-sitter
-  ts_config = {     -- tree-sitter 排除规则
-    -- NOTES: tree-sitter node 可以通过 `:TSPlaygroundToggle` 查看.
+  check_ts = true,  -- check treesitter
+  ts_config = {     -- treesitter 排除规则
+    -- NOTES: treesitter node 可以通过 `:TSPlaygroundToggle` 查看.
     lua = { "string", "source" },  -- it will not add a pair on that treesitter node,
     javascript = { "string", "template_string" },
     java = false,  -- don't check treesitter on java, 使用 autopairs 默认设置.

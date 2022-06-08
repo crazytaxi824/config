@@ -17,7 +17,7 @@ configs.setup {
     disable = { "" },  -- list of language that will be disabled
 
     --- NOTE: 同时使用 vim 自带 syntax,
-    --- 使得 vim syntax 和 tree-sitter 的颜色效果(underine, bold...)同时生效.
+    --- 使得 vim syntax 和 treesitter 的颜色效果(underine, bold...)同时生效.
     additional_vim_regex_highlighting = false,
   },
 
