@@ -86,7 +86,7 @@ function Notify(msg, lvl, opt)
   end
 end
 
---- 使用 `$ which` 查看插件所需 tools 是否存在 ---------------------------------------------------------
+--- 使用 `$ which` 查看插件所需 tools 是否存在 -----------------------------------------------------
 function Check_Cmd_Tools(tools)
   local result = {"These Tools should be in the $PATH"}
   local count = 0
@@ -103,7 +103,31 @@ function Check_Cmd_Tools(tools)
   end
 end
 
---- TEST: test functions ---
+--- 获取 cursor treesitter node --------------------------------------------------------------------
+function TS_Get_Cursor_Node()
+  local ts_status, ts_utils = pcall(require, "nvim-treesitter.ts_utils")
+  if not ts_status then
+    Notify("treesitter is not loaded.", "WARN", {title={"findFuncCallBeforeCursor()","handlers.lua"}})
+    return nil
+  end
+
+  local node = ts_utils.get_node_at_cursor()
+  print("cursor node:", node:type(), node:start())
+  local parent = node:parent()
+  if parent then
+    print("parent node:", parent:type(), parent:start())
+  end
+  local prev = ts_utils.get_previous_node(node)
+  if prev then
+    print("prev node:", prev:type(), prev:start())
+  end
+  local next = ts_utils.get_next_node(node)
+  if next then
+    print("next node:", next:type(), next:start())
+  end
+end
+
+--- TEST: test functions ---------------------------------------------------------------------------
 
 
 

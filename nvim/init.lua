@@ -129,5 +129,5 @@ require "user.colors"  -- vim highlight 设置
 --- TODO -------------------------------------------------------------------------------------------
 -- global Var & Function start with '__Fn()'
 
--- [[ jump to function first line or previous function first line, using treesitter.
+
 
