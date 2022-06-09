@@ -124,6 +124,8 @@ return packer.startup(function(use)
   --- `:TSUpdate`             -- Update the installed languages
   -- -- }}}
   use {"nvim-treesitter/nvim-treesitter",
+    run = ":TSUpdate",   -- Post-update/install hook.
+    config = function() require("user.plugin-settings.treesitter") end,
     requires = {
       --- NOTE: 以下都是 treesitter modules 插件, 在 setup() 中启用的插件.
       --- 第一方 module 插件 ---
@@ -142,28 +144,27 @@ return packer.startup(function(use)
       {"windwp/nvim-ts-autotag"}, -- auto close tag <div></div>
       {"p00f/nvim-ts-rainbow"},   -- 括号颜色. treesitter 解析
     },
-    run = ":TSUpdate",   -- Post-update/install hook.
-    config = function() require("user.plugin-settings.treesitter") end,
   }
 
   --- 以下是使用了 treesitter 功能的插件. (这些插件也可以不使用 treesitter 的功能)
   --- 注释
   use {"numToStr/Comment.nvim",
+    config = function() require("user.plugin-settings.comment") end,
     requires = {
       "JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
       "nvim-treesitter/nvim-treesitter",
     },
-    config = function() require("user.plugin-settings.comment") end
   }
 
   --- identline
   use {"lukas-reineke/indent-blankline.nvim",
+    config = function() require("user.plugin-settings.indentline") end,
     requires = "nvim-treesitter/nvim-treesitter",  -- 设置 vim.g.indent_blankline_use_treesitter = "v:true"
-    config = function() require("user.plugin-settings.indentline") end
   }
 
   --- Completion -----------------------------------------------------------------------------------
   use {"hrsh7th/nvim-cmp",
+    config = function() require("user.plugin-settings.cmp") end,
     --- NOTE: 以下是 nvim-cmp module 插件, 在 setup() 中启用的插件.
     requires = {
       "hrsh7th/cmp-nvim-lsp",      -- LSP source for nvim-cmp
@@ -172,23 +173,22 @@ return packer.startup(function(use)
       {"saadparwaiz1/cmp_luasnip", -- Snippets source for nvim-cmp
         requires = {
           {"L3MON4D3/LuaSnip",     -- snippet engine, for "cmp_luasnip"
+            config = function() require("user.plugin-settings.luasnip") end,
             requires = "rafamadriz/friendly-snippets",  -- snippets content, 自定义 snippets 可以借鉴这个结构.
-            config = function() require("user.plugin-settings.luasnip") end
           },
         },
       },
       --"hrsh7th/cmp-cmdline",     -- cmdline completions, 不好用.
     },
-    config = function() require("user.plugin-settings.cmp") end
   }
 
   --- 自动括号, 同时依赖 treesitter && cmp
   use {"windwp/nvim-autopairs",
+    config = function() require("user.plugin-settings.autopairs") end,
     requires = {
       "nvim-treesitter/nvim-treesitter",  -- setup() 中 `check_ts`, `ts_config` 需要 treesitter 支持.
       "hrsh7th/nvim-cmp",  -- cmp.event:on() 设置.
     },
-    config = function() require("user.plugin-settings.autopairs") end
   }
 
   --- LSP ------------------------------------------------------------------------------------------
@@ -198,17 +198,17 @@ return packer.startup(function(use)
   if proj_settings_status_ok then
     --- 官方 LSP 引擎.
     use {"neovim/nvim-lspconfig",
+      config = function() require("user.lsp.lspconfig") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
       requires = {
         "williamboman/nvim-lsp-installer", -- 简单安装 lsp server 的插件. NOTE: 和 lspconfig 并非依赖关系, 只是放在一起方便 setup()
         "hrsh7th/cmp-nvim-lsp",  -- provide content to nvim-cmp Completion. cmp_nvim_lsp.update_capabilities(capabilities)
       },
-      config = function() require("user.lsp.lspconfig") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     }
 
     --- null-ls 插件 formatters && linters, depends on "nvim-lua/plenary.nvim"
     use {"jose-elias-alvarez/null-ls.nvim",
-      requires = "nvim-lua/plenary.nvim",
       config = function() require("user.lsp.null-ls") end,
+      requires = "nvim-lua/plenary.nvim",
     }
 
     --- 加载其他 LSP 相关自定义设置
@@ -224,8 +224,8 @@ return packer.startup(function(use)
   --- Buffer & Status Line -------------------------------------------------------------------------
   --- vim-fugitive: airline 中显示 git 状态
   use {"vim-airline/vim-airline",
+    config = function() require("user.plugin-settings.airline") end,
     requires = "tpope/vim-fugitive",
-    config = function() require("user.plugin-settings.airline") end
   }
   --- TODO 以下插件可以替代 airline --- {{{
   --use "akinsho/bufferline.nvim"     -- top buffer list
@@ -241,13 +241,14 @@ return packer.startup(function(use)
   use {"puremourning/vimspector",
     config = function() require("user.plugin-settings.vimspector") end
   }
-  --use "mfussenegger/nvim-dap"      -- lua debug tool
+  --use "mfussenegger/nvim-dap"   -- lua debug tool
+  --use "Pocco81/dap-buddy.nvim"  -- "nvim-dap" management tool
 
   --- Useful Tools ---------------------------------------------------------------------------------
   --- fzf rg fd, preview 使用的是 treesitter, 而不用 bat
   use {"nvim-telescope/telescope.nvim",
+    config = function() require("user.plugin-settings.telescope") end,
     requires = "nvim-lua/plenary.nvim",
-    config = function() require("user.plugin-settings.telescope") end
   }
 
   --- terminal
