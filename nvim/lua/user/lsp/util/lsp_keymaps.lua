@@ -1,6 +1,9 @@
 --- LSP buffer 专用 keymaps.
 --- NOTE: 只在有 LSP 的时候生效. 针对 buffer 设置 keymap.
 --- 主要用在: null-ls.setup() on_attach 和 lspconfig.setup() on_attach 设置中. 当有 client 可以 attach 的时候设置 keymap.
+--- null-ls 和 lspconfig 都会用到该 keymaps 设置.
+--     lspconfig 会用到 textDocument_keymaps() & diagnostic_keymaps()
+--     null-ls   只用到 diagnostic_keymaps()
 
 local M = {}  -- module, 仅提供两个 keymaps 方法.
 
@@ -43,12 +46,13 @@ M.diagnostic_keymaps = function(bufnr)
   --- code action
   vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
 
-  --- set key description manually ---
+  --- which-key ---
   local status_ok, which_key = pcall(require, "which-key")
   if not status_ok then
     return
   end
 
+  --- set key description manually ---
   which_key.register({
     c = {
       name = "Code",

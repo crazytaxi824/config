@@ -232,34 +232,7 @@ which_key.register({
   f = {name = "Telescope Find"},
 },{mode='n',prefix='<leader>'})
 
---- NOTE: 以上是全局 keymap 设置, 下面是 local to buffer 的设置 ------------------------------------
-
---- setup Vimspector keymap ------------------------------------------------------------------------
---- NOTE: 这里把 vimspector 单独拿出来是因为 Vimspector keymap 设置不是全局的.
----       而且 Vimspector 自己本身是 optional 加载.
-function _Vimspector_keymaps()
-  local vimspector_keymaps = {
-    {'n', '<leader>cs', '<cmd>call vimspector#Continue()<CR>', opt, 'Debug - Start(Continue)'},
-    {'n', '<leader>ce', '<cmd>call vimspector#Stop()<CR>', opt, 'Debug - Stop(End)'},
-    {'n', '<leader>cr', '<cmd>call vimspector#Restart()<CR>', opt, 'Debug - Restart'},
-    {'n', '<leader>cq', '<cmd>call vimspector#Reset()<CR>', opt, 'Debug - Quit'},
-    {'n', '<leader>cc', '<Plug>VimspectorBalloonEval', opt, 'Debug - Popup Value under cursor'},
-    {'n', '<F9>',  '<cmd>call vimspector#ToggleBreakpoint()<CR>', opt, 'Debug - Toggle Breakpoint'},
-    {'n', '<F10>', '<cmd>call vimspector#StepOver()<CR>', opt, 'Debug - Step Over'},
-    {'n', '<F11>', '<cmd>call vimspector#StepInto()<CR>', opt, 'Debug - Step Into'},
-    {'n', '<F23>', '<cmd>call vimspector#StepOut()<CR>', opt, 'Debug - Step Out'},  -- <S-F11>
-  }
-
-  for _, kv in ipairs(vimspector_keymaps) do
-    vim.api.nvim_buf_set_keymap(0, kv[1], kv[2], kv[3], kv[4])  -- NOTE: 针对 buffer 设置 keymap.
-  end
-
-  --- set key description manually ---
-  which_key.register({
-    ['<F9>'] = "Debug - Toggle Breakpoint",
-    ['<F10>'] = "Debug - Step Over",
-    ['<F11>'] = "Debug - Step Into",
-    ['<S-F11>'] = "Debug - Step Out",
-  },{mode='n', prefix='<leader>c', buffer=0})  -- NOTE: 针对 buffer 有效.
-end
+----------------------------------------------------------------------------------------------------
+--- NOTE: 以上是全局 keymap 设置 ---
+----------------------------------------------------------------------------------------------------
 
