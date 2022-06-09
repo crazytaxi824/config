@@ -27,6 +27,12 @@
 ---    - 加载 ~/.config/nvim/lua/user/options.lua 单个文件, require "user.options" OR require "user/options" 省略 .lua
 ---    - 加载 ~/.config/nvim/lua/user/lsp/ 文件夹. VVI: 首先 lsp 文件夹中必须有 init.lua 文件,
 ---           然后使用 require "user/lsp" 直接加载整个 lsp 文件夹.
+--
+--- VVI: `_G` 全局变量/函数
+--    nvim 中有一个 `_G` 全局变量. 自定义的所有全局变量和函数都会被放在 _G 内.
+--    例如:
+--      自定义了 __Proj_local_settings 变量, 则可以使用 __Proj_local_settings 或者 _G.__Proj_local_settings 访问.
+--      自定义全局函数 Notify(xxx), 则可以使用 Notify(), 或者 _G.Notify() 调用函数.
 
 --- NOTE: 常用函数
 --    pcall(vim.cmd, "normal! n")         获取 command 返回信息
@@ -112,12 +118,20 @@
 -- `:NullLsLog`                      | 查看 null-ls debug log           | "jose-elias-alvarez/null-ls.nvim"
 -- `:NullLsInfo`                     | 查看 null-ls 加载信息            |
 -------------------------------------+----------------------------------+------------------------------------
+-- `:LuaCacheProfile`                | 查看文件加载时间                 | "lewis6991/impatient.nvim" 需要 enable_profile()
+-- `:LuaCacheClear`                  | 清空缓存文件, 下次启动重新生成   |    清空 luacache_chunks, luacache_modpaths
+-------------------------------------+----------------------------------+------------------------------------
+
+--- VVI: 在最开始加载 "lewis6991/impatient.nvim" 设置,
+--- Speed up loading Lua modules in Neovim to improve startup time.
+require "user.plugin-settings.impatient"
 
 --- 读取设置: ~/.config/nvim/lua/user/xxx.lua
 require "user.util"      -- [必要], 自定义函数, 很多设置用到的常用函数.
 require "user.settings"  -- vimrc 设置
 require "user.keymaps"   -- keymap 设置
 require "user.fold"      -- 代码折叠设置, NOTE: treesitter experimental function.
+require "user.custom_commands"  -- 自定义命令
 --require "user.terminal"  -- 自定义 terminal, 需要时可替代 toggle terminal.
 
 --- 加载 plugins ---
@@ -127,7 +141,8 @@ require "user.plugins"  -- packer 加载 plugin
 require "user.colors"  -- vim highlight 设置
 
 --- TODO -------------------------------------------------------------------------------------------
--- global Var & Function start with '__Fn()'
+--- optimise startup speed
+-- vimspector deleted, after/ftplugin/go debug needs to change
 
 
 

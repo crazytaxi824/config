@@ -42,6 +42,19 @@ M.diagnostic_keymaps = function(bufnr)
 
   --- code action
   vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
+
+  --- set key description manually ---
+  local status_ok, which_key = pcall(require, "which-key")
+  if not status_ok then
+    return
+  end
+
+  which_key.register({
+    c = {
+      name = "Code",
+      a = "LSP - Code Action",
+    }
+  },{mode='n',prefix='<leader>', buffer=bufnr})
 end
 
 return M

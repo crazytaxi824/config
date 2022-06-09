@@ -4,39 +4,37 @@
 --    adapter 定义在 lua/user/plugin-settings/vimspector.lua -> vim.g.vimspector_adapters
 --    config  定义在 lua/user/plugin-settings/vimspector.lua -> vim.g.vimspector_configurations
 
---- NOTE: 判断 vimspector 是否启动, 类似 pcall(). 因为 vimspector 是一个 vim 插件, 所以这里通过全局变量判断.
-if vim.g.vimspector_adapters and vim.g.vimspector_configurations then
-  local function debug()
-    if string.match(vim.fn.expand('%'), ".*_test%.go$") then
-      --- Debug Test file
-      --- NOTE: debug_go_test 定义在 lua/user/plugin-settings/vimspector.lua -> vim.g.vimspector_configurations
-      vim.cmd(':call vimspector#LaunchWithSettings({"configuration": "debug_go_test"})')
-    else
-      --- 判断是否在 main package
-      --- 获取文件夹路径.
-      local dir = vim.fn.expand('%:h')
+local function debug()
+  if string.match(vim.fn.expand('%'), ".*_test%.go$") then
+    --- Debug Test file
+    --- NOTE: debug_go_test 定义在 lua/user/plugin-settings/vimspector.lua -> vim.g.vimspector_configurations
+    vim.cmd(':call vimspector#LaunchWithSettings({"configuration": "debug_go_test"})')
+  else
+    --- 判断是否在 main package
+    --- 获取文件夹路径.
+    local dir = vim.fn.expand('%:h')
 
-      --- 获取 package name, `cd src/xxx && go list -f '{{.Name}}'`
-      local pkg_name = string.match(vim.fn.system("cd " .. dir .. " && go list -f '{{.Name}}'"), "[%S ]*")
-      if vim.v.shell_error ~= 0 then
-        Notify(pkg_name,"ERROR",{title={"debug()","debug_vimspector.lua"}})
-        return
-      end
-
-      --- 如果不在 main package, 不运行 Debug
-      if pkg_name ~= 'main' then
-        Notify('file is not in "main" package',"WARN",{title={"debug()","debug_vimspector.lua"}})
-        return
-      end
-
-      --- Debug Main
-      --- NOTE: debug_go 定义在 lua/user/plugin-settings/vimspector.lua -> vim.g.vimspector_configurations
-      vim.cmd(':call vimspector#LaunchWithSettings({"configuration": "debug_go"})')
+    --- 获取 package name, `cd src/xxx && go list -f '{{.Name}}'`
+    local pkg_name = string.match(vim.fn.system("cd " .. dir .. " && go list -f '{{.Name}}'"), "[%S ]*")
+    if vim.v.shell_error ~= 0 then
+      Notify(pkg_name,"ERROR",{title={"debug()","debug_vimspector.lua"}})
+      return
     end
-  end
 
-  vim.api.nvim_buf_create_user_command(0, 'Debug', debug, {})
+    --- 如果不在 main package, 不运行 Debug
+    if pkg_name ~= 'main' then
+      Notify('file is not in "main" package',"WARN",{title={"debug()","debug_vimspector.lua"}})
+      return
+    end
+
+    --- Debug Main
+    --- NOTE: debug_go 定义在 lua/user/plugin-settings/vimspector.lua -> vim.g.vimspector_configurations
+    vim.cmd(':call vimspector#LaunchWithSettings({"configuration": "debug_go"})')
+  end
 end
 
+--- Debug command
+vim.api.nvim_buf_create_user_command(0, 'Debug', debug, {})
 
-
+--- Debug keymapping -------------------------------------------------------------------------------
+_Debug_keymaps() -- 针对 go buffer 设置 keymap. 设置在 'lua/user/keymaps.lua'
