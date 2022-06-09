@@ -141,8 +141,7 @@ require "user.plugins"  -- packer 加载 plugin
 require "user.colors"  -- vim highlight 设置
 
 --- TODO -------------------------------------------------------------------------------------------
---- optimise startup speed
--- vimspector deleted, after/ftplugin/go debug needs to change
 
+-- seperate Keymap plugin settings.
 
 

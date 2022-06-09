@@ -37,4 +37,4 @@ end
 vim.api.nvim_buf_create_user_command(0, 'Debug', debug, {})
 
 --- Debug keymapping -------------------------------------------------------------------------------
-_Debug_keymaps() -- 针对 go buffer 设置 keymap. 设置在 'lua/user/keymaps.lua'
+_Vimspector_keymaps() -- 针对 go buffer 设置 keymap. 设置在 'lua/user/keymaps.lua'

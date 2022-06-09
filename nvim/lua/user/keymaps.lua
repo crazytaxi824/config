@@ -210,7 +210,6 @@ for _, kv in ipairs(keymaps) do
   vim.keymap.set(kv[1], kv[2], kv[3], kv[4])
 end
 
-
 --- which-key --------------------------------------------------------------------------------------
 --- https://github.com/folke/which-key.nvim#%EF%B8%8F-mappings
 local status_ok, which_key = pcall(require, "which-key")
@@ -233,8 +232,12 @@ which_key.register({
   f = {name = "Telescope Find"},
 },{mode='n',prefix='<leader>'})
 
+--- NOTE: 以上是全局 keymap 设置, 下面是 local to buffer 的设置 ------------------------------------
+
 --- setup Vimspector keymap ------------------------------------------------------------------------
-function _Debug_keymaps()
+--- NOTE: 这里把 vimspector 单独拿出来是因为 Vimspector keymap 设置不是全局的.
+---       而且 Vimspector 自己本身是 optional 加载.
+function _Vimspector_keymaps()
   local vimspector_keymaps = {
     {'n', '<leader>cs', '<cmd>call vimspector#Continue()<CR>', opt, 'Debug - Start(Continue)'},
     {'n', '<leader>ce', '<cmd>call vimspector#Stop()<CR>', opt, 'Debug - Stop(End)'},
@@ -253,7 +256,6 @@ function _Debug_keymaps()
 
   --- set key description manually ---
   which_key.register({
-    --- Vimspector ---
     ['<F9>'] = "Debug - Toggle Breakpoint",
     ['<F10>'] = "Debug - Step Over",
     ['<F11>'] = "Debug - Step Into",
