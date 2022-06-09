@@ -104,9 +104,7 @@ return packer.startup(function(use)
   --- Performence & Functions ----------------------------------------------------------------------
   --- 加快 lua module 加载时间, 生成 ~/.cache/nvim/luacache_chunks & luacache_modpaths
   --- VVI: impatient needs to be setup before any other lua plugin is loaded.
-  use {"lewis6991/impatient.nvim",
-    config = function() require('impatient').enable_profile() end,
-  }
+  use "lewis6991/impatient.nvim"  -- NOTE: 这里只是安装, 设置在 init.lua 中. impatient 不是通过 setup() 设置.
 
   --- Useful lua functions used by lots of plugins
   use "nvim-lua/plenary.nvim"

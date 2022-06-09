@@ -112,6 +112,13 @@
 -- `:NullLsLog`                      | 查看 null-ls debug log           | "jose-elias-alvarez/null-ls.nvim"
 -- `:NullLsInfo`                     | 查看 null-ls 加载信息            |
 -------------------------------------+----------------------------------+------------------------------------
+-- `:LuaCacheProfile`                | 查看文件加载时间,                | "lewis6991/impatient.nvim"
+--                                   | 需要 enable_profile()            |
+-------------------------------------+----------------------------------+------------------------------------
+
+--- 在最开始加载 "lewis6991/impatient.nvim" 设置
+--- Speed up loading Lua modules in Neovim to improve startup time.
+require "user.plugin-settings.impatient"
 
 --- 读取设置: ~/.config/nvim/lua/user/xxx.lua
 require "user.util"      -- [必要], 自定义函数, 很多设置用到的常用函数.
@@ -128,6 +135,7 @@ require "user.colors"  -- vim highlight 设置
 
 --- TODO -------------------------------------------------------------------------------------------
 -- global Var & Function start with '__Fn()'
+
 
 
 
