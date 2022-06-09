@@ -1,3 +1,6 @@
+----------------------------------------------------------------------------------------------------
+--- NOTE: 全局 keymap 设置
+----------------------------------------------------------------------------------------------------
 --- Readme ----------------------------------------------------------------------------------------- {{{
 -- vim.keymap.set() & vim.keymap.del()
 -- vim.api.nvim_set_keymap() & vim.api.nvim_del_keymap()
@@ -42,15 +45,13 @@ end
 -- vim.keymap.set() - option `:help :map-arguments`
 -- noremap = { noremap = true },
 -- nowait = { nowait = true },
--- slient = { silent = true },
+-- silent = { silent = true },
 -- buffer = { buffer = true },  -- buffer 有效
 -- script = { script = true },
 -- expr = { expr = true },
 local opt = { noremap = true, silent = true }
-local opt_silent = { silent = true }
 
---- return keymap settings
---- { mode, key, remapkey, opt, description }  - description for 'which-key'
+--- NOTE: { mode, key, remap, opt, description }  - description for 'which-key'
 local keymaps = {
   --- common use -----------------------------------------------------------------------------------
   {'v', '<leader>y', '"*y', opt, 'Copy to system clipboard'},
@@ -105,7 +106,7 @@ local keymaps = {
   -- ':echo v:hlsearch' 显示目前 hlsearch 状态.
   --{'n', '?', 'v:hlsearch ? ":nohlsearch<CR>" : "?"', {noremap=true, expr=true}},  -- 三元表达式
   --{'n', '/', 'v:hlsearch ? ":nohlsearch<CR>" : "/"', {noremap=true, expr=true}},
-  {'n', '?', ":nohlsearch<CR>?", {noremap=true}},  -- 三元表达式
+  {'n', '?', ":nohlsearch<CR>?", {noremap=true}},
   {'n', '/', ":nohlsearch<CR>/", {noremap=true}},
 
   --- CTRL -----------------------------------------------------------------------------------------
@@ -163,101 +164,18 @@ local keymaps = {
   {'v', '<leader>>', '<C-c>`>a><C-c>`<i<<C-c>v`><right><right>', opt, 'which_key_ignore'},
   {'v', '<leader><lt>', '<C-c>`>a><C-c>`<lt>i<lt><C-c>v`><right><right>', opt, 'which_key_ignore'},  -- '<' 使用 <lt> 代替.
 
-  --- plugins --------------------------------------------------------------------------------------
-  -- nvim-tree -------------------------
-  {'n', '<leader>,', ':NvimTreeToggle<CR>', opt_silent},  -- NOTE: 没有设置 description, 直接使用 binding 字符
-
-  -- tagbar ----------------------------
-  {'n', '<leader>.', ':TagbarToggle<CR>', opt_silent},
-
-  -- comment ---------------------------
-  {'n', '<leader>\\', '<Plug>(comment_toggle_current_linewise)', opt_silent, 'comment'},
-  {'v', '<leader>\\', '<Plug>(comment_toggle_linewise_visual)', opt_silent, 'comment'},
-
-  -- airline ---------------------------
-  {'n', '<leader>1', '<Plug>AirlineSelectTab1', opt_silent, 'which_key_ignore'},
-  {'n', '<leader>2', '<Plug>AirlineSelectTab2', opt_silent, 'which_key_ignore'},
-  {'n', '<leader>3', '<Plug>AirlineSelectTab3', opt_silent, 'which_key_ignore'},
-  {'n', '<leader>4', '<Plug>AirlineSelectTab4', opt_silent, 'which_key_ignore'},
-  {'n', '<leader>5', '<Plug>AirlineSelectTab5', opt_silent, 'which_key_ignore'},
-  {'n', '<leader>6', '<Plug>AirlineSelectTab6', opt_silent, 'which_key_ignore'},
-  {'n', '<leader>7', '<Plug>AirlineSelectTab7', opt_silent, 'which_key_ignore'},
-  {'n', '<leader>8', '<Plug>AirlineSelectTab8', opt_silent, 'which_key_ignore'},
-  {'n', '<leader>9', '<Plug>AirlineSelectTab9', opt_silent, 'which_key_ignore'},
-  {'n', '<leader>0', '<Plug>AirlineSelectTab0', opt_silent, 'which_key_ignore'},
-  {'n', '<lt>', '<Plug>AirlineSelectPrevTab'},
-  {'n', '>', '<Plug>AirlineSelectNextTab'},
-
-  -- 关闭 buffers
-  {'n', '<leader>d', ':execute "normal! \\<Plug>AirlineSelectNextTab" <bar> :bdelete #<CR>', opt_silent, 'Close This Buffer'},
+  --- NOTE: 最后一个 bwipeout 是用来删除 [No Name] buffer 的
   {'n', '<leader>D', ':%bdelete <bar> :edit # <bar> :bwipeout #<CR>', opt, 'Close All Other Buffers'},
-
-  --- telescope fzf --------------------
-  --- Picker functions, https://github.com/nvim-telescope/telescope.nvim#pickers
-  --- 使用 `:Telescope` 列出所有 Picker
-  {'n', '<leader>ff', "<cmd>lua require('telescope.builtin').find_files()<cr>", opt, 'Telescope - fd'},
-  {'n', '<leader>fg', "<cmd>lua require('telescope.builtin').live_grep()<cr>", opt, 'Telescope - rg'},
-  {'n', '<leader>fb', "<cmd>lua require('telescope.builtin').buffers()<cr>", opt, 'Telescope - Buffer List'},
-  {'n', '<leader>fh', "<cmd>lua require('telescope.builtin').help_tags()<cr>", opt, 'Telescope - Vim Help Doc'},
-  {'n', '<leader>fc', "<cmd>lua require('telescope.builtin').command_history()<cr>", opt, 'Telescope - Command History'},
-  {'n', '<leader>fs', "<cmd>lua require('telescope.builtin').search_history()<cr>", opt, 'Telescope - Search History'},
-  {'n', '<leader>fk', "<cmd>lua require('telescope.builtin').keymaps()<cr>", opt, 'Telescope - Keymap normal Mode'},
-  {'n', 'z=', "<cmd>lua require('telescope.builtin').spell_suggest()<cr>", opt, 'Telescope - Spell Suggests'},  -- NOTE: 也可以使用 which-key 显示
+  --{'n', '<leader>d', 'bdelete', opt, 'Close This Buffer'},  -- 使用 airline 的功能删除 buffer.
 }
 
 --- 这里是设置所有 key mapping 的地方 --------------------------------------------------------------
-for _, kv in ipairs(keymaps) do
-  vim.keymap.set(kv[1], kv[2], kv[3], kv[4])
-end
-
-
---- which-key --------------------------------------------------------------------------------------
---- https://github.com/folke/which-key.nvim#%EF%B8%8F-mappings
-local status_ok, which_key = pcall(require, "which-key")
-if not status_ok then
-  return
-end
-
---- https://github.com/folke/which-key.nvim#%EF%B8%8F-mappings
---- NOTE: which-key 只用作显示 key description,
----       如果 which-key 有 bug 也不会影响 key mapping 的功能.
-for _, keymap in ipairs(keymaps) do
-  if keymap[5] then
-    which_key.register({[keymap[2]] = keymap[5]},{mode = keymap[1]})
-  end
-end
-
---- set group name manually ---
-which_key.register({
-  k = {name = "Fold Method"},
-  f = {name = "Telescope Find"},
-},{mode='n',prefix='<leader>'})
-
---- setup Vimspector keymap ------------------------------------------------------------------------
-function _Debug_keymaps()
-  local vimspector_keymaps = {
-    {'n', '<leader>cs', '<cmd>call vimspector#Continue()<CR>', opt, 'Debug - Start(Continue)'},
-    {'n', '<leader>ce', '<cmd>call vimspector#Stop()<CR>', opt, 'Debug - Stop(End)'},
-    {'n', '<leader>cr', '<cmd>call vimspector#Restart()<CR>', opt, 'Debug - Restart'},
-    {'n', '<leader>cq', '<cmd>call vimspector#Reset()<CR>', opt, 'Debug - Quit'},
-    {'n', '<leader>cc', '<Plug>VimspectorBalloonEval', opt, 'Debug - Popup Value under cursor'},
-    {'n', '<F9>',  '<cmd>call vimspector#ToggleBreakpoint()<CR>', opt, 'Debug - Toggle Breakpoint'},
-    {'n', '<F10>', '<cmd>call vimspector#StepOver()<CR>', opt, 'Debug - Step Over'},
-    {'n', '<F11>', '<cmd>call vimspector#StepInto()<CR>', opt, 'Debug - Step Into'},
-    {'n', '<F23>', '<cmd>call vimspector#StepOut()<CR>', opt, 'Debug - Step Out'},  -- <S-F11>
+Keymap_list_set(keymaps,
+  {
+    key_desc = {k = {name = "Fold Method"}},
+    opts = {mode='n', prefix='<leader>'}
   }
+)
 
-  for _, kv in ipairs(vimspector_keymaps) do
-    vim.api.nvim_buf_set_keymap(0, kv[1], kv[2], kv[3], kv[4])  -- NOTE: 针对 buffer 设置 keymap.
-  end
 
-  --- set key description manually ---
-  which_key.register({
-    --- Vimspector ---
-    ['<F9>'] = "Debug - Toggle Breakpoint",
-    ['<F10>'] = "Debug - Step Over",
-    ['<F11>'] = "Debug - Step Into",
-    ['<S-F11>'] = "Debug - Step Out",
-  },{mode='n', prefix='<leader>c', buffer=0})  -- NOTE: 针对 buffer 有效.
-end
 

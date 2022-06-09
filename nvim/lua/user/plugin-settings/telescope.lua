@@ -124,3 +124,27 @@ telescope.setup {
 }
 
 
+--- keymaps ----------------------------------------------------------------------------------------
+local opt = { noremap = true, silent = true }
+local telescope_keymaps = {
+  --- Picker functions, https://github.com/nvim-telescope/telescope.nvim#pickers
+  --- 使用 `:Telescope` 列出所有 Picker
+  {'n', '<leader>ff', "<cmd>lua require('telescope.builtin').find_files()<cr>", opt, 'Telescope - fd'},
+  {'n', '<leader>fg', "<cmd>lua require('telescope.builtin').live_grep()<cr>", opt, 'Telescope - rg'},
+  {'n', '<leader>fb', "<cmd>lua require('telescope.builtin').buffers()<cr>", opt, 'Telescope - Buffer List'},
+  {'n', '<leader>fh', "<cmd>lua require('telescope.builtin').help_tags()<cr>", opt, 'Telescope - Vim Help Doc'},
+  {'n', '<leader>fc', "<cmd>lua require('telescope.builtin').command_history()<cr>", opt, 'Telescope - Command History'},
+  {'n', '<leader>fs', "<cmd>lua require('telescope.builtin').search_history()<cr>", opt, 'Telescope - Search History'},
+  {'n', '<leader>fk', "<cmd>lua require('telescope.builtin').keymaps()<cr>", opt, 'Telescope - Keymap normal Mode'},
+  {'n', 'z=', "<cmd>lua require('telescope.builtin').spell_suggest()<cr>", opt, 'Telescope - Spell Suggests'},  -- NOTE: 也可以使用 which-key 显示
+}
+
+Keymap_list_set(telescope_keymaps,
+  {
+    key_desc = {f = {name = "Telescope Find"}},
+    opts = {mode='n', prefix='<leader>'}
+  }
+)
+
+
+

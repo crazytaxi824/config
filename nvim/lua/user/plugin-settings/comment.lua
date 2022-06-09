@@ -1,5 +1,5 @@
-local status_ok, comment = pcall(require, "Comment")
-if not status_ok then
+local comment_status_ok, comment = pcall(require, "Comment")
+if not comment_status_ok then
   return
 end
 
@@ -36,5 +36,15 @@ comment.setup {
     extended = false,
   },
 }
+
+--- keymaps ----------------------------------------------------------------------------------------
+local opt = { noremap = true, silent = true }
+local comment_keymaps = {
+  {'n', '<leader>\\', '<Plug>(comment_toggle_current_linewise)', opt, 'Comment toggle'},
+  {'v', '<leader>\\', '<Plug>(comment_toggle_linewise_visual)',  opt, 'Comment toggle'},
+}
+
+Keymap_list_set(comment_keymaps)
+
 
 
