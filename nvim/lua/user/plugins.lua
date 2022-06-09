@@ -225,11 +225,11 @@ return packer.startup(function(use)
     config = function() require("user.plugin-settings.airline") end,
     requires = "tpope/vim-fugitive",
   }
-  --- TODO 以下插件可以替代 airline --- {{{
+  --- airline 替代插件 --- {{{
   --use "akinsho/bufferline.nvim"     -- top buffer list
   --use "nvim-lualine/lualine.nvim"   -- bottom status line
   --use "moll/vim-bbye"               -- better :Bdelete & :Bwipeout
-  -- }}}
+  -- -- }}}
 
   --- Debug tools 安装 -----------------------------------------------------------------------------
   --- VimspectorInstall! delve | :VimspectorUpdate!
@@ -241,14 +241,17 @@ return packer.startup(function(use)
     --- fn 中都是插件中以定义的 vimL function.
     fn = {"vimspector#LaunchWithSettings", "vimspector#Launch", "vimspector#Continue", "vimspector#ToggleBreakpoint"},
   }
+  --- Debug 替代插件, 目前不完善 --- {{{
   --use "mfussenegger/nvim-dap"   -- lua debug tool
   --use "Pocco81/dap-buddy.nvim"  -- "nvim-dap" management tool
+  -- -- }}}
 
   --- Useful Tools ---------------------------------------------------------------------------------
   --- fzf rg fd, preview 使用的是 treesitter, 而不用 bat
   use {"nvim-telescope/telescope.nvim",
     config = function() require("user.plugin-settings.telescope") end,
     requires = "nvim-lua/plenary.nvim",
+    keys = {"<leader>f"},  -- telescope/fzf/rg 所有 keymap 都是以 <leader>f 开头.
   }
 
   --- terminal
