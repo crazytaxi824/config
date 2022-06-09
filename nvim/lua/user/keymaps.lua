@@ -230,15 +230,8 @@ end
 --- set group name manually ---
 which_key.register({
   k = {name = "Fold Method"},
-  c = {name = "Code Action"},
   f = {name = "Telescope Find"},
 },{mode='n',prefix='<leader>'})
-
---- set key description manually ---
-which_key.register({
-  --- LSP ---
-  ['a'] = "LSP - Code Action",  -- lsp/setup_opts.lua 中设置
-},{mode='n',prefix='<leader>c'})
 
 --- setup Vimspector keymap ------------------------------------------------------------------------
 function _Debug_keymaps()
