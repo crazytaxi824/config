@@ -131,6 +131,7 @@ require "user.util"      -- [必要], 自定义函数, 很多设置用到的常�
 require "user.settings"  -- vimrc 设置
 require "user.keymaps"   -- keymap 设置
 require "user.fold"      -- 代码折叠设置, NOTE: treesitter experimental function.
+require "user.custom_commands"  -- 自定义命令
 --require "user.terminal"  -- 自定义 terminal, 需要时可替代 toggle terminal.
 
 --- 加载 plugins ---
@@ -140,11 +141,8 @@ require "user.plugins"  -- packer 加载 plugin
 require "user.colors"  -- vim highlight 设置
 
 --- TODO -------------------------------------------------------------------------------------------
--- global Var & Function start with '__Fn()'
-
 --- optimise startup speed
 -- vimspector deleted, after/ftplugin/go debug needs to change
--- DO NOT run `Check_Cmd_Tools()` it on startup. after/ftplugin/go/ && null-ls.
 
 
 
