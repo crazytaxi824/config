@@ -52,31 +52,18 @@ local vimspector_keymaps = {
   {'n', '<F23>', '<cmd>call vimspector#StepOut()<CR>', opt, 'Debug - Step Out'},  -- <S-F11>
 }
 
-for _, kv in ipairs(vimspector_keymaps) do
-  vim.keymap.set(kv[1], kv[2], kv[3], kv[4])
-end
-
---- which-key ---
-local status_ok, which_key = pcall(require, "which-key")
-if not status_ok then
-  return
-end
-
-for _, keymap in ipairs(vimspector_keymaps) do
-  if keymap[5] then
-    which_key.register({[keymap[2]] = keymap[5]},{mode = keymap[1]})
-  end
-end
-
---- set key description manually ---
-which_key.register({
-  c = {
-    name = "Code",
-    ['<F9>'] = "Debug - Toggle Breakpoint",
-    ['<F10>'] = "Debug - Step Over",
-    ['<F11>'] = "Debug - Step Into",
-    ['<S-F11>'] = "Debug - Step Out",
+Keymap_list_set(vimspector_keymaps, {
+  key_desc = {
+    c = {
+      name = "Code",  -- NOTE: 这里设置必须和 lua/user/lsp/util/lsp_keymaps 一致.
+      ['<F9>'] = "Debug - Toggle Breakpoint",
+      ['<F10>'] = "Debug - Step Over",
+      ['<F11>'] = "Debug - Step Into",
+      ['<S-F11>'] = "Debug - Step Out",
+    }
   },
-},{mode='n', prefix='<leader>', buffer=0})  -- NOTE: 针对 buffer 有效.
+  opts = {mode='n', prefix='<leader>', buffer=0}  -- NOTE: 针对 buffer 有效.
+})
+
 
 

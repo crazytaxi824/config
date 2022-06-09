@@ -43,3 +43,8 @@ vim.cmd [[ hi link TagbarScope Type ]]  -- class, struct name
 vim.cmd [[ hi link TagbarType Type ]]
 vim.cmd [[ hi! TagbarSignature ctermfg=220 ]]
 
+--- keymaps ----------------------------------------------------------------------------------------
+vim.keymap.set('n', '<leader>.', ':TagbarToggle<CR>', { noremap = true, silent = true })
+
+
+

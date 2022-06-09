@@ -279,6 +279,7 @@ return packer.startup(function(use)
   use {"iamcco/markdown-preview.nvim",
     --- VVI: Update 后需要重新安装 preview 插件, 否则可能出现无法运行的情况.
     run = function() vim.fn["mkdp#util#install"]() end,
+    ft = {"markdown"},  -- BUG: 使用 ft 时, after/ftplugin/markdown.lua 会被加载两次.
   }
 
   --use "goolord/alpha-nvim"          -- neovim 启动页面
@@ -291,7 +292,6 @@ return packer.startup(function(use)
   --use "lunarvim/colorschemes"       -- A bunch of colorschemes you can try out
   --use "lunarvim/darkplus.nvim"
   --use "Mofiqul/vscode.nvim"
-
 end)
 
 

@@ -55,8 +55,7 @@ end
 vim.api.nvim_create_autocmd('TermOpen', {
   pattern = {"term://*go run*toggleterm#*", "term://*go test*toggleterm#*"},
   callback = function()
-    --- VVI: api.nvim_{buf}_set_keymap 需要使用 callback 来传入 local lua function
-    vim.api.nvim_buf_set_keymap(0, 'n', '<CR>', '', {noremap = true, callback = jumpToLogFile})
+    vim.keymap.set('n', '<CR>', jumpToLogFile, {noremap = true, buffer = true}) -- local to Terminal buffer
   end,
 })
 
