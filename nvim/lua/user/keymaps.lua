@@ -205,15 +205,15 @@ local keymaps = {
   {'n', 'z=', "<cmd>lua require('telescope.builtin').spell_suggest()<cr>", opt, 'Telescope - Spell Suggests'},  -- NOTE: 也可以使用 which-key 显示
 
   --- Vimspector -----------------------
-  {'n', '<leader>cs', '<Plug>VimspectorContinue', opt, 'Debug - Continue(Start)'},
-  {'n', '<leader>ce', '<Plug>VimspectorStop', opt, 'Debug - End(Stop)'},
-  {'n', '<leader>cr', '<Plug>VimspectorRestart', opt, 'Debug - Restart'},
-  {'n', '<leader>cq', ':VimspectorReset<CR>', opt, 'Debug - Quit'},
+  {'n', '<leader>cs', '<cmd>call vimspector#Continue()<CR>', opt, 'Debug - Start(Continue)'},
+  {'n', '<leader>ce', '<cmd>call vimspector#Stop()<CR>', opt, 'Debug - Stop(End)'},
+  {'n', '<leader>cr', '<cmd>call vimspector#Restart()<CR>', opt, 'Debug - Restart'},
+  {'n', '<leader>cq', '<cmd>call vimspector#Reset()<CR>', opt, 'Debug - Quit'},
   {'n', '<leader>cc', '<Plug>VimspectorBalloonEval', opt, 'Debug - Popup Value under cursor'},
-  {'n', '<F9>',  '<Plug>VimspectorToggleBreakpoint', opt, 'Debug - Toggle Breakpoint'},
-  {'n', '<F10>', '<Plug>VimspectorStepOver', opt, 'Debug - Step Over'},
-  {'n', '<F11>', '<Plug>VimspectorStepInto', opt, 'Debug - Step Into'},
-  {'n', '<F23>', '<Plug>VimspectorStepOut', opt, 'Debug - Step Out'},  -- <S-F11>
+  {'n', '<F9>',  '<cmd>call vimspector#ToggleBreakpoint()<CR>', opt, 'Debug - Toggle Breakpoint'},
+  {'n', '<F10>', '<cmd>call vimspector#StepOver()<CR>', opt, 'Debug - Step Over'},
+  {'n', '<F11>', '<cmd>call vimspector#StepInto()<CR>', opt, 'Debug - Step Into'},
+  {'n', '<F23>', '<cmd>call vimspector#StepOut()<CR>', opt, 'Debug - Step Out'},  -- <S-F11>
 }
 
 --- 这里是设置所有 key mapping 的地方 --------------------------------------------------------------

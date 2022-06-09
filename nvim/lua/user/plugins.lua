@@ -237,7 +237,9 @@ return packer.startup(function(use)
   --- https://github.com/puremourning/vimspector
   --- https://pepa.holla.cz/2021/03/01/golang-debugging-application-in-neovim/
   use {"puremourning/vimspector",
-    config = function() require("user.plugin-settings.vimspector") end
+    config = function() require("user.plugin-settings.vimspector") end,
+    --- fn 中都是插件中以定义的 vimL function.
+    fn = {"vimspector#LaunchWithSettings", "vimspector#Launch", "vimspector#Continue", "vimspector#ToggleBreakpoint"},
   }
   --use "mfussenegger/nvim-dap"   -- lua debug tool
   --use "Pocco81/dap-buddy.nvim"  -- "nvim-dap" management tool
