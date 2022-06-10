@@ -5,12 +5,18 @@ end
 
 -- https://github.com/numToStr/Comment.nvim#-hooks
 comment.setup {
+  padding = true,  -- Add a space between '//' and content. (boolean|fun():boolean)
+
+  sticky = true,  -- Whether the cursor should stay at its position. (boolean)
+
+  ignore = nil,  -- 忽略行, eg: ^func.*
+
+  --- NOTE: pre_hook 配合 "JoosepAlviste/nvim-ts-context-commentstring" 设置.
   pre_hook = function(ctx)
-    local U = require "Comment.utils"
+    local U = require("Comment.utils")
 
     local location = nil
     if ctx.ctype == U.ctype.block then
-      -- NOTE: 配合 "JoosepAlviste/nvim-ts-context-commentstring" 设置.
       location = require("ts_context_commentstring.utils").get_cursor_location()
     elseif ctx.cmotion == U.cmotion.v or ctx.cmotion == U.cmotion.V then
       location = require("ts_context_commentstring.utils").get_visual_start_location()
