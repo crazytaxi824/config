@@ -11,7 +11,7 @@
 
 --- functions for key mapping ---------------------------------------------------------------------- {{{
 --- close all terminal window function. 给 <leader>T 使用.
-local function deleteAllTerm()
+local function delete_all_terminals()
   -- 获取所有 bufnr, 判断 bufname 是否匹配 term://*
   for bufnr = vim.fn.bufnr('$'), 1, -1 do
     if string.match(vim.fn.bufname(bufnr), "^term://*") then
@@ -39,6 +39,25 @@ function _HlNextSearch(key)
     vim.cmd('sleep '..blink_time)
   end
 end
+
+--- 删除其他 buffer. `:bdelete` 本质是 unlist buffer. 即: listed = 0
+local function delete_all_other_buffers()
+  local buf_list = {}
+  for _, bufinfo in ipairs(vim.fn.getbufinfo()) do  -- 所有 buffer, table list
+    if bufinfo.listed == 1      -- 是 listed buffer. NOTE: nvimtree, tagbar, terminal 不会被关闭.
+      and bufinfo.changed == 0  -- 没有未保存内容
+      and bufinfo.loaded == 1   -- 已经加载完成
+      and bufinfo.hidden == 1   -- 隐藏状态的 buffer, 如果不是 hidden 状态, 例如当前 buffer, 不会被删除.
+    then
+      table.insert(buf_list, bufinfo.bufnr)
+    end
+  end
+  if #buf_list > 0 then
+    -- print('bdelete ' .. vim.fn.join(buf_list, ' ')) -- DEBUG
+    vim.cmd('bdelete ' .. vim.fn.join(buf_list, ' '))
+  end
+end
+
 -- -- }}}
 
 -- vim.keymap.set() - option `:help :map-arguments`
@@ -126,9 +145,6 @@ local keymaps = {
   {'v', 'ZZ', '<Nop>', opt, 'same as `:x`'},
 
   --- <leader> -------------------------------------------------------------------------------------
-  --- NOTE: terminal key mapping 在 "toggleterm.lua" 中设置了.
-  {'n', '<leader>T', deleteAllTerm, opt, "Close All Terminal Window"},
-
   {'n', '<leader>"', 'viw<C-c>`>a"<C-c>`<i"<C-c>', opt, 'which_key_ignore'},  -- 不在 which-key 中显示.
   {'n', "<leader>'", "viw<C-c>`>a'<C-c>`<i'<C-c>", opt, 'which_key_ignore'},
   {'n', '<leader>`', 'viw<C-c>`>a`<C-c>`<i`<C-c>', opt, 'which_key_ignore'},
@@ -161,12 +177,15 @@ local keymaps = {
   {'v', '<leader>>', '<C-c>`>a><C-c>`<i<<C-c>v`><right><right>', opt, 'which_key_ignore'},
   {'v', '<leader><lt>', '<C-c>`>a><C-c>`<lt>i<lt><C-c>v`><right><right>', opt, 'which_key_ignore'},  -- '<' 使用 <lt> 代替.
 
-  --- NOTE: 最后一个 bwipeout 是用来删除 [No Name] buffer 的
-  {'n', '<leader>D', ':%bdelete <bar> :edit # <bar> :bwipeout #<CR>', opt, 'Close All Other Buffers'},
+  --- 关闭所有其他 buffers
+  {'n', '<leader>D', delete_all_other_buffers, opt, 'Close All Other Buffers'},
   --{'n', '<leader>d', 'bdelete', opt, 'Close This Buffer'},  -- 使用 airline 的功能删除 buffer.
 
   --- 关闭所有其他窗口
   {'n', '<leader>W', '<C-w><C-o>', opt, 'Close All Other Windows'},
+
+  --- NOTE: terminal key mapping 在 "toggleterm.lua" 中设置了.
+  {'n', '<leader>T', delete_all_terminals, opt, "Close All Terminal Window"},
 }
 
 --- 这里是设置所有 key mapping 的地方 --------------------------------------------------------------
