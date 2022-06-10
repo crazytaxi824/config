@@ -2,13 +2,19 @@
 vim.g.airline_theme = "mydark"
 --vim.g.airline_theme = "dark"   -- 自带主题
 
-vim.g['airline#extensions#tabline#enabled'] = 1
-vim.g['airline#extensions#whitespace#checks'] = {'indent', 'trailing', 'conflicts'}
-vim.g['airline#extensions#tabline#buffer_idx_mode'] = 1
-vim.g['airline#extensions#tabline#keymap_ignored_filetypes'] = {'vimfiler', 'nerdtree', 'tagbar', 'Nvimtree'}
-vim.g['airline#extensions#branch#enabled'] = 1  -- "tpope/vim-fugitive"
+vim.g['airline#extensions#tabline#enabled'] = 1  -- 上方开启 buffer list
+vim.g['airline#extensions#tabline#buffer_idx_mode'] = 1  -- 给 buffer list 编号.
+vim.g['airline#extensions#whitespace#checks'] = {'indent', 'trailing', 'conflicts'}  -- 检查文档
 
--- `:help mode()` 显示所有模式.
+--- VVI: buffer unlist 指定文件名(pattern) / 文件类型.
+vim.g['airline#extensions#tabline#keymap_ignored_filetypes'] = {'vimfiler', 'nerdtree', 'tagbar', 'Nvimtree'} -- unlist 文件类型
+vim.g['airline#extensions#tabline#ignore_bufadd_pat'] = '!|term://|defx|gundo' -- 文件名部分匹配则 unlist
+
+--- airline 插件设置, 默认都是开启状态.
+--vim.g['airline#extensions#branch#enabled'] = 1  -- "tpope/vim-fugitive"
+--vim.g['airline#extensions#tagbar#enabled'] = 1  -- "tagbar"
+
+--- `:help mode()` 显示所有模式.
 vim.g.airline_mode_map = {
 	['n']     = ' NORMAL -',
 	['t']     = ' TERMINAL',
@@ -56,7 +62,7 @@ local airline_keymaps = {
   {'n', '<leader>d', ':execute "normal! \\<Plug>AirlineSelectNextTab" <bar> :bdelete #<CR>', opt, 'Close This Buffer'},
 }
 
-Keymap_list_set(airline_keymaps)
+Keymap_set_and_register(airline_keymaps)
 
 
 

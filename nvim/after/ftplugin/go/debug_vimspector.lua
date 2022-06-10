@@ -52,7 +52,7 @@ local vimspector_keymaps = {
   {'n', '<F23>', '<cmd>call vimspector#StepOut()<CR>', opt, 'Debug - Step Out'},  -- <S-F11>
 }
 
-Keymap_list_set(vimspector_keymaps, {
+Keymap_set_and_register(vimspector_keymaps, {
   key_desc = {
     c = {
       name = "Code",  -- NOTE: 这里设置必须和 lua/user/lsp/util/lsp_keymaps 一致.

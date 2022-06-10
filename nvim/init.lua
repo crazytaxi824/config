@@ -145,5 +145,6 @@ require "user.colors"  -- vim highlight 设置
 
 --- TODO -------------------------------------------------------------------------------------------
 
+--- fix nvim start [Scratch] buffer.
 
 

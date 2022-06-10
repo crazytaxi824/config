@@ -44,7 +44,7 @@ local comment_keymaps = {
   {'v', '<leader>\\', '<Plug>(comment_toggle_linewise_visual)',  opt, 'Comment toggle'},
 }
 
-Keymap_list_set(comment_keymaps)
+Keymap_set_and_register(comment_keymaps)
 
 
 
