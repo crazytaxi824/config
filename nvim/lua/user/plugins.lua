@@ -172,7 +172,7 @@ return packer.startup(function(use)
       "hrsh7th/cmp-path",          -- path completions
       {"saadparwaiz1/cmp_luasnip", -- Snippets source for nvim-cmp
         requires = {
-          {"L3MON4D3/LuaSnip",     -- snippet engine, for "cmp_luasnip"
+          {"L3MON4D3/LuaSnip",     -- snippet engine, for "cmp_luasnip", BUG: 每次打开文件都会有一个 [Scratch] buffer.
             config = function() require("user.plugin-settings.luasnip") end,
             requires = "rafamadriz/friendly-snippets",  -- snippets content, 自定义 snippets 可以借鉴这个结构.
           },
