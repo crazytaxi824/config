@@ -190,7 +190,7 @@ vim.opt.completeopt = { "menu", "menuone", "noselect" }    -- 为代码补全设
 -- `:help backup-table`, 四种设置情况.
 -- 禁用 backup 功能.
 vim.opt.backup = false
---vim.opt.writebackup = false
+vim.opt.writebackup = false
 
 -- 允许使用 swp 缓存文件.
 vim.opt.swapfile = true
