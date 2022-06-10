@@ -145,6 +145,5 @@ require "user.colors"  -- vim highlight 设置
 
 --- TODO -------------------------------------------------------------------------------------------
 
---- update <leader>d airline buffer delete function.
 
 

@@ -40,7 +40,7 @@ function _HlNextSearch(key)
   end
 end
 
---- 删除其他 buffer, TODO in same window.
+--- 删除其他 buffer. `:bdelete` 本质是 unlist buffer. 即: listed = 0
 local function delete_all_other_buffers()
   local buf_list = {}
   for _, bufinfo in ipairs(vim.fn.getbufinfo()) do  -- 所有 buffer, table list

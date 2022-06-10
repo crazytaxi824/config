@@ -59,7 +59,11 @@ local airline_keymaps = {
   {'n', '>', '<Plug>AirlineSelectNextTab'},
 
   --- airline 关闭 buffers.
-  {'n', '<leader>d', ':execute "normal! \\<Plug>AirlineSelectNextTab" <bar> :bdelete #<CR>', opt, 'Close This Buffer'},
+  --- bufnr("#") > 0 表示 '#' (previous buffer) 存在, 如果不存在则 bufnr('#') = -1.
+  --- 如果 # 存在, 但处于 unlisted 状态, 则 bdelete # 报错. 因为 `:bdelete` 本质就是 unlist buffer.
+  {'n', '<leader>d',
+    ':execute "normal! \\<Plug>AirlineSelectNextTab" <bar> if bufnr("#") > 0 <bar> :bdelete # <bar> endif<CR>',
+    opt, 'Close This Buffer'},
 }
 
 Keymap_set_and_register(airline_keymaps)
