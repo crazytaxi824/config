@@ -67,7 +67,7 @@ end
 --- key-settings for both vim.keymap.set() and which_key.register() --------------------------------
 --- keymap_list: { mode, key, remap, opt, description }  - description for 'which-key'
 --- register: which_key.register({keymap},{opts}) 中的两个入参.
-function Keymap_list_set(keymap_list, register)
+function Keymap_set_and_register(keymap_list, register)
   --- NOTE: 这里是正真设置 keymap 的地方, 下面的 which-key 如果不存在, 也不会影响 keymap 设置.
   for _, kv in ipairs(keymap_list) do
     vim.keymap.set(kv[1], kv[2], kv[3], kv[4])

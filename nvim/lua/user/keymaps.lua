@@ -39,7 +39,6 @@ function _HlNextSearch(key)
     vim.cmd('sleep '..blink_time)
   end
 end
-
 -- -- }}}
 
 -- vim.keymap.set() - option `:help :map-arguments`
@@ -102,8 +101,8 @@ local keymaps = {
   {'n','n', '<cmd>lua _HlNextSearch("n")<CR>', opt},
   {'n','N', '<cmd>lua _HlNextSearch("N")<CR>', opt},
 
-  -- NOTE: 这里不能使用 silent, 否则 command line 中不显示 '?' 和 '/'
-  -- ':echo v:hlsearch' 显示目前 hlsearch 状态.
+  --- NOTE: 这里不能使用 silent, 否则 command line 中不显示 '?' 和 '/'
+  --- ':echo v:hlsearch' 显示目前 hlsearch 状态.
   --{'n', '?', 'v:hlsearch ? ":nohlsearch<CR>" : "?"', {noremap=true, expr=true}},  -- 三元表达式
   --{'n', '/', 'v:hlsearch ? ":nohlsearch<CR>" : "/"', {noremap=true, expr=true}},
   {'n', '?', ":nohlsearch<CR>?", {noremap=true}},
@@ -113,7 +112,7 @@ local keymaps = {
   {'n', '<C-s>', ':update<CR>', opt},
   {'v', '<C-s>', '<C-c>:update<CR>', opt},
   {'i', '<C-s>', '<C-c>:update<CR>', opt},
-  -- VVI: <Ctrl-Z> 是危险操作. 意思是 :stop. 直接退出 vim, 会留下 .swp 文件
+  --- VVI: <Ctrl-Z> 是危险操作. 意思是 :stop. 直接退出 vim, 会留下 .swp 文件
   {'n', '<C-z>', 'u', opt},
   {'v', '<C-z>', '<Nop>', opt},
   {'i', '<C-z>', '<C-o>u', opt},
@@ -127,9 +126,7 @@ local keymaps = {
   {'v', 'ZZ', '<Nop>', opt, 'same as `:x`'},
 
   --- <leader> -------------------------------------------------------------------------------------
-  {'n', '<leader>W', '<C-w><C-o>', opt, 'Close All Other Windows'},
-
-  -- NOTE: terminal key mapping 在 "toggleterm.lua" 中设置了.
+  --- NOTE: terminal key mapping 在 "toggleterm.lua" 中设置了.
   {'n', '<leader>T', deleteAllTerm, opt, "Close All Terminal Window"},
 
   {'n', '<leader>"', 'viw<C-c>`>a"<C-c>`<i"<C-c>', opt, 'which_key_ignore'},  -- 不在 which-key 中显示.
@@ -167,15 +164,16 @@ local keymaps = {
   --- NOTE: 最后一个 bwipeout 是用来删除 [No Name] buffer 的
   {'n', '<leader>D', ':%bdelete <bar> :edit # <bar> :bwipeout #<CR>', opt, 'Close All Other Buffers'},
   --{'n', '<leader>d', 'bdelete', opt, 'Close This Buffer'},  -- 使用 airline 的功能删除 buffer.
+
+  --- 关闭所有其他窗口
+  {'n', '<leader>W', '<C-w><C-o>', opt, 'Close All Other Windows'},
 }
 
 --- 这里是设置所有 key mapping 的地方 --------------------------------------------------------------
-Keymap_list_set(keymaps,
-  {
-    key_desc = {k = {name = "Fold Method"}},
-    opts = {mode='n', prefix='<leader>'}
-  }
-)
+Keymap_set_and_register(keymaps, {
+  key_desc = {k = {name = "Fold Method"}},
+  opts = {mode='n', prefix='<leader>'}
+})
 
 
 

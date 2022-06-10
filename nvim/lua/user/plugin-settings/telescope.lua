@@ -139,12 +139,10 @@ local telescope_keymaps = {
   {'n', 'z=', "<cmd>lua require('telescope.builtin').spell_suggest()<cr>", opt, 'Telescope - Spell Suggests'},  -- NOTE: 也可以使用 which-key 显示
 }
 
-Keymap_list_set(telescope_keymaps,
-  {
-    key_desc = {f = {name = "Telescope Find"}},
-    opts = {mode='n', prefix='<leader>'}
-  }
-)
+Keymap_set_and_register(telescope_keymaps, {
+  key_desc = {f = {name = "Telescope Find"}},
+  opts = {mode='n', prefix='<leader>'}
+})
 
 
 

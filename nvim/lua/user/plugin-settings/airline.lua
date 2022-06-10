@@ -56,7 +56,7 @@ local airline_keymaps = {
   {'n', '<leader>d', ':execute "normal! \\<Plug>AirlineSelectNextTab" <bar> :bdelete #<CR>', opt, 'Close This Buffer'},
 }
 
-Keymap_list_set(airline_keymaps)
+Keymap_set_and_register(airline_keymaps)
 
 
 
