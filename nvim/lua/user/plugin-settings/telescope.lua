@@ -125,18 +125,19 @@ telescope.setup {
 
 
 --- keymaps ----------------------------------------------------------------------------------------
+local builtin = require("telescope.builtin")
 local opt = { noremap = true, silent = true }
 local telescope_keymaps = {
   --- Picker functions, https://github.com/nvim-telescope/telescope.nvim#pickers
   --- 使用 `:Telescope` 列出所有 Picker
-  {'n', '<leader>ff', "<cmd>lua require('telescope.builtin').find_files()<cr>", opt, 'Telescope - fd'},
-  {'n', '<leader>fg', "<cmd>lua require('telescope.builtin').live_grep()<cr>", opt, 'Telescope - rg'},
-  {'n', '<leader>fb', "<cmd>lua require('telescope.builtin').buffers()<cr>", opt, 'Telescope - Buffer List'},
-  {'n', '<leader>fh', "<cmd>lua require('telescope.builtin').help_tags()<cr>", opt, 'Telescope - Vim Help Doc'},
-  {'n', '<leader>fc', "<cmd>lua require('telescope.builtin').command_history()<cr>", opt, 'Telescope - Command History'},
-  {'n', '<leader>fs', "<cmd>lua require('telescope.builtin').search_history()<cr>", opt, 'Telescope - Search History'},
-  {'n', '<leader>fk', "<cmd>lua require('telescope.builtin').keymaps()<cr>", opt, 'Telescope - Keymap normal Mode'},
-  {'n', 'z=', "<cmd>lua require('telescope.builtin').spell_suggest()<cr>", opt, 'Telescope - Spell Suggests'},  -- NOTE: 也可以使用 which-key 显示
+  {'n', '<leader>ff', builtin.find_files, opt, 'Telescope - fd'},
+  {'n', '<leader>fb', builtin.buffers,    opt, 'Telescope - Buffer List'},
+  {'n', '<leader>fh', builtin.help_tags,  opt, 'Telescope - Vim Help Doc'},
+  {'n', '<leader>fk', builtin.keymaps,    opt, 'Telescope - Keymap normal Mode'},
+  {'n', '<leader>fc', builtin.command_history, opt, 'Telescope - Command History'},
+  {'n', '<leader>fs', builtin.search_history,  opt, 'Telescope - Search History'},
+  {'n', 'z=', builtin.spell_suggest, opt, 'Telescope - Spell Suggests'},  -- 也可以使用 which-key 显示.
+  --{'n', '<leader>fg', builtin.live_grep,  opt, 'Telescope - rg'},  -- NOTE: 使用自定义 :Rg 命令更灵活.
 }
 
 Keymap_set_and_register(telescope_keymaps, {
