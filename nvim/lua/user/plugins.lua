@@ -253,7 +253,7 @@ return packer.startup(function(use)
   use {"nvim-telescope/telescope.nvim",
     config = function() require("user.plugin-settings.telescope") end,
     requires = "nvim-lua/plenary.nvim",
-    keys = {"<leader>f"},  -- NOTE: telescope/fzf/rg 所有 keymap 都是以 <leader>f 开头.
+    --keys = {"<leader>f"},  -- NOTE: telescope/fzf/rg 所有 keymap 都是以 <leader>f 开头.
   }
 
   --- terminal

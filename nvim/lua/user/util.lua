@@ -11,6 +11,26 @@ function TrimString(str)
   return string.match(str, "^%s*(.-)%s*$")
 end
 
+--- escape charactor -------------------------------------------------------------------------------
+function Escape_chars(string)
+  return string.gsub(string, "[%(|%)|\\|%[|%]|%-|%{%}|%?|%+|%*|%^|%$|%.]", {
+    ["\\"] = "\\\\",
+    ["-"] = "\\-",
+    ["("] = "\\(",
+    [")"] = "\\)",
+    ["["] = "\\[",
+    ["]"] = "\\]",
+    ["{"] = "\\{",
+    ["}"] = "\\}",
+    ["?"] = "\\?",
+    ["+"] = "\\+",
+    ["*"] = "\\*",
+    ["^"] = "\\^",
+    ["$"] = "\\$",
+    ["."] = "\\.",
+  })
+end
+
 --- 提醒使用 notify 插件或者 vim.notify() 函数 -----------------------------------------------------
 --- msg - string|[]string
 --- lvl - string|number. "TRACE"-0, "DEBUG"-1, "INFO"-2, "WARN"-3, "ERROR"-4, `:help vim.log.levels`, `:help notify.setup`
@@ -104,5 +124,6 @@ function Keymap_set_and_register(keymap_list, register)
     which_key.register(register.key_desc, register.opts)
   end
 end
+
 
 

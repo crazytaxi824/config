@@ -85,9 +85,7 @@ local function goAddTags(arglist)
 
   print(sh_cmd)
   local result = vim.fn.system(sh_cmd)
-
-  --- 判断结果是否错误
-  if vim.v.shell_error ~= 0 then
+  if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
     Notify(result, "ERROR", {title={"goAddTags()","tool_gomodifytags.lua"}})
     return
   end
