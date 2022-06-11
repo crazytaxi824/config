@@ -17,7 +17,7 @@ telescope.setup {
       "rg",
       "--color=never",
       "--vimgrep",        -- --no-heading,--with-filename,--line-number,--column
-      "--only-matching",  -- only print matched text, 也可以使用 --trim 打印整行内容.
+      "--only-matching",  -- only print matched text, 也可以使用 "--trim" 打印整行内容.
       "--smart-case",     -- 如果有大写则 case sensitive, 如果全小写则 ignore case.
     },
 
@@ -125,24 +125,82 @@ telescope.setup {
 
 
 --- keymaps ----------------------------------------------------------------------------------------
+local builtin = require("telescope.builtin")
 local opt = { noremap = true, silent = true }
 local telescope_keymaps = {
   --- Picker functions, https://github.com/nvim-telescope/telescope.nvim#pickers
   --- 使用 `:Telescope` 列出所有 Picker
-  {'n', '<leader>ff', "<cmd>lua require('telescope.builtin').find_files()<cr>", opt, 'Telescope - fd'},
-  {'n', '<leader>fg', "<cmd>lua require('telescope.builtin').live_grep()<cr>", opt, 'Telescope - rg'},
-  {'n', '<leader>fb', "<cmd>lua require('telescope.builtin').buffers()<cr>", opt, 'Telescope - Buffer List'},
-  {'n', '<leader>fh', "<cmd>lua require('telescope.builtin').help_tags()<cr>", opt, 'Telescope - Vim Help Doc'},
-  {'n', '<leader>fc', "<cmd>lua require('telescope.builtin').command_history()<cr>", opt, 'Telescope - Command History'},
-  {'n', '<leader>fs', "<cmd>lua require('telescope.builtin').search_history()<cr>", opt, 'Telescope - Search History'},
-  {'n', '<leader>fk', "<cmd>lua require('telescope.builtin').keymaps()<cr>", opt, 'Telescope - Keymap normal Mode'},
-  {'n', 'z=', "<cmd>lua require('telescope.builtin').spell_suggest()<cr>", opt, 'Telescope - Spell Suggests'},  -- NOTE: 也可以使用 which-key 显示
+  {'n', '<leader>ff', builtin.find_files, opt, 'Telescope - fd'},
+  {'n', '<leader>fb', builtin.buffers,    opt, 'Telescope - Buffer List'},
+  {'n', '<leader>fh', builtin.help_tags,  opt, 'Telescope - Vim Help Doc'},
+  {'n', '<leader>fk', builtin.keymaps,    opt, 'Telescope - Keymap normal Mode'},
+  {'n', '<leader>fc', builtin.command_history, opt, 'Telescope - Command History'},
+  {'n', '<leader>fs', builtin.search_history,  opt, 'Telescope - Search History'},
+  {'n', 'z=', builtin.spell_suggest, opt, 'Telescope - Spell Suggests'},  -- 也可以使用 which-key 显示.
+  --{'n', '<leader>fg', builtin.live_grep,  opt, 'Telescope - rg'},  -- NOTE: 使用自定义 :Rg 命令更灵活.
 }
 
 Keymap_set_and_register(telescope_keymaps, {
   key_desc = {f = {name = "Telescope Find"}},
   opts = {mode='n', prefix='<leader>'}
 })
+
+--- 自定义 Rg command ------------------------------------------------------------------------------
+--- NOTE: 修改自 telescope.builtin.grep_string()
+---       https://github.com/nvim-telescope/telescope.nvim -> lua/telescope/builtin/files.lua
+---       定义在: files.grep_string = function(opts), opts 参数为 `:help grep_string()`, cwd, search ...
+local finders = require "telescope.finders"
+local make_entry = require "telescope.make_entry"
+local pickers = require "telescope.pickers"
+local conf = require("telescope.config").values
+
+local rg_search = function(additional_args)
+  local result = vim.fn.system(vim.fn.join(conf.vimgrep_arguments, " ") .. " " .. additional_args)
+  if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
+    if result == "" then
+      vim.notify("no result found", vim.log.levels.WARN)
+    else
+      Notify(result, "ERROR", {title={"rg_search()","telescope.lua"}})
+    end
+    return
+  end
+
+  pickers.new({
+    prompt_title = "Rg",
+    finder = finders.new_table({
+      results = vim.fn.split(result, '\n'),
+      entry_maker = make_entry.gen_from_vimgrep(),  -- VVI: jump to <file:line:column>
+    }),
+    previewer = conf.grep_previewer({}),
+    sorter = conf.generic_sorter(),  -- VVI: 可以通过 fzf 输入框对 results 进行过滤.
+  }):find()
+end
+
+--- Rg command 使用方法 --- {{{
+--- 例子: 如果要使用正则表达式, 则需要使用 '' OR "" OR \(escape), 否则报错 zsh: no matches found.
+---   Rg foo\ bar == Rg 'foo bar' == Rg "foo bar" == Rg foo\ bar ./         # 在当前文件夹搜索
+---   Rg 'foo.*bar' == Rg "foo.*bar" == Rg foo.\*bar == Rg 'foo.*bar' ./    # 同上
+---
+--- 搜索指定文件(夹)
+---   Rg 'foo bar'  ./src/main.go    # 在 main.go 文件中搜索 'foo bar'
+---   Rg 'foo bar'  ./src            # 在 src 文件夹下搜索 'foo bar'
+---   Rg 'foo.*bar' ./src ./tmp      # 在 ./src 和 ./tmp 两个文件夹下搜索 'foo.*bar'
+---
+--- 搜索条件: -w -i -s ...
+---   Rg -w 'foo'   # 匹配整个单词, 而不是部分匹配. 类似 '\bWord\b'
+---   Rg -i 'foo'   # ignore case
+---   Rg -s 'foo'   # case sensitive
+---   Rg -S 'foo'   # --smart-case, 如果全小写则 ignore case, 如果有大写字母则 case sensitive.
+---
+---   Rg -wi 'foo' ./
+---   Rg -ws 'foo' ./src
+---   Rg -wS 'foo' ./src /tmp
+-- -- }}}
+vim.api.nvim_create_user_command("Rg",
+  function(opts)
+    rg_search(opts.args)
+  end,
+{nargs="+"})
 
 
 

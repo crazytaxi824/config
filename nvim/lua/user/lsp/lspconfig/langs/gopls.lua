@@ -5,7 +5,13 @@
 
 -- `$ go env GOROOT` | `$ go env GOMODCACHE`
 local function go_env(v)
-  return string.match(vim.fn.system('go env '..v),'[%S ]*')
+  local result = vim.fn.system('go env '..v)
+  if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
+    Notify(result, "ERROR", {title={"go_env()","gopls.lua"}})
+    return
+  end
+
+  return string.match(result, '[%S ]*')
 end
 
 --- NOTE: ignore following folds as workspace root directory.
