@@ -111,16 +111,33 @@ vim.cmd('hi link TSConstructor Normal')         -- import <TSConstructor> from '
 
 vim.cmd('hi TSLiteral ctermbg=238')     -- NOTE: markdown `code`
 
+--- diagnostics 颜色设置 ---
+--- DiagnosticInfo - lua global function name begin with lower-case.
+--- DiagnosticHint - lua function not used.
+
+--- diagnostics popup text color.
+vim.cmd('hi DiagnosticError ctermfg=167')
+vim.cmd('hi DiagnosticWarn ctermfg=220')
+vim.cmd('hi DiagnosticInfo ctermfg=75')
+vim.cmd('hi DiagnosticHint ctermfg=246')
+
+--- diagnostics sign, 默认和 diagnostics text 颜色一样
+--vim.cmd('hi DiagnosticSignError ctermfg=167')
+--vim.cmd('hi DiagnosticSignWarn ctermfg=220')
+--vim.cmd('hi DiagnosticSignInfo ctermfg=75')
+vim.cmd('hi DiagnosticSignHint ctermfg=244')
+
+--- diagnostics error words, 默认没有颜色, 只有 underline
+vim.cmd('hi DiagnosticUnderlineError cterm=bold,underline ctermfg=196')
+vim.cmd('hi DiagnosticUnderlineWarn cterm=bold,underline ctermfg=196')
+--vim.cmd('hi DiagnosticUnderlineInfo ctermfg=75')
+vim.cmd('hi DiagnosticUnderlineHint ctermfg=244')
+
 --- LSP 相关颜色 ----------------------------------------------------------------------------------
 --- vim.lsp.buf.document_highlight() 颜色, 类似 Same_ID ---
 vim.cmd('hi LspReferenceText ctermbg=238')
 vim.cmd('hi LspReferenceRead ctermbg=238')
 vim.cmd('hi LspReferenceWrite ctermbg=238')
 
---- diagnostics virtual_text 颜色设置 ---
-vim.cmd('hi DiagnosticError ctermfg=167')
-vim.cmd('hi DiagnosticWarn ctermfg=191')
-vim.cmd('hi DiagnosticInfo ctermfg=75')
-vim.cmd('hi DiagnosticHint ctermfg=244')
 
 
