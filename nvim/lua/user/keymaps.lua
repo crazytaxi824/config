@@ -2,15 +2,15 @@
 --- NOTE: 全局 keymap 设置
 ----------------------------------------------------------------------------------------------------
 --- Readme ----------------------------------------------------------------------------------------- {{{
--- vim.keymap.set() & vim.keymap.del()
--- vim.api.nvim_set_keymap() & vim.api.nvim_del_keymap()
--- vim.api.nvim_buf_set_keymap() & vim.api.nvim_buf_del_keymap()
--- vim.keymap.set() 可以同时设置多个模式, vim.api.nvim_set_keymap() 每次只能设置一个模式
--- <S-F12> 在 neovim 中是 <F24>, <C-F12> 是 <F36>, <C-S-F12> 是 <F48>. 其他组合键都可以通过 insert 模式打印出来.
+--- vim.keymap.set() & vim.keymap.del()
+--- vim.api.nvim_set_keymap() & vim.api.nvim_del_keymap()
+--- vim.api.nvim_buf_set_keymap() & vim.api.nvim_buf_del_keymap()
+--- vim.keymap.set() 可以同时设置多个模式, vim.api.nvim_set_keymap() 每次只能设置一个模式
+--- <S-F12> 在 neovim 中是 <F24>, <C-F12> 是 <F36>, <C-S-F12> 是 <F48>. 其他组合键都可以通过 insert 模式打印出来.
 -- -- }}}
 
 --- functions for key mapping ---------------------------------------------------------------------- {{{
---- close all terminal window function. 给 <leader>T 使用.
+--- close all terminal window function -------------------------------------------------------------
 local function delete_all_terminals()
   -- 获取所有 bufnr, 判断 bufname 是否匹配 term://*
   for bufnr = vim.fn.bufnr('$'), 1, -1 do
@@ -20,7 +20,7 @@ local function delete_all_terminals()
   end
 end
 
---- for Search Highlight
+--- for Search Highlight ---------------------------------------------------------------------------
 function _HlNextSearch(key)
   local status, errmsg = pcall(vim.cmd, 'normal! ' .. key)
   if not status then
@@ -40,7 +40,8 @@ function _HlNextSearch(key)
   end
 end
 
---- 删除其他 buffer. `:bdelete` 本质是 unlist buffer. 即: listed = 0
+--- 删除其他 buffer --------------------------------------------------------------------------------
+--- `:bdelete` 本质是 unlist buffer. 即: listed = 0
 local function delete_all_other_buffers()
   local buf_list = {}
   for _, bufinfo in ipairs(vim.fn.getbufinfo()) do  -- 所有 buffer, table list
@@ -57,6 +58,111 @@ local function delete_all_other_buffers()
     vim.cmd('bdelete ' .. vim.fn.join(buf_list, ' '))
   end
 end
+
+--- [[, ]], jump to previous/next section ---------------------------------------------------------- {{{
+local function find_ts_root_node()
+  local tstrees = vim.treesitter.get_parser(0)
+  for _, tree in ipairs(tstrees:trees()) do
+    local tree_root = tree:root()
+    if tree_root then
+      return tree_root
+    end
+  end
+  return nil
+end
+
+local function ts_root_children()
+  local root = find_ts_root_node()
+  if not root then
+    return
+  end
+
+  local child_without_comment = {}  -- named child without comment.
+
+  local child_count = root:named_child_count()
+  for i = 0, child_count-1 do
+    local child = root:named_child(i)
+    if child:type() ~= "comment" then
+      table.insert(child_without_comment, child)
+    end
+  end
+
+  if #child_without_comment>0 then
+    return child_without_comment
+  end
+
+  return nil
+end
+
+local function nodes_around_cursor()
+  local root_children = ts_root_children()
+  if not root_children then
+    return nil
+  end
+
+  local cursor_lnum = vim.fn.getpos('.')[2]  -- {bufnr, line, col, bytes}, table_list/array, 从 1 开始计算.
+
+  for index in ipairs(root_children) do
+    local node_line = root_children[index]:start()  -- {line, col, bytes}, 从 0 开始计算.
+    if cursor_lnum < node_line+1 then
+      return {
+        prev = root_children[index-2],
+        current = root_children[index-1],
+        next = root_children[index],
+        cursor_lnum = cursor_lnum,
+      }
+    end
+  end
+
+  -- cursor at last node
+  return {
+    prev = root_children[#root_children-1],
+    current = root_children[#root_children],
+    next = nil,
+    cursor_lnum = cursor_lnum,
+  }
+end
+
+local function jump_to_prev_section()
+  local result = nodes_around_cursor()
+  if not result then
+    return
+  end
+
+  local current_node_lnum = result.current:start()
+
+  if result.cursor_lnum == current_node_lnum+1 then
+    if result.prev then
+      local prev_node_lnum = result.prev:start()
+      vim.fn.cursor(prev_node_lnum+1, 1)
+    else
+      vim.fn.cursor(1, 1)  -- beginning of the buffer
+    end
+  else
+    --- jump to cursor current node first line.
+    vim.fn.cursor(current_node_lnum+1, 1)
+  end
+end
+
+local function jump_to_next_section()
+  local result = nodes_around_cursor()
+  if not result then
+    return
+  end
+
+  if result.next then
+    local next_node_lnum = result.next:start()
+    vim.fn.cursor(next_node_lnum+1, 1)
+  else
+    --- 这里是 cursor 超出最后一个 node 的情况.
+    local current_node_last_line = result.current:end_()
+    if result.cursor_lnum <= current_node_last_line+1 then
+      -- jump to last node's last line
+      vim.fn.cursor(current_node_last_line+1, 1)
+    end
+  end
+end
+-- -- }}}
 
 -- -- }}}
 
@@ -140,10 +246,6 @@ local keymaps = {
   {'n', '<leader>k1', 'zM', opt, "Close all folds"},
   {'n', '<leader>kj', 'zR', opt, "Open all folds"},
 
-  --- 其他 -----------------------------------------------------------------------------------------
-  {'n', 'ZZ', '<Nop>', opt, 'same as `:x`'},
-  {'v', 'ZZ', '<Nop>', opt, 'same as `:x`'},
-
   --- <leader> -------------------------------------------------------------------------------------
   {'n', '<leader>"', 'viw<C-c>`>a"<C-c>`<i"<C-c>', opt, 'which_key_ignore'},  -- 不在 which-key 中显示.
   {'n', "<leader>'", "viw<C-c>`>a'<C-c>`<i'<C-c>", opt, 'which_key_ignore'},
@@ -186,6 +288,13 @@ local keymaps = {
 
   --- NOTE: terminal key mapping 在 "toggleterm.lua" 中设置了.
   {'n', '<leader>T', delete_all_terminals, opt, "Close All Terminal Window"},
+
+  --- 其他 -----------------------------------------------------------------------------------------
+  {'n', 'ZZ', '<Nop>', opt, 'same as `:x`'},
+  {'v', 'ZZ', '<Nop>', opt, 'same as `:x`'},
+
+  {'n', '[[', jump_to_prev_section, opt, 'Jump to Prev Section'},
+  {'n', ']]', jump_to_next_section, opt, 'Jump to Next Section'},
 }
 
 --- 这里是设置所有 key mapping 的地方 --------------------------------------------------------------
