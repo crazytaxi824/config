@@ -129,18 +129,22 @@ local function jump_to_prev_section()
     return
   end
 
-  local current_node_lnum = result.current:start()
+  if result.current then
+    --- NOTE: cursor line < first non comment node 的情况下 result.current = nil.
+    local current_node_lnum = result.current:start()
 
-  if result.cursor_lnum == current_node_lnum+1 then
-    if result.prev then
-      local prev_node_lnum = result.prev:start()
-      vim.fn.cursor(prev_node_lnum+1, 1)
+    if result.cursor_lnum == current_node_lnum+1 then
+      if result.prev then
+        local prev_node_lnum = result.prev:start()
+        vim.fn.cursor(prev_node_lnum+1, 1)
+      else
+        --- 自己是 first node's first line 的情况
+        vim.notify("it's first node in this buffer", vim.log.levels.WARN)
+      end
     else
-      vim.fn.cursor(1, 1)  -- beginning of the buffer
+      --- jump to cursor current node first line.
+      vim.fn.cursor(current_node_lnum+1, 1)
     end
-  else
-    --- jump to cursor current node first line.
-    vim.fn.cursor(current_node_lnum+1, 1)
   end
 end
 
@@ -154,11 +158,14 @@ local function jump_to_next_section()
     local next_node_lnum = result.next:start()
     vim.fn.cursor(next_node_lnum+1, 1)
   else
-    --- 这里是 cursor 超出最后一个 node 的情况.
+    --- NOTE: cursor_line > last node's last line 的情况.
     local current_node_last_line = result.current:end_()
-    if result.cursor_lnum <= current_node_last_line+1 then
+    if result.cursor_lnum < current_node_last_line+1 then
       -- jump to last node's last line
       vim.fn.cursor(current_node_last_line+1, 1)
+    else
+      --- 自己在 last node's last line 的情况
+      vim.notify("it's last node in this buffer", vim.log.levels.WARN)
     end
   end
 end
