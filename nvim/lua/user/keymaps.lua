@@ -134,6 +134,7 @@ local function jump_to_prev_section()
     local current_node_lnum = result.current:start()
 
     if result.cursor_lnum == current_node_lnum+1 then
+      -- cursor 在 current_node 第一行.
       if result.prev then
         local prev_node_lnum = result.prev:start()
         vim.fn.cursor(prev_node_lnum+1, 1)
@@ -145,6 +146,8 @@ local function jump_to_prev_section()
       --- jump to cursor current node first line.
       vim.fn.cursor(current_node_lnum+1, 1)
     end
+  else
+    vim.notify("it's first node in this buffer", vim.log.levels.WARN)
   end
 end
 
