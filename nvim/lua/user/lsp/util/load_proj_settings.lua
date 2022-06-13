@@ -35,21 +35,18 @@ __Proj_local_settings.exists = function(section, tool)
   return false
 end
 
---- project local setting 存在的情况下 extend settings.
+--- project local setting 存在的情况下 extend settings. VVI: 一定要配合 exists() 使用.
 __Proj_local_settings.exists_keep_extend = function (section, tool, tbl, ...)
-  -- __Proj_local_settings._lazyload()  -- VVI: exists() 中已经 lazyload()
+  --- __Proj_local_settings._lazyload()  -- VVI: exists() 中已经 lazyload()
 
-  if ... then
-    return vim.tbl_deep_extend('keep', __Proj_local_settings._content[section][tool], tbl, ...)
-  end
-
-  return vim.tbl_deep_extend('keep', __Proj_local_settings._content[section][tool], tbl)
+  --- tbl_deep_extend() 会自动处理 ... 是否为 nil 的情况.
+  return vim.tbl_deep_extend('keep', __Proj_local_settings._content[section][tool], tbl, ...)
 end
 
 --- VVI: 主要函数 keep_extend() 用 project 设置覆盖 global 设置.
 --- 使用 tbl_deep_extend('keep', xx, xx, ...)
 __Proj_local_settings.keep_extend = function(section, tool, tbl, ...)
-  -- __Proj_local_settings._lazyload()  -- VVI: exists() 中已经 lazyload()
+  --- __Proj_local_settings._lazyload()  -- VVI: exists() 中已经 lazyload()
 
   --- 如果项目本地设置存在
   if __Proj_local_settings.exists(section, tool) then
