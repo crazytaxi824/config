@@ -61,7 +61,12 @@ end
 
 --- [[, ]], jump to previous/next section ---------------------------------------------------------- {{{
 local function find_ts_root_node()
-  local tstrees = vim.treesitter.get_parser(0)
+  local tsparser_status_ok, tstrees = pcall(vim.treesitter.get_parser, 0)
+  if not tsparser_status_ok then
+    vim.notify(tstrees, vim.log.levels.WARN)
+    return
+  end
+
   for _, tree in ipairs(tstrees:trees()) do
     local tree_root = tree:root()
     if tree_root then
