@@ -42,10 +42,8 @@ M.on_attach = function(client, bufnr)
   --- ts, js, html, json, jsonc ... 使用 'prettier'
   --- lua 使用 'stylua'
   local disable_format = {"tsserver", "html", "sumneko_lua", "jsonls"}
-  for _, server in ipairs(disable_format) do
-    if client.name == server then
-      client.resolved_capabilities.document_formatting = false
-    end
+  if vim.tbl_contains(disable_format, client.name) then
+    client.resolved_capabilities.document_formatting = false
   end
 
   --- 加载自定义设置 ---
@@ -72,11 +70,14 @@ M.capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
 --- 这里是为了能单独给 project 设置 LSP setting
 M.on_init = function(client)
   --- 加载项目本地设置, 覆盖 global settings.
-  client.config.settings[client.name] = __Proj_local_settings.keep_extend("settings", client.name,
-    client.config.settings[client.name])
+  if __Proj_local_settings.exists("settings", client.name) then
+    client.config.settings[client.name] = __Proj_local_settings.exists_keep_extend("settings", client.name,
+      client.config.settings[client.name])
 
-  -- VVI: tell LSP configs are changed.
-  client.notify("workspace/didChangeConfiguration")
+    --- VVI: tell LSP configs are changed.
+    --- 有些 LSP server 不支持 didChangeConfiguration. eg: jsonls
+    client.notify("workspace/didChangeConfiguration")
+  end
 
   return true  -- VVI: 如果 return false 则 LSP 不启动.
 end
