@@ -165,6 +165,7 @@ local schemas = {
 return {
   settings = {
     json = {
+      validate = { enable = true },  -- VVI: 开启 diagnostic, 默认不开启.
       schemas = schemas,
     },
   },
