@@ -129,7 +129,7 @@ vim.cmd('hi DiagnosticSignHint ctermfg=244')
 
 --- diagnostics error words, 默认没有颜色, 只有 underline
 vim.cmd('hi DiagnosticUnderlineError cterm=bold,underline ctermfg=167')
-vim.cmd('hi DiagnosticUnderlineWarn cterm=bold,underline ctermfg=167')
+--vim.cmd('hi DiagnosticUnderlineWarn cterm=bold,underline ctermfg=167')
 --vim.cmd('hi DiagnosticUnderlineInfo ctermfg=75')
 vim.cmd('hi DiagnosticUnderlineHint ctermfg=244')
 
