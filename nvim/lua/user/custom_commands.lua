@@ -15,7 +15,7 @@
 --    `:help getwininfo()`           " VVI: 获取所有 window 的所有信息
 --    `:help win_gettype(win_id)`    " 获取 window 类型
 -- -- }}}
-function GetWinInfo()
+function Get_win_info()
   local infos = {}
 
   for win_index = 1, vim.fn.winnr('$'), 1 do
@@ -51,7 +51,7 @@ end
 --        argument_list  -- func call '(xxx)' 中的所有内容, 包括括号 ().
 --        func call 名字 -- call_expression.function.field
 -- -- }}}
-function TS_Get_Cursor_Node()
+function Get_TSNode_at_cursor()
   local ts_status, ts_utils = pcall(require, "nvim-treesitter.ts_utils")
   if not ts_status then
     Notify("treesitter is not loaded.", "WARN", {title={"TS_Get_Cursor_Node()","util.lua"}})

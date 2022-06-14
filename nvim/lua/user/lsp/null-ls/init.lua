@@ -19,7 +19,7 @@ local null_tools = {
   eslint = "   npm install -g eslint",
 }
 
-Check_Cmd_Tools(null_tools)
+Check_cmd_tools(null_tools)
 -- -- }}}
 
 --- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/formatting
