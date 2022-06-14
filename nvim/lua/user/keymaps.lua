@@ -21,7 +21,7 @@ local function delete_all_terminals()
 end
 
 --- for Search Highlight ---------------------------------------------------------------------------
-function _HlNextSearch(key)
+local function hl_search(key)
   local status, errmsg = pcall(vim.cmd, 'normal! ' .. key)
   if not status then
     vim.notify(errmsg, vim.log.levels.ERROR) -- 这里不要使用 notify 插件, 显示错误信息.
@@ -31,13 +31,26 @@ function _HlNextSearch(key)
   local search_pat = '\\%#' .. vim.fn.getreg('/')
   local blink_time = '40m'
   for _ = 1, 2, 1 do  -- 循环闪烁
-    local hl_id = vim.fn.matchadd('HLNextSearch', search_pat, 101)
+    local hl_id = vim.fn.matchadd('HLSearchWord', search_pat, 101)
     vim.cmd[[redraw]]
     vim.cmd('sleep '..blink_time)
     vim.fn.matchdelete(hl_id)
     vim.cmd[[redraw]]
     vim.cmd('sleep '..blink_time)
   end
+end
+
+--- word: bool, 是否使用 \<word\>
+local function hl_visual_search(key, whole_word)
+  --- 利用 register "f
+  vim.cmd[[normal! "fy]]  -- copy VISUAL select to register f
+  local tmp_search = vim.fn.getreg("f")
+  if whole_word then
+    vim.fn.setreg('/', '\\<' .. tmp_search .. '\\>')
+  else
+    vim.fn.setreg('/', tmp_search)
+  end
+  hl_search(key)
 end
 
 --- 删除其他 buffer --------------------------------------------------------------------------------
@@ -61,7 +74,12 @@ end
 
 --- [[, ]], jump to previous/next section ---------------------------------------------------------- {{{
 local function find_ts_root_node()
-  local tstrees = vim.treesitter.get_parser(0)
+  local tsparser_status_ok, tstrees = pcall(vim.treesitter.get_parser, 0)
+  if not tsparser_status_ok then
+    vim.notify(tstrees, vim.log.levels.WARN)
+    return
+  end
+
   for _, tree in ipairs(tstrees:trees()) do
     local tree_root = tree:root()
     if tree_root then
@@ -221,25 +239,23 @@ local keymaps = {
   {'n', '<Tab>', '<C-w><C-w>', opt},
 
   --- Search ---------------------------------------------------------------------------------------
-  {'n','*', '<cmd>lua _HlNextSearch("*")<CR>', opt},
-  {'n','#', '<cmd>lua _HlNextSearch("#")<CR>', opt},
-  {'n','g*', '<cmd>lua _HlNextSearch("g*")<CR>', opt, 'Search <cword> Next'},
-  {'n','g#', '<cmd>lua _HlNextSearch("g#")<CR>', opt, 'Search <cword> Previous'},
+  {'n','*',  function() hl_search("*")  end, opt},
+  {'n','#',  function() hl_search("#")  end, opt},
+  {'n','g*', function() hl_search("g*") end, opt, 'Search <cword> Next'},
+  {'n','g#', function() hl_search("g#") end, opt, 'Search <cword> Previous'},
 
   --- NOTE: "fy - copy VISUAL selected text to register "f"
   --    `let @/ = @f` - copy register "f" to register "/" (search register)
-  {'v', '*', '"fy<cmd>let @/ = "\\\\<"..@f.."\\\\>" <bar> lua _HlNextSearch("n")<CR>', opt},
-  {'v', '#', '"fy<cmd>let @/ = "\\\\<"..@f.."\\\\>" <bar> lua _HlNextSearch("N")<CR>', opt},
-  {'v', 'g*', '"fy<cmd>let @/ = @f <bar> lua _HlNextSearch("n")<CR>', opt, 'Search <cword> Next'},
-  {'v', 'g#', '"fy<cmd>let @/ = @f <bar> lua _HlNextSearch("N")<CR>', opt, 'Search <cword> Previous'},
+  {'v', '*',  function() hl_visual_search('n', true) end, opt, 'Search <cword> Next'},
+  {'v', '#',  function() hl_visual_search('N', true) end, opt, 'Search <cword> Previous'},
+  {'v', 'g*', function() hl_visual_search('n') end, opt, 'Search <cword> Next'},
+  {'v', 'g#', function() hl_visual_search('N') end, opt, 'Search <cword> Previous'},
 
-  {'n','n', '<cmd>lua _HlNextSearch("n")<CR>', opt},
-  {'n','N', '<cmd>lua _HlNextSearch("N")<CR>', opt},
+  {'n','n', function() hl_search("n") end, opt},
+  {'n','N', function() hl_search("N") end, opt},
 
   --- NOTE: 这里不能使用 silent, 否则 command line 中不显示 '?' 和 '/'
   --- ':echo v:hlsearch' 显示目前 hlsearch 状态.
-  --{'n', '?', 'v:hlsearch ? ":nohlsearch<CR>" : "?"', {noremap=true, expr=true}},  -- 三元表达式
-  --{'n', '/', 'v:hlsearch ? ":nohlsearch<CR>" : "/"', {noremap=true, expr=true}},
   {'n', '?', ":nohlsearch<CR>?", {noremap=true}},
   {'n', '/', ":nohlsearch<CR>/", {noremap=true}},
 

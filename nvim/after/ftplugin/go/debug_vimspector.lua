@@ -5,7 +5,7 @@
 --    config  定义在 lua/user/plugin-settings/vimspector.lua -> vim.g.vimspector_configurations
 
 --- Debug command ----------------------------------------------------------------------------------
-local function debug()
+local function debug_go()
   if string.match(vim.fn.expand('%'), ".*_test%.go$") then
     --- Debug Test file
     --- NOTE: debug_go_test 定义在 lua/user/plugin-settings/vimspector.lua -> vim.g.vimspector_configurations
@@ -35,7 +35,7 @@ local function debug()
 end
 
 --- Debug command
-vim.api.nvim_buf_create_user_command(0, 'Debug', debug, {})
+vim.api.nvim_buf_create_user_command(0, 'Debug', debug_go, {})
 
 --- Debug keymapping -------------------------------------------------------------------------------
 --- NOTE: Vimspector keymap 设置不是全局的. 而且 Vimspector 自己本身是 optional 加载.

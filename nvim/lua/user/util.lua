@@ -1,13 +1,13 @@
 -- NOTE: 返回光标所在位置是否已经在最左侧了, 或者光标前一个字符是否为 %s, 即:\n \t \r space ...
 --       目的是判断是否需要执行 backspace.
 --       true - 本行前一位没有任何字符; nil - 本行前一位有字符.
-function CheckBackspace()
+function Check_backspace()
   local col = vim.fn.col(".") - 1
   return col == 0 or vim.fn.getline("."):sub(col, col):match("%s")
 end
 
 --- 去掉 string prefix suffix whitespace -----------------------------------------------------------
-function TrimString(str)
+function Trim_string(str)
   return string.match(str, "^%s*(.-)%s*$")
 end
 
@@ -68,7 +68,7 @@ function Notify(msg, lvl, opt)
 end
 
 --- 使用 `$ which` 查看插件所需 tools 是否存在 -----------------------------------------------------
-function Check_Cmd_Tools(tools)
+function Check_cmd_tools(tools)
   local result = {"These Tools should be in the $PATH"}
   local count = 0
   for tool, install in pairs(tools) do

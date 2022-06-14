@@ -21,7 +21,7 @@
 
 local reusable_term_size = 12
 
-function TerminalExec(term_id, cmd)
+function Terminal_exec(term_id, cmd)
   local win_index = -1
   -- 获取 term win_id
   for winnr = vim.fn.winnr('$'), 1, -1 do
@@ -38,7 +38,7 @@ function TerminalExec(term_id, cmd)
   vim.fn.setwinvar(vim.fn.win_getid(), "reusable", term_id)
 end
 
-function TerminalNormal()
+function Terminal_normal()
   local term_bufnr = -1
   -- 获取 term win_id
   for bufnr = vim.fn.bufnr('$'), 1, -1 do
@@ -49,7 +49,7 @@ function TerminalNormal()
 
   if term_bufnr > 0 then
     if vim.fn.getbufinfo(term_bufnr)[1].hidden == 0 then
-      Notify("terminal normal is already opened","WARN",{title={"TerminalNormal()","terminal.lua"}})
+      Notify("terminal normal is already opened","WARN",{title={"Terminal_normal()","terminal.lua"}})
     else
       -- load 隐藏的 terminal normal
       vim.cmd('bot sbuffer '..term_bufnr ..' | setlocal winfixheight nobuflisted')
