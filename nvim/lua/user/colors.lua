@@ -56,7 +56,7 @@ vim.cmd('hi FloatBorder ctermfg=237')   -- Floating Window border 颜色 - borde
 vim.cmd('hi WildMenu cterm=bold ctermfg=235 ctermbg=39')     -- command 模式自动补全
 vim.cmd('hi! StatusLine cterm=None ctermfg=145 ctermbg=236') -- command 自动补全时 statusLine 颜色
 
-vim.cmd('hi! HLNextSearch cterm=None ctermfg=232 ctermbg=232') -- 自定义 highling next search blink 的颜色
+vim.cmd('hi! HLSearchWord cterm=None ctermfg=232 ctermbg=232') -- 自定义 highling next search blink 的颜色
 
 --- 基础颜色 ---------------------------------------------------------------------------------------
 vim.cmd('hi Keyword ctermfg=170')                -- 最主要的颜色
