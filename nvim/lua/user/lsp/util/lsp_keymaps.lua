@@ -20,9 +20,9 @@ M.textDocument_keymaps = function(bufnr)
 
   --- 自定义的 hover_short() request, 在 hover() 基础上只显示 function signature, 不显示 comments.
   vim.api.nvim_buf_set_keymap(bufnr, "n", "<C-CR>", "", {noremap = true,
-    callback = require("user.lsp.lspconfig.custom_lsp_request").hover_short})
+    callback = require("user.lsp.lspconfig.user_lsp_request").hover_short})
   vim.api.nvim_buf_set_keymap(bufnr, "i", "<C-CR>", "", {noremap = true,
-    callback = require("user.lsp.lspconfig.custom_lsp_request").hover_short})
+    callback = require("user.lsp.lspconfig.user_lsp_request").hover_short})
 
   --- definition, references, implementation.
   vim.api.nvim_buf_set_keymap(bufnr, "n", "<F12>", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
