@@ -1,6 +1,6 @@
--- NOTE: 返回光标所在位置是否已经在最左侧了, 或者光标前一个字符是否为 %s, 即:\n \t \r space ...
---       目的是判断是否需要执行 backspace.
---       true - 本行前一位没有任何字符; nil - 本行前一位有字符.
+--- NOTE: 返回光标所在位置是否已经在最左侧了, 或者光标前一个字符是否为 %s, 即:\n \t \r space ...
+---       目的是判断是否需要执行 backspace.
+---       true - 本行前一位没有任何字符; nil - 本行前一位有字符.
 function Check_backspace()
   local col = vim.fn.col(".") - 1
   return col == 0 or vim.fn.getline("."):sub(col, col):match("%s")
