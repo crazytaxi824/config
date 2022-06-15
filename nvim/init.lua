@@ -130,18 +130,19 @@
 require "user.plugin-settings.impatient"
 
 --- 读取设置: ~/.config/nvim/lua/user/xxx.lua
-require "user.util"      -- [必要], 自定义函数, 很多设置用到的常用函数.
-require "user.settings"  -- vimrc 设置
-require "user.keymaps"   -- keymap 设置
-require "user.fold"      -- 代码折叠设置, NOTE: treesitter experimental function.
+require "user.global_util"  -- [必要], 自定义函数, 很多设置用到的常用函数.
+require "user.settings"     -- vimrc 设置
+require "user.lsp"          -- 加载 vim.lsp 相关设置, user/lsp 是个文件夹, 这里是加载的 user/lsp/init.lua
+require "user.keymaps"      -- keymap 设置
+require "user.fold"         -- 代码折叠设置, NOTE: treesitter experimental function.
 require "user.user_commands"  -- 自定义命令
---require "user.terminal"  -- 自定义 terminal, 需要时可替代 toggle terminal.
+--require "user.terminal"   -- 自定义 terminal, 需要时可替代 toggle terminal.
 
---- 加载 plugins ---
+--- 加载 plugins 和 settings
 require "user.plugins"  -- packer 加载 plugin
 
---- 放在最后 overwirte 其他颜色设置.
-require "user.colors"  -- vim highlight 设置
+--- 放在最后 overwirte 其他颜色设置
+require "user.colors"   -- vim highlight 设置
 
 --- TODO -------------------------------------------------------------------------------------------
 

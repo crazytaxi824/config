@@ -210,9 +210,6 @@ return packer.startup(function(use)
       config = function() require("user.lsp.null-ls") end,
       requires = "nvim-lua/plenary.nvim",
     }
-
-    --- 加载其他 LSP 相关自定义设置
-    require("user.lsp.util")
   end
 
   --- File Tree Display ----------------------------------------------------------------------------
