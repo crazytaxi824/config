@@ -263,17 +263,22 @@ local keymaps = {
   {'n', '<C-s>', ':update<CR>', opt},
   {'v', '<C-s>', '<C-c>:update<CR>', opt},
   {'i', '<C-s>', '<C-c>:update<CR>', opt},
-  --- VVI: <Ctrl-Z> 是危险操作. 意思是 :stop. 直接退出 vim, 会留下 .swp 文件
+  --- VVI: <Ctrl-Z> 是危险操作. 意思是 :stop. Suspend vim, 退出到 terminal 界面, 但保留 job.
+  --- 需要使用 `jobs -l` 列出 Suspended 列表,
+  --- 使用 `fg %1` 恢复 job,
+  --- 或者 `kill %1` 终止 job (不推荐, 会留下 .swp 文件).
   {'n', '<C-z>', 'u', opt},
   {'v', '<C-z>', '<Nop>', opt},
   {'i', '<C-z>', '<C-o>u', opt},
 
   --- fold -----------------------------------------------------------------------------------------
+  --- 这里是模拟 vscode keymaps.
   {'n', '<leader>k1', 'zM', opt, "Close all folds"},
   {'n', '<leader>kj', 'zR', opt, "Open all folds"},
 
   --- <leader> -------------------------------------------------------------------------------------
-  {'n', '<leader>"', 'viw<C-c>`>a"<C-c>`<i"<C-c>', opt, 'which_key_ignore'},  -- 不在 which-key 中显示.
+  --- <leader> keymaps 默认会显示在 which-key list 中, 所以需要使用 'which_key_ignore' 阻止显示
+  {'n', '<leader>"', 'viw<C-c>`>a"<C-c>`<i"<C-c>', opt, 'which_key_ignore'},
   {'n', "<leader>'", "viw<C-c>`>a'<C-c>`<i'<C-c>", opt, 'which_key_ignore'},
   {'n', '<leader>`', 'viw<C-c>`>a`<C-c>`<i`<C-c>', opt, 'which_key_ignore'},
   {'n', '<leader>*', 'viw<C-c>`>a*<C-c>`<i*<C-c>', opt, 'which_key_ignore'},
@@ -316,8 +321,9 @@ local keymaps = {
   {'n', '<leader>T', delete_all_terminals, opt, "Close All Terminal Window"},
 
   --- 其他 -----------------------------------------------------------------------------------------
-  {'n', 'ZZ', '<Nop>', opt, 'same as `:x`'},
-  {'v', 'ZZ', '<Nop>', opt, 'same as `:x`'},
+  --- ZZ same as `:x`
+  {'n', 'ZZ', '<Nop>', opt},
+  {'v', 'ZZ', '<Nop>', opt},
 
   {'n', '[[', jump_to_prev_section, opt, 'Jump to Prev Section'},
   {'n', ']]', jump_to_next_section, opt, 'Jump to Next Section'},
