@@ -8,7 +8,7 @@
 ---       如果 null-ls 没有设置对应的 format tool, formatting_seq_sync(...{"null-ls"}) 也不会报错.
 
 --- 如果有 LSP client 支持格式化 current buffer 则运行 vim.lsp.buf.formatting_seq_sync(); 否则 return.
-local function lspFormat()
+local function lsp_format()
   local clients = vim.tbl_values(vim.lsp.buf_get_clients())
   for _, client in ipairs(clients) do
     --if client.resolved_capabilities.document_formatting then  -- NOTE: 也可以用 resolved_capabilities 判断.
@@ -22,8 +22,7 @@ local function lspFormat()
 
   -- 如果没有任何 LSP 支持 formating 则提醒.
   Notify(
-    {"no LSP support Formatting this file. please check:",
-      "':lua print(vim.inspect(vim.tbl_values(vim.lsp.buf_get_clients())))'"},
+    "no LSP support Formatting this file. please check `:LspInstallInfo`",
     "WARN",
     {title={"lspFormat()","auto_format.lua"}}
   )
@@ -31,7 +30,7 @@ end
 
 --- 定义 `:Format` command. NOTE: 有些文件类型 (markdown, lua ...) 需要手动执行 Format 命令.
 --vim.cmd [[command! Format lua vim.lsp.buf.formatting_sync()]]  -- 基本原理
-vim.api.nvim_create_user_command("Format", lspFormat, {bang=true, bar=true})
+vim.api.nvim_create_user_command("Format", lsp_format, {bang=true, bar=true})
 
 --- BufWritePre 在写入文件之前执行 Format.
 --- NOTE: yaml, markdown, lua 不在 autocmd 中, 这些文件可以手动执行 `:Format` 命令.
