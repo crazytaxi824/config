@@ -52,7 +52,17 @@ return {
 
 # LSP 插件关系
 
+## vim.lsp 
+
+vim.lsp 是 neovim 自带的 lsp client 实例, 实现了向 lsp server 请求 method 和 handler 用于处理 server 返回的 response.
+
+lsp server 包括 gopls, tsserver, pyright ...
+
+<br />
+
 ## lspconfig 官方插件
+
+`lspconfig` 给 vim.lsp 提供 lsp server 设置.
 
 `neovim/nvim-lspconfig`
 
@@ -67,6 +77,7 @@ lspconfig.{lsp_server}.setup({
   capabilities = cmp_nvim_lsp.update_capabilities()  -- 将 lsp completion 返回给 cmp-nvim-lsp.
 })
 
+-- eg:
 lspconfig.gopls.setup({
   ...
 })
@@ -101,11 +112,12 @@ lspconfig.gopls.setup({
 
 `jose-elias-alvarez/null-ls.nvim`
 
-`null-ls` 是一个 lsp client 接口, 将 LSP protocal 中的 diagnostic, format, code_action ... 等请求翻译成各种 linter,
-formatter 工具的命令并执行, 然后获取返回信息.
+`null-ls` 是将 vim.lsp 中的 diagnostic, format, code_action ... 等请求翻译成各种 linter, formatter 的命令并执行, 然后将
+执行结果翻译后返回给 vim.lsp 的一个工具.
 
 简单来说是把 golangci, eslint ... 等工具变成了一个 lsp server, 通过 lsp protocal 的标准请求翻译成这些工具的命令.
 
-`null-ls` 和 `lspconfig` 是独立的两个 lsp client, 不存在依赖关系. 可以通过 `:LspInfo` 查看到两个 lsp client.
+`null-ls` 和 `lspconfig` 是独立的两个 plugin, 不存在依赖关系, 但都接入到了 vim.lsp 中. 可以通过 `:LspInfo` 查看到
+两个 lsp client.
 
 <br />
