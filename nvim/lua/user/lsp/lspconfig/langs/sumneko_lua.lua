@@ -2,14 +2,19 @@
 return {
   settings = {
     Lua = {
+      --runtime = {
+      --  version = 'LuaJIT',
+      --},
       diagnostics = {
         globals = { "vim" },
       },
       workspace = {
+        --- NOTE: nvim_get_runtime_file() 列出所有 runtimepath ~/.local/share/nvim/site/pack/*/start/* 文件夹.
+        --library = vim.api.nvim_get_runtime_file("", true),  -- VVI: DO NOT use this.
         library = {
-          [vim.fn.expand("$VIMRUNTIME/lua")] = true,
-          [vim.fn.stdpath("config") .. "/lua"] = true,
-      	},
+          vim.fn.expand("$VIMRUNTIME/lua"),
+          vim.fn.stdpath("config") .. "/lua",  -- /Users/ray/.config/nvim/lua/
+        },
       },
     },
   },
