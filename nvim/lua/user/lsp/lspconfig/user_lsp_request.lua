@@ -61,6 +61,7 @@ local M = {}
 ---    不显示 comments, 只显示 function 定义.
 --- copy from `function M.hover(_, result, ctx, config)`
 --- https://github.com/neovim/neovim/ -> runtime/lua/vim/lsp/handlers.lua
+--- `:help lsp-handler`, lsp-request handler 的第一个参数为 err, 这里省略不处理.
 local function hover_short_handler(_, result, ctx, config)
   config = config or {}
   config.focus_id = ctx.method

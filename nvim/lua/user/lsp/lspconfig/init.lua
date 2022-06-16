@@ -64,12 +64,10 @@ lsp_installer.setup {
     },
   },
 
-  log_level = vim.log.levels.WARN,  -- `:help vim.log.levels` 影响 `:LspInstallLog`
+  --log_level = vim.log.levels.INFO,  -- 影响 `:LspInstallLog`
 }
 
 --- lspconfig setup() ------------------------------------------------------------------------------
-vim.lsp.set_log_level("WARN")  -- `:help vim.lsp.set_log_level` 影响 `:LspLog`
-
 for _, LSP_server in pairs(LSP_servers) do
   --- NOTE: opts 必须包含 on_attach, capabilities 两个属性.
   ---       这里的 opts 获取到的是 require 文件中返回的 M.
