@@ -9,6 +9,7 @@ local M = {}  -- module, 仅提供两个 keymaps 方法.
 
 local opts = { noremap = true }
 
+--- for lspconfig only -----------------------------------------------------------------------------
 M.textDocument_keymaps = function(bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, "n", "<F2>", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
   vim.api.nvim_buf_set_keymap(bufnr, "i", "<F2>", "<C-o><cmd>lua vim.lsp.buf.rename()<CR>", opts)
@@ -36,6 +37,7 @@ M.textDocument_keymaps = function(bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, "n", "<Esc>", '<Esc><cmd>doautocmd CompleteDone<CR>', opts)
 end
 
+--- for lspconfig && null-ls, format && diagnostic -------------------------------------------------
 M.diagnostic_keymaps = function(bufnr)
   --- jump to diagnostics next error.
   vim.api.nvim_buf_set_keymap(bufnr, "n", "<F8>", '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)

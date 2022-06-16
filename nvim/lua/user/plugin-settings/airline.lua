@@ -55,7 +55,7 @@ local airline_keymaps = {
   {'n', '<leader>8', '<Plug>AirlineSelectTab8', opt, 'which_key_ignore'},
   {'n', '<leader>9', '<Plug>AirlineSelectTab9', opt, 'which_key_ignore'},
   {'n', '<leader>0', '<Plug>AirlineSelectTab0', opt, 'which_key_ignore'},
-  {'n', '<lt>', '<Plug>AirlineSelectPrevTab'},
+  {'n', '<lt>', '<Plug>AirlineSelectPrevTab'},  --- <lt>, less than, 代表 '<'. 也可以使用 '\<'
   {'n', '>', '<Plug>AirlineSelectNextTab'},
 
   --- airline 关闭 buffers.

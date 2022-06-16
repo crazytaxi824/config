@@ -54,5 +54,5 @@ return {
       ["ui.diagnostic.staticcheck"] = false,
     },
   },
-  single_file_support = true,
+  single_file_support = true,  -- 默认开启.
 }

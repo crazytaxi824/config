@@ -28,6 +28,9 @@
 ---    - 加载 ~/.config/nvim/lua/user/lsp/ 文件夹. VVI: 首先 lsp 文件夹中必须有 init.lua 文件,
 ---           然后使用 require "user/lsp" 直接加载整个 lsp 文件夹.
 --
+--- NOTE: keymap 键位.
+--     - `:help key-notation`
+--
 --- VVI: `_G` 全局变量/函数
 --    nvim 中有一个 `_G` 全局变量. 自定义的所有全局变量和函数都会被放在 _G 内.
 --    例如:
