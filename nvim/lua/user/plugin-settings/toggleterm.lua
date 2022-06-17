@@ -35,6 +35,8 @@ toggleterm.setup({
 
   hide_numbers = false,  -- 隐藏 teriminal 行号, 会影响后打开的 window 也没有 number.
   persist_size = true,   -- 保持 window size
+  persist_mode = true,   -- if set to true (default) the previous terminal mode will be remembered
+
   shade_terminals = false,  -- `set termguicolors` 用
   --shade_filetypes = {},
   --shading_factor = 2,     -- the degree by which to darken to terminal colour, 1 | 2 | 3
