@@ -84,6 +84,15 @@ end
 packer.init {
   --snapshot = "2022.06.07",   -- VVI: Name of the snapshot you would like to load at startup
   snapshot_path = vim.fn.stdpath('config') .. '/packer_snapshot', -- Default save directory for snapshots
+  --package_root = vim.fn.stdpath('data') .. '/site/pack'),  -- 默认值
+  --compile_path = vim.fn.stdpath('config') .. '/plugin/packer_compiled.lua'),  -- 默认值, 应该不常改动.
+
+  ensure_dependencies = true, -- Should packer install plugin dependencies?
+  auto_clean = true, -- During sync(), remove unused plugins
+  autoremove = false, -- Remove disabled or unused plugins without prompting the user
+  compile_on_sync = true, -- During sync(), run packer.compile()
+  auto_reload_compiled = true, -- Automatically reload the compiled file after creating it.
+
   display = {
     open_fn = function()
       --- Packer 面板 border 样式.
@@ -91,6 +100,7 @@ packer.init {
       return require("packer.util").float({ border = {"▄","▄","▄","█","▀","▀","▀","█"} })  -- `:help nvim_open_win()`
     end,
   },
+  log = { level = 'info' }, -- "trace", "debug", "info", "warn"(*), "error", "fatal".
 }
 
 --- 官方文档 https://github.com/wbthomason/packer.nvim
@@ -281,7 +291,11 @@ return packer.startup(function(use)
   use {"iamcco/markdown-preview.nvim",
     --- VVI: Update 后需要重新安装 preview 插件, 否则可能出现无法运行的情况.
     run = function() vim.fn["mkdp#util#install"]() end,
-    ft = {"markdown"},  -- BUG: 使用 ft 时, after/ftplugin/markdown.lua 会被加载两次.
+
+    -- FIXME: packer 中使用 ft 时, after/ftplugin/markdown.lua 会被加载两次.
+    -- https://github.com/wbthomason/packer.nvim/issues/648
+    -- https://github.com/wbthomason/packer.nvim/issues/698
+    ft = {"markdown"},
   }
 
   --use "goolord/alpha-nvim"          -- neovim 启动页面

@@ -2,9 +2,9 @@
 return {
   settings = {
     Lua = {
-      --runtime = {
-      --  version = 'LuaJIT',
-      --},
+      -- runtime = {
+      --   version = 'LuaJIT',
+      -- },
       diagnostics = {
         globals = { "vim" },
       },

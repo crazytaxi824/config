@@ -138,6 +138,14 @@ null_ls.setup({
   -- NOTE: 非常耗资源, 调试完后设置为 false.
   -- is the same as setting log.level to "trace" 记录 log, `:NullLsLog` 打印 log.
   debug = false,
+  log = {
+    enable = true,   -- write to null-ls.log.
+    level = 'warn',  -- "error", "warn"(*), "info", "debug", "trace"
+
+    -- show log output in Neovim's ':messages'.
+    -- sync is slower but guarantees that messages will appear in order.
+    use_console = 'async',  -- "sync", "async"(*), false.
+  },
 
   update_in_insert = false,  -- 节省资源, 一边输入一边检查
   debounce = 600,            -- 节省资源, diagnostics 间隔时间, 默认 250
