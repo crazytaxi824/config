@@ -64,7 +64,7 @@ lsp_installer.setup {
     },
   },
 
-  --log_level = vim.log.levels.INFO,  -- 影响 `:LspInstallLog`
+  log_level = vim.log.levels.WARN,  -- 影响 `:LspInstallLog`
 }
 
 --- lspconfig setup() ------------------------------------------------------------------------------
