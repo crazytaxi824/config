@@ -60,6 +60,11 @@
 -- NOTE: You must run this or `PackerSync` whenever you make changes to your plugin configuration.
 
 -- -- }}}
+--- README: packer 主要是一个 plugin 安装/管理插件.
+--- nvim 加载插件的时候读取的是 packer.compile() 之后的文件.
+--- `:PackerSync` 的时候会自动运行 compile(), 重新生成 compile 文件. 主要影响 setup() 设置文件加载.
+--- VVI: 插件一旦安装到 pack/packer/start/ 中, 不论本文件中的 use() 是否被注释, 已安装的插件都会被加载.
+--- 如果想要插件不加载, 卸载该插件, 或者使用 `opt = true`, 将插件移动到 pack/packer/opt/ 文件夹中.
 
 --- NOTE: Only required if you have packer configured as `opt`
 --vim.cmd [[packadd packer.nvim]]  -- 在 stdpath('cache') 中创建 "packer.nvim" 文件夹
@@ -100,13 +105,13 @@ packer.init {
       return require("packer.util").float({ border = {"▄","▄","▄","█","▀","▀","▀","█"} })  -- `:help nvim_open_win()`
     end,
     keybindings = { -- Keybindings for the display window
-      quit = '<ESC>',  -- VVI: 默认是 'q', 其他的都是 <ESC>
+      quit = '<ESC>',  -- VVI: 默认是 'q'
       toggle_info = '<CR>',
       diff = 'd',
       prompt_revert = 'r',
     },
   },
-  log = { level = 'info' }, -- "trace", "debug", "info", "warn"(*), "error", "fatal".
+  log = { level = 'warn' }, -- "trace", "debug", "info", "warn"(*), "error", "fatal".
 }
 
 --- 官方文档 https://github.com/wbthomason/packer.nvim
@@ -115,7 +120,7 @@ packer.init {
 --- 插件的安装位置在 "~/.local/share/nvim/site/pack/packer/start/..."
 --- `:PackerSync` - install / update / clean 插件包.
 return packer.startup(function(use)
-  use "wbthomason/packer.nvim" -- Have packer manage itself
+  use "wbthomason/packer.nvim"  -- VVI: 必要. Have packer manage itself
 
   --- Performence & Functions ----------------------------------------------------------------------
   --- 加快 lua module 加载时间, 生成 ~/.cache/nvim/luacache_chunks && luacache_modpaths
@@ -125,6 +130,7 @@ return packer.startup(function(use)
   }
 
   --- Useful lua functions used by lots of plugins
+  --- NOTE: plenary.nvim 合并了 popup.nvim
   use "nvim-lua/plenary.nvim"
 
   --- [FIXME] Needed while issue https://github.com/neovim/neovim/issues/12587 is still open
