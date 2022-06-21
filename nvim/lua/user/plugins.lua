@@ -99,6 +99,12 @@ packer.init {
       --- return require("packer.util").float { border = "single" }  -- `:help nvim_open_win()`
       return require("packer.util").float({ border = {"▄","▄","▄","█","▀","▀","▀","█"} })  -- `:help nvim_open_win()`
     end,
+    keybindings = { -- Keybindings for the display window
+      quit = '<ESC>',  -- VVI: 默认是 'q', 其他的都是 <ESC>
+      toggle_info = '<CR>',
+      diff = 'd',
+      prompt_revert = 'r',
+    },
   },
   log = { level = 'info' }, -- "trace", "debug", "info", "warn"(*), "error", "fatal".
 }

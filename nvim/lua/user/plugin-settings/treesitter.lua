@@ -3,12 +3,18 @@ if not status_ok then
   return
 end
 
+--- path to store parsers. VVI: directory must be writeable and must be explicitly added to the runtimepath.
+--- 需要在 setup() 中设置 parsers_install_dir, 同时将 path 添加到 vim 的 runtimepath 中.
+local treesitter_parsers_path = vim.fn.expand('~/.local/share/nvim/site/treesitter-parser')
+vim.opt.runtimepath:append(treesitter_parsers_path)
+
 configs.setup {
   --- supported langs, https://github.com/nvim-treesitter/nvim-treesitter#supported-languages
   --ensure_installed = { "go", "lua", "javascript", "typescript", "tsx", "html", "css", "scss" ... },
   ensure_installed = "all",  -- 白名单, "all" OR a list of languages
-  sync_install = false,      -- install languages synchronously (only applied to `ensure_installed`)
+  sync_install = false,  -- install languages synchronously (only applied to `ensure_installed`)
   ignore_install = {},  -- 黑名单, List of parsers to ignore installing
+  parser_install_dir = treesitter_parsers_path,  -- path to store parsers.
 
   --- `:TSModuleInfo` 可以查看 module 设置.
   --- treesitter 自带 modules 设置 -----------------------------------------------------------------
