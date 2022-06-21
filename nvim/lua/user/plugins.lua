@@ -106,7 +106,7 @@ packer.init {
       prompt_revert = 'r',
     },
   },
-  log = { level = 'info' }, -- "trace", "debug", "info", "warn"(*), "error", "fatal".
+  log = { level = 'warn' }, -- "trace", "debug", "info", "warn"(*), "error", "fatal".
 }
 
 --- 官方文档 https://github.com/wbthomason/packer.nvim
