@@ -1,4 +1,6 @@
---- notify() options `:h notify.Options` ----------------------------
+--- nvim-notify ------------------------------------------------------------------------------------
+--- `:help notify.Options`
+--- `:help notify.Config`
 local notify_status_ok, notify = pcall(require, "notify")
 if not notify_status_ok then
   return
@@ -27,12 +29,13 @@ notify.setup({
   },
 })
 
---- 颜色只对 notify 有用 ---------------------------------------------------------------------------
+--- 使用方法:
 -- require('telescope').extensions.notify.notify(<opts>)  -- 整合到 telescope
--- print(vim.inspect(require("notify").history())) -- :Notifications   -- 查看 msg 列表
--- require("notify")("omg", "DEBUG", {title = "TTT"})     -- send notify message
--- require("notify")("omg", 0, {title = "TTT"})           -- send notify message
+-- print(vim.inspect(require("notify").history()))  -- `:Notifications` 查看 msg 列表
+-- require("notify")("omg", "DEBUG", {title = "TTT"})  -- send notify message
+-- require("notify")("omg", 0, {title = "TTT"})        -- send notify message
 
+--- 颜色只对 notify 有用 ---------------------------------------------------------------------------
 --- border 颜色
 vim.cmd [[highlight NotifyERRORBorder ctermfg=167]] -- red
 vim.cmd [[highlight NotifyWARNBorder  ctermfg=166]] -- orange
@@ -60,5 +63,6 @@ vim.cmd [[highlight link NotifyWARNBody Normal]]
 vim.cmd [[highlight link NotifyINFOBody Normal]]
 vim.cmd [[highlight link NotifyDEBUGBody Normal]]
 vim.cmd [[highlight link NotifyTRACEBody Normal]]
+
 
 
