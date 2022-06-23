@@ -34,7 +34,7 @@ function Terminal_exec(term_id, cmd)
     vim.cmd(win_index..'q!')  -- 关闭之前的 terminal window
   end
 
-  vim.cmd('bot split term://'..cmd..';\\#reusable\\#'..term_id .. ' | setlocal winfixheight nobuflisted bufhidden=wipe')
+  vim.cmd('bot split term://'..cmd..';\\#reusable\\#'..term_id .. ' | setlocal winfixheight nobuflisted bufhidden=wipe filetype=myterm')
   vim.fn.setwinvar(vim.fn.win_getid(), "reusable", term_id)
 end
 
@@ -58,7 +58,7 @@ function Terminal_normal()
   end
 
   -- 开启新的 terminal normal
-  vim.cmd('bot split term:///bin/zsh;\\#reusable\\#normal | setlocal winfixheight nobuflisted')
+  vim.cmd('bot split term:///bin/zsh;\\#reusable\\#normal | setlocal winfixheight nobuflisted filetype=myterm')
   vim.fn.setwinvar(vim.fn.win_getid(), "reusable", "normal")
 end
 
