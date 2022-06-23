@@ -1,3 +1,6 @@
+--- README: 如果 cursor 所在的 window 中显示的(active) buffer 是 unlisted (即: 不显示在 tabline 上的 buffer),
+--- 不能使用 <Plug>AirlineSelectPrev/NextTab 来进行 buffer 切换, 但是可以使用 <Plug>AirlineSelectTabX 直接跳转.
+
 --- 自定义 theme 文件在 '~/.config/nvim/autoload/airline/themes/mydark.vim'
 vim.g.airline_theme = "mydark"
 --vim.g.airline_theme = "dark"   -- 自带主题
