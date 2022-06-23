@@ -9,9 +9,12 @@ vim.g['airline#extensions#tabline#enabled'] = 1  -- 上方开启 buffer list
 vim.g['airline#extensions#tabline#buffer_idx_mode'] = 1  -- 给 buffer list 编号.
 vim.g['airline#extensions#whitespace#checks'] = {'indent', 'trailing', 'conflicts'}  -- 检查文档
 
---- VVI: buffer unlist 指定文件名(pattern) / 文件类型.
-vim.g['airline#extensions#tabline#keymap_ignored_filetypes'] = {'vimfiler', 'nerdtree', 'tagbar', 'Nvimtree'} -- unlist 文件类型
-vim.g['airline#extensions#tabline#ignore_bufadd_pat'] = '!|term://|defx|gundo' -- 文件名部分匹配则 unlist
+--- VVI: 指定 filetype 中不能使用 <Plug>AirlineSelectXXX 功能.
+vim.g['airline#extensions#tabline#keymap_ignored_filetypes'] = {'vimfiler', 'nerdtree', 'tagbar', 'NvimTree', 'toggleterm', 'myterm'}
+--- VVI: 文件名(pattern)匹配则 unlist. 这里需要修改默认值, 否则 tagbar.lua 无法显示在 tabline 中.
+vim.g['airline#extensions#tabline#ignore_bufadd_pat'] = '!|defx|gundo|term://'
+--- buffer unlist 指定文件名(pattern), 和上面的 ignore_bufadd_pat 功能类似.
+--vim.g['airline#extensions#tabline#excludes'] = {'term://'}  -- list
 
 --- airline 插件设置, 默认都是开启状态.
 --vim.g['airline#extensions#branch#enabled'] = 1  -- "tpope/vim-fugitive"
