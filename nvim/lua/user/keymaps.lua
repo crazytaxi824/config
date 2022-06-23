@@ -61,7 +61,7 @@ local function delete_all_other_buffers()
     if bufinfo.listed == 1      -- 是 listed buffer. NOTE: nvimtree, tagbar, terminal 不会被关闭.
       and bufinfo.changed == 0  -- 没有未保存内容
       and bufinfo.loaded == 1   -- 已经加载完成
-      and bufinfo.hidden == 1   -- 隐藏状态的 buffer, 如果不是 hidden 状态, 例如当前 buffer, 不会被删除.
+      and bufinfo.hidden == 1   -- 隐藏状态的 buffer. 如果不是 hidden 状态, 例如当前 buffer, 不会被删除.
     then
       table.insert(buf_list, bufinfo.bufnr)
     end

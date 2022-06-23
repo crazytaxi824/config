@@ -42,6 +42,18 @@ vim.g['airline#extensions#tabline#formatter'] = 'myfilename'
 --vim.g['airline#extensions#tabline#formatter'] = 'unique_tail'
 
 --- keymaps ----------------------------------------------------------------------------------------
+--- 利用 <Plug>AirlineSelectPrev/NextTab 判断是否需要 delete buffer.
+local function airline_del_current_buffer()
+  local before_select_bufnr = vim.fn.bufnr('%')  --- 获取当前 bufnr()
+  vim.cmd([[execute "normal! \<Plug>AirlineSelectPrevTab"]])  -- 使用 airline 跳转到 prev/next buffer
+  local after_select_bufnr = vim.fn.bufnr('%')   --- 获取跳转后 bufnr()
+
+  --- 如果 before != after 则执行 bdelete #.
+  if before_select_bufnr ~= after_select_bufnr then
+    vim.cmd([[bdelete #]])
+  end
+end
+
 local opt = { noremap = true, silent = true }
 local airline_keymaps = {
   -- airline ---------------------------------------------------------------------------------------
@@ -61,9 +73,7 @@ local airline_keymaps = {
   --- airline 关闭 buffers.
   --- bufnr("#") > 0 表示 '#' (previous buffer) 存在, 如果不存在则 bufnr('#') = -1.
   --- 如果 # 存在, 但处于 unlisted 状态, 则 bdelete # 报错. 因为 `:bdelete` 本质就是 unlist buffer.
-  {'n', '<leader>d',
-    ':execute "normal! \\<Plug>AirlineSelectNextTab" <bar> if bufnr("#") > 0 <bar> :bdelete # <bar> endif<CR>',
-    opt, 'Close This Buffer'},
+  {'n', '<leader>d', airline_del_current_buffer, opt, 'Close This Buffer'},
 }
 
 Keymap_set_and_register(airline_keymaps)
