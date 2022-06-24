@@ -83,7 +83,7 @@ local function buf_index_in_airline_tab(bufnr)
     end
   end
 
-  --- tab_index 在这里是 listed buffer 总数, 即 last listed buffer tab index.
+  --- 如果传入的 bufnr 是 nil, 则 tab_index 是 listed buffer 总数, 即 last listed buffer tab index.
   return tab_index
 end
 
