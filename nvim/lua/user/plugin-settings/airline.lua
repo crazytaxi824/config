@@ -5,7 +5,7 @@ vim.g['airline#extensions#tabline#enabled'] = 1  -- 上方开启 buffer list
 --- mode = 1 只能使用 <Plug>AirlineSelectTab0-9,   0 是最后一个 buffer 编号, 相当于 10
 --- mode = 2 只能使用 <Plug>AirlineSelectTab11-99, 没有 0-9 可以用, 第一个编号是 11
 --- mode = 3 可以使用 <Plug>AirlineSelectTab01-99, 第一个编号是 01, 而不是 1
-vim.g['airline#extensions#tabline#buffer_idx_mode'] = 1
+vim.g['airline#extensions#tabline#buffer_idx_mode'] = 3
 
 --- 检查文档格式
 --- indent: mixed indent within a line
@@ -62,31 +62,85 @@ vim.g.airline_mode_map = {
 -- -- }}}
 
 --- keymaps ----------------------------------------------------------------------------------------
+--- NOTE: 打开 unlisted buffer 后, <Plug>AirlineSelectPrev/NextTab 无法使用. 但是可以使用 <Plug>AirlineSelectTabX
+--- 如果当前 buffer 是 unlisted active buffer, 即显示但不在 tabline 中的 buffer, 则
+--- 使用 \d  跳转到 (#/first/last) listed buffer.
+--- 不需要 bdelete, 因为该 buffer 本身是 unlisted.
+
+--- functions for delete current buffer from tabline ----------------------------------------------- {{{
+--- 寻找指定 listed bufnr 在 airline's tabline 中的 tab index 位置.
+--- 如果 bufnr 不存在, 则返回 listed buffer 总数.
+local function buf_index_in_airline_tab(bufnr)
+  local buffers = vim.fn.getbufinfo()
+  local tab_index = 0
+  for i = 1, #buffers, 1 do
+    if buffers[i].listed == 1 then  -- 只统计 listed buffer
+      tab_index = tab_index + 1
+      if bufnr and buffers[i].bufnr == bufnr then
+        --- 如果 bufnr 存在, 则返回 bufnr 的 tab index,
+        return tab_index
+      end
+    end
+  end
+
+  --- tab_index 在这里是 listed buffer 总数, 即 last listed buffer tab index.
+  return tab_index
+end
+
+--- if '#' buffer 存在, 而且是 listed, 则 load buffer, 如果 # 不存在, 则跳到 first/last listed buffer.
+local function jump_to_listed_buffer()
+  local prev_bufnr = vim.fn.bufnr('#')
+  local tab_index = 0
+
+  if prev_bufnr > 0 and vim.fn.buflisted(prev_bufnr) == 1 then
+    --- prev_buffer 存在, 同时是 listed buffer.
+    tab_index = buf_index_in_airline_tab(prev_bufnr)
+  else
+    --- prev_buffer 不存在, 或者不是 listed buffer.
+    tab_index = buf_index_in_airline_tab()
+  end
+
+  --- NOTE: load buffer, 最好使用 <Plug>AirlineSelectTabX, 可以避免 NvimTree, term, tagbar 跳转到别的 buffer 上.
+  --- 因为 airline#extensions#tabline#keymap_ignored_filetypes 的设置.
+  if tab_index > 0 and tab_index < 10 then
+    --- 个位数需要前面 +0, eg: <Plug>AirlineSelectTab01, FOR: buffer_idx_mode = 3 ONLY.
+    vim.cmd([[execute "normal! \<Plug>AirlineSelectTab0]] .. tab_index .. '"')
+  elseif tab_index >= 10 and tab_index < 100 then
+    vim.cmd([[execute "normal! \<Plug>AirlineSelectTab]] .. tab_index .. '"')
+  --- elseif tab_index >= 100 的情况不考虑.
+  end
+end
+
 --- 利用 <Plug>AirlineSelectPrev/NextTab 判断是否需要 delete buffer.
 local function airline_del_current_buffer()
   local before_select_bufnr = vim.fn.bufnr('%')  --- 获取当前 bufnr()
   vim.cmd([[execute "normal! \<Plug>AirlineSelectPrevTab"]])  -- 使用 airline 跳转到 prev/next buffer
   local after_select_bufnr = vim.fn.bufnr('%')   --- 获取跳转后 bufnr()
 
-  --- 如果 before != after 则执行 bdelete #.
   if before_select_bufnr ~= after_select_bufnr then
+    --- 如果 before != after 则执行 bdelete #.
     vim.cmd([[bdelete #]])
+  else
+    --- 如果 before == after, 出现这种情况主要是在 unlisted active buffer.
+    --- 跳转到 listed buffer
+    jump_to_listed_buffer()
   end
 end
+-- -- }}}
 
 local opt = { noremap = true, silent = true }
 local airline_keymaps = {
   -- airline ---------------------------------------------------------------------------------------
-  {'n', '<leader>1', '<Plug>AirlineSelectTab1', opt, 'which_key_ignore'},
-  {'n', '<leader>2', '<Plug>AirlineSelectTab2', opt, 'which_key_ignore'},
-  {'n', '<leader>3', '<Plug>AirlineSelectTab3', opt, 'which_key_ignore'},
-  {'n', '<leader>4', '<Plug>AirlineSelectTab4', opt, 'which_key_ignore'},
-  {'n', '<leader>5', '<Plug>AirlineSelectTab5', opt, 'which_key_ignore'},
-  {'n', '<leader>6', '<Plug>AirlineSelectTab6', opt, 'which_key_ignore'},
-  {'n', '<leader>7', '<Plug>AirlineSelectTab7', opt, 'which_key_ignore'},
-  {'n', '<leader>8', '<Plug>AirlineSelectTab8', opt, 'which_key_ignore'},
-  {'n', '<leader>9', '<Plug>AirlineSelectTab9', opt, 'which_key_ignore'},
-  {'n', '<leader>0', '<Plug>AirlineSelectTab0', opt, 'which_key_ignore'},
+  {'n', '<leader>1', '<Plug>AirlineSelectTab01', opt, 'which_key_ignore'},
+  {'n', '<leader>2', '<Plug>AirlineSelectTab02', opt, 'which_key_ignore'},
+  {'n', '<leader>3', '<Plug>AirlineSelectTab03', opt, 'which_key_ignore'},
+  {'n', '<leader>4', '<Plug>AirlineSelectTab04', opt, 'which_key_ignore'},
+  {'n', '<leader>5', '<Plug>AirlineSelectTab05', opt, 'which_key_ignore'},
+  {'n', '<leader>6', '<Plug>AirlineSelectTab06', opt, 'which_key_ignore'},
+  {'n', '<leader>7', '<Plug>AirlineSelectTab07', opt, 'which_key_ignore'},
+  {'n', '<leader>8', '<Plug>AirlineSelectTab08', opt, 'which_key_ignore'},
+  {'n', '<leader>9', '<Plug>AirlineSelectTab09', opt, 'which_key_ignore'},
+  {'n', '<leader>0', '<Plug>AirlineSelectTab10', opt, 'which_key_ignore'},
 
   --- NOTE: 如果 cursor 所在的 window 中显示的(active) buffer 是 unlisted (即: 不显示在 tabline 上的 buffer),
   --- 不能使用 <Plug>AirlineSelectPrev/NextTab 来进行 buffer 切换,
