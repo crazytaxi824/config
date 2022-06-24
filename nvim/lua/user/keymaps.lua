@@ -54,14 +54,14 @@ local function hl_visual_search(key, whole_word)
 end
 
 --- 删除其他 buffer --------------------------------------------------------------------------------
---- `:bdelete` 本质是 unlist buffer. 即: listed = 0
+--- NOTE: `:bdelete` 本质是 unlist buffer. 即: listed = 0
 local function delete_all_other_buffers()
   local buf_list = {}
   for _, bufinfo in ipairs(vim.fn.getbufinfo()) do  -- 所有 buffer, table list
-    if bufinfo.listed == 1      -- 是 listed buffer. NOTE: nvimtree, tagbar, terminal 不会被关闭.
-      and bufinfo.changed == 0  -- 没有未保存内容
-      and bufinfo.loaded == 1   -- 已经加载完成
-      and bufinfo.hidden == 1   -- 隐藏状态的 buffer. 如果不是 hidden 状态, 例如当前 buffer, 不会被删除.
+    if bufinfo.listed == 1      -- 是 listed buffer. NOTE: nvimtree, tagbar, terminal 不会被关闭, 因为他们是 unlisted.
+      and bufinfo.changed == 0  -- 没有修改后未保存的内容.
+      and bufinfo.loaded == 1   -- 已经加载完成.
+      and bufinfo.hidden == 1   -- 隐藏状态的 buffer. 如果是 active 状态(即: 正在显示的 buffer, 例如当前 buffer), 不会被删除.
     then
       table.insert(buf_list, bufinfo.bufnr)
     end
