@@ -22,58 +22,42 @@
 local reusable_term_size = 12
 
 function Terminal_exec(term_id, cmd)
-  local win_index = -1
   -- 获取 term win_id
   for winnr = vim.fn.winnr('$'), 1, -1 do
-    if vim.fn.getwinvar(winnr, 'reusable') == term_id then
-      win_index = winnr
+    if vim.fn.getwinvar(winnr, 'reusable') == term_id then  --- NOTE: getwinvar()
+      vim.cmd(winnr .. 'q!')  -- 关闭之前的 terminal window
     end
-  end
-
-  if win_index > 0 then
-    vim.cmd(win_index..'q!')  -- 关闭之前的 terminal window
   end
 
   vim.cmd('bot split term://'..cmd..';\\#reusable\\#'..term_id .. ' | setlocal winfixheight nobuflisted bufhidden=wipe filetype=myterm')
-  vim.fn.setwinvar(vim.fn.win_getid(), "reusable", term_id)
+  vim.fn.setwinvar(vim.fn.win_getid(), "reusable", term_id)  --- NOTE: setwinvar()
 end
 
 function Terminal_normal()
-  local term_bufnr = -1
   -- 获取 term win_id
-  for bufnr = vim.fn.bufnr('$'), 1, -1 do
-    if string.match(vim.fn.bufname(bufnr), "term://.*;#reusable#normal") then
-      term_bufnr = bufnr
+  for winnr = vim.fn.winnr('$'), 1, -1 do
+    if vim.fn.getwinvar(winnr, 'reusable') == "normal" then  --- NOTE: getwinvar()
+      vim.cmd(winnr .. 'q!')  -- 关闭之前的 terminal window
     end
-  end
-
-  if term_bufnr > 0 then
-    if vim.fn.getbufinfo(term_bufnr)[1].hidden == 0 then
-      Notify("terminal normal is already opened","WARN",{title={"Terminal_normal()","terminal.lua"}})
-    else
-      -- load 隐藏的 terminal normal
-      vim.cmd('bot sbuffer '..term_bufnr ..' | setlocal winfixheight nobuflisted')
-    end
-    return
   end
 
   -- 开启新的 terminal normal
   vim.cmd('bot split term:///bin/zsh;\\#reusable\\#normal | setlocal winfixheight nobuflisted filetype=myterm')
-  vim.fn.setwinvar(vim.fn.win_getid(), "reusable", "normal")
+  vim.fn.setwinvar(vim.fn.win_getid(), "reusable", "normal")  --- NOTE: setwinvar()
 end
 
 
 --- Terminal autocmd -------------------------------------------------------------------------------
+--- VVI: 绑定 <ESC> 进入 terminal normal 模式, 只对本 buffer 有效.
+vim.cmd [[au TermOpen term://* tnoremap <buffer> <ESC> <C-\><C-n>]]
+
 --- normal terminal 进入时打开 insert mode
 vim.cmd [[au TermOpen  term://*#reusable#normal startinsert]]
 --- normal terminal job done 时 quit! / bd! / bw!
 vim.cmd [[au TermClose term://*#reusable#normal quit!]]
 
---- resize reusable terminal
-vim.cmd('au BufEnter term://*#reusable#* resize '..reusable_term_size)  -- 必须要, 否则 sbuffer 的时候高度会变成一半.
-
---- 绑定 <ESC> 进入 terminal normal 模式, 只对本 buffer 有效.
-vim.cmd [[au TermOpen term://* tnoremap <buffer> <ESC> <C-\><C-n>]]
+--- resize reusable terminal, 这里是为了避免 term 窗口 size 是屏幕的一半.
+vim.cmd('au BufEnter term://*#reusable#* resize '..reusable_term_size)
 
 
 
