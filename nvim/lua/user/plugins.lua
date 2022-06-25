@@ -193,6 +193,7 @@ return packer.startup(function(use)
       "hrsh7th/cmp-nvim-lsp",      -- LSP source for nvim-cmp
       "hrsh7th/cmp-buffer",        -- buffer completions
       "hrsh7th/cmp-path",          -- path completions
+      --"hrsh7th/cmp-cmdline",     -- cmdline completions, 不好用.
       {"saadparwaiz1/cmp_luasnip", -- Snippets source for nvim-cmp
         requires = {
           {"L3MON4D3/LuaSnip",     -- snippet engine, for "cmp_luasnip", BUG: 每次打开文件都会有一个 [Scratch] buffer.
@@ -201,7 +202,6 @@ return packer.startup(function(use)
           },
         },
       },
-      --"hrsh7th/cmp-cmdline",     -- cmdline completions, 不好用.
     },
   }
 

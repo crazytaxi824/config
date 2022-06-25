@@ -12,11 +12,17 @@
 --- functions for key mapping ---------------------------------------------------------------------- {{{
 --- close all terminal window function -------------------------------------------------------------
 local function delete_all_terminals()
+  local buf_list = {}
+
   -- 获取所有 bufnr, 判断 bufname 是否匹配 term://*
   for bufnr = vim.fn.bufnr('$'), 1, -1 do
     if string.match(vim.fn.bufname(bufnr), "^term://*") then
-      vim.cmd('bdelete! '..bufnr)
+      table.insert(buf_list, bufnr)
     end
+  end
+
+  if #buf_list > 0 then
+    vim.cmd('bdelete! ' .. vim.fn.join(buf_list, ' '))  -- NOTE: 需要使用 '!' 强制退出 term
   end
 end
 
@@ -57,15 +63,16 @@ end
 --- NOTE: `:bdelete` 本质是 unlist buffer. 即: listed = 0
 local function delete_all_other_buffers()
   local buf_list = {}
-  for _, bufinfo in ipairs(vim.fn.getbufinfo()) do  -- 所有 buffer, table list
-    if bufinfo.listed == 1      -- 是 listed buffer. NOTE: nvimtree, tagbar, terminal 不会被关闭, 因为他们是 unlisted.
-      and bufinfo.changed == 0  -- 没有修改后未保存的内容.
-      and bufinfo.loaded == 1   -- 已经加载完成.
-      and bufinfo.hidden == 1   -- 隐藏状态的 buffer. 如果是 active 状态(即: 正在显示的 buffer, 例如当前 buffer), 不会被删除.
+
+  --- NOTE: nvimtree, tagbar, terminal 不会被关闭, 因为他们是 unlisted.
+  for _, bufinfo in ipairs(vim.fn.getbufinfo({buflisted = 1})) do  -- 获取 listed buffer
+    if bufinfo.changed == 0    -- 没有修改后未保存的内容.
+      and bufinfo.hidden == 1  -- 是隐藏状态的 buffer. 如果是 active 状态(即: 正在显示的 buffer, 例如当前 buffer), 不会被删除.
     then
       table.insert(buf_list, bufinfo.bufnr)
     end
   end
+
   if #buf_list > 0 then
     -- print('bdelete ' .. vim.fn.join(buf_list, ' ')) -- DEBUG
     vim.cmd('bdelete ' .. vim.fn.join(buf_list, ' '))

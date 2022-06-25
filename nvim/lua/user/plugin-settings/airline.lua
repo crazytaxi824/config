@@ -71,20 +71,16 @@ vim.g.airline_mode_map = {
 --- 寻找指定 listed bufnr 在 airline's tabline 中的 tab index 位置.
 --- 如果 bufnr 不存在, 则返回 listed buffer 总数.
 local function buf_index_in_airline_tab(bufnr)
-  local buffers = vim.fn.getbufinfo()
-  local tab_index = 0
-  for i = 1, #buffers, 1 do
-    if buffers[i].listed == 1 then  -- 只统计 listed buffer
-      tab_index = tab_index + 1
-      if bufnr and buffers[i].bufnr == bufnr then
-        --- 如果 bufnr 存在, 则返回 bufnr 的 tab index,
-        return tab_index
-      end
+  local listed_buffers = vim.fn.getbufinfo({buflisted=1})  -- 只获取 listed buffer
+  for i = 1, #listed_buffers, 1 do
+    if bufnr and listed_buffers[i].bufnr == bufnr then
+      --- 如果 bufnr 存在, 则返回 bufnr 的 tab index,
+      return i
     end
   end
 
-  --- tab_index 在这里是 listed buffer 总数, 即 last listed buffer tab index.
-  return tab_index
+  --- 如果传入的 bufnr 是 nil, 则返回 last listed buffer tab index.
+  return #listed_buffers
 end
 
 --- if '#' buffer 存在, 而且是 listed, 则 load buffer, 如果 # 不存在, 则跳到 first/last listed buffer.
@@ -108,6 +104,9 @@ local function jump_to_listed_buffer()
   elseif tab_index >= 10 and tab_index < 100 then
     vim.cmd([[execute "normal! \<Plug>AirlineSelectTab]] .. tab_index .. '"')
   --- elseif tab_index >= 100 的情况不考虑.
+  elseif tab_index <= 0 then
+    --- 没有任何 listed buffer 存在
+    vim.notify("no listed buffer exists", vim.log.levels.WARN)
   end
 end
 

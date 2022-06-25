@@ -125,7 +125,7 @@
 -- `:LuaCacheClear`                  | 清空缓存文件, 下次启动重新生成   |    清空 luacache_chunks, luacache_modpaths
 -------------------------------------+----------------------------------+------------------------------------
 -- `$ nvim --startuptime [logfile] [open_file]`  -- 将 nvim 打开 open_file 过程中的所有耗时打印到 logfile 中
--- eg: nvim --startuptime log src/main.go
+-- eg: `$ nvim --startuptime log src/main.go`  -- 将 nvim 打开 open_file 过程中的所有耗时打印到 ./log 文件中
 -------------------------------------+----------------------------------+------------------------------------
 
 --- VVI: 在最开始加载 "lewis6991/impatient.nvim" 设置,
