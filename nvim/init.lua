@@ -139,7 +139,7 @@ require "user.lsp"          -- 加载 vim.lsp 相关设置, user/lsp 是个文�
 require "user.keymaps"      -- keymap 设置
 require "user.fold"         -- 代码折叠设置, NOTE: treesitter experimental function.
 require "user.user_commands"  -- 自定义命令
---require "user.terminal"   -- 自定义 terminal, 需要时可替代 toggle terminal.
+--require "user.terminal"   -- 自定义 terminal, 学习/测试用. 需要时可替代 toggle terminal.
 
 --- 加载 plugins 和 settings
 require "user.plugins"  -- packer 加载 plugin
