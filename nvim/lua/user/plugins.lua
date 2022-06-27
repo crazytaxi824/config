@@ -77,6 +77,27 @@
 --    autocmd BufWritePost plugins.lua source <afile> | PackerSync
 --  augroup end
 -- ]]
+
+--- NOTE: 使用 :PackerSync :PackerUpdate ... 之后记录 update info 到指定文件.
+--- autocmd User PackerComplete     -- Fires after install, update, clean, and sync asynchronous operations finish.
+--- autocmd User PackerCompileDone  -- Fires after compiling.
+--- 使用方法 vim.cmd [[ autocmd User PackerComplete :set filetype? ]]
+--- getline(1, '$') 获取文件所有内容. return list.
+--- writefile(["foo", "bar"], "foo.log", "a")  -- a - append mode
+vim.api.nvim_create_autocmd("User", {
+  pattern = { "PackerComplete" },
+  callback = function()
+    if vim.bo.filetype == 'packer' then  -- 在 packer 窗口中.
+      local update_info = vim.fn.getline(1, '$')  -- 获取 update 的信息
+      update_info = vim.list_extend({"", vim.fn.strftime(" [%Y-%m-%d %H:%M:%S]")}, update_info)  -- insert date && time into update_info
+
+      local update_log = vim.fn.stdpath('cache') .. '/packer.myupdate.log'
+
+      -- write update_info to update_log file
+      vim.fn.writefile(update_info, update_log, 'a')
+    end
+  end
+})
 -- -- }}}
 
 --- Use a protected call so we don't error out on first use
@@ -88,7 +109,7 @@ end
 --- Have packer use a popup window, "nvim-lua/popup.nvim"
 packer.init {
   --snapshot = "2022.06.23",   -- VVI: Name of the snapshot you would like to load at startup
-  snapshot_path = vim.fn.stdpath('config') .. '/packer_snapshot', -- Default save directory for snapshots
+  snapshot_path = vim.fn.stdpath('config') .. '/packer_snapshot',  -- 默认路径是 stdpath('cache') .. '/packer.nvim'
   --package_root = vim.fn.stdpath('data') .. '/site/pack'),  -- 默认值
   --compile_path = vim.fn.stdpath('config') .. '/plugin/packer_compiled.lua'),  -- 默认值, 应该不常改动.
 
