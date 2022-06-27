@@ -19,7 +19,7 @@ configs.setup {
   --- `:TSModuleInfo` 可以查看 module 设置.
   --- treesitter 自带 modules 设置 -----------------------------------------------------------------
   highlight = {
-    enable = true,     -- VVI: `false` will disable the whole extension
+    enable = true,  -- VVI: highlight 是 treesitter 的主要功能.
     disable = { "" },  -- list of language that will be disabled
 
     --- NOTE: 同时使用 vim 自带 syntax,
