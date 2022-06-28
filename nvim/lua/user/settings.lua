@@ -116,9 +116,9 @@ vim.cmd [[au Filetype python setlocal expandtab textwidth=79]]
 ---       如果必须设置 filetype on, 则下面两个设置必须放在 filetype on 前面.
 vim.g.did_load_filetypes = 0  -- 0 - 关闭 vim 内置 filetype 检查; 1(*) - 关闭 vim & lua filetype 检查.
 vim.g.do_filetype_lua = 1     -- 读取 runtimepath/filetype.lua 中定义的 filetype mapping.
--- `:help :filetype on`, Detail: The ":filetype on" command will load these files:
---    $VIMRUNTIME/filetype.lua
---    $VIMRUNTIME/filetype.vim
+--- `:help :filetype on`, Detail: The ":filetype on" command will load these files:
+---    $VIMRUNTIME/filetype.lua
+---    $VIMRUNTIME/filetype.vim
 --vim.cmd('filetype on')  -- VVI: 默认开启, 不要手动设置.
 --vim.cmd('syntax on')    -- vim 内置语法高亮.
                           -- NOTE: syntax off 的情况下不会加载 after/syntax, 但是会加载 after/ftplugin
@@ -131,7 +131,7 @@ vim.opt.ttimeoutlen = 0   -- <ESC> 延迟时间, 默认 50ms.  <ESC> 的主要�
                           -- ttimeoutlen>0 的情况下, 从 insert 直接转成 visual 需要 <ESC>v, 中间不需要经过 normal 模式;
                           -- ttimeoutlen=0 的情况下, 模式转换时肯定会经过 normal. 因为按下 <ESC> 时马上就会转成 normal 模式.
 
--- 功能设置, 以下都是默认值
+--- 功能设置, 以下都是默认值
 vim.opt.backspace = 'indent,eol,start'  -- 设置 backspace 模式.
 vim.opt.history = 10000    -- command 保存的数量，默认(10000)
 vim.opt.autoindent = true  -- 继承前一行的缩进方式，适用于多行注释
@@ -145,19 +145,19 @@ vim.opt.foldenable = true  -- 折叠代码.
 vim.opt.hidden = true      -- NOTE: When off a buffer is unloaded when it is abandoned.
                            -- vim-airline & coc.nvim 需要用到.
 
--- window / scroll 设置
+--- window / scroll 设置
 vim.opt.splitbelow = true  -- force all horizontal splits to go below current window
 vim.opt.splitright = true  -- force all vertical splits to go to the right of current window
 vim.opt.scrolloff = 2      -- 没有到达文件顶部/底部时, 光标留空 n 行. 同时会影响 H / L 键行为.
 vim.opt.sidescrolloff = 16 -- 和上面类似, 横向留空 n 列.
 
--- search 设置，命令 `/` `?`
+--- search 设置，命令 `/` `?`
 vim.opt.incsearch = true   -- 开始实时搜索
 vim.opt.ignorecase = true  -- 大小写不敏感. 大小写敏感使用 `/Foo\C`; 不敏感用 /Foo\c
 vim.opt.smartcase = true   -- 如果 search 文字中有大写字母则 case sensitive; 如果没有大写字母则 ignorecase.
 vim.opt.hlsearch = true    -- / ? 搜索时显示所有匹配项. 颜色设置 `hi Search` & `hi IncSearch`
 
--- 样式设置
+--- 样式设置
 --vim.opt.showtabline = 2    -- always show tabs
 
 vim.opt.number = true        -- 设置行号
@@ -172,8 +172,8 @@ vim.opt.signcolumn = 'yes:1'  -- 始终显示 signcolumn. line_number 左边用�
 vim.opt.showmatch = true      -- 跳到匹配的括号上, 包括 () {} []
 vim.opt.cmdheight = 2         -- 底部状态栏高度, more space.
 
--- 只在超出 textwidth 的行中显示 ColorColumn. 可以替代 `set colorcolumn`
--- vim.cmd [[ au BufEnter * call matchadd('ColorColumn', '\%' .. (&textwidth+1) .. 'v', 100) ]]
+--- 只在超出 textwidth 的行中显示 ColorColumn. 可以替代 `set colorcolumn`
+--vim.cmd [[ au BufEnter * call matchadd('ColorColumn', '\%' .. (&textwidth+1) .. 'v', 100) ]]
 vim.api.nvim_create_autocmd("BufEnter", {
   pattern = {"*"},
   callback = function()
@@ -187,50 +187,60 @@ vim.api.nvim_create_autocmd("BufEnter", {
 
 vim.opt.completeopt = { "menu", "menuone", "noselect" }    -- 为代码补全设置, mostly just for cmp
 
--- `:help backup-table`, 四种设置情况.
--- 禁用 backup 功能.
+--- `:help backup-table`, 四种设置情况.
+--- 禁用 backup 功能.
 vim.opt.backup = false
 vim.opt.writebackup = false
 
--- 允许使用 swp 缓存文件.
+--- 允许使用 swp 缓存文件.
 vim.opt.swapfile = true
 
--- undo history 持久化
-vim.cmd [[au Filetype * ++once !mkdir -p /tmp/nvim/undo]]  -- VVI: ++once 只在进入 neovim 时执行一次 mkdir
+--- undo history 持久化
 vim.opt.undofile = true
-vim.opt.undodir = "/tmp/nvim/undo"
+vim.opt.undodir = '/tmp/nvim/undo'  -- undodir 是全局设置, 无法单独给某个文件设置.
 vim.opt.undolevels = 5000
+--vim.cmd([[au Filetype * ++once :silent !mkdir -p ]] .. vim.go.undodir)
+vim.api.nvim_create_autocmd("Filetype", {
+  pattern = {"*"},
+  callback = function()
+    --- undodir 不存在的情况下, `mkdir -p` 创建该文件夹.
+    if vim.fn.isdirectory(vim.go.undodir) == 0 then
+      vim.cmd([[silent !mkdir -p ]] .. vim.go.undodir)
+    end
+  end,
+  once = true,  -- ++once 只在进入 neovim 时执行一次 autocmd
+})
 
--- status line 设置，vim 最底部状栏
+--- status line 设置，vim 最底部状栏
 vim.opt.showmode = false  -- 不显示模式, alirline 显示.
 vim.opt.showcmd = true    -- 显示键入的快捷键, 不是 command. 默认 `set noshowcmd`
 --vim.opt.shortmess:append('c')   -- :set shortmess+=c
 --vim.opt.laststatus=0            -- 0-不显示(默认), 1-窗口数量>1时显示, 2-总是显示
 
--- 换行符, space, tab, cr ... 显示设置. `:help listchars`
---   eol:↴ - 换行
---   lead/trail - 行首(尾)的空格
---   precedes/extends - 不换行(:set nowrap)的情况下, 内容长度超出屏幕的行会有该标记
+--- 换行符, space, tab, cr ... 显示设置. `:help listchars`
+---   eol:↴ - 换行
+---   lead/trail - 行首(尾)的空格
+---   precedes/extends - 不换行(:set nowrap)的情况下, 内容长度超出屏幕的行会有该标记
 vim.opt.list = true
 vim.opt.listchars = 'tab:│ ,lead: ,trail:·,extends:→,precedes:←,nbsp:⎵'
 
--- 填充符, `:help fillchars`
---   diff  - vimdiff 中被删除的行的填充字符.
---   fold  - 折叠代码的行的填充字符.
---   vert  - 竖着并排窗口的分隔符. eg: tagbar, nerdtree ...
---   stl   - statusline 中间的填充字符.
---   stlnc - non-current window 的 statusline 中间的填充字符.
---   eob   - 文件最后一行之后, 空白行的行号.
+--- 填充符, `:help fillchars`
+---   diff  - vimdiff 中被删除的行的填充字符.
+---   fold  - 折叠代码的行的填充字符.
+---   vert  - 竖着并排窗口的分隔符. eg: tagbar, nerdtree ...
+---   stl   - statusline 中间的填充字符.
+---   stlnc - non-current window 的 statusline 中间的填充字符.
+---   eob   - 文件最后一行之后, 空白行的行号.
 vim.opt.fillchars = 'fold: ,diff: ,vert:│,eob:~'
 
--- `:h foldtext` 改变折叠代码的样式. 配合 fillchars 使用.
+--- `:h foldtext` 改变折叠代码的样式. 配合 fillchars 使用.
 vim.opt.foldtext = 'printf("%s …", getline(v:foldstart))'
 
--- 让 quickfix window 始终显示在屏幕最下方, 相当于命令 `:botright copen`
--- wincmd 快捷键是 <Ctrl-w>
+--- 让 quickfix window 始终显示在屏幕最下方, 相当于命令 `:botright copen`
+--- wincmd 快捷键是 <Ctrl-w>
 vim.cmd [[au Filetype qf :wincmd J]]
 
--- markdown 文件自动执行 SpellCheck 命令
+--- markdown 文件自动执行 SpellCheck 命令
 --vim.cmd [[au Filetype pandoc,markdown setlocal spell spelllang=en,cjk]]
 
 
