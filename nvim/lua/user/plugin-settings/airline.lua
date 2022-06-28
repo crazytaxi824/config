@@ -124,6 +124,19 @@ end
 
 --- 利用 <Plug>AirlineSelectPrev/NextTab 判断是否需要 delete buffer.
 local function airline_del_current_buffer()
+  --- NOTE: multi tab 的情况下, 使用 :tabclose 关闭整个 tab, 同时 bdelete 该 tab 中的所有 buffer.
+  --- 获取 tab 总数. 大于 1 说明有多个 tab.
+  if vim.fn.tabpagenr() > 1 then
+    ---  获取该 tab 中的所有 bufnr. return list.
+    local tab_buf_list = vim.fn.tabpagebuflist()
+
+    --- `:tabclose` 关闭整个 tab
+    --- `:bdelete 1 2 3` 删除 tab 中的所有 buffer
+    vim.cmd([[ tabclose | bdelete ]] .. vim.fn.join(tab_buf_list, ' '))
+    return
+  end
+
+  --- NOTE: single tab 情况下删除 current buffer.
   local before_select_bufnr = vim.fn.bufnr('%')  --- 获取当前 bufnr()
   vim.cmd([[execute "normal! \<Plug>AirlineSelectPrevTab"]])  -- 使用 airline 跳转到 prev/next buffer
   local after_select_bufnr = vim.fn.bufnr('%')   --- 获取跳转后 bufnr()
