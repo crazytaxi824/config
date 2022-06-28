@@ -35,13 +35,15 @@ let g:airline#themes#mydark#palette.inactive_modified = {
       \ 'airline_c': [ '#875faf', '', 255, 53, '' ],
       \ }
 
-""" 如果要设置 airline 颜色必须使用 AirlineAfterTheme
+""" VVI: 如果要设置 airline 颜色必须使用 AirlineAfterTheme
+""" :help airline-tabline-hlgroups
 function! s:update_highlights()
     """ tabline 颜色, 最上面一行文件名不同状态下的颜色.
     hi airline_tabsel ctermfg=17 ctermbg=190
     hi airline_tab ctermfg=255 ctermbg=236
     hi airline_tabmod ctermfg=17 ctermbg=45
     hi airline_tabmod_unsel ctermfg=255 ctermbg=53
+	" hi airline_tablabel ctermfg=255 ctermbg=201
 endfunction
 autocmd User AirlineAfterTheme call s:update_highlights()
 

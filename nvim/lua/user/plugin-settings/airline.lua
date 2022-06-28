@@ -37,6 +37,18 @@ vim.g.airline_theme = "mydark"
 vim.g['airline#extensions#tabline#formatter'] = 'myfilename'
 --vim.g['airline#extensions#tabline#formatter'] = 'unique_tail'
 
+--- tabs/buffer 显示样式 ---------------------------------------------------------------------------
+vim.g['airline#extensions#tabline#show_tabs'] = 1  -- tabs 模式下显示 'tabs' 在 left-side
+vim.g['airline#extensions#tabline#buf_label_first'] = 1  -- 'buffer' 显示在 left-side
+vim.g['airline#extensions#tabline#show_splits'] = 0  -- VVI: 在 tabs 模式下 right-side 不显示 buffer
+--vim.g['airline#extensions#tabline#show_tab_count'] = 2  -- NOTE: 始终在 right-side 显示 tab number
+
+vim.g['airline#extensions#tabline#show_tab_nr'] = 1  -- 在 tab 模式下 filename 前显示 tab/buf number.
+vim.g['airline#extensions#tabline#tab_nr_type'] = 2  -- filename 前 number 格式为 [tab].[buf]
+vim.g['airline#extensions#tabline#tabs_label'] = 'tabs'    -- 默认为 'tabs'
+vim.g['airline#extensions#tabline#buffers_label'] = 'bufs' -- 默认为 'buffers'
+vim.g['airline#extensions#tabline#overflow_marker'] = '…'  -- 字符省略符, 默认为 '...'
+
 --- `:help mode()` 显示所有模式 -------------------------------------------------------------------- {{{
 vim.g.airline_mode_map = {
 	['n']     = ' NORMAL -',

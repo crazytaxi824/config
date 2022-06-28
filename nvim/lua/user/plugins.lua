@@ -1,4 +1,9 @@
---- Packer.nvim 设置 -------------------------------------------------------------------------------- {{{
+--- README: packer 主要是一个 plugin 安装/管理插件.
+--- nvim 加载插件的时候读取的是 packer.compile() 之后的文件.
+--- `:PackerSync` 的时候会自动运行 compile(), 重新生成 compile 文件. 主要影响 setup() 设置文件加载.
+--- VVI: 插件一旦安装到 pack/packer/start/ 中, 不论本文件中的 use() 是否被注释, 已安装的插件都会被加载.
+--- 如果想要插件不加载, 卸载该插件, 或者使用 `opt = true`, 将插件移动到 pack/packer/opt/ 文件夹中.
+--- Packer.nvim 设置 ------------------------------------------------------------------------------- {{{
 -- https://github.com/wbthomason/packer.nvim#specifying-plugins
 --
 -- opt 属性:
@@ -60,16 +65,12 @@
 -- NOTE: You must run this or `PackerSync` whenever you make changes to your plugin configuration.
 
 -- -- }}}
---- README: packer 主要是一个 plugin 安装/管理插件.
---- nvim 加载插件的时候读取的是 packer.compile() 之后的文件.
---- `:PackerSync` 的时候会自动运行 compile(), 重新生成 compile 文件. 主要影响 setup() 设置文件加载.
---- VVI: 插件一旦安装到 pack/packer/start/ 中, 不论本文件中的 use() 是否被注释, 已安装的插件都会被加载.
---- 如果想要插件不加载, 卸载该插件, 或者使用 `opt = true`, 将插件移动到 pack/packer/opt/ 文件夹中.
 
 --- NOTE: Only required if you have packer configured as `opt`
---vim.cmd [[packadd packer.nvim]]  -- 在 stdpath('cache') 中创建 "packer.nvim" 文件夹
+--vim.cmd [[packadd packer.nvim]]  -- 会在 stdpath('cache') 中创建 "packer.nvim" 文件夹
 
---- save plugins.lua 时自动运行 `:PackerSync` 命令. --- {{{
+--- packer autocmd --------------------------------------------------------------------------------- {{{
+--- save plugins.lua (本文件) 时自动运行 `:PackerSync` 命令
 --- NOTE: 这里的文件名是 plugins.lua, 是本文件的文件名.
 -- vim.cmd [[
 --  augroup packer_user_config
@@ -87,13 +88,18 @@
 vim.api.nvim_create_autocmd("User", {
   pattern = { "PackerComplete" },
   callback = function()
-    if vim.bo.filetype == 'packer' then  -- 在 packer 窗口中.
-      local update_info = vim.fn.getline(1, '$')  -- 获取 update 的信息
-      update_info = vim.list_extend({"", vim.fn.strftime(" [%Y-%m-%d %H:%M:%S]")}, update_info)  -- insert date && time into update_info
+    --- NOTE: 如果打开了 packer 窗口, 则记录窗口中的所有内容.
+    if vim.bo.filetype == 'packer' then
+      --- 读取 packer 文件中的所有信息. 从第一行到最后一行.
+      local update_info = vim.fn.getline(1, '$')
 
+      --- 给内容添加时间信息.
+      update_info = vim.list_extend({"", vim.fn.strftime(" [%Y-%m-%d %H:%M:%S]")}, update_info)
+
+      --- 文件写入位置.
       local update_log = vim.fn.stdpath('cache') .. '/packer.myupdate.log'
 
-      -- write update_info to update_log file
+      --- 将内容写入文件中.
       vim.fn.writefile(update_info, update_log, 'a')
     end
   end
