@@ -43,7 +43,7 @@ function! s:update_highlights()
     hi airline_tab ctermfg=255 ctermbg=236
     hi airline_tabmod ctermfg=17 ctermbg=45
     hi airline_tabmod_unsel ctermfg=255 ctermbg=53
-	" hi airline_tablabel ctermfg=255 ctermbg=201
+	hi airline_tablabel ctermfg=255 ctermbg=200
 endfunction
 autocmd User AirlineAfterTheme call s:update_highlights()
 

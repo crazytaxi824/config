@@ -38,8 +38,8 @@ vim.g['airline#extensions#tabline#formatter'] = 'myfilename'
 --vim.g['airline#extensions#tabline#formatter'] = 'unique_tail'
 
 --- tabs/buffer 显示样式 ---------------------------------------------------------------------------
-vim.g['airline#extensions#tabline#show_tabs'] = 1  -- tabs 模式下显示 'tabs' 在 left-side
-vim.g['airline#extensions#tabline#buf_label_first'] = 1  -- 'buffer' 显示在 left-side
+vim.g['airline#extensions#tabline#show_tabs'] = 1  -- tabs 模式下在 left-side 显示 'tabs'
+--vim.g['airline#extensions#tabline#buf_label_first'] = 1  -- 'buffer' 显示在 left-side
 vim.g['airline#extensions#tabline#show_splits'] = 0  -- VVI: 在 tabs 模式下 right-side 不显示 buffer
 --vim.g['airline#extensions#tabline#show_tab_count'] = 2  -- NOTE: 始终在 right-side 显示 tab number
 
