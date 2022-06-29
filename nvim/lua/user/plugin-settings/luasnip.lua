@@ -5,8 +5,7 @@ if not snip_status_ok then
 end
 
 --- "L3MON4D3/LuaSnip" 设置 ------------------------------------------------------------------------
---  https://github.com/L3MON4D3/LuaSnip -> Examples/snippets.lua
---  https://github.com/L3MON4D3/LuaSnip/blob/eb5b77e7927e4b28800b4f40c5507d6396b7eeaf/Examples/snippets.lua
+--- https://github.com/L3MON4D3/LuaSnip -> Examples/snippets.lua
 luasnip.config.set_config({
   history = false,
 })

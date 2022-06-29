@@ -69,8 +69,7 @@
 --- NOTE: Only required if you have packer configured as `opt`
 --vim.cmd [[packadd packer.nvim]]  -- 会在 stdpath('cache') 中创建 "packer.nvim" 文件夹
 
---- packer autocmd --------------------------------------------------------------------------------- {{{
---- save plugins.lua (本文件) 时自动运行 `:PackerSync` 命令
+--- save plugins.lua (本文件) 时自动运行 `:PackerSync` 命令 ---------------------------------------- {{{
 --- NOTE: 这里的文件名是 plugins.lua, 是本文件的文件名.
 -- vim.cmd [[
 --  augroup packer_user_config
@@ -78,7 +77,15 @@
 --    autocmd BufWritePost plugins.lua source <afile> | PackerSync
 --  augroup end
 -- ]]
+-- -- }}}
 
+--- Use a protected call so we don't error out on first use
+local status_ok, packer = pcall(require, "packer")
+if not status_ok then
+  return
+end
+
+--- packer autocmd && functions -------------------------------------------------------------------- {{{
 --- NOTE: 使用 :PackerSync :PackerUpdate ... 之后记录 update info 到指定文件.
 --- autocmd User PackerComplete     -- Fires after install, update, clean, and sync asynchronous operations finish.
 --- autocmd User PackerCompileDone  -- Fires after compiling.
@@ -105,12 +112,6 @@ vim.api.nvim_create_autocmd("User", {
   end
 })
 -- -- }}}
-
---- Use a protected call so we don't error out on first use
-local status_ok, packer = pcall(require, "packer")
-if not status_ok then
-  return
-end
 
 --- Have packer use a popup window, "nvim-lua/popup.nvim"
 packer.init {

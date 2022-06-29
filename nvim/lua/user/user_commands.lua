@@ -1,4 +1,4 @@
---- 获取所有 window 的 filetype 和 syntax ---------------------------------------------------------- {{{
+--- 获取所有 window 的 filetype 和 syntax 等信息 --------------------------------------------------- {{{
 --    `:help winnr()`   " winnr()    - 当前 window_index
 --                      " winnr('#') - prev_window_index
 --                      " winnr('$') - total_window_number
