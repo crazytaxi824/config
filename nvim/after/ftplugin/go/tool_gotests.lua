@@ -25,6 +25,6 @@ end
 vim.api.nvim_buf_create_user_command(
   0,          -- bufnr = 0 表示 current buffer.
   "GoTests",  -- command name
-  goTests, -- 好处是可以使用 local function
+  goTests,    -- 使用 vim.api 方法的好处是可以使用 local lua function
   {bang = true}  -- options: {bang = true, nargs = "+"}
 )
