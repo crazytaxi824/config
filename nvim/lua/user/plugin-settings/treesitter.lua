@@ -22,8 +22,9 @@ configs.setup {
     enable = true,  -- VVI: highlight 是 treesitter 的主要功能.
     disable = { "" },  -- list of language that will be disabled
 
-    --- NOTE: 同时使用 vim 自带 syntax,
-    --- 使得 vim syntax 和 treesitter 的颜色效果(underine, bold...)同时生效.
+    --- NOTE: true - 同时使用 treesitter 和 vim 自带 syntax 颜色, vim syntax 和 treesitter 的颜色效果叠加.
+    ---              eg: syntax 是 bold, 而 treesitter 是 blue, 则最终颜色效果为 blue + bold.
+    ---       false - 只使用 treesitter 颜色.
     additional_vim_regex_highlighting = false,
   },
 

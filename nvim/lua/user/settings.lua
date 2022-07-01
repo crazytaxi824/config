@@ -112,17 +112,28 @@ vim.cmd [[au Filetype python setlocal expandtab textwidth=79]]
 
 -- }}}
 
---- [XXX] 这两个设置和 filetype on 冲突. 不要手动设置 filetype on.
+--- filetype && syntax 设置
+--- [XXX] 以下两个设置和 filetype on 冲突. 不要手动设置 filetype on.
 ---       如果必须设置 filetype on, 则下面两个设置必须放在 filetype on 前面.
-vim.g.did_load_filetypes = 0  -- 0 - 关闭 vim 内置 filetype 检查; 1(*) - 关闭 vim & lua filetype 检查.
-vim.g.do_filetype_lua = 1     -- 读取 runtimepath/filetype.lua 中定义的 filetype mapping.
---- `:help :filetype on`, Detail: The ":filetype on" command will load these files:
+--- VVI: 读取 runtimepath/filetype.lua 中定义的 filetype.
+--- 自定义 filetype remap 在 stdpath('config') .. '/filetype.lua' 中.
+vim.g.do_filetype_lua = 1  -- 默认关闭
+
+--- VVI: `:help did_load_filetypes`, If this variable exists, $VIMRUNTIME/filetype.vim will not run.
+---      注意这里的 $VIMRUNTIME 不是 runtimepath, 而是 shell 中定义的系统变量.
+--- 0 - 变量存在, 不加载 '$VIMRUNTIME/filetype.vim'; 值不等于 1, 加载 nvim lua 'runtimepath/filetype.lua'.
+--- 1 - 变量存在, 不加载 '$VIMRUNTIME/filetype.vim'; 值等于 1, 不加载 nvim lua 'runtimepath/filetype.lua'. 相当于 filetype off
+vim.g.did_load_filetypes = 0
+
+--- `:help :filetype`, Detail: The ":filetype on" command will load these files:
 ---    $VIMRUNTIME/filetype.lua
 ---    $VIMRUNTIME/filetype.vim
---vim.cmd('filetype on')  -- VVI: 默认开启, 不要手动设置.
---vim.cmd('syntax on')    -- vim 内置语法高亮.
+--- VVI: 因此设置了 did_load_filetypes 之后不要再设置 `:filetype on/off`, 都会产生冲突.
+--vim.cmd('filetype on')  -- 不要手动设置. 使用 vim.g.did_load_filetypes 来代替.
+--vim.cmd('syntax on')    -- vim 内置语法高亮, 默认开启. 基于正则表达式的语法高亮, 速度慢.
                           -- NOTE: syntax off 的情况下不会加载 after/syntax, 但是会加载 after/ftplugin
 
+--- 快捷键延迟时间设置
 vim.opt.timeoutlen = 600  -- 组合键延迟时间, 默认1000ms. eg: <leader>w, <C-W><C-O>...
 vim.opt.ttimeoutlen = 0   -- <ESC> 延迟时间, 默认 50ms.  <ESC> 的主要作用是切换模式.
                           -- <ESC> 是发送 ^[ 相当于是 <C-[> 组合键.

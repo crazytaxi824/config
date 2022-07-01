@@ -24,9 +24,9 @@ vim.cmd [[
 -- 非代码文件不使用 foldnestmax, 打开文件时也不进行折叠.
 vim.cmd [[
   au Filetype css,less,scss,html,json,jsonc,graphql
-    \ setlocal foldmethod=expr |
-    \ setlocal foldexpr=nvim_treesitter#foldexpr() |
-    \ setlocal foldlevel=999
+  \ setlocal foldmethod=expr |
+  \ setlocal foldexpr=nvim_treesitter#foldexpr() |
+  \ setlocal foldlevel=999
 ]]
 
 -- foldnestmax 设置对 marker 不生效. 打开文件时自动按照 marker {{{xxx}}} 折叠.
