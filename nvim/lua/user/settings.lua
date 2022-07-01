@@ -125,11 +125,17 @@ vim.g.do_filetype_lua = 1  -- 默认关闭
 --- 1 - 变量存在, 不加载 '$VIMRUNTIME/filetype.vim'; 值等于 1, 不加载 nvim lua 'runtimepath/filetype.lua'. 相当于 filetype off
 vim.g.did_load_filetypes = 0
 
+--- `:help filetype-overview` 可以查看 filetype 设置.
 --- `:help :filetype`, Detail: The ":filetype on" command will load these files:
 ---    $VIMRUNTIME/filetype.lua
 ---    $VIMRUNTIME/filetype.vim
+--- `:filetype` 命令打印结果 'filetype detection:ON  plugin:ON  indent:ON'
 --- VVI: 因此设置了 did_load_filetypes 之后不要再设置 `:filetype on/off`, 都会产生冲突.
 --vim.cmd('filetype on')  -- 不要手动设置. 使用 vim.g.did_load_filetypes 来代替.
+
+--- NOTE: https://github.com/nvim-treesitter/nvim-treesitter/issues/359
+--- When you activate treesitter highlighting, syntax gets automatically turned off for that file type
+--- while you can keep it for the file types WITHOUT parser.
 --vim.cmd('syntax on')    -- vim 内置语法高亮, 默认开启. 基于正则表达式的语法高亮, 速度慢.
                           -- NOTE: syntax off 的情况下不会加载 after/syntax, 但是会加载 after/ftplugin
 
