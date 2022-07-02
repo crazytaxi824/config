@@ -45,20 +45,20 @@ toggleterm.setup({
     border = "single",  -- `:help nvim_open_win()`
     winblend = 0,
   },
-  -- 其他设置 --- {{{
-  -- on_open = fun(t: Terminal), -- function to run when the terminal opens
-  -- on_close = fun(t: Terminal), -- function to run when the terminal closes
+  --- 其他设置 --- {{{
+  -- on_open  = fun(t: Terminal), -- TermOpen
+  -- on_close = fun(t: Terminal), -- TermLeave, term 关闭
+  -- on_exit  = fun(t: Terminal, job: number, exit_code: number, name: string) -- TermClose, job ends.
   -- on_stdout = fun(t: Terminal, job: number, data: string[], name: string) -- callback for processing output on stdout
   -- on_stderr = fun(t: Terminal, job: number, data: string[], name: string) -- callback for processing output on stderr
-  -- on_exit = fun(t: Terminal, job: number, exit_code: number, name: string) -- function to run when terminal process exits
-  -- }}}
+  -- -- }}}
 })
 
 --- terminal key mapping ---------------------------------------------------------------------------
 --- VVI: <leader>t 打开指定 id=99 的 terminal.
 vim.keymap.set('n', '<leader>t', ':99ToggleTerm<CR>', {noremap = true, silent = true})
 
---- VVI: toggleterm#60-99 自动进入 insert mode
+--- VVI: toggleterm#60-99 自动进入 insert mode, 用于下面的 _NODE_TOGGLE() 和 _PYTHON_TOGGLE() 等.
 vim.cmd [[au TermOpen term://*toggleterm#[6-9][0-9] :startinsert]]
 
 --- 绑定 <ESC> 进入 terminal normal 模式, 只对本 buffer 有效.

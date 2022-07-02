@@ -46,7 +46,7 @@
 ---   vim.list_extend({list1}, {list2})   合并两个 list-like table
 ---   vim.tbl_deep_extend("force", {map1}, {map2}, {map3}...)  合并多个 map-like table
 --    vim.split({string}, {sep}, {kwargs})
---    vim.fn.split({string}, {pattern}, {keepempty})
+--    vim.fn.split({string}, {pattern}, {keepempty})  -- 默认 keepempty=0(false)
 --    vim.fn.join({list}, sep)
 --
 --- NOTE: nvim 常用函数

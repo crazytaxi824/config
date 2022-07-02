@@ -26,9 +26,28 @@ local go_opts = {
   count = go_term_id,     -- 这里是指定 id, 类似 `:100ToggleTerm`,
                           -- 就算是 hidden 状态也可以通过 `:100ToggleTerm` 重新打开.
                           -- 如果两个 Terminal 有相同的 ID, 则会出现错误.
-  on_open = function()
-    vim.cmd('wincmd p')  -- move to previous window
-  end
+
+  --- move to previous window when job ends.
+  -- on_exit = function()
+  --   vim.cmd('wincmd p')
+  -- end,
+
+  --- matchadd(), highlight certain words, use builtin highlight group 'Underlined'
+  on_stdout = function(_,_,data,_)
+    for _, lcontent in ipairs(data) do
+      local fp = vim.split(lcontent, ":")
+
+      if vim.fn.filereadable(fp[1]) == 1 then
+        local lnum = tonumber(fp[2])  -- tonumber(nil) = nil; tonumber('a') = nil
+
+        if not lnum then  -- 如果没有 lnum 则
+          vim.fn.matchadd('Underlined', fp[1])  -- highlight filepath
+        else
+          vim.fn.matchadd('Underlined', fp[1]..':'..fp[2])  -- highlight filepath && line number
+        end
+      end
+    end
+  end,
 }
 
 --- go run ----------------------------------------------------------------------------------------- {{{
