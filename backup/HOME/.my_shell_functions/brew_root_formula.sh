@@ -32,25 +32,24 @@
 function checkBrewRootFormula() {
 	local common_formula_list=(bat clang-format fd ffmpeg fzf git git-delta git-flow git-flow-avh graphviz grpcurl
 		lazygit pandoc prettier protobuf rclone ripgrep siege stylua tmux tree universal-ctags vim viu w3m youtube-dl
-		yarn neovim shfmt)
+		yarn neovim shfmt wget)
 
 	# brew list --formula   # 已经安装的所有 formula, 不包括 cask.
 	local formula_list=()
-	formula_list+=( $(brew list --formula | cat) )  # 这里使用 cat 只是为了变成 list.
+	formula_list+=($(brew list --formula | cat)) # 这里使用 cat 只是为了变成 list.
 
 	# brew deps --installed   # 列出所有已安装的包和各自的依赖
 	local all_deps=$(brew deps --installed)
 
-	for formula in $formula_list
-	do
+	for formula in $formula_list; do
 		# [^^] 表示不要 mactch 开头是 xxx 的行.
 		# \b   boundary 表示单词的边界, 可以是空格或者\t \n ...; eg: \bfoo\b 表示单词完全匹配.
 		# [[ $(echo $all_deps | grep "[^^]\b$formula\b") == '' ]] && echo "$formula"
 
 		# 不是任何别的包依赖, 同时不在 common formula list 中
-		[[ $(echo $all_deps | grep "[^^]\b$formula\b") == '' ]] \
-			&& ([[ $(echo $common_formula_list | grep "\b$formula\b") == '' ]] \
-			&& echo -e "\e[1;33m$formula ???\e[0m" || echo -e "$formula")
+		[[ $(echo $all_deps | grep "[^^]\b$formula\b") == '' ]] &&
+			([[ $(echo $common_formula_list | grep "\b$formula\b") == '' ]] &&
+				echo -e "\e[1;33m$formula ???\e[0m" || echo -e "$formula")
 	done
 }
 

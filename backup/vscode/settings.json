@@ -35,8 +35,8 @@
   // "vsintellicode.modify.editor.suggestSelection": "disabled", // "enabled" when (recentlyUsed)
 
   // 括号的颜色. 可以给 "[lang]" 单独设置.
-  "editor.bracketPairColorization.enabled": false,
-  "editor.guides.bracketPairs": false,
+  "editor.bracketPairColorization.enabled": false, // 这里是括号本身的颜色.
+  "editor.guides.bracketPairs": false, // guides 是 indent line 颜色.
   // "editor.language.colorizedBracketPairs": [
   //   ["[", "]"],
   //   ["(", ")"],
