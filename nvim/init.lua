@@ -131,6 +131,7 @@
 -------------------------------------+----------------------------------+------------------------------------
 
 --- VVI: 在最开始加载 "lewis6991/impatient.nvim" 设置,
+--- it is recommended you add the following near the start of your 'init.vim'.
 --- Speed up loading Lua modules in Neovim to improve startup time.
 require "user.plugin-settings.impatient"
 

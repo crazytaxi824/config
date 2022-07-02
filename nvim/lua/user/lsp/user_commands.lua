@@ -1,4 +1,6 @@
 --- LSP 常用功能函数 -------------------------------------------------------------------------------
+--- `:GetLspClientsInfo`   表示所有启动的 lsp
+--- `:GetLspClientsInfo 0` 表示当前 buffer 的 attached lsp
 vim.api.nvim_create_user_command("GetLspClientsInfo",
   function(opt)
     --- opt 是 command 传入的 nargs 参数 --- {{{
@@ -21,6 +23,6 @@ vim.api.nvim_create_user_command("GetLspClientsInfo",
       print(vim.inspect(vim.tbl_values(vim.lsp.buf_get_clients())))
     end
   end,
-  {bang=true, bar=true, nargs="?"}  -- command options
+  {bang=true, nargs="?"}  -- command options
 )
 

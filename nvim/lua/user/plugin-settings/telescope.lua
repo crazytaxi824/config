@@ -146,9 +146,11 @@ Keymap_set_and_register(telescope_keymaps, {
 })
 
 --- 自定义 Rg command ------------------------------------------------------------------------------
---- NOTE: 修改自 telescope.builtin.grep_string()
+--- NOTE: 修改自 telescope.builtin.grep_string() 定义在:
 ---       https://github.com/nvim-telescope/telescope.nvim -> lua/telescope/builtin/files.lua
----       定义在: files.grep_string = function(opts), opts 参数为 `:help grep_string()`, cwd, search ...
+---       files.grep_string = function(opts), opts 参数为 `:help grep_string()`, cwd, search ...
+--- make_entry 的内置函数定义在:
+---       https://github.com/nvim-telescope/telescope.nvim -> lua/telescope/make_entry.lua
 local finders = require "telescope.finders"
 local make_entry = require "telescope.make_entry"
 local pickers = require "telescope.pickers"
@@ -166,10 +168,10 @@ local rg_search = function(additional_args)
   end
 
   pickers.new({
-    prompt_title = "Rg",
+    prompt_title = ":Rg",
     finder = finders.new_table({
       results = vim.fn.split(result, '\n'),
-      entry_maker = make_entry.gen_from_vimgrep(),  -- VVI: jump to <file:line:column>
+      entry_maker = make_entry.gen_from_vimgrep(),  -- VVI: <CR> jump to <file:line:column>
     }),
     previewer = conf.grep_previewer({}),
     sorter = conf.generic_sorter(),  -- VVI: 可以通过 fzf 输入框对 results 进行过滤.
