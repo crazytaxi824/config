@@ -92,6 +92,11 @@ end
 --- 使用方法 vim.cmd [[ autocmd User PackerComplete :set filetype? ]]
 --- getline(1, '$') 获取文件所有内容. return list.
 --- writefile(["foo", "bar"], "foo.log", "a")  -- a - append mode
+
+--- packer update log 文件写入位置.
+local packer_update_log = vim.fn.stdpath('cache') .. '/packer.myupdate.log'
+
+--- 记录 :PackerSync && :PackerUpdate ... 更新信息到指定文件.
 vim.api.nvim_create_autocmd("User", {
   pattern = { "PackerComplete" },
   callback = function()
@@ -103,14 +108,22 @@ vim.api.nvim_create_autocmd("User", {
       --- 给内容添加时间信息.
       update_info = vim.list_extend({"", vim.fn.strftime(" [%Y-%m-%d %H:%M:%S]")}, update_info)
 
-      --- 文件写入位置.
-      local update_log = vim.fn.stdpath('cache') .. '/packer.myupdate.log'
-
       --- 将内容写入文件中.
-      vim.fn.writefile(update_info, update_log, 'a')
+      vim.fn.writefile(update_info, packer_update_log, 'a')
     end
   end
 })
+
+--- 显示上述文件的内容.
+vim.api.nvim_create_user_command("PackerUpdateLog",
+  function()
+    --- nobuflisted
+    --- nomodifiable 不能修改原文件, 但是可以将修改后的文件保存到另一个文件中.
+    --- readonly     不能 :w 保存修改, 但是可以 :w! 强制保存修改到原文件.
+    vim.cmd([[edit +setlocal\ readonly ]] .. packer_update_log)
+  end,
+  {bang=true, bar=true}
+)
 -- -- }}}
 
 --- Have packer use a popup window, "nvim-lua/popup.nvim"
