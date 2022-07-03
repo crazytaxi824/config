@@ -145,7 +145,7 @@ require "user.user_commands"  -- 自定义命令
 --require "user.terminal"   -- 自定义 terminal, 学习/测试用. 需要时可替代 toggle terminal.
 
 --- 加载 plugins 和 settings
-require "user.plugins"  -- packer 加载 plugin
+require "user.plugins_loader"  -- packer 加载 plugin
 
 --- 放在最后 overwirte 其他颜色设置
 require "user.colors"   -- vim highlight 设置
