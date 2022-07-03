@@ -1,6 +1,4 @@
-----------------------------------------------------------------------------------------------------
 --- NOTE: 全局 keymap 设置
-----------------------------------------------------------------------------------------------------
 --- Readme ----------------------------------------------------------------------------------------- {{{
 --- vim.keymap.set() & vim.keymap.del()
 --- vim.api.nvim_set_keymap() & vim.api.nvim_del_keymap()
@@ -8,6 +6,22 @@
 --- vim.keymap.set() 可以同时设置多个模式, vim.api.nvim_set_keymap() 每次只能设置一个模式
 --- <S-F12> 在 neovim 中是 <F24>, <C-F12> 是 <F36>, <C-S-F12> 是 <F48>. 其他组合键都可以通过 insert 模式打印出来.
 -- -- }}}
+--- 常用组合键前缀:
+---   - <leader>
+---   - g
+---   - z
+---   - i_CTRL-R | c_CTRL-R  NOTE: 在 insert/command 模式下 paste register 到 file/command line.
+---                          eg: insert/command 模式下输入 <CTRL-R>0 相当于 normal 模式下 "0p
+---                          后面接 = 可以填入 expr. eg: insert/command 模式下输入 <CTRL-R>=100-80, 得到 20.
+---   - "  - select register for paste. 可以用在 y,p,d,x 等复制/剪切/粘贴功能上. eg: "*y
+---   - @  - execute content of register, like macro.
+---   - [ | ]  - navigation in file
+---
+--- 常用固定组合键:
+---   - i_CTRL-X_CTRL-O  - omni completion
+---   - i_CTRL-O  - 用于在 insert mode 中执行一个 command 然后回到 insert mode.
+---   - i_CTRL-C | v_CTRL-C  - insert/visual 退回到 normal mode.
+---   - v_CTRL-G  - 切换 visual/select mode, select mode 是 visual 的一个子模式, 多用于代码补全的默认值.
 
 --- functions for key mapping ---------------------------------------------------------------------- {{{
 --- close all terminal window function -------------------------------------------------------------
@@ -213,7 +227,6 @@ local opt = { noremap = true, silent = true }
 --- NOTE: { mode, key, remap, opt, description }  - description for 'which-key'
 local keymaps = {
   --- common use -----------------------------------------------------------------------------------
-  {'v', '<leader>y', '"*y', opt, 'Copy to system clipboard'},
   {'n', 'D', '"_dd', opt},
   {'v', 'D', '"_x', opt},
   {'n', 'O', 'O<C-c><Down>', opt},
@@ -278,12 +291,17 @@ local keymaps = {
   {'v', '<C-z>', '<Nop>', opt},
   {'i', '<C-z>', '<C-o>u', opt},
 
-  --- fold -----------------------------------------------------------------------------------------
-  --- 这里是模拟 vscode keymaps.
+  --- <leader> -------------------------------------------------------------------------------------
+  --- copy / paste
+  --- NOTE: 如果是 linux server 系统, 则没有系统级 clipboard, 则无法使用该 copy 方式.
+  ---       在没有 cilpboard 的情况下如果想要粘贴 register 中的内容到 command line,
+  ---       需要使用 |:<CTRL-R> {register}|. `:help c_CTRL-R`.
+  {'v', '<leader>y', '"*y', opt, 'Copy to system clipboard'},
+
+  --- fold code, 这里是模拟 vscode keymaps.
   {'n', '<leader>k1', 'zM', opt, "Close all folds"},
   {'n', '<leader>kj', 'zR', opt, "Open all folds"},
 
-  --- <leader> -------------------------------------------------------------------------------------
   --- <leader> keymaps 默认会显示在 which-key list 中, 所以需要使用 'which_key_ignore' 阻止显示
   {'n', '<leader>"', 'viw<C-c>`>a"<C-c>`<i"<C-c>', opt, 'which_key_ignore'},
   {'n', "<leader>'", "viw<C-c>`>a'<C-c>`<i'<C-c>", opt, 'which_key_ignore'},
@@ -334,6 +352,10 @@ local keymaps = {
 
   {'n', '[[', jump_to_prev_section, opt, 'Jump to Prev Section'},
   {'n', ']]', jump_to_next_section, opt, 'Jump to Next Section'},
+
+  --- 切换 buffer, NOTE: 目前使用 airline <Plug>AirlineSelectPrevTab 进行 buffer 切换
+  --{'n', '<lt>', ':bprevious<CR>', opt, 'go to previous buffer'},
+  --{'n', '>', ':bnext<CR>', opt, 'go to next buffer'},
 }
 
 --- 这里是设置所有 key mapping 的地方 --------------------------------------------------------------
