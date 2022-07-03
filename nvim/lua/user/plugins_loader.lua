@@ -71,6 +71,7 @@
 
 --- save plugins.lua (本文件) 时自动运行 `:PackerSync` OR `:PackerCompile` 命令 --------------------
 --- NOTE: 这里的文件名是 plugins_loader.lua, 是本文件的文件名.
+---       修改本文件后必须进行 :PackerCompile, 否则无法生效.
 vim.cmd([[
  augroup packer_user_config
    autocmd!
