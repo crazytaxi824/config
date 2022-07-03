@@ -107,7 +107,7 @@ plugins=(
 	zsh-autosuggestions      # https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md
 )
 
-# zsh-autosuggestions plugin 设置
+# NOTE: zsh-autosuggestions plugin 设置
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=242"  # inline 代码提示的颜色. 默认是 8, bold black 颜色.
 
 # oh my zsh 最后一行
@@ -251,7 +251,7 @@ FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --color='dark,hl:191:reverse,hl+:191:reverse
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --preview='([[ -d {} ]] && (tree -NC -L 3 {})) || ([[ -f {} ]] && (bat --color=always --style=numbers {}))'"
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --preview-window='right,border-left'"
 # 以下是定义 fzf 快捷键作用
-# [XXX] Vim: Warning: Output not to a terminal. 使用 `vim file > /dev/tty`
+# [XXX] Vim: Warning: Output not to a terminal. 解决方法: `vim/nvim file > /dev/tty`
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-e:abort+execute($EDITOR -- {} > /dev/tty),ctrl-o:abort+execute(open {}),ctrl-a:select-all'"
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-p:change-preview-window(down,border-top|hidden|)'"
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='shift-up:preview-half-page-up,shift-down:preview-half-page-down'"
