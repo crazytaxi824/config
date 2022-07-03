@@ -195,7 +195,9 @@ return packer.startup(function(use)
       --- 第一方 module 插件 ---
       --- 顶部显示 cursor 所在 function 的定义.
       --- https://github.com/nvim-treesitter/nvim-treesitter-context#configuration
-      {"nvim-treesitter/nvim-treesitter-context"},
+      {"nvim-treesitter/nvim-treesitter-context",
+        config = function() require("user.plugin-settings.treesitter-context") end,
+      },
 
       --- 用于获取 treesitter 信息, 调整颜色很有用.
       {"nvim-treesitter/playground",
