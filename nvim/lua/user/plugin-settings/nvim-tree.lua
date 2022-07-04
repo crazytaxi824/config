@@ -28,22 +28,26 @@ nvim_tree.setup {
     relativenumber = false,  -- 显示 relative number
     signcolumn = "yes",      -- 显示 signcolumn
     mappings = {
-      custom_only = true,  -- 只使用 custom key mapping
+      custom_only = true,  -- NOTE: 只使用 custom key mapping
       list = {   -- user mappings go here
         { key = {"<CR>", "e"},   action = "edit" },
         { key = "<C-v>",         action = "vsplit" },  -- vsplit edit
         { key = "<C-x>",         action = "split" },
         { key = "<C-o>",         action = "system_open" },
         { key = "a",             action = "create" },
-        { key = "d",             action = "remove" },
-        { key = "R",             action = "rename" },  -- 类似 mv
+        { key = "D",             action = "remove" },
+        { key = "R",             action = "rename" },  -- 类似 `$ mv foo bar`
         { key = "r",             action = "refresh" },
         { key = "y",             action = "copy_absolute_path" },
         { key = "W",             action = "collapse_all" },
         { key = "I",             action = "toggle_git_ignored" },
-        { key = "H",             action = "toggle_dotfiles" },
-        { key = "q",             action = "close" },
+        { key = "H",             action = "toggle_dotfiles" },  -- 隐藏文件
+        { key = "q",             action = "close" },  -- close nvim-tree window
         { key = "?",             action = "toggle_help" },
+        { key = "<F8>",          action = "next_diag_item" },  -- next diagnostics item
+        { key = "<F20>",         action = "prev_diag_item" },  -- <S-F8> previous diagnostics item
+        { key = "<S-CR>",        action = "cd" },  -- `cd` in the directory under the cursor
+        { key = "<C-CR>",        action = "cd" },  -- `cd` in the directory under the cursor
       },
     },
   },
