@@ -879,9 +879,10 @@ key_bindings:
   ### --- 自定义 key mapping, escape code - map key to Ctrl-? -----------------------------------------------
   # https://github.com/prompt-toolkit/python-prompt-toolkit/ -> src/prompt_toolkit/input/ansi_escape_sequences.py
 
-  # TODO 中文输入法输入过程中, delete 键不会删除之前的字符.
+  # NOTE: 中文输入法输入过程中, delete 键不会删除之前的字符.
   # 因为这个键默认是 delete 键 (Control-H, "\x08") 而不是 backspace 键.
   # unset a default binding set to `ReceiveChar`
+  # 以下设置覆盖 alacritty 默认设置.
   - { key: Back,                                                     action: ReceiveChar   }
 
   # 切换窗口(win) <Command-`>  这个快捷键是 macos 系统中的设置. 设置->键盘->快捷键->键盘(左侧目录)
@@ -889,13 +890,14 @@ key_bindings:
   # 切换实例(App) <Command-Tab>, 系统级应用切换.
   - { key: N,              mods: Command|Shift,              action: SpawnNewInstance      }
 
-  # <Ctrl-Left/Right> 被系统占用了, 所以这里使用 Option 代替.
-  # <Option-Left/Right> 是 vscode 等编辑器使用的快捷键. 默认 <Option-Backspace> 按照单词删除.
+  # NOTE: <Ctrl-Left/Right/Up/Down> 被 MacOS 系统占用了, 所以这里使用 Option 代替.
+  # 默认 <Option-Backspace> 按照单词删除.
   - { key: Up,     mods: Option,                                   chars: "\x1b[1;5A"      }  # Ctrl-Up
   - { key: Down,   mods: Option,                                   chars: "\x1b[1;5B"      }  # Ctrl-Down
   - { key: Right,  mods: Option,                                   chars: "\x1b[1;5C"      }  # Ctrl-Right  - forward-word
   - { key: Left,   mods: Option,                                   chars: "\x1b[1;5D"      }  # Ctrl-Left   - backward-word
 
+  # NOTE: 以下是为 vim/nvim 设置的 key mapping.
   - { key: Return,  mods: Shift,                                   chars: "\x1b[13;2u"     }  # Shift-CR
   - { key: Return,  mods: Control,                                 chars: "\x1b[13;5u"     }  # CTRL-CR
   - { key: Return,  mods: Command,                                 chars: "\x1b[13;5u"     }  # CTRL-CR
