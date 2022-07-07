@@ -26,7 +26,10 @@ ts_ctx.setup{
     },
     -- Example for a specific filetype.
     go = {
+      'import',
       'type',
+      'var',
+      'const',
     },
   },
   exact_patterns = {
@@ -43,8 +46,8 @@ ts_ctx.setup{
 }
 
 --- highlight --------------------------------------------------------------------------------------
---vim.cmd [[hi TreesitterContext ctermfg=]]
-vim.cmd [[ hi! TreesitterContextLineNumber ctermfg=75 ]]
+--vim.cmd [[hi TreesitterContext ctermfg=]]  -- default link to Pmenu
+vim.cmd [[ hi! TreesitterContextLineNumber cterm=bold ctermfg=75 ctermbg=237 ]]
 
 
 
