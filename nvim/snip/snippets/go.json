@@ -106,7 +106,7 @@
   "switch type": {
     "prefix": "switch-type",
     "body": "switch ${1:interface}.(type) {\ncase ${2:int}:\n\t$3\ndefault:\n\t$4\n}",
-    "description": "Snippets for Switch-Type"
+    "description": "Snippets for Switch-(interface{})Type"
   },
   "select case": {
     "prefix": "select-case",
