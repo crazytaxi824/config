@@ -1,38 +1,54 @@
 #!/bin/zsh
 
-# 目前常用 formula
-# bat          - cat 替代工具
-# clang-format - proto 格式化工具
-# fd           - find 替代工具, 查找文件名
-# ffmpeg
-# fzf
-# git
-# git-delta    - git diff 工具
-# git-flow     - git-flow 插件, 也可以使用 git-flow-avh, 二选一即可
-# git-flow-avh
-# graphviz  - 图表绘制工具, go 性能分析需要用到
-# grpcurl   - grpc
-# lazygit   - git cui 工具
-# pandoc    - 文档格式转换工具, 支持 word, pdf, markdown ... 各种格式
-# prettier  - 格式化工具
-# protobuf
-# rclone   - ftp / sftp / webstorage ... 工具
-# ripgrep  - (rg) grep 替代工具, 内容查找工具
-# siege    - http request 压力测试工具
-# tmux
-# tree
-# universal-ctags  - 各种语言的 object 分析工具, 语法分析
-# vim
-# viu  - terminal 显示图片工具
-# w3m  - terminal 显示网页工具
-# youtube-dl
-# shfmt - shell format tool
-
 # 检查 brew 中所有不属于任何别的包依赖的包.
 function checkBrewRootFormula() {
-	local common_formula_list=(bat clang-format fd ffmpeg fzf git git-delta git-flow git-flow-avh graphviz grpcurl
-		lazygit pandoc prettier protobuf rclone ripgrep siege stylua tmux tree universal-ctags vim viu w3m youtube-dl
-		yarn neovim shfmt wget)
+	# local common_formula_list=(bat clang-format fd ffmpeg fzf git git-delta git-flow git-flow-avh graphviz grpcurl
+	# 	lazygit pandoc prettier protobuf rclone ripgrep siege stylua tmux tree universal-ctags vim viu w3m youtube-dl
+	# 	yarn neovim shfmt wget)
+	local common_formula_list=(
+		fzf
+		bat     # cat 替代工具, 语法高亮.
+		fd      # find 替代工具, 查找文件名
+		ripgrep # (rg) grep 替代工具, 内容查找工具
+
+		git
+		lazygit   # git cui 工具
+		git-delta # git diff 工具
+		git-flow  # git-flow 插件, 也可以使用 git-flow-avh, 二选一即可
+		git-flow-avh
+
+		# editor pluglins
+		vim
+		neovim
+		universal-ctags # 各种语言的 object 分析工具. vim/neovim tagbar 插件使用
+		prettier        # 格式化工具
+		clang-format    # c,c++,object-c 格式化工具
+		stylua          # lua format tool
+		shfmt           # shell format tool
+
+		# dev tools
+		graphviz # 图表绘制工具, go 性能分析需要用到
+		protobuf # protoc 命令行工具
+		yarn     # 代替 npm 包管理工具
+
+		# testing tools
+		curl    # url 请求工具
+		wget    # terminal 下载工具
+		grpcurl # grpc 请求工具
+		rclone  # ftp / sftp / webstorage ... 工具
+		siege   # http request 压力测试工具
+
+		# terminal tools
+		tmux # terminal session / split screen 工具
+		tree # terminal 显示 dir 结构
+		viu  # terminal 显示图片工具
+		w3m  # terminal 显示网页工具
+
+		# other tools
+		pandoc # 文档格式转换工具, 支持 word, pdf, markdown ... 各种格式
+		ffmpeg
+		youtube-dl
+	)
 
 	# brew list --formula   # 已经安装的所有 formula, 不包括 cask.
 	local formula_list=()

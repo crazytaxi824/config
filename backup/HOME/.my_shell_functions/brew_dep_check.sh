@@ -1,5 +1,6 @@
 #!/bin/zsh
 
+# 检查有哪些包 deps on 指定的 Formulae
 function checkBrewDep() {
 	if (( ${#*[@]} > 1 )); then
 		echo "only one dependency is allowed"
