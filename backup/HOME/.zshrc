@@ -530,7 +530,7 @@ function backupConfigFiles() {
 		cp ~/.ssh/config $backup_folder/HOME/.ssh/
 
 		# git setting
-		# cp ~/.gitconfig $backup_folder/gitconfig   # TODO private
+		# NOTE: '~/.gitconfig' is a private file, SHOULD NOT be uploaded to internet.
 		cp ~/.gitignore_global $backup_folder/HOME/
 
 		# tmux
@@ -571,7 +571,7 @@ function restoreConfigFiles() {
 	# for 循环
 	for restore_folder in $restore_folder_list
 	do
-		# 判断备份文件夹是否存在
+		# 判断 Restore 文件夹是否存在
 		if [[ -d $restore_folder ]]; then
 			echo -e "\e[32m - $restore_folder ✔\e[0m"
 		else
@@ -593,9 +593,9 @@ function restoreConfigFiles() {
 
 	case $restore in
 		"yes"|"Yes")
-			# NOTE: copy 隐藏文件使用 `cp -a src/. dst/` 注意最后有个点.
+			# NOTE: copy 隐藏文件使用 `cp -a src/. dst/` 注意 src/ 最后有个点.
 			cp -a $backup_folder/HOME/. ~/
-			echo -e "\e[35mPlease check 'gitconfig' file settings!\e[0m"
+			echo -e "\e[35mPlease check restored file '\$HOME/gitconfig_needs_setup'\e[0m"
 
 			# lazygit ~/Library/Application Support/lazygit/config.yml
 			cp $backup_folder/lazygit/config.yml ~/Library/Application\ Support/lazygit/

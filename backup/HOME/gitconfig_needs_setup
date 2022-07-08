@@ -1,3 +1,5 @@
+; filepath should be '~/.gitconfig'
+
 [core]
 	; excludesfile = /Users/xxx/.gitignore_global
 	quotepath = off  ; 中文文件名不显示 unicode
