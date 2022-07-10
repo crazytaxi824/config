@@ -290,11 +290,12 @@ return packer.startup(function(use)
     config = function() require("user.plugin-settings.airline") end,
     requires = "tpope/vim-fugitive",
   }
-  --- airline 替代插件 --- {{{
-  --use "akinsho/bufferline.nvim"     -- top buffer list
-  --use "nvim-lualine/lualine.nvim"   -- bottom status line
-  --use "moll/vim-bbye"               -- better :Bdelete & :Bwipeout
-  -- -- }}}
+  --- airline 替代插件 ---
+  -- use {"akinsho/bufferline.nvim",     -- top buffer list
+  --   config = function() require("user.plugin-settings.bufferline") end,
+  -- }
+  -- use "nvim-lualine/lualine.nvim"   -- bottom status line
+  -- use "moll/vim-bbye"               -- better :Bdelete & :Bwipeout
 
   --- Debug tools 安装 -----------------------------------------------------------------------------
   --- VimspectorInstall! delve | :VimspectorUpdate!

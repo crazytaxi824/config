@@ -99,6 +99,7 @@ nvim_tree.setup {
       ".editorconfig", ".gitignore", "go.mod", "go.sum",
       "package-lock.json", "package.json", "tsconfig.json"
     },
+    symlink_destination = true,
   },
   update_focused_file = {
     enable = false,
