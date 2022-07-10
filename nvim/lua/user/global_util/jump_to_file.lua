@@ -10,7 +10,7 @@ function Jump_to_file(filepath, lnum)
   end
 
   local same_file_win_id = -1  -- 用于设置 setloclist()
-  local loc_items = nil     -- 初始化 local list item
+  local loc_items = nil  -- 初始化 local list item
 
   -- 寻找和 log 打印的 filepath 相同的 win_id. 如果有则跳转到该 window.
   for _, win_info in ipairs(vim.fn.getwininfo()) do
@@ -63,7 +63,7 @@ function Parse_filepath(lcontent)
 end
 
 --- terminal normal 模式跳转文件 -------------------------------------------------------------------
---- 操作方法: 在 terminal normal 模式中, 在行的任意位置使用 <CR> 跳转到文件.
+--- 操作方法: 在 Terminal Normal 模式中, 在行的任意位置使用 <CR> 跳转到文件.
 function Line_filepath()
   return Parse_filepath(vim.fn.getline('.'))
 end

@@ -32,7 +32,8 @@ local go_opts = {
   --   vim.cmd('wincmd p')
   -- end,
 
-  --- matchadd(), highlight certain words, use builtin highlight group 'Underlined'
+  --- matchadd(), highlight certain words in Current Window.
+  --- use builtin highlight group 'Underlined'
   on_stdout = function(_,_,data,_)
     for _, lcontent in ipairs(data) do
       local filepath, lnum = Parse_filepath(lcontent)
