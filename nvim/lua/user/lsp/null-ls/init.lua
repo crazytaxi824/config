@@ -156,7 +156,7 @@ null_ls.setup({
   --- null-ls 退出的时候提醒.
   on_exit = function()
     Notify("Null-Ls exit. Please check ':NullLsInfo' & ':NullLsLog'","WARN",
-      {title = {"LSP", "null-ls.lua"}, timeout = false})
+      {title = {"Null-ls", "null-ls/init.lua"}, timeout = false})
   end,
 
   --- 设置 key_mapping vim.diagnostic.goto_next() ...

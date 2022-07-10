@@ -1,3 +1,23 @@
+--- escape charactor -------------------------------------------------------------------------------
+function Escape_chars(string)
+  return string.gsub(string, "[%(|%)|\\|%[|%]|%-|%{%}|%?|%+|%*|%^|%$|%.]", {
+    ["\\"] = "\\\\",
+    ["-"] = "\\-",
+    ["("] = "\\(",
+    [")"] = "\\)",
+    ["["] = "\\[",
+    ["]"] = "\\]",
+    ["{"] = "\\{",
+    ["}"] = "\\}",
+    ["?"] = "\\?",
+    ["+"] = "\\+",
+    ["*"] = "\\*",
+    ["^"] = "\\^",
+    ["$"] = "\\$",
+    ["."] = "\\.",
+  })
+end
+
 --- 获取所有 window 的 filetype 和 syntax 等信息 --------------------------------------------------- {{{
 --    `:help winnr()`   " winnr()    - 当前 window_index
 --                      " winnr('#') - prev_window_index
@@ -54,7 +74,7 @@ end
 function Get_TSNode_at_cursor()
   local ts_status, ts_utils = pcall(require, "nvim-treesitter.ts_utils")
   if not ts_status then
-    Notify("treesitter is not loaded.", "WARN", {title={"TS_Get_Cursor_Node()","util.lua"}})
+    Notify("treesitter is not loaded.", "WARN", {title="TS_Get_Cursor_Node()"})
     return nil
   end
 

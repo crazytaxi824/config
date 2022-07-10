@@ -7,28 +7,9 @@ function Check_backspace()
 end
 
 --- 去掉 string prefix suffix whitespace -----------------------------------------------------------
+--- 类似 vim.fn.trim()
 function Trim_string(str)
   return string.match(str, "^%s*(.-)%s*$")
-end
-
---- escape charactor -------------------------------------------------------------------------------
-function Escape_chars(string)
-  return string.gsub(string, "[%(|%)|\\|%[|%]|%-|%{%}|%?|%+|%*|%^|%$|%.]", {
-    ["\\"] = "\\\\",
-    ["-"] = "\\-",
-    ["("] = "\\(",
-    [")"] = "\\)",
-    ["["] = "\\[",
-    ["]"] = "\\]",
-    ["{"] = "\\{",
-    ["}"] = "\\}",
-    ["?"] = "\\?",
-    ["+"] = "\\+",
-    ["*"] = "\\*",
-    ["^"] = "\\^",
-    ["$"] = "\\$",
-    ["."] = "\\.",
-  })
 end
 
 --- 提醒使用 notify 插件或者 vim.notify() 函数 -----------------------------------------------------
@@ -80,7 +61,7 @@ function Check_cmd_tools(tools)
   end
 
   if count > 0 then
-    Notify(result, "WARN", {title = {"Check_Tools()", "global_util.lua"}, timeout = false})
+    Notify(result, "WARN", {title = {"Check_Tools()", "common_utils.lua"}, timeout = false})
   end
 end
 

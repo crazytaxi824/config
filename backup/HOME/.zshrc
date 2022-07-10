@@ -595,7 +595,8 @@ function restoreConfigFiles() {
 		"yes"|"Yes")
 			# NOTE: copy 隐藏文件使用 `cp -a src/. dst/` 注意 src/ 最后有个点.
 			cp -a $backup_folder/HOME/. ~/
-			echo -e "\e[35mPlease check restored file '\$HOME/gitconfig_needs_setup'\e[0m"
+			# NOTE: restore 之后需要设置 ~/.gitconfig 文件.
+			echo -e "\e[35m!!! Please check restored file '\$HOME/gitconfig_needs_setup' !!!\e[0m"
 
 			# lazygit ~/Library/Application Support/lazygit/config.yml
 			cp $backup_folder/lazygit/config.yml ~/Library/Application\ Support/lazygit/

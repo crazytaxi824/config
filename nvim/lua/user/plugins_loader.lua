@@ -131,7 +131,7 @@ packer.init {
   --snapshot = "2022.07.02",   -- VVI: Name of the snapshot you would like to load at startup
   snapshot_path = vim.fn.stdpath('config') .. '/packer_snapshot',  -- 默认路径是 stdpath('cache') .. '/packer.nvim'
   --package_root = vim.fn.stdpath('data') .. '/site/pack'),  -- 默认值
-  --compile_path = vim.fn.stdpath('config') .. '/plugin/packer_compiled.lua'),  -- 默认值, 应该不常改动.
+  --compile_path = vim.fn.stdpath('config') .. '/plugin/packer_compiled.lua'),  -- VVI: 不要修改. /plugin 文件夹会自动加载.
 
   ensure_dependencies = true, -- Should packer install plugin dependencies?
   auto_clean = true, -- During sync(), remove unused plugins

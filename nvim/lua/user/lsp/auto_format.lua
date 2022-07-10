@@ -24,7 +24,7 @@ local function lsp_format()
   Notify(
     "no LSP support Formatting this file. please check `:LspInstallInfo`",
     "WARN",
-    {title={"lspFormat()","auto_format.lua"}}
+    {title={"lsp_Format()","auto_format.lua"}}
   )
 end
 
