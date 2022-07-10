@@ -35,7 +35,7 @@ nvim_tree.setup {
         { key = "<C-x>",         action = "split" },
         { key = "<C-o>",         action = "system_open" },
         { key = "a",             action = "create" },
-        { key = "D",             action = "remove" },
+        { key = "d",             action = "remove" },
         { key = "R",             action = "rename" },  -- 类似 `$ mv foo bar`
         { key = "r",             action = "refresh" },
         { key = "y",             action = "copy_absolute_path" },

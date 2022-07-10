@@ -35,7 +35,7 @@ local go_opts = {
   --- matchadd(), highlight certain words, use builtin highlight group 'Underlined'
   on_stdout = function(_,_,data,_)
     for _, lcontent in ipairs(data) do
-      local filepath, lnum = Parse_line_filepath(lcontent)
+      local filepath, lnum = Parse_filepath(lcontent)
 
       if vim.fn.filereadable(filepath) == 1 then
         if not lnum then  -- 如果没有 lnum 则
