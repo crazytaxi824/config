@@ -294,7 +294,9 @@ return packer.startup(function(use)
   use {"akinsho/bufferline.nvim",     -- top buffer list
     config = function() require("user.plugin-settings.bufferline") end,
   }
-  use "nvim-lualine/lualine.nvim"   -- bottom status line
+  use {"nvim-lualine/lualine.nvim",   -- bottom status line
+    config = function() require("user.plugin-settings.lualine") end,
+  }
   -- use "moll/vim-bbye"               -- better :Bdelete & :Bwipeout
 
   --- Debug tools 安装 -----------------------------------------------------------------------------
