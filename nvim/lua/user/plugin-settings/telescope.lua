@@ -171,10 +171,10 @@ local rg_search = function(additional_args)
     prompt_title = ":Rg",
     finder = finders.new_table({
       results = vim.fn.split(result, '\n'),
-      entry_maker = make_entry.gen_from_vimgrep(),  -- VVI: <CR> jump to <file:line:column>
+      entry_maker = make_entry.gen_from_vimgrep(),  -- VVI: gen_from_vimgrep() 设置作用: <CR> jump to <file:line:column>
     }),
     previewer = conf.grep_previewer({}),
-    sorter = conf.generic_sorter(),  -- VVI: 可以通过 fzf 输入框对 results 进行过滤.
+    sorter = conf.generic_sorter(),  -- VVI: 设置 sorter 后可以通过 fzf 输入框对 results 进行过滤.
   }):find()
 end
 
