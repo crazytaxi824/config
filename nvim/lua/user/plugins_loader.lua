@@ -286,14 +286,14 @@ return packer.startup(function(use)
 
   --- Buffer & Status Line -------------------------------------------------------------------------
   --- vim-fugitive: airline 中显示 git 状态
-  use {"vim-airline/vim-airline",
-    config = function() require("user.plugin-settings.airline") end,
-    requires = "tpope/vim-fugitive",
-  }
-  --- airline 替代插件 ---
-  -- use {"akinsho/bufferline.nvim",     -- top buffer list
-  --   config = function() require("user.plugin-settings.bufferline") end,
+  -- use {"vim-airline/vim-airline",
+  --   config = function() require("user.plugin-settings.airline") end,
+  --   requires = "tpope/vim-fugitive",
   -- }
+  --- airline 替代插件 ---
+  use {"akinsho/bufferline.nvim",     -- top buffer list
+    config = function() require("user.plugin-settings.bufferline") end,
+  }
   -- use "nvim-lualine/lualine.nvim"   -- bottom status line
   -- use "moll/vim-bbye"               -- better :Bdelete & :Bwipeout
 
