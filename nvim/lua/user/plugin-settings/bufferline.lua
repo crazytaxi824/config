@@ -145,7 +145,6 @@ local buf_highlights = {
     gui = bufline_hi.buf_style,
   },
 }
--- -- }}}
 
 --- numbers 和 buffer 颜色相同
 buf_highlights.numbers = buf_highlights.background
@@ -165,6 +164,8 @@ buf_highlights.info_selected = buf_highlights.buffer_selected
 buf_highlights.hint = buf_highlights.background
 buf_highlights.hint_visible = buf_highlights.buffer_visible
 buf_highlights.hint_selected = buf_highlights.buffer_selected
+
+-- -- }}}
 
 --- https://github.com/akinsho/bufferline.nvim#configuration
 bufferline.setup({
@@ -220,7 +221,7 @@ bufferline.setup({
 
     --- NOTE: this will be called a lot so don't do any heavy processing here
     -- custom_filter = function(buf_number, buf_numbers)
-    --   --- filter out filetypes you don't want to see
+    --   --- NOTE: filter out filetypes you don't want to see
     --   if vim.bo[buf_number].filetype ~= "<i-dont-want-to-see-this>" then
     --     return true
     --   end
@@ -252,6 +253,80 @@ bufferline.setup({
   --- 颜色设置
   highlights = buf_highlights,
 })
+
+--- keymaps ----------------------------------------------------------------------------------------
+
+--- functions for delete current buffer from tabline ----------------------------------------------- {{{
+--- NOTE: 指定 filetype 不能使用 go_to() 功能.
+local function buf_jumpable()
+  --- 不能使用 bufferline.go_to() 的 filetype
+  local exclude_filetype = {'vimfiler', 'nerdtree', 'tagbar', 'NvimTree', 'toggleterm', 'myterm'}
+
+  if vim.tbl_contains(exclude_filetype, vim.bo.filetype) then
+    return false
+  end
+
+  return true
+end
+
+--- 删除当前 buffer
+local function bufferline_del_current_buffer()
+  --- NOTE: multi tab 的情况下, 使用 :tabclose 关闭整个 tab, 同时 bdelete 该 tab 中的所有 buffer.
+  --- 获取 tab 总数. 大于 1 说明有多个 tab.
+  if vim.fn.tabpagenr() > 1 then
+    ---  获取该 tab 中的所有 bufnr. return list.
+    local tab_buf_list = vim.fn.tabpagebuflist()
+
+    --- `:tabclose` 关闭整个 tab
+    --- `:bdelete 1 2 3` 删除 tab 中的所有 buffer
+    vim.cmd([[ tabclose | bdelete ]] .. vim.fn.join(tab_buf_list, ' '))
+    return
+  end
+
+  --- NOTE: single tab 情况下删除 current buffer.
+  if not buf_jumpable() then
+    return  --- 如果当前 buffer 不能 jump 则直接返回.
+  end
+
+  local before_select_bufnr = vim.fn.bufnr('%')  --- 获取当前 bufnr()
+  bufferline.cycle(-1)  -- 跳转到 prev buffer
+  local after_select_bufnr = vim.fn.bufnr('%')   --- 获取跳转后 bufnr()
+
+  if before_select_bufnr ~= after_select_bufnr then
+    --- 如果 before != after 则执行 bdelete #.
+    vim.cmd([[bdelete #]])
+  else
+    --- 如果 before == after 则说明是最后一个 listed buffer, 或者当前 buffer 是 unlisted active buffer.
+    bufferline.go_to(1, true)
+  end
+end
+
+-- -- }}}
+
+local opt = { noremap = true, silent = true }
+local bufferline_keymaps = {
+  {'n', '<leader>1', function() if buf_jumpable() then bufferline.go_to(1, true) end end, opt, 'which_key_ignore'},
+  {'n', '<leader>2', function() if buf_jumpable() then bufferline.go_to(2, true) end end, opt, 'which_key_ignore'},
+  {'n', '<leader>3', function() if buf_jumpable() then bufferline.go_to(3, true) end end, opt, 'which_key_ignore'},
+  {'n', '<leader>4', function() if buf_jumpable() then bufferline.go_to(4, true) end end, opt, 'which_key_ignore'},
+  {'n', '<leader>5', function() if buf_jumpable() then bufferline.go_to(5, true) end end, opt, 'which_key_ignore'},
+  {'n', '<leader>6', function() if buf_jumpable() then bufferline.go_to(6, true) end end, opt, 'which_key_ignore'},
+  {'n', '<leader>7', function() if buf_jumpable() then bufferline.go_to(7, true) end end, opt, 'which_key_ignore'},
+  {'n', '<leader>8', function() if buf_jumpable() then bufferline.go_to(8, true) end end, opt, 'which_key_ignore'},
+  {'n', '<leader>9', function() if buf_jumpable() then bufferline.go_to(9, true) end end, opt, 'which_key_ignore'},
+
+  --- NOTE: 如果 cursor 所在的 window 中显示的(active) buffer 是 unlisted (即: 不显示在 tabline 上的 buffer),
+  --- 不能使用 BufferLineCycleNext/Prev 来进行 buffer 切换, 但是可以使用 bufferline.go_to() 直接跳转.
+  {'n', '<lt>', function() bufferline.cycle(-1) end, opt},  --- <lt>, less than, 代表 '<'. 也可以使用 '\<'
+  {'n', '>', function() bufferline.cycle(1) end, opt},
+
+  --- 关闭 buffer
+  --- bufnr("#") > 0 表示 '#' (previous buffer) 存在, 如果不存在则 bufnr('#') = -1.
+  --- 如果 # 存在, 但处于 unlisted 状态, 则 bdelete # 报错. 因为 `:bdelete` 本质就是 unlist buffer.
+  {'n', '<leader>d', bufferline_del_current_buffer, opt, 'Close This Buffer'},
+}
+
+Keymap_set_and_register(bufferline_keymaps)
 
 
 
