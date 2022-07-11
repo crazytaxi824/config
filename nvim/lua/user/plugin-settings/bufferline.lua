@@ -3,80 +3,254 @@ if not bufferline_status_ok then
   return
 end
 
+--- highlight 设置 --------------------------------------------------------------------------------- {{{
+local bufline_hi = {
+  --normal_fg = 188,  -- NOTE: colors.lua 设置中 highlight Normal ctermfg=188, 所有默认 fg 都是 188.
+
+  buf_fg = 246,
+  buf_bg = 236,
+  buf_vis_bg = 232,
+  buf_sel_bg = 232,
+  buf_style = "bold,italic",
+
+  duplicate_fg = 243,
+
+  tab_sel_fg = 232,
+  tab_sel_bg = 190,
+
+  modified_fg = 117,
+
+  error_fg = 160,
+  warning_fg = 220,
+  info_fg = 75,
+  hint_fg = 246,
+}
+
+local buf_highlights = {
+  --fill = {}, -- 整个 bufferline 颜色
+  background = {  -- 每个 buffer 的颜色
+    ctermfg = bufline_hi.buf_fg,
+    ctermbg = bufline_hi.buf_bg,
+  },
+  buffer_visible = {  -- unfocused window
+    ctermbg = bufline_hi.buf_vis_bg,
+  },
+  buffer_selected = {
+    ctermbg = bufline_hi.buf_sel_bg,
+    gui = bufline_hi.buf_style,
+  },
+
+  --- duplicate 默认是 italic
+  duplicate = {
+    ctermfg = bufline_hi.duplicate_fg,
+    ctermbg = bufline_hi.buf_bg,
+  },
+  duplicate_visible = {
+    ctermfg = bufline_hi.duplicate_fg,
+    ctermbg = bufline_hi.buf_vis_bg,
+  },
+  duplicate_selected = {  -- 需要和 buffer_selected 相同
+    ctermfg = bufline_hi.duplicate_fg,
+    ctermbg = bufline_hi.buf_sel_bg,
+  },
+
+  --- NOTE: indicator 不显示, 通过 XXX_selected bg 显示.
+  indicator_visible = {  -- background 颜色需要和 buffer_visible bg 相同
+    ctermfg = bufline_hi.buf_vis_bg,
+    ctermbg = bufline_hi.buf_vis_bg,
+  },
+  indicator_selected = {  -- background 颜色需要和 buffer_selected bg 相同
+    ctermfg = bufline_hi.buf_sel_bg,
+    ctermbg = bufline_hi.buf_sel_bg,
+  },
+
+  --- NOTE: separator 是 buffer 之间的间隔符, separator_selected 是 tab 之间的间隔符
+  tab_selected = {  -- 右上角 tab 颜色
+    ctermfg = bufline_hi.tab_sel_fg,
+    ctermbg = bufline_hi.tab_sel_bg,
+  },
+  separator_selected = {  -- tab 之间的间隔颜色, 和 tab_selected 颜色一样
+    ctermfg = bufline_hi.tab_sel_bg,
+    ctermbg = bufline_hi.tab_sel_bg,
+  },
+  separator = {  -- separator 纯黑色, buffer 之间的间隔
+    ctermfg = 0,
+  },
+
+  --- ONLY modified_icon color
+  modified = {
+    ctermfg = bufline_hi.modified_fg,
+    ctermbg = bufline_hi.buf_bg,
+  },
+  modified_visible = {
+    ctermfg = bufline_hi.modified_fg,
+    ctermbg = bufline_hi.buf_vis_bg,
+  },
+  modified_selected = {
+    ctermfg = bufline_hi.modified_fg,
+    ctermbg = bufline_hi.buf_sel_bg,
+  },
+
+  --- error, warning, info, hint 颜色设置.
+  error_diagnostic = {
+    ctermfg = bufline_hi.error_fg,
+    ctermbg = bufline_hi.buf_bg,
+  },
+  error_diagnostic_visible = {
+    ctermfg = bufline_hi.error_fg,
+    ctermbg = bufline_hi.buf_vis_bg,
+  },
+  error_diagnostic_selected = {
+    ctermfg = bufline_hi.error_fg,
+    ctermbg = bufline_hi.buf_sel_bg,
+    gui = bufline_hi.buf_style,
+  },
+  warning_diagnostic = {
+    ctermfg = bufline_hi.warning_fg,
+    ctermbg = bufline_hi.buf_bg,
+  },
+  warning_diagnostic_visible = {
+    ctermfg = bufline_hi.warning_fg,
+    ctermbg = bufline_hi.buf_vis_bg,
+  },
+  warning_diagnostic_selected = {
+    ctermfg = bufline_hi.warning_fg,
+    ctermbg = bufline_hi.buf_sel_bg,
+    gui = bufline_hi.buf_style,
+  },
+  info_diagnostic = {
+    ctermfg = bufline_hi.info_fg,
+    ctermbg = bufline_hi.buf_bg,
+  },
+  info_diagnostic_visible = {
+    ctermfg = bufline_hi.info_fg,
+    ctermbg = bufline_hi.buf_vis_bg,
+  },
+  info_diagnostic_selected = {
+    ctermfg = bufline_hi.info_fg,
+    ctermbg = bufline_hi.buf_sel_bg,
+    gui = bufline_hi.buf_style,
+  },
+  hint_diagnostic = {
+    ctermfg = bufline_hi.hint_fg,
+    ctermbg = bufline_hi.buf_bg,
+  },
+  hint_diagnostic_visible = {
+    ctermfg = bufline_hi.hint_fg,
+    ctermbg = bufline_hi.buf_vis_bg,
+  },
+  hint_diagnostic_selected = {
+    ctermfg = bufline_hi.hint_fg,
+    ctermbg = bufline_hi.buf_sel_bg,
+    gui = bufline_hi.buf_style,
+  },
+}
+-- -- }}}
+
+--- numbers 和 buffer 颜色相同
+buf_highlights.numbers = buf_highlights.background
+buf_highlights.numbers_visible = buf_highlights.buffer_visible
+buf_highlights.numbers_selected = buf_highlights.buffer_selected
+
+--- error, warning, info, hint 和 buffer 颜色相同
+buf_highlights.error = buf_highlights.background
+buf_highlights.error_visible = buf_highlights.buffer_visible
+buf_highlights.error_selected = buf_highlights.buffer_selected
+buf_highlights.warning = buf_highlights.background
+buf_highlights.warning_visible = buf_highlights.buffer_visible
+buf_highlights.warning_selected = buf_highlights.buffer_selected
+buf_highlights.info = buf_highlights.background
+buf_highlights.info_visible = buf_highlights.buffer_visible
+buf_highlights.info_selected = buf_highlights.buffer_selected
+buf_highlights.hint = buf_highlights.background
+buf_highlights.hint_visible = buf_highlights.buffer_visible
+buf_highlights.hint_selected = buf_highlights.buffer_selected
+
+--- https://github.com/akinsho/bufferline.nvim#configuration
 bufferline.setup({
   options = {
     mode = "buffers", -- set to "tabs" to only show tabpages instead
     numbers = "ordinal", -- "none" | "ordinal" | "buffer_id" | "both" | function({ ordinal, id, lower, raise }): string,
-    close_command = "bdelete! %d",       -- can be a string | function, see "Mouse actions"
-    right_mouse_command = "bdelete! %d", -- can be a string | function, see "Mouse actions"
-    left_mouse_command = "buffer %d",    -- can be a string | function, see "Mouse actions"
-    middle_mouse_command = nil,          -- can be a string | function, see "Mouse actions"
+    always_show_bufferline = true, -- VVI: 一直显示 tabline
+
+    --- icon 显示
+    color_icons = false, -- whether or not to add the filetype icon highlights
+    show_buffer_icons = false, -- disable filetype icons for buffers
+    show_buffer_default_icon = false, -- whether or not an unrecognised filetype should show a default icon
+    show_close_icon = false,  -- tab close icon
+    show_buffer_close_icons = false, -- buffer close icon
 
     --- NOTE: this plugin is designed with this icon in mind,
     --- and so changing this is NOT recommended, this is intended
     --- as an escape hatch for people who cannot bear it for whatever reason
-    indicator_icon = '', -- █
-    buffer_close_icon = '',
+    indicator_icon = ' ',  --  █ ▎, NOTE: 这里不设置任何值, 只是站位作用.
+    buffer_close_icon = 'x',  -- 每个 buffer 后面显示 close icon.
     modified_icon = '●',
-    close_icon = '',  -- close tab
-    -- left_trunc_marker = '|',
-    -- right_trunc_marker = '|',
+    close_icon = 'x',  -- close tab
+    left_trunc_marker = '',
+    right_trunc_marker = '',
 
-    --- name_formatter can be used to change the buffer's label in the bufferline.
-    --- Please note some names can/will break the
-    --- bufferline so use this at your discretion knowing that it has
-    --- some limitations that will *NOT* be fixed.
+    --- mouse actions --- {{{
+    --close_command = "bdelete! %d",       -- can be a string | function, see "Mouse actions"
+    --right_mouse_command = "bdelete! %d", -- can be a string | function, see "Mouse actions"
+    --left_mouse_command = "buffer %d",    -- can be a string | function, see "Mouse actions"
+    --middle_mouse_command = nil,          -- can be a string | function, see "Mouse actions"
+    -- -- }}}
+
+    --- NOTE: name_formatter can be used to change the buffer's label in the bufferline.
     -- name_formatter = function(buf)  -- buf contains a "name", "path" and "bufnr"
     --   -- remove extension from markdown files for example
     --   if buf.name:match('%.md') then
     --     return vim.fn.fnamemodify(buf.name, ':t:r')
     --   end
     -- end,
-    max_name_length = 18,
+
+    enforce_regular_tabs = false,  -- VVI: 固定 tab size
+    tab_size = 8,  -- 最小宽度
+    max_name_length = 18,  -- 最大宽度
     max_prefix_length = 15, -- prefix used when a buffer is de-duplicated
-    tab_size = 18,
-    diagnostics = "nvim_lsp",
+
+    --- 显示 diagnostics info
+    diagnostics = "nvim_lsp",  -- 在文件名后显示 diagnostic 错误信息.
     diagnostics_update_in_insert = false,
-    -- The diagnostics indicator can be set to nil to keep the buffer name highlight but delete the highlighting
+    --- The diagnostics indicator can be set to nil to keep the buffer name highlight but delete the highlighting
     diagnostics_indicator = function(count, level, diagnostics_dict, context)
       return "("..count..")"
     end,
-    -- NOTE: this will be called a lot so don't do any heavy processing here
+
+    --- NOTE: this will be called a lot so don't do any heavy processing here
     -- custom_filter = function(buf_number, buf_numbers)
-    --   -- filter out filetypes you don't want to see
+    --   --- filter out filetypes you don't want to see
     --   if vim.bo[buf_number].filetype ~= "<i-dont-want-to-see-this>" then
     --     return true
     --   end
-    --   -- filter out by buffer name
+    --   --- filter out by buffer name
     --   if vim.fn.bufname(buf_number) ~= "<buffer-name-I-dont-want>" then
     --     return true
     --   end
-    --   -- filter out based on arbitrary rules
-    --   -- e.g. filter out vim wiki buffer from tabline in your work repo
+    --   --- filter out based on arbitrary rules
+    --   --- e.g. filter out vim wiki buffer from tabline in your work repo
     --   if vim.fn.getcwd() == "<work-repo>" and vim.bo[buf_number].filetype ~= "wiki" then
     --     return true
     --   end
-    --   -- filter out by it's index number in list (don't show first buffer)
+    --   --- filter out by it's index number in list (don't show first buffer)
     --   if buf_numbers[1] ~= buf_number then
     --     return true
     --   end
     -- end,
-    offsets = {{filetype = "NvimTree", text = "File Explorer", text_align = "center", highlight="Underlined"}},
-    color_icons = true, -- whether or not to add the filetype icon highlights
-    show_buffer_icons = true, -- disable filetype icons for buffers
-    show_buffer_close_icons = true,
-    show_buffer_default_icon = true, -- whether or not an unrecognised filetype should show a default icon
-    show_close_icon = true,
-    show_tab_indicators = true,
+
+    --- 在 nvim-tree 上显示 "File Explorer"
+    offsets = {{filetype = "NvimTree", text = "File Explorer", text_align = "center", highlight="Directory"}},
+
+    show_tab_indicators = true, -- 多个 tab 时在右上角显示 1 | 2 | ...
     persist_buffer_sort = true, -- whether or not custom sorted buffers should persist
 
-    --- can also be a table containing 2 custom separators
-    --- [focused and unfocused]. eg: { '|', '|' }
-    separator_style = "thin",
-    enforce_regular_tabs = false,
-    always_show_bufferline = true,
+    separator_style = {' ',' '},  -- "thin", -- "thick", {'',''}, -- [focused and unfocused]
     sort_by = 'id',
-  }
+  },
+
+  --- 颜色设置
+  highlights = buf_highlights,
 })
 
 

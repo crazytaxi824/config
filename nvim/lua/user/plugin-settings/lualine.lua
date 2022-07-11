@@ -17,7 +17,7 @@ lualine.setup {
   --- VVI: https://github.com/nvim-lualine/lualine.nvim#changing-components-in-lualine-sections
   sections = {
     lualine_a = {'mode'},
-    lualine_b = {'branch', 'diff'},
+    lualine_b = {'branch'},
     lualine_c = {
       {'filename',
         path = 3,  -- Absolute path, with ~ as the home directory
