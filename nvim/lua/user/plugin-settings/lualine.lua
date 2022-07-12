@@ -3,7 +3,8 @@ if not lualine_status_ok then
   return
 end
 
---- 自定义 theme --- {{{
+--- 自定义 theme ----------------------------------------------------------------------------------- {{{
+--- https://github.com/nvim-lualine/lualine.nvim/blob/master/lua/lualine/themes/gruvbox_light.lua
 local colors = {
   black  = 234,
   white  = 188,
