@@ -4,13 +4,15 @@ if not bufferline_status_ok then
 end
 
 --- highlight 设置 --------------------------------------------------------------------------------- {{{
-local bufline_hi = {
+local colors = {
   --normal_fg = 188,  -- NOTE: colors.lua 设置中 highlight Normal ctermfg=188, 所有默认 fg 都是 188.
+  fill_bg = 234,  -- fill 整个 bufferline banner 的背景色
 
   buf_fg = 246,
   buf_bg = 236,
-  buf_vis_bg = 232,
+  buf_sel_fg = 85,
   buf_sel_bg = 232,
+  buf_vis_bg = 232,
   buf_style = "bold",
 
   duplicate_fg = 243,
@@ -29,144 +31,146 @@ local bufline_hi = {
 }
 
 local buf_highlights = {
-  fill = { ctermbg = 234,}, -- 整个 bufferline 颜色
+  fill = { ctermbg = colors.fill_bg },  -- fill 整个 bufferline banner 的背景色
+
   background = {  -- 每个 buffer 的颜色
-    ctermfg = bufline_hi.buf_fg,
-    ctermbg = bufline_hi.buf_bg,
+    ctermfg = colors.buf_fg,
+    ctermbg = colors.buf_bg,
   },
   buffer_visible = {  -- unfocused window
-    ctermbg = bufline_hi.buf_vis_bg,
+    ctermbg = colors.buf_vis_bg,
   },
   buffer_selected = {
-    ctermbg = bufline_hi.buf_sel_bg,
-    gui = bufline_hi.buf_style,
+    ctermfg = colors.buf_sel_fg,
+    ctermbg = colors.buf_sel_bg,
+    gui = colors.buf_style,
   },
 
   close_button = {
-    ctermfg = bufline_hi.buf_fg,
-    ctermbg = bufline_hi.buf_bg,
+    ctermfg = colors.buf_fg,
+    ctermbg = colors.buf_bg,
   },
   close_button_visible = {
-    ctermfg = bufline_hi.buf_fg,
-    ctermbg = bufline_hi.buf_vis_bg,
+    ctermfg = colors.buf_fg,
+    ctermbg = colors.buf_vis_bg,
   },
   close_button_selected = {
-    ctermfg = bufline_hi.buf_fg,
-    ctermbg = bufline_hi.buf_sel_bg,
+    ctermfg = colors.buf_fg,
+    ctermbg = colors.buf_sel_bg,
   },
 
   --- duplicate 默认是 italic
   duplicate = {
-    ctermfg = bufline_hi.duplicate_fg,
-    ctermbg = bufline_hi.buf_bg,
+    ctermfg = colors.duplicate_fg,
+    ctermbg = colors.buf_bg,
   },
   duplicate_visible = {
-    ctermfg = bufline_hi.duplicate_fg,
-    ctermbg = bufline_hi.buf_vis_bg,
+    ctermfg = colors.duplicate_fg,
+    ctermbg = colors.buf_vis_bg,
   },
   duplicate_selected = {  -- 需要和 buffer_selected 相同
-    ctermfg = bufline_hi.duplicate_fg,
-    ctermbg = bufline_hi.buf_sel_bg,
+    ctermfg = colors.duplicate_fg,
+    ctermbg = colors.buf_sel_bg,
   },
 
   --- NOTE: indicator 不显示, 通过 XXX_selected bg 显示.
   indicator_visible = {  -- background 颜色需要和 buffer_visible bg 相同
-    ctermfg = bufline_hi.indicator_fg,
-    ctermbg = bufline_hi.buf_vis_bg,
+    ctermfg = colors.indicator_fg,
+    ctermbg = colors.buf_vis_bg,
   },
   indicator_selected = {  -- background 颜色需要和 buffer_selected bg 相同
-    ctermfg = bufline_hi.indicator_fg,
-    ctermbg = bufline_hi.buf_sel_bg,
+    ctermfg = colors.indicator_fg,
+    ctermbg = colors.buf_sel_bg,
   },
 
   --- NOTE: separator 是 buffer 之间的间隔符, separator_selected 是 tab 之间的间隔符
   tab_selected = {  -- 右上角 tab 颜色
-    ctermfg = bufline_hi.tab_sel_fg,
-    ctermbg = bufline_hi.tab_sel_bg,
+    ctermfg = colors.tab_sel_fg,
+    ctermbg = colors.tab_sel_bg,
   },
   separator_selected = {  -- tab 之间的间隔颜色, 和 tab_selected 颜色一样
-    ctermfg = bufline_hi.tab_sel_bg,
-    ctermbg = bufline_hi.tab_sel_bg,
+    ctermfg = colors.tab_sel_bg,
+    ctermbg = colors.tab_sel_bg,
   },
   separator = {  -- buffer & tab 之间的间隔颜色
-    ctermfg = bufline_hi.separator_fg,
+    ctermfg = colors.separator_fg,
     --ctermbg = bufline_hi.buf_bg,  -- NOTE: 如果需要显示 separator 使用 buffer bg 颜色.
   },
 
   --- ONLY modified_icon color
   modified = {
-    ctermfg = bufline_hi.modified_fg,
-    ctermbg = bufline_hi.buf_bg,
+    ctermfg = colors.modified_fg,
+    ctermbg = colors.buf_bg,
   },
   modified_visible = {
-    ctermfg = bufline_hi.modified_fg,
-    ctermbg = bufline_hi.buf_vis_bg,
+    ctermfg = colors.modified_fg,
+    ctermbg = colors.buf_vis_bg,
   },
   modified_selected = {
-    ctermfg = bufline_hi.modified_fg,
-    ctermbg = bufline_hi.buf_sel_bg,
+    ctermfg = colors.modified_fg,
+    ctermbg = colors.buf_sel_bg,
   },
 
   --- error, warning, info, hint 颜色设置.
   error_diagnostic = {
-    ctermfg = bufline_hi.error_fg,
-    ctermbg = bufline_hi.buf_bg,
-    gui = bufline_hi.diag_style,
+    ctermfg = colors.error_fg,
+    ctermbg = colors.buf_bg,
+    gui = colors.diag_style,
   },
   error_diagnostic_visible = {
-    ctermfg = bufline_hi.error_fg,
-    ctermbg = bufline_hi.buf_vis_bg,
-    gui = bufline_hi.diag_style,
+    ctermfg = colors.error_fg,
+    ctermbg = colors.buf_vis_bg,
+    gui = colors.diag_style,
   },
   error_diagnostic_selected = {
-    ctermfg = bufline_hi.error_fg,
-    ctermbg = bufline_hi.buf_sel_bg,
-    gui = bufline_hi.diag_style,
+    ctermfg = colors.error_fg,
+    ctermbg = colors.buf_sel_bg,
+    gui = colors.diag_style,
   },
   warning_diagnostic = {
-    ctermfg = bufline_hi.warning_fg,
-    ctermbg = bufline_hi.buf_bg,
-    gui = bufline_hi.diag_style,
+    ctermfg = colors.warning_fg,
+    ctermbg = colors.buf_bg,
+    gui = colors.diag_style,
   },
   warning_diagnostic_visible = {
-    ctermfg = bufline_hi.warning_fg,
-    ctermbg = bufline_hi.buf_vis_bg,
-    gui = bufline_hi.diag_style,
+    ctermfg = colors.warning_fg,
+    ctermbg = colors.buf_vis_bg,
+    gui = colors.diag_style,
   },
   warning_diagnostic_selected = {
-    ctermfg = bufline_hi.warning_fg,
-    ctermbg = bufline_hi.buf_sel_bg,
-    gui = bufline_hi.diag_style,
+    ctermfg = colors.warning_fg,
+    ctermbg = colors.buf_sel_bg,
+    gui = colors.diag_style,
   },
   info_diagnostic = {
-    ctermfg = bufline_hi.info_fg,
-    ctermbg = bufline_hi.buf_bg,
-    gui = bufline_hi.diag_style,
+    ctermfg = colors.info_fg,
+    ctermbg = colors.buf_bg,
+    gui = colors.diag_style,
   },
   info_diagnostic_visible = {
-    ctermfg = bufline_hi.info_fg,
-    ctermbg = bufline_hi.buf_vis_bg,
-    gui = bufline_hi.diag_style,
+    ctermfg = colors.info_fg,
+    ctermbg = colors.buf_vis_bg,
+    gui = colors.diag_style,
   },
   info_diagnostic_selected = {
-    ctermfg = bufline_hi.info_fg,
-    ctermbg = bufline_hi.buf_sel_bg,
-    gui = bufline_hi.diag_style,
+    ctermfg = colors.info_fg,
+    ctermbg = colors.buf_sel_bg,
+    gui = colors.diag_style,
   },
   hint_diagnostic = {
-    ctermfg = bufline_hi.hint_fg,
-    ctermbg = bufline_hi.buf_bg,
-    gui = bufline_hi.diag_style,
+    ctermfg = colors.hint_fg,
+    ctermbg = colors.buf_bg,
+    gui = colors.diag_style,
   },
   hint_diagnostic_visible = {
-    ctermfg = bufline_hi.hint_fg,
-    ctermbg = bufline_hi.buf_vis_bg,
-    gui = bufline_hi.diag_style,
+    ctermfg = colors.hint_fg,
+    ctermbg = colors.buf_vis_bg,
+    gui = colors.diag_style,
   },
   hint_diagnostic_selected = {
-    ctermfg = bufline_hi.hint_fg,
-    ctermbg = bufline_hi.buf_sel_bg,
-    gui = bufline_hi.diag_style,
+    ctermfg = colors.hint_fg,
+    ctermbg = colors.buf_sel_bg,
+    gui = colors.diag_style,
   },
 }
 
@@ -192,6 +196,7 @@ buf_highlights.hint_selected = buf_highlights.buffer_selected
 -- -- }}}
 
 --- functions for delete current buffer from tabline ----------------------------------------------- {{{
+--- 用于 <leader>d 快捷键和 mouse actions 设置.
 --- NOTE: 指定 filetype 不能使用 go_to() 功能.
 local function buf_jumpable()
   --- 不能使用 bufferline.go_to() 的 filetype
@@ -262,12 +267,11 @@ bufferline.setup({
     left_trunc_marker = '',
     right_trunc_marker = '',
 
-    --- mouse actions --- {{{
+    --- mouse actions
     close_command = bufferline_del_current_buffer,       -- can be a string | function, see "Mouse actions"
     --right_mouse_command = "bdelete! %d", -- can be a string | function, see "Mouse actions"
     --left_mouse_command = "buffer %d",    -- can be a string | function, see "Mouse actions"
     --middle_mouse_command = nil,          -- can be a string | function, see "Mouse actions"
-    -- -- }}}
 
     --- NOTE: name_formatter can be used to change the buffer's label in the bufferline.
     -- name_formatter = function(buf)  -- buf contains a "name", "path" and "bufnr"
