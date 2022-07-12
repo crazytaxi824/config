@@ -58,7 +58,7 @@ vim.cmd('hi! StatusLine cterm=None ctermfg=145 ctermbg=236') -- command 自动�
 
 vim.cmd('hi! HLSearchWord cterm=None ctermfg=232 ctermbg=232') -- 自定义 highling next search blink 的颜色
 
-vim.cmd('hi! Directory cterm=bold,underline ctermfg=150')  -- for bufferline 在 nvim-tree 显示 "File Explorer"
+vim.cmd('hi! Directory cterm=bold,underline ctermfg=150 ctermbg=234')  -- for bufferline 在 nvim-tree 显示 "File Explorer"
 
 --- 基础颜色 ---------------------------------------------------------------------------------------
 vim.cmd('hi Keyword ctermfg=170')                -- 最主要的颜色

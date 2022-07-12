@@ -29,7 +29,7 @@ local bufline_hi = {
 }
 
 local buf_highlights = {
-  --fill = {}, -- 整个 bufferline 颜色
+  fill = { ctermbg = 234,}, -- 整个 bufferline 颜色
   background = {  -- 每个 buffer 的颜色
     ctermfg = bufline_hi.buf_fg,
     ctermbg = bufline_hi.buf_bg,
