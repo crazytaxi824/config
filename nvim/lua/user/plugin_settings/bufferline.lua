@@ -11,12 +11,12 @@ local colors = {
   buf_fg = 246,
   buf_bg = 236,
   buf_sel_fg = 85,
-  buf_sel_bg = 232,
-  buf_vis_bg = 232,
+  buf_sel_bg = 233,
+  buf_vis_bg = 233,
   buf_style = "bold",
 
   duplicate_fg = 243,
-  tab_sel_fg = 232,
+  tab_sel_fg = 233,
   tab_sel_bg = 190,
 
   modified_fg = 117,
