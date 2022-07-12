@@ -11,16 +11,18 @@ local bufline_hi = {
   buf_bg = 236,
   buf_vis_bg = 232,
   buf_sel_bg = 232,
-  buf_style = "bold,italic",
+  buf_style = "bold",
 
   duplicate_fg = 243,
-
   tab_sel_fg = 232,
   tab_sel_bg = 190,
 
   modified_fg = 117,
+  separator_fg = 238,
+  indicator_fg = 117,
 
-  error_fg = 160,
+  diag_style = "bold",
+  error_fg = 196,
   warning_fg = 220,
   info_fg = 75,
   hint_fg = 246,
@@ -40,6 +42,19 @@ local buf_highlights = {
     gui = bufline_hi.buf_style,
   },
 
+  close_button = {
+    ctermfg = bufline_hi.buf_fg,
+    ctermbg = bufline_hi.buf_bg,
+  },
+  close_button_visible = {
+    ctermfg = bufline_hi.buf_fg,
+    ctermbg = bufline_hi.buf_vis_bg,
+  },
+  close_button_selected = {
+    ctermfg = bufline_hi.buf_fg,
+    ctermbg = bufline_hi.buf_sel_bg,
+  },
+
   --- duplicate 默认是 italic
   duplicate = {
     ctermfg = bufline_hi.duplicate_fg,
@@ -56,11 +71,11 @@ local buf_highlights = {
 
   --- NOTE: indicator 不显示, 通过 XXX_selected bg 显示.
   indicator_visible = {  -- background 颜色需要和 buffer_visible bg 相同
-    ctermfg = bufline_hi.buf_vis_bg,
+    ctermfg = bufline_hi.indicator_fg,
     ctermbg = bufline_hi.buf_vis_bg,
   },
   indicator_selected = {  -- background 颜色需要和 buffer_selected bg 相同
-    ctermfg = bufline_hi.buf_sel_bg,
+    ctermfg = bufline_hi.indicator_fg,
     ctermbg = bufline_hi.buf_sel_bg,
   },
 
@@ -73,8 +88,9 @@ local buf_highlights = {
     ctermfg = bufline_hi.tab_sel_bg,
     ctermbg = bufline_hi.tab_sel_bg,
   },
-  separator = {  -- separator 纯黑色, buffer 之间的间隔
-    ctermfg = 0,
+  separator = {  -- buffer & tab 之间的间隔颜色
+    ctermfg = bufline_hi.separator_fg,
+    --ctermbg = bufline_hi.buf_bg,  -- NOTE: 如果需要显示 separator 使用 buffer bg 颜色.
   },
 
   --- ONLY modified_icon color
@@ -95,54 +111,62 @@ local buf_highlights = {
   error_diagnostic = {
     ctermfg = bufline_hi.error_fg,
     ctermbg = bufline_hi.buf_bg,
+    gui = bufline_hi.diag_style,
   },
   error_diagnostic_visible = {
     ctermfg = bufline_hi.error_fg,
     ctermbg = bufline_hi.buf_vis_bg,
+    gui = bufline_hi.diag_style,
   },
   error_diagnostic_selected = {
     ctermfg = bufline_hi.error_fg,
     ctermbg = bufline_hi.buf_sel_bg,
-    gui = bufline_hi.buf_style,
+    gui = bufline_hi.diag_style,
   },
   warning_diagnostic = {
     ctermfg = bufline_hi.warning_fg,
     ctermbg = bufline_hi.buf_bg,
+    gui = bufline_hi.diag_style,
   },
   warning_diagnostic_visible = {
     ctermfg = bufline_hi.warning_fg,
     ctermbg = bufline_hi.buf_vis_bg,
+    gui = bufline_hi.diag_style,
   },
   warning_diagnostic_selected = {
     ctermfg = bufline_hi.warning_fg,
     ctermbg = bufline_hi.buf_sel_bg,
-    gui = bufline_hi.buf_style,
+    gui = bufline_hi.diag_style,
   },
   info_diagnostic = {
     ctermfg = bufline_hi.info_fg,
     ctermbg = bufline_hi.buf_bg,
+    gui = bufline_hi.diag_style,
   },
   info_diagnostic_visible = {
     ctermfg = bufline_hi.info_fg,
     ctermbg = bufline_hi.buf_vis_bg,
+    gui = bufline_hi.diag_style,
   },
   info_diagnostic_selected = {
     ctermfg = bufline_hi.info_fg,
     ctermbg = bufline_hi.buf_sel_bg,
-    gui = bufline_hi.buf_style,
+    gui = bufline_hi.diag_style,
   },
   hint_diagnostic = {
     ctermfg = bufline_hi.hint_fg,
     ctermbg = bufline_hi.buf_bg,
+    gui = bufline_hi.diag_style,
   },
   hint_diagnostic_visible = {
     ctermfg = bufline_hi.hint_fg,
     ctermbg = bufline_hi.buf_vis_bg,
+    gui = bufline_hi.diag_style,
   },
   hint_diagnostic_selected = {
     ctermfg = bufline_hi.hint_fg,
     ctermbg = bufline_hi.buf_sel_bg,
-    gui = bufline_hi.buf_style,
+    gui = bufline_hi.diag_style,
   },
 }
 
@@ -167,32 +191,79 @@ buf_highlights.hint_selected = buf_highlights.buffer_selected
 
 -- -- }}}
 
+--- functions for delete current buffer from tabline ----------------------------------------------- {{{
+--- NOTE: 指定 filetype 不能使用 go_to() 功能.
+local function buf_jumpable()
+  --- 不能使用 bufferline.go_to() 的 filetype
+  local exclude_filetype = {'vimfiler', 'nerdtree', 'tagbar', 'NvimTree', 'toggleterm', 'myterm'}
+
+  if vim.tbl_contains(exclude_filetype, vim.bo.filetype) then
+    return false
+  end
+
+  return true
+end
+
+--- 删除当前 buffer
+local function bufferline_del_current_buffer()
+  --- NOTE: multi tab 的情况下, 使用 :tabclose 关闭整个 tab, 同时 bdelete 该 tab 中的所有 buffer.
+  --- 获取 tab 总数. 大于 1 说明有多个 tab.
+  if vim.fn.tabpagenr() > 1 then
+    ---  获取该 tab 中的所有 bufnr. return list.
+    local tab_buf_list = vim.fn.tabpagebuflist()
+
+    --- `:tabclose` 关闭整个 tab
+    --- `:bdelete 1 2 3` 删除 tab 中的所有 buffer
+    vim.cmd([[ tabclose | bdelete ]] .. vim.fn.join(tab_buf_list, ' '))
+    return
+  end
+
+  --- NOTE: single tab 情况下删除 current buffer.
+  if not buf_jumpable() then
+    return  --- 如果当前 buffer 不能 jump 则直接返回.
+  end
+
+  local before_select_bufnr = vim.fn.bufnr('%')  --- 获取当前 bufnr()
+  bufferline.cycle(-1)  -- 跳转到 prev buffer
+  local after_select_bufnr = vim.fn.bufnr('%')   --- 获取跳转后 bufnr()
+
+  if before_select_bufnr ~= after_select_bufnr then
+    --- 如果 before != after 则执行 bdelete #.
+    vim.cmd([[bdelete #]])
+  else
+    --- 如果 before == after 则说明是最后一个 listed buffer, 或者当前 buffer 是 unlisted active buffer.
+    bufferline.go_to(1, true)
+  end
+end
+
+-- -- }}}
+
 --- https://github.com/akinsho/bufferline.nvim#configuration
 bufferline.setup({
   options = {
     mode = "buffers", -- set to "tabs" to only show tabpages instead
     numbers = "ordinal", -- "none" | "ordinal" | "buffer_id" | "both" | function({ ordinal, id, lower, raise }): string,
-    always_show_bufferline = true, -- VVI: 一直显示 tabline
+    always_show_bufferline = true, -- VVI: 一直显示 bufferline
 
     --- icon 显示
     color_icons = false, -- whether or not to add the filetype icon highlights
     show_buffer_icons = false, -- disable filetype icons for buffers
     show_buffer_default_icon = false, -- whether or not an unrecognised filetype should show a default icon
     show_close_icon = false,  -- tab close icon
-    show_buffer_close_icons = false, -- buffer close icon
+    show_buffer_close_icons = true, -- buffer close icon
 
     --- NOTE: this plugin is designed with this icon in mind,
     --- and so changing this is NOT recommended, this is intended
     --- as an escape hatch for people who cannot bear it for whatever reason
-    indicator_icon = ' ',  --  █ ▎, NOTE: 这里不设置任何值, 只是站位作用.
-    buffer_close_icon = 'x',  -- 每个 buffer 后面显示 close icon.
+    indicator_icon = '▎',  --  █ ▎▌, NOTE: 这里不设置任何值, 只是站位作用.
+    buffer_close_icon = '×',  -- 每个 buffer 后面显示 close icon.
     modified_icon = '●',
-    close_icon = 'x',  -- close tab
+    close_icon = '×',  -- close tab
     left_trunc_marker = '',
     right_trunc_marker = '',
 
     --- mouse actions --- {{{
-    --close_command = "bdelete! %d",       -- can be a string | function, see "Mouse actions"
+    close_command = bufferline_del_current_buffer,       -- can be a string | function, see "Mouse actions"
     --right_mouse_command = "bdelete! %d", -- can be a string | function, see "Mouse actions"
     --left_mouse_command = "buffer %d",    -- can be a string | function, see "Mouse actions"
     --middle_mouse_command = nil,          -- can be a string | function, see "Mouse actions"
@@ -246,7 +317,7 @@ bufferline.setup({
     show_tab_indicators = true, -- 多个 tab 时在右上角显示 1 | 2 | ...
     persist_buffer_sort = true, -- whether or not custom sorted buffers should persist
 
-    separator_style = {' ',' '},  -- "thin", -- "thick", {'',''}, -- [focused and unfocused]
+    separator_style = {' ', ' '},  -- thin thick, {'',''}, -- [focused and unfocused]
     sort_by = 'id',
   },
 
@@ -255,54 +326,6 @@ bufferline.setup({
 })
 
 --- keymaps ----------------------------------------------------------------------------------------
-
---- functions for delete current buffer from tabline ----------------------------------------------- {{{
---- NOTE: 指定 filetype 不能使用 go_to() 功能.
-local function buf_jumpable()
-  --- 不能使用 bufferline.go_to() 的 filetype
-  local exclude_filetype = {'vimfiler', 'nerdtree', 'tagbar', 'NvimTree', 'toggleterm', 'myterm'}
-
-  if vim.tbl_contains(exclude_filetype, vim.bo.filetype) then
-    return false
-  end
-
-  return true
-end
-
---- 删除当前 buffer
-local function bufferline_del_current_buffer()
-  --- NOTE: multi tab 的情况下, 使用 :tabclose 关闭整个 tab, 同时 bdelete 该 tab 中的所有 buffer.
-  --- 获取 tab 总数. 大于 1 说明有多个 tab.
-  if vim.fn.tabpagenr() > 1 then
-    ---  获取该 tab 中的所有 bufnr. return list.
-    local tab_buf_list = vim.fn.tabpagebuflist()
-
-    --- `:tabclose` 关闭整个 tab
-    --- `:bdelete 1 2 3` 删除 tab 中的所有 buffer
-    vim.cmd([[ tabclose | bdelete ]] .. vim.fn.join(tab_buf_list, ' '))
-    return
-  end
-
-  --- NOTE: single tab 情况下删除 current buffer.
-  if not buf_jumpable() then
-    return  --- 如果当前 buffer 不能 jump 则直接返回.
-  end
-
-  local before_select_bufnr = vim.fn.bufnr('%')  --- 获取当前 bufnr()
-  bufferline.cycle(-1)  -- 跳转到 prev buffer
-  local after_select_bufnr = vim.fn.bufnr('%')   --- 获取跳转后 bufnr()
-
-  if before_select_bufnr ~= after_select_bufnr then
-    --- 如果 before != after 则执行 bdelete #.
-    vim.cmd([[bdelete #]])
-  else
-    --- 如果 before == after 则说明是最后一个 listed buffer, 或者当前 buffer 是 unlisted active buffer.
-    bufferline.go_to(1, true)
-  end
-end
-
--- -- }}}
-
 local opt = { noremap = true, silent = true }
 local bufferline_keymaps = {
   {'n', '<leader>1', function() if buf_jumpable() then bufferline.go_to(1, true) end end, opt, 'which_key_ignore'},
