@@ -189,14 +189,14 @@ return packer.startup(function(use)
   -- -- }}}
   use {"nvim-treesitter/nvim-treesitter",
     run = ":TSUpdate",   -- Post-update/install hook.
-    config = function() require("user.plugin-settings.treesitter") end,
+    config = function() require("user.plugin_settings.treesitter") end,
     requires = {
       --- NOTE: 以下都是 treesitter modules 插件, 在 setup() 中启用的插件.
       --- 第一方 module 插件 ---
       --- 顶部显示 cursor 所在 function 的定义.
       --- https://github.com/nvim-treesitter/nvim-treesitter-context#configuration
       {"nvim-treesitter/nvim-treesitter-context",
-        config = function() require("user.plugin-settings.treesitter-context") end,
+        config = function() require("user.plugin_settings.treesitter-context") end,
       },
 
       --- 用于获取 treesitter 信息, 调整颜色很有用.
@@ -215,7 +215,7 @@ return packer.startup(function(use)
   --- 以下是使用了 treesitter 功能的插件. (这些插件也可以不使用 treesitter 的功能)
   --- 注释
   use {"numToStr/Comment.nvim",
-    config = function() require("user.plugin-settings.comment") end,
+    config = function() require("user.plugin_settings.comment") end,
     requires = {
       "JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
       "nvim-treesitter/nvim-treesitter",
@@ -224,13 +224,13 @@ return packer.startup(function(use)
 
   --- identline
   use {"lukas-reineke/indent-blankline.nvim",
-    config = function() require("user.plugin-settings.indentline") end,
+    config = function() require("user.plugin_settings.indentline") end,
     requires = "nvim-treesitter/nvim-treesitter",  -- 设置 vim.g.indent_blankline_use_treesitter = "v:true"
   }
 
   --- Completion -----------------------------------------------------------------------------------
   use {"hrsh7th/nvim-cmp",
-    config = function() require("user.plugin-settings.cmp") end,
+    config = function() require("user.plugin_settings.cmp") end,
     --- NOTE: 以下是 nvim-cmp module 插件, 在 setup() 中启用的插件.
     requires = {
       "hrsh7th/cmp-nvim-lsp",      -- LSP source for nvim-cmp
@@ -240,7 +240,7 @@ return packer.startup(function(use)
       {"saadparwaiz1/cmp_luasnip", -- Snippets source for nvim-cmp
         requires = {
           {"L3MON4D3/LuaSnip",     -- snippet engine, for "cmp_luasnip", BUG: 每次打开文件都会有一个 [Scratch] buffer.
-            config = function() require("user.plugin-settings.luasnip") end,
+            config = function() require("user.plugin_settings.luasnip") end,
             requires = "rafamadriz/friendly-snippets",  -- snippets content, 自定义 snippets 可以借鉴这个结构.
           },
         },
@@ -250,7 +250,7 @@ return packer.startup(function(use)
 
   --- 自动括号, 同时依赖 treesitter && cmp
   use {"windwp/nvim-autopairs",
-    config = function() require("user.plugin-settings.autopairs") end,
+    config = function() require("user.plugin_settings.autopairs") end,
     requires = {
       "nvim-treesitter/nvim-treesitter",  -- setup() 中 `check_ts`, `ts_config` 需要 treesitter 支持.
       "hrsh7th/nvim-cmp",  -- cmp.event:on() 设置.
@@ -281,15 +281,15 @@ return packer.startup(function(use)
   --- File Tree Display ----------------------------------------------------------------------------
   --use "kyazdani42/nvim-web-devicons"  -- 提供 icons 需要 patch 字体 (Nerd Fonts)
   use {"kyazdani42/nvim-tree.lua",      -- 类似 NerdTree
-    config = function() require("user.plugin-settings.nvim-tree") end
+    config = function() require("user.plugin_settings.nvim-tree") end
   }
 
   --- Buffer & Status Line -------------------------------------------------------------------------
   use {"akinsho/bufferline.nvim",     -- top buffer list
-    config = function() require("user.plugin-settings.bufferline") end,
+    config = function() require("user.plugin_settings.bufferline") end,
   }
   use {"nvim-lualine/lualine.nvim",   -- bottom status line
-    config = function() require("user.plugin-settings.lualine") end,
+    config = function() require("user.plugin_settings.lualine") end,
   }
 
   --- Debug tools 安装 -----------------------------------------------------------------------------
@@ -298,7 +298,7 @@ return packer.startup(function(use)
   --- https://github.com/puremourning/vimspector
   --- https://pepa.holla.cz/2021/03/01/golang-debugging-application-in-neovim/
   use {"puremourning/vimspector",
-    config = function() require("user.plugin-settings.vimspector") end,
+    config = function() require("user.plugin_settings.vimspector") end,
     --- fn 中都是插件中以定义的 vimL function.
     fn = {"vimspector#LaunchWithSettings", "vimspector#Launch", "vimspector#Continue", "vimspector#ToggleBreakpoint"},
   }
@@ -310,24 +310,24 @@ return packer.startup(function(use)
   --- Useful Tools ---------------------------------------------------------------------------------
   --- fzf rg fd, preview 使用的是 treesitter, 而不用 bat
   use {"nvim-telescope/telescope.nvim",
-    config = function() require("user.plugin-settings.telescope") end,
+    config = function() require("user.plugin_settings.telescope") end,
     requires = "nvim-lua/plenary.nvim",
     --keys = {"<leader>f"},  -- NOTE: telescope/fzf/rg 所有 keymap 都是以 <leader>f 开头.
   }
 
   --- terminal
   use {"akinsho/toggleterm.nvim",
-    config = function() require("user.plugin-settings.toggleterm") end
+    config = function() require("user.plugin_settings.toggleterm") end
   }
 
   --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   use {"folke/which-key.nvim",
-    config = function() require("user.plugin-settings.which-key") end
+    config = function() require("user.plugin_settings.which-key") end
   }
 
   --- 通知功能
   use {"rcarriga/nvim-notify",
-    config = function() require("user.plugin-settings.notify") end
+    config = function() require("user.plugin_settings.notify") end
   }
 
   --- tagbar --- {{{
@@ -336,7 +336,7 @@ return packer.startup(function(use)
   --- `ctags --list-languages` 查看支持的语言. 不支持 jsx/tsx, 支持 typescript, 勉强支持 javascript
   -- -- }}}
   use {"preservim/tagbar",
-    config = function() require("user.plugin-settings.tagbar") end
+    config = function() require("user.plugin_settings.tagbar") end
   }
 
   --- markdown preview

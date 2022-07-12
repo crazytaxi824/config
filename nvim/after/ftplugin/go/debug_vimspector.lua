@@ -1,14 +1,14 @@
 --- "puremourning/vimspector"
 --- https://github.com/puremourning/vimspector#go
 --- VVI:
---    adapter 定义在 lua/user/plugin-settings/vimspector.lua -> vim.g.vimspector_adapters
---    config  定义在 lua/user/plugin-settings/vimspector.lua -> vim.g.vimspector_configurations
+--    adapter 定义在 lua/user/plugin_settings/vimspector.lua -> vim.g.vimspector_adapters
+--    config  定义在 lua/user/plugin_settings/vimspector.lua -> vim.g.vimspector_configurations
 
 --- Debug command ----------------------------------------------------------------------------------
 local function debug_go()
   if string.match(vim.fn.expand('%'), ".*_test%.go$") then
     --- Debug Test file
-    --- NOTE: debug_go_test 定义在 lua/user/plugin-settings/vimspector.lua -> vim.g.vimspector_configurations
+    --- NOTE: debug_go_test 定义在 lua/user/plugin_settings/vimspector.lua -> vim.g.vimspector_configurations
     vim.cmd(':call vimspector#LaunchWithSettings({"configuration": "debug_go_test"})')
   else
     --- 判断是否在 main package
@@ -29,7 +29,7 @@ local function debug_go()
     end
 
     --- Debug Main
-    --- NOTE: debug_go 定义在 lua/user/plugin-settings/vimspector.lua -> vim.g.vimspector_configurations
+    --- NOTE: debug_go 定义在 lua/user/plugin_settings/vimspector.lua -> vim.g.vimspector_configurations
     vim.cmd(':call vimspector#LaunchWithSettings({"configuration": "debug_go"})')
   end
 end
