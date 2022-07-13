@@ -303,9 +303,10 @@ return packer.startup(function(use)
     fn = {"vimspector#LaunchWithSettings", "vimspector#Launch", "vimspector#Continue", "vimspector#ToggleBreakpoint"},
   }
   --- Debug 替代插件, 目前不完善 --- {{{
-  --use "mfussenegger/nvim-dap"   -- lua debug tool
-  --use "rcarriga/nvim-dap-ui"    -- ui for "nvim-dap"
-  --use "Pocco81/dap-buddy.nvim"  -- manage debuggers provided by "nvim-dap".
+  -- use {"rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
+  --   requires = "mfussenegger/nvim-dap",  -- lua debug tool
+  -- }
+  -- use "Pocco81/dap-buddy.nvim"  -- manage debuggers provided by "nvim-dap".
   -- -- }}}
 
   --- Useful Tools ---------------------------------------------------------------------------------
