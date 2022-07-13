@@ -5,11 +5,9 @@ end
 
 -- https://github.com/numToStr/Comment.nvim#-hooks
 comment.setup {
-  padding = true,  -- Add a space between '//' and content. (boolean|fun():boolean)
-
+  padding = true, -- Add a space between '//' and content. (boolean|fun():boolean)
   sticky = true,  -- Whether the cursor should stay at its position. (boolean)
-
-  ignore = nil,  -- 忽略行, eg: ^func.*
+  ignore = nil,   -- 忽略行, eg: ^func.*
 
   --- NOTE: pre_hook 配合 "JoosepAlviste/nvim-ts-context-commentstring" 设置.
   pre_hook = function(ctx)

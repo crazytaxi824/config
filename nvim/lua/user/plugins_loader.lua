@@ -128,7 +128,7 @@ vim.api.nvim_create_user_command("PackerUpdateLog",
 
 --- Have packer use a popup window, "nvim-lua/popup.nvim"
 packer.init {
-  snapshot = "2022.07.12",   -- VVI: Name of the snapshot you would like to load at startup
+  --snapshot = "2022.07.12",   -- VVI: Name of the snapshot you would like to load at startup
   snapshot_path = vim.fn.stdpath('config') .. '/snapshots',  -- 默认路径是 stdpath('cache') .. '/packer.nvim'
   --package_root = vim.fn.stdpath('data') .. '/site/pack'),  -- 默认值
   --compile_path = vim.fn.stdpath('config') .. '/plugin/packer_compiled.lua'),  -- VVI: 不要修改. /plugin 文件夹会自动加载.
@@ -217,15 +217,15 @@ return packer.startup(function(use)
   use {"numToStr/Comment.nvim",
     config = function() require("user.plugin_settings.comment") end,
     requires = {
-      "JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
+      "JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 context-commentstring.
       "nvim-treesitter/nvim-treesitter",
     },
   }
 
   --- identline
   use {"lukas-reineke/indent-blankline.nvim",
-    config = function() require("user.plugin_settings.indentline") end,
-    requires = "nvim-treesitter/nvim-treesitter",  -- 设置 vim.g.indent_blankline_use_treesitter = "v:true"
+    config = function() require("user.plugin_settings.indentline") end,  -- setup() 设置 use_treesitter = true
+    requires = "nvim-treesitter/nvim-treesitter",
   }
 
   --- Completion -----------------------------------------------------------------------------------
@@ -304,7 +304,8 @@ return packer.startup(function(use)
   }
   --- Debug 替代插件, 目前不完善 --- {{{
   --use "mfussenegger/nvim-dap"   -- lua debug tool
-  --use "Pocco81/dap-buddy.nvim"  -- "nvim-dap" management tool
+  --use "rcarriga/nvim-dap-ui"    -- ui for "nvim-dap"
+  --use "Pocco81/dap-buddy.nvim"  -- manage debuggers provided by "nvim-dap".
   -- -- }}}
 
   --- Useful Tools ---------------------------------------------------------------------------------

@@ -31,23 +31,43 @@ local diagnostics = null_ls.builtins.diagnostics
 --local code_actions = null_ls.builtins.code_actions
 
 --- diagnostics_opts 用于下面的 sources diagnostics 设置 ------------------------------------------- {{{
+--- https://github.com/jose-elias-alvarez/null-ls.nvim -> lua/null-ls/methods.lua
+-- local internal_methods = {
+--     CODE_ACTION = "NULL_LS_CODE_ACTION",  --- NOTE: for code_actions
+--
+--     DIAGNOSTICS = "NULL_LS_DIAGNOSTICS",  --- NOTE: for linter diagnostics
+--     DIAGNOSTICS_ON_OPEN = "NULL_LS_DIAGNOSTICS_ON_OPEN",
+--     DIAGNOSTICS_ON_SAVE = "NULL_LS_DIAGNOSTICS_ON_SAVE",
+--
+--     FORMATTING = "NULL_LS_FORMATTING",  --- NOTE: for formatter
+--     RANGE_FORMATTING = "NULL_LS_RANGE_FORMATTING",
+--
+--     HOVER = "NULL_LS_HOVER",  --- NOTE: for hover
+--
+--     COMPLETION = "NULL_LS_COMPLETION",  --- NOTE: for COMPLETION
+-- }
 local diagnostics_opts = {
-  method = null_ls.methods.DIAGNOSTICS_ON_SAVE,  -- 只在 save 的时候执行 diagnostics.
-  runtime_condition = function(params)  -- NOTE: 耗资源, 每次运行 linter 前都要运行该函数, 不要做太复杂的运算.
+  -- 只在 save 的时候执行 diagnostics.
+  method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
+
+  -- NOTE: 耗资源, 每次运行 linter 前都要运行该函数, 不要做太复杂的运算.
+  runtime_condition = function(params)
+    -- DO NOT lint readonly files
     if vim.bo.readonly then
-      return false  -- do not lint readonly files
+      return false  -- false 不执行 lint
     end
 
-    --- NOTE: 文件夹中的文件不进行 lint
+    --- NOTE: ignore 文件夹中的文件不进行 lint
     local ignore_lint_folders = {"node_modules"}
     for _, ignored in ipairs(ignore_lint_folders) do
       if string.match(params.bufname, ignored) then
-        return false  -- ignore 指定 folder 中的文件
+        return false  -- false 不执行 lint
       end
     end
 
     return true
   end,
+
   --timeout = 3000,   -- linter 超时时间, 全局设置了 default_timeout.
   --diagnostics_format = "#{m} [null-ls:#{s}]",  -- 只对单个 linter 生效.
 }
@@ -63,7 +83,7 @@ local diagnostics_opts = {
 local linter_settings = {
   --- golangci-lint
   diagnostics.golangci_lint.with(__Proj_local_settings.keep_extend('lint', 'golangci_lint',
-    require("user.lsp.null-ls.tools.golangci"), diagnostics_opts)
+    require("user.lsp.null-ls.tools.golangci"), diagnostics_opts)  -- NOTE: 加载单独设置 null-ls/tools/golangci
   ),
 
   --- NOTE: eslint 分别对不同的 filetype 做不同的设置. --- {{{
@@ -128,18 +148,29 @@ null_ls.setup({
   --- VVI: 设置 linter / formatter / code actions
   sources = vim.list_extend(linter_settings, formatter_settings),
 
-  --- VVI: project root, 影响 linter 执行. root_dir 传入一个回调 func(fname).
-  --- 如果想要改变 linter 执行的路径, 需要在 linter.with() 设置中设置 cwd. cwd 默认值为 root_dir.
-  --- null-ls 的 root_dir 只会运行一次. 而 lspconfig 的 root_dir 在每次打开 buffer 时都会执行.
-  --- root_dir 有默认值. 如果 root_pattern() 返回 nil, 则 root_dir 会被设置成默认值, 即 vim.fn.getcwd().
-  root_dir = require("null-ls.utils").root_pattern(
-    '.git','go.mod','go.work','package.json','tsconfig.json','jsconfig.json'),
+  --- VVI: project root, 影响 linter 执行时的 pwd. 这里的 root_dir 是一个全局设置, 对 null-ls 中的所有 linter 有效.
+  --- root_dir 需要传入一个回调函数 func(params):string.
+  --- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/MAIN.md#generators
+  --- 默认值: root_dir = require("null-ls.utils").root_pattern(".null-ls-root", "Makefile", ".git")
+  --- 如果 utils.root_pattern() 返回 nil, 则 root_dir 会被设置成当前路径 vim.fn.getcwd().
+  ---
+  --- PROBLEM: null-ls 的 root_dir 只会运行一次. 而 lspconfig 的 root_dir 在每次打开 buffer 时都会执行.
+  --- Q: 为什么要在每次执行 linter 时单独获取 pwd 路径?
+  --- A: 因为 nvim 可能会在多个项目文件之间跳转, 每个项目有自己单独的 root.
+  --- HOW: 单独为 linter 设置 cwd = func(params):string, 参考 tools/golangci.lua
+  root_dir = function(params)
+    local util = require("null-ls.utils")
+    return util.root_pattern('go.work')(params.bufname) or
+      util.root_pattern('.git','go.mod','package.json','tsconfig.json','jsconfig.json')(params.bufname)
+  end,
 
   -- NOTE: 非常耗资源, 调试完后设置为 false.
   -- is the same as setting log.level to "trace" 记录 log, `:NullLsLog` 打印 log.
   debug = false,
+
+  --- log 输出到 stdpath('cache') .. 'null-ls.log'
   log = {
-    enable = true,   -- write to null-ls.log.
+    enable = true,
     level = 'warn',  -- "error", "warn"(*), "info", "debug", "trace"
 
     -- show log output in Neovim's ':messages'.
