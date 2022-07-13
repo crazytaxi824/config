@@ -128,12 +128,21 @@ null_ls.setup({
   --- VVI: 设置 linter / formatter / code actions
   sources = vim.list_extend(linter_settings, formatter_settings),
 
-  --- VVI: project root, 影响 linter 执行. root_dir 传入一个回调 func(fname).
-  --- 如果想要改变 linter 执行的路径, 需要在 linter.with() 设置中设置 cwd. cwd 默认值为 root_dir.
-  --- null-ls 的 root_dir 只会运行一次. 而 lspconfig 的 root_dir 在每次打开 buffer 时都会执行.
-  --- root_dir 有默认值. 如果 root_pattern() 返回 nil, 则 root_dir 会被设置成默认值, 即 vim.fn.getcwd().
-  root_dir = require("null-ls.utils").root_pattern(
-    '.git','go.mod','go.work','package.json','tsconfig.json','jsconfig.json'),
+  --- VVI: project root, 影响 linter 执行时的 pwd. 这里的 root_dir 是一个全局设置, 对 null-ls 中的所有 linter 有效.
+  --- root_dir 需要传入一个回调函数 func(params):string.
+  --- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/MAIN.md#generators
+  --- 默认值: root_dir = require("null-ls.utils").root_pattern(".null-ls-root", "Makefile", ".git")
+  --- 如果 utils.root_pattern() 返回 nil, 则 root_dir 会被设置成当前路径 vim.fn.getcwd().
+  ---
+  --- PROBLEM: null-ls 的 root_dir 只会运行一次. 而 lspconfig 的 root_dir 在每次打开 buffer 时都会执行.
+  --- Q: 为什么要在每次执行 linter 时单独获取 pwd 路径?
+  --- A: 因为 nvim 可能会在多个项目文件之间跳转, 每个项目有自己单独的 root.
+  --- HOW: 单独为 linter 设置 cwd = func(params):string, 参考 tools/golangci.lua
+  root_dir = function(params)
+    local util = require("null-ls.utils")
+    return util.root_pattern('go.work')(params.bufname) or
+      util.root_pattern('.git','go.mod','package.json','tsconfig.json','jsconfig.json')(params.bufname)
+  end,
 
   -- NOTE: 非常耗资源, 调试完后设置为 false.
   -- is the same as setting log.level to "trace" 记录 log, `:NullLsLog` 打印 log.

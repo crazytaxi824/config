@@ -3,15 +3,16 @@ local util = require("null-ls.utils")
 --- NOTE: 执行 golangci-lint 的 pwd. 默认是 params.root 即: null_ls.setup() 中的 root_dir / $ROOT
 --- 这里的逻辑是参考 lspconfig/langs/gopls.lua 中 root_dir 的逻辑.
 --- params 回调参数 --- {{{
---   content,    -- current buffer content (table, split at newline)
---   lsp_method, -- lsp method that triggered request (string)
---   method,  -- null-ls method that triggered generator (string)
---   row,     -- cursor's current row (number, zero-indexed)
---   col,     -- cursor's current column (number)
---   bufnr,   -- current buffer's number (number)
---   bufname, -- current buffer's full path (string)
---   ft,   -- current buffer's filetype (string)
---   root, -- current buffer's root directory (string)
+--- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/MAIN.md#generators
+--    content,    -- current buffer content (table, split at newline)
+--    lsp_method, -- lsp method that triggered request (string)
+--    method,  -- null-ls method that triggered generator (string)
+--    row,     -- cursor's current row (number, zero-indexed)
+--    col,     -- cursor's current column (number)
+--    bufnr,   -- current buffer's number (number)
+--    bufname, -- current buffer's full path (string)
+--    ft,   -- current buffer's filetype (string)
+--    root, -- current buffer's root directory (string)
 -- -- }}}
 local function pwd_root(params)
   return util.root_pattern('go.work')(params.bufname) or
