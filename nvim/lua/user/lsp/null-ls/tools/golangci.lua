@@ -1,7 +1,6 @@
 local util = require("null-ls.utils")
 
 --- NOTE: 执行 golangci-lint 的 pwd. 默认是 params.root 即: null_ls.setup() 中的 root_dir / $ROOT
---- 这里的逻辑是参考 lspconfig/langs/gopls.lua 中 root_dir 的逻辑.
 --- params 回调参数 --- {{{
 --- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/MAIN.md#generators
 --    content,    -- current buffer content (table, split at newline)
@@ -15,9 +14,12 @@ local util = require("null-ls.utils")
 --    root, -- current buffer's root directory (string)
 -- -- }}}
 local function pwd_root(params)
-  return util.root_pattern('go.work')(params.bufname) or
-      util.root_pattern('go.mod','.git')(params.bufname) or
-      params.root
+  --- VVI: 优先获取 'root_dir' from lspconfig on_attach() setbufvar()
+  --- 刚打开 buffer 的时候 lspconfig.root_dir 还未设置, 会用到下面的方法.
+  return vim.fn.getbufvar(params.bufnr, "lspconfig").root_dir or
+    util.root_pattern('go.work')(params.bufname) or  -- then get 'go.work'
+    util.root_pattern('go.mod','.git')(params.bufname) or  -- then get 'go.mod' | '.git'
+    params.root  -- last fallback setting
 end
 
 return {
@@ -31,6 +33,7 @@ return {
     --- VVI: 这里必须要使用 $DIRNAME.
     ---  如果使用 $FILENAME 意思是 lint 单个文件. 别的文件中定义的 var 无法被 golangci 找到.
     ---  如果缺省设置, 即不设置 $FILENAME 也不设置 $DIRNAME, 则每次 golangci 都会 lint 整个 project.
+    ---  --path-prefix  Path prefix to add to output. VVI: 必须要, 默认是 pwd.
     return { "run", "--fix=false", "--fast", "--out-format=json", "$DIRNAME", "--path-prefix", pwd_root(params) }
   end,
 
