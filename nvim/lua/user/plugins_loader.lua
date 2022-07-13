@@ -3,6 +3,7 @@
 --- `:PackerSync` 的时候会自动运行 compile(), 重新生成 compile 文件. 主要影响 setup() 设置文件加载.
 --- VVI: 插件一旦安装到 pack/packer/start/ 中, 不论本文件中的 use() 是否被注释, 已安装的插件都会被加载.
 --- 如果想要插件不加载, 卸载该插件, 或者使用 `opt = true`, 将插件移动到 pack/packer/opt/ 文件夹中.
+--- `:PackerLoad a b` 相当于 lua require('packer').loader('a b')
 --- Packer.nvim 设置 ------------------------------------------------------------------------------- {{{
 -- https://github.com/wbthomason/packer.nvim#specifying-plugins
 --
@@ -43,7 +44,7 @@
 --                                -- FIXME https://github.com/wbthomason/packer.nvim/issues/648
 --   keys = string or list,       -- Specifies maps which load this plugin. See "Keybindings".
 --   event = string or list,      -- Specifies autocommand events which load this plugin.
---   fn = string or list          -- Specifies functions which load this plugin.
+--   fn = string or list          -- Specifies functions which load this plugin. NOTE: 目前测试只有 VimL fn 可以使用.
 --   cond = string, function, or list of strings/functions,   -- Specifies a conditional test to load this plugin
 --   module = string or list      -- Specifies Lua module names for require. When requiring a string which starts
 --                                -- with one of these module names, the plugin will be loaded.
@@ -302,13 +303,16 @@ return packer.startup(function(use)
     --- fn 中都是插件中以定义的 vimL function.
     fn = {"vimspector#LaunchWithSettings", "vimspector#Launch", "vimspector#Continue", "vimspector#ToggleBreakpoint"},
   }
-  --- Debug 替代插件, 目前不完善 --- {{{
   use {"rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
-    config = function() require("user.plugin_settings.dap") end,
-    requires = "mfussenegger/nvim-dap",  -- lua debug tool
+    opt = true,  --- VVI: 通过 `:PackerLoad nvim-dap-ui` 手动加载
+    config = function() require("user.plugin_settings.nvim-dap-ui") end,
+    requires = {
+      {"mfussenegger/nvim-dap",  -- lua debug tool
+        config = function() require("user.plugin_settings.nvim-dap") end,
+      },
+    },
   }
   -- use "Pocco81/dap-buddy.nvim"  -- manage debuggers provided by "nvim-dap".
-  -- -- }}}
 
   --- Useful Tools ---------------------------------------------------------------------------------
   --- fzf rg fd, preview 使用的是 treesitter, 而不用 bat

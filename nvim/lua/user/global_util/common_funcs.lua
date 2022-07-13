@@ -34,5 +34,20 @@ end
 
 --- NOTE: 以下是 test functions --------------------------------------------------------------------
 
+vim.api.nvim_create_user_command("DD",
+  function()
+    require('packer').loader('nvim-dap-ui')  -- VVI: 加载 plugins 相当于 ':PackerLoad nvim-dap-ui'
+    require('dap').continue()
+  end,
+  {bang=true, bar=true}
+)
+
+vim.api.nvim_create_user_command("TT",
+  function()
+    require('packer').loader('nvim-dap-ui')  -- VVI: 加载 plugins 相当于 ':PackerLoad nvim-dap-ui'
+    require('dap').toggle_breakpoint()
+  end,
+  {bang=true, bar=true}
+)
 
 
