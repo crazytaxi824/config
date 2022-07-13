@@ -63,7 +63,7 @@ local diagnostics_opts = {
 local linter_settings = {
   --- golangci-lint
   diagnostics.golangci_lint.with(__Proj_local_settings.keep_extend('lint', 'golangci_lint',
-    require("user.lsp.null-ls.tools.golangci"), diagnostics_opts)
+    require("user.lsp.null-ls.tools.golangci"), diagnostics_opts)  -- NOTE: 加载单独设置 null-ls/tools/golangci
   ),
 
   --- NOTE: eslint 分别对不同的 filetype 做不同的设置. --- {{{
@@ -138,8 +138,10 @@ null_ls.setup({
   -- NOTE: 非常耗资源, 调试完后设置为 false.
   -- is the same as setting log.level to "trace" 记录 log, `:NullLsLog` 打印 log.
   debug = false,
+
+  --- log 输出到 stdpath('cache') .. 'null-ls.log'
   log = {
-    enable = true,   -- write to null-ls.log.
+    enable = true,
     level = 'warn',  -- "error", "warn"(*), "info", "debug", "trace"
 
     -- show log output in Neovim's ':messages'.
