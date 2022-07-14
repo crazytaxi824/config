@@ -6,10 +6,11 @@ dap.adapters.go = function(callback, config)
   local stdout = vim.loop.new_pipe(false)
   local handle
   local pid_or_err
+  local host = "127.0.0.1"
   local port = 38697
   local opts = {
     stdio = {nil, stdout},
-    args = {"dap", "-l", "127.0.0.1:" .. port},
+    args = {"dap", "-l", host .. ":" .. port},
     detached = true
   }
   handle, pid_or_err = vim.loop.spawn("dlv", opts, function(code)  --- NOTE: dlv command
@@ -31,7 +32,7 @@ dap.adapters.go = function(callback, config)
   -- Wait for delve to start
   vim.defer_fn(
     function()
-      callback({type = "server", host = "127.0.0.1", port = port})
+      callback({type = "server", host = host, port = port})
     end,
     100)
 end
@@ -51,21 +52,14 @@ end
 dap.configurations.go = {
   {
     type = "go",
-    name = "Debug",
+    name = "Debug go",
     request = "launch",
     program = "${file}"
   },
+  -- go test package
   {
     type = "go",
-    name = "Debug test", -- configuration for debugging test files
-    request = "launch",
-    mode = "test",
-    program = "${file}"
-  },
-  -- works with go.mod packages and sub packages 
-  {
-    type = "go",
-    name = "Debug test (go.mod)",
+    name = "Debug go test (package/dir)",
     request = "launch",
     mode = "test",
     program = "./${relativeFileDirname}"
@@ -78,6 +72,14 @@ dap.configurations.go = {
 -- `DapLogPoint` for log points (default: `L`)
 -- `DapStopped` to indicate where the debugee is stopped (default: `→`)
 -- `DapBreakpointRejected` to indicate breakpoints rejected by the debug adapter (default: `R`)
+vim.cmd([[
+  hi DapBreakpoint ctermfg=190
+  hi DapStopped ctermfg=75
+  hi DapStoppedLine ctermbg=238
+]])
+
+vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "DapBreakpoint", numhl = "", linehl="" })
+vim.fn.sign_define("DapStopped", { text = " →", texthl = "DapStopped", numhl = "", linehl="DapStoppedLine" })
 
 --- repl / debug console command
 --    .exit               Closes the REPL
