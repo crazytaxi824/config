@@ -35,7 +35,7 @@ vim.g.vimspector_configurations = {
   },
 }
 
---- 窗口设置
+--- 窗口设置 ---------------------------------------------------------------------------------------
 --- if  sidebar_width + code_minwidth + terminal_maxwidth < screen, terminal 在右边, 否则在下面.
 --- 这里的 terminal 是指 output terminal, 不是 dap terminal.
 vim.g.vimspector_terminal_maxwidth = 65  -- 默认 80
@@ -45,5 +45,19 @@ vim.g.vimspector_sidebar_width = 46  -- 默认 50
 vim.g.vimspector_code_minwidth = 70  -- 默认 82
 
 vim.g.vimspector_bottombar_height = 10  -- 默认 10
+
+--- sign / icon 设置 -------------------------------------------------------------------------------
+--- https://github.com/puremourning/vimspector#changing-the-default-signs
+vim.cmd([[
+  sign define vimspectorBP            text=\ ● texthl=WarningMsg
+  sign define vimspectorBPCond        text=\ ◆ texthl=WarningMsg
+  sign define vimspectorBPLog         text=\ ◆ texthl=SpellRare
+  sign define vimspectorBPDisabled    text=\ ● texthl=LineNr
+  sign define vimspectorPC            text=\ ▶ texthl=MatchParen linehl=CursorLine
+  sign define vimspectorPCBP          text=●▶  texthl=MatchParen linehl=CursorLine
+  sign define vimspectorCurrentThread text=▶   texthl=MatchParen linehl=CursorLine
+  sign define vimspectorCurrentFrame  text=▶   texthl=Special    linehl=CursorLine
+]])
+
 
 

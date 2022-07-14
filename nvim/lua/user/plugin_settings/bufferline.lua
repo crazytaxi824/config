@@ -213,7 +213,7 @@ end
 local function bufferline_del_current_buffer()
   --- NOTE: multi tab 的情况下, 使用 :tabclose 关闭整个 tab, 同时 bdelete 该 tab 中的所有 buffer.
   --- 获取 tab 总数. 大于 1 说明有多个 tab.
-  if vim.fn.tabpagenr() > 1 then
+  if #vim.fn.gettabinfo() > 1 then
     ---  获取该 tab 中的所有 bufnr. return list.
     local tab_buf_list = vim.fn.tabpagebuflist()
 

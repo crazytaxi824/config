@@ -107,7 +107,11 @@
 -------------------------------------+----------------------------------+------------------------------------
 -- `:checkhealth`                    | (*) 检查 nvim 环境               | neovim
 -------------------------------------+----------------------------------+------------------------------------
--- `:PackerSync`                     | Clean, Install, Update packages. | "wbthomason/packer.nvim"
+-- `:PackerClean`                    | Remove disabled/unused plugins.  | "wbthomason/packer.nvim"
+-- `:PackerCompile`                  | Regenerate compiled loader file. |
+-- `:PackerInstall`                  | Clean, Install missing plugins.  |
+-- `:PackerUpdate`                   | Clean, Update, Install plugins.  |
+-- `:PackerSync`                     | :PackerUpdate, Compile plugins.  | *
 -- `:PackerSnapshot foo`             | 拍摄快照记录 plugins 版本        |
 -------------------------------------+----------------------------------+------------------------------------
 -- `:LspInfo`                        | 所有已启动的 LSP 列表.           | "neovim/nvim-lspconfig"
