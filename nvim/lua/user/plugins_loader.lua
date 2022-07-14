@@ -294,17 +294,9 @@ return packer.startup(function(use)
   }
 
   --- Debug tools 安装 -----------------------------------------------------------------------------
-  --- VimspectorInstall! delve | :VimspectorUpdate!
-  --- delve 安装位置 vimspector_base_dir=~/.local/share/nvim/site/pack/packer/start/vimspector/gadgets/macos/...
-  --- https://github.com/puremourning/vimspector
-  --- https://pepa.holla.cz/2021/03/01/golang-debugging-application-in-neovim/
-  use {"puremourning/vimspector",
-    config = function() require("user.plugin_settings.vimspector") end,
-    --- fn 中都是插件中以定义的 vimL function.
-    fn = {"vimspector#LaunchWithSettings", "vimspector#Launch", "vimspector#Continue", "vimspector#ToggleBreakpoint"},
-  }
+  require("user.plugin_settings.debug")  -- NOTE: 先加载 dap debug lazyload 启动方式
   use {"rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
-    opt = true,  --- VVI: 通过 `:PackerLoad nvim-dap-ui` 手动加载
+    opt = true,  --- VVI: 在 debug.lua 中通过 `:PackerLoad nvim-dap-ui` 手动加载
     config = function() require("user.plugin_settings.nvim-dap-ui") end,
     requires = {
       {"mfussenegger/nvim-dap",  -- lua debug tool
