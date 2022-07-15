@@ -1,5 +1,13 @@
 --- dapui 设置 -------------------------------------------------------------------------------------
-local dap, dapui = require("dap"), require("dapui")
+local dap_status_ok, dap = pcall(require, "dap")
+if not dap_status_ok then
+  return
+end
+
+local dapui_status_ok, dapui = pcall(require, "dapui")
+if not dapui_status_ok then
+  return
+end
 
 dapui.setup({
   mappings = {

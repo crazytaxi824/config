@@ -1,6 +1,9 @@
 --- https://github.com/leoluz/nvim-dap-go
 --- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#go-using-delve-directly
-local dap = require "dap"
+local dap_status_ok, dap = pcall(require, "dap")
+if not dap_status_ok then
+  return
+end
 
 dap.adapters.go = function(callback, config)
   local stdout = vim.loop.new_pipe(false)

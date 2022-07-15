@@ -8,10 +8,12 @@ vim.api.nvim_create_autocmd("FileType", {
         --- load nvim-api-ui (requires nvim-dap)
         require('packer').loader('nvim-dap-ui')  -- VVI: 相当于 ':PackerLoad nvim-dap-ui'
 
-        local dap = require('dap')
-        --- 如果 dap 已经运行, 则不进行任何操作.
-        if not dap.session() then
-          dap.continue() -- start debug
+        local dap_status_ok, dap = pcall(require, 'dap')
+        if dap_status_ok then
+          --- 如果 dap 已经运行, 则不进行任何操作.
+          if not dap.session() then
+            dap.continue() -- start debug
+          end
         end
       end,
       {bang=true, bar=true}
@@ -26,7 +28,10 @@ vim.api.nvim_create_autocmd("FileType", {
           require('packer').loader('nvim-dap-ui')  -- VVI: 相当于 ':PackerLoad nvim-dap-ui'
 
           --- toggle breakpoint
-          require('dap').toggle_breakpoint()
+          local dap_status_ok, dap = pcall(require, 'dap')
+          if dap_status_ok then
+            dap.toggle_breakpoint()
+          end
         end,
       }
     )
@@ -34,7 +39,7 @@ vim.api.nvim_create_autocmd("FileType", {
     --- which-key <F9> toggle_breakpoint
     local wk_status_ok, wk = pcall(require, "which-key")
     if wk_status_ok then
-      wk.register({['<leader>c<F9>'] = {"Debug - Toggle Breakpoint"}}, {mode="n"})
+      wk.register({['<leader>c<F9>'] = {"Debug - Toggle Breakpoint"}}, {mode="n", buffer=0})
     end
 
   end,
