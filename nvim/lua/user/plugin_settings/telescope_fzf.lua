@@ -167,7 +167,7 @@ local rg_search = function(additional_args)
     return
   end
 
-  pickers.new({
+  pickers.new({}, {
     prompt_title = ":Rg",
     finder = finders.new_table({
       results = vim.fn.split(result, '\n'),

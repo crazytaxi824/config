@@ -5,6 +5,9 @@ if not dap_status_ok then
   return
 end
 
+--- Defaults to `INFO`, 打印到 'stdpath('cache') .. dap.log'
+dap.set_log_level('WARN')
+
 dap.adapters.go = function(callback, config)
   local stdout = vim.loop.new_pipe(false)
   local handle

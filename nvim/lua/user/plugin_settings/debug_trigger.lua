@@ -5,8 +5,10 @@ vim.api.nvim_create_autocmd("FileType", {
     --- set command :Debug
     vim.api.nvim_buf_create_user_command(0, 'Debug',
       function()
-        --- load nvim-api-ui (requires nvim-dap)
-        require('packer').loader('nvim-dap-ui')  -- VVI: 相当于 ':PackerLoad nvim-dap-ui'
+        --- NOTE: packer_plugins 是一个全局变量, 可以用来查看 plugin 信息.
+        if not packer_plugins['nvim-dap-ui'].loaded then
+          require('packer').loader('nvim-dap-ui')  -- VVI: 相当于 ':PackerLoad nvim-dap-ui'
+        end
 
         local dap_status_ok, dap = pcall(require, 'dap')
         if dap_status_ok then
@@ -24,8 +26,10 @@ vim.api.nvim_create_autocmd("FileType", {
       {
         noremap=true,
         callback = function()
-          --- load nvim-api-ui (requires nvim-dap)
-          require('packer').loader('nvim-dap-ui')  -- VVI: 相当于 ':PackerLoad nvim-dap-ui'
+          --- NOTE: packer_plugins 是一个全局变量, 可以用来查看 plugin 信息.
+          if not packer_plugins['nvim-dap-ui'].loaded then
+            require('packer').loader('nvim-dap-ui')  -- VVI: 相当于 ':PackerLoad nvim-dap-ui'
+          end
 
           --- toggle breakpoint
           local dap_status_ok, dap = pcall(require, 'dap')

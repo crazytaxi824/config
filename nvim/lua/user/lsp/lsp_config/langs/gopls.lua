@@ -7,7 +7,7 @@
 local function go_env(v)
   local result = vim.fn.system('go env '..v)
   if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
-    Notify(result, "ERROR", {title={"go_env()","gopls.lua"}})
+    Notify(result, "ERROR")
     return
   end
 
