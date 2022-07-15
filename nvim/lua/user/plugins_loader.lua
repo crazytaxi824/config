@@ -193,9 +193,10 @@ return packer.startup(function(use)
   --- `:TSInstall {lang}`     -- Install languages
   --- `:TSUninstall {lang}`   -- Uninstall languages
   --- `:TSUpdate`             -- Update the installed languages
+  --- `:TSUpdateSync`         -- Update the installed languages synchronously
   -- -- }}}
   use {"nvim-treesitter/nvim-treesitter",
-    run = ":TSUpdate",   -- Post-update/install hook.
+    run = ":TSUpdateSync",   -- Post-update/install hook.
     config = function() require("user.plugin_settings.treesitter") end,
     requires = {
       --- NOTE: 以下都是 treesitter modules 插件, 在 setup() 中启用的插件.
