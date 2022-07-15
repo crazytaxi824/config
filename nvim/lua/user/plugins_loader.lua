@@ -129,7 +129,7 @@ vim.api.nvim_create_user_command("PackerUpdateLog",
 
 --- Have packer use a popup window, "nvim-lua/popup.nvim"
 packer.init {
-  snapshot = "2022.07.15",   -- VVI: Name of the snapshot you would like to load at startup
+  --snapshot = "2022.07.15",   -- VVI: Name of the snapshot you would like to load at startup
   snapshot_path = vim.fn.stdpath('config') .. '/snapshots',  -- 默认路径是 stdpath('cache') .. '/packer.nvim'
   --package_root = vim.fn.stdpath('data') .. '/site/pack'),  -- 默认值
   --compile_path = vim.fn.stdpath('config') .. '/plugin/packer_compiled.lua'),  -- VVI: 不要修改. /plugin 文件夹会自动加载.
@@ -197,7 +197,7 @@ return packer.startup(function(use)
       --- 顶部显示 cursor 所在 function 的定义.
       --- https://github.com/nvim-treesitter/nvim-treesitter-context#configuration
       {"nvim-treesitter/nvim-treesitter-context",
-        config = function() require("user.plugin_settings.treesitter-context") end,
+        config = function() require("user.plugin_settings.treesitter_ctx") end,
       },
 
       --- 用于获取 treesitter 信息, 调整颜色很有用.
@@ -231,7 +231,7 @@ return packer.startup(function(use)
 
   --- Completion -----------------------------------------------------------------------------------
   use {"hrsh7th/nvim-cmp",
-    config = function() require("user.plugin_settings.cmp") end,
+    config = function() require("user.plugin_settings.cmp_completion") end,
     --- NOTE: 以下是 nvim-cmp module 插件, 在 setup() 中启用的插件.
     requires = {
       "hrsh7th/cmp-nvim-lsp",      -- LSP source for nvim-cmp
@@ -241,7 +241,7 @@ return packer.startup(function(use)
       {"saadparwaiz1/cmp_luasnip", -- Snippets source for nvim-cmp
         requires = {
           {"L3MON4D3/LuaSnip",     -- snippet engine, for "cmp_luasnip", BUG: 每次打开文件都会有一个 [Scratch] buffer.
-            config = function() require("user.plugin_settings.luasnip") end,
+            config = function() require("user.plugin_settings.luasnip_snippest") end,
             requires = "rafamadriz/friendly-snippets",  -- snippets content, 自定义 snippets 可以借鉴这个结构.
           },
         },
@@ -265,7 +265,7 @@ return packer.startup(function(use)
   if proj_settings_status_ok then
     --- 官方 LSP 引擎.
     use {"neovim/nvim-lspconfig",
-      config = function() require("user.lsp.lspconfig") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
+      config = function() require("user.lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
       requires = {
         "williamboman/nvim-lsp-installer", -- 简单安装 lsp server 的插件. NOTE: 和 lspconfig 并非依赖关系, 只是放在一起方便 setup()
         "hrsh7th/cmp-nvim-lsp",  -- provide content to nvim-cmp Completion. cmp_nvim_lsp.update_capabilities(capabilities)
@@ -274,7 +274,7 @@ return packer.startup(function(use)
 
     --- null-ls 插件 formatters && linters, depends on "nvim-lua/plenary.nvim"
     use {"jose-elias-alvarez/null-ls.nvim",
-      config = function() require("user.lsp.null-ls") end,
+      config = function() require("user.lsp.null_ls") end,
       requires = "nvim-lua/plenary.nvim",
     }
   end
@@ -282,25 +282,25 @@ return packer.startup(function(use)
   --- File Tree Display ----------------------------------------------------------------------------
   --use "kyazdani42/nvim-web-devicons"  -- 提供 icons 需要 patch 字体 (Nerd Fonts)
   use {"kyazdani42/nvim-tree.lua",      -- 类似 NerdTree
-    config = function() require("user.plugin_settings.nvim-tree") end
+    config = function() require("user.plugin_settings.file_tree") end
   }
 
   --- Buffer & Status Line -------------------------------------------------------------------------
   use {"akinsho/bufferline.nvim",     -- top buffer list
-    config = function() require("user.plugin_settings.bufferline") end,
+    config = function() require("user.plugin_settings.deco_bufferline") end,
   }
   use {"nvim-lualine/lualine.nvim",   -- bottom status line
-    config = function() require("user.plugin_settings.lualine") end,
+    config = function() require("user.plugin_settings.deco_lualine") end,
   }
 
   --- Debug tools 安装 -----------------------------------------------------------------------------
-  require("user.plugin_settings.debug")  -- NOTE: 先加载 dap debug lazyload 启动方式
+  require("user.plugin_settings.debug_trigger")  -- NOTE: 先加载 dap debug lazyload 启动方式
   use {"rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
     opt = true,  --- VVI: 在 debug.lua 中通过 `:PackerLoad nvim-dap-ui` 手动加载
-    config = function() require("user.plugin_settings.nvim-dap-ui") end,
+    config = function() require("user.plugin_settings.debug_dap_ui") end,
     requires = {
       {"mfussenegger/nvim-dap",  -- lua debug tool
-        config = function() require("user.plugin_settings.nvim-dap") end,
+        config = function() require("user.plugin_settings.debug_dap") end,
       },
     },
   }
@@ -309,24 +309,24 @@ return packer.startup(function(use)
   --- Useful Tools ---------------------------------------------------------------------------------
   --- fzf rg fd, preview 使用的是 treesitter, 而不用 bat
   use {"nvim-telescope/telescope.nvim",
-    config = function() require("user.plugin_settings.telescope") end,
+    config = function() require("user.plugin_settings.telescope_fzf") end,
     requires = "nvim-lua/plenary.nvim",
     --keys = {"<leader>f"},  -- NOTE: telescope/fzf/rg 所有 keymap 都是以 <leader>f 开头.
   }
 
   --- terminal
   use {"akinsho/toggleterm.nvim",
-    config = function() require("user.plugin_settings.toggleterm") end
+    config = function() require("user.plugin_settings.toggleterm_terminal") end
   }
 
   --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   use {"folke/which-key.nvim",
-    config = function() require("user.plugin_settings.which-key") end
+    config = function() require("user.plugin_settings.which_key") end
   }
 
   --- 通知功能
   use {"rcarriga/nvim-notify",
-    config = function() require("user.plugin_settings.notify") end
+    config = function() require("user.plugin_settings.nvim_notify") end
   }
 
   --- tagbar --- {{{

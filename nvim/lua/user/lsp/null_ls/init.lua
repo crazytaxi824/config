@@ -83,7 +83,7 @@ local diagnostics_opts = {
 local linter_settings = {
   --- golangci-lint
   diagnostics.golangci_lint.with(__Proj_local_settings.keep_extend('lint', 'golangci_lint',
-    require("user.lsp.null-ls.tools.golangci"), diagnostics_opts)  -- NOTE: 加载单独设置 null-ls/tools/golangci
+    require("user.lsp.null_ls.tools.golangci"), diagnostics_opts)  -- NOTE: 加载单独设置 null_ls/tools/golangci
   ),
 
   --- NOTE: eslint 分别对不同的 filetype 做不同的设置. --- {{{
@@ -119,7 +119,7 @@ local linter_settings = {
 local formatter_settings = {
   --- NOTE: 需要在 lsp.setup(opts) 中的 on_attach 中排除 tsserver & sumneko_lua 的 formatting 功能
   formatting.prettier.with(__Proj_local_settings.keep_extend('format', 'prettier',
-    require("user.lsp.null-ls.tools.prettier")
+    require("user.lsp.null_ls.tools.prettier")
   )),
 
   --- lua, stylua
@@ -187,7 +187,7 @@ null_ls.setup({
   --- null-ls 退出的时候提醒.
   on_exit = function()
     Notify("Null-Ls exit. Please check ':NullLsInfo' & ':NullLsLog'","WARN",
-      {title = {"Null-ls", "null-ls/init.lua"}, timeout = false})
+      {title = {"Null-ls", "null_ls/init.lua"}, timeout = false})
   end,
 
   --- 设置 key_mapping vim.diagnostic.goto_next() ...
