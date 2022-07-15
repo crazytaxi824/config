@@ -23,7 +23,7 @@ function Notify(msg, lvl, opt)
 
   local notify_status_ok, notify = pcall(require, "notify")
   if notify_status_ok then
-    notify(msg, l, opt)
+    notify.notify(msg, l, opt)
   else
     if type(msg) == 'table' then
       --- msg should be table array, join message []string with '\n'

@@ -52,7 +52,7 @@
 --- NOTE: nvim 常用函数
 --    vim.cmd(autocmd) -> vim.api.nvim_create_autocmd("BufEnter", {pattern, buffer=0, command/callback}),
 --    vim.cmd(command) -> vim.api.nvim_create_user_command(), nvim_buf_create_user_command()
---    vim.keymap.set() -> 直接写 local function
+--    vim.keymap.set() -> 直接写 local function. NOTE: global keymaps cannot overwrite buffer keymaps.
 --    vim.api.nvim_echo({{"A warning message: blahblah", "WarningMsg"}}, true, {})
 --    vim.notify("msg", vim.log.levels.WARN) == vim.api.nvim_echo({{"A warning message: blahblah", "WarningMsg"}}, true, {})
 --    vim.notify_once("msg", vim.log.levels.WARN)  只显示一次.
