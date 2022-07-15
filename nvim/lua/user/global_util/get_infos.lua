@@ -54,8 +54,8 @@ end
 function Get_TSNode_at_cursor()
   local ts_status, ts_utils = pcall(require, "nvim-treesitter.ts_utils")
   if not ts_status then
-    Notify("treesitter is not loaded.", "WARN", {title="TS_Get_Cursor_Node()"})
-    return nil
+    Notify("treesitter is not loaded.", "WARN")
+    return
   end
 
   local node = ts_utils.get_node_at_cursor()

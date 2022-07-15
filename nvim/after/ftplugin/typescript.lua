@@ -30,7 +30,7 @@ local function ts_run(file)
   -- check tsconfig.json file
   local pwd = vim.fn.getcwd()
   if vim.fn.filereadable(pwd..'/tsconfig.json') == 0 then
-    Notify("'tsconfig.json' is missing, please check your pwd.", "ERROR", {title={"ts_run()","typescript.lua"}})
+    Notify("'tsconfig.json' is missing.", "ERROR")
     return
   end
 
@@ -46,14 +46,14 @@ end
 local function ts_jest(file, coverage)
   -- check xxx.test.js file
   if not string.match(file, ".*%.test$") then
-    Notify("not a test file.", "ERROR", {title={"ts_jest()","typescript.lua"}})
+    Notify("not a test file.", "ERROR")
     return
   end
 
   -- check tsconfig.json file
   local pwd = vim.fn.getcwd()
   if vim.fn.filereadable(pwd..'/tsconfig.json') == 0 then
-    Notify("'tsconfig.json' is missing, please check your pwd.", "ERROR", {title={"ts_jest()","typescript.lua"}})
+    Notify("'tsconfig.json' is missing.", "ERROR")
     return
   end
 

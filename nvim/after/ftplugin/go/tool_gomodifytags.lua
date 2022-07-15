@@ -27,15 +27,14 @@
 --- GoAddTags --------------------------------------------------------------------------------------
 local function go_add_tags(arglist)
   if vim.bo.readonly then
-    Notify("this is a readonly file","ERROR",{title={"go_add_tags()","tool_gomodifytags.lua"}})
+    Notify("cannot add tags to readonly file","ERROR")
     return
   end
 
   if #arglist > 2 then
     Notify(
       {"too many args",'eg: ":GoAddTags json,xml | :GoAddTags json,xml camelcase"'},
-      "ERROR",
-      {title={"go_add_tags()","tool_gomodifytags.lua"}}
+      "ERROR"
     )
     return
   end
@@ -70,8 +69,7 @@ local function go_add_tags(arglist)
         "transform error: snakecase(*) | camelcase | lispcase | pascalcase | titlecase | keep",
         'eg: ":GoAddTags json,xml snakecase"'
       },
-      "ERROR",
-      {title={"go_add_tags()","tool_gomodifytags.lua"}}
+      "ERROR"
     )
     return
   end
@@ -86,7 +84,7 @@ local function go_add_tags(arglist)
   print(sh_cmd)
   local result = vim.fn.system(sh_cmd)
   if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
-    Notify(result, "ERROR", {title={"go_add_tags()","tool_gomodifytags.lua"}})
+    Notify(result, "ERROR")
     return
   end
 
@@ -108,15 +106,14 @@ vim.api.nvim_buf_create_user_command(
 --- GoRemoveTags -----------------------------------------------------------------------------------
 local function go_remove_tags(arglist)
   if vim.bo.readonly then
-    Notify("this is a readonly file","ERROR",{title={"go_remove_tags()", "tool_gomodifytags.too"}})
+    Notify("cannot remove tags from readonly file","ERROR")
     return
   end
 
   if #arglist > 1 then
     Notify(
       {"too many args",'eg: ":GoRemoveTags | :GoRemoveTags json,xml"'},
-      "ERROR",
-      {title={"go_remove_tags()", "tool_gomodifytags.too"}}
+      "ERROR"
     )
     return
   end
@@ -142,7 +139,7 @@ local function go_remove_tags(arglist)
 
   --- 判断结果是否错误
   if vim.v.shell_error ~= 0 then
-    Notify(result,"ERROR",{title={"go_remove_tags()", "tool_gomodifytags.too"}})
+    Notify(result, "ERROR")
     return
   end
 

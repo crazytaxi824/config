@@ -32,7 +32,7 @@ end
 local function js_jest(file, coverage)
   -- check xxx.test.js file
   if not string.match(file, ".*%.test%.js$") then
-    Notify("not a test file.", "ERROR", {title={"js_jest()","javascript.lua"}})
+    Notify("not a test file.", "ERROR")
     return
   end
 

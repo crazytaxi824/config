@@ -1,15 +1,14 @@
 -- 创建 markdown table
 local function markdown_create_table(arglist)  -- args: 创建一个 row * col 的表.
   if vim.bo.readonly then
-    Notify("this is a readonly file","ERROR",{title={"markdown_create_table()", "markdown.lua"}})
+    Notify("this is a readonly file","ERROR")
     return
   end
 
   if #arglist ~= 2 then
     Notify(
       'args error. eg: "MarkdownCreateTable row:number col:number"',
-      "ERROR",
-      {title={"markdown_create_table()", "markdown.lua"}}
+      "ERROR"
     )
     return
   end
@@ -18,12 +17,12 @@ local function markdown_create_table(arglist)  -- args: 创建一个 row * col �
   local row = tonumber(arglist[1])
   local col = tonumber(arglist[2])
   if row == nil or col == nil then
-    Notify("args need to be number","ERROR",{title={"markdown_create_table()", "markdown.lua"}})
+    Notify("args need to be number","ERROR")
     return
   end
 
   if row < 1 or col < 1 then
-    Notify("row & col needs to > 0","ERROR",{title={"markdown_create_table()", "markdown.lua"}})
+    Notify("row & col needs to > 0","ERROR")
     return
   end
 

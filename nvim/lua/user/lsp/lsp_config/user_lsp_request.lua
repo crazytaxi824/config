@@ -14,7 +14,7 @@
 local function find_fn_call_before_cursor()
   local ts_status, ts_utils = pcall(require, "nvim-treesitter.ts_utils")
   if not ts_status then
-    Notify("treesitter is not loaded.", "WARN", {title="find_fn_call_before_cursor()"})
+    Notify("treesitter is not loaded.", "WARN")
     return nil
   end
 

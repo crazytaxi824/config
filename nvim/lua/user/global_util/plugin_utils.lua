@@ -23,8 +23,32 @@ function Notify(msg, lvl, opt)
 
   local notify_status_ok, notify = pcall(require, "notify")
   if notify_status_ok then
+    --- NOTE: debug.getinfo() 获取 source filename & function name
+    --- debug.getinfo() 第一个参数是 stack level, 如果是 1 则会返回本文件的名字和本函数的名字,
+    --- 即: 'plugin_utils.lua' && 'Notify'
+    --- 如果是 2 则会返回调用 Notify() 的文件和函数名.
+    local file_path_list = vim.split(debug.getinfo(2, 'S').source,'/')
+    local script_filename = file_path_list[#file_path_list]
+    local func_name = debug.getinfo(2, 'n').name  -- function name without '()'
+
+    local title
+    if func_name then
+      title = {title = {func_name .. '()', script_filename}}
+    else
+      title = {title = script_filename}
+    end
+
+    if not opt then
+      opt = title
+    else
+      opt = vim.tbl_deep_extend('keep', opt, title)
+    end
+
+    --- 如果调用本函数时传入了 opt, 则使用传入的值.
     notify.notify(msg, l, opt)
+
   else
+    --- 如果 nvim-notify 不存在则使用 vim.notify()
     if type(msg) == 'table' then
       --- msg should be table array, join message []string with '\n'
       vim.notify(vim.fn.join(msg, '\n'), l)
