@@ -25,9 +25,9 @@
 --   :GoRemoveTags json,xml
 
 --- GoAddTags --------------------------------------------------------------------------------------
-local function goAddTags(arglist)
+local function go_add_tags(arglist)
   if vim.bo.readonly then
-    Notify("this is a readonly file","ERROR",{title={"goAddTags()","tool_gomodifytags.lua"}})
+    Notify("this is a readonly file","ERROR",{title={"go_add_tags()","tool_gomodifytags.lua"}})
     return
   end
 
@@ -35,7 +35,7 @@ local function goAddTags(arglist)
     Notify(
       {"too many args",'eg: ":GoAddTags json,xml | :GoAddTags json,xml camelcase"'},
       "ERROR",
-      {title={"goAddTags()","tool_gomodifytags.lua"}}
+      {title={"go_add_tags()","tool_gomodifytags.lua"}}
     )
     return
   end
@@ -71,7 +71,7 @@ local function goAddTags(arglist)
         'eg: ":GoAddTags json,xml snakecase"'
       },
       "ERROR",
-      {title={"goAddTags()","tool_gomodifytags.lua"}}
+      {title={"go_add_tags()","tool_gomodifytags.lua"}}
     )
     return
   end
@@ -86,11 +86,11 @@ local function goAddTags(arglist)
   print(sh_cmd)
   local result = vim.fn.system(sh_cmd)
   if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
-    Notify(result, "ERROR", {title={"goAddTags()","tool_gomodifytags.lua"}})
+    Notify(result, "ERROR", {title={"go_add_tags()","tool_gomodifytags.lua"}})
     return
   end
 
-  vim.cmd('checktime')  -- refresh & reload buffer
+  vim.cmd('checktime')  -- VVI: refresh & reload buffer
 end
 
 --- NOTE: *.go 被重新加载时, 本文件会被重新读取. 会造成重复设置 command, 所以必须使用 `command!`
@@ -100,15 +100,15 @@ vim.api.nvim_buf_create_user_command(
   0,
   "GoAddTags",
   function(input)
-    goAddTags(input.fargs)
+    go_add_tags(input.fargs)
   end,
   {nargs = "+", bang = true}
 )
 
 --- GoRemoveTags -----------------------------------------------------------------------------------
-local function goRemoveTags(arglist)
+local function go_remove_tags(arglist)
   if vim.bo.readonly then
-    Notify("this is a readonly file","ERROR",{title={"goRemoveTags()", "tool_gomodifytags.too"}})
+    Notify("this is a readonly file","ERROR",{title={"go_remove_tags()", "tool_gomodifytags.too"}})
     return
   end
 
@@ -116,7 +116,7 @@ local function goRemoveTags(arglist)
     Notify(
       {"too many args",'eg: ":GoRemoveTags | :GoRemoveTags json,xml"'},
       "ERROR",
-      {title={"goRemoveTags()", "tool_gomodifytags.too"}}
+      {title={"go_remove_tags()", "tool_gomodifytags.too"}}
     )
     return
   end
@@ -142,20 +142,21 @@ local function goRemoveTags(arglist)
 
   --- 判断结果是否错误
   if vim.v.shell_error ~= 0 then
-    Notify(result,"ERROR",{title={"goRemoveTags()", "tool_gomodifytags.too"}})
+    Notify(result,"ERROR",{title={"go_remove_tags()", "tool_gomodifytags.too"}})
     return
   end
 
-  vim.cmd('checktime')  -- refresh & reload buffer
+  vim.cmd('checktime')  -- VVI: refresh & reload buffer
 end
 
 vim.api.nvim_buf_create_user_command(
   0,
   "GoRemoveTags",
   function(input)
-    goRemoveTags(input.fargs)
+    go_remove_tags(input.fargs)
   end,
   {bang = true, nargs = "*"}
 )
+
 
 

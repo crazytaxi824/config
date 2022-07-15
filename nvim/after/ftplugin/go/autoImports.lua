@@ -5,7 +5,7 @@
 --- NOTE:   目前在 null-ls 中使用 formatting.goimports 替代.
 --- https://cs.opensource.google/go/x/tools/+/refs/tags/gopls/v0.8.3:gopls/doc/vim.md#neovim-imports
 --- https://github.com/neovim/nvim-lspconfig/issues/115
-function OrganizeImports(wait_ms)
+function Organize_imports(wait_ms)
   local params = vim.lsp.util.make_range_params()
   params.context = { only = {"source.organizeImports"} }
   local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, wait_ms)
@@ -25,5 +25,6 @@ end
 
 --- 以下设置 always prompt, 总是会提示选择.
 --autocmd BufWritePre *.go :silent lua vim.lsp.buf.code_action({ only = { "source.organizeImports" } })
+
 
 

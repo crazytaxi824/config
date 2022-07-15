@@ -50,14 +50,14 @@ local go_opts = {
 }
 
 --- go run ----------------------------------------------------------------------------------------- {{{
-local function goRun()
+local function go_run()
   -- 获取 _test.go 文件夹路径.
   local dir = vim.fn.expand('%:h')
 
   -- VVI: 获取 go import path, `cd src/xxx && go list -f '{{.ImportPath}}'`
   local import_path = string.match(vim.fn.system("cd " .. dir .. " && go list -f '{{.ImportPath}}'"), "[%S ]*")
   if vim.v.shell_error ~= 0 then
-    Notify(import_path,"ERROR",{title={"goRun()","go_run_test.lua"}})
+    Notify(import_path,"ERROR",{title={"go_run()","go_run_test.lua"}})
     return
   end
 
@@ -70,10 +70,10 @@ end
 -- -- }}}
 
 --- go test run all -------------------------------------------------------------------------------- {{{
-local function goTestAll()
+local function go_test_all()
   -- 判断当前文件是否是 _test.go
   if string.match(vim.fn.expand('%:t'), "_test%.go$") == nil then
-    Notify('not "_test.go" file',"ERROR",{title={"goTestAll()","go_run_test.lua"}})
+    Notify('not "_test.go" file',"ERROR",{title={"go_test_all()","go_run_test.lua"}})
     return
   end
 
@@ -83,7 +83,7 @@ local function goTestAll()
   -- VVI: 获取 go import path, `cd src/xxx && go list -f '{{.ImportPath}}'`
   local import_path = string.match(vim.fn.system("cd " .. dir .. " && go list -f '{{.ImportPath}}'"), "[%S ]*")
   if vim.v.shell_error ~= 0 then
-    Notify(import_path,"ERROR",{title={"goTestAll()","go_run_test.lua"}})
+    Notify(import_path,"ERROR",{title={"go_test_all()","go_run_test.lua"}})
     return
   end
 
@@ -97,10 +97,10 @@ end
 -- -- }}}
 
 --- go test bench all ------------------------------------------------------------------------------ {{{
-local function goBenchAll()
+local function go_bench_all()
   -- 判断当前文件是否是 _test.go
   if string.match(vim.fn.expand('%:t'), "_test%.go$") == nil then
-    Notify('not "_test.go" file',"ERROR",{title={"goBenchAll()","go_run_test.lua"}})
+    Notify('not "_test.go" file',"ERROR",{title={"go_bench_all()","go_run_test.lua"}})
     return
   end
 
@@ -110,7 +110,7 @@ local function goBenchAll()
   -- VVI: 获取 go import path, `cd src/xxx && go list -f '{{.ImportPath}}'`
   local import_path = string.match(vim.fn.system("cd " .. dir .. " && go list -f '{{.ImportPath}}'"), "[%S ]*")
   if vim.v.shell_error ~= 0 then
-    Notify(import_path,"ERROR",{title={"goBenchAll()","go_run_test.lua"}})
+    Notify(import_path,"ERROR",{title={"go_bench_all()","go_run_test.lua"}})
     return
   end
 
@@ -124,10 +124,10 @@ end
 -- -- }}}
 
 --- go test fuzz all ------------------------------------------------------------------------------- {{{
-local function goFuzzAll()
+local function go_fuzz_all()
   -- 判断当前文件是否是 _test.go
   if string.match(vim.fn.expand('%:t'), "_test%.go$") == nil then
-    Notify('not "_test.go" file',"ERROR",{title={"goFuzzAll()","go_run_test.lua"}})
+    Notify('not "_test.go" file',"ERROR",{title={"go_fuzz_all()","go_run_test.lua"}})
     return
   end
 
@@ -137,7 +137,7 @@ local function goFuzzAll()
   -- VVI: 获取 go import path, `cd src/xxx && go list -f '{{.ImportPath}}'`
   local import_path = string.match(vim.fn.system("cd " .. dir .. " && go list -f '{{.ImportPath}}'"), "[%S ]*")
   if vim.v.shell_error ~= 0 then
-    Notify(import_path,"ERROR",{title={"goFuzzAll()","go_run_test.lua"}})
+    Notify(import_path,"ERROR",{title={"go_fuzz_all()","go_run_test.lua"}})
     return
   end
 
@@ -152,7 +152,7 @@ end
 
 --- go test single function ------------------------------------------------------------------------ {{{
 --- 从 cursor 所在行向上查找, 返回函数定义行 "func Foo(param type) {"
-local function findFuncLine()  -- return (func_name: string|nil)
+local function find_func_line()  -- return (func_name: string|nil)
   local lcontent = vim.fn.getline('.')  -- 获取行内容
 
   -- 如果找到 ^func.* 则返回整行内容.
@@ -165,8 +165,8 @@ end
 
 --- 返回 Test Function Name, "TestXxx(t *testing.T)", "BenchmarkXxx(b *testing.B)", "FuzzXxx(f *testing.F)"
 --- NOTE: mark - 0: error | 1: TestXxx | 2: BenchmarkXxx | 3: FuzzXxx
-local function goTestFuncName()  -- return {funcname: string|nil, mark :number}
-  local func_line = findFuncLine()
+local function go_test_func_name()  -- return {funcname: string|nil, mark :number}
+  local func_line = find_func_line()
   if func_line == nil then
     return nil, 0
   end
@@ -195,17 +195,17 @@ local function goTestFuncName()  -- return {funcname: string|nil, mark :number}
 end
 
 --- 返回 "go test -v -run TestFoo ImportPath"
-local function goTestCmd()   -- return (cmd: string|nil)
+local function go_test_cmd()   -- return (cmd: string|nil)
   -- 判断当前文件是否 _test.go
   if string.match(vim.fn.expand('%:t'), "_test%.go$") == nil then
-    Notify('not "_test.go" file',"ERROR",{title={"goTestCmd()","go_run_test.lua"}})
+    Notify('not "_test.go" file',"ERROR",{title={"go_test_cmd()","go_run_test.lua"}})
     return nil
   end
 
   -- 判断当前函数是否 TestXXX. 如果是则 获取 test function name.
-  local testfn, mark = goTestFuncName()
+  local testfn, mark = go_test_func_name()
   if mark == 0 then
-    Notify('not a Test funciton',"ERROR",{title={"goTestCmd()","go_run_test.lua"}})
+    Notify('not a Test funciton',"ERROR",{title={"go_test_cmd()","go_run_test.lua"}})
     return nil
   end
 
@@ -215,7 +215,7 @@ local function goTestCmd()   -- return (cmd: string|nil)
   -- VVI: 获取 go import path, `cd src/xxx && go list -f '{{.ImportPath}}'`
   local import_path = string.match(vim.fn.system("cd " .. dir .. " && go list -f '{{.ImportPath}}'"), "[%S ]*")
   if vim.v.shell_error ~= 0 then
-    Notify(import_path,"ERROR",{title={"goTestCmd()","go_run_test.lua"}})
+    Notify(import_path,"ERROR",{title={"go_test_cmd()","go_run_test.lua"}})
     return nil
   end
 
@@ -241,8 +241,8 @@ local function goTestCmd()   -- return (cmd: string|nil)
 end
 
 --- 通过 Terminal 运行 cmd ---
-local function goTestSingle()
-  local cmd = goTestCmd()
+local function go_test_single_func()
+  local cmd = go_test_cmd()
   if cmd == nil then
     return
   end
@@ -257,11 +257,11 @@ end
 --- key mapping ------------------------------------------------------------------------------------
 local opt = {noremap = true, buffer = true}
 
-vim.keymap.set('n', '<F5>', goRun, opt)
+vim.keymap.set('n', '<F5>', go_run, opt)
 
-vim.keymap.set('n', '<F6>', goTestSingle, opt)
-vim.keymap.set('n', '<F18>', goTestAll, opt)  -- <S-F6>
-vim.keymap.set('n', '<F30>', goBenchAll, opt)  -- <C-F6>
+vim.keymap.set('n', '<F6>', go_test_single_func, opt)
+vim.keymap.set('n', '<F18>', go_test_all, opt)  -- <S-F6>
+vim.keymap.set('n', '<F30>', go_bench_all, opt)  -- <C-F6>
 
 
 
