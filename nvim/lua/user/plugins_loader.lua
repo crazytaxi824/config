@@ -1,3 +1,4 @@
+--- 安装: `git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim`
 --- README: packer 主要是一个 plugin 安装/管理插件.
 --- nvim 加载插件的时候读取的是 packer.compile() 之后的文件.
 --- `:PackerSync` 的时候会自动运行 compile(), 重新生成 compile 文件. 主要影响 setup() 设置文件加载.
@@ -74,16 +75,21 @@
 --- NOTE: 这里的文件名是 plugins_loader.lua, 是本文件的文件名.
 ---       修改本文件后必须进行 :PackerCompile, 否则无法生效.
 vim.cmd([[
- augroup packer_user_config
-   autocmd!
-   autocmd BufWritePost plugins_loader.lua source <afile> | PackerCompile
- augroup end
+  augroup packer_user_config
+    autocmd!
+    autocmd BufWritePost plugins_loader.lua source <afile> | PackerCompile
+  augroup end
 ]])
 
 --- Use a protected call so we don't error out on first use
-local status_ok, packer = pcall(require, "packer")
-if not status_ok then
-  return
+local packer_status_ok, packer = pcall(require, "packer")
+if not packer_status_ok then
+  --- NOTE: 如果 packer 不存在则自动 install
+  local result = vim.fn.system('git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim')
+  if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
+    Notify(result, "ERROR", {title={"install packer.nvim", "plugins_loader.lua"}})
+    return
+  end
 end
 
 --- packer autocmd && functions -------------------------------------------------------------------- {{{
