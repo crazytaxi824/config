@@ -296,7 +296,7 @@ return packer.startup(function(use)
   --- Debug tools 安装 -----------------------------------------------------------------------------
   require("user.plugin_settings.debug_trigger")  -- NOTE: 先加载 dap debug lazyload 启动方式
   use {"rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
-    opt = true,  --- VVI: 在 debug.lua 中通过 `:PackerLoad nvim-dap-ui` 手动加载
+    opt = true,  --- VVI: 可以通过 `:PackerLoad foo bar` OR require('packer').loader('foo bar') 手动加载
     config = function() require("user.plugin_settings.debug_dap_ui") end,
     requires = {
       {"mfussenegger/nvim-dap",  -- lua debug tool

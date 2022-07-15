@@ -21,7 +21,7 @@ local js_opts = {
 }
 
 --- node file --------------------------------------------------------------------------------------
-local function jsRun(file)
+local function js_run(file)
   -- VVI: 删除之前的 terminal.
   vim.cmd('silent! bw! term://*toggleterm#'..js_term_id)
   local js = Terminal:new(vim.tbl_deep_extend('force', js_opts, { cmd = "node " .. file }))
@@ -29,10 +29,10 @@ local function jsRun(file)
 end
 
 --- jest file --------------------------------------------------------------------------------------
-local function jsJest(file, coverage)
+local function js_jest(file, coverage)
   -- check xxx.test.js file
   if not string.match(file, ".*%.test%.js$") then
-    Notify("not a test file.", "ERROR", {title={"jsJest()","javascript.lua"}})
+    Notify("not a test file.", "ERROR", {title={"js_jest()","javascript.lua"}})
     return
   end
 
@@ -53,7 +53,10 @@ end
 local opt = {noremap = true, buffer = true}
 
 --- run current_file ---
-vim.keymap.set('n', '<F5>', function() jsRun(vim.fn.expand('%')) end, opt)
+vim.keymap.set('n', '<F5>', function() js_run(vim.fn.expand('%')) end, opt)
 
-vim.keymap.set('n', '<F6>', function() jsJest(vim.fn.expand('%'), false) end, opt)
-vim.keymap.set('n', '<F18>', function() jsJest(vim.fn.expand('%'), true) end, opt)  -- <S-F6>
+vim.keymap.set('n', '<F6>', function() js_jest(vim.fn.expand('%'), false) end, opt)
+vim.keymap.set('n', '<F18>', function() js_jest(vim.fn.expand('%'), true) end, opt)  -- <S-F6>
+
+
+

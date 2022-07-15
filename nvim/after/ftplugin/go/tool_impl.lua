@@ -5,14 +5,14 @@
 --  `:call writefile(["foo"], "src/main.go", "a")`  -- 'a': append mode, 将数据写入文件最后.
 --
 --  操作方法, cursor 指向 interface Name, 使用 Command `:GoImpl Foo`
-local function goImpl(arglist)
+local function go_impl(arglist)
   if vim.bo.readonly then
-    Notify("this is a readonly file","ERROR",{title={"goImpl()","tool_impl.lua"}})
+    Notify("this is a readonly file","ERROR",{title={"go_impl()","tool_impl.lua"}})
     return
   end
 
   if #arglist > 1 then
-    Notify("only one args is allowed","ERROR",{title={"goImpl()","tool_impl.lua"}})
+    Notify("only one args is allowed","ERROR",{title={"go_impl()","tool_impl.lua"}})
     return
   end
 
@@ -27,7 +27,7 @@ local function goImpl(arglist)
 
   --- 判断结果是否错误
   if vim.v.shell_error ~= 0 then
-    Notify(result,"ERROR",{title={"goImpl()","tool_impl.lua"}})
+    Notify(result,"ERROR",{title={"go_impl()","tool_impl.lua"}})
     return
   end
 
@@ -46,8 +46,10 @@ vim.api.nvim_buf_create_user_command(
   0,
   "GoImpl",
   function(input)
-    goImpl(input.fargs)
+    go_impl(input.fargs)
   end,
   {bang=true, nargs="+"}
 )
+
+
 
