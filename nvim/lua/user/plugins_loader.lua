@@ -23,6 +23,9 @@
 --                                -- NOTE: after 插件名只写最后一部分, eg: after = "nvim-cmp", VVI: 不要写 after = "hrsh7th/nvim-cmp"
 --   rtp = string,                -- Specifies a subdirectory of the plugin to add to runtimepath.
 --   opt = boolean,               -- Manually marks a plugin as optional.
+--                                -- VVI: 可以通过 `:PackerLoad foo bar` OR require('packer').loader('foo bar') 手动加载
+--                                -- packer.nvim 提供一个全局变量 packer_plugins 在 plugin/packer_compiled.lua 中.
+--                                -- print(vim.inspect(packer_plugins)) 可以用来判断 plugins 是否安装, 是否加载 (loaded=true)
 --
 --   -- 固定 plugin 版本
 --   branch = string,             -- VVI: Specifies a git branch to use
@@ -302,14 +305,10 @@ return packer.startup(function(use)
 
   --- Debug tools 安装 -----------------------------------------------------------------------------
   require("user.plugin_settings.debug_trigger")  -- NOTE: 先加载 dap debug lazyload 启动方式
-  use {"rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
-    opt = true,  --- VVI: 可以通过 `:PackerLoad foo bar` OR require('packer').loader('foo bar') 手动加载
-    config = function() require("user.plugin_settings.debug_dap_ui") end,
-    requires = {
-      {"mfussenegger/nvim-dap",  -- lua debug tool
-        config = function() require("user.plugin_settings.debug_dap") end,
-      },
-    },
+  use {"mfussenegger/nvim-dap",  -- lua debug tool
+    config = function() require("user.plugin_settings.debug_dap") end,
+    requires = "rcarriga/nvim-dap-ui",  -- ui for "nvim-dap", NOTE: dap-ui setup() 设置在 debug_dap.lua 中.
+    cmd = {'DapToggleBreakpoint', 'DapContinue'}
   }
   -- use "Pocco81/dap-buddy.nvim"  -- manage debuggers provided by "nvim-dap".
 
