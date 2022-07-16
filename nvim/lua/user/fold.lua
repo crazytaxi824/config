@@ -30,7 +30,6 @@ vim.cmd [[
 ]]
 
 -- foldnestmax 设置对 marker 不生效. 打开文件时自动按照 marker {{{xxx}}} 折叠.
-vim.cmd [[au BufEnter ~/.config/nvim/* setlocal foldmethod=marker | setlocal foldlevel=0]]
 vim.cmd [[au Filetype vim,zsh,yaml setlocal foldmethod=marker | setlocal foldlevel=0]]
-
-
+-- ~/.config/nvim/* 中的所有 file 都使用 marker {{{xxx}}} 折叠.
+vim.cmd('au BufEnter ' .. vim.fn.stdpath('config') .. '/* setlocal foldmethod=marker | setlocal foldlevel=0')

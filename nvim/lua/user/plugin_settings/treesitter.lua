@@ -5,7 +5,7 @@ end
 
 --- path to store parsers. VVI: directory must be writeable and must be explicitly added to the runtimepath.
 --- 需要在 setup() 中设置 parsers_install_dir, 同时将 path 添加到 vim 的 runtimepath 中.
-local treesitter_parsers_path = vim.fn.expand('~/.local/share/nvim/site/treesitter-parser')
+local treesitter_parsers_path = vim.fn.stdpath('data') .. '/site/treesitter-parser'
 vim.opt.runtimepath:append(treesitter_parsers_path)
 
 configs.setup {

@@ -64,8 +64,8 @@ vim.cmd [[au TermOpen term://*toggleterm#[6-9][0-9] :startinsert]]
 --- 绑定 <ESC> 进入 terminal normal 模式, 只对本 buffer 有效.
 vim.cmd [[au TermOpen term://* tnoremap <buffer> <ESC> <C-\><C-n>]]
 
--- 以下是通过 Terminal 运行 shell cmd --------------------------------------------------------------
--- NOTE: 可以参考 "~/.config/nvim/after/ftplugin/go/gorun_gotest.lua"
+--- 以下是通过 Terminal 运行 shell cmd --------------------------------------------------------------
+--- NOTE: 可以参考 "~/.config/nvim/after/ftplugin/go/gorun_gotest.lua"
 
 local Terminal = require("toggleterm.terminal").Terminal
 
