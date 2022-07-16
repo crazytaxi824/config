@@ -8,9 +8,10 @@
 --      go install github.com/josharian/impl@latest
 local function check_go_tools()
   local gotools = {
-    gotests = "  go install github.com/cweill/gotests/gotests@latest",
+    go = "       https://go.dev/",
+    dlv = "      go install github.com/go-delve/delve/cmd/dlv@latest", -- delve
     impl = "     go install github.com/josharian/impl@latest",
-    dlv = "      go install github.com/go-delve/delve/cmd/dlv@latest", -- vimspector
+    gotests = "  go install github.com/cweill/gotests/gotests@latest",
     --goimports = "go install golang.org/x/tools/cmd/goimports@latest",  -- null-ls 中有检查.
     --gopls = "    go install golang.org/x/tools/gopls@latest",  -- lsp-installer 安装
 
