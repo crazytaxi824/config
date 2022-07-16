@@ -16,7 +16,7 @@ end
 --- get_installed_servers()  -- 所有已安装的 lsp server.
 
 --- 获取所有通过 lsp-installer 安装的 lsp server.
---- BUG: 第一次打开文件的时候 lsp_installer.get_installed_servers() 无法找到 gopls. 不知道为什么. 暂时警用该方法.
+--- NOTE: 第一次打开文件的时候 lsp_installer.get_installed_servers() 无法找到 gopls. 不知道为什么, 暂时不使用该方法.
 -- local function get_installed_server_names()
 --   local svr_list = {}
 --   for _, svr in ipairs(lsp_installer.get_installed_servers()) do

@@ -28,7 +28,7 @@ configs.setup {
     additional_vim_regex_highlighting = false,
   },
 
-  --- BUG 每次打开文件都会添加一个 setlocal indentexpr=nvim_treesitter#indent()
+  --- FIXME: 每次打开文件都会添加一个 setlocal indentexpr=nvim_treesitter#indent()
   --- https://github.com/nvim-treesitter/nvim-treesitter/issues/3172
   --- 使用 'indent_blankline' 代替.
   -- indent = {

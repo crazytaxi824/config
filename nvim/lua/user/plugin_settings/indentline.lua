@@ -13,8 +13,11 @@ end
 
 indent_blankline.setup({
   enabled = true,
-  use_treesitter = true,  -- NOTE: use treesitter. 默认 false.
-  --use_treesitter_scope = true,  -- Instead of using |g:indent_blankline_context_patterns|, 有 BUG.
+  use_treesitter = true,  -- NOTE: use treesitter to calculate indentation when possible. 默认 false.
+  --use_treesitter_scope = true,  -- VVI: 不要设置, 会导致 indentline 显示不如预期.
+
+  indent_level = 10,  -- VVI: maximum indent level to display. 默认 10.
+  max_indent_increase = 1,  -- 多行 trailing comments 不会出现 indentline, eg: settings.lua 中的 comments.
 
   buftype_exclude = { "terminal", "nofile", "quickfix" },
   bufname_exclude = {'README.md', '.*\\.py'},  -- python 不适合 indent line.
@@ -35,7 +38,7 @@ indent_blankline.setup({
   --space_char_blankline = ' ',  -- indent line 之间的空白显示, 默认为空字符 ' '.
   --show_end_of_line = true,  -- 同时需要设置 vim.opt.listchars:append("eol:↴")
 
-  --- 有 BUG 导致 indent line 颜色显示不正确.
+  --- BUG: indent line 颜色显示不正确.
   --- 以下设置需要安装 nvim-treesitter, 同时在每次 autocmd CursorMoved 时计算, 会影响速度.
   --show_current_context = true,  -- 显示 indentLine 颜色.
   --show_current_context_start = true,  -- 在 indentLine 起始行添加下划线.

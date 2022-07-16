@@ -1,6 +1,7 @@
 --- BUG: treesitter foldmethod bug
 --       tab indent 的折叠显示不正确. \t 被当作是一个字符, 导致折叠后的代码前面只空一格.
 --       space indent 的折叠显示正确.
+--       这里通过设置 foldnestmax=1 来确保只折叠最外层代码.
 
 --- 根据不同情况设置不同的折叠方式.
 -- VVI: 不要在打开代码前设置 foldmethod=syntax, 会严重拖慢文件切换速度. eg: jump to definition.

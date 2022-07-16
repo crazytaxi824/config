@@ -44,8 +44,9 @@
 --   -- plugin 加载条件.
 --   cmd = string or list,        -- VVI: 必须是 plugin 自带 command.
 --   ft = string or list,         -- 指定 filetype 加载插件.
---                                -- BUG 使用 ft 后, after/syntax, after/ftplugin 中的文件会被读取两次. 不推荐使用.
---                                -- FIXME https://github.com/wbthomason/packer.nvim/issues/648
+--                                -- FIXME: 使用 ft 后, after/syntax, after/ftplugin 中的文件会被读取两次. 不推荐使用.
+--                                -- https://github.com/wbthomason/packer.nvim/issues/648
+--                                -- https://github.com/wbthomason/packer.nvim/issues/698
 --   keys = string or list,       -- Specifies maps which load this plugin. See "Keybindings".
 --   event = string or list,      -- Specifies autocommand events which load this plugin.
 --   fn = string or list          -- Specifies functions which load this plugin. VVI: 目前测试只有 VimL fn 可以使用.
@@ -162,7 +163,7 @@ vim.api.nvim_create_user_command("PackerUpdateLog",
 
 --- Have packer use a popup window, "nvim-lua/popup.nvim"
 packer.init {
-  --snapshot = "2022.07.15",   -- VVI: Name of the snapshot you would like to load at startup
+  snapshot = "2022.07.15",   -- VVI: Name of the snapshot you would like to load at startup
   snapshot_path = vim.fn.stdpath('config') .. '/snapshots',  -- 默认路径是 stdpath('cache') .. '/packer.nvim'
   --package_root = vim.fn.stdpath('data') .. '/site/pack'),  -- 默认值
   --compile_path = vim.fn.stdpath('config') .. '/plugin/packer_compiled.lua'),  -- VVI: 不要修改. /plugin 文件夹会自动加载.
@@ -209,7 +210,7 @@ return packer.startup(function(use)
   --- NOTE: plenary.nvim 合并了 popup.nvim
   use "nvim-lua/plenary.nvim"
 
-  --- [FIXME] Needed while issue https://github.com/neovim/neovim/issues/12587 is still open
+  --- FIXME: https://github.com/neovim/neovim/issues/12587
   --- CursorHold and CursorHoldI are blocked by timer_start()
   use "antoinemadec/FixCursorHold.nvim"
 
@@ -373,9 +374,7 @@ return packer.startup(function(use)
     --- VVI: Update 后需要重新安装 preview 插件, 否则可能出现无法运行的情况.
     run = function() vim.fn["mkdp#util#install"]() end,
 
-    -- FIXME: packer 中使用 ft 时, after/ftplugin/markdown.lua 会被加载两次.
-    -- https://github.com/wbthomason/packer.nvim/issues/648
-    -- https://github.com/wbthomason/packer.nvim/issues/698
+    --- NOTE: packer 中使用 ft 时, after/ftplugin/markdown.lua 会被加载两次.
     ft = {"markdown"},
   }
 
