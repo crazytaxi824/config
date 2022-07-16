@@ -57,7 +57,7 @@ local function go_run()
   -- VVI: 获取 go import path, `cd src/xxx && go list -f '{{.ImportPath}}'`
   local import_path = string.match(vim.fn.system("cd " .. dir .. " && go list -f '{{.ImportPath}}'"), "[%S ]*")
   if vim.v.shell_error ~= 0 then
-    Notify(import_path,"ERROR",{title={"go_run()","go_run_test.lua"}})
+    Notify(import_path,"ERROR")
     return
   end
 

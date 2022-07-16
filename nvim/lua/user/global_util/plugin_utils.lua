@@ -71,7 +71,7 @@ function Check_cmd_tools(tools)
   end
 
   if count > 0 then
-    Notify(result, "WARN", {title = {"Check_Tools()", "common_utils.lua"}, timeout = false})
+    Notify(result, "WARN", {timeout = false})
   end
 end
 

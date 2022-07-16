@@ -14,7 +14,8 @@ return {
         library = {
           vim.fn.expand("$VIMRUNTIME/lua"),
           vim.fn.stdpath("config") .. "/lua",     -- ~/.config/nvim/lua/
-          vim.fn.stdpath("config") .. "/plugin",  -- ~/.config/nvim/plugin/
+          vim.fn.stdpath("config") .. "/after",   -- ~/.config/nvim/after/
+          --vim.fn.stdpath("config") .. "/plugin",  -- ~/.config/nvim/plugin/
         },
       },
     },

@@ -162,7 +162,7 @@ local rg_search = function(additional_args)
     if result == "" then
       vim.notify("no result found", vim.log.levels.WARN)
     else
-      Notify(result, "ERROR", {title={"rg_search()","telescope.lua"}})
+      Notify(result, "ERROR")
     end
     return
   end

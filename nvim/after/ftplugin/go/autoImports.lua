@@ -20,6 +20,7 @@ function Organize_imports(wait_ms)
   end
 end
 
+--- VVI: 这里必须使用 augroup, 否则会重复设置 autocmd.
 --- BufWritePre 在写入文件之前执行上面的函数.
 --autocmd BufWritePre *.go :lua OrganizeImports(3000)
 

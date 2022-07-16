@@ -40,7 +40,7 @@ lsp_installer.setup {
   -- 如果 gopls 不在 $PATH 中, 则使用 lsp-installer 下载的 gopls.
   ensure_installed = LSP_servers,   -- list 中设置的 LSP 如果没有安装, 则自动安装.
 
-  -- LSP server 安装下载位置. 默认在 "~/.local/share/nvim/lsp_servers/..."
+  -- NOTE: LSP server 下载位置默认在 "~/.local/share/nvim/lsp_servers/..."
   --install_root_dir = vim.fn.stdpath("data") .. "/lsp_servers",
 
   automatic_installation = false, -- 在 lspconfig.xxx.setup() 的 LSP 自动安装.
@@ -75,10 +75,12 @@ for _, LSP_server in pairs(LSP_servers) do
 
   --- NOTE: 加载 lsp 配置文件, "~/.config/nvim/lua/user/lsp/lsp_config/langs/..."
   --- 如果文件存在, 则加载自定义设置, 如果没有自定义设置则加载默认设置.
-  local has_custom_opts, server_custom_opts = pcall(require, "user.lsp.lsp_config.langs." .. LSP_server)
-  if has_custom_opts then
-    -- tbl_deep_extend() 合并两个 table.
-    opts = vim.tbl_deep_extend("force", opts, server_custom_opts)
+  if vim.fn.filereadable(vim.fn.stdpath('config') .. '/lua/user/lsp/lsp_config/langs/' .. LSP_server .. '.lua') == 1 then
+    --- NOTE: 这里使用 pcall() 是为了确保 xxx.lua 文件执行没有问题.
+    local lsp_custom_status_ok, lsp_custom_opts = pcall(require, "user.lsp.lsp_config.langs." .. LSP_server)
+    if lsp_custom_status_ok then
+      opts = vim.tbl_deep_extend("force", opts, lsp_custom_opts)
+    end
   end
 
   --- VVI: 这里就是 lspconfig.xxx.setup() 针对不同的 lsp 进行加载.

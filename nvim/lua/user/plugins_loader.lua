@@ -20,9 +20,12 @@
 --   installer = function,        -- Specifies custom installer. See "custom installers" below.
 --   updater = function,          -- Specifies custom updater. See "custom installers" below.
 --   after = string or list,      -- 在加载指定 plugin 后, 加载自己.
---                                -- NOTE: after 插件名只写最后一部分, eg: after = "nvim-cmp", VVI: 不要写 after = "hrsh7th/nvim-cmp"
+--                                -- VVI: after 插件名只写最后一部分, eg: after = "nvim-cmp", 不要写 after = "hrsh7th/nvim-cmp"
 --   rtp = string,                -- Specifies a subdirectory of the plugin to add to runtimepath.
 --   opt = boolean,               -- Manually marks a plugin as optional.
+--                                -- VVI: 可以通过 `:PackerLoad foo bar` OR require('packer').loader('foo bar') 手动加载
+--                                -- packer.nvim 提供一个全局变量 packer_plugins 在 plugin/packer_compiled.lua 中.
+--                                -- print(vim.inspect(packer_plugins)) 可以用来判断 plugins 是否安装, 是否加载 (loaded=true)
 --
 --   -- 固定 plugin 版本
 --   branch = string,             -- VVI: Specifies a git branch to use
@@ -39,13 +42,13 @@
 --
 --   -- NOTE: The following keys all imply `lazy-loading` and imply `opt = true`
 --   -- plugin 加载条件.
---   cmd = string or list,        -- Specifies commands which load this plugin. Can be an autocmd pattern.
---   ft = string or list,         -- VVI: 指定 filetype 加载插件.
+--   cmd = string or list,        -- VVI: 必须是 plugin 自带 command.
+--   ft = string or list,         -- 指定 filetype 加载插件.
 --                                -- BUG 使用 ft 后, after/syntax, after/ftplugin 中的文件会被读取两次. 不推荐使用.
 --                                -- FIXME https://github.com/wbthomason/packer.nvim/issues/648
 --   keys = string or list,       -- Specifies maps which load this plugin. See "Keybindings".
 --   event = string or list,      -- Specifies autocommand events which load this plugin.
---   fn = string or list          -- Specifies functions which load this plugin. NOTE: 目前测试只有 VimL fn 可以使用.
+--   fn = string or list          -- Specifies functions which load this plugin. VVI: 目前测试只有 VimL fn 可以使用.
 --   cond = string, function, or list of strings/functions,   -- Specifies a conditional test to load this plugin
 --   module = string or list      -- Specifies Lua module names for require. When requiring a string which starts
 --                                -- with one of these module names, the plugin will be loaded.
@@ -54,42 +57,66 @@
 -- }
 --
 -- Packer 命令
--- `:PackerCompile`    -- Regenerate compiled loader file
--- `:PackerClean`      -- Remove any disabled or unused plugins
--- `:PackerInstall`    -- Clean, then install missing plugins
--- `:PackerUpdate`     -- Clean, then update and install plugins
+--   `:PackerCompile`    -- Regenerate compiled loader file
+--   `:PackerClean`      -- Remove any disabled or unused plugins
+--   `:PackerInstall`    -- Clean, then install missing plugins
+--   `:PackerUpdate`     -- Clean, then update and install plugins
+--   
+--   `:PackerSnapshot foo`     -- 创建一个 snapshot
+--   `:PackerSnapshotDelete foo`  -- 删除一个 snapshot
+--   `:PackerSnapshotRollback foo`  -- 回滚到指定 snapshot
 --
--- `:PackerSnapshot foo`     -- 创建一个 snapshot
--- `:PackerSnapshotDelete foo`  -- 删除一个 snapshot
--- `:PackerSnapshotRollback foo`  -- 回滚到指定 snapshot
+--   `:PackerSync`       -- NOTE: 使用这一个命令就够了. Perform `PackerUpdate` and then `PackerCompile`
+--   NOTE: You must run this or `PackerSync` whenever you make changes to your plugin configuration.
 --
--- `:PackerSync`       -- NOTE: 使用这一个命令就够了. Perform `PackerUpdate` and then `PackerCompile`
--- NOTE: You must run this or `PackerSync` whenever you make changes to your plugin configuration.
+-- Packer opt 设置
+--   NOTE: Only required if you have packer configured as `opt`
+--   vim.cmd [[packadd packer.nvim]]  -- 会在 stdpath('cache') 中创建 "packer.nvim" 文件夹
 
 -- -- }}}
 
---- NOTE: Only required if you have packer configured as `opt`
---vim.cmd [[packadd packer.nvim]]  -- 会在 stdpath('cache') 中创建 "packer.nvim" 文件夹
+--- VVI: debug.getinfo() 函数获取本文件路径.
+--- source 返回的内容中:
+---   If source starts with a '@', it means that the function was defined in a file;
+---   If source starts with a '=', the remainder of its contents describes the source in a user-dependent manner.
+---   Otherwise, the function was defined in a string where source is that string. 
+local this_file = debug.getinfo(1, 'S').source
+if string.sub(this_file, 1, 1) ~= '@' then
+  Notify("packer config file error", "ERROR", {title = "packer.nvim", timeout = false})
+  return
+else
+  this_file = string.sub(this_file, 2)
+end
 
 --- save plugins.lua (本文件) 时自动运行 `:PackerSync` OR `:PackerCompile` 命令 --------------------
---- NOTE: 这里的文件名是 plugins_loader.lua, 是本文件的文件名.
----       修改本文件后必须进行 :PackerCompile, 否则无法生效.
-vim.cmd([[
-  augroup packer_user_config
-    autocmd!
-    autocmd BufWritePost plugins_loader.lua source <afile> | PackerCompile
-  augroup end
-]])
+--- NOTE: 修改本文件后必须进行 :PackerCompile, 否则设置无法生效.
+--- 这里必须使用 autogroup 否则每次 source 都会生成一个新的 autocmd,
+--- 需要通过 'autogroup foo au! ... ' 来覆盖之前的设置.
+local packer_user_config_id = vim.api.nvim_create_augroup(
+  "packer_user_config",
+  {clear = true}  -- NOTE: clear=true 表示 'au!'
+)
+vim.api.nvim_create_autocmd("BufWritePost", {
+  group = packer_user_config_id,
+  pattern = {this_file},
+  command = 'source ' .. this_file .. ' | PackerCompile',  -- 相当于 'source <afile>',
+})
 
 --- Use a protected call so we don't error out on first use
 local packer_status_ok, packer = pcall(require, "packer")
 if not packer_status_ok then
   --- NOTE: 如果 packer 不存在则自动 install
-  local result = vim.fn.system('git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim')
+  local packer_install_path = vim.fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
+  local packer_install_cmd = 'git clone --depth 1 https://github.com/wbthomason/packer.nvim ' .. packer_install_path
+  local result = vim.fn.system(packer_install_cmd)
   if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
-    Notify(result, "ERROR", {title={"install packer.nvim", "plugins_loader.lua"}})
+    vim.notify('install "packer.nvim" error:\ninstall cmd: ' .. packer_install_cmd .. '\nError msg:\n' .. result,
+      vim.log.levels.ERROR)
     return
   end
+
+  --- NOTE: packer 安装完后通过 :PackerSync 安装 plugins
+  vim.cmd('source ' .. this_file .. ' | PackerSync')
 end
 
 --- packer autocmd && functions -------------------------------------------------------------------- {{{
@@ -135,7 +162,7 @@ vim.api.nvim_create_user_command("PackerUpdateLog",
 
 --- Have packer use a popup window, "nvim-lua/popup.nvim"
 packer.init {
-  snapshot = "2022.07.15",   -- VVI: Name of the snapshot you would like to load at startup
+  --snapshot = "2022.07.15",   -- VVI: Name of the snapshot you would like to load at startup
   snapshot_path = vim.fn.stdpath('config') .. '/snapshots',  -- 默认路径是 stdpath('cache') .. '/packer.nvim'
   --package_root = vim.fn.stdpath('data') .. '/site/pack'),  -- 默认值
   --compile_path = vim.fn.stdpath('config') .. '/plugin/packer_compiled.lua'),  -- VVI: 不要修改. /plugin 文件夹会自动加载.
@@ -193,9 +220,10 @@ return packer.startup(function(use)
   --- `:TSInstall {lang}`     -- Install languages
   --- `:TSUninstall {lang}`   -- Uninstall languages
   --- `:TSUpdate`             -- Update the installed languages
+  --- `:TSUpdateSync`         -- Update the installed languages synchronously
   -- -- }}}
   use {"nvim-treesitter/nvim-treesitter",
-    run = ":TSUpdate",   -- Post-update/install hook.
+    run = ":TSUpdateSync",   -- Post-update/install hook.
     config = function() require("user.plugin_settings.treesitter") end,
     requires = {
       --- NOTE: 以下都是 treesitter modules 插件, 在 setup() 中启用的插件.
@@ -301,14 +329,10 @@ return packer.startup(function(use)
 
   --- Debug tools 安装 -----------------------------------------------------------------------------
   require("user.plugin_settings.debug_trigger")  -- NOTE: 先加载 dap debug lazyload 启动方式
-  use {"rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
-    opt = true,  --- VVI: 可以通过 `:PackerLoad foo bar` OR require('packer').loader('foo bar') 手动加载
-    config = function() require("user.plugin_settings.debug_dap_ui") end,
-    requires = {
-      {"mfussenegger/nvim-dap",  -- lua debug tool
-        config = function() require("user.plugin_settings.debug_dap") end,
-      },
-    },
+  use {"mfussenegger/nvim-dap",  -- lua debug tool
+    config = function() require("user.plugin_settings.debug_dap") end,
+    requires = "rcarriga/nvim-dap-ui",  -- ui for "nvim-dap", NOTE: dap-ui && dap 设置在同一文件中.
+    cmd = {'DapToggleBreakpoint', 'DapContinue'}  -- 通过 nvim-dap 内置 command 启动.
   }
   -- use "Pocco81/dap-buddy.nvim"  -- manage debuggers provided by "nvim-dap".
 
