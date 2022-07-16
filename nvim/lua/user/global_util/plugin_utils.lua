@@ -60,19 +60,24 @@ end
 
 --- 使用 `$ which` 查看插件所需 tools 是否存在 -----------------------------------------------------
 function Check_cmd_tools(tools)
-  local result = {"These Tools should be in the $PATH"}
-  local count = 0
-  for tool, install in pairs(tools) do
-    vim.fn.system('which '.. tool)
-    if vim.v.shell_error ~= 0 then
-      table.insert(result, tool .. ": " .. install)
-      count = count + 1
+  --- NOTE: "vim.schedule(function() ... end)" is a async function
+  --- 延迟执行 "vim.defer_fn(function() ... end, 3000)", 等待 3s 执行.
+  --- 新线程   "vim.loop.new_thread(function() ... end)"
+  vim.schedule(function()
+    local result = {"These Tools should be in the $PATH"}
+    local count = 0
+    for tool, install in pairs(tools) do
+      vim.fn.system('which '.. tool)
+      if vim.v.shell_error ~= 0 then
+        table.insert(result, tool .. ": " .. install)
+        count = count + 1
+      end
     end
-  end
 
-  if count > 0 then
-    Notify(result, "WARN", {timeout = false})
-  end
+    if count > 0 then
+      Notify(result, "WARN", {timeout = false})
+    end
+  end)
 end
 
 --- key-settings for both vim.keymap.set() and which_key.register() --------------------------------
