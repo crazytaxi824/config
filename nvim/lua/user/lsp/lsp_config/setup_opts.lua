@@ -69,7 +69,7 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 M.capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
 
 --- https://github.com/neovim/nvim-lspconfig/wiki/Project-local-settings
---- NOTE: LSP settings Hook, 不是必要设置 ----------------------------------------------------------
+--- NOTE: LSP settings Hook ------------------------------------------------------------------------
 --- 这里是为了能单独给 project 设置 LSP setting
 M.on_init = function(client)
   --- 加载项目本地设置, 覆盖 global settings.

@@ -75,16 +75,17 @@
 
 -- -- }}}
 
---- VVI: 获取本文件路径
---- If source starts with a '@', it means that the function was defined in a file;
---- If source starts with a '=', the remainder of its contents describes the source in a user-dependent manner.
---- Otherwise, the function was defined in a string where source is that string. 
-local this_lua_file = debug.getinfo(1, 'S').source
-if string.sub(this_lua_file, 1, 1) ~= '@' then
+--- VVI: debug.getinfo() 函数获取本文件路径.
+--- source 返回的内容中:
+---   If source starts with a '@', it means that the function was defined in a file;
+---   If source starts with a '=', the remainder of its contents describes the source in a user-dependent manner.
+---   Otherwise, the function was defined in a string where source is that string. 
+local this_file = debug.getinfo(1, 'S').source
+if string.sub(this_file, 1, 1) ~= '@' then
   Notify("packer config file error", "ERROR", {title = "packer.nvim", timeout = false})
   return
 else
-  this_lua_file = string.sub(this_lua_file, 2)
+  this_file = string.sub(this_file, 2)
 end
 
 --- save plugins.lua (本文件) 时自动运行 `:PackerSync` OR `:PackerCompile` 命令 --------------------
@@ -97,8 +98,8 @@ local packer_user_config_id = vim.api.nvim_create_augroup(
 )
 vim.api.nvim_create_autocmd("BufWritePost", {
   group = packer_user_config_id,
-  pattern = {this_lua_file},
-  command = 'source ' .. this_lua_file .. ' | PackerCompile',  -- 相当于 'source <afile>',
+  pattern = {this_file},
+  command = 'source ' .. this_file .. ' | PackerCompile',  -- 相当于 'source <afile>',
 })
 
 --- Use a protected call so we don't error out on first use
@@ -106,14 +107,16 @@ local packer_status_ok, packer = pcall(require, "packer")
 if not packer_status_ok then
   --- NOTE: 如果 packer 不存在则自动 install
   local packer_install_path = vim.fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
-  local result = vim.fn.system('git clone --depth 1 https://github.com/wbthomason/packer.nvim ' .. packer_install_path)
+  local packer_install_cmd = 'git clone --depth 1 https://github.com/wbthomason/packer.nvim ' .. packer_install_path
+  local result = vim.fn.system(packer_install_cmd)
   if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
-    Notify(result, "ERROR", {title="install 'packer.nvim' error", timeout=false})
+    vim.notify('install "packer.nvim" error:\ninstall cmd: ' .. packer_install_cmd .. '\nError msg:\n' .. result,
+      vim.log.levels.ERROR)
     return
   end
 
   --- NOTE: packer 安装完后通过 :PackerSync 安装 plugins
-  vim.cmd('source ' .. this_lua_file .. ' | PackerSync')
+  vim.cmd('source ' .. this_file .. ' | PackerSync')
 end
 
 --- packer autocmd && functions -------------------------------------------------------------------- {{{

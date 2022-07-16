@@ -56,7 +56,7 @@ vim.api.nvim_buf_create_user_command(
   function(input)
     markdown_create_table(input.fargs)
   end,
-  {nargs="+"}
+  {bang=true, nargs="+"}
 )
 
 

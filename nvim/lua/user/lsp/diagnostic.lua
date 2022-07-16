@@ -28,12 +28,12 @@ local config = {
   float = {
     focusable = false,
     style = "minimal",
-    -- border = "single",  -- `:help nvim_open_win()`
+    --border = "single",  -- `:help nvim_open_win()`
     border = {"▄","▄","▄","█","▀","▀","▀","█"},
     source = true,   -- diagnostic message 中带 linter 名字
     header = "",
     prefix = "",
-    --noautocmd = true,  -- float window 不加载 autocmd
+    --noautocmd = true,  -- float window 不加载 Buf* 相关 autocmd. VVI: 不要设置为 true.
   },
 }
 

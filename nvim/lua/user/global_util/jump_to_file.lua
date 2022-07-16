@@ -52,7 +52,7 @@ function Jump_to_file(filepath, lnum)
   end
 end
 
---- split filepath:lnum
+--- split filepath:lnum, NOTE: go_run_test.lua 文件会用到该函数.
 function Parse_filepath(lcontent)
   local fp = vim.split(vim.fn.trim(lcontent), ":")
   if fp[2] then
