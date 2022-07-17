@@ -122,7 +122,7 @@ M.hover_short = function()
 
   vim.lsp.buf_request(0, method, param,
     --- VVI: 添加 offsetX 设置到 handler, 用来偏移 open_floating_preview() window
-    vim.lsp.with(hover_short_handler,
+    vim.lsp.with(hover_short_handler,  -- VVI: 调用自定义 handler
       {
         offset_x = result.offsetX,
         offset_y = result.offsetY,

@@ -1,5 +1,5 @@
-local status_ok, configs = pcall(require, "nvim-treesitter.configs")
-if not status_ok then
+local nv_ts_status_ok, ts_configs = pcall(require, "nvim-treesitter.configs")
+if not nv_ts_status_ok then
   return
 end
 
@@ -8,7 +8,7 @@ end
 local treesitter_parsers_path = vim.fn.stdpath('data') .. '/site/treesitter-parser'
 vim.opt.runtimepath:append(treesitter_parsers_path)
 
-configs.setup {
+ts_configs.setup {
   --- supported langs, https://github.com/nvim-treesitter/nvim-treesitter#supported-languages
   --ensure_installed = { "go", "lua", "javascript", "typescript", "tsx", "html", "css", "scss" ... },
   ensure_installed = "all",  -- 白名单, "all" OR a list of languages
@@ -19,7 +19,7 @@ configs.setup {
   --- `:TSModuleInfo` 可以查看 module 设置.
   --- treesitter 自带 modules 设置 -----------------------------------------------------------------
   highlight = {
-    enable = true,  -- VVI: highlight 是 treesitter 的主要功能.
+    enable = false,  -- VVI: 后面使用 lazy 方式启动 highlight, 提前加载会严重拖慢文件打开速度.
     disable = { "" },  -- list of language that will be disabled
 
     --- NOTE: true - 同时使用 treesitter 和 vim 自带 syntax 颜色, vim syntax 和 treesitter 的颜色效果叠加.
@@ -28,7 +28,7 @@ configs.setup {
     additional_vim_regex_highlighting = false,
   },
 
-  --- FIXME: 每次打开文件都会添加一个 setlocal indentexpr=nvim_treesitter#indent()
+  --- FIXME: 每次打开文件都会添加一个 setlocal indentexpr=nvim_treesitter#indent() --- {{{
   --- https://github.com/nvim-treesitter/nvim-treesitter/issues/3172
   --- 使用 'indent_blankline' 代替.
   -- indent = {
@@ -46,6 +46,7 @@ configs.setup {
   --    node_decremental = "grm",
   --  },
   --},
+  -- -- }}}
 
   --- 启用第三方插件 modules 设置 ------------------------------------------------------------------
   --- "JoosepAlviste/nvim-ts-context-commentstring"
@@ -85,12 +86,12 @@ configs.setup {
   },
 
   --- "p00f/nvim-ts-rainbow"
-  rainbow = {
-    enable = true,
-    disable = { "cpp", "go" },  -- list of languages you want to disable the plugin for
-    extended_mode = false, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
-    max_file_lines = 999, -- Do not enable for files with more than n lines, int
-  },
+  -- rainbow = {
+  --   enable = false,  -- VVI: 严重拖慢文件打开速度, 不建议开启.
+  --   disable = { "cpp", "go" },  -- list of languages you want to disable the plugin for
+  --   extended_mode = false, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
+  --   max_file_lines = 999, -- Do not enable for files with more than n lines, int
+  -- },
 }
 
 --- rainbow colors ---------------------------------------------------------------------------------
@@ -103,5 +104,39 @@ vim.cmd [[highlight rainbowcol6 ctermfg=167]]  -- red
 vim.cmd [[highlight rainbowcol7 ctermfg=248]]  -- grey
 
 
+--- HACK: autocmd lazy highlight -------------------------------------------------------------------
+--- 参考源代码: enable_module() 针对 buffer 设置 module; enable_all() 是针对全局.
+--- https://github.com/nvim-treesitter/nvim-treesitter/ - > /lua/nvim-treesitter/configs.lua
+local parsers = require "nvim-treesitter.parsers"
+
+local function enable_module(mod, bufnr, lang)
+  local module = ts_configs.get_module(mod)
+  if not module then
+    return
+  end
+
+  bufnr = bufnr or vim.api.nvim_get_current_buf()
+  lang = lang or parsers.get_buf_lang(bufnr)
+
+  if not module.enable then
+    if module.enabled_buffers then
+      module.enabled_buffers[bufnr] = true
+    else
+      module.enabled_buffers = { [bufnr] = true }
+    end
+  end
+
+  ts_configs.attach_module(mod, bufnr, lang)
+end
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = {"*"},
+  callback = function(params)
+    --- NOTE: 这里使用 vim.schedule() 无法获得想要的效果.
+    vim.defer_fn(function()
+      enable_module('highlight', params.buf)
+    end, 100)  -- delay 100ms, 象征意义, 设置为 1ms 加载速度也差不多.
+  end
+})
 
 
