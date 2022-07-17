@@ -156,7 +156,7 @@ local make_entry = require "telescope.make_entry"
 local pickers = require "telescope.pickers"
 local conf = require("telescope.config").values
 
-local rg_search = function(additional_args)
+local function rg_search(additional_args)
   local result = vim.fn.system(vim.fn.join(conf.vimgrep_arguments, " ") .. " " .. additional_args)
   if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
     if result == "" then

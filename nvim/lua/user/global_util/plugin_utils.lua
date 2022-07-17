@@ -59,8 +59,6 @@ end
 --- 使用 `$ which` 查看插件所需 tools 是否存在 -----------------------------------------------------
 function Check_cmd_tools(tools, opt)
   --- NOTE: "vim.schedule(function() ... end)" is a async function
-  --- 延迟执行 "vim.defer_fn(function() ... end, 3000)", 等待 3s 执行.
-  --- 新线程   "vim.loop.new_thread(function() ... end)", 查看 vim.is_thread(), true - other threads
   vim.schedule(function()
     local result = {"These Tools should be in the $PATH"}
     local count = 0
