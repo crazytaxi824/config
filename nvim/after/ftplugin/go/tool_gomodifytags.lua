@@ -49,7 +49,7 @@ local function go_add_tags(arglist)
 
   local transform = ""
 
-  if arglist[2] == nil then
+  if not arglist[2] then
     transform = "snakecase"  -- default case
   elseif arglist[2] == 's' or arglist[2] == 'snake' or arglist[2] == 'snakecase' then  -- foo_bar
     transform = "snakecase"
