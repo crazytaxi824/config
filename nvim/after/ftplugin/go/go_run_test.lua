@@ -49,104 +49,109 @@ local go_opts = {
   end,
 }
 
---- go run ----------------------------------------------------------------------------------------- {{{
-local function go_run()
-  -- 获取 _test.go 文件夹路径.
-  local dir = vim.fn.expand('%:h')
-
-  -- VVI: 获取 go import path, `cd src/xxx && go list -f '{{.ImportPath}}'`
-  local import_path = string.match(vim.fn.system("cd " .. dir .. " && go list -f '{{.ImportPath}}'"), "[%S ]*")
+--- VVI: 获取 go import path, `cd src/xxx && go list -f '{{.ImportPath}}'`
+local function go_import_path(dir)
+  local result = vim.fn.system("cd " .. dir .. " && go list -f '{{.ImportPath}}'")
   if vim.v.shell_error ~= 0 then
-    Notify(import_path,"ERROR")
+    Notify(result,"ERROR")
     return
   end
 
-  -- VVI: 删除之前的 terminal.
+  return string.match(result, "[%S ]*")  -- return import_path WITHOUT '\n'
+end
+
+--- toggleterm run cmd
+local function toggleterm_run(cmd)
+  --- VVI: 删除之前的 terminal.
   vim.cmd('silent! bw! term://*toggleterm#'..go_term_id)
-  -- go run Package
-  local go = Terminal:new(vim.tbl_deep_extend('force', go_opts, { cmd = "cd " .. dir .. " && go run " .. import_path }))
+
+  --- run cmd
+  local go = Terminal:new(vim.tbl_deep_extend('force', go_opts, { cmd = cmd }))
   go:toggle()
+end
+
+--- go run ----------------------------------------------------------------------------------------- {{{
+local function go_run()
+  --- 获取当前文件所在文件夹路径.
+  local dir = vim.fn.expand('%:h')
+
+  --- 获取 go import path, `cd src/xxx && go list -f '{{.ImportPath}}'`
+  local import_path = go_import_path(dir)
+  if not import_path then
+    return
+  end
+
+  --- go run local/src
+  toggleterm_run("cd " .. dir .. " && go run " .. import_path)
 end
 -- -- }}}
 
 --- go test run all -------------------------------------------------------------------------------- {{{
 local function go_test_all()
-  -- 判断当前文件是否是 _test.go
-  if string.match(vim.fn.expand('%:t'), "_test%.go$") == nil then
+  --- 判断当前文件是否是 _test.go
+  if not string.match(vim.fn.expand('%:t'), "_test%.go$") then
     Notify('not "_test.go" file',"ERROR")
     return
   end
 
-  -- 获取 _test.go 文件夹路径.
+  --- 获取当前文件所在文件夹路径.
   local dir = vim.fn.expand('%:h')
 
-  -- VVI: 获取 go import path, `cd src/xxx && go list -f '{{.ImportPath}}'`
-  local import_path = string.match(vim.fn.system("cd " .. dir .. " && go list -f '{{.ImportPath}}'"), "[%S ]*")
-  if vim.v.shell_error ~= 0 then
-    Notify(import_path,"ERROR")
+  --- 获取 go import path, `cd src/xxx && go list -f '{{.ImportPath}}'`
+  local import_path = go_import_path(dir)
+  if not import_path then
     return
   end
 
-  -- VVI: 删除之前的 terminal.
-  vim.cmd('silent! bw! term://*toggleterm#'..go_term_id)
-  -- go test -v -timeout 30s -run "^Test.*" ImportPath
+  --- go test -v -timeout 30s -run "^Test.*" ImportPath
   local cmd = 'cd ' .. dir .. ' && go test -v -timeout 30s -run "^Test.*" ' .. import_path
-  local go = Terminal:new(vim.tbl_deep_extend('force', go_opts, { cmd = cmd }))
-  go:toggle()
+  toggleterm_run(cmd)
 end
 -- -- }}}
 
 --- go test bench all ------------------------------------------------------------------------------ {{{
 local function go_bench_all()
-  -- 判断当前文件是否是 _test.go
-  if string.match(vim.fn.expand('%:t'), "_test%.go$") == nil then
+  --- 判断当前文件是否是 _test.go
+  if not string.match(vim.fn.expand('%:t'), "_test%.go$") then
     Notify('not "_test.go" file',"ERROR")
     return
   end
 
-  -- 获取 _test.go 文件夹路径.
+  --- 获取当前文件所在文件夹路径.
   local dir = vim.fn.expand('%:h')
 
-  -- VVI: 获取 go import path, `cd src/xxx && go list -f '{{.ImportPath}}'`
-  local import_path = string.match(vim.fn.system("cd " .. dir .. " && go list -f '{{.ImportPath}}'"), "[%S ]*")
-  if vim.v.shell_error ~= 0 then
-    Notify(import_path,"ERROR")
+  --- 获取 go import path, `cd src/xxx && go list -f '{{.ImportPath}}'`
+  local import_path = go_import_path(dir)
+  if not import_path then
     return
   end
 
-  -- VVI: 删除之前的 terminal.
-  vim.cmd('silent! bw! term://*toggleterm#'..go_term_id)
-  -- go test -v -timeout 30s -run ^$ -benchmem -bench "^Benchmark.*" ImportPath
+  --- go test -v -timeout 30s -run ^$ -benchmem -bench "^Benchmark.*" ImportPath
   local cmd = 'cd ' .. dir .. ' && go test -v -timeout 30s -run ^$ -benchmem -bench "^Benchmark.*" ' .. import_path
-  local go = Terminal:new(vim.tbl_deep_extend('force', go_opts, { cmd = cmd }))
-  go:toggle()
+  toggleterm_run(cmd)
 end
 -- -- }}}
 
 --- go test fuzz all ------------------------------------------------------------------------------- {{{
 local function go_fuzz_all()
-  -- 判断当前文件是否是 _test.go
-  if string.match(vim.fn.expand('%:t'), "_test%.go$") == nil then
+  --- 判断当前文件是否是 _test.go
+  if not string.match(vim.fn.expand('%:t'), "_test%.go$") then
     Notify('not "_test.go" file',"ERROR")
     return
   end
 
-  -- 获取 _test.go 文件夹路径.
+  --- 获取当前文件所在文件夹路径.
   local dir = vim.fn.expand('%:h')
 
-  -- VVI: 获取 go import path, `cd src/xxx && go list -f '{{.ImportPath}}'`
-  local import_path = string.match(vim.fn.system("cd " .. dir .. " && go list -f '{{.ImportPath}}'"), "[%S ]*")
-  if vim.v.shell_error ~= 0 then
-    Notify(import_path,"ERROR")
+  --- 获取 go import path, `cd src/xxx && go list -f '{{.ImportPath}}'`
+  local import_path = go_import_path(dir)
+  if not import_path then
     return
   end
 
-  -- VVI: 删除之前的 terminal.
-  vim.cmd('silent! bw! term://*toggleterm#'..go_term_id)
-  -- go test -v -run ^$ -fuzztime 30s -fuzz "^Fuzz.*" ImportPath
+  --- go test -v -run ^$ -fuzztime 30s -fuzz "^Fuzz.*" ImportPath
   local cmd = 'cd ' .. dir .. ' && go test -v -fuzztime 30s -run ^$ -fuzz "^Fuzz.*" ' .. import_path
-  local go = Terminal:new(vim.tbl_deep_extend('force', go_opts, { cmd = cmd }))
-  go:toggle()
+  toggleterm_run(cmd)
 end
 -- -- }}}
 
@@ -155,39 +160,38 @@ end
 local function find_func_line()  -- return (func_name: string|nil)
   local lcontent = vim.fn.getline('.')  -- 获取行内容
 
-  -- 如果找到 ^func.* 则返回整行内容.
-  if string.match(lcontent, "^func .*") ~= nil then
+  --- 如果找到 ^func.* 则返回整行内容.
+  if string.match(lcontent, "^func .*") then
     return lcontent
   end
-
-  return nil  -- 如果都没找到则返回 nil
+  --- 如果没找到则返回 nil
 end
 
 --- 返回 Test Function Name, "TestXxx(t *testing.T)", "BenchmarkXxx(b *testing.B)", "FuzzXxx(f *testing.F)"
 --- NOTE: mark - 0: error | 1: TestXxx | 2: BenchmarkXxx | 3: FuzzXxx
 local function go_test_func_name()  -- return {funcname: string|nil, mark :number}
   local func_line = find_func_line()
-  if func_line == nil then
+  if not func_line then
     return nil, 0
   end
 
-  -- %w     - 单个 char [a-zA-Z0-9]
-  -- [%w_]  - 单个 char [a-zA-Z0-9] && _
-  -- [BFMT] - 单个 char B|F|M|T
-  -- go test 函数不允许 func [T any]TestXxx(), 不允许有 type param.
+  --- NOTE: go test 函数不允许 func [T any]TestXxx(), 不允许有 type param.
+  --- %w     - 单个 char [a-zA-Z0-9]
+  --- [%w_]  - 单个 char [a-zA-Z0-9] && _
+  --- [BFMT] - 单个 char B|F|M|T
 
   local testfn = string.match(func_line, "func Test[%w_]*%([%w_]* %*testing%.T%)")
-  if testfn ~=nil then
+  if testfn then
     return string.match(testfn, "Test[%w_]*"), 1
   end
 
   testfn = string.match(func_line, "func Benchmark[%w_]*%([%w_]* %*testing%.B%)")
-  if testfn ~=nil then
+  if testfn then
     return string.match(testfn, "Benchmark[%w_]*"), 2
   end
 
   testfn = string.match(func_line, "func Fuzz[%w_]*%([%w_]* %*testing%.F%)")
-  if testfn ~=nil then
+  if testfn then
     return string.match(testfn, "Fuzz[%w_]*"), 3
   end
 
@@ -196,44 +200,41 @@ end
 
 --- 返回 "go test -v -run TestFoo ImportPath"
 local function go_test_cmd()   -- return (cmd: string|nil)
-  -- 判断当前文件是否 _test.go
-  if string.match(vim.fn.expand('%:t'), "_test%.go$") == nil then
+  --- 判断当前文件是否 _test.go
+  if not string.match(vim.fn.expand('%:t'), "_test%.go$") then
     Notify('not "_test.go" file',"ERROR")
-    return nil
+    return
   end
 
-  -- 判断当前函数是否 TestXXX. 如果是则 获取 test function name.
+  --- 判断当前函数是否 TestXXX. 如果是则 获取 test function name.
   local testfn, mark = go_test_func_name()
-  if mark == 0 then
-    Notify('not a Test funciton',"ERROR")
-    return nil
+  if not testfn or mark == 0 then
+    Notify('Please Put cursor on "func TestXXX()"',"WARN")
+    return
   end
 
-  -- 获取 _test.go 文件夹路径.
+  --- 获取当前文件所在文件夹路径.
   local dir = vim.fn.expand('%:h')
 
-  -- VVI: 获取 go import path, `cd src/xxx && go list -f '{{.ImportPath}}'`
-  local import_path = string.match(vim.fn.system("cd " .. dir .. " && go list -f '{{.ImportPath}}'"), "[%S ]*")
-  if vim.v.shell_error ~= 0 then
-    Notify(import_path,"ERROR")
-    return nil
+  --- 获取 go import path, `cd src/xxx && go list -f '{{.ImportPath}}'`
+  local import_path = go_import_path(dir)
+  if not import_path then
+    return
   end
 
-  -- cmd
-  local cmd = ""
-
+  local cmd
   if mark == 1 then
-    -- go test -v -timeout 10s -run TestXxx ImportPath
+    --- go test -v -timeout 10s -run TestXxx ImportPath
     cmd = 'cd ' .. dir .. " && go test -v -timeout 10s -run " .. testfn .. " " .. import_path
   end
 
   if mark == 2 then
-    -- go test -v -timeout 10s -run ^$ -benchmem -bench BenchmarkXxx ImportPath
+    --- go test -v -timeout 10s -run ^$ -benchmem -bench BenchmarkXxx ImportPath
     cmd = 'cd ' .. dir .. " && go test -v -timeout 10s -run ^$ -benchmem -bench " .. testfn .. " " .. import_path
   end
 
   if mark == 3 then
-    -- go test -v -run ^$ -fuzztime 10s -fuzz FuzzXxx ImportPath
+    --- go test -v -run ^$ -fuzztime 10s -fuzz FuzzXxx ImportPath
     cmd = 'cd ' .. dir .. " && go test -v -fuzztime 10s -run ^$ -fuzz " .. testfn .. " " .. import_path
   end
 
@@ -243,14 +244,11 @@ end
 --- 通过 Terminal 运行 cmd ---
 local function go_test_single_func()
   local cmd = go_test_cmd()
-  if cmd == nil then
+  if not cmd then
     return
   end
 
-  -- VVI: 删除之前的 terminal.
-  vim.cmd('silent! bw! term://*toggleterm#'..go_term_id)
-  local gotest = Terminal:new(vim.tbl_deep_extend('force', go_opts, { cmd = cmd }))
-  gotest:toggle()
+  toggleterm_run(cmd)
 end
 -- -- }}}
 

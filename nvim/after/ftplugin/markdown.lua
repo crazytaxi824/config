@@ -16,7 +16,7 @@ local function markdown_create_table(arglist)  -- args: 创建一个 row * col �
   -- 类型转换
   local row = tonumber(arglist[1])
   local col = tonumber(arglist[2])
-  if row == nil or col == nil then
+  if not row or not col then
     Notify("args need to be number","ERROR")
     return
   end

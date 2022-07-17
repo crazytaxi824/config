@@ -58,6 +58,20 @@
 --    vim.notify_once("msg", vim.log.levels.WARN)  只显示一次.
 --    vim.lsp.buf.execute_command() && vim.lsp.util.apply_workspace_edit()
 --    print(vim.inspect(vim.lsp.buf_get_clients())) -- VVI: lsp on_attach.
+--
+--- NOTE: async 函数
+--    vim.schedule(callback)  -- async 执行 callback.
+--    vim.defer_fn(callback, delay)  -- 延迟执行 callback. delay 单位是 ms.
+--
+--  NOTE: 新线程函数, ':help vim.loop'
+--    vim.loop.new_thread(callback)  -- 新线程, VVI: 无法调用 main thread 中的任何数据, 相当于两个单独的程序.
+--                                   -- print(vim.is_thread()), false - main thread; true - other threads
+--  lua 运行 shell cmd, 获取 output.
+--    local handle = io.popen(cmd)
+--    local result = handle:read("a")  -- a - read all output
+--    handle:close()
+--  lua 运行 shell cmd, 获取 exit code.
+--    local exit_code = os.execute(cmd)
 
 --- VVI: floating window 设置: `:help nvim_open_win()`
 

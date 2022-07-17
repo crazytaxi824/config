@@ -13,13 +13,14 @@ local null_tools = {
   stylua = "   brew info stylua",
   shfmt = "    brew info shfmt",
 
+  mypy = "     pip3 install mypy",  -- mypy-extensions, mypy 插件, experimental extensions
   flake8 = "   pip3 install flake8",
   autopep8 = " pip3 install autopep8",
 
   eslint = "   npm install -g eslint",
 }
 
-Check_cmd_tools(null_tools)
+Check_cmd_tools(null_tools, {title= "check null-ls tools"})
 -- -- }}}
 
 --- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/formatting
@@ -47,12 +48,12 @@ local diagnostics = null_ls.builtins.diagnostics
 --     COMPLETION = "NULL_LS_COMPLETION",  --- NOTE: for COMPLETION
 -- }
 local diagnostics_opts = {
-  -- 只在 save 的时候执行 diagnostics.
+  --- 只在 save 的时候执行 diagnostics.
   method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
 
-  -- NOTE: 耗资源, 每次运行 linter 前都要运行该函数, 不要做太复杂的运算.
+  --- NOTE: 耗资源, 每次运行 linter 前都要运行该函数, 不要做太复杂的运算.
   runtime_condition = function(params)
-    -- DO NOT lint readonly files
+    --- DO NOT lint readonly files
     if vim.bo.readonly then
       return false  -- false 不执行 lint
     end
@@ -70,15 +71,25 @@ local diagnostics_opts = {
 
   --timeout = 3000,   -- linter 超时时间, 全局设置了 default_timeout.
   --diagnostics_format = "#{m} [null-ls:#{s}]",  -- 只对单个 linter 生效.
+
+  --- post hook, 这里是修改 error msg 的 severity level. NOTE: 会导致 diagnostics_format 设置失效.
+  --- This option is not compatible with 'diagnostics_format'.
+  -- diagnostics_postprocess = function(diagnostic)
+  --   --- 会导致所有 error msg 都是设置的 severity level, ERROR | WARN | INFO | HINT
+  --   diagnostic.severity = vim.diagnostic.severity.WARN
+  --
+  --   --- 相当于重新设置 diagnostics_format.
+  --   diagnostic.message = diagnostic.message .. ' [null-ls]'
+  -- end,
 }
 -- -- }}}
 
 --- linter / formatter / code action 设置 ----------------------------------------------------------
--- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/MAIN.md  -- runtime_condition function 中的 params
--- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/CONFIG.md    -- setup 设置
--- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md  -- formatter & linter 列表
--- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTIN_CONFIG.md  -- with() 设置
--- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/HELPERS.md -- $FILENAME, $DIRNAME, $ROOT ...
+--- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/MAIN.md  -- runtime_condition function 中的 params
+--- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/CONFIG.md    -- setup 设置
+--- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md  -- formatter & linter 列表
+--- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTIN_CONFIG.md  -- with() 设置
+--- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/HELPERS.md -- $FILENAME, $DIRNAME, $ROOT ...
 --- linters 设置 -----------------------------------------------------------------------------------
 local linter_settings = {
   --- golangci-lint
@@ -108,8 +119,9 @@ local linter_settings = {
     filetypes = {"javascript", "javascriptreact", "vue"},
   }, diagnostics_opts)),
 
-  -- python, flake8
+  --- python, flake8, mypy
   diagnostics.flake8.with(__Proj_local_settings.keep_extend('lint', 'flake8', diagnostics_opts)),
+  diagnostics.mypy.with(__Proj_local_settings.keep_extend('lint', 'mypy', diagnostics_opts)),
 
   --- protobuf, buf
   diagnostics.buf.with(__Proj_local_settings.keep_extend('lint', 'buf', diagnostics_opts)),
@@ -164,24 +176,27 @@ null_ls.setup({
       util.root_pattern('.git','go.mod','package.json','tsconfig.json','jsconfig.json')(params.bufname)
   end,
 
-  -- NOTE: 非常耗资源, 调试完后设置为 false.
-  -- is the same as setting log.level to "trace" 记录 log, `:NullLsLog` 打印 log.
+  --- NOTE: 非常耗资源, 调试完后设置为 false.
+  --- is the same as setting log.level to "trace" 记录 log, `:NullLsLog` 打印 log.
   debug = false,
+
+  --- 如果 error msg 没有特别指明 severity level, 则会使用下面的设置.
+  fallback_severity = vim.diagnostic.severity.WARN,
 
   --- log 输出到 stdpath('cache') .. 'null-ls.log'
   log = {
     enable = true,
     level = 'warn',  -- "error", "warn"(*), "info", "debug", "trace"
 
-    -- show log output in Neovim's ':messages'.
-    -- sync is slower but guarantees that messages will appear in order.
+    --- show log output in Neovim's ':messages'.
+    --- sync is slower but guarantees that messages will appear in order.
     use_console = 'async',  -- "sync", "async"(*), false.
   },
 
   update_in_insert = false,  -- 节省资源, 一边输入一边检查
   debounce = 600,            -- 节省资源, diagnostics 间隔时间, 默认 250
+  default_timeout = 5000,    -- lint 超时时间
   diagnostics_format = "#{m} [null-ls]",  -- 错误信息显示格式, #{m} - message, #{s} - source, #{c} - err_code
-  default_timeout = 5000,   -- lint 超时时间
 
   --- NOTE: 以下 callback 函数中都会传入 on_init = function(client, init_result) 两个参数.
   --- null-ls 退出的时候提醒.
