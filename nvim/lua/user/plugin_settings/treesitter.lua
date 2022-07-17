@@ -86,12 +86,12 @@ ts_configs.setup {
   },
 
   --- "p00f/nvim-ts-rainbow"
-  rainbow = {
-    enable = false,  -- VVI: 严重拖慢文件打开速度, 不建议开启.
-    disable = { "cpp", "go" },  -- list of languages you want to disable the plugin for
-    extended_mode = false, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
-    max_file_lines = 999, -- Do not enable for files with more than n lines, int
-  },
+  -- rainbow = {
+  --   enable = false,  -- VVI: 严重拖慢文件打开速度, 不建议开启.
+  --   disable = { "cpp", "go" },  -- list of languages you want to disable the plugin for
+  --   extended_mode = false, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
+  --   max_file_lines = 999, -- Do not enable for files with more than n lines, int
+  -- },
 }
 
 --- rainbow colors ---------------------------------------------------------------------------------

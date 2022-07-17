@@ -161,7 +161,7 @@ vim.api.nvim_create_user_command("PackerUpdateLog",
 
 --- Have packer use a popup window, "nvim-lua/popup.nvim"
 packer.init {
-  snapshot = "2022.07.15",   -- VVI: Name of the snapshot you would like to load at startup
+  snapshot = "2022.07.18",   -- VVI: Name of the snapshot you would like to load at startup
   snapshot_path = vim.fn.stdpath('config') .. '/snapshots',  -- 默认路径是 stdpath('cache') .. '/packer.nvim'
   --package_root = vim.fn.stdpath('data') .. '/site/pack'),  -- 默认值
   --compile_path = vim.fn.stdpath('config') .. '/plugin/packer_compiled.lua'),  -- VVI: 不要修改. /plugin 文件夹会自动加载.
@@ -242,7 +242,7 @@ return packer.startup(function(use)
       --- 第三方 module 插件 ---
       {"JoosepAlviste/nvim-ts-context-commentstring"}, -- Comment 依赖 commentstring.
       {"windwp/nvim-ts-autotag"}, -- auto close tag <div></div>
-      {"p00f/nvim-ts-rainbow"},   -- 括号颜色. treesitter 解析
+      --{"p00f/nvim-ts-rainbow"},   -- 括号颜色. treesitter 解析, 严重拖慢文件打开速度.
     },
   }
 
