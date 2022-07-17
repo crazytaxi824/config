@@ -92,27 +92,32 @@
 --    ["?"] = "%?";
 --
 --    \n, \t, \r ...
+--  }
 --
 --- NOTE: lua regex 正则
 --  lua regex - string.match(), https://fhug.org.uk/kb/kb-article/understanding-lua-patterns/
---  }
 --
---- NOTE: using filter, `:help filter`
---  使用方法:
---  1. 在行内写入 shell 代码. `cal -h -3`
---  2. filter command, `!!`, 不需要 `:`, 会在底部命令行区域出现 `:.!`, 进入 (filter) command 模式.
---     . 表示当前行.
---     ! 表示后面是 shell command.
---  3. ! 后输入 bash, cat, grep ... 等支持 pipe 的 shell command. 如果不支持 pipe 则不行, 例如 echo.
+--- NOTE: using filter, `:help filter` 使用方法:
+--    1. 在行内写入 shell 代码. `cal -h -3`
+--    2. filter command, `!!`, 不需要 `:`, 会在底部命令行区域出现 `:.!`, 进入 (filter) command 模式.
+--       . 表示当前行.
+--       ! 表示后面是 shell command.
+--    3. ! 后输入 bash, cat, grep ... 等支持 pipe 的 shell command. 如果不支持 pipe 则不行, 例如 echo.
 --
---  visual mode:
---  也可以在 visual select 之后, 按 `!`, 进入 (filter) command 模式 `:'<,'>!`
+--    visual mode:
+--    也可以在 visual select 之后, 按 `!`, 进入 (filter) command 模式 `:'<,'>!`
 --
 --  其他例子:
---  打开文件: line: `cat ~/.Desktop/foo.md`, cmd: `:.!bash`
---  打印日历: line: `cal -h -3`, cmd: `:.!bash`
---  过滤内容: line: `a/b/c`, cmd: `:.!awk -F/ '{print $1}'`  -- 替换成 a.
---  过滤行:   line: `abc`, `ccc`, `ddd`, visual select 之后 cmd: `:'<,'>!grep c`  --  剩下 `abc`, `ccc` 两行.
+--    line: './src/main.go'        cmd: `:.!cat`                   输出 './src/main.go'
+--    line: './src/main.go'        cmd: `:.!xargs echo`            输出 './src/main.go'
+--    line: './src/main.go',       cmd: `:.!xargs cat`             输出文件内容
+--    line: 'cat ./src/main.go',   cmd: `:.!bash`                  输出文件内容
+--    line: 'cal -h -3',           cmd: `:.!bash`                  输出日历
+--    line: 'a/b/c',               cmd: `:.!awk -F/ '{print $1}'`  输出 'a'.
+--    3-line: 'abc', 'ccc', 'ddd', visual select 之后 cmd: `:'<,'>!grep c`   输出两行 'abc', 'ccc'
+--
+-- VVI: FileType vs BufEnter 区别:
+--    'xxx.log' 文件不会触发 FileType, 因为没有该 filetype, 但是会触发 BufEnter.
 --
 -- -- }}}
 

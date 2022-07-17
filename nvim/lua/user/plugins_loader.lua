@@ -1,9 +1,7 @@
 --- 安装: `git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim`
 --- README: packer 主要是一个 plugin 安装/管理插件.
---- nvim 加载插件的时候读取的是 packer.compile() 之后的文件.
+--- nvim 加载插件的时候读取的是 packer.compile() 之后的文件. 所以在修改了插件设置后需要 `:PackerCompile` 来使设置生效.
 --- `:PackerSync` 的时候会自动运行 compile(), 重新生成 compile 文件. 主要影响 setup() 设置文件加载.
---- VVI: 插件一旦安装到 pack/packer/start/ 中, 不论本文件中的 use() 是否被注释, 已安装的插件都会被加载.
---- 如果想要插件不加载, 卸载该插件, 或者使用 `opt = true`, 将插件移动到 pack/packer/opt/ 文件夹中.
 --- `:PackerLoad a b` 相当于 lua require('packer').loader('a b')
 --- Packer.nvim 设置 ------------------------------------------------------------------------------- {{{
 -- https://github.com/wbthomason/packer.nvim#specifying-plugins
@@ -122,8 +120,8 @@ end
 
 --- packer autocmd && functions -------------------------------------------------------------------- {{{
 --- NOTE: 使用 :PackerSync :PackerUpdate ... 之后记录 update info 到指定文件.
---- autocmd User PackerComplete     -- Fires after install, update, clean, and sync asynchronous operations finish.
---- autocmd User PackerCompileDone  -- Fires after compiling.
+--- doautocmd User PackerComplete     -- Fires after install, update, clean, and sync asynchronous operations finish.
+--- doautocmd User PackerCompileDone  -- Fires after compiling.
 --- 使用方法 vim.cmd [[ autocmd User PackerComplete :set filetype? ]]
 --- getline(1, '$') 获取文件所有内容. return list.
 --- writefile(["foo", "bar"], "foo.log", "a")  -- a - append mode
