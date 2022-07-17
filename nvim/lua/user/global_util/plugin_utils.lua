@@ -31,6 +31,7 @@ function Notify(msg, lvl, opt)
     local script_filename = file_path_list[#file_path_list]
     local func_name = debug.getinfo(2, 'n').name  -- function name without '()'
 
+    --- put function name && filename in 'title'
     local title
     if func_name then
       title = {title = {func_name .. '()', script_filename}}
@@ -38,11 +39,8 @@ function Notify(msg, lvl, opt)
       title = {title = script_filename}
     end
 
-    if not opt then
-      opt = title
-    else
-      opt = vim.tbl_deep_extend('keep', opt, title)
-    end
+    opt = opt or {}  -- 确保 opt 是 table, 而不是 nil. 否则无法用于 vim.tbl_deep_extend()
+    opt = vim.tbl_deep_extend('force', title, opt)
 
     --- 如果调用本函数时传入了 opt, 则使用传入的值.
     notify.notify(msg, l, opt)
@@ -59,10 +57,10 @@ function Notify(msg, lvl, opt)
 end
 
 --- 使用 `$ which` 查看插件所需 tools 是否存在 -----------------------------------------------------
-function Check_cmd_tools(tools)
+function Check_cmd_tools(tools, opt)
   --- NOTE: "vim.schedule(function() ... end)" is a async function
   --- 延迟执行 "vim.defer_fn(function() ... end, 3000)", 等待 3s 执行.
-  --- 新线程   "vim.loop.new_thread(function() ... end)"
+  --- 新线程   "vim.loop.new_thread(function() ... end)", 查看 vim.is_thread(), true - other threads
   vim.schedule(function()
     local result = {"These Tools should be in the $PATH"}
     local count = 0
@@ -75,7 +73,9 @@ function Check_cmd_tools(tools)
     end
 
     if count > 0 then
-      Notify(result, "WARN", {timeout = false})
+      opt = opt or {}  -- 确保 opt 是 table, 而不是 nil. 否则无法用于 vim.tbl_deep_extend()
+      opt = vim.tbl_deep_extend('force', {timeout=false}, opt)
+      Notify(result, "WARN", opt)
     end
   end)
 end

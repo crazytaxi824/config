@@ -19,7 +19,7 @@ local function check_go_tools()
     --["golangci-lint"] = "go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest", -- null-ls 中有检查.
   }
 
-  Check_cmd_tools(gotools)
+  Check_cmd_tools(gotools, {title = "check go tools"})
 end
 
 vim.api.nvim_create_autocmd("Filetype", {
