@@ -120,13 +120,13 @@ vim.cmd('hi TSLiteral ctermbg=238')     -- NOTE: markdown `code`
 
 --- diagnostics popup text color.
 vim.cmd('hi DiagnosticError ctermfg=167')
-vim.cmd('hi DiagnosticWarn ctermfg=220')
+vim.cmd('hi DiagnosticWarn ctermfg=215')
 vim.cmd('hi DiagnosticInfo ctermfg=75')
 vim.cmd('hi DiagnosticHint ctermfg=246')
 
 --- diagnostics sign, 默认和 diagnostics text 颜色一样
 --vim.cmd('hi DiagnosticSignError ctermfg=167')
---vim.cmd('hi DiagnosticSignWarn ctermfg=220')
+--vim.cmd('hi DiagnosticSignWarn ctermfg=215')
 --vim.cmd('hi DiagnosticSignInfo ctermfg=75')
 vim.cmd('hi DiagnosticSignHint ctermfg=244')
 

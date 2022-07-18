@@ -19,6 +19,7 @@ local colors = {
   red = 160,  -- error, readonly
   orange = 215, -- warn
   blue = 63,  -- info
+  dark_orange = 136, -- trailing_whitespace && mixed_indent
 }
 
 local my_theme = {
@@ -44,18 +45,14 @@ local my_theme = {
 --- 自定义 components ------------------------------------------------------------------------------ {{{
 --- NOTE: https://github.com/nvim-lualine/lualine.nvim/wiki/Component-snippets
 
---- check Trailing Whitespace ----------------------------------------------------------------------
-local trailing_whitespace_record = '' -- NOTE: 这里缓存数据可以减少计算量,
-                                      -- 并且在退出 insert mode 之后再更新 lualine.
-local function trailing_whitespace()
-  if vim.fn.mode() ~= 'i' then
-    local space = vim.fn.search([[\s\+$]], 'nwc')
-    trailing_whitespace_record = space ~= 0 and "TS:"..space or ""
-  end
-  return trailing_whitespace_record
+--- check Trailing-Whitespace && Mixed-indent ------------------------------------------------------
+--- check Trailing-Whitespace
+local function check_trailing_whitespace()
+  local space = vim.fn.search([[\s\+$]], 'nwc')
+  return space ~= 0 and "TS:"..space or ""
 end
 
---- check Mixed-indent -----------------------------------------------------------------------------
+--- check Mixed-indent
 local function check_mixed_indent()
   local space_pat = [[\v^ +]]
   local tab_pat = [[\v^\t+]]
@@ -85,12 +82,21 @@ local function check_mixed_indent()
   end
 end
 
-local mixed_indent_record = ''  -- NOTE: 这里缓存数据可以减少计算量,
-                                -- 并且在退出 insert mode 之后再更新 lualine.
-local function mixed_indent()
+-- NOTE: 这里缓存数据可以减少计算量, 在退出 insert mode 之后再进行计算并更新 lualine.
+local mixed_indent_record = ''
+
+local function my_check()
   if vim.fn.mode() ~= 'i' then
-    mixed_indent_record = check_mixed_indent()
+    local mi = check_mixed_indent()
+    local ts = check_trailing_whitespace()
+
+    if mi ~= '' and ts ~= '' then
+      mixed_indent_record = mi .. ' ' .. ts
+    else
+      mixed_indent_record = mi .. ts
+    end
   end
+
   return mixed_indent_record
 end
 
@@ -166,8 +172,7 @@ lualine.setup {
     lualine_x = {'encoding', 'filetype'},
     lualine_y = {'progress'},
     lualine_z = {'location',
-      {mixed_indent, color = {bg=colors.red, fg=colors.white, gui='bold'}},  -- 自定义 components
-      {trailing_whitespace, color = {bg=colors.orange, fg=colors.black, gui='bold'}},
+      {my_check, color = {bg=colors.dark_orange, fg=colors.black, gui='bold'}},  -- 自定义 components
       { 'diagnostics',
         symbols = {error = 'E:', warn = 'W:', info = 'I:', hint = 'H:'},
         update_in_insert = false, -- Update diagnostics in insert mode.
@@ -208,8 +213,7 @@ lualine.setup {
       },
     },
     lualine_x = {
-      {mixed_indent, color = {fg=colors.red, gui='bold'}},  -- 自定义 components
-      {trailing_whitespace, color = {fg=colors.orange, gui='bold'}},
+      {my_check, color = {fg=colors.dark_orange, gui='bold'}},  -- 自定义 components
       { 'diagnostics',
         symbols = {error = 'E:', warn = 'W:', info = 'I:', hint = 'H:'},
         diagnostics_color = {
