@@ -49,7 +49,7 @@ lualine.setup {
 
   --- VVI: https://github.com/nvim-lualine/lualine.nvim#changing-components-in-lualine-sections
   sections = {
-    lualine_a = {'mode'},
+    lualine_a = {'mode'},  -- NOTE: 如果要显示自定义文字需要使用 function() return "foo" end
     lualine_b = {
       {'branch',
         icons_enabled = true, -- 单独设置 branch 使用 icon.
@@ -109,8 +109,14 @@ lualine.setup {
 
   --- lualine extensions change statusline appearance for a window/buffer with specified filetypes.
   --- https://github.com/nvim-lualine/lualine.nvim#extensions
-  extensions = {'nvim-tree', 'nerdtree'},
+  --- NOTE: 'quickfix' includes loclist and quickfix
+  extensions = {'nvim-tree', 'nerdtree', 'quickfix'},
 }
+
+--- 无法使用 lualine 的情况下 StatusLine 颜色 ------------------------------------------------------
+--- eg: tagbar 有自己设置的 ':set statusline?'
+vim.cmd('hi! StatusLine cterm=NONE ctermfg=' .. colors.light_green .. ' ctermbg=' .. colors.black)  -- active
+vim.cmd('hi! StatusLineNC cterm=NONE ctermfg=' .. colors.light_grey .. ' ctermbg=' .. colors.black) -- inactive
 
 
 
