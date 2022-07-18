@@ -98,7 +98,7 @@ local packer_user_config_id = vim.api.nvim_create_augroup(
 vim.api.nvim_create_autocmd("BufWritePost", {
   group = packer_user_config_id,
   pattern = {this_file},
-  command = 'source ' .. this_file .. ' | PackerCompile',  -- 相当于 'source <afile>',
+  command = 'source ' .. this_file .. ' | PackerCompile profile=true',  -- 相当于 'source <afile>',
 })
 
 --- Use a protected call so we don't error out on first use
@@ -320,10 +320,10 @@ return packer.startup(function(use)
 
   --- Buffer & Status Line -------------------------------------------------------------------------
   use {"akinsho/bufferline.nvim",     -- top buffer list
-    config = function() require("user.plugin_settings.deco_bufferline") end,
+    config = function() require("user.plugin_settings.decor_bufferline") end,
   }
   use {"nvim-lualine/lualine.nvim",   -- bottom status line
-    config = function() require("user.plugin_settings.deco_lualine") end,
+    config = function() require("user.plugin_settings.decor_lualine") end,
   }
 
   --- Debug tools 安装 -----------------------------------------------------------------------------
