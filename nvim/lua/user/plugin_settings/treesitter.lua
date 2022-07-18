@@ -103,11 +103,10 @@ vim.cmd [[highlight rainbowcol5 ctermfg=42]]   -- green
 vim.cmd [[highlight rainbowcol6 ctermfg=167]]  -- red
 vim.cmd [[highlight rainbowcol7 ctermfg=248]]  -- grey
 
-
 --- HACK: autocmd lazy highlight -------------------------------------------------------------------
 --- 参考源代码: enable_module() 针对 buffer 设置 module; enable_all() 是针对全局.
 --- https://github.com/nvim-treesitter/nvim-treesitter/ - > /lua/nvim-treesitter/configs.lua
-local parsers = require "nvim-treesitter.parsers"
+local parsers = require("nvim-treesitter.parsers")
 
 local function enable_module(mod, bufnr, lang)
   local module = ts_configs.get_module(mod)
@@ -138,5 +137,6 @@ vim.api.nvim_create_autocmd('FileType', {
     end, 100)  -- delay 100ms, 象征意义, 设置为 1ms 加载速度也差不多.
   end
 })
+
 
 

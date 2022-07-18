@@ -179,9 +179,10 @@ end
 
 --- terminate debug && close debug tab/buffers
 local function close_debug_tab_and_buffers()
-  --- NOTE: stop debug, and close dap/dap-ui in Callback function (after session stoped)
+  --- dap.terminate({terminate_opt}, {disconnect_opts}, Callback), terminates the debug adapter and disconnect debug session.
+  --- terminate opt:  https://microsoft.github.io/debug-adapter-protocol/specification#Requests_Terminate
+  --- disconnect opt: https://microsoft.github.io/debug-adapter-protocol/specification#Requests_Disconnect
   --- Callback function 在 session 结束后执行, 如果 session 不存在则立即执行.
-  --- dap.terminate() - terminates the debug adapter and disconnect debug session.
   dap.terminate({},{terminateDebugee = true}, function()
     --- NOTE: 如果在 dap.repl.close() 之后再执行 dap.terminal() 会重新打开 dap-repl buffer.
     dap.repl.close()  -- close dap-repl console window && delete dap-repl buffer.
@@ -209,6 +210,7 @@ dap.listeners.after.event_initialized["dapui_config"] = function()
   dapui.open()  -- will open dap-ui layouts in new tab.
 end
 
+--- other hook events --- {{{
 --- debug job done 之前 close debug tab, dap-repl, dap-ui windows
 --- NOTE: 不要自动关闭, 使用自定义函数手动关闭.
 -- dap.listeners.before.event_terminated["dapui_config"] = function()
@@ -223,6 +225,7 @@ end
 --   vim.cmd('stopinsert')
 --   close_debug_tab_and_buffers()
 -- end
+-- --}}}
 
 --- keymaps ----------------------------------------------------------------------------------------
 --- dap 可用方法 --- {{{

@@ -136,7 +136,8 @@ vim.g.did_load_filetypes = 0
 --- NOTE: https://github.com/nvim-treesitter/nvim-treesitter/issues/359
 --- When you activate treesitter highlighting, syntax gets automatically turned off for that file type
 --- while you can keep it for the file types WITHOUT parser.
---vim.cmd('syntax on')    -- vim 内置语法高亮, 默认开启. 基于正则表达式的语法高亮, 速度慢.
+--vim.cmd('syntax on')    -- `:echo g:syntax_on`, toggle the syntax on/off.
+                          -- vim 内置语法高亮, 默认开启. 基于正则表达式的语法高亮.
                           -- NOTE: syntax off 的情况下不会加载 after/syntax, 但是会加载 after/ftplugin
 
 --- 快捷键延迟时间设置
