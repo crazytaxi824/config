@@ -60,7 +60,7 @@
 --   `:PackerClean`      -- Remove any disabled or unused plugins
 --   `:PackerInstall`    -- Clean, then install missing plugins
 --   `:PackerUpdate`     -- Clean, then update and install plugins
---   
+--
 --   `:PackerSnapshot foo`     -- 创建一个 snapshot
 --   `:PackerSnapshotDelete foo`  -- 删除一个 snapshot
 --   `:PackerSnapshotRollback foo`  -- 回滚到指定 snapshot
@@ -78,7 +78,7 @@
 --- source 返回的内容中:
 ---   If source starts with a '@', it means that the function was defined in a file;
 ---   If source starts with a '=', the remainder of its contents describes the source in a user-dependent manner.
----   Otherwise, the function was defined in a string where source is that string. 
+---   Otherwise, the function was defined in a string where source is that string.
 local this_file = debug.getinfo(1, 'S').source
 if string.sub(this_file, 1, 1) ~= '@' then
   Notify("packer config file error", "ERROR", {title = "packer.nvim", timeout = false})

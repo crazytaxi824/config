@@ -13,6 +13,10 @@ vim.g.tagbar_visibility_symbols = {
   private   = ' -',
 }
 
+--- ignore files && filetype
+--vim.cmd('autocmd BufNewFile,BufReadPost NvimTree_* let b:tagbar_ignore = 1')  -- ignore
+--vim.cmd('autocmd FileType NvimTree let b:tagbar_ignore = 1')
+
 --- 这里是专为 go 设置的 kinds --------------------------------------------------------------------- {{{
 --- VVI: `:TagbarGetTypeConfig go` - 将打印下面的 kinds 设置到文件中, 可根据需求修改.
 --- `:help tagbar-extend`, {short}:{long}[:{fold}[:{stl}]], 其中 {fold} 和 {stl} 可以省略, 默认值为0.
@@ -36,7 +40,7 @@ vim.g.tagbar_visibility_symbols = {
 -- \ }
 -- -- }}}
 
---- Tagbar 颜色 ---
+--- Tagbar 颜色 ------------------------------------------------------------------------------------
 vim.cmd [[ hi link TagbarKind Keyword ]]  -- tag group name, "imports", "functions"
 vim.cmd [[ hi! TagbarNestedKind ctermfg=75 ]]  -- 内部颜色 [fields] [methods]
 vim.cmd [[ hi link TagbarScope Type ]]  -- class, struct name

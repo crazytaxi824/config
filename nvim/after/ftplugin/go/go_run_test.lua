@@ -11,7 +11,7 @@
 
 local status_ok, term = pcall(require, "toggleterm.terminal")
 if not status_ok then
-	return
+  return
 end
 
 local Terminal = term.Terminal
