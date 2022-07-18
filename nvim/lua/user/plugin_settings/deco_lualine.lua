@@ -10,10 +10,15 @@ local colors = {
   white = 188,
 
   green = 190,
-  light_green = 85,
+  light_green = 85,  -- filename saved
+  light_blue = 117,  -- filename modified
 
   grey  = 236,
-  light_grey = 246,
+  light_grey = 246,  -- inactive, hint
+
+  red = 160,  -- error, readonly
+  orange = 215, -- warn
+  blue = 63,  -- info
 }
 
 local my_theme = {
@@ -36,11 +41,103 @@ local my_theme = {
 }
 -- -- }}}
 
+--- 自定义 components ------------------------------------------------------------------------------ {{{
+--- NOTE: https://github.com/nvim-lualine/lualine.nvim/wiki/Component-snippets
+
+--- check Trailing Whitespace ----------------------------------------------------------------------
+local trailing_whitespace_record = '' -- NOTE: 这里缓存数据可以减少计算量,
+                                      -- 并且在退出 insert mode 之后再更新 lualine.
+local function trailing_whitespace()
+  if vim.fn.mode() ~= 'i' then
+    local space = vim.fn.search([[\s\+$]], 'nwc')
+    trailing_whitespace_record = space ~= 0 and "TS:"..space or ""
+  end
+  return trailing_whitespace_record
+end
+
+--- check Mixed-indent -----------------------------------------------------------------------------
+local function check_mixed_indent()
+  local space_pat = [[\v^ +]]
+  local tab_pat = [[\v^\t+]]
+  local space_indent = vim.fn.search(space_pat, 'nwc')
+  local tab_indent = vim.fn.search(tab_pat, 'nwc')
+  local mixed = (space_indent > 0 and tab_indent > 0)  -- 判断同一个 file 中是否有 mixed_indent
+
+  local mixed_same_line
+  if not mixed then
+    mixed_same_line = vim.fn.search([[\v^(\t+ | +\t)]], 'nwc')  -- 判断同一行中是否有 mixed_indent
+    mixed = mixed_same_line > 0
+  end
+  if not mixed then return '' end  --- no mixed_indent
+
+  --- 如果 mixed_same_line 则先返回 mixed_same_line
+  if mixed_same_line ~= nil and mixed_same_line > 0 then
+     return 'MI:'..mixed_same_line
+  end
+
+  --- 如果 mixed_indent in file, 则返回数量少的 indent line.
+  local space_indent_cnt = vim.fn.searchcount({pattern=space_pat, max_count=1e3}).total
+  local tab_indent_cnt =  vim.fn.searchcount({pattern=tab_pat, max_count=1e3}).total
+  if space_indent_cnt > tab_indent_cnt then
+    return 'MI:'..tab_indent
+  else
+    return 'MI:'..space_indent
+  end
+end
+
+local mixed_indent_record = ''  -- NOTE: 这里缓存数据可以减少计算量,
+                                -- 并且在退出 insert mode 之后再更新 lualine.
+local function mixed_indent()
+  if vim.fn.mode() ~= 'i' then
+    mixed_indent_record = check_mixed_indent()
+  end
+  return mixed_indent_record
+end
+
+--- Changing filename color based on modified status -----------------------------------------------
+local highlight = require('lualine.highlight')
+local my_fname = require('lualine.components.filename'):extend() -- 修改自 filename component
+
+--- NOTE: 这里的 options 就是 'filename' components 中的 { 'filename', path=3, symbols = {...} }
+function my_fname:init(options)
+  my_fname.super.init(self, options)
+  self.status_colors = {
+    modified_readonly = highlight.create_component_highlight_group(
+      {bg = colors.red, fg = colors.white, gui='bold'}, 'filename_modified_readonly', self.options),
+    modified = highlight.create_component_highlight_group(
+      {fg = colors.light_blue, gui='bold' }, 'filename_status_modified', self.options),
+    readonly = highlight.create_component_highlight_group(
+      {fg = colors.red, gui='bold'}, 'filename_readonly', self.options),
+    saved = highlight.create_component_highlight_group(
+      {fg = colors.light_green}, 'filename_status_saved', self.options),
+  }
+  if self.options.color == nil then self.options.color = '' end
+end
+
+function my_fname:update_status()
+  local data = my_fname.super.update_status(self)
+
+  if vim.bo.modified and vim.bo.readonly then
+    data = highlight.component_format_highlight(self.status_colors.modified_readonly) .. data
+  elseif vim.bo.modified then
+    data = highlight.component_format_highlight(self.status_colors.modified) .. data
+  elseif vim.bo.readonly then
+    data = highlight.component_format_highlight(self.status_colors.readonly) .. data
+  else
+    data = highlight.component_format_highlight(self.status_colors.saved) .. data
+  end
+
+  return data
+end
+
+-- -- }}}
+
+--- `:help lualine-Global-options`
 lualine.setup {
   options = {
     theme = my_theme,  -- https://github.com/nvim-lualine/lualine.nvim/blob/master/THEMES.md
     icons_enabled = false, -- 不使用 icon, NOTE: 可以在 sections 中单独设置. `:help lualine-Global-options`
-    component_separators = { left = '', right = ''},
+    component_separators = { left = '', right = ''},  -- 'mode', 'filename', 'branch' ... 这些属于 components
     section_separators = { left = ' ', right = ' '},
     disabled_filetypes = {},
     always_divide_middle = true,
@@ -57,29 +154,29 @@ lualine.setup {
       }
     },
     lualine_c = {
-      {'filename',
+      { my_fname,  -- VVI: 使用自定义 filename 代替自带 'filename' component.
         path = 3,  -- Absolute path, with ~ as the home directory
         symbols = {
-          modified = '[+]',      -- Text to show when the file is modified.
-          readonly = '[-]',      -- Text to show when the file is non-modifiable or readonly.
-          unnamed = '[No Name]', -- Text to show for unnamed buffers.
+          modified = '[+]',       -- Text to show when the file is modified.
+          readonly = '[-]',       -- Text to show when the file is non-modifiable or readonly.
+          unnamed  = '[No Name]', -- Text to show for unnamed buffers.
         },
-        --- NOTE: output format
-        -- fmt = function(content)
-        --   print(content:sub(-3,-1))
-        --   return content
-        -- end,
       },
     },
     lualine_x = {'encoding', 'filetype'},
     lualine_y = {'progress'},
     lualine_z = {'location',
-      {'diagnostics',
+      {mixed_indent, color = {bg=colors.red, fg=colors.white, gui='bold'}},  -- 自定义 components
+      {trailing_whitespace, color = {bg=colors.orange, fg=colors.black, gui='bold'}},
+      { 'diagnostics',
+        symbols = {error = 'E:', warn = 'W:', info = 'I:', hint = 'H:'},
+        update_in_insert = false, -- Update diagnostics in insert mode.
         diagnostics_color = {
-          error = 'ErrorMsg',        -- Changes diagnostics' error color.
-          warn  = 'WarningMsg',      -- Changes diagnostics' warn color.
-          info  = 'SpecialComment',  -- Changes diagnostics' info color.
-          hint  = 'DiagnosticHint',  -- Changes diagnostics' hint color.
+          --error = 'ErrorMsg',  -- 也可以使用 highlight group.
+          error = {bg=colors.red, fg=colors.white, gui='bold'},        -- Changes diagnostics' error color.
+          warn  = {bg=colors.orange, fg=colors.black, gui='bold'},     -- Changes diagnostics' warn color.
+          info  = {bg=colors.blue, fg=colors.white, gui='bold'},       -- Changes diagnostics' info color.
+          hint  = {bg=colors.light_grey, fg=colors.black, gui='bold'}, -- Changes diagnostics' hint color.
         },
       },
     },
@@ -93,13 +190,37 @@ lualine.setup {
       {'filename',
         path = 3,  -- Absolute path, with ~ as the home directory
         symbols = {
-          modified = '[+]',      -- Text to show when the file is modified.
-          readonly = '[-]',      -- Text to show when the file is non-modifiable or readonly.
-          unnamed = '[No Name]', -- Text to show for unnamed buffers.
+          modified = '[+]',       -- Text to show when the file is modified.
+          readonly = '[-]',       -- Text to show when the file is non-modifiable or readonly.
+          unnamed  = '[No Name]', -- Text to show for unnamed buffers.
         },
+        color = function()
+          if vim.bo.modified and vim.bo.readonly then
+            return {bg = colors.red, fg = colors.white, gui='bold'}
+          elseif vim.bo.modified then
+            return {fg = colors.light_blue}
+          elseif vim.bo.readonly then
+            return {fg = colors.red}
+          else
+            return {fg = colors.light_grey, bg = colors.black}
+          end
+        end,
       },
     },
-    lualine_x = {'diagnostics'},
+    lualine_x = {
+      {mixed_indent, color = {fg=colors.red, gui='bold'}},  -- 自定义 components
+      {trailing_whitespace, color = {fg=colors.orange, gui='bold'}},
+      { 'diagnostics',
+        symbols = {error = 'E:', warn = 'W:', info = 'I:', hint = 'H:'},
+        diagnostics_color = {
+          --error = 'ErrorMsg',  -- 也可以使用 highlight group.
+          error = {fg=colors.red, gui='bold'},        -- Changes diagnostics' error color.
+          warn  = {fg=colors.orange, gui='bold'},     -- Changes diagnostics' warn color.
+          info  = {fg=colors.blue, gui='bold'},       -- Changes diagnostics' info color.
+          hint  = {fg=colors.light_grey, gui='bold'}, -- Changes diagnostics' hint color.
+        },
+      }
+    },
     lualine_y = {},
     lualine_z = {}
   },
