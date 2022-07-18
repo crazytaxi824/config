@@ -52,7 +52,7 @@ return {
 
 # LSP 插件关系
 
-## vim.lsp 
+## vim.lsp
 
 vim.lsp 是 neovim 自带的 lsp client 实例, 实现了向 lsp server 请求 method 和 handler 用于处理 server 返回的 response.
 
