@@ -47,7 +47,7 @@ ts_ctx.setup{
 
 --- highlight --------------------------------------------------------------------------------------
 --vim.cmd [[hi TreesitterContext ctermfg=]]  -- default link to Pmenu
-vim.cmd [[ hi! TreesitterContextLineNumber cterm=bold ctermfg=75 ctermbg=233 ]]
+vim.cmd [[ hi TreesitterContextLineNumber cterm=bold ctermfg=75 ctermbg=233 ]]
 
 
 

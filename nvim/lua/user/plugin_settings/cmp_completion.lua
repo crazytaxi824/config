@@ -156,24 +156,24 @@ cmp.setup {
 --- Cmp completion menu color ---------------------------------------------------------------------- {{{
 -- https://github.com/hrsh7th/nvim-cmp/wiki/Menu-Appearance
 --- 匹配文字的颜色
-vim.cmd [[highlight! CmpItemAbbrMatch ctermfg=213]]
-vim.cmd [[highlight! CmpItemAbbrMatchFuzzy ctermfg=213]]
+vim.cmd [[hi CmpItemAbbrMatch ctermfg=213]]
+vim.cmd [[hi CmpItemAbbrMatchFuzzy ctermfg=213]]
 
-vim.cmd [[highlight! link CmpItemKindInterface Type]]
-vim.cmd [[highlight! link CmpItemKindClass Type]]
-vim.cmd [[highlight! link CmpItemKindStruct Type]]
-vim.cmd [[highlight! link CmpItemKindTypeParameter Type]]
-vim.cmd [[highlight! link CmpItemKindFunction Function]]
-vim.cmd [[highlight! link CmpItemKindMethod Function]]
-vim.cmd [[highlight! link CmpItemKindKeyword Keyword]]
-vim.cmd [[highlight! link CmpItemKindModule String]]
+vim.cmd [[hi! link CmpItemKindInterface Type]]
+vim.cmd [[hi! link CmpItemKindClass Type]]
+vim.cmd [[hi! link CmpItemKindStruct Type]]
+vim.cmd [[hi! link CmpItemKindTypeParameter Type]]
+vim.cmd [[hi! link CmpItemKindFunction Function]]
+vim.cmd [[hi! link CmpItemKindMethod Function]]
+vim.cmd [[hi! link CmpItemKindKeyword Keyword]]
+vim.cmd [[hi! link CmpItemKindModule String]]
 
 -- grey
-vim.cmd [[highlight! CmpItemAbbrDeprecated ctermfg=244 cterm=underline]]  -- 弃用的 suggestion.
-vim.cmd [[highlight! CmpItemKindText ctermfg=246]]
+vim.cmd [[hi CmpItemAbbrDeprecated ctermfg=244 cterm=underline]]  -- 弃用的 suggestion.
+vim.cmd [[hi CmpItemKindText ctermfg=246]]
 
 -- light blue
-vim.cmd [[hi! CmpItemKindSnippet ctermfg=75]]
+vim.cmd [[hi CmpItemKindSnippet ctermfg=75]]
 
 -- -- }}}
 

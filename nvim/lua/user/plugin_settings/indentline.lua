@@ -57,12 +57,12 @@ indent_blankline.setup({
 })
 
 --- 设置颜色 ---------------------------------------------------------------------------------------
-vim.cmd [[highlight IndentBlanklineIndent1 ctermfg=172]]
-vim.cmd [[highlight IndentBlanklineIndent2 ctermfg=25]]
-vim.cmd [[highlight IndentBlanklineIndent3 ctermfg=29]]
-vim.cmd [[highlight IndentBlanklineIndent4 ctermfg=128]]
-vim.cmd [[highlight IndentBlanklineIndent5 ctermfg=198]]
-vim.cmd [[highlight IndentBlanklineIndent6 ctermfg=105]]
+vim.cmd [[hi IndentBlanklineIndent1 ctermfg=172]]
+vim.cmd [[hi IndentBlanklineIndent2 ctermfg=25]]
+vim.cmd [[hi IndentBlanklineIndent3 ctermfg=29]]
+vim.cmd [[hi IndentBlanklineIndent4 ctermfg=128]]
+vim.cmd [[hi IndentBlanklineIndent5 ctermfg=198]]
+vim.cmd [[hi IndentBlanklineIndent6 ctermfg=105]]
 
 
 

@@ -41,11 +41,11 @@ vim.g.tagbar_visibility_symbols = {
 -- -- }}}
 
 --- Tagbar 颜色 ------------------------------------------------------------------------------------
-vim.cmd [[ hi link TagbarKind Keyword ]]  -- tag group name, "imports", "functions"
-vim.cmd [[ hi! TagbarNestedKind ctermfg=75 ]]  -- 内部颜色 [fields] [methods]
-vim.cmd [[ hi link TagbarScope Type ]]  -- class, struct name
-vim.cmd [[ hi link TagbarType Type ]]
-vim.cmd [[ hi! TagbarSignature ctermfg=220 ]]
+vim.cmd [[ hi! link TagbarKind Keyword ]]  -- tag group name, "imports", "functions"
+vim.cmd [[ hi TagbarNestedKind ctermfg=75 ]]  -- 内部颜色 [fields] [methods]
+vim.cmd [[ hi! link TagbarScope Type ]]  -- class, struct name
+vim.cmd [[ hi! link TagbarType Type ]]
+vim.cmd [[ hi TagbarSignature ctermfg=220 ]]
 
 --- keymaps ----------------------------------------------------------------------------------------
 vim.keymap.set('n', '<leader>.', ':TagbarToggle<CR>', { noremap = true, silent = true })

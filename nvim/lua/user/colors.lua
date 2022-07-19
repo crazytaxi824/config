@@ -5,9 +5,6 @@
 --    'termfg, termbg'     表示 16 色 terminal
 --    'term, cterm'        表示样式, underline, bold, italic ...
 --
---    ':hi links <group1> <group2>'   表示直接用已经定义好的 color scheme.
---    ':hi clear <group>'             表示删除颜色
---
 --- 常用颜色
 --    ctermfg=188/252   白色   -  一般文字颜色
 --    ctermfg=85        暗金色 - 函数名, 函数调用
@@ -19,10 +16,28 @@
 --    ctermfg=75        蓝色   - package, import, func
 --    ctermfg=43        淡绿色 - 数据类型, 数字(int, bool)
 --    ctermfg=71        绿色   - comment 注释 (:hi Comment)
+--
+--- NOTE: 只有 ':hi link' 才有 [!] 设置.
+--- 如果是 ':hi <group>' 只会覆盖对应的 kv 颜色值.
+--- eg: 'hi Foo cterm=bold ctermfg=201 ctermbg=233'
+--      'hi Foo ctermfg=190'
+--      最终结果为 'hi Foo cterm=bold ctermfg=190 ctermbg=233'
+--
+--- 颜色设置 cmd
+--    ':hi <group> ctermfg...'           Set color
+--    ':hi clear <group>'                Reset to default color
+--    ':hi default <group> ctermfg...'   Set default color, 如果使用 `:hi clear <group>` 会回到这个颜色.
+--
+--    ':hi links <group1> <group2>'      将 <group1> 的颜色设置为 <group2> 的颜色.
+--                                       如果 <group2> 颜色变化, <group1> 颜色也会随之变化.
+--    ':hi! links <group1> <group2>'     相当于 ':hi clear <group>' && ':hi links <group1> <group2>'
+--    ':hi default links <group1> <group2>'    将 <group1> default 颜色设置为 <group2> 的颜色.
+--    ':hi! default links <group1> <group2>'   相当于 ':hi clear <group>' && ':hi default links <group1> <group2>'
+--
+--- lua 设置颜色: `:help nvim_set_hl`
+--    vim.api.nvim_set_hl()
+--
 -- -- }}}
-
---- vim.api.nvim_set_hl()
---- `:help nvim_set_hl`
 
 --- editor -----------------------------------------------------------------------------------------
 vim.cmd('hi Normal ctermbg=NONE ctermfg=188')      -- 透明背景 / 深色背景 - 一般文字颜色 188/252
@@ -56,33 +71,35 @@ vim.cmd('hi FloatBorder ctermfg=233')   -- VVI: Floating Window border 颜色需
 
 vim.cmd('hi WildMenu cterm=bold ctermfg=235 ctermbg=39')     -- command 模式自动补全
 
-vim.cmd('hi! HLSearchWord cterm=None ctermfg=232 ctermbg=232') -- 自定义 highling next search blink 的颜色
+vim.cmd('hi HLSearchWord cterm=None ctermfg=232 ctermbg=232') -- 自定义 highling next search blink 的颜色
 
-vim.cmd('hi! Directory cterm=bold,underline ctermfg=246 ctermbg=234')  -- for bufferline 在 nvim-tree 显示 "File Explorer"
+vim.cmd('hi Directory cterm=bold,underline ctermfg=246 ctermbg=234')  -- for bufferline 在 nvim-tree 显示 "File Explorer"
 
 --- 基础颜色 ---------------------------------------------------------------------------------------
 vim.cmd('hi Keyword ctermfg=170')                -- 最主要的颜色
 vim.cmd('hi Function ctermfg=85')                -- func <Function> {}, 定义 & call func 都使用该颜色
 vim.cmd('hi Type ctermfg=43 cterm=italic')       -- type <Type> struct
 vim.cmd('hi Constant ctermfg=188')               -- const <Constant> = 100
-vim.cmd('hi link Operator Normal')               -- = != == > < ...
 vim.cmd('hi Identifier ctermfg=117 cterm=None')  -- 取消 bold
 
--- vim.cmd('hi Statement ctermfg=170')   -- TODO
--- vim.cmd('hi Structure ctermfg=117')
+vim.cmd('hi Conditional ctermfg=213')      -- if, switch, case ...
+vim.cmd('hi! link Repeat Conditional')     -- for range
+vim.cmd('hi! link Statement Conditional')  -- 默认 syntax 中 'package' & 'import' 关键字
+vim.cmd('hi! link Include Conditional')    -- package, import ...
 
-vim.cmd('hi Conditional ctermfg=213')    -- if, switch, case ...
-vim.cmd('hi link Repeat Conditional')    -- for range
-vim.cmd('hi link Include Conditional')   -- package, import ...
-vim.cmd('hi link Delimiter Normal')      -- 括号颜色, [] () {}
+vim.cmd('hi! link Delimiter Normal')       -- 括号颜色, [] () {}
+vim.cmd('hi! link Operator Normal')        -- = != == > < ...
+
+--vim.cmd('hi Structure ctermfg=117')
 
 vim.cmd('hi String ctermfg=173')         -- "abc"
 vim.cmd('hi Character ctermfg=173')      -- 'a'
-vim.cmd('hi Special ctermfg=117')        -- \n \t \" ... escape string
+vim.cmd('hi Special ctermfg=75')        --  null | undefined
+vim.cmd('hi SpecialChar ctermfg=117')    -- \n \t \" ... escape string
 vim.cmd('hi Number ctermfg=43')          -- 100, int, uint ...
-vim.cmd('hi link Float Number')          -- 10.02 float64, float32
 vim.cmd('hi Boolean ctermfg=75')         -- true / false
 vim.cmd('hi PreProc ctermfg=75')         -- tsxTSVariableBuiltin, tsxTSConstBuiltin ...
+vim.cmd('hi! link Float Number')         -- 10.02 float64, float32
 
 --- diff 颜色 --------------------------------------------------------------------------------------
 vim.cmd('hi DiffAdd ctermfg=188 ctermbg=22')
@@ -93,7 +110,7 @@ vim.cmd('hi DiffText cterm=None ctermfg=188 ctermbg=160')
 -- diff mode 模式下 CursorLine 样式
 vim.cmd [[
   if &diff
-    highlight CursorLine cterm=underline
+    hi CursorLine cterm=underline
   endif
 ]]
 
@@ -102,18 +119,7 @@ vim.cmd('hi Title cterm=bold ctermfg=114')      -- markdown Title
 vim.cmd('hi Conceal ctermfg=117 ctermbg=None')  -- markdown 特殊符号颜色
 vim.cmd('hi Label ctermfg=117')                 -- json key color
 
---- treesitter 颜色 --------------------------------------------------------------------------------
-vim.cmd('hi link TSProperty Normal')            -- struct/class field
-vim.cmd('hi link TSField Normal')
-vim.cmd('hi link TSParameter Normal')           -- 入参出参
-vim.cmd('hi link TSKeywordReturn Conditional')  -- return
-vim.cmd('hi link TSNamespace Normal')           -- package <Namespace>
-vim.cmd('hi link TSFuncBuiltin Function')       -- new() make() copy() ...
-vim.cmd('hi link TSConstructor Normal')         -- import <TSConstructor> from 'react';
-
-vim.cmd('hi TSLiteral ctermbg=238')     -- NOTE: markdown `code`
-
---- diagnostics 颜色设置 ---
+--- diagnostics 颜色设置 ---------------------------------------------------------------------------
 --- DiagnosticInfo - lua global function name begin with lower-case.
 --- DiagnosticHint - lua function not used.
 
@@ -140,6 +146,26 @@ vim.cmd('hi DiagnosticUnderlineHint ctermfg=244')
 vim.cmd('hi LspReferenceText ctermbg=238')
 vim.cmd('hi LspReferenceRead ctermbg=238')
 vim.cmd('hi LspReferenceWrite ctermbg=238')
+
+--- treesitter 颜色 --------------------------------------------------------------------------------
+vim.cmd('hi! link TSField Normal')               -- golang struct field
+vim.cmd('hi! link TSParameter Normal')           -- 入参出参
+vim.cmd('hi! link TSKeywordReturn Conditional')  -- return
+vim.cmd('hi! link TSNamespace Normal')           -- package <Namespace>
+vim.cmd('hi! link TSFuncBuiltin Function')       -- new() make() copy() ...
+
+vim.cmd('hi TSLiteral ctermbg=238')     -- NOTE: markdown `code`
+
+--- for typescript, html
+vim.cmd('hi! link TSConstructor Normal')  -- import <TSConstructor> from 'react'
+vim.cmd('hi TSProperty ctermfg=117')      -- like TSField in golang
+
+--- <div></div>
+vim.cmd('hi TSTag ctermfg=74')             -- <div></div>, html 内置标签文字颜色 div
+vim.cmd('hi TSTagDelimiter ctermfg=243')   -- <div></div>, <> 括号颜色
+vim.cmd('hi! link TSTagAttribute TSProperty')  -- <... width=..., height=... >
+
+--- TODO `autocmd FileType typescriptreact` ...
 
 
 

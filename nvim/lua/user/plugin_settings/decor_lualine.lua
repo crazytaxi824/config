@@ -240,8 +240,8 @@ lualine.setup {
 
 --- 无法使用 lualine 的情况下 StatusLine 颜色 ------------------------------------------------------
 --- eg: tagbar 有自己设置的 ':set statusline?'
-vim.cmd('hi! StatusLine cterm=NONE ctermfg=' .. colors.light_green .. ' ctermbg=' .. colors.black)  -- active
-vim.cmd('hi! StatusLineNC cterm=NONE ctermfg=' .. colors.light_grey .. ' ctermbg=' .. colors.black) -- inactive
+vim.cmd('hi StatusLine cterm=NONE ctermfg=' .. colors.light_green .. ' ctermbg=' .. colors.black)  -- active
+vim.cmd('hi StatusLineNC cterm=NONE ctermfg=' .. colors.light_grey .. ' ctermbg=' .. colors.black) -- inactive
 
 
 

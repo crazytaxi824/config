@@ -95,13 +95,13 @@ ts_configs.setup {
 }
 
 --- rainbow colors ---------------------------------------------------------------------------------
-vim.cmd [[highlight rainbowcol1 ctermfg=220]]  -- yellow
-vim.cmd [[highlight rainbowcol2 ctermfg=33]]   -- blue
-vim.cmd [[highlight rainbowcol3 ctermfg=81]]   -- cyan
-vim.cmd [[highlight rainbowcol4 ctermfg=206]]  -- magenta
-vim.cmd [[highlight rainbowcol5 ctermfg=42]]   -- green
-vim.cmd [[highlight rainbowcol6 ctermfg=167]]  -- red
-vim.cmd [[highlight rainbowcol7 ctermfg=248]]  -- grey
+--vim.cmd [[hi rainbowcol1 ctermfg=220]]  -- yellow
+--vim.cmd [[hi rainbowcol2 ctermfg=33]]   -- blue
+--vim.cmd [[hi rainbowcol3 ctermfg=81]]   -- cyan
+--vim.cmd [[hi rainbowcol4 ctermfg=206]]  -- magenta
+--vim.cmd [[hi rainbowcol5 ctermfg=42]]   -- green
+--vim.cmd [[hi rainbowcol6 ctermfg=167]]  -- red
+--vim.cmd [[hi rainbowcol7 ctermfg=248]]  -- grey
 
 --- HACK: autocmd lazy highlight -------------------------------------------------------------------
 --- NOTE: 使用 lazy 方式启动 highlight, 提前加载 treesitter 会严重拖慢文件打开速度.
