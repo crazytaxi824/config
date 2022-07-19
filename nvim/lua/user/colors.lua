@@ -49,13 +49,12 @@ vim.cmd('hi WarningMsg ctermfg=236 ctermbg=215')   -- echohl 颜色, XXX FIXME B
 vim.cmd('hi Todo ctermbg=28 ctermfg=188')          -- TODO, HACK 颜色
 vim.cmd('hi SpecialComment ctermbg=63 ctermfg=188')  -- NOTE: DEBUG: FOO: 颜色
 
-vim.cmd('hi PmenuSel cterm=underline,bold ctermfg=None ctermbg=240')  -- Complettion Menu 选中项颜色
-vim.cmd('hi Pmenu ctermfg=188 ctermbg=233')  -- VVI: Completion Menu & Floating Window 背景颜色
-vim.cmd('hi FloatBorder ctermfg=233')   -- VVI: Floating Window border 颜色需要和 Pmenu 的背景色相同.
+vim.cmd('hi PmenuSel cterm=underline,bold ctermfg=None ctermbg=238')  -- Complettion Menu 选中项颜色
+vim.cmd('hi Pmenu ctermfg=188 ctermbg=233')  -- VVI: Completion Menu & Floating Window 背景颜色, 或者 bg=236.
+vim.cmd('hi FloatBorder ctermfg=233')   -- VVI: Floating Window border 颜色需要和 Pmenu 的背景色相同 (bg=236)
                                         -- border = {"▄","▄","▄","█","▀","▀","▀","█"}
 
 vim.cmd('hi WildMenu cterm=bold ctermfg=235 ctermbg=39')     -- command 模式自动补全
-vim.cmd('hi! StatusLine cterm=None ctermfg=145 ctermbg=236') -- command 自动补全时 statusLine 颜色
 
 vim.cmd('hi! HLSearchWord cterm=None ctermfg=232 ctermbg=232') -- 自定义 highling next search blink 的颜色
 
