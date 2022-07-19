@@ -86,13 +86,15 @@ dap.configurations.go = {
 -- `DapStopped` to indicate where the debugee is stopped (default: `→`)
 -- `DapBreakpointRejected` to indicate breakpoints rejected by the debug adapter (default: `R`)
 vim.cmd([[
-  hi DapBreakpoint ctermfg=190
-  hi DapStopped ctermfg=75
-  hi DapStoppedLine ctermbg=238
+  hi DapBreakpointHL ctermfg=190
+  hi DapBreakpointRejectedHL ctermfg=190
+  hi DapStoppedHL ctermfg=75
+  hi DapStoppedLineHL ctermbg=238
 ]])
 
-vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "DapBreakpoint", numhl = "", linehl="" })
-vim.fn.sign_define("DapStopped", { text = " →", texthl = "DapStopped", numhl = "", linehl="DapStoppedLine" })
+vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "DapBreakpointHL", numhl = "", linehl="" })
+vim.fn.sign_define("DapBreakpointRejected", { text = "◌", texthl = "DapBreakpointRejectedHL", numhl = "", linehl="" })
+vim.fn.sign_define("DapStopped", { text = " →", texthl = "DapStoppedHL", numhl = "", linehl="DapStoppedLineHL" })
 -- -- }}}
 
 --- repl / debug console command --- {{{
@@ -128,22 +130,22 @@ dapui.setup({
   layouts = {
     {
       elements = {
-      -- Elements can be strings or table with id and size keys.
-        { id = "scopes", size = 0.25 },
+        --{ id = "scopes", size = 0.25 },  -- Elements can be strings or table with id and size keys.
+        "scopes",
         "breakpoints",
         "stacks",
         "watches",
       },
-      size = 60, -- columns (width)
       position = "left",
+      size = 0.32, -- columns (width)
     },
     {
       elements = {
         "repl",  -- REPL / Debug console
         --"console",  -- dapui console, 在 go 中没用.
       },
-      size = 0.25, -- 25% of total lines (height)
       position = "bottom",
+      size = 0.25, -- 25% of total lines (height)
     },
   },
 
@@ -257,8 +259,10 @@ local debug_keymaps = {
   {'n', '<leader>cs', dap.continue,  opt, 'Debug - Start(Continue)'},
   {'n', '<leader>ce', dap.terminate, opt, 'Debug - Stop(End)'},
   {'n', '<leader>cr', dap.run_last,  opt, 'Debug - Restart'},
-  {'n', '<leader>cc', dapui.eval,    opt, 'Debug - Popup Value under cursor'},  --- NOTE: 这里是 dapui, 运行两次进入 float window.
   {'n', '<leader>cq', close_debug_tab_and_buffers, opt, 'Debug - Quit'},
+
+  --- NOTE: 这里是 dapui 的方法 eval(), 运行两次进入 float window.
+  {'n', '<leader>cc', function() dapui.eval() dapui.eval() end, opt, 'Debug - Popup Value under cursor'},
 
   --{'n', '<F9>',  dap.toggle_breakpoint, opt},  -- breakpoint 设置应该只针对源代码启用.
   {'n', '<F21>', dap.clear_breakpoints, opt},  -- <S-f9>
