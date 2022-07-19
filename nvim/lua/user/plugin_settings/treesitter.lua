@@ -104,6 +104,7 @@ vim.cmd [[highlight rainbowcol6 ctermfg=167]]  -- red
 vim.cmd [[highlight rainbowcol7 ctermfg=248]]  -- grey
 
 --- HACK: autocmd lazy highlight -------------------------------------------------------------------
+--- NOTE: 使用 lazy 方式启动 highlight, 提前加载 treesitter 会严重拖慢文件打开速度.
 --- 参考源代码: enable_module() 针对 buffer 设置 module; enable_all() 是针对全局.
 --- https://github.com/nvim-treesitter/nvim-treesitter/ - > /lua/nvim-treesitter/configs.lua
 local parsers = require("nvim-treesitter.parsers")
@@ -132,6 +133,7 @@ vim.api.nvim_create_autocmd('FileType', {
   pattern = {"*"},
   callback = function(params)
     --- NOTE: 这里使用 vim.schedule() 无法获得想要的效果.
+    --- 在文件打开 N(ms) 之后再 highlight 文本.
     vim.defer_fn(function()
       enable_module('highlight', params.buf)
     end, 100)  -- delay 100ms, 象征意义, 设置为 1ms 加载速度也差不多.
