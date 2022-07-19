@@ -72,10 +72,10 @@ local diagnostics_opts = {
   --timeout = 3000,   -- linter 超时时间, 全局设置了 default_timeout.
   --diagnostics_format = "#{m} [null-ls:#{s}]",  -- 只对单个 linter 生效.
 
-  --- post hook, 这里是修改 error msg 的 severity level. NOTE: 会导致 diagnostics_format 设置失效.
+  --- NOTE: Post Hook, 会导致 diagnostics_format 设置失效. 可以给单独 linter 设置 post hook.
   --- This option is not compatible with 'diagnostics_format'.
   -- diagnostics_postprocess = function(diagnostic)
-  --   --- 会导致所有 error msg 都是设置的 severity level, ERROR | WARN | INFO | HINT
+  --   --- 会导致所有 error msg 都是设置的 severity level, ERROR(1) | WARN(2) | INFO(3) | HINT(4)
   --   diagnostic.severity = vim.diagnostic.severity.WARN
   --
   --   --- 相当于重新设置 diagnostics_format.
