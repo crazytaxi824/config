@@ -34,6 +34,10 @@ local function lsp_highlight(client)
 end
 -- -- }}}
 
+--- 官网设置. https://github.com/hrsh7th/nvim-cmp/ -> /lua/cmp/config/default.lua
+--- 默认 150. 受到 nvim-cmp performance{} 影响. 这里设置应该比 nvim-cmp 更高.
+M.flags = {debounce_text_changes = 500}
+
 --- NOTE: on_attach - 加载 Key mapping & highlight 设置 --------------------------------------------
 ---       这里传入的 client 是正在加载的 lsp_client, vim.inspect(client) 中可以看到 codeActionKind.
 M.on_attach = function(client, bufnr)
@@ -70,7 +74,8 @@ M.capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
 
 --- https://github.com/neovim/nvim-lspconfig/wiki/Project-local-settings
 --- NOTE: LSP settings Hook ------------------------------------------------------------------------
---- 这里是为了能单独给 project 设置 LSP setting
+--- 这里是为了能单独给 project 设置 LSP setting.
+--- init() runs Before attach().
 M.on_init = function(client)
   --- 加载项目本地设置, 覆盖 global settings.
   if __Proj_local_settings.exists("settings", client.name) then

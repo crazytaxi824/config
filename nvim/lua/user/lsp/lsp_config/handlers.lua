@@ -17,6 +17,7 @@
 --   }
 -- )
 
+--- publishDiagnostics 是用来 diagnostic 的.
 -- vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 --   vim.lsp.handlers["textDocument/publishDiagnostics"], {
 --     -- Enable underline, use default values

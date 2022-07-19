@@ -42,6 +42,13 @@ local kind_icons = {  --- {{{
 
 cmp.setup {
   preselect = cmp.PreselectMode.None,  -- NOTE: cmp.PreselectMode.None | cmp.PreselectMode.Item
+
+  --- VVI: 会影响 lspconfig[xxx].setup({..., flags = {debounce_text_changes = xxx }}) 设置.
+  performance = {
+    debounce = 240,  --- 发送更新请求的时间. 默认 80.
+    throttle = 80,   --- 本地更新 completionItem 的时间. 默认 40.
+  },
+
   snippet = {  -- 给 "saadparwaiz1/cmp_luasnip" 设置 snippet
     expand = function(args)
       luasnip.lsp_expand(args.body) -- For "L3MON4D3/LuaSnip" users.
@@ -50,6 +57,7 @@ cmp.setup {
       --vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
     end,
   },
+
   sources = {
     -- VVI: 顺序很重要
     { name = "luasnip" },   -- "saadparwaiz1/cmp_luasnip" -> "L3MON4D3/LuaSnip"
@@ -63,10 +71,12 @@ cmp.setup {
     -- { name = 'ultisnips' }, -- For ultisnips users -- "SirVer/ultisnips" python
     -- }}}
   },
+
   window = {
     --completion = cmp.config.window.bordered({border = "single"}),  -- `:help nvim_open_win()`
     --documentation = cmp.config.window.bordered({border = "single"}),
   },
+
   -- completion 菜单显示
   formatting = {
     fields = { "abbr", "kind", "menu" },
@@ -83,10 +93,12 @@ cmp.setup {
       return vim_item
     end,
   },
+
   experimental = {
     ghost_text = false,
     native_menu = false,   -- VVI: disable it.
   },
+
   -- key mapping -------
   mapping = {
     ["<Up>"] = cmp.mapping.select_prev_item(),

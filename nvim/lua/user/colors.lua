@@ -118,7 +118,7 @@ vim.cmd('hi TSLiteral ctermbg=238')     -- NOTE: markdown `code`
 --- DiagnosticInfo - lua global function name begin with lower-case.
 --- DiagnosticHint - lua function not used.
 
---- diagnostics popup text color.
+--- diagnostics popup/floating window text color.
 vim.cmd('hi DiagnosticError ctermfg=167')
 vim.cmd('hi DiagnosticWarn ctermfg=215')
 vim.cmd('hi DiagnosticInfo ctermfg=75')
@@ -130,7 +130,7 @@ vim.cmd('hi DiagnosticHint ctermfg=246')
 --vim.cmd('hi DiagnosticSignInfo ctermfg=75')
 vim.cmd('hi DiagnosticSignHint ctermfg=244')
 
---- diagnostics error words, 默认没有颜色, 只有 underline
+--- diagnostics error 'source code' color.
 vim.cmd('hi DiagnosticUnderlineError cterm=bold,underline ctermfg=167')
 --vim.cmd('hi DiagnosticUnderlineWarn cterm=bold,underline ctermfg=167')
 --vim.cmd('hi DiagnosticUnderlineInfo ctermfg=75')
