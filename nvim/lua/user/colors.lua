@@ -76,11 +76,11 @@ vim.cmd('hi HLSearchWord cterm=None ctermfg=232 ctermbg=232') -- 自定义 highl
 vim.cmd('hi Directory cterm=bold,underline ctermfg=246 ctermbg=234')  -- for bufferline 在 nvim-tree 显示 "File Explorer"
 
 --- 基础颜色 ---------------------------------------------------------------------------------------
-vim.cmd('hi Keyword ctermfg=170')                -- 最主要的颜色
-vim.cmd('hi Function ctermfg=85')                -- func <Function> {}, 定义 & call func 都使用该颜色
-vim.cmd('hi Type ctermfg=43 cterm=italic')       -- type <Type> struct
-vim.cmd('hi Constant ctermfg=188')               -- const <Constant> = 100
-vim.cmd('hi Identifier ctermfg=117 cterm=None')  -- 取消 bold
+vim.cmd('hi Keyword ctermfg=170')           -- 最主要的颜色
+vim.cmd('hi Function ctermfg=85')           -- func <Function> {}, 定义 & call func 都使用该颜色
+vim.cmd('hi Type ctermfg=43 cterm=italic')  -- type <Type> struct
+vim.cmd('hi! link Identifier Type')         -- typescriptTypeReference
+vim.cmd('hi Constant ctermfg=188')          -- const <Constant> = 100
 
 vim.cmd('hi Conditional ctermfg=213')      -- if, switch, case ...
 vim.cmd('hi! link Repeat Conditional')     -- for range
@@ -94,7 +94,7 @@ vim.cmd('hi! link Operator Normal')        -- = != == > < ...
 
 vim.cmd('hi String ctermfg=173')         -- "abc"
 vim.cmd('hi Character ctermfg=173')      -- 'a'
-vim.cmd('hi Special ctermfg=75')        --  null | undefined
+vim.cmd('hi Special ctermfg=75')         --  null (tsxTSConstBuiltin) | undefined (tsxTSVariableBuiltin)
 vim.cmd('hi SpecialChar ctermfg=117')    -- \n \t \" ... escape string
 vim.cmd('hi Number ctermfg=43')          -- 100, int, uint ...
 vim.cmd('hi Boolean ctermfg=75')         -- true / false
@@ -148,24 +148,32 @@ vim.cmd('hi LspReferenceRead ctermbg=238')
 vim.cmd('hi LspReferenceWrite ctermbg=238')
 
 --- treesitter 颜色 --------------------------------------------------------------------------------
+--- treesitter global 颜色设置
 vim.cmd('hi! link TSField Normal')               -- golang struct field
 vim.cmd('hi! link TSParameter Normal')           -- 入参出参
 vim.cmd('hi! link TSKeywordReturn Conditional')  -- return
 vim.cmd('hi! link TSNamespace Normal')           -- package <Namespace>
 vim.cmd('hi! link TSFuncBuiltin Function')       -- new() make() copy() ...
+vim.cmd('hi! link TSFunction Function')
+vim.cmd('hi! link TSMethod Function')
 
-vim.cmd('hi TSLiteral ctermbg=238')     -- NOTE: markdown `code`
+--- markdown
+vim.cmd('hi markdown_inlineTSStrong ctermbg=238')  -- `code`
+vim.cmd('hi markdownTSPunctSpecial ctermfg=246')   -- `- * #`
 
 --- for typescript, html
 vim.cmd('hi! link TSConstructor Normal')  -- import <TSConstructor> from 'react'
 vim.cmd('hi TSProperty ctermfg=117')      -- like TSField in golang
 
+--- set vim-syntax color to match treesitter color
+vim.cmd('hi! link typescriptMember TSProperty')
+vim.cmd('hi! link typescriptInterfaceName TSType')
+vim.cmd('hi! link typescriptExport TSKeyword')
+
 --- <div></div>
 vim.cmd('hi TSTag ctermfg=74')             -- <div></div>, html 内置标签文字颜色 div
 vim.cmd('hi TSTagDelimiter ctermfg=243')   -- <div></div>, <> 括号颜色
 vim.cmd('hi! link TSTagAttribute TSProperty')  -- <... width=..., height=... >
-
---- TODO `autocmd FileType typescriptreact` ...
 
 
 
