@@ -121,7 +121,9 @@ local linter_settings = {
 
   --- python, flake8, mypy
   diagnostics.flake8.with(__Proj_local_settings.keep_extend('lint', 'flake8', diagnostics_opts)),
-  diagnostics.mypy.with(__Proj_local_settings.keep_extend('lint', 'mypy', diagnostics_opts)),
+  diagnostics.mypy.with(__Proj_local_settings.keep_extend('lint', 'mypy', {
+    extra_args = {"--follow-imports=silent", "--ignore-missing-imports"},
+  }, diagnostics_opts)),
 
   --- protobuf, buf
   diagnostics.buf.with(__Proj_local_settings.keep_extend('lint', 'buf', diagnostics_opts)),
@@ -176,12 +178,12 @@ null_ls.setup({
       util.root_pattern('.git','go.mod','package.json','tsconfig.json','jsconfig.json')(params.bufname)
   end,
 
+  --- 如果 error msg 没有特别指明 severity level, 则会使用下面的设置.
+  fallback_severity = vim.diagnostic.severity.WARN,
+
   --- NOTE: 非常耗资源, 调试完后设置为 false.
   --- is the same as setting log.level to "trace" 记录 log, `:NullLsLog` 打印 log.
   debug = false,
-
-  --- 如果 error msg 没有特别指明 severity level, 则会使用下面的设置.
-  fallback_severity = vim.diagnostic.severity.WARN,
 
   --- log 输出到 stdpath('cache') .. 'null-ls.log'
   log = {
