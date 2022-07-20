@@ -48,6 +48,7 @@ local function hl_search(key)
     return
   end
 
+  --- NOTE: `:help /ordinary-atom`, `\%#` 意思是从 cursor 位置开始匹配.
   local search_pat = '\\%#' .. vim.fn.getreg('/')
   local blink_time = '40m'
   for _ = 1, 2, 1 do  -- 循环闪烁
@@ -63,7 +64,7 @@ end
 --- word: bool, 是否使用 \<word\>
 local function hl_visual_search(key, whole_word)
   --- 利用 register "f
-  vim.cmd[[normal! "fy]]  -- copy VISUAL select to register f
+  vim.cmd[[normal! "fy]]  -- copy VISUAL select to register 'f'
   local tmp_search = vim.fn.getreg("f")
   if whole_word then
     vim.fn.setreg('/', '\\<' .. tmp_search .. '\\>')

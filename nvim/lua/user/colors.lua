@@ -57,7 +57,8 @@ vim.cmd('hi ColorColumn ctermbg=238')              -- textwidth column 颜色
 vim.cmd('hi QuickFixLine cterm=bold ctermbg=237 ctermfg=75')  -- Quick Fix 选中行颜色
 
 vim.cmd('hi IncSearch ctermfg=0 ctermbg=213 cterm=None')  -- / ? 搜索颜色
-vim.cmd('hi Search ctermfg=0 ctermbg=191')                  -- / ? * # g* g# 搜索颜色
+vim.cmd('hi Search ctermfg=0 ctermbg=191')                -- / ? * # g* g# 搜索颜色
+vim.cmd('hi HLSearchWord cterm=None ctermfg=232 ctermbg=232') -- 自定义 highling next search blink 的颜色
 
 vim.cmd('hi ErrorMsg ctermfg=253 ctermbg=203')     -- echoerr 颜色
 vim.cmd('hi WarningMsg ctermfg=236 ctermbg=215')   -- echohl 颜色, XXX FIXME BUG 颜色
@@ -70,8 +71,6 @@ vim.cmd('hi FloatBorder ctermfg=233')   -- VVI: Floating Window border 颜色需
                                         -- border = {"▄","▄","▄","█","▀","▀","▀","█"}
 
 vim.cmd('hi WildMenu cterm=bold ctermfg=235 ctermbg=39')     -- command 模式自动补全
-
-vim.cmd('hi HLSearchWord cterm=None ctermfg=232 ctermbg=232') -- 自定义 highling next search blink 的颜色
 
 vim.cmd('hi Directory cterm=bold,underline ctermfg=246 ctermbg=234')  -- for bufferline 在 nvim-tree 显示 "File Explorer"
 
