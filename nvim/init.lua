@@ -52,6 +52,7 @@
 --                              -- feedkeys("\<CR>") simulates pressing of the <Enter> key.
 --                              -- But feedkeys('\<CR>') pushes 5 characters.
 --
+--    vim.fn.json_encode(table) / vim.fn.json_decode(string)  -- json 处理.
 --    vim.fn.split({string}, {pattern}, {keepempty})  -- 默认 keepempty=0(false)
 --    vim.fn.join({list}, sep)
 --

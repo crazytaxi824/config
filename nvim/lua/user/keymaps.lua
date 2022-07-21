@@ -67,7 +67,7 @@ local my_search_sign = {
   group = "MySearchSignGroup",
   sign = "MySearchSign",
   id = 10010,
-  text = " ⚲",  -- 类似 icon, ⌕☌⚲⚯
+  text = "⚲",  -- 类似 icon, ⌕☌⚲⚯
 }
 --- define my_search_sign
 vim.fn.sign_define(my_search_sign.sign, {text=my_search_sign.text, texthl="IncSearch", numhl="IncSearch"})
@@ -104,7 +104,7 @@ local function hl_search(key)
 end
 
 --- NOTE: 这里必须使用 global function, 因为还没找到使用 vim.api 执行 '/' 的方法.
-function __Delete_search_hl()
+function _Delete_search_hl()
   --- VVI: 删除之前的 highlight.
   if search_hl_cache then
     vim.fn.matchdelete(search_hl_cache.hl_id, search_hl_cache.win_id)
@@ -317,8 +317,8 @@ local keymaps = {
 
   --- NOTE: 这里不能使用 silent, 否则 command line 中不显示 '?' 和 '/'
   --- ':echo v:hlsearch' 显示目前 hlsearch 状态.
-  {'n', '?', "<cmd>lua __Delete_search_hl()<CR>?", {noremap=true}},
-  {'n', '/', "<cmd>lua __Delete_search_hl()<CR>/", {noremap=true}},
+  {'n', '?', "<cmd>lua _Delete_search_hl()<CR>?", {noremap=true}},
+  {'n', '/', "<cmd>lua _Delete_search_hl()<CR>/", {noremap=true}},
 
   --- CTRL -----------------------------------------------------------------------------------------
   {'n', '<C-s>', ':update<CR>', opt},

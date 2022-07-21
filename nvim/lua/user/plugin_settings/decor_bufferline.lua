@@ -24,7 +24,7 @@ local colors = {
   indicator_fg = 117,
 
   diag_style = "bold",
-  error_fg = 196,
+  error_fg = 167,
   warning_fg = 215,
   info_fg = 75,
   hint_fg = 246,
@@ -261,9 +261,9 @@ bufferline.setup({
     --- and so changing this is NOT recommended, this is intended
     --- as an escape hatch for people who cannot bear it for whatever reason
     indicator_icon = '▎',  --  █ ▎▌, NOTE: 这里不设置任何值, 只是站位作用.
-    buffer_close_icon = '×',  -- 每个 buffer 后面显示 close icon.
+    buffer_close_icon = '✕',  -- 每个 buffer 后面显示 close icon.
     modified_icon = '●',
-    close_icon = '×',  -- close tab
+    close_icon = '✕',  -- close tab
     left_trunc_marker = '',
     right_trunc_marker = '',
 

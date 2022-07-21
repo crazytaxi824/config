@@ -16,7 +16,7 @@ local colors = {
   grey  = 236,
   light_grey = 246,  -- inactive, hint
 
-  red = 160,  -- error, readonly
+  red = 167,  -- error, readonly
   orange = 215, -- warn
   blue = 63,  -- info
   dark_orange = 136, -- trailing_whitespace && mixed_indent
