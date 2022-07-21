@@ -109,6 +109,7 @@ ts_configs.setup {
 --- https://github.com/nvim-treesitter/nvim-treesitter/ - > /lua/nvim-treesitter/configs.lua
 local parsers = require("nvim-treesitter.parsers")
 
+--- 针对 buffer 设置 module
 local function enable_module(mod, bufnr, lang)
   local module = ts_configs.get_module(mod)
   if not module then

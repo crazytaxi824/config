@@ -268,10 +268,10 @@ bufferline.setup({
     right_trunc_marker = '',
 
     --- mouse actions
-    close_command = bufferline_del_current_buffer,       -- can be a string | function, see "Mouse actions"
-    --right_mouse_command = "bdelete! %d", -- can be a string | function, see "Mouse actions"
-    --left_mouse_command = "buffer %d",    -- can be a string | function, see "Mouse actions"
-    --middle_mouse_command = nil,          -- can be a string | function, see "Mouse actions"
+    close_command = bufferline_del_current_buffer,  -- can be a string | function, see "Mouse actions"
+    --right_mouse_command = "bdelete! %d",  -- can be a string | function, see "Mouse actions"
+    --left_mouse_command = "buffer %d",     -- can be a string | function, see "Mouse actions"
+    --middle_mouse_command = nil,           -- can be a string | function, see "Mouse actions"
 
     --- NOTE: name_formatter can be used to change the buffer's label in the bufferline.
     -- name_formatter = function(buf)  -- buf contains a "name", "path" and "bufnr"

@@ -161,7 +161,10 @@ vim.api.nvim_create_user_command("PackerUpdateLog",
 
 --- Have packer use a popup window, "nvim-lua/popup.nvim"
 packer.init {
-  snapshot = "2022.07.18",   -- VVI: Name of the snapshot you would like to load at startup
+  --- VVI: Name of the snapshot you would like to load at startup.
+  --- need to connection to https://github.com, 所以才会 async 执行.
+  --snapshot = "2022.07.18",
+
   snapshot_path = vim.fn.stdpath('config') .. '/snapshots',  -- 默认路径是 stdpath('cache') .. '/packer.nvim'
   --package_root = vim.fn.stdpath('data') .. '/site/pack'),  -- 默认值
   --compile_path = vim.fn.stdpath('config') .. '/plugin/packer_compiled.lua'),  -- VVI: 不要修改. /plugin 文件夹会自动加载.
