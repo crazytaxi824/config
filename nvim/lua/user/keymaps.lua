@@ -24,7 +24,7 @@
 ---   - v_CTRL-G  - 切换 visual/select mode, select mode 是 visual 的一个子模式, 多用于代码补全的默认值.
 
 --- functions for key mapping ---------------------------------------------------------------------- {{{
---- close all terminal window function -------------------------------------------------------------
+--- close all terminal window ----------------------------------------------------------------------
 local function delete_all_terminals()
   local buf_list = {}
 
@@ -40,41 +40,7 @@ local function delete_all_terminals()
   end
 end
 
---- for Search Highlight ---------------------------------------------------------------------------
-local function hl_search(key)
-  local status, errmsg = pcall(vim.cmd, 'normal! ' .. key)
-  if not status then
-    vim.notify(errmsg, vim.log.levels.ERROR) -- 这里不要使用 notify 插件, 显示错误信息.
-    return
-  end
-
-  --- NOTE: `:help /ordinary-atom`, `\%#` 意思是从 cursor 位置开始匹配.
-  local search_pat = '\\%#' .. vim.fn.getreg('/')
-  local blink_time = '40m'
-  for _ = 1, 2, 1 do  -- 循环闪烁
-    local hl_id = vim.fn.matchadd('HLSearchWord', search_pat, 101)
-    vim.cmd[[redraw]]
-    vim.cmd('sleep '..blink_time)
-    vim.fn.matchdelete(hl_id)
-    vim.cmd[[redraw]]
-    vim.cmd('sleep '..blink_time)
-  end
-end
-
---- word: bool, 是否使用 \<word\>
-local function hl_visual_search(key, whole_word)
-  --- 利用 register "f
-  vim.cmd[[normal! "fy]]  -- copy VISUAL select to register 'f'
-  local tmp_search = vim.fn.getreg("f")
-  if whole_word then
-    vim.fn.setreg('/', '\\<' .. tmp_search .. '\\>')
-  else
-    vim.fn.setreg('/', tmp_search)
-  end
-  hl_search(key)
-end
-
---- 删除其他 buffer --------------------------------------------------------------------------------
+--- delete all other buffers -----------------------------------------------------------------------
 --- NOTE: `:bdelete` 本质是 unlist buffer. 即: listed = 0
 local function delete_all_other_buffers()
   local buf_list = {}
@@ -93,6 +59,51 @@ local function delete_all_other_buffers()
     vim.cmd('bdelete ' .. vim.fn.join(buf_list, ' '))
   end
 end
+
+--- for Search Highlight --------------------------------------------------------------------------- {{{
+local search_pattern_record = {}  -- {patter: string, id: matchadd()}
+
+local function hl_search(key)
+  local status, errmsg = pcall(vim.cmd, 'normal! ' .. key)
+  if not status then
+    vim.notify(errmsg, vim.log.levels.ERROR) -- 这里不要使用 notify 插件, 显示错误信息.
+    return
+  end
+
+  --- NOTE: `:help /ordinary-atom`
+  --- `\%#` 意思是从 cursor 位置开始匹配.
+  --- `\c`  意思是 ignore-case.
+  local search_pattern = '\\%#' .. vim.fn.getreg('/') .. '\\c'
+  if search_pattern_record.pattern ~= search_pattern then
+    local hl_id = vim.fn.matchadd('IncSearch', search_pattern, 101)
+    search_pattern_record = {pattern=search_pattern, id=hl_id}
+  end
+end
+
+--- NOTE: 这里必须使用 global function, 因为还没找到 vim.api 执行 '/'
+function __Delete_search_hl()
+  if search_pattern_record.id then
+    vim.fn.matchdelete(search_pattern_record.id)
+  end
+
+  search_pattern_record = {}  -- clear record
+  vim.cmd[[nohlsearch]]
+end
+
+--- word: bool, 是否使用 \<word\>
+local function hl_visual_search(key, whole_word)
+  --- 利用 register "f
+  vim.cmd[[normal! "fy]]  -- copy VISUAL select to register 'f'
+  local tmp_search = vim.fn.getreg("f")
+  if whole_word then
+    vim.fn.setreg('/', '\\<' .. tmp_search .. '\\>')
+  else
+    vim.fn.setreg('/', tmp_search)
+  end
+  hl_search(key)
+end
+
+-- -- }}}
 
 --- [[, ]], jump to previous/next section ---------------------------------------------------------- {{{
 local function find_ts_root_node()
@@ -277,8 +288,8 @@ local keymaps = {
 
   --- NOTE: 这里不能使用 silent, 否则 command line 中不显示 '?' 和 '/'
   --- ':echo v:hlsearch' 显示目前 hlsearch 状态.
-  {'n', '?', ":nohlsearch<CR>?", {noremap=true}},
-  {'n', '/', ":nohlsearch<CR>/", {noremap=true}},
+  {'n', '?', "<cmd>lua __Delete_search_hl()<CR>?", {noremap=true}},
+  {'n', '/', "<cmd>lua __Delete_search_hl()<CR>/", {noremap=true}},
 
   --- CTRL -----------------------------------------------------------------------------------------
   {'n', '<C-s>', ':update<CR>', opt},
