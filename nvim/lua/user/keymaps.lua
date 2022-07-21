@@ -87,12 +87,17 @@ end
 
 --- NOTE: 这里必须使用 global function, 因为还没找到使用 vim.api 执行 '/' 的方法.
 function __Delete_search_hl()
+  --- VVI: 删除之前的 highlight.
   if search_hl_cache then
     vim.fn.matchdelete(search_hl_cache.hl_id, search_hl_cache.win_id)
+    search_hl_cache = nil  -- clear cache
   end
 
-  search_hl_cache = nil  -- clear cache
   vim.cmd[[nohlsearch]]
+
+  --- NOTE: 以下方法无法进行 'incsearch'. 但是可以使函数变成 local function.
+  --local search_input = vim.fn.input('/')
+  --vim.cmd('/' .. search_input)
 end
 
 --- word: bool, 是否使用 \<word\>

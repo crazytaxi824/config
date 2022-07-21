@@ -46,8 +46,25 @@
 ---   vim.list_extend({list1}, {list2})   合并两个 list-like table
 ---   vim.tbl_deep_extend("force", {map1}, {map2}, {map3}...)  合并多个 map-like table
 --    vim.split({string}, {sep}, {kwargs})
+--
+-- vim 自带函数
+--    vim.fn.feedkeys("\<CR>")  -- VVI: 模拟输入 <CR>
+--                              -- feedkeys("\<CR>") simulates pressing of the <Enter> key.
+--                              -- But feedkeys('\<CR>') pushes 5 characters.
+--
 --    vim.fn.split({string}, {pattern}, {keepempty})  -- 默认 keepempty=0(false)
 --    vim.fn.join({list}, sep)
+--
+--    vim.fn.getwininfo() / vim.fn.gettabinfo()
+--    vim.fn.getbufinfo() / vim.fn.getbufinfo({buflisted = 1})
+--
+--    vim.fn.getwinvar() / vim.fn.setwinvar()
+--    vim.fn.getbufvar() / vim.fn.setbufvar()
+--    vim.fn.gettabvar() / vim.fn.settabvar()
+--
+--    vim.fn.bufnr() / vim.fn.bufname()
+--    vim.fn.winnr() / vim.fn.win_getid() / vim.fn.win_gotoid()
+--    vim.fn.tabpagenr() / vim.fn.tabpagebuflist() / vim.fn.tabpagewinnr()
 --
 --- NOTE: nvim 常用函数
 --    vim.cmd(autocmd) -> vim.api.nvim_create_autocmd("BufEnter", {pattern, buffer=0, command/callback}),
