@@ -61,7 +61,7 @@ local function delete_all_other_buffers()
 end
 
 --- for Search Highlight --------------------------------------------------------------------------- {{{
-local search_hl_id  --- 缓存 matchadd() 生成的 highlight id.
+local search_hl_cache  --- 缓存 { win_id=win_getid(), hl_id=matchadd() }
 
 local function hl_search(key)
   local status, errmsg = pcall(vim.cmd, 'normal! ' .. key)
@@ -71,8 +71,8 @@ local function hl_search(key)
   end
 
   --- VVI: 删除之前的 highlight. 必须删除, 然后重新 highlight.
-  if search_hl_id then
-    vim.fn.matchdelete(search_hl_id)
+  if search_hl_cache then
+    vim.fn.matchdelete(search_hl_cache.hl_id, search_hl_cache.win_id)
   end
 
   --- NOTE: `:help /ordinary-atom`
@@ -80,16 +80,18 @@ local function hl_search(key)
   --- `\c`  意思是 ignore-case.
   local search_pattern = '\\c\\%#' .. vim.fn.getreg('/')
   local hl_id = vim.fn.matchadd('IncSearch', search_pattern, 101)
-  search_hl_id = hl_id
+
+  --- 缓存数据
+  search_hl_cache = {hl_id = hl_id, win_id = vim.fn.win_getid()}
 end
 
 --- NOTE: 这里必须使用 global function, 因为还没找到使用 vim.api 执行 '/' 的方法.
 function __Delete_search_hl()
-  if search_hl_id then
-    vim.fn.matchdelete(search_hl_id)
+  if search_hl_cache then
+    vim.fn.matchdelete(search_hl_cache.hl_id, search_hl_cache.win_id)
   end
 
-  search_hl_id = nil  -- clear record
+  search_hl_cache = nil  -- clear cache
   vim.cmd[[nohlsearch]]
 end
 

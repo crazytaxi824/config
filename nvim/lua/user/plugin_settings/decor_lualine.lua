@@ -83,7 +83,7 @@ local function check_mixed_indent()
 end
 
 -- NOTE: 这里缓存数据可以减少计算量, 在退出 insert mode 之后再进行计算并更新 lualine.
-local mixed_indent_record = ''
+local mixed_indent_cache = ''
 
 local function my_check()
   if vim.fn.mode() ~= 'i' then
@@ -91,13 +91,13 @@ local function my_check()
     local ts = check_trailing_whitespace()
 
     if mi ~= '' and ts ~= '' then
-      mixed_indent_record = mi .. ' ' .. ts
+      mixed_indent_cache = mi .. ' ' .. ts
     else
-      mixed_indent_record = mi .. ts
+      mixed_indent_cache = mi .. ts
     end
   end
 
-  return mixed_indent_record
+  return mixed_indent_cache
 end
 
 --- Changing filename color based on modified status -----------------------------------------------
