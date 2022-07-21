@@ -58,7 +58,6 @@ vim.cmd('hi QuickFixLine cterm=bold ctermbg=237 ctermfg=75')  -- Quick Fix 选�
 
 vim.cmd('hi IncSearch ctermfg=0 ctermbg=213 cterm=None')  -- / ? 搜索颜色
 vim.cmd('hi Search ctermfg=0 ctermbg=191')                -- / ? * # g* g# 搜索颜色
-vim.cmd('hi HLSearchWord cterm=None ctermfg=232 ctermbg=232') -- 自定义 highling next search blink 的颜色
 
 vim.cmd('hi ErrorMsg ctermfg=253 ctermbg=203')     -- echoerr 颜色
 vim.cmd('hi WarningMsg ctermfg=236 ctermbg=215')   -- echohl 颜色, XXX FIXME BUG 颜色

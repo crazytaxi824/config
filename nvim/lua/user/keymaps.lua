@@ -61,7 +61,7 @@ local function delete_all_other_buffers()
 end
 
 --- for Search Highlight --------------------------------------------------------------------------- {{{
-local search_pattern_record = {}  -- {patter: string, id: matchadd()}
+local search_hl_id  --- 缓存 matchadd() 生成的 highlight id.
 
 local function hl_search(key)
   local status, errmsg = pcall(vim.cmd, 'normal! ' .. key)
@@ -70,23 +70,26 @@ local function hl_search(key)
     return
   end
 
-  --- NOTE: `:help /ordinary-atom`
-  --- `\%#` 意思是从 cursor 位置开始匹配.
-  --- `\c`  意思是 ignore-case.
-  local search_pattern = '\\%#' .. vim.fn.getreg('/') .. '\\c'
-  if search_pattern_record.pattern ~= search_pattern then
-    local hl_id = vim.fn.matchadd('IncSearch', search_pattern, 101)
-    search_pattern_record = {pattern=search_pattern, id=hl_id}
+  --- VVI: 删除之前的 highlight. 必须删除, 然后重新 highlight.
+  if search_hl_id then
+    vim.fn.matchdelete(search_hl_id)
   end
+
+  --- NOTE: `:help /ordinary-atom`
+  --- `\%#` 意思是从 cursor 所在位置开始寻找 match.
+  --- `\c`  意思是 ignore-case.
+  local search_pattern = '\\c\\%#' .. vim.fn.getreg('/')
+  local hl_id = vim.fn.matchadd('IncSearch', search_pattern, 101)
+  search_hl_id = hl_id
 end
 
---- NOTE: 这里必须使用 global function, 因为还没找到 vim.api 执行 '/'
+--- NOTE: 这里必须使用 global function, 因为还没找到使用 vim.api 执行 '/' 的方法.
 function __Delete_search_hl()
-  if search_pattern_record.id then
-    vim.fn.matchdelete(search_pattern_record.id)
+  if search_hl_id then
+    vim.fn.matchdelete(search_hl_id)
   end
 
-  search_pattern_record = {}  -- clear record
+  search_hl_id = nil  -- clear record
   vim.cmd[[nohlsearch]]
 end
 
