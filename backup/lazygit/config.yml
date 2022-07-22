@@ -22,9 +22,15 @@ gui:
     inactiveBorderColor:  # 未选中窗口的文字和边框颜色, 241
       - '#626262'
     cherryPickedCommitFgColor:  # Commits window 中使用 'c' 选择 cherry pick 的文字颜色
-      - black
-    cherryPickedCommitBgColor:
-      - cyan
+      - magenta
+      - bold
+    cherryPickedCommitBgColor:  # 不使用任何 bg 颜色, 默认为 cyan.
+      - ''
+    selectedLineBgColor:   # left-side menu line color
+      - '#4E4E4E'
+      - underline
+    selectedRangeBgColor:  # stage / unstage line color
+      - reverse
 
 git:
   # merging:
