@@ -285,7 +285,7 @@ local function bufferline_del_current_buffer(ignore_tab)
     vim.cmd([[bdelete #]])
   else
     --- 如果 before == after 则说明是最后一个 listed buffer, 或者当前 buffer 是 unlisted active buffer.
-    bufferline.go_to(1, true)
+    bufferline.go_to(-1, true)   --- NOTE: go_to(-1, true) 跳到最后一个 buffer.
   end
 end
 
@@ -398,6 +398,8 @@ bufferline.setup({
 --- keymaps ----------------------------------------------------------------------------------------
 local opt = { noremap = true, silent = true }
 local bufferline_keymaps = {
+  --- NOTE: according to bufferline source code, `go_to_buffer()` is deprecate. it calls `go_to()`
+  --- https://github.com/akinsho/bufferline.nvim/ -> /lua/bufferline.lua
   {'n', '<leader>1', function() if buf_jumpable() then bufferline.go_to(1, true) end end, opt, 'which_key_ignore'},
   {'n', '<leader>2', function() if buf_jumpable() then bufferline.go_to(2, true) end end, opt, 'which_key_ignore'},
   {'n', '<leader>3', function() if buf_jumpable() then bufferline.go_to(3, true) end end, opt, 'which_key_ignore'},
