@@ -167,6 +167,9 @@ lualine.setup {
           readonly = '[-]',       -- Text to show when the file is non-modifiable or readonly.
           unnamed  = '[No Name]', -- Text to show for unnamed buffers.
         },
+        --on_click = function(number, mouse, modifiers) end,  -- - number of clicks incase of multiple clicks
+                                                              -- - mouse button used (l(left)/r(right)/m(middle)/...)
+                                                              -- - modifiers pressed (s(shift)/c(ctrl)/a(alt)/m(meta)...)
       },
     },
     lualine_x = {'encoding', 'filetype'},
