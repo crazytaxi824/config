@@ -83,6 +83,8 @@ keybinding:
     gotoTop: 'g'        # go to top of list
     gotoBottom: 'G'     # go to bottom of list
   # file (window No.1)
+  files:
+    fetch: '<f12>'        # submodules 项目子仓库, 使用 'b' 打开 menu 操作
   submodules:
     init: '<f12>'         # submodules 项目子仓库, 使用 'b' 打开 menu 操作
   # branch (window No.3)

@@ -84,8 +84,8 @@ nvim_tree.setup {
           symlink_open = ''
         },
         git = {
-          unstaged  = "✗",
-          staged    = "✓",
+          unstaged  = "✗",  -- ✗✘
+          staged    = "✓",  -- ✓✔︎
           unmerged  = "u",
           renamed   = "R",
           untracked = "A",  -- untracked = new file.
@@ -115,10 +115,10 @@ nvim_tree.setup {
     enable = true,
     show_on_dirs = true,
     icons = {
-      hint    = "⚑ ",
+      hint    = "⚐ ",  -- ⚐⚑
       info    = "𝖎 ",
       warning = "⚠️ ",
-      error   = "❌",
+      error   = "✘ ",  -- ❌✕✖︎✘
     },
   },
   filters = {
@@ -199,6 +199,13 @@ vim.cmd('hi! link NvimTreeFileMerge   Normal')
 vim.cmd('hi! link NvimTreeFileRenamed Normal')
 vim.cmd('hi! link NvimTreeFileNew     Normal')
 vim.cmd('hi! link NvimTreeFileDeleted Normal')
+
+--- diagnostic icons highlight.
+-- NvimTreeLspDiagnosticsError         -- 默认 DiagnosticError
+-- NvimTreeLspDiagnosticsWarning       -- 默认 DiagnosticWarn
+-- NvimTreeLspDiagnosticsInformation   -- 默认 DiagnosticInfo
+-- NvimTreeLspDiagnosticsHint          -- 默认 DiagnosticHint
+
 -- -- }}}
 
 --- keymaps ----------------------------------------------------------------------------------------

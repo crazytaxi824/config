@@ -3,13 +3,14 @@ if not comment_status_ok then
   return
 end
 
--- https://github.com/numToStr/Comment.nvim#-hooks
+--- https://github.com/numToStr/Comment.nvim
 comment.setup {
   padding = true, -- Add a space between '//' and content. (boolean|fun():boolean)
   sticky = true,  -- Whether the cursor should stay at its position. (boolean)
   ignore = nil,   -- 忽略行, eg: ^func.*
 
   --- NOTE: pre_hook 配合 "JoosepAlviste/nvim-ts-context-commentstring" 设置.
+  --- https://github.com/numToStr/Comment.nvim#-hooks
   pre_hook = function(ctx)
     local U = require("Comment.utils")
 
@@ -21,6 +22,7 @@ comment.setup {
     end
 
     return require("ts_context_commentstring.internal").calculate_commentstring {
+      --- NOTE: Determine whether to use linewise or blockwise commentstring
       key = ctx.ctype == U.ctype.line and "__default" or "__multiline",
       location = location,
     }

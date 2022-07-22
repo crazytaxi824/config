@@ -61,7 +61,19 @@ local function delete_all_other_buffers()
 end
 
 --- for Search Highlight --------------------------------------------------------------------------- {{{
-local search_hl_cache  --- 缓存 { win_id=win_getid(), hl_id=matchadd() }
+--- 在当前 search result 前放置 search_sign.
+local my_search_sign = {
+  -- {group} as a namespace for {id}, thus two groups can use the same IDs.
+  group = "MySearchSignGroup",
+  sign = "MySearchSign",
+  id = 10010,
+  text = "⚲",  -- 类似 icon, ⌕☌⚲⚯
+}
+--- define my_search_sign
+vim.fn.sign_define(my_search_sign.sign, {text=my_search_sign.text, texthl="IncSearch", numhl="IncSearch"})
+
+--- 缓存 { win_id=win_getid(), hl_id=matchadd() }, for vim.fn.matchdelete()
+local search_hl_cache
 
 local function hl_search(key)
   local status, errmsg = pcall(vim.cmd, 'normal! ' .. key)
@@ -74,6 +86,7 @@ local function hl_search(key)
   if search_hl_cache then
     vim.fn.matchdelete(search_hl_cache.hl_id, search_hl_cache.win_id)
   end
+  vim.fn.sign_unplace(my_search_sign.group)  -- clear my_search_sign
 
   --- NOTE: `:help /ordinary-atom`
   --- `\%#` 意思是从 cursor 所在位置开始寻找 match.
@@ -81,18 +94,24 @@ local function hl_search(key)
   local search_pattern = '\\c\\%#' .. vim.fn.getreg('/')
   local hl_id = vim.fn.matchadd('IncSearch', search_pattern, 101)
 
+  --- NOTE: place my_search_sign
+  local cur_pos = vim.fn.getpos('.')  -- [bufnum, lnum, col, off]
+  vim.fn.sign_place(my_search_sign.id, my_search_sign.group, my_search_sign.sign, vim.fn.bufnr(),
+    {lnum=cur_pos[2], priority=109})
+
   --- 缓存数据
   search_hl_cache = {hl_id = hl_id, win_id = vim.fn.win_getid()}
 end
 
 --- NOTE: 这里必须使用 global function, 因为还没找到使用 vim.api 执行 '/' 的方法.
-function __Delete_search_hl()
+function _Delete_search_hl()
   --- VVI: 删除之前的 highlight.
   if search_hl_cache then
     vim.fn.matchdelete(search_hl_cache.hl_id, search_hl_cache.win_id)
     search_hl_cache = nil  -- clear cache
   end
 
+  vim.fn.sign_unplace(my_search_sign.group)  -- clear my_search_sign
   vim.cmd[[nohlsearch]]
 
   --- NOTE: 以下方法无法进行 'incsearch'. 但是可以使函数变成 local function.
@@ -298,8 +317,8 @@ local keymaps = {
 
   --- NOTE: 这里不能使用 silent, 否则 command line 中不显示 '?' 和 '/'
   --- ':echo v:hlsearch' 显示目前 hlsearch 状态.
-  {'n', '?', "<cmd>lua __Delete_search_hl()<CR>?", {noremap=true}},
-  {'n', '/', "<cmd>lua __Delete_search_hl()<CR>/", {noremap=true}},
+  {'n', '?', "<cmd>lua _Delete_search_hl()<CR>?", {noremap=true}},
+  {'n', '/', "<cmd>lua _Delete_search_hl()<CR>/", {noremap=true}},
 
   --- CTRL -----------------------------------------------------------------------------------------
   {'n', '<C-s>', ':update<CR>', opt},

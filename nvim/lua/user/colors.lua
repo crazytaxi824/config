@@ -59,7 +59,7 @@ vim.cmd('hi QuickFixLine cterm=bold ctermbg=237 ctermfg=75')  -- Quick Fix 选�
 vim.cmd('hi IncSearch ctermfg=0 ctermbg=213 cterm=None')  -- / ? 搜索颜色
 vim.cmd('hi Search ctermfg=0 ctermbg=191')                -- / ? * # g* g# 搜索颜色
 
-vim.cmd('hi ErrorMsg ctermfg=253 ctermbg=203')     -- echoerr 颜色
+vim.cmd('hi ErrorMsg ctermfg=253 ctermbg=167')     -- echoerr 颜色
 vim.cmd('hi WarningMsg ctermfg=236 ctermbg=215')   -- echohl 颜色, XXX FIXME BUG 颜色
 vim.cmd('hi Todo ctermbg=28 ctermfg=188')          -- TODO, HACK 颜色
 vim.cmd('hi SpecialComment ctermbg=63 ctermfg=188')  -- NOTE: DEBUG: FOO: 颜色

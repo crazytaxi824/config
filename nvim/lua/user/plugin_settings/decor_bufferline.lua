@@ -24,7 +24,7 @@ local colors = {
   indicator_fg = 117,
 
   diag_style = "bold",
-  error_fg = 196,
+  error_fg = 167,
   warning_fg = 215,
   info_fg = 75,
   hint_fg = 246,
@@ -209,17 +209,58 @@ local function buf_jumpable()
   return true
 end
 
---- 删除当前 buffer
-local function bufferline_del_current_buffer()
-  --- NOTE: multi tab 的情况下, 使用 :tabclose 关闭整个 tab, 同时 bdelete 该 tab 中的所有 buffer.
-  --- 获取 tab 总数. 大于 1 说明有多个 tab.
-  if #vim.fn.gettabinfo() > 1 then
-    ---  获取该 tab 中的所有 bufnr. return list.
-    local tab_buf_list = vim.fn.tabpagebuflist()
+--- 关闭整个 tab 以及其中的 buffer.
+local function close_current_tab()
+  local total_tab_num = vim.fn.tabpagenr('$')  --- 获取 tab 总数. 大于 1 说明有多个 tab.
+  if total_tab_num < 2 then
+    return false  -- 没有 tab 可以 close.
+  end
 
-    --- `:tabclose` 关闭整个 tab
-    --- `:bdelete 1 2 3` 删除 tab 中的所有 buffer
-    vim.cmd([[ tabclose | bdelete ]] .. vim.fn.join(tab_buf_list, ' '))
+  --- 获取当前 tab 中的所有 bufnr. return list.
+  --- NOTE: tab 是一组 win 的集合. 这里返回的 buffer list 是属于该 tab 的各个 win 正在显示的 buffer.
+  local cur_tab_buf_list = vim.fn.tabpagebuflist()
+
+  --- 获取其他 tab 中的所有 buffer list.
+  local current_tabnr = vim.fn.tabpagenr()
+  local exclude_buffer_list = {}  --- buffers which also in other tabs
+  for i = 1, total_tab_num, 1 do
+    if i ~= current_tabnr then
+      vim.list_extend(exclude_buffer_list, vim.fn.tabpagebuflist(i))
+    end
+  end
+
+  --- 排除同时存在于其他 tab 中 buffer.
+  local del_buffer_list = {}
+  for _, bufnr in ipairs(cur_tab_buf_list) do
+    if not vim.tbl_contains(exclude_buffer_list, bufnr) then
+      table.insert(del_buffer_list, bufnr)
+    end
+  end
+
+  --- 排除未保存的 buffers (changed/modified)
+  --local modified_buffer = vim.fn.getbufinfo({bufmodified=1})
+  local del_nochanged_buf_list = {}
+  for _, bufnr in ipairs(del_buffer_list) do
+    if vim.fn.getbufinfo(bufnr)[1].changed == 0 then
+      table.insert(del_nochanged_buf_list, bufnr)
+    end
+  end
+
+  --- `:tabclose` 关闭整个 tab
+  --- `:bdelete 1 2 3` 删除 tab 中的所有 buffer
+  if #del_nochanged_buf_list > 0 then
+    vim.cmd([[ tabclose | bdelete ]] .. vim.fn.join(del_nochanged_buf_list, ' '))
+  else
+    vim.cmd([[ tabclose ]])
+  end
+
+  return true  -- 已经成功 close tab.
+end
+
+--- 删除当前 buffer, NOTE: if ignore_tab == true, DO NOT run close_current_tab()
+local function bufferline_del_current_buffer(ignore_tab)
+  --- NOTE: multi tab 的情况下, 使用 :tabclose 关闭整个 tab, 同时 bdelete 该 tab 中的所有 buffer.
+  if not ignore_tab and close_current_tab() then  -- return true: 有多个 tab, 并已关闭当前 tab.
     return
   end
 
@@ -238,6 +279,23 @@ local function bufferline_del_current_buffer()
   else
     --- 如果 before == after 则说明是最后一个 listed buffer, 或者当前 buffer 是 unlisted active buffer.
     bufferline.go_to(1, true)
+  end
+end
+
+--- 删除指定 buffer
+local function bufferline_del_buffer_by_bufnr(bufnr)
+  --- 判断指定 bufnr 是否是 last listed buffer
+  local listed_buffers = vim.fn.getbufinfo({buflisted=1})
+  if #listed_buffers < 2 then
+    vim.notify("can't close last listed-buffer", vim.log.levels.WARN)
+    return
+  end
+
+  --- NOTE: 删除的 buffer 是当前 buffer 时, 避免直接退出 nvim.
+  if vim.fn.bufnr() == bufnr then
+    bufferline_del_current_buffer(true)
+  else
+    vim.cmd('bdelete! ' .. bufnr)
   end
 end
 
@@ -261,17 +319,18 @@ bufferline.setup({
     --- and so changing this is NOT recommended, this is intended
     --- as an escape hatch for people who cannot bear it for whatever reason
     indicator_icon = '▎',  --  █ ▎▌, NOTE: 这里不设置任何值, 只是站位作用.
-    buffer_close_icon = '×',  -- 每个 buffer 后面显示 close icon.
+    buffer_close_icon = '✕',  -- 每个 buffer 后面显示 close icon.
     modified_icon = '●',
-    close_icon = '×',  -- close tab
+    close_icon = '✕',  -- close tab
     left_trunc_marker = '',
     right_trunc_marker = '',
 
-    --- mouse actions
-    close_command = bufferline_del_current_buffer,  -- can be a string | function, see "Mouse actions"
-    --right_mouse_command = "bdelete! %d",  -- can be a string | function, see "Mouse actions"
-    --left_mouse_command = "buffer %d",     -- can be a string | function, see "Mouse actions"
-    --middle_mouse_command = nil,           -- can be a string | function, see "Mouse actions"
+    --- mouse actions, can be a string | function, see "Mouse actions"
+    --- NOTE: 这里 %d 是 bufnr() 的 placeholder. 可以使用 function(bufnr) 来设置.
+    close_command = bufferline_del_buffer_by_bufnr,     -- delete 指定 bufnr, 默认 "bdelete! %d"
+    --left_mouse_command = "buffer %d",  -- jump to buffer bufnr
+    right_mouse_command = "",            -- 取消默认值, 默认 "bdelete! %d"
+    --middle_mouse_command = nil,
 
     --- NOTE: name_formatter can be used to change the buffer's label in the bufferline.
     -- name_formatter = function(buf)  -- buf contains a "name", "path" and "bufnr"
