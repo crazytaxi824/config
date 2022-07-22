@@ -63,7 +63,7 @@ end
 --- for Search Highlight --------------------------------------------------------------------------- {{{
 --- 在当前 search result 前放置 search_sign.
 local my_search_sign = {
-  -- {group} as a namespace for {id}, thus two groups can use the same IDs.
+  --- {group} as a namespace for {id}, thus two groups can use the same IDs.
   group = "MySearchSignGroup",
   sign = "MySearchSign",
   id = 10010,
