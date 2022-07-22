@@ -85,7 +85,7 @@ vim.cmd('hi! link Repeat Conditional')     -- for range
 vim.cmd('hi! link Statement Conditional')  -- 默认 syntax 中 'package' & 'import' 关键字
 vim.cmd('hi! link Include Conditional')    -- package, import ...
 
-vim.cmd('hi! link Delimiter Normal')       -- 括号颜色, [] () {}
+vim.cmd('hi! link Delimiter Normal')       -- 符号颜色, [] () {} ; : ...
 vim.cmd('hi! link Operator Normal')        -- = != == > < ...
 
 --vim.cmd('hi Structure ctermfg=117')
@@ -147,31 +147,38 @@ vim.cmd('hi LspReferenceWrite ctermbg=238')
 
 --- treesitter 颜色 --------------------------------------------------------------------------------
 --- treesitter global 颜色设置
-vim.cmd('hi! link TSField Normal')               -- golang struct field
-vim.cmd('hi! link TSParameter Normal')           -- 入参出参
-vim.cmd('hi! link TSKeywordReturn Conditional')  -- return
-vim.cmd('hi! link TSNamespace Normal')           -- package <Namespace>
-vim.cmd('hi! link TSFuncBuiltin Function')       -- new() make() copy() ...
+vim.cmd('hi! link TSField Normal')      -- golang struct field, when define
+vim.cmd('hi TSProperty ctermfg=117')    -- like TSField, eg: Foo.<Property>, 主要为 js, ts... 用.
+vim.cmd('hi! link TSParameter Normal')  -- 入参出参
+
 vim.cmd('hi! link TSFunction Function')
+vim.cmd('hi! link TSFuncBuiltin Function')       -- new() make() copy() ...
 vim.cmd('hi! link TSMethod Function')
 
---- markdown
+vim.cmd('hi! link TSKeywordReturn Conditional')  -- return
+vim.cmd('hi! link TSNamespace Normal')           -- package <Namespace>
+
+--- typescript
+vim.cmd('hi! link TSConstructor Normal')  -- import <TSConstructor> from 'react'
+
+--- html, tag <div></div>
+vim.cmd('hi TSTag ctermfg=74')             -- <div></div>, html 内置标签文字颜色 div
+vim.cmd('hi TSTagDelimiter ctermfg=243')   -- <div></div>, <> 括号颜色
+vim.cmd('hi! link TSTagAttribute TSProperty')  -- <... width=..., height=... >
+
+--- golang, NOTE: 单独为 go 设置 Property 颜色.
+vim.cmd('hi! link goTSProperty Normal')  -- 设置 golang 的 Foo.Name 颜色为 Normal
+
+--- markdown, NOTE: 单独为 markdown 设置颜色.
 vim.cmd('hi markdown_inlineTSStrong ctermbg=238')  -- `code`
 vim.cmd('hi markdownTSPunctSpecial ctermfg=246')   -- `- * #`
 
---- for typescript, html
-vim.cmd('hi! link TSConstructor Normal')  -- import <TSConstructor> from 'react'
-vim.cmd('hi TSProperty ctermfg=117')      -- like TSField in golang
-
+--- syntax 颜色设置 --------------------------------------------------------------------------------
+--- NOTE: 这里设置 syntax 颜色是为了让 treesitter lazy render 的时候不至于颜色差距太大.
 --- set vim-syntax color to match treesitter color
 vim.cmd('hi! link typescriptMember TSProperty')
 vim.cmd('hi! link typescriptInterfaceName TSType')
 vim.cmd('hi! link typescriptExport TSKeyword')
-
---- <div></div>
-vim.cmd('hi TSTag ctermfg=74')             -- <div></div>, html 内置标签文字颜色 div
-vim.cmd('hi TSTagDelimiter ctermfg=243')   -- <div></div>, <> 括号颜色
-vim.cmd('hi! link TSTagAttribute TSProperty')  -- <... width=..., height=... >
 
 
 
