@@ -199,7 +199,9 @@ packer.init {
 --- 插件的安装位置在 "~/.local/share/nvim/site/pack/packer/start/..."
 --- `:PackerSync` - install / update / clean 插件包.
 return packer.startup(function(use)
-  use {"wbthomason/packer.nvim", commit="e4c2afb"}  -- VVI: 必要. Have packer manage itself
+  use {"wbthomason/packer.nvim",  -- VVI: 必要. Have packer manage itself
+    commit = "494fd59",
+  }
 
   --- Performence & Functions ----------------------------------------------------------------------
   --- 加快 lua module 加载时间, 生成 ~/.cache/nvim/luacache_chunks && luacache_modpaths
@@ -211,11 +213,15 @@ return packer.startup(function(use)
 
   --- Useful lua functions used by lots of plugins
   --- NOTE: plenary.nvim 合并了 popup.nvim
-  use {"nvim-lua/plenary.nvim", commit="46e8bb9"}
+  use {"nvim-lua/plenary.nvim",
+    commit = "986ad71",
+  }
 
   --- FIXME: https://github.com/neovim/neovim/issues/12587
   --- CursorHold and CursorHoldI are blocked by timer_start()
-  use {"antoinemadec/FixCursorHold.nvim", commit="5aa5ff1"}
+  use {"antoinemadec/FixCursorHold.nvim",
+    commit = "5aa5ff1",
+  }
 
   --- Treesitter -----------------------------------------------------------------------------------
   --- Commands for "nvim-treesitter/nvim-treesitter" --- {{{
@@ -227,7 +233,7 @@ return packer.startup(function(use)
   --- `:TSUpdateSync`         -- Update the installed languages synchronously
   -- -- }}}
   use {"nvim-treesitter/nvim-treesitter",
-    commit = "9577a1a",
+    commit = "783c74c",
     run = ":TSUpdateSync",   -- Post-update/install hook.
     config = function() require("user.plugin_settings.treesitter") end,
     requires = {
@@ -248,8 +254,13 @@ return packer.startup(function(use)
       },
 
       --- 第三方 module 插件 ---
-      {"JoosepAlviste/nvim-ts-context-commentstring", commit="8834375"}, -- Comment 依赖 commentstring.
-      {"windwp/nvim-ts-autotag", commit="044a05c"},  -- auto close tag <div></div>
+      {"JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
+        commit="8834375",
+      },
+
+      {"windwp/nvim-ts-autotag",  -- auto close tag <div></div>
+        commit="044a05c",
+      },
       --{"p00f/nvim-ts-rainbow"},   -- 括号颜色. treesitter 解析, 严重拖慢文件打开速度.
     },
   }
@@ -257,7 +268,7 @@ return packer.startup(function(use)
   --- 以下是使用了 treesitter 功能的插件. (这些插件也可以不使用 treesitter 的功能)
   --- 注释
   use {"numToStr/Comment.nvim",
-    commit = "4086630",
+    commit = "2e0572c",
     config = function() require("user.plugin_settings.comment") end,
     requires = {
       "JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 context-commentstring.
@@ -272,24 +283,33 @@ return packer.startup(function(use)
     requires = "nvim-treesitter/nvim-treesitter",
   }
 
+  --- TODO PackerSync from here
   --- Completion -----------------------------------------------------------------------------------
   use {"hrsh7th/nvim-cmp",
     commit = "9897465",
     config = function() require("user.plugin_settings.cmp_completion") end,
     --- NOTE: 以下是 nvim-cmp module 插件, 在 setup() 中启用的插件.
     requires = {
-      {"hrsh7th/cmp-nvim-lsp", commit="affe808"},  -- LSP source for nvim-cmp
-      {"hrsh7th/cmp-buffer", commit="62fc67a"},    -- buffer completions
-      {"hrsh7th/cmp-path", commit="981baf9"},      -- path completions
-      --"hrsh7th/cmp-cmdline",     -- cmdline completions, 不好用.
-      {"saadparwaiz1/cmp_luasnip", -- Snippets source for nvim-cmp
+      --"hrsh7th/cmp-cmdline",  -- cmdline completions, 不好用.
+      {"hrsh7th/cmp-nvim-lsp",  -- LSP source for nvim-cmp
+        commit="affe808"
+      },
+      {"hrsh7th/cmp-buffer",    -- buffer completions
+        commit="62fc67a"
+      },
+      {"hrsh7th/cmp-path",      -- path completions
+        commit="981baf9"
+      },
+      {"saadparwaiz1/cmp_luasnip",  -- Snippets source for nvim-cmp
         commit = "a9de941",
         requires = {
           {"L3MON4D3/LuaSnip",     -- snippet engine, for "cmp_luasnip", BUG: 每次打开文件都会有一个 [Scratch] buffer.
             commit = "7d78278",
             config = function() require("user.plugin_settings.luasnip_snippest") end,
             requires = {
-              {"rafamadriz/friendly-snippets", commit="24afb4c"}  -- snippets content, 自定义 snippets 可以借鉴这个结构.
+              {"rafamadriz/friendly-snippets",  -- snippets content, 自定义 snippets 可以借鉴这个结构.
+                commit="24afb4c",
+              },
             },
           },
         },
@@ -317,7 +337,9 @@ return packer.startup(function(use)
       commit = "41a8269",
       config = function() require("user.lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
       requires = {
-        {"williamboman/nvim-lsp-installer", commit="33700e2"}, -- 简单安装 lsp server 的插件. NOTE: 和 lspconfig 并非依赖关系, 只是放在一起方便 setup()
+        {"williamboman/nvim-lsp-installer",  -- 简单安装 lsp server 的插件. NOTE: 和 lspconfig 并非依赖关系, 只是放在一起方便 setup()
+          commit="33700e2"
+        },
         "hrsh7th/cmp-nvim-lsp",  -- provide content to nvim-cmp Completion. cmp_nvim_lsp.update_capabilities(capabilities)
       },
     }
@@ -353,7 +375,9 @@ return packer.startup(function(use)
     commit = "f4a3be5",
     config = function() require("user.plugin_settings.debug_dap") end,
     requires = {
-      {"rcarriga/nvim-dap-ui", commit="d33b905"}  -- ui for "nvim-dap", NOTE: dap-ui && dap 设置在同一文件中.
+      {"rcarriga/nvim-dap-ui",  -- ui for "nvim-dap", NOTE: dap-ui && dap 设置在同一文件中.
+        commit="d33b905"
+      },
     },
     cmd = {'DapToggleBreakpoint', 'DapContinue'}  -- 通过 nvim-dap 内置 command 启动.
   }
