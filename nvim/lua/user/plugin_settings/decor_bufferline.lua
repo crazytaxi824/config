@@ -264,12 +264,19 @@ local function bufferline_del_current_buffer(ignore_tab)
     return
   end
 
-  --- NOTE: single tab 情况下删除 current buffer.
+  --- 如果当前 buffer 不允许 jump 到别的 buffer 则直接返回.
   if not buf_jumpable() then
-    return  --- 如果当前 buffer 不能 jump 则直接返回.
+    return
   end
 
+  --- NOTE: single tab 情况下删除 current buffer.
   local before_select_bufnr = vim.fn.bufnr('%')  --- 获取当前 bufnr()
+  --- 判断当前 buffer 是否未保存.
+  if vim.fn.getbufinfo(before_select_bufnr)[1].changed == 1 then
+    Notify("can't close Unsaved buffer", "WARN")
+    return
+  end
+
   bufferline.cycle(-1)  -- 跳转到 prev buffer
   local after_select_bufnr = vim.fn.bufnr('%')   --- 获取跳转后 bufnr()
 
@@ -287,7 +294,7 @@ local function bufferline_del_buffer_by_bufnr(bufnr)
   --- 判断指定 bufnr 是否是 last listed buffer
   local listed_buffers = vim.fn.getbufinfo({buflisted=1})
   if #listed_buffers < 2 then
-    vim.notify("can't close last listed-buffer", vim.log.levels.WARN)
+    Notify("can't close last listed-buffer", "WARN")
     return
   end
 
