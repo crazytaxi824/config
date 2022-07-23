@@ -208,8 +208,5 @@ vim.cmd('hi! link NvimTreeFileDeleted Normal')
 
 -- -- }}}
 
---- keymaps ----------------------------------------------------------------------------------------
-vim.keymap.set('n', '<leader>,', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
-
 
 

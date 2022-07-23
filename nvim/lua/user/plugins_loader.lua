@@ -159,6 +159,10 @@ vim.api.nvim_create_user_command("PackerUpdateLog",
 )
 -- -- }}}
 
+--- VVI: 加载 packer plugins trigger 设置, 用于 lazy load plugins.
+--- trigger 必须放在 require('packer') 之后.
+require("user.plugin_settings._trigger")
+
 --- Have packer use a popup window, "nvim-lua/popup.nvim"
 packer.init {
   --- Name of the snapshot File you would like to load at startup.
@@ -355,7 +359,8 @@ return packer.startup(function(use)
   --use "kyazdani42/nvim-web-devicons"  -- 提供 icons 需要 patch 字体 (Nerd Fonts)
   use {"kyazdani42/nvim-tree.lua",      -- 类似 NerdTree
     commit = "d927e89",
-    config = function() require("user.plugin_settings.file_tree") end
+    config = function() require("user.plugin_settings.file_tree") end,
+    cmd = {"NvimTreeToggle", "NvimTreeOpen"},
   }
 
   --- Buffer & Status Line -------------------------------------------------------------------------
@@ -369,7 +374,6 @@ return packer.startup(function(use)
   }
 
   --- Debug tools 安装 -----------------------------------------------------------------------------
-  require("user.plugin_settings.debug_trigger")  -- NOTE: 先加载 dap debug lazyload 启动方式
   use {"rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
     commit = "d33b905",
     config = function()
