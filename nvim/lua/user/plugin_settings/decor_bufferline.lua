@@ -19,9 +19,9 @@ local colors = {
   tab_sel_fg = 233,
   tab_sel_bg = 190,
 
-  modified_fg = 117,
+  modified_fg = 81,
   separator_fg = 238,
-  indicator_fg = 117,
+  indicator_fg = 81,
 
   diag_style = "bold",
   error_fg = 167,
@@ -209,6 +209,7 @@ local function buf_jumpable()
   return true
 end
 
+--- NOTE: tab 是一组 win 的集合. `:tabclose` 本质是关闭 tab 中所有的 win. 并不 bdelete buffer.
 --- 关闭整个 tab 以及其中的 buffer.
 local function close_current_tab()
   local total_tab_num = vim.fn.tabpagenr('$')  --- 获取 tab 总数. 大于 1 说明有多个 tab.
@@ -217,7 +218,7 @@ local function close_current_tab()
   end
 
   --- 获取当前 tab 中的所有 bufnr. return list.
-  --- NOTE: tab 是一组 win 的集合. 这里返回的 buffer list 是属于该 tab 的各个 win 正在显示的 buffer.
+  --- NOTE: 这里返回的 buffer list 是属于该 tab 的各个 win 正在显示的 buffer.
   local cur_tab_buf_list = vim.fn.tabpagebuflist()
 
   --- 获取其他 tab 中的所有 buffer list.

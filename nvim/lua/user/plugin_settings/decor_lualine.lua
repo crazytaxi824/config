@@ -11,7 +11,7 @@ local colors = {
 
   green = 190,
   light_green = 85,  -- filename saved
-  light_blue = 117,  -- filename modified
+  light_blue = 81,   -- filename modified
 
   grey  = 236,
   light_grey = 246,  -- inactive, hint

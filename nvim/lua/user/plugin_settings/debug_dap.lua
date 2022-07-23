@@ -1,3 +1,11 @@
+--- VVI: manually load nvim-dap first. require('packer').loader('foo bar')
+local packer_status_ok, packer = pcall(require, 'packer')
+if not packer_status_ok then
+  return
+end
+
+packer.loader('nvim-dap')  --- NOTE: 手动加载 nvim-dap
+
 --- https://github.com/leoluz/nvim-dap-go
 --- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#go-using-delve-directly
 local dap_status_ok, dap = pcall(require, "dap")

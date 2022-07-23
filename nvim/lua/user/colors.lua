@@ -6,16 +6,21 @@
 --    'term, cterm'        表示样式, underline, bold, italic ...
 --
 --- 常用颜色
---    ctermfg=188/252   白色   -  一般文字颜色
---    ctermfg=85        暗金色 - 函数名, 函数调用
---    ctermfg=213       亮粉色 - return, if, else, break
---    ctermfg=173       暗橙色 - String, ':hi String'
---    ctermfg=220       亮橙色 - 括号匹配颜色
---    ctermfg=170       紫色   - onedark theme (主色调)
---    ctermfg=117/81    淡蓝色 - goField, Special, fmt.Printf("%s \n")
---    ctermfg=75        蓝色   - package, import, func
---    ctermfg=43        淡绿色 - 数据类型, 数字(int, bool)
---    ctermfg=71        绿色   - comment 注释 (:hi Comment)
+--    188/252   白色   -  一般文字颜色
+--    170       紫色   - onedark theme (主色调)
+--    85        暗金色 - function, function call
+--    213       品红(magenta) - IncSearch, return, if, else, break
+--    215       橙色   - warning
+--    173       暗橙色 - String, ':hi String'
+--    220       亮橙色 - 括号匹配颜色
+--    75        蓝色   - package, import, func
+--    81        淡蓝色(cyan) - goField, Special, fmt.Printf("%s \n")
+--    63        深蓝色 - info msg background
+--    71        绿色   - comment 注释 (:hi Comment)
+--    43        淡绿色 - 数据类型, 数字(int, bool)
+--    167       红色   - error
+--    190       黄色   - bufferline
+--    233       黑色   - bufferline / lualine / floating window / Pmenu
 --
 --- NOTE: 只有 ':hi link' 才有 [!] 设置.
 --- 如果是 ':hi <group>' 只会覆盖对应的 kv 颜色值.
@@ -88,12 +93,12 @@ vim.cmd('hi! link Include Conditional')    -- package, import ...
 vim.cmd('hi! link Delimiter Normal')       -- 符号颜色, [] () {} ; : ...
 vim.cmd('hi! link Operator Normal')        -- = != == > < ...
 
---vim.cmd('hi Structure ctermfg=117')
+--vim.cmd('hi Structure ctermfg=81')
 
 vim.cmd('hi String ctermfg=173')         -- "abc"
 vim.cmd('hi Character ctermfg=173')      -- 'a'
 vim.cmd('hi Special ctermfg=75')         --  null (tsxTSConstBuiltin) | undefined (tsxTSVariableBuiltin)
-vim.cmd('hi SpecialChar ctermfg=117')    -- \n \t \" ... escape string
+vim.cmd('hi SpecialChar ctermfg=81')    -- \n \t \" ... escape string
 vim.cmd('hi Number ctermfg=43')          -- 100, int, uint ...
 vim.cmd('hi Boolean ctermfg=75')         -- true / false
 vim.cmd('hi PreProc ctermfg=75')         -- tsxTSVariableBuiltin, tsxTSConstBuiltin ...
@@ -114,8 +119,8 @@ vim.cmd [[
 
 --- 其他常用颜色 -----------------------------------------------------------------------------------
 vim.cmd('hi Title cterm=bold ctermfg=114')      -- markdown Title
-vim.cmd('hi Conceal ctermfg=117 ctermbg=None')  -- markdown 特殊符号颜色
-vim.cmd('hi Label ctermfg=117')                 -- json key color
+vim.cmd('hi Conceal ctermfg=81 ctermbg=None')  -- markdown 特殊符号颜色
+vim.cmd('hi Label ctermfg=81')                 -- json key color
 
 --- diagnostics 颜色设置 ---------------------------------------------------------------------------
 --- DiagnosticInfo - lua global function name begin with lower-case.
@@ -148,7 +153,7 @@ vim.cmd('hi LspReferenceWrite ctermbg=238')
 --- treesitter 颜色 --------------------------------------------------------------------------------
 --- treesitter global 颜色设置
 vim.cmd('hi! link TSField Normal')      -- golang struct field, when define
-vim.cmd('hi TSProperty ctermfg=117')    -- like TSField, eg: Foo.<Property>, 主要为 js, ts... 用.
+vim.cmd('hi TSProperty ctermfg=81')    -- like TSField, eg: Foo.<Property>, 主要为 js, ts... 用.
 vim.cmd('hi! link TSParameter Normal')  -- 入参出参
 
 vim.cmd('hi! link TSFunction Function')
