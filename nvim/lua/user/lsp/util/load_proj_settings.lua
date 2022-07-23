@@ -1,5 +1,9 @@
 --- 缓存 dofile 读取到的 project local settings 数据. 用于 lspconfig && null-ls 使用.
 --- 主要函数是 keep_extend('local_setting_name', {overwrite_settings_tbl})
+--- VVI: dofile() vs require():
+--    dofile()  - loads and executes a file every time being called.
+--    require() - is more complicated; it keeps a table of modules that have already been loaded and their return results,
+--                to ensure that the same code isn't loaded twice.
 
 --- 全局变量
 __Proj_local_settings = {

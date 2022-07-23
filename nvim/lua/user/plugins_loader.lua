@@ -375,7 +375,7 @@ return packer.startup(function(use)
     config = function() require("user.plugin_settings.debug_dap") end,
     requires = {
       {"rcarriga/nvim-dap-ui",  -- ui for "nvim-dap", NOTE: dap-ui && dap 设置在同一文件中.
-        commit="d33b905"
+        commit = "d33b905",
       },
     },
     cmd = {'DapToggleBreakpoint', 'DapContinue'}  -- 通过 nvim-dap 内置 command 启动.
