@@ -372,11 +372,16 @@ return packer.startup(function(use)
   require("user.plugin_settings.debug_trigger")  -- NOTE: 先加载 dap debug lazyload 启动方式
   use {"rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
     commit = "d33b905",
-    config = function() require("user.plugin_settings.debug_dap") end,  -- NOTE: dap-ui && dap 设置在同一文件中.
+    config = function()
+      require('packer').loader('nvim-dap')  -- NOTE: 手动加载 nvim-dap.
+                                            -- 这里不能直接使用 packer.loader(), 而必须重新 require('packer').loader()
+                                            -- 否则无法找到 nvim-dap.
+      require("user.plugin_settings.debug_dap")  -- NOTE: dap-ui && dap 设置在同一文件中.
+    end,
     requires = {
       {"mfussenegger/nvim-dap",  -- core debug tool
         commit = "69efa4d",
-        opt = true,  --- dap config 文件中手动加载 nvim-dap
+        opt = true,  -- NOTE: 在上面 config 中手动加载 nvim-dap
       },
     },
     cmd = {'DapToggleBreakpoint', 'DapContinue'}  -- NOTE: nvim-dap 内置 command 可以启动 nvim-dap-ui.
