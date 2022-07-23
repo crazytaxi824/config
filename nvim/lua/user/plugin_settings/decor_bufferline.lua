@@ -19,9 +19,9 @@ local colors = {
   tab_sel_fg = 233,
   tab_sel_bg = 190,
 
-  modified_fg = 117,
+  modified_fg = 81,
   separator_fg = 238,
-  indicator_fg = 117,
+  indicator_fg = 81,
 
   diag_style = "bold",
   error_fg = 167,
