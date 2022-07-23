@@ -1,3 +1,5 @@
+--- NOTE: 本文件主要是设置可以触发 lazy 加载 packer-opt plugins 的 commands
+
 --- nvim-dap ---------------------------------------------------------------------------------------
 vim.api.nvim_create_autocmd("FileType", {
   pattern = {"go"},  --- NOTE: 目前只对 go 使用 debug
