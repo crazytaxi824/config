@@ -28,7 +28,6 @@ gui:
       - ''
     selectedLineBgColor:   # left-side menu line color
       - '#4E4E4E'
-      - underline
     selectedRangeBgColor:  # stage / unstage line color
       - reverse
 
