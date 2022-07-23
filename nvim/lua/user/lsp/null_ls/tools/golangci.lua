@@ -33,7 +33,7 @@ return {
     --- VVI: 这里必须要使用 $DIRNAME.
     ---  如果使用 $FILENAME 意思是 lint 单个文件. 别的文件中定义的 var 无法被 golangci 找到.
     ---  如果缺省设置, 即不设置 $FILENAME 也不设置 $DIRNAME, 则每次 golangci 都会 lint 整个 project.
-    ---  --path-prefix  Path prefix to add to output. VVI: 必须要, 默认是 pwd.
+    ---  --path-prefix  Path prefix to add to output. VVI: 必须要, 否则找不到文件. 默认是 pwd, 需要改为 cwd 执行时的 path.
     return { "run", "--fix=false", "--fast", "--out-format=json", "$DIRNAME", "--path-prefix", pwd_root(params), "--issues-exit-code=0" }
   end,
 
