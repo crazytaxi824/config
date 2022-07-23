@@ -1,4 +1,4 @@
---- Debug plugins lazy load ------------------------------------------------------------------------
+--- nvim-dap ---------------------------------------------------------------------------------------
 vim.api.nvim_create_autocmd("FileType", {
   pattern = {"go"},  --- NOTE: 目前只对 go 使用 debug
   callback = function()
@@ -17,6 +17,9 @@ vim.api.nvim_create_autocmd("FileType", {
     end
   end,
 })
+
+--- nvim-tree --------------------------------------------------------------------------------------
+vim.keymap.set('n', '<leader>,', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
 
 
 
