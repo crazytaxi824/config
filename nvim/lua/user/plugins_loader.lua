@@ -337,7 +337,7 @@ return packer.startup(function(use)
       config = function() require("user.lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
       requires = {
         {"williamboman/nvim-lsp-installer",  -- 简单安装 lsp server 的插件. NOTE: 和 lspconfig 并非依赖关系, 只是放在一起方便 setup()
-          commit="8848ef6"
+          commit="8848ef6",
         },
         "hrsh7th/cmp-nvim-lsp",  -- provide content to nvim-cmp Completion. cmp_nvim_lsp.update_capabilities(capabilities)
       },
@@ -428,8 +428,9 @@ return packer.startup(function(use)
   --- markdown preview
   use {"iamcco/markdown-preview.nvim",
     commit = "02cc387",
-    run = function() vim.fn["mkdp#util#install"]() end,  --- VVI: Update 后需要重新安装 preview 插件, 否则可能出现无法运行的情况.
-    ft = {"markdown"},  --- NOTE: packer 中使用 ft 时, after/ftplugin/markdown.lua 会被加载两次.
+    run = function() vim.fn["mkdp#util#install"]() end,  -- VVI: Update 后需要重新安装 preview 插件, 否则可能出现无法运行的情况.
+    config = function() vim.cmd('doautocmd mkdp_init BufEnter') end,  -- VVI: 需要这个设置才能使用 cmd 条件, 否则报错.
+    cmd = {"MarkdownPreview", "MarkdownPreviewToggle", "MarkdownPreviewStop"},
   }
 
   --use "goolord/alpha-nvim"          -- neovim 启动页面
