@@ -90,8 +90,8 @@ M.on_init = function(client)
   return true  -- VVI: 如果 return false 则 LSP 不启动.
 end
 
---- 可以手动通过 :LspStart gopls 启动 lsp
---M.autostart = false
+--- NOTE: 可以手动通过 :LspStart gopls 启动 lsp.
+--M.autostart = false  -- 默认为 true
 
 return M
 
