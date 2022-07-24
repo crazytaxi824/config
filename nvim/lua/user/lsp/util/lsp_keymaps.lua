@@ -24,6 +24,9 @@ M.textDocument_keymaps = function(bufnr)
     callback = require("user.lsp.lsp_config.user_lsp_request").hover_short})
   vim.api.nvim_buf_set_keymap(bufnr, "i", "<C-CR>", "", {noremap = true,
     callback = require("user.lsp.lsp_config.user_lsp_request").hover_short})
+  --vim.api.nvim_buf_set_keymap(bufnr, "i", ",",
+  --  ",<cmd>lua require('user.lsp.lsp_config.user_lsp_request').hover_short()<CR>",
+  --  {noremap = true})
 
   --- definition, references, implementation.
   vim.api.nvim_buf_set_keymap(bufnr, "n", "<F12>", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
