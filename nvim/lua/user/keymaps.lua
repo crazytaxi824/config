@@ -107,7 +107,12 @@ end
 function _Delete_search_hl()
   --- VVI: 删除之前的 highlight.
   if search_hl_cache then
-    vim.fn.matchdelete(search_hl_cache.hl_id, search_hl_cache.win_id)
+    --- 如果 win 已经关闭则不用 matchdelete()
+    local win_info = vim.fn.getwininfo(search_hl_cache.win_id)
+    if #win_info > 0 then
+      vim.fn.matchdelete(search_hl_cache.hl_id, search_hl_cache.win_id)
+    end
+
     search_hl_cache = nil  -- clear cache
   end
 
