@@ -152,30 +152,31 @@ Keymap_set_and_register(telescope_keymaps, {
 ---       files.grep_string = function(opts), opts 参数为 `:help grep_string()`, cwd, search ...
 --- make_entry 的内置函数定义在:
 ---       https://github.com/nvim-telescope/telescope.nvim -> lua/telescope/make_entry.lua
-local finders = require "telescope.finders"
-local make_entry = require "telescope.make_entry"
-local pickers = require "telescope.pickers"
+local finders = require("telescope.finders")
+local make_entry = require("telescope.make_entry")
+local pickers = require("telescope.pickers")
 local conf = require("telescope.config").values
 
-local function rg_search(additional_args)
-  local result = vim.fn.system(vim.fn.join(conf.vimgrep_arguments, " ") .. " " .. additional_args)
+local function my_rg_picker(opts)
+  opts = opts or {}
+  local result = vim.fn.system(vim.fn.join(conf.vimgrep_arguments, " ") .. " " .. opts.extra_args)
   if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
     if result == "" then
-      vim.notify("no result found", vim.log.levels.WARN)
+      vim.notify("Rg: no result found", vim.log.levels.WARN)
     else
       Notify(result, "ERROR")
     end
     return
   end
 
-  pickers.new({}, {
+  pickers.new(opts, {
     prompt_title = ":Rg",
     finder = finders.new_table({
       results = vim.fn.split(result, '\n'),
       entry_maker = make_entry.gen_from_vimgrep(),  -- VVI: gen_from_vimgrep() 设置作用: <CR> jump to <file:line:column>
     }),
-    previewer = conf.grep_previewer({}),
-    sorter = conf.generic_sorter(),  -- VVI: 设置 sorter 后可以通过 fzf 输入框对 results 进行过滤.
+    previewer = conf.grep_previewer(opts),
+    sorter = conf.generic_sorter(opts),  -- VVI: 设置 sorter 后可以通过 fzf 输入框对 results 进行过滤.
   }):find()
 end
 
@@ -200,8 +201,8 @@ end
 ---   Rg -wS 'foo' ./src /tmp
 -- -- }}}
 vim.api.nvim_create_user_command("Rg",
-  function(opts)
-    rg_search(opts.args)
+  function(params)
+    my_rg_picker({extra_args = params.args})
   end,
 {nargs="+"})
 
