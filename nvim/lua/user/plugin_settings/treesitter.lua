@@ -137,7 +137,7 @@ vim.api.nvim_create_autocmd('FileType', {
     --- 在文件打开 N(ms) 之后再 highlight 文本.
     vim.defer_fn(function()
       enable_module('highlight', params.buf)
-    end, 100)  -- delay 100ms, 象征意义, 设置为 1ms 加载速度也差不多.
+    end, 200)  -- delay (N)ms
   end
 })
 

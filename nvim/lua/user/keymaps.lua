@@ -107,7 +107,12 @@ end
 function _Delete_search_hl()
   --- VVI: 删除之前的 highlight.
   if search_hl_cache then
-    vim.fn.matchdelete(search_hl_cache.hl_id, search_hl_cache.win_id)
+    --- 如果 win 已经关闭则不用 matchdelete()
+    local win_info = vim.fn.getwininfo(search_hl_cache.win_id)
+    if #win_info > 0 then
+      vim.fn.matchdelete(search_hl_cache.hl_id, search_hl_cache.win_id)
+    end
+
     search_hl_cache = nil  -- clear cache
   end
 
@@ -148,7 +153,6 @@ local function find_ts_root_node()
       return tree_root
     end
   end
-  return nil
 end
 
 local function ts_root_children()
@@ -170,14 +174,12 @@ local function ts_root_children()
   if #child_without_comment>0 then
     return child_without_comment
   end
-
-  return nil
 end
 
 local function nodes_around_cursor()
   local root_children = ts_root_children()
   if not root_children then
-    return nil
+    return
   end
 
   local cursor_lnum = vim.fn.getpos('.')[2]  -- {bufnr, line, col, bytes}, table_list/array, 从 1 开始计算.
