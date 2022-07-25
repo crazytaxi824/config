@@ -97,8 +97,8 @@ end
 vim.api.nvim_buf_create_user_command(
   0,
   "GoAddTags",
-  function(input)
-    go_add_tags(input.fargs)
+  function(params)
+    go_add_tags(params.fargs)
   end,
   {nargs = "+", bang = true}
 )
@@ -149,8 +149,8 @@ end
 vim.api.nvim_buf_create_user_command(
   0,
   "GoRemoveTags",
-  function(input)
-    go_remove_tags(input.fargs)
+  function(params)
+    go_remove_tags(params.fargs)
   end,
   {bang = true, nargs = "*"}
 )

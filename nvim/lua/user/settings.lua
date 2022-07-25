@@ -179,6 +179,7 @@ vim.opt.hlsearch = true    -- / ? 搜索时显示所有匹配项. 颜色设置 `
 --vim.opt.showtabline = 2    -- always show tabs
 
 vim.opt.number = true        -- 设置行号
+--vim.opt.relativenumber = true  -- 相对行号
 --vim.opt.numberwidth = 4    -- 默认行号占 4 列
 
 vim.opt.cursorline = true    -- 突出显示当前行. 包括: 行号, 背景色, 下划线...

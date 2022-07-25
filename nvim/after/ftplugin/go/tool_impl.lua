@@ -45,8 +45,8 @@ end
 vim.api.nvim_buf_create_user_command(
   0,
   "GoImpl",
-  function(input)
-    go_impl(input.fargs)
+  function(params)
+    go_impl(params.fargs)
   end,
   {bang=true, nargs="+"}
 )

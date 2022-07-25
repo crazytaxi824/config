@@ -104,6 +104,7 @@ for lsp_svr, filetypes in pairs(lsp_servers_map) do
 
       lspconfig[lsp_svr].setup(opts)  -- 设置 lsp
       vim.cmd('LspStart ' .. lsp_svr )  -- VVI: 手动启动 lsp
+      --Notify(lsp_svr .. " started", "INFO", {title="LSP"})  -- DEBUG 用. 每个 lsp 应该只打印一次.
     end
   })
 end
