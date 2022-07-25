@@ -90,18 +90,21 @@ keybinding:
   # file (window No.1)
   files:
     fetch: '<f12>'        # submodules 项目子仓库, 使用 'b' 打开 menu 操作
+    commitChangesWithoutHook: '<f12>'
   submodules:
     init: '<f12>'         # submodules 项目子仓库, 使用 'b' 打开 menu 操作
   # branch (window No.3)
   branches:
     rebaseBranch: '<f12>' # use 'rebase-checkout' carefully.
     fastForward: '<f12>'  # fast-forward this branch from its upstream
+    forceCheckoutBranch: '<f12>'
   # commit (window No.4)
   commits:
     revertCommit: '<f12>' # use 'revert-commit' carefully. no confirm required
-    pickCommit: '<f12>'   # pick commit (when mid-rebase)
     viewResetOptions: '<f12>'  # 默认为 'g', 这里是为了避免按键冲突
   # stash (window No.5)
   stash:
     popStash: 'p'  # 默认为 'g', 这里是为了避免按键冲突
+
+
 
