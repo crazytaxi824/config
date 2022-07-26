@@ -20,7 +20,7 @@ ts_configs.setup {
   --- treesitter 自带 modules 设置 -----------------------------------------------------------------
   highlight = {
     enable = false,  -- VVI: 后面使用 lazy 方式启动 highlight, 提前加载会严重拖慢文件打开速度.
-    disable = { "" },  -- list of language that will be disabled
+    disable = { "" },  -- list of language that will be disabled.
 
     --- NOTE: true - 同时使用 treesitter 和 vim 自带 syntax 颜色, vim syntax 和 treesitter 的颜色效果叠加.
     ---              eg: syntax 是 bold, 而 treesitter 是 blue, 则最终颜色效果为 blue + bold.
@@ -117,6 +117,15 @@ local function enable_module(mod, bufnr, lang)
   end
 
   bufnr = bufnr or vim.api.nvim_get_current_buf()
+
+  --- VVI: 判断 bufnr 是否存在.
+  --- 遇到的问题: WhichKey window 打开后很快关闭, 造成 error.
+  --- 分析: 因为 defer_fn() 的原因, 指定的 buffer 有可能在打开后 N(ms) 内就被关闭了, 引起 error.
+  if vim.fn.bufexists(bufnr) == 0 then
+    return
+  end
+
+  --- 通过 parser 获取指定 buffer 的 lang.
   lang = lang or parsers.get_buf_lang(bufnr)
 
   if not module.enable then
