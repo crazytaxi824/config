@@ -44,8 +44,7 @@ local my_theme = {
 
 --- 自定义 components ------------------------------------------------------------------------------ {{{
 --- NOTE: https://github.com/nvim-lualine/lualine.nvim/wiki/Component-snippets
-
---- check Trailing-Whitespace && Mixed-indent ------------------------------------------------------
+--- check Trailing-Whitespace && Mixed-indent ---------------------------------- {{{
 --- check Trailing-Whitespace
 local function check_trailing_whitespace()
   local space = vim.fn.search([[\s\+$]], 'nwc')
@@ -99,8 +98,9 @@ local function my_check()
 
   return mixed_indent_cache
 end
+-- -- }}}
 
---- Changing filename color based on modified status -----------------------------------------------
+--- Changing filename color based on modified status --------------------------- {{{
 local highlight = require('lualine.highlight')
 local my_fname = require('lualine.components.filename'):extend() -- 修改自 filename component
 
@@ -135,6 +135,15 @@ function my_fname:update_status()
 
   return data
 end
+-- -- }}}
+
+--- 修改 progress component ---------------------------------------------------- {{{
+--- 参照 https://github.com/nvim-lualine/lualine.nvim/blob/master/lua/lualine/components/progress.lua
+--- NOTE: `:help 'statusline'` 中有对 l p v L... 占位符的解释.
+local function my_progress()
+  return '%3p%%:𝌆 %L'
+end
+-- -- }}}
 
 -- -- }}}
 
@@ -173,9 +182,9 @@ lualine.setup {
       },
     },
     lualine_x = {'encoding', 'filetype'},
-    lualine_y = {'progress'},
+    lualine_y = {my_progress},  -- 自定义 component, 修改自 builtin 'progress' component
     lualine_z = {'location',
-      {my_check, color = {bg=colors.dark_orange, fg=colors.black, gui='bold'}},  -- 自定义 components
+      {my_check, color = {bg=colors.dark_orange, fg=colors.black, gui='bold'}},  -- 自定义 component
       { 'diagnostics',
         symbols = {error = 'E:', warn = 'W:', info = 'I:', hint = 'H:'},
         update_in_insert = false, -- Update diagnostics in insert mode.

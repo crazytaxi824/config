@@ -380,7 +380,7 @@ return packer.startup(function(use)
       require('packer').loader('nvim-dap')  -- NOTE: 手动加载 nvim-dap.
                                             -- 这里不能直接使用 packer.loader(), 而必须重新 require('packer').loader()
                                             -- 否则无法找到 nvim-dap.
-      require("user.plugin_settings.debug_dap")  -- NOTE: dap-ui && dap 设置在同一文件中.
+      require("user.plugin_settings.dap_debug")  -- NOTE: dap-ui && dap 设置在同一文件中.
     end,
     requires = {
       {"mfussenegger/nvim-dap",  -- core debug tool
