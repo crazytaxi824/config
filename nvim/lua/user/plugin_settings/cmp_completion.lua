@@ -38,7 +38,7 @@ local kind_icons = {  --- {{{
   Event = "event",
   Operator = "op",
 }
--- }}}
+-- -- }}}
 
 cmp.setup {
   preselect = cmp.PreselectMode.None,  -- NOTE: cmp.PreselectMode.None | cmp.PreselectMode.Item
@@ -59,17 +59,17 @@ cmp.setup {
   },
 
   sources = {
-    -- VVI: 顺序很重要
+    --- VVI: 顺序很重要
     { name = "luasnip" },   -- "saadparwaiz1/cmp_luasnip" -> "L3MON4D3/LuaSnip"
     { name = "nvim_lsp" },  -- "hrsh7th/cmp-nvim-lsp"
     { name = "buffer" },    -- "hrsh7th/cmp-buffer"
     { name = "path" },      -- "hrsh7th/cmp-path"
-    -- NOTE: other snippets engine --- {{{
-    -- { name = 'vsnip' },     -- For vsnip users     -- "hrsh7th/vim-vsnip" vim-script
-    -- { name = 'luasnip' },   -- For luasnip users   -- "L3MON4D3/LuaSnip" lua
-    -- { name = 'snippy' },    -- For snippy users    -- "dcampos/nvim-snippy" lua
-    -- { name = 'ultisnips' }, -- For ultisnips users -- "SirVer/ultisnips" python
-    -- }}}
+    --- NOTE: other snippets engine --- {{{
+    --{ name = 'vsnip' },      -- For vsnip users      -- "hrsh7th/vim-vsnip" vim-script
+    --{ name = 'luasnip' },    -- For luasnip users    -- "L3MON4D3/LuaSnip" lua
+    --{ name = 'snippy' },     -- For snippy users     -- "dcampos/nvim-snippy" lua
+    --{ name = 'ultisnips' },  -- For ultisnips users  -- "SirVer/ultisnips" python
+    -- -- }}}
   },
 
   window = {
@@ -77,19 +77,27 @@ cmp.setup {
     --documentation = cmp.config.window.bordered({border = "single"}),
   },
 
-  -- completion 菜单显示
+  --- completion 菜单显示
   formatting = {
+    --- abbr: suggestion
+    --- kind: function, method, module...
+    --- menu: [LSP], [Buffer]...
     fields = { "abbr", "kind", "menu" },
+
     format = function(entry, vim_item)
-      -- Kind icons
       vim_item.kind = string.format("   %s", kind_icons[vim_item.kind])  --  kind icon 前多个空格
-      -- vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind)
-      vim_item.menu = ({
-        luasnip  = "[Snip]",
-        nvim_lsp = "[LSP]",
-        buffer   = "[Buff]",
-        path     = "[Path]",
-      })[entry.source.name]
+      --vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind)  -- 使用图标和 kind_name
+
+      --- 不显示 menu
+      vim_item.menu = " "
+      --- 如果需要显示 menu 使用以下设置.
+      -- vim_item.menu = ({
+      --   luasnip  = "[Snip]",
+      --   nvim_lsp = "[LSP]",
+      --   buffer   = "[Buff]",
+      --   path     = "[Path]",
+      -- })[entry.source.name]
+
       return vim_item
     end,
   },
@@ -99,7 +107,7 @@ cmp.setup {
     native_menu = false,   -- VVI: disable it.
   },
 
-  -- key mapping -------
+  --- key mapping -------
   mapping = {
     ["<Up>"] = cmp.mapping.select_prev_item(),
     ["<Down>"] = cmp.mapping.select_next_item(),
@@ -114,8 +122,8 @@ cmp.setup {
     --["<C-s>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),   -- 手动触发 completion. NOTE: 不需要.
     -- -- }}}
 
-    -- Accept currently selected item. If none selected, `select` first item.
-    -- Set `select` to `false` to only confirm explicitly selected items.
+    --- Accept currently selected item. If none selected, `select` first item.
+    --- Set `select` to `false` to only confirm explicitly selected items.
     ["<CR>"] = cmp.mapping.confirm { select = true },
     ["<Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then

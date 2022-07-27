@@ -198,15 +198,15 @@ buf_highlights.hint_selected = buf_highlights.buffer_selected
 --- functions for delete current buffer from tabline ----------------------------------------------- {{{
 --- 用于 <leader>d 快捷键和 mouse actions 设置.
 --- NOTE: 指定 filetype 不能使用 go_to() 功能.
-local function buf_jumpable()
-  --- 不能使用 bufferline.go_to() 的 filetype
+local function exclude_filetypes()
+  --- 自定义: 不允许使用 bufferline.go_to() 的 filetype
   local exclude_filetype = {'vimfiler', 'nerdtree', 'tagbar', 'NvimTree', 'toggleterm', 'myterm'}
 
   if vim.tbl_contains(exclude_filetype, vim.bo.filetype) then
-    return false
+    return true
   end
 
-  return true
+  return false
 end
 
 --- NOTE: tab 是一组 win 的集合. `:tabclose` 本质是关闭 tab 中所有的 win. 并不 bdelete buffer.
@@ -265,8 +265,8 @@ local function bufferline_del_current_buffer(ignore_tab)
     return
   end
 
-  --- 如果当前 buffer 不允许 jump 到别的 buffer 则直接返回.
-  if not buf_jumpable() then
+  --- 如果当前 buffer 的 filetype 不允许 go_to(), 则直接返回.
+  if exclude_filetypes() then
     return
   end
 
@@ -401,15 +401,15 @@ local opt = { noremap = true, silent = true }
 local bufferline_keymaps = {
   --- NOTE: according to bufferline source code, `go_to_buffer()` is deprecate. it calls `go_to()`
   --- https://github.com/akinsho/bufferline.nvim/ -> /lua/bufferline.lua
-  {'n', '<leader>1', function() if buf_jumpable() then bufferline.go_to(1, true) end end, opt, 'which_key_ignore'},
-  {'n', '<leader>2', function() if buf_jumpable() then bufferline.go_to(2, true) end end, opt, 'which_key_ignore'},
-  {'n', '<leader>3', function() if buf_jumpable() then bufferline.go_to(3, true) end end, opt, 'which_key_ignore'},
-  {'n', '<leader>4', function() if buf_jumpable() then bufferline.go_to(4, true) end end, opt, 'which_key_ignore'},
-  {'n', '<leader>5', function() if buf_jumpable() then bufferline.go_to(5, true) end end, opt, 'which_key_ignore'},
-  {'n', '<leader>6', function() if buf_jumpable() then bufferline.go_to(6, true) end end, opt, 'which_key_ignore'},
-  {'n', '<leader>7', function() if buf_jumpable() then bufferline.go_to(7, true) end end, opt, 'which_key_ignore'},
-  {'n', '<leader>8', function() if buf_jumpable() then bufferline.go_to(8, true) end end, opt, 'which_key_ignore'},
-  {'n', '<leader>9', function() if buf_jumpable() then bufferline.go_to(9, true) end end, opt, 'which_key_ignore'},
+  {'n', '<leader>1', function() if not exclude_filetypes() then bufferline.go_to(1, true) end end, opt, 'which_key_ignore'},
+  {'n', '<leader>2', function() if not exclude_filetypes() then bufferline.go_to(2, true) end end, opt, 'which_key_ignore'},
+  {'n', '<leader>3', function() if not exclude_filetypes() then bufferline.go_to(3, true) end end, opt, 'which_key_ignore'},
+  {'n', '<leader>4', function() if not exclude_filetypes() then bufferline.go_to(4, true) end end, opt, 'which_key_ignore'},
+  {'n', '<leader>5', function() if not exclude_filetypes() then bufferline.go_to(5, true) end end, opt, 'which_key_ignore'},
+  {'n', '<leader>6', function() if not exclude_filetypes() then bufferline.go_to(6, true) end end, opt, 'which_key_ignore'},
+  {'n', '<leader>7', function() if not exclude_filetypes() then bufferline.go_to(7, true) end end, opt, 'which_key_ignore'},
+  {'n', '<leader>8', function() if not exclude_filetypes() then bufferline.go_to(8, true) end end, opt, 'which_key_ignore'},
+  {'n', '<leader>9', function() if not exclude_filetypes() then bufferline.go_to(9, true) end end, opt, 'which_key_ignore'},
 
   --- NOTE: 如果 cursor 所在的 window 中显示的(active) buffer 是 unlisted (即: 不显示在 tabline 上的 buffer),
   --- 不能使用 BufferLineCycleNext/Prev 来进行 buffer 切换, 但是可以使用 bufferline.go_to() 直接跳转.
