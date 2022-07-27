@@ -23,13 +23,13 @@ local kind_icons = {  --- {{{
   Class = "struct",
   Interface = "iface",
   TypeParameter = "param",
-  Unit = "u",
-  Value = "v",
+  Unit = "unit",
+  Value = "val",
   Enum = "enum",
   EnumMember = "enum",
   Keyword = "keywd",
   Snippet = "snip",
-  Color = "c",
+  Color = "color",
   File = "file",
   Reference = "ref",
   Folder = "dir",
@@ -155,9 +155,16 @@ cmp.setup {
 
 --- Cmp completion menu color ---------------------------------------------------------------------- {{{
 -- https://github.com/hrsh7th/nvim-cmp/wiki/Menu-Appearance
+
 --- 匹配文字的颜色
 vim.cmd [[hi CmpItemAbbrMatch ctermfg=213]]
 vim.cmd [[hi CmpItemAbbrMatchFuzzy ctermfg=213]]
+
+--- [lsp], [buffer], [path], [snippet] 颜色
+vim.cmd [[hi CmpItemMenu ctermfg=43]]
+
+--- VVI: CmpItemKindXXX 默认颜色, 如果没有单独设置 CmpItemKindXXX 颜色则会使用该颜色.
+vim.cmd [[hi CmpItemKindDefault ctermfg=248]]
 
 vim.cmd [[hi! link CmpItemKindInterface Type]]
 vim.cmd [[hi! link CmpItemKindClass Type]]
@@ -165,14 +172,21 @@ vim.cmd [[hi! link CmpItemKindStruct Type]]
 vim.cmd [[hi! link CmpItemKindTypeParameter Type]]
 vim.cmd [[hi! link CmpItemKindFunction Function]]
 vim.cmd [[hi! link CmpItemKindMethod Function]]
+vim.cmd [[hi! link CmpItemKindConstructor Function]]
 vim.cmd [[hi! link CmpItemKindKeyword Keyword]]
+vim.cmd [[hi! link CmpItemKindVariable Keyword]]
+vim.cmd [[hi! link CmpItemKindConstant Keyword]]
+vim.cmd [[hi! link CmpItemKindEnum Keyword]]
 vim.cmd [[hi! link CmpItemKindModule String]]
+
+--- cyan
+vim.cmd [[hi CmpItemKindFile ctermfg=81]]
+vim.cmd [[hi CmpItemKindFolder ctermfg=81]]
 
 -- grey
 vim.cmd [[hi CmpItemAbbrDeprecated ctermfg=244 cterm=underline]]  -- 弃用的 suggestion.
-vim.cmd [[hi CmpItemKindText ctermfg=246]]
 
--- light blue
+-- blue
 vim.cmd [[hi CmpItemKindSnippet ctermfg=75]]
 
 -- -- }}}
