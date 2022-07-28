@@ -11,7 +11,6 @@ function Jump_to_file(filepath, lnum)
 
   --- 如果 filepath 不可读取, 则直接 return. eg: filepath 错误
   if vim.fn.filereadable(filepath) == 0 then
-    Notify("cannot open file '" .. filepath .. "'", "DEBUG")
     return
   end
 
@@ -88,6 +87,13 @@ function Visual_selected_filepath()
   end
 
   local v_content = string.sub(vim.fn.getline("'<"), startpos[3], endpos[3])
+
+  --- 如果 v_content 不可读取, 则直接 return. eg: filepath 错误
+  if vim.fn.filereadable(v_content) == 0 then
+    Notify("cannot open file '" .. v_content .. "'", "DEBUG")
+    return
+  end
+
   return Parse_filepath(v_content)
 end
 

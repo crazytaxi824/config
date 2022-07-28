@@ -15,9 +15,11 @@ local ts_opts = {
   count = ts_term_id,     -- 这里是指定 id, 类似 `:100ToggleTerm`,
                           -- 就算是 hidden 状态也可以通过 `:100ToggleTerm` 重新打开.
                           -- 如果两个 Terminal 有相同的 ID, 则会出现错误.
-  on_open = function()
-    vim.cmd('wincmd p')  -- move to previous window
-  end
+
+  --- move to previous window when job ends.
+  -- on_exit = function()
+  --   vim.cmd('wincmd p')  -- move to previous window
+  -- end
 }
 
 --- node file --------------------------------------------------------------------------------------
