@@ -3,19 +3,19 @@
 --- nvim-dap ---------------------------------------------------------------------------------------
 vim.api.nvim_create_autocmd("FileType", {
   pattern = {"go"},  --- NOTE: 目前只对 go 使用 debug
-  callback = function()
+  callback = function(params)
     --- set command :Debug
     --vim.cmd([[command -buffer -bar Debug DapContinue]])
-    vim.api.nvim_buf_create_user_command(0, 'Debug', 'DapContinue', {bang=true, bar=true})
+    vim.api.nvim_buf_create_user_command(params.buf, 'Debug', 'DapContinue', {bang=true, bar=true})
 
     --- set <F9> Toggle Breakpoint
     --vim.cmd([[ nnoremap <buffer> <F9> <cmd>DapToggleBreakpoint<CR>]])
-    vim.keymap.set('n', '<F9>', '<cmd>DapToggleBreakpoint<CR>', {noremap=true, buffer=true})
+    vim.keymap.set('n', '<F9>', '<cmd>DapToggleBreakpoint<CR>', {noremap=true, buffer=params.buf})
 
     --- which-key <F9> toggle_breakpoint
     local wk_status_ok, wk = pcall(require, "which-key")
     if wk_status_ok then
-      wk.register({['<leader>c<F9>'] = {"Debug - Toggle Breakpoint"}}, {mode="n", buffer=0})
+      wk.register({['<leader>c<F9>'] = {"Debug - Toggle Breakpoint"}}, {mode="n", buffer=params.buf})
     end
   end,
 })
