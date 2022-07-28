@@ -314,24 +314,29 @@ bufferline.setup({
   options = {
     mode = "buffers", -- set to "tabs" to only show tabpages instead
     numbers = "ordinal", -- "none" | "ordinal" | "buffer_id" | "both" | function({ ordinal, id, lower, raise }): string,
+    sort_by = 'id',  -- 其他选项有 BUG.
+    persist_buffer_sort = true, -- whether or not custom sorted buffers should persist
+
     always_show_bufferline = true, -- VVI: 一直显示 bufferline
+    show_tab_indicators = true, -- 多个 tab 时在右上角显示 1 | 2 | ...
 
     --- icon 显示
     color_icons = false, -- whether or not to add the filetype icon highlights
     show_buffer_icons = false, -- disable filetype icons for buffers
     show_buffer_default_icon = false, -- whether or not an unrecognised filetype should show a default icon
-    show_close_icon = false,  -- tab close icon
+    show_close_icon = false,  -- tab close icon. 无法自定义 tab close command, 所以不使用.
     show_buffer_close_icons = true, -- buffer close icon
 
     --- NOTE: this plugin is designed with this icon in mind,
     --- and so changing this is NOT recommended, this is intended
     --- as an escape hatch for people who cannot bear it for whatever reason
-    indicator_icon = '▎',  --  █ ▎▌, NOTE: 这里不设置任何值, 只是站位作用.
+    indicator_icon = '▎',  --  █ ▎▌
     buffer_close_icon = '✕',  -- 每个 buffer 后面显示 close icon.
     modified_icon = '●',
     close_icon = '✕',  -- close tab
     left_trunc_marker = '',
     right_trunc_marker = '',
+    separator_style = {' ', ' '},  -- 'thin', 'thick', {'',''} - [focused and unfocused]
 
     --- mouse actions, can be a string | function, see "Mouse actions"
     --- NOTE: 这里 %d 是 bufnr() 的 placeholder. 可以使用 function(bufnr) 来设置.
@@ -361,6 +366,12 @@ bufferline.setup({
       return "("..count..")"
     end,
 
+    --- 在 nvim-tree 上显示 "File Explorer"
+    offsets = {
+      {filetype = "NvimTree", text = "File Explorer", text_align = "center", highlight="Directory"},
+      --{filetype = "tagbar", text = "TagBar", text_align = "center", highlight="Directory"}
+    },
+
     --- NOTE: this will be called a lot so don't do any heavy processing here
     -- custom_filter = function(buf_number, buf_numbers)
     --   --- NOTE: filter out filetypes you don't want to see
@@ -381,15 +392,6 @@ bufferline.setup({
     --     return true
     --   end
     -- end,
-
-    --- 在 nvim-tree 上显示 "File Explorer"
-    offsets = {{filetype = "NvimTree", text = "File Explorer", text_align = "center", highlight="Directory"}},
-
-    show_tab_indicators = true, -- 多个 tab 时在右上角显示 1 | 2 | ...
-    persist_buffer_sort = true, -- whether or not custom sorted buffers should persist
-
-    separator_style = {' ', ' '},  -- thin thick, {'',''}, -- [focused and unfocused]
-    sort_by = 'id',
   },
 
   --- 颜色设置
