@@ -90,7 +90,6 @@ for lsp_svr, filetypes in pairs(lsp_servers_map) do
     once = true,  --- VVI: only need to start LSP server once.
     callback = function()
       local opts = require("user.lsp.lsp_config.setup_opts")
-      opts.autostart = false  -- VVI: 不要自动启动
 
       --- 加载 lsp 配置文件, "~/.config/nvim/lua/user/lsp/lsp_config/langs/..."
       --- 如果文件存在, 则加载自定义设置, 如果没有自定义设置则加载默认设置.
@@ -102,8 +101,8 @@ for lsp_svr, filetypes in pairs(lsp_servers_map) do
         end
       end
 
-      lspconfig[lsp_svr].setup(opts)  -- 设置 lsp
-      vim.cmd('LspStart ' .. lsp_svr )  -- VVI: 手动启动 lsp
+      lspconfig[lsp_svr].setup(opts)    -- 设置 lsp
+      vim.cmd('LspStart ' .. lsp_svr )  -- VVI: 第一次必须要手动启动 lsp.
       --Notify(lsp_svr .. " started", "INFO", {title="LSP"})  -- DEBUG 用. 每个 lsp 应该只打印一次.
     end
   })

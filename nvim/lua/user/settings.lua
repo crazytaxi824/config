@@ -160,7 +160,7 @@ vim.opt.wildmode = "full"  -- Complete the next full match.
 vim.opt.wildoptions = ""   -- default "pum,tagfile", pum - popupmenu | tagfile - <C-d> list matches
 vim.opt.wildignorecase = true  -- command 自动补全时忽略大小写.
 vim.opt.foldenable = true  -- 折叠代码.
-vim.opt.hidden = true      -- NOTE: When off a buffer is unloaded when it is abandoned.
+vim.opt.hidden = true      -- NOTE: When 'false' a buffer is unloaded when it is abandoned.
                            -- vim-airline & coc.nvim 需要用到.
 
 --- window / scroll 设置
@@ -221,13 +221,13 @@ vim.opt.undolevels = 5000
 --vim.cmd([[au Filetype * ++once :silent !mkdir -p ]] .. vim.go.undodir)
 vim.api.nvim_create_autocmd("Filetype", {
   pattern = {"*"},
+  once = true,  -- VVI: ++once 只在进入 neovim 时执行一次 autocmd
   callback = function()
     --- undodir 不存在的情况下, `mkdir -p` 创建该文件夹.
     if vim.fn.isdirectory(vim.go.undodir) == 0 then
       vim.cmd([[silent !mkdir -p ]] .. vim.go.undodir)
     end
   end,
-  once = true,  -- ++once 只在进入 neovim 时执行一次 autocmd
 })
 
 --- status line 设置，vim 最底部状栏
