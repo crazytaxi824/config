@@ -61,7 +61,7 @@ vim.cmd('hi SignColumn ctermbg=None')              -- line_number 左边用来�
 vim.cmd('hi ColorColumn ctermbg=238')              -- textwidth column 颜色
 vim.cmd('hi QuickFixLine cterm=bold ctermbg=237 ctermfg=75')  -- Quick Fix 选中行颜色
 
-vim.cmd('hi IncSearch ctermfg=0 ctermbg=213 cterm=None')  -- / ? 搜索颜色
+vim.cmd('hi IncSearch ctermfg=0 ctermbg=213 cterm=bold')  -- / ? 搜索颜色
 vim.cmd('hi Search ctermfg=0 ctermbg=191')                -- / ? * # g* g# 搜索颜色
 
 vim.cmd('hi ErrorMsg ctermfg=253 ctermbg=167')     -- echoerr 颜色

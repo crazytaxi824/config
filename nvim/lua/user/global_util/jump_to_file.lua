@@ -65,10 +65,10 @@ end
 --- TermLeave 意思是 term 关闭
 vim.api.nvim_create_autocmd('TermOpen', {
   pattern = {"term://*"},
-  callback = function()
+  callback = function(params)
     vim.keymap.set('n', '<CR>',
       "<cmd>lua Jump_to_file(Line_filepath())<CR>",
-      {noremap = true, silent = true, buffer = true} -- local to Terminal buffer
+      {noremap = true, silent = true, buffer = params.buf} -- local to Terminal buffer
     )
   end,
 })
