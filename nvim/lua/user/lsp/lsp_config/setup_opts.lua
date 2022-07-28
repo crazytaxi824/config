@@ -90,7 +90,8 @@ M.on_init = function(client)
   return true  -- VVI: 如果 return false 则 LSP 不启动.
 end
 
---- NOTE: 可以手动通过 :LspStart gopls 启动 lsp.
+--- VVI: autostart 不要设置为 false, 会造成很多问题.
+--- 需要启动多个 lsp 实例的时候, 如果 autostart 为 false, 则每次都需要手动启动. eg: `:LspStart pyright`
 --M.autostart = false  -- 默认为 true
 
 return M
