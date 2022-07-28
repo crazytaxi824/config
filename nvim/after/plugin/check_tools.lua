@@ -22,10 +22,10 @@ local function check_go_tools()
   Check_cmd_tools(gotools, {title = "check go tools"})
 end
 
-vim.api.nvim_create_autocmd("Filetype", {
+vim.api.nvim_create_autocmd("FileType", {
   pattern = {"go"},
-  callback = check_go_tools,
   once = true,  -- VVI: Run check once only.
+  callback = check_go_tools,
 })
 
 
