@@ -1,6 +1,6 @@
 --- Jump to file -----------------------------------------------------------------------------------
 --- 利用 local list 跳转到 log 文件
-function Jump_to_file(filepath, lnum)
+function Jump_to_file(filepath, lnum, err_msg)
   if not filepath then
     return
   end
@@ -11,6 +11,9 @@ function Jump_to_file(filepath, lnum)
 
   --- 如果 filepath 不可读取, 则直接 return. eg: filepath 错误
   if vim.fn.filereadable(filepath) == 0 then
+    if err_msg then
+      Notify(err_msg .. filepath, "DEBUG")
+    end
     return
   end
 
@@ -87,14 +90,9 @@ function Visual_selected_filepath()
   end
 
   local v_content = string.sub(vim.fn.getline("'<"), startpos[3], endpos[3])
+  local fp, lnum = Parse_filepath(v_content)
 
-  --- 如果 v_content 不可读取, 则直接 return. eg: filepath 错误
-  if vim.fn.filereadable(v_content) == 0 then
-    Notify("cannot open file '" .. v_content .. "'", "DEBUG")
-    return
-  end
-
-  return Parse_filepath(v_content)
+  return fp, lnum, 'cannot open file: '
 end
 
 vim.keymap.set('v', '<CR>',
