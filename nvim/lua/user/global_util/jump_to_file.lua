@@ -4,6 +4,7 @@ function Jump_to_file(filepath, lnum, col)
   if not filepath then
     return
   end
+  filepath = vim.fn.expand(filepath)
 
   if not lnum then  --- 如果 lnum 不存在, 跳到文件第一行.
     lnum = 1
@@ -14,7 +15,7 @@ function Jump_to_file(filepath, lnum, col)
   end
 
   --- 如果 filepath 不可读取, 则直接 return. eg: filepath 错误
-  if vim.fn.filereadable(vim.fn.expand(filepath)) == 0 then
+  if vim.fn.filereadable(filepath) == 0 then
     Notify('cannot open file: ' .. filepath, "DEBUG", {timeout = 1500})
     return
   end
@@ -49,8 +50,19 @@ function Jump_to_file(filepath, lnum, col)
   end
 end
 
+--- file://xxxx
+local function parse_file_scheme(content)
+  if string.match(content, '^file://') then
+    local _, e = string.find(content, 'file://')
+    return string.sub(content, e+1)
+  end
+  return content
+end
+
 --- split filepath:lnum, NOTE: go_run_test.lua 文件会用到该函数.
 function Parse_filepath(content)
+  content = parse_file_scheme(content)
+
   local file, lnum, col
   local fp = vim.split(vim.fn.trim(content), ":")
   file = fp[1]
@@ -63,20 +75,10 @@ function Parse_filepath(content)
   return file, lnum, col
 end
 
---- file://xxxx
-local function parse_file_scheme(content)
-  if string.match(content, '^file://') then
-    local _, e = string.find(content, 'file://')
-    return string.sub(content, e+1)
-  end
-  return content
-end
-
 --- terminal normal 模式跳转文件 -------------------------------------------------------------------
 --- 操作方法: 在 Terminal Normal 模式中, 在行的任意位置使用 <CR> 跳转到文件.
 function Cursor_cWORD_filepath()
-  local content = parse_file_scheme(vim.fn.expand('<cWORD>'))
-  return Parse_filepath(content)
+  return Parse_filepath(vim.fn.expand('<cWORD>'))
 end
 
 --- TermClose 意思是 job done
@@ -106,8 +108,6 @@ function Visual_selected_filepath()
   end
 
   local v_content = string.sub(vim.fn.getline("'<"), startpos[3], endpos[3])
-  v_content = parse_file_scheme(v_content)
-
   return Parse_filepath(v_content)
 end
 

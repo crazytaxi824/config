@@ -49,23 +49,18 @@ toggleterm.setup({
   --- highlight <file:line:col>
   on_stdout = function(_,_,data,_)
     --- file:// pattern match
-    vim.fn.matchadd('Underlined', 'file://\\S*')  -- highlight filepath
+    --- '\f' - isfname, 可用于 filename 的字符/数字/符号...
+    --- '\<' - start of a word
+    vim.fn.matchadd('Underlined', '\\<file://\\f*\\(:[0-9]\\+\\)\\{0,2}')  -- highlight filepath
 
     for _, lcontent in ipairs(data) do
       for _, content in ipairs(vim.split(lcontent, " ")) do
-        local filepath, lnum, col = Parse_filepath(content)
-
-        if vim.fn.filereadable(vim.fn.expand(filepath)) == 1 then
-          --print(filepath, lnum)
-          if not lnum then  -- 如果没有 lnum 则
-            vim.fn.matchadd('Underlined', vim.fn.escape(filepath, '~') .. ':\\{0,1}')  -- highlight filepath
-          else
-            if not col then
-              vim.fn.matchadd('Underlined', vim.fn.escape(filepath, '~')..':'..lnum .. ':\\{0,1}')  -- highlight filepath && line number
-            else
-              vim.fn.matchadd('Underlined', vim.fn.escape(filepath, '~')..':'..lnum..':'..col .. ':\\{0,1}')  -- highlight filepath && line number && column
-            end
-          end
+        --- VVI: 这里必须 trim(), 可以去掉 \r \n ...
+        local fp = vim.split(vim.fn.trim(content), ":")
+        if vim.fn.filereadable(vim.fn.expand(fp[1])) == 1 then
+          --- \@<! - eg: \(foo\)\@<!bar  - any "bar" that's not in "foobar"
+          --- \@!  - eg: foo\(bar\)\@!   - any "foo" not followed by "bar"
+          vim.fn.matchadd('Underlined', '\\(\\S\\)\\@<!'..vim.fn.escape(fp[1], '~') .. '\\(:[0-9]\\+\\)\\{0,2}')  -- highlight filepath
         end
       end
     end
