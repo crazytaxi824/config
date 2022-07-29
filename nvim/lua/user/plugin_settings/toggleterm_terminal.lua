@@ -45,6 +45,31 @@ toggleterm.setup({
     border = "single",  -- `:help nvim_open_win()`
     winblend = 0,
   },
+
+  --- highlight <file:line:col>
+  on_stdout = function(_,_,data,_)
+    --- file:// pattern match
+    vim.fn.matchadd('Underlined', 'file://\\S*')  -- highlight filepath
+
+    for _, lcontent in ipairs(data) do
+      for _, content in ipairs(vim.split(lcontent, " ")) do
+        local filepath, lnum, col = Parse_filepath(content)
+
+        if vim.fn.filereadable(vim.fn.expand(filepath)) == 1 then
+          --print(filepath, lnum)
+          if not lnum then  -- 如果没有 lnum 则
+            vim.fn.matchadd('Underlined', vim.fn.escape(filepath, '~') .. ':\\{0,1}')  -- highlight filepath
+          else
+            if not col then
+              vim.fn.matchadd('Underlined', vim.fn.escape(filepath, '~')..':'..lnum .. ':\\{0,1}')  -- highlight filepath && line number
+            else
+              vim.fn.matchadd('Underlined', vim.fn.escape(filepath, '~')..':'..lnum..':'..col .. ':\\{0,1}')  -- highlight filepath && line number && column
+            end
+          end
+        end
+      end
+    end
+  end,
   --- 其他设置 --- {{{
   -- on_open  = fun(t: Terminal), -- TermOpen
   -- on_close = fun(t: Terminal), -- TermLeave, term 关闭

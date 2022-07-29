@@ -1,6 +1,6 @@
 --- Jump to file -----------------------------------------------------------------------------------
 --- 利用 local list 跳转到 log 文件
-function Jump_to_file(filepath, lnum, err_msg)
+function Jump_to_file(filepath, lnum, col)
   if not filepath then
     return
   end
@@ -9,11 +9,13 @@ function Jump_to_file(filepath, lnum, err_msg)
     lnum = 1
   end
 
+  if not col then
+    col = 1
+  end
+
   --- 如果 filepath 不可读取, 则直接 return. eg: filepath 错误
-  if vim.fn.filereadable(filepath) == 0 then
-    if err_msg then
-      Notify(err_msg .. filepath, "DEBUG")
-    end
+  if vim.fn.filereadable(vim.fn.expand(filepath)) == 0 then
+    Notify('cannot open file: ' .. filepath, "DEBUG", {timeout = 1000})
     return
   end
 
@@ -30,7 +32,7 @@ function Jump_to_file(filepath, lnum, err_msg)
   end
 
   --- `:help setqflist-what`
-  local loclist_items = {filename = filepath, lnum = lnum, text='jump_to_log_file()'}
+  local loclist_items = {filename = filepath, lnum = lnum, col=col, text='jump_to_log_file()'}
 
   if vim.fn.win_gotoid(log_display_win_id) == 1 then
     --- 如果 log_display_win_id 可以跳转则直接跳转.
@@ -48,19 +50,33 @@ function Jump_to_file(filepath, lnum, err_msg)
 end
 
 --- split filepath:lnum, NOTE: go_run_test.lua 文件会用到该函数.
-function Parse_filepath(lcontent)
-  local fp = vim.split(vim.fn.trim(lcontent), ":")
+function Parse_filepath(content)
+  local file, lnum, col
+  local fp = vim.split(vim.fn.trim(content), ":")
+  file = fp[1]
   if fp[2] then
-    local lnum = tonumber(vim.split(fp[2], " ")[1])  -- tonumber(nil) = nil; tonumber('a') = nil
-    return fp[1], lnum
+    lnum = tonumber(fp[2])  -- tonumber(nil) = nil; tonumber('a') = nil
   end
-  return fp[1], nil
+  if lnum and fp[3] then
+    col = tonumber(fp[3])
+  end
+  return file, lnum, col
+end
+
+--- file://xxxx
+local function parse_file_scheme(content)
+  if string.match(content, '^file://') then
+    local _, e = string.find(content, 'file://')
+    return string.sub(content, e+1)
+  end
+  return content
 end
 
 --- terminal normal 模式跳转文件 -------------------------------------------------------------------
 --- 操作方法: 在 Terminal Normal 模式中, 在行的任意位置使用 <CR> 跳转到文件.
-function Line_filepath()
-  return Parse_filepath(vim.fn.getline('.'))
+function Cursor_cWORD_filepath()
+  local content = parse_file_scheme(vim.fn.expand('<cWORD>'))
+  return Parse_filepath(content)
 end
 
 --- TermClose 意思是 job done
@@ -69,7 +85,7 @@ vim.api.nvim_create_autocmd('TermOpen', {
   pattern = {"term://*"},
   callback = function(params)
     vim.keymap.set('n', '<CR>',
-      "<cmd>lua Jump_to_file(Line_filepath())<CR>",
+      "<cmd>lua Jump_to_file(Cursor_cWORD_filepath())<CR>",
       {noremap = true, silent = true, buffer = params.buf} -- local to Terminal buffer
     )
   end,
@@ -90,9 +106,9 @@ function Visual_selected_filepath()
   end
 
   local v_content = string.sub(vim.fn.getline("'<"), startpos[3], endpos[3])
-  local fp, lnum = Parse_filepath(v_content)
+  v_content = parse_file_scheme(v_content)
 
-  return fp, lnum, 'cannot open file: '
+  return Parse_filepath(v_content)
 end
 
 vim.keymap.set('v', '<CR>',

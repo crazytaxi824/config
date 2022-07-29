@@ -31,22 +31,6 @@ local go_opts = {
   -- on_exit = function()
   --   vim.cmd('wincmd p')
   -- end,
-
-  --- matchadd(), highlight certain words in Current Window.
-  --- use builtin highlight group 'Underlined'
-  on_stdout = function(_,_,data,_)
-    for _, lcontent in ipairs(data) do
-      local filepath, lnum = Parse_filepath(lcontent)
-
-      if vim.fn.filereadable(filepath) == 1 then
-        if not lnum then  -- 如果没有 lnum 则
-          vim.fn.matchadd('Underlined', filepath)  -- highlight filepath
-        else
-          vim.fn.matchadd('Underlined', filepath..':'..lnum)  -- highlight filepath && line number
-        end
-      end
-    end
-  end,
 }
 
 --- VVI: 获取 go import path, `cd src/xxx && go list -f '{{.ImportPath}}'`
