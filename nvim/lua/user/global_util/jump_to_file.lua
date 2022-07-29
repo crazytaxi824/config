@@ -15,7 +15,7 @@ function Jump_to_file(filepath, lnum, col)
 
   --- 如果 filepath 不可读取, 则直接 return. eg: filepath 错误
   if vim.fn.filereadable(vim.fn.expand(filepath)) == 0 then
-    Notify('cannot open file: ' .. filepath, "DEBUG", {timeout = 1000})
+    Notify('cannot open file: ' .. filepath, "DEBUG", {timeout = 1500})
     return
   end
 
