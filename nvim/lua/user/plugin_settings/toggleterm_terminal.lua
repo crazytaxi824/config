@@ -29,11 +29,14 @@ toggleterm.setup({
   insert_mappings = false,       -- 是否在 insert 模式下使用 open_mapping 快捷键.
   terminal_mappings = false,     -- 是否在 terminal insert && normal 模式下使用 open_mapping 快捷键.
 
-  close_on_exit = true,      -- 执行完成之后退出 terminal. 输入 exit | <C-d> 之后关闭 terminal.
-  start_in_insert = false,   -- VVI: 全局模式, 不好用. 打开 terminal 时进入 insert 模式.
+  close_on_exit = true,     -- 执行完成之后退出 terminal. 输入 `$ exit` 之后自动关闭 terminal.
+  start_in_insert = false,  -- VVI: 打开 terminal 时进入 insert 模式.
+                            -- 类似 `au TermOpen|BufWinEnter term://*#toggleterm* :startinsert`
+                            -- 全局设置, 不好用. 可以单独设置.
+
   direction = "horizontal",  -- vertical | horizontal | tab | float
 
-  hide_numbers = false,  -- 隐藏 teriminal 行号, 会影响后打开的 window 也没有 number.
+  hide_numbers = false,  -- 隐藏 terminal 行号, BUG: 会影响后打开的 window 也没有 number. 下面通过 au 设置.
   persist_size = true,   -- 保持 window size
   persist_mode = true,   -- if set to true (default) the previous terminal mode will be remembered
 
@@ -66,44 +69,160 @@ toggleterm.setup({
     end
   end,
   --- 其他设置 --- {{{
-  -- on_open  = fun(t: Terminal), -- TermOpen
-  -- on_close = fun(t: Terminal), -- TermLeave, term 关闭
+  -- on_open  = fun(t: Terminal), -- TermOpen, 打开新 terminal 时才会生效.
+  -- on_close = fun(t: Terminal), -- NOTE: autoclose=true 的时候才能触发.
   -- on_exit  = fun(t: Terminal, job: number, exit_code: number, name: string) -- TermClose, job ends.
   -- on_stdout = fun(t: Terminal, job: number, data: string[], name: string) -- callback for processing output on stdout
   -- on_stderr = fun(t: Terminal, job: number, data: string[], name: string) -- callback for processing output on stderr
+
+  --- NOTE: nightly version 才有 winbar 可以用.
+  -- winbar = {
+  --   enabled = false,
+  -- },
   -- -- }}}
 })
 
---- terminal key mapping ---------------------------------------------------------------------------
---- VVI: <leader>t 打开指定 id=99 的 terminal.
-vim.keymap.set('n', '<leader>t', ':99ToggleTerm<CR>', {noremap = true, silent = true})
+--- 其他 terminal 设置 -----------------------------------------------------------------------------
+--- #toggleterm#1-9 自动进入 insert mode.
+--- VVI: TermOpen 只在 job start 的时候启动一次, buffer 被隐藏后再次调出使用的是 BufWinEnter 事件.
+--- 可以通过 `:au ToggleTermCommands` 查看.
+--vim.cmd [[au TermOpen term://*#toggleterm#[1-9] :startinsert]]
+--vim.cmd [[au BufWinEnter term://*#toggleterm#[1-9] :startinsert]]
 
---- VVI: toggleterm#60-99 自动进入 insert mode, 用于下面的 _NODE_TOGGLE() 和 _PYTHON_TOGGLE() 等.
-vim.cmd [[au TermOpen term://*toggleterm#[6-9][0-9] :startinsert]]
+--- <ESC> 进入 terminal Normal 模式, VVI: 同时也 press <ESC>, 用于退出 fzf 等 terminal 中的操作. 只对本 buffer 有效.
+vim.cmd [[au TermOpen term://* tnoremap <buffer> <ESC> <ESC><C-\><C-n>]]
 
---- 绑定 <ESC> 进入 terminal normal 模式, 只对本 buffer 有效.
-vim.cmd [[au TermOpen term://* tnoremap <buffer> <ESC> <C-\><C-n>]]
+--- 设置 terminal 不显示行号.
+vim.cmd [[au TermOpen term://* :setlocal nonumber]]
 
---- 以下是通过 Terminal 运行 shell cmd --------------------------------------------------------------
+--- Terminal 实例 ----------------------------------------------------------------------------------
 --- NOTE: 可以参考 "~/.config/nvim/after/ftplugin/go/gorun_gotest.lua"
-
 local Terminal = require("toggleterm.terminal").Terminal
 
-local node = Terminal:new({ cmd = "node", hidden = true, direction = "float", count = 61 })
+--- cache terminal instance for :open() / :close() / :shutdown() / :clear() / :spawn() / :new()
+local my_terminals = {}
+
+--- VVI: execute: golang / javascript / typescript / python...
+local exec_term_id = 1001
+local exec_term = Terminal:new({count = exec_term_id})
+function _Exec(cmd)
+  --- VVI: 删除之前的 terminal, 同时终止 job.
+  exec_term:shutdown()
+
+  --- 生成新的 exec_term, 不同的 cmd.
+  --- 生成了新的实例, 需要重新缓存新生成的实例, 否则无法 open() / close() ...
+  --- 也可以使用 Terminal:new({...})
+  exec_term = exec_term:new({count = exec_term_id, close_on_exit = false, cmd = cmd})
+  my_terminals[exec_term_id] = exec_term  -- VVI: 缓存新的 exec terminal
+
+  --- run cmd
+  exec_term:open()
+end
+
+--- node ---
+local node_term_id = 201
+local node_term = Terminal:new({
+  cmd = "node",
+  hidden = true,  -- true: 该 term 不受 :ToggleTerm :ToggleTermToggleAll ... 命令影响.
+  direction = "float",  -- horizontal(*) | vertical | float | tab
+  count = node_term_id,
+  on_open = function(term)
+    vim.cmd('startinsert')  -- 使用 on_open 相当于启动了 TermOpen && BufWinEnter 事件.
+  end
+})
 function _NODE_TOGGLE()
-  node:toggle()
+  node_term:toggle()
 end
 
-local python = Terminal:new({ cmd = "python3", hidden = true, direction = "float", count = 62 })
+--- python3 ---
+local py_term_id = 202
+local python_term = Terminal:new({
+  cmd = "python3",
+  hidden = true,
+  direction = "float",
+  count = py_term_id,
+  on_open = function(term)
+    vim.cmd('startinsert')
+  end
+})
 function _PYTHON_TOGGLE()
-  python:toggle()
+  python_term:toggle()
 end
 
---- 使用 `:lua _LAZYGIT_TOGGLE()` 运行, 下同.
--- local lazygit = Terminal:new({ cmd = "lazygit", hidden = true, direction = "float" })
--- function _LAZYGIT_TOGGLE()
---   lazygit:toggle()
--- end
+--- normal terminals ---
+local n1_term = Terminal:new({count = 1, on_open = function() vim.cmd('startinsert') end}) -- open()|close()|send(cmd)|shutdown()
+local n2_term = Terminal:new({count = 2, on_open = function() vim.cmd('startinsert') end})
+local n3_term = Terminal:new({count = 3, on_open = function() vim.cmd('startinsert') end})
+local n4_term = Terminal:new({count = 4, on_open = function() vim.cmd('startinsert') end})
+local n5_term = Terminal:new({count = 5, on_open = function() vim.cmd('startinsert') end})
+local n6_term = Terminal:new({count = 6, on_open = function() vim.cmd('startinsert') end})
+local n7_term = Terminal:new({count = 7, direction = "vertical", on_open = function() vim.cmd('startinsert') end})
+local n8_term = Terminal:new({count = 8, direction = "vertical", on_open = function() vim.cmd('startinsert') end})
+local n9_term = Terminal:new({count = 9, direction = "vertical", on_open = function() vim.cmd('startinsert') end})
+
+--- VVI: 缓存所有自定义 terminal 实例. :open() / :close() / :shutdown()
+my_terminals = {
+  --- normal terminal
+  [1]=n1_term, [2]=n2_term, [3]=n3_term,
+  [4]=n4_term, [5]=n5_term, [6]=n6_term,
+  [7]=n7_term, [8]=n8_term, [9]=n9_term,
+
+  --- special use terminal
+  [exec_term_id]=exec_term,
+  [node_term_id]=node_term,
+  [py_term_id]=python_term
+}
+
+--- terminal key mapping ---------------------------------------------------------------------------
+--- 常用 terminal.
+local function toggle_normal_term()
+  --- NOTE: v:count1 默认值为1.
+  my_terminals[vim.v.count1]:toggle()
+end
+
+--- 通过 bufname 获取 terminal id.
+local function get_term_id(bufname)
+  local tmp = vim.split(bufname, '#')
+  return tonumber(tmp[#tmp])  -- tonumber('')=nil; tonumber('a')=nil; tonumber('12a')=nil; tonumber('a12')=nil;
+end
+
+--- open / close all terminals
+local function toggle_all_terms()
+  local active_terms = {}
+  local inactive_terms = {}
+
+  --- 遍历所有 buffer, 筛选出 active_terms && inactive_terms
+  for _, buf in ipairs(vim.fn.getbufinfo()) do
+    if string.match(buf.name, '^term://') then
+      if #buf.windows > 0 then  -- buf.windows 表示 buffer 是否 active.
+        table.insert(active_terms, get_term_id(buf.name))
+      else
+        table.insert(inactive_terms, get_term_id(buf.name))
+      end
+    end
+  end
+
+  --- 如果有 active terminal 则全部关闭.
+  if #active_terms > 0 then
+    for _, id in ipairs(active_terms) do
+      my_terminals[id]:close()
+    end
+    return
+  end
+
+  --- 如果没有 active terminal 则全部打开.
+  for _, id in ipairs(inactive_terms) do
+    my_terminals[id]:open()
+  end
+end
+
+local opt = {noremap = true, silent = true}
+local toggleterm_keymaps = {
+  {'n', 'tt', toggle_normal_term, opt, "{N}ToggleTerm"},
+  {'n', '<leader>t', toggle_all_terms, opt, "Toggle All Terminals"},
+}
+
+Keymap_set_and_register(toggleterm_keymaps)
 
 
 

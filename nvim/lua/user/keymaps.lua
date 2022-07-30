@@ -24,8 +24,9 @@
 ---   - v_CTRL-G  - 切换 visual/select mode, select mode 是 visual 的一个子模式, 多用于代码补全的默认值.
 
 --- functions for key mapping ---------------------------------------------------------------------- {{{
---- close all terminal window ----------------------------------------------------------------------
-local function delete_all_terminals()
+--- wipeout all terminals --------------------------------------------------------------------------
+--- NOTE: close all terminals' window; stop all terminals' job; wipeout all terminals' buffer.
+local function wipeout_all_terminals()
   local buf_list = {}
 
   -- 获取所有 bufnr, 判断 bufname 是否匹配 term://*
@@ -36,7 +37,7 @@ local function delete_all_terminals()
   end
 
   if #buf_list > 0 then
-    vim.cmd('bdelete! ' .. vim.fn.join(buf_list, ' '))  -- NOTE: 需要使用 '!' 强制退出 term
+    vim.cmd('bw! ' .. vim.fn.join(buf_list, ' '))  -- NOTE: 需要使用 '!' 强制退出 term
   end
 end
 
@@ -386,7 +387,7 @@ local keymaps = {
   {'n', '<leader>W', '<C-w><C-o>', opt, 'Close All Other Windows'},
 
   --- NOTE: terminal key mapping 在 "toggleterm.lua" 中设置了.
-  {'n', '<leader>T', delete_all_terminals, opt, "Close All Terminal Window"},
+  {'n', '<leader>T', wipeout_all_terminals, opt, "Wipeout All Terminals"},
 
   --- 其他 -----------------------------------------------------------------------------------------
   --- ZZ same as `:x`

@@ -9,30 +9,6 @@
 --    <S-F6> go test -v -timeout 30s -run "^Test.*"
 --    <C-F6> go test -v -timeout 30s -run ^$ -benchmem -bench "^Benchmark.*"
 
-local status_ok, term = pcall(require, "toggleterm.terminal")
-if not status_ok then
-  return
-end
-
-local Terminal = term.Terminal
-
-local go_term_id = 1024   -- NOTE: toggleterm count id
-
---- Terminal options for go only ---
-local go_opts = {
-  hidden = true,          -- VVI: true - 不加入到 terminal list, 无法被 `:ToggleTerm` 找到.
-                          -- 用 :q 只能隐藏, 用 :q! exit job.
-  close_on_exit = false,  -- 运行完成之后不要关闭 terminal.
-  count = go_term_id,     -- 这里是指定 id, 类似 `:100ToggleTerm`,
-                          -- 就算是 hidden 状态也可以通过 `:100ToggleTerm` 重新打开.
-                          -- 如果两个 Terminal 有相同的 ID, 则会出现错误.
-
-  --- move to previous window when job ends.
-  -- on_exit = function()
-  --   vim.cmd('wincmd p')
-  -- end,
-}
-
 --- VVI: 获取 go import path, `cd src/xxx && go list -f '{{.ImportPath}}'`
 local function go_import_path(dir)
   local result = vim.fn.system("cd " .. dir .. " && go list -f '{{.ImportPath}}'")
@@ -42,16 +18,6 @@ local function go_import_path(dir)
   end
 
   return string.match(result, "[%S ]*")  -- return import_path WITHOUT '\n'
-end
-
---- toggleterm run cmd
-local function toggleterm_run(cmd)
-  --- VVI: 删除之前的 terminal.
-  vim.cmd('silent! bw! term://*toggleterm#'..go_term_id)
-
-  --- run cmd
-  local go = Terminal:new(vim.tbl_deep_extend('force', go_opts, { cmd = cmd }))
-  go:toggle()
 end
 
 --- go run ----------------------------------------------------------------------------------------- {{{
@@ -66,7 +32,7 @@ local function go_run()
   end
 
   --- go run local/src
-  toggleterm_run("cd " .. dir .. " && go run " .. import_path)
+  _Exec("cd " .. dir .. " && go run " .. import_path)
 end
 -- -- }}}
 
@@ -89,7 +55,7 @@ local function go_test_all()
 
   --- go test -v -timeout 30s -run "^Test.*" ImportPath
   local cmd = 'cd ' .. dir .. ' && go test -v -timeout 30s -run "^Test.*" ' .. import_path
-  toggleterm_run(cmd)
+  _Exec(cmd)
 end
 -- -- }}}
 
@@ -112,7 +78,7 @@ local function go_bench_all()
 
   --- go test -v -timeout 30s -run ^$ -benchmem -bench "^Benchmark.*" ImportPath
   local cmd = 'cd ' .. dir .. ' && go test -v -timeout 30s -run ^$ -benchmem -bench "^Benchmark.*" ' .. import_path
-  toggleterm_run(cmd)
+  _Exec(cmd)
 end
 -- -- }}}
 
@@ -135,7 +101,7 @@ local function go_fuzz_all()
 
   --- go test -v -run ^$ -fuzztime 30s -fuzz "^Fuzz.*" ImportPath
   local cmd = 'cd ' .. dir .. ' && go test -v -fuzztime 30s -run ^$ -fuzz "^Fuzz.*" ' .. import_path
-  toggleterm_run(cmd)
+  _Exec(cmd)
 end
 -- -- }}}
 
@@ -232,7 +198,7 @@ local function go_test_single_func()
     return
   end
 
-  toggleterm_run(cmd)
+  _Exec(cmd)
 end
 -- -- }}}
 
