@@ -398,7 +398,7 @@ return packer.startup(function(use)
     commit = "bb8db6e",
     config = function() require("user.plugin_settings.telescope_fzf") end,
     requires = "nvim-lua/plenary.nvim",
-    --keys = {"<leader>f"},  -- NOTE: telescope/fzf/rg 所有 keymap 都是以 <leader>f 开头.
+    --keys = {"<leader>f"},
   }
 
   --- terminal

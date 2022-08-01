@@ -134,8 +134,12 @@
 --    line: 'a/b/c',               cmd: `:.!awk -F/ '{print $1}'`  输出 'a'.
 --    3-line: 'abc', 'ccc', 'ddd', visual select 之后 cmd: `:'<,'>!grep c`   输出两行 'abc', 'ccc'
 --
--- VVI: FileType vs BufEnter 区别:
+--- VVI: FileType vs BufEnter 区别:
 --    'xxx.log' 文件不会触发 FileType, 因为没有该 filetype, 但是会触发 BufEnter.
+--
+--- NOTE: 影响 opening buffers 加载时间的主要原因:
+--    1. `set undofile`, 占大概 32ms. 猜测和 undo 记录的数量有关系, 需要花时间解析.
+--    2. nvim-lspconfig 加载 lsp (eg: gopls) 加载占大概 30ms, 有些 lsp 启动速度很快 (eg: tsserver) 大概只占 5ms
 --
 -- -- }}}
 
@@ -179,7 +183,8 @@ require "user.plugin_settings.impatient"
 --- 读取设置: ~/.config/nvim/lua/user/xxx.lua
 require "user.global_util"  -- [必要], 自定义函数, 很多设置用到的常用函数.
 require "user.settings"     -- vimrc 设置
-require "user.lsp"          -- 加载 vim.lsp 相关设置, user/lsp 是个文件夹, 这里是加载的 user/lsp/init.lua
+require "user.lsp"          -- 加载 vim.lsp/vim.diagnostic 相关设置. 这里不是插件设置, 是内置参数设置.
+                            -- user/lsp 是个文件夹, 这里是加载的 user/lsp/init.lua
 require "user.keymaps"      -- keymap 设置
 require "user.fold"         -- 代码折叠设置, NOTE: treesitter experimental function.
 --require "user.terminal"   -- 自定义 terminal, 学习/测试用. 需要时可替代 toggle terminal.

@@ -257,7 +257,7 @@ vim.opt.foldtext = 'printf("%s …", getline(v:foldstart))'
 
 --- 让 quickfix window 始终显示在屏幕最下方, 相当于命令 `:botright copen`
 --- wincmd 快捷键是 <Ctrl-w>
-vim.cmd [[au Filetype qf :wincmd J]]
+--vim.cmd [[au Filetype qf :wincmd J]]
 
 --- markdown 文件自动执行 SpellCheck 命令
 --vim.cmd [[au Filetype pandoc,markdown setlocal spell spelllang=en,cjk]]

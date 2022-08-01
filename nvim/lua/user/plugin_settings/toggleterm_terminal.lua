@@ -29,9 +29,9 @@ toggleterm.setup({
   insert_mappings = false,       -- 是否在 insert 模式下使用 open_mapping 快捷键.
   terminal_mappings = false,     -- 是否在 terminal insert && normal 模式下使用 open_mapping 快捷键.
 
-  close_on_exit = true,     -- 执行完成之后退出 terminal. 输入 `$ exit` 之后自动关闭 terminal.
+  close_on_exit = true,     -- job 执行完成之后退出 terminal. 输入 `$ exit` 之后自动关闭 terminal.
   start_in_insert = false,  -- VVI: 打开 terminal 时进入 insert 模式.
-                            -- 类似 `au TermOpen|BufWinEnter term://*#toggleterm* :startinsert`
+                            -- 类似 `au TermOpen|BufWinEnter term://*#toggleterm#* :startinsert`
                             -- 全局设置, 不好用. 可以单独设置.
 
   direction = "horizontal",  -- vertical | horizontal | tab | float
@@ -96,17 +96,16 @@ vim.cmd [[au TermOpen term://* tnoremap <buffer> <ESC> <ESC><C-\><C-n>]]
 vim.cmd [[au TermOpen term://* :setlocal nonumber]]
 
 --- Terminal 实例 ----------------------------------------------------------------------------------
---- NOTE: 可以参考 "~/.config/nvim/after/ftplugin/go/gorun_gotest.lua"
 local Terminal = require("toggleterm.terminal").Terminal
 
---- cache terminal instance for :open() / :close() / :shutdown() / :clear() / :spawn() / :new()
+--- 缓存所有自定义 terminal 实例. cache terminal instance.
 local my_terminals = {}
 
 --- VVI: execute: golang / javascript / typescript / python...
 local exec_term_id = 1001
 local exec_term = Terminal:new({count = exec_term_id})
 function _Exec(cmd)
-  --- VVI: 删除之前的 terminal, 同时终止 job.
+  --- 删除之前的 terminal, 同时终止 job.
   exec_term:shutdown()
 
   --- 生成新的 exec_term, 不同的 cmd.
@@ -160,7 +159,7 @@ local n7_term = Terminal:new({count = 7, direction = "vertical", on_open = funct
 local n8_term = Terminal:new({count = 8, direction = "vertical", on_open = function() vim.cmd('startinsert') end})
 local n9_term = Terminal:new({count = 9, direction = "vertical", on_open = function() vim.cmd('startinsert') end})
 
---- VVI: 缓存所有自定义 terminal 实例. :open() / :close() / :shutdown()
+--- 缓存所有自定义 terminal 实例.
 my_terminals = {
   --- normal terminal
   [1]=n1_term, [2]=n2_term, [3]=n3_term,
@@ -174,9 +173,10 @@ my_terminals = {
 }
 
 --- terminal key mapping ---------------------------------------------------------------------------
+--- terminal 实例内置方法: `:open() / :close() / :shutdown() / :clear() / :spawn() / :new()`
 --- 常用 terminal.
 local function toggle_normal_term()
-  --- NOTE: v:count1 默认值为1.
+  --- v:count1 默认值为1.
   my_terminals[vim.v.count1]:toggle()
 end
 
@@ -194,7 +194,7 @@ local function toggle_all_terms()
   --- 遍历所有 buffer, 筛选出 active_terms && inactive_terms
   for _, buf in ipairs(vim.fn.getbufinfo()) do
     if string.match(buf.name, '^term://') then
-      if #buf.windows > 0 then  -- buf.windows 表示 buffer 是否 active.
+      if #buf.windows > 0 then  -- buf.windows 判断 buffer 是否 active.
         table.insert(active_terms, get_term_id(buf.name))
       else
         table.insert(inactive_terms, get_term_id(buf.name))
@@ -204,21 +204,21 @@ local function toggle_all_terms()
 
   --- 如果有 active terminal 则全部关闭.
   if #active_terms > 0 then
-    for _, id in ipairs(active_terms) do
-      my_terminals[id]:close()
+    for _, term_id in ipairs(active_terms) do
+      my_terminals[term_id]:close()
     end
     return
   end
 
-  --- 如果没有 active terminal 则全部打开.
-  for _, id in ipairs(inactive_terms) do
-    my_terminals[id]:open()
+  --- 如果没有 active terminal 则打开全部 inactive terminals.
+  for _, term_id in ipairs(inactive_terms) do
+    my_terminals[term_id]:open()
   end
 end
 
 local opt = {noremap = true, silent = true}
 local toggleterm_keymaps = {
-  {'n', 'tt', toggle_normal_term, opt, "{N}ToggleTerm"},
+  {'n', 'tt', toggle_normal_term, opt, "[1-9]Toggle Terminals"},
   {'n', '<leader>t', toggle_all_terms, opt, "Toggle All Terminals"},
 }
 

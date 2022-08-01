@@ -46,7 +46,7 @@ ts_ctx.setup{
 }
 
 --- highlight --------------------------------------------------------------------------------------
---vim.cmd [[hi TreesitterContext ctermfg= ]]
+--vim.cmd [[hi TreesitterContext ctermfg= ]]  -- default link to NormalFloat
 vim.cmd [[ hi! link TreesitterContextLineNumber NormalFloat ]]
 
 
