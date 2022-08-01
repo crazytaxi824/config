@@ -165,6 +165,7 @@ vim.cmd('hi! link TSNamespace Normal')           -- package <Namespace>
 
 --- typescript
 vim.cmd('hi! link TSConstructor Normal')  -- import <TSConstructor> from 'react'
+vim.cmd('hi! link TSKeywordOperator Keyword')  -- 关键字 new
 
 --- html, tag <div></div>
 vim.cmd('hi TSTag ctermfg=74')             -- <div></div>, html 内置标签文字颜色 div
