@@ -177,7 +177,7 @@ vim.cmd('hi! link TSTagAttribute TSProperty')  -- <... width=..., height=... >
 vim.cmd('hi! link TSURI String')  -- <src="TSURI">
 
 --- markdown, NOTE: 单独为 markdown 设置颜色.
-vim.cmd('hi markdown_inlineTSStrong ctermbg=238')  -- `code`
+vim.cmd('hi markdown_inlineTSLiteral ctermbg=238')  -- `code`
 vim.cmd('hi markdownTSPunctSpecial ctermfg=246')   -- `- * #`
 
 --- syntax 颜色设置 --------------------------------------------------------------------------------
