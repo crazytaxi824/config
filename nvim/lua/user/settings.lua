@@ -217,7 +217,7 @@ vim.opt.swapfile = true
 --- undo history 持久化
 vim.opt.undofile = true
 vim.opt.undodir = '/tmp/nvim/undo'  -- undodir 是全局设置, 无法单独给某个文件设置.
-vim.opt.undolevels = 5000
+--vim.opt.undolevels = 1000  -- 默认 1000. NOTE: undolevels 太大可能影响 opening buffer 速度.
 --vim.cmd([[au Filetype * ++once :silent !mkdir -p ]] .. vim.go.undodir)
 vim.api.nvim_create_autocmd("Filetype", {
   pattern = {"*"},

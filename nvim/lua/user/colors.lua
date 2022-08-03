@@ -163,20 +163,21 @@ vim.cmd('hi! link TSMethod Function')
 vim.cmd('hi! link TSKeywordReturn Conditional')  -- return
 vim.cmd('hi! link TSNamespace Normal')           -- package <Namespace>
 
+--- golang, NOTE: 单独为 go 设置 Property 颜色.
+vim.cmd('hi! link goTSProperty Normal')  -- 设置 golang 的 Foo.Name 颜色为 Normal
+
 --- typescript
 vim.cmd('hi! link TSConstructor Normal')  -- import <TSConstructor> from 'react'
 vim.cmd('hi! link TSKeywordOperator Keyword')  -- 关键字 new
 
 --- html, tag <div></div>
-vim.cmd('hi TSTag ctermfg=74')             -- <div></div>, html 内置标签文字颜色 div
+vim.cmd('hi TSTag ctermfg=68')             -- <div></div>, html 内置标签文字颜色 div
 vim.cmd('hi TSTagDelimiter ctermfg=243')   -- <div></div>, <> 括号颜色
 vim.cmd('hi! link TSTagAttribute TSProperty')  -- <... width=..., height=... >
-
---- golang, NOTE: 单独为 go 设置 Property 颜色.
-vim.cmd('hi! link goTSProperty Normal')  -- 设置 golang 的 Foo.Name 颜色为 Normal
+vim.cmd('hi! link TSURI String')  -- <src="TSURI">
 
 --- markdown, NOTE: 单独为 markdown 设置颜色.
-vim.cmd('hi markdown_inlineTSStrong ctermbg=238')  -- `code`
+vim.cmd('hi markdown_inlineTSLiteral ctermbg=238')  -- `code`
 vim.cmd('hi markdownTSPunctSpecial ctermfg=246')   -- `- * #`
 
 --- syntax 颜色设置 --------------------------------------------------------------------------------
