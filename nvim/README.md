@@ -60,17 +60,21 @@ lua 中有一个 `_G` 全局变量. 自定义的所有全局变量和函数都�
 
 <br />
 
-## nvim 常用函数
+## 常用函数
+
+### lua 常用函数
 
 - `pcall(vim.cmd, "normal! n")` -- 获取 command 返回信息
-
-- `vim.inspect(table)` -- 打印 table 中的内容, 类似 fmt.Printf("%+v", struct)
 
 - `table.insert({list}, elem)` -- 向 list 中插入元素
 
 - `table.concat({list}, "sep")` -- 类似 strings.Join()
 
 - `string.gsub("a b c", " ", "\\%%")` -- 类似 strings.Replace()
+
+### nvim 常用函数
+
+- `vim.inspect(table)` -- 打印 table 中的内容, 类似 fmt.Printf("%+v", struct)
 
 - `vim.list_extend({list1}, {list2})` -- 合并两个 list-like table
 
@@ -87,6 +91,8 @@ lua 中有一个 `_G` 全局变量. 自定义的所有全局变量和函数都�
 - `vim.fn.split({string}, {pattern}, {keepempty})` -- 默认 keepempty=0(false)
 
 - `vim.fn.join({list}, sep)`
+
+- `vim.fn.trim()`
 
 ### window / tab / buffer 函数
 
@@ -217,3 +223,20 @@ using filter, `:help filter` 使用方法:
 ### VVI: FileType vs BufEnter 区别:
 
 'xxx.log' 文件不会触发 FileType, 因为没有该 filetype, 但是会触发 BufEnter.
+
+<br />
+
+# test function
+
+## 测试 autocmd FileType 传入的 params.buf 和 bufnr() 得出的结果是否一样.
+
+```lua
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = {"*"},
+  callback = function(params)
+    local bufinfo = vim.fn.getbufinfo(params.buf)[1]
+    print('bufnr():', vim.fn.bufnr(), '| params.buf:', params.buf, '| bufname():', vim.fn.bufname(), "| getbufinfo(params.buf):", bufinfo.bufnr, bufinfo.name)
+    print()
+  end
+})
+```

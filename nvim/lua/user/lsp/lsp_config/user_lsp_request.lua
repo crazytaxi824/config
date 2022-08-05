@@ -63,10 +63,8 @@ local function find_fn_call_before_cursor()
       --- 判断 arguments/argument_list 前一个 node 是否 type_arguments(generic type param)
       local prev_node = node:prev_named_sibling()
       if prev_node:type() == 'type_arguments' then
-        local p_row, p_col, _ = prev_node:start()
-        print(p_row, p_col)
-
         --- 如果是 type_arguments 则返回 type_arguments node 前一个字符位置.
+        local p_row, p_col, _ = prev_node:start()
         return calculate_offset(p_row, p_col-1)
       end
 
