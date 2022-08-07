@@ -337,11 +337,11 @@ return packer.startup(function(use)
   if proj_settings_status_ok then
     --- 官方 LSP 引擎.
     use {"neovim/nvim-lspconfig",
-      commit = "3479473",
+      commit = "6e047f1",
       config = function() require("user.lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
       requires = {
         {"williamboman/nvim-lsp-installer",  -- 简单安装 lsp server 的插件. NOTE: 和 lspconfig 并非依赖关系, 只是放在一起方便 setup()
-          commit="8848ef6",
+          commit="6b76bce",
         },
         "hrsh7th/cmp-nvim-lsp",  -- provide content to nvim-cmp Completion. cmp_nvim_lsp.update_capabilities(capabilities)
       },
@@ -349,7 +349,7 @@ return packer.startup(function(use)
 
     --- null-ls 插件 formatters && linters, depends on "nvim-lua/plenary.nvim"
     use {"jose-elias-alvarez/null-ls.nvim",
-      commit = "9c396ab",
+      commit = "53622ed",
       config = function() require("user.lsp.null_ls") end,
       requires = "nvim-lua/plenary.nvim",
     }
