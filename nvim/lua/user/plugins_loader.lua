@@ -369,7 +369,7 @@ return packer.startup(function(use)
     config = function() require("user.plugin_settings.decor_bufferline") end,
   }
   use {"nvim-lualine/lualine.nvim",   -- bottom status line
-    commit = "8d956c1",
+    commit = "f40db9a",
     config = function() require("user.plugin_settings.decor_lualine") end,
   }
 
