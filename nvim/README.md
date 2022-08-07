@@ -220,7 +220,7 @@ using filter, `:help filter` 使用方法:
 - floating window 设置: `:help nvim_open_win()`
 - 正则: eg: `string.match()`, https://fhug.org.uk/kb/kb-article/understanding-lua-patterns/
 
-### VVI: FileType vs BufEnter 区别:
+## VVI: FileType vs BufEnter 区别:
 
 'xxx.log' 文件不会触发 FileType, 因为没有该 filetype, 但是会触发 BufEnter.
 
