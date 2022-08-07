@@ -20,6 +20,9 @@ nvim_tree.setup {
   sort_by = "name",
   update_cwd = false,
   view = {
+    -- float = {  -- 在 floating window 中打开 nvim-tree.
+    --   enable = true,
+    -- },
     width = 30,
     height = 30,
     side = "left",
