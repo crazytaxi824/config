@@ -375,7 +375,7 @@ return packer.startup(function(use)
 
   --- Debug tools 安装 -----------------------------------------------------------------------------
   use {"rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
-    commit = "d33b905",
+    commit = "225115a",
     config = function()
       require('packer').loader('nvim-dap')  -- NOTE: 手动加载 nvim-dap.
                                             -- 这里不能直接使用 packer.loader(), 而必须重新 require('packer').loader()
@@ -384,7 +384,7 @@ return packer.startup(function(use)
     end,
     requires = {
       {"mfussenegger/nvim-dap",  -- core debug tool
-        commit = "69efa4d",
+        commit = "66d33b7",
         opt = true,  -- NOTE: 在上面 config 中手动加载 nvim-dap
       },
     },
