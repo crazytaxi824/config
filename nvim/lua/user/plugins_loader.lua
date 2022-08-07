@@ -237,7 +237,7 @@ return packer.startup(function(use)
   --- `:TSUpdateSync`         -- Update the installed languages synchronously
   -- -- }}}
   use {"nvim-treesitter/nvim-treesitter",
-    commit = "783c74c",
+    commit = "a9a6493",
     run = ":TSUpdateSync",   -- Post-update/install hook.
     config = function() require("user.plugin_settings.treesitter") end,
     requires = {
@@ -246,7 +246,7 @@ return packer.startup(function(use)
       --- 顶部显示 cursor 所在 function 的定义.
       --- https://github.com/nvim-treesitter/nvim-treesitter-context#configuration
       {"nvim-treesitter/nvim-treesitter-context",
-        commit = "0d086d2",
+        commit = "8e88b67",
         config = function() require("user.plugin_settings.treesitter_ctx") end,
       },
 
@@ -259,7 +259,7 @@ return packer.startup(function(use)
 
       --- 第三方 module 插件 ---
       {"JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
-        commit="8834375",
+        commit="7d0b001",
       },
 
       {"windwp/nvim-ts-autotag",  -- auto close tag <div></div>
@@ -272,17 +272,17 @@ return packer.startup(function(use)
   --- 以下是使用了 treesitter 功能的插件. (这些插件也可以不使用 treesitter 的功能)
   --- 注释
   use {"numToStr/Comment.nvim",
-    commit = "2e0572c",
+    commit = "9b76787",
     config = function() require("user.plugin_settings.comment") end,
     requires = {
-      "JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 context-commentstring.
       "nvim-treesitter/nvim-treesitter",
+      "JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 context-commentstring.
     },
   }
 
   --- identline
   use {"lukas-reineke/indent-blankline.nvim",
-    commit = "4a58fe6",
+    commit = "c15bbe9",
     config = function() require("user.plugin_settings.indentline") end,  -- setup() 设置 use_treesitter = true
     requires = "nvim-treesitter/nvim-treesitter",
   }
