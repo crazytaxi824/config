@@ -158,16 +158,16 @@ font:
     style: Bold Italic
 
   # Point size
-  size: 16
-  # size: 14.6 # vscode font size
+  size: 14.5
+  # size: 14.5 # vscode font size
 
   # Offset is the extra space around each character. `offset.y` can be thought
   # of as modifying the line spacing, and `offset.x` as modifying the letter
   # spacing.
   offset:
-    x: 0  # letter spacing
-    y: 8  # line spacing, 和 vscode 行间距相同.
-          # vscode 的设置为 "editor.lineHeight", 默认根据 fontsize 自动计算行间距.
+    x: 1  # letter spacing. NOTE: vscode 英文字间距为'1'; 中文字间距为'0'.
+    y: 8  # line spacing. 通过对比 vscode 得到行间距为'8'.
+          # vscode 的设置为 "editor.lineHeight". 默认根据 fontsize 自动计算行间距, value between 0~8.
 
   # Glyph offset determines the locations of the glyphs within their cells with
   # the default being at the bottom. Increasing `x` moves the glyph to the
