@@ -11,7 +11,7 @@ end
 
 --- "hrsh7th/nvim-cmp" 主要设置 --------------------------------------------------------------------
 --- NOTE: find more here: https://www.nerdfonts.com/cheat-sheet
-local kind_icons = {  --- {{{
+local kind_icon_txt = {  --- {{{
   Text = "txt",
   Module = "module",     -- import
   Method = "fn",
@@ -86,7 +86,7 @@ cmp.setup {
     fields = { "abbr", "kind", "menu" },
 
     format = function(entry, vim_item)
-      vim_item.kind = string.format("   %s", kind_icons[vim_item.kind])  --  kind icon 前多个空格
+      vim_item.kind = string.format("   %s", kind_icon_txt[vim_item.kind])  --  kind icon 前多个空格
       --vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind)  -- 使用图标和 kind_name
 
       --- 不显示 menu

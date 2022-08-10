@@ -112,17 +112,18 @@ local buf_highlights = {
   },
 
   --- error, warning, info, hint 颜色设置.
-  error_diagnostic = {
+  --- NOTE: 这里只是 diagnostic 部分的颜色显示, 不包括 buffer_num && buffer_name 颜色. eg: (1)
+  error_diagnostic = {           -- hi BufferLineErrorDiagnostic
     ctermfg = colors.error_fg,
     ctermbg = colors.buf_bg,
     gui = colors.diag_style,
   },
-  error_diagnostic_visible = {
+  error_diagnostic_visible = {   -- hi BufferLineErrorDiagnosticVisible
     ctermfg = colors.error_fg,
     ctermbg = colors.buf_vis_bg,
     gui = colors.diag_style,
   },
-  error_diagnostic_selected = {
+  error_diagnostic_selected = {  -- hi BufferLineErrorDiagnosticSelected
     ctermfg = colors.error_fg,
     ctermbg = colors.buf_sel_bg,
     gui = colors.diag_style,
@@ -174,15 +175,17 @@ local buf_highlights = {
   },
 }
 
---- numbers 和 buffer 颜色相同
+--- numbers 和 buffer 颜色相同,
+--- NOTE: 这里是 buffer_num 部分的颜色显示, 不包括 buffer_name && diagnostic 部分. eg: 1. 2. 3.
 buf_highlights.numbers = buf_highlights.background
 buf_highlights.numbers_visible = buf_highlights.buffer_visible
 buf_highlights.numbers_selected = buf_highlights.buffer_selected
 
---- error, warning, info, hint 和 buffer 颜色相同
-buf_highlights.error = buf_highlights.background
-buf_highlights.error_visible = buf_highlights.buffer_visible
-buf_highlights.error_selected = buf_highlights.buffer_selected
+--- 有 error, warning, info, hint 的 buffer_name text 部分颜色设置, 默认没有颜色和背景色.
+--- NOTE: 这里是 buffer_name 部分的颜色显示, 不包括 buffer_num && diagnostic 部分颜色.
+buf_highlights.error = buf_highlights.background                -- hi BufferLineError
+buf_highlights.error_visible = buf_highlights.buffer_visible    -- hi BufferLineErrorVisible
+buf_highlights.error_selected = buf_highlights.buffer_selected  -- hi BufferLineErrorSelected
 buf_highlights.warning = buf_highlights.background
 buf_highlights.warning_visible = buf_highlights.buffer_visible
 buf_highlights.warning_selected = buf_highlights.buffer_selected
