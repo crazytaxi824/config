@@ -16,7 +16,7 @@ local util = require("null-ls.utils")
 local function pwd_root(params)
   --- VVI: 优先获取 'root_dir' from lspconfig on_attach() setbufvar()
   --- 刚打开 buffer 的时候 lspconfig.root_dir 还未设置, 会用到下面的方法.
-  return vim.fn.getbufvar(params.bufnr, "lspconfig").root_dir or
+  return vim.fn.getbufvar(params.bufnr, "my_lspconfig").root_dir or
     util.root_pattern('go.work')(params.bufname) or  -- then get 'go.work'
     util.root_pattern('go.mod','.git')(params.bufname) or  -- then get 'go.mod' | '.git'
     params.root  -- last fallback setting

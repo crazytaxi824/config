@@ -83,23 +83,22 @@ local function check_mixed_indent()
 end
 
 --- 合并两个 check, 同时检查 ---------------------------------------------------
---- NOTE: 这里缓存数据可以减少计算量, 在退出 insert mode 之后再进行计算并更新 lualine.
-local mixed_indent_cache = ''
-
 local function my_check()
-  --- 退出 INSERT 模式后再进行检查.
+  local bufvar_lualine = 'my_lualine_checks'
+
+  --- NOTE: 退出 INSERT 模式后再进行检查. 可以减少计算量, 在退出 insert mode 之后再进行计算并更新 lualine.
   if vim.fn.mode() ~= 'i' then
     local mi = check_mixed_indent()
     local ts = check_trailing_whitespace()
 
     if mi ~= '' and ts ~= '' then
-      mixed_indent_cache = mi .. ' ' .. ts
+      vim.fn.setbufvar(vim.fn.bufnr(), bufvar_lualine, mi .. ' ' .. ts)
     else
-      mixed_indent_cache = mi .. ts
+      vim.fn.setbufvar(vim.fn.bufnr(), bufvar_lualine, mi .. ts)
     end
   end
 
-  return mixed_indent_cache
+  return vim.fn.getbufvar(vim.fn.bufnr(), bufvar_lualine)
 end
 -- -- }}}
 

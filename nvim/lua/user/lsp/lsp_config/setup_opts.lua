@@ -51,7 +51,7 @@ M.on_attach = function(client, bufnr)
   end
 
   --- VVI: 设置 root_dir 到 buffer variables 中, 为了给 null-ls 提供 cwd 设置.
-  vim.fn.setbufvar(bufnr, "lspconfig", {root_dir = client.config.root_dir})
+  vim.fn.setbufvar(bufnr, "my_lspconfig", {root_dir = client.config.root_dir})
 
   --- 加载自定义设置 ---
   --- Same_ID
