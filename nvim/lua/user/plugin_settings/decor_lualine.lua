@@ -43,15 +43,16 @@ local my_theme = {
 -- -- }}}
 
 --- 自定义 components ------------------------------------------------------------------------------ {{{
---- NOTE: https://github.com/nvim-lualine/lualine.nvim/wiki/Component-snippets
 --- check Trailing-Whitespace && Mixed-indent ---------------------------------- {{{
---- check Trailing-Whitespace
+--- NOTE: https://github.com/nvim-lualine/lualine.nvim/wiki/Component-snippets
+
+--- check Trailing-Whitespace --------------------------------------------------
 local function check_trailing_whitespace()
   local space = vim.fn.search([[\s\+$]], 'nwc')
   return space ~= 0 and "TS:"..space or ""
 end
 
---- check Mixed-indent
+--- check Mixed-indent ---------------------------------------------------------
 local function check_mixed_indent()
   local space_pat = [[\v^ +]]
   local tab_pat = [[\v^\t+]]
@@ -81,10 +82,12 @@ local function check_mixed_indent()
   end
 end
 
--- NOTE: 这里缓存数据可以减少计算量, 在退出 insert mode 之后再进行计算并更新 lualine.
+--- 合并两个 check, 同时检查 ---------------------------------------------------
+--- NOTE: 这里缓存数据可以减少计算量, 在退出 insert mode 之后再进行计算并更新 lualine.
 local mixed_indent_cache = ''
 
 local function my_check()
+  --- 退出 INSERT 模式后再进行检查.
   if vim.fn.mode() ~= 'i' then
     local mi = check_mixed_indent()
     local ts = check_trailing_whitespace()
@@ -137,9 +140,15 @@ function my_fname:update_status()
 end
 -- -- }}}
 
---- 修改 progress component ---------------------------------------------------- {{{
+--- 修改 location && progress component ---------------------------------------- {{{
 --- 参照 https://github.com/nvim-lualine/lualine.nvim/blob/master/lua/lualine/components/progress.lua
 --- NOTE: `:help 'statusline'` 中有对 l p v L... 占位符的解释.
+--- '%3l' && '%-2v' 中 3/-2 表示保留位数, 就算没有文字也将保留空位.
+
+local function my_location()
+  return '%3l:%-2v'
+end
+
 local function my_progress()
   return '%3p%%:𝌆 %L'
 end
@@ -183,7 +192,8 @@ lualine.setup {
     },
     lualine_x = {'encoding', 'filetype'},
     lualine_y = {my_progress},  -- 自定义 component, 修改自 builtin 'progress' component
-    lualine_z = {'location',
+    lualine_z = {
+      {my_location},
       {my_check, color = {bg=colors.dark_orange, fg=colors.black, gui='bold'}},  -- 自定义 component
       { 'diagnostics',
         symbols = {error = 'E:', warn = 'W:', info = 'I:', hint = 'H:'},
