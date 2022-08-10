@@ -196,7 +196,9 @@ null_ls.setup({
   },
 
   update_in_insert = false,  -- 节省资源, 一边输入一边检查
-  debounce = 600,            -- 节省资源, diagnostics 间隔时间, 默认 250
+  debounce = 500,            -- NOTE: 这里相当于是 null-ls 的 "flags = {debounce_text_changes = xxx}" 设置. 默认 250.
+                             -- 停止输入文字的时间超过该数值, 则向 null-ls 发送请求.
+                             -- 如果 "update_in_insert = false", 则该设置应该不生效.
   default_timeout = 5000,    -- lint 超时时间
   diagnostics_format = "#{m} [null-ls]",  -- 错误信息显示格式, #{m} - message, #{s} - source, #{c} - err_code
 

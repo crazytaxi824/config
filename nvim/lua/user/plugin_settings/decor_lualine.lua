@@ -84,9 +84,10 @@ end
 
 --- 合并两个 check, 同时检查 ---------------------------------------------------
 local function my_check()
+  --- 通过设置 setbufvar() / getbufvar() 来缓存 whitespace && mixed_indent 结果.
   local bufvar_lualine = 'my_lualine_checks'
 
-  --- NOTE: 退出 INSERT 模式后再进行检查. 可以减少计算量, 在退出 insert mode 之后再进行计算并更新 lualine.
+  --- NOTE: 在退出 insert mode 之后再进行计算并更新 lualine, 可以减少计算量.
   if vim.fn.mode() ~= 'i' then
     local mi = check_mixed_indent()
     local ts = check_trailing_whitespace()
