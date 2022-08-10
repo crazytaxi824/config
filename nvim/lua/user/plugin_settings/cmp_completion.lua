@@ -40,13 +40,14 @@ local kind_icons = {  --- {{{
 }
 -- -- }}}
 
+--- 默认设置: https://github.com/hrsh7th/nvim-cmp -> /lua/cmp/config/default.lua
 cmp.setup {
   preselect = cmp.PreselectMode.None,  -- NOTE: cmp.PreselectMode.None | cmp.PreselectMode.Item
 
-  --- VVI: 会影响 lspconfig[xxx].setup({..., flags = {debounce_text_changes = xxx }}) 设置.
   performance = {
-    debounce = 240,  --- 发送更新请求的时间. 默认 80.
-    throttle = 80,   --- 本地更新 completionItem 的时间. 默认 40.
+   debounce = 120,  --- 停止输入文字的时间超过该数值, 则向 sources 请求更新 completion Item. 默认 60.
+   throttle = 60,   --- 停止输入文字的时间超过该数值, 则匹配和过滤本地已获取的 completion Item. 默认 30.
+   -- fetching_timeout = 200,  --- 默认 200.
   },
 
   snippet = {  -- 给 "saadparwaiz1/cmp_luasnip" 设置 snippet

@@ -7,8 +7,6 @@
 --    可以用来加载 project local settings.
 --    修改之后使用 lsp_client.notify("workspace/didChangeConfiguration") 通知 LSP server.
 
-local M = {}
-
 --- work like Same_ID, `:help vim.lsp.buf.document_highlight()` ------------------------------------ {{{
 --    NOTE: Usage of |vim.lsp.buf.document_highlight()| requires the
 --    following highlight groups to be defined or you won't be able
@@ -34,9 +32,11 @@ local function lsp_highlight(client)
 end
 -- -- }}}
 
---- 官网设置. https://github.com/hrsh7th/nvim-cmp/ -> /lua/cmp/config/default.lua
---- 默认 150. 受到 nvim-cmp performance{} 影响. 这里设置应该比 nvim-cmp 更高.
-M.flags = {debounce_text_changes = 500}
+local M = {}
+
+--- NOTE: 停止输入文字的时间超过该数值, 则向 lsp server 发送请求.
+--- 如果 "diagnostic.config({update_in_insert = false})", 则该设置应该不生效.
+M.flags = { debounce_text_changes = 500 }   --- 默认 150.
 
 --- NOTE: on_attach - 加载 Key mapping & highlight 设置 --------------------------------------------
 ---       这里传入的 client 是正在加载的 lsp_client, vim.inspect(client) 中可以看到 codeActionKind.
