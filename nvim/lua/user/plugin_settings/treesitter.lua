@@ -142,11 +142,14 @@ end
 vim.api.nvim_create_autocmd('FileType', {
   pattern = {"*"},
   callback = function(params)
-    --- NOTE: 这里使用 vim.schedule() 无法获得想要的效果.
-    --- 在文件打开 N(ms) 之后再 highlight 文本.
-    vim.defer_fn(function()
+    --- 文件打开之后再 highlight 文本.
+    vim.schedule(function()
       enable_module('highlight', params.buf)
-    end, 200)  -- delay (N)ms
+    end)
+    --- NOTE: 如果使用 vim.schedule() 无法获得想要的效果, 可以使用 vim.defer_fn().
+    --vim.defer_fn(function()
+    --  enable_module('highlight', params.buf)
+    --end, 200)  -- delay (N)ms, then run callback()
   end
 })
 
