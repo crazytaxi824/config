@@ -7,7 +7,9 @@ if not notify_status_ok then
 end
 
 notify.setup({
-  level = "TRACE",    -- "ERROR(4) > WARN(3) > INFO(2) > DEBUG(1) > TRACE(0)", NOTE: 大写, 这里不能用数字.
+  level = "TRACE",    -- Minimum log level to display.
+                      -- ERROR(4) > WARN(3) > INFO(2) > DEBUG(1) > TRACE(0), NOTE: 大写, 这里不能用数字.
+
   stages = "static",  -- VVI: Animation style, for `set termguicolors`
 
   on_open = nil,
