@@ -18,8 +18,16 @@ notify.setup({
   timeout = 3000,     -- Default timeout for notifications
 
   minimum_width = 50, -- Minimum width for notification windows
-  max_width = nil,    -- Max number of columns for messages
-  max_height = nil,   -- Max number of lines for a message
+  --- Max number of columns for messages
+  max_width = function()
+    --- vim.go.columns 整个屏幕的宽度
+    return math.ceil(math.max(vim.go.columns / 2))
+  end,
+  --- Max number of lines for a message
+  max_height = function()
+    --- vim.go.lines 整个屏幕的高度
+    return math.ceil(math.max(vim.go.lines / 3))
+  end,
 
   -- Icons for the different levels
   icons = {

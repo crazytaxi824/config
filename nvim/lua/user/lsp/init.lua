@@ -1,6 +1,10 @@
 --- `:help vim.lsp.set_log_level()`, 影响 `:LspLog`.
 --- BUG: 默认为 "WARN", 但 vim.lsp 还未实现 sumneko_lua 中的 workspace/diagnostic/refresh handler, 会有大量 WARN log.
-vim.lsp.set_log_level("ERROR")
+if __Debug_Neovim.lspconfig or __Debug_Neovim.null_ls then
+  vim.lsp.set_log_level("DEBUG")
+else
+  vim.lsp.set_log_level("ERROR")
+end
 
 --- 加载 LSP 相关自定义设置.
 require("user.lsp.diagnostic")   -- 加载 diagnostic 设置

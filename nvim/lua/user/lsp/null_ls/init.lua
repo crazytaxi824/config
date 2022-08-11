@@ -183,7 +183,7 @@ null_ls.setup({
 
   --- NOTE: 非常耗资源, 调试完后设置为 false.
   --- is the same as setting log.level to "trace" 记录 log, `:NullLsLog` 打印 log.
-  debug = false,
+  debug = __Debug_Neovim.null_ls,
 
   --- log 输出到 stdpath('cache') .. 'null-ls.log'
   log = {
@@ -210,11 +210,21 @@ null_ls.setup({
   end,
 
   --- 设置 key_mapping vim.diagnostic.goto_next() ...
-  on_attach = function()
+  on_attach = function(client)
     require("user.lsp.util.lsp_keymaps").diagnostic_keymaps(0)
+
+    --- DEBUG: 用
+    if __Debug_Neovim.null_ls then
+      Notify("LSP Server attach: " .. client.name, "DEBUG", {title="Null-ls"})
+    end
   end,
 
-  --on_init = function(client, init_result)
+  on_init = function(client, init_result)
+    --- DEBUG: 用
+    if __Debug_Neovim.null_ls then
+      Notify("LSP Server init: " .. client.name, "DEBUG", {title="Null-ls"})
+    end
+  end,
 })
 
 

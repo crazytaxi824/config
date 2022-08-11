@@ -37,7 +37,9 @@ return {
     local golangci_args = { "run", "--fix=false", "--fast", "--out-format=json", "$DIRNAME", "--path-prefix", pwd_root(params), "--issues-exit-code=0" }
 
     --- DEBUG: 用
-    --Notify('golangci-lint' .. vim.fn.join(golangci_args, " "), "DEBUG")
+    if __Debug_Neovim.null_ls then
+      Notify('golangci-lint' .. vim.fn.join(golangci_args, " "), "DEBUG", {title="Null-ls"})
+    end
 
     return golangci_args
   end,

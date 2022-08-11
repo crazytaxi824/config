@@ -13,6 +13,7 @@ return {
         --library = vim.api.nvim_get_runtime_file("", true),  -- VVI: DO NOT use this.
         library = {
           vim.fn.expand("$VIMRUNTIME/lua"),
+          vim.fn.stdpath("config") .. "/init.lua",   -- ~/.config/nvim/init.lua
           vim.fn.stdpath("config") .. "/lua",     -- ~/.config/nvim/lua/
           vim.fn.stdpath("config") .. "/after",   -- ~/.config/nvim/after/
           --vim.fn.stdpath("config") .. "/plugin",  -- ~/.config/nvim/plugin/
