@@ -271,6 +271,7 @@ return packer.startup(function(use)
 
   --- 以下是使用了 treesitter 功能的插件. (这些插件也可以不使用 treesitter 的功能)
   --- 注释
+  --- FIXME: commit 'cd1c381' 中 lua 注释 linewise 不正确, 使用的是 blockwise.
   use {"numToStr/Comment.nvim",
     commit = "9b76787",
     config = function() require("user.plugin_settings.comment") end,
