@@ -395,7 +395,7 @@ return packer.startup(function(use)
   --- Useful Tools ---------------------------------------------------------------------------------
   --- fzf rg fd, preview 使用的是 treesitter, 而不用 bat
   use {"nvim-telescope/telescope.nvim",
-    commit = "4725867",
+    commit = "8746347",
     config = function() require("user.plugin_settings.telescope_fzf") end,
     requires = "nvim-lua/plenary.nvim",
     --keys = {"<leader>f"},
@@ -403,7 +403,7 @@ return packer.startup(function(use)
 
   --- terminal
   use {"akinsho/toggleterm.nvim",
-    commit = "dfce846",
+    commit = "6236642",
     config = function() require("user.plugin_settings.toggleterm_terminal") end
   }
 
@@ -425,7 +425,7 @@ return packer.startup(function(use)
   --- `ctags --list-languages` 查看支持的语言. 不支持 jsx/tsx, 支持 typescript, 勉强支持 javascript
   -- -- }}}
   use {"preservim/tagbar",
-    commit = "0243b19",
+    commit = "87afc29",
     config = function() require("user.plugin_settings.tagbar") end,
   }
 
