@@ -204,14 +204,14 @@ packer.init {
 --- `:PackerSync` - install / update / clean 插件包.
 return packer.startup(function(use)
   use {"wbthomason/packer.nvim",  -- VVI: 必要. Have packer manage itself
-    commit = "afab895",
+    commit = "712dfa0",
   }
 
   --- Performence & Functions ----------------------------------------------------------------------
   --- 加快 lua module 加载时间, 生成 ~/.cache/nvim/luacache_chunks && luacache_modpaths
   --- VVI: impatient needs to be setup before any other lua plugin is loaded.
   use {"lewis6991/impatient.nvim",  -- NOTE: 这里只是安装, 设置在 init.lua 中. impatient 不是通过 setup() 设置.
-    commit = "4ccbe74",
+    commit = "49f4ed4",
     run = ":LuaCacheClear",  -- 更新后清空 luacache_chunks && luacache_modpaths, 下次启动 nvim 时重新生成.
   }
 
@@ -237,7 +237,7 @@ return packer.startup(function(use)
   --- `:TSUpdateSync`         -- Update the installed languages synchronously
   -- -- }}}
   use {"nvim-treesitter/nvim-treesitter",
-    commit = "a9a6493",
+    commit = "9b3f127",
     run = ":TSUpdateSync",   -- Post-update/install hook.
     config = function() require("user.plugin_settings.treesitter") end,
     requires = {
@@ -259,11 +259,11 @@ return packer.startup(function(use)
 
       --- 第三方 module 插件 ---
       {"JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
-        commit="7d0b001",
+        commit = "4befb89",
       },
 
       {"windwp/nvim-ts-autotag",  -- auto close tag <div></div>
-        commit="044a05c",
+        commit = "fdefe46",
       },
       --{"p00f/nvim-ts-rainbow"},   -- 括号颜色. treesitter 解析, 严重拖慢文件打开速度.
     },
@@ -271,6 +271,7 @@ return packer.startup(function(use)
 
   --- 以下是使用了 treesitter 功能的插件. (这些插件也可以不使用 treesitter 的功能)
   --- 注释
+  --- FIXME: commit 'cd1c381' 中 lua 注释 linewise 不正确, 使用的是 blockwise.
   use {"numToStr/Comment.nvim",
     commit = "9b76787",
     config = function() require("user.plugin_settings.comment") end,
@@ -295,19 +296,19 @@ return packer.startup(function(use)
     requires = {
       --"hrsh7th/cmp-cmdline",  -- cmdline completions, 不好用.
       {"hrsh7th/cmp-nvim-lsp",  -- LSP source for nvim-cmp
-        commit="affe808"
+        commit = "affe808",
       },
       {"hrsh7th/cmp-buffer",    -- buffer completions
-        commit="62fc67a"
+        commit = "3022dbc",
       },
       {"hrsh7th/cmp-path",      -- path completions
-        commit="447c87c"
+        commit = "447c87c",
       },
       {"saadparwaiz1/cmp_luasnip",  -- Snippets source for nvim-cmp
         commit = "a9de941",
         requires = {
           {"L3MON4D3/LuaSnip",     -- snippet engine, for "cmp_luasnip", BUG: 每次打开文件都会有一个 [Scratch] buffer.
-            commit = "ac27343",
+            commit = "3d6c52b",
             config = function() require("user.plugin_settings.luasnip_snippest") end,
             requires = {
               {"rafamadriz/friendly-snippets",  -- snippets content, 自定义 snippets 可以借鉴这个结构.
@@ -322,7 +323,7 @@ return packer.startup(function(use)
 
   --- 自动括号, 同时依赖 treesitter && cmp
   use {"windwp/nvim-autopairs",
-    commit = "ca89ab9",
+    commit = "34bd374",
     config = function() require("user.plugin_settings.autopairs") end,
     requires = {
       "nvim-treesitter/nvim-treesitter",  -- setup() 中 `check_ts`, `ts_config` 需要 treesitter 支持.
@@ -337,11 +338,11 @@ return packer.startup(function(use)
   if proj_settings_status_ok then
     --- 官方 LSP 引擎.
     use {"neovim/nvim-lspconfig",
-      commit = "6e047f1",
+      commit = "da7461b",
       config = function() require("user.lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
       requires = {
         {"williamboman/nvim-lsp-installer",  -- 简单安装 lsp server 的插件. NOTE: 和 lspconfig 并非依赖关系, 只是放在一起方便 setup()
-          commit="6b76bce",
+          commit = "469fe5c",
         },
         "hrsh7th/cmp-nvim-lsp",  -- provide content to nvim-cmp Completion. cmp_nvim_lsp.update_capabilities(capabilities)
       },
@@ -349,7 +350,7 @@ return packer.startup(function(use)
 
     --- null-ls 插件 formatters && linters, depends on "nvim-lua/plenary.nvim"
     use {"jose-elias-alvarez/null-ls.nvim",
-      commit = "53622ed",
+      commit = "8c90ccf",
       config = function() require("user.lsp.null_ls") end,
       requires = "nvim-lua/plenary.nvim",
     }
@@ -358,18 +359,18 @@ return packer.startup(function(use)
   --- File Tree Display ----------------------------------------------------------------------------
   --use "kyazdani42/nvim-web-devicons"  -- 提供 icons 需要 patch 字体 (Nerd Fonts)
   use {"kyazdani42/nvim-tree.lua",      -- 类似 NerdTree
-    commit = "ff6e796",
+    commit = "261a5c3",
     config = function() require("user.plugin_settings.file_tree") end,
     cmd = {"NvimTreeToggle", "NvimTreeOpen"},
   }
 
   --- Buffer & Status Line -------------------------------------------------------------------------
   use {"akinsho/bufferline.nvim",     -- top buffer list
-    commit = "7ca869b",
+    commit = "2e5d92e",
     config = function() require("user.plugin_settings.decor_bufferline") end,
   }
   use {"nvim-lualine/lualine.nvim",   -- bottom status line
-    commit = "f40db9a",
+    commit = "c0510dd",
     config = function() require("user.plugin_settings.decor_lualine") end,
   }
 
@@ -395,7 +396,7 @@ return packer.startup(function(use)
   --- Useful Tools ---------------------------------------------------------------------------------
   --- fzf rg fd, preview 使用的是 treesitter, 而不用 bat
   use {"nvim-telescope/telescope.nvim",
-    commit = "4725867",
+    commit = "8746347",
     config = function() require("user.plugin_settings.telescope_fzf") end,
     requires = "nvim-lua/plenary.nvim",
     --keys = {"<leader>f"},
@@ -403,7 +404,7 @@ return packer.startup(function(use)
 
   --- terminal
   use {"akinsho/toggleterm.nvim",
-    commit = "dfce846",
+    commit = "6236642",
     config = function() require("user.plugin_settings.toggleterm_terminal") end
   }
 
@@ -425,7 +426,7 @@ return packer.startup(function(use)
   --- `ctags --list-languages` 查看支持的语言. 不支持 jsx/tsx, 支持 typescript, 勉强支持 javascript
   -- -- }}}
   use {"preservim/tagbar",
-    commit = "0243b19",
+    commit = "87afc29",
     config = function() require("user.plugin_settings.tagbar") end,
   }
 
