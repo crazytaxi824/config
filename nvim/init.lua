@@ -30,6 +30,12 @@
 -- eg: `$ nvim --startuptime log src/main.go`    -- 将 nvim 打开 open_file 过程中的所有耗时打印到 ./log 文件中
 -------------------------------------+----------------------------------+------------------------------------
 
+--- for Debugging Neovim plugins. `:LspInfo`, `:LspLog`
+__Debug_Neovim = {
+  null_ls = false,    -- :NullLsLog & golangci-lint Notify Commands.
+  lspconfig = false,  -- lspconfig DEBUG
+}
+
 --- VVI: 在最开始加载 "lewis6991/impatient.nvim" 设置,
 --- it is recommended you add the following near the start of your 'init.vim'.
 --- Speed up loading Lua modules in Neovim to improve startup time.

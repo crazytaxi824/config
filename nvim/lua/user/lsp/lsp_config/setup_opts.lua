@@ -61,6 +61,11 @@ M.on_attach = function(client, bufnr)
   local lsp_keymaps = require("user.lsp.util.lsp_keymaps")
   lsp_keymaps.textDocument_keymaps(bufnr)
   lsp_keymaps.diagnostic_keymaps(bufnr)
+
+  --- DEBUG: 用
+  if __Debug_Neovim.lspconfig then
+    Notify("LSP Server attach: " .. client.name, "DEBUG", {title="LSP"})
+  end
 end
 
 --- NOTE: capabilities - Provides content to "hrsh7th/cmp-nvim-lsp" Completion ---------------------
@@ -85,6 +90,11 @@ M.on_init = function(client)
     --- VVI: tell LSP configs are changed.
     --- 有些 LSP server 不支持 didChangeConfiguration. eg: jsonls
     client.notify("workspace/didChangeConfiguration")
+  end
+
+  --- DEBUG: 用
+  if __Debug_Neovim.lspconfig then
+    Notify("LSP Server init: " .. client.name, "DEBUG", {title="LSP"})
   end
 
   return true  -- VVI: 如果 return false 则 LSP 不启动.

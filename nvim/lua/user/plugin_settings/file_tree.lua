@@ -121,7 +121,7 @@ nvim_tree.setup {
       hint    = "⚐ ",  -- ⚐⚑
       info    = "𝖎 ",
       warning = "⚠️ ",
-      error   = "✘ ",  -- ❌✕✖︎✘
+      error   = "✘ ",  -- ❌✕✖︎✗✘
     },
   },
   filters = {

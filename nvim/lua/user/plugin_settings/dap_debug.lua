@@ -130,11 +130,12 @@ dapui.setup({
   layouts = {
     {
       elements = {
+        --- NOTE: 顺序有影响.
         --{ id = "scopes", size = 0.25 },  -- Elements can be strings or table with id and size keys.
         "scopes",
+        "watches",
         "breakpoints",
         "stacks",
-        "watches",
       },
       position = "left",
       size = 0.32, -- columns (width)
