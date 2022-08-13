@@ -358,18 +358,18 @@ return packer.startup(function(use)
   --- File Tree Display ----------------------------------------------------------------------------
   --use "kyazdani42/nvim-web-devicons"  -- 提供 icons 需要 patch 字体 (Nerd Fonts)
   use {"kyazdani42/nvim-tree.lua",      -- 类似 NerdTree
-    commit = "ff6e796",
+    commit = "261a5c3",
     config = function() require("user.plugin_settings.file_tree") end,
     cmd = {"NvimTreeToggle", "NvimTreeOpen"},
   }
 
   --- Buffer & Status Line -------------------------------------------------------------------------
   use {"akinsho/bufferline.nvim",     -- top buffer list
-    commit = "7ca869b",
+    commit = "2e5d92e",
     config = function() require("user.plugin_settings.decor_bufferline") end,
   }
   use {"nvim-lualine/lualine.nvim",   -- bottom status line
-    commit = "f40db9a",
+    commit = "c0510dd",
     config = function() require("user.plugin_settings.decor_lualine") end,
   }
 
