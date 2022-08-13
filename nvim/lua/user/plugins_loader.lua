@@ -259,11 +259,11 @@ return packer.startup(function(use)
 
       --- 第三方 module 插件 ---
       {"JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
-        commit="7d0b001",
+        commit = "4befb89",
       },
 
       {"windwp/nvim-ts-autotag",  -- auto close tag <div></div>
-        commit="044a05c",
+        commit = "fdefe46",
       },
       --{"p00f/nvim-ts-rainbow"},   -- 括号颜色. treesitter 解析, 严重拖慢文件打开速度.
     },
