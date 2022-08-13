@@ -295,19 +295,19 @@ return packer.startup(function(use)
     requires = {
       --"hrsh7th/cmp-cmdline",  -- cmdline completions, 不好用.
       {"hrsh7th/cmp-nvim-lsp",  -- LSP source for nvim-cmp
-        commit="affe808"
+        commit = "affe808",
       },
       {"hrsh7th/cmp-buffer",    -- buffer completions
-        commit="62fc67a"
+        commit = "3022dbc",
       },
       {"hrsh7th/cmp-path",      -- path completions
-        commit="447c87c"
+        commit = "447c87c",
       },
       {"saadparwaiz1/cmp_luasnip",  -- Snippets source for nvim-cmp
         commit = "a9de941",
         requires = {
           {"L3MON4D3/LuaSnip",     -- snippet engine, for "cmp_luasnip", BUG: 每次打开文件都会有一个 [Scratch] buffer.
-            commit = "ac27343",
+            commit = "3d6c52b",
             config = function() require("user.plugin_settings.luasnip_snippest") end,
             requires = {
               {"rafamadriz/friendly-snippets",  -- snippets content, 自定义 snippets 可以借鉴这个结构.
@@ -322,7 +322,7 @@ return packer.startup(function(use)
 
   --- 自动括号, 同时依赖 treesitter && cmp
   use {"windwp/nvim-autopairs",
-    commit = "ca89ab9",
+    commit = "34bd374",
     config = function() require("user.plugin_settings.autopairs") end,
     requires = {
       "nvim-treesitter/nvim-treesitter",  -- setup() 中 `check_ts`, `ts_config` 需要 treesitter 支持.
