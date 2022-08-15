@@ -49,6 +49,11 @@ git:
     #   \--line-numbers-minus-style="196" --minus-style="normal 88" --minus-emph-style="normal 196"
     #   \--plus-style="normal 22" --plus-emph-style="normal 28"
 
+  # 默认为 true, auto fetch remote repo.
+  # `git fetch origin` 可以将 remote 版本下载到本地仓库. 用于检查 local & remote 中的文件是否不同.
+  # fetch 之后可以通过 `git merge origin/develop` 将 fetch 到的远程版本合并到当前 branch.
+  #autoFetch: true
+
   # Commits window (window No.4) 显示 commit tree, 而不是 list.
   log:
     showGraph: 'always'  # always | never | when-maximised (当按 '+' 时显示 commit tree)
@@ -84,7 +89,7 @@ keybinding:
   universal:
     undo: '<f12>'       # ctrl-z, 危险操作
     redo: '<f12>'       # shift-z
-    pullFiles: '<f12>'  # use 'fetch' instead of 'pull'
+    pullFiles: '<f12>'  # use 'fetch' instead of 'pull', 慎用.
     gotoTop: 'g'        # go to top of list
     gotoBottom: 'G'     # go to bottom of list
   # file (window No.1)
