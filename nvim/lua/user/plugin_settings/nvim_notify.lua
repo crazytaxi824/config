@@ -48,21 +48,21 @@ notify.setup({
 --- 颜色只对 notify 有用 ---------------------------------------------------------------------------
 --- border 颜色
 vim.cmd [[hi NotifyERRORBorder ctermfg=167]] -- red
-vim.cmd [[hi NotifyWARNBorder  ctermfg=166]] -- orange
+vim.cmd [[hi NotifyWARNBorder  ctermfg=202]] -- orange
 vim.cmd [[hi NotifyINFOBorder  ctermfg=38]]  -- blue
 vim.cmd [[hi NotifyDEBUGBorder ctermfg=102]] -- grey
 vim.cmd [[hi NotifyTRACEBorder ctermfg=59]]  -- grey
 
 --- Title 颜色
 vim.cmd [[hi NotifyERRORTitle ctermfg=197]]  -- magenta
-vim.cmd [[hi NotifyWARNTitle  ctermfg=208]]  -- orange
+vim.cmd [[hi NotifyWARNTitle  ctermfg=214]]  -- orange
 vim.cmd [[hi NotifyINFOTitle  ctermfg=81]]   -- blue
 vim.cmd [[hi NotifyDEBUGTitle ctermfg=102]]  -- green
 vim.cmd [[hi NotifyTRACETitle ctermfg=59]]   -- grey
 
 --- icon 颜色, NOTE: 没用到
 vim.cmd [[hi NotifyERRORIcon ctermfg=197]]
-vim.cmd [[hi NotifyWARNIcon  ctermfg=208]]
+vim.cmd [[hi NotifyWARNIcon  ctermfg=214]]
 vim.cmd [[hi NotifyINFOIcon  ctermfg=81]]
 vim.cmd [[hi NotifyDEBUGIcon ctermfg=102]]
 vim.cmd [[hi NotifyTRACEIcon ctermfg=59]]

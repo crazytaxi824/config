@@ -17,14 +17,14 @@ local colors = {
   light_grey = 246,  -- inactive, hint
 
   red = 167,  -- error, readonly
-  orange = 215, -- warn
+  orange = 214, -- warn
   blue = 63,  -- info
-  dark_orange = 136, -- trailing_whitespace && mixed_indent
+  dark_orange = 202, -- trailing_whitespace && mixed_indent
 }
 
 --- Airline theme color
 --- black = 233; white = 188
---- normal: a = black/190, b = white/grey, c = 190/black  -- green
+--- normal: a = black/190, b = white/grey, c = 190/black  -- yellow
 --- insert: a = black/45, b = white/27, c = white/17      -- blue
 --- visual: a = black/214, b = black/202, c = white/52    -- orange
 --- replace: a = white/124, b = white/27, c = white/17    -- red
@@ -35,7 +35,7 @@ local my_theme = {
     c = { fg = colors.light_green, bg = colors.black },
   },
 
-  --- 以下如果不设置则继承 normal 的设置.
+  --- 其他模式如果缺省设置, 则继承 normal 的设置 --------------------------------------------------- {{{
   -- insert = {
   --   a = { fg = colors.black, bg = 45, gui = 'bold' },
   --   b = { fg = colors.white, bg = 27},
@@ -52,6 +52,7 @@ local my_theme = {
   --   c = { fg = colors.white, bg = 17},
   -- },
   -- command = {},
+  -- -- }}}
 
   inactive = {
     a = { fg = colors.light_green, bg = colors.grey },

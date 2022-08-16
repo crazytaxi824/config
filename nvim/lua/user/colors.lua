@@ -7,20 +7,28 @@
 --
 --- 常用颜色
 --    188/252   白色   -  一般文字颜色
+--    233       黑色   - bufferline / lualine / floating window / Pmenu
+--
 --    170       紫色   - onedark theme (主色调)
 --    85        暗金色 - function, function call
 --    213       品红(magenta) - IncSearch, return, if, else, break
---    215       橙色   - warning
+--
+--    214       橙色   - warning
+--    202       橙红色
 --    173       暗橙色 - String, ':hi String'
---    220       亮橙色 - 括号匹配颜色
+--
+--    81        cyan   - goField, Special, fmt.Printf("%s \n")
 --    75        蓝色   - package, import, func
---    81        淡蓝色(cyan) - goField, Special, fmt.Printf("%s \n")
 --    63        深蓝色 - info msg background
+--
 --    71        绿色   - comment 注释 (:hi Comment)
 --    43        淡绿色 - 数据类型, 数字(int, bool)
+--
 --    167       红色   - error
+--    52        暗红色
+--
 --    190       黄色   - bufferline
---    233       黑色   - bufferline / lualine / floating window / Pmenu
+--    220       黄色   - 括号匹配颜色
 --
 --- NOTE: 只有 ':hi link' 才有 [!] 设置.
 --- 如果是 ':hi <group>' 只会覆盖对应的 kv 颜色值.
@@ -65,7 +73,7 @@ vim.cmd('hi IncSearch ctermfg=0 ctermbg=213 cterm=bold')  -- / ? 搜索颜色
 vim.cmd('hi Search ctermfg=0 ctermbg=191')                -- / ? * # g* g# 搜索颜色
 
 vim.cmd('hi ErrorMsg ctermfg=253 ctermbg=167')     -- echoerr 颜色
-vim.cmd('hi WarningMsg ctermfg=236 ctermbg=215')   -- echohl 颜色, XXX FIXME BUG 颜色
+vim.cmd('hi WarningMsg ctermfg=236 ctermbg=214')   -- echohl 颜色, XXX FIXME BUG 颜色
 vim.cmd('hi Todo ctermbg=28 ctermfg=188')          -- TODO, HACK 颜色
 vim.cmd('hi SpecialComment ctermbg=63 ctermfg=188')  -- NOTE: DEBUG: FOO: 颜色
 
@@ -128,13 +136,13 @@ vim.cmd('hi Label ctermfg=81')                 -- json key color
 
 --- diagnostics popup/floating window text color.
 vim.cmd('hi DiagnosticError ctermfg=167')
-vim.cmd('hi DiagnosticWarn ctermfg=215')
+vim.cmd('hi DiagnosticWarn ctermfg=214')
 vim.cmd('hi DiagnosticInfo ctermfg=75')
 vim.cmd('hi DiagnosticHint ctermfg=246')
 
 --- diagnostics sign, 默认和 diagnostics text 颜色一样
 --vim.cmd('hi DiagnosticSignError ctermfg=167')
---vim.cmd('hi DiagnosticSignWarn ctermfg=215')
+--vim.cmd('hi DiagnosticSignWarn ctermfg=214')
 --vim.cmd('hi DiagnosticSignInfo ctermfg=75')
 vim.cmd('hi DiagnosticSignHint ctermfg=244')
 

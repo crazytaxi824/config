@@ -25,7 +25,7 @@ local colors = {
 
   diag_style = "bold",
   error_fg = 167,
-  warning_fg = 215,
+  warning_fg = 214,
   info_fg = 75,
   hint_fg = 246,
 }
