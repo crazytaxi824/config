@@ -83,7 +83,7 @@ vim.opt.shiftwidth = 4   -- shift 缩进宽度, <Shift-,> / <Shift-.>
                          -- 在 let g:prettier#config#tab_width=2 时不影响 prettier.
                          -- 同时影响 indentLine 画线的宽度.
 
-vim.opt.wrap = false     -- 单行文字是否可以超出屏幕.
+vim.opt.wrap = false     -- 单行文字是否可以超出屏幕. local to window, 所以如果想要区别设置只能使用 BufEnter.
                          -- nowrap - 单行可以超出屏幕, 不换行;
                          -- wrap(默认) - 超出屏幕则(软)换行. 即行号不变, 文字在下一行显示.
 
