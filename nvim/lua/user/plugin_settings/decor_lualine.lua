@@ -22,6 +22,12 @@ local colors = {
   dark_orange = 136, -- trailing_whitespace && mixed_indent
 }
 
+--- Airline theme color
+--- black = 233; white = 188
+--- normal: a = black/190, b = white/grey, c = 190/black  -- green
+--- insert: a = black/45, b = white/27, c = white/17      -- blue
+--- visual: a = black/214, b = black/202, c = white/52    -- orange
+--- replace: a = white/124, b = white/27, c = white/17    -- red
 local my_theme = {
   normal = {
     a = { fg = colors.black, bg = colors.green, gui = "bold" },
@@ -29,10 +35,23 @@ local my_theme = {
     c = { fg = colors.light_green, bg = colors.black },
   },
 
-  --- 以下都是和 normal 相同
-  -- insert = { a = { fg = colors.black, bg = colors.blue } },
-  -- visual = { a = { fg = colors.black, bg = colors.cyan } },
-  -- replace = { c = { fg = colors.white, bg = 17 } },
+  --- 以下如果不设置则继承 normal 的设置.
+  -- insert = {
+  --   a = { fg = colors.black, bg = 45, gui = 'bold' },
+  --   b = { fg = colors.white, bg = 27},
+  --   c = { fg = colors.white, bg = 17},
+  -- },
+  -- visual = {
+  --   a = { fg = colors.black, bg = 214, gui = 'bold' },
+  --   b = { fg = colors.black, bg = 202},
+  --   c = { fg = colors.white, bg = 52},
+  -- },
+  -- replace = {
+  --   a = { fg = colors.white, bg = 124, gui = 'bold' },
+  --   b = { fg = colors.white, bg = 27},
+  --   c = { fg = colors.white, bg = 17},
+  -- },
+  -- command = {},
 
   inactive = {
     a = { fg = colors.light_green, bg = colors.grey },
@@ -43,9 +62,8 @@ local my_theme = {
 -- -- }}}
 
 --- 自定义 components ------------------------------------------------------------------------------ {{{
---- check Trailing-Whitespace && Mixed-indent ---------------------------------- {{{
 --- NOTE: https://github.com/nvim-lualine/lualine.nvim/wiki/Component-snippets
-
+--- check Trailing-Whitespace && Mixed-indent ---------------------------------- {{{
 --- check Trailing-Whitespace --------------------------------------------------
 local function check_trailing_whitespace()
   local space = vim.fn.search([[\s\+$]], 'nwc')
@@ -103,43 +121,6 @@ local function my_check()
 end
 -- -- }}}
 
---- Changing filename color based on modified status --------------------------- {{{
-local highlight = require('lualine.highlight')
-local my_fname = require('lualine.components.filename'):extend() -- 修改自 filename component
-
---- NOTE: 这里的 options 就是 'filename' components 中的 { 'filename', path=3, symbols = {...} }
-function my_fname:init(options)
-  my_fname.super.init(self, options)
-  self.status_colors = {
-    modified_readonly = highlight.create_component_highlight_group(
-      {bg = colors.red, fg = colors.white, gui='bold'}, 'filename_modified_readonly', self.options),
-    modified = highlight.create_component_highlight_group(
-      {fg = colors.light_blue, gui='bold' }, 'filename_status_modified', self.options),
-    readonly = highlight.create_component_highlight_group(
-      {fg = colors.red, gui='bold'}, 'filename_readonly', self.options),
-    saved = highlight.create_component_highlight_group(
-      {fg = colors.light_green}, 'filename_status_saved', self.options),
-  }
-  if self.options.color == nil then self.options.color = '' end
-end
-
-function my_fname:update_status()
-  local data = my_fname.super.update_status(self)
-
-  if vim.bo.modified and vim.bo.readonly then
-    data = highlight.component_format_highlight(self.status_colors.modified_readonly) .. data
-  elseif vim.bo.modified then
-    data = highlight.component_format_highlight(self.status_colors.modified) .. data
-  elseif vim.bo.readonly then
-    data = highlight.component_format_highlight(self.status_colors.readonly) .. data
-  else
-    data = highlight.component_format_highlight(self.status_colors.saved) .. data
-  end
-
-  return data
-end
--- -- }}}
-
 --- 修改 location && progress component ---------------------------------------- {{{
 --- 参照 https://github.com/nvim-lualine/lualine.nvim/blob/master/lua/lualine/components/progress.lua
 --- NOTE: `:help 'statusline'` 中有对 l p v L... 占位符的解释.
@@ -178,13 +159,28 @@ lualine.setup {
       }
     },
     lualine_c = {
-      { my_fname,  -- VVI: 使用自定义 filename 代替自带 'filename' component.
-        path = 3,  -- Absolute path, with ~ as the home directory
+      {'filename',
+        path = 3, -- 路径显示模式.
+                  -- 0: Just the filename
+                  -- 1: Relative path
+                  -- 2: Absolute path
+                  -- 3: Absolute path, with tilde as the home directory '~'
         symbols = {
           modified = '[+]',       -- Text to show when the file is modified.
           readonly = '[-]',       -- Text to show when the file is non-modifiable or readonly.
           unnamed  = '[No Name]', -- Text to show for unnamed buffers.
         },
+        color = function()
+          if vim.bo.modified and vim.bo.readonly then
+            return {fg = colors.white, bg = colors.red, gui='bold'}
+          elseif vim.bo.modified then
+            return {fg = colors.light_blue, gui='bold'}
+          elseif vim.bo.readonly then
+            return {fg = colors.red, gui='bold'}
+          else
+            return {fg = colors.light_green}
+          end
+        end,
         --on_click = function(number, mouse, modifiers) end,  -- - number of clicks incase of multiple clicks
                                                               -- - mouse button used (l(left)/r(right)/m(middle)/...)
                                                               -- - modifiers pressed (s(shift)/c(ctrl)/a(alt)/m(meta)...)
@@ -223,13 +219,13 @@ lualine.setup {
         },
         color = function()
           if vim.bo.modified and vim.bo.readonly then
-            return {bg = colors.red, fg = colors.white, gui='bold'}
+            return {fg = colors.white, bg = colors.red, gui='bold'}
           elseif vim.bo.modified then
             return {fg = colors.light_blue}
           elseif vim.bo.readonly then
             return {fg = colors.red}
           else
-            return {fg = colors.light_grey, bg = colors.black}
+            return {fg = colors.light_grey}
           end
         end,
       },
