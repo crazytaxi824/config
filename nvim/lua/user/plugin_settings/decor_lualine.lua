@@ -136,6 +136,36 @@ local function my_progress()
 end
 -- -- }}}
 
+--- indicate 文件是否 modified / readonly -------------------------------------- {{{
+--- NOTE: 这里主要是为了解决 inactive_sections 中的 filename 无法分别设置颜色.
+local function modified_readonly()
+  if vim.bo.modified and vim.bo.readonly then  -- 对 readonly 文件做出修改
+    return "modified readonly"
+  end
+  return ''
+end
+
+local function readonly()
+  if vim.bo.modified and vim.bo.readonly then  -- 如果是 modified_readonly 则不显示
+    return ''
+  end
+  if vim.bo.readonly then
+    return "readonly"
+  end
+  return ''
+end
+
+local function modified()
+  if vim.bo.modified and vim.bo.readonly then  -- 如果是 modified_readonly 则不显示
+    return ''
+  end
+  if vim.bo.modified then
+    return "modified"
+  end
+  return ''
+end
+-- -- }}}
+
 -- -- }}}
 
 --- `:help lualine-Global-options`
@@ -157,7 +187,7 @@ lualine.setup {
       {'branch',
         icons_enabled = true, -- 单独设置 branch 使用 icon.
         icon = {'', color={fg='green'}},
-      }
+      },
     },
     lualine_c = {
       {'filename',
@@ -210,13 +240,17 @@ lualine.setup {
     lualine_a = {},
     lualine_b = {},
     lualine_c = {
+      --- NOTE: 以下三个 components 主要是为了解决 inactive_sections 中的 filename 无法分别设置颜色.
+      {modified_readonly, color = {fg=colors.white, bg=colors.red, gui='bold'}},
+      {readonly, color = {fg=colors.dark_orange, gui='bold'}},
+      {modified, color = {fg=colors.light_blue, gui='bold'}},
       {'filename',
         path = 3,  -- Absolute path, with ~ as the home directory
         symbols = {
           modified = '[+]',       -- Text to show when the file is modified.
           readonly = '[-]',       -- Text to show when the file is non-modifiable or readonly.
           unnamed  = '[No Name]', -- Text to show for unnamed buffers.
-          --- NOTE: 这里设置 color = function() 会导致所有 inactive buffer 的 statusline 颜色一起改变. 不推荐分别设置.
+          --- NOTE: 这里设置 color = function() 会导致所有 inactive buffer 的 filename 颜色一起改变.
         },
       },
     },
@@ -231,7 +265,7 @@ lualine.setup {
           info  = {fg=colors.blue, gui='bold'},       -- Changes diagnostics' info color.
           hint  = {fg=colors.light_grey, gui='bold'}, -- Changes diagnostics' hint color.
         },
-      }
+      },
     },
     lualine_y = {},
     lualine_z = {}
