@@ -172,15 +172,14 @@ lualine.setup {
           unnamed  = '[No Name]', -- Text to show for unnamed buffers.
         },
         color = function()
-          if vim.bo.modified and vim.bo.readonly then
+          if vim.bo.modified and vim.bo.readonly then  -- 对 readonly 文件做出修改
             return {fg = colors.white, bg = colors.red, gui='bold'}
-          elseif vim.bo.modified then
+          elseif vim.bo.modified then  -- 修改后未保存的文件
             return {fg = colors.light_blue, gui='bold'}
-          elseif vim.bo.readonly then
-            return {fg = colors.red, gui='bold'}
-          else
-            return {fg = colors.light_green}
+          elseif vim.bo.readonly then  -- readonly 文件
+            return {fg = colors.dark_orange, gui='bold'}
           end
+          return {fg = colors.light_green} -- 其他情况
         end,
         --on_click = function(number, mouse, modifiers) end,  -- - number of clicks incase of multiple clicks
                                                               -- - mouse button used (l(left)/r(right)/m(middle)/...)
@@ -217,18 +216,8 @@ lualine.setup {
           modified = '[+]',       -- Text to show when the file is modified.
           readonly = '[-]',       -- Text to show when the file is non-modifiable or readonly.
           unnamed  = '[No Name]', -- Text to show for unnamed buffers.
+          --- NOTE: 这里设置 color = function() 会导致所有 inactive buffer 的 statusline 颜色一起改变. 不推荐分别设置.
         },
-        color = function()
-          if vim.bo.modified and vim.bo.readonly then
-            return {fg = colors.white, bg = colors.red, gui='bold'}
-          elseif vim.bo.modified then
-            return {fg = colors.light_blue}
-          elseif vim.bo.readonly then
-            return {fg = colors.red}
-          else
-            return {fg = colors.light_grey}
-          end
-        end,
       },
     },
     lualine_x = {
