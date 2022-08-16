@@ -8,36 +8,36 @@ local colors = {
   --normal_fg = 188,  -- NOTE: colors.lua 设置中 highlight Normal ctermfg=188, 所有默认 fg 都是 188.
   fill_bg = 234,  -- fill 整个 bufferline banner 的背景色
 
-  buf_fg = 246,
-  buf_bg = 236,
-  buf_sel_fg = 85,
-  buf_sel_bg = 233,
-  buf_vis_bg = 233,
+  buf_fg = 246,        -- light_grey
+  buf_bg = 236,        -- grey
+  buf_sel_fg = 85,     -- light_green
+  buf_sel_bg = 233,    -- black
+  buf_vis_bg = 233,    -- black
   buf_style = "bold",
 
-  duplicate_fg = 243,
-  tab_sel_fg = 233,
-  tab_sel_bg = 190,
+  duplicate_fg = 243,  -- grey
+  tab_sel_fg = 233,    -- black
+  tab_sel_bg = 190,    -- yellow
 
-  modified_fg = 81,
-  separator_fg = 238,
-  indicator_fg = 81,
+  modified_fg = 81,    -- cyan
+  separator_fg = 238,  -- grey
+  indicator_fg = 81,   -- cyan
 
   diag_style = "bold",
-  error_fg = 167,
-  warning_fg = 214,
-  info_fg = 75,
-  hint_fg = 246,
+  error_fg = 167,      -- red
+  warning_fg = 214,    -- orange
+  info_fg = 75,        -- blue
+  hint_fg = 246,       -- light_grey
 }
 
 local buf_highlights = {
   fill = { ctermbg = colors.fill_bg },  -- fill 整个 bufferline banner 的背景色
 
-  background = {  -- 每个 buffer 的颜色
+  background = {  -- 默认设置, 其他设置缺省的时候使用该设置.
     ctermfg = colors.buf_fg,
     ctermbg = colors.buf_bg,
   },
-  buffer_visible = {  -- unfocused window
+  buffer_visible = {  -- cursor 在别的 window 时, buffer filename 颜色.
     ctermbg = colors.buf_vis_bg,
   },
   buffer_selected = {
@@ -59,7 +59,8 @@ local buf_highlights = {
     ctermbg = colors.buf_sel_bg,
   },
 
-  --- duplicate 默认是 italic
+  --- duplicate 默认是 italic.
+  --- 这里是指相同文件名的 prefix 部分. eg: prefix1/abc.txt && prefix2/abc.txt
   duplicate = {
     ctermfg = colors.duplicate_fg,
     ctermbg = colors.buf_bg,
@@ -73,7 +74,7 @@ local buf_highlights = {
     ctermbg = colors.buf_sel_bg,
   },
 
-  --- NOTE: indicator 不显示, 通过 XXX_selected bg 显示.
+  --- NOTE: indicator - 当前正在显示的 buffer. ▎
   indicator_visible = {  -- background 颜色需要和 buffer_visible bg 相同
     ctermfg = colors.indicator_fg,
     ctermbg = colors.buf_vis_bg,
@@ -97,7 +98,7 @@ local buf_highlights = {
     --ctermbg = bufline_hi.buf_bg,  -- NOTE: 如果需要显示 separator 使用 buffer bg 颜色.
   },
 
-  --- ONLY modified_icon color
+  --- ONLY modified_icon color. ●
   modified = {
     ctermfg = colors.modified_fg,
     ctermbg = colors.buf_bg,

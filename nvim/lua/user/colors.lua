@@ -23,6 +23,7 @@
 --
 --    71        绿色   - comment 注释 (:hi Comment)
 --    43        淡绿色 - 数据类型, 数字(int, bool)
+--    85        淡绿色 - bufferline & lualine
 --
 --    167       红色   - error
 --    52        暗红色

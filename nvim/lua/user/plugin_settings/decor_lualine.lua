@@ -13,7 +13,7 @@ local colors = {
   light_green = 85,  -- filename saved
   light_blue = 81,   -- filename modified
 
-  grey  = 236,
+  grey  = 236,       -- section_b
   light_grey = 246,  -- inactive, hint
 
   red = 167,  -- error, readonly
