@@ -60,11 +60,11 @@ cmp.setup {
   },
 
   sources = {
-    --- VVI: 顺序很重要
+    --- VVI: 顺序很重要. `:help cmp-config.sources`, 还有很多其他设置, eg: max_item_count
     { name = "luasnip" },   -- "saadparwaiz1/cmp_luasnip" -> "L3MON4D3/LuaSnip"
     { name = "nvim_lsp" },  -- "hrsh7th/cmp-nvim-lsp"
-    { name = "buffer" },    -- "hrsh7th/cmp-buffer"
     { name = "path" },      -- "hrsh7th/cmp-path"
+    { name = "buffer", max_item_count = 5 },    -- "hrsh7th/cmp-buffer"
     --- NOTE: other snippets engine --- {{{
     --{ name = 'vsnip' },      -- For vsnip users      -- "hrsh7th/vim-vsnip" vim-script
     --{ name = 'luasnip' },    -- For luasnip users    -- "L3MON4D3/LuaSnip" lua

@@ -30,6 +30,7 @@ nvim_tree.setup {
     number = false,          -- 显示 line number
     relativenumber = false,  -- 显示 relative number
     signcolumn = "yes",      -- 显示 signcolumn
+    --- ":help nvim-tree-default-mappings"
     mappings = {
       custom_only = true,  -- NOTE: 只使用 custom key mapping
       list = {   -- user mappings go here
@@ -51,6 +52,8 @@ nvim_tree.setup {
         { key = "<F20>",         action = "prev_diag_item" },  -- <S-F8> previous diagnostics item
         { key = "<S-CR>",        action = "cd" },  -- `cd` in the directory under the cursor
         { key = "<C-CR>",        action = "cd" },  -- `cd` in the directory under the cursor
+        { key = "C",             action = "copy" },  -- copy file
+        { key = "P",             action = "paste" }, -- paste file
       },
     },
   },

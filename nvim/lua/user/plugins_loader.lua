@@ -341,8 +341,8 @@ return packer.startup(function(use)
       commit = "da7461b",
       config = function() require("user.lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
       requires = {
-        {"williamboman/nvim-lsp-installer",  -- 简单安装 lsp server 的插件. NOTE: 和 lspconfig 并非依赖关系, 只是放在一起方便 setup()
-          commit = "469fe5c",
+        {"williamboman/mason.nvim",  -- 简单安装 lsp server 的插件. NOTE: 和 lspconfig 并非依赖关系, 只是放在一起方便 setup()
+          commit = "fb0c23b",
         },
         "hrsh7th/cmp-nvim-lsp",  -- provide content to nvim-cmp Completion. cmp_nvim_lsp.update_capabilities(capabilities)
       },
