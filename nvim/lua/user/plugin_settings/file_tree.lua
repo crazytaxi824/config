@@ -3,6 +3,7 @@ if not status_ok then
   return
 end
 
+--- `:help nvim-tree-setup`
 nvim_tree.setup {
   auto_reload_on_write = true,  -- VVI: `:w` 时刷新 nvim-tree.
   disable_netrw = false,   -- completely disable netrw
@@ -23,9 +24,9 @@ nvim_tree.setup {
     -- float = {  -- 在 floating window 中打开 nvim-tree.
     --   enable = true,
     -- },
-    width = 30,
-    height = 30,
     side = "left",
+    width = 36,
+    --height = 10,  -- side = "top" 时有效
     preserve_window_proportions = false,
     number = false,          -- 显示 line number
     relativenumber = false,  -- 显示 relative number

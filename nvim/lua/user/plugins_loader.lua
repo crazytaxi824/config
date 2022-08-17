@@ -332,18 +332,22 @@ return packer.startup(function(use)
   }
 
   --- LSP ------------------------------------------------------------------------------------------
+  --- 安装 & 管理 lsp/formatter/linter/debug tools 的插件.
+  use {"williamboman/mason.nvim",
+    commit = "fb0c23b",
+    config = function() require("user.lsp.mason_tool_installer") end,
+  }
+
   --- 读取项目本地设置, 如果读取成功则加载 lspconfig && null-ls.
-  --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
   local proj_settings_status_ok = pcall(require, "user.lsp.util.load_proj_settings") -- NOTE: 加载 "__Proj_local_settings"
   if proj_settings_status_ok then
+    --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
     --- 官方 LSP 引擎.
     use {"neovim/nvim-lspconfig",
       commit = "da7461b",
       config = function() require("user.lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
       requires = {
-        {"williamboman/mason.nvim",  -- 简单安装 lsp server 的插件. NOTE: 和 lspconfig 并非依赖关系, 只是放在一起方便 setup()
-          commit = "fb0c23b",
-        },
+        "williamboman/mason.nvim",  -- install lsp_svr tools.
         "hrsh7th/cmp-nvim-lsp",  -- provide content to nvim-cmp Completion. cmp_nvim_lsp.update_capabilities(capabilities)
       },
     }
@@ -352,7 +356,10 @@ return packer.startup(function(use)
     use {"jose-elias-alvarez/null-ls.nvim",
       commit = "8c90ccf",
       config = function() require("user.lsp.null_ls") end,
-      requires = "nvim-lua/plenary.nvim",
+      requires = {
+        "williamboman/mason.nvim",  -- install formatter/linter tools.
+        "nvim-lua/plenary.nvim",
+      },
     }
   end
 
@@ -365,10 +372,13 @@ return packer.startup(function(use)
   }
 
   --- Buffer & Status Line -------------------------------------------------------------------------
-  use {"akinsho/bufferline.nvim",     -- top buffer list
+  --- tabline decorator, `:help 'tabline'`
+  use {"akinsho/bufferline.nvim",
     commit = "2e5d92e",
     config = function() require("user.plugin_settings.decor_bufferline") end,
   }
+
+  --- statusline decorator, `:help 'statusline'`
   use {"nvim-lualine/lualine.nvim",   -- bottom status line
     commit = "c0510dd",
     config = function() require("user.plugin_settings.decor_lualine") end,
@@ -387,6 +397,7 @@ return packer.startup(function(use)
       {"mfussenegger/nvim-dap",  -- core debug tool
         commit = "66d33b7",
         opt = true,  -- NOTE: 在上面 config 中手动加载 nvim-dap
+        requires = "williamboman/mason.nvim",  -- install debug tools. eg: 'delve'
       },
     },
     cmd = {'DapToggleBreakpoint', 'DapContinue'}  -- NOTE: nvim-dap 内置 command 可以启动 nvim-dap-ui.
