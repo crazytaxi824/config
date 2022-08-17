@@ -18,7 +18,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
     local wrap_filetypes = {'', 'markdown', 'text'}  -- '' 表示 unnamed buffer 或者不认识的 filetype.
     if vim.tbl_contains(wrap_filetypes, vim.bo.filetype) then
       vim.wo.wrap = true
-      cursor_move_in_wrap(params.bufnr)
+      cursor_move_in_wrap(params.buf)
     else
       vim.wo.wrap = false
     end
