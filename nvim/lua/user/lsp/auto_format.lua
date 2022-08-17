@@ -22,7 +22,7 @@ local function lsp_format()
 
   -- 如果没有任何 LSP 支持 formating 则提醒.
   Notify(
-    "no LSP support Formatting this file. please check `:LspInstallInfo`",
+    "no LSP support Formatting this file. please check `:LspInfo`",
     "WARN"
   )
 end
