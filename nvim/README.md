@@ -60,6 +60,22 @@ lua 中有一个 `_G` 全局变量. 自定义的所有全局变量和函数都�
 
 <br />
 
+## vim 内置属性设置
+
+eg: `wrap` is local to window
+
+| vim script        | neovim lua            | lua set to specific win/buffer            |
+| ----------------- | --------------------- | ----------------------------------------- |
+| `setlocal wrap`   | `vim.wo.wrap = true`  | `vim.fn.setwinvar(winnr, '&wrap', 1)`     |
+| `setlocal nowrap` | `vim.wo.wrap = false` | `vim.fn.setwinvar(winnr, '&wrap', 0)`     |
+| `set wrap?`       | `print(vim.wo.wrap)`  | `print(vim.fn.getwinvar(winnr, '&wrap'))` |
+
+如果不是 vim 内置 option 则使用 '&xxx' 变量名 set 时会报错.
+
+eg: `:call setbufvar(5, '&foo', 'bar')`, 报错 `E355: Unknown option: foo`
+
+<br />
+
 ## 常用函数
 
 ### lua 常用函数
@@ -240,3 +256,11 @@ vim.api.nvim_create_autocmd("FileType", {
   end
 })
 ```
+
+<br />
+
+# Note
+
+- Feature/attach to unnamed buffer #1929, https://github.com/neovim/nvim-lspconfig/pull/1929. for now: add file in nvim-tree, eg: 'tmp.json', 'tmp.go', and remove it later.
+
+- "Comment.nvim" plugin upgrade. new Feature.
