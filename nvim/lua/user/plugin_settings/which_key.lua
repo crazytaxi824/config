@@ -13,15 +13,17 @@ which_key.setup({
       suggestions = 36, -- how many suggestions should be shown in the list?
     },
     --- the presets plugin, adds help for a bunch of default keybindings in Neovim, No actual key bindings are created.
-    --- preset: https://github.com/folke/which-key.nvim/blob/main/lua/which-key/plugins/presets/init.lua
+    --- presets 是 which-key 预设好的 keymap 绑定. 虽然和系统快捷键功能一样, 但是进行了二次绑定, 所以会覆盖 keymaps.lua 中的设置.
     presets = {
+      --- https://github.com/folke/which-key.nvim/blob/main/lua/which-key/plugins/presets/init.lua
       operators = false,    -- adds help for operators like d, y, ... and registers them for motion / text object completion
-      motions = false,      -- adds help for motions, eg: 'gg' ...
-      text_objects = true,  -- help for text objects, eg: 'viw', 'vip', 'diw', 'ciw', 'yiw' ...
+      motions = false,      -- adds help for motions, eg: 'gg', 'k', 'j', 'h', 'l', '0', '$', '^', 'b', 'e', 'w'...
+      text_objects = true,  -- help for text objects, eg: 'a' - around, 'i' - inside, 'viw' ...
+      --- https://github.com/folke/which-key.nvim/blob/main/lua/which-key/plugins/presets/misc.lua
       windows = true,       -- default bindings on <c-w>
-      nav = true,           -- window 操作相关. misc bindings to work with windows
+      nav = true,           -- '[', ']', 'H', 'M', 'L' ...
       z = true,             -- bindings for folds, spelling and others prefixed with z
-      g = true,             -- bindings for prefixed with g
+      g = true,             -- bindings for prefixed with g. 'gn', 'gN', 'gi', 'gv', 'gx', 'gf', 'g%'
     },
   },
   operators = { gc = "Comments" },  -- NOTE: 手动 trigger which-key 显示.
@@ -34,8 +36,8 @@ which_key.setup({
   },
   icons = {
     breadcrumb = "»", -- symbol used in the command line area that shows your active key combo
-    separator = "➜", -- symbol used between a key and it's label
-    group = "+ ", -- symbol prepended to a group
+    separator = "➜",  -- symbol used between a key and it's label
+    group = "+ ",     -- symbol prepended to a group
   },
   popup_mappings = {
     scroll_down = '<down>', -- <C-d> binding to scroll down inside the popup
@@ -44,7 +46,7 @@ which_key.setup({
   window = {
     border = "none", -- none, single, double, shadow
     position = "bottom", -- bottom, top
-    margin = { 1, 0, 1, 0 }, -- extra window margin [top, right, bottom, left]
+    margin = { 1, 0, 1, 0 },  -- extra window margin  [top, right, bottom, left]
     padding = { 1, 0, 1, 0 }, -- extra window padding [top, right, bottom, left]
     winblend = 0
   },
