@@ -26,7 +26,6 @@ local function del_cursor_move_in_wrap(bufnr)
 
   for _, mode in ipairs(modes) do
     local buf_keymaps = vim.api.nvim_buf_get_keymap(bufnr, mode)
-
     for _, key in ipairs(keys) do
       for _, buf_keymap in ipairs(buf_keymaps) do
         if buf_keymap.lhs == key then
@@ -43,13 +42,7 @@ local function bufnr_set_wrap_to_all_windows(bufnr, on_off)
   local buf_win_ids = vim.fn.getbufinfo(bufnr)[1].windows
 
   for _, win_id in ipairs(buf_win_ids) do
-    --- 通过 win_id 获取 winnr, getwininfo({win_id})
-    local winnr = vim.fn.getwininfo(win_id)[1].winnr
-    if on_off then
-      vim.fn.setwinvar(winnr, '&wrap', 1)  -- setlocal wrap to specific window
-    else
-      vim.fn.setwinvar(winnr, '&wrap', 0)  -- setlocal nowrap to specific window
-    end
+    vim.wo[win_id].wrap = on_off  -- setlocal wrap to specific window
   end
 end
 

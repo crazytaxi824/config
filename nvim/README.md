@@ -64,11 +64,11 @@ lua 中有一个 `_G` 全局变量. 自定义的所有全局变量和函数都�
 
 eg: `wrap` is local to window
 
-| vim script        | neovim lua            | lua set to specific win/buffer            |
-| ----------------- | --------------------- | ----------------------------------------- |
-| `setlocal wrap`   | `vim.wo.wrap = true`  | `vim.fn.setwinvar(winnr, '&wrap', 1)`     |
-| `setlocal nowrap` | `vim.wo.wrap = false` | `vim.fn.setwinvar(winnr, '&wrap', 0)`     |
-| `set wrap?`       | `print(vim.wo.wrap)`  | `print(vim.fn.getwinvar(winnr, '&wrap'))` |
+| vim script        | neovim lua            | set to specific win_id        | set to specific winnr                     |
+| ----------------- | --------------------- | ----------------------------- | ----------------------------------------- |
+| `setlocal wrap`   | `vim.wo.wrap = true`  | `vim.wo[win_id].wrap = true`  | `vim.fn.setwinvar(winnr, '&wrap', 1)`     |
+| `setlocal nowrap` | `vim.wo.wrap = false` | `vim.wo[win_id].wrap = false` | `vim.fn.setwinvar(winnr, '&wrap', 0)`     |
+| `set wrap?`       | `print(vim.wo.wrap)`  | `print(vim.wo[win_id].wrap)`  | `print(vim.fn.getwinvar(winnr, '&wrap'))` |
 
 如果不是 vim 内置 option 则使用 '&xxx' 变量名 set 时会报错.
 
