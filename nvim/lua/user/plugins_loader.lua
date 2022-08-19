@@ -253,7 +253,7 @@ return packer.startup(function(use)
       --- 用于获取 treesitter 信息, 调整颜色很有用.
       {"nvim-treesitter/playground",
         commit = "ce7e4b7",
-        -- NOTE: 执行以下命令时再加载 playground.
+        --- NOTE: 执行以下命令时再加载 playground.
         cmd = {"TSPlaygroundToggle", "TSHighlightCapturesUnderCursor"},
       },
 
@@ -307,7 +307,7 @@ return packer.startup(function(use)
       {"saadparwaiz1/cmp_luasnip",  -- Snippets source for nvim-cmp
         commit = "a9de941",
         requires = {
-          {"L3MON4D3/LuaSnip",     -- snippet engine, for "cmp_luasnip", BUG: 每次打开文件都会有一个 [Scratch] buffer.
+          {"L3MON4D3/LuaSnip",     -- snippet engine, for "cmp_luasnip", NOTE: 每次打开文件都会有一个 [Scratch] buffer.
             commit = "3d6c52b",
             config = function() require("user.plugin_settings.luasnip_snippest") end,
             requires = {

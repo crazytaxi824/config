@@ -38,17 +38,17 @@ local function del_cursor_move_in_wrap(bufnr)
 end
 
 --- 通过 bufnr 给所有显示该 buffer 的 window 设置 wrap.
-local function set_bufnr_wrap(bufnr, on_off)
-  --- getbufinfo(bufnr)[1]  -- 通过 windows 属性获取 {win_id}
+local function bufnr_set_wrap_to_all_windows(bufnr, on_off)
+  --- 通过 windows 属性获取 {win_id}, getbufinfo(bufnr)[1]
   local buf_win_ids = vim.fn.getbufinfo(bufnr)[1].windows
 
   for _, win_id in ipairs(buf_win_ids) do
-    --- getwininfo({win_id}) -- 通过 win_id 获取 winnr
+    --- 通过 win_id 获取 winnr, getwininfo({win_id})
     local winnr = vim.fn.getwininfo(win_id)[1].winnr
     if on_off then
-      vim.fn.setwinvar(winnr, '&wrap', 1)  -- setlocal wrap
+      vim.fn.setwinvar(winnr, '&wrap', 1)  -- setlocal wrap to specific window
     else
-      vim.fn.setwinvar(winnr, '&wrap', 0)  -- setlocal nowrap
+      vim.fn.setwinvar(winnr, '&wrap', 0)  -- setlocal nowrap to specific window
     end
   end
 end
@@ -76,14 +76,24 @@ vim.api.nvim_create_user_command("WrapToggle", function()
 
   -- local filepath = vim.fn.fnamemodify(bufname, ":p")
   if not vim.wo.wrap then
-    -- vim.wo.wrap = true
-    set_bufnr_wrap(bufnr, true)
-    wrap_list[buf] = true  -- cache result
+    --- setlocal wrap to window
+    --vim.wo.wrap = true
+    bufnr_set_wrap_to_all_windows(bufnr, true)
+
+    --- cache result
+    wrap_list[buf] = true
+
+    --- 设置 keymaps
     set_cursor_move_in_wrap(bufnr)
   else
-    -- vim.wo.wrap = false
-    set_bufnr_wrap(bufnr, false)
-    wrap_list[buf] = nil  -- delete cache
+    --- setlocal nowrap to window
+    --vim.wo.wrap = false
+    bufnr_set_wrap_to_all_windows(bufnr, false)
+
+    --- delete cache
+    wrap_list[buf] = nil
+
+    --- 删除 keymaps 设置
     del_cursor_move_in_wrap(bufnr)
   end
 end, {bar=true})
@@ -104,12 +114,12 @@ vim.api.nvim_create_autocmd({"BufEnter", "WinEnter"}, {
     end
 
     if wrap_list[buf] then
-      -- vim.wo.wrap = true
-      set_bufnr_wrap(params.buf, true)
+      --vim.wo.wrap = true
+      bufnr_set_wrap_to_all_windows(params.buf, true)
       set_cursor_move_in_wrap(params.buf)
     else
-      -- vim.wo.wrap = false
-      set_bufnr_wrap(params.buf, false)
+      --vim.wo.wrap = false
+      bufnr_set_wrap_to_all_windows(params.buf, false)
       del_cursor_move_in_wrap(params.buf)
     end
   end
