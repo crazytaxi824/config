@@ -374,7 +374,7 @@ return packer.startup(function(use)
   --- Buffer & Status Line -------------------------------------------------------------------------
   --- tabline decorator, `:help 'tabline'`
   use {"akinsho/bufferline.nvim",
-    commit = "2e5d92e",
+    commit = "06eb4ad",
     config = function() require("user.plugin_settings.decor_bufferline") end,
   }
 

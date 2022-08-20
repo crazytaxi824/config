@@ -13,7 +13,6 @@ local colors = {
   buf_sel_fg = 85,     -- light_green
   buf_sel_bg = 233,    -- black
   buf_vis_bg = 233,    -- black
-  buf_style = "bold",
 
   duplicate_fg = 243,  -- grey
   tab_sel_fg = 233,    -- black
@@ -23,13 +22,13 @@ local colors = {
   separator_fg = 238,  -- grey
   indicator_fg = 81,   -- cyan
 
-  diag_style = "bold",
   error_fg = 167,      -- red
   warning_fg = 214,    -- orange
   info_fg = 75,        -- blue
   hint_fg = 246,       -- light_grey
 }
 
+--- 默认设置 `:help bufferline-highlights`
 local buf_highlights = {
   fill = { ctermbg = colors.fill_bg },  -- fill 整个 bufferline banner 的背景色
 
@@ -43,7 +42,8 @@ local buf_highlights = {
   buffer_selected = {
     ctermfg = colors.buf_sel_fg,
     ctermbg = colors.buf_sel_bg,
-    gui = colors.buf_style,
+    bold = true,
+    italic = false,  -- 默认设置中是 buffer_selected.italic = true.
   },
 
   close_button = {
@@ -64,14 +64,17 @@ local buf_highlights = {
   duplicate = {
     ctermfg = colors.duplicate_fg,
     ctermbg = colors.buf_bg,
+    italic = true,
   },
   duplicate_visible = {
     ctermfg = colors.duplicate_fg,
     ctermbg = colors.buf_vis_bg,
+    italic = true,
   },
-  duplicate_selected = {  -- 需要和 buffer_selected 相同
+  duplicate_selected = {
     ctermfg = colors.duplicate_fg,
     ctermbg = colors.buf_sel_bg,
+    italic = true,
   },
 
   --- NOTE: indicator - 当前正在显示的 buffer. ▎
@@ -117,62 +120,66 @@ local buf_highlights = {
   error_diagnostic = {           -- hi BufferLineErrorDiagnostic
     ctermfg = colors.error_fg,
     ctermbg = colors.buf_bg,
-    gui = colors.diag_style,
+    bold = true,
   },
   error_diagnostic_visible = {   -- hi BufferLineErrorDiagnosticVisible
     ctermfg = colors.error_fg,
     ctermbg = colors.buf_vis_bg,
-    gui = colors.diag_style,
+    bold = true,
   },
   error_diagnostic_selected = {  -- hi BufferLineErrorDiagnosticSelected
     ctermfg = colors.error_fg,
     ctermbg = colors.buf_sel_bg,
-    gui = colors.diag_style,
+    bold = true,
+    italic = false,
   },
   warning_diagnostic = {
     ctermfg = colors.warning_fg,
     ctermbg = colors.buf_bg,
-    gui = colors.diag_style,
+    bold = true,
   },
   warning_diagnostic_visible = {
     ctermfg = colors.warning_fg,
     ctermbg = colors.buf_vis_bg,
-    gui = colors.diag_style,
+    bold = true,
   },
   warning_diagnostic_selected = {
     ctermfg = colors.warning_fg,
     ctermbg = colors.buf_sel_bg,
-    gui = colors.diag_style,
+    bold = true,
+    italic = false,
   },
   info_diagnostic = {
     ctermfg = colors.info_fg,
     ctermbg = colors.buf_bg,
-    gui = colors.diag_style,
+    bold = true,
   },
   info_diagnostic_visible = {
     ctermfg = colors.info_fg,
     ctermbg = colors.buf_vis_bg,
-    gui = colors.diag_style,
+    bold = true,
   },
   info_diagnostic_selected = {
     ctermfg = colors.info_fg,
     ctermbg = colors.buf_sel_bg,
-    gui = colors.diag_style,
+    bold = true,
+    italic = false,
   },
   hint_diagnostic = {
     ctermfg = colors.hint_fg,
     ctermbg = colors.buf_bg,
-    gui = colors.diag_style,
+    bold = true,
   },
   hint_diagnostic_visible = {
     ctermfg = colors.hint_fg,
     ctermbg = colors.buf_vis_bg,
-    gui = colors.diag_style,
+    bold = true,
   },
   hint_diagnostic_selected = {
     ctermfg = colors.hint_fg,
     ctermbg = colors.buf_sel_bg,
-    gui = colors.diag_style,
+    bold = true,
+    italic = false,
   },
 }
 
@@ -315,6 +322,9 @@ end
 
 --- https://github.com/akinsho/bufferline.nvim#configuration
 bufferline.setup({
+  --- 颜色设置
+  highlights = buf_highlights,
+
   options = {
     mode = "buffers", -- set to "tabs" to only show tabpages instead
     numbers = "ordinal", -- "none" | "ordinal" | "buffer_id" | "both" | function({ ordinal, id, lower, raise }): string,
@@ -397,9 +407,6 @@ bufferline.setup({
     --   end
     -- end,
   },
-
-  --- 颜色设置
-  highlights = buf_highlights,
 })
 
 --- keymaps ----------------------------------------------------------------------------------------
