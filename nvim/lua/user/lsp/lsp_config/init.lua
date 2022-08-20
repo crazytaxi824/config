@@ -30,25 +30,23 @@ end
 -- -- }}}
 
 --- HACK: 以下设置是为了 autocmd 根据 filetype 加载不同的 lsp --------------------------------------
---- map_key(jsonls): 是 nvim-lspconfig setup() 时用的名字. eg: require("lspconfig")["jsonls"].setup(), `:LspStart jsonls`
---- mason_name: 是用于 mason.nvim 安装时使用的名字. `:MasonInstall json-lsp`, 这里不能用 jsonls.
----   - mason_name 和 lsp 的 cmd 也是有区别的. json-lsp 的 cmd = { "vscode-json-language-server", "--stdio" }
----   - 名字的对应可以查看 https://github.com/williamboman/mason-lspconfig.nvim/blob/main/doc/server-mapping.md
---- filetypes: 可以通过 :LspInfo 查看. 用于 autocmd.
+--- filetypes: 可以通过 `:LspInfo` 查看. 用于 autocmd.
+--- 以下命令行工具可以通过 mason.nvim 安装, 也可以通过 brew 安装到 $PATH 中.
+--- 通过 mason 安装时需要对应名字. https://github.com/williamboman/mason-lspconfig.nvim/blob/main/doc/server-mapping.md
 local lsp_servers_map = {
-  sumneko_lua = {mason_name='lua-language-server', ft={'lua'}},
-  tsserver = {mason_name='typescript-language-server', ft={'javascript', 'javascriptreact', 'javascript.jsx', 'typescript', 'typescriptreact', 'typescript.tsx'}},
-  bashls   = {mason_name='bash-language-server', ft={'sh'}},
-  gopls    = {mason_name='gopls',    ft={'go', 'gomod', 'gowork', 'gotmpl'}},
-  pyright  = {mason_name='pyright',  ft={'python'}},
-  html     = {mason_name='html-lsp', ft={'html'}},
-  cssls    = {mason_name='css-lsp',  ft={'css', 'scss', 'less'}},
-  jsonls   = {mason_name='json-lsp', ft={'json', 'jsonc'}},
+  sumneko_lua = {'lua'},
+  tsserver    = {'javascript', 'javascriptreact', 'javascript.jsx', 'typescript', 'typescriptreact', 'typescript.tsx'},
+  bashls      = {'sh'},
+  gopls       = {'go', 'gomod', 'gowork', 'gotmpl'},
+  pyright     = {'python'},
+  html        = {'html'},
+  cssls       = {'css', 'scss', 'less'},
+  jsonls      = {'json', 'jsonc'},
 }
 
-for lsp_svr, lsp_prop in pairs(lsp_servers_map) do
+for lsp_svr, filetypes in pairs(lsp_servers_map) do
   vim.api.nvim_create_autocmd("FileType", {
-    pattern = lsp_prop.ft,
+    pattern = filetypes,
     once = true,  --- VVI: only need to start LSP server once.
     callback = function()
       local opts = require("user.lsp.lsp_config.setup_opts")
