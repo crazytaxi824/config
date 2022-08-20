@@ -415,7 +415,7 @@ return packer.startup(function(use)
 
   --- terminal
   use {"akinsho/toggleterm.nvim",
-    commit = "6236642",
+    commit = "62683d9",
     config = function() require("user.plugin_settings.toggleterm_terminal") end
   }
 
