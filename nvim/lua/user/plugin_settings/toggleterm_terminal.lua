@@ -49,7 +49,7 @@ toggleterm.setup({
     winblend = 0,
   },
 
-  --- highlight <file:line:col>
+  --- highlight <file:line:col>, `:help pattern-overview`
   on_stdout = function(_,_,data,_)
     --- file:// pattern match
     --- '\f' - isfname, 可用于 filename 的字符/数字/符号...

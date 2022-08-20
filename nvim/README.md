@@ -234,7 +234,8 @@ using filter, `:help filter` 使用方法:
 
 - 键位查看 `:help key-notation`
 - floating window 设置: `:help nvim_open_win()`
-- 正则: eg: `string.match()`, https://fhug.org.uk/kb/kb-article/understanding-lua-patterns/
+- lua pattern: eg: `string.match()`, https://fhug.org.uk/kb/kb-article/understanding-lua-patterns/
+- vim pattern: `:help pattern-overview`
 
 ## VVI: FileType vs BufEnter 区别:
 
