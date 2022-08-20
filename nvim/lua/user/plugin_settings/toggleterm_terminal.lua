@@ -16,6 +16,26 @@ if not status_ok then
   return
 end
 
+--- highlight <file:line:col>, `:help pattern-overview`
+local function highlight_path_in_term(data_list)
+  --- file:// pattern match
+  --- '\f' - isfname, 可用于 filename 的字符/数字/符号...
+  --- '\<' - start of a word
+  vim.fn.matchadd('Underlined', '\\<file://\\f*\\(:[0-9]\\+\\)\\{0,2}')  -- highlight filepath
+
+  for _, lcontent in ipairs(data_list) do
+    for _, content in ipairs(vim.split(lcontent, " ")) do
+      --- VVI: 这里必须 trim(), 可以去掉 \r \n ...
+      local fp = vim.split(vim.fn.trim(content), ":")
+      if vim.fn.filereadable(vim.fn.expand(fp[1])) == 1 then
+        --- \@<! - eg: \(foo\)\@<!bar  - any "bar" that's not in "foobar"
+        --- \@!  - eg: foo\(bar\)\@!   - any "foo" not followed by "bar"
+        vim.fn.matchadd('Underlined', '\\(\\S\\)\\@<!'..vim.fn.escape(fp[1], '~') .. '\\(:[0-9]\\+\\)\\{0,2}')  -- highlight filepath
+      end
+    end
+  end
+end
+
 toggleterm.setup({
   size = function(term)
     if term.direction == "horizontal" then
@@ -49,24 +69,10 @@ toggleterm.setup({
     winblend = 0,
   },
 
-  --- highlight <file:line:col>
-  on_stdout = function(_,_,data,_)
-    --- file:// pattern match
-    --- '\f' - isfname, 可用于 filename 的字符/数字/符号...
-    --- '\<' - start of a word
-    vim.fn.matchadd('Underlined', '\\<file://\\f*\\(:[0-9]\\+\\)\\{0,2}')  -- highlight filepath
-
-    for _, lcontent in ipairs(data) do
-      for _, content in ipairs(vim.split(lcontent, " ")) do
-        --- VVI: 这里必须 trim(), 可以去掉 \r \n ...
-        local fp = vim.split(vim.fn.trim(content), ":")
-        if vim.fn.filereadable(vim.fn.expand(fp[1])) == 1 then
-          --- \@<! - eg: \(foo\)\@<!bar  - any "bar" that's not in "foobar"
-          --- \@!  - eg: foo\(bar\)\@!   - any "foo" not followed by "bar"
-          vim.fn.matchadd('Underlined', '\\(\\S\\)\\@<!'..vim.fn.escape(fp[1], '~') .. '\\(:[0-9]\\+\\)\\{0,2}')  -- highlight filepath
-        end
-      end
-    end
+  --- terminal 输出时 highlight filepath.
+  --- output 是一个 list, 按照行分隔.
+  on_stdout = function(_,_,output,_)
+    highlight_path_in_term(output)
   end,
   --- 其他设置 --- {{{
   -- on_open  = fun(t: Terminal), -- TermOpen, 打开新 terminal 时才会生效.
@@ -84,7 +90,7 @@ toggleterm.setup({
 
 --- 其他 terminal 设置 -----------------------------------------------------------------------------
 --- #toggleterm#1-9 自动进入 insert mode.
---- VVI: TermOpen 只在 job start 的时候启动一次, buffer 被隐藏后再次调出使用的是 BufWinEnter 事件.
+--- VVI: TermOpen 只在 job start 的时候启动一次, terminal-buffer 被隐藏后再次调出使用的是 BufWinEnter 事件.
 --- 可以通过 `:au ToggleTermCommands` 查看.
 --vim.cmd [[au TermOpen term://*#toggleterm#[1-9] :startinsert]]
 --vim.cmd [[au BufWinEnter term://*#toggleterm#[1-9] :startinsert]]
@@ -94,6 +100,16 @@ vim.cmd [[au TermOpen term://* tnoremap <buffer> <ESC> <ESC><C-\><C-n>]]
 
 --- 设置 terminal 不显示行号.
 vim.cmd [[au TermOpen term://* :setlocal nonumber]]
+
+--- TermClose 意思是 job ends. 这里不使用 TermClose 而是使用 on_stdout 主要是因为有些程序运行不会结束, eg: http 监听.
+--- BufWinEnter 当 terminal buffer 被隐藏后再次打开的时候 highlight filepath.
+vim.api.nvim_create_autocmd({"BufWinEnter"}, {
+  pattern = {"term://*"},
+  callback = function()
+    local output = vim.fn.getline(1, '$')
+    highlight_path_in_term(output)
+  end,
+})
 
 --- Terminal 实例 ----------------------------------------------------------------------------------
 local Terminal = require("toggleterm.terminal").Terminal

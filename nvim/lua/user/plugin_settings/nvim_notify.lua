@@ -1,4 +1,5 @@
 --- nvim-notify ------------------------------------------------------------------------------------
+--- NOTE: notify 的窗口打开时设置是 set nowrap 的, 无法修改.
 --- `:help notify.Options`
 --- `:help notify.Config`
 local notify_status_ok, notify = pcall(require, "notify")

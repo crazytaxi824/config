@@ -80,8 +80,8 @@ end
 
 --- key-settings for both vim.keymap.set() and which_key.register() --------------------------------
 --- keymap_list: { mode, key, remap, opt, description }  - description for 'which-key'
---- register: which_key.register({keymap},{opts}) 中的两个入参.
-function Keymap_set_and_register(keymap_list, register)
+--- keys_desc_only: which_key.register({keymap},{opts}) 中的两个入参. 用于只注册到 which-key 中显示, 而不用真的 keymap.
+function Keymap_set_and_register(keymap_list, keys_desc_only)
   --- NOTE: 这里是正真设置 keymap 的地方, 下面的 which-key 如果不存在, 也不会影响 keymap 设置.
   for _, keymap in ipairs(keymap_list) do
     vim.keymap.set(keymap[1], keymap[2], keymap[3], keymap[4])
@@ -102,7 +102,7 @@ function Keymap_set_and_register(keymap_list, register)
   end
 
   --- set group name manually ---
-  --- 如果 register.opts 为 nil, 则使用默认值 --- {{{
+  --- 如果 opts 为 nil, 则使用默认值 --- {{{
   -- {
   --   mode = "n", -- NORMAL mode
   --   -- prefix: use "<leader>f" for example for mapping everything related to finding files
@@ -114,8 +114,8 @@ function Keymap_set_and_register(keymap_list, register)
   --   nowait = false, -- use `nowait` when creating keymaps
   -- }
   -- -- }}}
-  if register and register.key_desc then
-    which_key.register(register.key_desc, register.opts)
+  if keys_desc_only and keys_desc_only.key_desc then
+    which_key.register(keys_desc_only.key_desc, keys_desc_only.opts)
   end
 end
 
