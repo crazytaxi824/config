@@ -10,9 +10,10 @@ comment.setup {
   ignore = nil,   -- 忽略行, eg: ^func.*
 
   --- NOTE: pre_hook 配合 "JoosepAlviste/nvim-ts-context-commentstring" 设置.
-  --- https://github.com/numToStr/Comment.nvim#-hooks
+  --- https://github.com/JoosepAlviste/nvim-ts-context-commentstring#commentnvim
   pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
   --- 手动设置 ts_context_commentstring prehook() --- {{{
+  --- https://github.com/numToStr/Comment.nvim#-hooks
   -- pre_hook = function(ctx)
   --   local U = require("Comment.utils")
   --

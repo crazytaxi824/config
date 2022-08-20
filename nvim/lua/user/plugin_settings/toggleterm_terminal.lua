@@ -75,7 +75,7 @@ toggleterm.setup({
     highlight_path_in_term(output)
   end,
   --- 其他设置 --- {{{
-  -- on_open  = fun(t: Terminal), -- TermOpen, 打开新 terminal 时才会生效.
+  -- on_open  = fun(t: Terminal), -- TermOpen, job start.
   -- on_close = fun(t: Terminal), -- NOTE: autoclose=true 的时候才能触发.
   -- on_exit  = fun(t: Terminal, job: number, exit_code: number, name: string) -- TermClose, job ends.
   -- on_stdout = fun(t: Terminal, job: number, data: string[], name: string) -- callback for processing output on stdout
