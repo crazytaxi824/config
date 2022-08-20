@@ -259,7 +259,7 @@ return packer.startup(function(use)
 
       --- 第三方 module 插件 ---
       {"JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
-        commit = "4befb89",
+        commit = "37a97a0",
       },
 
       {"windwp/nvim-ts-autotag",  -- auto close tag <div></div>
@@ -271,7 +271,6 @@ return packer.startup(function(use)
 
   --- 以下是使用了 treesitter 功能的插件. (这些插件也可以不使用 treesitter 的功能)
   --- 注释
-  --- FIXME: commit 'cd1c381' 中 lua 注释 linewise 不正确, 使用的是 blockwise.
   use {"numToStr/Comment.nvim",
     commit = "ab63cc9",
     config = function() require("user.plugin_settings.comment") end,

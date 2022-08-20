@@ -11,22 +11,25 @@ comment.setup {
 
   --- NOTE: pre_hook 配合 "JoosepAlviste/nvim-ts-context-commentstring" 设置.
   --- https://github.com/numToStr/Comment.nvim#-hooks
-  pre_hook = function(ctx)
-    local U = require("Comment.utils")
-
-    local location = nil
-    if ctx.ctype == U.ctype.blockwise then
-      location = require("ts_context_commentstring.utils").get_cursor_location()
-    elseif ctx.cmotion == U.cmotion.v or ctx.cmotion == U.cmotion.V then
-      location = require("ts_context_commentstring.utils").get_visual_start_location()
-    end
-
-    return require("ts_context_commentstring.internal").calculate_commentstring {
-      --- NOTE: Determine whether to use linewise or blockwise commentstring
-      key = ctx.ctype == U.ctype.linewise and "__default" or "__multiline",
-      location = location,
-    }
-  end,
+  pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
+  --- 手动设置 ts_context_commentstring prehook() --- {{{
+  -- pre_hook = function(ctx)
+  --   local U = require("Comment.utils")
+  --
+  --   local location = nil
+  --   if ctx.ctype == U.ctype.blockwise then
+  --     location = require("ts_context_commentstring.utils").get_cursor_location()
+  --   elseif ctx.cmotion == U.cmotion.v or ctx.cmotion == U.cmotion.V then
+  --     location = require("ts_context_commentstring.utils").get_visual_start_location()
+  --   end
+  --
+  --   return require("ts_context_commentstring.internal").calculate_commentstring {
+  --     --- NOTE: Determine whether to use linewise or blockwise commentstring
+  --     key = ctx.ctype == U.ctype.linewise and "__default" or "__multiline",
+  --     location = location,
+  --   }
+  -- end,
+  -- -- }}}
 
   -- 禁用默认 key mapping
   mappings = {
