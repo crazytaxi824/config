@@ -289,11 +289,12 @@ return packer.startup(function(use)
 
   --- Completion -----------------------------------------------------------------------------------
   use {"hrsh7th/nvim-cmp",
-    commit = "706371f",
+    commit = "b1ebdb0",
     config = function() require("user.plugin_settings.cmp_completion") end,
     --- NOTE: 以下是 nvim-cmp module 插件, 在 setup() 中启用的插件.
     requires = {
       --"hrsh7th/cmp-cmdline",  -- cmdline completions, 不好用.
+
       {"hrsh7th/cmp-nvim-lsp",  -- LSP source for nvim-cmp
         commit = "affe808",
       },

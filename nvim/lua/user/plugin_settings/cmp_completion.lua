@@ -40,7 +40,7 @@ local kind_icon_txt = {  --- {{{
 }
 -- -- }}}
 
---- 默认设置: https://github.com/hrsh7th/nvim-cmp -> /lua/cmp/config/default.lua
+--- 默认设置: https://github.com/hrsh7th/nvim-cmp/blob/main/lua/cmp/config/default.lua
 cmp.setup {
   preselect = cmp.PreselectMode.None,  -- NOTE: cmp.PreselectMode.None | cmp.PreselectMode.Item
 
