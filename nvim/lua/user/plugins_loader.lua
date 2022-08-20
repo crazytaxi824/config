@@ -237,7 +237,7 @@ return packer.startup(function(use)
   --- `:TSUpdateSync`         -- Update the installed languages synchronously
   -- -- }}}
   use {"nvim-treesitter/nvim-treesitter",
-    commit = "9b3f127",
+    commit = "2bb9bb7",
     run = ":TSUpdateSync",   -- Post-update/install hook.
     config = function() require("user.plugin_settings.treesitter") end,
     requires = {
