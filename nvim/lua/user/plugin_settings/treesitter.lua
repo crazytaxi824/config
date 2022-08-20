@@ -28,12 +28,6 @@ ts_configs.setup {
     additional_vim_regex_highlighting = false,
   },
 
-  --- 使用 'indent_blankline' 代替.
-  -- indent = {
-  --   enable = true,
-  --   disable = { "yaml" },  -- 不要自动给 yaml 进行 indent.
-  -- },
-
   --- 作用不大.
   -- incremental_selection = {
   --   enable = true,
@@ -43,6 +37,12 @@ ts_configs.setup {
   --     scope_incremental = "grc",
   --     node_decremental = "grm",
   --   },
+  -- },
+
+  --- NOTE: This is an experimental feature. 使用 'indent_blankline' 代替.
+  -- indent = {
+  --   enable = true,
+  --   disable = { "yaml" },  -- 不要自动给 yaml 进行 indent.
   -- },
 
   --- 启用第三方插件 modules 设置 ------------------------------------------------------------------
