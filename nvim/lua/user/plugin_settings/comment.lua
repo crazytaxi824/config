@@ -15,7 +15,7 @@ comment.setup {
     local U = require("Comment.utils")
 
     local location = nil
-    if ctx.ctype == U.ctype.block then
+    if ctx.ctype == U.ctype.blockwise then
       location = require("ts_context_commentstring.utils").get_cursor_location()
     elseif ctx.cmotion == U.cmotion.v or ctx.cmotion == U.cmotion.V then
       location = require("ts_context_commentstring.utils").get_visual_start_location()
@@ -23,7 +23,7 @@ comment.setup {
 
     return require("ts_context_commentstring.internal").calculate_commentstring {
       --- NOTE: Determine whether to use linewise or blockwise commentstring
-      key = ctx.ctype == U.ctype.line and "__default" or "__multiline",
+      key = ctx.ctype == U.ctype.linewise and "__default" or "__multiline",
       location = location,
     }
   end,
@@ -46,7 +46,7 @@ comment.setup {
 --- keymaps ----------------------------------------------------------------------------------------
 local opt = { noremap = true, silent = true }
 local comment_keymaps = {
-  {'n', '<leader>\\', '<Plug>(comment_toggle_current_linewise)', opt, 'Comment toggle'},
+  {'n', '<leader>\\', '<Plug>(comment_toggle_linewise_current)', opt, 'Comment toggle'},
   {'v', '<leader>\\', '<Plug>(comment_toggle_linewise_visual)',  opt, 'Comment toggle'},
 }
 

@@ -273,7 +273,7 @@ return packer.startup(function(use)
   --- 注释
   --- FIXME: commit 'cd1c381' 中 lua 注释 linewise 不正确, 使用的是 blockwise.
   use {"numToStr/Comment.nvim",
-    commit = "9b76787",
+    commit = "ab63cc9",
     config = function() require("user.plugin_settings.comment") end,
     requires = {
       "nvim-treesitter/nvim-treesitter",
