@@ -204,7 +204,7 @@ packer.init {
 --- `:PackerSync` - install / update / clean 插件包.
 return packer.startup(function(use)
   use {"wbthomason/packer.nvim",  -- VVI: 必要. Have packer manage itself
-    commit = "712dfa0",
+    commit = "90b323b",
   }
 
   --- Performence & Functions ----------------------------------------------------------------------
