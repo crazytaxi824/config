@@ -5,7 +5,7 @@ end
 
 --- path to store parsers. VVI: directory must be writeable and must be explicitly added to the runtimepath.
 --- 需要在 setup() 中设置 parsers_install_dir, 同时将 path 添加到 vim 的 runtimepath 中.
-local treesitter_parsers_path = vim.fn.stdpath('data') .. '/site/treesitter-parser'
+local treesitter_parsers_path = vim.fn.stdpath('data') .. '/treesitter_parser'
 vim.opt.runtimepath:append(treesitter_parsers_path)
 
 ts_configs.setup {
@@ -13,7 +13,7 @@ ts_configs.setup {
   --ensure_installed = { "go", "lua", "javascript", "typescript", "tsx", "html", "css", "scss" ... },
   ensure_installed = "all",  -- 白名单, "all" OR a list of languages
   sync_install = false,  -- install languages synchronously (only applied to `ensure_installed`)
-  ignore_install = {},  -- 黑名单, List of parsers to ignore installing
+  ignore_install = {"hlsl"},  -- 黑名单, 不安装. FIXME: hlsl 每次 :TSUpdate 的时候都会重新安装.
   parser_install_dir = treesitter_parsers_path,  -- path to store parsers.
 
   --- `:TSModuleInfo` 可以查看 module 设置.

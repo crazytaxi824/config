@@ -331,6 +331,13 @@ return packer.startup(function(use)
     },
   }
 
+  --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件 --------------------------------------
+  use {"williamboman/mason.nvim",
+    commit = "5dbb22a",
+    config = function() require("user.plugin_settings.mason_tool_installer") end,
+    --- NOTE: 不能 opt 加载 mason 否则其他插件无法找到 mason 安装的工具.
+  }
+
   --- LSP ------------------------------------------------------------------------------------------
   --- 读取项目本地设置, 如果读取成功则加载 lspconfig && null-ls.
   local proj_settings_status_ok = pcall(require, "user.lsp.util.load_proj_settings") -- NOTE: 加载 "__Proj_local_settings"
@@ -340,14 +347,20 @@ return packer.startup(function(use)
     use {"neovim/nvim-lspconfig",
       commit = "da7461b",
       config = function() require("user.lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
-      requires = "hrsh7th/cmp-nvim-lsp",  -- provide content to nvim-cmp Completion. cmp_nvim_lsp.update_capabilities(capabilities)
+      requires = {
+        "hrsh7th/cmp-nvim-lsp",  -- provide content to nvim-cmp Completion. cmp_nvim_lsp.update_capabilities(capabilities)
+        "williamboman/mason.nvim",  -- 安装 lsp 命令行工具.
+      },
     }
 
     --- null-ls 插件 formatters && linters, depends on "nvim-lua/plenary.nvim"
     use {"jose-elias-alvarez/null-ls.nvim",
       commit = "9d1f8dc",
       config = function() require("user.lsp.null_ls") end,
-      requires = "nvim-lua/plenary.nvim",
+      requires = {
+        "nvim-lua/plenary.nvim",
+        "williamboman/mason.nvim",  -- 安装 linter/formatter 命令行工具. eg: shfmt, stylua ...
+      },
     }
   end
 
@@ -385,19 +398,13 @@ return packer.startup(function(use)
       {"mfussenegger/nvim-dap",  -- core debug tool
         commit = "ad8b0de",
         opt = true,  -- NOTE: 在上面 config 中手动加载 nvim-dap
-        requires = "williamboman/mason.nvim",  -- install debug tools. eg: 'delve'
+        requires = "williamboman/mason.nvim",  -- install dap-debug tools. eg: 'delve'
       },
     },
     cmd = {'DapToggleBreakpoint', 'DapContinue'}  -- NOTE: nvim-dap 内置 command 可以启动 nvim-dap-ui.
   }
 
   --- Useful Tools ---------------------------------------------------------------------------------
-  --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件.
-  use {"williamboman/mason.nvim",
-    commit = "5dbb22a",
-    config = function() require("user.plugin_settings.mason_tool_installer") end,
-  }
-
   --- fzf rg fd, preview 使用的是 treesitter, 而不用 bat
   use {"nvim-telescope/telescope.nvim",
     commit = "28dc08f",

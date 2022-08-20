@@ -17,8 +17,8 @@ if not mason_ok then
 end
 
 mason.setup {
-  --- NOTE: LSP server 下载位置默认在 "~/.local/share/nvim/mason_lsp_servers/..."
-  install_root_dir = vim.fn.stdpath("data") .. "/mason_lsp_servers",
+  --- NOTE: LSP server 下载位置默认在 "~/.local/share/nvim/mason_tools/..."
+  install_root_dir = vim.fn.stdpath("data") .. "/mason_tools",
 
   max_concurrent_installers = 4,  -- 并发安装数量.
 
