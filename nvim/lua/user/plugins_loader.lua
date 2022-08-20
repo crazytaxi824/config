@@ -395,7 +395,7 @@ return packer.startup(function(use)
     end,
     requires = {
       {"mfussenegger/nvim-dap",  -- core debug tool
-        commit = "66d33b7",
+        commit = "ad8b0de",
         opt = true,  -- NOTE: 在上面 config 中手动加载 nvim-dap
         requires = "williamboman/mason.nvim",  -- install debug tools. eg: 'delve'
       },
