@@ -308,11 +308,11 @@ return packer.startup(function(use)
         commit = "a9de941",
         requires = {
           {"L3MON4D3/LuaSnip",     -- snippet engine, for "cmp_luasnip", NOTE: 每次打开文件都会有一个 [Scratch] buffer.
-            commit = "3d6c52b",
+            commit = "faa5257",
             config = function() require("user.plugin_settings.luasnip_snippest") end,
             requires = {
               {"rafamadriz/friendly-snippets",  -- snippets content, 自定义 snippets 可以借鉴这个结构.
-                commit = "7339def",
+                commit = "6227548",
               },
             },
           },
@@ -323,7 +323,7 @@ return packer.startup(function(use)
 
   --- 自动括号, 同时依赖 treesitter && cmp
   use {"windwp/nvim-autopairs",
-    commit = "34bd374",
+    commit = "0a18e10",
     config = function() require("user.plugin_settings.autopairs") end,
     requires = {
       "nvim-treesitter/nvim-treesitter",  -- setup() 中 `check_ts`, `ts_config` 需要 treesitter 支持.
