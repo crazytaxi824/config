@@ -334,7 +334,7 @@ return packer.startup(function(use)
   --- LSP ------------------------------------------------------------------------------------------
   --- 安装 & 管理 lsp/formatter/linter/debug tools 的插件.
   use {"williamboman/mason.nvim",
-    commit = "fb0c23b",
+    commit = "5dbb22a",
     config = function() require("user.lsp.mason_tool_installer") end,
   }
 
@@ -354,7 +354,7 @@ return packer.startup(function(use)
 
     --- null-ls 插件 formatters && linters, depends on "nvim-lua/plenary.nvim"
     use {"jose-elias-alvarez/null-ls.nvim",
-      commit = "8c90ccf",
+      commit = "9d1f8dc",
       config = function() require("user.lsp.null_ls") end,
       requires = {
         "williamboman/mason.nvim",  -- install formatter/linter tools.
