@@ -28,25 +28,22 @@ ts_configs.setup {
     additional_vim_regex_highlighting = false,
   },
 
-  --- FIXME: 每次打开文件都会添加一个 setlocal indentexpr=nvim_treesitter#indent() --- {{{
-  --- https://github.com/nvim-treesitter/nvim-treesitter/issues/3172
-  --- 使用 'indent_blankline' 代替.
+  --- 作用不大.
+  -- incremental_selection = {
+  --   enable = true,
+  --   keymaps = {
+  --     init_selection = "gnn",
+  --     node_incremental = "grn",
+  --     scope_incremental = "grc",
+  --     node_decremental = "grm",
+  --   },
+  -- },
+
+  --- NOTE: This is an experimental feature. 使用 'indent_blankline' 代替.
   -- indent = {
   --   enable = true,
   --   disable = { "yaml" },  -- 不要自动给 yaml 进行 indent.
   -- },
-
-  --- 作用不大.
-  --incremental_selection = {
-  --  enable = true,
-  --  keymaps = {
-  --    init_selection = "gnn",
-  --    node_incremental = "grn",
-  --    scope_incremental = "grc",
-  --    node_decremental = "grm",
-  --  },
-  --},
-  -- -- }}}
 
   --- 启用第三方插件 modules 设置 ------------------------------------------------------------------
   --- "JoosepAlviste/nvim-ts-context-commentstring"

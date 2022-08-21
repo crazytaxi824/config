@@ -104,7 +104,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 --- Use a protected call so we don't error out on first use
 local packer_status_ok, packer = pcall(require, "packer")
 if not packer_status_ok then
-  --- NOTE: 如果 packer 不存在则自动 install
+  --- NOTE: 如果 packer 不存在则自动 install "packer.nvim"
   local packer_install_path = vim.fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
   local packer_install_cmd = 'git clone --depth 1 https://github.com/wbthomason/packer.nvim ' .. packer_install_path
   local result = vim.fn.system(packer_install_cmd)
@@ -114,7 +114,7 @@ if not packer_status_ok then
     return
   end
 
-  --- NOTE: packer 安装完后通过 :PackerSync 安装 plugins
+  --- NOTE: packer 安装完后通过 `:PackerSync` 安装 plugins
   vim.cmd('source ' .. this_file .. ' | PackerSync')
 end
 

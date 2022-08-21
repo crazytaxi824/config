@@ -141,18 +141,36 @@ end
 -- -- }}}
 
 --- [[, ]], jump to previous/next section ---------------------------------------------------------- {{{
+local function parse_buffer_lang()
+  --- 利用 nvim-treesitter 获取 buffer lang.
+  local nvim_ts_ok, nvim_ts_parsers = pcall(require, "nvim-treesitter.parsers")
+  if nvim_ts_ok then
+    return nvim_ts_parsers.get_buf_lang(0)  -- 如果 nvim-treesitter 存在, 则 parse
+  else
+    return vim.bo.filetype  -- 如果 nvim-treesitter 不存在, 则使用 filetype
+  end
+end
+
 local function find_ts_root_node()
-  local tsparser_status_ok, tstrees = pcall(vim.treesitter.get_parser, 0)
-  if not tsparser_status_ok then
-    vim.notify(tstrees, vim.log.levels.WARN)
+  local lang = parse_buffer_lang()
+  if not lang or lang == '' then
+    vim.notify('treesitter-parser for current buffer is not available', vim.log.levels.WARN)
     return
   end
 
-  for _, tree in ipairs(tstrees:trees()) do
-    local tree_root = tree:root()
-    if tree_root then
-      return tree_root
-    end
+  --- vim.treesitter.get_parser(bufnr, lang)
+  --- "bufnr", 0 current buffer
+  --- "lang", default filetype.
+  local tsparser_status_ok, tsparser = pcall(vim.treesitter.get_parser, 0, lang)
+  if not tsparser_status_ok then
+    vim.notify(tsparser, vim.log.levels.WARN)
+    return
+  end
+
+  --- tsparser:parse() return a {table} of immutable trees
+  local tstree = tsparser:parse()[1]
+  if tstree then
+    return tstree:root()
   end
 end
 
@@ -162,7 +180,7 @@ local function ts_root_children()
     return
   end
 
-  local child_without_comment = {}  -- named child without comment.
+  local child_without_comment = {}  -- cache named child without comment.
 
   local child_count = root:named_child_count()
   for i = 0, child_count-1 do
@@ -223,14 +241,14 @@ local function jump_to_prev_section()
         vim.fn.cursor(prev_node_lnum+1, 1)
       else
         --- 自己是 first node's first line 的情况
-        vim.notify("it's first node in this buffer", vim.log.levels.WARN)
+        vim.notify("it's first node in this buffer", vim.log.levels.INFO)
       end
     else
       --- jump to cursor current node first line.
       vim.fn.cursor(current_node_lnum+1, 1)
     end
   else
-    vim.notify("it's first node in this buffer", vim.log.levels.WARN)
+    vim.notify("it's first node in this buffer", vim.log.levels.INFO)
   end
 end
 
@@ -251,7 +269,7 @@ local function jump_to_next_section()
       vim.fn.cursor(current_node_last_line+1, 1)
     else
       --- 自己在 last node's last line 的情况
-      vim.notify("it's last node in this buffer", vim.log.levels.WARN)
+      vim.notify("it's last node in this buffer", vim.log.levels.INFO)
     end
   end
 end
