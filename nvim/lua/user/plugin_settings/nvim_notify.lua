@@ -13,8 +13,17 @@ notify.setup({
 
   stages = "static",  -- VVI: Animation style, for `set termguicolors`
 
-  on_open = nil,
   on_close = nil,
+  on_open = function(win_id)
+    local bufnr = vim.api.nvim_win_get_buf(win_id)
+
+    --- set filetype, 主要是为了 highlight. 默认 filetype 是 notify
+    --vim.api.nvim_buf_set_option(bufnr, "filetype", "markdown")
+
+    --- set keymap to close window 
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'q', "<cmd>q<CR>", {noremap=true, silent=true})
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<ESC>', "<cmd>q<CR>", {noremap=true, silent=true})
+  end,
 
   timeout = 3000,     -- Default timeout for notifications
 
