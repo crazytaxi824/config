@@ -38,7 +38,7 @@ end
 
 --- 通过 bufnr 给所有显示该 buffer 的 window 设置 wrap.
 local function bufnr_set_wrap_to_all_windows(bufnr, on_off)
-  --- 通过 windows 属性获取 {win_id}, getbufinfo(bufnr)[1]
+  --- 通过 bufinfo 的 windows 属性获取 {win_id}
   local buf_win_ids = vim.fn.getbufinfo(bufnr)[1].windows
 
   for _, win_id in ipairs(buf_win_ids) do
