@@ -162,12 +162,13 @@ dapui.setup({
 
 --- dap && dap-ui debug functions ------------------------------------------------------------------ {{{
 --- NOTE: 通过 settabvar() && gettabvar() 来确定 debug_tab 是否存在.
+local tabvar_debug = "my_debug"
 
 --- open a new tab for debug
 local function open_new_tab_for_debug()
   --- if debug tab exists, jump to debug tab.
   for _, tab_info in pairs(vim.fn.gettabinfo()) do
-    if vim.fn.gettabvar(tab_info.tabnr, "debug").dap_tab then
+    if vim.fn.gettabvar(tab_info.tabnr, tabvar_debug).dap_tab then
       vim.cmd('normal! '.. tab_info.tabnr .. 'gt')  -- 1gt | 2gt jump to tab
       return
     end
@@ -176,8 +177,8 @@ local function open_new_tab_for_debug()
   -- VVI: if debug tab NOT exist, open a new tab for debug.
   vim.cmd('tabnew '..vim.fn.bufname())
 
-  --- 标记该 tab 为 'debug.dap_tab = true'
-  vim.fn.settabvar(vim.fn.tabpagenr(), "debug", {dap_tab = true})
+  --- 标记该 tab 为 'my_debug.dap_tab = true'
+  vim.fn.settabvar(vim.fn.tabpagenr(), tabvar_debug, {dap_tab = true})
 end
 
 --- terminate debug && close debug tab/buffers
@@ -191,9 +192,9 @@ local function close_debug_tab_and_buffers()
     dap.repl.close()  -- close dap-repl console window && delete dap-repl buffer.
     dapui.close()  -- close all dap-ui windows
 
-    --- VVI: close 'debug.dap_tab = true' tab
+    --- VVI: close 'my_debug.dap_tab = true' tab
     for _, tab_info in pairs(vim.fn.gettabinfo()) do
-      if vim.fn.gettabvar(tab_info.tabnr, "debug").dap_tab then
+      if vim.fn.gettabvar(tab_info.tabnr, tabvar_debug).dap_tab then
         vim.cmd(tab_info.tabnr .. 'tabclose')
       end
     end
