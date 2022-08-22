@@ -253,7 +253,6 @@ vim.api.nvim_create_autocmd("FileType", {
   callback = function(params)
     local bufinfo = vim.fn.getbufinfo(params.buf)[1]
     print('bufnr():', vim.fn.bufnr(), '| params.buf:', params.buf, '| bufname():', vim.fn.bufname(), "| getbufinfo(params.buf):", bufinfo.bufnr, bufinfo.name)
-    print()
   end
 })
 ```
