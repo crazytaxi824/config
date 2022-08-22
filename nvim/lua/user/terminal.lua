@@ -20,30 +20,31 @@
 -- :set winfixwidth / vim.wo.winfixwidth = true   固定 window 宽度
 
 local reusable_term_size = 12
+local winvar_reusable = "my_reusable"
 
 function Terminal_exec(term_id, cmd)
   -- 获取 term win_id
   for winnr = vim.fn.winnr('$'), 1, -1 do
-    if vim.fn.getwinvar(winnr, 'reusable') == term_id then  --- NOTE: getwinvar()
+    if vim.fn.getwinvar(winnr, winvar_reusable) == term_id then
       vim.cmd(winnr .. 'q!')  -- 关闭之前的 terminal window
     end
   end
 
   vim.cmd('bot split term://'..cmd..';\\#reusable\\#'..term_id .. ' | setlocal winfixheight nobuflisted bufhidden=wipe filetype=myterm')
-  vim.fn.setwinvar(vim.fn.win_getid(), "reusable", term_id)  --- NOTE: setwinvar()
+  vim.fn.setwinvar(vim.fn.win_getid(), winvar_reusable, term_id)
 end
 
 function Terminal_normal()
   -- 获取 term win_id
   for winnr = vim.fn.winnr('$'), 1, -1 do
-    if vim.fn.getwinvar(winnr, 'reusable') == "normal" then  --- NOTE: getwinvar()
+    if vim.fn.getwinvar(winnr, winvar_reusable) == "normal" then
       vim.cmd(winnr .. 'q!')  -- 关闭之前的 terminal window
     end
   end
 
   -- 开启新的 terminal normal
   vim.cmd('bot split term:///bin/zsh;\\#reusable\\#normal | setlocal winfixheight nobuflisted filetype=myterm')
-  vim.fn.setwinvar(vim.fn.win_getid(), "reusable", "normal")  --- NOTE: setwinvar()
+  vim.fn.setwinvar(vim.fn.win_getid(), winvar_reusable, "normal")
 end
 
 

@@ -20,7 +20,7 @@ notify.setup({
     --- set filetype, 主要是为了 highlight. 默认 filetype 是 notify
     --vim.api.nvim_buf_set_option(bufnr, "filetype", "markdown")
 
-    --- set keymap to close window 
+    --- set keymap to close window
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'q', "<cmd>q<CR>", {noremap=true, silent=true})
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<ESC>', "<cmd>q<CR>", {noremap=true, silent=true})
   end,
