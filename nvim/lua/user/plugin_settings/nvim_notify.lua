@@ -8,8 +8,8 @@ if not notify_status_ok then
 end
 
 notify.setup({
-  level = "TRACE",    -- Minimum log level to display.
-                      -- ERROR(4) > WARN(3) > INFO(2) > DEBUG(1) > TRACE(0), NOTE: 大写, 这里不能用数字.
+  level = "TRACE",  -- Minimum log level to display.
+                    -- 可以使用 vim.log.levels (int); 也可以用 vim.log.levels 也可以使用 (string), 大小写都可以.
 
   stages = "static",  -- VVI: Animation style, for `set termguicolors`
 

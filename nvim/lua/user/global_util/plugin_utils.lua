@@ -60,7 +60,7 @@ end
 function Check_cmd_tools(tools, opt)
   --- NOTE: "vim.schedule(function() ... end)" is a async function
   vim.schedule(function()
-    local result = {"These Tools should be in the $PATH, or `:Mason` install"}
+    local result = {"These Tools should be in the $PATH, OR `:Mason` to install"}
     local count = 0
     for tool, install in pairs(tools) do
       vim.fn.system('which '.. tool)
