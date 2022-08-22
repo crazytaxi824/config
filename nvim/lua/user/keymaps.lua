@@ -106,9 +106,9 @@ end
 
 --- NOTE: 这里必须使用 global function, 因为还没找到使用 vim.api 执行 '/' 的方法.
 function _Delete_search_hl()
-  --- VVI: 删除之前的 highlight.
+  --- 删除之前的 highlight
   if search_hl_cache then
-    --- 如果 win 已经关闭则不用 matchdelete()
+    --- NOTE: 如果 win 已经关闭 (win_id 不存在), 则不能使用 matchdelete(win_id), 否则报错.
     local win_info = vim.fn.getwininfo(search_hl_cache.win_id)
     if #win_info > 0 then
       vim.fn.matchdelete(search_hl_cache.hl_id, search_hl_cache.win_id)

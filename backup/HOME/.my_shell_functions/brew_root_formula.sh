@@ -20,10 +20,19 @@ function checkBrewRootFormula() {
 		# editor pluglins
 		vim
 		neovim
+
+		# language && tools
+		node
+		go
+		rust
+		cargo
+		lua
+		luajit          # lua 环境
+		stylua          # lua format tool
+		luarocks        # lua package manager
 		universal-ctags # 各种语言的 object 分析工具. vim/neovim tagbar 插件使用
 		prettier        # 格式化工具
 		clang-format    # c,c++,object-c 格式化工具
-		stylua          # lua format tool
 		shfmt           # shell format tool
 
 		# dev tools

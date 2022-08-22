@@ -110,7 +110,7 @@ eg: `:call setbufvar(5, '&foo', 'bar')`, 报错 `E355: Unknown option: foo`
 
 - `vim.fn.trim()`
 
-### window / tab / buffer 函数
+### vim - window / tab / buffer 函数
 
 getXXXinfo()
 
@@ -135,6 +135,14 @@ XXX number
 - `vim.fn.winnr()` / `vim.fn.win_getid()` / `vim.fn.win_gotoid()`
 
 - `vim.fn.tabpagenr()` / `vim.fn.tabpagebuflist()` / `vim.fn.tabpagewinnr()`
+
+### nvim.api - win / tab / buffer 函数
+
+- `vim.api.nvim_win_get_var()` / `vim.api.nvim_win_set_var()` / `vim.api.nvim_win_del_var()`
+- `vim.api.nvim_buf_get_var()` / `vim.api.nvim_buf_set_var()` / `vim.api.nvim_buf_del_var()`
+- `vim.api.nvim_tabpage_get_var()` / `vim.api.nvim_tabpage_set_var()` / `vim.api.nvim_tabpage_del_var()`
+
+==还有很多 nvim.api 函数和 vim 的函数对应.==
 
 ### nvim async 函数
 
@@ -253,7 +261,6 @@ vim.api.nvim_create_autocmd("FileType", {
   callback = function(params)
     local bufinfo = vim.fn.getbufinfo(params.buf)[1]
     print('bufnr():', vim.fn.bufnr(), '| params.buf:', params.buf, '| bufname():', vim.fn.bufname(), "| getbufinfo(params.buf):", bufinfo.bufnr, bufinfo.name)
-    print()
   end
 })
 ```
