@@ -5,16 +5,19 @@
 --- silent execute "!gomodifytags -file src/main.go -offset 219 -clear-options -quiet -w" | checktime  -- 删除所有 tag 的所有 options
 --- silent execute "!gomodifytags -file src/main.go -offset 219 -remove-tags json -quiet -w" | checktime  -- 删除指定 tag
 --- silent execute "!gomodifytags -file src/main.go -offset 219 -remove-options json=omitempty -quiet -w" | checktime  -- 删除指定 tag 的指定 option.
---- NOTE: 本文件只实现 -add-tags -clear-tags -remove-tags 三个功能. 不准备实现 -add-options -remove-options -clear-options 功能.
+--- NOTE: 本文件不准备实现 -add-options -remove-options -clear-options 功能.
 ---
 --- 操作方法: cursor 在 struct 的 {} 内, 使用以下 Command
 ---   :GoTagAdd json,xml            -- 默认: snakecase
 ---   :GoTagAdd json,xml camelcase  -- camelcase
----   :GoTagAdd json=omitempty,xml=omitempty  -- add-options
+---   :GoTagAdd json=foo,xml=bar    -- add-options
+---   :GoTagAdd json=foo,json=bar   -- NOTE: add multi-options to a Single tag.
 --
 ---   :GoTagRemove           -- remove all tags and their options
 ---   :GoTagRemove json,xml  -- remove specified tags and it's options
----   :GoTagRemoveOptions json=omitempty,xml=omitempty  -- remove specified tags and it's options
+--
+---   :GoTagOptionsClear   -- Clear all tag options
+---   :GoTagOptionsRemove json=foo,xml=bar  -- remove specified tags and it's options
 ---
 --- gomodifytags 命令行工具.
 --- checktime - refresh buffer. 主要用于文件在 vim 外部被修改后刷新. eg: `gomodifytags`, `call writefile()` 等
@@ -27,7 +30,7 @@
 ---    -transform  snakecase(*) | camelcase | lispcase | pascalcase | titlecase | keep
 
 --- GoAddTags --------------------------------------------------------------------------------------
---- arglist[1] = json,xml
+--- arglist[1] is tag options. could be 'json','json=foo', 'json,xml=bar', 'json=foo,xml=bar', , 'json=foo,json=fuz,xml=bar'
 --- arglist[2] = <可为空>|snakecase|camelcase|...
 local go_add_tags_cmd = "GoTagAdd"
 
@@ -40,11 +43,14 @@ local function go_add_tags(arglist)
   if #arglist > 2 then
     Notify(
       {
-        "too many args, eg:",
+        "too many args.",
+        "Command examples:",
         '  :' .. go_add_tags_cmd .. ' json,xml',
         '  :' .. go_add_tags_cmd .. ' json,xml camelcase',
         '  :' .. go_add_tags_cmd .. ' json=omitempty,xml=omitempty',
         '  :' .. go_add_tags_cmd .. ' json=omitempty,xml=omitempty camelcase',
+        "transform:",
+        "  snakecase(*) | camelcase | lispcase | pascalcase | titlecase | keep",
       },
       "ERROR"
     )
@@ -61,11 +67,20 @@ local function go_add_tags(arglist)
   local offset = vim.fn.line2byte('.')  -- 当前行的 col(1) 的 byte 位置,
                                         -- NOTE: 不管 cursor 在本行的任意 col, 返回值都相同.
 
-  --- parse tag name and tag options
-  -- local tag_opt = "json=omitempty,xml=omitempty"
+  --- parse tag name and tag options from arglist[1].
+  local tag_list = {}
+  local tag_opt_list = {}
+  for _, tag_opt in ipairs(vim.split(arglist[1], ',')) do
+    local to = vim.split(tag_opt, '=')
+    if #to > 0 and to[1] ~= '' then  -- 'json'|'json=foo'
+      table.insert(tag_list, to[1])
+    end
+    if #to == 2 then  -- 'json=foo'
+      table.insert(tag_opt_list, tag_opt)
+    end
+  end
 
   local transform = ""
-
   if not arglist[2] then
     transform = "snakecase"  -- default case
   elseif arglist[2] == 's' or arglist[2] == 'snake' or arglist[2] == 'snakecase' then  -- foo_bar
@@ -83,8 +98,14 @@ local function go_add_tags(arglist)
   else
     Notify(
       {
-        "transform error: snakecase(*) | camelcase | lispcase | pascalcase | titlecase | keep",
+        "transform error.",
+        "Command examples:",
+        '  :' .. go_add_tags_cmd .. ' json,xml',
+        '  :' .. go_add_tags_cmd .. ' json,xml camelcase',
+        '  :' .. go_add_tags_cmd .. ' json=omitempty,xml=omitempty',
         '  :' .. go_add_tags_cmd .. ' json=omitempty,xml=omitempty camelcase',
+        "transform:",
+        "  snakecase(*) | camelcase | lispcase | pascalcase | titlecase | keep",
       },
       "ERROR"
     )
@@ -93,10 +114,15 @@ local function go_add_tags(arglist)
 
   local sh_cmd = "gomodifytags -file " .. fp ..
     " -offset " .. offset ..
-    " -add-tags " .. arglist[1] ..
-    -- " -add-options " .. tag_opt ..  -- NOTE: 不准备实现 options
+    " -add-tags " .. vim.fn.join(tag_list,',') ..
     " -transform " .. transform ..
     " -skip-unexported -sort -quiet -w -override"
+
+  --- -add-options
+  if #tag_opt_list > 0 then
+    sh_cmd = sh_cmd ..
+      " -add-options " .. vim.fn.join(tag_opt_list,',')
+  end
 
   print(sh_cmd)
   local result = vim.fn.system(sh_cmd)
@@ -149,7 +175,6 @@ local function go_remove_tags(arglist)
 
   local offset = vim.fn.line2byte('.')
   local sh_cmd = ""
-
 
   if #arglist == 0 then
     sh_cmd = "gomodifytags -file " .. fp ..
