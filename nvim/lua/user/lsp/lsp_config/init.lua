@@ -44,6 +44,7 @@ local lsp_servers_map = {
   jsonls      = {'json', 'jsonc'},
 }
 
+--- NOTE: lspconfig 中 lsp 配置, eg: require("lspconfig")["jsonls"].setup(opts)
 for lsp_svr, filetypes in pairs(lsp_servers_map) do
   vim.api.nvim_create_autocmd("FileType", {
     pattern = filetypes,
