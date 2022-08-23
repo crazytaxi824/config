@@ -1,5 +1,4 @@
 --- https://github.com/leoluz/nvim-dap-go
---- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#go-using-delve-directly
 local dap_status_ok, dap = pcall(require, "dap")
 if not dap_status_ok then
   return
@@ -14,70 +13,47 @@ end
 --- Defaults to `INFO`, 打印到 'stdpath('cache') .. dap.log'
 dap.set_log_level('WARN')
 
-dap.adapters.go = function(callback, config)
-  local stdout = vim.loop.new_pipe(false)
-  local handle
-  local pid_or_err
-  local host = "127.0.0.1"
-  local port = 38697
-  local opts = {
-    stdio = {nil, stdout},
-    args = {"dap", "-l", host .. ":" .. port},
-    detached = true
-  }
-  handle, pid_or_err = vim.loop.spawn("dlv", opts, function(code)  --- NOTE: dlv command
-    stdout:close()
-    handle:close()
-    if code ~= 0 then
-      print('dlv exited with code', code)
-    end
-  end)
-  assert(handle, 'Error running dlv: ' .. tostring(pid_or_err))
-  stdout:read_start(function(err, chunk)
-    assert(not err, err)
-    if chunk then
-      vim.schedule(function()
-        require('dap.repl').append(chunk)
-      end)
-    end
-  end)
-  -- Wait for delve to start
-  vim.defer_fn(
-    function()
-      callback({type = "server", host = host, port = port})
-    end,
-    100)
-end
-
---- NOTE: for 'go' ONLY.
---- https://github.com/go-delve/delve/blob/master/Documentation/usage/dlv_dap.md
 --- Some variables are supported --- {{{
---   `${file}`: Active filename
---   `${fileBasename}`: The current file's basename
---   `${fileBasenameNoExtension}`: The current file's basename without extension
---   `${fileDirname}`: The current file's dirname
---   `${fileExtname}`: The current file's extension
---   `${relativeFile}`: The current file relative to |getcwd()|
---   `${relativeFileDirname}`: The current file's dirname relative to |getcwd()|
---   `${workspaceFolder}`: The current working directory of Neovim
---   `${workspaceFolderBasename}`: The name of the folder opened in Neovim
+--   "${port}": nvim-dap resolves a free port.
+--   "${file}": Active filename
+--   "${fileBasename}": The current file's basename
+--   "${fileBasenameNoExtension}": The current file's basename without extension
+--   "${fileDirname}": The current file's dirname
+--   "${fileExtname}": The current file's extension
+--   "${relativeFile}": The current file relative to |getcwd()|
+--   "${relativeFileDirname}": The current file's dirname relative to |getcwd()|
+--   "${workspaceFolder}": The current working directory of Neovim
+--   "${workspaceFolderBasename}": The name of the folder opened in Neovim
 -- -- }}}
+--- golang debug settings ----------------------------------
+--- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#go-using-delve-directly
+dap.adapters.delve = {
+  type = 'server',
+  port = '${port}',
+  executable = {
+    command = 'dlv',
+    args = {'dap', '-l', '127.0.0.1:${port}'},
+  }
+}
+
 dap.configurations.go = {
   {
-    type = "go",
+    type = "delve",  -- VVI: 这里的名字和需要上面 dap.adapters.xxx 的名字一样.
     name = "Debug go",
     request = "launch",
     program = "${file}"
   },
   -- go test package
   {
-    type = "go",
+    type = "delve",  -- VVI: 这里的名字和需要上面 dap.adapters.xxx 的名字一样.
     name = "Debug go test (package/dir)",
     request = "launch",
     mode = "test",
     program = "./${relativeFileDirname}"
   }
 }
+
+--- NOTE: put Other Debug adapters & configurations settings here ---
 
 --- signs setting --- {{{
 -- `DapBreakpoint` for breakpoints (default: `B`)
@@ -200,7 +176,6 @@ local function close_debug_tab_and_buffers()
     end
   end)
 end
-
 -- -- }}}
 
 --- 开启 new tab 进行 debug ------------------------------------------------------------------------
