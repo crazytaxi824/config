@@ -46,7 +46,7 @@ local function bufnr_set_wrap_to_all_windows(bufnr, on_off)
   end
 end
 
---- NOTE: 缓存 :WrapToggle 的 filepath and bufnr ---------------------------------------------------
+--- NOTE: 缓存 :WrapToggle 的 filepath / bufnr -----------------------------------------------------
 --- 同一个 file 被 :bwipeout 之后再次打开, 会被分配一个新的 bufnr.
 --- 如果 bufname() ~= '' 则缓存文件绝对路径. buffer 被 :bwipeout 之后再次打开时继承之前的设置.
 --- 如果 bufname() == '' 则缓存 bufnr. 没有名字的 buffer 只能通过 bufnr 来缓存.
@@ -61,27 +61,24 @@ vim.api.nvim_create_user_command("WrapToggle", function()
   --- 如果 bufname() ~= '' 则缓存文件绝对路径. buffer 被 :bwipeout 之后再次打开时继承之前的设置.
   --- 如果 bufname() == '' 则缓存 bufnr. 没有名字的 buffer 只能通过 bufnr 来缓存.
   local buf
-  if bufname == '' then  -- [No Name] buffer
-    buf = bufnr
+  if bufname == '' then
+    buf = bufnr  -- [No Name] buffer, 缓存 bufnr
   else
-    buf = vim.fn.fnamemodify(bufname, ":p")
+    buf = vim.fn.fnamemodify(bufname, ":p")  -- 缓存文件的绝对路径
   end
 
-  -- local filepath = vim.fn.fnamemodify(bufname, ":p")
   if not vim.wo.wrap then
     --- setlocal wrap to window
-    --vim.wo.wrap = true
-    bufnr_set_wrap_to_all_windows(bufnr, true)
+    bufnr_set_wrap_to_all_windows(bufnr, true)  -- vim.wo.wrap = true
 
-    --- cache result
+    --- cache filepath/bufnr
     wrap_list[buf] = true
 
     --- 设置 keymaps
     set_cursor_move_in_wrap(bufnr)
   else
     --- setlocal nowrap to window
-    --vim.wo.wrap = false
-    bufnr_set_wrap_to_all_windows(bufnr, false)
+    bufnr_set_wrap_to_all_windows(bufnr, false)  -- vim.wo.wrap = false
 
     --- delete cache
     wrap_list[buf] = nil
@@ -96,13 +93,13 @@ end, {bar=true})
 vim.api.nvim_create_autocmd({"BufEnter", "WinEnter"}, {
   pattern = {"*"},
   callback = function(params)
-    --- NOTE: params.file 是文件的绝对路径. [No Name] buffer 的 params.file == ''.
     --- 如果 bufname() ~= '' 则缓存文件绝对路径. buffer 被 :bwipeout 之后再次打开时继承之前的设置.
     --- 如果 bufname() == '' 则缓存 bufnr. 没有名字的 buffer 只能通过 bufnr 来缓存.
     local buf
     if params.file == '' then  -- [No Name] buffer
-      buf = params.buf
+      buf = params.buf  -- [No Name] buffer, 缓存 bufnr
     else
+      --- params.file 是文件的绝对路径. [No Name] buffer 的 params.file == ''.
       buf = params.file
     end
 

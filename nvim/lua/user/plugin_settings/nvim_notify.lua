@@ -17,7 +17,7 @@ notify.setup({
   on_open = function(win_id)
     local bufnr = vim.api.nvim_win_get_buf(win_id)
 
-    --- set filetype, 主要是为了 highlight. 默认 filetype 是 notify
+    --- set filetype 主要是为了 highlight. 默认 filetype = notify
     --vim.api.nvim_buf_set_option(bufnr, "filetype", "markdown")
 
     --- set keymap to close window
