@@ -29,7 +29,7 @@
 ---    -tagname    json,xml,sql ...
 ---    -transform  snakecase(*) | camelcase | lispcase | pascalcase | titlecase | keep
 
---- GoAddTags --------------------------------------------------------------------------------------
+--- ADD Tags and Options ---------------------------------------------------------------------------
 --- arglist[1] is tag options. could be 'json','json=foo', 'json,xml=bar', 'json=foo,xml=bar', , 'json=foo,json=fuz,xml=bar'
 --- arglist[2] = <可为空>|snakecase|camelcase|...
 local go_add_tags_cmd = "GoTagAdd"
@@ -146,7 +146,7 @@ vim.api.nvim_buf_create_user_command(
   {nargs = "+", bang = true}
 )
 
---- GoRemoveTags -----------------------------------------------------------------------------------
+--- Remove Tags and Options ------------------------------------------------------------------------
 local go_remove_tags_cmd = "GoTagRemove"
 
 local function go_remove_tags(arglist)
@@ -158,9 +158,10 @@ local function go_remove_tags(arglist)
   if #arglist > 1 then
     Notify(
       {
-        "too many args, eg:",
+        "too many args.",
+        "Command examples:",
         '  :' .. go_remove_tags_cmd,
-        '  :' .. go_remove_tags_cmd .. 'json,xml',
+        '  :' .. go_remove_tags_cmd .. ' json,xml',
       },
       "ERROR"
     )
@@ -174,15 +175,14 @@ local function go_remove_tags(arglist)
   end
 
   local offset = vim.fn.line2byte('.')
-  local sh_cmd = ""
+  local sh_cmd = "gomodifytags -file " .. fp ..
+    " -offset " .. offset
 
   if #arglist == 0 then
-    sh_cmd = "gomodifytags -file " .. fp ..
-      " -offset " .. offset ..
+    sh_cmd = sh_cmd ..
       " -clear-tags -quiet -w"
   else
-    sh_cmd = "gomodifytags -file " .. fp ..
-      " -offset " .. offset ..
+    sh_cmd = sh_cmd ..
       " -remove-tags " .. arglist[1] ..
       " -quiet -w"
   end
@@ -207,6 +207,11 @@ vim.api.nvim_buf_create_user_command(
   end,
   {bang = true, nargs = "*"}
 )
+
+--- Clear All Tags' Options ------------------------------------------------------------------------
+
+
+--- Remove specified Tag's Options -----------------------------------------------------------------
 
 
 
