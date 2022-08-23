@@ -1,10 +1,10 @@
 --- NOTE: <cword> under the cursor need to be a interface name.
---  `impl -dir src Cat Animal`
+--  `impl -dir src Cat IAnimal`
 --      - 'Cat'      是我们需要定义的 type, 也就是以下传入的 obj.
 --      - 'Animal'   是 interface 的名字, 使用时需要将 cursor 放在 Animal 上.
 --  `:call writefile(["foo"], "src/main.go", "a")`  -- 'a': append mode, 将数据写入文件最后.
 --
---  操作方法, cursor 指向 interface Name, 使用 Command `:GoImpl Foo`
+--  操作方法, cursor 指向 interface Name <cword>, 使用 Command `:GoImpl Foo`
 local function go_impl(arglist)
   if vim.bo.readonly then
     Notify("this is a readonly file","ERROR")
@@ -12,16 +12,16 @@ local function go_impl(arglist)
   end
 
   if #arglist > 1 then
-    Notify("only one args is allowed","ERROR")
+    Notify({"only one args is allowed", "  :GoImpl Foo"},"ERROR")
     return
   end
 
   local dir = vim.fn.expand('%:h')
   local lastline = vim.fn.line('$')
-  local iface = vim.fn.expand('<cword>')
+  local iface_name = vim.fn.expand('<cword>')
 
   --- 执行 shell cmd
-  local sh_cmd = 'impl -dir ' .. dir .. ' ' .. arglist[1] .. ' ' .. iface
+  local sh_cmd = 'impl -dir ' .. dir .. ' ' .. arglist[1] .. ' ' .. iface_name
   print(sh_cmd)
   local result = vim.fn.system(sh_cmd)
 
@@ -31,9 +31,18 @@ local function go_impl(arglist)
     return
   end
 
+  --- 删除 result 最后的空行.
+  local content = vim.split(result, '\n')
+  while content[#content] == '' do
+    table.remove(content, #content)
+  end
+  print(vim.inspect(content))
+
+  --- add 'type Foo struct{}'
+  local msg = vim.list_extend({"", "type " .. arglist[1] .. " struct{}", ""}, content)
+
   --- 写入当前文件
-  local msg = vim.list_extend({""}, vim.split(result, '\n'))
-  vim.fn.writefile(msg, vim.fn.expand('%'), 'a')
+  vim.fn.writefile(msg, vim.fn.expand('%'), 'a')  -- 'a' append mode
 
   --- checktime          刷新 buffer 显示
   --- cursor(lnum. col)  移动 cursor
