@@ -1,30 +1,36 @@
 --- 使用 gomodifytags 给 struct 添加/移除 tags -----------------------------------------------------
--- 命令行工具使用: `gomodifytags --help`
--- silent execute "!gomodifytags -file src/main.go -offset 219 -add-tags json,xml -add-options json=omitempty,xml=omitempty -transform snakecase -skip-unexported -quiet -w" | checktime
--- silent execute "!gomodifytags -file src/main.go -offset 219 -clear-tags -quiet -w" | checktime  -- 删除所有 tag
--- silent execute "!gomodifytags -file src/main.go -offset 219 -clear-options -quiet -w" | checktime  -- 删除所有 tag 的所有 options
--- silent execute "!gomodifytags -file src/main.go -offset 219 -remove-tags json -quiet -w" | checktime  -- 删除指定 tag
--- silent execute "!gomodifytags -file src/main.go -offset 219 -remove-options json=omitempty -quiet -w" | checktime  -- 删除指定 tag 的指定 option.
+--- 命令行工具使用: `gomodifytags --help`
+--- silent execute "!gomodifytags -file src/main.go -offset 219 -add-tags json,xml -add-options json=omitempty,xml=omitempty -transform snakecase -skip-unexported -quiet -w" | checktime
+--- silent execute "!gomodifytags -file src/main.go -offset 219 -clear-tags -quiet -w" | checktime  -- 删除所有 tag
+--- silent execute "!gomodifytags -file src/main.go -offset 219 -clear-options -quiet -w" | checktime  -- 删除所有 tag 的所有 options
+--- silent execute "!gomodifytags -file src/main.go -offset 219 -remove-tags json -quiet -w" | checktime  -- 删除指定 tag
+--- silent execute "!gomodifytags -file src/main.go -offset 219 -remove-options json=omitempty -quiet -w" | checktime  -- 删除指定 tag 的指定 option.
+--- NOTE: 本文件只实现 -add-tags -clear-tags -remove-tags 三个功能. 不准备实现 -add-options -remove-options -clear-options 功能.
+---
+--- 操作方法: cursor 在 struct 的 {} 内, 使用以下 Command
+---   :GoTagAdd json,xml            -- 默认: snakecase
+---   :GoTagAdd json,xml camelcase  -- camelcase
+---   :GoTagAdd json=omitempty,xml=omitempty  -- add-options
 --
--- gomodifytags 命令行工具.
--- checktime - refresh buffer. 主要用于文件在 vim 外部被修改后刷新. eg: `gomodifytags`, `call writefile()` 等
---      NOTE: 文件被外部修改之后会重新加载所有针对该 <buffer> 的插件, eg: rundo - read undo file.
---
--- 可选填项:
---    -file       filepath
---    -offset     n (num, byte offset) VVI: 主要利用这个功能实现, vim.fn.line2byte() 获取 offset
---    -tagname    json,xml,sql ...
---    -transform  snakecase(*) | camelcase | lispcase | pascalcase | titlecase | keep
---
--- NOTE: 本文件不准备实现 options 功能. 只实现 -add-tags -clear-tags -remove-tags 三个功能.
---
--- 操作方法: cursor 在 struct 的 {} 内, 使用以下 Command
---   :GoAddTags json,xml camelcase
---   :GoAddTags json,xml <omit>
---   :GoRemoveAllTags
---   :GoRemoveTags json,xml
+---   :GoTagRemove           -- remove all tags and their options
+---   :GoTagRemove json,xml  -- remove specified tags and it's options
+---   :GoTagRemoveOptions json=omitempty,xml=omitempty  -- remove specified tags and it's options
+---
+--- gomodifytags 命令行工具.
+--- checktime - refresh buffer. 主要用于文件在 vim 外部被修改后刷新. eg: `gomodifytags`, `call writefile()` 等
+---      NOTE: 文件被外部修改之后会重新加载所有针对该 <buffer> 的插件, eg: rundo - read undo file.
+---
+--- 可选填项:
+---    -file       filepath
+---    -offset     n (num, byte offset) VVI: 主要利用这个功能实现, vim.fn.line2byte() 获取 offset
+---    -tagname    json,xml,sql ...
+---    -transform  snakecase(*) | camelcase | lispcase | pascalcase | titlecase | keep
 
 --- GoAddTags --------------------------------------------------------------------------------------
+--- arglist[1] = json,xml
+--- arglist[2] = <可为空>|snakecase|camelcase|...
+local go_add_tags_cmd = "GoTagAdd"
+
 local function go_add_tags(arglist)
   if vim.bo.readonly then
     Notify("cannot add tags to readonly file","ERROR")
@@ -33,18 +39,29 @@ local function go_add_tags(arglist)
 
   if #arglist > 2 then
     Notify(
-      {"too many args",'eg: ":GoAddTags json,xml | :GoAddTags json,xml camelcase"'},
+      {
+        "too many args, eg:",
+        '  :' .. go_add_tags_cmd .. ' json,xml',
+        '  :' .. go_add_tags_cmd .. ' json,xml camelcase',
+        '  :' .. go_add_tags_cmd .. ' json=omitempty,xml=omitempty',
+        '  :' .. go_add_tags_cmd .. ' json=omitempty,xml=omitempty camelcase',
+      },
       "ERROR"
     )
     return
   end
 
   local fp = vim.fn.expand("%:.")  -- current filepath
+  if fp == "" then
+    Notify("filepath/bufname is empty", "ERROR")
+    return
+  end
 
   --- 获取当前 cursor offset, 即在整个文档中的 byte 位置.
   local offset = vim.fn.line2byte('.')  -- 当前行的 col(1) 的 byte 位置,
                                         -- NOTE: 不管 cursor 在本行的任意 col, 返回值都相同.
 
+  --- parse tag name and tag options
   -- local tag_opt = "json=omitempty,xml=omitempty"
 
   local transform = ""
@@ -67,7 +84,7 @@ local function go_add_tags(arglist)
     Notify(
       {
         "transform error: snakecase(*) | camelcase | lispcase | pascalcase | titlecase | keep",
-        'eg: ":GoAddTags json,xml snakecase"'
+        '  :' .. go_add_tags_cmd .. ' json=omitempty,xml=omitempty camelcase',
       },
       "ERROR"
     )
@@ -96,7 +113,7 @@ end
 -- command! -buffer -nargs=+ GoAddTags :lua _GoAddTags(<f-args>)
 vim.api.nvim_buf_create_user_command(
   0,
-  "GoAddTags",
+  go_add_tags_cmd,
   function(params)
     go_add_tags(params.fargs)
   end,
@@ -104,6 +121,8 @@ vim.api.nvim_buf_create_user_command(
 )
 
 --- GoRemoveTags -----------------------------------------------------------------------------------
+local go_remove_tags_cmd = "GoTagRemove"
+
 local function go_remove_tags(arglist)
   if vim.bo.readonly then
     Notify("cannot remove tags from readonly file","ERROR")
@@ -112,13 +131,22 @@ local function go_remove_tags(arglist)
 
   if #arglist > 1 then
     Notify(
-      {"too many args",'eg: ":GoRemoveTags | :GoRemoveTags json,xml"'},
+      {
+        "too many args, eg:",
+        '  :' .. go_remove_tags_cmd,
+        '  :' .. go_remove_tags_cmd .. 'json,xml',
+      },
       "ERROR"
     )
     return
   end
 
   local fp = vim.fn.expand("%:.")  -- current filepath
+  if fp == "" then
+    Notify("filepath/bufname is empty", "ERROR")
+    return
+  end
+
   local offset = vim.fn.line2byte('.')
   local sh_cmd = ""
 
@@ -148,7 +176,7 @@ end
 
 vim.api.nvim_buf_create_user_command(
   0,
-  "GoRemoveTags",
+  go_remove_tags_cmd,
   function(params)
     go_remove_tags(params.fargs)
   end,
