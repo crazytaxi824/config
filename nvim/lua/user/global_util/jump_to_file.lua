@@ -37,14 +37,14 @@ function Jump_to_file(filepath, lnum, col)
 
   if vim.fn.win_gotoid(log_display_win_id) == 1 then
     --- 如果 log_display_win_id 可以跳转则直接跳转.
-    vim.fn.setloclist(log_display_win_id, {loclist_items}, 'r')  -- 给指定 window 设置 loclist
+    vim.fn.setloclist(log_display_win_id, {loclist_items}, 'r')  -- 给指定 window 设置 loclist, 'r' - replace, `:help setqflist-what`
     vim.cmd('silent lfirst')  -- jump to loclist first item
     vim.fn.setloclist(log_display_win_id, {}, 'r')  -- VVI: clear loclist
   else
     --- 如果 log_display_win_id 不能跳转, 则在 terminal 正上方创建一个新的 window 用于显示 log filepath
     vim.cmd('leftabove split ' .. loclist_items.filename)
     log_display_win_id = vim.fn.win_getid()
-    vim.fn.setloclist(log_display_win_id, {loclist_items}, 'r')  -- 给指定 window 设置 loclist
+    vim.fn.setloclist(log_display_win_id, {loclist_items}, 'r')  -- 给指定 window 设置 loclist, 'r' - replace, `:help setqflist-what`
     vim.cmd('silent lfirst')  -- jump to loclist first item
     vim.fn.setloclist(log_display_win_id, {}, 'r')  -- VVI: clear loclist
   end
