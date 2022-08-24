@@ -4,23 +4,23 @@ if not null_ls_status_ok then
 end
 
 --- 检查 null-ls 所需 tools ------------------------------------------------------------------------ {{{
-local null_tools = {
-  ["golangci-lint"] = "go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest",
-  ["goimports"] = "    go install golang.org/x/tools/cmd/goimports@latest",
-  ["buf"] = "          go install github.com/bufbuild/buf/cmd/buf@latest",  -- protobuf formatter & linter
-
-  prettier = " brew info prettier",
-  stylua = "   brew info stylua",
-  shfmt = "    brew info shfmt",
-
-  mypy = "     pip3 install mypy",  -- 还有个 mypy-extensions 是 mypy 插件, experimental extensions
-  flake8 = "   pip3 install flake8",
-  autopep8 = " pip3 install autopep8",
-
-  eslint = "   npm install -g eslint",
-}
-
-Check_cmd_tools(null_tools, {title= "check null-ls tools"})
+-- local null_tools = {
+--   ["golangci-lint"] = "go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest",
+--   ["goimports"] = "    go install golang.org/x/tools/cmd/goimports@latest",
+--   ["buf"] = "          go install github.com/bufbuild/buf/cmd/buf@latest",  -- protobuf formatter & linter
+--
+--   prettier = " brew info prettier",
+--   stylua = "   brew info stylua",
+--   shfmt = "    brew info shfmt",
+--
+--   mypy = "     pip3 install mypy",  -- 还有个 mypy-extensions 是 mypy 插件, experimental extensions
+--   flake8 = "   pip3 install flake8",
+--   autopep8 = " pip3 install autopep8",
+--
+--   eslint = "   npm install -g eslint",
+-- }
+--
+-- Check_cmd_tools(null_tools, {title= "check null-ls tools"})
 -- -- }}}
 
 --- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/formatting
