@@ -21,8 +21,8 @@ notify.setup({
     --vim.api.nvim_buf_set_option(bufnr, "filetype", "markdown")
 
     --- set keymap to close window
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'q', "<cmd>q<CR>", {noremap=true, silent=true})
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<ESC>', "<cmd>q<CR>", {noremap=true, silent=true})
+    vim.keymap.set('n', 'q', '<cmd>q<CR>', {noremap=true, buffer=bufnr})
+    --vim.keymap.set('n', '<ESC>', '<cmd>q<CR>', {noremap=true, buffer=bufnr})
   end,
 
   timeout = 3000,     -- Default timeout for notifications

@@ -3,10 +3,10 @@
 设置文件地址 `proj_root/.nvim/settings.lua`
 
 ```lua
--- 以下所有设置都可以缺省, 只用设置需要覆盖 default setting 的项.
--- 如果一个项目中有多个不同的 filetype 对应多个不同的 lsp, linter, formatter, 可以在不同的 section 中设置多个 tool.
+--- 以下所有设置都可以缺省, 只用设置需要覆盖 default setting 的项.
+--- 如果一个项目中有多个不同的 filetype 对应多个不同的 lsp, linter, formatter, 可以在不同的 section 中设置多个 tool.
 return {
-  -- nvim-lspconfig 设置
+  --- nvim-lspconfig 设置
   settings = {
     gopls = {
       ["ui.completion.usePlaceholders"] = true,
@@ -22,14 +22,25 @@ return {
     bashls = { ... },
   },
 
-  -- null-ls linter/diagnostics 设置
-  -- eg: null_ls.diagnostics.xxx.with() 设置.
+  --- null-ls linter/diagnostics 设置
+  --- eg: null_ls.diagnostics.xxx.with() 设置.
   lint = {
     golangci_lint = {
       command = "/path/to/golangci-lint",
       cwd = "path/to/current_working_dir",
       args = { "run", ... },  -- overwrite default settings.
-      extra_args = { "--config", '~/.config/lints/.golangci.yml' },
+      extra_args = {
+		--- 指定 config 文件.
+		"--config", '~/.config/lints/.golangci.yml',
+
+		--- 生产模式下增加的 linter, '-E' = '--enable'.
+		"--enable", "unused",
+		"-E", "unparam",
+		"-E", "goconst",
+		"-E", "whitespace",
+		"-E", "ifshort",
+		"-E", "decorder"
+	  }
       filetypes = { "go" },
     },
     eslint = { ... },
@@ -37,8 +48,8 @@ return {
     buf = { ... },
   },
 
-  -- null-ls formatter 设置
-  -- eg: null_ls.formatting.xxx.with() 设置.
+  --- null-ls formatter 设置
+  --- eg: null_ls.formatting.xxx.with() 设置.
   format = {
     prettier = { ... },
     stylua = { ... },
