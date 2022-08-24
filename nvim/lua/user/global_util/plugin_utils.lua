@@ -57,33 +57,12 @@ function Notify(msg, lvl, opt)
 end
 
 --- 使用 `$ which` 查看插件所需 tools 是否存在 -----------------------------------------------------
-function Check_cmd_tools(tools, opt)
-  --- NOTE: "vim.schedule(function() ... end)" is a async function
-  vim.schedule(function()
-    local result = {"These Tools should be in the $PATH, OR `:Mason` to install"}
-    local count = 0
-    for tool, install in pairs(tools) do
-      vim.fn.system('which '.. tool)
-      if vim.v.shell_error ~= 0 then
-        table.insert(result, tool .. ": " .. install)
-        count = count + 1
-      end
-    end
-
-    if count > 0 then
-      opt = opt or {}  -- 确保 opt 是 table, 而不是 nil. 否则无法用于 vim.tbl_deep_extend()
-      opt = vim.tbl_deep_extend('force', {timeout=false}, opt)
-      Notify(result, "WARN", opt)
-    end
-  end)
-end
-
 --- lsp tools:
 ---   {cmd="gopls", lspconfig="gopls", mason="gopls", install="go install golang.org/x/tools/gopls@latest"}
 ---   {cmd="vscode-json-language-server", lspconfig="jsonls", mason="json-lsp"}
 ---   {cmd="typescript-language-server", lspconfig="tsserver", mason="typescript-language-server"}
 ---   {cmd="dlv", mason="delve"}
-function Check_cmd_tools2(tools, notify_opt)
+function Check_cmd_tools(tools, notify_opt)
   --- NOTE: "vim.schedule(function() ... end)" is a async function
   vim.schedule(function()
     local result = {"Tools should be installed:"}
