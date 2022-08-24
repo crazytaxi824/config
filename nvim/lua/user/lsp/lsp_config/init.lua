@@ -100,7 +100,7 @@ for lsp_svr, v in pairs(lsp_servers_map) do
       lspconfig[lsp_svr].setup(opts)    -- 设置 lsp
       vim.cmd('LspStart ' .. lsp_svr )  -- VVI: 第一次必须要手动启动 lsp.
 
-      --- 检查 lsp tools 是否存在
+      --- 检查 lsp tools 是否安装
       Check_cmd_tools({v}, {title="LSP_config"})
 
       --- DEBUG: 用. 每个 lsp 应该只打印一次.

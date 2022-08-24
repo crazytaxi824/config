@@ -4,6 +4,8 @@ if not null_ls_status_ok then
 end
 
 --- 检查 null-ls 所需 tools ------------------------------------------------------------------------ {{{
+--- 在 null_ls.setup() 的时候, 如果命令行工具不存在不会报错;
+--- 在使用的时候 (eg:Format) 如果命令行工具不存在才会报错.
 local null_tools = {
   {cmd="goimports", install="go install golang.org/x/tools/cmd/goimports@latest", mason="goimports"},
   {cmd="golangci-lint", install="go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest", mason="golangci-lint"},
@@ -210,7 +212,7 @@ null_ls.setup({
   end,
 
   --- 设置 key_mapping vim.diagnostic.goto_next() ...
-  on_attach = function(client)
+  on_attach = function(client, bufnr)
     require("user.lsp.util.lsp_keymaps").diagnostic_keymaps(0)
 
     --- DEBUG: 用
