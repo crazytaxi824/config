@@ -78,6 +78,38 @@ function Check_cmd_tools(tools, opt)
   end)
 end
 
+--- lsp tools:
+---   {cmd="gopls", lspconfig="gopls", mason="gopls", install="go install golang.org/x/tools/gopls@latest"}
+---   {cmd="vscode-json-language-server", lspconfig="jsonls", mason="json-lsp"}
+---   {cmd="typescript-language-server", lspconfig="tsserver", mason="typescript-language-server"}
+---   {cmd="dlv", mason="delve"}
+function Check_cmd_tools2(tools, notify_opt)
+  --- NOTE: "vim.schedule(function() ... end)" is a async function
+  vim.schedule(function()
+    local result = {"Tools should be installed:"}
+    local count = 0
+    for _, tool in ipairs(tools) do
+      vim.fn.system('which '.. tool.cmd)
+      if vim.v.shell_error ~= 0 then
+        table.insert(result, " - " .. tool.cmd)
+        if tool.mason then
+          table.insert(result, "   - :MasonInstall " .. tool.mason)
+        end
+        if tool.install then
+          table.insert(result, "   - " .. tool.install)
+        end
+        count = count + 1
+      end
+    end
+
+    if count > 0 then
+      notify_opt = notify_opt or {}  -- 确保 opt 是 table, 而不是 nil. 否则无法用于 vim.tbl_deep_extend()
+      notify_opt = vim.tbl_deep_extend('force', {timeout=false}, notify_opt)
+      Notify(result, "WARN", notify_opt)
+    end
+  end)
+end
+
 --- key-settings for both vim.keymap.set() and which_key.register() --------------------------------
 --- keymap_list: { mode, key, remap, opt, description }  - description for 'which-key'
 --- keys_desc_only: which_key.register({keymap},{opts}) 中的两个入参. 用于只注册到 which-key 中显示, 而不用真的 keymap.
