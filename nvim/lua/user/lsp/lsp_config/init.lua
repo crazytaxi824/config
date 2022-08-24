@@ -33,20 +33,55 @@ end
 --- filetypes: 可以通过 `:LspInfo` 查看. 用于 autocmd.
 --- 以下命令行工具可以通过 mason.nvim 安装, 也可以通过 brew 安装到 $PATH 中.
 --- 通过 mason 安装时需要对应名字. https://github.com/williamboman/mason-lspconfig.nvim/blob/main/doc/server-mapping.md
+--- lspconfig_name: filetype
 local lsp_servers_map = {
-  sumneko_lua = {'lua'},
-  tsserver    = {'javascript', 'javascriptreact', 'javascript.jsx', 'typescript', 'typescriptreact', 'typescript.tsx'},
-  bashls      = {'sh'},
-  gopls       = {'go', 'gomod', 'gowork', 'gotmpl'},
-  pyright     = {'python'},
-  html        = {'html'},
-  cssls       = {'css', 'scss', 'less'},
-  jsonls      = {'json', 'jsonc'},
+  sumneko_lua = {
+    cmd = "lua-language-server",
+    mason = "lua-language-server",
+    filetypes = {'lua'}
+  },
+  tsserver = {
+    cmd = "typescript-language-server",
+    mason = "typescript-language-server",
+    filetypes = {'javascript', 'javascriptreact', 'javascript.jsx', 'typescript', 'typescriptreact', 'typescript.tsx'}
+  },
+  bashls = {
+    cmd = "bash-language-server",
+    mason = "bash-language-server",
+    filetypes = {'sh'}
+  },
+  gopls = {
+    cmd = "gopls",
+    mason = "gopls",
+    install = "go install golang.org/x/tools/gopls@latest",
+    filetypes = {'go', 'gomod', 'gowork', 'gotmpl'}
+  },
+  pyright = {
+    cmd = "pyright",
+    mason = "pyright",
+    filetypes = {'python'}
+  },
+  html = {
+    cmd = "vscode-html-language-server",
+    mason = "html-lsp",
+    filetypes = {'html'}
+  },
+  cssls = {
+    cmd = "vscode-css-language-server",
+    mason = "css-lsp",
+    filetypes = {'css', 'scss', 'less'}
+  },
+  jsonls = {
+    cmd = "vscode-json-language-server",
+    mason = "json-lsp",
+    filetypes = {'json', 'jsonc'}
+  },
 }
 
-for lsp_svr, filetypes in pairs(lsp_servers_map) do
+--- NOTE: lspconfig 中 lsp 配置, eg: require("lspconfig")["jsonls"].setup(opts)
+for lsp_svr, v in pairs(lsp_servers_map) do
   vim.api.nvim_create_autocmd("FileType", {
-    pattern = filetypes,
+    pattern = v.filetypes,
     once = true,  --- VVI: only need to start LSP server once.
     callback = function()
       local opts = require("user.lsp.lsp_config.setup_opts")
@@ -64,6 +99,9 @@ for lsp_svr, filetypes in pairs(lsp_servers_map) do
 
       lspconfig[lsp_svr].setup(opts)    -- 设置 lsp
       vim.cmd('LspStart ' .. lsp_svr )  -- VVI: 第一次必须要手动启动 lsp.
+
+      --- 检查 lsp tools 是否安装
+      Check_cmd_tools({v}, {title="LSP_config"})
 
       --- DEBUG: 用. 每个 lsp 应该只打印一次.
       if __Debug_Neovim.lspconfig then

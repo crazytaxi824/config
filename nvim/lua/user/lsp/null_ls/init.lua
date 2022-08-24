@@ -4,20 +4,22 @@ if not null_ls_status_ok then
 end
 
 --- 检查 null-ls 所需 tools ------------------------------------------------------------------------ {{{
+--- 在 null_ls.setup() 的时候, 如果命令行工具不存在不会报错;
+--- 在使用的时候 (eg:Format) 如果命令行工具不存在才会报错.
 local null_tools = {
-  ["golangci-lint"] = "go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest",
-  ["goimports"] = "    go install golang.org/x/tools/cmd/goimports@latest",
-  ["buf"] = "          go install github.com/bufbuild/buf/cmd/buf@latest",  -- protobuf formatter & linter
+  {cmd="goimports", install="go install golang.org/x/tools/cmd/goimports@latest", mason="goimports"},
+  {cmd="golangci-lint", install="go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest", mason="golangci-lint"},
+  {cmd="buf", install="go install github.com/bufbuild/buf/cmd/buf@latest", mason="buf"},  -- protobuf formatter & linter
 
-  prettier = " brew info prettier",
-  stylua = "   brew info stylua",
-  shfmt = "    brew info shfmt",
+  {cmd="prettier", install=" brew info prettier", mason="prettier"},
+  {cmd="stylua", install="brew info stylua", mason="stylua"},
+  {cmd="shfmt", install="brew info shfmt", mason="shfmt"},
 
-  mypy = "     pip3 install mypy",  -- 还有个 mypy-extensions 是 mypy 插件, experimental extensions
-  flake8 = "   pip3 install flake8",
-  autopep8 = " pip3 install autopep8",
+  {cmd="mypy", install="pip3 install mypy", mason="mypy"},  -- 还有个 mypy-extensions 是 mypy 插件, experimental extensions
+  {cmd="flake8", install="pip3 install flake8", mason="flake8"},
+  {cmd="autopep8", install="pip3 install autopep8", mason="autopep8"},
 
-  eslint = "   npm install -g eslint",
+  {cmd="eslint", install="npm install -g eslint"},  -- NOTE: mason 暂时不能安装 "eslint"
 }
 
 Check_cmd_tools(null_tools, {title= "check null-ls tools"})
@@ -210,7 +212,7 @@ null_ls.setup({
   end,
 
   --- 设置 key_mapping vim.diagnostic.goto_next() ...
-  on_attach = function(client)
+  on_attach = function(client, bufnr)
     require("user.lsp.util.lsp_keymaps").diagnostic_keymaps(0)
 
     --- DEBUG: 用

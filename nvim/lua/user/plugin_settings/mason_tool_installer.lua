@@ -1,23 +1,29 @@
 --- README:
 --- mason.nvim 是一个 tools 安装 & 管理插件. 用于下载 lsp/formatter/linter/dap-debug 工具, eg: gopls, prettier, delve
 --- 这些工具可以不通过 mason 安装, 可以手动安装在 $PATH 中. eg: `brew install xxx`
+--- 可以使用 require("mason-registry").is_installed("json-lsp") 来判断工具是否被 mason 安装.
 
 --- Mason 安装 LSP 时使用的名字和 LSP 命令行工具的名字有区别. 其他命令行工具名字(formatter/linter/dap)没有变化.
 --- 名字的对应 https://github.com/williamboman/mason-lspconfig.nvim/blob/main/doc/server-mapping.md
---------------+------------------------------------------------+---------------------------------------------
---- LSP       | "neovim/nvim-lspconfig" setup()                |  MasonInstall
---------------+------------------------------------------------+---------------------------------------------
---- jsonls    | require("lspconfig")["jsonls"].setup(opts)     | `:MasonInstall json-lsp`
---------------+------------------------------------------------+---------------------------------------------
---- tsserver  | require("lspconfig")["tsserver"].setup(opts)   | `:MasonInstall typescript-language-server`
---------------+------------------------------------------------+---------------------------------------------
+--- mason-lspconfig 对应文件 https://github.com/williamboman/mason-lspconfig.nvim/blob/main/lua/mason-lspconfig/mappings/server.lua
+---+-----------------------------+--------------------------------------------+------------------------------------------------+
+---| cmd_line_tool Name          |  Mason Name                                | "neovim/nvim-lspconfig" setup() Name           |
+---+-----------------------------+--------------------------------------------+------------------------------------------------+
+---| gopls                       | `:MasonInstall gopls`                      | require("lspconfig")["gopls"].setup(opts)      |
+---+-----------------------------+--------------------------------------------+------------------------------------------------+
+---| vscode-json-language-server | `:MasonInstall json-lsp`                   | require("lspconfig")["jsonls"].setup(opts)     |
+---+-----------------------------+--------------------------------------------+------------------------------------------------+
+---| typescript-language-server  | `:MasonInstall typescript-language-server` | require("lspconfig")["tsserver"].setup(opts)   |
+---+-----------------------------+--------------------------------------------+------------------------------------------------+
+---| dlv                         | `:MasonInstall delve`                      |                                                |
+---+-----------------------------+--------------------------------------------+------------------------------------------------+
 local mason_ok, mason = pcall(require, "mason")
 if not mason_ok then
   return
 end
 
 mason.setup {
-  --- NOTE: LSP server 下载位置默认在 "~/.local/share/nvim/mason_tools/..."
+  --- NOTE: LSP server 下载位置默认在 "~/.local/share/nvim/mason/"
   install_root_dir = vim.fn.stdpath("data") .. "/mason_tools",
 
   max_concurrent_installers = 4,  -- 并发安装数量.

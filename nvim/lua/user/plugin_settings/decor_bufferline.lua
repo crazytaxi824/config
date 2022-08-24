@@ -211,7 +211,8 @@ buf_highlights.hint_selected = buf_highlights.buffer_selected
 --- NOTE: 指定 filetype 不能使用 go_to() 功能.
 local function exclude_filetypes()
   --- 自定义: 不允许使用 bufferline.go_to() 的 filetype
-  local exclude_filetype = {'vimfiler', 'nerdtree', 'tagbar', 'NvimTree', 'toggleterm', 'myterm'}
+  --- quickfix && location-list 的 filetype 都是 'qf'.
+  local exclude_filetype = {'vimfiler', 'nerdtree', 'tagbar', 'NvimTree', 'toggleterm', 'myterm', 'qf'}
 
   if vim.tbl_contains(exclude_filetype, vim.bo.filetype) then
     return true
