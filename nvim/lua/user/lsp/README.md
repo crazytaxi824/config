@@ -7,7 +7,7 @@
 --- 如果一个项目中有多个不同的 filetype 对应多个不同的 lsp, linter, formatter, 可以在不同的 section 中设置多个 tool.
 return {
   --- nvim-lspconfig 设置
-  settings = {
+  lsp_settings = {
     gopls = {
       ["ui.completion.usePlaceholders"] = true,
       ["ui.diagnostic.staticcheck"] = false,
@@ -24,7 +24,7 @@ return {
 
   --- null-ls linter/diagnostics 设置
   --- eg: null_ls.diagnostics.xxx.with() 设置.
-  lint = {
+  linter = {
     golangci_lint = {
       command = "/path/to/golangci-lint",
       cwd = "path/to/current_working_dir",
@@ -49,7 +49,7 @@ return {
 
   --- null-ls formatter 设置
   --- eg: null_ls.formatting.xxx.with() 设置.
-  format = {
+  formatter = {
     prettier = { ... },
     stylua = { ... },
     autopep8 = { ... },
