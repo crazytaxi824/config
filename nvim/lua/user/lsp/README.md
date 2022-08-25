@@ -38,7 +38,6 @@ return {
 		"-E", "unparam",
 		"-E", "goconst",
 		"-E", "whitespace",
-		"-E", "ifshort",
 		"-E", "decorder"
 	  }
       filetypes = { "go" },
