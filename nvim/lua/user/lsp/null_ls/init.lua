@@ -96,8 +96,9 @@ local diagnostics_opts = {
 local linter_settings = {
   --- golangci-lint
   diagnostics.golangci_lint.with(__Proj_local_settings.keep_extend('lint', 'golangci_lint',
-    require("user.lsp.null_ls.tools.golangci"), diagnostics_opts)  -- NOTE: 加载单独设置 null_ls/tools/golangci
-  ),
+    require("user.lsp.null_ls.tools.golangci_lint"),  -- NOTE: 加载单独设置 null_ls/tools/golangci_lint.lua
+    diagnostics_opts
+  )),
 
   --- NOTE: eslint 分别对不同的 filetype 做不同的设置. --- {{{
   --- eslint 运行必须有配置文件, 如果没有配置文件则 eslint 运行错误.
@@ -135,7 +136,7 @@ local linter_settings = {
 local formatter_settings = {
   --- NOTE: 需要在 lsp.setup(opts) 中的 on_attach 中排除 tsserver & sumneko_lua 的 formatting 功能
   formatting.prettier.with(__Proj_local_settings.keep_extend('format', 'prettier',
-    require("user.lsp.null_ls.tools.prettier")
+    require("user.lsp.null_ls.tools.prettier")  -- NOTE: 加载单独设置 null_ls/tools/prettier.lua
   )),
 
   --- lua, stylua

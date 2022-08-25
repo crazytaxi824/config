@@ -187,7 +187,7 @@ packer.init {
       return require("packer.util").float({ border = {"▄","▄","▄","█","▀","▀","▀","█"} })  -- `:help nvim_open_win()`
     end,
     keybindings = { -- Keybindings for the display window
-      quit = '<ESC>',  -- VVI: 默认是 'q'
+      quit = 'q',  -- close window, 默认是 'q'
       toggle_info = '<CR>',
       diff = 'd',
       prompt_revert = 'r',
