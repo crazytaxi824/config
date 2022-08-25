@@ -101,13 +101,29 @@ lspconfig.gopls.setup({
 
 <br />
 
-## lsp-installer
+## mason
 
-`williamboman/nvim-lsp-installer`
+`williamboman/mason.nvim`
 
-`lsp-installer` 是一个 lsp server 安装插件, 和 lspconfig 没有依赖关系, 也不是 lsp client.
+`mason` 是一个命令行工具安装/管理插件, 包括 lsp, formatter, linter, dap 几种不同的命令行工具, eg: gopls, prettier, delve
+这些工具可以不通过 mason 安装, 可以手动安装在 $PATH 中. eg: `brew install xxx`
 
-主要作用是可以很方便的管理 lsp server tools, 例如: gopls, tsserver, pyright ...
+`mason` 和 `nvim-lspconfig` 没有依赖关系, 也不是 lsp client.
+
+`:Mason` 安装 LSP 时使用的名字和 `nvim-lspconfig` setup() 的名字有区别.
+
+`mason` 安装的 tools 的名字可能和命令行工具的名字也不一样. eg: `delve` 的命令行工具文件名是 `dlv`
+
+名字的对应 https://github.com/williamboman/mason-lspconfig.nvim/blob/main/doc/server-mapping.md
+
+mason-lspconfig 对应文件 https://github.com/williamboman/mason-lspconfig.nvim/blob/main/lua/mason-lspconfig/mappings/server.lua
+
+| 命令行工具(文件)名          | Mason Name                                 | "neovim/nvim-lspconfig" setup() Name         |
+| --------------------------- | ------------------------------------------ | -------------------------------------------- |
+| gopls                       | `:MasonInstall gopls`                      | require("lspconfig")["gopls"].setup(opts)    |
+| vscode-json-language-server | `:MasonInstall json-lsp`                   | require("lspconfig")["jsonls"].setup(opts)   |
+| typescript-language-server  | `:MasonInstall typescript-language-server` | require("lspconfig")["tsserver"].setup(opts) |
+| dlv                         | `:MasonInstall delve`                      |                                              |
 
 功能:
 
