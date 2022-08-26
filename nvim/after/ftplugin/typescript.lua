@@ -13,7 +13,7 @@ local function ts_run(file)
     return
   end
 
-  _Exec("tsc -p ./tsconfig.json && node dist/" .. file .. '.js')
+  _Exec("tsc -p ./tsconfig.json && node dist/" .. file .. '.js', true)  -- cache cmd for re-run.
 end
 
 --- jest js_file -----------------------------------------------------------------------------------

@@ -32,7 +32,7 @@ local function go_run()
   end
 
   --- go run local/src
-  _Exec("cd " .. dir .. " && go run " .. import_path)
+  _Exec("cd " .. dir .. " && go run " .. import_path, true)  -- cache cmd for re-run.
 end
 -- -- }}}
 
@@ -208,7 +208,7 @@ local opt = {noremap = true, buffer = true}
 vim.keymap.set('n', '<F5>', go_run, opt)
 
 vim.keymap.set('n', '<F6>', go_test_single_func, opt)
-vim.keymap.set('n', '<F18>', go_test_all, opt)  -- <S-F6>
+vim.keymap.set('n', '<F18>', go_test_all, opt)   -- <S-F6>
 vim.keymap.set('n', '<F30>', go_bench_all, opt)  -- <C-F6>
 
 
