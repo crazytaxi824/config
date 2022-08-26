@@ -27,7 +27,9 @@ local function highlight_path_in_term(data_list)
     for _, content in ipairs(vim.split(lcontent, " ")) do
       --- VVI: 这里必须 trim(), 可以去掉 \r \n ...
       local fp = vim.split(vim.fn.trim(content), ":")
-      if vim.fn.filereadable(vim.fn.expand(fp[1])) == 1 then
+
+      local expand_status_ok, result = pcall(vim.fn.expand, fp[1])
+      if expand_status_ok and vim.fn.filereadable(result) == 1 then
         --- \@<! - eg: \(foo\)\@<!bar  - any "bar" that's not in "foobar"
         --- \@!  - eg: foo\(bar\)\@!   - any "foo" not followed by "bar"
         vim.fn.matchadd('Underlined', '\\(\\S\\)\\@<!'..vim.fn.escape(fp[1], '~') .. '\\(:[0-9]\\+\\)\\{0,2}')  -- highlight filepath
