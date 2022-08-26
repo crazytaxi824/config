@@ -71,6 +71,7 @@ toggleterm.setup({
 
   --- terminal 输出时 highlight filepath.
   --- output 是一个 list, 按照行分隔.
+  --- 这里不使用 autocmd TermClose 而是使用 on_stdout 主要是因为有些程序运行不会结束, eg: http 监听.
   on_stdout = function(_,_,output,_)
     highlight_path_in_term(output)
   end,
@@ -101,8 +102,9 @@ vim.cmd [[au TermOpen term://* tnoremap <buffer> <ESC> <ESC><C-\><C-n>]]
 --- 设置 terminal 不显示行号.
 vim.cmd [[au TermOpen term://* :setlocal nonumber]]
 
---- TermClose 意思是 job ends. 这里不使用 TermClose 而是使用 on_stdout 主要是因为有些程序运行不会结束, eg: http 监听.
+--- TermClose 意思是 job ends.
 --- BufWinEnter 当 terminal buffer 被隐藏后再次打开的时候 highlight filepath.
+--- 这里不使用 TermClose 而是使用 on_stdout 主要是因为有些程序运行不会结束, eg: http 监听.
 vim.api.nvim_create_autocmd({"BufWinEnter"}, {
   pattern = {"term://*"},
   callback = function()
@@ -112,25 +114,75 @@ vim.api.nvim_create_autocmd({"BufWinEnter"}, {
 })
 
 --- Terminal 实例 ----------------------------------------------------------------------------------
+---   term:clear()     清除 term 设置.
+---   term:close()     关闭窗口
+---   term:open()      打开窗口, 如果 term 不存在则运行 job.
+---   term:toggle()    相当于 close() / open(), 如果 term 不存在则运行 job.
+---   term:shutdown()  NOTE: exit terminal. 终止 terminal job, 然后关闭 term 窗口.
 local Terminal = require("toggleterm.terminal").Terminal
 
 --- 缓存所有自定义 terminal 实例. cache terminal instance.
 local my_terminals = {}
 
+
 --- VVI: execute: golang / javascript / typescript / python...
 local exec_term_id = 1001
-local exec_term = Terminal:new({count = exec_term_id})
-function _Exec(cmd)
+local exec_opts = {
+  count = exec_term_id,
+  close_on_exit = false,
+}
+local exec_term = Terminal:new(exec_opts)
+local cache_cmd     -- string, 缓存 _Exec() 中运行的 cmd.
+
+--- cache 是一个标记, 如果为 true, 则在将 cmd 记录在 last_cmd 中.
+function _Exec(cmd, cache)
+  --- 缓存 cmd.
+  if cache then
+    cache_cmd = cmd
+  end
+
   --- 删除之前的 terminal, 同时终止 job.
   exec_term:shutdown()
 
-  --- 生成新的 exec_term, 不同的 cmd.
-  --- 生成了新的实例, 需要重新缓存新生成的实例, 否则无法 open() / close() ...
-  --- 也可以使用 Terminal:new({...})
-  exec_term = exec_term:new({count = exec_term_id, close_on_exit = false, cmd = cmd})
-  my_terminals[exec_term_id] = exec_term  -- VVI: 缓存新的 exec terminal
+  --- 设置 cmd
+  exec_term.cmd = cmd
+  --- NOTE: 如果使用 :new() 生成了新的实例, 需要重新缓存新生成的实例, 否则无法 open() / close() ...
+  --exec_term = exec_term:new(vim.tbl_deep_extend('error', exec_opts, {cmd = cmd}))
+  --my_terminals[exec_term_id] = exec_term  -- VVI: 缓存新的 exec terminal
 
   --- run cmd
+  exec_term:open()
+end
+
+--- 运行 cached cmd
+local function exec_cached_cmd()
+  if not cache_cmd then
+    Notify("no Command has been Cached", "Info")
+    return
+  end
+
+  --- 删除之前的 terminal, 同时终止 job.
+  exec_term:shutdown()
+
+  --- 设置 cmd
+  exec_term.cmd = cache_cmd
+
+  --- run cmd
+  exec_term:open()
+end
+
+--- 运行 last cmd
+local function exec_last_cmd()
+  if not exec_term.cmd then
+    Notify("no Command has been Executed", "Info")
+    return
+  end
+
+  --- 删除之前的 terminal, 同时终止 job.
+  exec_term:shutdown()
+
+  --- re-run last cmd.
+  --- NOTE: 这里因为没有改变 exec_term 中的任何设置, 所以 open() 的时候, 会运行上一次记录在 cmd 中的命令.
   exec_term:open()
 end
 
@@ -236,6 +288,9 @@ local opt = {noremap = true, silent = true}
 local toggleterm_keymaps = {
   {'n', 'tt', toggle_normal_term, opt, "[1-9]Toggle Terminals"},
   {'n', '<leader>t', toggle_all_terms, opt, "Toggle All Terminals"},
+
+  {'n', '<F17>', exec_cached_cmd, opt},  -- <S-F5> run cache cmd.
+  {'n', '<F29>', exec_last_cmd, opt},    -- <C-F5> re-run last cmd.
 }
 
 Keymap_set_and_register(toggleterm_keymaps)

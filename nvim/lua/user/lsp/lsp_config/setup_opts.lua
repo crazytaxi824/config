@@ -83,8 +83,9 @@ M.capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
 --- init() runs Before attach().
 M.on_init = function(client)
   --- 加载项目本地设置, 覆盖 global settings.
-  if __Proj_local_settings.exists("settings", client.name) then
-    client.config.settings[client.name] = __Proj_local_settings.exists_keep_extend("settings", client.name,
+  local local_lspconfig_key = "lsp_settings"
+  if __Proj_local_settings.exists(local_lspconfig_key, client.name) then
+    client.config.settings[client.name] = __Proj_local_settings.exists_keep_extend(local_lspconfig_key, client.name,
       client.config.settings[client.name])
 
     --- VVI: tell LSP configs are changed.
