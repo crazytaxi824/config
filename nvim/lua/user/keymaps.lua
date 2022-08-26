@@ -37,7 +37,7 @@ local function wipeout_all_terminals()
   end
 
   if #buf_list > 0 then
-    vim.cmd('bw! ' .. vim.fn.join(buf_list, ' '))  -- NOTE: 需要使用 '!' 强制退出 term
+    vim.cmd('bw! ' .. vim.fn.join(buf_list, ' '))  -- NOTE: 需要使用 '!' 强制结束 job, 并且关闭 term 窗口.
   end
 end
 
