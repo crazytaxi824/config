@@ -115,7 +115,7 @@ vim.api.nvim_create_autocmd({"BufWinEnter"}, {
 
 --- Terminal 实例 ----------------------------------------------------------------------------------
 ---   term:clear()     清除 term 设置.
----   term:close()     关闭窗口
+---   term:close()     关闭窗口, NOTE: 只能关闭 :open() 打开的窗口.
 ---   term:open()      打开窗口, 如果 term 不存在则运行 job.
 ---   term:toggle()    相当于 close() / open(), 如果 term 不存在则运行 job.
 ---   term:shutdown()  NOTE: exit terminal. 终止 terminal job, 然后关闭 term 窗口.
@@ -123,7 +123,6 @@ local Terminal = require("toggleterm.terminal").Terminal
 
 --- 缓存所有自定义 terminal 实例. cache terminal instance.
 local my_terminals = {}
-
 
 --- VVI: execute: golang / javascript / typescript / python...
 local exec_term_id = 1001
@@ -217,7 +216,7 @@ function _PYTHON_TOGGLE()
 end
 
 --- normal terminals ---
-local n1_term = Terminal:new({count = 1, on_open = function() vim.cmd('startinsert') end}) -- open()|close()|send(cmd)|shutdown()
+local n1_term = Terminal:new({count = 1, on_open = function() vim.cmd('startinsert') end})
 local n2_term = Terminal:new({count = 2, on_open = function() vim.cmd('startinsert') end})
 local n3_term = Terminal:new({count = 3, on_open = function() vim.cmd('startinsert') end})
 local n4_term = Terminal:new({count = 4, on_open = function() vim.cmd('startinsert') end})
@@ -237,7 +236,7 @@ my_terminals = {
   --- special use terminal
   [exec_term_id]=exec_term,
   [node_term_id]=node_term,
-  [py_term_id]=python_term
+  [py_term_id]=python_term,
 }
 
 --- terminal key mapping ---------------------------------------------------------------------------
@@ -248,39 +247,39 @@ local function toggle_normal_term()
   my_terminals[vim.v.count1]:toggle()
 end
 
---- 通过 bufname 获取 terminal id.
-local function get_term_id(bufname)
-  local tmp = vim.split(bufname, '#')
-  return tonumber(tmp[#tmp])  -- tonumber('')=nil; tonumber('a')=nil; tonumber('12a')=nil; tonumber('a12')=nil;
-end
-
 --- open / close all terminals
 local function toggle_all_terms()
-  local active_terms = {}
+  local active_terms_wins = {}
   local inactive_terms = {}
 
   --- 遍历所有 buffer, 筛选出 active_terms && inactive_terms
   for _, buf in ipairs(vim.fn.getbufinfo()) do
     if string.match(buf.name, '^term://') then
       if #buf.windows > 0 then  -- buf.windows 判断 buffer 是否 active.
-        table.insert(active_terms, get_term_id(buf.name))
+        vim.list_extend(active_terms_wins, buf.windows)
       else
-        table.insert(inactive_terms, get_term_id(buf.name))
+        --- NOTE: toggleterm 会在每个 toggleterm buffer 中 setbufvar('toggle_number'), 值是 terminal count/id
+        table.insert(inactive_terms, buf.variables["toggle_number"])  -- 如果 table.insert(list, nil), 则 list 不会有任何影响.
       end
     end
   end
 
   --- 如果有 active terminal 则全部关闭.
-  if #active_terms > 0 then
-    for _, term_id in ipairs(active_terms) do
-      my_terminals[term_id]:close()
+  if #active_terms_wins > 0 then
+    for _, win_id in ipairs(active_terms_wins) do
+      --- 关闭所有 active terminal 的窗口
+      --- NOTE: 这里不使用 :close() 是因为 :close() 之能关闭 :open() 打开的窗口,
+      --- 如果有多个窗口都显示同一个 terminal 则 :close() 无法关闭全部窗口.
+      vim.api.nvim_win_close(win_id, false)
     end
     return
   end
 
   --- 如果没有 active terminal 则打开全部 inactive terminals.
   for _, term_id in ipairs(inactive_terms) do
-    my_terminals[term_id]:open()
+    if my_terminals[term_id] then
+      my_terminals[term_id]:open()
+    end
   end
 end
 
