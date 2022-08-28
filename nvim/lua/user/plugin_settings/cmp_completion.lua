@@ -113,39 +113,43 @@ cmp.setup {
     ["<Up>"] = cmp.mapping.select_prev_item(),
     ["<Down>"] = cmp.mapping.select_next_item(),
     ["<C-y>"] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
-    ["<Esc>"] = cmp.mapping(cmp.mapping.abort()),
-    --["<C-e>"] = cmp.mapping {  -- 默认 <C-e>, 对 insert, command 模式分别设置不同的行为.  --- {{{
-    --  i = cmp.mapping.abort(),
-    --  c = cmp.mapping.close(),
-    --},
-    --["{"] = cmp.mapping(cmp.mapping.scroll_docs(-1), { "i", "c" }),
-    --["}"] = cmp.mapping(cmp.mapping.scroll_docs(1), { "i", "c" }),
-    --["<C-s>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),   -- 手动触发 completion. NOTE: 不需要.
+    ["<Esc>"] = cmp.mapping.abort(),
+
+    --- 其他 cmp.mapping 设置方式 --- {{{
+    -- ["<C-e>"] = cmp.mapping {  -- 默认 <C-e>, 对 insert, command 模式分别设置不同的行为.
+    --   i = cmp.mapping.abort(),
+    --   c = cmp.mapping.close(),
+    -- },
+    --
+    -- ["{"] = cmp.mapping(cmp.mapping.scroll_docs(-1), { "i", "c" }),
+    -- ["}"] = cmp.mapping(cmp.mapping.scroll_docs(1), { "i", "c" }),
+    -- ["<C-s>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),   -- 手动触发 completion. NOTE: 不需要.
     -- -- }}}
 
     --- Accept currently selected item. If none selected, `select` first item.
     --- Set `select` to `false` to only confirm explicitly selected items.
-    ["<CR>"] = cmp.mapping.confirm { select = true },
+    ["<CR>"] = cmp.mapping.confirm({ select = true }),
+
+    --- <Tab> 不同情况下触发不同行为.
     ["<Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
-        cmp.confirm { select = true }  -- confirm
-      elseif luasnip.expand_or_jumpable() then
-        luasnip.expand_or_jump()
+        cmp.confirm({ select = true })  -- confirm
+      elseif luasnip.expand_or_jumpable() then  -- expand 是指展开 snippest; jumpable 是指 cursor 跳转到 placeholder.
+        luasnip.expand_or_jump()  -- 展开 snippet OR 跳转到下一个 snippets placeholder
       else
         --cmp.complete()  -- 手动触发 completion menu.
         fallback()  -- 执行原本的功能
       end
     end, {"i","s"}), -- 在 insert select 模式下使用
-    --["<S-Tab>"] = cmp.mapping(function(fallback)   --- {{{
-    --  if cmp.visible() then
-    --    cmp.select_prev_item()
-    --  elseif luasnip.jumpable(-1) then
-    --    luasnip.jump(-1)
-    --  else
-    --    fallback()
-    --  end
-    --end, {"i","s"}),
-    -- }}}
+
+    -- ["<S-Tab>"] = cmp.mapping(function(fallback)  --- {{{
+    --   if luasnip.jumpable(-1) then  -- 如果存在上一个 snippets placeholder
+    --     luasnip.jump(-1)  -- 跳转到上一个 snippets placeholder
+    --   else
+    --     fallback()
+    --   end
+    -- end, {"i","s"}),
+    -- -- }}}
   },
 }
 

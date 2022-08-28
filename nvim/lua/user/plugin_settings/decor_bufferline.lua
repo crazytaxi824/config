@@ -387,10 +387,10 @@ bufferline.setup({
       return "("..count..")"
     end,
 
-    --- 在 nvim-tree 上显示 "File Explorer"
+    --- ':help bufferline-configuration', 在 nvim-tree 上显示 "File Explorer"
     offsets = {
-      {filetype = "NvimTree", text = "File Explorer", text_align = "center", highlight="Directory"},
-      --{filetype = "tagbar", text = "TagBar", text_align = "center", highlight="Directory"}
+      {filetype = "NvimTree", text = "File Explorer", text_align = "center", highlight="Directory", separator = true},
+      --{filetype = "tagbar", text = "TagBar", text_align = "center", highlight="Directory", separator = true},
     },
 
     --- NOTE: this will be called a lot so don't do any heavy processing here
