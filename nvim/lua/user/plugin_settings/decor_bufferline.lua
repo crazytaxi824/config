@@ -208,7 +208,7 @@ buf_highlights.hint_selected = buf_highlights.buffer_selected
 
 --- functions for delete current buffer from tabline ----------------------------------------------- {{{
 --- 用于 <leader>d 快捷键和 mouse actions 设置.
---- NOTE: 指定 filetype 不能使用 go_to() 功能.
+--- NOTE: 指定 filetype 不能使用 go_to() 功能, 也不能被 bufferline_del_current_buffer() 关闭.
 local function is_exclude_filetype()
   --- 自定义: 不允许使用 bufferline.go_to() 的 filetype
   local exclude_filetypes = {
@@ -224,8 +224,8 @@ local function is_exclude_filetype()
   return false
 end
 
---- NOTE: tab 是一组 win 的集合. `:tabclose` 本质是关闭 tab 中所有的 win. 并不 bdelete buffer.
---- 关闭整个 tab 以及其中的 buffer.
+--- tab 是一组 win 的集合. `:tabclose` 本质是关闭 tab 中所有的 win. 并不 bdelete buffer.
+--- 关闭整个 tab 以及其中的 buffer. 如果 tab 中的 buffer 同时存在于其他的 tab 中, 则不删除.
 local function close_current_tab()
   local total_tab_num = vim.fn.tabpagenr('$')  --- 获取 tab 总数. 大于 1 说明有多个 tab.
   if total_tab_num < 2 then
@@ -233,7 +233,7 @@ local function close_current_tab()
   end
 
   --- 获取当前 tab 中的所有 bufnr. return list.
-  --- NOTE: 这里返回的 buffer list 是属于该 tab 的各个 win 正在显示的 buffer.
+  --- 这里返回的 buffer list 是属于该 tab 的各个 win 正在显示的 buffer.
   local cur_tab_buf_list = vim.fn.tabpagebuflist()
 
   --- 获取其他 tab 中的所有 buffer list.
@@ -273,7 +273,25 @@ local function close_current_tab()
   return true  -- 已经成功 close tab.
 end
 
---- 删除当前 buffer, NOTE: if ignore_tab == true, DO NOT run close_current_tab()
+--- 判断 bufnr 是否为第一个 listed buffer
+local function is_first_listed_buffer(bufnr)
+  local listed_buffers = vim.fn.getbufinfo({buflisted=1})
+  if #listed_buffers > 0 and listed_buffers[1].bufnr == bufnr then
+    return true
+  end
+end
+
+--- 判断 bufnr 是否为最后一个 listed buffer
+local function is_last_listed_buffer(bufnr)
+  local listed_buffers = vim.fn.getbufinfo({buflisted=1})
+  if #listed_buffers > 0 and listed_buffers[#listed_buffers].bufnr == bufnr then
+    return true
+  end
+end
+
+--- 删除当前 buffer.
+--- ignore_tab 用于避免 close 最后一个 tab 导致退出 nvim.
+--- 如果 ignore_tab == true, 则不运行 close_current_tab()
 local function bufferline_del_current_buffer(ignore_tab)
   --- NOTE: multi tab 的情况下, 使用 :tabclose 关闭整个 tab, 同时 bdelete 该 tab 中的所有 buffer.
   if not ignore_tab and close_current_tab() then  -- return true: 有多个 tab, 并已关闭当前 tab.
@@ -286,17 +304,23 @@ local function bufferline_del_current_buffer(ignore_tab)
   end
 
   --- NOTE: single tab 情况下删除 current buffer.
-  local before_select_bufnr = vim.fn.bufnr('%')  --- 获取当前 bufnr()
+  local bufnr_before_jump = vim.fn.bufnr('%')  --- 获取当前 bufnr()
   --- 判断当前 buffer 是否未保存.
-  if vim.fn.getbufinfo(before_select_bufnr)[1].changed == 1 then
+  if vim.fn.getbufinfo(bufnr_before_jump)[1].changed == 1 then
     Notify("can't close Unsaved buffer", "WARN")
     return
   end
 
-  bufferline.cycle(-1)  -- 跳转到 prev buffer
-  local after_select_bufnr = vim.fn.bufnr('%')   --- 获取跳转后 bufnr()
+  --- 如果当前 buffer 是第一个 listed buffer 则跳到后一个 buffer;
+  --- 如果当前 buffer 不是第一个 listed buffer 则跳到前一个 buffer;
+  if is_first_listed_buffer(bufnr_before_jump) then
+    bufferline.cycle(1)   -- 跳转到 next buffer
+  else
+    bufferline.cycle(-1)  -- 跳转到 prev buffer
+  end
 
-  if before_select_bufnr ~= after_select_bufnr then
+  local bufnr_after_jump = vim.fn.bufnr('%')   --- 获取跳转后 bufnr()
+  if bufnr_before_jump ~= bufnr_after_jump then
     --- 如果 before != after 则执行 bdelete #.
     vim.cmd([[bdelete #]])
   else
@@ -307,21 +331,34 @@ end
 
 --- 删除指定 buffer
 local function bufferline_del_buffer_by_bufnr(bufnr)
-  --- 判断指定 bufnr 是否是 last listed buffer
+  --- 判断指定 bufnr 是否为仅剩的最后一个 listed buffer
   local listed_buffers = vim.fn.getbufinfo({buflisted=1})
   if #listed_buffers < 2 then
-    Notify("can't close last listed-buffer", "WARN")
+    Notify("can't close the Only listed-buffer", "WARN")
     return
   end
 
-  --- NOTE: 删除的 buffer 是当前 buffer 时, 避免直接退出 nvim.
   if vim.fn.bufnr() == bufnr then
+    --- NOTE: 删除的 buffer 是当前 buffer 时, 避免直接退出 nvim.
     bufferline_del_current_buffer(true)
   else
+    --- 如果关闭的不是当前 buffer, 则直接删除.
     vim.cmd('bdelete! ' .. bufnr)
   end
 end
 
+-- -- }}}
+
+--- functions for left_mouse_command --------------------------------------------------------------- {{{
+local function load_bufnr_on_left_click(bufnr)
+  --- 如果当前 window 中是一个 unlisted-buffer 则 return.
+  if vim.fn.getbufinfo('%')[1].listed == 0 then
+    Notify("can't load buffer {" .. bufnr .. "} in this window (unlisted-buffer)", "WARN")
+    return
+  end
+  --- load 指定 buffer
+  vim.cmd(bufnr..'buffer')
+end
 -- -- }}}
 
 --- https://github.com/akinsho/bufferline.nvim#configuration
@@ -361,9 +398,9 @@ bufferline.setup({
 
     --- mouse actions, can be a string | function, see "Mouse actions"
     --- NOTE: 这里 %d 是 bufnr() 的 placeholder. 可以使用 function(bufnr) 来设置.
-    close_command = bufferline_del_buffer_by_bufnr,     -- delete 指定 bufnr, 默认 "bdelete! %d"
-    --left_mouse_command = "buffer %d",  -- jump to buffer bufnr
-    right_mouse_command = "",            -- 取消默认值, 默认 "bdelete! %d"
+    close_command = bufferline_del_buffer_by_bufnr,  -- delete 指定 bufnr, 默认 "bdelete! %d"
+    left_mouse_command = load_bufnr_on_left_click,  -- load bufnr in current window. 默认 "buffer %d"
+    right_mouse_command = "",  -- 取消默认值, 默认 "bdelete! %d"
     --middle_mouse_command = nil,
 
     --- NOTE: name_formatter can be used to change the buffer's label in the bufferline.
