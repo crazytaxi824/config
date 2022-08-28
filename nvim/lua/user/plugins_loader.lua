@@ -308,7 +308,7 @@ return packer.startup(function(use)
         commit = "a9de941",
         requires = {
           {"L3MON4D3/LuaSnip",     -- snippet engine, for "cmp_luasnip", NOTE: 每次打开文件都会有一个 [Scratch] buffer.
-            commit = "b9450d8",    -- "faa5257",
+            commit = "b9450d8",  -- "faa5257" refactor
             config = function() require("user.plugin_settings.luasnip_snippest") end,
             requires = {
               {"rafamadriz/friendly-snippets",  -- snippets content, 自定义 snippets 可以借鉴这个结构.
@@ -333,7 +333,7 @@ return packer.startup(function(use)
 
   --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件 --------------------------------------
   use {"williamboman/mason.nvim",
-    commit = "5dbb22a",
+    commit = "cd5f08c",  -- "5dbb22a", filetype 从 'mason.nvim' 改为 'mason'.
     config = function() require("user.plugin_settings.mason_tool_installer") end,
     --- NOTE: 不能 opt 加载 mason 否则其他插件无法找到 mason 安装的工具.
   }
