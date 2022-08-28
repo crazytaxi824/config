@@ -259,7 +259,7 @@ return packer.startup(function(use)
 
       --- 第三方 module 插件 ---
       {"JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
-        commit = "37a97a0",
+        commit = "4d3a68c",
       },
 
       {"windwp/nvim-ts-autotag",  -- auto close tag <div></div>
