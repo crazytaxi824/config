@@ -1,4 +1,6 @@
-# README
+[toc]
+
+# neovim 配置
 
 ## 教学
 
@@ -49,6 +51,26 @@
 
 <br />
 
+## 优化 nvim 启动时间
+
+`$ nvim --startuptime log src/main.go` 在 ./log 文件中打印 nvim 启动时间详情. 其中 `.../packer_compiled.lua` & `opening buffers`
+耗时是最长的.
+
+查看 `.../packer_compiled.lua` 耗时详情可以使用:
+
+- `PackerCompile profile=true`
+- `:PackerProfile`
+
+造成 `opening buffers` 时间长的原因:
+
+- `set undofile`, 占大概 32 ms
+- `nvim-lspconfig` 加载 lsp (eg: gopls) 加载占大概 30ms, 有些 lsp 启动速度很快 (eg: tsserver) 大概只占 5ms. 可以使用
+  `autocmd Filetype ... vim.schedule()` 方式 lazy load lsp, 降低 lspconfig 在 nvim 启动时的耗时.
+
+<br />
+
+# neovim lua 使用
+
 ## lua 全局变量 `_G`
 
 lua 中有一个 `_G` 全局变量. 自定义的所有全局变量和函数都会被放在 `_G` 内.
@@ -60,7 +82,9 @@ lua 中有一个 `_G` 全局变量. 自定义的所有全局变量和函数都�
 
 <br />
 
-## vim 内置属性设置
+## lua 设置 vim 属性
+
+### vim 内置属性
 
 eg: `wrap` is local to window
 
@@ -73,6 +97,16 @@ eg: `wrap` is local to window
 如果不是 vim 内置 option 则使用 '&xxx' 变量名 set 时会报错.
 
 eg: `:call setbufvar(5, '&foo', 'bar')`, 报错 `E355: Unknown option: foo`
+
+<br />
+
+### vim 变量
+
+| vim script         | neovim lua         |
+| ------------------ | ------------------ |
+| `let g:foo=1`      | `vim.g.foo=1`      |
+| `let g:foo=v:true` | `vim.g.foo=true`   |
+| `echo g:foo`       | `print(vim.g.foo)` |
 
 <br />
 
@@ -228,6 +262,21 @@ using filter, `:help filter` 使用方法:
 | line: 'a/b/c',               | cmd: `:.!awk -F/ '{print $1}'`          | 输出 'a'.             |
 | 3-line: 'abc', 'ccc', 'ddd', | visual select 之后 cmd: `:'<,'>!grep c` | 输出两行 'abc', 'ccc' |
 
+```
+cal -h -3
+
+!!bash
+
+      May 2022             June 2022             July 2022
+Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa
+ 1  2  3  4  5  6  7            1  2  3  4                  1  2
+ 8  9 10 11 12 13 14   5  6  7  8  9 10 11   3  4  5  6  7  8  9
+15 16 17 18 19 20 21  12 13 14 15 16 17 18  10 11 12 13 14 15 16
+22 23 24 25 26 27 28  19 20 21 22 23 24 25  17 18 19 20 21 22 23
+29 30 31              26 27 28 29 30        24 25 26 27 28 29 30
+                                            31
+```
+
 <br />
 
 ## 多行数字增加 `Ctrl-a` 和数字减少 `Ctrl-x`
@@ -245,7 +294,7 @@ using filter, `:help filter` 使用方法:
 - lua pattern: eg: `string.match()`, https://fhug.org.uk/kb/kb-article/understanding-lua-patterns/
 - vim pattern: `:help pattern-overview`
 
-## VVI: FileType vs BufEnter 区别:
+## VVI: FileType vs BufEnter 区别
 
 'xxx.log' 文件不会触发 FileType, 因为没有该 filetype, 但是会触发 BufEnter.
 
@@ -269,6 +318,20 @@ vim.api.nvim_create_autocmd("FileType", {
 
 # Note
 
-- Feature/attach to unnamed buffer #1929, https://github.com/neovim/nvim-lspconfig/pull/1929. for now: add file in nvim-tree, eg: 'tmp.json', 'tmp.go', and remove it later.
+## Feature required
 
-- "Comment.nvim" plugin upgrade. new Feature.
+### nvim-lspconfig new feature required
+
+- Feature/attach to unnamed buffer #1929, https://github.com/neovim/nvim-lspconfig/pull/1929.
+  for now: add file in nvim-tree, eg: 'tmp.json', 'tmp.go', and remove it later.
+
+<br />
+
+## FIXME
+
+## TODO
+
+- UPGRADE: `bufferline.nvim`, `nvim-lspconfig`, `LuaSnip` refactor, 可能会有 BUG, 需要持续关注更新.
+  在稳定之后再创建新的 v0.2.13 tag.
+
+- 将 global_util 中的函数分开.
