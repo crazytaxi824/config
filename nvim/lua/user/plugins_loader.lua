@@ -309,6 +309,7 @@ return packer.startup(function(use)
         requires = {
           {"L3MON4D3/LuaSnip",     -- snippet engine, for "cmp_luasnip", NOTE: 每次打开文件都会有一个 [Scratch] buffer.
             commit = "b9450d8",  -- "faa5257", UPGRADE: refactor
+            run = "make install_jsregexp",
             config = function() require("user.plugin_settings.luasnip_snippest") end,
             requires = {
               {"rafamadriz/friendly-snippets",  -- snippets content, 自定义 snippets 可以借鉴这个结构.
