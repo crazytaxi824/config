@@ -13,7 +13,7 @@ ts_configs.setup {
   --ensure_installed = { "go", "lua", "javascript", "typescript", "tsx", "html", "css", "scss" ... },
   ensure_installed = "all",  -- 白名单, "all" OR a list of languages
   sync_install = false,  -- install languages synchronously (only applied to `ensure_installed`)
-  ignore_install = {"hlsl"},  -- 黑名单, 不安装. FIXME: hlsl 每次 :TSUpdate 的时候都会重新安装.
+  ignore_install = {},  -- 黑名单, 不安装.
   parser_install_dir = treesitter_parsers_path,  -- path to store parsers.
 
   --- `:TSModuleInfo` 可以查看 module 设置.
