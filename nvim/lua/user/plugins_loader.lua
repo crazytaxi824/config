@@ -375,13 +375,13 @@ return packer.startup(function(use)
   --- Buffer & Status Line -------------------------------------------------------------------------
   --- tabline decorator, `:help 'tabline'`
   use {"akinsho/bufferline.nvim",
-    commit = "06eb4ad",
+    commit = "fb7b173",  -- "06eb4ad", UPGRADE: refactor
     config = function() require("user.plugin_settings.decor_bufferline") end,
   }
 
   --- statusline decorator, `:help 'statusline'`
   use {"nvim-lualine/lualine.nvim",   -- bottom status line
-    commit = "c0510dd",
+    commit = "3cf4540",
     config = function() require("user.plugin_settings.decor_lualine") end,
   }
 
