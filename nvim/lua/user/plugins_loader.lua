@@ -204,7 +204,7 @@ packer.init {
 --- `:PackerSync` - install / update / clean 插件包.
 return packer.startup(function(use)
   use {"wbthomason/packer.nvim",  -- VVI: 必要. Have packer manage itself
-    commit = "90b323b",
+    commit = "3a9f980",
   }
 
   --- Performence & Functions ----------------------------------------------------------------------
@@ -218,7 +218,7 @@ return packer.startup(function(use)
   --- Useful lua functions used by lots of plugins
   --- NOTE: plenary.nvim 合并了 popup.nvim
   use {"nvim-lua/plenary.nvim",
-    commit = "31807ee",
+    commit = "a3dafaa",
   }
 
   --- FIXME: https://github.com/neovim/neovim/issues/12587
@@ -237,7 +237,7 @@ return packer.startup(function(use)
   --- `:TSUpdateSync`         -- Update the installed languages synchronously
   -- -- }}}
   use {"nvim-treesitter/nvim-treesitter",
-    commit = "2bb9bb7",
+    commit = "8a1ff3cf",
     run = ":TSUpdateSync",   -- Post-update/install hook.
     config = function() require("user.plugin_settings.treesitter") end,
     requires = {
@@ -252,14 +252,14 @@ return packer.startup(function(use)
 
       --- 用于获取 treesitter 信息, 调整颜色很有用.
       {"nvim-treesitter/playground",
-        commit = "ce7e4b7",
+        commit = "a0aeb6a",
         --- NOTE: 执行以下命令时再加载 playground.
         cmd = {"TSPlaygroundToggle", "TSHighlightCapturesUnderCursor"},
       },
 
       --- 第三方 module 插件 ---
       {"JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
-        commit = "37a97a0",
+        commit = "4d3a68c",
       },
 
       {"windwp/nvim-ts-autotag",  -- auto close tag <div></div>
@@ -272,7 +272,7 @@ return packer.startup(function(use)
   --- 以下是使用了 treesitter 功能的插件. (这些插件也可以不使用 treesitter 的功能)
   --- 注释
   use {"numToStr/Comment.nvim",
-    commit = "ab63cc9",
+    commit = "80e7746",
     config = function() require("user.plugin_settings.comment") end,
     requires = {
       "nvim-treesitter/nvim-treesitter",
@@ -289,7 +289,7 @@ return packer.startup(function(use)
 
   --- Completion -----------------------------------------------------------------------------------
   use {"hrsh7th/nvim-cmp",
-    commit = "b1ebdb0",
+    commit = "058100d",
     config = function() require("user.plugin_settings.cmp_completion") end,
     --- NOTE: 以下是 nvim-cmp module 插件, 在 setup() 中启用的插件.
     requires = {
@@ -308,7 +308,7 @@ return packer.startup(function(use)
         commit = "a9de941",
         requires = {
           {"L3MON4D3/LuaSnip",     -- snippet engine, for "cmp_luasnip", NOTE: 每次打开文件都会有一个 [Scratch] buffer.
-            commit = "faa5257",
+            commit = "b9450d8",  -- "faa5257", UPGRADE: refactor
             config = function() require("user.plugin_settings.luasnip_snippest") end,
             requires = {
               {"rafamadriz/friendly-snippets",  -- snippets content, 自定义 snippets 可以借鉴这个结构.
@@ -333,7 +333,7 @@ return packer.startup(function(use)
 
   --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件 --------------------------------------
   use {"williamboman/mason.nvim",
-    commit = "5dbb22a",
+    commit = "cd5f08c",
     config = function() require("user.plugin_settings.mason_tool_installer") end,
     --- NOTE: 不能 opt 加载 mason 否则其他插件无法找到 mason 安装的工具.
   }
@@ -345,7 +345,7 @@ return packer.startup(function(use)
     --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
     --- 官方 LSP 引擎.
     use {"neovim/nvim-lspconfig",
-      commit = "da7461b",
+      commit = "7f0dc42",  -- "da7461b", UPGRADE: 使用 0.7 API.
       config = function() require("user.lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
       requires = {
         "hrsh7th/cmp-nvim-lsp",  -- provide content to nvim-cmp Completion. cmp_nvim_lsp.update_capabilities(capabilities)
@@ -355,7 +355,7 @@ return packer.startup(function(use)
 
     --- null-ls 插件 formatters && linters, depends on "nvim-lua/plenary.nvim"
     use {"jose-elias-alvarez/null-ls.nvim",
-      commit = "9d1f8dc",
+      commit = "753ad51",
       config = function() require("user.lsp.null_ls") end,
       requires = {
         "nvim-lua/plenary.nvim",
@@ -367,7 +367,7 @@ return packer.startup(function(use)
   --- File Tree Display ----------------------------------------------------------------------------
   --use "kyazdani42/nvim-web-devicons"  -- 提供 icons 需要 patch 字体 (Nerd Fonts)
   use {"kyazdani42/nvim-tree.lua",      -- 类似 NerdTree
-    commit = "81eb718",
+    commit = "ce5d0a6",
     config = function() require("user.plugin_settings.file_tree") end,
     cmd = {"NvimTreeToggle", "NvimTreeOpen"},
   }
@@ -375,13 +375,13 @@ return packer.startup(function(use)
   --- Buffer & Status Line -------------------------------------------------------------------------
   --- tabline decorator, `:help 'tabline'`
   use {"akinsho/bufferline.nvim",
-    commit = "06eb4ad",
+    commit = "fb7b173",  -- "06eb4ad", UPGRADE: refactor indicator = {icon, style}
     config = function() require("user.plugin_settings.decor_bufferline") end,
   }
 
   --- statusline decorator, `:help 'statusline'`
   use {"nvim-lualine/lualine.nvim",   -- bottom status line
-    commit = "c0510dd",
+    commit = "3cf4540",
     config = function() require("user.plugin_settings.decor_lualine") end,
   }
 
@@ -396,7 +396,7 @@ return packer.startup(function(use)
     end,
     requires = {
       {"mfussenegger/nvim-dap",  -- core debug tool
-        commit = "ad8b0de",
+        commit = "57003a0",  -- TODO: `DapLoadLaunchJSON`
         opt = true,  -- NOTE: 在上面 config 中手动加载 nvim-dap
         requires = "williamboman/mason.nvim",  -- install dap-debug tools. eg: 'delve'
       },
@@ -407,7 +407,7 @@ return packer.startup(function(use)
   --- Useful Tools ---------------------------------------------------------------------------------
   --- fzf rg fd, preview 使用的是 treesitter, 而不用 bat
   use {"nvim-telescope/telescope.nvim",
-    commit = "28dc08f",
+    commit = "b923665",
     config = function() require("user.plugin_settings.telescope_fzf") end,
     requires = "nvim-lua/plenary.nvim",
     --keys = {"<leader>f"},
@@ -415,7 +415,7 @@ return packer.startup(function(use)
 
   --- terminal
   use {"akinsho/toggleterm.nvim",
-    commit = "62683d9",
+    commit = "7fb7cdf",
     config = function() require("user.plugin_settings.toggleterm_terminal") end
   }
 
@@ -427,7 +427,7 @@ return packer.startup(function(use)
 
   --- 通知功能
   use {"rcarriga/nvim-notify",
-    commit = "60bb6bf",
+    commit = "cf5dc4f",
     config = function() require("user.plugin_settings.nvim_notify") end
   }
 

@@ -1,7 +1,7 @@
 --- Jump to file -----------------------------------------------------------------------------------
 --- 利用 local list 跳转到 log 文件
 function Jump_to_file(filepath, lnum, col)
-  if not filepath or filepath == '' then
+  if not filepath or filepath == '' then  -- empty line
     return
   end
 
@@ -10,6 +10,7 @@ function Jump_to_file(filepath, lnum, col)
     Notify('cannot open file: ' .. filepath, "DEBUG", {timeout = 1500})
     return
   end
+
   filepath = result
 
   if not lnum then  --- 如果 lnum 不存在, 跳到文件第一行.
