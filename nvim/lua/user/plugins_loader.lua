@@ -308,7 +308,7 @@ return packer.startup(function(use)
         commit = "a9de941",
         requires = {
           {"L3MON4D3/LuaSnip",     -- snippet engine, for "cmp_luasnip", NOTE: 每次打开文件都会有一个 [Scratch] buffer.
-            commit = "b9450d8",  -- "faa5257" refactor
+            commit = "b9450d8",  -- "faa5257", UPGRADE: refactor
             config = function() require("user.plugin_settings.luasnip_snippest") end,
             requires = {
               {"rafamadriz/friendly-snippets",  -- snippets content, 自定义 snippets 可以借鉴这个结构.
@@ -333,7 +333,7 @@ return packer.startup(function(use)
 
   --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件 --------------------------------------
   use {"williamboman/mason.nvim",
-    commit = "cd5f08c",  -- "5dbb22a", filetype 从 'mason.nvim' 改为 'mason'.
+    commit = "cd5f08c",  -- "5dbb22a", UPGRADE: filetype 从 'mason.nvim' 改为 'mason'.
     config = function() require("user.plugin_settings.mason_tool_installer") end,
     --- NOTE: 不能 opt 加载 mason 否则其他插件无法找到 mason 安装的工具.
   }
@@ -345,7 +345,7 @@ return packer.startup(function(use)
     --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
     --- 官方 LSP 引擎.
     use {"neovim/nvim-lspconfig",
-      commit = "da7461b",
+      commit = "7f0dc42",  -- "da7461b", UPGRADE: 使用 0.7 API.
       config = function() require("user.lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
       requires = {
         "hrsh7th/cmp-nvim-lsp",  -- provide content to nvim-cmp Completion. cmp_nvim_lsp.update_capabilities(capabilities)
@@ -355,7 +355,7 @@ return packer.startup(function(use)
 
     --- null-ls 插件 formatters && linters, depends on "nvim-lua/plenary.nvim"
     use {"jose-elias-alvarez/null-ls.nvim",
-      commit = "9d1f8dc",
+      commit = "753ad51",
       config = function() require("user.lsp.null_ls") end,
       requires = {
         "nvim-lua/plenary.nvim",
