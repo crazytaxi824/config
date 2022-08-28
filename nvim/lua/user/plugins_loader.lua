@@ -375,7 +375,7 @@ return packer.startup(function(use)
   --- Buffer & Status Line -------------------------------------------------------------------------
   --- tabline decorator, `:help 'tabline'`
   use {"akinsho/bufferline.nvim",
-    commit = "fb7b173",  -- "06eb4ad", UPGRADE: refactor
+    commit = "fb7b173",  -- "06eb4ad", UPGRADE: refactor indicator = {icon, style}
     config = function() require("user.plugin_settings.decor_bufferline") end,
   }
 

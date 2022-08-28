@@ -348,7 +348,10 @@ bufferline.setup({
     --- NOTE: this plugin is designed with this icon in mind,
     --- and so changing this is NOT recommended, this is intended
     --- as an escape hatch for people who cannot bear it for whatever reason
-    indicator_icon = '▎',  --  █ ▎▌
+    indicator = {
+      style = 'icon',  -- 'icon' | 'underline' | 'none',
+      icon = '▎',  --  █ ▎▌, style = 'icon' 时生效.
+    },
     buffer_close_icon = '✕',  -- 每个 buffer 后面显示 close icon.
     modified_icon = '●',
     close_icon = '✕',  -- close tab
