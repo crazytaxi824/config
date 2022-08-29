@@ -189,8 +189,18 @@ vim.cmd('hi! link TSURI String')  -- <src="TSURI">
 vim.cmd('hi markdown_inlineTSLiteral ctermbg=238')  -- `code`
 vim.cmd('hi markdownTSPunctSpecial ctermfg=246')   -- `- * #`
 
---- syntax 颜色设置 --------------------------------------------------------------------------------
---- NOTE: 这里设置 syntax 颜色是为了让 treesitter lazy render 的时候不至于颜色差距太大.
+--- NOTE: 以下设置是为了配合 lazy load plugins -----------------------------------------------------
+--- 以下颜色为了 lazy load lualine
+--- 无法使用 lualine 的情况下 StatusLine 颜色, eg: tagbar 有自己设置的 ':set statusline?' 颜色不受 lualine 控制.
+vim.cmd('hi StatusLine cterm=NONE ctermfg=85 ctermbg=233')  -- active
+vim.cmd('hi StatusLineNC cterm=NONE ctermfg=246 ctermbg=233') -- inactive, NC (not-current windows)
+
+--- 以下颜色为了 lazy load bufferline
+vim.cmd([[hi TabLineFill cterm=NONE ctermfg=NONE ctermbg=NONE]])
+--vim.cmd([[hi TabLine cterm=NONE ctermfg=234 ctermbg=NONE]])
+--vim.cmd([[hi TabLineSel cterm=NONE ctermfg=234 ctermbg=NONE]])
+
+--- 设置 syntax 颜色是为了让 treesitter lazy render 的时候不至于颜色差距太大.
 --- set vim-syntax color to match treesitter color
 vim.cmd('hi! link typescriptMember TSProperty')
 vim.cmd('hi! link typescriptInterfaceName TSType')

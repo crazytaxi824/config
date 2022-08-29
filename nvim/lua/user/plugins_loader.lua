@@ -228,6 +228,26 @@ return packer.startup(function(use)
     commit = "5aa5ff1",
   }
 
+  --- 常用工具 -------------------------------------------------------------------------------------
+  --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
+  use {"folke/which-key.nvim",
+    commit = "bd4411a",
+    config = function() require("user.plugin_settings.which_key") end,
+  }
+
+  --- 通知功能
+  use {"rcarriga/nvim-notify",
+    commit = "cf5dc4f",
+    config = function() require("user.plugin_settings.nvim_notify") end,
+  }
+
+  --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件
+  use {"williamboman/mason.nvim",
+    commit = "cd5f08c",
+    config = function() require("user.plugin_settings.mason_tool_installer") end,
+    --- NOTE: 不能 opt 加载 mason 否则其他插件无法找到 mason 安装的工具.
+  }
+
   --- Treesitter -----------------------------------------------------------------------------------
   --- Commands for "nvim-treesitter/nvim-treesitter" --- {{{
   --- `:help nvim-treesitter-commands`
@@ -371,13 +391,6 @@ return packer.startup(function(use)
     },
   }
 
-  --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件 --------------------------------------
-  use {"williamboman/mason.nvim",
-    commit = "cd5f08c",
-    config = function() require("user.plugin_settings.mason_tool_installer") end,
-    --- NOTE: 不能 opt 加载 mason 否则其他插件无法找到 mason 安装的工具.
-  }
-
   --- LSP ------------------------------------------------------------------------------------------
   --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
   --- 官方 LSP 引擎.
@@ -418,25 +431,14 @@ return packer.startup(function(use)
   use {"akinsho/bufferline.nvim",
     commit = "fb7b173",  -- "06eb4ad", UPGRADE: refactor indicator = {icon, style}
     config = function() require("user.plugin_settings.decor_bufferline") end,
+    opt = true,
   }
 
   --- statusline decorator, `:help 'statusline'`
   use {"nvim-lualine/lualine.nvim",   -- bottom status line
     commit = "3cf4540",
     config = function() require("user.plugin_settings.decor_lualine") end,
-  }
-
-  --- 常用工具 -------------------------------------------------------------------------------------
-  --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
-  use {"folke/which-key.nvim",
-    commit = "bd4411a",
-    config = function() require("user.plugin_settings.which_key") end,
-  }
-
-  --- 通知功能
-  use {"rcarriga/nvim-notify",
-    commit = "cf5dc4f",
-    config = function() require("user.plugin_settings.nvim_notify") end,
+    opt = true,
   }
 
   --- Debug tools 安装 -----------------------------------------------------------------------------

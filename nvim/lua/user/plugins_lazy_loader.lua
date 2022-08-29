@@ -1,5 +1,5 @@
 --- lazy load opt plugins, loader() 名字可以查看 packer_compiled.lua
---- 这里使用 BufEnter 是为了避免在多个 neovim 中重复打开同一个文件的时候出现 vim.schedule() 运行错误.
+--- NOTE: 这里使用 auto BufEnter 是为了避免在多个 neovim 中重复打开同一个文件的时候出现 vim.schedule() 运行错误.
 vim.api.nvim_create_autocmd("BufEnter", {
   pattern = {"*"},
   once = true,
@@ -20,6 +20,12 @@ vim.api.nvim_create_autocmd("BufEnter", {
         --require('packer').loader('null-ls.nvim')  -- NOTE: 使用 after = "nvim-lspconfig" 加载
       end
 
+      --- Appearance plugins
+      --- 需要先设置 showtabline=2 (always show tabline), 否则在加载 bufferline 后屏幕会向下移动一行.
+      require('packer').loader('bufferline.nvim')
+      require('packer').loader('lualine.nvim')
+
+      --- Other useful tools
       require('packer').loader('nvim-autopairs')
       require('packer').loader('telescope.nvim')
       require('packer').loader('toggleterm.nvim')

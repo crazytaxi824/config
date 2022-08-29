@@ -193,7 +193,14 @@ vim.opt.smartcase = true   -- 如果 search 文字中有大写字母则 case sen
 vim.opt.hlsearch = true    -- / ? 搜索时显示所有匹配项. 颜色设置 `hi Search` & `hi IncSearch`
 
 --- 样式设置
---vim.opt.showtabline = 2    -- always show tabs
+vim.opt.showtabline = 2   -- always show tabline 屏幕最顶部显示 buffer name 的行.
+
+vim.opt.laststatus = 2    -- last window always show statusline, 屏幕底部状栏.
+vim.opt.showmode = false  -- statusline 不显示 mode() 模式信息. airline/lualine 插件显示.
+
+--vim.opt.shortmess:append('c')   -- :set shortmess+=c
+vim.opt.showcmd = true  -- 屏幕右下角显示键入的快捷键, 不是 command.
+vim.opt.cmdheight = 2   -- 底部 command area (below statusline) 高度, {n} 行.
 
 vim.opt.number = true        -- 设置行号
 --vim.opt.relativenumber = true  -- 相对行号
@@ -206,7 +213,6 @@ vim.opt.cursorline = true    -- 突出显示当前行. 包括: 行号, 背景色
 vim.opt.signcolumn = 'yes:1'  -- 始终显示 signcolumn. line_number 左边用来标记错误, 打断点的位置. 术语 gutter.
                               -- '1' 表示 signcolumn 宽度. 宽度为 1*2=2 格; 如果设置为 2, 则宽度为 2*2=4 格.
 vim.opt.showmatch = true      -- 跳到匹配的括号上, 包括 () {} []
-vim.opt.cmdheight = 2         -- 底部状态栏高度, more space.
 
 --- 只在超出 textwidth 的行中显示 ColorColumn. 可以替代 `set colorcolumn`
 --vim.cmd [[ au BufEnter * call matchadd('ColorColumn', '\%' .. (&textwidth+1) .. 'v', 100) ]]
@@ -256,12 +262,6 @@ vim.api.nvim_create_autocmd("BufEnter", {
     end)
   end,
 })
-
---- status line 设置，vim 最底部状栏
-vim.opt.showmode = false  -- 不显示模式, alirline 显示.
-vim.opt.showcmd = true    -- 显示键入的快捷键, 不是 command. 默认 `set noshowcmd`
---vim.opt.shortmess:append('c')   -- :set shortmess+=c
---vim.opt.laststatus=0            -- 0-不显示(默认), 1-窗口数量>1时显示, 2-总是显示
 
 --- 换行符, space, tab, cr ... 显示设置. `:help listchars`
 ---   eol:↴ - 换行
