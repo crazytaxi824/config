@@ -272,7 +272,10 @@ vim.opt.fillchars = 'fold: ,diff: ,vert:│,eob:~'
 --- `:h foldtext` 改变折叠代码的样式. 配合 fillchars 使用.
 vim.opt.foldtext = 'printf("%s …", getline(v:foldstart))'
 
---- quickfix & location-list window 设置, 他们的 filetype 都是 'qf'.
+--- markdown 文件自动执行 SpellCheck 命令
+--vim.cmd [[au Filetype pandoc,markdown setlocal spell spelllang=en,cjk]]
+
+--- NOTE: 'quickfix' & 'location-list' 的 filetype 都是 'qf'.
 --- :wincmd 快捷键是 <Ctrl-w>
 --vim.cmd [[au Filetype qf :wincmd J]]  --- 打开 qf window 时, 始终显示在屏幕最下方.
 --vim.cmd [[au Filetype qf :setlocal nobuflisted]]  --- nobuflisted for quickfix && location-list
@@ -288,8 +291,19 @@ vim.api.nvim_create_autocmd("FileType", {
   end
 })
 
---- markdown 文件自动执行 SpellCheck 命令
---vim.cmd [[au Filetype pandoc,markdown setlocal spell spelllang=en,cjk]]
+--- `:help command-line-window`, 包括 q: q/ q? 打开的窗口.
+--vim.cmd([[autocmd CmdwinEnter * nnoremap <buffer> q <cmd>q<CR>]])
+vim.api.nvim_create_autocmd("CmdwinEnter", {
+  pattern = {"*"},  -- 包括: * / ?
+  callback = function(params)
+    --- setlocal nobuflisted
+    vim.bo[params.buf].buflisted = false
+
+    --- close window
+    vim.keymap.set('n', 'q', '<cmd>q<CR>', {noremap=true, buffer=params.buf})
+    --vim.keymap.set('n', '<ESC>', '<cmd>q<CR>', {noremap=true, buffer=params.buf})
+  end
+})
 
 
 

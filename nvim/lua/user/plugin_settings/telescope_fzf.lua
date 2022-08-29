@@ -135,7 +135,7 @@ local telescope_keymaps = {
   {'n', '<leader>fh', builtin.help_tags,  opt, 'Telescope - Vim Help Doc'},
   {'n', '<leader>fk', builtin.keymaps,    opt, 'Telescope - Keymap normal Mode'},
   {'n', '<leader>fc', builtin.command_history, opt, 'Telescope - Command History'},
-  {'n', '<leader>fs', builtin.search_history,  opt, 'Telescope - Search History'},
+  {'n', '<leader>f/', builtin.search_history,  opt, 'Telescope - Search History'},
   {'n', '<leader>fl', builtin.highlights,  opt, 'Telescope - Search Highlight'},
   {'n', 'z=', builtin.spell_suggest, opt, 'Telescope - Spell Suggests'},  -- 也可以使用 which-key 显示.
   --{'n', '<leader>fg', builtin.live_grep,  opt, 'Telescope - rg'},  -- NOTE: 使用自定义 :Rg 命令更灵活.
