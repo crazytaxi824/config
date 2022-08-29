@@ -236,14 +236,24 @@ vim.opt.undofile = true
 vim.opt.undodir = '/tmp/nvim/undo'  -- undodir 是全局设置, 无法单独给某个文件设置.
 --vim.opt.undolevels = 1000  -- 默认 1000. NOTE: undolevels 太大可能影响 opening buffer 速度.
 --vim.cmd([[au Filetype * ++once :silent !mkdir -p ]] .. vim.go.undodir)
-vim.api.nvim_create_autocmd("Filetype", {
+
+--- NOTE: 这里不使用 FileType 是因为如果 buffer 的 filetype='' 则不会触发 autocmd.
+vim.api.nvim_create_autocmd("BufEnter", {
   pattern = {"*"},
   once = true,  -- VVI: ++once 只在进入 neovim 时执行一次 autocmd
   callback = function()
-    --- undodir 不存在的情况下, `mkdir -p` 创建该文件夹.
-    if vim.fn.isdirectory(vim.go.undodir) == 0 then
-      vim.cmd([[silent !mkdir -p ]] .. vim.go.undodir)
-    end
+    --- 延迟执行
+    vim.schedule(function()
+      --- undodir 不存在的情况下, `mkdir -p` 创建该文件夹.
+      if vim.fn.isdirectory(vim.go.undodir) == 0 then
+        --vim.cmd([[silent !mkdir -p ]] .. vim.go.undodir)
+        local result = vim.fn.system('!mkdir -p '.. vim.go.undodir)
+        if vim.v.shell_error ~= 0 then
+          Notify(result, "ERROR")
+          return
+        end
+      end
+    end)
   end,
 })
 
