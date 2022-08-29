@@ -236,14 +236,24 @@ vim.opt.undofile = true
 vim.opt.undodir = '/tmp/nvim/undo'  -- undodir 是全局设置, 无法单独给某个文件设置.
 --vim.opt.undolevels = 1000  -- 默认 1000. NOTE: undolevels 太大可能影响 opening buffer 速度.
 --vim.cmd([[au Filetype * ++once :silent !mkdir -p ]] .. vim.go.undodir)
-vim.api.nvim_create_autocmd("Filetype", {
+
+--- NOTE: 这里不使用 FileType 是因为如果 buffer 的 filetype='' 则不会触发 autocmd.
+vim.api.nvim_create_autocmd("BufEnter", {
   pattern = {"*"},
   once = true,  -- VVI: ++once 只在进入 neovim 时执行一次 autocmd
   callback = function()
-    --- undodir 不存在的情况下, `mkdir -p` 创建该文件夹.
-    if vim.fn.isdirectory(vim.go.undodir) == 0 then
-      vim.cmd([[silent !mkdir -p ]] .. vim.go.undodir)
-    end
+    --- 延迟执行
+    vim.schedule(function()
+      --- undodir 不存在的情况下, `mkdir -p` 创建该文件夹.
+      if vim.fn.isdirectory(vim.go.undodir) == 0 then
+        --vim.cmd([[silent !mkdir -p ]] .. vim.go.undodir)
+        local result = vim.fn.system('!mkdir -p '.. vim.go.undodir)
+        if vim.v.shell_error ~= 0 then
+          Notify(result, "ERROR")
+          return
+        end
+      end
+    end)
   end,
 })
 
@@ -272,7 +282,10 @@ vim.opt.fillchars = 'fold: ,diff: ,vert:│,eob:~'
 --- `:h foldtext` 改变折叠代码的样式. 配合 fillchars 使用.
 vim.opt.foldtext = 'printf("%s …", getline(v:foldstart))'
 
---- quickfix & location-list window 设置, 他们的 filetype 都是 'qf'.
+--- markdown 文件自动执行 SpellCheck 命令
+--vim.cmd [[au Filetype pandoc,markdown setlocal spell spelllang=en,cjk]]
+
+--- NOTE: 'quickfix' & 'location-list' 的 filetype 都是 'qf'.
 --- :wincmd 快捷键是 <Ctrl-w>
 --vim.cmd [[au Filetype qf :wincmd J]]  --- 打开 qf window 时, 始终显示在屏幕最下方.
 --vim.cmd [[au Filetype qf :setlocal nobuflisted]]  --- nobuflisted for quickfix && location-list
@@ -288,8 +301,19 @@ vim.api.nvim_create_autocmd("FileType", {
   end
 })
 
---- markdown 文件自动执行 SpellCheck 命令
---vim.cmd [[au Filetype pandoc,markdown setlocal spell spelllang=en,cjk]]
+--- `:help command-line-window`, 包括 q: q/ q? 打开的窗口.
+--vim.cmd([[autocmd CmdwinEnter * nnoremap <buffer> q <cmd>q<CR>]])
+vim.api.nvim_create_autocmd("CmdwinEnter", {
+  pattern = {"*"},  -- 包括: * / ?
+  callback = function(params)
+    --- setlocal nobuflisted
+    vim.bo[params.buf].buflisted = false
+
+    --- close window
+    vim.keymap.set('n', 'q', '<cmd>q<CR>', {noremap=true, buffer=params.buf})
+    --vim.keymap.set('n', '<ESC>', '<cmd>q<CR>', {noremap=true, buffer=params.buf})
+  end
+})
 
 
 
