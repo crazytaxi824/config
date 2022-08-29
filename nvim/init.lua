@@ -53,6 +53,7 @@ require "user.set_wrap"     -- autocmd 根据 filetype 设置 set wrap && cursor
 
 --- 加载 plugins 和 settings
 require "user.plugins_loader"  -- packer 加载 plugin
+require "user.plugins_lazy_loader"  -- 利用vim.schedual() lazy load plugins
 
 --- 放在最后 overwirte 其他颜色设置
 require "user.colors"   -- vim highlight 设置

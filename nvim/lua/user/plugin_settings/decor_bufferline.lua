@@ -92,14 +92,23 @@ local buf_highlights = {
     ctermfg = colors.tab_sel_fg,
     ctermbg = colors.tab_sel_bg,
   },
-  separator_selected = {  -- tab 之间的间隔颜色, 和 tab_selected 颜色一样
+  tab_separator = {  -- tab 之间分隔线 | 的颜色.
+    ctermfg = colors.duplicate_fg,
+    -- ctermbg = colors.tab_sel_bg,
+  },
+  tab_separator_selected = {  -- selected tab 后面一个分隔线 | 的颜色.
     ctermfg = colors.tab_sel_bg,
     ctermbg = colors.tab_sel_bg,
   },
-  separator = {  -- buffer & tab 之间的间隔颜色
-    ctermfg = colors.separator_fg,
-    --ctermbg = bufline_hi.buf_bg,  -- NOTE: 如果需要显示 separator 使用 buffer bg 颜色.
-  },
+
+  -- separator = {  -- buffer 之间分隔线 | 颜色, NOTE: 目前设置是 ' ' 空格, 所以 fg 不起作用, 只有 bg 起作用.
+  --   ctermfg = colors.separator_fg,
+  --   ctermbg = colors.tab_sel_bg,
+  -- },
+  -- separator_selected = {  -- NOTE: 好像没有任何作用
+  --   ctermfg = colors.tab_sel_bg,
+  --   ctermbg = colors.tab_sel_bg,
+  -- },
 
   --- ONLY modified_icon color. ●
   modified = {
@@ -361,6 +370,7 @@ local function load_bufnr_on_left_click(bufnr)
 end
 -- -- }}}
 
+--- `:help bufferline-configuration`
 --- https://github.com/akinsho/bufferline.nvim#configuration
 bufferline.setup({
   --- 颜色设置

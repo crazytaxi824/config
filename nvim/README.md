@@ -329,6 +329,8 @@ vim.api.nvim_create_autocmd("FileType", {
 
 ## FIXME
 
+- LuaSnip opt 加载时无法 load jsregexp 插件.
+
 ## TODO
 
 - UPGRADE: `bufferline.nvim`, `nvim-lspconfig`, `LuaSnip` refactor, 可能会有 BUG, 需要持续关注更新.

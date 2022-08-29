@@ -177,11 +177,7 @@ null_ls.setup({
   --- Q: 为什么要在每次执行 linter 时单独获取 pwd 路径?
   --- A: 因为 nvim 可能会在多个项目文件之间跳转, 每个项目有自己单独的 root.
   --- HOW: 单独为 linter 设置 cwd = func(params):string, 参考 tools/golangci.lua
-  root_dir = function(params)
-    local util = require("null-ls.utils")
-    return util.root_pattern('go.work')(params.bufname) or
-      util.root_pattern('.git','go.mod','package.json','tsconfig.json','jsconfig.json')(params.bufname)
-  end,
+  --root_dir = function(params) return vim.fn.getcwd() end,
 
   --- 如果 error msg 没有特别指明 severity level, 则会使用下面的设置.
   fallback_severity = vim.diagnostic.severity.WARN,
