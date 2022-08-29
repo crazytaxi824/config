@@ -308,8 +308,8 @@ return packer.startup(function(use)
         commit = "a9de941",
         requires = {
           {"L3MON4D3/LuaSnip",     -- snippet engine, for "cmp_luasnip", NOTE: 每次打开文件都会有一个 [Scratch] buffer.
-            commit = "b9450d8",  -- "faa5257", UPGRADE: refactor
-            run = "make install_jsregexp",
+            commit = "9f454cc",  -- "faa5257", UPGRADE: refactor
+            run = "make install_jsregexp",  -- https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#transformations
             config = function() require("user.plugin_settings.luasnip_snippest") end,
             requires = {
               {"rafamadriz/friendly-snippets",  -- snippets content, 自定义 snippets 可以借鉴这个结构.
@@ -346,7 +346,7 @@ return packer.startup(function(use)
     --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
     --- 官方 LSP 引擎.
     use {"neovim/nvim-lspconfig",
-      commit = "7f0dc42",  -- "da7461b", UPGRADE: 使用 0.7 API.
+      commit = "636ce36",  -- "da7461b", UPGRADE: 使用 0.7 API.
       config = function() require("user.lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
       requires = {
         "hrsh7th/cmp-nvim-lsp",  -- provide content to nvim-cmp Completion. cmp_nvim_lsp.update_capabilities(capabilities)
