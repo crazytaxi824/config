@@ -124,8 +124,9 @@ end
 
 --- 修改 location && progress component ---------------------------------------- {{{
 --- 参照 https://github.com/nvim-lualine/lualine.nvim/blob/master/lua/lualine/components/progress.lua
---- NOTE: `:help 'statusline'` 中有对 l p v L... 占位符的解释.
+--- NOTE: `:help 'statusline'` 中有对 l p v L... 占位符的解释. v - Virtual Column; c - Byte index.
 --- '%3l' && '%-2v' 中 3/-2 表示保留位数, 就算没有文字也将保留空位.
+--- '3' 表示在前面(左边)保留2个位置; '-2' 表示在后面(右边)保留1个位置.
 
 local function my_location()
   return '%3l:%-2v'

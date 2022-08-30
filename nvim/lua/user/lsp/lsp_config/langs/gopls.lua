@@ -1,9 +1,13 @@
--- 官方文档
--- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#gopls
--- https://github.com/golang/tools/blob/master/gopls/doc/settings.md
--- https://github.com/golang/tools/blob/master/gopls/doc/vim.md#neovim-config
+--- 官方文档
+--- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#gopls
+--- https://github.com/golang/tools/blob/master/gopls/doc/settings.md
+--- https://github.com/golang/tools/blob/master/gopls/doc/vim.md#neovim-config
 
--- `$ go env GOROOT` | `$ go env GOMODCACHE`
+--- FIXME: gopls v0.9.4: https://github.com/golang/go/issues/50750
+--- 使用 workspace 'go.work' 的情况下, `:LspLog` 打印错误 `go mod tidy` Error.
+--- "finding module for package xxx: cannot find module providing package xxx: module lookup disabled by GOPROXY=off"
+
+--- `$ go env GOROOT` | `$ go env GOMODCACHE`
 local function go_env(v)
   local result = vim.fn.system('go env '..v)
   if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
