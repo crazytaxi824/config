@@ -58,7 +58,7 @@ toggleterm.setup({
 
   direction = "horizontal",  -- vertical | horizontal | tab | float
 
-  hide_numbers = false,  -- 隐藏 terminal 行号, BUG: 会影响后打开的 window 也没有 number. 下面通过 au 设置.
+  hide_numbers = false,  -- 隐藏 terminal 行号, BUG: 会影响后打开的 window 也没有 number. 下面通过 autocmd 手动设置.
   persist_size = true,   -- 保持 window size
   persist_mode = true,   -- if set to true (default) the previous terminal mode will be remembered
 

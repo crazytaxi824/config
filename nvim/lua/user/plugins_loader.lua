@@ -43,7 +43,7 @@
 --   -- plugin 加载条件.
 --   cmd = string or list,        -- VVI: 必须是 plugin 自带 command.
 --   ft = string or list,         -- 指定 filetype 加载插件.
---                                -- FIXME: 使用 ft 后, after/syntax, after/ftplugin 中的文件会被读取两次. 不推荐使用.
+--                                -- BUG: 使用 ft 后, after/syntax, after/ftplugin 中的文件会被读取两次. 不推荐使用.
 --                                -- https://github.com/wbthomason/packer.nvim/issues/648
 --                                -- https://github.com/wbthomason/packer.nvim/issues/698
 --   keys = string or list,       -- Specifies maps which load this plugin. See "Keybindings".
@@ -222,7 +222,7 @@ return packer.startup(function(use)
     commit = "a3dafaa",
   }
 
-  --- FIXME: https://github.com/neovim/neovim/issues/12587
+  --- BUG: https://github.com/neovim/neovim/issues/12587
   --- CursorHold and CursorHoldI are blocked by timer_start()
   use {"antoinemadec/FixCursorHold.nvim",
     commit = "5aa5ff1",
@@ -357,7 +357,7 @@ return packer.startup(function(use)
   --- snippet engine, for "cmp_luasnip", NOTE: 每次打开文件都会有一个 [Scratch] buffer.
   use {"L3MON4D3/LuaSnip",
     commit = "b5cfdd0",  -- "faa5257", UPGRADE: refactor
-    --- FIXME: opt 加载无法 load jsregexp 插件.
+    --- BUG: opt 加载无法 load jsregexp 插件.
     --- 文件位置: stdpath('data') .. "/site/pack/packer/start/LuaSnip/lua/luasnip-jsregexp.so"
     run = "make install_jsregexp",  -- https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#transformations
     config = function() require("user.plugin_settings.luasnip_snippest") end,
