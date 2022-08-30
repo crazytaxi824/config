@@ -13,6 +13,19 @@
 ---                0 代表从最外层开始 fold.
 ---                999 表示从 1000 层开始 fold, 即不进行 fold.
 
+--- VVI: 必须放在最上面, 因为如果 stdpath('config') 路径下有 json ... 等文件, 可以通过下面的 autocmd 覆盖这里的设置.
+--- 这里不能使用 'BufEnter' 否则每次切换窗口或者文件的时候都会重新设置.
+--- "~/.config/nvim/*" 中的所有 file 都使用 marker {{{xxx}}} 折叠.
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = {"*"},
+  callback = function(params)
+    if string.match(vim.fn.fnamemodify(params.file, ":p"), '^'..vim.fn.stdpath('config')) then
+      vim.wo.foldmethod = "marker"
+      vim.wo.foldlevel = 0
+    end
+  end
+})
+
 --- VVI: 这里只是进行了 key mapping 而没有直接设置 foldmethod. 避免超大文件切换速度慢.
 --- 在使用 \k1 之前无法使用 zo zc ... 等快捷键.
 vim.cmd([[
@@ -29,9 +42,6 @@ vim.cmd([[
 
 --- 'foldnestmax' 设置对 marker 不生效. 打开文件时自动按照 marker {{{xxx}}} 折叠.
 vim.cmd [[au Filetype vim,zsh,yaml setlocal foldmethod=marker foldlevel=0]]
-
---- "~/.config/nvim/*" 中的所有 file 都使用 marker {{{xxx}}} 折叠.
-vim.cmd('au BufEnter ' .. vim.fn.stdpath('config') .. '/* setlocal foldmethod=marker foldlevel=0')
 
 
 
