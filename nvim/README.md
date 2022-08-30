@@ -69,6 +69,29 @@
 
 <br />
 
+# vim options 设置 local to window / local to buffer
+
+官方解释
+
+```
+global              one option for all buffers and windows
+local to window     each window has its own copy of this option
+local to buffer     each buffer has its own copy of this option
+```
+
+`local to buffer` 相当于 buffer 的属性. eg: filetype, keymap, textwidth ...
+
+`local to window` 并不只是 window 的属性, 而是 buffer 在该 window 的属性. 需要同时满足 bufnr & win_id (不是 winnr) 两个条件的属性.
+所以可以看作是 buffer 在指定 window 中的属性. 也可以看作 window 中不同 buffer 的属性.
+
+测试: `setlocal number` 显示行号. 是一个 `local to window` option.
+
+- 当我们在不同的 window 中加载同一个 buffer, 可以通过 `setlocal number` / `setlocal nonumber` 分别显示不同的样式.
+- 当我们在同一个 window 中加载不同 buffer 的情况下, buffer-A `setlocal nonumber`; buffer-B `setlocal number`, 切换显示文件
+  的时候 `number` 显示也会根据 buffer 切换.
+
+<br />
+
 # neovim lua 使用
 
 ## lua 全局变量 `_G`
@@ -326,10 +349,6 @@ vim.api.nvim_create_autocmd("FileType", {
   for now: add file in nvim-tree, eg: 'tmp.json', 'tmp.go', and remove it later.
 
 <br />
-
-## FIXME
-
-- LuaSnip opt 加载时无法 load jsregexp 插件.
 
 ## TODO
 

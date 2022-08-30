@@ -124,8 +124,9 @@ end
 
 --- 修改 location && progress component ---------------------------------------- {{{
 --- 参照 https://github.com/nvim-lualine/lualine.nvim/blob/master/lua/lualine/components/progress.lua
---- NOTE: `:help 'statusline'` 中有对 l p v L... 占位符的解释.
+--- NOTE: `:help 'statusline'` 中有对 l p v L... 占位符的解释. v - Virtual Column; c - Byte index.
 --- '%3l' && '%-2v' 中 3/-2 表示保留位数, 就算没有文字也将保留空位.
+--- '3' 表示在前面(左边)保留2个位置; '-2' 表示在后面(右边)保留1个位置.
 
 local function my_location()
   return '%3l:%-2v'
@@ -279,11 +280,6 @@ lualine.setup {
   --- NOTE: 'quickfix' includes loclist and quickfix
   extensions = {'nvim-tree', 'nerdtree', 'quickfix'},
 }
-
---- 无法使用 lualine 的情况下 StatusLine 颜色 ------------------------------------------------------
---- eg: tagbar 有自己设置的 ':set statusline?'
-vim.cmd('hi StatusLine cterm=NONE ctermfg=' .. colors.light_green .. ' ctermbg=' .. colors.black)  -- active
-vim.cmd('hi StatusLineNC cterm=NONE ctermfg=' .. colors.light_grey .. ' ctermbg=' .. colors.black) -- inactive
 
 
 

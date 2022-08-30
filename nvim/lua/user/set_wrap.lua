@@ -95,12 +95,12 @@ vim.api.nvim_create_autocmd({"BufEnter", "WinEnter"}, {
   callback = function(params)
     --- 如果 bufname() ~= '' 则缓存文件绝对路径. buffer 被 :bwipeout 之后再次打开时继承之前的设置.
     --- 如果 bufname() == '' 则缓存 bufnr. 没有名字的 buffer 只能通过 bufnr 来缓存.
+    --- NOTE: params.file 不一定是文件的绝对路径. [No Name] buffer 的 params.file == ''.
     local buf
     if params.file == '' then  -- [No Name] buffer
       buf = params.buf  -- [No Name] buffer, 缓存 bufnr
     else
-      --- params.file 是文件的绝对路径. [No Name] buffer 的 params.file == ''.
-      buf = params.file
+      buf = vim.fn.fnamemodify(params.file, ":p")
     end
 
     if wrap_list[buf] then

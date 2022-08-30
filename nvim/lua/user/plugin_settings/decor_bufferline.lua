@@ -30,7 +30,8 @@ local colors = {
 
 --- 默认设置 `:help bufferline-highlights`
 local buf_highlights = {
-  fill = { ctermbg = colors.fill_bg },  -- fill 整个 bufferline banner 的背景色
+  --- fill 整个 bufferline banner 的背景色, NOTE: 如果需要透明, 则不要设置.
+  --fill = { ctermbg = colors.fill_bg },  -- hi TabLineFill
 
   background = {  -- 默认设置, 其他设置缺省的时候使用该设置.
     ctermfg = colors.buf_fg,

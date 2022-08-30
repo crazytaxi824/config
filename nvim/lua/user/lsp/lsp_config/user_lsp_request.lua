@@ -86,7 +86,7 @@ local M = {}
 --- NOTE: 该自定义 handler 主要作用是根据 'textDocument/hover' handler 修改 open_floating_preview()
 --        中的显示内容. 不显示 comments, 只显示 function 定义. 类似 textDocument/signatureHelp.
 --- copy from `function M.hover(_, result, ctx, config)`
---- https://github.com/neovim/neovim/ -> runtime/lua/vim/lsp/handlers.lua
+--- https://github.com/neovim/neovim/blob/master/runtime/lua/vim/lsp/handlers.lua
 --- `:help lsp-handler`, lsp-request handler 的第一个参数为 err, 这里省略不处理.
 local function hover_short_handler(_, result, ctx, config)
   config = config or {}

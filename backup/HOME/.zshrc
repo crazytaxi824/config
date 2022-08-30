@@ -21,7 +21,7 @@ export GOPATH=$HOME/gopath
 export GOBIN=$GOPATH/bin
 export PATH=$PATH:$GOBIN
 export GO111MODULE=on
-#export GOPROXY="https://proxy.golang.org,direct"  # default setting
+#export GOPROXY=off  # 默认值 "https://proxy.golang.org,direct"
 #export GOSUMDB=off  # Disable the Go checksum database
 
 # DEBUG use only

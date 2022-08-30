@@ -123,7 +123,7 @@ mason-lspconfig 对应文件 https://github.com/williamboman/mason-lspconfig.nvi
 | gopls                       | `:MasonInstall gopls`                      | require("lspconfig")["gopls"].setup(opts)    |
 | vscode-json-language-server | `:MasonInstall json-lsp`                   | require("lspconfig")["jsonls"].setup(opts)   |
 | typescript-language-server  | `:MasonInstall typescript-language-server` | require("lspconfig")["tsserver"].setup(opts) |
-| dlv                         | `:MasonInstall delve`                      |                                              |
+| dlv                         | `:MasonInstall delve`                      | N/A                                          |
 
 功能:
 
