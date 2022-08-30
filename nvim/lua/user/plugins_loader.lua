@@ -261,7 +261,7 @@ return packer.startup(function(use)
     commit = "8a1ff3cf",
     run = ":TSUpdateSync",   -- Post-update/install hook.
     config = function() require("user.plugin_settings.treesitter") end,
-    opt = true,
+    opt = true,  -- 在 vim.schedule() 中 lazy load
     requires = {
       --- 以下都是 treesitter modules 插件, 在 setup() 中启用的插件.
       --- 第一方 module 插件 ---
@@ -431,14 +431,14 @@ return packer.startup(function(use)
   use {"akinsho/bufferline.nvim",
     commit = "fb7b173",  -- "06eb4ad", UPGRADE: refactor indicator = {icon, style}
     config = function() require("user.plugin_settings.decor_bufferline") end,
-    opt = true,
+    opt = true,  -- 在 vim.schedule() 中 lazy load
   }
 
   --- statusline decorator, `:help 'statusline'`
   use {"nvim-lualine/lualine.nvim",   -- bottom status line
     commit = "3cf4540",
     config = function() require("user.plugin_settings.decor_lualine") end,
-    opt = true,
+    opt = true,  -- 在 vim.schedule() 中 lazy load
   }
 
   --- Debug tools 安装 -----------------------------------------------------------------------------

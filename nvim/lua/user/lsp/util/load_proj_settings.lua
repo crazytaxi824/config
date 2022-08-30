@@ -18,14 +18,14 @@ __Proj_local_settings._lazyload = function()
     return
   end
 
-  --- 第一次读取文件
+  --- 第一次读取文件, NOTE: 使用 dofile 方法执行指定 lua 文件. 如果文件不存在, 或执行错误(语法错误), 则忽略.
   local ok, proj_settings = pcall(dofile, '.nvim/settings.lua')
   if ok and proj_settings then
     --- '.nvim/settings.lua' 读取成功, 同时返回值不是 nil 的情况下赋值给 _content
-    __Proj_local_settings._content = proj_settings  -- NOTE: 缓存数据.
+    __Proj_local_settings._content = proj_settings  -- 缓存数据.
   end
 
-  __Proj_local_settings._once = true  -- NOTE: 标记为已读.
+  __Proj_local_settings._once = true  -- 标记为已读.
 end
 
 --- 如果项目本地设置存在
@@ -47,7 +47,7 @@ __Proj_local_settings.exists_keep_extend = function (section, tool, tbl, ...)
   return vim.tbl_deep_extend('keep', __Proj_local_settings._content[section][tool], tbl, ...)
 end
 
---- VVI: 主要函数 keep_extend() 用 project 设置覆盖 global 设置.
+--- NOTE: 主要函数 keep_extend() 用 project local 设置覆盖 global 设置.
 --- 使用 tbl_deep_extend('keep', xx, xx, ...)
 __Proj_local_settings.keep_extend = function(section, tool, tbl, ...)
   --- __Proj_local_settings._lazyload()  -- VVI: exists() 中已经 lazyload()
