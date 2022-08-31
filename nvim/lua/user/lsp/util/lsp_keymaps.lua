@@ -36,8 +36,8 @@ M.textDocument_keymaps = function(bufnr)
   --- 使用 hover 代替 signature_help, 因为有些 LSP 还不支持 signature_help, eg: typescript, javascript ...
   --vim.api.nvim_buf_set_keymap(bufnr, "n", "K", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
 
-  --- VVI: vim.lsp.handlers 中使用 CompleteDone event 来触发 close hover window.
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "<Esc>", '<Esc><cmd>doautocmd CompleteDone<CR>', opts)
+  --- VVI: vim.lsp.handlers 中使用 User event 来触发 close hover window.
+  vim.api.nvim_buf_set_keymap(bufnr, "n", "<Esc>", '<Esc><cmd>doautocmd User<CR>', opts)
 end
 
 --- for lspconfig && null-ls, format && diagnostic -------------------------------------------------
