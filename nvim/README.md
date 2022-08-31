@@ -94,6 +94,18 @@ local to buffer     each buffer has its own copy of this option
 
 # neovim lua 使用
 
+## nvim_create_autocmd User Event
+
+```lua
+vim.cmd [[autocmd User Foo echo "foo"]]
+
+vim.api.nvim_create_autocmd("User", {
+  pattern = {"Foo"},
+  callback = function() print("foo") end,
+})
+
+```
+
 ## lua 全局变量 `_G`
 
 lua 中有一个 `_G` 全局变量. 自定义的所有全局变量和函数都会被放在 `_G` 内.
@@ -356,3 +368,5 @@ vim.api.nvim_create_autocmd("FileType", {
   在稳定之后再创建新的 v0.2.13 tag.
 
 - 将 global_util 中的函数分开.
+
+- hightlight path in filetyp='dap-repl' window.
