@@ -1,3 +1,25 @@
+--- highlight <file:line:col>, `:help pattern-overview` --------------------------------------------
+function Highlight_filepath(data_list)
+  --- file:// pattern match
+  --- '\f' - isfname, 可用于 filename 的字符/数字/符号...
+  --- '\<' - start of a word
+  vim.fn.matchadd('Underlined', '\\<file://\\f*\\(:[0-9]\\+\\)\\{0,2}')  -- highlight filepath
+
+  for _, lcontent in ipairs(data_list) do
+    for _, content in ipairs(vim.split(lcontent, " ")) do
+      --- VVI: 这里必须 trim(), 可以去掉 \r \n ...
+      local fp = vim.split(vim.fn.trim(content), ":")
+
+      local expand_status_ok, result = pcall(vim.fn.expand, fp[1])
+      if expand_status_ok and vim.fn.filereadable(result) == 1 then
+        --- \@<! - eg: \(foo\)\@<!bar  - any "bar" that's not in "foobar"
+        --- \@!  - eg: foo\(bar\)\@!   - any "foo" not followed by "bar"
+        vim.fn.matchadd('Underlined', '\\(\\S\\)\\@<!'..vim.fn.escape(fp[1], '~') .. '\\(:[0-9]\\+\\)\\{0,2}')  -- highlight filepath
+      end
+    end
+  end
+end
+
 --- Jump to file -----------------------------------------------------------------------------------
 --- 利用 local list 跳转到 log 文件
 function Jump_to_file(filepath, lnum, col)
