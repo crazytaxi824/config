@@ -5,7 +5,8 @@ local function markdown_create_table(arglist)  -- args: 创建一个 row * col �
     return
   end
 
-  if #arglist ~= 2 then
+  -- if arglist < 1, vim 会提示需要 Argument required
+  if #arglist > 2 then
     Notify(
       'args error. eg: "MarkdownCreateTable row:number col:number"',
       "ERROR"
@@ -14,9 +15,16 @@ local function markdown_create_table(arglist)  -- args: 创建一个 row * col �
   end
 
   -- 类型转换
-  local row = tonumber(arglist[1])
-  local col = tonumber(arglist[2])
-  if not row or not col then
+  local col = tonumber(arglist[1])  -- NOTE: col 放在前面, 必须要的, row 很容易复制添加.
+
+  local row
+  if not arglist[2] then
+    row = 3  -- row omit 默认值
+  else
+    row = tonumber(arglist[2])  -- 如果 arglist[2] 不是 number, row = nil
+  end
+
+  if not col or not row then
     Notify("args need to be number","ERROR")
     return
   end
