@@ -356,7 +356,7 @@ return packer.startup(function(use)
 
   --- snippet engine, for "cmp_luasnip", NOTE: 每次打开文件都会有一个 [Scratch] buffer.
   use {"L3MON4D3/LuaSnip",
-    commit = "b5cfdd0",  -- "faa5257", UPGRADE: refactor
+    commit = "1843932",  -- "faa5257", UPGRADE: refactor
     --- BUG: opt 加载无法 load jsregexp 插件.
     --- 文件位置: stdpath('data') .. "/site/pack/packer/start/LuaSnip/lua/luasnip-jsregexp.so"
     run = "make install_jsregexp",  -- https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#transformations
@@ -395,7 +395,7 @@ return packer.startup(function(use)
   --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
   --- 官方 LSP 引擎.
   use {"neovim/nvim-lspconfig",
-    commit = "636ce36",  -- "da7461b", UPGRADE: 使用 0.7 API.
+    commit = "df17834",  -- "da7461b", UPGRADE: 使用 0.7 API.
     config = function() require("user.lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     opt = true,  -- 在 vim.schedule() 中 lazy load
     requires = {
@@ -429,7 +429,7 @@ return packer.startup(function(use)
   --- Buffer & Status Line -------------------------------------------------------------------------
   --- tabline decorator, `:help 'tabline'`
   use {"akinsho/bufferline.nvim",
-    commit = "fb7b173",  -- "06eb4ad", UPGRADE: refactor indicator = {icon, style}
+    commit = "fb7b173",
     config = function() require("user.plugin_settings.decor_bufferline") end,
     opt = true,  -- 在 vim.schedule() 中 lazy load
   }
