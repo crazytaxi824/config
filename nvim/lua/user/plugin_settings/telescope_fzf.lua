@@ -32,6 +32,7 @@ telescope.setup {
 
     --- `:help telescope.defaults.mappings`         - 默认 key mapping 也能使用
     --- `:help telescope.defaults.default_mappings` - 只使用自定义 key mapping
+    --- https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/mappings.lua
     mappings = {
       i = {
         --["<C-c>"] = actions.close,
@@ -46,13 +47,16 @@ telescope.setup {
         ["<C-v>"] = actions.select_vertical,
         --["<C-t>"] = actions.select_tab,
 
-        ["<C-u>"] = false,  -- NOTE: 为了在 insert 模式下使用 <C-u> 清空 input.
+        ["<C-u>"] = false,  -- NOTE: 为了在 insert 模式下使用 <C-u> 清空 input, 不能使用 nil.
         ["<C-d>"] = false,
         ["<PageUp>"] = actions.preview_scrolling_up,
         ["<PageDown>"] = actions.preview_scrolling_down,
         ["<S-Up>"] = actions.results_scrolling_up,
         ["<S-Down>"] = actions.results_scrolling_down,
 
+        --- move_selection_next 和 move_selection_worse 的区别:
+        --- next 移动到下一个结果; worse 移动到搜索排序的下一个结果.
+        --- worse 会根据 sorting_strategy = "ascending" / "descending" 改变方向, 而 next 不会.
         ["<Tab>"] = actions.toggle_selection + actions.move_selection_next,
         ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_previous,
         --["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
@@ -66,7 +70,7 @@ telescope.setup {
       },
 
       n = {
-        ["<esc>"] = actions.close,
+        ["<ESC>"] = actions.close,
         ["<CR>"] = actions.select_default,
         ["<C-x>"] = actions.select_horizontal,
         ["<C-v>"] = actions.select_vertical,

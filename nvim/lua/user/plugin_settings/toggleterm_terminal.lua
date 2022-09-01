@@ -16,28 +16,6 @@ if not status_ok then
   return
 end
 
---- highlight <file:line:col>, `:help pattern-overview`
-local function highlight_path_in_term(data_list)
-  --- file:// pattern match
-  --- '\f' - isfname, 可用于 filename 的字符/数字/符号...
-  --- '\<' - start of a word
-  vim.fn.matchadd('Underlined', '\\<file://\\f*\\(:[0-9]\\+\\)\\{0,2}')  -- highlight filepath
-
-  for _, lcontent in ipairs(data_list) do
-    for _, content in ipairs(vim.split(lcontent, " ")) do
-      --- VVI: 这里必须 trim(), 可以去掉 \r \n ...
-      local fp = vim.split(vim.fn.trim(content), ":")
-
-      local expand_status_ok, result = pcall(vim.fn.expand, fp[1])
-      if expand_status_ok and vim.fn.filereadable(result) == 1 then
-        --- \@<! - eg: \(foo\)\@<!bar  - any "bar" that's not in "foobar"
-        --- \@!  - eg: foo\(bar\)\@!   - any "foo" not followed by "bar"
-        vim.fn.matchadd('Underlined', '\\(\\S\\)\\@<!'..vim.fn.escape(fp[1], '~') .. '\\(:[0-9]\\+\\)\\{0,2}')  -- highlight filepath
-      end
-    end
-  end
-end
-
 toggleterm.setup({
   size = function(term)
     if term.direction == "horizontal" then
@@ -75,7 +53,7 @@ toggleterm.setup({
   --- output 是一个 list, 按照行分隔.
   --- 这里不使用 autocmd TermClose 而是使用 on_stdout 主要是因为有些程序运行不会结束, eg: http 监听.
   on_stdout = function(_,_,output,_)
-    highlight_path_in_term(output)
+    Highlight_filepath(output)
   end,
   --- 其他设置 --- {{{
   -- on_open  = fun(t: Terminal), -- TermOpen, job start.
@@ -111,7 +89,7 @@ vim.api.nvim_create_autocmd({"BufWinEnter"}, {
   pattern = {"term://*"},
   callback = function()
     local output = vim.fn.getline(1, '$')
-    highlight_path_in_term(output)
+    Highlight_filepath(output)
   end,
 })
 
