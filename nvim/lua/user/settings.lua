@@ -192,8 +192,7 @@ vim.opt.wildmode = "full"  -- Complete the next full match.
 vim.opt.wildoptions = ""   -- default "pum,tagfile", pum - popupmenu | tagfile - <C-d> list matches
 vim.opt.wildignorecase = true  -- command 自动补全时忽略大小写.
 vim.opt.foldenable = true  -- 折叠代码.
-vim.opt.hidden = true      -- NOTE: When 'false' a buffer is unloaded when it is abandoned.
-                           -- vim-airline & coc.nvim 需要用到.
+vim.opt.hidden = true      -- VVI: 很多插件需要用到 hidden buffer. When 'false' a buffer is unloaded when it is abandoned.
 
 --- window / scroll 设置
 vim.opt.splitbelow = true  -- force all horizontal splits to go below current window

@@ -396,7 +396,7 @@ bufferline.setup({
     mode = "buffers", -- set to "tabs" to only show tabpages instead
     numbers = "ordinal", -- "none" | "ordinal" | "buffer_id" | "both" | function({ ordinal, id, lower, raise }): string,
     sort_by = 'id',  -- 其他选项有 BUG.
-    persist_buffer_sort = true, -- whether or not custom sorted buffers should persist
+    persist_buffer_sort = false, -- whether or not custom sorted buffers should persist
 
     always_show_bufferline = true, -- VVI: 一直显示 bufferline
     show_tab_indicators = true, -- 多个 tab 时在右上角显示 1 | 2 | ...
@@ -509,6 +509,50 @@ local bufferline_keymaps = {
 }
 
 Keymap_set_and_register(bufferline_keymaps)
+
+--- HACK: 被删除的 buffer 重新打开时, 分配到 buffer list 的最后 ------------------------------------
+--- 原理: 修改 state.custom_sort = {bufnr ...}, 来改变 bufferline 的显示顺序.
+--- 需要用到 state.components, 即 bufferline.exec() 中的 visible_buffers_info
+local state = require("bufferline.state")
+
+local function table_index(list, elem)
+  for index, value in ipairs(list) do
+    if value == elem then
+      return index
+    end
+  end
+end
+
+local function remove_bufnr_from_custom_sort(bufnr)
+  local list = {}
+
+  if state.custom_sort then
+    --- 如果 custom_sort 存在, 说明 buffer 位置排序已经被改变过.
+    --- 从 state.components 中获取位置顺序
+    list = vim.tbl_map(function(item)
+      return item.id
+    end, state.components)
+  else
+    --- 如果 custom_sort 不存在, 说明 buffer 位置是按照 bufnr 排序的(buffer 打开的顺序)
+    local listed_buffer = vim.fn.getbufinfo({buflisted=1})
+    list = vim.tbl_map(function(item)
+      return item.bufnr
+    end, listed_buffer)
+  end
+
+  --- 从 list 中移除被删除的 bufnr
+  table.remove(list, table_index(list, bufnr))
+
+  state.custom_sort = list
+  -- print(vim.inspect(state.custom_sort))
+end
+
+vim.api.nvim_create_autocmd("BufDelete", {
+  pattern = {"*"},
+  callback = function(params)
+    remove_bufnr_from_custom_sort(params.buf)
+  end
+})
 
 
 
