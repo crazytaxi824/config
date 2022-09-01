@@ -197,8 +197,8 @@ vim.cmd('hi StatusLineNC cterm=NONE ctermfg=246 ctermbg=233') -- inactive, NC (n
 
 --- 以下颜色为了 lazy load bufferline
 vim.cmd([[hi TabLineFill cterm=NONE ctermfg=NONE ctermbg=NONE]])
+vim.cmd([[hi TabLineSel cterm=bold ctermfg=85 ctermbg=233]])
 --vim.cmd([[hi TabLine cterm=NONE ctermfg=234 ctermbg=NONE]])
---vim.cmd([[hi TabLineSel cterm=NONE ctermfg=234 ctermbg=NONE]])
 
 --- 设置 syntax 颜色是为了让 treesitter lazy render 的时候不至于颜色差距太大.
 --- set vim-syntax color to match treesitter color
