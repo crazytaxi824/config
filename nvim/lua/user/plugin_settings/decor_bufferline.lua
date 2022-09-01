@@ -284,19 +284,33 @@ local function close_current_tab()
 end
 
 --- 判断 bufnr 是否为第一个 listed buffer
-local function is_first_listed_buffer(bufnr)
-  local listed_buffers = vim.fn.getbufinfo({buflisted=1})
-  if #listed_buffers > 0 and listed_buffers[1].bufnr == bufnr then
-    return true
-  end
+local function is_first_bufferline_index(bufnr)
+  local is_first_index
+
+  --- NOTE: require("bufferline").exec(ordinal_index, function(index_bufinfo, visible_buffers_info))
+  --- ordinal_index 是指 buffer 在 tabline 中 (最上方的文件栏) 从左向右的位置.
+  --- 通过传入的 ordinal_index 获取 index_bufinfo, 和所有 visible_buffers 的 bufinfo.
+  --- 如果 ordinal_index 不存在: eg: -1, 0, 999 ... 则不执行 callback.
+  bufferline.exec(1, function(index_bufinfo, visible_buffers_info)
+    is_first_index = index_bufinfo.id == bufnr
+  end)
+
+  return is_first_index
 end
 
 --- 判断 bufnr 是否为最后一个 listed buffer
-local function is_last_listed_buffer(bufnr)
-  local listed_buffers = vim.fn.getbufinfo({buflisted=1})
-  if #listed_buffers > 0 and listed_buffers[#listed_buffers].bufnr == bufnr then
-    return true
-  end
+local function is_last_bufferline_index(bufnr)
+  local is_last_index
+
+  bufferline.exec(1, function(index_bufinfo, visible_buffers_info)
+    --- 这里主要是利用 visible_buffers_info 结果是按照 ordinal_index 顺序排序的.
+    if not visible_buffers_info[#visible_buffers_info].ordinal == #visible_buffers_info then
+      Notify("visible_buffers_info Sort Order error", "ERROR")
+    end
+    is_last_index = visible_buffers_info[#visible_buffers_info].id == bufnr
+  end)
+
+  return is_last_index
 end
 
 --- 删除当前 buffer.
@@ -321,12 +335,12 @@ local function bufferline_del_current_buffer(ignore_tab)
     return
   end
 
-  --- 如果当前 buffer 是第一个 listed buffer 则跳到后一个 buffer;
-  --- 如果当前 buffer 不是第一个 listed buffer 则跳到前一个 buffer;
-  if is_first_listed_buffer(bufnr_before_jump) then
-    bufferline.cycle(1)   -- 跳转到 next buffer
-  else
+  --- 如果当前 buffer 是最后一个 listed buffer 则跳到前一个 buffer;
+  --- 如果当前 buffer 不是最后一个 listed buffer 则跳到后一个 buffer;
+  if is_last_bufferline_index(bufnr_before_jump) then
     bufferline.cycle(-1)  -- 跳转到 prev buffer
+  else
+    bufferline.cycle(1)   -- 跳转到 next buffer
   end
 
   local bufnr_after_jump = vim.fn.bufnr('%')   --- 获取跳转后 bufnr()
@@ -360,14 +374,15 @@ end
 -- -- }}}
 
 --- functions for left_mouse_command --------------------------------------------------------------- {{{
+--- load 鼠标点击的 buffer
 local function load_bufnr_on_left_click(bufnr)
   --- 如果当前 window 中是一个 unlisted-buffer 则 return.
   if vim.fn.getbufinfo('%')[1].listed == 0 then
     Notify("can't load buffer {" .. bufnr .. "} in this window (unlisted-buffer)", "WARN")
     return
   end
-  --- load 指定 buffer
-  vim.cmd(bufnr..'buffer')
+
+  vim.cmd(bufnr..'buffer')  -- load 指定 buffer
 end
 -- -- }}}
 
@@ -441,7 +456,7 @@ bufferline.setup({
       --{filetype = "tagbar", text = "TagBar", text_align = "center", highlight="Directory", separator = true},
     },
 
-    --- NOTE: this will be called a lot so don't do any heavy processing here
+    --- NOTE: this will be called a lot so don't do any heavy processing here --- {{{
     -- custom_filter = function(buf_number, buf_numbers)
     --   --- NOTE: filter out filetypes you don't want to see
     --   if vim.bo[buf_number].filetype ~= "<i-dont-want-to-see-this>" then
@@ -461,6 +476,7 @@ bufferline.setup({
     --     return true
     --   end
     -- end,
+    -- -- }}}
   },
 })
 
@@ -487,7 +503,9 @@ local bufferline_keymaps = {
   --- 关闭 buffer
   --- bufnr("#") > 0 表示 '#' (previous buffer) 存在, 如果不存在则 bufnr('#') = -1.
   --- 如果 # 存在, 但处于 unlisted 状态, 则 bdelete # 报错. 因为 `:bdelete` 本质就是 unlist buffer.
-  {'n', '<leader>d', bufferline_del_current_buffer, opt, 'Close This Buffer'},
+  {'n', '<leader>d', bufferline_del_current_buffer, opt, 'Close Current Buffer/Tab'},
+  {'n', '<leader>Dr', '<cmd>BufferLineCloseRight<CR>', opt, 'Close Right Side Buffers'},
+  {'n', '<leader>Dl', '<cmd>BufferLineCloseLeft<CR>', opt, 'Close Left Side Buffers'},
 }
 
 Keymap_set_and_register(bufferline_keymaps)

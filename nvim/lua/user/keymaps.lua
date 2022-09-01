@@ -398,8 +398,8 @@ local keymaps = {
   {'v', '<leader><lt>', '<C-c>`>a><C-c>`<lt>i<lt><C-c>v`><right><right>', opt, 'which_key_ignore'},  -- '<' 使用 <lt> 代替.
 
   --- 关闭所有其他 buffers
-  {'n', '<leader>D', delete_all_other_buffers, opt, 'Close All Other Buffers'},
-  --{'n', '<leader>d', 'bdelete', opt, 'Close This Buffer'},  -- 使用 airline 的功能删除 buffer.
+  {'n', '<leader>Da', delete_all_other_buffers, opt, 'Close All Other Buffers'},
+  --{'n', '<leader>d', 'bdelete', opt, 'Close Current Buffer'},
 
   --- 关闭所有其他窗口
   {'n', '<leader>W', '<C-w><C-o>', opt, 'Close All Other Windows'},
@@ -422,7 +422,10 @@ local keymaps = {
 
 --- 这里是设置所有 key mapping 的地方 --------------------------------------------------------------
 Keymap_set_and_register(keymaps, {
-  key_desc = {k = {name = "Fold Method"}},
+  key_desc = {
+    k = {name = "Fold Method"},
+    D = {name = "Close Buffers"},
+  },
   opts = {mode='n', prefix='<leader>'}
 })
 
