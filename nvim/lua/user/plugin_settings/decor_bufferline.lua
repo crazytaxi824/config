@@ -287,10 +287,14 @@ end
 local function is_first_bufferline_index(bufnr)
   local is_first_index
 
-  --- NOTE: require("bufferline").exec(ordinal_index, function(index_bufinfo, visible_buffers_info))
-  --- ordinal_index 是指 buffer 在 tabline 中 (最上方的文件栏) 从左向右的位置.
-  --- 通过传入的 ordinal_index 获取 index_bufinfo, 和所有 visible_buffers 的 bufinfo.
-  --- 如果 ordinal_index 不存在: eg: -1, 0, 999 ... 则不执行 callback.
+  --- require("bufferline").exec(index, function(index_bufinfo, visible_buffers_info))
+  --- VVI: filename 在 bufferline 中的显示顺序一定是按照 {visible_buffers_info} 中的排序来的,
+  --- 但是 ordinal 值则不一定和 index 相同.
+  ---  - index 是指在 bufferline 中 (最上方的文件栏) 从左向右的位置.
+  ---    也是 visible_buffers_info 中 buffer 的 index 顺序.
+  ---  - NOTE: ordinal 并不可靠, 它不一定是左向右的位置, 也有可能重复. eg :BufferLineTogglePin.
+  --- 通过 callback 获取 index_bufinfo, 和所有 visible_buffers 的 bufinfo.
+  --- 如果 index 不存在: eg: -1, 0, 999 ... 则不执行 callback.
   bufferline.exec(1, function(index_bufinfo, visible_buffers_info)
     is_first_index = index_bufinfo.id == bufnr
   end)
@@ -303,10 +307,6 @@ local function is_last_bufferline_index(bufnr)
   local is_last_index
 
   bufferline.exec(1, function(index_bufinfo, visible_buffers_info)
-    --- 这里主要是利用 visible_buffers_info 结果是按照 ordinal_index 顺序排序的.
-    if not visible_buffers_info[#visible_buffers_info].ordinal == #visible_buffers_info then
-      Notify("visible_buffers_info Sort Order error", "ERROR")
-    end
     is_last_index = visible_buffers_info[#visible_buffers_info].id == bufnr
   end)
 
@@ -396,7 +396,8 @@ bufferline.setup({
     mode = "buffers", -- set to "tabs" to only show tabpages instead
     numbers = "ordinal", -- "none" | "ordinal" | "buffer_id" | "both" | function({ ordinal, id, lower, raise }): string,
     sort_by = 'id',  -- 其他选项有 BUG.
-    persist_buffer_sort = false, -- whether or not custom sorted buffers should persist
+    persist_buffer_sort = true, -- whether or not custom sorted buffers should persist between sessions.
+                                -- 会创建一个全局变量 g:BufferlinePositions 保存自 state.custom_sort
 
     always_show_bufferline = true, -- VVI: 一直显示 bufferline
     show_tab_indicators = true, -- 多个 tab 时在右上角显示 1 | 2 | ...
@@ -500,19 +501,25 @@ local bufferline_keymaps = {
   {'n', '<lt>', function() bufferline.cycle(-1) end, opt},  --- <lt>, less than, 代表 '<'. 也可以使用 '\<'
   {'n', '>', function() bufferline.cycle(1) end, opt},
 
+  --- 左右移动 buffer
+  {'n', '<leader><Left>', '<cmd>BufferLineMovePrev<CR>', opt},
+  {'n', '<leader><Right>', '<cmd>BufferLineMoveNext<CR>', opt},
+
   --- 关闭 buffer
   --- bufnr("#") > 0 表示 '#' (previous buffer) 存在, 如果不存在则 bufnr('#') = -1.
   --- 如果 # 存在, 但处于 unlisted 状态, 则 bdelete # 报错. 因为 `:bdelete` 本质就是 unlist buffer.
   {'n', '<leader>d', bufferline_del_current_buffer, opt, 'Close Current Buffer/Tab'},
-  {'n', '<leader>Dr', '<cmd>BufferLineCloseRight<CR>', opt, 'Close Right Side Buffers'},
-  {'n', '<leader>Dl', '<cmd>BufferLineCloseLeft<CR>', opt, 'Close Left Side Buffers'},
+  {'n', '<leader>D<Right>', '<cmd>BufferLineCloseRight<CR>', opt, 'Close Right Side Buffers'},
+  {'n', '<leader>D<Left>', '<cmd>BufferLineCloseLeft<CR>', opt, 'Close Left Side Buffers'},
 }
 
 Keymap_set_and_register(bufferline_keymaps)
 
---- HACK: 被删除的 buffer 重新打开时, 分配到 buffer list 的最后 ------------------------------------
---- 原理: 修改 state.custom_sort = {bufnr ...}, 来改变 bufferline 的显示顺序.
---- 需要用到 state.components, 即 bufferline.exec() 中的 visible_buffers_info
+--- HACK: 被 bdelete / bwipeout 的 buffer 重新打开时, 分配到 bufferline list 的最后 ----------------
+--- 原理: 在 buffer 被 bdelete / bwipeout 的时候修改 state.custom_sort = {bufnr ...},
+--- 来改变 bufferline 的显示顺序.
+--- 需要用到 state.components, 即 bufferline.exec(callback()) 中的 visible_buffers_info
+--- 如果需要自动刷新 bufferline 显示, 需要使用 require("bufferline.ui").refresh()
 local state = require("bufferline.state")
 
 local function table_index(list, elem)
@@ -543,16 +550,37 @@ local function remove_bufnr_from_custom_sort(bufnr)
   --- 从 list 中移除被删除的 bufnr
   table.remove(list, table_index(list, bufnr))
 
+  --- 手动改变 sort 顺序, 下次 bufferline 刷新的时候会根据该顺序显示.
   state.custom_sort = list
   -- print(vim.inspect(state.custom_sort))
 end
 
+--- BufDelete 触发条件: bdelete, bwipeout
 vim.api.nvim_create_autocmd("BufDelete", {
   pattern = {"*"},
   callback = function(params)
     remove_bufnr_from_custom_sort(params.buf)
   end
 })
+
+--- DEBUG: 用
+function BufferlineInfo(index)
+  -- print("state.components:", vim.inspect(state.components))
+  print("state.custom_sort (bufnrs order):", vim.inspect(state.custom_sort))
+  if index then
+    bufferline.exec(index, function (index_info, vis_infos)
+      if index then
+        print("ordinal:", index_info.ordinal, "; bufnr:", index_info.id, "; bufname:", index_info.path)
+      end
+    end)
+  else
+    bufferline.exec(1, function (i, vis_infos)
+      for i, value in ipairs(vis_infos) do
+        print("index:", i, "ordinal:", value.ordinal, "; bufnr:", value.id, "; bufname:", value.path)
+      end
+    end)
+  end
+end
 
 
 
