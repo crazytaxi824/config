@@ -181,6 +181,8 @@ eg: `:call setbufvar(5, '&foo', 'bar')`, 报错 `E355: Unknown option: foo`
 
 ### vim - window / tab / buffer 函数
 
+NOTE: 这些函数中没有 del() 方法. 原因是: 当 buffer/win/tab close 的时候, 所有的 var 都会被清空.
+
 getXXXinfo()
 
 - `vim.fn.getwininfo()`
