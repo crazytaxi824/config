@@ -19,9 +19,10 @@ indent_blankline.setup({
   indent_level = 10,  -- VVI: maximum indent level to display. 默认 10.
   max_indent_increase = 1,  -- 多行 trailing comments 不会出现 indentline, eg: settings.lua 中的 comments.
 
-  buftype_exclude = { "terminal", "nofile", "quickfix" },
-  bufname_exclude = {'README.md', '.*\\.py'},  -- python 不适合 indent line.
+  buftype_exclude = { "terminal", "nofile", "quickfix", "help", "prompt" },
+  bufname_exclude = {'README.md'},
   filetype_exclude = {
+    "qf",  -- quickfix & location list
     "help",
     "startify",
     "dashboard",
@@ -29,6 +30,7 @@ indent_blankline.setup({
     "neogitstatus",
     "NvimTree",
     "Trouble",
+    "python",  -- python 不适合 indent line.
   },
 
   char = "│",  -- 默认 "▏" and "▎"

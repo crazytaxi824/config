@@ -158,9 +158,9 @@ nvim_tree.setup {
       resize_window = true,  -- VVI: 重新渲染 nvimtree 窗口大小.
       window_picker = {
         enable = true,       -- false: 总在 vsplit 窗口中打开新文件.
-        exclude = {          -- 以下类型的窗口不能用于打开文件.
+        exclude = {          -- 以下类型的窗口不能用于 nvim-tree 打开文件.
           filetype = { "notify", "packer", "qf", "diff", "fugitive", "fugitiveblame" },
-          buftype = { "nofile", "terminal", "help" },
+          buftype = { "nofile", "terminal", "help", "prompt", "quickfix" },
         },
       },
     },
