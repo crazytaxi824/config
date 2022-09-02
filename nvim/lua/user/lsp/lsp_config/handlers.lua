@@ -49,11 +49,8 @@ vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
     border = {"▄","▄","▄","█","▀","▀","▀","█"},
 
     --- events, to trigger close floating window
-    --- VVI: `set omnifunc?` 没有设置, 所以 <C-x><C-o> 不会触发 Completion.
-    --- 使用 `:doautocmd User` 手动触发 event.
-    close_events = {"WinScrolled", "User"},
-    --- 以下是 close_events 默认设置. https://github.com/neovim/neovim/ -> runtime/lua/vim/lsp/util.lua
-    --close_events = {"CursorMoved", "CursorMovedI", "InsertCharPre"},
+    --- https://github.com/neovim/neovim/ -> runtime/lua/vim/lsp/util.lua
+    close_events = {"WinScrolled"},  -- 默认 {"CursorMoved", "CursorMovedI", "InsertCharPre"}
   }
 )
 
