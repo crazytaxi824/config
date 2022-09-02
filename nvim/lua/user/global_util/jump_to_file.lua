@@ -21,7 +21,9 @@ function Highlight_filepath(data_list)
 end
 
 --- Jump to file -----------------------------------------------------------------------------------
---- 利用 local list 跳转到 log 文件
+--- 利用 local list 跳转到 log 文件, vim.fn.setloclist(win_id/winnr, {item_list}, 'r'/'a')
+--- vim.fn.setloclist(1000, { {filename='src/main.go', lnum=1, col=1, text='jump_to_log_file()'} }, 'r'/'a')
+--- 'r' - replace items; 'a' - append items
 function Jump_to_file(filepath, lnum, col)
   if not filepath or filepath == '' then  -- empty line
     return

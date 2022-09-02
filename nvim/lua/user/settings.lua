@@ -310,8 +310,8 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.bo[params.buf].buflisted = false
 
     --- close window
-    vim.keymap.set('n', 'q', '<cmd>cclose<CR>', {noremap=true, buffer=params.buf})
-    --vim.keymap.set('n', '<ESC>', '<cmd>cclose<CR>', {noremap=true, buffer=params.buf})
+    vim.keymap.set('n', 'q', '<cmd>q<CR>', {noremap=true, buffer=params.buf})
+    --vim.keymap.set('n', '<ESC>', '<cmd>q<CR>', {noremap=true, buffer=params.buf})
   end
 })
 
