@@ -267,7 +267,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
       --- undodir 不存在的情况下, `mkdir -p` 创建该文件夹.
       if vim.fn.isdirectory(vim.go.undodir) == 0 then
         --vim.cmd([[silent !mkdir -p ]] .. vim.go.undodir)
-        local result = vim.fn.system('!mkdir -p '.. vim.go.undodir)
+        local result = vim.fn.system('mkdir -p '.. vim.go.undodir)
         if vim.v.shell_error ~= 0 then
           Notify(result, "ERROR")
           return
