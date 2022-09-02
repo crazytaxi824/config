@@ -257,10 +257,10 @@ vim.opt.undodir = '/tmp/nvim/undo'  -- undodir 是全局设置, 无法单独给�
 --vim.opt.undolevels = 1000  -- 默认 1000. NOTE: undolevels 太大可能影响 opening buffer 速度.
 --vim.cmd([[au Filetype * ++once :silent !mkdir -p ]] .. vim.go.undodir)
 
---- NOTE: 这里不使用 FileType 是因为如果 buffer 的 filetype='' 则不会触发 autocmd.
-vim.api.nvim_create_autocmd("BufEnter", {
+--- 这里使用 VimEnter 是因为只需要执行一次命令.
+vim.api.nvim_create_autocmd("VimEnter", {
   pattern = {"*"},
-  once = true,  -- VVI: ++once 只在进入 neovim 时执行一次 autocmd
+  once = true,  -- "++once" 只在进入 neovim 时执行一次 autocmd
   callback = function()
     --- 延迟执行
     vim.schedule(function()
