@@ -24,11 +24,13 @@ end
 --- 利用 local list 跳转到 log 文件, vim.fn.setloclist(win_id/winnr, {item_list}, 'r'/'a')
 --- vim.fn.setloclist(1000, { {filename='src/main.go', lnum=1, col=1, text='jump_to_log_file()'} }, 'r'/'a')
 --- 'r' - replace items; 'a' - append items
+--- `:help setqflist-what`
 function Jump_to_file(filepath, lnum, col)
   if not filepath or filepath == '' then  -- empty line
     return
   end
 
+  --- 这里使用 pcall 是为了防止 vim.fn.expand('{foo') unescaped char {}[] ... 报错.
   local expand_status_ok, result = pcall(vim.fn.expand, filepath)
   if not expand_status_ok then
     Notify('cannot open file: ' .. filepath, "DEBUG", {timeout = 1500})
@@ -54,28 +56,27 @@ function Jump_to_file(filepath, lnum, col)
   --- 如果有 local list item, 则选择合适的 window 进行显示.
   local log_display_win_id  -- 用于设置 setloclist()
 
-  --- 寻找第一个显示 listed-buffer 的 window 用于显示 log filepath.
-  local all_win_info = vim.fn.getwininfo()
-  for _, win_info in ipairs(all_win_info) do
-    if vim.fn.buflisted(win_info.bufnr) == 1 then
-      log_display_win_id = win_info.winid
-      break
+  --- 在本 tab 中寻找第一个显示 listed-buffer 的 window, 用于显示 log filepath.
+  local tab_wins = vim.fn.winnr('$')
+  for i=1, tab_wins, 1 do
+    local winid = vim.fn.win_getid(i)
+    if vim.fn.buflisted(vim.api.nvim_win_get_buf(winid)) == 1 then
+      log_display_win_id = winid
     end
   end
 
-  --- `:help setqflist-what`
-  local loclist_items = {filename = filepath, lnum = lnum, col=col, text='jump_to_log_file()'}
+  local loclist_item = {filename = filepath, lnum = lnum, col=col, text='jump_to_log_file()'}
 
   if vim.fn.win_gotoid(log_display_win_id) == 1 then
     --- 如果 log_display_win_id 可以跳转则直接跳转.
-    vim.fn.setloclist(log_display_win_id, {loclist_items}, 'r')  -- 给指定 window 设置 loclist, 'r' - replace, `:help setqflist-what`
+    vim.fn.setloclist(log_display_win_id, {loclist_item}, 'r')  -- 给指定 window 设置 loclist, 'r' - replace, `:help setqflist-what`
     vim.cmd('silent lfirst')  -- jump to loclist first item
     vim.fn.setloclist(log_display_win_id, {}, 'r')  -- VVI: clear loclist
   else
     --- 如果 log_display_win_id 不能跳转, 则在 terminal 正上方创建一个新的 window 用于显示 log filepath
-    vim.cmd('leftabove split ' .. loclist_items.filename)
+    vim.cmd('leftabove split ' .. loclist_item.filename)
     log_display_win_id = vim.fn.win_getid()
-    vim.fn.setloclist(log_display_win_id, {loclist_items}, 'r')  -- 给指定 window 设置 loclist, 'r' - replace, `:help setqflist-what`
+    vim.fn.setloclist(log_display_win_id, {loclist_item}, 'r')  -- 给指定 window 设置 loclist, 'r' - replace, `:help setqflist-what`
     vim.cmd('silent lfirst')  -- jump to loclist first item
     vim.fn.setloclist(log_display_win_id, {}, 'r')  -- VVI: clear loclist
   end
