@@ -257,17 +257,17 @@ vim.opt.undodir = '/tmp/nvim/undo'  -- undodir 是全局设置, 无法单独给�
 --vim.opt.undolevels = 1000  -- 默认 1000. NOTE: undolevels 太大可能影响 opening buffer 速度.
 --vim.cmd([[au Filetype * ++once :silent !mkdir -p ]] .. vim.go.undodir)
 
---- NOTE: 这里不使用 FileType 是因为如果 buffer 的 filetype='' 则不会触发 autocmd.
-vim.api.nvim_create_autocmd("BufEnter", {
+--- 这里使用 VimEnter 是因为只需要执行一次命令.
+vim.api.nvim_create_autocmd("VimEnter", {
   pattern = {"*"},
-  once = true,  -- VVI: ++once 只在进入 neovim 时执行一次 autocmd
+  once = true,  -- "++once" 只在进入 neovim 时执行一次 autocmd
   callback = function()
     --- 延迟执行
     vim.schedule(function()
       --- undodir 不存在的情况下, `mkdir -p` 创建该文件夹.
       if vim.fn.isdirectory(vim.go.undodir) == 0 then
         --vim.cmd([[silent !mkdir -p ]] .. vim.go.undodir)
-        local result = vim.fn.system('!mkdir -p '.. vim.go.undodir)
+        local result = vim.fn.system('mkdir -p '.. vim.go.undodir)
         if vim.v.shell_error ~= 0 then
           Notify(result, "ERROR")
           return
@@ -310,8 +310,8 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.bo[params.buf].buflisted = false
 
     --- close window
-    vim.keymap.set('n', 'q', '<cmd>cclose<CR>', {noremap=true, buffer=params.buf})
-    --vim.keymap.set('n', '<ESC>', '<cmd>cclose<CR>', {noremap=true, buffer=params.buf})
+    vim.keymap.set('n', 'q', '<cmd>q<CR>', {noremap=true, buffer=params.buf})
+    --vim.keymap.set('n', '<ESC>', '<cmd>q<CR>', {noremap=true, buffer=params.buf})
   end
 })
 

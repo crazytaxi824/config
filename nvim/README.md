@@ -181,6 +181,8 @@ eg: `:call setbufvar(5, '&foo', 'bar')`, 报错 `E355: Unknown option: foo`
 
 ### vim - window / tab / buffer 函数
 
+NOTE: 这些函数中没有 del() 方法. 原因是: 当 buffer/win/tab close 的时候, 所有的 var 都会被清空.
+
 getXXXinfo()
 
 - `vim.fn.getwininfo()`
@@ -370,3 +372,14 @@ vim.api.nvim_create_autocmd("FileType", {
 - 将 global_util 中的函数分开.
 
 - hightlight path in filetyp='dap-repl' window.
+
+```lua
+vim.api.nvim_create_autocmd({"BufEnter", "TextChanged", "TextChangedI", "FileChangedShell", "FileChangedShellPost"}, {
+  pattern = {"\\[dap-repl\\]"},
+  callback = function(params)
+    print(params.event)
+    local output = vim.fn.getline(1, '$')
+    print(vim.inspect(output))
+  end
+})
+```
