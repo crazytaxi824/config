@@ -372,3 +372,14 @@ vim.api.nvim_create_autocmd("FileType", {
 - 将 global_util 中的函数分开.
 
 - hightlight path in filetyp='dap-repl' window.
+
+```lua
+vim.api.nvim_create_autocmd({"BufEnter", "TextChanged", "TextChangedI", "FileChangedShell", "FileChangedShellPost"}, {
+  pattern = {"\\[dap-repl\\]"},
+  callback = function(params)
+    print(params.event)
+    local output = vim.fn.getline(1, '$')
+    print(vim.inspect(output))
+  end
+})
+```
