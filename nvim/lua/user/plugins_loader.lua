@@ -443,7 +443,7 @@ return packer.startup(function(use)
 
   --- Debug tools 安装 -----------------------------------------------------------------------------
   use {"mfussenegger/nvim-dap",  -- core debug tool
-    commit = "57003a0",  -- TODO: `DapLoadLaunchJSON`
+    commit = "ea25d6d",  -- TODO: `DapLoadLaunchJSON`
     requires = "williamboman/mason.nvim",  -- install dap-debug tools. eg: 'delve'
     cmd = {'DapToggleBreakpoint', 'DapContinue'},
     --- NOTE: dap-ui && dap 设置在同一文件中.
