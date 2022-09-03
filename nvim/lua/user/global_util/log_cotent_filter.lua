@@ -1,3 +1,4 @@
+--- 离开 vim 时, 清理 log 文件 ---------------------------------------------------------------------
 local function clean_log_file(filepath, regexp)
   --- lua read file --- {{{
   -- local f, err = io.open(filepath, 'r')  -- read mode
@@ -61,6 +62,7 @@ local function clean_log_file(filepath, regexp)
   vim.fn.writefile(new_content, filepath)  -- flag: omit - 直接覆盖写入, 'a' - append 写入.
 end
 
+--- 离开 vim 时, 清理 log 文件.
 vim.api.nvim_create_autocmd("VimLeave", {
   pattern = {"*"},
   once = true,  -- VimLeave execute only once
