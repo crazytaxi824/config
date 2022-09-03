@@ -6,11 +6,19 @@ function Check_backspace()
   return col == 0 or vim.fn.getline("."):sub(col, col):match("%s")
 end
 
---- escape charactor -------------------------------------------------------------------------------
-function Escape_chars(string)
-  return string.gsub(string, "[%(|%)|\\|%[|%]|%-|%{%}|%?|%+|%*|%^|%$|%.]", {
-    ["\\"] = "\\\\",
-    ["-"] = "\\-",
+--- escape RegExp charactor ------------------------------------------------------------------------
+--- escape 传入的整个 string 用于 RegExp.
+--- '%%' 代表 '%' 是 lua string.gsub(), string.match(), string.find(), string.gmatch() 中的 pattern safe substitute.
+--- https://fhug.org.uk/kb/kb-article/understanding-lua-patterns/
+--- % . [ ] ^ $ ( ) * + - ? 有特殊含义, 需要使用 '%' escape. NOTE: 这里不包括 \ { }
+---
+--- 以下函数的意思是将 ()[]{} ... 这些 char 替换成 \(\)\[\]\{\} ... 用于 RegExp.
+--- 而 RegExp 中需要对 \ { } 进行 escape, 但不需要对 % escape.
+---
+--- eg: Escape_RegExp_chars('()[]{}%.^*$+-\\')  -> \(\)\[\]\{\}%\.\^\*\$\+\-\\
+function Escape_RegExp_chars(string)
+  return string.gsub(string, "[\\%(%)%[%]{}%?%+%-%*%^%$%.]", {
+    ["\\"] = "\\\\",  -- \ -> \\
     ["("] = "\\(",
     [")"] = "\\)",
     ["["] = "\\[",
@@ -19,14 +27,13 @@ function Escape_chars(string)
     ["}"] = "\\}",
     ["?"] = "\\?",
     ["+"] = "\\+",
+    ["-"] = "\\-",
     ["*"] = "\\*",
     ["^"] = "\\^",
     ["$"] = "\\$",
     ["."] = "\\.",
   })
 end
-
---- NOTE: 以下是 test functions --------------------------------------------------------------------
 
 
 
