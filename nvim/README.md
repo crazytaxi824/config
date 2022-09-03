@@ -369,8 +369,6 @@ vim.api.nvim_create_autocmd("FileType", {
 - UPGRADE: `bufferline.nvim`, `nvim-lspconfig`, `LuaSnip` refactor, 可能会有 BUG, 需要持续关注更新.
   在稳定之后再创建新的 v0.2.13 tag.
 
-- 将 global_util 中的函数分开.
-
 - hightlight path in filetyp='dap-repl' window.
 
 ```lua

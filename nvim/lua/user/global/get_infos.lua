@@ -54,7 +54,7 @@ end
 function Get_TSNode_at_cursor()
   local ts_status, ts_utils = pcall(require, "nvim-treesitter.ts_utils")
   if not ts_status then
-    Notify("treesitter is not loaded.", "WARN")
+    Notify("nvim-treesitter is not loaded.", "WARN")
     return
   end
 

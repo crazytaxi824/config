@@ -75,8 +75,8 @@ vim.cmd('hi Search ctermfg=0 ctermbg=191')                -- / ? * # g* g# 搜�
 
 vim.cmd('hi ErrorMsg ctermfg=253 ctermbg=167')     -- echoerr 颜色
 vim.cmd('hi WarningMsg ctermfg=236 ctermbg=214')   -- echohl 颜色, XXX FIXME BUG 颜色
-vim.cmd('hi Todo ctermbg=28 ctermfg=188')          -- TODO, HACK 颜色
-vim.cmd('hi SpecialComment ctermbg=63 ctermfg=188')  -- NOTE: DEBUG: FOO: 颜色
+vim.cmd('hi Todo cterm=bold ctermfg=188 ctermbg=22')            -- TODO, HACK 颜色
+vim.cmd('hi SpecialComment cterm=bold ctermfg=188 ctermbg=63')  -- NOTE: DEBUG: FOO: 颜色
 
 vim.cmd('hi PmenuSel cterm=underline,bold ctermfg=None ctermbg=238')  -- Complettion Menu 选中项颜色
 vim.cmd('hi Pmenu ctermfg=188 ctermbg=233')  -- VVI: Completion Menu & Floating Window 背景颜色, 或者 bg=236.
