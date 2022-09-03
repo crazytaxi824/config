@@ -258,7 +258,7 @@ return packer.startup(function(use)
   --- `:TSUpdateSync`         -- Update the installed languages synchronously
   -- -- }}}
   use {"nvim-treesitter/nvim-treesitter",
-    commit = "501db145",
+    commit = "73cd1f18",
     run = ":TSUpdate",   -- Post-update/install hook.
     config = function() require("user.plugin_settings.treesitter") end,
     opt = true,  -- 在 vim.schedule() 中 lazy load
