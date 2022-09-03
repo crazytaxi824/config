@@ -13,15 +13,17 @@
 --    to see the actual highlights. |LspReferenceText|
 --    |LspReferenceRead| |LspReferenceWrite|
 local function lsp_highlight(client)
-  -- Set autocommands conditional on server_capabilities
+  --- TODO: CursorHold 过程中不要 clear_references(), 在判断 word 改变之后再 clear.
+  --- Set autocommands conditional on server_capabilities
   if client.resolved_capabilities.document_highlight then
     vim.cmd [[
       augroup lsp_document_highlight
         autocmd! * <buffer>
-        autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
-        autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()  -- insert mode
-        autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-        autocmd CursorMovedI <buffer> lua vim.lsp.buf.clear_references()   -- insert mode
+        "autocmd ModeChanged * lua vim.lsp.buf.clear_references()
+        autocmd CursorHold <buffer> lua vim.lsp.buf.clear_references() vim.lsp.buf.document_highlight()
+        autocmd CursorHoldI <buffer> lua vim.lsp.buf.clear_references() vim.lsp.buf.document_highlight()  -- insert mode
+        "autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
+        "autocmd CursorMovedI <buffer> lua vim.lsp.buf.clear_references()   -- insert mode
       augroup END
     ]]
   end
