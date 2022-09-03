@@ -15,15 +15,11 @@
 local function lsp_highlight(client)
   -- Set autocommands conditional on server_capabilities
   if client.resolved_capabilities.document_highlight then
-    -- TODO clear_references() when 'documentHighlight' return different result.
-    -- vim.lsp.buf_request(0, 'textDocument/documentHighlight',
-    --    vim.lsp.util.make_position_params(), function(_,r,_,_) print(vim.inspect(r)) end)
-    -- 判断两个 table 的内容是否相同.
     vim.cmd [[
       augroup lsp_document_highlight
         autocmd! * <buffer>
         autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
-        "autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()  -- insert mode
+        autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()  -- insert mode
         autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
         autocmd CursorMovedI <buffer> lua vim.lsp.buf.clear_references()   -- insert mode
       augroup END
