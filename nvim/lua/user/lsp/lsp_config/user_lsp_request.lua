@@ -125,7 +125,7 @@ local function hover_short_handler(_, result, ctx, config)
 end
 
 --- vim.lsp.buf_request() ----------------------------------
---- https://github.com/neovim/neovim/ -> runtime/lua/vim/lsp/buf.lua
+--- https://github.com/neovim/neovim/blob/master/runtime/lua/vim/lsp/buf.lua
 --- vim.lsp.buf_request(0, method, params, handlerFn)  -- 向 LSP server 发送请求, 通过 handler 处理结果.
 M.hover_short = function()
   local result = find_fn_call_before_cursor()

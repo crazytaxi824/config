@@ -152,10 +152,10 @@ Keymap_set_and_register(telescope_keymaps, {
 
 --- 自定义 Rg command ------------------------------------------------------------------------------
 --- NOTE: 修改自 telescope.builtin.grep_string() 定义在:
----       https://github.com/nvim-telescope/telescope.nvim -> lua/telescope/builtin/files.lua
+---       https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/builtin/__files.lua
 ---       files.grep_string = function(opts), opts 参数为 `:help grep_string()`, cwd, search ...
 --- make_entry 的内置函数定义在:
----       https://github.com/nvim-telescope/telescope.nvim -> lua/telescope/make_entry.lua
+---       https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/make_entry.lua
 local finders = require("telescope.finders")
 local make_entry = require("telescope.make_entry")
 local pickers = require("telescope.pickers")

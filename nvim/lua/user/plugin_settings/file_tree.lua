@@ -70,6 +70,7 @@ nvim_tree.setup {
   renderer = {
     highlight_git = false,  -- 开启 git 颜色.
     highlight_opened_files = "all",  -- NOTE: "none" | "icon" | "name" | "all"
+    indent_width = 2, -- 默认 2.
     indent_markers = {
       enable = true,
       icons = {

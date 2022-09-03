@@ -49,14 +49,14 @@ vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
     border = {"▄","▄","▄","█","▀","▀","▀","█"},
 
     --- events, to trigger close floating window
-    --- https://github.com/neovim/neovim/ -> runtime/lua/vim/lsp/util.lua
+    --- https://github.com/neovim/neovim/blob/master/runtime/lua/vim/lsp/util.lua
     close_events = {"WinScrolled"},  -- 默认 {"CursorMoved", "CursorMovedI", "InsertCharPre"}
   }
 )
 
 --- HACK: Always Put popup window on Top of the cursor.
 --- 影响所有使用 vim.lsp.util.open_floating_preview() 的 popup window.
---- https://github.com/neovim/neovim/ -> runtime/lua/vim/lsp/util.lua
+--- https://github.com/neovim/neovim/blob/master/runtime/lua/vim/lsp/util.lua
 --- modify native function (global) - `vim.lsp.util.make_floating_popup_options` -------------------
 vim.lsp.util.make_floating_popup_options = function (width, height, opts)
     vim.validate {

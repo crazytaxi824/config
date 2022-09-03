@@ -877,7 +877,7 @@ key_bindings:
   #- { key: B,              mods: Command, mode: ~Search,     action: SearchBackward        }
 
   ### --- 自定义 key mapping, escape code - map key to Ctrl-? -----------------------------------------------
-  # https://github.com/prompt-toolkit/python-prompt-toolkit/ -> src/prompt_toolkit/input/ansi_escape_sequences.py
+  # https://github.com/prompt-toolkit/python-prompt-toolkit/blob/master/src/prompt_toolkit/input/ansi_escape_sequences.py
 
   # NOTE: 中文输入法输入过程中, delete 键不会删除之前的字符.
   # 因为这个键默认是 delete 键 (Control-H, "\x08") 而不是 backspace 键.
