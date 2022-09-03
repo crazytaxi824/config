@@ -276,14 +276,14 @@ return packer.startup(function(use)
 
   --- 第一方 module 插件 ---
   use {"nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-    commit = "8e88b67",
+    commit = "1f66894",
     --- https://github.com/nvim-treesitter/nvim-treesitter-context#configuration
     config = function() require("user.plugin_settings.treesitter_ctx") end,
     after = "nvim-treesitter",
   }
 
   use {"nvim-treesitter/playground",  -- 用于获取 treesitter 信息, 调整颜色很有用.
-    commit = "a0aeb6a",
+    commit = "90d2b3e",
     cmd = {"TSPlaygroundToggle", "TSHighlightCapturesUnderCursor"},
     after = "nvim-treesitter",
   }
