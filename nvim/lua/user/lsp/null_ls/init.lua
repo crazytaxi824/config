@@ -34,7 +34,7 @@ local diagnostics = null_ls.builtins.diagnostics
 --local code_actions = null_ls.builtins.code_actions
 
 --- diagnostics_opts 用于下面的 sources diagnostics 设置 ------------------------------------------- {{{
---- https://github.com/jose-elias-alvarez/null-ls.nvim -> lua/null-ls/methods.lua
+--- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/master/lua/null-ls/methods.lua
 -- local internal_methods = {
 --     CODE_ACTION = "NULL_LS_CODE_ACTION",  --- NOTE: for code_actions
 --

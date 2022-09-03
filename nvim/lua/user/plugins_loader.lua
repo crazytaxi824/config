@@ -198,8 +198,8 @@ packer.init {
 }
 
 --- 官方文档 https://github.com/wbthomason/packer.nvim
---- 插件推荐 https://github.com/LunarVim/Neovim-from-scratch/ -> lua/user/plugins.lua
----          https://github.com/LunarVim/LunarVim -> lua/lvim/plugins.lua
+--- 插件推荐 https://github.com/LunarVim/Neovim-from-scratch/blob/master/lua/user/plugins.lua
+---          https://github.com/LunarVim/LunarVim/blob/master/lua/lvim/plugins.lua
 --- `:echo stdpath("data")` == "~/.local/share/nvim"
 --- 插件的安装位置在 "~/.local/share/nvim/site/pack/packer/start/..."
 --- `:PackerSync` - install / update / clean 插件包.

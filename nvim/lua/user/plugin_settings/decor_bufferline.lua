@@ -485,7 +485,7 @@ bufferline.setup({
 local opt = { noremap = true, silent = true }
 local bufferline_keymaps = {
   --- NOTE: according to bufferline source code, `go_to_buffer()` is deprecate. it calls `go_to()`
-  --- https://github.com/akinsho/bufferline.nvim/ -> /lua/bufferline.lua
+  --- https://github.com/akinsho/bufferline.nvim/blob/master/lua/bufferline.lua
   {'n', '<leader>1', function() if not is_exclude_filetype() then bufferline.go_to(1, true) end end, opt, 'which_key_ignore'},
   {'n', '<leader>2', function() if not is_exclude_filetype() then bufferline.go_to(2, true) end end, opt, 'which_key_ignore'},
   {'n', '<leader>3', function() if not is_exclude_filetype() then bufferline.go_to(3, true) end end, opt, 'which_key_ignore'},
