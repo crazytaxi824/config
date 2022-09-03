@@ -322,7 +322,7 @@ return packer.startup(function(use)
 
   --- Completion -----------------------------------------------------------------------------------
   use {"hrsh7th/nvim-cmp",
-    commit = "058100d",
+    commit = "33fbb2c",
     config = function() require("user.plugin_settings.cmp_completion") end,
     opt = true,  -- 在 vim.schedule() 中 lazy load
   }
