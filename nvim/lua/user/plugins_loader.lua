@@ -395,7 +395,7 @@ return packer.startup(function(use)
   --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
   --- 官方 LSP 引擎.
   use {"neovim/nvim-lspconfig",
-    commit = "df17834",  -- "da7461b", UPGRADE: 使用 0.7 API.
+    commit = "0fafc3e",  -- "da7461b", UPGRADE: 使用 0.7 API.
     config = function() require("user.lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     opt = true,  -- 在 vim.schedule() 中 lazy load
     requires = {
