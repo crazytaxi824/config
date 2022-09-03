@@ -11,8 +11,10 @@
 local function lsp_format()
   local clients = vim.tbl_values(vim.lsp.buf_get_clients())
   for _, client in ipairs(clients) do
-    --if client.resolved_capabilities.document_formatting then  -- NOTE: 也可以用 resolved_capabilities 判断.
-    --- NOTE: 如果 lsp_client 支持 formatting, 但是禁用了 formatting 功能, supports_method() 也会返回 false.
+    --- NOTE: 如果 lsp_client 支持 formatting, 但是禁用了 formatting 功能, 则:
+    ---  - supports_method('textDocument/formatting') 会返回 false;
+    ---  - resolved_capabilities.document_formatting 值也为 false.
+    --- 所以也可以用 if client.resolved_capabilities.document_formatting 判断.
     if client.supports_method('textDocument/formatting') then
       --vim.lsp.buf.formatting_sync()  -- 如果有多个 Lsp 提供 format 功能, 则会 prompt.
       vim.lsp.buf.formatting_seq_sync(nil, 3000, {"null-ls"})  -- 最后执行 null-ls format, 其他的 Lsp 也会执行 format.

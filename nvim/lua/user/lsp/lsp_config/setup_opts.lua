@@ -7,29 +7,6 @@
 --    可以用来加载 project local settings.
 --    修改之后使用 lsp_client.notify("workspace/didChangeConfiguration") 通知 LSP server.
 
---- work like Same_ID, `:help vim.lsp.buf.document_highlight()` ------------------------------------ {{{
---    NOTE: Usage of |vim.lsp.buf.document_highlight()| requires the
---    following highlight groups to be defined or you won't be able
---    to see the actual highlights. |LspReferenceText|
---    |LspReferenceRead| |LspReferenceWrite|
-local function lsp_highlight(client)
-  --- TODO: CursorHold 过程中不要 clear_references(), 在判断 word 改变之后再 clear.
-  --- Set autocommands conditional on server_capabilities
-  if client.resolved_capabilities.document_highlight then
-    vim.cmd [[
-      augroup lsp_document_highlight
-        autocmd! * <buffer>
-        "autocmd ModeChanged * lua vim.lsp.buf.clear_references()
-        autocmd CursorHold <buffer> lua vim.lsp.buf.clear_references() vim.lsp.buf.document_highlight()
-        autocmd CursorHoldI <buffer> lua vim.lsp.buf.clear_references() vim.lsp.buf.document_highlight()  -- insert mode
-        "autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-        "autocmd CursorMovedI <buffer> lua vim.lsp.buf.clear_references()   -- insert mode
-      augroup END
-    ]]
-  end
-end
--- -- }}}
-
 local M = {}
 
 --- NOTE: 停止输入文字的时间超过该数值, 则向 lsp server 发送请求.
@@ -53,7 +30,7 @@ M.on_attach = function(client, bufnr)
 
   --- 加载自定义设置 ---
   --- Same_ID
-  lsp_highlight(client)
+  require("user.lsp.lsp_config.same_id").lsp_highlight(client, bufnr)
 
   --- 设置 lsp 专用 keymaps
   local lsp_keymaps = require("user.lsp.util.lsp_keymaps")
