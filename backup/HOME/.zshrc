@@ -648,14 +648,14 @@ function checkZshTools() {
 	printf "\n"
 
 	echo -e "\e[32mcheck nvim environment:\e[0m"
-	# node & python3 都是 nvim plugin 依赖
+	# 如果 brew install neovim, 会安装依赖: gettext, libtermkey, libuv, luajit, luv, msgpack, tree-sitter, unibilium
+	# node & python3 是 neovim 某些 plugin 的依赖. NOTE: python3 有可能需要 v3.9.x 版本
 	[ -x $brew_path/nvim ] && echo -e "\e[32m - nvim ✔\e[0m" || echo -e "\e[31m - nvim ✗, 'brew info nvim'\e[0m"
 	[ -x $brew_path/node ] && echo -e "\e[32m - node ✔\e[0m" || echo -e "\e[31m - node ✗, 'brew info node'\e[0m"
 	[ -x $brew_path/python3 ] && echo -e "\e[32m - python3 ✔\e[0m" || echo -e "\e[31m - python3 ✗, 'brew info python3'\e[0m"
 	[ -x $brew_path/pandoc ] && echo -e "\e[32m - pandoc ✔\e[0m" || echo -e "\e[31m - pandoc ✗, 'brew info pandoc'\e[0m"
 	[ -x $brew_path/prettier ] && echo -e "\e[32m - prettier ✔\e[0m" || echo -e "\e[31m - prettier ✗, 'brew info prettier'\e[0m"
 	[ -x $brew_path/ctags ] && echo -e "\e[32m - ctags (universal-ctags) ✔\e[0m" || echo -e "\e[31m - ctags (universal-ctags) ✗, 'brew info universal-ctags'\e[0m"
-	[ -x $brew_path/stylua ] && echo -e "\e[32m - stylua ✔\e[0m" || echo -e "\e[31m - stylua ✗, 'brew info stylua'\e[0m"
 	printf "\n"
 }
 
