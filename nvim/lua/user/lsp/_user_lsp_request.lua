@@ -158,6 +158,3 @@ M.hover_short = function()
 end
 
 return M
-
-
-
