@@ -252,7 +252,7 @@ local debug_keymaps = {
 Keymap_set_and_register(debug_keymaps, {
   key_desc = {
     c = {
-      name = "Code",  -- NOTE: 这里设置必须和 lua/user/lsp/util/lsp_keymaps 一致.
+      name = "Code",  -- NOTE: 这里设置必须和 lua/user/lsp/lsp_keymaps 一致.
       -- ['<F9>'] = "Debug - Toggle Breakpoint",  -- NOTE: 已经在 lua/user/plugin_settings/_trigger.lua 中设置.
       ['<S-F9>']  = "Debug - Clear Breakpoints",
       ['<F10>']   = "Debug - Step Over",

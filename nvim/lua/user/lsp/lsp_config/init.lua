@@ -113,8 +113,5 @@ end
 -- end
 -- -- }}}
 
---- 其他 LSP 相关设置 ------------------------------------------------------------------------------
-require("user.lsp.lsp_config.handlers")    -- overwrite 默认 handlers 设置
-
 
 

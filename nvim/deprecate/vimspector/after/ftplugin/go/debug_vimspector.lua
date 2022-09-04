@@ -55,7 +55,7 @@ local vimspector_keymaps = {
 Keymap_set_and_register(vimspector_keymaps, {
   key_desc = {
     c = {
-      name = "Code",  -- NOTE: 这里设置必须和 lua/user/lsp/util/lsp_keymaps 一致.
+      name = "Code",  -- NOTE: 这里设置必须和 lua/user/lsp/lsp_keymaps 一致.
       ['<F9>'] = "Debug - Toggle Breakpoint",
       ['<F10>'] = "Debug - Step Over",
       ['<F11>'] = "Debug - Step Into",
