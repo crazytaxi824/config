@@ -381,3 +381,5 @@ vim.api.nvim_create_autocmd({"BufEnter", "TextChanged", "TextChangedI", "FileCha
   end
 })
 ```
+
+- alacritty v0.11.0

@@ -1,10 +1,7 @@
 # 在 lazygit 界面中选中 Status 窗口，然后按下 'o' 键，打开 config.yml 文件
 # 本文件地址在 "~/Library/Application\ Support/lazygit/config.yml"
 
-# 需要安装 brew install git-delta; https://github.com/dandavison/delta
-# 配置教程 https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md
-# git log format: https://www.git-scm.com/docs/git-log#Documentation/git-log.txt-emnem
-
+# DOC: lazygit 配置: https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md
 gui:
   # stuff relating to the UI
   scrollHeight: 5                    # main pannel (右侧主窗口) pageup/pagedown 滚动 n 行, 不要超过 commandLogSize.
@@ -34,6 +31,9 @@ gui:
 git:
   # merging:
   #   args: '--no-ff'  # no-fast-forward
+
+  # DOC: lazygit diff 配置: https://github.com/jesseduffield/lazygit/blob/master/docs/Custom_Pagers.md
+  # 需要安装 brew install git-delta; https://github.com/dandavison/delta
   paging:
     colorArg: always
     # delta commands;
@@ -59,7 +59,7 @@ git:
     showGraph: 'always'  # always | never | when-maximised (当按 '+' 时显示 commit tree)
 
   # Branchs window (window No.3) 右侧显示的 commit tree.
-  # git log format: https://www.git-scm.com/docs/git-log#Documentation/git-log.txt-emnem
+  # DOC: git log format 配置: https://www.git-scm.com/docs/git-log#Documentation/git-log.txt-emnem
   # 最后的换行是为了让每一个 commit 都占2行位置. 如果不换行则有些占一行，有些占两行.
   # 显示 current branch git log
   branchLogCmd: "git log --graph {{branchName}} --format=format:'%C(green)%h%C(reset) -%C(magenta)%d%C(reset) %C(white)%s%C(reset) %C(242)(%ar)%C(reset)%n'' '"
@@ -67,7 +67,7 @@ git:
   #branchLogCmd: "git log --graph --all --format=format:'%C(green)%h%C(reset) -%C(magenta)%d%C(reset) %C(white)%s%C(reset) %C(242)(%ar)%C(reset)%n'' '"
 
   # Status window (window No.1) 按 'a' 键显示 all Branches commit tree.
-  # strftime format, --date=format:'', https://stackoverflow.com/questions/7853332/how-to-change-git-log-date-formats#34778736
+  # DOC: strftime format, --date, https://stackoverflow.com/questions/7853332/how-to-change-git-log-date-formats#34778736
   # 第2行之前的空格是为了对齐.
   allBranchesLogCmd: "git log --date=format:'%Y-%b-%d %H:%M:%S' --graph --all --format=format:'%C(green)%h%C(reset) -%C(magenta)%d%C(reset) %C(cyan)%ad%C(reset) %C(242)(%ar) - %an%C(reset)%n''          %C(white)%s%C(reset)%n'' '"
 
