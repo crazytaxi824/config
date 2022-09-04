@@ -186,7 +186,7 @@ vim.opt.backspace = 'indent,eol,start'  -- 设置 backspace 模式.
 vim.opt.history = 10000    -- command 保存的数量，默认(10000)
 vim.opt.autoindent = true  -- 继承前一行的缩进方式，适用于多行注释
 vim.opt.autowrite = true   -- 可以自动保存 buffer，例如在 buffer 切换的时候.
-vim.opt.updatetime = 300   -- faster completion (4000ms default)
+vim.opt.updatetime = 600   -- faster completion (4000ms default)
 vim.opt.wildmenu = true    -- Command 模式下 <Tab> completion. `:help wildmenu` - enhanced mode of command-line completion.
 vim.opt.wildmode = "full"  -- Complete the next full match.
 vim.opt.wildoptions = ""   -- default "pum,tagfile", pum - popupmenu | tagfile - <C-d> list matches
@@ -229,10 +229,14 @@ vim.opt.signcolumn = 'yes:1'  -- 始终显示 signcolumn. line_number 左边用�
 vim.opt.showmatch = true      -- 跳到匹配的括号上, 包括 () {} []
 
 --- 只在超出 textwidth 的行中显示 ColorColumn. 可以替代 `set colorcolumn`
---vim.cmd [[ au BufEnter * call matchadd('ColorColumn', '\%' .. (&textwidth+1) .. 'v', 100) ]]
-vim.api.nvim_create_autocmd("BufEnter", {
+--vim.cmd [[ au FileType * call matchadd('ColorColumn', '\%' .. (&textwidth+1) .. 'v', 100) ]]
+vim.api.nvim_create_autocmd("FileType", {
   pattern = {"*"},
-  callback = function()
+  callback = function(params)
+    --- `:help 'buftype'`
+    if vim.bo[params.buf].buftype ~= '' then
+      return
+    end
     if vim.bo.textwidth > 0 then  -- 如果 buffer 没有设置 textwidth, 即 textwidth=0 则不执行.
       vim.fn.matchadd('ColorColumn', '\\%' .. vim.bo.textwidth+1 .. 'v', 100)
     end

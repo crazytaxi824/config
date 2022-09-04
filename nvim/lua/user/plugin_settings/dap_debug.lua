@@ -138,7 +138,7 @@ dapui.setup({
 
 --- dap && dap-ui debug functions ------------------------------------------------------------------ {{{
 --- NOTE: 通过 settabvar() && gettabvar() 来确定 debug_tab 是否存在.
-local tabvar_debug = "my_debug"
+local tabvar_debug = "my_debug_dap"
 
 --- open a new tab for debug
 local function open_new_tab_for_debug()
