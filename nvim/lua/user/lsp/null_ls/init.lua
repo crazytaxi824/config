@@ -3,6 +3,8 @@ if not null_ls_status_ok then
   return
 end
 
+local proj_local_settings = require("user.lsp._load_proj_settings")
+
 --- 检查 null-ls 所需 tools ------------------------------------------------------------------------ {{{
 --- 在 null_ls.setup() 的时候, 如果命令行工具不存在不会报错;
 --- 在使用的时候 (eg:Format) 如果命令行工具不存在才会报错.
@@ -96,7 +98,7 @@ local diagnostics_opts = {
 local local_linter_key = "linter"
 local linter_settings = {
   --- golangci-lint
-  diagnostics.golangci_lint.with(__Proj_local_settings.keep_extend(local_linter_key, 'golangci_lint',
+  diagnostics.golangci_lint.with(proj_local_settings.keep_extend(local_linter_key, 'golangci_lint',
     require("user.lsp.null_ls.tools.golangci_lint"),  -- NOTE: 加载单独设置 null_ls/tools/golangci_lint.lua
     diagnostics_opts
   )),
@@ -110,55 +112,55 @@ local linter_settings = {
   --- 可以使用 '--config /xxx' 指定配置文件位置.
   --- https://eslint.org/docs/user-guide/configuring/configuration-files
   -- -- }}}
-  diagnostics.eslint.with(__Proj_local_settings.keep_extend(local_linter_key, 'eslint', {
+  diagnostics.eslint.with(proj_local_settings.keep_extend(local_linter_key, 'eslint', {
     extra_args = { "--config", "eslintrc-ts.json" },
     filetypes = {"typescript"},
   }, diagnostics_opts)),
-  diagnostics.eslint.with(__Proj_local_settings.keep_extend(local_linter_key, 'eslint', {
+  diagnostics.eslint.with(proj_local_settings.keep_extend(local_linter_key, 'eslint', {
     extra_args = { "--config", "eslintrc-react.json" },
     filetypes = {"typescriptreact"},
   }, diagnostics_opts)),
-  diagnostics.eslint.with(__Proj_local_settings.keep_extend(local_linter_key, 'eslint', {
+  diagnostics.eslint.with(proj_local_settings.keep_extend(local_linter_key, 'eslint', {
     extra_args = { "--config", "eslintrc-js.json" },
     filetypes = {"javascript", "javascriptreact", "vue"},
   }, diagnostics_opts)),
 
   --- python, flake8, mypy
-  diagnostics.flake8.with(__Proj_local_settings.keep_extend(local_linter_key, 'flake8', diagnostics_opts)),
-  diagnostics.mypy.with(__Proj_local_settings.keep_extend(local_linter_key, 'mypy', {
+  diagnostics.flake8.with(proj_local_settings.keep_extend(local_linter_key, 'flake8', diagnostics_opts)),
+  diagnostics.mypy.with(proj_local_settings.keep_extend(local_linter_key, 'mypy', {
     extra_args = {"--follow-imports=silent", "--ignore-missing-imports"},
   }, diagnostics_opts)),
 
   --- protobuf, buf
-  diagnostics.buf.with(__Proj_local_settings.keep_extend(local_linter_key, 'buf', diagnostics_opts)),
+  diagnostics.buf.with(proj_local_settings.keep_extend(local_linter_key, 'buf', diagnostics_opts)),
 }
 
 --- formatter 设置 ---------------------------------------------------------------------------------
 local local_formatter_key = "formatter"
 local formatter_settings = {
   --- NOTE: 需要在 lsp.setup(opts) 中的 on_attach 中排除 tsserver & sumneko_lua 的 formatting 功能
-  formatting.prettier.with(__Proj_local_settings.keep_extend(local_formatter_key, 'prettier',
+  formatting.prettier.with(proj_local_settings.keep_extend(local_formatter_key, 'prettier',
     require("user.lsp.null_ls.tools.prettier")  -- NOTE: 加载单独设置 null_ls/tools/prettier.lua
   )),
 
   --- lua, stylua
-  formatting.stylua.with(__Proj_local_settings.keep_extend(local_formatter_key, 'stylua', {
+  formatting.stylua.with(proj_local_settings.keep_extend(local_formatter_key, 'stylua', {
     extra_args = { "--column-width=" .. vim.bo.textwidth },  -- 和 vim textwidth 相同.
   })),
 
   --- python, autopep8, black, YAPF
-  formatting.autopep8.with(__Proj_local_settings.keep_extend(local_formatter_key, 'autopep8', {})),
+  formatting.autopep8.with(proj_local_settings.keep_extend(local_formatter_key, 'autopep8', {})),
 
   --- go, gofmt, goimports, gofumpt
   --- go 需要在这里使用 'goimports', 因为 gopls 默认不会处理 "source.organizeImports",
   --- 但是需要 gopls 格式化 go.mod 文件.
-  formatting.goimports.with(__Proj_local_settings.keep_extend(local_formatter_key, 'goimports', {})),
+  formatting.goimports.with(proj_local_settings.keep_extend(local_formatter_key, 'goimports', {})),
 
   --- sh shell
-  formatting.shfmt.with(__Proj_local_settings.keep_extend(local_formatter_key, 'shfmt', {})),
+  formatting.shfmt.with(proj_local_settings.keep_extend(local_formatter_key, 'shfmt', {})),
 
   --- protobuf, buf
-  formatting.buf.with(__Proj_local_settings.keep_extend(local_formatter_key, 'buf', {})),
+  formatting.buf.with(proj_local_settings.keep_extend(local_formatter_key, 'buf', {})),
 }
 
 --- null-ls setup() 在这里加载上面设置的 formatting & linter ---------------------------------------
@@ -186,7 +188,7 @@ null_ls.setup({
   --- is the same as setting log.level to "trace" 记录 log, `:NullLsLog` 打印 log.
   debug = __Debug_Neovim.null_ls,
 
-  --- log 输出到 stdpath('cache') .. 'null-ls.log'
+  --- log 输出到 stdpath('cache') .. '/null-ls.log'
   log = {
     enable = true,
     level = 'warn',  -- "error", "warn"(*), "info", "debug", "trace"
@@ -212,7 +214,7 @@ null_ls.setup({
 
   --- 设置 key_mapping vim.diagnostic.goto_next() ...
   on_attach = function(client, bufnr)
-    require("user.lsp.util.lsp_keymaps").diagnostic_keymaps(0)
+    require("user.lsp.lsp_keymaps").diagnostic_keymaps(0)
 
     --- DEBUG: 用
     if __Debug_Neovim.null_ls then

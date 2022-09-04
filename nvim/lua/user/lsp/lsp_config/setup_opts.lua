@@ -33,7 +33,7 @@ M.on_attach = function(client, bufnr)
   require("user.lsp.lsp_config.same_id").lsp_highlight(client, bufnr)
 
   --- 设置 lsp 专用 keymaps
-  local lsp_keymaps = require("user.lsp.util.lsp_keymaps")
+  local lsp_keymaps = require("user.lsp.lsp_keymaps")
   lsp_keymaps.textDocument_keymaps(bufnr)
   lsp_keymaps.diagnostic_keymaps(bufnr)
 
@@ -59,8 +59,10 @@ M.capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
 M.on_init = function(client)
   --- 加载项目本地设置, 覆盖 global settings.
   local local_lspconfig_key = "lsp_settings"
-  if __Proj_local_settings.exists(local_lspconfig_key, client.name) then
-    client.config.settings[client.name] = __Proj_local_settings.exists_keep_extend(local_lspconfig_key, client.name,
+
+  local proj_local_settings = require("user.lsp._load_proj_settings")
+  if proj_local_settings.exists(local_lspconfig_key, client.name) then
+    client.config.settings[client.name] = proj_local_settings.exists_keep_extend(local_lspconfig_key, client.name,
       client.config.settings[client.name])
 
     --- VVI: tell LSP configs are changed.
