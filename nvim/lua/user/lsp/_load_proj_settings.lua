@@ -70,6 +70,3 @@ M.keep_extend = function(section, tool, tbl, ...)
 end
 
 return M
-
-
-

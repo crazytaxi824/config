@@ -24,9 +24,14 @@ ts_configs.setup {
 
     disable = { "" },  -- list of language that will be disabled.
 
-    --- NOTE: true - 同时使用 treesitter 和 vim 自带 syntax 颜色, vim syntax 和 treesitter 的颜色效果叠加.
-    ---              eg: syntax 是 bold, 而 treesitter 是 blue, 则最终颜色效果为 blue + bold.
-    ---       false - 只使用 treesitter 颜色.
+    --- NOTE: `:help :syn-manual`. nvim-treesitter 会强制将 syntax 设置为 `syntax manual`.
+    ---        This will enable the syntax highlighting, but not switch it on automatically.
+    ---        查看 `echo g:syntax_on` = 1, 说明 syntax 是开启状态.
+    --- true  - 同时使用 treesitter 和 vim 自带 syntax 颜色, 这时 vim syntax 和 treesitter 的颜色效果叠加.
+    ---         eg: syntax 是 bold, 而 treesitter 是 blue, 则最终颜色效果为 blue + bold.
+    ---         在 manual 状态下自动设置 `set syntax=ON`. VVI: 所以 `set syntax?` 返回 'ON', 而不是 'go', 'lua' ...
+    --- false - 只使用 treesitter 颜色, 默认值.
+    ---         不设置 syntax, 所以 `set syntax?` 返回 ''. 但是 `echo g:syntax_on` = 1, 说明 syntax 是开启状态.
     additional_vim_regex_highlighting = false,
   },
 
@@ -152,5 +157,6 @@ ts_configs.setup {
 --   end
 -- })
 -- -- }}}
+
 
 

@@ -65,5 +65,3 @@ M.diagnostic_keymaps = function(bufnr)
 end
 
 return M
-
-

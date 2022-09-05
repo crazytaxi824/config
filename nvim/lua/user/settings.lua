@@ -104,9 +104,10 @@ vim.g.did_load_filetypes = 0
 --- NOTE: https://github.com/nvim-treesitter/nvim-treesitter/issues/359
 --- When you activate treesitter highlighting, syntax gets automatically turned off for that file type
 --- while you can keep it for the file types WITHOUT parser.
---vim.cmd('syntax on')    -- `:echo g:syntax_on`, toggle the syntax on/off.
-                          -- vim 内置语法高亮, 默认开启. 基于正则表达式的语法高亮.
-                          -- NOTE: syntax off 的情况下不会加载 after/syntax, 但是会加载 after/ftplugin
+--- vim 内置语法高亮, 基于正则表达式的语法高亮.
+--vim.cmd('syntax on')    -- 默认开启. `:echo g:syntax_on`, 可以查看 syntax 是否开启.
+                          -- nvim-treesitter 插件会强制将 syntax 设置为 `syntax manual`. `:help :syn-manual`
+                          -- NOTE: 如果直接设置 `syntax off` 则, vim 不会加载 after/syntax. (但是不影响加载 after/ftplugin)
 
 --- VVI: DO NOT use neovim/runtime/ftplugin/xxx.vim 中预设的 keymap.
 vim.g.no_plugin_maps = 1

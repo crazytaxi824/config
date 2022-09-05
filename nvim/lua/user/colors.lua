@@ -31,7 +31,7 @@
 --    190       黄色   - bufferline
 --    220       黄色   - 括号匹配颜色
 --
---- NOTE: 只有 ':hi link' 才有 [!] 设置.
+--- NOTE: 只有 ':hi[!] link' 才有 [!] 设置.
 --- 如果是 ':hi <group>' 只会覆盖对应的 kv 颜色值.
 --- eg: 'hi Foo cterm=bold ctermfg=201 ctermbg=233'
 --      'hi Foo ctermfg=190'
@@ -99,19 +99,18 @@ vim.cmd('hi! link Repeat Conditional')     -- for range
 vim.cmd('hi! link Statement Conditional')  -- 默认 syntax 中 'package' & 'import' 关键字
 vim.cmd('hi! link Include Conditional')    -- package, import ...
 
-vim.cmd('hi! link Delimiter Normal')       -- 符号颜色, [] () {} ; : ...
-vim.cmd('hi! link Operator Normal')        -- = != == > < ...
+vim.cmd('hi! link Delimiter Normal')    -- 符号颜色, [] () {} ; : ...
+vim.cmd('hi! link Operator Normal')     -- = != == > < ...
+vim.cmd('hi Structure ctermfg=81')      -- luaTable
 
---vim.cmd('hi Structure ctermfg=81')
-
-vim.cmd('hi String ctermfg=173')         -- "abc"
-vim.cmd('hi Character ctermfg=173')      -- 'a'
-vim.cmd('hi Special ctermfg=75')         --  null (tsxTSConstBuiltin) | undefined (tsxTSVariableBuiltin)
+vim.cmd('hi String ctermfg=173')        -- "abc"
+vim.cmd('hi Character ctermfg=173')     -- 'a'
+vim.cmd('hi Special ctermfg=75')        --  null (tsxTSConstBuiltin) | undefined (tsxTSVariableBuiltin)
 vim.cmd('hi SpecialChar ctermfg=81')    -- \n \t \" ... escape string
-vim.cmd('hi Number ctermfg=43')          -- 100, int, uint ...
-vim.cmd('hi Boolean ctermfg=75')         -- true / false
-vim.cmd('hi PreProc ctermfg=75')         -- tsxTSVariableBuiltin, tsxTSConstBuiltin ...
-vim.cmd('hi! link Float Number')         -- 10.02 float64, float32
+vim.cmd('hi Number ctermfg=43')         -- 100, int, uint ...
+vim.cmd('hi Boolean ctermfg=75')        -- true / false
+vim.cmd('hi PreProc ctermfg=75')        -- tsxTSVariableBuiltin, tsxTSConstBuiltin ...
+vim.cmd('hi! link Float Number')        -- 10.02 float64, float32
 
 --- diff 颜色 --------------------------------------------------------------------------------------
 vim.cmd('hi DiffAdd ctermfg=188 ctermbg=22')

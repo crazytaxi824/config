@@ -81,8 +81,10 @@ end
 local prev_doc_hi_pos = {}
 
 local function handler(_, result, ctx, config)
-  --- VVI: 没有结果的情况下, 有些 lsp 会返回 nil, 有些会返回 {}
+  --- VVI: 没有结果的情况下, 有些 lsp 会返回 nil, 有些会返回 empty table {}. eg: cursor 在空白行.
   if not result or #result == 0 then
+    prev_doc_hi_pos = {}  -- 清空结果
+    vim.lsp.buf.clear_references()  -- clear previous highlight
     return
   end
 
@@ -95,7 +97,7 @@ local function handler(_, result, ctx, config)
   if not r then
     -- print('changed')  -- documentHighlight position changed
     vim.lsp.buf.clear_references()  -- clear previous highlight
-    vim.lsp.buf.document_highlight() -- new highlight
+    vim.lsp.buf.document_highlight()  -- new highlight
   end
 
   -- print('same')  -- documentHighlight same as previous highlight
@@ -104,10 +106,19 @@ end
 --- 发送 documentHighlight 请求
 local method = 'textDocument/documentHighlight'
 
-local function same_doc_highlight()
+local function highlight_references()
   local param = vim.lsp.util.make_position_params()
   vim.lsp.buf_request(0, method, param, handler)
 end
+
+--- 在 cursor 进入另外一个 window 前, 或者在 window 加载其他的 buffer 前, 清除 clear highlight.
+vim.api.nvim_create_autocmd({"WinLeave", "BufWinLeave"}, {
+  pattern = {"*"},
+  callback = function(params)
+    prev_doc_hi_pos = {}  -- 清空结果
+    vim.lsp.buf.clear_references()  -- clear previous highlight
+  end
+})
 
 --- 返回 documentHighlight 方法 --------------------------------------------------------------------
 local M = {}
@@ -123,7 +134,7 @@ M.lsp_highlight = function (client, bufnr)
     vim.api.nvim_create_autocmd({"CursorHold", "CursorHoldI"}, {
       group = group,
       buffer = bufnr,
-      callback = same_doc_highlight,
+      callback = highlight_references,
     })
   end
 end
