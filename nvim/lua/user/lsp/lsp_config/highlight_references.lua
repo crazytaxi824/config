@@ -111,15 +111,6 @@ local function highlight_references()
   vim.lsp.buf_request(0, method, param, handler)
 end
 
---- 在 cursor 进入另外一个 window 前, 或者在 window 加载其他的 buffer 前, 清除 clear highlight.
-vim.api.nvim_create_autocmd({"WinLeave", "BufWinLeave"}, {
-  pattern = {"*"},
-  callback = function(params)
-    prev_doc_hi_pos = {}  -- 清空结果
-    vim.lsp.buf.clear_references()  -- clear previous highlight
-  end
-})
-
 --- 返回 documentHighlight 方法 --------------------------------------------------------------------
 local M = {}
 
@@ -128,13 +119,23 @@ M.lsp_highlight = function (client, bufnr)
   --- Set autocommands conditional on server_capabilities
   --- 也可以使用 if client.resolved_capabilities.document_highlight 来判断.
   if client.supports_method(method) then
-    local group = vim.api.nvim_create_augroup('lsp_document_highlight', {
+    local group_id = vim.api.nvim_create_augroup('lsp_document_highlight', {
       clear = true,
     })
     vim.api.nvim_create_autocmd({"CursorHold", "CursorHoldI"}, {
-      group = group,
+      group = group_id,
       buffer = bufnr,
       callback = highlight_references,
+    })
+
+    --- 在 cursor 进入另外一个 window 前, 或者在 window 加载其他的 buffer 前, 清除 clear highlight.
+    vim.api.nvim_create_autocmd({"WinLeave", "BufWinLeave"}, {
+      group = group_id,
+      buffer = bufnr,
+      callback = function(params)
+        prev_doc_hi_pos = {}  -- 清空结果
+        vim.lsp.buf.clear_references()  -- clear previous highlight
+      end
     })
   end
 end
