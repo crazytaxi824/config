@@ -8,6 +8,10 @@ if not lspconfig_ok then
   return
 end
 
+--- change :LspInfo border, `:help lspconfig-highlight`
+require('lspconfig.ui.windows').default_options.border = {"▄","▄","▄","█","▀","▀","▀","█"}
+vim.cmd('hi! link LspInfoBorder FloatBorder')
+
 --- 以下命令行工具可以通过 mason.nvim 安装, 也可以通过 brew 安装到 $PATH 中.
 --- filetypes: 可以通过 `:LspInfo` 查看. 用于 autocmd.
 --- lspconfig_name: filetype
