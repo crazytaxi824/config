@@ -383,3 +383,11 @@ vim.api.nvim_create_autocmd({"BufEnter", "TextChanged", "TextChangedI", "FileCha
 ```
 
 - alacritty v0.11.0
+
+- nvim-tree toggle git icon and color.
+
+- nvim-tree Discard File changes
+  - delete file unstage ' D', staged 'D '
+  - new file unstaged '??', staged 'A '
+  - modified file unstaged ' M', staged 'M '
+  - Renamed file 必须 add & delete file 都是 staged 状态, 否则一个显示 ??/A, 一个显示 D

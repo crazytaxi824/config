@@ -423,7 +423,7 @@ return packer.startup(function(use)
   use {"kyazdani42/nvim-tree.lua",      -- 类似 NerdTree
     commit = "011a781",
     config = function() require("user.plugin_settings.file_tree") end,
-    cmd = {"NvimTreeToggle", "NvimTreeOpen"},
+    cmd = {"NvimTreeToggle", "NvimTreeOpen", "NvimTreeFindFile", "NvimTreeFindFileToggle"},
   }
 
   --- Buffer & Status Line -------------------------------------------------------------------------

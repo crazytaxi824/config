@@ -1,81 +1,81 @@
 // Place your key bindings in this file to override the defaultsauto[]
 [
-	{
-		"key": "cmd+e",
-		"command": "workbench.files.action.collapseExplorerFolders"
-	},
-	{
-		"key": "cmd+e",
-		"command": "-actions.findWithSelection"
-	},
-	{
-		"key": "cmd+y",
-		"command": "editor.action.deleteLines",
-		"when": "textInputFocus && !editorReadonly"
-	},
-	{
-		"key": "shift+cmd+k",
-		"command": "-editor.action.deleteLines",
-		"when": "textInputFocus && !editorReadonly"
-	},
-	{
-		"key": "f8",
-		"command": "editor.action.marker.next",
-		"when": "editorFocus"
-	},
-	{
-		"key": "alt+f8",
-		"command": "-editor.action.marker.next",
-		"when": "editorFocus"
-	},
-	{
-		"key": "alt+f8",
-		"command": "editor.action.marker.nextInFiles",
-		"when": "editorFocus"
-	},
-	{
-		"key": "f8",
-		"command": "-editor.action.marker.nextInFiles",
-		"when": "editorFocus"
-	},
-	{
-		"key": "shift+f8",
-		"command": "editor.action.marker.prev",
-		"when": "editorFocus"
-	},
-	{
-		"key": "shift+alt+f8",
-		"command": "-editor.action.marker.prev",
-		"when": "editorFocus"
-	},
-	{
-		"key": "shift+alt+f8",
-		"command": "editor.action.marker.prevInFiles",
-		"when": "editorFocus"
-	},
-	{
-		"key": "shift+f8",
-		"command": "-editor.action.marker.prevInFiles",
-		"when": "editorFocus"
-	},
-	{
-		"key": "ctrl+f5",
-		"command": "workbench.action.debug.start",
-		"when": "debuggersAvailable && debugState == 'inactive'"
-	},
-	{
-		"key": "f5",
-		"command": "-workbench.action.debug.start",
-		"when": "debuggersAvailable && debugState == 'inactive'"
-	},
-	{
-		"key": "f5",
-		"command": "workbench.action.debug.run",
-		"when": "debuggersAvailable && debugState != 'initializing'"
-	},
-	{
-		"key": "ctrl+f5",
-		"command": "-workbench.action.debug.run",
-		"when": "debuggersAvailable && debugState != 'initializing'"
-	}
+  {
+    "key": "cmd+e",
+    "command": "-actions.findWithSelection"
+  },
+  {
+    "key": "cmd+y",
+    "command": "editor.action.deleteLines",
+    "when": "textInputFocus && !editorReadonly"
+  },
+  {
+    "key": "shift+cmd+k",
+    "command": "-editor.action.deleteLines",
+    "when": "textInputFocus && !editorReadonly"
+  },
+  {
+    "key": "f8",
+    "command": "editor.action.marker.next",
+    "when": "editorFocus"
+  },
+  {
+    "key": "alt+f8",
+    "command": "-editor.action.marker.next",
+    "when": "editorFocus"
+  },
+  {
+    "key": "alt+f8",
+    "command": "editor.action.marker.nextInFiles",
+    "when": "editorFocus"
+  },
+  {
+    "key": "f8",
+    "command": "-editor.action.marker.nextInFiles",
+    "when": "editorFocus"
+  },
+  {
+    "key": "shift+f8",
+    "command": "editor.action.marker.prev",
+    "when": "editorFocus"
+  },
+  {
+    "key": "shift+alt+f8",
+    "command": "-editor.action.marker.prev",
+    "when": "editorFocus"
+  },
+  {
+    "key": "shift+alt+f8",
+    "command": "editor.action.marker.prevInFiles",
+    "when": "editorFocus"
+  },
+  {
+    "key": "shift+f8",
+    "command": "-editor.action.marker.prevInFiles",
+    "when": "editorFocus"
+  },
+  {
+    "key": "ctrl+f5",
+    "command": "workbench.action.debug.start",
+    "when": "debuggersAvailable && debugState == 'inactive'"
+  },
+  {
+    "key": "f5",
+    "command": "-workbench.action.debug.start",
+    "when": "debuggersAvailable && debugState == 'inactive'"
+  },
+  {
+    "key": "f5",
+    "command": "workbench.action.debug.run",
+    "when": "debuggersAvailable && debugState != 'initializing'"
+  },
+  {
+    "key": "ctrl+f5",
+    "command": "-workbench.action.debug.run",
+    "when": "debuggersAvailable && debugState != 'initializing'"
+  },
+  {
+    "key": "cmd+e",
+    "command": "workbench.files.action.collapseExplorerFolders"
+  }
 ]

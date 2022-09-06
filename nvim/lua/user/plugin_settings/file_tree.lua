@@ -3,6 +3,112 @@ if not status_ok then
   return
 end
 
+--- for keymap ------------------------------------------------------------------------------------- {{{
+local function git_discard_file_changes(node)
+  --print(node.name, node.absolute_path, vim.inspect(node.git_status), node.type)
+
+  --- node.name: filename, not prefix path
+  --- node.absolute_path
+  --- node.type = 'file' | 'directory'
+  ---
+  --- DOC: git file dirty.
+  --- https://git-scm.com/docs/git-status#_short_format
+  --- https://github.com/kyazdani42/nvim-tree.lua/blob/master/lua/nvim-tree/renderer/components/git.lua
+  ---
+  --- git command:
+  ---   - git reset: staged -> unstaged
+  ---   - git checkout: delete unstaged changes
+  ---
+  --- node.git_status:
+  --- modify: ' M': unstaged
+  ---               discard all: git checkout -- 'file'
+  --          'M ': staged
+  ---               discard all: git reset -- 'file' && git checkout -- 'file'
+  --          'MM': some parts staged, some parts unstaged
+  ---               discard unstaged: git checkout -- 'file',
+  ---               discard all: git reset -- 'file' && git checkout -- 'file'
+  --- new/add:
+  ---         '??', ' A': unstracked new file
+  ---               discard all: rm 'file'
+  ---         'A ': staged new file
+  ---               discard all: git rest -- 'file' && rm 'file'
+  ---         'AA': unknown
+  ---         'AU': unknown
+  ---         'AM': staged new file + unstaged part
+  ---               discard unstaged: git checkout -- 'file'
+  ---               discard all: git rest -- 'file' && rm 'file'
+  --- NOTE: 无法显示 Deleted file, 所也无法显示 Rename. 因为 Rename 需要 staged new file & staged deleted file
+
+  if node.type ~= 'file' then
+    Notify("Cannot Discard on ".. node.type, "INFO")
+    return
+  end
+
+  local cmd
+
+  if node.git_status == "MM" then
+    --- prompt
+    vim.ui.input({ prompt = "git: Discard file changes " .. node.name .. " ? a[ll]/u[nstaged]/n: "}, function(choice)
+      vim.cmd("normal! :")  -- clear command line prompt message.
+      if choice == 'a' or choice == 'all' then
+        cmd = 'git reset -- "' .. node.absolute_path .. '" && git checkout -- "' .. node.absolute_path .. '"'
+      elseif choice == 'u' or choice == 'unstaged' then
+        cmd = 'git checkout -- "' .. node.absolute_path .. '"'
+      end
+    end)
+  elseif node.git_status == "M " then
+    vim.ui.input({ prompt = "git: Discard file changes " .. node.name .. " ? a[ll]/n: "}, function(choice)
+      vim.cmd("normal! :")  -- clear command line prompt message.
+      if choice == 'a' or choice == 'all' then
+        cmd = 'git reset -- "' .. node.absolute_path .. '" && git checkout -- "' .. node.absolute_path .. '"'
+      end
+    end)
+  elseif node.git_status == " M" then
+    vim.ui.input({ prompt = "git: Discard file changes " .. node.name .. " ? a[ll]/n: "}, function(choice)
+      vim.cmd("normal! :")  -- clear command line prompt message.
+      if choice == 'a' or choice == 'all' then
+        cmd = 'git checkout -- "' .. node.absolute_path .. '"'
+      end
+    end)
+  elseif node.git_status == "AM" then
+    vim.ui.input({ prompt = "git: Discard file changes " .. node.name .. " ? a[ll]/u[nstaged]/n: "}, function(choice)
+      vim.cmd("normal! :")  -- clear command line prompt message.
+      if choice == 'a' or choice == 'all' then
+        cmd = 'git reset -- "' .. node.absolute_path .. '" && rm "' .. node.absolute_path .. '"'
+      elseif choice == 'u' or choice == 'unstaged' then
+        cmd = 'git checkout -- "' .. node.absolute_path .. '"'
+      end
+    end)
+  elseif node.git_status == "??" or node.git_status == " A" then
+    vim.ui.input({ prompt = "git: Discard file changes " .. node.name .. " ? a[ll]/n: "}, function(choice)
+      vim.cmd("normal! :")  -- clear command line prompt message.
+      if choice == 'a' or choice == 'all' then
+        cmd = 'rm "' .. node.absolute_path .. '"'
+      end
+    end)
+  elseif node.git_status == "A " then
+    vim.ui.input({ prompt = "git: Discard file changes " .. node.name .. " ? a[ll]/n: "}, function(choice)
+      vim.cmd("normal! :")  -- clear command line prompt message.
+      if choice == 'a' or choice == 'all' then
+        cmd = 'git reset -- "' .. node.absolute_path .. '" && rm "' .. node.absolute_path .. '"'
+      end
+    end)
+  else
+    Notify("please use other tools to do complex git operations", "INFO")
+    return
+  end
+
+  if cmd then
+    local result = vim.fn.system(cmd)
+    if vim.v.shell_error ~= 0 then
+      vim.notify(result, vim.log.levels.ERROR)
+    end
+    vim.cmd('checktime')
+  end
+
+end
+-- -- }}}
+
 --- `:help nvim-tree-setup`
 nvim_tree.setup {
   auto_reload_on_write = true,  -- VVI: `:w` 时刷新 nvim-tree.
@@ -39,7 +145,7 @@ nvim_tree.setup {
     preserve_window_proportions = false,
     number = false,          -- 显示 line number
     relativenumber = false,  -- 显示 relative number
-    signcolumn = "yes",      -- 显示 signcolumn
+    signcolumn = "yes",      -- VVI: 显示 signcolumn, "yes" | "auto" | "no"
     --- ":help nvim-tree-default-mappings"
     mappings = {
       custom_only = true,  -- NOTE: 只使用 custom key mapping
@@ -53,7 +159,8 @@ nvim_tree.setup {
         { key = "R",             action = "rename" },  -- 类似 `$ mv foo bar`
         { key = "r",             action = "refresh" },
         { key = "y",             action = "copy_absolute_path" },
-        { key = "W",             action = "collapse_all" },
+        { key = "E",             action = "collapse_all" },  -- vscode 自定义按键为 cmd+E
+        { key = "W",             action = "expand_all" },
         { key = "I",             action = "toggle_git_ignored" },
         { key = "H",             action = "toggle_dotfiles" },  -- 隐藏文件
         { key = "q",             action = "close" },  -- close nvim-tree window
@@ -64,12 +171,16 @@ nvim_tree.setup {
         { key = "<C-CR>",        action = "cd" },  -- `cd` in the directory under the cursor
         { key = "C",             action = "copy" },  -- copy file
         { key = "P",             action = "paste" }, -- paste file
+
+        --- 自定义功能
+        --- action 内容成为 help 中展示的文字.
+        { key = "<C-d>",     action = "git: Discard file changes",   action_cb = git_discard_file_changes},
       },
     },
   },
   renderer = {
-    highlight_git = false,  -- 开启 git 颜色.
-    highlight_opened_files = "all",  -- NOTE: "none" | "icon" | "name" | "all"
+    highlight_git = true,  -- 开启 git filename 颜色. 需要设置 git.enable = true
+    highlight_opened_files = "all",  -- highlight icon or filename or both. "none"(*) | "icon" | "name" | "all"
     indent_width = 2, -- 默认 2.
     indent_markers = {
       enable = true,
@@ -82,30 +193,33 @@ nvim_tree.setup {
     },
     icons = {
       webdev_colors = false,
+      git_placement = "before",  -- 'before' (filename) | 'after' (filename) | 'signcolumn' (vim.signcolumn='yes')
       symlink_arrow = " ➜ ",  -- old_name ➜ new_name
       show = {
-        git = false,   -- 显示 git icon
-        folder = true, -- 显示 folder icon
+        git = true,    -- 显示 git icon. 需要设置 git.enable = true
         file = false,  -- 显示 file icon
-        folder_arrow = false,
+        folder = true, -- 显示 folder icon
+        folder_arrow = false,  -- NOTE: 使用 folder icon 代替, folder_arrow icon 无法改变颜色, 也无法设置 empty icon.
       },
       glyphs = {
         default = '',
-        symlink = '',  -- 这里的 symlink 和上面设置不一样, 这里是文件名前面的 icon.
+        symlink = '',  -- 这里的 symlink 和 symlink_arrow 设置不一样, 这里是文件名前面的 icon.
         folder = {
-          default = '▶︎',
-          open = '▽',
-          empty = '-',
-          empty_open = '-',
-          symlink = '',
-          symlink_open = ''
+          arrow_closed = "▶︎",  -- folder_arrow
+          arrow_open = "▽",    -- folder_arrow
+          default = '▶︎',  -- folder
+          open = '▽',     -- folder
+          empty = '-',    -- folder
+          empty_open = '-',  -- folder
+          symlink = '▶︎',
+          symlink_open = '▽',
         },
         git = {
           unstaged  = "✗",  -- ✗✘
           staged    = "✓",  -- ✓✔︎
           unmerged  = "u",
           renamed   = "R",
-          untracked = "A",  -- untracked = new file.
+          untracked = "?",  -- ★ untracked = new file.
           deleted   = "D",
           ignored   = "◌",
         },
@@ -128,7 +242,7 @@ nvim_tree.setup {
     cmd = nil,  -- Mac 中可以改为 "open"
     args = {},
   },
-  diagnostics = {    -- VVI: 显示 vim diagnostics result
+  diagnostics = {  --- VVI: 显示 vim diagnostics (Hint|Info|Warn|Error) 需要设置 vim.signcolumn='yes'
     enable = true,
     show_on_dirs = true,
     icons = {
@@ -144,8 +258,9 @@ nvim_tree.setup {
     exclude = {},
   },
   git = {
-    enable = false,
+    enable = false,  -- VVI: 开启 git filename 和 icon 颜色显示. 需要开启 renderer.highlight_git 和 renderer.icons.show.git
     ignore = false,  -- ignore gitignore files
+    show_on_dirs = true,
     timeout = 400,
   },
   actions = {
@@ -186,9 +301,6 @@ nvim_tree.setup {
   },
 } -- END_DEFAULT_OPTS
 
---- automatically close the tab/vim when nvim-tree is the last window in the tab
-vim.cmd [[autocmd BufEnter * ++nested if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpagenr() | quit | endif]]
-
 --- `:help nvim-tree-highlight` -------------------------------------------------------------------- {{{
 vim.cmd('hi NvimTreeFolderIcon ctermfg=81 cterm=bold')
 vim.cmd('hi NvimTreeFolderName ctermfg=81 cterm=bold')
@@ -203,19 +315,21 @@ vim.cmd('hi NvimTreeIndentMarker ctermfg=242')
 --- nvim-tree Git color, 需要开启 highlight_git=true, render={git={enable=true}}
 --- 这里设置了 git icon color
 vim.cmd('hi NvimTreeGitDirty   ctermfg=167')
-vim.cmd('hi NvimTreeGitStaged  ctermfg=71')
+vim.cmd('hi NvimTreeGitStaged  ctermfg=42')
 vim.cmd('hi NvimTreeGitMerge   ctermfg=170')
 vim.cmd('hi NvimTreeGitRenamed ctermfg=170')
-vim.cmd('hi NvimTreeGitNew     ctermfg=71')
+vim.cmd('hi NvimTreeGitNew     ctermfg=167')
 vim.cmd('hi NvimTreeGitDeleted ctermfg=167')
+vim.cmd('hi NvimTreeGitIgnored ctermfg=242')
 
---- 以下默认是 link 上面 git icon color, 这里重置了颜色.
-vim.cmd('hi! link NvimTreeFileDirty   Normal')
-vim.cmd('hi! link NvimTreeFileStaged  Normal')
-vim.cmd('hi! link NvimTreeFileMerge   Normal')
-vim.cmd('hi! link NvimTreeFileRenamed Normal')
-vim.cmd('hi! link NvimTreeFileNew     Normal')
-vim.cmd('hi! link NvimTreeFileDeleted Normal')
+--- git filename color, 默认是 link 上面 git icon color. 如果不想要 filename 颜色, 可以在这里重置颜色.
+-- vim.cmd('hi! link NvimTreeFileDirty   Normal')
+-- vim.cmd('hi! link NvimTreeFileStaged  Normal')
+-- vim.cmd('hi! link NvimTreeFileMerge   Normal')
+-- vim.cmd('hi! link NvimTreeFileRenamed Normal')
+-- vim.cmd('hi! link NvimTreeFileNew     Normal')
+-- vim.cmd('hi! link NvimTreeFileDeleted Normal')
+-- vim.cmd('hi! link NvimTreeFileIgnored Normal')
 
 --- diagnostic icons highlight.
 -- NvimTreeLspDiagnosticsError         -- 默认 DiagnosticError
@@ -224,6 +338,23 @@ vim.cmd('hi! link NvimTreeFileDeleted Normal')
 -- NvimTreeLspDiagnosticsHint          -- 默认 DiagnosticHint
 
 -- -- }}}
+
+--- automatically close the tab/vim when nvim-tree is the last window in the tab
+vim.cmd [[autocmd BufEnter * ++nested if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpagenr() | quit | endif]]
+
+--- HACK refresh nvim-tree when enter a buffer.
+local tree_api = require("nvim-tree.api")
+vim.api.nvim_create_autocmd({"BufEnter"}, {
+  pattern = {"*"},
+  callback = function(params)
+    --- VVI: 必须使用 vim.schedule(), 否则 bdelete 的时候不会刷新显示.
+    --- 因为 bnext | bdelete #, 先 Enter 其他 buffer, 这时之前的 buffer 还没有被 delete, 所以 reload()
+    --- 的时候 buffer highlight 还在.
+    vim.schedule(function ()
+      tree_api.tree.reload()
+    end)
+  end
+})
 
 
 

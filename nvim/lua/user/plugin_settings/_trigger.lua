@@ -21,7 +21,8 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 --- nvim-tree --------------------------------------------------------------------------------------
-vim.keymap.set('n', '<leader>,', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>,', ':NvimTreeFindFileToggle<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader><lt>', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
 
 
 
