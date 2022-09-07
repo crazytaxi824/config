@@ -502,8 +502,8 @@ local bufferline_keymaps = {
   {'n', '>', function() bufferline.cycle(1) end, opt},
 
   --- 左右移动 buffer
-  {'n', '<leader><Left>', '<cmd>BufferLineMovePrev<CR>', opt},
-  {'n', '<leader><Right>', '<cmd>BufferLineMoveNext<CR>', opt},
+  {'n', '<leader><Left>', '<cmd>BufferLineMovePrev<CR>', opt, 'buffer: Move Buffer Left'},
+  {'n', '<leader><Right>', '<cmd>BufferLineMoveNext<CR>', opt, 'buffer: Move Buffer Right'},
 
   --- 关闭 buffer
   --- bufnr("#") > 0 表示 '#' (previous buffer) 存在, 如果不存在则 bufnr('#') = -1.

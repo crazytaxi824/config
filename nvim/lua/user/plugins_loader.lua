@@ -472,6 +472,13 @@ return packer.startup(function(use)
     opt = true,  -- 在 vim.schedule() 中 lazy load
   }
 
+  --- Git
+  use {"lewis6991/gitsigns.nvim",
+    commit = "d7e0bcb",
+    config = function() require("user.plugin_settings.git_signs") end,
+    opt = true,
+  }
+
   --- tagbar --- {{{
   --- 函数/类型列表，需要安装 Universal Ctags - `brew info universal-ctags`, 注意不要安装错了.
   --- https://github.com/universal-ctags/ctags/blob/master/docs/news.rst#new-parsers
@@ -493,9 +500,6 @@ return packer.startup(function(use)
 
   --use "goolord/alpha-nvim"          -- neovim 启动页面
   --use "ahmedkhalf/project.nvim"     -- project manager
-
-  --- Git
-  --use "lewis6991/gitsigns.nvim"
 
   --- Colorschemes
   --use "lunarvim/colorschemes"       -- A bunch of colorschemes you can try out

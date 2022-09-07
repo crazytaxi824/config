@@ -115,10 +115,10 @@ vim.cmd('hi PreProc ctermfg=75')        -- tsxTSVariableBuiltin, tsxTSConstBuilt
 vim.cmd('hi! link Float Number')        -- 10.02 float64, float32
 
 --- diff 颜色 --------------------------------------------------------------------------------------
-vim.cmd('hi DiffAdd ctermfg=188 ctermbg=22')
-vim.cmd('hi DiffDelete ctermfg=188 ctermbg=52')
-vim.cmd('hi DiffChange cterm=None ctermfg=188')
-vim.cmd('hi DiffText cterm=None ctermfg=188 ctermbg=160')
+vim.cmd('hi DiffAdd ctermfg=42 ctermbg=NONE')
+vim.cmd('hi DiffDelete ctermfg=167 ctermbg=NONE')
+vim.cmd('hi DiffChange cterm=None ctermfg=213 ctermbg=NONE')
+vim.cmd('hi DiffText cterm=None ctermfg=190 ctermbg=238')
 
 -- diff mode 模式下 CursorLine 样式
 vim.cmd [[
