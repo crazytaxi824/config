@@ -127,6 +127,11 @@ vim.cmd [[
   endif
 ]]
 
+--- diff mode 下
+--- `set foldcolumn?`=2 在 foldcolumn 显示在 SignColumn 前面.
+--- `set foldmethod?`=diff
+vim.cmd('hi FoldColumn cterm=bold ctermfg=42 ctermbg=NONE')
+
 --- 其他常用颜色 -----------------------------------------------------------------------------------
 vim.cmd('hi Title cterm=bold ctermfg=114')     -- markdown Title
 vim.cmd('hi Conceal ctermfg=81 ctermbg=None')  -- markdown 特殊符号颜色

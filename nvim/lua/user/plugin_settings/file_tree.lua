@@ -4,10 +4,11 @@ if not status_ok then
 end
 
 --- for keymap ------------------------------------------------------------------------------------- {{{
+--- git: Discard file changes --- {{{
 local function git_discard_file_changes(node)
   --print(node.name, node.absolute_path, vim.inspect(node.git_status), node.type)
 
-  --- node.name: filename, not prefix path
+  --- READMD: node.name: filename, not prefix path --- {{{
   --- node.absolute_path
   --- node.type = 'file' | 'directory'
   ---
@@ -38,6 +39,7 @@ local function git_discard_file_changes(node)
   ---               discard unstaged: git checkout -- 'file'
   ---               discard all: git rest -- 'file' && rm 'file'
   --- NOTE: 无法显示 Deleted file, 所也无法显示 Rename. 因为 Rename 需要 staged new file & staged deleted file
+  -- -- }}}
 
   if node.type ~= 'file' then
     Notify("Cannot Discard on ".. node.type, "INFO")
@@ -105,7 +107,19 @@ local function git_discard_file_changes(node)
     end
     vim.cmd('checktime')
   end
+end
+-- -- }}}
 
+local function compare_marked_files(node)
+  local nt_api = require("nvim-tree.api")
+  local marks_list = nt_api.marks.list()  -- 获取 mark 的 nodes
+  if #marks_list ~= 2 then
+    Notify("more than 2 marks available, can only campare exactly 2 files")
+    return
+  end
+
+  vim.cmd('tabnew ' .. marks_list[1].absolute_path)  -- open new tab for compare
+  vim.cmd('vert diffsplit ' .. marks_list[2].absolute_path) -- compare file
 end
 -- -- }}}
 
@@ -155,7 +169,7 @@ nvim_tree.setup {
         { key = "<C-x>",         action = "split" },
         { key = "<C-o>",         action = "system_open" },
         { key = "a",             action = "create" },
-        { key = "d",             action = "remove" },
+        { key = {"d", "D"},      action = "remove" },
         { key = "R",             action = "rename" },  -- 类似 `$ mv foo bar`
         { key = "r",             action = "refresh" },
         { key = "y",             action = "copy_absolute_path" },
@@ -163,6 +177,7 @@ nvim_tree.setup {
         { key = "W",             action = "expand_all" },
         { key = "I",             action = "toggle_git_ignored" },
         { key = "H",             action = "toggle_dotfiles" },  -- 隐藏文件
+        { key = "m",             action = "toggle_mark" }, -- paste file
         { key = "q",             action = "close" },  -- close nvim-tree window
         { key = "?",             action = "toggle_help" },
         { key = "<F8>",          action = "next_diag_item" },  -- next diagnostics item
@@ -174,7 +189,8 @@ nvim_tree.setup {
 
         --- 自定义功能
         --- action 内容成为 help 中展示的文字.
-        { key = "<C-d>",     action = "git: Discard file changes",   action_cb = git_discard_file_changes},
+        { key = "<leader>d",     action = "git: Discard file changes",   action_cb = git_discard_file_changes},
+        { key = "<leader>c",     action = "compare marked files",   action_cb = compare_marked_files},
       },
     },
   },
@@ -204,6 +220,7 @@ nvim_tree.setup {
       glyphs = {
         default = '',
         symlink = '',  -- 这里的 symlink 和 symlink_arrow 设置不一样, 这里是文件名前面的 icon.
+        bookmark = '★',
         folder = {
           arrow_closed = "▶︎",  -- folder_arrow
           arrow_open = "▽",    -- folder_arrow
