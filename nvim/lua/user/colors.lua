@@ -57,11 +57,18 @@
 vim.cmd('hi Normal ctermbg=NONE ctermfg=188')      -- 透明背景 / 深色背景 - 一般文字颜色 188/252
 vim.cmd('hi Visual ctermbg=24')                    -- Visual 模式下 select 到的字符颜色. 类似 vscode 颜色
 
-vim.cmd('hi Comment ctermfg=71')                   -- 注释颜色
-vim.cmd('hi Folded ctermbg=235 ctermfg=67')        -- 折叠行颜色
-vim.cmd('hi NonText ctermfg=238')                  -- 影响 listchars indentLine 颜色
-vim.cmd('hi VertSplit ctermfg=59 ctermbg=None cterm=None')   -- 屏幕分隔线颜色
-vim.cmd('hi MatchParen cterm=underline,bold ctermfg=220 ctermbg=None')    -- 括号匹配颜色
+--- VVI: Pmenu & FloatBorder 背景色需要设置为相同, 影响很多窗口的颜色.
+local float_win_border_color = 233  -- 或者 236
+vim.cmd('hi PmenuSel cterm=underline,bold ctermfg=None ctermbg=238')  -- Completion Menu 选中项颜色
+vim.cmd('hi Pmenu ctermfg=188 ctermbg=' .. float_win_border_color)  -- Completion Menu & Floating Window 背景颜色
+vim.cmd('hi FloatBorder ctermfg=' .. float_win_border_color)   -- Floating Window border 颜色需要和 Pmenu 的背景色相同
+                                                               -- border = {"▄","▄","▄","█","▀","▀","▀","█"}
+
+vim.cmd('hi Comment ctermfg=71')             -- 注释颜色
+vim.cmd('hi Folded ctermbg=235 ctermfg=67')  -- 折叠行颜色
+vim.cmd('hi NonText ctermfg=238')            -- 影响 listchars indentLine 颜色
+vim.cmd('hi VertSplit ctermfg=59 ctermbg=None cterm=None')  -- 屏幕分隔线颜色
+vim.cmd('hi MatchParen cterm=underline,bold ctermfg=220 ctermbg=None')  -- 括号匹配颜色
 
 vim.cmd('hi LineNr ctermfg=240')                   -- 行号颜色
 vim.cmd('hi CursorLine ctermbg=235 cterm=None')    -- 光标所在行颜色
@@ -77,11 +84,6 @@ vim.cmd('hi ErrorMsg ctermfg=253 ctermbg=167')     -- echoerr 颜色
 vim.cmd('hi WarningMsg ctermfg=236 ctermbg=214')   -- echohl 颜色, XXX FIXME BUG 颜色
 vim.cmd('hi Todo cterm=bold ctermfg=188 ctermbg=22')            -- TODO, HACK 颜色
 vim.cmd('hi SpecialComment cterm=bold ctermfg=188 ctermbg=63')  -- NOTE: DEBUG: FOO: 颜色
-
-vim.cmd('hi PmenuSel cterm=underline,bold ctermfg=None ctermbg=238')  -- Complettion Menu 选中项颜色
-vim.cmd('hi Pmenu ctermfg=188 ctermbg=233')  -- VVI: Completion Menu & Floating Window 背景颜色, 或者 bg=236.
-vim.cmd('hi FloatBorder ctermfg=233')   -- VVI: Floating Window border 颜色需要和 Pmenu 的背景色相同 (bg=236)
-                                        -- border = {"▄","▄","▄","█","▀","▀","▀","█"}
 
 vim.cmd('hi WildMenu cterm=bold ctermfg=235 ctermbg=39')     -- command 模式自动补全
 
@@ -126,7 +128,7 @@ vim.cmd [[
 ]]
 
 --- 其他常用颜色 -----------------------------------------------------------------------------------
-vim.cmd('hi Title cterm=bold ctermfg=114')      -- markdown Title
+vim.cmd('hi Title cterm=bold ctermfg=114')     -- markdown Title
 vim.cmd('hi Conceal ctermfg=81 ctermbg=None')  -- markdown 特殊符号颜色
 vim.cmd('hi Label ctermfg=81')                 -- json key color
 
@@ -153,7 +155,7 @@ vim.cmd('hi DiagnosticUnderlineError cterm=bold,underline ctermfg=167')
 vim.cmd('hi DiagnosticUnderlineHint ctermfg=244')
 
 --- LSP 相关颜色 ----------------------------------------------------------------------------------
---- vim.lsp.buf.document_highlight() 颜色, 类似 Same_ID ---
+--- vim.lsp.buf.document_highlight() 颜色, 类似 Same_ID
 vim.cmd('hi LspReferenceText ctermbg=238')
 vim.cmd('hi LspReferenceRead ctermbg=238')
 vim.cmd('hi LspReferenceWrite ctermbg=238')
@@ -161,11 +163,11 @@ vim.cmd('hi LspReferenceWrite ctermbg=238')
 --- treesitter 颜色 --------------------------------------------------------------------------------
 --- treesitter global 颜色设置
 vim.cmd('hi! link TSField Normal')      -- golang struct field, when define
-vim.cmd('hi TSProperty ctermfg=81')    -- like TSField, eg: Foo.<Property>, 主要为 js, ts... 用.
+vim.cmd('hi TSProperty ctermfg=81')     -- like TSField, eg: Foo.<Property>, 主要为 js, ts... 用.
 vim.cmd('hi! link TSParameter Normal')  -- 入参出参
 
 vim.cmd('hi! link TSFunction Function')
-vim.cmd('hi! link TSFuncBuiltin Function')       -- new() make() copy() ...
+vim.cmd('hi! link TSFuncBuiltin Function')  -- new() make() copy() ...
 vim.cmd('hi! link TSMethod Function')
 
 vim.cmd('hi! link TSKeywordReturn Conditional')  -- return
@@ -186,12 +188,12 @@ vim.cmd('hi! link TSURI String')  -- <src="TSURI">
 
 --- markdown, NOTE: 单独为 markdown 设置颜色.
 vim.cmd('hi markdown_inlineTSLiteral ctermbg=238')  -- `code`
-vim.cmd('hi markdownTSPunctSpecial ctermfg=246')   -- `- * #`
+vim.cmd('hi markdownTSPunctSpecial ctermfg=246')    -- `- * #`
 
 --- NOTE: 以下设置是为了配合 lazy load plugins -----------------------------------------------------
 --- 以下颜色为了 lazy load lualine
 --- 无法使用 lualine 的情况下 StatusLine 颜色, eg: tagbar 有自己设置的 ':set statusline?' 颜色不受 lualine 控制.
-vim.cmd('hi StatusLine cterm=NONE ctermfg=85 ctermbg=233')  -- active
+vim.cmd('hi StatusLine cterm=NONE ctermfg=85 ctermbg=233')    -- active
 vim.cmd('hi StatusLineNC cterm=NONE ctermfg=246 ctermbg=233') -- inactive, NC (not-current windows)
 
 --- 以下颜色为了 lazy load bufferline

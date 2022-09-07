@@ -47,8 +47,9 @@ ts_ctx.setup{
 }
 
 --- highlight --------------------------------------------------------------------------------------
---vim.cmd [[hi TreesitterContext ctermfg= ]]  -- default link to NormalFloat
-vim.cmd [[ hi! link TreesitterContextLineNumber NormalFloat ]]
+--- NOTE: 需要设置和 BufferLineBufferSelected 的 bg 颜色一致.
+vim.cmd [[hi TreesitterContext ctermbg=233]]  -- 默认 link to NormalFloat
+vim.cmd [[hi TreesitterContextLineNumber ctermbg=233]]  -- 默认 link to LineNr, 最好和 TreesitterContext bg 颜色一致.
 
 
 
