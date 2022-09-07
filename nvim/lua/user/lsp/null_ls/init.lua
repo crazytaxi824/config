@@ -32,8 +32,8 @@ local formatting = null_ls.builtins.formatting
 --- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
 local diagnostics = null_ls.builtins.diagnostics
 --- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/code_actions
---- NOTE: null-ls 不是 autostart 的, 需要触发操作后才会加载. 会导致第一次 code action 的时候速度慢.
---local code_actions = null_ls.builtins.code_actions
+--- NOTE: null-ls 不是 autostart 的, 需要触发操作后才会加载. eslint 等工具启动速度慢, 会拖慢第一次使用 code action 的时间.
+local code_actions = null_ls.builtins.code_actions
 
 --- diagnostics_opts 用于下面的 sources diagnostics 设置 ------------------------------------------- {{{
 --- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/master/lua/null-ls/methods.lua
@@ -163,11 +163,26 @@ local formatter_settings = {
   formatting.buf.with(proj_local_settings.keep_extend(local_formatter_key, 'buf', {})),
 }
 
+--- code actions 设置 -------------------------------------------------------------------------------
+local code_action_settings = {
+  code_actions.gitsigns,  --- "lewis6991/gitsigns.nvim" 插件
+}
+
+--- 合并多个 list
+local function combine_lists(...)
+  local lists = {...}  --- NOTE: 获取 variable number of arguments
+  local result = {}
+  for _, elem in ipairs(lists) do
+    vim.list_extend(result, elem)
+  end
+  return result
+end
+
 --- null-ls setup() 在这里加载上面设置的 formatting & linter ---------------------------------------
 --- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/CONFIG.md
 null_ls.setup({
   --- VVI: 设置 linter / formatter / code actions
-  sources = vim.list_extend(linter_settings, formatter_settings),
+  sources = combine_lists(linter_settings, formatter_settings, code_action_settings),
 
   --- VVI: project root, 影响 linter 执行时的 pwd. 这里的 root_dir 是一个全局设置, 对 null-ls 中的所有 linter 有效.
   --- root_dir 需要传入一个回调函数 func(params):string.

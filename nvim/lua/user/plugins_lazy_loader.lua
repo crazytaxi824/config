@@ -25,6 +25,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
       require('packer').loader('nvim-autopairs')
       require('packer').loader('telescope.nvim')
       require('packer').loader('toggleterm.nvim')
+      require('packer').loader('gitsigns.nvim')
       require('packer').loader('tagbar')
     end)
   end
