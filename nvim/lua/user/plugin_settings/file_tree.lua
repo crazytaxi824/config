@@ -127,7 +127,7 @@ end
 
 -- -- }}}
 
---- `:help nvim-tree-setup`
+--- `:help nvim-tree-setup` ------------------------------------------------------------------------ {{{
 nvim_tree.setup {
   auto_reload_on_write = true,  -- VVI: `:w` 时刷新 nvim-tree.
   disable_netrw = false,   -- completely disable netrw
@@ -235,9 +235,9 @@ nvim_tree.setup {
           symlink_open = '▽',
         },
         git = {
-          unstaged  = "✗",  -- ✗✘
-          staged    = "✓",  -- ✓✔︎
-          unmerged  = "u",
+          unstaged  = "M",  -- ✗✘
+          staged    = "M",  -- ✓✔︎
+          unmerged  = "U",
           renamed   = "R",
           untracked = "?",  -- ★ untracked = new file.
           deleted   = "D",
@@ -246,9 +246,8 @@ nvim_tree.setup {
       },
     },
     special_files = {
-      "Cargo.toml", "Makefile", "MAKEFILE", "README.md", "readme.md",
-      ".editorconfig", ".gitignore", "go.mod", "go.sum",
-      "package-lock.json", "package.json", "tsconfig.json"
+      "Makefile", "MAKEFILE", "README.md", "readme.md", "Readme.md",
+      ".editorconfig", ".gitignore",
     },
     symlink_destination = true,
   },
@@ -321,16 +320,19 @@ nvim_tree.setup {
   },
 } -- END_DEFAULT_OPTS
 
+-- -- }}}
+
 --- `:help nvim-tree-highlight` -------------------------------------------------------------------- {{{
-vim.cmd('hi NvimTreeFolderIcon ctermfg=81 cterm=bold')
 vim.cmd('hi NvimTreeFolderName ctermfg=81 cterm=bold')
-vim.cmd('hi NvimTreeEmptyFolderName ctermfg=81 cterm=bold')
-vim.cmd('hi NvimTreeOpenedFolderName ctermfg=81 cterm=bold')  -- 已打开文件夹的颜色
+vim.cmd('hi! default link NvimTreeFolderIcon NvimTreeFolderName')
+vim.cmd('hi! default link NvimTreeEmptyFolderName NvimTreeFolderName')
+vim.cmd('hi! default link NvimTreeOpenedFolderName NvimTreeFolderName')  -- 已打开文件夹的颜色
 vim.cmd('hi NvimTreeOpenedFile ctermbg=238')   -- 已经打开文件的颜色
+vim.cmd('hi NvimTreeIndentMarker ctermfg=242') -- └ │ 颜色
+
 vim.cmd('hi NvimTreeSymlink ctermfg=207')      -- 链接文件, magenta
 vim.cmd('hi NvimTreeExecFile ctermfg=167')     -- 可执行文件, red
 vim.cmd('hi NvimTreeSpecialFile ctermfg=179')  -- 自定义 Sepcial 文件, orange
-vim.cmd('hi NvimTreeIndentMarker ctermfg=242')
 
 --- nvim-tree Git color, 需要开启 highlight_git=true, render={git={enable=true}}
 --- 这里设置了 git icon color
@@ -343,11 +345,11 @@ vim.cmd('hi NvimTreeGitDeleted ctermfg=167')
 vim.cmd('hi NvimTreeGitIgnored ctermfg=242')
 
 --- git filename color, 默认是 link 上面 git icon color. 如果不想要 filename 颜色, 可以在这里重置颜色.
--- vim.cmd('hi! link NvimTreeFileDirty   Normal')
+vim.cmd('hi! default link NvimTreeFileDirty NvimTreeGitStaged')  -- hi! default link 在 hi clear 时回到该设置.
+vim.cmd('hi! default link NvimTreeFileNew NvimTreeGitStaged')
 -- vim.cmd('hi! link NvimTreeFileStaged  Normal')
 -- vim.cmd('hi! link NvimTreeFileMerge   Normal')
 -- vim.cmd('hi! link NvimTreeFileRenamed Normal')
--- vim.cmd('hi! link NvimTreeFileNew     Normal')
 -- vim.cmd('hi! link NvimTreeFileDeleted Normal')
 -- vim.cmd('hi! link NvimTreeFileIgnored Normal')
 
@@ -377,9 +379,9 @@ vim.api.nvim_create_autocmd({"BufEnter"}, {
 
 --- HACK: keymaps toggle git icons and filename highlights -----------------------------------------
 --- 通过改变内部 "nvim-tree.renderer.components.git" 的 git_icons 来显示/隐藏图标.
-local git_icons  -- cache git icons table
+local cache_git_icons  -- cache git icons table
 
-local function git_file_highlight_clear()
+local function git_file_icons_and_highlight_clear()
   local git_component_ok, git_comp = pcall(require, "nvim-tree.renderer.components.git")
   if not git_component_ok then
     Notify('"nvim-tree.renderer.components.git" load error.', "WARN")
@@ -387,11 +389,12 @@ local function git_file_highlight_clear()
   end
 
   --- 如果已经存入 git_icons 则不再赋值, git_icons 值不会变.
-  if not git_icons then
-    git_icons = git_comp.git_icons  -- cache git_icons
+  if not cache_git_icons then
+    cache_git_icons = git_comp.git_icons  -- cache git_icons
   end
   git_comp.git_icons = {}  -- clear icons
 
+  --- 清除 file git status 颜色
   vim.cmd('hi! link NvimTreeFileDirty   Normal')
   vim.cmd('hi! link NvimTreeFileStaged  Normal')
   vim.cmd('hi! link NvimTreeFileMerge   Normal')
@@ -400,18 +403,25 @@ local function git_file_highlight_clear()
   vim.cmd('hi! link NvimTreeFileDeleted Normal')
   vim.cmd('hi! link NvimTreeFileIgnored Normal')
 
+  --- 启用 special_file & exe_file & symlink_file color.
+  -- vim.cmd('hi NvimTreeSymlink ctermfg=207')      -- 链接文件, magenta
+  -- vim.cmd('hi NvimTreeExecFile ctermfg=167')     -- 可执行文件, red
+  -- vim.cmd('hi NvimTreeSpecialFile ctermfg=179')  -- 自定义 Sepcial 文件, orange
+
   nt_api.tree.reload()  -- refresh tree
 end
 
-local function git_file_highlight_show()
+local function git_file_icons_and_highlight_enable()
   local git_component_ok, git_comp = pcall(require, "nvim-tree.renderer.components.git")
   if not git_component_ok then
     Notify('"nvim-tree.renderer.components.git" load error.', "WARN")
     return
   end
 
-  git_comp.git_icons = git_icons  -- restore icons
+  --- 避免第一次使用时 cache_git_icons = nil
+  git_comp.git_icons = cache_git_icons or git_comp.git_icons -- restore icons
 
+  --- 启用 file git status 颜色
   vim.cmd('hi clear NvimTreeFileDirty')   -- 默认 link to NvimTreeGitDirty
   vim.cmd('hi clear NvimTreeFileStaged')  -- 默认 link to NvimTreeGitStaged
   vim.cmd('hi clear NvimTreeFileMerge')
@@ -420,11 +430,16 @@ local function git_file_highlight_show()
   vim.cmd('hi clear NvimTreeFileDeleted')
   vim.cmd('hi clear NvimTreeFileIgnored')
 
+  --- 清除 special_file & exe_file & symlink_file color.
+  -- vim.cmd('hi! link NvimTreeSymlink Normal')
+  -- vim.cmd('hi! link NvimTreeExecFile Normal')
+  -- vim.cmd('hi! link NvimTreeSpecialFile Normal')
+
   nt_api.tree.reload()  -- refresh tree
 end
 
 local function git_show_highlights()
-  git_file_highlight_show()  -- "nvim-tree" plugin
+  git_file_icons_and_highlight_enable()
 
   local git_signs_ok, git_signs = pcall(require, 'gitsigns')
   if git_signs_ok then
@@ -433,7 +448,7 @@ local function git_show_highlights()
 end
 
 local function git_hide_highlights()
-  git_file_highlight_clear()  -- "nvim-tree" plugin
+  git_file_icons_and_highlight_clear()
 
   local git_signs_ok, git_signs = pcall(require, 'gitsigns')
   if git_signs_ok then

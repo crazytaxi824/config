@@ -5,6 +5,7 @@ end
 
 --- `:help gitsigns`
 git_signs.setup({
+  sign_priority = 11,  -- 默认是 6, vim.diagnostic sign priority 默认是 10.
   signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
   --- NOTE: 以下不推荐默认开启. 可以使用 `:Gitsigns preview_hunk` 查看修改记录, 使用 `:Gitsigns next/prev_hunk` 跳转.
   --numhl      = false, -- Toggle with `:Gitsigns toggle_numhl`
