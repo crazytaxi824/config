@@ -369,7 +369,7 @@ vim.api.nvim_create_autocmd("FileType", {
 - UPGRADE: `bufferline.nvim`, `nvim-lspconfig`, `LuaSnip` refactor, 可能会有 BUG, 需要持续关注更新.
   在稳定之后再创建新的 v0.2.13 tag.
 
-- hightlight path in filetyp='dap-repl' window.
+- highlight path in filetyp='dap-repl' window.
 
 ```lua
 vim.api.nvim_create_autocmd({"BufEnter", "TextChanged", "TextChangedI", "FileChangedShell", "FileChangedShellPost"}, {
@@ -382,12 +382,3 @@ vim.api.nvim_create_autocmd({"BufEnter", "TextChanged", "TextChangedI", "FileCha
 })
 ```
 
-- alacritty v0.11.0
-
-- nvim-tree toggle git icon and color.
-
-- nvim-tree Discard File changes
-  - delete file unstage ' D', staged 'D '
-  - new file unstaged '??', staged 'A '
-  - modified file unstaged ' M', staged 'M '
-  - Renamed file 必须 add & delete file 都是 staged 状态, 否则一个显示 ??/A, 一个显示 D

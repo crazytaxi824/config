@@ -3,6 +3,8 @@ if not status_ok then
   return
 end
 
+local nt_api = require("nvim-tree.api")
+
 --- for keymap ------------------------------------------------------------------------------------- {{{
 --- git: Discard file changes --- {{{
 local function git_discard_file_changes(node)
@@ -110,8 +112,8 @@ local function git_discard_file_changes(node)
 end
 -- -- }}}
 
-local function compare_marked_files(node)
-  local nt_api = require("nvim-tree.api")
+--- compare two marked files, using `:vert diffsplit <filename>` --- {{{
+local function compare_two_marked_files(node)
   local marks_list = nt_api.marks.list()  -- 获取 mark 的 nodes
   if #marks_list ~= 2 then
     Notify("more than 2 marks available, can only campare exactly 2 files")
@@ -121,6 +123,8 @@ local function compare_marked_files(node)
   vim.cmd('tabnew ' .. marks_list[1].absolute_path)  -- open new tab for compare
   vim.cmd('vert diffsplit ' .. marks_list[2].absolute_path) -- compare file
 end
+-- -- }}}
+
 -- -- }}}
 
 --- `:help nvim-tree-setup`
@@ -187,10 +191,9 @@ nvim_tree.setup {
         { key = "C",             action = "copy" },  -- copy file
         { key = "P",             action = "paste" }, -- paste file
 
-        --- 自定义功能
-        --- action 内容成为 help 中展示的文字.
+        --- 自定义功能. NOTE: action 内容成为 help 中展示的文字.
         { key = "<leader>d",     action = "git: Discard file changes",   action_cb = git_discard_file_changes},
-        { key = "<leader>c",     action = "compare marked files",   action_cb = compare_marked_files},
+        { key = "<leader>c",     action = "compare two marked files",   action_cb = compare_two_marked_files},
       },
     },
   },
@@ -275,7 +278,7 @@ nvim_tree.setup {
     exclude = {},
   },
   git = {
-    enable = false,  -- VVI: 开启 git filename 和 icon 颜色显示. 需要开启 renderer.highlight_git 和 renderer.icons.show.git
+    enable = true,  -- VVI: 开启 git filename 和 icon 颜色显示. 需要开启 renderer.highlight_git 和 renderer.icons.show.git
     ignore = false,  -- ignore gitignore files
     show_on_dirs = true,
     timeout = 400,
@@ -359,8 +362,7 @@ vim.cmd('hi NvimTreeGitIgnored ctermfg=242')
 --- automatically close the tab/vim when nvim-tree is the last window in the tab
 vim.cmd [[autocmd BufEnter * ++nested if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpagenr() | quit | endif]]
 
---- HACK refresh nvim-tree when enter a buffer.
-local tree_api = require("nvim-tree.api")
+--- refresh nvim-tree when enter a buffer.
 vim.api.nvim_create_autocmd({"BufEnter"}, {
   pattern = {"*"},
   callback = function(params)
@@ -368,9 +370,88 @@ vim.api.nvim_create_autocmd({"BufEnter"}, {
     --- 因为 bnext | bdelete #, 先 Enter 其他 buffer, 这时之前的 buffer 还没有被 delete, 所以 reload()
     --- 的时候 buffer highlight 还在.
     vim.schedule(function ()
-      tree_api.tree.reload()
+      nt_api.tree.reload()
     end)
   end
+})
+
+--- HACK: keymaps toggle git icons and filename highlights -----------------------------------------
+--- 通过改变内部 "nvim-tree.renderer.components.git" 的 git_icons 来显示/隐藏图标.
+local git_icons  -- cache git icons table
+
+local function git_file_highlight_clear()
+  local git_component_ok, git_comp = pcall(require, "nvim-tree.renderer.components.git")
+  if not git_component_ok then
+    Notify('"nvim-tree.renderer.components.git" load error.', "WARN")
+    return
+  end
+
+  --- 如果已经存入 git_icons 则不再赋值, git_icons 值不会变.
+  if not git_icons then
+    git_icons = git_comp.git_icons  -- cache git_icons
+  end
+  git_comp.git_icons = {}  -- clear icons
+
+  vim.cmd('hi! link NvimTreeFileDirty   Normal')
+  vim.cmd('hi! link NvimTreeFileStaged  Normal')
+  vim.cmd('hi! link NvimTreeFileMerge   Normal')
+  vim.cmd('hi! link NvimTreeFileRenamed Normal')
+  vim.cmd('hi! link NvimTreeFileNew     Normal')
+  vim.cmd('hi! link NvimTreeFileDeleted Normal')
+  vim.cmd('hi! link NvimTreeFileIgnored Normal')
+
+  nt_api.tree.reload()  -- refresh tree
+end
+
+local function git_file_highlight_show()
+  local git_component_ok, git_comp = pcall(require, "nvim-tree.renderer.components.git")
+  if not git_component_ok then
+    Notify('"nvim-tree.renderer.components.git" load error.', "WARN")
+    return
+  end
+
+  git_comp.git_icons = git_icons  -- restore icons
+
+  vim.cmd('hi clear NvimTreeFileDirty')   -- 默认 link to NvimTreeGitDirty
+  vim.cmd('hi clear NvimTreeFileStaged')  -- 默认 link to NvimTreeGitStaged
+  vim.cmd('hi clear NvimTreeFileMerge')
+  vim.cmd('hi clear NvimTreeFileRenamed')
+  vim.cmd('hi clear NvimTreeFileNew')
+  vim.cmd('hi clear NvimTreeFileDeleted')
+  vim.cmd('hi clear NvimTreeFileIgnored')
+
+  nt_api.tree.reload()  -- refresh tree
+end
+
+local function git_show_highlights()
+  git_file_highlight_show()  -- "nvim-tree" plugin
+
+  local git_signs_ok, git_signs = pcall(require, 'gitsigns')
+  if git_signs_ok then
+    git_signs.toggle_signs(true)   -- true: show highlights
+  end
+end
+
+local function git_hide_highlights()
+  git_file_highlight_clear()  -- "nvim-tree" plugin
+
+  local git_signs_ok, git_signs = pcall(require, 'gitsigns')
+  if git_signs_ok then
+    git_signs.toggle_signs(false)  -- false: hide highlights
+  end
+end
+
+local opt = { noremap = true, silent = true}
+local gitsigns_keymaps = {
+  {'n', '<leader>gs', git_show_highlights, opt, "git: Show highlights"},
+  {'n', '<leader>gh', git_hide_highlights, opt, "git: Hide highlights"},
+}
+
+Keymap_set_and_register(gitsigns_keymaps, {
+  key_desc = {
+    g = {name = "Git"},
+  },
+  opts = {mode='n', prefix='<leader>'}
 })
 
 

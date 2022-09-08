@@ -17,9 +17,10 @@ vim.api.nvim_create_autocmd("BufEnter", {
       --require('packer').loader('null-ls.nvim')  -- NOTE: 使用 after = "nvim-lspconfig" 加载
 
       --- Appearance plugins
-      --- 需要先设置 showtabline=2 (always show tabline), 否则在加载 bufferline 后屏幕会向下移动一行.
-      require('packer').loader('bufferline.nvim')
+      require('packer').loader('nvim-tree.lua')
       require('packer').loader('lualine.nvim')
+      require('packer').loader('bufferline.nvim')  -- NOTE: 需要先设置 showtabline=2 (always show tabline),
+                                                   -- 否则在加载 bufferline 后屏幕会向下移动一行.
 
       --- Other useful tools
       require('packer').loader('nvim-autopairs')
