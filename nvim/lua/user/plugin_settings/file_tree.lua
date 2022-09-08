@@ -327,7 +327,7 @@ vim.cmd('hi NvimTreeFolderName ctermfg=81 cterm=bold')
 vim.cmd('hi! default link NvimTreeFolderIcon NvimTreeFolderName')
 vim.cmd('hi! default link NvimTreeEmptyFolderName NvimTreeFolderName')
 vim.cmd('hi! default link NvimTreeOpenedFolderName NvimTreeFolderName')  -- 已打开文件夹的颜色
-vim.cmd('hi NvimTreeOpenedFile ctermbg=238')   -- 已经打开文件的颜色
+vim.cmd('hi NvimTreeOpenedFile ctermbg=238')   -- 已经打开文件的颜色, 只设置 bg.
 vim.cmd('hi NvimTreeIndentMarker ctermfg=242') -- └ │ 颜色
 
 vim.cmd('hi NvimTreeSymlink ctermfg=207')      -- 链接文件, magenta
@@ -394,7 +394,7 @@ local function git_file_icons_and_highlight_clear()
   end
   git_comp.git_icons = {}  -- clear icons
 
-  --- 清除 file git status 颜色
+  --- VVI: 清除 file git status 颜色, 将颜色设置为 {group} xxx clear, 忽略 default 设置.
   vim.cmd('hi! link NvimTreeFileDirty   NONE')
   vim.cmd('hi! link NvimTreeFileStaged  NONE')
   vim.cmd('hi! link NvimTreeFileMerge   NONE')
