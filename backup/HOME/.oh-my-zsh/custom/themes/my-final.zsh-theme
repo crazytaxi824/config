@@ -73,7 +73,9 @@ ZSH_THEME_GIT_PROMPT_SUFFIX="%b%f%k" # 清空所有颜色
 
 }
 
-# 这个函数是为了每次回车时, PROMPT 能够刷新 git 状态.
+# NOTE: 这个函数是为了每次回车时, PROMPT 能够刷新 git 状态.
+# 主要是给 ZSH_THEME_GIT_PROMPT_PREFIX 动态赋值,
+# 同时打印 echo $(git_prompt_info), 打印结果为 %K{xx}%F{xx} %B feature/dev ✔ %b%f%k
 function git_info() {
   # 当前 branch 如果是 master 或者 main, 显示高亮黄色警告.
   if [[ $(git_current_branch) == master || $(git_current_branch) == main ]]; then
