@@ -344,14 +344,14 @@ vim.cmd('hi NvimTreeGitNew     ctermfg=167')
 vim.cmd('hi NvimTreeGitDeleted ctermfg=167')
 vim.cmd('hi NvimTreeGitIgnored ctermfg=242')
 
---- git filename color, 默认是 link 上面 git icon color. 如果不想要 filename 颜色, 可以在这里重置颜色.
-vim.cmd('hi! default link NvimTreeFileDirty NvimTreeGitStaged')  -- hi! default link 在 hi clear 时回到该设置.
-vim.cmd('hi! default link NvimTreeFileNew NvimTreeGitStaged')
--- vim.cmd('hi! link NvimTreeFileStaged  Normal')
--- vim.cmd('hi! link NvimTreeFileMerge   Normal')
--- vim.cmd('hi! link NvimTreeFileRenamed Normal')
--- vim.cmd('hi! link NvimTreeFileDeleted Normal')
--- vim.cmd('hi! link NvimTreeFileIgnored Normal')
+--- git filename color, 默认是 link 上面 git icon color.
+vim.cmd('hi! default link NvimTreeFileDirty  NvimTreeGitStaged')  -- hi! default link 在 hi clear 时回到该设置.
+vim.cmd('hi! default link NvimTreeFileNew    NvimTreeGitStaged')
+-- vim.cmd('hi! default link NvimTreeFileStaged NvimTreeGitStaged')
+-- vim.cmd('hi! default link NvimTreeFileMerge   NvimTreeGitMerge')
+-- vim.cmd('hi! default link NvimTreeFileRenamed NvimTreeGitRenamed')
+-- vim.cmd('hi! default link NvimTreeFileDeleted NvimTreeGitDeleted')
+-- vim.cmd('hi! default link NvimTreeFileIgnored NvimTreeGitIgnored')
 
 --- diagnostic icons highlight.
 -- NvimTreeLspDiagnosticsError         -- 默认 DiagnosticError
@@ -395,13 +395,13 @@ local function git_file_icons_and_highlight_clear()
   git_comp.git_icons = {}  -- clear icons
 
   --- 清除 file git status 颜色
-  vim.cmd('hi! link NvimTreeFileDirty   Normal')
-  vim.cmd('hi! link NvimTreeFileStaged  Normal')
-  vim.cmd('hi! link NvimTreeFileMerge   Normal')
-  vim.cmd('hi! link NvimTreeFileRenamed Normal')
-  vim.cmd('hi! link NvimTreeFileNew     Normal')
-  vim.cmd('hi! link NvimTreeFileDeleted Normal')
-  vim.cmd('hi! link NvimTreeFileIgnored Normal')
+  vim.cmd('hi! link NvimTreeFileDirty   NONE')
+  vim.cmd('hi! link NvimTreeFileStaged  NONE')
+  vim.cmd('hi! link NvimTreeFileMerge   NONE')
+  vim.cmd('hi! link NvimTreeFileRenamed NONE')
+  vim.cmd('hi! link NvimTreeFileNew     NONE')
+  vim.cmd('hi! link NvimTreeFileDeleted NONE')
+  vim.cmd('hi! link NvimTreeFileIgnored NONE')
 
   --- 启用 special_file & exe_file & symlink_file color.
   -- vim.cmd('hi NvimTreeSymlink ctermfg=207')      -- 链接文件, magenta
@@ -421,9 +421,9 @@ local function git_file_icons_and_highlight_enable()
   --- 避免第一次使用时 cache_git_icons = nil
   git_comp.git_icons = cache_git_icons or git_comp.git_icons -- restore icons
 
-  --- 启用 file git status 颜色
-  vim.cmd('hi clear NvimTreeFileDirty')   -- 默认 link to NvimTreeGitDirty
-  vim.cmd('hi clear NvimTreeFileStaged')  -- 默认 link to NvimTreeGitStaged
+  --- 启用 file git status 颜色, 使用 hi clear 让 group 恢复 default 设置.
+  vim.cmd('hi clear NvimTreeFileDirty')
+  vim.cmd('hi clear NvimTreeFileStaged')
   vim.cmd('hi clear NvimTreeFileMerge')
   vim.cmd('hi clear NvimTreeFileRenamed')
   vim.cmd('hi clear NvimTreeFileNew')
