@@ -106,8 +106,7 @@ end
 -- -- }}}
 
 --- go test single function ------------------------------------------------------------------------ {{{
---- 从 cursor 所在行向上查找, 返回函数定义行 "func Foo(param type) {"
-local function find_func_line()  -- return (func_name: string|nil)
+local function get_func_line()  -- return (func_name: string|nil)
   local lcontent = vim.fn.getline('.')  -- 获取行内容
 
   --- 如果找到 ^func.* 则返回整行内容.
@@ -120,7 +119,7 @@ end
 --- 返回 Test Function Name, "TestXxx(t *testing.T)", "BenchmarkXxx(b *testing.B)", "FuzzXxx(f *testing.F)"
 --- NOTE: mark - 0: error | 1: TestXxx | 2: BenchmarkXxx | 3: FuzzXxx
 local function go_test_func_name()  -- return {funcname: string|nil, mark :number}
-  local func_line = find_func_line()
+  local func_line = get_func_line()
   if not func_line then
     return nil, 0
   end

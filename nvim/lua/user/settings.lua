@@ -81,16 +81,20 @@
 vim.opt.mouse = 'a'  -- allow the mouse to be used in neovim, `:help mouse`
 
 --- filetype && syntax 设置
---- [XXX] 以下两个设置和 filetype on 冲突. 不要手动设置 filetype on.
----       如果必须设置 filetype on, 则下面两个设置必须放在 filetype on 前面.
---- VVI: 读取 runtimepath/filetype.lua 中定义的 filetype.
+--- VVI: 以下两个设置 do_filetype_lua & did_load_filetypes 和 filetype on 冲突. 不要手动设置 filetype on.
+---      如果必须设置 filetype on, 则下面两个设置必须放在 filetype on 前面.
+--- NOTE: `:help do_filetype_lua` 执行 runtimepath/filetype.lua
 --- 自定义 filetype remap 在 stdpath('config') .. '/filetype.lua' 中.
-vim.g.do_filetype_lua = 1  -- 默认关闭
+vim.g.do_filetype_lua = 1
 
---- VVI: `:help did_load_filetypes`, If this variable exists, $VIMRUNTIME/filetype.vim will not run.
----      注意这里的 $VIMRUNTIME 不是 runtimepath, 而是 shell 中定义的系统变量.
---- 0 - 变量存在, 不加载 '$VIMRUNTIME/filetype.vim'; 值不等于 1, 加载 nvim lua 'runtimepath/filetype.lua'.
---- 1 - 变量存在, 不加载 '$VIMRUNTIME/filetype.vim'; 值等于 1, 不加载 nvim lua 'runtimepath/filetype.lua'. 相当于 filetype off
+--- NOTE: `:help did_load_filetypes`, 主要用于 "Disable filetype.vim".
+--- builtin filetype detection provided by Nvim can be disabled by setting the 'did_load_filetypes' global variable.
+--- If this variable exists, $VIMRUNTIME/filetype.vim will not run.
+--- 只要 g:did_load_filetypes 变量存在, 就不加载 '$VIMRUNTIME/filetype.vim';
+--- 0 - 加载 nvim lua 'runtimepath/filetype.lua'.
+--- 1 - 不加载 nvim lua 'runtimepath/filetype.lua'. 相当于 `filetype off`.
+--- NOTE: 注意这里的 `:help $VIMRUNTIME` 不是 runtimepath, 而是 VIM 环境变量, 可以在 vim 中使用 `echo $VIMRUNTIME` 查看.
+--- 而且 `:set runtimepath?` 路径列表中包含 $VIMRUNTIME 路径.
 vim.g.did_load_filetypes = 0
 
 --- `:help filetype-overview` 可以查看 filetype 设置.
