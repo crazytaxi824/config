@@ -473,6 +473,9 @@ return packer.startup(function(use)
   }
 
   --- Git
+  --- NOTE: gitsigns 会检查 "trouble.nvim" 是否安装, 如果有安装则:
+  --- `:Gitsigns setqflist/seqloclist` will open Trouble instead of quickfix or location list windows.
+  --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   use {"lewis6991/gitsigns.nvim",
     commit = "d7e0bcb",
     config = function() require("user.plugin_settings.git_signs") end,
