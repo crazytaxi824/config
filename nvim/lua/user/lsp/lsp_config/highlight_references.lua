@@ -41,13 +41,20 @@
 
 --- sort response list 方便 compare. VVI: 需要 compare kind, start.line & start.character
 local function sort_table(list)
-  table.sort(list, function(i, j)  -- compare kind
-    return i.kind < j.kind
-  end)
+  if #list < 1 then
+    return
+  end
+
+  --- NOTE: some lsp response DO NOT have 'kind'.
+  if list[1].kind then
+    table.sort(list, function(i, j)  -- compare kind
+      return i.kind < j.kind
+    end)
+  end
   table.sort(list, function(i, j)  -- compare start.line
     return i.range.start.line < j.range.start.line
   end)
-  table.sort(list, function(i, j)  -- compare start.character
+  table.sort(list, function(i, j)  -- compare start.character, 同一行中多个 var 排序.
     return i.range.start.character < j.range.start.character
   end)
 end
@@ -59,11 +66,13 @@ local function compare_sorted_table(t1, t2)
     return
   end
 
-  for i=1,#t1,1 do
-    if t1.kind ~= t2.kind then
+  for i=1, #t1, 1 do
+    --- NOTE: some lsp response DO NOT have 'kind'.
+    if t1.kind and t1.kind ~= t2.kind then
       -- print('kind value not the same')
       return
     end
+
     --- 这里不需要检查 end, 因为一个 highlight 的 start~end 不会和另一个 highlight 有任何重叠部分.
     --- 也不会有两个 highlight 出现在同一个 start position 上.
     for key, _ in pairs(t1[i].range.start) do
@@ -114,7 +123,11 @@ end
 --- 返回 documentHighlight 方法 --------------------------------------------------------------------
 local M = {}
 
---- HACK: 解决的问题: CursorHold 过程中不要 clear_references(), 在判断 word 改变之后再 clear.
+--- HACK: 问题: CursorMove 触发 clear_references() & CursorHold 触发 document_highlight(),
+--- cursor 在同一个 document_highlight 的内部移动时造成闪烁.
+--- 解决办法: 缓存上一次 lsp 返回的 highlight 结果, 和这一次的进行对比,
+--- 如果结果完全相同, 则直接返回;
+--- 如果结果不同则清除之前的 clear_references() highlight, 重新 document_highlight()
 M.lsp_highlight = function (client, bufnr)
   --- Set autocommands conditional on server_capabilities
   --- 也可以使用 if client.resolved_capabilities.document_highlight 来判断.
