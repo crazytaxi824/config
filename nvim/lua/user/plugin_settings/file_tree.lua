@@ -5,7 +5,49 @@ end
 
 local nt_api = require("nvim-tree.api")
 
---- for keymap ------------------------------------------------------------------------------------- {{{
+--- file/dir icons --------------------------------------------------------------------------------- {{{
+local nt_indent_line = {
+  corner = "└ ",
+  edge = "│ ",
+  item = "│ ",
+  none = "  ",
+}
+
+local glyphs = {
+  default = '',
+  symlink = '',  -- 这里的 symlink 和 symlink_arrow 设置不一样, 这里是文件名前面的 icon.
+  bookmark = '★',
+  folder = {
+    arrow_closed = "▶︎",  -- folder_arrow
+    arrow_open = "▽",    -- folder_arrow
+    default = '▶︎',  -- folder
+    open = '▽',     -- folder
+    empty = '-',    -- folder
+    empty_open = '-',  -- folder
+    symlink = '▶︎',
+    symlink_open = '▽',
+  },
+  git = {
+    unstaged  = "M",  -- ✗✘
+    staged    = "M",  -- ✓✔︎
+    unmerged  = "U",
+    renamed   = "R",
+    untracked = "?",  -- ★ untracked = new file.
+    deleted   = "D",
+    ignored   = "◌",
+  },
+}
+
+local diagnostics_icons = {
+  hint    = "⚐ ",  -- ⚐⚑
+  info    = "𝖎 ",
+  warning = "⚠️ ",
+  error   = "✘ ",  -- ❌✕✖︎✗✘
+}
+
+-- -- }}}
+
+--- nvim-tree buffer keymaps ----------------------------------------------------------------------- {{{
 --- git: Discard file changes --- {{{
 local function git_discard_file_changes(node)
   --print(node.name, node.absolute_path, vim.inspect(node.git_status), node.type)
@@ -125,25 +167,62 @@ local function compare_two_marked_files(node)
 end
 -- -- }}}
 
+local nt_buffer_keymaps = {
+  { key = {"<CR>", "e"},   action = "edit" },
+  { key = "<C-v>",         action = "vsplit" },  -- vsplit edit
+  { key = "<C-x>",         action = "split" },
+  { key = "<C-o>",         action = "system_open" },
+  { key = "a",             action = "create" },
+  { key = {"d", "D"},      action = "remove" },
+  { key = "R",             action = "rename" },  -- 类似 `$ mv foo bar`
+  { key = "r",             action = "refresh" },
+  { key = "y",             action = "copy_absolute_path" },
+  { key = "E",             action = "collapse_all" },  -- vscode 自定义按键为 cmd+E
+  { key = "W",             action = "expand_all" },
+  { key = "I",             action = "toggle_git_ignored" },
+  { key = "H",             action = "toggle_dotfiles" },  -- 隐藏文件
+  { key = "m",             action = "toggle_mark" }, -- paste file
+  { key = "q",             action = "close" },  -- close nvim-tree window
+  { key = "?",             action = "toggle_help" },
+  { key = "<F8>",          action = "next_diag_item" },  -- next diagnostics item
+  { key = "<F20>",         action = "prev_diag_item" },  -- <S-F8> previous diagnostics item
+  { key = "<S-CR>",        action = "cd" },  -- `cd` in the directory under the cursor
+  { key = "<C-CR>",        action = "cd" },  -- `cd` in the directory under the cursor
+  { key = "C",             action = "copy" },  -- copy file
+  { key = "P",             action = "paste" }, -- paste file
+
+  --- 自定义功能. NOTE: action 内容成为 help 中展示的文字.
+  --- action_cb 意思是 callback 函数.
+  { key = "<leader>d",     action = "git: Discard file changes",   action_cb = git_discard_file_changes},
+  { key = "<leader>c",     action = "compare two marked files",   action_cb = compare_two_marked_files},
+}
+
 -- -- }}}
 
 --- `:help nvim-tree-setup` ------------------------------------------------------------------------ {{{
 nvim_tree.setup {
   auto_reload_on_write = true,  -- VVI: `:w` 时刷新 nvim-tree.
-  disable_netrw = false,   -- completely disable netrw
-  hijack_cursor = false,   -- keeps the cursor on the first letter of the filename
+
+  disable_netrw = false,   -- completely disable netrw. NOTE: netrw: vim's builtin file explorer.
   hijack_netrw = true,     -- hijack netrw windows (overriden if |disable_netrw| is `true`)
+  hijack_cursor = false,   -- keeps the cursor on the first letter of the filename
   hijack_directories = {   -- hijacks new directory buffers when they are opened (`:e dir`)
-    enable = true,
+    enable = true,  -- NOTE: 和下面的 auto close the tab/vim when nvim-tree is the last window 一起使用时, 会导致 nvim 退出.
     auto_open = true,
   },
-  hijack_unnamed_buffer_when_opening = false,
-  ignore_buffer_on_setup = false,
-  open_on_setup = false,      -- 打开 dir 时自动开启 nvimtree
-  open_on_setup_file = false, -- 打开 file 时自动开启 nvimtree
-  open_on_tab = false,
+  hijack_unnamed_buffer_when_opening = false,  -- Opens in place of the unnamed buffer if it's empty.
+
+  --- 启动 nvim 时, 打开 tree.
+  open_on_setup = false,  -- 不好用. 启动 nvim 打开文件时, 自动打开 tree. eg: `nvim dir`
+  open_on_setup_file = false,  -- 启动 nvim 打开文件, 且文件存在的情况下, 自动打开 tree. eg: `nvim file`
+  open_on_tab = false,  -- 在 tree 打开的状态下 open new tab, 则在新 tab 中自动打开 tree.
+  ignore_buffer_on_setup = false,  -- Will ignore the buffer, when deciding to open the tree on setup.
+  ignore_ft_on_setup = {},  -- List of filetypes that will prevent `open_on_setup` to open.
+  ignore_buf_on_tab_change = {},  -- List of filetypes or buffer names that will prevent `open_on_tab` to open.
+
   sort_by = "name",
-  update_cwd = false,
+  sync_root_with_cwd = false,  -- Changes the tree root directory on `DirChanged` and refreshes the tree.
+
   view = {
     -- float = {  -- 在 floating window 中打开 nvim-tree.  --- {{{
     --   enable = true,
@@ -167,109 +246,49 @@ nvim_tree.setup {
     --- ":help nvim-tree-default-mappings"
     mappings = {
       custom_only = true,  -- NOTE: 只使用 custom key mapping
-      list = {   -- user mappings go here
-        { key = {"<CR>", "e"},   action = "edit" },
-        { key = "<C-v>",         action = "vsplit" },  -- vsplit edit
-        { key = "<C-x>",         action = "split" },
-        { key = "<C-o>",         action = "system_open" },
-        { key = "a",             action = "create" },
-        { key = {"d", "D"},      action = "remove" },
-        { key = "R",             action = "rename" },  -- 类似 `$ mv foo bar`
-        { key = "r",             action = "refresh" },
-        { key = "y",             action = "copy_absolute_path" },
-        { key = "E",             action = "collapse_all" },  -- vscode 自定义按键为 cmd+E
-        { key = "W",             action = "expand_all" },
-        { key = "I",             action = "toggle_git_ignored" },
-        { key = "H",             action = "toggle_dotfiles" },  -- 隐藏文件
-        { key = "m",             action = "toggle_mark" }, -- paste file
-        { key = "q",             action = "close" },  -- close nvim-tree window
-        { key = "?",             action = "toggle_help" },
-        { key = "<F8>",          action = "next_diag_item" },  -- next diagnostics item
-        { key = "<F20>",         action = "prev_diag_item" },  -- <S-F8> previous diagnostics item
-        { key = "<S-CR>",        action = "cd" },  -- `cd` in the directory under the cursor
-        { key = "<C-CR>",        action = "cd" },  -- `cd` in the directory under the cursor
-        { key = "C",             action = "copy" },  -- copy file
-        { key = "P",             action = "paste" }, -- paste file
-
-        --- 自定义功能. NOTE: action 内容成为 help 中展示的文字.
-        { key = "<leader>d",     action = "git: Discard file changes",   action_cb = git_discard_file_changes},
-        { key = "<leader>c",     action = "compare two marked files",   action_cb = compare_two_marked_files},
-      },
+      list = nt_buffer_keymaps,   -- user mappings go here
     },
   },
+
   renderer = {
     highlight_git = true,  -- 开启 git filename 颜色. 需要设置 git.enable = true
     highlight_opened_files = "all",  -- highlight icon or filename or both. "none"(*) | "icon" | "name" | "all"
     indent_width = 2, -- 默认 2.
     indent_markers = {
       enable = true,
-      icons = {
-        corner = "└ ",
-        edge = "│ ",
-        item = "│ ",
-        none = "  ",
-      },
+      icons = nt_indent_line,
     },
     icons = {
-      webdev_colors = false,
+      webdev_colors = false,  -- 使用 `nvim-web-devicons`, otherwise `NvimTreeFileIcon`.
       git_placement = "before",  -- 'before' (filename) | 'after' (filename) | 'signcolumn' (vim.signcolumn='yes')
-      symlink_arrow = " ➜ ",  -- old_name ➜ new_name
+      symlink_arrow = " ➜ ",  -- old_name ➜ new_name, 这个不是显示在 filename/dir 之前的 icon.
       show = {
-        git = true,    -- 显示 git icon. 需要设置 git.enable = true
-        file = false,  -- 显示 file icon
         folder = true, -- 显示 folder icon
         folder_arrow = false,  -- NOTE: 使用 folder icon 代替, folder_arrow icon 无法改变颜色, 也无法设置 empty icon.
+        file = false,  -- 显示 file icon, `nvim-web-devicons` will be used if available.
+        git = true,    -- 显示 git icon. 需要设置 git.enable = true
       },
-      glyphs = {
-        default = '',
-        symlink = '',  -- 这里的 symlink 和 symlink_arrow 设置不一样, 这里是文件名前面的 icon.
-        bookmark = '★',
-        folder = {
-          arrow_closed = "▶︎",  -- folder_arrow
-          arrow_open = "▽",    -- folder_arrow
-          default = '▶︎',  -- folder
-          open = '▽',     -- folder
-          empty = '-',    -- folder
-          empty_open = '-',  -- folder
-          symlink = '▶︎',
-          symlink_open = '▽',
-        },
-        git = {
-          unstaged  = "M",  -- ✗✘
-          staged    = "M",  -- ✓✔︎
-          unmerged  = "U",
-          renamed   = "R",
-          untracked = "?",  -- ★ untracked = new file.
-          deleted   = "D",
-          ignored   = "◌",
-        },
-      },
+      glyphs = glyphs,
     },
     special_files = {
       "Makefile", "MAKEFILE", "README.md", "readme.md", "Readme.md",
       ".editorconfig", ".gitignore",
     },
-    symlink_destination = true,
+    symlink_destination = true,  -- Whether to show the destination of the symlink.
   },
   update_focused_file = {
-    enable = false,
-    update_cwd = false,
+    enable = false,  -- `:e file` 时, 更新 tree, 展开文件夹直到找到该文件.
+    update_root = false,  -- VVI: Update the root directory of the tree if the file is not under current root directory.
     ignore_list = {},
   },
-  ignore_ft_on_setup = {},
   system_open = {
-    cmd = nil,  -- Mac 中可以改为 "open"
+    cmd = "open",  -- Mac 中可以改为 "open"
     args = {},
   },
   diagnostics = {  --- VVI: 显示 vim diagnostics (Hint|Info|Warn|Error) 需要设置 vim.signcolumn='yes'
     enable = true,
-    show_on_dirs = true,
-    icons = {
-      hint    = "⚐ ",  -- ⚐⚑
-      info    = "𝖎 ",
-      warning = "⚠️ ",
-      error   = "✘ ",  -- ❌✕✖︎✗✘
-    },
+    show_on_dirs = true,  -- 在文件所属的 dir name 前也显示 sign.
+    icons = diagnostics_icons,
   },
   filters = {
     dotfiles = false,  -- true:不显示隐藏文件, false:显示隐藏文件.
@@ -279,7 +298,7 @@ nvim_tree.setup {
   git = {
     enable = true,  -- VVI: 开启 git filename 和 icon 颜色显示. 需要开启 renderer.highlight_git 和 renderer.icons.show.git
     ignore = false,  -- ignore gitignore files
-    show_on_dirs = true,
+    show_on_dirs = true,  -- 在文件所属的 dir name 前也显示 sign.
     timeout = 400,
   },
   actions = {
@@ -361,11 +380,14 @@ vim.cmd('hi! default link NvimTreeFileNew    NvimTreeGitStaged')
 
 -- -- }}}
 
+--- autocmd ---------------------------------------------------------------------------------------- {{{
 --- automatically close the tab/vim when nvim-tree is the last window in the tab
 vim.cmd [[autocmd BufEnter * ++nested if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpagenr() | quit | endif]]
 
---- refresh nvim-tree when enter a buffer.
-vim.api.nvim_create_autocmd({"BufEnter"}, {
+--- refresh nvim-tree when enter/delete a buffer.
+--- BufEnter  用在打开 unloaded buffer 时.
+--- BufDelete 用在 close 非当前 buffer 时.
+vim.api.nvim_create_autocmd({"BufEnter", "BufDelete"}, {
   pattern = {"*"},
   callback = function(params)
     --- VVI: 必须使用 vim.schedule(), 否则 bdelete 的时候不会刷新显示.
@@ -376,11 +398,13 @@ vim.api.nvim_create_autocmd({"BufEnter"}, {
     end)
   end
 })
+-- -- }}}
 
---- HACK: keymaps toggle git icons and filename highlights -----------------------------------------
+--- HACK: keymaps toggle git icons and filename highlights ----------------------------------------- {{{
 --- 通过改变内部 "nvim-tree.renderer.components.git" 的 git_icons 来显示/隐藏图标.
 local cache_git_icons  -- cache git icons table
 
+--- 清除 git icons && file highlights ------------------------------------------ {{{
 local function git_file_icons_and_highlight_clear()
   local git_component_ok, git_comp = pcall(require, "nvim-tree.renderer.components.git")
   if not git_component_ok then
@@ -403,14 +427,17 @@ local function git_file_icons_and_highlight_clear()
   vim.cmd('hi! link NvimTreeFileDeleted NONE')
   vim.cmd('hi! link NvimTreeFileIgnored NONE')
 
-  --- 启用 special_file & exe_file & symlink_file color.
+  --- 启用 special_file & exe_file & symlink_file color --- {{{
   -- vim.cmd('hi NvimTreeSymlink ctermfg=207')      -- 链接文件, magenta
   -- vim.cmd('hi NvimTreeExecFile ctermfg=167')     -- 可执行文件, red
   -- vim.cmd('hi NvimTreeSpecialFile ctermfg=179')  -- 自定义 Sepcial 文件, orange
+  -- -- }}}
 
   nt_api.tree.reload()  -- refresh tree
 end
+-- -- }}}
 
+--- 重置 git icons && file highlights ------------------------------------------ {{{
 local function git_file_icons_and_highlight_enable()
   local git_component_ok, git_comp = pcall(require, "nvim-tree.renderer.components.git")
   if not git_component_ok then
@@ -430,14 +457,17 @@ local function git_file_icons_and_highlight_enable()
   vim.cmd('hi clear NvimTreeFileDeleted')
   vim.cmd('hi clear NvimTreeFileIgnored')
 
-  --- 清除 special_file & exe_file & symlink_file color.
+  --- 清除 special_file & exe_file & symlink_file color --- {{{
   -- vim.cmd('hi! link NvimTreeSymlink Normal')
   -- vim.cmd('hi! link NvimTreeExecFile Normal')
   -- vim.cmd('hi! link NvimTreeSpecialFile Normal')
+  -- -- }}}
 
   nt_api.tree.reload()  -- refresh tree
 end
+-- -- }}}
 
+--- 显示 nvim-tree icons and highlights & gitsigns signs
 local function git_show_highlights()
   git_file_icons_and_highlight_enable()
 
@@ -447,6 +477,7 @@ local function git_show_highlights()
   end
 end
 
+--- 隐藏 nvim-tree icons and highlights & gitsigns signs
 local function git_hide_highlights()
   git_file_icons_and_highlight_clear()
 
@@ -456,6 +487,7 @@ local function git_hide_highlights()
   end
 end
 
+--- 设置 keymaps ---------------------------------------------------------------
 local opt = { noremap = true, silent = true}
 local gitsigns_keymaps = {
   {'n', '<leader>gs', git_show_highlights, opt, "git: Show highlights"},
@@ -469,5 +501,6 @@ Keymap_set_and_register(gitsigns_keymaps, {
   opts = {mode='n', prefix='<leader>'}
 })
 
+-- -- }}}
 
 
