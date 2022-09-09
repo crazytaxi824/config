@@ -39,8 +39,8 @@
 --
 --- 颜色设置 cmd
 --    ':hi <group> ctermfg...'           Set color
---    ':hi clear <group>'                Reset to default color
---    ':hi! link <group> NONE'           VVI: 将颜色设为 NONE. 忽略 default color, 结果为 {group} xxx cleared
+--    ':hi clear <group>'                Reset to default color. 如果没有 default color, 则结果为 {group} xxx cleared
+--    ':hi! link <group> NONE'           VVI: 将颜色设为 NONE. 直接忽略 default color, 将颜色设置为 {group} xxx cleared
 --    ':hi default <group> ctermfg...'   Set default color, 如果使用 `:hi clear <group>` 会回到这个颜色.
 --                                       VVI: 只适用于定义新的 group, 如果 group 已存在, 则 hi default 命令不会执行.
 --
