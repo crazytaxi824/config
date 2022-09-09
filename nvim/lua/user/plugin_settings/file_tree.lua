@@ -167,11 +167,32 @@ local function compare_two_marked_files(node)
 end
 -- -- }}}
 
+--- system open file --- {{{
+local function system_open(node)
+  --- 根据文件属性使用对应的 application 打开.
+  vim.fn.system('open "' .. node.absolute_path .. '"')  -- NOTE: filepath 需要使用引号 "", 否则有些 filepath 中有空格.
+  if vim.v.shell_error == 0 then
+    return
+  end
+
+  --- `open -a file` Specifies the application to use for opening the file.
+  vim.fn.system('open -a "/Applications/Visual Studio Code.app/" "' .. node.absolute_path .. '"')
+  if vim.v.shell_error == 0 then
+    return
+  end
+
+  --- `open -R file` Reveals the file(s) in the Finder instead of opening them.
+  local r = vim.fn.system('open -R "' .. node.absolute_path .. '"')
+  if vim.v.shell_error ~= 0 then
+    Notify(r, "ERROR")
+  end
+end
+-- -- }}}
+
 local nt_buffer_keymaps = {
   { key = {"<CR>", "e"},   action = "edit" },
   { key = "<C-v>",         action = "vsplit" },  -- vsplit edit
   { key = "<C-x>",         action = "split" },
-  { key = "<C-o>",         action = "system_open" },
   { key = "a",             action = "create" },
   { key = {"d", "D"},      action = "remove" },
   { key = "R",             action = "rename" },  -- 类似 `$ mv foo bar`
@@ -193,8 +214,9 @@ local nt_buffer_keymaps = {
 
   --- 自定义功能. NOTE: action 内容成为 help 中展示的文字.
   --- action_cb 意思是 callback 函数.
-  { key = "<leader>d",     action = "git: Discard file changes",   action_cb = git_discard_file_changes},
-  { key = "<leader>c",     action = "compare two marked files",   action_cb = compare_two_marked_files},
+  { key = "<C-o>",         action = "system open", action_cb = system_open},
+  { key = "<leader>c",     action = "compare two marked files", action_cb = compare_two_marked_files},
+  { key = "<leader>d",     action = "git: Discard file changes", action_cb = git_discard_file_changes},
 }
 
 -- -- }}}
@@ -282,7 +304,7 @@ nvim_tree.setup {
     ignore_list = {},
   },
   system_open = {
-    cmd = "open",  -- Mac 中可以改为 "open"
+    cmd = "",  -- Mac 中可以改为 "open", NOTE: 无法处理错误, 推荐使用 action_cb.
     args = {},
   },
   diagnostics = {  --- VVI: 显示 vim diagnostics (Hint|Info|Warn|Error) 需要设置 vim.signcolumn='yes'
