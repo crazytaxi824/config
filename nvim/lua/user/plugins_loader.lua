@@ -235,19 +235,21 @@ return packer.startup(function(use)
   --- 本配置依赖插件 -------------------------------------------------------------------------------
   --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   use {"folke/which-key.nvim",
-    commit = "bd4411a",
+    commit = "439637d",  -- TODO: feat: for nvim 0.7.0 or higher, use native keymap callbacks instead of which key functions (5 days ago)
+                         -- `:help nvim_set_keymap()` default opt 中有 noremap, silent ... 还有 'desc' 设置. which-key
+                         -- 现在默认使用 desc 设置. 如果没有使用 name 的话.
     config = function() require("user.plugin_settings.which_key") end,
   }
 
   --- 通知功能
   use {"rcarriga/nvim-notify",
-    commit = "cf5dc4f",
+    commit = "7076ce8",
     config = function() require("user.plugin_settings.nvim_notify") end,
   }
 
   --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件
   use {"williamboman/mason.nvim",
-    commit = "1cde8fd",
+    commit = "e89217b",
     config = function() require("user.plugin_settings.mason_tool_installer") end,
     --- NOTE: 不能 opt 加载 mason 否则其他插件无法找到 mason 安装的工具.
   }
