@@ -32,7 +32,6 @@ local formatting = null_ls.builtins.formatting
 --- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
 local diagnostics = null_ls.builtins.diagnostics
 --- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/code_actions
---- NOTE: null-ls 不是 autostart 的, 需要触发操作后才会加载. eslint 等工具启动速度慢, 会拖慢第一次使用 code action 的时间.
 local code_actions = null_ls.builtins.code_actions
 
 --- diagnostics_opts 用于下面的 sources diagnostics 设置 ------------------------------------------- {{{
@@ -165,7 +164,14 @@ local formatter_settings = {
 
 --- code actions 设置 -------------------------------------------------------------------------------
 local code_action_settings = {
-  code_actions.gitsigns,  --- "lewis6991/gitsigns.nvim" 插件
+  --- "lewis6991/gitsigns.nvim" 插件
+  code_actions.gitsigns.with({
+    disabled_filetypes = { "NvimTree", "tagbar" },
+  }),
+
+  --- NOTE: null-ls 不是 autostart 的, 需要触发操作后才会加载.
+  --- eslint 等工具启动速度慢, 会拖慢第一次使用 code action 的时间.
+  code_actions.eslint,
 }
 
 --- 合并多个 list
