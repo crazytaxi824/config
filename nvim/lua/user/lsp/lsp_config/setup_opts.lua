@@ -16,15 +16,6 @@ M.flags = { debounce_text_changes = 500 }   --- 默认 150.
 --- NOTE: on_attach - 加载 Key mapping & highlight 设置 --------------------------------------------
 ---       这里传入的 client 是正在加载的 lsp_client, vim.inspect(client) 中可以看到 codeActionKind.
 M.on_attach = function(client, bufnr)
-  --- VVI: 禁止使用 LSP 的 formatting 功能, 在 null-ls 中使用其他 format 工具
-  --- `:lua print(vim.inspect(vim.lsp.buf_get_clients()))` 查看启动的 lsp 和所有相关设置
-  --- ts, js, html, json, jsonc ... 使用 'prettier'
-  --- lua 使用 'stylua'
-  local disable_format = {"tsserver", "html", "sumneko_lua", "jsonls"}
-  if vim.tbl_contains(disable_format, client.name) then
-    client.resolved_capabilities.document_formatting = false
-  end
-
   --- VVI: 设置 root_dir 到 buffer variables 中, 为了给 null-ls 提供 cwd 设置.
   vim.fn.setbufvar(bufnr, "my_lspconfig", {root_dir = client.config.root_dir})
 
@@ -57,7 +48,16 @@ M.capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
 --- 这里是为了能单独给 project 设置 LSP setting.
 --- init() runs Before attach().
 M.on_init = function(client)
-  --- 加载项目本地设置, 覆盖 global settings.
+  --- NOTE: 禁止使用 LSP 的 formatting 功能, 在 null-ls 中使用其他 format 工具
+  --- `:lua print(vim.inspect(vim.lsp.buf_get_clients()))` 查看启动的 lsp 和所有相关设置
+  --- ts, js, html, json, jsonc ... 使用 'prettier'
+  --- lua 使用 'stylua'
+  local disable_format = {"tsserver", "html", "sumneko_lua", "jsonls"}
+  if vim.tbl_contains(disable_format, client.name) then
+    client.resolved_capabilities.document_formatting = false
+  end
+
+  --- NOTE: 加载项目本地设置, 覆盖 global settings -----------------------------
   local local_lspconfig_key = "lsp_settings"
 
   local proj_local_settings = require("user.lsp._load_proj_settings")
