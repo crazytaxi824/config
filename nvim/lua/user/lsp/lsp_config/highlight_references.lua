@@ -89,11 +89,23 @@ end
 --- cache 上一次的 documentHighlight 结果.
 local prev_doc_hi_pos = {}
 
-local function handler(_, result, ctx, config)
+--- `:help lsp-handler`
+local function handler(err, result, req, config)
+  if err then
+    local debug = "error message:\n" .. vim.inspect(err) ..
+      "lsp request:\n" .. vim.inspect(req) ..
+      "result:\n" .. vim.inspect(result)
+    Notify(debug, "ERROR")
+    return
+  end
+
   --- VVI: 没有结果的情况下, 有些 lsp 会返回 nil, 有些会返回 empty table {}. eg: cursor 在空白行.
   if not result or #result == 0 then
-    prev_doc_hi_pos = {}  -- 清空结果
-    vim.lsp.buf.clear_references()  -- clear previous highlight
+    prev_doc_hi_pos = {}  -- clear cached result
+
+    --- VVI: 这里不要使用 vim.lsp.buf.clear_references() 方法,
+    --- 这个方法只能清除当前 buffer 的 highlight.
+    vim.lsp.util.buf_clear_references(req.bufnr)  -- clear previous highlight
     return
   end
 
@@ -105,8 +117,19 @@ local function handler(_, result, ctx, config)
 
   if not r then
     -- print('changed')  -- documentHighlight position changed
-    vim.lsp.buf.clear_references()  -- clear previous highlight
-    vim.lsp.buf.document_highlight()  -- new highlight
+
+    --- VVI: 这里不要使用 vim.lsp.buf.clear_references() 方法,
+    --- 这个方法只能清除当前 buffer 的 highlight.
+    vim.lsp.util.buf_clear_references(req.bufnr)  -- clear previous highlight
+
+    --- VVI: 这里不要使用 vim.lsp.buf.document_highlight(),
+    --- 因为这个方法会重新发送 buf_request('textDocument/documentHighlight').
+    --- vim.lsp.util.buf_highlight_references() 只渲染结果.
+    local client = vim.lsp.get_client_by_id(req.client_id)
+    if not client then
+      return
+    end
+    vim.lsp.util.buf_highlight_references(req.bufnr, result, client.offset_encoding)
   end
 
   -- print('same')  -- documentHighlight same as previous highlight
@@ -115,12 +138,14 @@ end
 --- 发送 documentHighlight 请求
 local method = 'textDocument/documentHighlight'
 
-local function highlight_references()
+--- NOTE: 本函数相当于替代 vim.lsp.buf.document_highlight() 方法.
+local function highlight_references(bufnr)
   local param = vim.lsp.util.make_position_params()
-  vim.lsp.buf_request(0, method, param, handler)
+  vim.lsp.buf_request(bufnr, method, param, handler)
 end
 
---- 返回 documentHighlight 方法 --------------------------------------------------------------------
+--- 返回自定义 documentHighlight 处理方法 ----------------------------------------------------------
+--- NOTE: 主要是用于替代 vim.lsp.buf.document_highlight() 方法.
 local M = {}
 
 --- HACK: 问题: CursorMove 触发 clear_references() & CursorHold 触发 document_highlight(),
@@ -132,22 +157,27 @@ M.lsp_highlight = function (client, bufnr)
   --- Set autocommands conditional on server_capabilities
   --- 也可以使用 if client.resolved_capabilities.document_highlight 来判断.
   if client.supports_method(method) then
-    local group_id = vim.api.nvim_create_augroup('lsp_document_highlight', {
-      clear = true,
-    })
     vim.api.nvim_create_autocmd({"CursorHold", "CursorHoldI"}, {
-      group = group_id,
       buffer = bufnr,
-      callback = highlight_references,
+      callback = function(params)
+        --- 使用自定义的 documentHighlight 请求处理, 代替 vim.lsp.buf.document_highlight()
+        --- VVI: 千万不能使用 lsp_highlight(client, bufnr) 中传入的 bufnr,
+        --- 因为 lsp_highlight() 只在 on_attach 的时候执行一次.
+        highlight_references(params.buf)
+      end,
     })
 
     --- 在 cursor 进入另外一个 window 前, 或者在 window 加载其他的 buffer 前, 清除 clear highlight.
     vim.api.nvim_create_autocmd({"WinLeave", "BufWinLeave"}, {
-      group = group_id,
       buffer = bufnr,
       callback = function(params)
-        prev_doc_hi_pos = {}  -- 清空结果
-        vim.lsp.buf.clear_references()  -- clear previous highlight
+        prev_doc_hi_pos = {}  -- clear cached result
+
+        --- NOTE: 这里不要使用 vim.lsp.buf.clear_references() 方法,
+        --- 这个方法只能清除当前 buffer 的 highlight.
+        --- VVI: 千万不能使用 lsp_highlight(client, bufnr) 中传入的 bufnr,
+        --- 因为 lsp_highlight() 只在 on_attach 的时候执行一次.
+        vim.lsp.util.buf_clear_references(params.buf)
       end
     })
   end
