@@ -264,7 +264,7 @@ return packer.startup(function(use)
   --- `:TSUpdateSync`         -- Update the installed languages synchronously
   -- -- }}}
   use {"nvim-treesitter/nvim-treesitter",
-    commit = "73cd1f18",
+    commit = "965a74f7",
     run = ":TSUpdate",   -- Post-update/install hook.
     config = function() require("user.plugin_settings.treesitter") end,
     opt = true,  -- 在 vim.schedule() 中 lazy load
@@ -282,14 +282,14 @@ return packer.startup(function(use)
 
   --- 第一方 module 插件 ---
   use {"nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-    commit = "1f66894",
+    commit = "82631f6",
     --- https://github.com/nvim-treesitter/nvim-treesitter-context#configuration
     config = function() require("user.plugin_settings.treesitter_ctx") end,
     after = "nvim-treesitter",
   }
 
   use {"nvim-treesitter/playground",  -- 用于获取 treesitter 信息, 调整颜色很有用.
-    commit = "90d2b3e",
+    commit = "bcfab84",
     cmd = {"TSPlaygroundToggle", "TSHighlightCapturesUnderCursor"},
     after = "nvim-treesitter",
   }
@@ -309,7 +309,7 @@ return packer.startup(function(use)
   --- 以下是使用了 treesitter 功能的插件. (这些插件也可以不使用 treesitter 的功能)
   --- 注释
   use {"numToStr/Comment.nvim",
-    commit = "80e7746",
+    commit = "30d23aa",
     config = function() require("user.plugin_settings.comment") end,
     after = {"nvim-treesitter", "nvim-ts-context-commentstring"},
     requires = {
