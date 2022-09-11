@@ -182,10 +182,11 @@ packer.init {
 
   display = {
     open_fn = function()
-      --- Packer 面板 border 样式.
-      --- return require("packer.util").float { border = "single" }  -- `:help nvim_open_win()`
+      --- require("packer.util").float() 使用 float window 打开 packer info 面板. 默认在右侧打开新 window.
+      --- border = { ... } 面板 border 样式.
       return require("packer.util").float({ border = {"▄","▄","▄","█","▀","▀","▀","█"} })  -- `:help nvim_open_win()`
     end,
+    prompt_border = {"▄","▄","▄","█","▀","▀","▀","█"},  -- prompt 面板样式. eg: delete plugins
     keybindings = { -- Keybindings for the display window
       quit = 'q',  -- close window, 默认是 'q'
       toggle_info = '<CR>',
@@ -197,6 +198,9 @@ packer.init {
 }
 -- -- }}}
 
+--- VVI: 加载 packer plugins trigger 设置, 用于 lazy load plugins.
+require("user.plugin_settings._trigger")
+
 --- 官方文档 https://github.com/wbthomason/packer.nvim
 --- 插件推荐 https://github.com/LunarVim/Neovim-from-scratch/blob/master/lua/user/plugins.lua
 ---          https://github.com/LunarVim/LunarVim/blob/master/lua/lvim/plugins.lua
@@ -204,11 +208,8 @@ packer.init {
 --- 插件的安装位置在 "~/.local/share/nvim/site/pack/packer/start/..."
 --- `:PackerSync` - install / update / clean 插件包.
 return packer.startup(function(use)
-  --- VVI: 加载 packer plugins trigger 设置, 用于 lazy load plugins.
-  require("user.plugin_settings._trigger")
-
   use {"wbthomason/packer.nvim",  -- VVI: 必要. Have packer manage itself
-    commit = "dee5a4f",
+    commit = "6afb674",
   }
 
   --- Performence & Functions ----------------------------------------------------------------------
@@ -222,7 +223,7 @@ return packer.startup(function(use)
   --- Useful lua functions used by lots of plugins
   --- NOTE: plenary.nvim 合并了 popup.nvim
   use {"nvim-lua/plenary.nvim",
-    commit = "a3dafaa",
+    commit = "4b66054",
   }
 
   --- BUG: https://github.com/neovim/neovim/issues/12587
