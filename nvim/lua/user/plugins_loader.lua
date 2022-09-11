@@ -235,7 +235,7 @@ return packer.startup(function(use)
   --- 本配置依赖插件 -------------------------------------------------------------------------------
   --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   use {"folke/which-key.nvim",
-    commit = "439637d",
+    commit = "d1872f1",
     config = function() require("user.plugin_settings.which_key") end,
   }
 
@@ -247,7 +247,7 @@ return packer.startup(function(use)
 
   --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件
   use {"williamboman/mason.nvim",
-    commit = "e89217b",
+    commit = "5e39f99",
     config = function() require("user.plugin_settings.mason_tool_installer") end,
     --- NOTE: 不能 opt 加载 mason 否则其他插件无法找到 mason 安装的工具.
   }
@@ -410,7 +410,7 @@ return packer.startup(function(use)
 
   --- null-ls 插件 formatters && linters, depends on "nvim-lua/plenary.nvim"
   use {"jose-elias-alvarez/null-ls.nvim",
-    commit = "7cd491b",
+    commit = "bf02782",  -- '7cd491b' UPGRADE: refactor nvim 0.7 api
     config = function() require("user.lsp.null_ls") end,
     after = {
       "nvim-lspconfig",  -- VVI: 这里是为了获取 lspconfig 分析出的 root_dir 用于 linter 执行时的 pwd.
