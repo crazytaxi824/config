@@ -65,9 +65,9 @@ git_signs.setup({
 --- highlights -------------------------------------------------------------------------------------
 vim.cmd('hi GitSignsCurrentLineBlame ctermfg=242')  -- current_line_blame 默认不开启.
 
-vim.cmd('hi GitSignsDeleteVirtLn ctermfg=240')  -- 通过 virtual_text 显示删除行的文字颜色.
---vim.cmd('hi GitSignsDelete ctermfg=242')  -- signcolumn 中 delete 行显示的 ▁▔ 的颜色.
---vim.cmd('hi GitSignsDeletePreview ctermfg=242')  -- preview_hunk 中 deleted line 的颜色.
+vim.cmd('hi GitSignsDeleteVirtLn ctermfg=240')  -- 通过 virtual_text 显示 deleted/changed 行的文字颜色. default link to DiffDelete.
+--vim.cmd('hi GitSignsDelete ctermfg=240')  -- signcolumn 中 delete 行显示的 ▁▔ 的颜色. default link to DiffDelete.
+--vim.cmd('hi GitSignsDeletePreview ctermfg=240')  -- preview_hunk 中 deleted line 的颜色. default link to DiffDelete.
 
 
 
