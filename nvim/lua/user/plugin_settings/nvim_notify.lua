@@ -13,6 +13,8 @@ notify.setup({
 
   stages = "static",  -- VVI: Animation style, for `set termguicolors`
 
+  top_down = true,  -- true: top-down; false: bottom-up
+
   on_close = nil,
   on_open = function(win_id)
     local bufnr = vim.api.nvim_win_get_buf(win_id)

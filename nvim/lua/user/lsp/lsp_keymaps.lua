@@ -7,61 +7,58 @@
 
 local M = {}  -- module, 仅提供两个 keymaps 方法.
 
-local opts = { noremap = true }
-
 --- for lspconfig only -----------------------------------------------------------------------------
 M.textDocument_keymaps = function(bufnr)
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "<F2>", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
-  vim.api.nvim_buf_set_keymap(bufnr, "i", "<F2>", "<C-o><cmd>lua vim.lsp.buf.rename()<CR>", opts)
-
-  -- NOTE: 连续两次 F4 会进入 floating window, q 退出 floating window.
-  -- 如果在 handlers.lua 中 overwrite 设置 {focusable = false}, 则不会进入 floating window.
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "<F4>", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
-  vim.api.nvim_buf_set_keymap(bufnr, "i", "<F4>", "<C-o><cmd>lua vim.lsp.buf.hover()<CR>", opts)
-
-  --- HACK: 自定义的 hover_short() request, 在 hover() 基础上只显示 function signature, 不显示 comments.
   local lsp_req = require("user.lsp._user_lsp_request")
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "<S-CR>", "", {noremap = true, callback = lsp_req.hover_short})
-  vim.api.nvim_buf_set_keymap(bufnr, "i", "<S-CR>", "", {noremap = true, callback = lsp_req.hover_short})
 
-  --- definition, references, implementation.
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "<F12>", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "<F24>", "<cmd>lua vim.lsp.buf.references()<CR>", opts)  -- <S-F12>
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "<F36>", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts) -- <C-F12>
+  local opts = { noremap=true, silent=true, buffer=bufnr }
+  local textdoc_keymaps = {
+    {"n", "<F2>", "<cmd>lua vim.lsp.buf.rename()<CR>", opts},
+    {"i", "<F2>", "<C-o><cmd>lua vim.lsp.buf.rename()<CR>", opts},
 
-  --- 使用 hover 代替 signature_help, 因为有些 LSP 还不支持 signature_help, eg: typescript, javascript ...
-  --vim.api.nvim_buf_set_keymap(bufnr, "n", "K", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
+    -- NOTE: 连续两次 F4 会进入 floating window, q 退出 floating window.
+    -- 如果在 handlers.lua 中 overwrite 设置 {focusable = false}, 则不会进入 floating window.
+    {"n", "<F4>", "<cmd>lua vim.lsp.buf.hover()<CR>", opts},
+    {"i", "<F4>", "<C-o><cmd>lua vim.lsp.buf.hover()<CR>", opts},
 
-  --- HACK: 手动触发 WinScrolled event 来触发 close hover window.
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "<Esc>", '<Esc><cmd>doautocmd WinScrolled<CR>', opts)
+    -- NOTE: 自定义的 hover_short() request, 在 hover() 基础上只显示 function signature, 不显示 comments.
+    {"n", "<S-CR>", lsp_req.hover_short, opts},
+    {"i", "<S-CR>", lsp_req.hover_short, opts},
+
+    {"n", "<F12>", "<cmd>lua vim.lsp.buf.definition()<CR>", opts},
+    {"n", "<F24>", "<cmd>lua vim.lsp.buf.references()<CR>", opts},  -- <S-F12>
+    {"n", "<F36>", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts},  -- <C-F12>
+
+    --- HACK: 手动触发 WinScrolled event 来触发 close hover window.
+    {"n", "<Esc>", '<Esc><cmd>doautocmd WinScrolled<CR>', opts},
+
+    --- 使用 hover 代替 signature_help, 因为有些 LSP 还不支持 signature_help, eg: typescript, javascript ...
+    -- {"n", "K", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts}, 
+  }
+
+  Keymap_set_and_register(textdoc_keymaps)
 end
 
 --- for lspconfig && null-ls, format && diagnostic -------------------------------------------------
 M.diagnostic_keymaps = function(bufnr)
-  --- jump to diagnostics next error.
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "<F8>", '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "<F20>", '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts) -- <S-F8>
+  local opts = { noremap=true, silent=true, buffer=bufnr }
+  local diag_keymaps = {
+    --- jump to diagnostics next error.
+    {"n", "<F8>", '<cmd>lua vim.diagnostic.goto_next()<CR>', opts},
+    {"n", "<F20>", '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts},  -- <S-F8>
 
-  --- 将 diagnostics error 放入 quickfix list.
-  --- 也可以使用 vim.diagnostic.setqflist({open = false}) 禁止打开 quickfix window
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>q", "<cmd>lua vim.diagnostic.setqflist()<CR>", opts)
+    --- 将 diagnostics error 放入 quickfix list.
+    --- 也可以使用 vim.diagnostic.setqflist({open = false}) 禁止打开 quickfix window
+    {"n", "<leader>q", "<cmd>lua vim.diagnostic.setqflist()<CR>", vim.tbl_deep_extend('force', opts, {desc='diag: put errors into quickfix'})},
 
-  --- code action
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
+    --- code action
+    {"n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", vim.tbl_deep_extend('force', opts, {desc='LSP: Code Action'})},
+  }
 
-  --- which-key ---
-  local status_ok, which_key = pcall(require, "which-key")
-  if not status_ok then
-    return
-  end
-
-  --- set key description manually ---
-  which_key.register({
-    c = {
-      name = "Code",
-      a = "LSP - Code Action",
-    }
-  },{mode='n',prefix='<leader>', buffer=bufnr})
+  Keymap_set_and_register(diag_keymaps, {
+    key_desc = { c = {name = "Code"} },
+    opts = {mode='n',prefix='<leader>', buffer=bufnr},
+  })
 end
 
 return M

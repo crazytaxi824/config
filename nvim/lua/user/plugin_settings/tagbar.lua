@@ -48,7 +48,7 @@ vim.cmd [[ hi! link TagbarType Type ]]  -- Keyword "struct", "string",
 vim.cmd [[ hi TagbarSignature ctermfg=220 ]]  -- function signature "(...)"
 
 --- keymaps ----------------------------------------------------------------------------------------
-vim.keymap.set('n', '<leader>.', ':TagbarToggle<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>.', ':TagbarToggle<CR>', { noremap=true, silent=true, desc='toggle TagBar' })
 
 
 

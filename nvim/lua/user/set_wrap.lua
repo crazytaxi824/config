@@ -1,20 +1,19 @@
 --- 使用 gj / gk / g0 / g$ 在 wrap buffer 中移动 cursor.
-local cursor_move_keymaps = {
-  {{'n','v'}, '<Down>', 'gj'},
-  {{'n','v'}, '<Up>',   'gk'},
-  {{'n','v'}, '<Home>', 'g0'},  -- g0 相当于 g<Home>
-  {{'n','v'}, '<End>',  'g$'},  -- g$ 相当于 g<End>
-
-  {'i', '<Down>', '<C-o>gj'},
-  {'i', '<Up>',   '<C-o>gk'},
-  {'i', '<Home>', '<C-o>g0'},
-  {'i', '<End>',  '<C-o>g$'},
-}
-
 local function set_cursor_move_in_wrap(bufnr)
-  for _, keymap in ipairs(cursor_move_keymaps) do
-    vim.keymap.set(keymap[1], keymap[2], keymap[3], {buffer=bufnr, silent=true})
-  end
+  local opts = {buffer=bufnr, silent=true}
+  local cursor_move_keymaps = {
+    {{'n','v'}, '<Down>', 'gj', opts, 'display lines downward'},
+    {{'n','v'}, '<Up>',   'gk', opts, 'display lines upward'},
+    {{'n','v'}, '<Home>', 'g0', opts, 'first char of line'},  -- g0 相当于 g<Home>
+    {{'n','v'}, '<End>',  'g$', opts, 'last char of line'},  -- g$ 相当于 g<End>
+
+    {'i', '<Down>', '<C-o>gj', opts, 'display lines downward'},
+    {'i', '<Up>',   '<C-o>gk', opts, 'display lines upward'},
+    {'i', '<Home>', '<C-o>g0', opts, 'first char of line'},
+    {'i', '<End>',  '<C-o>g$', opts, 'last char of line'},
+  }
+
+  Keymap_set_and_register(cursor_move_keymaps)
 end
 
 --- VVI: 不能直接使用 vim.keymap.del(), 因为如果在 '<Up>' ... 等 key 没有 set() 的情况下, del() 会报错.

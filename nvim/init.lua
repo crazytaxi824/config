@@ -58,7 +58,7 @@ require "user.plugins_lazy_loader"  -- 利用vim.schedual() lazy load plugins
 --- 放在最后 overwirte 其他颜色设置
 require "user.colors"   -- vim highlight 设置
 
-require("user.health")  -- 在 :checkhealth 时执行.
+require "user.health"  -- 在 :checkhealth 时执行.
 
 
 

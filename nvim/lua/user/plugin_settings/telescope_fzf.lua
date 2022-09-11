@@ -134,15 +134,15 @@ local opt = { noremap = true, silent = true }
 local telescope_keymaps = {
   --- Picker functions, https://github.com/nvim-telescope/telescope.nvim#pickers
   --- 使用 `:Telescope` 列出所有 Picker
-  {'n', '<leader>ff', builtin.find_files, opt, 'Telescope - fd'},
-  {'n', '<leader>fb', builtin.buffers,    opt, 'Telescope - Buffer List'},
-  {'n', '<leader>fh', builtin.help_tags,  opt, 'Telescope - Vim Help Doc'},
-  {'n', '<leader>fk', builtin.keymaps,    opt, 'Telescope - Keymap normal Mode'},
-  {'n', '<leader>fc', builtin.command_history, opt, 'Telescope - Command History'},
-  {'n', '<leader>f/', builtin.search_history,  opt, 'Telescope - Search History'},
-  {'n', '<leader>fl', builtin.highlights,  opt, 'Telescope - Search Highlight'},
-  {'n', 'z=', builtin.spell_suggest, opt, 'Telescope - Spell Suggests'},  -- 也可以使用 which-key 显示.
-  --{'n', '<leader>fg', builtin.live_grep,  opt, 'Telescope - rg'},  -- NOTE: 使用自定义 :Rg 命令更灵活.
+  {'n', '<leader>ff', builtin.find_files, opt, 'telescope: fd'},
+  {'n', '<leader>fb', builtin.buffers,    opt, 'telescope: Buffer List'},
+  {'n', '<leader>fh', builtin.help_tags,  opt, 'telescope: Vim Help Doc'},
+  {'n', '<leader>fk', builtin.keymaps,    opt, 'telescope: Keymap normal Mode'},
+  {'n', '<leader>fc', builtin.command_history, opt, 'telescope: Command History'},
+  {'n', '<leader>f/', builtin.search_history,  opt, 'telescope: Search History'},
+  {'n', '<leader>fl', builtin.highlights,  opt, 'telescope: Search Highlight'},
+  {'n', 'z=', builtin.spell_suggest, opt, 'telescope: Spell Suggests'},  -- 也可以使用 which-key 显示.
+  --{'n', '<leader>fg', builtin.live_grep,  opt, 'telescope: rg'},  -- NOTE: 使用自定义 :Rg 命令更灵活.
 }
 
 Keymap_set_and_register(telescope_keymaps, {

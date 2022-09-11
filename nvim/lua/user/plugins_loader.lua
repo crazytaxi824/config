@@ -3,7 +3,7 @@
 --- nvim 加载插件的时候读取的是 packer.compile() 之后的文件. 所以在修改了插件设置后需要 `:PackerCompile` 来使设置生效.
 --- `:PackerSync` 的时候会自动运行 compile(), 重新生成 compile 文件. 主要影响 setup() 设置文件加载.
 --- `:PackerLoad a b` 相当于 lua require('packer').loader('a b')
---- Packer.nvim 设置 ------------------------------------------------------------------------------- {{{
+--- Packer.nvim 设置文档 --------------------------------------------------------------------------- {{{
 -- https://github.com/wbthomason/packer.nvim#specifying-plugins
 --
 -- opt 属性:
@@ -75,7 +75,7 @@
 
 -- -- }}}
 
---- VVI: debug.getinfo() 函数获取本文件路径.
+--- VVI: debug.getinfo() 函数获取本文件路径 -------------------------------------------------------- {{{
 --- source 返回的内容中:
 ---   If source starts with a '@', it means that the function was defined in a file;
 ---   If source starts with a '=', the remainder of its contents describes the source in a user-dependent manner.
@@ -87,8 +87,9 @@ if string.sub(this_file, 1, 1) ~= '@' then
 else
   this_file = string.sub(this_file, 2)
 end
+-- -- }}}
 
---- save plugins.lua (本文件) 时自动运行 `:PackerSync` OR `:PackerCompile` 命令 --------------------
+--- save plugins.lua (本文件) 时自动运行 `:PackerSync` OR `:PackerCompile` 命令 -------------------- {{{
 --- NOTE: 修改本文件后必须进行 :PackerCompile, 否则设置无法生效.
 --- 这里必须使用 autogroup 否则每次 source 都会生成一个新的 autocmd,
 --- 需要通过 'autogroup foo au! ... ' 来覆盖之前的设置.
@@ -101,11 +102,12 @@ vim.api.nvim_create_autocmd("BufWritePost", {
   pattern = {this_file},
   command = 'source ' .. this_file .. ' | PackerCompile profile=true',  -- 相当于 'source <afile>',
 })
+-- -- }}}
 
---- Use a protected call so we don't error out on first use
+--- NOTE: 如果 packer 不存在则自动 install "packer.nvim" ------------------------------------------- {{{
 local packer_status_ok, packer = pcall(require, "packer")
 if not packer_status_ok then
-  --- NOTE: 如果 packer 不存在则自动 install "packer.nvim"
+  --- install "packer.nvim"
   local packer_install_path = vim.fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
   local packer_install_cmd = 'git clone --depth 1 https://github.com/wbthomason/packer.nvim ' .. packer_install_path
   local result = vim.fn.system(packer_install_cmd)
@@ -118,8 +120,9 @@ if not packer_status_ok then
   --- NOTE: packer 安装完后通过 `:PackerSync` 安装 plugins
   vim.cmd('source ' .. this_file .. ' | PackerSync')
 end
+-- -- }}}
 
---- packer autocmd && functions -------------------------------------------------------------------- {{{
+--- packer 记录 update info & :PackerUpdateLog ----------------------------------------------------- {{{
 --- NOTE: 使用 :PackerSync :PackerUpdate ... 之后记录 update info 到指定文件.
 --- doautocmd User PackerComplete     -- Fires after install, update, clean, and sync asynchronous operations finish.
 --- doautocmd User PackerCompileDone  -- Fires after compiling.
@@ -160,11 +163,7 @@ vim.api.nvim_create_user_command("PackerUpdateLog",
 )
 -- -- }}}
 
---- VVI: 加载 packer plugins trigger 设置, 用于 lazy load plugins.
---- trigger 必须放在 require('packer') 之后.
-require("user.plugin_settings._trigger")
-
---- Have packer use a popup window, "nvim-lua/popup.nvim"
+--- packer.init(), Have packer use a popup window, "nvim-lua/popup.nvim" --------------------------- {{{
 packer.init {
   --- Name of the snapshot File you would like to load at startup.
   --- 该设置需要联网, 如果无法访问 github.com 则直接报错.
@@ -183,10 +182,11 @@ packer.init {
 
   display = {
     open_fn = function()
-      --- Packer 面板 border 样式.
-      --- return require("packer.util").float { border = "single" }  -- `:help nvim_open_win()`
+      --- require("packer.util").float() 使用 float window 打开 packer info 面板. 默认在右侧打开新 window.
+      --- border = { ... } 面板 border 样式.
       return require("packer.util").float({ border = {"▄","▄","▄","█","▀","▀","▀","█"} })  -- `:help nvim_open_win()`
     end,
+    prompt_border = {"▄","▄","▄","█","▀","▀","▀","█"},  -- prompt 面板样式. eg: delete plugins
     keybindings = { -- Keybindings for the display window
       quit = 'q',  -- close window, 默认是 'q'
       toggle_info = '<CR>',
@@ -196,6 +196,10 @@ packer.init {
   },
   log = { level = 'warn' }, -- "trace", "debug", "info", "warn"(*), "error", "fatal".
 }
+-- -- }}}
+
+--- VVI: 加载 packer plugins trigger 设置, 用于 lazy load plugins.
+require("user.plugin_settings._trigger")
 
 --- 官方文档 https://github.com/wbthomason/packer.nvim
 --- 插件推荐 https://github.com/LunarVim/Neovim-from-scratch/blob/master/lua/user/plugins.lua
@@ -205,7 +209,7 @@ packer.init {
 --- `:PackerSync` - install / update / clean 插件包.
 return packer.startup(function(use)
   use {"wbthomason/packer.nvim",  -- VVI: 必要. Have packer manage itself
-    commit = "dee5a4f",
+    commit = "6afb674",
   }
 
   --- Performence & Functions ----------------------------------------------------------------------
@@ -219,7 +223,7 @@ return packer.startup(function(use)
   --- Useful lua functions used by lots of plugins
   --- NOTE: plenary.nvim 合并了 popup.nvim
   use {"nvim-lua/plenary.nvim",
-    commit = "a3dafaa",
+    commit = "4b66054",
   }
 
   --- BUG: https://github.com/neovim/neovim/issues/12587
@@ -231,19 +235,21 @@ return packer.startup(function(use)
   --- 本配置依赖插件 -------------------------------------------------------------------------------
   --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   use {"folke/which-key.nvim",
-    commit = "bd4411a",
+    commit = "439637d",  -- TODO: feat: for nvim 0.7.0 or higher, use native keymap callbacks instead of which key functions (5 days ago)
+                         -- `:help nvim_set_keymap()` default opt 中有 noremap, silent ... 还有 'desc' 设置. which-key
+                         -- 现在默认使用 desc 设置. 如果没有使用 name 的话.
     config = function() require("user.plugin_settings.which_key") end,
   }
 
   --- 通知功能
   use {"rcarriga/nvim-notify",
-    commit = "cf5dc4f",
+    commit = "7076ce8",
     config = function() require("user.plugin_settings.nvim_notify") end,
   }
 
   --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件
   use {"williamboman/mason.nvim",
-    commit = "1cde8fd",
+    commit = "e89217b",
     config = function() require("user.plugin_settings.mason_tool_installer") end,
     --- NOTE: 不能 opt 加载 mason 否则其他插件无法找到 mason 安装的工具.
   }

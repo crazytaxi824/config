@@ -233,13 +233,13 @@ end
 -- -- }}}
 local opt = { noremap = true, silent = true }
 local debug_keymaps = {
-  {'n', '<leader>cs', dap.continue,  opt, 'Debug - Start(Continue)'},
-  {'n', '<leader>ce', dap.terminate, opt, 'Debug - Stop(End)'},
-  {'n', '<leader>cr', dap.run_last,  opt, 'Debug - Restart'},
-  {'n', '<leader>cq', close_debug_tab_and_buffers, opt, 'Debug - Quit'},
+  {'n', '<leader>cs', dap.continue,  opt, 'debug: Start(Continue)'},
+  {'n', '<leader>ce', dap.terminate, opt, 'debug: Stop(End)'},
+  {'n', '<leader>cr', dap.run_last,  opt, 'debug: Restart'},
+  {'n', '<leader>cq', close_debug_tab_and_buffers, opt, 'debug: Quit'},
 
   --- NOTE: 这里是 dapui 的方法 eval(), 运行两次进入 float window.
-  {'n', '<leader>cc', function() dapui.eval() dapui.eval() end, opt, 'Debug - Popup Value under cursor'},
+  {'n', '<leader>cc', function() dapui.eval() dapui.eval() end, opt, 'debug: Popup Value under cursor'},
 
   --{'n', '<F9>',  dap.toggle_breakpoint, opt},  -- breakpoint 设置应该只针对源代码启用.
   {'n', '<F21>', dap.clear_breakpoints, opt},  -- <S-f9>
@@ -251,16 +251,13 @@ local debug_keymaps = {
 --- 这里是 global keymaps 设置
 Keymap_set_and_register(debug_keymaps, {
   key_desc = {
-    c = {
-      name = "Code",  -- NOTE: 这里设置必须和 lua/user/lsp/lsp_keymaps 一致.
-      -- ['<F9>'] = "Debug - Toggle Breakpoint",  -- NOTE: 已经在 lua/user/plugin_settings/_trigger.lua 中设置.
-      ['<S-F9>']  = "Debug - Clear Breakpoints",
-      ['<F10>']   = "Debug - Step Over",
-      ['<F11>']   = "Debug - Step Into",
-      ['<S-F11>'] = "Debug - Step Out",
-    }
+    -- ['<F9>'] = "debug: Toggle Breakpoint",  -- NOTE: 已经在 lua/user/plugin_settings/_trigger.lua 中设置.
+    ['<S-F9>']  = "debug: Clear Breakpoints",
+    ['<F10>']   = "debug: Step Over",
+    ['<F11>']   = "debug: Step Into",
+    ['<S-F11>'] = "debug: Step Out",
   },
-  opts = {mode='n', prefix='<leader>'}  -- 全局有效
+  opts = {mode='n', prefix='<leader>c'}  -- 全局有效
 })
 
 

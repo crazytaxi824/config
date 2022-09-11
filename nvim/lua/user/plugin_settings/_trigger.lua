@@ -15,14 +15,10 @@ vim.api.nvim_create_autocmd("FileType", {
     --- which-key <F9> toggle_breakpoint
     local wk_status_ok, wk = pcall(require, "which-key")
     if wk_status_ok then
-      wk.register({['<leader>c<F9>'] = {"Debug - Toggle Breakpoint"}}, {mode="n", buffer=params.buf})
+      wk.register({['<leader>c<F9>'] = {"debug: Toggle Breakpoint"}}, {mode="n", buffer=params.buf})
     end
   end,
 })
-
---- nvim-tree --------------------------------------------------------------------------------------
-vim.keymap.set('n', '<leader>,', ':NvimTreeFindFileToggle<CR>', { noremap = true, silent = true })
-vim.keymap.set('n', '<leader><lt>', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
 
 
 
