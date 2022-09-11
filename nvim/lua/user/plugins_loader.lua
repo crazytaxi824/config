@@ -383,7 +383,7 @@ return packer.startup(function(use)
 
   --- 自动括号, 同时依赖 treesitter && cmp
   use {"windwp/nvim-autopairs",
-    commit = "0a18e10",
+    commit = "5fe2441",
     config = function() require("user.plugin_settings.autopairs") end,
     after = {
       "nvim-cmp",  -- cmp.event:on() 设置.
