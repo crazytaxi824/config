@@ -134,7 +134,7 @@ cmp.setup {
     ["<Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.confirm({ select = true })  -- confirm
-      elseif luasnip.expand_or_jumpable() then  -- expand 是指展开 snippest; jumpable 是指 cursor 跳转到 placeholder.
+      elseif luasnip.expand_or_locally_jumpable() then  -- expand 是指展开 snippest; jumpable 是指 cursor 跳转到 placeholder ${1}.
         luasnip.expand_or_jump()  -- 展开 snippet OR 跳转到下一个 snippets placeholder
       else
         --cmp.complete()  -- 手动触发 completion menu.
