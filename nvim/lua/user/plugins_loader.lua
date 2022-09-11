@@ -235,9 +235,7 @@ return packer.startup(function(use)
   --- 本配置依赖插件 -------------------------------------------------------------------------------
   --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   use {"folke/which-key.nvim",
-    commit = "439637d",  -- TODO: feat: for nvim 0.7.0 or higher, use native keymap callbacks instead of which key functions (5 days ago)
-                         -- `:help nvim_set_keymap()` default opt 中有 noremap, silent ... 还有 'desc' 设置. which-key
-                         -- 现在默认使用 desc 设置. 如果没有使用 name 的话.
+    commit = "439637d",
     config = function() require("user.plugin_settings.which_key") end,
   }
 
@@ -362,7 +360,7 @@ return packer.startup(function(use)
 
   --- snippet engine, for "cmp_luasnip", NOTE: 每次打开文件都会有一个 [Scratch] buffer.
   use {"L3MON4D3/LuaSnip",
-    commit = "66864ff",
+    commit = "6e506ce",  -- TODO: feat: Add new locally_jumpable(dir) function (3 days ago)
     --- BUG: opt 加载无法 load jsregexp 插件.
     --- 文件位置: stdpath('data') .. "/site/pack/packer/start/LuaSnip/lua/luasnip-jsregexp.so"
     run = "make install_jsregexp",  -- https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#transformations
@@ -371,7 +369,7 @@ return packer.startup(function(use)
     requires = {
       "saadparwaiz1/cmp_luasnip",
       {"rafamadriz/friendly-snippets",  -- snippets content, 自定义 snippets 可以借鉴这个结构.
-        commit = "6227548",
+        commit = "22a9975",
       },
     },
   }
