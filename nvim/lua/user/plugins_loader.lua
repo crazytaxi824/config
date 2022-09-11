@@ -433,7 +433,7 @@ return packer.startup(function(use)
   --- Buffer & Status Line -------------------------------------------------------------------------
   --- tabline decorator, `:help 'tabline'`
   use {"akinsho/bufferline.nvim",
-    commit = "938908f",
+    commit = "ffa1d00",
     config = function() require("user.plugin_settings.decor_bufferline") end,
     opt = true,  -- 在 vim.schedule() 中 lazy load
   }
