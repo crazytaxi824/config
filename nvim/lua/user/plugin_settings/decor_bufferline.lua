@@ -502,15 +502,15 @@ local bufferline_keymaps = {
   {'n', '>', function() bufferline.cycle(1) end, opt},
 
   --- 左右移动 buffer
-  {'n', '<leader><Left>', '<cmd>BufferLineMovePrev<CR>', opt, 'buffer: Move Buffer Left'},
-  {'n', '<leader><Right>', '<cmd>BufferLineMoveNext<CR>', opt, 'buffer: Move Buffer Right'},
+  {'n', '<leader><Left>', '<cmd>BufferLineMovePrev<CR>', opt, 'buf: Move Buffer Left'},
+  {'n', '<leader><Right>', '<cmd>BufferLineMoveNext<CR>', opt, 'buf: Move Buffer Right'},
 
   --- 关闭 buffer
   --- bufnr("#") > 0 表示 '#' (previous buffer) 存在, 如果不存在则 bufnr('#') = -1.
   --- 如果 # 存在, 但处于 unlisted 状态, 则 bdelete # 报错. 因为 `:bdelete` 本质就是 unlist buffer.
-  {'n', '<leader>d', bufferline_del_current_buffer, opt, 'Close Current Buffer/Tab'},
-  {'n', '<leader>D<Right>', '<cmd>BufferLineCloseRight<CR>', opt, 'Close Right Side Buffers'},
-  {'n', '<leader>D<Left>', '<cmd>BufferLineCloseLeft<CR>', opt, 'Close Left Side Buffers'},
+  {'n', '<leader>d', bufferline_del_current_buffer, opt, 'buf: Close Current Buffer/Tab'},
+  {'n', '<leader>D<Right>', '<cmd>BufferLineCloseRight<CR>', opt, 'buf: Close Right Side Buffers'},
+  {'n', '<leader>D<Left>', '<cmd>BufferLineCloseLeft<CR>', opt, 'buf: Close Left Side Buffers'},
 }
 
 Keymap_set_and_register(bufferline_keymaps)
@@ -564,7 +564,7 @@ vim.api.nvim_create_autocmd("BufDelete", {
 })
 
 --- DEBUG: 用
-function BufferlineInfo(index)
+function Bufferline_info(index)
   -- print("state.components:", vim.inspect(state.components))
   print("state.custom_sort (bufnrs order):", vim.inspect(state.custom_sort))
   if index then

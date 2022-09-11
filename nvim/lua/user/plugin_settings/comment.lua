@@ -50,8 +50,8 @@ comment.setup {
 --- keymaps ----------------------------------------------------------------------------------------
 local opt = { noremap = true, silent = true }
 local comment_keymaps = {
-  {'n', '<leader>\\', '<Plug>(comment_toggle_linewise_current)', opt, 'Comment toggle'},
-  {'v', '<leader>\\', '<Plug>(comment_toggle_linewise_visual)',  opt, 'Comment toggle'},
+  {'n', '<leader>\\', '<Plug>(comment_toggle_linewise_current)', opt, 'toggle Comment'},
+  {'v', '<leader>\\', '<Plug>(comment_toggle_linewise_visual)',  opt, 'toggle Comment'},
 }
 
 Keymap_set_and_register(comment_keymaps)

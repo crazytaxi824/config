@@ -277,13 +277,14 @@ end
 
 -- -- }}}
 
--- vim.keymap.set() - option `:help :map-arguments`
--- noremap = { noremap = true },
--- nowait = { nowait = true },
--- silent = { silent = true },
--- buffer = { buffer = true },  -- buffer 有效
--- script = { script = true },
--- expr = { expr = true },
+--- vim.keymap.set() - option `:help :map-arguments`
+--- { noremap = true },
+--- { nowait = true },
+--- { silent = true },
+--- { buffer = true },  -- buffer 有效
+--- { script = true },
+--- { expr = true },
+--- { desc = "key_description" }
 local opt = { noremap = true, silent = true }
 
 --- NOTE: { mode, key, remap, opt, description }  - description for 'which-key'
@@ -398,14 +399,14 @@ local keymaps = {
   {'v', '<leader><lt>', '<C-c>`>a><C-c>`<lt>i<lt><C-c>v`><right><right>', opt, 'which_key_ignore'},  -- '<' 使用 <lt> 代替.
 
   --- 关闭所有其他 buffers
-  {'n', '<leader>Da', delete_all_other_buffers, opt, 'Close All Other Buffers'},
-  --{'n', '<leader>d', 'bdelete', opt, 'Close Current Buffer'},
+  {'n', '<leader>Da', delete_all_other_buffers, opt, 'buf: Close All Other Buffers'},
+  --{'n', '<leader>d', 'bdelete', opt, 'buf: Close Current Buffer'},
 
   --- 关闭所有其他窗口
-  {'n', '<leader>W', '<C-w><C-o>', opt, 'Close All Other Windows'},
+  {'n', '<leader>W', '<C-w><C-o>', opt, 'win: Close All Other Windows'},
 
   --- NOTE: terminal key mapping 在 "toggleterm.lua" 中设置了.
-  {'n', '<leader>T', wipeout_all_terminals, opt, "Wipeout All Terminals"},
+  {'n', '<leader>T', wipeout_all_terminals, opt, "term: Wipeout All Terminals"},
 
   --- 其他 -----------------------------------------------------------------------------------------
   --- ZZ same as `:x`

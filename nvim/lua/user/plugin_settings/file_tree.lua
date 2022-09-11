@@ -219,6 +219,9 @@ local nt_buffer_keymaps = {
   { key = "<leader>d",     action = "git: Discard file changes", action_cb = git_discard_file_changes},
 }
 
+--- global keymap ---
+vim.keymap.set('n', '<leader>,', ':NvimTreeFindFileToggle<CR>', {noremap=true, silent=true, desc='toggle Nvim-Tree'})
+
 -- -- }}}
 
 --- `:help nvim-tree-setup` ------------------------------------------------------------------------ {{{
@@ -524,5 +527,6 @@ Keymap_set_and_register(gitsigns_keymaps, {
 })
 
 -- -- }}}
+
 
 

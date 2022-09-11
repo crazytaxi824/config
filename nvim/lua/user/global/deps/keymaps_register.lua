@@ -1,5 +1,5 @@
 --- key-settings for both vim.keymap.set() and which_key.register() --------------------------------
---- keymap_list: { mode, key, remap, opt, description }
+--- keymap_list: { mode, key, rhs, opts, description }
 --- keys_desc_only: which_key.register({keymap},{opts}) 中的两个入参. 用于只注册到 which-key 中显示, 而不用真的 keymap.
 function Keymap_set_and_register(keymap_list, keys_desc_only)
   local wk_ignore_list = {}  -- cache 'which_key_ignore' 标记的 keymap.
