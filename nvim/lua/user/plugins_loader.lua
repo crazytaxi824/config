@@ -464,7 +464,10 @@ return packer.startup(function(use)
   use {"nvim-telescope/telescope.nvim",
     commit = "2584ff3",
     config = function() require("user.plugin_settings.telescope_fzf") end,
-    requires = "nvim-lua/plenary.nvim",
+    requires = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+    },
     --keys = {"<leader>f"},
     opt = true,  -- 在 vim.schedule() 中 lazy load
   }
