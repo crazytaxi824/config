@@ -322,7 +322,7 @@ nvim_tree.setup {
   },
   git = {
     enable = true,  -- VVI: 开启 git filename 和 icon 颜色显示. 需要开启 renderer.highlight_git 和 renderer.icons.show.git
-    ignore = false,  -- ignore gitignore files
+    ignore = false,  -- 不显示 .gitignore files
     show_on_dirs = true,  -- 在文件所属的 dir name 前也显示 sign.
     timeout = 400,
   },
