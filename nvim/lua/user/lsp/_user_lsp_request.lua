@@ -88,9 +88,14 @@ local M = {}
 --- copy from `function M.hover(_, result, ctx, config)`
 --- https://github.com/neovim/neovim/blob/master/runtime/lua/vim/lsp/handlers.lua
 --- `:help lsp-handler`, lsp-request handler 的第一个参数为 err, 这里省略不处理.
-local function hover_short_handler(_, result, ctx, config)
+local function hover_short_handler(err, result, req, config)
+  if err then
+    Notify(vim.inspect(err), "ERROR")
+    return
+  end
+
   config = config or {}
-  config.focus_id = ctx.method
+  config.focus_id = req.method
 
   -- NOTE: open_floating_preview() 自定义设置
   config.focusable = false
