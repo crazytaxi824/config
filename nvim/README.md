@@ -393,5 +393,5 @@ vim.api.nvim_create_autocmd({"BufEnter", "TextChanged", "TextChangedI", "FileCha
 - global exclude.filetyps & exclude.buftypes
 - bufferline, nvim-tree, indentline
 
-
+- which-key <bs> up one level. top level key desc.
 
