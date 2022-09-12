@@ -140,7 +140,7 @@ local function git_discard_file_changes(node)
       end
     end)
   else
-    Notify("please use other tools to do complex git operations", "INFO")
+    Notify({"git: Cannot Discard Changes on current file", "please use other tools to do complex git operations"}, "INFO")
     return
   end
 

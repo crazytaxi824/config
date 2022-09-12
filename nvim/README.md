@@ -382,3 +382,12 @@ vim.api.nvim_create_autocmd({"BufEnter", "TextChanged", "TextChangedI", "FileCha
 })
 ```
 
+- gitsigns code_action attach to NvimTree tagbar ...
+
+- global exclude.filetyps & exclude.buftypes
+- bufferline, nvim-tree, indentline
+
+## FIXME
+
+- method textDocument/documentHighlight is not supported by any of the servers registered for the current buffer
+
