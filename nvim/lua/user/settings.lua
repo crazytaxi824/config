@@ -238,7 +238,7 @@ vim.opt.showmatch = true      -- 跳到匹配的括号上, 包括 () {} []
 vim.api.nvim_create_autocmd("FileType", {
   pattern = {"*"},
   callback = function(params)
-    --- `:help 'buftype'`
+    --- `:help 'buftype'`, exclude buftype: nofile, terminal, quickfix, prompt, help ...
     if vim.bo[params.buf].buftype ~= '' then
       return
     end

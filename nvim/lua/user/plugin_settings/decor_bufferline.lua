@@ -220,7 +220,7 @@ buf_highlights.hint_selected = buf_highlights.buffer_selected
 --- 用于 <leader>d 快捷键和 mouse actions 设置.
 --- NOTE: 指定 filetype 不能使用 go_to() 功能, 也不能被 bufferline_del_current_buffer() 关闭.
 local function is_excluded_file()
-  --- exclude buftype: nofile, terminal, quickfix, prompt, help ...
+  --- `:help 'buftype'`, exclude buftype: nofile, terminal, quickfix, prompt, help ...
   if vim.bo.buftype ~= '' then
     return true
   end

@@ -20,15 +20,16 @@ indent_blankline.setup({
   max_indent_increase = 1,  -- 多行 trailing comments 不会出现 indentline, eg: settings.lua 中的 comments.
 
   bufname_exclude = {'README.md'},
-  buftype_exclude = { "terminal", "nofile", "quickfix", "help", "prompt" },
+  buftype_exclude = { "nofile", "quickfix", "help", "terminal", "prompt" },
   filetype_exclude = {
     "qf",  -- quickfix & location list
     "help",
+    "packer",
+    "NvimTree",
+    "tagbar",
     "startify",
     "dashboard",
-    "packer",
     "neogitstatus",
-    "NvimTree",
     "Trouble",
     "python",  -- python 不适合 indent line.
   },
