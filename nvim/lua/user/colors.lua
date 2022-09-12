@@ -63,6 +63,7 @@ vim.cmd('hi Visual ctermbg=24')                    -- Visual 模式下 select �
 local float_win_border_color = 233  -- 或者 236
 vim.cmd('hi PmenuSel cterm=underline,bold ctermfg=None ctermbg=238')  -- Completion Menu 选中项颜色
 vim.cmd('hi Pmenu ctermfg=188 ctermbg=' .. float_win_border_color)  -- Completion Menu & Floating Window 背景颜色
+vim.cmd('hi! link NormalFloat Pmenu')  -- NormalFloat 默认 link to Pmenu
 vim.cmd('hi FloatBorder ctermfg=' .. float_win_border_color)   -- Floating Window border 颜色需要和 Pmenu 的背景色相同
                                                                -- border = {"▄","▄","▄","█","▀","▀","▀","█"}
 
