@@ -27,9 +27,7 @@ function Keymap_set_and_register(keymap_list, keys_desc_only)
   --- NOTE: 设置 'which_key_ignore' 标记的 keymap.
   --- 参考 which_key.register({keymap},{opts}) 设置: https://github.com/folke/which-key.nvim#%EF%B8%8F-mappings
   for _, keymap in ipairs(wk_ignore_list) do
-    if keymap[5] then
-      which_key.register({[keymap[2]] = keymap[5]},{mode = keymap[1]})
-    end
+    which_key.register({[keymap[2]] = keymap[5]},{mode = keymap[1]})
   end
 
   --- set group name manually ---

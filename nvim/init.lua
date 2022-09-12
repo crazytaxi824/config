@@ -46,7 +46,6 @@ require "user.global"      -- [必要], 自定义函数, 很多设置用到的�
 require "user.settings"    -- vimrc 设置
 require "user.lsp"         -- 加载 vim.lsp/vim.diagnostic 相关设置. 这里不是插件设置, 是内置参数设置.
                            -- user/lsp 是个文件夹, 这里是加载的 user/lsp/init.lua
-require "user.keymaps"     -- keymap 设置
 require "user.set_fold"    -- 代码折叠设置, NOTE: treesitter experimental function.
 require "user.set_wrap"    -- autocmd 根据 filetype 设置 set wrap && cursor move.
 --require "user.terminal"  -- 自定义 terminal, 学习/测试用. 需要时可替代 toggle terminal.
@@ -55,7 +54,8 @@ require "user.set_wrap"    -- autocmd 根据 filetype 设置 set wrap && cursor 
 require "user.plugins_loader"  -- packer 加载 plugin
 require "user.plugins_lazy_loader"  -- 利用vim.schedual() lazy load plugins
 
---- 放在最后 overwirte 其他颜色设置
+--- 放在最后 overwirte 其他设置
+require "user.keymaps"  -- keymap 设置
 require "user.colors"   -- vim highlight 设置
 
 require "user.health"  -- 在 :checkhealth 时执行.

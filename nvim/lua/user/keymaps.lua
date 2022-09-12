@@ -290,69 +290,69 @@ local opt = { noremap = true, silent = true }
 --- NOTE: { mode, key, remap, opt, description }  - description for 'which-key'
 local keymaps = {
   --- common use -----------------------------------------------------------------------------------
-  {'n', 'D', '"_dd', opt},
-  {'v', 'D', '"_x', opt},
-  {'n', 'O', 'O<C-c><Down>', opt},
+  {'n', 'D', '"_dd', opt, "delete line No Copy"},
+  {'v', 'D', '"_x', opt, "delete line No Copy"},
+  {'n', 'O', 'O<C-c><Down>', opt, "add new line above cursor"},
 
   --- move cursor ----------------------------------------------------------------------------------
-  {'n', '<S-Up>', '6gk', opt},
-  {'v', '<S-Up>', '6gk', opt},
-  {'i', '<S-Up>', '<C-o>6gk', opt},
-  {'n', '<S-Down>', '6gj', opt},
-  {'v', '<S-Down>', '6gj', opt},
-  {'i', '<S-Down>', '<C-o>6gj', opt},
+  {'n', '<S-Up>', '6gk', opt, 'which_key_ignore'},
+  {'v', '<S-Up>', '6gk', opt, 'which_key_ignore'},
+  {'i', '<S-Up>', '<C-o>6gk', opt, 'which_key_ignore'},
+  {'n', '<S-Down>', '6gj', opt, 'which_key_ignore'},
+  {'v', '<S-Down>', '6gj', opt, 'which_key_ignore'},
+  {'i', '<S-Down>', '<C-o>6gj', opt, 'which_key_ignore'},
 
-  {'n', '<PageUp>', 'zbH', opt},
-  {'v', '<PageUp>', 'zbH', opt},
-  {'i', '<PageUp>', '<C-o>zb<C-o>H', opt},
-  {'n', '<PageDown>', 'ztL', opt},
-  {'v', '<PageDown>', 'ztL', opt},
-  {'i', '<PageDown>', '<C-o>zt<C-o>L', opt},
+  {'n', '<PageUp>', 'zbH', opt, 'which_key_ignore'},
+  {'v', '<PageUp>', 'zbH', opt, 'which_key_ignore'},
+  {'i', '<PageUp>', '<C-o>zb<C-o>H', opt, 'which_key_ignore'},
+  {'n', '<PageDown>', 'ztL', opt, 'which_key_ignore'},
+  {'v', '<PageDown>', 'ztL', opt, 'which_key_ignore'},
+  {'i', '<PageDown>', '<C-o>zt<C-o>L', opt, 'which_key_ignore'},
 
-  {'n', '<C-Up>', '3<C-y>', opt},
-  {'v', '<C-Up>', '3<C-y>', opt},
-  {'i', '<C-Up>', '<C-o>3<C-y>', opt},
-  {'n', '<C-Down>', '3<C-e>', opt},
-  {'v', '<C-Down>', '3<C-e>', opt},
-  {'i', '<C-Down>', '<C-o>3<C-e>', opt},
+  {'n', '<C-Up>', '3<C-y>', opt, 'which_key_ignore'},
+  {'v', '<C-Up>', '3<C-y>', opt, 'which_key_ignore'},
+  {'i', '<C-Up>', '<C-o>3<C-y>', opt, 'which_key_ignore'},
+  {'n', '<C-Down>', '3<C-e>', opt, 'which_key_ignore'},
+  {'v', '<C-Down>', '3<C-e>', opt, 'which_key_ignore'},
+  {'i', '<C-Down>', '<C-o>3<C-e>', opt, 'which_key_ignore'},
 
-  {'n', 'G', 'Gzz', opt},  -- put last line in center
+  {'n', 'G', 'Gzz', opt, 'which_key_ignore'},  -- put last line in center
 
   --- Tab ------------------------------------------------------------------------------------------
-  {'n', '<Tab>', '<C-w><C-w>', opt},  -- 切换到另一个窗口.
+  {'n', '<Tab>', '<C-w><C-w>', opt, 'which_key_ignore'},  -- 切换到另一个窗口.
 
   --- Search ---------------------------------------------------------------------------------------
-  {'n','*',  function() hl_search("*")  end, opt},
-  {'n','#',  function() hl_search("#")  end, opt},
-  {'n','g*', function() hl_search("g*") end, opt, 'Search <cword> Next'},
-  {'n','g#', function() hl_search("g#") end, opt, 'Search <cword> Previous'},
+  {'n','*',  function() hl_search("*")  end, opt, 'search: \\<cword\\> Forward'},
+  {'n','#',  function() hl_search("#")  end, opt, 'search: \\<cword\\> Backward'},
+  {'n','g*', function() hl_search("g*") end, opt, 'search: <cword> Forward'},
+  {'n','g#', function() hl_search("g#") end, opt, 'search: <cword> Backward'},
 
   --- NOTE: "fy - copy VISUAL selected text to register "f"
   --    `let @/ = @f` - copy register "f" to register "/" (search register)
-  {'v', '*',  function() hl_visual_search('n', true) end, opt, 'Search <cword> Next'},
-  {'v', '#',  function() hl_visual_search('N', true) end, opt, 'Search <cword> Previous'},
-  {'v', 'g*', function() hl_visual_search('n') end, opt, 'Search <cword> Next'},
-  {'v', 'g#', function() hl_visual_search('N') end, opt, 'Search <cword> Previous'},
+  {'v', '*',  function() hl_visual_search('n', true) end, opt, 'search: \\<cword\\> Forward'},
+  {'v', '#',  function() hl_visual_search('N', true) end, opt, 'search: \\<cword\\> Backward'},
+  {'v', 'g*', function() hl_visual_search('n') end, opt, 'search: <cword> Forward'},
+  {'v', 'g#', function() hl_visual_search('N') end, opt, 'search: <cword> Backward'},
 
-  {'n','n', function() hl_search("n") end, opt},
-  {'n','N', function() hl_search("N") end, opt},
+  {'n','n', function() hl_search("n") end, opt, 'search: Forward'},
+  {'n','N', function() hl_search("N") end, opt, 'search: Backward'},
 
   --- NOTE: 这里不能使用 silent, 否则 command line 中不显示 '?' 和 '/'
   --- ':echo v:hlsearch' 显示目前 hlsearch 状态.
-  {'n', '?', "<cmd>lua _Delete_search_hl()<CR>?", {noremap=true}},
-  {'n', '/', "<cmd>lua _Delete_search_hl()<CR>/", {noremap=true}},
+  {'n', '?', "<cmd>lua _Delete_search_hl()<CR>?", {noremap=true}, 'which_key_ignore'},
+  {'n', '/', "<cmd>lua _Delete_search_hl()<CR>/", {noremap=true}, 'which_key_ignore'},
 
   --- CTRL -----------------------------------------------------------------------------------------
-  {'n', '<C-s>', ':update<CR>', opt},
-  {'v', '<C-s>', '<C-c>:update<CR>', opt},
-  {'i', '<C-s>', '<C-c>:update<CR>', opt},
+  {'n', '<C-s>', ':update<CR>', opt, 'which_key_ignore'},
+  {'v', '<C-s>', '<C-c>:update<CR>', opt, 'which_key_ignore'},
+  {'i', '<C-s>', '<C-c>:update<CR>', opt, 'which_key_ignore'},
   --- VVI: <Ctrl-Z> 是危险操作. 意思是 :stop. Suspend vim, 退出到 terminal 界面, 但保留 job.
   --- 需要使用 `jobs -l` 列出 Suspended 列表,
   --- 使用 `fg %1` 恢复 job,
   --- 或者 `kill %1` 终止 job (不推荐, 会留下 .swp 文件).
-  {'n', '<C-z>', 'u', opt},
-  {'v', '<C-z>', '<Nop>', opt},
-  {'i', '<C-z>', '<C-o>u', opt},
+  {'n', '<C-z>', 'u', opt, 'which_key_ignore'},
+  {'v', '<C-z>', '<Nop>', opt, 'which_key_ignore'},
+  {'i', '<C-z>', '<C-o>u', opt, 'which_key_ignore'},
 
   --- <leader> -------------------------------------------------------------------------------------
   --- copy / paste
@@ -428,6 +428,20 @@ Keymap_set_and_register(keymaps, {
     D = {name = "Close Buffers"},
   },
   opts = {mode='n', prefix='<leader>'}
+})
+
+--- for key desc only
+Keymap_set_and_register({}, {
+  key_desc = {
+    ['['] = {name="Section Jump"},
+    [']'] = {name="Section Jump"},
+    g = {name="g"},
+    z = {name="z"},
+    ['<leader>'] = {name="\\"},
+    Y = {'copy whole line without \\n'},
+    ['<C-L>'] = {'which_key_ignore'},
+  },
+  opts = {mode='n'},
 })
 
 

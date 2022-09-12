@@ -241,24 +241,15 @@ local debug_keymaps = {
   --- NOTE: 这里是 dapui 的方法 eval(), 运行两次进入 float window.
   {'n', '<leader>cc', function() dapui.eval() dapui.eval() end, opt, 'debug: Popup Value under cursor'},
 
-  --{'n', '<F9>',  dap.toggle_breakpoint, opt},  -- breakpoint 设置应该只针对源代码启用.
-  {'n', '<F21>', dap.clear_breakpoints, opt},  -- <S-f9>
-  {'n', '<F10>', dap.step_over, opt},
-  {'n', '<F11>', dap.step_into, opt},
-  {'n', '<F23>', dap.step_out,  opt},  -- <S-F11>
+  --{'n', '<F9>',  dap.toggle_breakpoint, opt, "debug: Toggle Breakpoint"},  -- 已经在 _trigger.lua 文件中设置.
+  {'n', '<F21>', dap.clear_breakpoints, opt, "debug: Clear Breakpoints"},  -- <S-f9>
+  {'n', '<F10>', dap.step_over, opt, "debug: Step Over"},
+  {'n', '<F11>', dap.step_into, opt, "debug: Step Into"},
+  {'n', '<F23>', dap.step_out,  opt, "debug: Step Out"},  -- <S-F11>
 }
 
 --- 这里是 global keymaps 设置
-Keymap_set_and_register(debug_keymaps, {
-  key_desc = {
-    -- ['<F9>'] = "debug: Toggle Breakpoint",  -- NOTE: 已经在 lua/user/plugin_settings/_trigger.lua 中设置.
-    ['<S-F9>']  = "debug: Clear Breakpoints",
-    ['<F10>']   = "debug: Step Over",
-    ['<F11>']   = "debug: Step Into",
-    ['<S-F11>'] = "debug: Step Out",
-  },
-  opts = {mode='n', prefix='<leader>c'}  -- 全局有效
-})
+Keymap_set_and_register(debug_keymaps)
 
 
 

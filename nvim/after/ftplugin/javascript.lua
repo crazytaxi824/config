@@ -24,12 +24,16 @@ end
 
 --- keymap -----------------------------------------------------------------------------------------
 local opt = {noremap = true, buffer = true}
+local js_keymaps = {
+  --- run current_file ---
+  {'n', '<F5>', function() js_run(vim.fn.expand('%')) end, opt, "code: Run"},
 
---- run current_file ---
-vim.keymap.set('n', '<F5>', function() js_run(vim.fn.expand('%')) end, opt)
+  --- jest test ---
+  {'n', '<F6>', function() js_jest(vim.fn.expand('%'), false) end, opt, "code: Run Test"},
+  {'n', '<F18>', function() js_jest(vim.fn.expand('%'), true) end, opt, "code: Run Test --coverage"},  -- <S-F6>
+}
 
-vim.keymap.set('n', '<F6>', function() js_jest(vim.fn.expand('%'), false) end, opt)
-vim.keymap.set('n', '<F18>', function() js_jest(vim.fn.expand('%'), true) end, opt)  -- <S-F6>
+Keymap_set_and_register(js_keymaps)
 
 
 

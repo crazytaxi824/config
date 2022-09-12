@@ -203,12 +203,15 @@ end
 
 --- key mapping ------------------------------------------------------------------------------------
 local opt = {noremap = true, buffer = true}
+local go_keymaps = {
+  {'n', '<F5>', go_run, opt, "code: Run"},
 
-vim.keymap.set('n', '<F5>', go_run, opt)
+  {'n', '<F6>', go_test_single_func, opt, "code: Run Test/Bench (Single)"},
+  {'n', '<F18>', go_test_all, opt, "code: Run Test (All)"},   -- <S-F6>
+  {'n', '<F30>', go_bench_all, opt, "code: Run Benchmark (All)"},  -- <C-F6>
+}
 
-vim.keymap.set('n', '<F6>', go_test_single_func, opt)
-vim.keymap.set('n', '<F18>', go_test_all, opt)   -- <S-F6>
-vim.keymap.set('n', '<F30>', go_bench_all, opt)  -- <C-F6>
+Keymap_set_and_register(go_keymaps)
 
 
 
