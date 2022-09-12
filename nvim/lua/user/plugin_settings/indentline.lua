@@ -13,7 +13,7 @@ end
 
 indent_blankline.setup({
   enabled = true,
-  use_treesitter = true,  -- NOTE: use treesitter to calculate indentation when possible. 默认 false.
+  use_treesitter = true,  -- NOTE: use treesitter when possible. 默认 false.
   --use_treesitter_scope = true,  -- VVI: 不要设置, 会导致 indentline 显示不如预期.
 
   indent_level = 10,  -- VVI: maximum indent level to display. 默认 10.
