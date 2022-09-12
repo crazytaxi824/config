@@ -368,6 +368,8 @@ vim.api.nvim_create_autocmd("FileType", {
 
 - method textDocument/documentHighlight is not supported by any of the servers registered for the current buffer
 
+- \\ comment on nomodifiable buffer.
+
 <br />
 
 ## TODO

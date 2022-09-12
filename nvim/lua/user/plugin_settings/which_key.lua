@@ -92,7 +92,7 @@ which_key.setup({
   -- Disabled by deafult for Telescope
   disable = {
     buftypes = {},
-    filetypes = { "TelescopePrompt" },
+    filetypes = { "TelescopePrompt", "NvimTree", "tagbar", "mason", "packer", "null-ls-info", "lspinfo" },
   },
 })
 
