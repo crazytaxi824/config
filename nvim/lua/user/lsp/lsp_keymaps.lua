@@ -9,7 +9,7 @@ local M = {}  -- module, 仅提供两个 keymaps 方法.
 
 --- for lspconfig only -----------------------------------------------------------------------------
 M.textDocument_keymaps = function(bufnr)
-  local lsp_req = require("user.lsp._user_lsp_request")
+  local custom_lsp_req = require("user.lsp.custom_lsp_request")
 
   local opts = { noremap=true, silent=true, buffer=bufnr }
   local textdoc_keymaps = {
@@ -22,8 +22,8 @@ M.textDocument_keymaps = function(bufnr)
     {"i", "<F4>", "<C-o><cmd>lua vim.lsp.buf.hover()<CR>", opts},
 
     -- NOTE: 自定义的 hover_short() request, 在 hover() 基础上只显示 function signature, 不显示 comments.
-    {"n", "<S-CR>", lsp_req.hover_short, opts},
-    {"i", "<S-CR>", lsp_req.hover_short, opts},
+    {"n", "<S-CR>", custom_lsp_req.hover_short, opts},
+    {"i", "<S-CR>", custom_lsp_req.hover_short, opts},
 
     {"n", "<F12>", "<cmd>lua vim.lsp.buf.definition()<CR>", opts},
     {"n", "<F24>", "<cmd>lua vim.lsp.buf.references()<CR>", opts},  -- <S-F12>

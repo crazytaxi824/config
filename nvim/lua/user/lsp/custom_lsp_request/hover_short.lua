@@ -138,8 +138,6 @@ M.hover_short = function()
     return
   end
 
-  local method = 'textDocument/hover'  -- 调用 lsp hover() 请求
-
   --- VVI: overwrite make_position_params() 生成的请求位置.
   local param = vim.tbl_deep_extend('force',
     vim.lsp.util.make_position_params(),
@@ -151,7 +149,7 @@ M.hover_short = function()
     }
   )
 
-  vim.lsp.buf_request(0, method, param,
+  vim.lsp.buf_request(0, 'textDocument/hover', param,
     --- VVI: 添加 offsetX 设置到 handler, 用来偏移 open_floating_preview() window
     vim.lsp.with(hover_short_handler,  -- VVI: 调用自定义 handler
       {

@@ -1,18 +1,17 @@
---- sort table list, compare table item sequentially.
---- textDocument/documentHighlight response:
--- {{
---   kind = 1,
---   range = {
---     end = {
---       character = 4,
---       line = 12
---     },
---     start = {
---       character = 1,
---       line = 12
---     }
---   }
--- }, ...}
+--- HACK: PROBLEM: CursorMove 触发 clear_references() & CursorHold 触发 document_highlight(),
+--- cursor 在同一个 document_highlight 的内部移动时造成闪烁.
+---
+--- SOLUTION: 重写 lsp.buf.document_highlight() 方法, 在其 handler 中对 lsp 返回的 result 进行
+--- 有条件的 highlight_references() / clear_references().
+---
+--- handler 具体条件:
+--- 缓存上一次 lsp 返回的 highlight result 结果, 和下一次的 result 进行对比,
+--- 如果结果完全相同, 则直接返回, 不进行任何 highlight / clear 处理;
+--- 如果结果不同则清除之前的 clear_references() highlight, 重新 document_highlight()
+---
+--- builtin vs custom document_highlight() 区别:
+--- builtin 的 vim.lsp.buf.document_highlight() 方法中 handler 主要是对 lsp 返回的 result 进行 highlight;
+--- custom 的 document highlight 方法中 handler 对 result 进行了有条件的 highlight_references() 和 clear_references()
 
 --- 官方设置方法, `:help vim.lsp.buf.document_highlight()` ------------------------------------ {{{
 ---   NOTE: Usage of |vim.lsp.buf.document_highlight()| requires the
@@ -39,7 +38,24 @@
 --
 -- -- }}}
 
---- sort response list 方便 compare. VVI: 需要 compare kind, start.line & start.character
+--- sort response list 方便 compare -------------------------------------------- {{{
+--- VVI: sort kind & start.line & start.character
+--- sort table list, compare table item sequentially.
+--- textDocument/documentHighlight response:
+-- {{
+--   kind = 1,
+--   range = {
+--     end = {
+--       character = 4,
+--       line = 12
+--     },
+--     start = {
+--       character = 1,
+--       line = 12
+--     }
+--   }
+-- }, ...}
+
 local function sort_table(list)
   if #list < 1 then
     return
@@ -47,19 +63,20 @@ local function sort_table(list)
 
   --- NOTE: some lsp response DO NOT have 'kind'.
   if list[1].kind then
-    table.sort(list, function(i, j)  -- compare kind
+    table.sort(list, function(i, j)  -- sort kind
       return i.kind < j.kind
     end)
   end
-  table.sort(list, function(i, j)  -- compare start.line
+  table.sort(list, function(i, j)  -- sort start.line
     return i.range.start.line < j.range.start.line
   end)
-  table.sort(list, function(i, j)  -- compare start.character, 同一行中多个 var 排序.
+  table.sort(list, function(i, j)  -- sort start.character, 同一行中多个 var 排序.
     return i.range.start.character < j.range.start.character
   end)
 end
+-- -- }}}
 
---- 判断两个 list 是否相同
+--- 判断两个 list 是否相同 ----------------------------------------------------- {{{
 local function compare_sorted_table(t1, t2)
   if #t1 ~= #t2 then
     -- print('lists length are not the same')
@@ -85,12 +102,16 @@ local function compare_sorted_table(t1, t2)
 
   return true  -- 认为两个 list 相同
 end
+-- -- }}}
+
+local M = {}
 
 --- cache 上一次的 documentHighlight 结果.
 local prev_doc_hi_pos = {}
 
 --- `:help lsp-handler`
-local function handler(err, result, req, config)
+--- custom lsp.buf_request() handler -------------------------------------------
+local function doc_hl_handler(err, result, req, config)
   if err then
     local debug = "error message:\n" .. vim.inspect(err) ..
       "lsp request:\n" .. vim.inspect(req) ..
@@ -101,7 +122,8 @@ local function handler(err, result, req, config)
 
   --- VVI: 没有结果的情况下, 有些 lsp 会返回 nil, 有些会返回 empty table {}. eg: cursor 在空白行.
   if not result or #result == 0 then
-    prev_doc_hi_pos = {}  -- clear cached result
+    --- clear cached result
+    prev_doc_hi_pos = {}
 
     --- VVI: 这里不要使用 vim.lsp.buf.clear_references() 方法,
     --- 这个方法只能清除当前 buffer 的 highlight.
@@ -122,65 +144,41 @@ local function handler(err, result, req, config)
     --- 这个方法只能清除当前 buffer 的 highlight.
     vim.lsp.util.buf_clear_references(req.bufnr)  -- clear previous highlight
 
-    --- VVI: 这里不要使用 vim.lsp.buf.document_highlight(),
-    --- 因为这个方法会重新发送 buf_request('textDocument/documentHighlight').
-    --- vim.lsp.util.buf_highlight_references() 只渲染结果.
+    --- 为了获取 offset_encoding
     local client = vim.lsp.get_client_by_id(req.client_id)
     if not client then
       return
     end
+
+    --- VVI: 这里不要使用 vim.lsp.buf.document_highlight(),
+    --- 因为 document_highlight() 会重新发送 vim.lsp.buf_request('textDocument/documentHighlight').
+    --- 而 vim.lsp.util.buf_highlight_references() 只渲染已获取的 result 结果.
     vim.lsp.util.buf_highlight_references(req.bufnr, result, client.offset_encoding)
   end
 
   -- print('same')  -- documentHighlight same as previous highlight
 end
 
---- 发送 documentHighlight 请求
-local method = 'textDocument/documentHighlight'
-
---- NOTE: 本函数相当于替代 vim.lsp.buf.document_highlight() 方法.
-local function highlight_references(bufnr)
-  local param = vim.lsp.util.make_position_params()
-  vim.lsp.buf_request(bufnr, method, param, handler)
+--- NOTE: 本函数相当于重写 vim.lsp.buf.document_highlight() 方法
+--- vim.lsp.buf.document_highlight() 源代码 ------------------------------------ {{{
+--- https://github.com/neovim/neovim/blob/master/runtime/lua/vim/lsp/buf.lua
+--- function M.document_highlight()
+---   local params = util.make_position_params()
+---   request('textDocument/documentHighlight', params)
+--- end
+--- -- }}}
+M.doc_highlight = function(bufnr)
+  local param = vim.lsp.util.make_position_params()  -- lsp request's cursor position.
+  vim.lsp.buf_request(bufnr, 'textDocument/documentHighlight', param, doc_hl_handler)
 end
 
---- 返回自定义 documentHighlight 处理方法 ----------------------------------------------------------
---- NOTE: 主要是用于替代 vim.lsp.buf.document_highlight() 方法.
-local M = {}
+--- VVI: 这里不要使用 vim.lsp.buf.clear_references() 方法, 这个方法只能清除当前 buffer 的 highlight.
+M.doc_clear = function(bufnr)
+  --- clear cached result
+  prev_doc_hi_pos = {}
 
---- HACK: 问题: CursorMove 触发 clear_references() & CursorHold 触发 document_highlight(),
---- cursor 在同一个 document_highlight 的内部移动时造成闪烁.
---- 解决办法: 缓存上一次 lsp 返回的 highlight 结果, 和这一次的进行对比,
---- 如果结果完全相同, 则直接返回;
---- 如果结果不同则清除之前的 clear_references() highlight, 重新 document_highlight()
-M.lsp_highlight = function (client, bufnr)
-  --- Set autocommands conditional on server_capabilities
-  --- 也可以使用 if client.resolved_capabilities.document_highlight 来判断.
-  if client.supports_method(method) then
-    vim.api.nvim_create_autocmd({"CursorHold", "CursorHoldI"}, {
-      buffer = bufnr,
-      callback = function(params)
-        --- 使用自定义的 documentHighlight 请求处理, 代替 vim.lsp.buf.document_highlight()
-        --- VVI: 千万不能使用 lsp_highlight(client, bufnr) 中传入的 bufnr,
-        --- 因为 lsp_highlight() 只在 on_attach 的时候执行一次.
-        highlight_references(params.buf)
-      end,
-    })
-
-    --- 在 cursor 进入另外一个 window 前, 或者在 window 加载其他的 buffer 前, 清除 clear highlight.
-    vim.api.nvim_create_autocmd({"WinLeave", "BufWinLeave"}, {
-      buffer = bufnr,
-      callback = function(params)
-        prev_doc_hi_pos = {}  -- clear cached result
-
-        --- NOTE: 这里不要使用 vim.lsp.buf.clear_references() 方法,
-        --- 这个方法只能清除当前 buffer 的 highlight.
-        --- VVI: 千万不能使用 lsp_highlight(client, bufnr) 中传入的 bufnr,
-        --- 因为 lsp_highlight() 只在 on_attach 的时候执行一次.
-        vim.lsp.util.buf_clear_references(params.buf)
-      end
-    })
-  end
+  --- clear previous highlight
+  vim.lsp.util.buf_clear_references(bufnr)
 end
 
 return M

@@ -364,6 +364,12 @@ vim.api.nvim_create_autocmd("FileType", {
 
 <br />
 
+## FIXME
+
+- method textDocument/documentHighlight is not supported by any of the servers registered for the current buffer
+
+<br />
+
 ## TODO
 
 - UPGRADE: `bufferline.nvim`, `nvim-lspconfig`, `LuaSnip` refactor, 可能会有 BUG, 需要持续关注更新.
@@ -382,12 +388,10 @@ vim.api.nvim_create_autocmd({"BufEnter", "TextChanged", "TextChangedI", "FileCha
 })
 ```
 
-- gitsigns code_action attach to NvimTree tagbar ...
+- gitsigns code_action attach to NvimTree tagbar ... move to `<leader>ga` "git: action"
 
 - global exclude.filetyps & exclude.buftypes
 - bufferline, nvim-tree, indentline
 
-## FIXME
 
-- method textDocument/documentHighlight is not supported by any of the servers registered for the current buffer
 
