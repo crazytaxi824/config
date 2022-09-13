@@ -97,8 +97,9 @@ which_key.setup({
 })
 
 --- highlight --------------------------------------------------------------------------------------
+vim.cmd('hi WhichKeyDesc ctermfg=81')
 --vim.cmd('hi WhichKeyFloat ctermbg=236')   -- 默认 link to NormalFloat
---vim.cmd('hi WhichKeyBorder ctermfg=236')  -- 目前没有用到 Border, 所以该设置没用.
+--vim.cmd('hi WhichKeyBorder ctermfg=236')  -- 目前 window.border = "none", 所以该设置没用.
 
 
 

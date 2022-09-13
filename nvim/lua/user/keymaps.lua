@@ -438,7 +438,7 @@ Keymap_set_and_register({}, {
     g = {name="g"},
     z = {name="z"},
     ['<leader>'] = {name="\\"},
-    Y = {'copy whole line without \\n'},
+    Y = {'copy whole line without "\\n"'},
     ['<C-L>'] = {'which_key_ignore'},
   },
   opts = {mode='n'},
