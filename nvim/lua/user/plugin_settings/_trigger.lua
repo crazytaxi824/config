@@ -10,13 +10,7 @@ vim.api.nvim_create_autocmd("FileType", {
 
     --- set <F9> Toggle Breakpoint
     --vim.cmd([[ nnoremap <buffer> <F9> <cmd>DapToggleBreakpoint<CR>]])
-    vim.keymap.set('n', '<F9>', '<cmd>DapToggleBreakpoint<CR>', {noremap=true, buffer=params.buf})
-
-    --- which-key <F9> toggle_breakpoint
-    local wk_status_ok, wk = pcall(require, "which-key")
-    if wk_status_ok then
-      wk.register({['<leader>c<F9>'] = {"debug: Toggle Breakpoint"}}, {mode="n", buffer=params.buf})
-    end
+    vim.keymap.set('n', '<F9>', '<cmd>DapToggleBreakpoint<CR>', {noremap=true, buffer=params.buf, desc="debug: Toggle Breakpoint" })
   end,
 })
 

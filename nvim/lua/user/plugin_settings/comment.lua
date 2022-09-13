@@ -32,26 +32,46 @@ comment.setup {
   -- end,
   -- -- }}}
 
-  -- 禁用默认 key mapping
+  --- 禁用默认 key mapping
   mappings = {
-    ---Operator-pending mapping
-    ---Includes `gcc`, `gbc`, `gc[count]{motion}` and `gb[count]{motion}`
-    ---NOTE: These mappings can be changed individually by `opleader` and `toggler` config
+    --- Operator-pending mapping
+    --- Includes `gcc`, `gbc`, `gc[count]{motion}` and `gb[count]{motion}`
+    --- NOTE: These mappings can be changed individually by `opleader` and `toggler` config
     basic = false,
-    ---Extra mapping
-    ---Includes `gco`, `gcO`, `gcA`
+    --- Extra mapping
+    --- Includes `gco`, `gcO`, `gcA`
     extra = false,
-    ---Extended mapping
-    ---Includes `g>`, `g<`, `g>[count]{motion}` and `g<[count]{motion}`
+    --- Extended mapping
+    --- Includes `g>`, `g<`, `g>[count]{motion}` and `g<[count]{motion}`
     extended = false,
   },
 }
 
 --- keymaps ----------------------------------------------------------------------------------------
+local c_api = require("Comment.api")
+
+function _Comment_exclude_file(mode)
+  if not vim.bo.modifiable then
+    vim.notify("cannot Comment on no-modifiable file", vim.log.levels.WARN)
+    return
+  end
+
+  if mode == 'current' then
+    c_api.toggle.linewise.current()
+  elseif mode == 'visual' then
+    --- 方法拷贝自 '<Plug>(comment_toggle_linewise_visual)' 源代码
+    --- https://github.com/numToStr/Comment.nvim/blob/master/plugin/Comment.lua
+    c_api.locked("toggle.linewise")(vim.fn.visualmode())
+  end
+end
+
 local opt = { noremap = true, silent = true }
 local comment_keymaps = {
-  {'n', '<leader>\\', '<Plug>(comment_toggle_linewise_current)', opt, 'toggle Comment'},
-  {'v', '<leader>\\', '<Plug>(comment_toggle_linewise_visual)',  opt, 'toggle Comment'},
+  {'n', '<leader>\\', function () _Comment_exclude_file("current") end, opt, 'toggle Comment'},
+  {'v', '<leader>\\', '<C-c><CMD>lua _Comment_exclude_file("visual")<CR>', opt, 'toggle Comment'},
+
+  -- {'n', '<leader>\\', '<Plug>(comment_toggle_linewise_current)', opt, 'toggle Comment'},
+  -- {'v', '<leader>\\', '<Plug>(comment_toggle_linewise_visual)',  opt, 'toggle Comment'},
 }
 
 Keymap_set_and_register(comment_keymaps)

@@ -43,12 +43,16 @@ end
 
 --- keymap -----------------------------------------------------------------------------------------
 local opt = {noremap = true, buffer = true}
+local ts_keymaps = {
+  --- run dist/current_file ---
+  {'n', '<F5>', function() ts_run(vim.fn.expand('%:.:r')) end, opt, "code: Run"},
 
---- run dist/current_file ---
-vim.keymap.set('n', '<F5>', function() ts_run(vim.fn.expand('%:.:r')) end, opt)
+  --- jest test ---
+  {'n', '<F6>', function() ts_jest(vim.fn.expand('%:.:r'), false) end, opt, "code: Run Test"},
+  {'n', '<F18>', function() ts_jest(vim.fn.expand('%:.:r'), true) end, opt, "code: Run Test --coverage"},  -- <S-F6>
+}
 
-vim.keymap.set('n', '<F6>', function() ts_jest(vim.fn.expand('%:.:r'), false) end, opt)
-vim.keymap.set('n', '<F18>', function() ts_jest(vim.fn.expand('%:.:r'), true) end, opt)  -- <S-F6>
+Keymap_set_and_register(ts_keymaps)
 
 
 
