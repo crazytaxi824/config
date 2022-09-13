@@ -113,10 +113,8 @@ local prev_doc_hi_pos = {}
 --- custom lsp.buf_request() handler -------------------------------------------
 local function doc_hl_handler(err, result, req, config)
   if err then
-    local debug = "error message:\n" .. vim.inspect(err) ..
-      "lsp request:\n" .. vim.inspect(req) ..
-      "result:\n" .. vim.inspect(result)
-    Notify(debug, "ERROR")
+    require("user.lsp.custom_lsp_request.error_logger").log(err)
+    Notify("doc_highlight_handler error", "ERROR")
     return
   end
 
