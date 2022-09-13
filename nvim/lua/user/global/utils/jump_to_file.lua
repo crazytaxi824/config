@@ -120,7 +120,7 @@ vim.api.nvim_create_autocmd('TermOpen', {
   callback = function(params)
     vim.keymap.set('n', '<CR>',
       "<cmd>lua Jump_to_file(Cursor_cWORD_filepath())<CR>",
-      {noremap = true, silent = true, buffer = params.buf} -- local to Terminal buffer
+      {noremap = true, silent = true, buffer = params.buf, desc = "Jump to file"} -- local to Terminal buffer
     )
   end,
 })
@@ -145,7 +145,7 @@ end
 
 vim.keymap.set('v', '<CR>',
   "<C-c>:lua Jump_to_file(Visual_selected_filepath())<CR>",
-  {noremap = true, silent = true}
+  {noremap = true, silent = true, desc = "Jump to file"}
 )
 
 

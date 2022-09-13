@@ -106,7 +106,8 @@ vim.g.did_load_filetypes = 0
                           -- nvim-treesitter 插件会强制将 syntax 设置为 `syntax manual`. `:help :syn-manual`
                           -- NOTE: 如果直接设置 `syntax off` 则, vim 不会加载 after/syntax. (但是不影响加载 after/ftplugin)
 
---- VVI: 不使用 neovim/runtime/ftplugin/xxx.vim 中预设的 keymap.
+--- VVI: 不使用 $VIMRUNTIME/ftplugin/xxx.vim 中预设的 keymap.
+--- 会导致部分 keymaps 无法使用, 需要手动设置. eg: 'gO'
 vim.g.no_plugin_maps = 1
 
 --- VVI: neovim provider 设置. `:checkhealth` 中 "health#provider#check" 可以查看到以下设置是否正确.
@@ -321,8 +322,21 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.bo[params.buf].buflisted = false
 
     --- close window
-    vim.keymap.set('n', 'q', '<cmd>q<CR>', {noremap=true, buffer=params.buf})
-    --vim.keymap.set('n', '<ESC>', '<cmd>q<CR>', {noremap=true, buffer=params.buf})
+    vim.keymap.set('n', 'q', '<cmd>q<CR>', {noremap=true, buffer=params.buf, desc="close window"})
+    --vim.keymap.set('n', '<ESC>', '<cmd>q<CR>', {noremap=true, buffer=params.buf, desc="close window"})
+  end
+})
+
+--- gO 被 g.no_plugin_maps disable
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = {"help"},
+  callback = function(params)
+    vim.keymap.set('n', 'gO', '<cmd>call man#show_toc()<CR>', {
+      noremap=true,
+      silent=true,
+      buffer=params.buf,
+      desc='table of contents',
+    })
   end
 })
 
@@ -335,8 +349,8 @@ vim.api.nvim_create_autocmd("CmdwinEnter", {
     vim.bo[params.buf].buflisted = false
 
     --- close window
-    vim.keymap.set('n', 'q', '<cmd>q<CR>', {noremap=true, buffer=params.buf})
-    --vim.keymap.set('n', '<ESC>', '<cmd>q<CR>', {noremap=true, buffer=params.buf})
+    vim.keymap.set('n', 'q', '<cmd>q<CR>', {noremap=true, buffer=params.buf, desc="close window"})
+    --vim.keymap.set('n', '<ESC>', '<cmd>q<CR>', {noremap=true, buffer=params.buf, desc="close window"})
   end
 })
 
