@@ -19,9 +19,9 @@ local Terminal = term.Terminal
 local function gotests_cmd_tool()
   local fp = vim.fn.expand('%')
   local func = vim.fn.expand('<cword>')
-  local cmd = 'gotests -only ' .. func .. ' ' .. fp
 
-  --- `gotest -only Foo /xxx/src/foo.go`
+  --- `gotests -only Foo /xxx/src/foo.go`
+  local cmd = 'gotests -only ' .. func .. ' ' .. fp
   print(cmd)
 
   local gotests = Terminal:new({ cmd = cmd, hidden = true, direction = "float", close_on_exit = false })
@@ -33,7 +33,7 @@ vim.api.nvim_buf_create_user_command(
   0,          -- bufnr = 0 表示 current buffer.
   "GoTests",  -- command name
   gotests_cmd_tool,    -- 使用 vim.api 方法的好处是可以使用 local lua function
-  {bang = true}  -- options: {bang = true, nargs = "+"}
+  {bang = true, bar = true}  -- options: {bang = true, nargs = "+"}
 )
 
 
