@@ -20,6 +20,8 @@ local function go_import_path(dir)
   return string.match(result, "[%S ]*")  -- return import_path WITHOUT '\n'
 end
 
+--- `$ go help build`, go run & go build 使用相同的 flags.
+--- `go run` 相当于: 1. 生成一个临时的 go build file, 2. 然后 run.
 --- go run ----------------------------------------------------------------------------------------- {{{
 local function go_run()
   --- 获取当前文件所在文件夹路径.
@@ -36,6 +38,7 @@ local function go_run()
 end
 -- -- }}}
 
+--- `$ go help testflag`
 --- go test run all -------------------------------------------------------------------------------- {{{
 local function go_test_all()
   --- 判断当前文件是否是 _test.go
@@ -156,11 +159,14 @@ local function go_test_cmd()   -- return (cmd: string|nil)
   end
 
   --- 判断当前函数是否 TestXXX. 如果是则 获取 test function name.
-  local testfn, mark = go_test_func_name()
-  if not testfn or mark == 0 then
+  local testfn_name, mark = go_test_func_name()
+  if not testfn_name or mark == 0 then
     Notify('Please Put cursor on "func TestXXX()"',"WARN")
     return
   end
+
+  --- add regexp pattern to test function name
+  local testfn_name_regexp = '^' .. testfn_name .. '$'
 
   --- 获取当前文件所在文件夹路径.
   local dir = vim.fn.expand('%:h')
@@ -174,17 +180,17 @@ local function go_test_cmd()   -- return (cmd: string|nil)
   local cmd
   if mark == 1 then
     --- go test -v -timeout 10s -run TestXxx ImportPath
-    cmd = 'cd ' .. dir .. " && go test -v -timeout 10s -run " .. testfn .. " " .. import_path
+    cmd = 'cd ' .. dir .. " && go test -v -timeout 10s -run " .. testfn_name_regexp .. " " .. import_path
   end
 
   if mark == 2 then
     --- go test -v -timeout 10s -run ^$ -benchmem -bench BenchmarkXxx ImportPath
-    cmd = 'cd ' .. dir .. " && go test -v -timeout 10s -run ^$ -benchmem -bench " .. testfn .. " " .. import_path
+    cmd = 'cd ' .. dir .. " && go test -v -timeout 10s -run ^$ -benchmem -bench " .. testfn_name_regexp .. " " .. import_path
   end
 
   if mark == 3 then
-    --- go test -v -run ^$ -fuzztime 10s -fuzz FuzzXxx ImportPath
-    cmd = 'cd ' .. dir .. " && go test -v -fuzztime 10s -run ^$ -fuzz " .. testfn .. " " .. import_path
+    --- go test -v -run ^$ -fuzztime 30s -fuzz FuzzXxx ImportPath
+    cmd = 'cd ' .. dir .. " && go test -v -fuzztime 30s -run ^$ -fuzz " .. testfn_name_regexp .. " " .. import_path
   end
 
   return cmd
@@ -207,8 +213,8 @@ local go_keymaps = {
   {'n', '<F5>', go_run, opt, "code: Run"},
 
   {'n', '<F6>', go_test_single_func, opt, "code: Run Test/Bench (Single)"},
-  {'n', '<F18>', go_test_all, opt, "code: Run Test (All)"},   -- <S-F6>
-  {'n', '<F30>', go_bench_all, opt, "code: Run Benchmark (All)"},  -- <C-F6>
+  {'n', '<F18>', go_test_all, opt, "code: Run Test (Package)"},   -- <S-F6>
+  {'n', '<F30>', go_bench_all, opt, "code: Run Benchmark (Package)"},  -- <C-F6>
 }
 
 Keymap_set_and_register(go_keymaps)
