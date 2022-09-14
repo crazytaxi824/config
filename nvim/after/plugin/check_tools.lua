@@ -14,6 +14,7 @@ local function check_go_tools()
     {cmd="gotests", install="go install github.com/cweill/gotests/gotests@latest", mason="gotests"},
     {cmd="gopls", install="go install golang.org/x/tools/gopls@latest", mason="gopls"},
     {cmd="gomodifytags", install="go install github.com/fatih/gomodifytags@latest", mason="gomodifytags"},
+    {cmd="dot", install="brew info graphviz"},
 
     --- 以下 cmd 在 null-ls 中有检查.
     {cmd="goimports", install="go install golang.org/x/tools/cmd/goimports@latest", mason="goimports"},
