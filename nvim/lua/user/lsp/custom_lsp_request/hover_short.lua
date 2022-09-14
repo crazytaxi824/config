@@ -90,7 +90,7 @@ local M = {}
 --- `:help lsp-handler`, lsp-request handler 的第一个参数为 err, 这里省略不处理.
 local function hover_short_handler(err, result, req, config)
   if err then
-    require("user.lsp.custom_lsp_request.error_logger").log(err)
+    require("user.lsp.custom_lsp_request.error_logger").log("hover_short_handler", req, err)
     Notify("hover_short_handler error", "ERROR")
     return
   end

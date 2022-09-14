@@ -113,7 +113,7 @@ local prev_doc_hi_pos = {}
 --- custom lsp.buf_request() handler -------------------------------------------
 local function doc_hl_handler(err, result, req, config)
   if err then
-    require("user.lsp.custom_lsp_request.error_logger").log(err)
+    require("user.lsp.custom_lsp_request.error_logger").log("doc_highlight_handler", req, err)
     Notify("doc_highlight_handler error", "ERROR")
     return
   end
