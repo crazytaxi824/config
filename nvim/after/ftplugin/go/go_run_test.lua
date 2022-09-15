@@ -39,8 +39,9 @@ end
 -- -- }}}
 
 --- `$ go help testflag`
---- go test run all -------------------------------------------------------------------------------- {{{
-local function go_test_all()
+--- run 可以使用 coverage, pprof flags, eg: -cover, -coverprofile, -cpuprofile, -memprofile ...
+--- go test run Package ---------------------------------------------------------------------------- {{{
+local function go_test_run_pkg()
   --- 判断当前文件是否是 _test.go
   if not string.match(vim.fn.expand('%:t'), "_test%.go$") then
     Notify('not "_test.go" file',"ERROR")
@@ -62,8 +63,9 @@ local function go_test_all()
 end
 -- -- }}}
 
---- go test bench all ------------------------------------------------------------------------------ {{{
-local function go_bench_all()
+--- benchmark 可以使用 pprof flags. eg: -cpuprofile ...; 但不能使用 -cover flags
+--- go test bench Package -------------------------------------------------------------------------- {{{
+local function go_test_bench_pkg()
   --- 判断当前文件是否是 _test.go
   if not string.match(vim.fn.expand('%:t'), "_test%.go$") then
     Notify('not "_test.go" file',"ERROR")
@@ -85,8 +87,9 @@ local function go_bench_all()
 end
 -- -- }}}
 
---- go test fuzz all ------------------------------------------------------------------------------- {{{
-local function go_fuzz_all()
+--- fuzz 不能使用 pprof flags. eg: -cpuprofile ...; 但可以使用 -cover flags
+--- go test fuzz Package --------------------------------------------------------------------------- {{{
+local function go_test_fuzz_pkg()
   --- 判断当前文件是否是 _test.go
   if not string.match(vim.fn.expand('%:t'), "_test%.go$") then
     Notify('not "_test.go" file',"ERROR")
@@ -190,7 +193,7 @@ local function go_test_cmd()   -- return (cmd: string|nil)
 
   if mark == 3 then
     --- go test -v -run ^$ -fuzztime 30s -fuzz FuzzXxx ImportPath
-    cmd = 'cd ' .. dir .. " && go test -v -fuzztime 30s -run ^$ -fuzz " .. testfn_name_regexp .. " " .. import_path
+    cmd = 'cd ' .. dir .. " && go test -v -fuzztime 15s -run ^$ -fuzz " .. testfn_name_regexp .. " " .. import_path
   end
 
   return cmd
@@ -213,11 +216,43 @@ local go_keymaps = {
   {'n', '<F5>', go_run, opt, "code: Run"},
 
   {'n', '<F6>', go_test_single_func, opt, "code: Run Test/Bench (Single)"},
-  {'n', '<F18>', go_test_all, opt, "code: Run Test (Package)"},   -- <S-F6>
-  {'n', '<F30>', go_bench_all, opt, "code: Run Benchmark (Package)"},  -- <C-F6>
+  {'n', '<F18>', go_test_run_pkg, opt, "code: Run Test (Package)"},   -- <S-F6>
+  {'n', '<F30>', go_test_bench_pkg, opt, "code: Run Benchmark (Package)"},  -- <C-F6>
 }
 
 Keymap_set_and_register(go_keymaps)
+
+--- NOTE:
+--- <F6> go test Run/Benchmark/Fuzz single function, No Prompt.
+--- <S-F6> run test single function with options/flags
+--    - go test Run Single function
+--        - coverage
+--        - pprof
+--    - go test Benchmark Single function -benchtime (默认 1s)
+--    - go test Fuzz Single function, -fuzzminimizetime, -fuzztime
+--        - FuzzTime 30s
+--        - FuzzTime 60s
+--        - FuzzTime 3m
+--        - FuzzTime 6m
+--        - FuzzTime 10m
+--
+--- :GoTest prompt inputlist.
+--    - go test Run Package
+--        - coverage
+--        - pprof
+--    - go test Benchmark Package
+--    - go test /Fuzz Package
+--    - go test Run Project
+--        - coverage
+--        - pprof
+--    - go test Benchmark Project
+--    - go test /Fuzz Project
+
+--- NOTE: cover.out 文件必须在 workspace 中, 否则无法进行分析.
+--- '-coverage' 不会生成 [pkg].text 文件.
+
+--- NOTE: pprof profile 文件生成的同时会生成一个 [pkg].text 文件, 可以在执行完成后删除 `$ rm *.test`.
+--- -http=: 意思是使用默认 localhost:random_available_port, 也可以使用 -http=:18080
 
 
 
