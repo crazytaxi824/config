@@ -210,6 +210,21 @@ local function go_test_single_func()
 end
 -- -- }}}
 
+--- NOTE: cannot use -fuzz flag with multiple packages.
+--- go test run/bench Project ---------------------------------------------------------------------- {{{
+--- opt = 'run' | 'bench'
+local function go_test_proj(opt)
+  --- './...' 表示当前 pwd 下的所有 packages, 即整个 Project.
+  local cmd
+  if opt == 'bench' then
+    cmd = 'go test -v -timeout 3m -run ^$ -benchmem -bench "^Benchmark.*" ./...'
+  else
+    cmd = 'go test -v ./...'
+  end
+  _Exec(cmd)
+end
+-- -- }}}
+
 --- key mapping ------------------------------------------------------------------------------------
 local opt = {noremap = true, buffer = true}
 local go_keymaps = {
