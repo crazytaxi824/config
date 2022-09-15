@@ -389,7 +389,4 @@ vim.api.nvim_create_autocmd({"BufEnter", "TextChanged", "TextChangedI", "FileCha
 
 - go test 火焰图(pprof flamegraph), 调用树(pprof trace), coverage
 
-- <S-F6> prompt: Test/Benchmark/Fuzz. local foo = vim.fn.inputlist({"choose:", "1. hello", "2. world"})
-
-
-
+- move functions out of after/ftplugin, 只留下 keymap command 设置.
