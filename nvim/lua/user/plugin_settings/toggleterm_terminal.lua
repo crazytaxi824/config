@@ -106,11 +106,10 @@ local my_terminals = {}
 
 --- VVI: execute: golang / javascript / typescript / python...
 local exec_term_id = 1001
-local exec_opts = {
+local exec_term = Terminal:new({
   count = exec_term_id,
   close_on_exit = false,
-}
-local exec_term = Terminal:new(exec_opts)
+})
 local cache_cmd     -- string, 缓存 _Exec() 中运行的 cmd.
 
 --- cache 是一个标记, 如果为 true, 则在将 cmd 记录在 last_cmd 中.
@@ -165,6 +164,26 @@ local function exec_last_cmd()
   exec_term:open()
 end
 
+--- background terminal ---
+-- NOTE: this terminal only use to :spawn() cmd in background. cannot be :toggle()
+local bg_term = Terminal:new({
+  count = 3001,
+  hidden = true,
+})
+function _Bg_spawn(cmd)
+  --- 删除之前的 terminal, 同时终止 job.
+  bg_term:shutdown()
+
+  --- 设置 cmd
+  bg_term.cmd = cmd
+  --- NOTE: 如果使用 :new() 生成了新的实例, 需要重新缓存新生成的实例, 否则无法 open() / close() ...
+  --exec_term = exec_term:new(vim.tbl_deep_extend('error', exec_opts, {cmd = cmd}))
+  --my_terminals[exec_term_id] = exec_term  -- VVI: 缓存新的 exec terminal
+
+  --- run cmd
+  bg_term:open()
+end
+
 --- node ---
 local node_term_id = 201
 local node_term = Terminal:new({
@@ -217,6 +236,7 @@ my_terminals = {
   [exec_term_id]=exec_term,
   [node_term_id]=node_term,
   [py_term_id]=python_term,
+  --- NOTE: bg_term 不要进行 toggle()
 }
 
 --- terminal key mapping ---------------------------------------------------------------------------
