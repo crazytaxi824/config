@@ -57,7 +57,7 @@ toggleterm.setup({
   end,
   --- 其他设置 --- {{{
   -- on_open  = fun(t: Terminal), -- TermOpen, job start.
-  -- on_close = fun(t: Terminal), -- NOTE: autoclose=true 的时候才能触发.
+  -- on_close = fun(t: Terminal), -- NOTE: close_on_exit=true 的时候才能触发.
   -- on_exit  = fun(t: Terminal, job: number, exit_code: number, name: string) -- TermClose, job ends.
   -- on_stdout = fun(t: Terminal, job: number, data: string[], name: string) -- callback for processing output on stdout
   -- on_stderr = fun(t: Terminal, job: number, data: string[], name: string) -- callback for processing output on stderr
@@ -101,19 +101,17 @@ vim.api.nvim_create_autocmd({"BufWinEnter"}, {
 ---   term:shutdown()  NOTE: exit terminal. 终止 terminal job, 然后关闭 term 窗口.
 local Terminal = require("toggleterm.terminal").Terminal
 
---- 缓存所有自定义 terminal 实例. cache terminal instance.
-local my_terminals = {}
-
 --- VVI: execute: golang / javascript / typescript / python...
 local exec_term_id = 1001
 local exec_term = Terminal:new({
   count = exec_term_id,
-  close_on_exit = false,
+  close_on_exit = false,  --- VVI: 必须要, 否则在 :shutdown() 的时候会因为 close_on_exit 开始退出, 导致执行下一个命令时在 :open() 的过程中程序退出.
 })
 local cache_cmd     -- string, 缓存 _Exec() 中运行的 cmd.
 
 --- cache 是一个标记, 如果为 true, 则在将 cmd 记录在 last_cmd 中.
-function _Exec(cmd, cache)
+--- bg_callback_cmd 在 on_exit 的时候执行.
+function _Exec(cmd, cache, callback)
   --- 缓存 cmd.
   if cache then
     cache_cmd = cmd
@@ -122,8 +120,12 @@ function _Exec(cmd, cache)
   --- 删除之前的 terminal, 同时终止 job.
   exec_term:shutdown()
 
+  --- NOTE: callback 不存在的时候 on_exit 就会清除, 相当于: on_exit = nil
+  exec_term.on_exit = callback
+
   --- 设置 cmd
   exec_term.cmd = cmd
+
   --- NOTE: 如果使用 :new() 生成了新的实例, 需要重新缓存新生成的实例, 否则无法 open() / close() ...
   --exec_term = exec_term:new(vim.tbl_deep_extend('error', exec_opts, {cmd = cmd}))
   --my_terminals[exec_term_id] = exec_term  -- VVI: 缓存新的 exec terminal
@@ -169,6 +171,7 @@ end
 local bg_term = Terminal:new({
   count = 3001,
   hidden = true,
+  close_on_exit = false,  --- VVI: 必须要, 否则在 :shutdown() 的时候会因为 close_on_exit 开始退出, 导致执行下一个命令时在 :open() 的过程中程序退出.
 })
 function _Bg_spawn(cmd)
   --- 删除之前的 terminal, 同时终止 job.
@@ -181,7 +184,7 @@ function _Bg_spawn(cmd)
   --my_terminals[exec_term_id] = exec_term  -- VVI: 缓存新的 exec terminal
 
   --- run cmd
-  bg_term:open()
+  bg_term:spawn()
 end
 
 --- node ---
@@ -226,7 +229,7 @@ local n8_term = Terminal:new({count = 8, direction = "vertical", on_open = funct
 local n9_term = Terminal:new({count = 9, direction = "vertical", on_open = function() vim.cmd('startinsert') end})
 
 --- 缓存所有自定义 terminal 实例.
-my_terminals = {
+local my_terminals = {
   --- normal terminal
   [1]=n1_term, [2]=n2_term, [3]=n3_term,
   [4]=n4_term, [5]=n5_term, [6]=n6_term,

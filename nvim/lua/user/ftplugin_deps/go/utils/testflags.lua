@@ -71,7 +71,7 @@ local flag_desc_cmd = {
       prefix = ' mkdir -p ' .. pprof_dir .. ' &&' ,
       flag = pprof_flags,
       --- NOTE: 删除 [pkg].test 文件 && 打开浏览器, 分析文件.
-      suffix = ' && go tool pprof -http=localhost: ' .. pprof_dir .. 'cpu.out'
+      suffix = 'go tool pprof -http=localhost: ' .. pprof_dir .. 'cpu.out'
     }
   },
   mem = {
@@ -79,7 +79,7 @@ local flag_desc_cmd = {
     cmd = {
       prefix = ' mkdir -p ' .. pprof_dir .. ' &&' ,
       flag = pprof_flags,
-      suffix = ' && go tool pprof -http=localhost: ' .. pprof_dir .. 'mem.out'
+      suffix = 'go tool pprof -http=localhost: ' .. pprof_dir .. 'mem.out'
     }
   },
   mutex = {
@@ -87,7 +87,7 @@ local flag_desc_cmd = {
     cmd = {
       prefix = ' mkdir -p ' .. pprof_dir .. ' &&' ,
       flag = pprof_flags,
-      suffix = ' && go tool pprof -http=localhost: ' .. pprof_dir .. 'mutex.out'
+      suffix = 'go tool pprof -http=localhost: ' .. pprof_dir .. 'mutex.out'
     }
   },
   block = {
@@ -95,7 +95,7 @@ local flag_desc_cmd = {
     cmd = {
       prefix = ' mkdir -p ' .. pprof_dir .. ' &&' ,
       flag = pprof_flags,
-      suffix = ' && go tool pprof -http=localhost: ' .. pprof_dir .. 'block.out'
+      suffix = 'go tool pprof -http=localhost: ' .. pprof_dir .. 'block.out'
     }
   },
   trace = {
@@ -103,7 +103,7 @@ local flag_desc_cmd = {
     cmd = {
       prefix = ' mkdir -p ' .. pprof_dir .. ' &&' ,
       flag = pprof_flags,
-      suffix = ' && go tool trace -http=localhost: ' .. pprof_dir .. 'trace.out'
+      suffix = 'go tool trace -http=localhost: ' .. pprof_dir .. 'trace.out'
     }
   },
 
@@ -124,8 +124,7 @@ local flag_desc_cmd = {
     cmd = {
       prefix = ' mkdir -p ' .. coverage_dir .. ' &&' ,
       flag = ' -coverprofile ' .. coverage_dir .. 'cover.out',
-      --- VVI: 这里是 ; 而不是 &&. 因为 "coverage: [no statements] FAIL" 时 os.exit() 返回不是 0, 使用 && 会导致后续无法运行.
-      suffix = ' ; go tool cover -html=' .. coverage_dir .. 'cover.out -o ' .. coverage_dir .. 'cover.html'
+      suffix = 'go tool cover -html=' .. coverage_dir .. 'cover.out -o ' .. coverage_dir .. 'cover.html'
         .. ' && open ' .. coverage_dir .. 'cover.html',
     }
   },
