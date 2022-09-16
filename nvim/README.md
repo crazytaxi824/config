@@ -387,4 +387,6 @@ vim.api.nvim_create_autocmd({"BufEnter", "TextChanged", "TextChangedI", "FileCha
 
 - global exclude.filetyps & exclude.buftypes. plugins: bufferline, nvim-tree, indentline
 
+- go test 火焰图(pprof flamegraph), 调用树(pprof trace), coverage
 
+- move functions out of after/ftplugin, 只留下 keymap command 设置.
