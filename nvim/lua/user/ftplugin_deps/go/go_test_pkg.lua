@@ -43,6 +43,12 @@ local function go_test_pkg(opt)
 
   -- print(cmd)
   _Exec(cmd, false, function()
+    --- :GoPprof command
+    if vim.tbl_contains({'cpu', 'mem', 'mutex', 'block', 'trace'}, opt.flag) then
+      go_utils.set_pprof_cmd()
+    end
+
+    --- run `go tool pprof ...` in background terminal
     if flag_cmd.suffix and flag_cmd.suffix ~= '' then
       _Bg_spawn(flag_cmd.suffix)
     end
@@ -80,6 +86,7 @@ local function go_test_proj(opt)
   end)
 end
 
+--- export functions -------------------------------------------------------------------------------
 M.go_test_run_pkg = function()
   local select = {'none', 'cpu', 'mem', 'mutex', 'block', 'trace', 'cover', 'coverprofile'}
   vim.ui.select(select, {

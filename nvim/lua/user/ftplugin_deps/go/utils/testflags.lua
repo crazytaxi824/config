@@ -168,4 +168,21 @@ M.parse_testflag_cmd = function(flag)
   return f.cmd
 end
 
+--- :GoPprof command
+M.set_pprof_cmd = function()
+  vim.api.nvim_buf_create_user_command(0, 'GoPprof', function()
+    local select = {'cpu', 'mem', 'mutex', 'block', 'trace'}
+    vim.ui.select(select, {
+      prompt = 'choose go test flag:',
+      format_item = function(item)
+        return M.get_testflag_desc(item)
+      end
+    }, function (choice)
+      if choice then
+        _Bg_spawn(M.parse_testflag_cmd(choice).suffix)
+      end
+    end)
+  end, {bang=true})
+end
+
 return M

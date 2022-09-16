@@ -83,6 +83,12 @@ local function go_test_single(testfn_name, opt)
 
   -- print(cmd)
   _Exec(cmd, false, function()
+    --- :GoPprof command
+    if vim.tbl_contains({'cpu', 'mem', 'mutex', 'block', 'trace'}, opt.flag) then
+      go_utils.set_pprof_cmd()
+    end
+
+    --- run `go tool pprof ...` in background terminal
     if flag_cmd.suffix and flag_cmd.suffix ~= '' then
       _Bg_spawn(flag_cmd.suffix)
     end
