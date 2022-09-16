@@ -21,6 +21,10 @@
 --   .. ' && mkdir -p ' .. pprof_dir .. ' ' .. coverage_dir
 --   .. ' && go test -v'
 --
+--   --- 指定可执行文件 [pkg].test 的位置. 这里 -o 是 `$ go help build` 的 flag.
+--   --- 默认在 pwd 下, 名字为 package 的名字, 例如: go test ... local/src/foo 执行后名字为 foo.test
+--   .. ' -o pkg.test'
+--
 --   --- go tool cover -html=profile/cover.out -o profile/coverage.html
 --   --- NOTE: cover.out 文件必须在 workspace 中, 否则无法进行分析.
 --   --- '-coverage' 不会生成 [pkg].text 文件.
