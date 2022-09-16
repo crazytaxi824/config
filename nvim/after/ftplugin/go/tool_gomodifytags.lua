@@ -39,112 +39,6 @@
 ---       文件被外部修改之后会重新加载所有针对该 <buffer> 的插件, eg: rundo - read undo file.
 
 --- ADD Tags and Options ---------------------------------------------------------------------------
---- arglist[1] is tag options. could be 'json','json=foo', 'json,xml=bar', 'json=foo,xml=bar', , 'json=foo,json=fuz,xml=bar'
---- arglist[2] = <可为空>|snakecase|camelcase|...
-local function go_add_tags_and_opts(arglist, go_add_tags_cmd, offset)
-  if vim.bo.readonly then
-    Notify("cannot add tags to readonly file","ERROR")
-    return
-  end
-
-  if #arglist > 2 then
-    Notify(
-      {
-        "too many args.",
-        "Command examples:",
-        '  :' .. go_add_tags_cmd .. ' json,xml',
-        '  :' .. go_add_tags_cmd .. ' json,xml camelcase',
-        '  :' .. go_add_tags_cmd .. ' json=omitempty,xml=omitempty',
-        '  :' .. go_add_tags_cmd .. ' json=omitempty,xml=omitempty camelcase',
-        "transform:",
-        "  snakecase(*) | camelcase | lispcase | pascalcase | titlecase | keep",
-      },
-      "ERROR"
-    )
-    return
-  end
-
-  local fp = vim.fn.expand("%:.")  -- current filepath
-  if fp == "" then
-    Notify("filepath/bufname is empty", "ERROR")
-    return
-  end
-
-  --- parse tag name and tag options from arglist[1].
-  local tag_list = {}
-  local tag_opt_list = {}
-  for _, tag_opt in ipairs(vim.split(arglist[1], ',')) do
-    local to = vim.split(tag_opt, '=')
-    if #to > 0 and to[1] ~= '' then  -- 'json'|'json=foo'
-      table.insert(tag_list, to[1])
-    end
-    if #to == 2 then  -- 'json=foo'
-      table.insert(tag_opt_list, tag_opt)
-    end
-  end
-
-  local transform = ""
-  if not arglist[2] then
-    transform = "snakecase"  -- default case
-  elseif arglist[2] == 's' or arglist[2] == 'snake' or arglist[2] == 'snakecase' then  -- foo_bar
-    transform = "snakecase"
-  elseif arglist[2] == 'c' or arglist[2] == 'camel' or arglist[2] == 'camelcase' then   -- fooBar
-    transform = "camelcase"
-  elseif arglist[2] == 'p' or arglist[2] == 'pascal' or arglist[2] == 'pascalcase' then  -- FooBar
-    transform = "pascalcase"
-  elseif arglist[2] == 'l' or arglist[2] == 'lisp' or arglist[2] == 'lispcase' then    -- foo-bar
-    transform = "lispcase"
-  elseif arglist[2] == 't' or arglist[2] == 'title' or arglist[2] == 'titlecase' then   -- Foo Bar
-    transform = "titlecase"
-  elseif arglist[2] == 'k' or arglist[2] == 'keep' then  -- 和 field name 一样
-    transform = "keep"
-  else
-    Notify(
-      {
-        "transform error.",
-        "Command examples:",
-        '  :' .. go_add_tags_cmd .. ' json,xml',
-        '  :' .. go_add_tags_cmd .. ' json,xml camelcase',
-        '  :' .. go_add_tags_cmd .. ' json,xml=foo',
-        '  :' .. go_add_tags_cmd .. ' json,xml=foo camelcase',
-        '  :' .. go_add_tags_cmd .. ' json=omitempty,xml=foo',
-        '  :' .. go_add_tags_cmd .. ' json=omitempty,xml=foo camelcase',
-        "transform:",
-        "  snakecase(*) | camelcase | lispcase | pascalcase | titlecase | keep",
-      },
-      "ERROR"
-    )
-    return
-  end
-
-  local sh_cmd = "gomodifytags -file " .. fp ..
-    " -add-tags " .. vim.fn.join(tag_list,',') ..
-    " -transform " .. transform ..
-    " -skip-unexported -quiet -w -override"
-
-  --- -offset / -all
-  if offset then
-    sh_cmd = sh_cmd .. " -offset " .. offset
-  else
-    sh_cmd = sh_cmd .. " -all"
-  end
-
-  --- -add-options
-  if #tag_opt_list > 0 then
-    sh_cmd = sh_cmd ..
-      " -add-options " .. vim.fn.join(tag_opt_list,',')
-  end
-
-  print(sh_cmd)
-  local result = vim.fn.system(sh_cmd)
-  if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
-    Notify(result, "ERROR")
-    return
-  end
-
-  vim.cmd('checktime')  -- VVI: refresh & reload buffer
-end
-
 --- NOTE: *.go 被重新加载时, 本文件会被重新读取. 会造成重复设置 command, 所以必须使用 `command!`
 --  eg: `:GoAddTags json,xml c`, `:GoAddTags json,xml camel`, `:GoAddTags json`
 -- command! -buffer -nargs=+ GoAddTags :lua _GoAddTags(<f-args>)
@@ -159,7 +53,7 @@ vim.api.nvim_buf_create_user_command(
     local offset = vim.fn.line2byte('.')
     --- 'gomodifytags -add-tags [tags] -offset [n]'
     --- 'gomodifytags -add-tags [tags] -add-options [tag=option] -offset [n]'
-    go_add_tags_and_opts(params.fargs, go_add_tags_cmd, offset)
+    require("user.ftplugin_tools.go").go_add_tags_and_opts(params.fargs, go_add_tags_cmd, offset)
   end,
   {nargs = "+", bang = true}
 )
@@ -172,70 +66,12 @@ vim.api.nvim_buf_create_user_command(
     --- 通过判断 offset 是否为 nil, 来确定是否需要使用 '-all'.
     --- 'gomodifytags -add-tags [tags] -all'
     --- 'gomodifytags -add-tags [tags] -add-options [tag=option] -all'
-    go_add_tags_and_opts(params.fargs, go_add_tags_all_struct_cmd)
+    require("user.ftplugin_tools.go").go_add_tags_and_opts(params.fargs, go_add_tags_all_struct_cmd)
   end,
   {nargs = "+", bang = true}
 )
 
 --- Remove Tags and Options ------------------------------------------------------------------------
---- if no args,  remove all tags, use '-clear-tags'
---- if has args, remove specified tags, use '-remove-tags'
-local function go_remove_tags(arglist, go_remove_tags_cmd, offset)
-  if vim.bo.readonly then
-    Notify("cannot remove tags from readonly file","ERROR")
-    return
-  end
-
-  if #arglist > 1 then
-    Notify(
-      {
-        "too many args.",
-        "Command examples:",
-        '  :' .. go_remove_tags_cmd,
-        '  :' .. go_remove_tags_cmd .. ' json,xml',
-      },
-      "ERROR"
-    )
-    return
-  end
-
-  local fp = vim.fn.expand("%:.")  -- current filepath
-  if fp == "" then
-    Notify("filepath/bufname is empty", "ERROR")
-    return
-  end
-
-  local sh_cmd = "gomodifytags -file " .. fp
-
-  --- -offset / -all
-  if offset then
-    sh_cmd = sh_cmd .. " -offset " .. offset
-  else
-    sh_cmd = sh_cmd .. " -all"
-  end
-
-  --- -clear-tags / -remove-tags
-  if #arglist == 0 then
-    sh_cmd = sh_cmd ..
-      " -clear-tags -quiet -w"
-  else
-    sh_cmd = sh_cmd ..
-      " -remove-tags " .. arglist[1] ..
-      " -quiet -w"
-  end
-
-  print(sh_cmd)
-  local result = vim.fn.system(sh_cmd)
-
-  --- 判断结果是否错误
-  if vim.v.shell_error ~= 0 then
-    Notify(result, "ERROR")
-    return
-  end
-
-  vim.cmd('checktime')  -- VVI: refresh & reload buffer
-end
-
 local go_remove_tags_cmd = "GoTagRemove"
 vim.api.nvim_buf_create_user_command(
   0,
@@ -247,7 +83,7 @@ vim.api.nvim_buf_create_user_command(
     local offset = vim.fn.line2byte('.')
     --- 'gomodifytags -clear-tags -offset n'
     --- 'gomodifytags -remove-tags [tags] -offset n'
-    go_remove_tags(params.fargs, go_remove_tags_cmd, offset)
+    require("user.ftplugin_tools.go").go_remove_tags(params.fargs, go_remove_tags_cmd, offset)
   end,
   {bang = true, nargs = "*"}
 )
@@ -260,70 +96,12 @@ vim.api.nvim_buf_create_user_command(
     --- 通过判断 offset 是否为 nil, 来确定是否需要使用 '-all'.
     --- 'gomodifytags -clear-tags -all'
     --- 'gomodifytags -remove-tags [tags] -all'
-    go_remove_tags(params.fargs, go_remove_tags_all_struct_cmd)
+    require("user.ftplugin_tools.go").go_remove_tags(params.fargs, go_remove_tags_all_struct_cmd)
   end,
   {bang = true, nargs = "*"}
 )
 
 --- Remove Tag's Options ---------------------------------------------------------------------------
---- if no args,  remove all tags' options, use '-clear-options'
---- if has args, remove specified tag's options, use '-remove-options'
-local function go_remove_tags_opts(arglist, go_remove_tag_opts_cmd, offset)
-  if vim.bo.readonly then
-    Notify("cannot remove tags's options from readonly file","ERROR")
-    return
-  end
-
-  if #arglist > 1 then
-    Notify(
-      {
-        "too many args.",
-        "Command examples:",
-        '  :' .. go_remove_tag_opts_cmd,
-        '  :' .. go_remove_tag_opts_cmd .. ' json=foo,xml=bar',
-      },
-      "ERROR"
-    )
-    return
-  end
-
-  local fp = vim.fn.expand("%:.")  -- current filepath
-  if fp == "" then
-    Notify("filepath/bufname is empty", "ERROR")
-    return
-  end
-
-  local sh_cmd = "gomodifytags -file " .. fp
-
-  --- -offset / -all
-  if offset then
-    sh_cmd = sh_cmd .. " -offset " .. offset
-  else
-    sh_cmd = sh_cmd .. " -all"
-  end
-
-  --- -clear-options / -remove-options
-  if #arglist == 0 then
-    sh_cmd = sh_cmd ..
-      " -clear-options -quiet -w"
-  else
-    sh_cmd = sh_cmd ..
-      " -remove-options " .. arglist[1] ..
-      " -quiet -w"
-  end
-
-  print(sh_cmd)
-  local result = vim.fn.system(sh_cmd)
-
-  --- 判断结果是否错误
-  if vim.v.shell_error ~= 0 then
-    Notify(result, "ERROR")
-    return
-  end
-
-  vim.cmd('checktime')  -- VVI: refresh & reload buffer
-end
-
 local go_remove_tag_opts_cmd = "GoTagOptionsRemove"
 vim.api.nvim_buf_create_user_command(
   0,
@@ -336,7 +114,7 @@ vim.api.nvim_buf_create_user_command(
 
     --- 'gomodifytags -clear-options -offset n'
     --- 'gomodifytags -remove-options [tag=option] -offset n'
-    go_remove_tags_opts(params.fargs, go_remove_tag_opts_cmd, offset)
+    require("user.ftplugin_tools.go").go_remove_tags_opts(params.fargs, go_remove_tag_opts_cmd, offset)
   end,
   {bang = true, nargs = "*"}
 )
@@ -349,7 +127,7 @@ vim.api.nvim_buf_create_user_command(
     --- 通过判断 offset 是否为 nil, 来确定是否需要使用 '-all'.
     --- 'gomodifytags -clear-options -all'
     --- 'gomodifytags -remove-options [tag=option] -all'
-    go_remove_tags_opts(params.fargs, go_remove_tag_opts_all_struct_cmd)
+    require("user.ftplugin_tools.go").go_remove_tags_opts(params.fargs, go_remove_tag_opts_all_struct_cmd)
   end,
   {bang = true, nargs = "*"}
 )
