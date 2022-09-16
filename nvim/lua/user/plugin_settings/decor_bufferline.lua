@@ -327,11 +327,10 @@ local function bufferline_del_current_buffer(ignore_tab)
     return
   end
 
-  --- 如果当前 buffer 的 filetype 不允许 go_to(), 则直接返回.
-  --- 因为不希望使用 excluded file 进行 go_to() / cycle()
-  if is_excluded_file() then
-    return
-  end
+  --- NOTE: 这里不要使用 is_excluded_file() 过滤, 因为会阻止 unlisted buffer 被删除.
+  -- if is_excluded_file() then
+  --   return
+  -- end
 
   --- NOTE: single tab 情况下删除 current buffer.
   local bufnr_before_jump = vim.fn.bufnr('%')  --- 获取当前 bufnr()

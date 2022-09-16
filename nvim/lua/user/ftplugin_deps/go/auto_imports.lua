@@ -5,7 +5,10 @@
 --- NOTE:   目前在 null-ls 中使用 formatting.goimports 替代.
 --- https://cs.opensource.google/go/x/tools/+/refs/tags/gopls/v0.8.3:gopls/doc/vim.md#neovim-imports
 --- https://github.com/neovim/nvim-lspconfig/issues/115
-function Organize_imports(wait_ms)
+
+local M = {}
+
+M.organize_imports = function(wait_ms)
   local params = vim.lsp.util.make_range_params()
   params.context = { only = {"source.organizeImports"} }
   local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, wait_ms)
@@ -19,6 +22,8 @@ function Organize_imports(wait_ms)
     end
   end
 end
+
+return M
 
 --- VVI: 这里必须使用 augroup, 否则会重复设置 autocmd.
 --- BufWritePre 在写入文件之前执行上面的函数.
