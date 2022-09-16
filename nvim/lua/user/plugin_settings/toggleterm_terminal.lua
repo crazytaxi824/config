@@ -105,7 +105,7 @@ local Terminal = require("toggleterm.terminal").Terminal
 local exec_term_id = 1001
 local exec_term = Terminal:new({
   count = exec_term_id,
-  close_on_exit = false,  --- VVI: 必须要, 否则在 :shutdown() 的时候会因为 close_on_exit 开始退出, 导致执行下一个命令时在 :open() 的过程中程序退出.
+  close_on_exit = false,  --- VVI: 必须要, 否则在 :shutdown() 的时候会因为 close_on_exit 开始退出, 导致 :open() 在执行下一个命令的过程中 terminal 退出.
 })
 local cache_cmd     -- string, 缓存 _Exec() 中运行的 cmd.
 
@@ -171,7 +171,7 @@ end
 local bg_term = Terminal:new({
   count = 3001,
   hidden = true,
-  close_on_exit = false,  --- VVI: 必须要, 否则在 :shutdown() 的时候会因为 close_on_exit 开始退出, 导致执行下一个命令时在 :open() 的过程中程序退出.
+  close_on_exit = false,  --- VVI: 必须要, 否则在 :shutdown() 的时候会因为 close_on_exit 开始退出, 导致 :open() 在执行下一个命令的过程中 terminal 退出.
 })
 function _Bg_spawn(cmd)
   --- 删除之前的 terminal, 同时终止 job.
