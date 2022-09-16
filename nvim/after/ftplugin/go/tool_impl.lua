@@ -3,7 +3,7 @@ vim.api.nvim_buf_create_user_command(
   0,
   "GoImpl",
   function(params)
-    require("user.ftplugin_tools.go").go_impl(params.fargs)
+    require("user.ftplugin_deps.go").go_impl(params.fargs)
   end,
   {bang=true, nargs="+"}
 )

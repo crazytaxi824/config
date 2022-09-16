@@ -1,5 +1,5 @@
-local go_import_path = require("user.ftplugin_tools.go.utils.import_path")
-local go_testflags = require("user.ftplugin_tools.go.utils.testflags")
+local go_import_path = require("user.ftplugin_deps.go.utils.import_path")
+local go_testflags = require("user.ftplugin_deps.go.utils.testflags")
 
 local M = {
   get_import_path = go_import_path.get_import_path,
