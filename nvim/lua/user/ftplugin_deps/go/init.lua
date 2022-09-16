@@ -1,9 +1,9 @@
 local go_run = require("user.ftplugin_deps.go.go_run")
 local go_test_single = require("user.ftplugin_deps.go.go_test_single")
 local go_test_pkg = require("user.ftplugin_deps.go.go_test_pkg")
-local gomodifytags = require("user.ftplugin_deps.go.tool_gomodifytags")
-local gotests = require("user.ftplugin_deps.go.tool_gotests")
-local impl = require("user.ftplugin_deps.go.tool_impl")
+local tool_gomodifytags = require("user.ftplugin_deps.go.tool_gomodifytags")
+local tool_gotests = require("user.ftplugin_deps.go.tool_gotests")
+local tool_impl = require("user.ftplugin_deps.go.tool_impl")
 
 local M = {
   --- methods
@@ -15,12 +15,12 @@ local M = {
   go_test_bench_pkg = go_test_pkg.go_test_bench_pkg,
   go_test_bench_proj = go_test_pkg.go_test_bench_proj,
 
-  go_add_tags_and_opts = gomodifytags.go_add_tags_and_opts,
-  go_remove_tags = gomodifytags.go_remove_tags,
-  go_remove_tags_opts = gomodifytags.go_remove_tags_opts,
+  go_add_tags_and_opts = tool_gomodifytags.go_add_tags_and_opts,
+  go_remove_tags = tool_gomodifytags.go_remove_tags,
+  go_remove_tags_opts = tool_gomodifytags.go_remove_tags_opts,
 
-  gotests_cmd_tool = gotests.gotests_cmd_tool,
-  go_impl = impl.go_impl,
+  gotests_cmd_tool = tool_gotests.gotests_cmd_tool,
+  go_impl = tool_impl.go_impl,
 }
 
 return M
