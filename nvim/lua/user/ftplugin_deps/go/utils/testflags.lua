@@ -169,7 +169,7 @@ M.parse_testflag_cmd = function(flag)
 end
 
 --- :GoPprof command
-M.set_pprof_cmd = function()
+M.set_pprof_cmd_keymap = function()
   vim.api.nvim_buf_create_user_command(0, 'GoPprof', function()
     local select = {'cpu', 'mem', 'mutex', 'block', 'trace'}
     vim.ui.select(select, {
@@ -183,6 +183,15 @@ M.set_pprof_cmd = function()
       end
     end)
   end, {bang=true})
+
+  vim.api.nvim_buf_set_keymap(0, 'n', '<F6>', '<cmd>GoPprof<CR>', {
+    noremap = true,
+    silent = true,
+    desc = 'Go tool pprof/trace',
+  })
+
+  --- info Keymap and Command
+  Notify("terminal <buffer> can now use '<F6>' OR ':GoPprof' to display other profiles.", "INFO")
 end
 
 return M

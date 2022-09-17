@@ -45,7 +45,7 @@ local function go_test_pkg(opt)
   _Exec(cmd, false, function()
     --- :GoPprof command
     if vim.tbl_contains({'cpu', 'mem', 'mutex', 'block', 'trace'}, opt.flag) then
-      go_utils.set_pprof_cmd()
+      go_utils.set_pprof_cmd_keymap()
     end
 
     --- run `go tool pprof ...` in background terminal

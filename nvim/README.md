@@ -392,3 +392,5 @@ vim.api.nvim_create_autocmd({"BufEnter", "TextChanged", "TextChangedI", "FileCha
 - move functions out of after/ftplugin, 只留下 keymap command 设置.
 
 - :GoPprof 和 terminal bufnr 绑定.
+
+- :Close bg_term on exec_term.on_close
