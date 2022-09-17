@@ -180,7 +180,7 @@ vim.cmd [[au Filetype python setlocal expandtab textwidth=79]]
 --vim.g.mapleader = '\\'
 vim.opt.mouse = 'a'  -- allow the mouse to be used in neovim, `:help mouse`
 
---- 快捷键延迟时间设置
+--- 快捷键延迟时间设置 -----------------------------------------------------------------------------
 vim.opt.timeoutlen = 600  -- 组合键延迟时间, 默认1000ms. eg: <leader>w, <C-W><C-O>...
 vim.opt.ttimeoutlen = 0   -- <ESC> 延迟时间, 默认 50ms.  <ESC> 的主要作用是切换模式.
                           -- <ESC> 是发送 ^[ 相当于是 <C-[> 组合键.
@@ -189,7 +189,7 @@ vim.opt.ttimeoutlen = 0   -- <ESC> 延迟时间, 默认 50ms.  <ESC> 的主要�
                           -- ttimeoutlen>0 的情况下, 从 insert 直接转成 visual 需要 <ESC>v, 中间不需要经过 normal 模式;
                           -- ttimeoutlen=0 的情况下, 模式转换时肯定会经过 normal. 因为按下 <ESC> 时马上就会转成 normal 模式.
 
---- 功能设置, 以下都是默认值
+--- 功能设置 ---------------------------------------------------------------------------------------
 vim.opt.backspace = 'indent,eol,start'  -- 设置 backspace 模式.
 vim.opt.history = 10000    -- command 保存的数量，默认(10000)
 vim.opt.autoindent = true  -- 继承前一行的缩进方式，适用于多行注释
@@ -202,19 +202,22 @@ vim.opt.wildignorecase = true  -- command 自动补全时忽略大小写.
 vim.opt.foldenable = true  -- 折叠代码.
 vim.opt.hidden = true      -- VVI: 很多插件需要用到 hidden buffer. When 'false' a buffer is unloaded when it is abandoned.
 
---- window / scroll 设置
+--- markdown 文件自动执行 SpellCheck 命令
+--vim.cmd [[au Filetype pandoc,markdown setlocal spell spelllang=en,cjk]]
+
+--- window / scroll 设置 ---------------------------------------------------------------------------
 vim.opt.splitbelow = true  -- force all horizontal splits to go below current window
 vim.opt.splitright = true  -- force all vertical splits to go to the right of current window
 vim.opt.scrolloff = 4      -- 没有到达文件顶部/底部时, 光标留空 n 行. 同时会影响 H / L 键行为.
 vim.opt.sidescrolloff = 16 -- 和上面类似, 横向留空 n 列.
 
---- search 设置，命令 `/` `?`
+--- search 设置，命令 `/` `?` ----------------------------------------------------------------------
 vim.opt.incsearch = true   -- 开始实时搜索
 vim.opt.ignorecase = true  -- 大小写不敏感. 大小写敏感使用 `/Foo\C`; 不敏感用 /Foo\c
 vim.opt.smartcase = true   -- 如果 search 文字中有大写字母则 case sensitive; 如果没有大写字母则 ignorecase.
 vim.opt.hlsearch = true    -- / ? 搜索时显示所有匹配项. 颜色设置 `hi Search` & `hi IncSearch`
 
---- 样式设置
+--- 样式设置 ---------------------------------------------------------------------------------------
 vim.opt.showtabline = 2   -- always show tabline 屏幕最顶部显示 buffer name 的行.
 
 vim.opt.laststatus = 2    -- last window always show statusline, 屏幕底部状栏.
@@ -236,7 +239,11 @@ vim.opt.signcolumn = 'yes:1'  -- 始终显示 signcolumn. line_number 左边用�
                               -- '1' 表示 signcolumn 宽度. 宽度为 1*2=2 格; 如果设置为 2, 则宽度为 2*2=4 格.
 vim.opt.showmatch = true      -- 跳到匹配的括号上, 包括 () {} []
 
+vim.opt.completeopt = { "menu", "menuone", "noselect" }  -- 代码补全设置, nvim-cmp 不受影响.
+
 --- 只在超出 textwidth 的行中显示 ColorColumn. 可以替代 `set colorcolumn`
+--vim.opt.colorcolumn = '+1'  -- :set cc=+1  " highlight column after 'textwidth'
+                              -- :set cc=+1,+2,+3  " highlight three columns after 'textwidth'
 --vim.cmd [[ au FileType * call matchadd('ColorColumn', '\%' .. (&textwidth+1) .. 'v', 100) ]]
 vim.api.nvim_create_autocmd("FileType", {
   pattern = {"*"},
@@ -249,44 +256,6 @@ vim.api.nvim_create_autocmd("FileType", {
       vim.fn.matchadd('ColorColumn', '\\%' .. vim.bo.textwidth+1 .. 'v', 100)
     end
   end
-})
---vim.opt.colorcolumn = '+1'  -- :set cc=+1  " highlight column after 'textwidth'
-                              -- :set cc=+1,+2,+3  " highlight three columns after 'textwidth'
-
-vim.opt.completeopt = { "menu", "menuone", "noselect" }    -- 为代码补全设置, mostly just for cmp
-
---- `:help backup-table`, 四种设置情况.
---- 禁用 backup 功能.
-vim.opt.backup = false
-vim.opt.writebackup = false
-
---- 允许使用 swp 缓存文件.
-vim.opt.swapfile = true
-
---- undo history 持久化
-vim.opt.undofile = true
-vim.opt.undodir = '/tmp/nvim/undo'  -- undodir 是全局设置, 无法单独给某个文件设置.
---vim.opt.undolevels = 1000  -- 默认 1000. NOTE: undolevels 太大可能影响 opening buffer 速度.
---vim.cmd([[au Filetype * ++once :silent !mkdir -p ]] .. vim.go.undodir)
-
---- 这里使用 VimEnter 是因为只需要执行一次命令.
-vim.api.nvim_create_autocmd("VimEnter", {
-  pattern = {"*"},
-  once = true,  -- "++once" 只在进入 neovim 时执行一次 autocmd
-  callback = function()
-    --- 延迟执行
-    vim.schedule(function()
-      --- undodir 不存在的情况下, `mkdir -p` 创建该文件夹.
-      if vim.fn.isdirectory(vim.go.undodir) == 0 then
-        --vim.cmd([[silent !mkdir -p ]] .. vim.go.undodir)
-        local result = vim.fn.system('mkdir -p '.. vim.go.undodir)
-        if vim.v.shell_error ~= 0 then
-          Notify(result, "ERROR")
-          return
-        end
-      end
-    end)
-  end,
 })
 
 --- 换行符, space, tab, cr ... 显示设置. `:help listchars`
@@ -308,8 +277,41 @@ vim.opt.fillchars = 'fold: ,diff: ,vert:│,eob:~'
 --- `:h foldtext` 改变折叠代码的样式. 配合 fillchars 使用.
 vim.opt.foldtext = 'printf("%s …", getline(v:foldstart))'
 
---- markdown 文件自动执行 SpellCheck 命令
---vim.cmd [[au Filetype pandoc,markdown setlocal spell spelllang=en,cjk]]
+--- backup swapfile undofile -----------------------------------------------------------------------
+--- `:help backup-table`, 四种设置情况.
+--- 禁用 backup 功能.
+vim.opt.backup = false
+vim.opt.writebackup = false
+
+--- 允许使用 swp 缓存文件.
+vim.opt.swapfile = true
+
+--- undo history 持久化
+vim.opt.undofile = true
+vim.opt.undodir = '/tmp/nvim/undo'  -- undodir 是全局设置, 无法单独给某个文件设置.
+--vim.opt.undolevels = 1000  -- 默认 1000. NOTE: undolevels 太大可能影响 opening buffer 速度.
+--vim.cmd([[au Filetype * ++once :silent !mkdir -p ]] .. vim.go.undodir)
+
+--- autocmd ----------------------------------------------------------------------------------------
+--- 这里使用 VimEnter 是因为只需要执行一次命令.
+vim.api.nvim_create_autocmd("VimEnter", {
+  pattern = {"*"},
+  once = true,  -- "++once" 只在进入 neovim 时执行一次 autocmd
+  callback = function()
+    --- 延迟执行
+    vim.schedule(function()
+      --- undodir 不存在的情况下, `mkdir -p` 创建该文件夹.
+      if vim.fn.isdirectory(vim.go.undodir) == 0 then
+        --vim.cmd([[silent !mkdir -p ]] .. vim.go.undodir)
+        local result = vim.fn.system('mkdir -p '.. vim.go.undodir)
+        if vim.v.shell_error ~= 0 then
+          Notify(result, "ERROR")
+          return
+        end
+      end
+    end)
+  end,
+})
 
 --- NOTE: 'quickfix' & 'location-list' 的 filetype 都是 'qf'.
 --- :wincmd 快捷键是 <Ctrl-w>
@@ -327,7 +329,7 @@ vim.api.nvim_create_autocmd("FileType", {
   end
 })
 
---- gO 被 g.no_plugin_maps disable
+--- NOTE: keymap 'gO' 被 g.no_plugin_maps disable
 vim.api.nvim_create_autocmd("FileType", {
   pattern = {"help"},
   callback = function(params)

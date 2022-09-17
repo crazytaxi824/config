@@ -41,6 +41,8 @@ Keymap_set_and_register(go_keymaps)
 -- - go test Benchmark multiple packages (Project)
 --     - coverage
 -- -- }}}
+--- NOTE: 不能同时运行多个 fuzz test. Error: will not fuzz, -fuzz matches more than one fuzz test.
+--- 所以这里没有设置 GoTestFuzzPackage / GoTestFuzzPorject, 使用 go_test_single_func() 来运行 Fuzz test.
 vim.api.nvim_buf_create_user_command(0, "GoTestRunPackage", 'lua require("user.ftplugin_deps.go").go_test_run_pkg()', {bang=true})
 vim.api.nvim_buf_create_user_command(0, "GoTestRunPoject", 'lua require("user.ftplugin_deps.go").go_test_run_proj()', {bang=true})
 vim.api.nvim_buf_create_user_command(0, "GoTestBenchmarkPackage", 'lua require("user.ftplugin_deps.go").go_test_bench_pkg()', {bang=true})
