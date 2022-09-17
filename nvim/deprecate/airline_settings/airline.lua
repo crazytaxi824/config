@@ -132,7 +132,7 @@ local function airline_del_current_buffer()
 
     --- `:tabclose` 关闭整个 tab
     --- `:bdelete 1 2 3` 删除 tab 中的所有 buffer
-    vim.cmd([[ tabclose | bdelete ]] .. vim.fn.join(tab_buf_list, ' '))
+    vim.cmd([[ tabclose | bdelete ]] .. table.concat(tab_buf_list, ' '))
     return
   end
 

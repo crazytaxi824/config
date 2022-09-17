@@ -121,7 +121,7 @@ M.go_add_tags_and_opts = function(arglist, go_add_tags_cmd, offset)
   end
 
   local sh_cmd = "gomodifytags -file " .. fp ..
-    " -add-tags " .. vim.fn.join(tag_list,',') ..
+    " -add-tags " .. table.concat(tag_list,',') ..
     " -transform " .. transform ..
     " -skip-unexported -quiet -w -override"
 
@@ -135,7 +135,7 @@ M.go_add_tags_and_opts = function(arglist, go_add_tags_cmd, offset)
   --- -add-options
   if #tag_opt_list > 0 then
     sh_cmd = sh_cmd ..
-      " -add-options " .. vim.fn.join(tag_opt_list,',')
+      " -add-options " .. table.concat(tag_opt_list,',')
   end
 
   print(sh_cmd)

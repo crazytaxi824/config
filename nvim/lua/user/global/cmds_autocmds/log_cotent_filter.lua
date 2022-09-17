@@ -50,7 +50,7 @@ local function clean_log_file(filepath, regexp)
   -- end
   --
   -- --- 写入文件
-  -- _, err = f:write(vim.fn.join(new_content, '\n'))
+  -- _, err = f:write(table.concat(new_content, '\n'))
   -- if err then
   --   Notify(err, "ERROR")
   --   return

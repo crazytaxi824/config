@@ -280,7 +280,7 @@ local function close_current_tab()
   --- `:tabclose` 关闭整个 tab
   --- `:bdelete 1 2 3` 删除 tab 中的所有 buffer
   if #del_nochanged_buf_list > 0 then
-    vim.cmd([[ tabclose | bdelete ]] .. vim.fn.join(del_nochanged_buf_list, ' '))
+    vim.cmd([[ tabclose | bdelete ]] .. table.concat(del_nochanged_buf_list, ' '))
   else
     vim.cmd([[ tabclose ]])
   end

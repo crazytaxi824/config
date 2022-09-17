@@ -49,7 +49,7 @@ function Notify(msg, lvl, opt)
     --- 如果 nvim-notify 不存在则使用 vim.notify()
     if type(msg) == 'table' then
       --- msg should be table array, join message []string with '\n'
-      vim.notify(vim.fn.join(msg, '\n'), l)
+      vim.notify(table.concat(msg, '\n'), l)
     else
       vim.notify(msg, l)
     end

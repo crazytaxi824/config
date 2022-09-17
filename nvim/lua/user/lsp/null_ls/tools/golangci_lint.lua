@@ -41,7 +41,7 @@ return {
 
     --- DEBUG: 用
     if __Debug_Neovim.null_ls then
-      Notify('golangci-lint' .. vim.fn.join(golangci_args, " "), "DEBUG", {title="Null-ls"})
+      Notify('golangci-lint' .. table.concat(golangci_args, " "), "DEBUG", {title="Null-ls"})
     end
 
     return golangci_args

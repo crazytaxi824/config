@@ -163,7 +163,7 @@ local conf = require("telescope.config").values
 
 local function my_rg_picker(opts)
   opts = opts or {}
-  local result = vim.fn.system(vim.fn.join(conf.vimgrep_arguments, " ") .. " " .. opts.extra_args)
+  local result = vim.fn.system(table.concat(conf.vimgrep_arguments, " ") .. " " .. opts.extra_args)
   if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
     if result == "" then
       vim.notify("Rg: no result found", vim.log.levels.WARN)

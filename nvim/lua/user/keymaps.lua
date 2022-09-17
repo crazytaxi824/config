@@ -37,7 +37,7 @@ local function wipeout_all_terminals()
   end
 
   if #buf_list > 0 then
-    vim.cmd('bw! ' .. vim.fn.join(buf_list, ' '))  -- NOTE: 需要使用 '!' 强制结束 job, 并且关闭 term 窗口.
+    vim.cmd('bw! ' .. table.concat(buf_list, ' '))  -- NOTE: 需要使用 '!' 强制结束 job, 并且关闭 term 窗口.
   end
 end
 
@@ -56,8 +56,7 @@ local function delete_all_other_buffers()
   end
 
   if #buf_list > 0 then
-    -- print('bdelete ' .. vim.fn.join(buf_list, ' ')) -- DEBUG
-    vim.cmd('bdelete ' .. vim.fn.join(buf_list, ' '))
+    vim.cmd('bdelete ' .. table.concat(buf_list, ' '))
   end
 end
 
