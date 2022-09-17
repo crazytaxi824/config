@@ -69,7 +69,7 @@ toggleterm.setup({
   -- -- }}}
 })
 
---- 其他 terminal 设置 -----------------------------------------------------------------------------
+--- terminal 其他设置 ------------------------------------------------------------------------------
 --- #toggleterm#1-9 自动进入 insert mode.
 --- VVI: TermOpen 只在 job start 的时候启动一次, terminal-buffer 被隐藏后再次调出使用的是 BufWinEnter 事件.
 --- 可以通过 `:au ToggleTermCommands` 查看.
@@ -93,7 +93,7 @@ vim.api.nvim_create_autocmd({"BufWinEnter"}, {
   end,
 })
 
---- Terminal 实例 ----------------------------------------------------------------------------------
+--- Terminal 实例 ---------------------------------------------------------------------------------- {{{
 ---   term:clear()     清除 term 设置.
 ---   term:close()     关闭窗口, NOTE: 只能关闭 :open() 打开的窗口.
 ---   term:open()      打开窗口, 如果 term 不存在则运行 job.
@@ -101,7 +101,7 @@ vim.api.nvim_create_autocmd({"BufWinEnter"}, {
 ---   term:shutdown()  NOTE: exit terminal. 终止 terminal job, 然后关闭 term 窗口.
 local Terminal = require("toggleterm.terminal").Terminal
 
---- VVI: execute: golang / javascript / typescript / python...
+--- VVI: execute: golang / javascript / typescript / python... -----------------
 local exec_term_id = 1001
 local exec_term = Terminal:new({
   count = exec_term_id,
@@ -166,7 +166,7 @@ local function exec_last_cmd()
   exec_term:open()
 end
 
---- background terminal ---
+--- background terminal --------------------------------------------------------
 -- NOTE: this terminal only use to :spawn() cmd in background. cannot be :toggle()
 local bg_term = Terminal:new({
   count = 3001,
@@ -187,7 +187,7 @@ function _Bg_spawn(cmd)
   bg_term:spawn()
 end
 
---- node ---
+--- node -----------------------------------------------------------------------
 local node_term_id = 201
 local node_term = Terminal:new({
   cmd = "node",
@@ -202,7 +202,7 @@ function _NODE_TOGGLE()
   node_term:toggle()
 end
 
---- python3 ---
+--- python3 --------------------------------------------------------------------
 local py_term_id = 202
 local python_term = Terminal:new({
   cmd = "python3",
@@ -217,7 +217,7 @@ function _PYTHON_TOGGLE()
   python_term:toggle()
 end
 
---- normal terminals ---
+--- normal terminals -----------------------------------------------------------
 local n1_term = Terminal:new({count = 1, on_open = function() vim.cmd('startinsert') end})
 local n2_term = Terminal:new({count = 2, on_open = function() vim.cmd('startinsert') end})
 local n3_term = Terminal:new({count = 3, on_open = function() vim.cmd('startinsert') end})
@@ -227,6 +227,8 @@ local n6_term = Terminal:new({count = 6, on_open = function() vim.cmd('startinse
 local n7_term = Terminal:new({count = 7, direction = "vertical", on_open = function() vim.cmd('startinsert') end})
 local n8_term = Terminal:new({count = 8, direction = "vertical", on_open = function() vim.cmd('startinsert') end})
 local n9_term = Terminal:new({count = 9, direction = "vertical", on_open = function() vim.cmd('startinsert') end})
+
+-- -- }}}
 
 --- 缓存所有自定义 terminal 实例.
 local my_terminals = {
