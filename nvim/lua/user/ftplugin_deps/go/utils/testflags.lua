@@ -192,6 +192,18 @@ M.set_pprof_cmd_keymap = function()
 
   --- info Keymap and Command
   Notify("terminal <buffer> can now use '<F6>' OR ':GoPprof' to display other profiles.", "INFO")
+
+  --- delete all bg_term after this buffer removed.
+  --- NOTE: 这里不能用 BufDelete, 因为 terminal 本来就不在 buflist 中, 所以不会触发 BufDelete.
+  vim.api.nvim_create_autocmd("BufWipeout", {
+    buffer = 0,
+    callback = function(params)
+      --- TODO: delete all bg_term
+      print(vim.inspect(params))
+      -- bg_term:shutdown()
+    end,
+    desc = 'delete all bg_term when this buffer is deleted',
+  })
 end
 
 return M
