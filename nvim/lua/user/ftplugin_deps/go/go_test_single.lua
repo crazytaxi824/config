@@ -90,7 +90,7 @@ local function go_test_single(testfn_name, opt)
 
     --- run `go tool pprof ...` in background terminal
     if flag_cmd.suffix and flag_cmd.suffix ~= '' then
-      _Bg_spawn(flag_cmd.suffix)
+      go_utils.bg_term_spawn(flag_cmd.suffix)
     end
   end)
 end

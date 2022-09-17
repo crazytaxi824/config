@@ -110,7 +110,7 @@ local exec_term = Terminal:new({
 local cache_cmd     -- string, 缓存 _Exec() 中运行的 cmd.
 
 --- cache 是一个标记, 如果为 true, 则在将 cmd 记录在 last_cmd 中.
---- bg_callback_cmd 在 on_exit 的时候执行.
+--- callback 在 on_exit 的时候执行.
 function _Exec(cmd, cache, callback)
   --- 缓存 cmd.
   if cache then
@@ -164,27 +164,6 @@ local function exec_last_cmd()
   --- re-run last cmd.
   --- NOTE: 这里因为没有改变 exec_term 中的任何设置, 所以 open() 的时候, 会运行上一次记录在 cmd 中的命令.
   exec_term:open()
-end
-
---- background terminal --------------------------------------------------------
--- NOTE: this terminal only use to :spawn() cmd in background. cannot be :toggle()
-local bg_term = Terminal:new({
-  count = 3001,
-  hidden = true,
-  close_on_exit = false,  --- VVI: 必须要, 否则在 :shutdown() 的时候会因为 close_on_exit 开始退出, 导致 :open() 在执行下一个命令的过程中 terminal 退出.
-})
-function _Bg_spawn(cmd)
-  --- 删除之前的 terminal, 同时终止 job.
-  bg_term:shutdown()
-
-  --- 设置 cmd
-  bg_term.cmd = cmd
-  --- NOTE: 如果使用 :new() 生成了新的实例, 需要重新缓存新生成的实例, 否则无法 open() / close() ...
-  --exec_term = exec_term:new(vim.tbl_deep_extend('error', exec_opts, {cmd = cmd}))
-  --my_terminals[exec_term_id] = exec_term  -- VVI: 缓存新的 exec terminal
-
-  --- run cmd
-  bg_term:spawn()
 end
 
 --- node -----------------------------------------------------------------------
@@ -241,7 +220,6 @@ local my_terminals = {
   [exec_term_id]=exec_term,
   [node_term_id]=node_term,
   [py_term_id]=python_term,
-  --- NOTE: bg_term 不要进行 toggle()
 }
 
 --- terminal key mapping ---------------------------------------------------------------------------

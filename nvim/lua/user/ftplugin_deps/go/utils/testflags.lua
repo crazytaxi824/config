@@ -170,6 +170,9 @@ end
 
 --- :GoPprof command
 M.set_pprof_cmd_keymap = function()
+  local go_utils = require("user.ftplugin_deps.go.utils")
+
+  --- 使用 toggleterm:spawn() 在 background 运行 `go tool pprof/trace ...`
   vim.api.nvim_buf_create_user_command(0, 'GoPprof', function()
     local select = {'cpu', 'mem', 'mutex', 'block', 'trace'}
     vim.ui.select(select, {
@@ -179,7 +182,7 @@ M.set_pprof_cmd_keymap = function()
       end
     }, function (choice)
       if choice then
-        _Bg_spawn(M.parse_testflag_cmd(choice).suffix)
+        go_utils.bg_term_spawn(M.parse_testflag_cmd(choice).suffix)
       end
     end)
   end, {bang=true})
@@ -190,7 +193,7 @@ M.set_pprof_cmd_keymap = function()
     desc = 'Go tool pprof/trace',
   })
 
-  --- info Keymap and Command
+  --- info Keymap and Command setup
   Notify("terminal <buffer> can now use '<F6>' OR ':GoPprof' to display other profiles.", "INFO")
 
   --- delete all bg_term after this buffer removed.
@@ -198,9 +201,8 @@ M.set_pprof_cmd_keymap = function()
   vim.api.nvim_create_autocmd("BufWipeout", {
     buffer = 0,
     callback = function(params)
-      --- TODO: delete all bg_term
-      print(vim.inspect(params))
-      -- bg_term:shutdown()
+      --- delete all running bg_term
+      go_utils.bg_term_shutdown_all()
     end,
     desc = 'delete all bg_term when this buffer is deleted',
   })

@@ -1,7 +1,8 @@
 local M = {}
 
---- 设置 bg_term for 
-local bg_terms = {}
+local cache_bg_terms = {}  -- 缓存 bg_term
+
+local bg_term_count = 3001  -- bg_term count 从这个数字开始增长.
 
 M.bg_term_spawn = function(cmd)
   local term_status_ok, term = pcall(require, "toggleterm.terminal")
@@ -11,15 +12,23 @@ M.bg_term_spawn = function(cmd)
   end
 
   local bg_term = term.Terminal:new({
-    count = 3001,  -- NOTE: 所有 bg_term 使用同一个 count.
+    --- NOTE: count 在 term job end 之后可以被新的 term 使用, :ls! 中可以看到两个相同 count 的 buffer.
+    --- 但是如果有相同 count 的 term job 还未结束时, 新的 term 无法运行.
+    count = bg_term_count,
+
+    --- VVI: 必须要, 否则在 :shutdown() 的时候会因为 close_on_exit 开始退出,
+    --- 导致 :open() 在执行下一个命令的过程中 terminal 退出.
+    close_on_exit = false,
+
+    --- 不允许被 :ToggleTerm 控制.
     hidden = true,
-    close_on_exit = false,  -- VVI: 必须要, 否则在 :shutdown() 的时候会因为 close_on_exit 开始退出, 导致 :open() 在执行下一个命令的过程中 terminal 退出.
-    on_open = function(t)
-      -- print(vim.inspect(t))
-      -- table.insert(bg_terms_bufnr, t.bufnr)  -- cache bufnr
-      table.insert(bg_terms, t)  -- cache terminal
-    end
   })
+
+  --- 缓存当前 bg_term
+  table.insert(cache_bg_terms, bg_term)
+
+  --- 设置下一个 bg_term 的 count
+  bg_term_count = bg_term_count + 1
 
   --- 设置 cmd
   bg_term.cmd = cmd
@@ -32,10 +41,10 @@ M.bg_term_spawn = function(cmd)
 end
 
 M.bg_term_shutdown_all = function ()
-  for _, bg_term in ipairs(bg_terms) do
+  for _, bg_term in ipairs(cache_bg_terms) do
     bg_term:shutdown()
   end
-  bg_terms = {}
+  cache_bg_terms = {}
 end
 
 return M

@@ -50,7 +50,7 @@ local function go_test_pkg(opt)
 
     --- run `go tool pprof ...` in background terminal
     if flag_cmd.suffix and flag_cmd.suffix ~= '' then
-      _Bg_spawn(flag_cmd.suffix)
+      go_utils.bg_term_spawn(flag_cmd.suffix)
     end
   end)
 end
@@ -80,8 +80,9 @@ local function go_test_proj(opt)
 
   -- print(cmd)
   _Exec(cmd, false, function()
+    --- NOTE: cannot use pprof flag with multiple packages
     if flag_cmd.suffix and flag_cmd.suffix ~= '' then
-      _Bg_spawn(flag_cmd.suffix)
+      go_utils.bg_term_spawn(flag_cmd.suffix)
     end
   end)
 end
@@ -116,7 +117,7 @@ M.go_test_bench_pkg = function()
 end
 
 M.go_test_run_proj = function()
-  -- cannot use pprof flag with multiple packages
+  --- cannot use pprof flag with multiple packages
   local select = {'none', 'cover', 'coverprofile'}
   vim.ui.select(select, {
     prompt = 'choose go test flag:',
@@ -131,7 +132,7 @@ M.go_test_run_proj = function()
 end
 
 M.go_test_bench_proj = function()
-  -- cannot use pprof flag with multiple packages
+  --- cannot use pprof flag with multiple packages
   local select = {'none', 'cover', 'coverprofile'}
   vim.ui.select(select, {
     prompt = 'choose go test flag:',
