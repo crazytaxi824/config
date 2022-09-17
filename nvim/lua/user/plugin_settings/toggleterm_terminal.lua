@@ -58,7 +58,7 @@ toggleterm.setup({
   --- 其他设置 --- {{{
   -- on_open  = fun(t: Terminal), -- TermOpen, job start.
   -- on_close = fun(t: Terminal), -- NOTE: close_on_exit=true 的时候才能触发.
-  -- on_exit  = fun(t: Terminal, job: number, exit_code: number, name: string) -- TermClose, job ends.
+  -- on_exit  = fun(t: Terminal, job: number, exit_code: number, name: string) -- TermClose, job ends. VVI: 不要全局设置
   -- on_stdout = fun(t: Terminal, job: number, data: string[], name: string) -- callback for processing output on stdout
   -- on_stderr = fun(t: Terminal, job: number, data: string[], name: string) -- callback for processing output on stderr
 

@@ -11,24 +11,24 @@
 --       如果 func TestFoo() 在别的文件中, 例如: bar_test.go, 则可以正常生成测试代码.
 --       如果 foo_test.go 中没有 func TestFoo() 则可以正常生成测试代码.
 
-local status_ok, term = pcall(require, "toggleterm.terminal")
-if not status_ok then
-    return
-end
-local Terminal = term.Terminal
-
 local M = {}
 
 M.gotests_cmd_tool = function()
   local fp = vim.fn.expand('%')
   local func = vim.fn.expand('<cword>')
 
+  local status_ok, term = pcall(require, "toggleterm.terminal")
+  if not status_ok then
+    Notify("toggleterm.terminal cannot be loaded", "ERROR")
+    return
+  end
+
   --- `gotests -only Foo /xxx/src/foo.go`
   local cmd = 'gotests -only ' .. func .. ' ' .. fp
   print(cmd)
 
-  local gotests = Terminal:new({ cmd = cmd, hidden = true, direction = "float", close_on_exit = false })
-  gotests:toggle()
+  local gotests = term.Terminal:new({ count=2860, cmd = cmd, hidden = true, direction = "float", close_on_exit = false })
+  gotests:open()
 end
 
 return M
