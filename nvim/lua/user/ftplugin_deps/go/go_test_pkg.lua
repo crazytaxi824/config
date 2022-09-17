@@ -32,17 +32,27 @@ local function go_test_pkg(opt)
   --- NOTE: 不能同时运行多个 fuzz test. Error: will not fuzz, -fuzz matches more than one fuzz test.
   if opt.mode == 'run' then
     --- go test -v -timeout 30s -run "^Test.*" ImportPath
-    cmd = cmd .. ' go test -v' .. flag_cmd.flag .. ' -timeout 30s -run "^Test.*" ' .. import_path .. flag_cmd.suffix
+    cmd = cmd .. ' go test -v' .. flag_cmd.flag .. ' -timeout 30s -run "^Test.*" ' .. import_path
   elseif opt.mode == 'bench' then
     --- go test -v -timeout 30s -run ^$ -benchmem -bench "^Benchmark.*" ImportPath
-    cmd = cmd .. ' go test -v' .. flag_cmd.flag .. ' -timeout 30s -run ^$ -benchmem -bench "^Benchmark.*" ' .. import_path .. flag_cmd.suffix
+    cmd = cmd .. ' go test -v' .. flag_cmd.flag .. ' -timeout 30s -run ^$ -benchmem -bench "^Benchmark.*" ' .. import_path
   else  -- error
     Notify("go test package {opt.mode} should be: 'run' | 'bench'", "DEBUG")
     return
   end
 
   -- print(cmd)
-  _Exec(cmd)
+  _Exec(cmd, false, function()
+    --- :GoPprof command
+    if vim.tbl_contains({'cpu', 'mem', 'mutex', 'block', 'trace'}, opt.flag) then
+      go_utils.set_pprof_cmd_keymap()
+    end
+
+    --- run `go tool pprof ...` in background terminal
+    if flag_cmd.suffix and flag_cmd.suffix ~= '' then
+      go_utils.bg_term_spawn(flag_cmd.suffix)
+    end
+  end)
 end
 
 --- go test run/bench multiple packages (Project) --------------------------------------------------
@@ -60,18 +70,24 @@ local function go_test_proj(opt)
 
   --- NOTE: cannot use -fuzz flag with multiple packages.
   if opt.mode == 'run' then
-    cmd = flag_cmd.prefix .. ' go test -v' .. flag_cmd.flag .. ' -timeout 3m ./...' .. flag_cmd.suffix
+    cmd = flag_cmd.prefix .. ' go test -v' .. flag_cmd.flag .. ' -timeout 3m ./...'
   elseif opt.mode == 'bench' then
-    cmd = flag_cmd.prefix .. ' go test -v' .. flag_cmd.flag .. ' -timeout 5m -run ^$ -benchmem -bench "^Benchmark.*" ./...' .. flag_cmd.suffix
+    cmd = flag_cmd.prefix .. ' go test -v' .. flag_cmd.flag .. ' -timeout 5m -run ^$ -benchmem -bench "^Benchmark.*" ./...'
   else  -- error
     Notify("go test multiple packages {opt.mode} should be: 'run' | 'bench'", "DEBUG")
     return
   end
 
   -- print(cmd)
-  _Exec(cmd)
+  _Exec(cmd, false, function()
+    --- NOTE: cannot use pprof flag with multiple packages
+    if flag_cmd.suffix and flag_cmd.suffix ~= '' then
+      go_utils.bg_term_spawn(flag_cmd.suffix)
+    end
+  end)
 end
 
+--- export functions -------------------------------------------------------------------------------
 M.go_test_run_pkg = function()
   local select = {'none', 'cpu', 'mem', 'mutex', 'block', 'trace', 'cover', 'coverprofile'}
   vim.ui.select(select, {
@@ -101,10 +117,10 @@ M.go_test_bench_pkg = function()
 end
 
 M.go_test_run_proj = function()
-  -- cannot use pprof flag with multiple packages
+  --- cannot use pprof flag with multiple packages
   local select = {'none', 'cover', 'coverprofile'}
   vim.ui.select(select, {
-    prompt = 'choose go test flag:',
+    prompt = 'choose go test flag: [go test multiple packages cannot use pprof flags]',
     format_item = function(item)
       return go_utils.get_testflag_desc(item)
     end
@@ -116,10 +132,10 @@ M.go_test_run_proj = function()
 end
 
 M.go_test_bench_proj = function()
-  -- cannot use pprof flag with multiple packages
+  --- cannot use pprof flag with multiple packages
   local select = {'none', 'cover', 'coverprofile'}
   vim.ui.select(select, {
-    prompt = 'choose go test flag:',
+    prompt = 'choose go test flag: [go test multiple packages cannot use pprof flags]',
     format_item = function(item)
       return go_utils.get_testflag_desc(item)
     end

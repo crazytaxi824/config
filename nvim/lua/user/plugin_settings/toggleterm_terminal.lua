@@ -57,8 +57,8 @@ toggleterm.setup({
   end,
   --- 其他设置 --- {{{
   -- on_open  = fun(t: Terminal), -- TermOpen, job start.
-  -- on_close = fun(t: Terminal), -- NOTE: autoclose=true 的时候才能触发.
-  -- on_exit  = fun(t: Terminal, job: number, exit_code: number, name: string) -- TermClose, job ends.
+  -- on_close = fun(t: Terminal), -- NOTE: close_on_exit=true 的时候才能触发.
+  -- on_exit  = fun(t: Terminal, job: number, exit_code: number, name: string) -- TermClose, job ends. VVI: 不要全局设置
   -- on_stdout = fun(t: Terminal, job: number, data: string[], name: string) -- callback for processing output on stdout
   -- on_stderr = fun(t: Terminal, job: number, data: string[], name: string) -- callback for processing output on stderr
 
@@ -69,7 +69,7 @@ toggleterm.setup({
   -- -- }}}
 })
 
---- 其他 terminal 设置 -----------------------------------------------------------------------------
+--- terminal 其他设置 ------------------------------------------------------------------------------
 --- #toggleterm#1-9 自动进入 insert mode.
 --- VVI: TermOpen 只在 job start 的时候启动一次, terminal-buffer 被隐藏后再次调出使用的是 BufWinEnter 事件.
 --- 可以通过 `:au ToggleTermCommands` 查看.
@@ -93,7 +93,7 @@ vim.api.nvim_create_autocmd({"BufWinEnter"}, {
   end,
 })
 
---- Terminal 实例 ----------------------------------------------------------------------------------
+--- Terminal 实例 ---------------------------------------------------------------------------------- {{{
 ---   term:clear()     清除 term 设置.
 ---   term:close()     关闭窗口, NOTE: 只能关闭 :open() 打开的窗口.
 ---   term:open()      打开窗口, 如果 term 不存在则运行 job.
@@ -101,20 +101,17 @@ vim.api.nvim_create_autocmd({"BufWinEnter"}, {
 ---   term:shutdown()  NOTE: exit terminal. 终止 terminal job, 然后关闭 term 窗口.
 local Terminal = require("toggleterm.terminal").Terminal
 
---- 缓存所有自定义 terminal 实例. cache terminal instance.
-local my_terminals = {}
-
---- VVI: execute: golang / javascript / typescript / python...
+--- VVI: execute: golang / javascript / typescript / python... -----------------
 local exec_term_id = 1001
-local exec_opts = {
+local exec_term = Terminal:new({
   count = exec_term_id,
-  close_on_exit = false,
-}
-local exec_term = Terminal:new(exec_opts)
+  close_on_exit = false,  --- VVI: 必须要, 否则在 :shutdown() 的时候会因为 close_on_exit 开始退出, 导致 :open() 在执行下一个命令的过程中 terminal 退出.
+})
 local cache_cmd     -- string, 缓存 _Exec() 中运行的 cmd.
 
 --- cache 是一个标记, 如果为 true, 则在将 cmd 记录在 last_cmd 中.
-function _Exec(cmd, cache)
+--- callback 在 on_exit 的时候执行.
+function _Exec(cmd, cache, callback)
   --- 缓存 cmd.
   if cache then
     cache_cmd = cmd
@@ -123,8 +120,12 @@ function _Exec(cmd, cache)
   --- 删除之前的 terminal, 同时终止 job.
   exec_term:shutdown()
 
+  --- NOTE: callback 不存在的时候 on_exit 就会清除, 相当于: on_exit = nil
+  exec_term.on_exit = callback
+
   --- 设置 cmd
   exec_term.cmd = cmd
+
   --- NOTE: 如果使用 :new() 生成了新的实例, 需要重新缓存新生成的实例, 否则无法 open() / close() ...
   --exec_term = exec_term:new(vim.tbl_deep_extend('error', exec_opts, {cmd = cmd}))
   --my_terminals[exec_term_id] = exec_term  -- VVI: 缓存新的 exec terminal
@@ -165,7 +166,7 @@ local function exec_last_cmd()
   exec_term:open()
 end
 
---- node ---
+--- node -----------------------------------------------------------------------
 local node_term_id = 201
 local node_term = Terminal:new({
   cmd = "node",
@@ -180,7 +181,7 @@ function _NODE_TOGGLE()
   node_term:toggle()
 end
 
---- python3 ---
+--- python3 --------------------------------------------------------------------
 local py_term_id = 202
 local python_term = Terminal:new({
   cmd = "python3",
@@ -195,7 +196,7 @@ function _PYTHON_TOGGLE()
   python_term:toggle()
 end
 
---- normal terminals ---
+--- normal terminals -----------------------------------------------------------
 local n1_term = Terminal:new({count = 1, on_open = function() vim.cmd('startinsert') end})
 local n2_term = Terminal:new({count = 2, on_open = function() vim.cmd('startinsert') end})
 local n3_term = Terminal:new({count = 3, on_open = function() vim.cmd('startinsert') end})
@@ -206,8 +207,10 @@ local n7_term = Terminal:new({count = 7, direction = "vertical", on_open = funct
 local n8_term = Terminal:new({count = 8, direction = "vertical", on_open = function() vim.cmd('startinsert') end})
 local n9_term = Terminal:new({count = 9, direction = "vertical", on_open = function() vim.cmd('startinsert') end})
 
+-- -- }}}
+
 --- 缓存所有自定义 terminal 实例.
-my_terminals = {
+local my_terminals = {
   --- normal terminal
   [1]=n1_term, [2]=n2_term, [3]=n3_term,
   [4]=n4_term, [5]=n5_term, [6]=n6_term,
@@ -248,7 +251,7 @@ local function toggle_all_terms()
   if #active_terms_wins > 0 then
     for _, win_id in ipairs(active_terms_wins) do
       --- 关闭所有 active terminal 的窗口
-      --- NOTE: 这里不使用 :close() 是因为 :close() 之能关闭 :open() 打开的窗口,
+      --- NOTE: 这里不使用 :close() 是因为 :close() 只能关闭 :open() 打开的窗口,
       --- 如果有多个窗口都显示同一个 terminal 则 :close() 无法关闭全部窗口.
       vim.api.nvim_win_close(win_id, false)
     end
