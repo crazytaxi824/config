@@ -120,7 +120,7 @@ M.go_test_run_proj = function()
   --- cannot use pprof flag with multiple packages
   local select = {'none', 'cover', 'coverprofile'}
   vim.ui.select(select, {
-    prompt = 'choose go test flag:',
+    prompt = 'choose go test flag: [go test multiple packages cannot use pprof flags]',
     format_item = function(item)
       return go_utils.get_testflag_desc(item)
     end
@@ -135,7 +135,7 @@ M.go_test_bench_proj = function()
   --- cannot use pprof flag with multiple packages
   local select = {'none', 'cover', 'coverprofile'}
   vim.ui.select(select, {
-    prompt = 'choose go test flag:',
+    prompt = 'choose go test flag: [go test multiple packages cannot use pprof flags]',
     format_item = function(item)
       return go_utils.get_testflag_desc(item)
     end

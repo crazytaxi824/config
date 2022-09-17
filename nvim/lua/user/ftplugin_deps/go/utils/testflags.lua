@@ -176,7 +176,7 @@ M.set_pprof_cmd_keymap = function()
   vim.api.nvim_buf_create_user_command(0, 'GoPprof', function()
     local select = {'cpu', 'mem', 'mutex', 'block', 'trace'}
     vim.ui.select(select, {
-      prompt = 'choose go test flag:',
+      prompt = 'choose pprof profile to view: [coverage profile is an HTML, open to view]',
       format_item = function(item)
         return M.get_testflag_desc(item)
       end
