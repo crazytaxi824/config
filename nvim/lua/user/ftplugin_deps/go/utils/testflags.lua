@@ -1,7 +1,7 @@
 --- `$ go help testflag` --------------------------------------------------------------------------- {{{
---- go test run        可以使用 coverage, pprof flags, eg: -cover, -coverprofile, -cpuprofile, -memprofile ...
---- go test benchmark  可以使用 coverage, pprof flags, eg: -cover, -coverprofile, -cpuprofile, -memprofile ...
---- go test fuzz       不能使用 pprof flags. eg: -cpuprofile ...; 也不能使用 -cover -coverprofile flags
+--- go test run        能使用 pprof & cover & trace flags.
+--- go test benchmark  能使用 pprof & cover & trace flags.
+--- go test fuzz       不能使用 pprof & cover & trace flags.
 --- go test xxx multiple packages  不能使用 pprof flags, 但是可以使用 -cover -coverprofile flags
 
 --- VVI: go test flags
@@ -25,19 +25,22 @@
 --   --- 默认在 pwd 下, 名字为 package 的名字, 例如: go test ... local/src/foo 执行后名字为 foo.test
 --   .. ' -o pkg.test'
 --
---   --- go tool cover -html=profile/cover.out -o profile/coverage.html
+--   --- NOTE: 以下所有分析报告文件生成的路径都在该路径下, 除非指定绝对路径.
+--   --- eg: '-cpuprofile a/b/c.out'  文件会生成在 pprof_dir/a/b/c.out#region
+--   --- eg: '-cpuprofile /a/b/c.out' 文件会生成在 /a/b/c.out
+--   .. ' -outputdir ' .. pprof_dir
+--
 --   --- NOTE: cover.out 文件必须在 workspace 中, 否则无法进行分析.
 --   --- '-coverage' 不会生成 [pkg].text 文件.
---   .. ' -cover -coverprofile '.. coverage_dir .. 'cover.out'
+--   .. ' -cover -coverprofile '.. coverage_dir .. 'cover.out'  -- go tool cover -html=cover.out -o cover.html
 --
 --   --- NOTE: pprof profile 文件生成的同时会生成一个 [pkg].text 文件, 可以在执行完成后删除.
 --   --- -http=: 意思是使用默认 localhost:random_available_port, 也可以使用 -http=:18080
---   .. ' -blockprofile block.out'   -- go tool pprof -http=: profile/block.out
---   .. ' -cpuprofile cpu.out'       -- go tool pprof -http=: profile/cpu.out
---   .. ' -memprofile mem.out'       -- go tool pprof -http=: profile/mem.out
---   .. ' -mutexprofile mutex.out'   -- go tool pprof -http=: profile/mutex.out
---   .. ' -trace trace.out'          -- go tool trace profile/trace.out
---   .. ' -outputdir ' .. pprof_dir
+--   .. ' -blockprofile block.out'   -- go tool pprof -http=localhost: block.out
+--   .. ' -cpuprofile cpu.out'       -- go tool pprof -http=localhost: cpu.out
+--   .. ' -memprofile mem.out'       -- go tool pprof -http=localhost: mem.out
+--   .. ' -mutexprofile mutex.out'   -- go tool pprof -http=localhost: mutex.out
+--   .. ' -trace trace.out'          -- go tool trace -http=localhost: trace.out
 --
 --   .. ' -timeout 30s -run "^Test.*" ' .. import_path
 --   .. ' && rm ./*.test'  -- remove pkg.text 可执行文件.
@@ -51,16 +54,15 @@ local coverage_dir = vim.fn.fnamemodify(vim.fn.getcwd() .. '/coverage/', ':p')  
 
 local pprof_flags = ' -o ' .. pprof_dir .. 'pkg.test'  -- [pkg].test 可执行文件生成位置, 这个是 `$ go help build` 的 flag.
   .. ' -outputdir ' .. pprof_dir  -- 以下所有 profile 文件生成的路径都在该路径下, 除非指定绝对路径.
-                                 -- eg: '-cpuprofile a/b/c.out'  文件会生成在 pprof_dir/a/b/c.out
-                                 -- eg: '-cpuprofile /a/b/c.out' 文件会生成在 /a/b/c.out
+                                  -- eg: '-cpuprofile a/b/c.out'  文件会生成在 pprof_dir/a/b/c.out
+                                  -- eg: '-cpuprofile /a/b/c.out' 文件会生成在 /a/b/c.out
   .. ' -cpuprofile cpu.out'
   .. ' -memprofile mem.out'
   .. ' -mutexprofile mutex.out'
   .. ' -blockprofile block.out'
   .. ' -trace trace.out'
-
   --- 使用 -coverprofile 生成的 cover.out 文件必须在 workspace 中, 否则无法进行分析.
-  --- 这里的 cover.out 就会生成在另外的文件夹内, 因为 coverage_dir 是绝对路径.
+  --- 这里的 cover.out 不会生成在 -outputdir 指定的文件夹内, 因为 coverage_dir 是绝对路径.
   -- .. ' -coverprofile ' .. coverage_dir .. 'cover.out'  -- NOTE: 单独使用 -coverprofile, 不在这里统一生成报告.
 
 local flag_desc_cmd = {

@@ -55,18 +55,18 @@ toggleterm.setup({
   on_stdout = function(_,_,output,_)
     Highlight_filepath(output)
   end,
-  --- 其他设置 --- {{{
-  -- on_open  = fun(t: Terminal), -- TermOpen, job start.
-  -- on_close = fun(t: Terminal), -- NOTE: close_on_exit=true 的时候才能触发.
-  -- on_exit  = fun(t: Terminal, job: number, exit_code: number, name: string) -- TermClose, job ends. VVI: 不要全局设置
-  -- on_stdout = fun(t: Terminal, job: number, data: string[], name: string) -- callback for processing output on stdout
-  -- on_stderr = fun(t: Terminal, job: number, data: string[], name: string) -- callback for processing output on stderr
+
+  --- 其他设置, NOTE: 以下最好不要全局设置 ---
+  --on_open  = fun(t: Terminal), -- toggleterm win open.  NOTE: term:spawn() 无法触发.
+  --on_close = fun(t: Terminal), -- toggleterm win close. NOTE: close_on_exit=true 的时候才能触发.
+  --on_exit  = fun(t: Terminal, job: number, exit_code: number, name: string) -- TermClose, job ends
+  --on_stdout = fun(t: Terminal, job: number, data: string[], name: string) -- callback for processing output on stdout
+  --on_stderr = fun(t: Terminal, job: number, data: string[], name: string) -- callback for processing output on stderr
 
   --- NOTE: nightly version 才有 winbar 可以用.
-  -- winbar = {
-  --   enabled = false,
-  -- },
-  -- -- }}}
+  --winbar = {
+  --  enabled = false,
+  --},
 })
 
 --- terminal 其他设置 ------------------------------------------------------------------------------
@@ -104,13 +104,18 @@ local Terminal = require("toggleterm.terminal").Terminal
 --- VVI: execute: golang / javascript / typescript / python... -----------------
 local exec_term_id = 1001
 local exec_term = Terminal:new({
+  --- NOTE: count 在 term job end 之后可以被新的 term 使用, :ls! 中可以看到两个相同 count 的 buffer.
+  --- 但是如果有相同 count 的 term job 还未结束时, 新的 term 无法运行.
   count = exec_term_id,
-  close_on_exit = false,  --- VVI: 必须要, 否则在 :shutdown() 的时候会因为 close_on_exit 开始退出, 导致 :open() 在执行下一个命令的过程中 terminal 退出.
+
+  --- VVI: 必须要, 否则在 :shutdown() 的时候会因为 close_on_exit 开始退出,
+  --- 导致 :open() 在执行下一个命令的过程中 terminal 退出.
+  close_on_exit = false,
 })
 local cache_cmd     -- string, 缓存 _Exec() 中运行的 cmd.
 
 --- cache 是一个标记, 如果为 true, 则在将 cmd 记录在 last_cmd 中.
---- callback 在 on_exit 的时候执行.
+--- callback 在 on_exit = func() 的时候执行.
 function _Exec(cmd, cache, callback)
   --- 缓存 cmd.
   if cache then
@@ -134,7 +139,7 @@ function _Exec(cmd, cache, callback)
   exec_term:open()
 end
 
---- 运行 cached cmd
+--- 重新执行 cached cmd
 local function exec_cached_cmd()
   if not cache_cmd then
     Notify("no Command has been Cached", "Info")
@@ -151,7 +156,7 @@ local function exec_cached_cmd()
   exec_term:open()
 end
 
---- 运行 last cmd
+--- 重新执行 last cmd
 local function exec_last_cmd()
   if not exec_term.cmd then
     Notify("no Command has been Executed", "Info")
