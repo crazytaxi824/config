@@ -325,40 +325,65 @@ end
 --- ignore_tab 用于避免 close 最后一个 tab 导致退出 nvim.
 --- 如果 ignore_tab == true, 则不运行 close_current_tab()
 local function bufferline_del_current_buffer(ignore_tab)
+  --- 不删除 nvim-tree
+  if vim.bo.filetype == 'NvimTree' then
+    return
+  end
+
   --- NOTE: multi tab 的情况下, 使用 :tabclose 关闭整个 tab, 同时 bdelete 该 tab 中的所有 buffer.
   if not ignore_tab and close_current_tab() then  -- return true: 有多个 tab, 并已关闭当前 tab.
     return
   end
 
-  --- NOTE: 这里不要使用 is_excluded_file() 过滤, 因为会阻止 unlisted buffer 被删除.
-  -- if is_excluded_file() then
-  --   return
-  -- end
+  --- NOTE: 以下是 single tab 情况下删除 current buffer.
+  local current_bufnr = vim.fn.bufnr()
+  if current_bufnr < 1 then
+    Notify("current bufnr < 1", "DEBUG")
+    return
+  end
 
-  --- NOTE: single tab 情况下删除 current buffer.
-  local bufnr_before_jump = vim.fn.bufnr('%')  --- 获取当前 bufnr()
-  --- 判断当前 buffer 是否未保存.
-  if vim.fn.getbufinfo(bufnr_before_jump)[1].changed == 1 then
+  local current_bufinfo = vim.fn.getbufinfo(current_bufnr)[1]
+
+  --- current buffer 修改后未保存.
+  if current_bufinfo.changed == 1 then
     Notify("can't close Unsaved buffer", "WARN")
+    return
+  end
+
+  --- current buffer 是 unlisted active buffer
+  if current_bufinfo.listed == 0 then
+    --- 如果有其他任何 window 中显示的是 listed buffer 则直接 :bdelete current buffer.
+    for _, wininfo in ipairs(vim.fn.getwininfo()) do
+      if vim.fn.buflisted(wininfo.bufnr) == 1 then
+        vim.cmd('bdelete')
+        return
+      end
+    end
+
+    --- 如果所有 window 中的 buffer 都是 unlisted 则跳到最后一个 visible buffer
+    --- NOTE: 这不需要 ':bdelete #' 因为 current buffer 本身就是 unlisted.
+    bufferline.go_to(-1, true)  -- NOTE: go_to(-1, true) 跳到最后一个 visible buffer
+    return
+  end
+
+  --- 以下是 current_bufinfo.listed == 1 的情况.
+  --- 如果 current buffer 是最后一个 listed buffer 则不删除.
+  local listed_buffers = vim.fn.getbufinfo({buflisted=1})
+  if #listed_buffers == 1 then
+    --- listed_buffers 只剩一个, current_bufinfo.listed == 1, 说明 current buffer 一定是最后一个 listed buffer.
+    Notify("can't close the Only listed-buffer", "WARN")
     return
   end
 
   --- 如果当前 buffer 是排在最后的 listed buffer 则跳到前一个 buffer;
   --- 如果当前 buffer 不是排在最后的 listed buffer 则跳到后一个 buffer;
-  if is_last_bufferline_index(bufnr_before_jump) then
+  if is_last_bufferline_index(current_bufnr) then
     bufferline.cycle(-1)  -- 跳转到 prev buffer
   else
     bufferline.cycle(1)   -- 跳转到 next buffer
   end
 
-  local bufnr_after_jump = vim.fn.bufnr('%')   --- 获取跳转后 bufnr()
-  if bufnr_before_jump ~= bufnr_after_jump then
-    --- 如果 before != after 则执行 bdelete #.
-    vim.cmd([[bdelete #]])
-  else
-    --- 如果 before == after 则说明是最后一个 listed buffer, 或者当前 buffer 是 unlisted active buffer.
-    bufferline.go_to(-1, true)   --- NOTE: go_to(-1, true) 跳到最后一个 buffer.
-  end
+  vim.cmd('bdelete #')
 end
 
 --- 删除指定 buffer

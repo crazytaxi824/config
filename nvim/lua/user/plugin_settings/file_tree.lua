@@ -216,7 +216,7 @@ local nt_buffer_keymaps = {
   --- action_cb 意思是 callback 函数.
   { key = "<C-o>",         action = "system open", action_cb = system_open},
   { key = "<leader>c",     action = "compare two marked files", action_cb = compare_two_marked_files},
-  { key = "<leader>d",     action = "git: Discard file changes", action_cb = git_discard_file_changes},
+  { key = "<leader>D",     action = "git: Discard file changes", action_cb = git_discard_file_changes},
 }
 
 --- global keymap ---
