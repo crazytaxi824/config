@@ -288,18 +288,19 @@ local function close_current_tab()
   return true  -- 已经成功 close tab.
 end
 
+--- `:help bufferline-functions`
+--- require("bufferline").exec(index, function(index_bufinfo, visible_buffers_info))
+---  - index 是指在 bufferline 中 (最上方的文件栏) 从左向右的位置,
+---    也是 visible_buffers_info 中 buffer 的 index 顺序.
+---    如果传入的 index 不存在, 则不执行 callback. eg: exec(0, callback), exec(999, callback)
+---  - callback 中提供: 指定的 index 的 bufinfo, 和 bufferline 中所有 buffer 的 bufinfo.
+--- VVI: filename 在 bufferline 中的显示顺序一定是按照 {visible_buffers_info} 中的排序来的,
+---    但是 ordinal 值则不一定和 index 相同. 它不一定是左向右的位置, 也有可能重复. eg :BufferLineTogglePin.
+
 --- 判断 bufnr 是否为第一个 listed buffer
 local function is_first_bufferline_index(bufnr)
   local is_first_index
 
-  --- require("bufferline").exec(index, function(index_bufinfo, visible_buffers_info))
-  --- VVI: filename 在 bufferline 中的显示顺序一定是按照 {visible_buffers_info} 中的排序来的,
-  --- 但是 ordinal 值则不一定和 index 相同.
-  ---  - index 是指在 bufferline 中 (最上方的文件栏) 从左向右的位置.
-  ---    也是 visible_buffers_info 中 buffer 的 index 顺序.
-  ---  - NOTE: ordinal 并不可靠, 它不一定是左向右的位置, 也有可能重复. eg :BufferLineTogglePin.
-  --- 通过 callback 获取 index_bufinfo, 和所有 visible_buffers 的 bufinfo.
-  --- 如果 index 不存在: eg: -1, 0, 999 ... 则不执行 callback.
   bufferline.exec(1, function(index_bufinfo, visible_buffers_info)
     is_first_index = index_bufinfo.id == bufnr
   end)
@@ -311,6 +312,8 @@ end
 local function is_last_bufferline_index(bufnr)
   local is_last_index
 
+  --- 这里使用 index=1 只是为了保证该函数能运行, 这里主要用到的是 visible_buffers_info,
+  --- 即: 所有 bufferline 中显示的 buffer, list 排列按显示顺序, 而不是 bufnr 顺序.
   bufferline.exec(1, function(index_bufinfo, visible_buffers_info)
     is_last_index = visible_buffers_info[#visible_buffers_info].id == bufnr
   end)
@@ -340,8 +343,8 @@ local function bufferline_del_current_buffer(ignore_tab)
     return
   end
 
-  --- 如果当前 buffer 是最后一个 listed buffer 则跳到前一个 buffer;
-  --- 如果当前 buffer 不是最后一个 listed buffer 则跳到后一个 buffer;
+  --- 如果当前 buffer 是排在最后的 listed buffer 则跳到前一个 buffer;
+  --- 如果当前 buffer 不是排在最后的 listed buffer 则跳到后一个 buffer;
   if is_last_bufferline_index(bufnr_before_jump) then
     bufferline.cycle(-1)  -- 跳转到 prev buffer
   else
