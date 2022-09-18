@@ -55,7 +55,7 @@ local wrap_list = {}
 --- 使用 command 手动切换 wrap 设置.
 vim.api.nvim_create_user_command("WrapToggle", function()
   local bufnr = vim.fn.bufnr()
-  local bufname = vim.fn.bufname(bufnr)
+  local bufname = vim.api.nvim_buf_get_name(bufnr)  -- full path
 
   --- 如果 bufname() ~= '' 则缓存文件绝对路径. buffer 被 :bwipeout 之后再次打开时继承之前的设置.
   --- 如果 bufname() == '' 则缓存 bufnr. 没有名字的 buffer 只能通过 bufnr 来缓存.
@@ -63,7 +63,7 @@ vim.api.nvim_create_user_command("WrapToggle", function()
   if bufname == '' then
     buf = bufnr  -- [No Name] buffer, 缓存 bufnr
   else
-    buf = vim.fn.fnamemodify(bufname, ":p")  -- 缓存文件的绝对路径
+    buf = bufname  -- 缓存文件的绝对路径
   end
 
   if not vim.wo.wrap then

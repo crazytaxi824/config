@@ -111,13 +111,13 @@ M.go_test_single_func = function(prompt)
 
   --- no prompt for testflags
   if not prompt then
-    go_test_single(testfn_name, {mode=mode, flag = 'none'})
+    go_test_single(testfn_name, {mode = mode, flag = 'none'})
     return
   end
 
   --- prompt choose testflags
   if mode == 'run' or mode == 'bench' then
-    local select = {'none', 'cpu', 'mem', 'mutex', 'block', 'trace', 'cover', 'coverprofile'}
+    local select = {'cpu', 'mem', 'mutex', 'block', 'trace', 'cover', 'coverprofile'}
     vim.ui.select(select, {
       prompt = 'choose go test flag:',
       format_item = function(item)
@@ -125,7 +125,7 @@ M.go_test_single_func = function(prompt)
       end
     }, function (choice)
       if choice then
-        go_test_single(testfn_name, {mode=mode, flag = choice})
+        go_test_single(testfn_name, {mode = mode, flag = choice})
       end
     end)
   elseif mode == 'fuzz' then
@@ -137,7 +137,7 @@ M.go_test_single_func = function(prompt)
       end
     }, function (choice)
       if choice then
-        go_test_single(testfn_name, {mode=mode, flag = choice})
+        go_test_single(testfn_name, {mode = mode, flag = choice})
       end
     end)
   else
