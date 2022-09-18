@@ -218,13 +218,8 @@ buf_highlights.hint_selected = buf_highlights.buffer_selected
 
 --- functions for delete current buffer from tabline ----------------------------------------------- {{{
 --- 用于 <leader>d 快捷键和 mouse actions 设置.
---- NOTE: 指定 filetype 不能使用 go_to() 功能, 也不能被 bufferline_del_current_buffer() 关闭.
-local function is_excluded_file()
-  --- `:help 'buftype'`, exclude buftype: nofile, terminal, quickfix, prompt, help ...
-  if vim.bo.buftype ~= '' then
-    return true
-  end
-
+--- 是否可以 go_to() 到别的 buffer.
+local function gotoable()
   --- 自定义: 不允许使用 bufferline.go_to() 的 filetype
   local exclude_filetypes = {
     'help', 'qf',  --- 'quickfix' && 'location-list' 的 filetype 都是 'qf'.
@@ -232,11 +227,20 @@ local function is_excluded_file()
     'toggleterm', 'myterm',
   }
 
-  if vim.tbl_contains(exclude_filetypes, vim.bo.filetype) then
+  --- `:help 'buftype'`, exclude buftype: nofile, terminal, quickfix, prompt, help ...
+  if vim.bo.buftype ~= '' or vim.tbl_contains(exclude_filetypes, vim.bo.filetype) then
+    --- 如果有其他任何 window 中显示的是 listed buffer 则 current buffer 不能 go_to() 到别的 buffer.
+    for _, wininfo in ipairs(vim.fn.getwininfo()) do
+      if vim.fn.buflisted(wininfo.bufnr) == 1 then
+        return false
+      end
+    end
+
+    --- 如果所有 window 都显示的是 unlisted buffer, 则 current buffer 可以 go_to() 别的 buffer.
     return true
   end
 
-  return false
+  return true
 end
 
 --- tab 是一组 win 的集合. `:tabclose` 本质是关闭 tab 中所有的 win. 并不 bdelete buffer.
@@ -322,7 +326,7 @@ local function is_last_bufferline_index(bufnr)
 end
 
 --- 删除当前 buffer.
---- ignore_tab 用于避免 close 最后一个 tab 导致退出 nvim.
+--- ignore_tab 用于避免 close 最后一个 tab 导致报错: "Cannot close last tab page"
 --- 如果 ignore_tab == true, 则不运行 close_current_tab()
 local function bufferline_del_current_buffer(ignore_tab)
   --- 不删除 nvim-tree
@@ -519,20 +523,20 @@ local opt = { noremap = true, silent = true }
 local bufferline_keymaps = {
   --- NOTE: according to bufferline source code, `go_to_buffer()` is deprecate. it calls `go_to()`
   --- https://github.com/akinsho/bufferline.nvim/blob/master/lua/bufferline.lua
-  {'n', '<leader>1', function() if not is_excluded_file() then bufferline.go_to(1, true) end end, opt, 'which_key_ignore'},
-  {'n', '<leader>2', function() if not is_excluded_file() then bufferline.go_to(2, true) end end, opt, 'which_key_ignore'},
-  {'n', '<leader>3', function() if not is_excluded_file() then bufferline.go_to(3, true) end end, opt, 'which_key_ignore'},
-  {'n', '<leader>4', function() if not is_excluded_file() then bufferline.go_to(4, true) end end, opt, 'which_key_ignore'},
-  {'n', '<leader>5', function() if not is_excluded_file() then bufferline.go_to(5, true) end end, opt, 'which_key_ignore'},
-  {'n', '<leader>6', function() if not is_excluded_file() then bufferline.go_to(6, true) end end, opt, 'which_key_ignore'},
-  {'n', '<leader>7', function() if not is_excluded_file() then bufferline.go_to(7, true) end end, opt, 'which_key_ignore'},
-  {'n', '<leader>8', function() if not is_excluded_file() then bufferline.go_to(8, true) end end, opt, 'which_key_ignore'},
-  {'n', '<leader>9', function() if not is_excluded_file() then bufferline.go_to(9, true) end end, opt, 'which_key_ignore'},
+  {'n', '<leader>1', function() if gotoable() then bufferline.go_to(1, true) end end, opt, 'which_key_ignore'},
+  {'n', '<leader>2', function() if gotoable() then bufferline.go_to(2, true) end end, opt, 'which_key_ignore'},
+  {'n', '<leader>3', function() if gotoable() then bufferline.go_to(3, true) end end, opt, 'which_key_ignore'},
+  {'n', '<leader>4', function() if gotoable() then bufferline.go_to(4, true) end end, opt, 'which_key_ignore'},
+  {'n', '<leader>5', function() if gotoable() then bufferline.go_to(5, true) end end, opt, 'which_key_ignore'},
+  {'n', '<leader>6', function() if gotoable() then bufferline.go_to(6, true) end end, opt, 'which_key_ignore'},
+  {'n', '<leader>7', function() if gotoable() then bufferline.go_to(7, true) end end, opt, 'which_key_ignore'},
+  {'n', '<leader>8', function() if gotoable() then bufferline.go_to(8, true) end end, opt, 'which_key_ignore'},
+  {'n', '<leader>9', function() if gotoable() then bufferline.go_to(9, true) end end, opt, 'which_key_ignore'},
 
   --- NOTE: 如果 cursor 所在的 window 中显示的(active) buffer 是 unlisted (即: 不显示在 tabline 上的 buffer),
   --- 不能使用 BufferLineCycleNext/Prev 来进行 buffer 切换, 但是可以使用 bufferline.go_to() 直接跳转.
-  {'n', '<lt>', function() bufferline.cycle(-1) end, opt, 'buf: jump to Prev buffer'},  --- <lt>, less than, 代表 '<'. 也可以使用 '\<'
-  {'n', '>', function() bufferline.cycle(1) end, opt, 'buf: jump to Next buffer'},
+  {'n', '<lt>', function() bufferline.cycle(-1) end, opt, 'buf: go to Prev buffer'},  --- <lt>, less than, 代表 '<'. 也可以使用 '\<'
+  {'n', '>', function() bufferline.cycle(1) end, opt, 'buf: go to Next buffer'},
 
   --- 左右移动 buffer
   {'n', '<leader><Left>', '<cmd>BufferLineMovePrev<CR>', opt, 'buf: Move Buffer Left'},
