@@ -92,7 +92,8 @@ which_key.setup({
   -- Disabled by deafult for Telescope
   disable = {
     buftypes = {},
-    filetypes = { "TelescopePrompt", "NvimTree", "tagbar", "mason", "packer", "null-ls-info", "lspinfo" },
+    --- 这里 filetypes 主要是全屏的 floating window
+    filetypes = { "TelescopePrompt", "mason", "packer", "null-ls-info", "lspinfo" },
   },
 })
 

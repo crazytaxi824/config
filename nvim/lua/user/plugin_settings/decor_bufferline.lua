@@ -216,7 +216,7 @@ buf_highlights.hint_selected = buf_highlights.buffer_selected
 
 -- -- }}}
 
---- functions for delete current buffer from tabline ----------------------------------------------- {{{
+--- functions for delete buffer/tab ---------------------------------------------------------------- {{{
 --- 用于 <leader>d 快捷键和 mouse actions 设置.
 --- 是否可以 go_to() 到别的 buffer.
 local function gotoable()
@@ -229,17 +229,16 @@ local function gotoable()
 
   --- `:help 'buftype'`, exclude buftype: nofile, terminal, quickfix, prompt, help ...
   if vim.bo.buftype ~= '' or vim.tbl_contains(exclude_filetypes, vim.bo.filetype) then
-    --- 如果有其他任何 window 中显示的是 listed buffer 则 current buffer 不能 go_to() 到别的 buffer.
+    --- 如果有其他任何 window 中显示的是 listed buffer 则 current win 不能 go_to() 到别的 buffer.
     for _, wininfo in ipairs(vim.fn.getwininfo()) do
       if vim.fn.buflisted(wininfo.bufnr) == 1 then
         return false
       end
     end
-
-    --- 如果所有 window 都显示的是 unlisted buffer, 则 current buffer 可以 go_to() 别的 buffer.
-    return true
   end
 
+  --- 如果所有 window 都显示的是 unlisted buffer, 则 current win 可以 go_to() 别的 buffer.
+  --- 如果 buftype == '' 或者 filetype 不是 exclude_filetypes, 则 current win 可以 go_to() 别的 buffer.
   return true
 end
 

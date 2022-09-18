@@ -385,7 +385,5 @@ vim.api.nvim_create_autocmd({"BufEnter", "TextChanged", "TextChangedI", "FileCha
 })
 ```
 
-- global exclude.filetyps & exclude.buftypes. plugins: bufferline, nvim-tree, indentline
-
 
 
