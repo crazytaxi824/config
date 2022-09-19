@@ -385,5 +385,7 @@ vim.api.nvim_create_autocmd({"BufEnter", "TextChanged", "TextChangedI", "FileCha
 })
 ```
 
-- chore: plugin_settings
+- neovim v0.8 release date: 30/9/2022
+
+
 
