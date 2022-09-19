@@ -363,9 +363,14 @@ local function bufferline_del_current_buffer(ignore_tab)
       end
     end
 
-    --- 如果所有 window 中的 buffer 都是 unlisted 则跳到最后一个 visible buffer
-    --- NOTE: 这不需要 ':bdelete #' 因为 current buffer 本身就是 unlisted.
-    bufferline.go_to(-1, true)  -- go_to(-1, true) 跳到最后一个 visible buffer
+    --- 如果所有 window 中的 buffer 都是 unlisted 则跳到 buffer #,
+    --- 如果 buffer # 也是 unlisted buffer, 则跳到最后一个 visible buffer.
+    --- NOTE: 这里不再需要 ':bdelete #' 删除 current buffer, 因为 current buffer 本身就是 unlisted.
+    if vim.fn.buflisted(vim.fn.bufnr('#')) == 1 then
+      vim.cmd('buffer #')
+    else
+      bufferline.go_to(-1, true)  -- go_to(-1, true) 跳到最后一个 visible buffer
+    end
     return
   end
 
