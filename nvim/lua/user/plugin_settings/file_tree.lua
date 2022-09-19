@@ -95,53 +95,66 @@ local function git_discard_file_changes(node)
 
   if node.git_status == "MM" then
     --- prompt
-    vim.ui.input({ prompt = "git: Discard file changes " .. node.name .. " ? a[ll]/u[nstaged]/n: "}, function(choice)
+    local prompt = "git: Discard file changes " .. node.name .. " ? a[ll]/u[nstaged]/n: "
+    vim.ui.input({ prompt = prompt }, function(choice)
       vim.cmd("normal! :")  -- clear command line prompt message.
       if choice == 'a' or choice == 'all' then
-        cmd = 'git reset -- "' .. node.absolute_path .. '" && git checkout -- "' .. node.absolute_path .. '"'
+        cmd = 'git reset -- "' .. node.absolute_path .. 
+          '" && git checkout -- "' .. node.absolute_path .. '"'
       elseif choice == 'u' or choice == 'unstaged' then
         cmd = 'git checkout -- "' .. node.absolute_path .. '"'
       end
     end)
   elseif node.git_status == "M " then
-    vim.ui.input({ prompt = "git: Discard file changes " .. node.name .. " ? a[ll]/n: "}, function(choice)
+    local prompt = "git: Discard file changes " .. node.name .. " ? a[ll]/n: "
+    vim.ui.input({ prompt = prompt }, function(choice)
       vim.cmd("normal! :")  -- clear command line prompt message.
       if choice == 'a' or choice == 'all' then
-        cmd = 'git reset -- "' .. node.absolute_path .. '" && git checkout -- "' .. node.absolute_path .. '"'
+        cmd = 'git reset -- "' .. node.absolute_path ..
+          '" && git checkout -- "' .. node.absolute_path .. '"'
       end
     end)
   elseif node.git_status == " M" then
-    vim.ui.input({ prompt = "git: Discard file changes " .. node.name .. " ? a[ll]/n: "}, function(choice)
+    local prompt = "git: Discard file changes " .. node.name .. " ? a[ll]/n: "
+    vim.ui.input({ prompt = prompt }, function(choice)
       vim.cmd("normal! :")  -- clear command line prompt message.
       if choice == 'a' or choice == 'all' then
         cmd = 'git checkout -- "' .. node.absolute_path .. '"'
       end
     end)
   elseif node.git_status == "AM" then
-    vim.ui.input({ prompt = "git: Discard file changes " .. node.name .. " ? a[ll]/u[nstaged]/n: "}, function(choice)
+    local prompt = "git: Discard file changes " .. node.name .. " ? a[ll]/u[nstaged]/n: "
+    vim.ui.input({ prompt = prompt }, function(choice)
       vim.cmd("normal! :")  -- clear command line prompt message.
       if choice == 'a' or choice == 'all' then
-        cmd = 'git reset -- "' .. node.absolute_path .. '" && rm "' .. node.absolute_path .. '"'
+        cmd = 'git reset -- "' .. node.absolute_path ..
+          '" && rm "' .. node.absolute_path .. '"'
       elseif choice == 'u' or choice == 'unstaged' then
         cmd = 'git checkout -- "' .. node.absolute_path .. '"'
       end
     end)
   elseif node.git_status == "??" or node.git_status == " A" then
-    vim.ui.input({ prompt = "git: Discard file changes " .. node.name .. " ? a[ll]/n: "}, function(choice)
+    local prompt = "git: Discard file changes " .. node.name .. " ? a[ll]/n: "
+    vim.ui.input({ prompt = prompt }, function(choice)
       vim.cmd("normal! :")  -- clear command line prompt message.
       if choice == 'a' or choice == 'all' then
         cmd = 'rm "' .. node.absolute_path .. '"'
       end
     end)
   elseif node.git_status == "A " then
-    vim.ui.input({ prompt = "git: Discard file changes " .. node.name .. " ? a[ll]/n: "}, function(choice)
+    local prompt = "git: Discard file changes " .. node.name .. " ? a[ll]/n: "
+    vim.ui.input({ prompt = prompt }, function(choice)
       vim.cmd("normal! :")  -- clear command line prompt message.
       if choice == 'a' or choice == 'all' then
-        cmd = 'git reset -- "' .. node.absolute_path .. '" && rm "' .. node.absolute_path .. '"'
+        cmd = 'git reset -- "' .. node.absolute_path ..
+          '" && rm "' .. node.absolute_path .. '"'
       end
     end)
   else
-    Notify({"git: Cannot Discard Changes on current file", "please use other tools to do complex git operations"}, "INFO")
+    Notify({
+      "git: Cannot Discard Changes on current file",
+      "please use other tools to do complex git operations",
+    }, "INFO")
     return
   end
 
@@ -171,7 +184,8 @@ end
 --- system open file --- {{{
 local function system_open(node)
   --- 根据文件属性使用对应的 application 打开.
-  vim.fn.system('open "' .. node.absolute_path .. '"')  -- NOTE: filepath 需要使用引号 "", 否则有些 filepath 中有空格.
+  --- NOTE: 有些 filepath 中有空格, 需要使用引号 ""
+  vim.fn.system('open "' .. node.absolute_path .. '"')
   if vim.v.shell_error == 0 then
     return
   end
@@ -221,7 +235,9 @@ local nt_buffer_keymaps = {
 }
 
 --- global keymap ---
-vim.keymap.set('n', '<leader>,', ':NvimTreeFindFileToggle<CR>', {noremap=true, silent=true, desc='toggle Nvim-Tree'})
+vim.keymap.set('n', '<leader>,', ':NvimTreeFindFileToggle<CR>', {
+  noremap=true, silent=true, desc='toggle Nvim-Tree'
+})
 
 -- -- }}}
 
@@ -233,7 +249,8 @@ nvim_tree.setup {
   hijack_netrw = true,     -- hijack netrw windows (overriden if |disable_netrw| is `true`)
   hijack_cursor = false,   -- keeps the cursor on the first letter of the filename
   hijack_directories = {   -- hijacks new directory buffers when they are opened (`:e dir`)
-    enable = true,  -- NOTE: 和下面的 auto close the tab/vim when nvim-tree is the last window 一起使用时, 会导致 nvim 退出.
+    enable = true,  -- NOTE: 和下面的 auto close the tab/vim when nvim-tree is the last window 一起使用时,
+                    -- 会导致 nvim 退出.
     auto_open = true,
   },
   hijack_unnamed_buffer_when_opening = false,  -- Opens in place of the unnamed buffer if it's empty.
@@ -278,7 +295,8 @@ nvim_tree.setup {
 
   renderer = {
     highlight_git = true,  -- 开启 git filename 颜色. 需要设置 git.enable = true
-    highlight_opened_files = "all",  -- highlight icon or filename or both. "none"(*) | "icon" | "name" | "all"
+    highlight_opened_files = "all",  -- highlight icon or filename or both.
+                                     -- "none"(*) | "icon" | "name" | "all"
     indent_width = 2, -- 默认 2.
     indent_markers = {
       enable = true,
@@ -286,11 +304,12 @@ nvim_tree.setup {
     },
     icons = {
       webdev_colors = false,  -- 使用 `nvim-web-devicons`, otherwise `NvimTreeFileIcon`.
-      git_placement = "before",  -- 'before' (filename) | 'after' (filename) | 'signcolumn' (vim.signcolumn='yes')
+      git_placement = "before",  -- 'before' (filename) | 'after' | 'signcolumn' (vim.signcolumn='yes')
       symlink_arrow = " ➜ ",  -- old_name ➜ new_name, 这个不是显示在 filename/dir 之前的 icon.
       show = {
         folder = true, -- 显示 folder icon
-        folder_arrow = false,  -- NOTE: 使用 folder icon 代替, folder_arrow icon 无法改变颜色, 也无法设置 empty icon.
+        folder_arrow = false,  -- NOTE: 使用 folder icon 代替, folder_arrow icon 无法改变颜色,
+                               -- 也无法设置 empty icon.
         file = false,  -- 显示 file icon, `nvim-web-devicons` will be used if available.
         git = true,    -- 显示 git icon. 需要设置 git.enable = true
       },
@@ -304,7 +323,8 @@ nvim_tree.setup {
   },
   update_focused_file = {
     enable = false,  -- `:e file` 时, 更新 tree, 展开文件夹直到找到该文件.
-    update_root = false,  -- VVI: Update the root directory of the tree if the file is not under current root directory.
+    update_root = false,  -- VVI: Update the root directory of the tree if
+                          -- the file is not under current root directory.
     ignore_list = {},
   },
   system_open = {
@@ -322,7 +342,8 @@ nvim_tree.setup {
     exclude = {},
   },
   git = {
-    enable = true,  -- VVI: 开启 git filename 和 icon 颜色显示. 需要开启 renderer.highlight_git 和 renderer.icons.show.git
+    enable = true,  -- VVI: 开启 git filename 和 icon 颜色显示.
+                    -- 需要开启 renderer.highlight_git 和 renderer.icons.show.git
     ignore = false,  -- 不显示 .gitignore files
     show_on_dirs = true,  -- 在文件所属的 dir name 前也显示 sign.
     timeout = 400,
@@ -339,7 +360,10 @@ nvim_tree.setup {
       window_picker = {
         enable = true,       -- false: 总在 vsplit 窗口中打开新文件.
         exclude = {          -- 以下类型的窗口不能用于 nvim-tree 打开文件.
-          filetype = { "qf", "help", "diff", "notify", "packer", "NvimTree", "tagbar", "fugitive", "fugitiveblame" },
+          filetype = {
+            "qf", "help", "diff", "notify", "packer", "NvimTree",
+            "tagbar", "fugitive", "fugitiveblame",
+          },
           buftype = { "nofile", "quickfix", "help", "terminal", "prompt" },
         },
       },

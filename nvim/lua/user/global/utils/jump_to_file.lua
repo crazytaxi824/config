@@ -12,9 +12,13 @@ function Highlight_filepath(data_list)
 
       local expand_status_ok, result = pcall(vim.fn.expand, fp[1])
       if expand_status_ok and vim.fn.filereadable(result) == 1 then
+        --- highlight filepath
         --- \@<! - eg: \(foo\)\@<!bar  - any "bar" that's not in "foobar"
         --- \@!  - eg: foo\(bar\)\@!   - any "foo" not followed by "bar"
-        vim.fn.matchadd('Underlined', '\\(\\S\\)\\@<!'..vim.fn.escape(fp[1], '~') .. '\\(:[0-9]\\+\\)\\{0,2}')  -- highlight filepath
+        vim.fn.matchadd(
+          'Underlined',
+          '\\(\\S\\)\\@<!'..vim.fn.escape(fp[1], '~') .. '\\(:[0-9]\\+\\)\\{0,2}'
+        )
       end
     end
   end
@@ -69,16 +73,27 @@ function Jump_to_file(filepath, lnum, col)
 
   if vim.fn.win_gotoid(log_display_win_id) == 1 then
     --- 如果 log_display_win_id 可以跳转则直接跳转.
-    vim.fn.setloclist(log_display_win_id, {loclist_item}, 'r')  -- 给指定 window 设置 loclist, 'r' - replace, `:help setqflist-what`
-    vim.cmd('silent lfirst')  -- jump to loclist first item
-    vim.fn.setloclist(log_display_win_id, {}, 'r')  -- VVI: clear loclist
+    --- 给指定 window 设置 loclist, 'r' - replace, `:help setqflist-what`
+    vim.fn.setloclist(log_display_win_id, {loclist_item}, 'r')
+
+    --- jump to loclist first item
+    vim.cmd('silent lfirst')
+
+    --- VVI: clear loclist
+    vim.fn.setloclist(log_display_win_id, {}, 'r')
   else
     --- 如果 log_display_win_id 不能跳转, 则在 terminal 正上方创建一个新的 window 用于显示 log filepath
     vim.cmd('leftabove split ' .. loclist_item.filename)
     log_display_win_id = vim.fn.win_getid()
-    vim.fn.setloclist(log_display_win_id, {loclist_item}, 'r')  -- 给指定 window 设置 loclist, 'r' - replace, `:help setqflist-what`
-    vim.cmd('silent lfirst')  -- jump to loclist first item
-    vim.fn.setloclist(log_display_win_id, {}, 'r')  -- VVI: clear loclist
+
+    --- 给指定 window 设置 loclist, 'r' - replace, `:help setqflist-what`
+    vim.fn.setloclist(log_display_win_id, {loclist_item}, 'r')
+
+    --- jump to loclist first item
+    vim.cmd('silent lfirst')
+
+    --- VVI: clear loclist
+    vim.fn.setloclist(log_display_win_id, {}, 'r')
   end
 end
 
@@ -120,7 +135,12 @@ vim.api.nvim_create_autocmd('TermOpen', {
   callback = function(params)
     vim.keymap.set('n', '<CR>',
       "<cmd>lua Jump_to_file(Cursor_cWORD_filepath())<CR>",
-      {noremap = true, silent = true, buffer = params.buf, desc = "Jump to file"} -- local to Terminal buffer
+      {
+        noremap = true,
+        silent = true,
+        buffer = params.buf,  -- local to Terminal buffer
+        desc = "Jump to file",
+      }
     )
   end,
 })

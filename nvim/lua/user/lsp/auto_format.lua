@@ -16,8 +16,9 @@ local function lsp_format()
     ---  - resolved_capabilities.document_formatting 值也为 false.
     --- 所以也可以用 if client.resolved_capabilities.document_formatting 判断.
     if client.supports_method('textDocument/formatting') then
-      --vim.lsp.buf.formatting_sync()  -- 如果有多个 Lsp 提供 format 功能, 则会 prompt.
-      vim.lsp.buf.formatting_seq_sync(nil, 3000, {"null-ls"})  -- 最后执行 null-ls format, 其他的 Lsp 也会执行 format.
+      --- 最后执行 null-ls format, NOTE: 其他的 Lsp 也会执行 format.
+      vim.lsp.buf.formatting_seq_sync(nil, 3000, {"null-ls"})
+      --vim.lsp.buf.formatting_sync()  -- NOTE: 如果有多个 Lsp 提供 format 功能, 则会 prompt.
       return
     end
   end

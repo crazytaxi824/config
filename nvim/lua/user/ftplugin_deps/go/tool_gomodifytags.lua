@@ -42,7 +42,8 @@
 local M = {}
 
 --- ADD Tags and Options --------------------------------------------------------------------------- {{{
---- arglist[1] is tag options. could be 'json','json=foo', 'json,xml=bar', 'json=foo,xml=bar', , 'json=foo,json=fuz,xml=bar'
+--- arglist[1] is tag options. could be 'json', 'json=foo',
+---   'json,xml=bar', 'json=foo,xml=bar', 'json=foo,json=fuz,xml=bar'
 --- arglist[2] = <可为空>|snakecase|camelcase|...
 M.go_add_tags_and_opts = function(arglist, go_add_tags_cmd, offset)
   if vim.bo.readonly then
@@ -91,13 +92,13 @@ M.go_add_tags_and_opts = function(arglist, go_add_tags_cmd, offset)
     transform = "snakecase"  -- default case
   elseif arglist[2] == 's' or arglist[2] == 'snake' or arglist[2] == 'snakecase' then  -- foo_bar
     transform = "snakecase"
-  elseif arglist[2] == 'c' or arglist[2] == 'camel' or arglist[2] == 'camelcase' then   -- fooBar
+  elseif arglist[2] == 'c' or arglist[2] == 'camel' or arglist[2] == 'camelcase' then  -- fooBar
     transform = "camelcase"
   elseif arglist[2] == 'p' or arglist[2] == 'pascal' or arglist[2] == 'pascalcase' then  -- FooBar
     transform = "pascalcase"
-  elseif arglist[2] == 'l' or arglist[2] == 'lisp' or arglist[2] == 'lispcase' then    -- foo-bar
+  elseif arglist[2] == 'l' or arglist[2] == 'lisp' or arglist[2] == 'lispcase' then  -- foo-bar
     transform = "lispcase"
-  elseif arglist[2] == 't' or arglist[2] == 'title' or arglist[2] == 'titlecase' then   -- Foo Bar
+  elseif arglist[2] == 't' or arglist[2] == 'title' or arglist[2] == 'titlecase' then  -- Foo Bar
     transform = "titlecase"
   elseif arglist[2] == 'k' or arglist[2] == 'keep' then  -- 和 field name 一样
     transform = "keep"

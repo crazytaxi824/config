@@ -49,10 +49,14 @@
 local M = {}
 
 --- NOTE: 这两个路径必须是绝对路径.
-local pprof_dir = vim.fn.fnamemodify(vim.fn.stdpath('cache')..'/go/pprof/', ':p')  -- mkdir 用到必须是绝对路径.
-local coverage_dir = vim.fn.fnamemodify(vim.fn.getcwd() .. '/coverage/', ':p')  -- '-coverprofile' 用到, 必须是绝对路径.
+--- mkdir 用到必须是绝对路径.
+local pprof_dir = vim.fn.fnamemodify(vim.fn.stdpath('cache')..'/go/pprof/', ':p')
 
-local pprof_flags = ' -o ' .. pprof_dir .. 'pkg.test'  -- [pkg].test 可执行文件生成位置, 这个是 `$ go help build` 的 flag.
+--- '-coverprofile' 用到, 必须是绝对路径.
+local coverage_dir = vim.fn.fnamemodify(vim.fn.getcwd() .. '/coverage/', ':p')
+
+local pprof_flags = ' -o ' .. pprof_dir .. 'pkg.test'  -- [pkg].test 可执行文件生成位置,
+                                                       -- 这个是 `$ go help build` 的 flag.
   .. ' -outputdir ' .. pprof_dir  -- 以下所有 profile 文件生成的路径都在该路径下, 除非指定绝对路径.
                                   -- eg: '-cpuprofile a/b/c.out'  文件会生成在 pprof_dir/a/b/c.out
                                   -- eg: '-cpuprofile /a/b/c.out' 文件会生成在 /a/b/c.out
@@ -63,7 +67,8 @@ local pprof_flags = ' -o ' .. pprof_dir .. 'pkg.test'  -- [pkg].test 可执行�
   .. ' -trace trace.out'
   --- 使用 -coverprofile 生成的 cover.out 文件必须在 workspace 中, 否则无法进行分析.
   --- 这里的 cover.out 不会生成在 -outputdir 指定的文件夹内, 因为 coverage_dir 是绝对路径.
-  -- .. ' -coverprofile ' .. coverage_dir .. 'cover.out'  -- NOTE: 单独使用 -coverprofile, 不在这里统一生成报告.
+  -- .. ' -coverprofile ' .. coverage_dir .. 'cover.out'  -- NOTE: 单独使用 -coverprofile,
+                                                          -- 不在这里统一生成报告.
 
 local flag_desc_cmd = {
   none = { desc = '[No Extra Flag]', cmd = {prefix='', flag='', suffix=''} },
@@ -137,7 +142,9 @@ local flag_desc_cmd = {
   fuzz60s = { desc = 'fuzztime 60s', cmd = {prefix='', flag=' -fuzztime 60s', suffix=''} },
   fuzz5m = { desc = 'fuzztime 5m', cmd = {prefix='', flag=' -fuzztime 5m', suffix=''} },
   fuzz10m = { desc = 'fuzztime 10m', cmd = {prefix='', flag=' -fuzztime 10m', suffix=''} },
-  fuzz_input = { desc = 'Input fuzztime: 1h2m30s (duration) | 1000x (times)', cmd = {} },  -- NOTE: 这里的 cmd 内容需要根据 input 来设置.
+
+  --- NOTE: 这里的 cmd 内容需要根据 input 来设置.
+  fuzz_input = { desc = 'Input fuzztime: 1h2m30s (duration) | 1000x (times)', cmd = {} },
 }
 
 --- 返回 description

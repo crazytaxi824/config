@@ -4,9 +4,9 @@ return {
   --env = { PRETTIERD_DEFAULT_CONFIG = vim.fn.expand("~/xxx/.prettierrc.json") }  -- 环境变量
 
   --- 常用 args:
-  ---   --no-editorconfig    不使用 .editorconfig 配置. NOTE: prettier 默认支持 .editorconfig 文件.
-  ---   --config <path>      Path to a Prettier configuration file (.prettierrc, package.json, prettier.config.js).
-  ---   --no-config          Do not look for a configuration file.
+  --  --no-editorconfig 不使用 .editorconfig 配置. NOTE: prettier 默认支持 .editorconfig 文件.
+  --  --config <path>   Path to a Prettier configuration file (.prettierrc, package.json, prettier.config.js).
+  --  --no-config       Do not look for a configuration file.
   extra_args = {
     "--single-quote",      -- Use single quotes instead of double quotes. 默认 false.
     "--jsx-single-quote",  -- Use single quotes in JSX. 默认 false.

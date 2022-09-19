@@ -32,10 +32,12 @@ local function go_test_pkg(opt)
   --- NOTE: 不能同时运行多个 fuzz test. Error: will not fuzz, -fuzz matches more than one fuzz test.
   if opt.mode == 'run' then
     --- go test -v -timeout 30s -run "^Test.*" ImportPath
-    cmd = cmd .. ' go test -v' .. flag_cmd.flag .. ' -timeout 30s -run "^Test.*" ' .. import_path
+    cmd = cmd .. ' go test -v' .. flag_cmd.flag
+      .. ' -timeout 30s -run "^Test.*" ' .. import_path
   elseif opt.mode == 'bench' then
     --- go test -v -timeout 30s -run ^$ -benchmem -bench "^Benchmark.*" ImportPath
-    cmd = cmd .. ' go test -v' .. flag_cmd.flag .. ' -timeout 30s -run ^$ -benchmem -bench "^Benchmark.*" ' .. import_path
+    cmd = cmd .. ' go test -v' .. flag_cmd.flag
+      .. ' -timeout 30s -run ^$ -benchmem -bench "^Benchmark.*" ' .. import_path
   else  -- error
     Notify("go test package {opt.mode} should be: 'run' | 'bench'", "DEBUG")
     return
@@ -70,9 +72,11 @@ local function go_test_proj(opt)
 
   --- NOTE: cannot use -fuzz flag with multiple packages.
   if opt.mode == 'run' then
-    cmd = flag_cmd.prefix .. ' go test -v' .. flag_cmd.flag .. ' -timeout 3m ./...'
+    cmd = flag_cmd.prefix .. ' go test -v' .. flag_cmd.flag
+      .. ' -timeout 3m ./...'
   elseif opt.mode == 'bench' then
-    cmd = flag_cmd.prefix .. ' go test -v' .. flag_cmd.flag .. ' -timeout 5m -run ^$ -benchmem -bench "^Benchmark.*" ./...'
+    cmd = flag_cmd.prefix .. ' go test -v' .. flag_cmd.flag
+      .. ' -timeout 5m -run ^$ -benchmem -bench "^Benchmark.*" ./...'
   else  -- error
     Notify("go test multiple packages {opt.mode} should be: 'run' | 'bench'", "DEBUG")
     return

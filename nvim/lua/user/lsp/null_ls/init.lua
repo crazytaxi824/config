@@ -9,15 +9,31 @@ local proj_local_settings = require("user.lsp._load_proj_settings")
 --- 在 null_ls.setup() 的时候, 如果命令行工具不存在不会报错;
 --- 在使用的时候 (eg:Format) 如果命令行工具不存在才会报错.
 local null_tools = {
-  {cmd="goimports", install="go install golang.org/x/tools/cmd/goimports@latest", mason="goimports"},
-  {cmd="golangci-lint", install="go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest", mason="golangci-lint"},
-  {cmd="buf", install="go install github.com/bufbuild/buf/cmd/buf@latest", mason="buf"},  -- protobuf formatter & linter
+  {
+    cmd="goimports",
+    install="go install golang.org/x/tools/cmd/goimports@latest",
+    mason="goimports",
+  },
+  {
+    cmd="golangci-lint",
+    install="go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest",
+    mason="golangci-lint",
+  },
+  {
+    cmd="buf",  -- protobuf formatter & linter
+    install="go install github.com/bufbuild/buf/cmd/buf@latest",
+    mason="buf"
+  },
+
+  {
+    cmd="mypy",  -- 还有个 mypy-extensions 是 mypy 插件, experimental extensions
+    install="pip3 install mypy",
+    mason="mypy"
+  },
 
   {cmd="prettier", install=" brew info prettier", mason="prettier"},
   {cmd="stylua", install="brew info stylua", mason="stylua"},
   {cmd="shfmt", install="brew info shfmt", mason="shfmt"},
-
-  {cmd="mypy", install="pip3 install mypy", mason="mypy"},  -- 还有个 mypy-extensions 是 mypy 插件, experimental extensions
   {cmd="flake8", install="pip3 install flake8", mason="flake8"},
   {cmd="autopep8", install="pip3 install autopep8", mason="autopep8"},
 
@@ -190,8 +206,8 @@ null_ls.setup({
   --- VVI: 设置 linter / formatter / code actions
   sources = combine_lists(linter_settings, formatter_settings, code_action_settings),
 
-  --- VVI: project root, 影响 linter 执行时的 pwd. 这里的 root_dir 是一个全局设置, 对 null-ls 中的所有 linter 有效.
-  --- root_dir 需要传入一个回调函数 func(params):string.
+  --- VVI: project root, 影响 linter 执行时的 pwd. 这里的 root_dir 是一个全局设置,
+  --- 对 null-ls 中的所有 linter 有效. root_dir 需要传入一个回调函数 func(params):string.
   --- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/MAIN.md#generators
   --- 默认值: root_dir = require("null-ls.utils").root_pattern(".null-ls-root", "Makefile", ".git")
   --- 如果 utils.root_pattern() 返回 nil, 则 root_dir 会被设置成当前路径 vim.fn.getcwd().
@@ -220,11 +236,13 @@ null_ls.setup({
   },
 
   update_in_insert = false,  -- 节省资源, 一边输入一边检查
-  debounce = 500,            -- NOTE: 这里相当于是 null-ls 的 "flags = {debounce_text_changes = xxx}" 设置. 默认 250.
-                             -- 停止输入文字的时间超过该数值, 则向 null-ls 发送请求.
-                             -- 如果 "update_in_insert = false", 则该设置应该不生效.
-  default_timeout = 5000,    -- lint 超时时间
-  diagnostics_format = "#{m} [null-ls]",  -- 错误信息显示格式, #{m} - message, #{s} - source, #{c} - err_code
+  debounce = 500,  -- 默认 250.
+                   -- NOTE: 这里相当于是 null-ls 的 "flags = {debounce_text_changes = xxx}" 设置.
+                   -- 停止输入文字的时间超过该数值, 则向 null-ls 发送请求.
+                   -- 如果 "update_in_insert = false", 则该设置应该不生效.
+  default_timeout = 5000,  -- lint 超时时间
+  diagnostics_format = "#{m} [null-ls]",  -- 错误信息显示格式,
+                                          -- #{m} - message, #{s} - source, #{c} - err_code
 
   --- NOTE: 以下 callback 函数中都会传入 on_init = function(client, init_result) 两个参数.
   --- null-ls 退出的时候提醒.

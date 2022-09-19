@@ -6,11 +6,15 @@ vim.api.nvim_create_autocmd("FileType", {
   callback = function(params)
     --- set command :Debug
     --vim.cmd([[command -buffer -bar Debug DapContinue]])
-    vim.api.nvim_buf_create_user_command(params.buf, 'Debug', 'DapContinue', {bang=true, bar=true})
+    vim.api.nvim_buf_create_user_command(params.buf, 'Debug', 'DapContinue', {
+      bang=true, bar=true
+    })
 
     --- set <F9> Toggle Breakpoint
     --vim.cmd([[ nnoremap <buffer> <F9> <cmd>DapToggleBreakpoint<CR>]])
-    vim.keymap.set('n', '<F9>', '<cmd>DapToggleBreakpoint<CR>', {noremap=true, buffer=params.buf, desc="debug: Toggle Breakpoint" })
+    vim.keymap.set('n', '<F9>', '<cmd>DapToggleBreakpoint<CR>', {
+      noremap=true, buffer=params.buf, desc="debug: Toggle Breakpoint"
+    })
   end,
 })
 

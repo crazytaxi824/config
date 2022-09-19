@@ -10,8 +10,10 @@
 --- 如果结果不同则清除之前的 clear_references() highlight, 重新 document_highlight()
 ---
 --- builtin vs custom document_highlight() 区别:
---- builtin 的 vim.lsp.buf.document_highlight() 方法中 handler 主要是对 lsp 返回的 result 进行 highlight;
---- custom 的 document highlight 方法中 handler 对 result 进行了有条件的 highlight_references() 和 clear_references()
+---  - builtin 的 vim.lsp.buf.document_highlight() 方法中 handler 主要是对
+---    lsp 返回的 result 进行 highlight;
+---  - custom 的 document highlight 方法中 handler 对 result 进行了有条件的
+---    highlight_references() 和 clear_references()
 
 --- 官方设置方法, `:help vim.lsp.buf.document_highlight()` ------------------------------------ {{{
 ---   NOTE: Usage of |vim.lsp.buf.document_highlight()| requires the

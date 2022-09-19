@@ -69,13 +69,16 @@ local function go_test_single(testfn_name, opt)
   local cmd = 'cd ' .. dir .. ' &&' .. flag_cmd.prefix
   if opt.mode == 'run' then
     --- go test -v -timeout 10s -run TestXxx ImportPath
-    cmd = cmd .. ' go test -v' .. flag_cmd.flag .. ' -timeout 10s -run ' .. testfn_name_regexp .. import_path
+    cmd = cmd .. ' go test -v' .. flag_cmd.flag
+      .. ' -timeout 10s -run ' .. testfn_name_regexp .. import_path
   elseif opt.mode == 'bench' then
     --- go test -v -timeout 10s -run ^$ -benchmem -bench BenchmarkXxx ImportPath
-    cmd = cmd .. ' go test -v' .. flag_cmd.flag .. ' -timeout 10s -run ^$ -benchmem -bench ' .. testfn_name_regexp .. import_path
+    cmd = cmd .. ' go test -v' .. flag_cmd.flag
+      .. ' -timeout 10s -run ^$ -benchmem -bench ' .. testfn_name_regexp .. import_path
   elseif opt.mode == 'fuzz' then
     --- go test -v -run ^$ -fuzztime 30s -fuzz FuzzXxx ImportPath
-    cmd = cmd .. ' go test -v -fuzztime 15s' .. flag_cmd.flag .. ' -run ^$ -fuzz ' .. testfn_name_regexp .. import_path
+    cmd = cmd .. ' go test -v -fuzztime 15s' .. flag_cmd.flag
+      .. ' -run ^$ -fuzz ' .. testfn_name_regexp .. import_path
   else
     Notify("go test single function {opt.mode} should be: 'run' | 'bench' | 'fuzz'", "DEBUG")
     return
