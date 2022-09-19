@@ -27,7 +27,7 @@ M.textDocument_keymaps = function(bufnr)
 
     {"n", "<F12>", "<cmd>lua vim.lsp.buf.definition()<CR>", opts, "LSP: Definition"},
     {"n", "<F24>", "<cmd>lua vim.lsp.buf.references()<CR>", opts, "LSP: References"},  -- <S-F12>
-    {"n", "<F36>", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts, "LSP: Interface Implementation"},  -- <C-F12>
+    {"n", "<F36>", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts, "LSP: Implementation (Interface)"},  -- <C-F12>
 
     --- HACK: 手动触发 WinScrolled event 来触发 close hover window.
     {"n", "<Esc>", '<Esc><cmd>doautocmd WinScrolled<CR>', opts, 'which_key_ignore'},
@@ -44,14 +44,14 @@ M.diagnostic_keymaps = function(bufnr)
   local opts = { noremap=true, silent=true, buffer=bufnr }
   local diag_keymaps = {
     --- jump to diagnostics next error.
-    {"n", "<F8>", '<cmd>lua vim.diagnostic.goto_next()<CR>', opts, "diag: goto Next Error"},
-    {"n", "<F20>", '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts, "diag: goto Prev Error"},  -- <S-F8>
+    {"n", "<F8>", '<cmd>lua vim.diagnostic.goto_next()<CR>', opts, "diagnostic: goto Next Error"},
+    {"n", "<F20>", '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts, "diagnostic: goto Prev Error"},  -- <S-F8>
 
     --- 将 diagnostics error 放入 quickfix list.
     --- 也可以使用 vim.diagnostic.setqflist({open = false}) 禁止打开 quickfix window
-    {"n", "<leader>q", "<cmd>lua vim.diagnostic.setqflist()<CR>", opts, 'diag: put errors into quickfix'},
+    {"n", "<leader>q", "<cmd>lua vim.diagnostic.setqflist()<CR>", opts, 'diagnostic: put errors into quickfix'},
 
-    --- code action
+    --- code action, for lspconfig & null-ls.
     {"n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts, 'LSP: Code Action'},
   }
 

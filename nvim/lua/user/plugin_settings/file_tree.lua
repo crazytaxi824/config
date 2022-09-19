@@ -82,7 +82,8 @@ local function git_discard_file_changes(node)
   ---         'AM': staged new file + unstaged part
   ---               discard unstaged: git checkout -- 'file'
   ---               discard all: git rest -- 'file' && rm 'file'
-  --- NOTE: 无法显示 Deleted file, 所也无法显示 Rename. 因为 Rename 需要 staged new file & staged deleted file
+  --- NOTE: Rename: 是在 staged new file & staged deleted file 后才会被认为是 Rename file.
+  ---       Delete file && Rename file 必须在下次进入 nvim 时才能看到.
   -- -- }}}
 
   if node.type ~= 'file' then

@@ -17,15 +17,25 @@ end
 local config = {
   --- NOTE: signs & underline & virtual_text 默认 true, 也可以使用 table.
   signs = true,  -- 显示 sign DiagnosticSignError/Warn/Info/Hint.
-                 -- {severity, priority}, priority 默认为 10.
+                 -- {severity, priority}
+                 --  severity: Only show signs for diagnostics matching the given severity,
+                 --  priority: DiagnosticSignError/Warn/Info/Hint 的 priority (all signs use the same priority), 默认值 10.
+                 --  NOTE: 除非 severity_sort = true, 则:
+                 --    - DiagnosticSignHint  priority=priority
+                 --    - DiagnosticSignInfo  priority=priority + 1
+                 --    - DiagnosticSignWarn  priority=priority + 2
+                 --    - DiagnosticSignError priority=priority + 3
+
+  severity_sort = true,  -- DiagnosticSignError > Warn > Info > Hint 优先级 (priority) 设置.
+
   underline = true,  -- 给错误的源代码使用 hi DiagnosticUnderlineError/Warn/Info/Hint
                      -- {severity}
+
   virtual_text = false,  -- 使用 virtual_text 显示 diagnostic_message.
                          -- {severity, source, spacing, prefix, format}
                          -- {source = true}, 使用 virtual_text 显示 diagnostic_message 时带上 linter 名字.
 
-  update_in_insert = false, -- 输入过程中 diagnostic. true - 体验更好 | false - 节省资源
-  severity_sort = true,     -- 按照优先级显示 Error > Warn > Info > Hint
+  update_in_insert = false,  -- 输入过程中 diagnostic. true - 体验更好 | false - 节省资源
 
   --- NOTE: `:help vim.diagnostic.config()` 中说明 float 设置使用的 `:help vim.diagnostic.open_float()`
   --- 而 vim.diagnostic.open_float() 使用的是 `:help vim.lsp.util.open_floating_preview()` + 一些属性.
