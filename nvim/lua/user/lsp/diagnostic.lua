@@ -19,7 +19,8 @@ local config = {
   signs = true,  -- 显示 sign DiagnosticSignError/Warn/Info/Hint.
                  -- {severity, priority}
                  --  severity: Only show signs for diagnostics matching the given severity,
-                 --  priority: DiagnosticSignError/Warn/Info/Hint 的 priority (all signs use the same priority), 默认值 10.
+                 --  priority: DiagnosticSignError/Warn/Info/Hint 的 priority (all signs use the same priority),
+                 --  默认值 10.
                  --  NOTE: 除非 severity_sort = true, 则:
                  --    - DiagnosticSignHint  priority=priority
                  --    - DiagnosticSignInfo  priority=priority + 1

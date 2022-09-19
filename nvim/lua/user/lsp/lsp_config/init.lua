@@ -24,7 +24,10 @@ local lsp_servers_map = {
   tsserver = {
     cmd = "typescript-language-server",
     mason = "typescript-language-server",
-    filetypes = {'javascript', 'javascriptreact', 'javascript.jsx', 'typescript', 'typescriptreact', 'typescript.tsx'}
+    filetypes = {
+      'javascript', 'javascriptreact', 'javascript.jsx',
+      'typescript', 'typescriptreact', 'typescript.tsx',
+    }
   },
   bashls = {
     cmd = "bash-language-server",
@@ -71,7 +74,8 @@ for lsp_svr, _ in pairs(lsp_servers_map) do
   --- 加载 lsp 配置文件, "~/.config/nvim/lua/user/lsp/lsp_config/langs/..."
   --- 如果文件存在, 则加载自定义设置, 如果没有自定义设置则加载默认设置.
   --- NOTE: 单独 lsp 设置: https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
-  if vim.fn.filereadable(vim.fn.stdpath('config') .. '/lua/user/lsp/lsp_config/langs/' .. lsp_svr .. '.lua') == 1 then
+  local lsp_setting = vim.fn.stdpath('config') .. '/lua/user/lsp/lsp_config/langs/' .. lsp_svr .. '.lua'
+  if vim.fn.filereadable(lsp_setting) == 1 then
     --- 使用 pcall() 是为了确保 xxx.lua 文件执行没有问题.
     local lsp_custom_status_ok, lsp_custom_opts = pcall(require, "user.lsp.lsp_config.langs." .. lsp_svr)
     if lsp_custom_status_ok then

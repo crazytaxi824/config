@@ -2,7 +2,8 @@
 --- 主要函数是 keep_extend('local_setting_name', {overwrite_settings_tbl})
 --- VVI: dofile() vs require():
 --    dofile()  - loads and executes a file every time being called.
---    require() - is more complicated; it keeps a table of modules that have already been loaded and their return results,
+--    require() - is more complicated; it keeps a table of modules
+--                that have already been loaded and their return results,
 --                to ensure that the same code isn't loaded twice.
 
 --- 全局变量
@@ -21,7 +22,8 @@ M._lazyload = function()
     -- print('load project local settings')
   end
 
-  --- 第一次读取文件, NOTE: 使用 dofile 方法执行指定 lua 文件. 如果文件不存在, 或执行错误(语法错误), 则忽略.
+  --- 第一次读取文件, NOTE: 使用 dofile 方法执行指定 lua 文件.
+  --- 如果文件不存在, 或执行错误(语法错误), 则忽略.
   local ok, proj_settings = pcall(dofile, '.nvim/settings.lua')
   if ok and proj_settings then
     --- '.nvim/settings.lua' 读取成功, 同时返回值不是 nil 的情况下赋值给 _content

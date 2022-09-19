@@ -1,14 +1,19 @@
 --- NOTE: 这里 node_row 和 node_char 都是从 0 开始计算.
 --- node_char 是指行内第几个字符, \t 算一个字符.
 local function calculate_offset(lsp_req_pos_line, lsp_req_pos_char)
-  local cursor_pos = vim.fn.getpos('.')  -- 光标位置, 返回 [bufnum, lnum, col, off]. lnum 和 col 都是从 1 开始计算.
+  --- 光标位置, 返回 [bufnum, lnum, col, off]. lnum 和 col 都是从 1 开始计算.
+  local cursor_pos = vim.fn.getpos('.')
 
   --- VVI: offset 中 \t 占4个字符位置, 而在 getpos() 和 node:start() 中只占1个字符.
   --- strdisplaywidth() 会计算实际显示宽度, \t 会被计算在显示宽度之内.
   --- node 行 virtual column 位置.
-  local node_display_width = vim.fn.strdisplaywidth(string.sub(vim.fn.getline(lsp_req_pos_line+1), 0, lsp_req_pos_char))
+  local node_display_width = vim.fn.strdisplaywidth(
+    string.sub(vim.fn.getline(lsp_req_pos_line+1), 0, lsp_req_pos_char)
+  )
   --- cursor 行 virtual column 位置.
-  local cursor_display_width = vim.fn.strdisplaywidth(string.sub(vim.fn.getline(cursor_pos[2]), 0, cursor_pos[3]-1))
+  local cursor_display_width = vim.fn.strdisplaywidth(
+    string.sub(vim.fn.getline(cursor_pos[2]), 0, cursor_pos[3]-1)
+  )
 
   --- 计算 open_floating_preview() 横向/纵向偏移量
   local offset_x = node_display_width - cursor_display_width
@@ -50,8 +55,8 @@ local function find_fn_call_before_cursor()
     return
   end
 
-  -- local pos = vim.fn.getpos('.')  -- 光标位置, 返回 [bufnum, lnum, col, off]. lnum 和 col 都是从 1 开始计算.
-  local node = ts_utils.get_node_at_cursor()  -- 获取 node at cursor.
+  --- 获取 node at cursor.
+  local node = ts_utils.get_node_at_cursor()
 
   --- 向上(parent)寻找 'argument_list' / 'arguments' node.
   --- eg: fn("bar") 中 `("bar")` 属于 arguments, 包括括号.
@@ -69,7 +74,8 @@ local function find_fn_call_before_cursor()
       end
 
       --- 如果前面不是 type_arguments 则返回本身 node 的前一个字符位置.
-      local row, col, _ = node:start()  -- argument_list start position, 即 '(' 的位置. row, col 都是从 0 开始计算位置.
+      local row, col, _ = node:start()  -- argument_list start position,
+                                        -- 即 '(' 的位置. row, col 都是从 0 开始计算位置.
       return calculate_offset(row, col-1)
     end
 
@@ -78,7 +84,8 @@ local function find_fn_call_before_cursor()
 end
 
 --- VVI: 自定义 lsp request ------------------------------------------------------------------------
---- 主要函数: vim.lsp.buf_request(0, method, params, handlerFn), 向 LSP server 发送请求, 通过自定义 handler 处理结果.
+--- 主要函数: vim.lsp.buf_request(0, method, params, handlerFn), 向 LSP server 发送请求,
+--- 通过自定义 handler 处理结果.
 
 local M = {}
 

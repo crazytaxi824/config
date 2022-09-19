@@ -33,11 +33,22 @@ return {
 
   ---  可以通过设置 setup() 中的 debug = true, 打开 `:NullLsLog` 查看命令行默认参数.
   args = function(params)
-    --- VVI: 这里必须要使用 $DIRNAME.
-    ---  如果使用 $FILENAME 意思是 lint 单个文件. 别的文件中定义的 var 无法被 golangci 找到.
-    ---  如果缺省设置, 即不设置 $FILENAME 也不设置 $DIRNAME, 则每次 golangci 都会 lint 整个 project.
-    ---  --path-prefix  Path prefix to add to output. VVI: 必须要, 否则找不到文件. 默认是 pwd, 需要改为 cwd 执行时的 path.
-    local golangci_args = { "run", "--fix=false", "--fast", "--out-format=json", "$DIRNAME", "--path-prefix", pwd_root(params), "--issues-exit-code=0" }
+    local golangci_args = {
+      "run", "--fix=false", "--fast", "--out-format=json",
+
+      -- VVI: 这里必须要使用 $DIRNAME.
+      -- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/HELPERS.md#args
+      -- 如果使用 $FILENAME 意思是 lint 单个文件. 其他 package 中定义的 var 无法被 golangci 找到.
+      -- 如果缺省设置, 即不设置 $FILENAME 也不设置 $DIRNAME, 则每次 golangci 都会 lint 整个 project.
+      "$DIRNAME",
+
+      -- Path prefix to add to output.
+      -- VVI: 必须要, 否则找不到文件. 默认是 pwd,
+      -- 需要改为 cwd 执行时的 path.
+      "--path-prefix", pwd_root(params),  
+
+      "--issues-exit-code=0",
+    }
 
     --- DEBUG: 用
     if __Debug_Neovim.null_ls then
@@ -49,7 +60,8 @@ return {
 
   --- golangci-lint 配置文件位置自动查找 --- {{{
   --- golangci-lint 会自动寻找 '.golangci.yml', '.golangci.yaml', '.golangci.toml', '.golangci.json'.
-  --- GolangCI-Lint also searches for config files in all directories from the directory of the first analyzed path up to the root.
+  --- GolangCI-Lint also searches for config files in all directories from the directory of
+  --- the first analyzed path up to the root.
   --- https://golangci-lint.run/usage/configuration/#linters-configuration
   -- -- }}}
   --extra_args = { '--config', ".golangci.yml"},  -- NOTE: 相对上面 cwd 的路径, 也可以使用绝对地址.
