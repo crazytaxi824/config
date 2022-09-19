@@ -20,7 +20,8 @@ git_signs.setup({
     --- NOTE: 在显示 change 的行同时需要显示 delete/topdelete 的情况下, 即需要在同一行的 signcolumn 中显示两个状态.
     changedelete = {hl = 'GitSignsChange', text = '╋━', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
   },
-  sign_priority = 10,  -- 默认是 6, vim.diagnostic sign priority 默认是 10
+  sign_priority = 10,  -- 默认是 6, vim.diagnostic DiagnosticSignHint priority 默认是 10.
+                       -- 这里设置为 10 会覆盖 DiagnosticSignHint(10), 但是 < DiagnosticSignInfo(11).
   update_debounce = 300,  -- 更新频率, 默认 100
   attach_to_untracked = true,  -- 新建文件是否 attach gitsigns
 
