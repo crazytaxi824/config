@@ -534,19 +534,19 @@ local bufferline_keymaps = {
 
   --- NOTE: 如果 cursor 所在的 window 中显示的(active) buffer 是 unlisted (即: 不显示在 tabline 上的 buffer),
   --- 不能使用 BufferLineCycleNext/Prev 来进行 buffer 切换, 但是可以使用 bufferline.go_to() 直接跳转.
-  {'n', '<lt>', function() bufferline.cycle(-1) end, opt, 'buf: go to Prev buffer'},  --- <lt>, less than, 代表 '<'. 也可以使用 '\<'
-  {'n', '>', function() bufferline.cycle(1) end, opt, 'buf: go to Next buffer'},
+  {'n', '<lt>', function() bufferline.cycle(-1) end, opt, 'buffer: go to Prev buffer'},  --- <lt>, less than, 代表 '<'. 也可以使用 '\<'
+  {'n', '>', function() bufferline.cycle(1) end, opt, 'buffer: go to Next buffer'},
 
   --- 左右移动 buffer
-  {'n', '<leader><Left>', '<cmd>BufferLineMovePrev<CR>', opt, 'buf: Move Buffer Left'},
-  {'n', '<leader><Right>', '<cmd>BufferLineMoveNext<CR>', opt, 'buf: Move Buffer Right'},
+  {'n', '<leader><Left>', '<cmd>BufferLineMovePrev<CR>', opt, 'buffer: Move Buffer Left'},
+  {'n', '<leader><Right>', '<cmd>BufferLineMoveNext<CR>', opt, 'buffer: Move Buffer Right'},
 
   --- 关闭 buffer
   --- bufnr("#") > 0 表示 '#' (previous buffer) 存在, 如果不存在则 bufnr('#') = -1.
   --- 如果 # 存在, 但处于 unlisted 状态, 则 bdelete # 报错. 因为 `:bdelete` 本质就是 unlist buffer.
-  {'n', '<leader>d', bufferline_del_current_buffer, opt, 'buf: Close Current Buffer/Tab'},
-  {'n', '<leader>D<Right>', '<cmd>BufferLineCloseRight<CR>', opt, 'buf: Close Right Side Buffers'},
-  {'n', '<leader>D<Left>', '<cmd>BufferLineCloseLeft<CR>', opt, 'buf: Close Left Side Buffers'},
+  {'n', '<leader>d', bufferline_del_current_buffer, opt, 'buffer: Close Current Buffer/Tab'},
+  {'n', '<leader>D<Right>', '<cmd>BufferLineCloseRight<CR>', opt, 'buffer: Close Right Side Buffers'},
+  {'n', '<leader>D<Left>', '<cmd>BufferLineCloseLeft<CR>', opt, 'buffer: Close Left Side Buffers'},
 }
 
 Keymap_set_and_register(bufferline_keymaps)
