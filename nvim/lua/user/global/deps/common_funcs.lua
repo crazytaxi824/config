@@ -8,7 +8,8 @@ end
 
 --- escape RegExp charactor ------------------------------------------------------------------------
 --- escape 传入的整个 string 用于 RegExp.
---- '%%' 代表 '%' 是 lua string.gsub(), string.match(), string.find(), string.gmatch() 中的 pattern safe substitute.
+--- '%%' 代表 '%' 是 string.gsub(), string.match(), string.find(),
+---                  string.gmatch() 中的 pattern safe substitute.
 --- https://fhug.org.uk/kb/kb-article/understanding-lua-patterns/
 --- % . [ ] ^ $ ( ) * + - ? 有特殊含义, 需要使用 '%' escape. NOTE: 这里不包括 \ { }
 ---

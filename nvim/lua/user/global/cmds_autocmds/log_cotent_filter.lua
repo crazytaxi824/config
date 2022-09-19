@@ -69,7 +69,10 @@ vim.api.nvim_create_autocmd("VimLeave", {
   callback = function()
     --- DEBUG: 退出 vim 时打印.
     --local time_now = vim.fn.strftime('%Y-%m-%d %H:%M:%S')
-    --vim.fn.writefile({'[' .. time_now .. '] ' .. vim.fn.getcwd()}, vim.fn.stdpath('cache') .. '/log', 'a')
+    --vim.fn.writefile(
+    --  {'[' .. time_now .. '] ' .. vim.fn.getcwd()},
+    --  vim.fn.stdpath('cache') .. '/log', 'a'
+    --)
 
     local lsplog = vim.fn.fnamemodify(vim.fn.stdpath('cache') .. '/lsp.log', ':p')
     if vim.fn.filereadable(lsplog) then
