@@ -27,12 +27,15 @@ which_key.setup({
       enabled = false,  -- z= select spelling suggestions, NOTE: 目前使用的 telescope
       suggestions = 36, -- how many suggestions should be shown in the list?
     },
-    --- the presets plugin, adds help for a bunch of default keybindings in Neovim, No actual key bindings are created.
-    --- presets 是 which-key 预设好的 keymap 绑定. 虽然和系统快捷键功能一样, 但是进行了二次绑定, 所以会覆盖 keymaps.lua 中的设置.
+    --- the presets plugin, adds help for a bunch of default keybindings in Neovim,
+    --- No actual key bindings are created.
+    --- presets 是 which-key 预设好的 keymap. 虽然和系统快捷键功能一样,
+    --- 但是进行了二次绑定, 所以会覆盖 keymaps.lua 中的设置.
     presets = {
       --- https://github.com/folke/which-key.nvim/blob/main/lua/which-key/plugins/presets/init.lua
       ---  BUG: operators 和 text_objects 中都有 'a', 'i' 设置, 重复显示.
-      operators = false,  -- 'c', 'd', 'y', 'v' ... 例如: 'ciw', 'caw', 'diw' ... NOTE: 设为 true 会影响 <, > buffer 跳转.
+      operators = false,  -- 'c', 'd', 'y', 'v' ... 例如: 'ciw', 'caw', 'diw' ...
+                          -- VVI: 设为 true 会影响 <, > buffer 跳转.
       motions = false,   -- 'g', 例如: 'gg', 'ge' ...
       text_objects = true,  -- 'a' - around, 'i' - inside.
 

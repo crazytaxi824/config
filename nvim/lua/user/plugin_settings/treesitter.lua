@@ -26,12 +26,13 @@ ts_configs.setup {
 
     --- NOTE: `:help :syn-manual`. nvim-treesitter 会强制将 syntax 设置为 `syntax manual`.
     ---        This will enable the syntax highlighting, but not switch it on automatically.
-    ---        查看 `echo g:syntax_on` = 1, 说明 syntax 是开启状态.
+    ---        `echo g:syntax_on` = 1, 说明 syntax 是开启状态;
+    ---        `set syntax?` 返回 'ON', 而不是 'go', 'lua' ..., 说明是 `syntax manual` 设置.
     --- true  - 同时使用 treesitter 和 vim 自带 syntax 颜色, 这时 vim syntax 和 treesitter 的颜色效果叠加.
     ---         eg: syntax 是 bold, 而 treesitter 是 blue, 则最终颜色效果为 blue + bold.
-    ---         在 manual 状态下自动设置 `set syntax=ON`. VVI: 所以 `set syntax?` 返回 'ON', 而不是 'go', 'lua' ...
+    ---         使用 vim 自带 syntax, 所以 `set syntax?` 返回 'ON'.
     --- false - 只使用 treesitter 颜色, 默认值.
-    ---         不设置 syntax, 所以 `set syntax?` 返回 ''. 但是 `echo g:syntax_on` = 1, 说明 syntax 是开启状态.
+    ---         不使用 vim 自带 syntax, 所以 `set syntax?` 返回 ''.
     additional_vim_regex_highlighting = false,
   },
 
@@ -93,7 +94,8 @@ ts_configs.setup {
   -- rainbow = {
   --   enable = false,  -- VVI: 严重拖慢文件打开速度, 不建议开启.
   --   disable = { "cpp", "go" },  -- list of languages you want to disable the plugin for
-  --   extended_mode = false, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
+  --   extended_mode = false,  -- Also highlight non-bracket delimiters like html tags,
+  --                           -- boolean or table: {lang = boolean}
   --   max_file_lines = 999, -- Do not enable for files with more than n lines, int
   -- },
 }

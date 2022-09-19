@@ -365,15 +365,16 @@ local function bufferline_del_current_buffer(ignore_tab)
 
     --- 如果所有 window 中的 buffer 都是 unlisted 则跳到最后一个 visible buffer
     --- NOTE: 这不需要 ':bdelete #' 因为 current buffer 本身就是 unlisted.
-    bufferline.go_to(-1, true)  -- NOTE: go_to(-1, true) 跳到最后一个 visible buffer
+    bufferline.go_to(-1, true)  -- go_to(-1, true) 跳到最后一个 visible buffer
     return
   end
 
-  --- 以下是 current_bufinfo.listed == 1 的情况.
+  --- NOTE: 以下是 current_bufinfo.listed == 1 的情况.
   --- 如果 current buffer 是最后一个 listed buffer 则不删除.
   local listed_buffers = vim.fn.getbufinfo({buflisted=1})
   if #listed_buffers == 1 then
-    --- listed_buffers 只剩一个, current_bufinfo.listed == 1, 说明 current buffer 一定是最后一个 listed buffer.
+    --- listed_buffers 只剩一个, 而且 current_bufinfo.listed == 1,
+    --- 说明 current buffer 一定是最后一个 listed buffer.
     Notify("can't close the Only listed-buffer", "WARN")
     return
   end
@@ -430,7 +431,7 @@ bufferline.setup({
 
   options = {
     mode = "buffers", -- set to "tabs" to only show tabpages instead
-    numbers = "ordinal", -- "none" | "ordinal" | "buffer_id" | "both" | function({ ordinal, id, lower, raise }): string,
+    numbers = "ordinal", -- "none" | "ordinal" | "buffer_id" | "both" | func({ordinal,id,lower,raise}):string
     sort_by = 'id',  -- 其他选项有 BUG.
     persist_buffer_sort = true, -- whether or not custom sorted buffers should persist between sessions.
                                 -- 会创建一个全局变量 g:BufferlinePositions 保存自 state.custom_sort
@@ -489,8 +490,8 @@ bufferline.setup({
 
     --- ':help bufferline-configuration', 在 nvim-tree 上显示 "File Explorer"
     offsets = {
-      {filetype = "NvimTree", text = "File Explorer", text_align = "center", highlight="Directory", separator = true},
-      --{filetype = "tagbar", text = "TagBar", text_align = "center", highlight="Directory", separator = true},
+      {filetype="NvimTree", text="File Explorer", text_align="center", highlight="Directory", separator=true},
+      -- {filetype="tagbar", text="TagBar", text_align="center", highlight="Directory", separator=true},
     },
 
     --- NOTE: this will be called a lot so don't do any heavy processing here --- {{{
@@ -534,7 +535,7 @@ local bufferline_keymaps = {
 
   --- NOTE: 如果 cursor 所在的 window 中显示的(active) buffer 是 unlisted (即: 不显示在 tabline 上的 buffer),
   --- 不能使用 BufferLineCycleNext/Prev 来进行 buffer 切换, 但是可以使用 bufferline.go_to() 直接跳转.
-  {'n', '<lt>', function() bufferline.cycle(-1) end, opt, 'buffer: go to Prev buffer'},  --- <lt>, less than, 代表 '<'. 也可以使用 '\<'
+  {'n', '<lt>', function() bufferline.cycle(-1) end, opt, 'buffer: go to Prev buffer'},  --- <lt>, less than, 代表 '<'
   {'n', '>', function() bufferline.cycle(1) end, opt, 'buffer: go to Next buffer'},
 
   --- 左右移动 buffer

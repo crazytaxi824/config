@@ -36,7 +36,8 @@ toggleterm.setup({
 
   direction = "horizontal",  -- vertical | horizontal | tab | float
 
-  hide_numbers = false,  -- 隐藏 terminal 行号, BUG: 会影响后打开的 window 也没有 number. 下面通过 autocmd 手动设置.
+  hide_numbers = false,  -- 隐藏 terminal 行号,
+                         -- BUG: 会影响后打开的 window 也没有 number. 下面通过 autocmd 手动设置.
   persist_size = true,   -- 保持 window size
   persist_mode = true,   -- if set to true (default) the previous terminal mode will be remembered
 
@@ -76,7 +77,8 @@ toggleterm.setup({
 --vim.cmd [[au TermOpen term://*#toggleterm#[1-9] :startinsert]]
 --vim.cmd [[au BufWinEnter term://*#toggleterm#[1-9] :startinsert]]
 
---- <ESC> 进入 terminal Normal 模式, VVI: 同时也 press <ESC>, 用于退出 fzf 等 terminal 中的操作. 只对本 buffer 有效.
+--- <ESC> 进入 terminal Normal 模式,
+--- VVI: 同时也 press <ESC>, 用于退出 fzf 等 terminal 中的操作. 只对本 buffer 有效.
 vim.cmd [[au TermOpen term://* tnoremap <buffer> <ESC> <ESC><C-\><C-n>]]
 
 --- 设置 terminal 不显示行号.
@@ -167,7 +169,8 @@ local function exec_last_cmd()
   exec_term:shutdown()
 
   --- re-run last cmd.
-  --- NOTE: 这里因为没有改变 exec_term 中的任何设置, 所以 open() 的时候, 会运行上一次记录在 cmd 中的命令.
+  --- NOTE: 这里因为没有改变 exec_term 中的任何设置,
+  --- 所以 open() 的时候, 会运行上一次记录在 cmd 中的命令.
   exec_term:open()
 end
 
@@ -247,7 +250,8 @@ local function toggle_all_terms()
         vim.list_extend(active_terms_wins, buf.windows)
       else
         --- NOTE: toggleterm 会在每个 toggleterm buffer 中 setbufvar('toggle_number'), 值是 terminal count/id
-        table.insert(inactive_terms, buf.variables["toggle_number"])  -- 如果 table.insert(list, nil), 则 list 不会有任何影响.
+        --- 如果 table.insert(list, nil), 则 list 不会有任何影响.
+        table.insert(inactive_terms, buf.variables["toggle_number"])
       end
     end
   end

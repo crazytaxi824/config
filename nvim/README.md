@@ -385,5 +385,5 @@ vim.api.nvim_create_autocmd({"BufEnter", "TextChanged", "TextChangedI", "FileCha
 })
 ```
 
-
+- chore: plugin_settings
 

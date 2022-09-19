@@ -9,7 +9,8 @@ end
 
 notify.setup({
   level = "TRACE",  -- Minimum log level to display.
-                    -- 可以使用 vim.log.levels (int); 也可以用 vim.log.levels 也可以使用 (string), 大小写都可以.
+                    -- 可以使用 vim.log.levels (int); 也可以用 vim.log.levels,
+                    -- 也可以使用 (string), 大小写都可以.
 
   stages = "static",  -- VVI: Animation style, for `set termguicolors`
 

@@ -173,12 +173,13 @@ end
 lualine.setup {
   options = {
     theme = my_theme,  -- https://github.com/nvim-lualine/lualine.nvim/blob/master/THEMES.md
-    icons_enabled = false, -- 不使用 icon, NOTE: 可以在 sections 中单独设置. `:help lualine-Global-options`
+    icons_enabled = false, -- 不使用默认 icon, 可以在 sections 中设置自定义 icon. `:help lualine-Global-options`
     component_separators = { left = '', right = ''},  -- 'mode', 'filename', 'branch' ... 这些属于 components
     section_separators = { left = ' ', right = ' '},
     disabled_filetypes = {},
     always_divide_middle = true,
-    globalstatus = false,  -- true - 则全局所有 window 使用同一个 status line; false - 每个window 单独自己的 status line.
+    globalstatus = false,  -- true - 则全局所有 window 使用同一个 status line;
+                           -- false - 每个window 单独自己的 status line.
   },
 
   --- VVI: https://github.com/nvim-lualine/lualine.nvim#changing-components-in-lualine-sections
@@ -212,9 +213,11 @@ lualine.setup {
           end
           return {fg = colors.light_green} -- 其他情况
         end,
-        --on_click = function(number, mouse, modifiers) end,  -- - number of clicks incase of multiple clicks
-                                                              -- - mouse button used (l(left)/r(right)/m(middle)/...)
-                                                              -- - modifiers pressed (s(shift)/c(ctrl)/a(alt)/m(meta)...)
+
+        --- number of clicks incase of multiple clicks
+        --- mouse button used (l(left)/r(right)/m(middle)/...)
+        --- modifiers pressed (s(shift)/c(ctrl)/a(alt)/m(meta)...)
+        --on_click = function(number, mouse, modifiers) end,
       },
     },
     lualine_x = {'encoding', 'filetype'},
