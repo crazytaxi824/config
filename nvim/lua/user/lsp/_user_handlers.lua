@@ -54,7 +54,8 @@ vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
   }
 )
 
---- HACK: Always Put popup window on Top of the cursor.
+--- HACK: 重写 neovim 内部函数 vim.lsp.util.make_floating_popup_options().
+---       Always Put popup window on Top of the cursor.
 --- 影响所有使用 vim.lsp.util.open_floating_preview() 的 popup window.
 --- https://github.com/neovim/neovim/blob/master/runtime/lua/vim/lsp/util.lua
 --- modify native function (global) - `vim.lsp.util.make_floating_popup_options` -------------------
