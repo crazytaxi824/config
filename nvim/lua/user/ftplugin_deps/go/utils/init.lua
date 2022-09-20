@@ -11,27 +11,32 @@ local M = {
   bg_term_shutdown_all = bg_term.bg_term_shutdown_all,
 }
 
+local function select_pprof()
+  --- 使用 toggleterm:spawn() 在 background 运行 `go tool pprof/trace ...`
+  local select = {'cpu', 'mem', 'mutex', 'block', 'trace'}
+  vim.ui.select(select, {
+    prompt = 'choose pprof profile to view: [coverage profile is an HTML, open to view]',
+    format_item = function(item)
+      return M.get_testflag_desc(item)
+    end
+  }, function (choice)
+    if choice then
+      M.bg_term_spawn(M.parse_testflag_cmd(choice).suffix)
+    end
+  end)
+end
+
 --- create :GoPprof command & <F6> keymap
 M.set_pprof_cmd_keymap = function()
-  --- 使用 toggleterm:spawn() 在 background 运行 `go tool pprof/trace ...`
-  vim.api.nvim_buf_create_user_command(0, 'GoPprof', function()
-    local select = {'cpu', 'mem', 'mutex', 'block', 'trace'}
-    vim.ui.select(select, {
-      prompt = 'choose pprof profile to view: [coverage profile is an HTML, open to view]',
-      format_item = function(item)
-        return M.get_testflag_desc(item)
-      end
-    }, function (choice)
-      if choice then
-        M.bg_term_spawn(M.parse_testflag_cmd(choice).suffix)
-      end
-    end)
-  end, {bang=true})
+  --- user command
+  vim.api.nvim_buf_create_user_command(0, 'GoPprof', select_pprof, {bang=true})
 
-  vim.api.nvim_buf_set_keymap(0, 'n', '<F6>', '<cmd>GoPprof<CR>', {
+  --- keymap
+  vim.api.nvim_buf_set_keymap(0, 'n', '<F6>', '', {
     noremap = true,
     silent = true,
     desc = 'Go tool pprof/trace',
+    callback = select_pprof,
   })
 
   --- delete all bg_term after this buffer removed.

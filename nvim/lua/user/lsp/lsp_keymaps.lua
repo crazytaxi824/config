@@ -30,7 +30,7 @@ M.textDocument_keymaps = function(bufnr)
     {"n", "<F24>", "<cmd>lua vim.lsp.buf.references()<CR>", opts, "LSP: References"},  -- <S-F12>
     {"n", "<F36>", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts, "LSP: Implementation (Interface)"},  -- <C-F12>
 
-    --- HACK: 手动触发 WinScrolled event 来触发 close hover window.
+    --- NOTE: 手动触发 WinScrolled event 来触发 close hover window.
     {"n", "<Esc>", '<Esc><cmd>doautocmd WinScrolled<CR>', opts, 'which_key_ignore'},
 
     --- 使用 hover 代替 signature_help, 因为有些 LSP 还不支持 signature_help, eg: typescript, javascript ...

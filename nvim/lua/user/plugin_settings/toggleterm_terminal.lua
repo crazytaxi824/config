@@ -57,7 +57,7 @@ toggleterm.setup({
     Highlight_filepath(output)
   end,
 
-  --- 其他设置, NOTE: 以下最好不要全局设置 ---
+  --- 其他设置, NOTE: 以下最好不要全局设置, 可以根据具体情况在 :open() 前设置 ---
   --on_open  = fun(t: Terminal), -- toggleterm win open.  NOTE: term:spawn() 无法触发.
   --on_close = fun(t: Terminal), -- toggleterm win close. NOTE: close_on_exit=true 的时候才能触发.
   --on_exit  = fun(t: Terminal, job: number, exit_code: number, name: string) -- TermClose, job ends
@@ -119,13 +119,28 @@ local cache_cmd     -- string, 缓存 _Exec() 中运行的 cmd.
 --- cache 是一个标记, 如果为 true, 则在将 cmd 记录在 last_cmd 中.
 --- callback 在 on_exit = func() 的时候执行.
 function _Exec(cmd, cache, callback)
-  --- 缓存 cmd.
+  --- 缓存 cmd
   if cache then
     cache_cmd = cmd
   end
 
   --- 删除之前的 terminal, 同时终止 job.
   exec_term:shutdown()
+
+  --- 缓存执行 _Exec() 的 window id
+  local exec_wid = vim.fn.win_getid(vim.fn.winnr())
+
+  --- 该 terminal buffer wipeout 的时候回到之前的窗口.
+  exec_term.on_open = function()
+    vim.api.nvim_create_autocmd("BufWipeout", {
+      buffer = 0,
+      callback = function(params)
+        --- 如果 goto 的 win_id 不存在, 则会自动跳到别的 window.
+        vim.fn.win_gotoid(exec_wid)  -- 这里会返回 true | false.
+      end,
+      desc = 'go back to _Exec() window',
+    })
+  end
 
   --- NOTE: callback 不存在的时候 on_exit 就会清除, 相当于: on_exit = nil
   exec_term.on_exit = callback

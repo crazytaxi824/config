@@ -561,8 +561,12 @@ Keymap_set_and_register(bufferline_keymaps)
 --- 原理: 在 buffer 被 bdelete / bwipeout 的时候修改 state.custom_sort = {bufnr ...},
 --- 来改变 bufferline 的显示顺序.
 --- 需要用到 state.components, 即 bufferline.exec(callback()) 中的 visible_buffers_info
---- 如果需要自动刷新 bufferline 显示, 需要使用 require("bufferline.ui").refresh()
-local state = require("bufferline.state")
+--- 如果需要手动刷新 bufferline 显示, 需要使用 require("bufferline.ui").refresh()
+local state_ok, state = pcall(require, "bufferline.state")
+if not state_ok then
+  Notify('cannot load "bufferline.state", state.custom_sort cannot be changed', "WARN")
+  return
+end
 
 local function table_index(list, elem)
   for index, value in ipairs(list) do

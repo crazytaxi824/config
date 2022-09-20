@@ -131,7 +131,9 @@ local flag_desc_cmd = {
     cmd = {
       prefix = ' mkdir -p ' .. coverage_dir .. ' &&' ,
       flag = ' -coverprofile ' .. coverage_dir .. 'cover.out',
-      suffix = 'go tool cover -html=' .. coverage_dir .. 'cover.out -o ' .. coverage_dir .. 'cover.html'
+      --- go tool cover -html=cover.out -o cover.html, 浏览器打开 cover.html 文件
+      suffix = 'go tool cover -html=' .. coverage_dir
+        .. 'cover.out -o ' .. coverage_dir .. 'cover.html'
         .. ' && open ' .. coverage_dir .. 'cover.html',
     }
   },
