@@ -99,7 +99,7 @@ local function git_discard_file_changes(node)
     vim.ui.input({ prompt = prompt }, function(choice)
       vim.cmd("normal! :")  -- clear command line prompt message.
       if choice == 'a' or choice == 'all' then
-        cmd = 'git reset -- "' .. node.absolute_path .. 
+        cmd = 'git reset -- "' .. node.absolute_path ..
           '" && git checkout -- "' .. node.absolute_path .. '"'
       elseif choice == 'u' or choice == 'unstaged' then
         cmd = 'git checkout -- "' .. node.absolute_path .. '"'
@@ -555,6 +555,34 @@ Keymap_set_and_register(gitsigns_keymaps, {
   opts = {mode='n', prefix='<leader>'}
 })
 
+-- -- }}}
+
+--- HACK: 利用 NvimTreeOpenedFile 只 highlight active buffer. 默认是显示 loaded buffer ------------- {{{
+--- 如果 buffer 没有显示在任何窗口则不要 highlight.
+--- 修改源代码: builder:_highlight_opened_files()
+local builder_status_ok, builder = pcall(require, "nvim-tree.renderer.builder")
+if builder_status_ok then
+  function builder:_highlight_opened_files(node, offset, icon_length, git_icons_length)
+    --- VVI: 如果 buffer 没有显示在任何窗口则不要 highlight.
+    if #vim.fn.getbufinfo(node.absolute_path)[1].windows == 0 then
+      return
+    end
+
+    local from = offset
+    local to = offset
+
+    if self.highlight_opened_files == "icon" then
+      to = from + icon_length
+    elseif self.highlight_opened_files == "name" then
+      from = offset + icon_length + git_icons_length
+      to = from + #node.name
+    elseif self.highlight_opened_files == "all" then
+      to = from + icon_length + git_icons_length + #node.name
+    end
+
+    self:_insert_highlight("NvimTreeOpenedFile", from, to)
+  end
+end
 -- -- }}}
 
 
