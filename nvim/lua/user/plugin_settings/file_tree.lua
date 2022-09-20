@@ -235,7 +235,7 @@ local nt_buffer_keymaps = {
 }
 
 --- global keymap ---
-vim.keymap.set('n', '<leader>,', ':NvimTreeFindFileToggle<CR>', {
+vim.keymap.set('n', '<leader>,', '<cmd>NvimTreeFindFileToggle<CR>', {
   noremap=true, silent=true, desc='toggle Nvim-Tree'
 })
 
@@ -353,6 +353,10 @@ nvim_tree.setup {
     change_dir = {
       enable = true,   -- change root dir
       global = false,
+    },
+    expand_all = {
+      max_folder_discovery = 300,
+      exclude = {"node_modules"},  -- NOTE: 排除 expand dir
     },
     open_file = {
       quit_on_open = false,  -- VVI: 打开文件后自动关闭 Nvimtree
