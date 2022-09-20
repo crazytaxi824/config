@@ -5,6 +5,7 @@
 --    'termfg, termbg'     表示 16 色 terminal
 --    'term, cterm'        表示样式, underline, bold, italic ...
 --
+--- NOTE: alacritty 背景色 (normal black) 设置为 234.
 --- 常用颜色
 --    188/252   白色   -  一般文字颜色
 --    233       黑色   - bufferline / lualine / floating window / Pmenu
@@ -60,7 +61,7 @@ vim.cmd('hi Normal ctermbg=NONE ctermfg=188')      -- 透明背景 / 深色背�
 vim.cmd('hi Visual ctermbg=24')                    -- Visual 模式下 select 到的字符颜色. 类似 vscode 颜色
 
 --- VVI: Pmenu & FloatBorder 背景色需要设置为相同, 影响很多窗口的颜色.
-local float_win_border_color = 233  -- 或者 236
+local float_win_border_color = 233
 vim.cmd('hi PmenuSel cterm=underline,bold ctermfg=None ctermbg=238')  -- Completion Menu 选中项颜色
 vim.cmd('hi Pmenu ctermfg=188 ctermbg=' .. float_win_border_color)  -- Completion Menu & Floating Window 背景颜色
 vim.cmd('hi! link NormalFloat Pmenu')  -- NormalFloat 默认 link to Pmenu
@@ -74,7 +75,7 @@ vim.cmd('hi VertSplit ctermfg=59 ctermbg=None cterm=None')  -- 屏幕分隔线�
 vim.cmd('hi MatchParen cterm=underline,bold ctermfg=220 ctermbg=None')  -- 括号匹配颜色
 
 vim.cmd('hi LineNr ctermfg=240')                   -- 行号颜色
-vim.cmd('hi CursorLine ctermbg=235 cterm=None')    -- 光标所在行颜色
+vim.cmd('hi CursorLine ctermbg=236 cterm=None')    -- 光标所在行颜色
 vim.cmd('hi CursorLineNr cterm=bold ctermfg=191')  -- 光标所在行号的颜色
 vim.cmd('hi SignColumn ctermbg=None')              -- line_number 左边用来标记错误, 打断点的位置. 术语 gutter
 vim.cmd('hi ColorColumn ctermbg=238')              -- textwidth column 颜色

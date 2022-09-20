@@ -400,7 +400,7 @@ vim.cmd('hi NvimTreeFolderName ctermfg=81 cterm=bold')
 vim.cmd('hi! default link NvimTreeFolderIcon NvimTreeFolderName')
 vim.cmd('hi! default link NvimTreeEmptyFolderName NvimTreeFolderName')
 vim.cmd('hi! default link NvimTreeOpenedFolderName NvimTreeFolderName')  -- 已打开文件夹的颜色
-vim.cmd('hi NvimTreeOpenedFile ctermbg=238')   -- 已经打开文件的颜色, 只设置 bg.
+vim.cmd('hi NvimTreeOpenedFile ctermbg=240')   -- 已经打开文件的颜色, 只设置 bg.
 vim.cmd('hi NvimTreeIndentMarker ctermfg=242') -- └ │ 颜色
 
 vim.cmd('hi NvimTreeSymlink ctermfg=207')      -- 链接文件, magenta
@@ -448,7 +448,7 @@ vim.api.nvim_create_autocmd({"BufEnter", "BufDelete"}, {
     --- 因为 bnext | bdelete #, 先 Enter 其他 buffer, 这时之前的 buffer 还没有被 delete, 所以 reload()
     --- 的时候 buffer highlight 还在.
     vim.schedule(function ()
-      nt_api.tree.reload()
+      nt_api.tree.reload()  -- refresh tree
     end)
   end
 })
@@ -558,8 +558,8 @@ Keymap_set_and_register(gitsigns_keymaps, {
 -- -- }}}
 
 --- HACK: 利用 NvimTreeOpenedFile 只 highlight active buffer. 默认是显示 loaded buffer ------------- {{{
+--- 重写 nvim-tree.renderer.builder module 中的 _highlight_opened_files() 函数.
 --- 如果 buffer 没有显示在任何窗口则不要 highlight.
---- 修改源代码: builder:_highlight_opened_files()
 local builder_status_ok, builder = pcall(require, "nvim-tree.renderer.builder")
 if builder_status_ok then
   function builder:_highlight_opened_files(node, offset, icon_length, git_icons_length)
