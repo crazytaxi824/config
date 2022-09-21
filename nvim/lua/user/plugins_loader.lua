@@ -369,7 +369,7 @@ return packer.startup(function(use)
     requires = {
       "saadparwaiz1/cmp_luasnip",
       {"rafamadriz/friendly-snippets",  -- snippets content, 自定义 snippets 可以借鉴这个结构.
-        commit = "22a9975",
+        commit = "2be79d8",
       },
     },
   }
