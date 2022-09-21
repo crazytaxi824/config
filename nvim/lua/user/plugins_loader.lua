@@ -235,7 +235,7 @@ return packer.startup(function(use)
   --- 本配置依赖插件 -------------------------------------------------------------------------------
   --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   use {"folke/which-key.nvim",
-    commit = "d1872f1",
+    commit = "6885b66",
     config = function() require("user.plugin_settings.which_key") end,
   }
 
