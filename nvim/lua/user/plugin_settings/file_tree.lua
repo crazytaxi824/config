@@ -378,7 +378,7 @@ nvim_tree.setup {
     require_confirm = true,
   },
 
-  -- 日志 --
+  --- 日志 ---
   log = {
     enable = false,
     truncate = false,
