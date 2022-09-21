@@ -410,7 +410,7 @@ return packer.startup(function(use)
 
   --- null-ls 插件 formatters && linters, depends on "nvim-lua/plenary.nvim"
   use {"jose-elias-alvarez/null-ls.nvim",
-    commit = "bf02782",  -- '7cd491b' UPGRADE: refactor nvim 0.7 api
+    commit = "1533257",
     config = function() require("user.lsp.null_ls") end,
     after = {
       "nvim-lspconfig",  -- VVI: 这里是为了获取 lspconfig 分析出的 root_dir 用于 linter 执行时的 pwd.
