@@ -495,7 +495,7 @@ return packer.startup(function(use)
   --- `ctags --list-languages` 查看支持的语言. 不支持 jsx/tsx, 支持 typescript, 勉强支持 javascript
   -- -- }}}
   use {"preservim/tagbar",
-    commit = "87afc29",
+    commit = "72cb099",
     config = function() require("user.plugin_settings.tagbar") end,
     opt = true,  -- 在 vim.schedule() 中 lazy load
   }
