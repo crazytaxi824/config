@@ -433,7 +433,7 @@ return packer.startup(function(use)
   --- Buffer & Status Line -------------------------------------------------------------------------
   --- tabline decorator, `:help 'tabline'`
   use {"akinsho/bufferline.nvim",
-    commit = "83bf4dc",  -- TODO: refactor
+    commit = "83bf4dc",  -- UPGRADE: refactor
     config = function() require("user.plugin_settings.decor_bufferline") end,
     opt = true,  -- 在 vim.schedule() 中 lazy load
   }
@@ -484,7 +484,7 @@ return packer.startup(function(use)
   --- `:Gitsigns setqflist/seqloclist` will open Trouble instead of quickfix or location list windows.
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   use {"lewis6991/gitsigns.nvim",
-    commit = "d7e0bcb",
+    commit = "f98c85e",
     config = function() require("user.plugin_settings.git_signs") end,
     opt = true,
   }
