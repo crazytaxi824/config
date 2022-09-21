@@ -223,13 +223,13 @@ return packer.startup(function(use)
   --- Useful lua functions used by lots of plugins
   --- NOTE: plenary.nvim 合并了 popup.nvim
   use {"nvim-lua/plenary.nvim",
-    commit = "4b66054",
+    commit = "62dc2a7",
   }
 
-  --- BUG: https://github.com/neovim/neovim/issues/12587
+  --- FIXED: neovim v0.8.0, https://github.com/neovim/neovim/pull/20198
   --- CursorHold and CursorHoldI are blocked by timer_start()
   use {"antoinemadec/FixCursorHold.nvim",
-    commit = "5aa5ff1",
+    commit = "70a9516",
   }
 
   --- 本配置依赖插件 -------------------------------------------------------------------------------
