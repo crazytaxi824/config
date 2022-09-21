@@ -12,6 +12,7 @@ M.check = function()
     "bufferline.state",
     "nvim-tree.renderer.components.git",
     "nvim-tree.renderer.builder",
+    "nvim-treesitter.ts_utils",
   }
 
   for _, req in ipairs(require_list) do

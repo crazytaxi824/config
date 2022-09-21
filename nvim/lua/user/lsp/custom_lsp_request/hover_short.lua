@@ -31,7 +31,7 @@ local function calculate_offset(lsp_req_pos_line, lsp_req_pos_char)
   }
 end
 
---- NOTE: 使用 nvim-treesitter 寻找 cursor 前最近的 function call() 的位置 --- {{{
+--- NOTE: 使用 nvim-treesitter 寻找 cursor 前最近的 function call() 的位置 ----- {{{
 -- `:help nvim-treesitter`
 --    node = ts_utils.get_node_at_cursor()  -- 获取 node at cursor.
 --
@@ -89,7 +89,7 @@ end
 
 local M = {}
 
---- lsp request handler ----------------------------------------------------------------------------
+--- lsp request handler --------------------------------------------------------
 --- NOTE: 该自定义 handler 主要作用是根据 'textDocument/hover' handler 修改 open_floating_preview()
 --        中的显示内容. 不显示 comments, 只显示 function 定义. 类似 textDocument/signatureHelp.
 --- copy from `function M.hover(_, result, ctx, config)`
@@ -137,7 +137,7 @@ local function hover_short_handler(err, result, req, config)
   return vim.lsp.util.open_floating_preview(markdown_lines, "markdown", config)
 end
 
---- vim.lsp.buf_request() ----------------------------------
+--- vim.lsp.buf_request() ------------------------------------------------------
 --- https://github.com/neovim/neovim/blob/master/runtime/lua/vim/lsp/buf.lua
 --- vim.lsp.buf_request(0, method, params, handlerFn)  -- 向 LSP server 发送请求, 通过 handler 处理结果.
 M.hover_short = function()
