@@ -263,19 +263,12 @@ local function close_current_tab()
     end
   end
 
-  --- 排除同时存在于其他 tab 中 buffer.
-  local del_buffer_list = {}
-  for _, bufnr in ipairs(cur_tab_buf_list) do
-    if not vim.tbl_contains(exclude_buffer_list, bufnr) then
-      table.insert(del_buffer_list, bufnr)
-    end
-  end
-
-  --- 排除未保存的 buffers (changed/modified)
-  --local modified_buffer = vim.fn.getbufinfo({bufmodified=1})
+  --- 排除存在于其他 tab 中 buffer, 和 unsaved buffer.
   local del_nochanged_buf_list = {}
-  for _, bufnr in ipairs(del_buffer_list) do
-    if vim.fn.getbufinfo(bufnr)[1].changed == 0 then
+  for _, bufnr in ipairs(cur_tab_buf_list) do
+    if not vim.tbl_contains(exclude_buffer_list, bufnr)  -- 排除存在于其他 tab 中 buffer.
+      and vim.fn.getbufinfo(bufnr)[1].changed == 0  -- 排除 unsaved buffer.
+    then
       table.insert(del_nochanged_buf_list, bufnr)
     end
   end
