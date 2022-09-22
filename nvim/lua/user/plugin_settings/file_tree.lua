@@ -47,7 +47,7 @@ local diagnostics_icons = {
 
 -- -- }}}
 
---- nvim-tree buffer keymaps ----------------------------------------------------------------------- {{{
+--- nvim-tree keymaps ------------------------------------------------------------------------------ {{{
 --- git: Discard file changes --- {{{
 local function git_discard_file_changes(node)
   --print(node.name, node.absolute_path, vim.inspect(node.git_status), node.type)
@@ -204,6 +204,8 @@ local function system_open(node)
 end
 -- -- }}}
 
+--- nvim-tree buffer keymaps ---------------------------------------------------
+--- only works within "NvimTree_X" buffer.
 local nt_buffer_keymaps = {
   { key = {"<CR>", "e"},   action = "edit" },
   { key = "<C-v>",         action = "vsplit" },  -- vsplit edit
@@ -234,10 +236,14 @@ local nt_buffer_keymaps = {
   { key = "<leader>D",     action = "git: Discard file changes", action_cb = git_discard_file_changes},
 }
 
---- global keymap ---
-vim.keymap.set('n', '<leader>,', '<cmd>NvimTreeFindFileToggle<CR>', {
-  noremap=true, silent=true, desc='toggle Nvim-Tree'
-})
+--- global keymap --------------------------------------------------------------
+local opts = {noremap=true, silent=true}
+local tree_keymaps = {
+  {'n', '<leader>,', '<cmd>NvimTreeToggle<CR>', opts, 'tree: toggle'},
+  {'n', '<leader><CR>', '<cmd>NvimTreeFindFile<CR>', opts, 'tree: find file'},
+}
+
+Keymap_set_and_register(tree_keymaps)
 
 -- -- }}}
 
@@ -339,7 +345,7 @@ nvim_tree.setup {
   filters = {
     dotfiles = false,  -- true:不显示隐藏文件, false:显示隐藏文件.
     custom = { '^\\.DS_Store$', '^\\.git$', '.*\\.swp$' },    -- 不显示指定文件
-    exclude = {},
+    exclude = {},  -- List of dir or files to exclude from filtering: always show them.
   },
   git = {
     enable = true,  -- VVI: 开启 git filename 和 icon 颜色显示.
@@ -355,8 +361,8 @@ nvim_tree.setup {
       global = false,
     },
     expand_all = {
-      max_folder_discovery = 300,
-      exclude = {"node_modules"},  -- NOTE: 排除 expand dir
+      max_folder_discovery = 60,  -- VVI: 最多递归打开 n 个 folder, 到达该数字后停止 expand.
+      exclude = { "node_modules", ".mypy_cache", ".git" },  -- NOTE: 排除 expand dir
     },
     open_file = {
       quit_on_open = false,  -- VVI: 打开文件后自动关闭 Nvimtree
