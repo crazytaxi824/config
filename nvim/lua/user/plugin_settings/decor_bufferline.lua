@@ -17,6 +17,7 @@ local colors = {
   duplicate_fg = 243,  -- grey
   tab_sel_fg = 233,    -- black
   tab_sel_bg = 190,    -- yellow
+  tab_separator_fg = 243, -- grey
 
   modified_fg = 81,    -- cyan
   separator_fg = 238,  -- grey
@@ -88,28 +89,28 @@ local buf_highlights = {
     ctermbg = colors.buf_sel_bg,
   },
 
-  --- NOTE: separator 是 buffer 之间的间隔符, separator_selected 是 tab 之间的间隔符
-  tab_selected = {  -- 右上角 tab 颜色
+  --- 右上角 tab 颜色, 1 | 2 | 3 |
+  tab_selected = {
     ctermfg = colors.tab_sel_fg,
     ctermbg = colors.tab_sel_bg,
   },
-  tab_separator = {  -- tab 之间分隔线 | 的颜色.
-    ctermfg = colors.duplicate_fg,
-    -- ctermbg = colors.tab_sel_bg,
+
+  --- tab 之间分隔线颜色, 样式不能自定义, 为 '▕'
+  tab_separator = {  -- tab 之间分隔线的颜色.
+    ctermfg = colors.tab_separator_fg,
+    -- ctermbg = ,
   },
-  tab_separator_selected = {  -- selected tab 后面一个分隔线 | 的颜色.
-    ctermfg = colors.tab_sel_bg,
+  tab_separator_selected = {  -- selected tab 后面一个分隔线'▕'的颜色. 最好和 tab_sel_bg 颜色相同.
+    -- ctermfg = ,
     ctermbg = colors.tab_sel_bg,
   },
 
-  -- separator = {  -- buffer 之间分隔线 | 颜色, NOTE: 目前设置是 ' ' 空格, 所以 fg 不起作用, 只有 bg 起作用.
+  --- buffer 之间分隔线颜色, 样式为 setup 中 separator_style 设置.
+  -- separator = {
   --   ctermfg = colors.separator_fg,
   --   ctermbg = colors.tab_sel_bg,
   -- },
-  -- separator_selected = {  -- NOTE: 好像没有任何作用
-  --   ctermfg = colors.tab_sel_bg,
-  --   ctermbg = colors.tab_sel_bg,
-  -- },
+  -- separator_selected = {},  -- NOTE: 好像没有任何作用
 
   --- ONLY modified_icon color. ●
   modified = {

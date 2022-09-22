@@ -295,7 +295,7 @@ nvim_tree.setup {
 
   renderer = {
     highlight_git = true,  -- 开启 git filename 颜色. 需要设置 git.enable = true
-    highlight_opened_files = "all",  -- highlight icon or filename or both.
+    highlight_opened_files = "name", -- highlight icon or filename or both.
                                      -- "none"(*) | "icon" | "name" | "all"
     indent_width = 2, -- 默认 2.
     indent_markers = {
@@ -415,7 +415,7 @@ vim.cmd('hi NvimTreeGitMerge   ctermfg=170')
 vim.cmd('hi NvimTreeGitRenamed ctermfg=170')
 vim.cmd('hi NvimTreeGitNew     ctermfg=167')
 vim.cmd('hi NvimTreeGitDeleted ctermfg=167')
-vim.cmd('hi NvimTreeGitIgnored ctermfg=242')
+vim.cmd('hi NvimTreeGitIgnored ctermfg=244')
 
 --- git filename color, 默认是 link 上面 git icon color.
 vim.cmd('hi! default link NvimTreeFileDirty  NvimTreeGitStaged')  -- hi! default link 在 hi clear 时回到该设置.
