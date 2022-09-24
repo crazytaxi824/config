@@ -99,7 +99,7 @@ M.go_test_run_pkg = function()
     format_item = function(item)
       return go_utils.get_testflag_desc(item)
     end
-  }, function (choice)
+  }, function(choice)
     if choice then
       go_test_pkg({mode = 'run', flag = choice })
     end
@@ -113,7 +113,7 @@ M.go_test_bench_pkg = function()
     format_item = function(item)
       return go_utils.get_testflag_desc(item)
     end
-  }, function (choice)
+  }, function(choice)
     if choice then
       go_test_pkg({mode = 'bench', flag = choice })
     end
@@ -128,7 +128,7 @@ M.go_test_run_proj = function()
     format_item = function(item)
       return go_utils.get_testflag_desc(item)
     end
-  }, function (choice)
+  }, function(choice)
     if choice then
       go_test_proj({mode = 'run', flag = choice })
     end
@@ -143,7 +143,7 @@ M.go_test_bench_proj = function()
     format_item = function(item)
       return go_utils.get_testflag_desc(item)
     end
-  }, function (choice)
+  }, function(choice)
     if choice then
       go_test_proj({mode = 'bench', flag = choice })
     end

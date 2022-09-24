@@ -608,13 +608,13 @@ function Bufferline_info(index)
   -- print("state.components:", vim.inspect(state.components))
   print("state.custom_sort (bufnrs order):", vim.inspect(state.custom_sort))
   if index then
-    bufferline.exec(index, function (index_info, vis_infos)
+    bufferline.exec(index, function(index_info, vis_infos)
       if index then
         print("ordinal:", index_info.ordinal, "; bufnr:", index_info.id, "; bufname:", index_info.path)
       end
     end)
   else
-    bufferline.exec(1, function (i, vis_infos)
+    bufferline.exec(1, function(i, vis_infos)
       for i, value in ipairs(vis_infos) do
         print("index:", i, "ordinal:", value.ordinal, "; bufnr:", value.id, "; bufname:", value.path)
       end

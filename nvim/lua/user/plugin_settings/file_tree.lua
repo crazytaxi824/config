@@ -453,7 +453,7 @@ vim.api.nvim_create_autocmd({"BufEnter", "BufDelete"}, {
     --- VVI: 必须使用 vim.schedule(), 否则 bdelete 的时候不会刷新显示.
     --- 因为 bnext | bdelete #, 先 Enter 其他 buffer, 这时之前的 buffer 还没有被 delete, 所以 reload()
     --- 的时候 buffer highlight 还在.
-    vim.schedule(function ()
+    vim.schedule(function()
       nt_api.tree.reload()  -- refresh tree
     end)
   end

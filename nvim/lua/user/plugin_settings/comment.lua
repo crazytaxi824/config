@@ -67,7 +67,7 @@ end
 
 local opt = { noremap = true, silent = true }
 local comment_keymaps = {
-  {'n', '<leader>\\', function () _Comment_exclude_file("current") end, opt, 'toggle Comment'},
+  {'n', '<leader>\\', function() _Comment_exclude_file("current") end, opt, 'toggle Comment'},
   {'v', '<leader>\\', '<C-c><CMD>lua _Comment_exclude_file("visual")<CR>', opt, 'toggle Comment'},
 
   -- {'n', '<leader>\\', '<Plug>(comment_toggle_linewise_current)', opt, 'toggle Comment'},
