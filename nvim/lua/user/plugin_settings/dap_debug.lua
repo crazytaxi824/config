@@ -127,7 +127,7 @@ dapui.setup({
   },
 
   --- TODO: need winbar
-  -- controls = {
+  -- controls = {  --- {{{
   --   enabled = true,
   --   -- Display controls in this element
   --   element = "repl",
@@ -142,6 +142,7 @@ dapui.setup({
   --     terminate = "□",
   --   },
   -- },
+  -- -- }}}
 
   floating = {
     max_height = nil, -- These can be integers or a float between 0 and 1.
@@ -267,6 +268,15 @@ local debug_keymaps = {
 
 --- 这里是 global keymaps 设置
 Keymap_set_and_register(debug_keymaps)
+
+--- Highlight filepath -----------------------------------------------------------------------------
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = {"dap-repl"},
+  callback = function(param)
+    print(param.event, param.file)
+    Highlight_filepath()
+  end,
+})
 
 
 
