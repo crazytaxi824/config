@@ -53,8 +53,8 @@ toggleterm.setup({
   --- terminal 输出时 highlight filepath.
   --- output 是一个 list, 按照行分隔.
   --- 这里不使用 autocmd TermClose 而是使用 on_stdout 主要是因为有些程序运行不会结束, eg: http 监听.
-  on_stdout = function(_,_,output,_)
-    Highlight_filepath(output)
+  on_stdout = function()
+    Highlight_filepath()
   end,
 
   --- 其他设置, NOTE: 以下最好不要全局设置, 可以根据具体情况在 :open() 前设置 ---
@@ -90,8 +90,7 @@ vim.cmd [[au TermOpen term://* :setlocal nonumber]]
 vim.api.nvim_create_autocmd({"BufWinEnter"}, {
   pattern = {"term://*"},
   callback = function()
-    local output = vim.fn.getline(1, '$')
-    Highlight_filepath(output)
+    Highlight_filepath()
   end,
 })
 

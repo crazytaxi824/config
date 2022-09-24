@@ -12,14 +12,14 @@
 --
 --    170       紫色   - onedark theme (主色调)
 --    85        暗金色 - function, function call
---    213       品红(magenta) - IncSearch, return, if, else, break
+--    213       品红(magenta) - IncSearch, return, if, else, break, package, import
 --
 --    214       橙色   - warning
 --    202       橙红色
 --    173       暗橙色 - String, ':hi String'
 --
 --    81        cyan   - goField, Special, fmt.Printf("%s \n")
---    75        蓝色   - package, import, func
+--    75        蓝色   - INFO, Boolean, SpecialChar
 --    63        深蓝色 - info msg background
 --
 --    71        绿色   - comment 注释 (:hi Comment)

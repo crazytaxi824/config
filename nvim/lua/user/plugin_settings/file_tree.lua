@@ -259,7 +259,7 @@ nvim_tree.setup {
                     -- 会导致 nvim 退出.
     auto_open = true,
   },
-  hijack_unnamed_buffer_when_opening = false,  -- Opens in place of the unnamed buffer if it's empty.
+  hijack_unnamed_buffer_when_opening = false,  -- Opens in place of the unnamed buffer if it's empty. 默认 false.
 
   --- 启动 nvim 时, 打开 tree.
   open_on_setup = false,  -- 不好用. 启动 nvim 打开文件时, 自动打开 tree. eg: `nvim dir`
