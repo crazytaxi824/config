@@ -17,7 +17,6 @@ M.go_run = function()
 
   --- go run local/src
   local cmd = "cd " .. dir .. " && go run " .. import_path
-  print(cmd)
   _Exec(cmd, true)  -- cache cmd for re-run.
 end
 

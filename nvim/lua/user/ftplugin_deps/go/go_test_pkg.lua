@@ -43,7 +43,6 @@ local function go_test_pkg(opt)
     return
   end
 
-  -- print(cmd)
   _Exec(cmd, false, function()
     --- :GoPprof command
     if vim.tbl_contains({'cpu', 'mem', 'mutex', 'block', 'trace'}, opt.flag) then
@@ -82,7 +81,6 @@ local function go_test_proj(opt)
     return
   end
 
-  -- print(cmd)
   _Exec(cmd, false, function()
     --- NOTE: cannot use pprof flag with multiple packages
     if flag_cmd.suffix and flag_cmd.suffix ~= '' then

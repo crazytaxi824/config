@@ -138,7 +138,7 @@ function _Exec(cmd, cache, callback)
         --- 如果 goto 的 win_id 不存在, 则会自动跳到别的 window.
         vim.fn.win_gotoid(exec_wid)  -- 这里会返回 true | false.
       end,
-      desc = 'go back to _Exec() window',
+      desc = 'go back to window which execute _Exec()',
     })
   end
 
@@ -146,7 +146,7 @@ function _Exec(cmd, cache, callback)
   exec_term.on_exit = callback
 
   --- 设置 cmd
-  exec_term.cmd = cmd
+  exec_term.cmd = 'echo -e "\\e[32m' .. vim.fn.escape(cmd,'"') .. ' \\e[0m" && ' .. cmd
 
   --- NOTE: 如果使用 :new() 生成了新的实例, 需要重新缓存新生成的实例, 否则无法 open() / close() ...
   --exec_term = exec_term:new(vim.tbl_deep_extend('error', exec_opts, {cmd = cmd}))
@@ -167,7 +167,7 @@ local function exec_cached_cmd()
   exec_term:shutdown()
 
   --- 设置 cmd
-  exec_term.cmd = cache_cmd
+  exec_term.cmd = 'echo -e "\\e[32m' .. vim.fn.escape(cache_cmd,'"') .. ' \\e[0m" && ' .. cache_cmd
 
   --- run cmd
   exec_term:open()

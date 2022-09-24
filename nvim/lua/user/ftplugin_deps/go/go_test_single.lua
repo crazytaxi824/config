@@ -84,7 +84,6 @@ local function go_test_single(testfn_name, opt)
     return
   end
 
-  -- print(cmd)
   _Exec(cmd, false, function()
     --- :GoPprof command
     if vim.tbl_contains({'cpu', 'mem', 'mutex', 'block', 'trace'}, opt.flag) then

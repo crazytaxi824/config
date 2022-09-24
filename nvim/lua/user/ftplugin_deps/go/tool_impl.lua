@@ -25,7 +25,7 @@ M.go_impl = function(arglist)
 
   --- 执行 shell cmd
   local sh_cmd = 'impl -dir ' .. dir .. ' ' .. arglist[1] .. ' ' .. iface_name
-  print(sh_cmd)
+  vim.notify(sh_cmd)
   local result = vim.fn.system(sh_cmd)
 
   --- 判断结果是否错误
@@ -39,7 +39,6 @@ M.go_impl = function(arglist)
   while content[#content] == '' do
     table.remove(content, #content)
   end
-  print(vim.inspect(content))
 
   --- add 'type Foo struct{}'
   local msg = vim.list_extend({"", "type " .. arglist[1] .. " struct{}", ""}, content)
