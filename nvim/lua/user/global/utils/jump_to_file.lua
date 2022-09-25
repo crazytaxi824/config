@@ -159,7 +159,7 @@ end
 vim.api.nvim_create_autocmd('TermOpen', {
   pattern = {"term://*"},
   callback = function(params)
-    vim.keymap.set('n', '<CR>',
+    vim.keymap.set('n', '<S-CR>',
       "<cmd>lua Jump_to_file(vim.fn.expand('<cWORD>'))<CR>",
       {
         noremap = true,
