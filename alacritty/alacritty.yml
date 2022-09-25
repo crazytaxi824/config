@@ -892,29 +892,30 @@ key_bindings:
 
   # NOTE: <Ctrl-Left/Right/Up/Down> 被 MacOS 系统占用了, 所以这里使用 Option 代替.
   # 默认 <Option-Backspace> 按照单词删除.
-  - { key: Up,     mods: Option,                                   chars: "\x1b[1;5A"      }  # Ctrl-Up
-  - { key: Down,   mods: Option,                                   chars: "\x1b[1;5B"      }  # Ctrl-Down
-  - { key: Right,  mods: Option,                                   chars: "\x1b[1;5C"      }  # Ctrl-Right  - forward-word
-  - { key: Left,   mods: Option,                                   chars: "\x1b[1;5D"      }  # Ctrl-Left   - backward-word
+  - { key: Up,     mods: Option,                                   chars: "\x1b[1;5A"      }  # Option-Up    -> Ctrl-Up
+  - { key: Down,   mods: Option,                                   chars: "\x1b[1;5B"      }  # Option-Down  -> Ctrl-Down
+  - { key: Left,   mods: Option,                                   chars: "\x1b[1;5D"      }  # Option-Left  -> Ctrl-Left  (backward-word)
+  - { key: Right,  mods: Option,                                   chars: "\x1b[1;5C"      }  # Option-Right -> Ctrl-Right (forward-word)
 
   # NOTE: 以下是为 vim/nvim 设置的 key mapping.
   - { key: Return,  mods: Shift,                                   chars: "\x1b[13;2u"     }  # Shift-CR
   - { key: Return,  mods: Control,                                 chars: "\x1b[13;5u"     }  # CTRL-CR
-  - { key: Return,  mods: Command,                                 chars: "\x1b[13;5u"     }  # CTRL-CR
+  - { key: Return,  mods: Command,                                 chars: "\x1b[13;5u"     }  # Command-CR -> CTRL-CR
   - { key: Return,  mods: Control|Shift,                           chars: "\x1b[13;6u"     }  # CTRL-Shift-CR
-  - { key: Return,  mods: Command|Shift,                           chars: "\x1b[13;6u"     }  # CTRL-Shift-CR
+  - { key: Return,  mods: Command|Shift,                           chars: "\x1b[13;6u"     }  # Command-Shift-CR -> CTRL-Shift-CR
 
-  - { key: Left,   mods: Command,       mode: ~Vi|~Search,             chars: "\x1bOH"     }  # Home  - 替代 <fn - left>
-  - { key: Right,  mods: Command,       mode: ~Vi|~Search,             chars: "\x1bOF"     }  # End   - 替代 <fn - right>
-  - { key: Up,     mods: Command,       mode: ~Vi|~Search,             chars: "\x1b[5~"    }  # PageUp    - 替代 <fn - up>
-  - { key: Down,   mods: Command,       mode: ~Vi|~Search,             chars: "\x1b[6~"    }  # PageDown  - 替代 <fn - down>
-  #- { key: Up,     mods: Command,       mode: ~Vi|~Search,             chars: "\x1b[1;5H"  }  # Ctrl-Home - file start
-  #- { key: Down,   mods: Command,       mode: ~Vi|~Search,             chars: "\x1b[1;5F"  }  # Ctrl-End  - file end
+  - { key: Up,     mods: Command,       mode: ~Vi|~Search,             chars: "\x1b[5~"    }  # Command-Up    -> PageUp    - 替代 <fn - up>
+  - { key: Down,   mods: Command,       mode: ~Vi|~Search,             chars: "\x1b[6~"    }  # Command-Down  -> PageDown  - 替代 <fn - down>
+  - { key: Left,   mods: Command,       mode: ~Vi|~Search,             chars: "\x1bOH"     }  # Command-Left  -> Home      - 替代 <fn - left>
+  - { key: Right,  mods: Command,       mode: ~Vi|~Search,             chars: "\x1bOF"     }  # Command-Right -> End       - 替代 <fn - right>
+  #- { key: Up,     mods: Command,       mode: ~Vi|~Search,             chars: "\x1b[1;5H"  } # Command-Up    -> Ctrl-Home - file start
+  #- { key: Down,   mods: Command,       mode: ~Vi|~Search,             chars: "\x1b[1;5F"  } # Command-Down  -> Ctrl-End  - file end
 
-  - { key: S,      mods: Command,       mode: ~Vi|~Search,             chars: "\x13"       }  # Ctrl-S  - save file.
-  - { key: W,      mods: Command,       mode: ~Vi|~Search,             chars: "\x17"       }  # Ctrl-W  - switch vim window, alacritty 默认设置是 Quit.
-  - { key: R,      mods: Command,       mode: ~Vi|~Search,             chars: "\x12"       }  # Ctrl-R  - vim 中 Ctrl-R 是 redo|register 操作.
-  - { key: Z,      mods: Command,       mode: ~Vi|~Search,             chars: "\x1a"       }  # Ctrl-Z  - vim 中将 Ctrl-z map 到 u 上 undo.
+  - { key: S,      mods: Command,       mode: ~Vi|~Search,             chars: "\x13"       }  # Command-S -> Ctrl-s, vim 中用于 save file.
+  - { key: W,      mods: Command,       mode: ~Vi|~Search,             chars: "\x17"       }  # Command-W -> Ctrl-w, vim 中用于 switch vim window, alacritty 默认设置是 Quit.
+  - { key: R,      mods: Command,       mode: ~Vi|~Search,             chars: "\x12"       }  # Command-R -> Ctrl-r, vim 中用于 redo|register 操作.
+  - { key: Z,      mods: Command,       mode: ~Vi|~Search,             chars: "\x1a"       }  # Command-Z -> Ctrl-z, vim 中用于 u 上 undo.
+  - { key: Slash,  mods: Command,       mode: ~Vi|~Search,             chars: "\x0a"       }  # Command-/ -> Ctrl-j, vim 中用于 Toggle Comments. vim 中无法设置 Ctrl-/ keymap
 
 # `alacritty --print-events` 打印 events/debug 信息.
 debug:

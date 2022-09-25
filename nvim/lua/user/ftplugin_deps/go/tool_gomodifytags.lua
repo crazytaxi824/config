@@ -139,7 +139,7 @@ M.go_add_tags_and_opts = function(arglist, go_add_tags_cmd, offset)
       " -add-options " .. table.concat(tag_opt_list,',')
   end
 
-  print(sh_cmd)
+  vim.notify(sh_cmd)
   local result = vim.fn.system(sh_cmd)
   if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
     Notify(result, "ERROR")
@@ -197,7 +197,7 @@ M.go_remove_tags = function(arglist, go_remove_tags_cmd, offset)
       " -quiet -w"
   end
 
-  print(sh_cmd)
+  vim.notify(sh_cmd)
   local result = vim.fn.system(sh_cmd)
 
   --- 判断结果是否错误
@@ -257,7 +257,7 @@ M.go_remove_tags_opts = function(arglist, go_remove_tag_opts_cmd, offset)
       " -quiet -w"
   end
 
-  print(sh_cmd)
+  vim.notify(sh_cmd)
   local result = vim.fn.system(sh_cmd)
 
   --- 判断结果是否错误

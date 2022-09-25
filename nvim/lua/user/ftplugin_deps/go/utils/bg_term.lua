@@ -40,7 +40,7 @@ M.bg_term_spawn = function(cmd)
   bg_term:spawn()
 end
 
-M.bg_term_shutdown_all = function ()
+M.bg_term_shutdown_all = function()
   for _, bg_term in ipairs(cache_bg_terms) do
     bg_term:shutdown()
   end

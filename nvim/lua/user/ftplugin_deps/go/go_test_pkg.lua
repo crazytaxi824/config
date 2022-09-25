@@ -43,7 +43,6 @@ local function go_test_pkg(opt)
     return
   end
 
-  -- print(cmd)
   _Exec(cmd, false, function()
     --- :GoPprof command
     if vim.tbl_contains({'cpu', 'mem', 'mutex', 'block', 'trace'}, opt.flag) then
@@ -82,7 +81,6 @@ local function go_test_proj(opt)
     return
   end
 
-  -- print(cmd)
   _Exec(cmd, false, function()
     --- NOTE: cannot use pprof flag with multiple packages
     if flag_cmd.suffix and flag_cmd.suffix ~= '' then
@@ -99,7 +97,7 @@ M.go_test_run_pkg = function()
     format_item = function(item)
       return go_utils.get_testflag_desc(item)
     end
-  }, function (choice)
+  }, function(choice)
     if choice then
       go_test_pkg({mode = 'run', flag = choice })
     end
@@ -113,7 +111,7 @@ M.go_test_bench_pkg = function()
     format_item = function(item)
       return go_utils.get_testflag_desc(item)
     end
-  }, function (choice)
+  }, function(choice)
     if choice then
       go_test_pkg({mode = 'bench', flag = choice })
     end
@@ -128,7 +126,7 @@ M.go_test_run_proj = function()
     format_item = function(item)
       return go_utils.get_testflag_desc(item)
     end
-  }, function (choice)
+  }, function(choice)
     if choice then
       go_test_proj({mode = 'run', flag = choice })
     end
@@ -143,7 +141,7 @@ M.go_test_bench_proj = function()
     format_item = function(item)
       return go_utils.get_testflag_desc(item)
     end
-  }, function (choice)
+  }, function(choice)
     if choice then
       go_test_proj({mode = 'bench', flag = choice })
     end

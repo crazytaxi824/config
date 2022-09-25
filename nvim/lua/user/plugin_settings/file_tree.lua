@@ -47,7 +47,7 @@ local diagnostics_icons = {
 
 -- -- }}}
 
---- nvim-tree buffer keymaps ----------------------------------------------------------------------- {{{
+--- nvim-tree keymaps ------------------------------------------------------------------------------ {{{
 --- git: Discard file changes --- {{{
 local function git_discard_file_changes(node)
   --print(node.name, node.absolute_path, vim.inspect(node.git_status), node.type)
@@ -204,6 +204,8 @@ local function system_open(node)
 end
 -- -- }}}
 
+--- nvim-tree buffer keymaps ---------------------------------------------------
+--- only works within "NvimTree_X" buffer.
 local nt_buffer_keymaps = {
   { key = {"<CR>", "e"},   action = "edit" },
   { key = "<C-v>",         action = "vsplit" },  -- vsplit edit
@@ -234,10 +236,14 @@ local nt_buffer_keymaps = {
   { key = "<leader>D",     action = "git: Discard file changes", action_cb = git_discard_file_changes},
 }
 
---- global keymap ---
-vim.keymap.set('n', '<leader>,', '<cmd>NvimTreeFindFileToggle<CR>', {
-  noremap=true, silent=true, desc='toggle Nvim-Tree'
-})
+--- global keymap --------------------------------------------------------------
+local opts = {noremap=true, silent=true}
+local tree_keymaps = {
+  {'n', '<leader>,', '<cmd>NvimTreeToggle<CR>', opts, 'tree: toggle'},
+  {'n', '<leader><CR>', '<cmd>NvimTreeFindFile<CR>', opts, 'tree: find file'},
+}
+
+Keymap_set_and_register(tree_keymaps)
 
 -- -- }}}
 
@@ -253,7 +259,7 @@ nvim_tree.setup {
                     -- 会导致 nvim 退出.
     auto_open = true,
   },
-  hijack_unnamed_buffer_when_opening = false,  -- Opens in place of the unnamed buffer if it's empty.
+  hijack_unnamed_buffer_when_opening = false,  -- Opens in place of the unnamed buffer if it's empty. 默认 false.
 
   --- 启动 nvim 时, 打开 tree.
   open_on_setup = false,  -- 不好用. 启动 nvim 打开文件时, 自动打开 tree. eg: `nvim dir`
@@ -295,7 +301,7 @@ nvim_tree.setup {
 
   renderer = {
     highlight_git = true,  -- 开启 git filename 颜色. 需要设置 git.enable = true
-    highlight_opened_files = "all",  -- highlight icon or filename or both.
+    highlight_opened_files = "name", -- highlight icon or filename or both.
                                      -- "none"(*) | "icon" | "name" | "all"
     indent_width = 2, -- 默认 2.
     indent_markers = {
@@ -339,7 +345,7 @@ nvim_tree.setup {
   filters = {
     dotfiles = false,  -- true:不显示隐藏文件, false:显示隐藏文件.
     custom = { '^\\.DS_Store$', '^\\.git$', '.*\\.swp$' },    -- 不显示指定文件
-    exclude = {},
+    exclude = {},  -- List of dir or files to exclude from filtering: always show them.
   },
   git = {
     enable = true,  -- VVI: 开启 git filename 和 icon 颜色显示.
@@ -355,8 +361,8 @@ nvim_tree.setup {
       global = false,
     },
     expand_all = {
-      max_folder_discovery = 300,
-      exclude = {"node_modules"},  -- NOTE: 排除 expand dir
+      max_folder_discovery = 60,  -- VVI: 最多递归打开 n 个 folder, 到达该数字后停止 expand.
+      exclude = { "node_modules", ".mypy_cache", ".git" },  -- NOTE: 排除 expand dir
     },
     open_file = {
       quit_on_open = false,  -- VVI: 打开文件后自动关闭 Nvimtree
@@ -378,7 +384,7 @@ nvim_tree.setup {
     require_confirm = true,
   },
 
-  -- 日志 --
+  --- 日志 ---
   log = {
     enable = false,
     truncate = false,
@@ -415,7 +421,7 @@ vim.cmd('hi NvimTreeGitMerge   ctermfg=170')
 vim.cmd('hi NvimTreeGitRenamed ctermfg=170')
 vim.cmd('hi NvimTreeGitNew     ctermfg=167')
 vim.cmd('hi NvimTreeGitDeleted ctermfg=167')
-vim.cmd('hi NvimTreeGitIgnored ctermfg=242')
+vim.cmd('hi NvimTreeGitIgnored ctermfg=244')
 
 --- git filename color, 默认是 link 上面 git icon color.
 vim.cmd('hi! default link NvimTreeFileDirty  NvimTreeGitStaged')  -- hi! default link 在 hi clear 时回到该设置.
@@ -447,7 +453,7 @@ vim.api.nvim_create_autocmd({"BufEnter", "BufDelete"}, {
     --- VVI: 必须使用 vim.schedule(), 否则 bdelete 的时候不会刷新显示.
     --- 因为 bnext | bdelete #, 先 Enter 其他 buffer, 这时之前的 buffer 还没有被 delete, 所以 reload()
     --- 的时候 buffer highlight 还在.
-    vim.schedule(function ()
+    vim.schedule(function()
       nt_api.tree.reload()  -- refresh tree
     end)
   end

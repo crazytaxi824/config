@@ -138,7 +138,7 @@ local telescope_keymaps = {
   {'n', '<leader>fb', builtin.buffers,    opt, 'telescope: Buffer List'},
   {'n', '<leader>fh', builtin.help_tags,  opt, 'telescope: Vim Help Doc'},
   {'n', '<leader>fk', builtin.keymaps,    opt, 'telescope: Keymap normal Mode'},
-  {'n', '<leader>fc', builtin.command_history, opt, 'telescope: Command History'},
+  {'n', '<leader>f:', builtin.command_history, opt, 'telescope: Command History'},
   {'n', '<leader>f/', builtin.search_history,  opt, 'telescope: Search History'},
   {'n', '<leader>fl', builtin.highlights,  opt, 'telescope: Search Highlight'},
   {'n', 'z=', builtin.spell_suggest, opt, 'telescope: Spell Suggests'},  -- 也可以使用 which-key 显示.

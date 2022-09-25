@@ -1,27 +1,37 @@
---- highlight <file:line:col>, `:help pattern-overview` --------------------------------------------
-function Highlight_filepath(data_list)
-  --- file:// pattern match
-  --- '\f' - isfname, 可用于 filename 的字符/数字/符号...
+--- highlight <file:line:col> ----------------------------------------------------------------------
+vim.cmd('hi Filepath cterm=underline ctermfg=43')  -- 自定义颜色, for Highlight_filepath()
+vim.cmd('hi URL cterm=underline ctermfg=75')  -- 自定义颜色, for Highlight_filepath()
+
+--- NOTE: `:help pattern-overview`, vim pattern.
+function Highlight_filepath()
+  --- file:///abc/def.txt
+  --- '\f' - isfname, 表示可用于 filename 的字符/数字/符号...
   --- '\<' - start of a word
-  vim.fn.matchadd('Underlined', '\\<file://\\f*\\(:[0-9]\\+\\)\\{0,2}')  -- highlight filepath
+  vim.fn.matchadd('Filepath',
+    '\\<file://'  -- 'file://' 开头
+    .. '\\f\\+'  -- filename 可以用字符. '\+' 表示至少有一个字符.
+    .. '\\(:[0-9]\\+\\)\\{0,2}'  -- ':num:num' | ':num' | '' (空)
+  )
 
-  for _, lcontent in ipairs(data_list) do
-    for _, content in ipairs(vim.split(lcontent, " ")) do
-      --- VVI: 这里必须 trim(), 可以去掉 \r \n ...
-      local fp = vim.split(vim.fn.trim(content), ":")
+  --- ~/xxx | ./xxx | /xxx
+  --- \@<! - eg: \(foo\)\@<!bar  - any "bar" that's not in "foobar"
+  --- \@!  - eg: foo\(bar\)\@!   - any "foo" not followed by "bar"
+  vim.fn.matchadd('Filepath',
+    '\\(\\S\\)\\@<!'   -- 表示前面不能是 (\S) non-whitespace, 意思是只能是 whitespace 或者 ^.
+    .. '[~.]\\{0,1}/'  -- '~/' | './' | '/' 开头
+    .. '\\f\\+'  -- filename 可以用字符. '\+' 表示至少有一个字符.
+    .. '\\(:[0-9]\\+\\)\\{0,2}'  -- ':num:num' | ':num' | '' (空)
+  )
 
-      local expand_status_ok, result = pcall(vim.fn.expand, fp[1])
-      if expand_status_ok and vim.fn.filereadable(result) == 1 then
-        --- highlight filepath
-        --- \@<! - eg: \(foo\)\@<!bar  - any "bar" that's not in "foobar"
-        --- \@!  - eg: foo\(bar\)\@!   - any "foo" not followed by "bar"
-        vim.fn.matchadd(
-          'Underlined',
-          '\\(\\S\\)\\@<!'..vim.fn.escape(fp[1], '~') .. '\\(:[0-9]\\+\\)\\{0,2}'
-        )
-      end
-    end
-  end
+  --- highlight url
+  --- http:// | https://
+  vim.fn.matchadd('URL',
+    '\\<http[s]\\{0,1}://'  -- 'http://' | 'https://' 开头
+    .. '\\f\\+'  -- filename 可以用字符. eg: www.abc.com
+    .. '\\(:[0-9]\\+\\)\\{0,1}' -- port, eg:80
+    .. '[/]\\{0,1}[?]\\{0,1}'  -- /? | ? | ''
+    .. '\\f*\\(&\\f\\+\\)*'  -- '' | foo=bar | foo=fuz&bar=buz...
+  )
 end
 
 --- Jump to file -----------------------------------------------------------------------------------
@@ -29,34 +39,7 @@ end
 --- vim.fn.setloclist(1000, { {filename='src/main.go', lnum=1, col=1, text='jump_to_log_file()'} }, 'r'/'a')
 --- 'r' - replace items; 'a' - append items
 --- `:help setqflist-what`
-function Jump_to_file(filepath, lnum, col)
-  if not filepath or filepath == '' then  -- empty line
-    return
-  end
-
-  --- 这里使用 pcall 是为了防止 vim.fn.expand('{foo') unescaped char {}[] ... 报错.
-  local expand_status_ok, result = pcall(vim.fn.expand, filepath)
-  if not expand_status_ok then
-    Notify('cannot open file: ' .. filepath, "DEBUG", {timeout = 1500})
-    return
-  end
-
-  filepath = result
-
-  if not lnum then  --- 如果 lnum 不存在, 跳到文件第一行.
-    lnum = 1
-  end
-
-  if not col then
-    col = 1
-  end
-
-  --- 如果 filepath 不可读取, 则直接 return. eg: filepath 错误
-  if vim.fn.filereadable(filepath) == 0 then
-    Notify('cannot open file: ' .. filepath, "DEBUG", {timeout = 1500})
-    return
-  end
-
+local function jump_to_file(absolute_path, lnum, col)
   --- 如果有 local list item, 则选择合适的 window 进行显示.
   local log_display_win_id  -- 用于设置 setloclist()
 
@@ -69,7 +52,7 @@ function Jump_to_file(filepath, lnum, col)
     end
   end
 
-  local loclist_item = {filename = filepath, lnum = lnum, col=col, text='jump_to_log_file()'}
+  local loclist_item = {filename = absolute_path, lnum = lnum, col=col, text='jump_to_file()'}
 
   if vim.fn.win_gotoid(log_display_win_id) == 1 then
     --- 如果 log_display_win_id 可以跳转则直接跳转.
@@ -97,6 +80,20 @@ function Jump_to_file(filepath, lnum, col)
   end
 end
 
+--- jump to dir if nvim-tree exist
+local function open_dir_in_nvimtree(dir)
+  local nt_status_ok, nt = pcall(require, "nvim-tree.api")
+  if not nt_status_ok then
+    return
+  end
+
+  --- open nvim-tree
+  nt.tree.open()
+
+  --- cursor jump to dir
+  nt.tree.find_file(dir)
+end
+
 --- file://xxxx
 local function parse_file_scheme(content)
   if string.match(content, '^file://') then
@@ -122,19 +119,48 @@ local function parse_filepath(content)
   return file, lnum, col
 end
 
+function Jump_to_file(content)
+  local filepath, lnum, col = parse_filepath(content)
+
+  if not filepath or filepath == '' then  -- empty line
+    return
+  end
+
+  local absolute_path = vim.fn.fnamemodify(filepath, ':p')
+
+  --- 如果 filepath 不可读取, 则直接 return. eg: filepath 错误
+  if vim.fn.filereadable(absolute_path) == 0 then
+    if vim.fn.isdirectory(absolute_path) == 0 then
+      Notify('cannot open file: "' .. filepath .. '"', "DEBUG", {timeout = 1500})
+      return
+    else
+      Notify('"' .. filepath .. '" is a directory', "DEBUG", {timeout = 1500})
+      --open_dir_in_nvimtree(absolute_path)  -- TODO
+      return
+    end
+  end
+
+  if not lnum then  --- 如果 lnum 不存在, 跳到文件第一行.
+    lnum = 1
+  end
+
+  if not col then
+    col = 1
+  end
+
+  jump_to_file(absolute_path, lnum, col)
+end
+
 --- terminal normal 模式跳转文件 -------------------------------------------------------------------
 --- 操作方法: 在 Terminal Normal 模式中, 在行的任意位置使用 <CR> 跳转到文件.
-function Cursor_cWORD_filepath()
-  return parse_filepath(vim.fn.expand('<cWORD>'))
-end
 
 --- TermClose 意思是 job done
 --- TermLeave 意思是 term 关闭
 vim.api.nvim_create_autocmd('TermOpen', {
   pattern = {"term://*"},
   callback = function(params)
-    vim.keymap.set('n', '<CR>',
-      "<cmd>lua Jump_to_file(Cursor_cWORD_filepath())<CR>",
+    vim.keymap.set('n', '<S-CR>',
+      "<cmd>lua Jump_to_file(vim.fn.expand('<cWORD>'))<CR>",
       {
         noremap = true,
         silent = true,
@@ -146,10 +172,10 @@ vim.api.nvim_create_autocmd('TermOpen', {
 })
 
 --- VISIAL 模式跳转文件 ----------------------------------------------------------------------------
---- VISUAL 选中的 filepath, 不管在什么 filetype 中都跳转
---- 操作方法: visual select 'filepath:lnum', 然后使用 <CR> 跳转到文件.
-function Visual_selected_filepath()
-  --- NOTE: getpos("'<") 和 getpos("'>") 必须在 normal 模式执行, 意思是从 visual mode 退出后再执行以下函数.
+--- 获取 visual selected word.
+function Visual_selected()
+  --- NOTE: getpos("'<") 和 getpos("'>") 必须在 normal 模式执行,
+  --- 即: <C-c> 从 visual mode 退出后再执行以下函数.
   --- `:echo getline("'<")[getpos("'<")[2]-1:getpos("'>")[2]-1]`
   local startpos = vim.fn.getpos("'<")
   local endpos = vim.fn.getpos("'>")
@@ -159,12 +185,13 @@ function Visual_selected_filepath()
     return
   end
 
-  local v_content = string.sub(vim.fn.getline("'<"), startpos[3], endpos[3])
-  return parse_filepath(v_content)
+  return string.sub(vim.fn.getline("'<"), startpos[3], endpos[3])
 end
 
-vim.keymap.set('v', '<CR>',
-  "<C-c>:lua Jump_to_file(Visual_selected_filepath())<CR>",
+--- VISUAL 选中的 filepath, 不管在什么 filetype 中都跳转
+--- 操作方法: visual select 'filepath:lnum', 然后使用 <S-CR> 跳转到文件.
+vim.keymap.set('v', '<S-CR>',
+  "<C-c>:lua Jump_to_file(Visual_selected())<CR>",
   {noremap = true, silent = true, desc = "Jump to file"}
 )
 

@@ -268,10 +268,8 @@ return packer.startup(function(use)
     opt = true,  -- 在 vim.schedule() 中 lazy load
     requires = {
       --- 以下都是 treesitter modules 插件, 在 setup() 中启用的插件.
-      --- 第一方 module 插件 ---
       "nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
       "nvim-treesitter/playground",  -- 用于获取 treesitter 信息, 调整颜色很有用.
-      --- 第三方 module 插件 ---
       "JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
       "windwp/nvim-ts-autotag",  -- auto close tag <div></div>
       --"p00f/nvim-ts-rainbow",  -- 括号颜色. treesitter 解析, 严重拖慢文件打开速度.
@@ -289,7 +287,6 @@ return packer.startup(function(use)
   use {"nvim-treesitter/playground",  -- 用于获取 treesitter 信息, 调整颜色很有用.
     commit = "e6a0bfa",
     cmd = {"TSPlaygroundToggle", "TSHighlightCapturesUnderCursor"},
-    after = "nvim-treesitter",
   }
 
   --- 第三方 module 插件 ---
@@ -302,7 +299,6 @@ return packer.startup(function(use)
     commit = "fdefe46",
     after = "nvim-treesitter",
   }
-  --{"p00f/nvim-ts-rainbow"},   -- 括号颜色. treesitter 解析, 严重拖慢文件打开速度.
 
   --- 以下是使用了 treesitter 功能的插件. (这些插件也可以不使用 treesitter 的功能)
   --- 注释
@@ -329,56 +325,53 @@ return packer.startup(function(use)
     commit = "913eb85",
     config = function() require("user.plugin_settings.cmp_completion") end,
     opt = true,  -- 在 vim.schedule() 中 lazy load
+    requires = {
+      "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全
+      "hrsh7th/cmp-buffer",  -- 当前 buffer 中有的 word
+      "hrsh7th/cmp-path",  -- filepath 补全
+      --"hrsh7th/cmp-cmdline",  -- cmdline completions, 不好用.
+      "saadparwaiz1/cmp_luasnip",  -- snippets
+    },
   }
 
   --- NOTE: 以下是 nvim-cmp module 插件, 在 setup() 中启用的插件.
   use {"hrsh7th/cmp-nvim-lsp",  -- LSP source for nvim-cmp
     commit = "affe808",
     after = "nvim-cmp",
-    requires = "hrsh7th/nvim-cmp",
   }
 
-  use {"hrsh7th/cmp-buffer",    -- buffer completions
+  use {"hrsh7th/cmp-buffer",  -- 当前 buffer 中有的 word
     commit = "3022dbc",
     after = "nvim-cmp",
-    requires = "hrsh7th/nvim-cmp",
   }
 
-  use {"hrsh7th/cmp-path",      -- path completions
+  use {"hrsh7th/cmp-path",  -- filepath 补全
     commit = "447c87c",
     after = "nvim-cmp",
-    requires = "hrsh7th/nvim-cmp",
   }
 
   use {"saadparwaiz1/cmp_luasnip",  -- Snippets source for nvim-cmp
     commit = "a9de941",
     after = "nvim-cmp",
-    requires = {
-      "hrsh7th/nvim-cmp", "L3MON4D3/LuaSnip",
-    },
+    requires = "L3MON4D3/LuaSnip",
   }
 
-  --- snippet engine, for "cmp_luasnip", NOTE: 每次打开文件都会有一个 [Scratch] buffer.
+  --- snippet engine, for "cmp_luasnip", 每次打开文件都会有一个 [Scratch] buffer.
   use {"L3MON4D3/LuaSnip",
-    commit = "d36c063",
-    --- BUG: opt 加载无法 load jsregexp 插件.
-    --- 文件位置: stdpath('data') .. "/site/pack/packer/start/LuaSnip/lua/luasnip-jsregexp.so"
+    commit = "d36c063",  -- BUG: opt 加载无法 load jsregexp 插件.
+                         -- jsregexp 位置: stdpath('data') .. "/site/pack/packer/start/LuaSnip/lua/luasnip-jsregexp.so"
     run = "make install_jsregexp",  -- https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#transformations
     config = function() require("user.plugin_settings.luasnip_snippest") end,
     after = "cmp_luasnip",
     requires = {
-      "saadparwaiz1/cmp_luasnip",
-      {"rafamadriz/friendly-snippets",  -- snippets content, 自定义 snippets 可以借鉴这个结构.
-        commit = "2be79d8",
-      },
+      {"rafamadriz/friendly-snippets", commit = "2be79d8"}, -- snippets content, 自定义 snippets 可以借鉴这个结构.
     },
   }
 
   --- cmdline completions, 不好用.
   -- use {"hrsh7th/cmp-cmdline",
-  --   commit = "",  -- NOTE: 从没有使用过
+  --   commit = "",
   --   after = "nvim-cmp",
-  --   requires = "hrsh7th/nvim-cmp",
   -- }
 
   --- 自动括号, 同时依赖 treesitter && cmp
@@ -386,8 +379,8 @@ return packer.startup(function(use)
     commit = "14cc2a4",
     config = function() require("user.plugin_settings.autopairs") end,
     after = {
-      "nvim-cmp",  -- cmp.event:on() 设置.
       "nvim-treesitter",  -- setup() 中 `check_ts`, `ts_config` 需要 treesitter 支持.
+      "nvim-cmp",  -- cmp.event:on() 设置.
     },
     requires = {
       "nvim-treesitter/nvim-treesitter",
@@ -403,7 +396,8 @@ return packer.startup(function(use)
     config = function() require("user.lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     opt = true,  -- 在 vim.schedule() 中 lazy load
     requires = {
-      "hrsh7th/cmp-nvim-lsp",  -- provide content to nvim-cmp Completion. cmp_nvim_lsp.update_capabilities(capabilities)
+      "nvim-cmp",  -- provide content to nvim-cmp Completion. cmp_nvim_lsp.update_capabilities(capabilities)
+      "hrsh7th/cmp-nvim-lsp",
       "williamboman/mason.nvim",  -- 安装 lsp 命令行工具.
     },
   }

@@ -45,7 +45,7 @@ M.exists = function(section, tool)
 end
 
 --- project local setting 存在的情况下 extend settings. VVI: 一定要配合 exists() 使用.
-M.exists_keep_extend = function (section, tool, tbl, ...)
+M.exists_keep_extend = function(section, tool, tbl, ...)
   --- M._lazyload()  -- VVI: exists() 中已经 lazyload()
 
   --- tbl_deep_extend() 会自动处理 ... 是否为 nil 的情况.

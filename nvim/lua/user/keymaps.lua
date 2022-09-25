@@ -342,9 +342,18 @@ local keymaps = {
   {'n', '/', "<cmd>lua _Delete_search_hl()<CR>/", {noremap=true}, 'which_key_ignore'},
 
   --- CTRL -----------------------------------------------------------------------------------------
+  --- 可以使用的 Ctrl keymap --- {{{
+  --- <C-q> 容易退出程序, 不要使用. 默认 Visual-Block mode
+  --- <C-s> = remap save file.
+  --- <C-z> = remap undo, 默认 ":stop" 中止 job.
+  --- <C-j> = remap toggle Comments, 默认相当于 j (cursor down)
+  --- <C-t> 默认 tag stack. NOTE: 还未 remap.
+  --- <C-g> 默认 print current filename. NOTE: 还未 remap.
+  -- -- }}}
   {'n', '<C-s>', ':update<CR>', opt, 'which_key_ignore'},
   {'v', '<C-s>', '<C-c>:update<CR>', opt, 'which_key_ignore'},
   {'i', '<C-s>', '<C-c>:update<CR>', opt, 'which_key_ignore'},
+
   --- VVI: <Ctrl-Z> 是危险操作. 意思是 :stop. Suspend vim, 退出到 terminal 界面, 但保留 job.
   --- 需要使用 `jobs -l` 列出 Suspended 列表,
   --- 使用 `fg %1` 恢复 job,

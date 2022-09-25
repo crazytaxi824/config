@@ -32,7 +32,7 @@ local null_tools = {
   },
 
   {cmd="prettier", install=" brew info prettier", mason="prettier"},
-  {cmd="stylua", install="brew info stylua", mason="stylua"},
+  --{cmd="stylua", install="brew info stylua", mason="stylua"},
   {cmd="shfmt", install="brew info shfmt", mason="shfmt"},
   {cmd="flake8", install="pip3 install flake8", mason="flake8"},
   {cmd="autopep8", install="pip3 install autopep8", mason="autopep8"},
@@ -157,11 +157,6 @@ local formatter_settings = {
   formatting.prettier.with(proj_local_settings.keep_extend(local_formatter_key, 'prettier',
     require("user.lsp.null_ls.tools.prettier")  -- NOTE: 加载单独设置 null_ls/tools/prettier.lua
   )),
-
-  --- lua, stylua
-  formatting.stylua.with(proj_local_settings.keep_extend(local_formatter_key, 'stylua', {
-    extra_args = { "--column-width=" .. vim.bo.textwidth },  -- 和 vim textwidth 相同.
-  })),
 
   --- python, autopep8, black, YAPF
   formatting.autopep8.with(proj_local_settings.keep_extend(local_formatter_key, 'autopep8', {})),

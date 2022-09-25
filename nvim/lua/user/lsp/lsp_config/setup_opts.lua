@@ -52,7 +52,7 @@ M.on_init = function(client)
   --- `:lua print(vim.inspect(vim.lsp.buf_get_clients()))` 查看启动的 lsp 和所有相关设置
   --- ts, js, html, json, jsonc ... 使用 'prettier'
   --- lua 使用 'stylua'
-  local disable_format = {"tsserver", "html", "sumneko_lua", "jsonls"}
+  local disable_format = {"tsserver", "html", "jsonls"}  -- 使用 prettier format.
   if vim.tbl_contains(disable_format, client.name) then
     client.resolved_capabilities.document_formatting = false
   end

@@ -53,8 +53,8 @@ toggleterm.setup({
   --- terminal 输出时 highlight filepath.
   --- output 是一个 list, 按照行分隔.
   --- 这里不使用 autocmd TermClose 而是使用 on_stdout 主要是因为有些程序运行不会结束, eg: http 监听.
-  on_stdout = function(_,_,output,_)
-    Highlight_filepath(output)
+  on_stdout = function()
+    Highlight_filepath()
   end,
 
   --- 其他设置, NOTE: 以下最好不要全局设置, 可以根据具体情况在 :open() 前设置 ---
@@ -90,8 +90,7 @@ vim.cmd [[au TermOpen term://* :setlocal nonumber]]
 vim.api.nvim_create_autocmd({"BufWinEnter"}, {
   pattern = {"term://*"},
   callback = function()
-    local output = vim.fn.getline(1, '$')
-    Highlight_filepath(output)
+    Highlight_filepath()
   end,
 })
 
@@ -138,7 +137,7 @@ function _Exec(cmd, cache, callback)
         --- 如果 goto 的 win_id 不存在, 则会自动跳到别的 window.
         vim.fn.win_gotoid(exec_wid)  -- 这里会返回 true | false.
       end,
-      desc = 'go back to _Exec() window',
+      desc = 'go back to window which execute _Exec()',
     })
   end
 
@@ -146,7 +145,7 @@ function _Exec(cmd, cache, callback)
   exec_term.on_exit = callback
 
   --- 设置 cmd
-  exec_term.cmd = cmd
+  exec_term.cmd = 'echo -e "\\e[32m' .. vim.fn.escape(cmd,'"') .. ' \\e[0m" && ' .. cmd
 
   --- NOTE: 如果使用 :new() 生成了新的实例, 需要重新缓存新生成的实例, 否则无法 open() / close() ...
   --exec_term = exec_term:new(vim.tbl_deep_extend('error', exec_opts, {cmd = cmd}))
@@ -167,7 +166,7 @@ local function exec_cached_cmd()
   exec_term:shutdown()
 
   --- 设置 cmd
-  exec_term.cmd = cache_cmd
+  exec_term.cmd = 'echo -e "\\e[32m' .. vim.fn.escape(cache_cmd,'"') .. ' \\e[0m" && ' .. cache_cmd
 
   --- run cmd
   exec_term:open()

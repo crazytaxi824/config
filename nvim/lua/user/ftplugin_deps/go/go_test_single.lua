@@ -84,7 +84,6 @@ local function go_test_single(testfn_name, opt)
     return
   end
 
-  -- print(cmd)
   _Exec(cmd, false, function()
     --- :GoPprof command
     if vim.tbl_contains({'cpu', 'mem', 'mutex', 'block', 'trace'}, opt.flag) then
@@ -126,7 +125,7 @@ M.go_test_single_func = function(prompt)
       format_item = function(item)
         return go_utils.get_testflag_desc(item)
       end
-    }, function (choice)
+    }, function(choice)
       if choice then
         go_test_single(testfn_name, {mode = mode, flag = choice})
       end
@@ -138,7 +137,7 @@ M.go_test_single_func = function(prompt)
       format_item = function(item)
         return go_utils.get_testflag_desc(item)
       end
-    }, function (choice)
+    }, function(choice)
       if choice then
         go_test_single(testfn_name, {mode = mode, flag = choice})
       end

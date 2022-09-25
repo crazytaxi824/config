@@ -19,7 +19,7 @@ local function select_pprof()
     format_item = function(item)
       return M.get_testflag_desc(item)
     end
-  }, function (choice)
+  }, function(choice)
     if choice then
       M.bg_term_spawn(M.parse_testflag_cmd(choice).suffix)
     end

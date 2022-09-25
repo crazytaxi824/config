@@ -32,13 +32,13 @@ M.gotests_cmd_tool = function()
 
   --- `gotests -only Foo /xxx/src/foo.go`
   local cmd = 'gotests -only ' .. func .. ' ' .. fp
-  print(cmd)
 
   --- 删除之前的 terminal, 同时终止 job.
   --- NOTE: 这一步放在 cmd 生成的后面, 防止 shutdown() 导致 buffer 意外改变.
   gotests:shutdown()
 
   --- 设置 cmd
+  vim.notify(cmd)
   gotests.cmd = cmd
 
   --- run cmd
