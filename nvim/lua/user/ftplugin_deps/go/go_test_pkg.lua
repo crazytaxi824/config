@@ -28,7 +28,7 @@ local function go_test_pkg(opt)
     return
   end
 
-  local cmd = 'cd ' .. dir .. ' &&' .. flag_cmd.prefix
+  local cmd = 'cd ' .. dir .. ' &&'
   --- NOTE: 不能同时运行多个 fuzz test. Error: will not fuzz, -fuzz matches more than one fuzz test.
   if opt.mode == 'run' then
     --- go test -v -timeout 30s -run "^Test.*" ImportPath
@@ -43,6 +43,16 @@ local function go_test_pkg(opt)
     return
   end
 
+  --- first run prefix shell command
+  if flag_cmd.prefix and flag_cmd.prefix ~= '' then
+    local result = vim.fn.system(flag_cmd.prefix)
+    if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
+      Notify(result, "ERROR")
+      return
+    end
+  end
+
+  --- toggleterm 执行 command
   _Exec(cmd, false, function()
     --- :GoPprof command
     if vim.tbl_contains({'cpu', 'mem', 'mutex', 'block', 'trace'}, opt.flag) then
@@ -71,16 +81,26 @@ local function go_test_proj(opt)
 
   --- NOTE: cannot use -fuzz flag with multiple packages.
   if opt.mode == 'run' then
-    cmd = flag_cmd.prefix .. ' go test -v' .. flag_cmd.flag
+    cmd = 'go test -v' .. flag_cmd.flag
       .. ' -timeout 3m ./...'
   elseif opt.mode == 'bench' then
-    cmd = flag_cmd.prefix .. ' go test -v' .. flag_cmd.flag
+    cmd = 'go test -v' .. flag_cmd.flag
       .. ' -timeout 5m -run ^$ -benchmem -bench "^Benchmark.*" ./...'
   else  -- error
     Notify("go test multiple packages {opt.mode} should be: 'run' | 'bench'", "DEBUG")
     return
   end
 
+  --- first run prefix shell command
+  if flag_cmd.prefix and flag_cmd.prefix ~= '' then
+    local result = vim.fn.system(flag_cmd.prefix)
+    if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
+      Notify(result, "ERROR")
+      return
+    end
+  end
+
+  --- toggleterm 执行 command
   _Exec(cmd, false, function()
     --- NOTE: cannot use pprof flag with multiple packages
     if flag_cmd.suffix and flag_cmd.suffix ~= '' then

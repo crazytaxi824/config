@@ -66,7 +66,7 @@ local function go_test_single(testfn_name, opt)
     return
   end
 
-  local cmd = 'cd ' .. dir .. ' &&' .. flag_cmd.prefix
+  local cmd = 'cd ' .. dir .. ' &&'
   if opt.mode == 'run' then
     --- go test -v -timeout 10s -run TestXxx ImportPath
     cmd = cmd .. ' go test -v' .. flag_cmd.flag
@@ -84,6 +84,16 @@ local function go_test_single(testfn_name, opt)
     return
   end
 
+  --- first run prefix shell command
+  if flag_cmd.prefix and flag_cmd.prefix ~= '' then
+    local result = vim.fn.system(flag_cmd.prefix)
+    if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
+      Notify(result, "ERROR")
+      return
+    end
+  end
+
+  --- toggleterm 执行 command
   _Exec(cmd, false, function()
     --- :GoPprof command
     if vim.tbl_contains({'cpu', 'mem', 'mutex', 'block', 'trace'}, opt.flag) then
