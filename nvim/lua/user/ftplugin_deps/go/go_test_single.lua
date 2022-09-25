@@ -100,6 +100,9 @@ local function go_test_single(testfn_name, opt)
       go_utils.set_pprof_cmd_keymap()
     end
 
+    --- autocmd bg_term:shutdown()
+    go_utils.auto_shutdown_all_bg_terms()
+
     --- run `go tool pprof ...` in background terminal
     if flag_cmd.suffix and flag_cmd.suffix ~= '' then
       go_utils.bg_term_spawn(flag_cmd.suffix)

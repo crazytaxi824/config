@@ -16,9 +16,8 @@ M.bg_term_spawn = function(cmd)
     --- 但是如果有相同 count 的 term job 还未结束时, 新的 term 无法运行.
     count = bg_term_count,
 
-    --- VVI: 必须要, 否则在 :shutdown() 的时候会因为 close_on_exit 开始退出,
-    --- 导致 :open() 在执行下一个命令的过程中 terminal 退出.
-    close_on_exit = false,
+    --- bg_term_spawn 窗口不打开, 不显示任何信息, 可以在执行完 job 之后自动退出.
+    close_on_exit = true,
 
     --- 不允许被 :ToggleTerm 控制.
     hidden = true,
@@ -44,6 +43,8 @@ M.bg_term_shutdown_all = function()
   for _, bg_term in ipairs(cache_bg_terms) do
     bg_term:shutdown()
   end
+
+  --- 清空 cache
   cache_bg_terms = {}
 end
 

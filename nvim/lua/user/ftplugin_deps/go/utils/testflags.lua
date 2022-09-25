@@ -146,7 +146,7 @@ local flag_desc_cmd = {
   fuzz10m = { desc = 'fuzztime 10m', cmd = {prefix='', flag=' -fuzztime 10m', suffix=''} },
 
   --- NOTE: 这里的 cmd 内容需要根据 input 来设置.
-  fuzz_input = { desc = 'Input fuzztime: 1h2m30s (duration) | 1000x (times)', cmd = {} },
+  fuzz_input = { desc = 'Input fuzztime: 15s|20m|1h20m30s (duration) | 1000x (times)', cmd = {} },
 }
 
 --- 返回 description
@@ -164,7 +164,7 @@ M.parse_testflag_cmd = function(flag)
   --- NOTE: 根据用户 input 设置 -fuzztime cmd 内容.
   if flag == 'fuzz_input' then
     local fuzz_cmd
-    vim.ui.input({prompt = 'Input -fuzztime (eg: 15s|10m|1h20m30s): '}, function(input)
+    vim.ui.input({prompt = 'Input -fuzztime: '}, function(input)
       if input then
         fuzz_cmd = { prefix = '', flag = ' -fuzztime '..input, suffix = '' }
       end

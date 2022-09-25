@@ -59,6 +59,9 @@ local function go_test_pkg(opt)
       go_utils.set_pprof_cmd_keymap()
     end
 
+    --- autocmd bg_term:shutdown()
+    go_utils.auto_shutdown_all_bg_terms()
+
     --- run `go tool pprof ...` in background terminal
     if flag_cmd.suffix and flag_cmd.suffix ~= '' then
       go_utils.bg_term_spawn(flag_cmd.suffix)
@@ -102,6 +105,9 @@ local function go_test_proj(opt)
 
   --- toggleterm 执行 command
   _Exec(cmd, false, function()
+    --- autocmd bg_term:shutdown()
+    go_utils.auto_shutdown_all_bg_terms()
+
     --- NOTE: cannot use pprof flag with multiple packages
     if flag_cmd.suffix and flag_cmd.suffix ~= '' then
       go_utils.bg_term_spawn(flag_cmd.suffix)
