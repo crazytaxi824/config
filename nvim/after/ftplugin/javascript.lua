@@ -26,7 +26,7 @@ end
 local opt = {noremap = true, buffer = true}
 local js_keymaps = {
   --- run current_file ---
-  {'n', '<F5>', function() js_run(vim.fn.expand('%')) end, opt, "code: Run"},
+  {'n', '<F5>', function() js_run(vim.fn.expand('%')) end, opt, "code: Run File"},
 
   --- jest test ---
   {'n', '<F6>', function() js_jest(vim.fn.expand('%'), false) end, opt, "code: Run Test"},

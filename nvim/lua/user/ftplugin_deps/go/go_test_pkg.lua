@@ -59,7 +59,7 @@ local function go_test_pkg(opt)
       go_utils.set_pprof_cmd_keymap()
     end
 
-    --- autocmd bg_term:shutdown()
+    --- autocmd BufWipeout bg_term:shutdown()
     go_utils.auto_shutdown_all_bg_terms()
 
     --- run `go tool pprof ...` in background terminal
@@ -108,7 +108,7 @@ local function go_test_proj(opt)
 
   --- toggleterm on_exit callback function
   local on_exit = function()
-    --- autocmd bg_term:shutdown()
+    --- autocmd BufWipeout bg_term:shutdown()
     go_utils.auto_shutdown_all_bg_terms()
 
     --- NOTE: cannot use pprof flag with multiple packages

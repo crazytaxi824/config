@@ -100,7 +100,7 @@ local function go_test_single(testfn_name, opt)
       go_utils.set_pprof_cmd_keymap()
     end
 
-    --- autocmd bg_term:shutdown()
+    --- autocmd BufWipeout bg_term:shutdown()
     go_utils.auto_shutdown_all_bg_terms()
 
     --- run `go tool pprof ...` in background terminal
