@@ -52,8 +52,8 @@ local function go_test_pkg(opt)
     end
   end
 
-  --- toggleterm 执行 command
-  _Exec(cmd, false, function()
+  --- toggleterm on_exit callback function
+  local on_exit = function()
     --- :GoPprof command
     if vim.tbl_contains({'cpu', 'mem', 'mutex', 'block', 'trace'}, opt.flag) then
       go_utils.set_pprof_cmd_keymap()
@@ -66,7 +66,10 @@ local function go_test_pkg(opt)
     if flag_cmd.suffix and flag_cmd.suffix ~= '' then
       go_utils.bg_term_spawn(flag_cmd.suffix)
     end
-  end)
+  end
+
+  --- toggleterm 执行 command
+  _Exec(cmd, false, on_exit)
 end
 
 --- go test run/bench multiple packages (Project) --------------------------------------------------
@@ -103,8 +106,8 @@ local function go_test_proj(opt)
     end
   end
 
-  --- toggleterm 执行 command
-  _Exec(cmd, false, function()
+  --- toggleterm on_exit callback function
+  local on_exit = function()
     --- autocmd bg_term:shutdown()
     go_utils.auto_shutdown_all_bg_terms()
 
@@ -112,7 +115,10 @@ local function go_test_proj(opt)
     if flag_cmd.suffix and flag_cmd.suffix ~= '' then
       go_utils.bg_term_spawn(flag_cmd.suffix)
     end
-  end)
+  end
+
+  --- toggleterm 执行 command
+  _Exec(cmd, false, on_exit)
 end
 
 --- export functions -------------------------------------------------------------------------------

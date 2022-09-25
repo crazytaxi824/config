@@ -93,8 +93,8 @@ local function go_test_single(testfn_name, opt)
     end
   end
 
-  --- toggleterm 执行 command
-  _Exec(cmd, false, function()
+  --- toggleterm on_exit callback function
+  local on_exit = function()
     --- :GoPprof command
     if vim.tbl_contains({'cpu', 'mem', 'mutex', 'block', 'trace'}, opt.flag) then
       go_utils.set_pprof_cmd_keymap()
@@ -107,7 +107,10 @@ local function go_test_single(testfn_name, opt)
     if flag_cmd.suffix and flag_cmd.suffix ~= '' then
       go_utils.bg_term_spawn(flag_cmd.suffix)
     end
-  end)
+  end
+
+  --- toggleterm 执行 command
+  _Exec(cmd, false, on_exit)
 end
 
 M.go_test_single_func = function(prompt)
