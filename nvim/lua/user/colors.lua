@@ -7,7 +7,7 @@
 --
 --- NOTE: alacritty 背景色 (normal black) 设置为 234.
 --- 常用颜色
---    188/252   白色   -  一般文字颜色
+--    188/251   白色   -  一般文字颜色
 --    233       黑色   - bufferline / lualine / floating window / Pmenu
 --
 --    170       紫色   - onedark theme (主色调)
@@ -57,13 +57,13 @@
 -- -- }}}
 
 --- editor -----------------------------------------------------------------------------------------
-vim.cmd('hi Normal ctermbg=NONE ctermfg=188')      -- 透明背景 / 深色背景 - 一般文字颜色 188/252
+vim.cmd('hi Normal ctermbg=NONE ctermfg=251')      -- 透明背景 / 深色背景 - 一般文字颜色 251/188
 vim.cmd('hi Visual ctermbg=24')                    -- Visual 模式下 select 到的字符颜色. 类似 vscode 颜色
 
 --- VVI: Pmenu & FloatBorder 背景色需要设置为相同, 影响很多窗口的颜色.
 local float_win_border_color = 233
 vim.cmd('hi PmenuSel cterm=underline,bold ctermfg=None ctermbg=238')  -- Completion Menu 选中项颜色
-vim.cmd('hi Pmenu ctermfg=188 ctermbg=' .. float_win_border_color)  -- Completion Menu & Floating Window 背景颜色
+vim.cmd('hi Pmenu ctermfg=251 ctermbg=' .. float_win_border_color)  -- Completion Menu & Floating Window 颜色
 vim.cmd('hi! link NormalFloat Pmenu')  -- NormalFloat 默认 link to Pmenu
 vim.cmd('hi FloatBorder ctermfg=' .. float_win_border_color)   -- Floating Window border 颜色需要和 Pmenu 的背景色相同
                                                                -- border = {"▄","▄","▄","█","▀","▀","▀","█"}
@@ -86,8 +86,8 @@ vim.cmd('hi Search ctermfg=0 ctermbg=191')                -- / ? * # g* g# 搜�
 
 vim.cmd('hi ErrorMsg ctermfg=253 ctermbg=167')     -- echoerr 颜色
 vim.cmd('hi WarningMsg ctermfg=236 ctermbg=214')   -- echohl 颜色, XXX FIXME BUG 颜色
-vim.cmd('hi Todo cterm=bold ctermfg=188 ctermbg=22')            -- TODO, HACK 颜色
-vim.cmd('hi SpecialComment cterm=bold ctermfg=188 ctermbg=63')  -- NOTE: DEBUG: FOO: 颜色
+vim.cmd('hi Todo cterm=bold ctermfg=251 ctermbg=22')            -- TODO, HACK 颜色
+vim.cmd('hi SpecialComment cterm=bold ctermfg=251 ctermbg=63')  -- NOTE: DEBUG: FOO: 颜色
 
 vim.cmd('hi WildMenu cterm=bold ctermfg=235 ctermbg=39')     -- command 模式自动补全
 
@@ -98,7 +98,7 @@ vim.cmd('hi Keyword ctermfg=170')           -- 最主要的颜色
 vim.cmd('hi Function ctermfg=85')           -- func <Function> {}, 定义 & call func 都使用该颜色
 vim.cmd('hi Type ctermfg=43 cterm=italic')  -- type <Type> struct
 vim.cmd('hi! link Identifier Type')         -- typescriptTypeReference
-vim.cmd('hi Constant ctermfg=188')          -- const <Constant> = 100
+vim.cmd('hi! link Constant Normal')         -- 常量颜色. eg: const <Constant> = 100
 
 vim.cmd('hi Conditional ctermfg=213')      -- if, switch, case ...
 vim.cmd('hi! link Repeat Conditional')     -- for range

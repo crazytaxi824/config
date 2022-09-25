@@ -7,7 +7,7 @@ end
 --- https://github.com/nvim-lualine/lualine.nvim/blob/master/lua/lualine/themes/gruvbox_light.lua
 local colors = {
   black = 233,
-  white = 188,
+  white = 251,
 
   green = 190,
   light_green = 85,  -- filename saved
@@ -23,7 +23,7 @@ local colors = {
 }
 
 --- Airline theme color
---- black = 233; white = 188
+--- black = 233; white = 251
 --- normal: a = black/190, b = white/grey, c = 190/black  -- yellow
 --- insert: a = black/45, b = white/27, c = white/17      -- blue
 --- visual: a = black/214, b = black/202, c = white/52    -- orange

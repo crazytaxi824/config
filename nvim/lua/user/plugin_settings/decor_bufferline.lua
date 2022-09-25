@@ -5,7 +5,7 @@ end
 
 --- highlight 设置 --------------------------------------------------------------------------------- {{{
 local colors = {
-  --normal_fg = 188,  -- NOTE: colors.lua 设置中 highlight Normal ctermfg=188, 所有默认 fg 都是 188.
+  --normal_fg = 251,  -- NOTE: colors.lua 设置中 highlight Normal ctermfg=251, 所有默认 fg 都是 251.
   fill_bg = 234,  -- fill 整个 bufferline banner 的背景色
 
   buf_fg = 246,        -- light_grey
