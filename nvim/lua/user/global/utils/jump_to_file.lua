@@ -1,17 +1,37 @@
 --- highlight <file:line:col> ----------------------------------------------------------------------
-vim.cmd('hi Filepath cterm=underline')  -- 自定义颜色, for Highlight_filepath()
+vim.cmd('hi Filepath cterm=underline ctermfg=43')  -- 自定义颜色, for Highlight_filepath()
+vim.cmd('hi URL cterm=underline ctermfg=75')  -- 自定义颜色, for Highlight_filepath()
 
 --- NOTE: `:help pattern-overview`, vim pattern.
 function Highlight_filepath()
-  --- file:// pattern match
+  --- file:///abc/def.txt
   --- '\f' - isfname, 表示可用于 filename 的字符/数字/符号...
   --- '\<' - start of a word
-  vim.fn.matchadd('Filepath', '\\<file://\\f*\\(:[0-9]\\+\\)\\{0,2}')  -- highlight filepath
+  vim.fn.matchadd('Filepath',
+    '\\<file://'  -- 'file://' 开头
+    .. '\\f\\+'  -- filename 可以用字符. '\+' 表示至少有一个字符.
+    .. '\\(:[0-9]\\+\\)\\{0,2}'  -- ':num:num' | ':num' | '' (空)
+  )
 
+  --- ~/xxx | ./xxx | /xxx
   --- \@<! - eg: \(foo\)\@<!bar  - any "bar" that's not in "foobar"
   --- \@!  - eg: foo\(bar\)\@!   - any "foo" not followed by "bar"
-  --- '\(\S\)\@<!' - 表示前面不能是 (\S) non-whitespace, 意思是只能是 whitespace 或者 ^.
-  vim.fn.matchadd('Filepath', '\\(\\S\\)\\@<![~.]\\{0,1}/\\f*\\(:[0-9]\\+\\)\\{0,2}')  -- highlight filepath
+  vim.fn.matchadd('Filepath',
+    '\\(\\S\\)\\@<!'   -- 表示前面不能是 (\S) non-whitespace, 意思是只能是 whitespace 或者 ^.
+    .. '[~.]\\{0,1}/'  -- '~/' | './' | '/' 开头
+    .. '\\f\\+'  -- filename 可以用字符. '\+' 表示至少有一个字符.
+    .. '\\(:[0-9]\\+\\)\\{0,2}'  -- ':num:num' | ':num' | '' (空)
+  )
+
+  --- highlight url
+  --- http:// | https://
+  vim.fn.matchadd('URL',
+    '\\<http[s]\\{0,1}://'  -- 'http://' | 'https://' 开头
+    .. '\\f\\+'  -- filename 可以用字符. eg: www.abc.com
+    .. '\\(:[0-9]\\+\\)\\{0,1}' -- port, eg:80
+    .. '[/]\\{0,1}[?]\\{0,1}'  -- /? | ? | ''
+    .. '\\f*\\(&\\f\\+\\)*'  -- '' | foo=bar | foo=fuz&bar=buz...
+  )
 end
 
 --- Jump to file -----------------------------------------------------------------------------------
