@@ -77,7 +77,6 @@ local flag_desc_cmd = {
     cmd = {
       prefix = ' mkdir -p ' .. pprof_dir,
       flag = pprof_flags,
-      --- NOTE: 删除 [pkg].test 文件 && 打开浏览器, 分析文件.
       suffix = 'go tool pprof -http=localhost: ' .. pprof_dir .. 'cpu.out'
     }
   },
@@ -134,15 +133,14 @@ local flag_desc_cmd = {
       --- go tool cover -html=cover.out -o cover.html, 浏览器打开 cover.html 文件
       suffix = 'go tool cover -html=' .. coverage_dir
         .. 'cover.out -o ' .. coverage_dir .. 'cover.html'
-        .. ' && open ' .. coverage_dir .. 'cover.html',
+        .. ' && open ' .. coverage_dir .. 'cover.html',  -- 使用操作系统打开 cover.html 文件
     }
   },
 
   --- fuzztime flags
-  fuzz_default = { desc = '[Default]: fuzztime 15s', cmd = {prefix='', flag='', suffix=''} },
   fuzz30s = { desc = 'fuzztime 30s', cmd = {prefix='', flag=' -fuzztime 30s', suffix=''} },
   fuzz60s = { desc = 'fuzztime 60s', cmd = {prefix='', flag=' -fuzztime 60s', suffix=''} },
-  fuzz5m = { desc = 'fuzztime 5m', cmd = {prefix='', flag=' -fuzztime 5m', suffix=''} },
+  fuzz5m  = { desc = 'fuzztime 5m',  cmd = {prefix='', flag=' -fuzztime 5m',  suffix=''} },
   fuzz10m = { desc = 'fuzztime 10m', cmd = {prefix='', flag=' -fuzztime 10m', suffix=''} },
 
   --- NOTE: 这里的 cmd 内容需要根据 input 来设置.
