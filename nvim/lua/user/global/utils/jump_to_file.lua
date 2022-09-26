@@ -1,5 +1,5 @@
 --- highlight <file:line:col> ----------------------------------------------------------------------
-vim.cmd('hi Filepath cterm=underline ctermfg=43')  -- 自定义颜色, for Highlight_filepath()
+vim.cmd('hi Filepath cterm=underline')  -- 自定义颜色, for Highlight_filepath()
 vim.cmd('hi URL cterm=underline ctermfg=75')  -- 自定义颜色, for Highlight_filepath()
 
 --- NOTE: `:help pattern-overview`, vim pattern.
