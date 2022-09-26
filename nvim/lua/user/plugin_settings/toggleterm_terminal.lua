@@ -50,13 +50,6 @@ toggleterm.setup({
     winblend = 0,
   },
 
-  --- terminal 输出时 highlight filepath.
-  --- output 是一个 list, 按照行分隔.
-  --- 这里不使用 autocmd TermClose 而是使用 on_stdout 主要是因为有些程序运行不会结束, eg: http 监听.
-  on_stdout = function()
-    Highlight_filepath()
-  end,
-
   --- 其他设置, NOTE: 以下最好不要全局设置, 可以根据具体情况在 :open() 前设置 ---
   --on_open  = fun(t: Terminal), -- toggleterm win open.  NOTE: term:spawn() 无法触发.
   --on_close = fun(t: Terminal), -- toggleterm win close. NOTE: close_on_exit=true 的时候才能触发.
@@ -70,7 +63,7 @@ toggleterm.setup({
   --},
 })
 
---- terminal 其他设置 ------------------------------------------------------------------------------
+--- terminal autocmd 设置 -------------------------------------------------------------------------- {{{
 --- #toggleterm#1-9 自动进入 insert mode.
 --- VVI: TermOpen 只在 job start 的时候启动一次, terminal-buffer 被隐藏后再次调出使用的是 BufWinEnter 事件.
 --- 可以通过 `:au ToggleTermCommands` 查看.
@@ -84,17 +77,9 @@ vim.cmd [[au TermOpen term://* tnoremap <buffer> <ESC> <ESC><C-\><C-n>]]
 --- 设置 terminal 不显示行号.
 vim.cmd [[au TermOpen term://* :setlocal nonumber]]
 
---- TermClose 意思是 job ends.
---- BufWinEnter 当 terminal buffer 被隐藏后再次打开的时候 highlight filepath.
---- 这里不使用 TermClose 而是使用 on_stdout 主要是因为有些程序运行不会结束, eg: http 监听.
-vim.api.nvim_create_autocmd({"BufWinEnter"}, {
-  pattern = {"term://*"},
-  callback = function()
-    Highlight_filepath()
-  end,
-})
+-- -- }}}
 
---- Terminal 实例 ---------------------------------------------------------------------------------- {{{
+--- toggleterm 实例 -------------------------------------------------------------------------------- {{{
 ---   term:clear()     清除 term 设置.
 ---   term:close()     关闭窗口, NOTE: 只能关闭 :open() 打开的窗口.
 ---   term:open()      打开窗口, 如果 term 不存在则运行 job.
@@ -102,7 +87,12 @@ vim.api.nvim_create_autocmd({"BufWinEnter"}, {
 ---   term:shutdown()  NOTE: exit terminal. 终止 terminal job, 然后关闭 term 窗口.
 local Terminal = require("toggleterm.terminal").Terminal
 
---- VVI: execute: golang / javascript / typescript / python... -----------------
+--- on_open callback function
+local function term_startinsert()
+  vim.cmd('startinsert')  -- 使用 on_open 相当于启动了 TermOpen 事件.
+end
+
+--- VVI: execute: golang / javascript / typescript / python... ----------------- {{{
 local exec_term_id = 1001
 local exec_term = Terminal:new({
   --- NOTE: count 在 term job end 之后可以被新的 term 使用, :ls! 中可以看到两个相同 count 的 buffer.
@@ -131,6 +121,8 @@ function _Exec(cmd, cache, on_exit_fn)
 
   --- 该 terminal buffer wipeout 的时候回到之前的窗口.
   exec_term.on_open = function()
+    Highlight_filepath()
+
     vim.api.nvim_create_autocmd("BufWipeout", {
       buffer = 0,
       callback = function(params)
@@ -188,49 +180,53 @@ local function exec_last_cmd()
   exec_term:open()
 end
 
---- node -----------------------------------------------------------------------
+-- -- }}}
+
+--- node ----------------------------------------------------------------------- {{{
 local node_term_id = 201
 local node_term = Terminal:new({
   cmd = "node",
   hidden = true,  -- true: 该 term 不受 :ToggleTerm :ToggleTermToggleAll ... 命令影响.
   direction = "float",  -- horizontal(*) | vertical | float | tab
   count = node_term_id,
-  on_open = function(term)
-    vim.cmd('startinsert')  -- 使用 on_open 相当于启动了 TermOpen && BufWinEnter 事件.
-  end
+  on_open = term_startinsert,
 })
+
 function _NODE_TOGGLE()
   node_term:toggle()
 end
+-- -- }}}
 
---- python3 --------------------------------------------------------------------
+--- python3 -------------------------------------------------------------------- {{{
 local py_term_id = 202
 local python_term = Terminal:new({
   cmd = "python3",
   hidden = true,
   direction = "float",
   count = py_term_id,
-  on_open = function(term)
-    vim.cmd('startinsert')
-  end
+  on_open = term_startinsert,
 })
+
 function _PYTHON_TOGGLE()
   python_term:toggle()
 end
+-- -- }}}
 
 --- normal terminals -----------------------------------------------------------
-local n1_term = Terminal:new({count = 1, on_open = function() vim.cmd('startinsert') end})
-local n2_term = Terminal:new({count = 2, on_open = function() vim.cmd('startinsert') end})
-local n3_term = Terminal:new({count = 3, on_open = function() vim.cmd('startinsert') end})
-local n4_term = Terminal:new({count = 4, on_open = function() vim.cmd('startinsert') end})
-local n5_term = Terminal:new({count = 5, on_open = function() vim.cmd('startinsert') end})
-local n6_term = Terminal:new({count = 6, on_open = function() vim.cmd('startinsert') end})
-local n7_term = Terminal:new({count = 7, direction = "vertical", on_open = function() vim.cmd('startinsert') end})
-local n8_term = Terminal:new({count = 8, direction = "vertical", on_open = function() vim.cmd('startinsert') end})
-local n9_term = Terminal:new({count = 9, direction = "vertical", on_open = function() vim.cmd('startinsert') end})
+local n1_term = Terminal:new({count = 1, on_open = term_startinsert})
+local n2_term = Terminal:new({count = 2, on_open = term_startinsert})
+local n3_term = Terminal:new({count = 3, on_open = term_startinsert})
+local n4_term = Terminal:new({count = 4, on_open = term_startinsert})
+local n5_term = Terminal:new({count = 5, on_open = term_startinsert})
+local n6_term = Terminal:new({count = 6, on_open = term_startinsert})
+local n7_term = Terminal:new({count = 7, direction = "vertical", on_open = term_startinsert})
+local n8_term = Terminal:new({count = 8, direction = "vertical", on_open = term_startinsert})
+local n9_term = Terminal:new({count = 9, direction = "vertical", on_open = term_startinsert})
 
 -- -- }}}
 
+--- keymaps ----------------------------------------------------------------------------------------
+--- keymap functions ----------------------------------------------------------- {{{
 --- 缓存所有自定义 terminal 实例.
 local my_terminals = {
   --- normal terminal
@@ -244,7 +240,6 @@ local my_terminals = {
   [py_term_id]=python_term,
 }
 
---- terminal key mapping ---------------------------------------------------------------------------
 --- terminal 实例内置方法: `:open() / :close() / :shutdown() / :clear() / :spawn() / :new()`
 --- 常用 terminal.
 local function toggle_normal_term()
@@ -288,6 +283,7 @@ local function toggle_all_terms()
     end
   end
 end
+-- -- }}}
 
 local opt = {noremap = true, silent = true}
 local toggleterm_keymaps = {

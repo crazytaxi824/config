@@ -273,7 +273,6 @@ Keymap_set_and_register(debug_keymaps)
 vim.api.nvim_create_autocmd("FileType", {
   pattern = {"dap-repl"},
   callback = function(param)
-    print(param.event, param.file)
     Highlight_filepath()
   end,
 })
