@@ -75,7 +75,7 @@ local flag_desc_cmd = {
   cpu = {
     desc = 'CPU profile',
     cmd = {
-      prefix = ' mkdir -p ' .. pprof_dir .. ' &&' ,
+      prefix = ' mkdir -p ' .. pprof_dir,
       flag = pprof_flags,
       --- NOTE: 删除 [pkg].test 文件 && 打开浏览器, 分析文件.
       suffix = 'go tool pprof -http=localhost: ' .. pprof_dir .. 'cpu.out'
@@ -84,7 +84,7 @@ local flag_desc_cmd = {
   mem = {
     desc = 'Memory profile',
     cmd = {
-      prefix = ' mkdir -p ' .. pprof_dir .. ' &&' ,
+      prefix = ' mkdir -p ' .. pprof_dir,
       flag = pprof_flags,
       suffix = 'go tool pprof -http=localhost: ' .. pprof_dir .. 'mem.out'
     }
@@ -92,7 +92,7 @@ local flag_desc_cmd = {
   mutex = {
     desc = 'Mutex profile',
     cmd = {
-      prefix = ' mkdir -p ' .. pprof_dir .. ' &&' ,
+      prefix = ' mkdir -p ' .. pprof_dir,
       flag = pprof_flags,
       suffix = 'go tool pprof -http=localhost: ' .. pprof_dir .. 'mutex.out'
     }
@@ -100,7 +100,7 @@ local flag_desc_cmd = {
   block = {
     desc = 'Block profile',
     cmd = {
-      prefix = ' mkdir -p ' .. pprof_dir .. ' &&' ,
+      prefix = ' mkdir -p ' .. pprof_dir,
       flag = pprof_flags,
       suffix = 'go tool pprof -http=localhost: ' .. pprof_dir .. 'block.out'
     }
@@ -108,7 +108,7 @@ local flag_desc_cmd = {
   trace = {
     desc = 'Trace',
     cmd = {
-      prefix = ' mkdir -p ' .. pprof_dir .. ' &&' ,
+      prefix = ' mkdir -p ' .. pprof_dir,
       flag = pprof_flags,
       suffix = 'go tool trace -http=localhost: ' .. pprof_dir .. 'trace.out'
     }
@@ -129,7 +129,7 @@ local flag_desc_cmd = {
   coverprofile = {
     desc = 'Coverage profile (detail)',
     cmd = {
-      prefix = ' mkdir -p ' .. coverage_dir .. ' &&' ,
+      prefix = ' mkdir -p ' .. coverage_dir,
       flag = ' -coverprofile ' .. coverage_dir .. 'cover.out',
       --- go tool cover -html=cover.out -o cover.html, 浏览器打开 cover.html 文件
       suffix = 'go tool cover -html=' .. coverage_dir
@@ -146,7 +146,7 @@ local flag_desc_cmd = {
   fuzz10m = { desc = 'fuzztime 10m', cmd = {prefix='', flag=' -fuzztime 10m', suffix=''} },
 
   --- NOTE: 这里的 cmd 内容需要根据 input 来设置.
-  fuzz_input = { desc = 'Input fuzztime: 1h2m30s (duration) | 1000x (times)', cmd = {} },
+  fuzz_input = { desc = 'Input fuzztime: 15s|20m|1h20m30s (duration) | 1000x (times)', cmd = {} },
 }
 
 --- 返回 description
@@ -165,7 +165,9 @@ M.parse_testflag_cmd = function(flag)
   if flag == 'fuzz_input' then
     local fuzz_cmd
     vim.ui.input({prompt = 'Input -fuzztime: '}, function(input)
-      fuzz_cmd = { prefix = '', flag = ' -fuzztime '..input, suffix = '' }
+      if input then
+        fuzz_cmd = { prefix = '', flag = ' -fuzztime '..input, suffix = '' }
+      end
     end)
     return fuzz_cmd
   end

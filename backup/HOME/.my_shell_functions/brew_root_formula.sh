@@ -13,6 +13,7 @@ function checkBrewRootFormula() {
 
 		git
 		lazygit   # git cui 工具
+		gitui     # git cui 工具
 		git-delta # git diff 工具
 		git-flow  # git-flow 插件, 也可以使用 git-flow-avh, 二选一即可
 		git-flow-avh

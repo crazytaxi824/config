@@ -117,7 +117,7 @@ local cache_cmd     -- string, 缓存 _Exec() 中运行的 cmd.
 
 --- cache 是一个标记, 如果为 true, 则在将 cmd 记录在 last_cmd 中.
 --- callback 在 on_exit = func() 的时候执行.
-function _Exec(cmd, cache, callback)
+function _Exec(cmd, cache, on_exit_fn)
   --- 缓存 cmd
   if cache then
     cache_cmd = cmd
@@ -142,7 +142,7 @@ function _Exec(cmd, cache, callback)
   end
 
   --- NOTE: callback 不存在的时候 on_exit 就会清除, 相当于: on_exit = nil
-  exec_term.on_exit = callback
+  exec_term.on_exit = on_exit_fn
 
   --- 设置 cmd
   exec_term.cmd = 'echo -e "\\e[32m' .. vim.fn.escape(cmd,'"') .. ' \\e[0m" && ' .. cmd

@@ -66,7 +66,7 @@ local function go_test_single(testfn_name, opt)
     return
   end
 
-  local cmd = 'cd ' .. dir .. ' &&' .. flag_cmd.prefix
+  local cmd = 'cd ' .. dir .. ' &&'
   if opt.mode == 'run' then
     --- go test -v -timeout 10s -run TestXxx ImportPath
     cmd = cmd .. ' go test -v' .. flag_cmd.flag
@@ -84,17 +84,33 @@ local function go_test_single(testfn_name, opt)
     return
   end
 
-  _Exec(cmd, false, function()
+  --- first run prefix shell command
+  if flag_cmd.prefix and flag_cmd.prefix ~= '' then
+    local result = vim.fn.system(flag_cmd.prefix)
+    if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
+      Notify(result, "ERROR")
+      return
+    end
+  end
+
+  --- toggleterm on_exit callback function
+  local on_exit = function()
     --- :GoPprof command
     if vim.tbl_contains({'cpu', 'mem', 'mutex', 'block', 'trace'}, opt.flag) then
       go_utils.set_pprof_cmd_keymap()
     end
 
+    --- autocmd BufWipeout bg_term:shutdown()
+    go_utils.auto_shutdown_all_bg_terms()
+
     --- run `go tool pprof ...` in background terminal
     if flag_cmd.suffix and flag_cmd.suffix ~= '' then
       go_utils.bg_term_spawn(flag_cmd.suffix)
     end
-  end)
+  end
+
+  --- toggleterm 执行 command
+  _Exec(cmd, false, on_exit)
 end
 
 M.go_test_single_func = function(prompt)
