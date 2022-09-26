@@ -1,5 +1,5 @@
-; filepath should be '~/.gitconfig'
-
+; This file should be '~/.gitconfig'
+; Only needs to setup [core] [user] [commit] settings.
 [core]
 	; excludesfile = /Users/xxx/.gitignore_global
 	quotepath = off  ; 中文文件名不显示 unicode
@@ -9,6 +9,7 @@
 [commit]
 	; template = /Users/xxx/.stCommitMsg
 
+; --- 以下设置不需要 setup -------------------------------------------------------------------------
 ; 自定义 command, `git tree`, `git vtree`
 [alias]
 	; https://stackoverflow.com/questions/1057564/pretty-git-branch-graphs

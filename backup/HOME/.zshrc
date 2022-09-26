@@ -480,6 +480,10 @@ function Rg() {
 
 # }}}
 
+# NOTE:
+# `cp -r src dst/`   注意 src 后面没有 /   copy src 整个文件夹到 dst 文件夹内, 结果: dst/src/...
+# `cp -r src/ dst/`  注意 src 后面有 /     copy src 内所有 file/dir 到 dst 内, 包括隐藏文件.
+# `cp -r src/* dst/` 注意 src 后面有 /*    copy src 内 file/dir 到 dst 内, 不包括隐藏文件.
 # backup - vimrc zshrc coc-setting lazygit snippets alacritty vscode ------- {{{
 function backupConfigFiles() {
 	# 多个备份文件夹地址
@@ -593,16 +597,16 @@ function restoreConfigFiles() {
 
 	case $restore in
 		"yes"|"Yes")
-			# NOTE: copy 隐藏文件使用 `cp -a src/. dst/` 注意 src/ 最后有个点.
-			cp -a $backup_folder/HOME/. ~/
+			# .zshrc .my_shell_functions/ .oh-my-zsh/custom/themes/ .tmux.conf .ssh/config .gitignore_global ...
+			cp -r $backup_folder/HOME/ ~/
 			# NOTE: restore 之后需要设置 ~/.gitconfig 文件.
-			echo -e "\e[35m!!! Please check restored file '\$HOME/gitconfig_needs_setup' !!!\e[0m"
+			echo -e "\e[35m!!! please SETUP restored file '~/gitconfig_needs_setup' !!!\e[0m"
 
 			# lazygit ~/Library/Application Support/lazygit/config.yml
 			cp $backup_folder/lazygit/config.yml ~/Library/Application\ Support/lazygit/
 
 			# vscode settings.json keybindings.json & snippets
-			cp -r $backup_folder/vscode/* ~/Library/Application\ Support/Code/User/
+			cp -r $backup_folder/vscode/ ~/Library/Application\ Support/Code/User/
 
 			echo -e "\e[32mRestore all Done! Happy Coding!\e[0m"
 			;;
