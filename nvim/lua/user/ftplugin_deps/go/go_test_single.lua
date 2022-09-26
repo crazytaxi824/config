@@ -147,7 +147,7 @@ M.go_test_single_func = function(prompt)
       end
     end)
   elseif mode == 'fuzz' then
-    local select = {'fuzz_default', 'fuzz30s', 'fuzz60s', 'fuzz5m', 'fuzz10m', 'fuzz_input'}
+    local select = {'fuzz30s', 'fuzz60s', 'fuzz5m', 'fuzz10m', 'fuzz_input'}
     vim.ui.select(select, {
       prompt = 'choose go test flag: [Fuzz test cannot use pprof & coverage flags]',
       format_item = function(item)
