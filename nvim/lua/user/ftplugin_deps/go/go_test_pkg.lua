@@ -18,7 +18,6 @@ local function go_test_pkg(opt)
   if not flag_cmd then
     return
   end
-  flag_cmd.flag = flag_cmd.flag or ''  -- 确保不是 nil.
 
   --- 获取当前文件所在文件夹路径.
   local dir = vim.fn.expand('%:h')
@@ -79,7 +78,6 @@ local function go_test_proj(opt)
   if not flag_cmd then
     return
   end
-  flag_cmd.flag = flag_cmd.flag or ''  -- 确保不是 nil.
 
   --- './...' 表示当前 pwd 下的所有 packages, 即整个 Project.
   local cmd

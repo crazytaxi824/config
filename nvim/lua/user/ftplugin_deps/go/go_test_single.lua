@@ -54,7 +54,6 @@ local function go_test_single(testfn_name, opt)
   if not flag_cmd then
     return
   end
-  flag_cmd.flag = flag_cmd.flag or ''  -- 确保不是 nil.
 
   --- add regexp pattern to test function name
   local testfn_name_regexp = '"^' .. testfn_name .. '$" '

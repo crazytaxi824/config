@@ -153,7 +153,15 @@ local flag_desc_cmd = {
 
 --- 返回 description
 M.get_testflag_desc = function(flag)
-  return flag_desc_cmd[flag].desc
+  local f = flag_desc_cmd[flag]
+  if not f then
+    return '[flag: "' .. flag .. '" is not in "testflags.lua" table]'
+  end
+  if not f.desc then
+    return '[flag: "' .. flag .. '.desc" is nil in "testflags.lua" table]'
+  end
+
+  return f.desc
 end
 
 --- 统一处理 flag 特殊情况
@@ -179,7 +187,13 @@ M.parse_testflag_cmd = function(flag)
     Notify('flag: "' .. flag .. '" is not in "testflags.lua" table', "DEBUG")
     return
   end
+  if not f.cmd then
+    Notify('flag: "' .. flag .. '.cmd" is nil in "testflags.lua" table', "DEBUG")
+    return
+  end
 
+  --- 确保 cmd.flag 不是 nil.
+  f.cmd.flag = f.cmd.flag or ''
   return f.cmd
 end
 
