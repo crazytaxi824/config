@@ -71,7 +71,7 @@ local pprof_flags = ' -o ' .. pprof_dir .. 'pkg.test'  -- [pkg].test 可执行�
                                                           -- 不在这里统一生成报告.
 
 --- VVI:
---- cmd 不能为 nil, 包含 {prefix, flag, suffix} 三个 shell command/flag.
+--- cmd - table|function, 不能为 nil, 包含 {prefix, flag, suffix} 三个 shell command/flag.
 --- prefix/suffix/flag 可以为 string | nil.
 local flag_desc_cmd = {
   --- 没有任何 testflag 的情况.
@@ -148,17 +148,25 @@ local flag_desc_cmd = {
   fuzz10m = { desc = 'fuzztime 10m', cmd = {flag = ' -fuzztime 10m'} },
 
   --- NOTE: 这里的 cmd 内容需要根据 input 来设置.
-  fuzz_input = { desc = 'Input fuzztime: 15s|20m|1h20m30s (duration) | 1000x (times)', cmd = {} },
+  fuzz_input = { desc = 'Input fuzztime: 15s|20m|1h20m30s (duration) | 1000x (times)', cmd = function()
+    local fuzz_cmd
+    vim.ui.input({prompt = 'Input -fuzztime: '}, function(input)
+      if input then
+        fuzz_cmd = { flag = ' -fuzztime '..input}
+      end
+    end)
+    return fuzz_cmd
+  end },
 }
 
 --- 返回 description
 M.get_testflag_desc = function(flag)
   local f = flag_desc_cmd[flag]
   if not f then
-    return '[flag: "' .. flag .. '" is not in "testflags.lua" table]'
+    return '[flag: "' .. flag .. '" is NOT in "testflags.lua" table]'
   end
   if not f.desc then
-    return '[flag: "' .. flag .. '.desc" is nil in "testflags.lua" table]'
+    return '[flag: "' .. flag .. '.desc" is MISSING from "testflags.lua" table]'
   end
 
   return f.desc
@@ -171,30 +179,39 @@ M.parse_testflag_cmd = function(flag)
     return
   end
 
-  --- NOTE: 根据用户 input 设置 -fuzztime cmd 内容.
-  if flag == 'fuzz_input' then
-    local fuzz_cmd
-    vim.ui.input({prompt = 'Input -fuzztime: '}, function(input)
-      if input then
-        fuzz_cmd = { flag = ' -fuzztime '..input}
-      end
-    end)
-    return fuzz_cmd
-  end
-
   local f = flag_desc_cmd[flag]
   if not f then
-    Notify('flag: "' .. flag .. '" is not in "testflags.lua" table', "DEBUG")
+    Notify('flag: "' .. flag .. '" is NOT in "testflags.lua" table', "DEBUG")
     return
   end
   if not f.cmd then
-    Notify('flag: "' .. flag .. '.cmd" is nil in "testflags.lua" table', "DEBUG")
+    --- 这里是提醒 flag.cmd 未设置.
+    Notify('flag: "' .. flag .. '.cmd" is MISSING from "testflags.lua" table', "DEBUG")
+    return
+  end
+
+  --- VVI: 这里不能直接使用 f.cmd = f.cmd(), 因为第一次执行的时候 f.cmd 是一个 function,
+  --- 而第二次执行的时候 f.cmd 已经变成一个 table 了.
+  local flag_cmd
+  local typ = type(f.cmd)
+  if typ == 'function' then
+    flag_cmd = f.cmd()
+  elseif typ == 'table' then
+    flag_cmd = f.cmd
+  else
+    Notify('flag: "' .. flag .. '.cmd" type error', "DEBUG")
+    return
+  end
+
+  if not flag_cmd then
+    --- 这里是提醒 flag.cmd 最终结果是 nil.
+    Notify('flag: "' .. flag .. '.cmd" is nil', "DEBUG")
     return
   end
 
   --- 确保 cmd.flag 不是 nil.
-  f.cmd.flag = f.cmd.flag or ''
-  return f.cmd
+  flag_cmd.flag = flag_cmd.flag or ''
+  return flag_cmd
 end
 
 return M
