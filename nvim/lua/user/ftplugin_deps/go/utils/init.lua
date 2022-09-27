@@ -1,10 +1,9 @@
-local go_import_path = require("user.ftplugin_deps.go.utils.import_path")
+local go_list_module = require("user.ftplugin_deps.go.utils.go_list")
 local go_testflags   = require("user.ftplugin_deps.go.utils.testflags")
 local bg_term        = require("user.ftplugin_deps.go.utils.bg_term")
 
 local M = {
-  get_import_path = go_import_path.get_import_path,
-  get_project_root = go_import_path.get_project_root,
+  go_list = go_list_module.go_list,
 
   parse_testflag_cmd = go_testflags.parse_testflag_cmd,
   get_testflag_desc = go_testflags.get_testflag_desc,

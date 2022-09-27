@@ -1,7 +1,8 @@
 --- `$ go help testflag` --------------------------------------------------------------------------- {{{
 --- go test run        能使用 pprof & cover & trace flags.
 --- go test benchmark  能使用 pprof & cover & trace flags.
---- go test fuzz       不能使用 pprof & cover & trace flags.
+--- go test fuzz       NOTE: 不能使用 pprof & cover & trace flags. 每次只能执行一个 fuzz test,
+---                    eg: 如果 package 中有多个 Fuzz test 函数 `go test -fuzz "^Fuzz.*"` 会报错.
 --- go test xxx multiple packages  不能使用 pprof flags, 但是可以使用 -cover -coverprofile flags
 
 --- VVI: go test flags
@@ -127,15 +128,13 @@ local flag_desc_cmd = {
   --- '-coverprofile /xxx/cover.out' 最好是是绝对路径, 避免和 '-outputdir' 冲突.
   coverprofile = {
     desc = 'Coverage profile (detail)',
-    cmd = function(opts)
-      opts = opts or {}
-      if not opts.project_root then
-        Notify("{project_root} is nil", "ERROR")
+    cmd = function(go_list)
+      if not go_list then
+        Notify("{go_list} is nil", "ERROR")
         return
       end
 
-      --- go project root path
-      local coverage_dir = opts.project_root .. '/coverage/'
+      local coverage_dir = go_list.Root .. '/coverage/'
       return {
         prefix = 'mkdir -p ' .. coverage_dir,
 
@@ -144,8 +143,8 @@ local flag_desc_cmd = {
 
         --- go tool cover -html=cover.out -o cover.html
         --- NOTE: 执行 `go tool cover` 时 pwd 必须在 project 中.
-        suffix = 'cd ' .. opts.project_root .. ' && go tool cover -html=coverage/cover.out -o coverage/cover.html'
-          .. ' && open coverage/cover.html',  -- 使用操作系统打开 cover.html 文件
+        suffix = 'cd ' .. coverage_dir .. ' && go tool cover -html=cover.out -o cover.html'
+          .. ' && open cover.html',  -- 使用操作系统打开 cover.html 文件
       }
     end
   },
@@ -159,7 +158,7 @@ local flag_desc_cmd = {
   --- NOTE: 这里的 cmd 内容需要根据 input 来设置.
   fuzz_input = {
     desc = 'Input fuzztime: 15s|20m|1h20m30s (duration) | 1000x (times)',
-    cmd = function(opts)
+    cmd = function()
       local fuzz_cmd
       vim.ui.input({prompt = 'Input -fuzztime: '}, function(input)
         if input then
@@ -185,7 +184,7 @@ M.get_testflag_desc = function(flag)
 end
 
 --- 统一处理 flag 特殊情况
-M.parse_testflag_cmd = function(flag, opts)
+M.parse_testflag_cmd = function(flag, go_list)
   if not flag then
     Notify('flag is nil', "DEBUG")
     return
@@ -207,7 +206,7 @@ M.parse_testflag_cmd = function(flag, opts)
   local flag_cmd
   local typ = type(f.cmd)
   if typ == 'function' then
-    flag_cmd = f.cmd(opts)
+    flag_cmd = f.cmd(go_list)
   elseif typ == 'table' then
     flag_cmd = f.cmd
   else
