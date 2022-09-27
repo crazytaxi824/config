@@ -4,6 +4,8 @@ local bg_term        = require("user.ftplugin_deps.go.utils.bg_term")
 
 local M = {
   get_import_path = go_import_path.get_import_path,
+  get_project_root = go_import_path.get_project_root,
+
   parse_testflag_cmd = go_testflags.parse_testflag_cmd,
   get_testflag_desc = go_testflags.get_testflag_desc,
 
