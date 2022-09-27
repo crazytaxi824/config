@@ -48,12 +48,8 @@
 
 local M = {}
 
---- NOTE: 这两个路径必须是绝对路径.
---- mkdir 用到必须是绝对路径.
+--- NOTE: 必须是绝对路径.
 local pprof_dir = vim.fn.fnamemodify(vim.fn.stdpath('cache')..'/go/pprof/', ':p')
-
---- '-coverprofile' 用到, 必须是绝对路径.
-local coverage_dir = vim.fn.fnamemodify(vim.fn.getcwd() .. '/coverage/', ':p')
 
 local pprof_flags = ' -o ' .. pprof_dir .. 'pkg.test'  -- [pkg].test 可执行文件生成位置,
                                                        -- 这个是 `$ go help build` 的 flag.
@@ -131,14 +127,27 @@ local flag_desc_cmd = {
   --- '-coverprofile /xxx/cover.out' 最好是是绝对路径, 避免和 '-outputdir' 冲突.
   coverprofile = {
     desc = 'Coverage profile (detail)',
-    cmd = {
-      prefix = 'mkdir -p ' .. coverage_dir,
-      flag = ' -coverprofile ' .. coverage_dir .. 'cover.out',
-      --- go tool cover -html=cover.out -o cover.html, 浏览器打开 cover.html 文件
-      suffix = 'go tool cover -html=' .. coverage_dir
-        .. 'cover.out -o ' .. coverage_dir .. 'cover.html'
-        .. ' && open ' .. coverage_dir .. 'cover.html',  -- 使用操作系统打开 cover.html 文件
-    }
+    cmd = function(opts)
+      opts = opts or {}
+      if not opts.project_root then
+        Notify("{project_root} is nil", "ERROR")
+        return
+      end
+
+      --- go project root path
+      local coverage_dir = opts.project_root .. '/coverage/'
+      return {
+        prefix = 'mkdir -p ' .. coverage_dir,
+
+        --- NOTE: 这里推荐使用绝对路径, 不受 pwd 影响.
+        flag = ' -coverprofile ' .. coverage_dir .. 'cover.out',
+
+        --- go tool cover -html=cover.out -o cover.html
+        --- NOTE: 执行 `go tool cover` 时 pwd 必须在 project 中.
+        suffix = 'cd ' .. opts.project_root .. ' && go tool cover -html=coverage/cover.out -o coverage/cover.html'
+          .. ' && open coverage/cover.html',  -- 使用操作系统打开 cover.html 文件
+      }
+    end
   },
 
   --- fuzztime flags
@@ -148,15 +157,18 @@ local flag_desc_cmd = {
   fuzz10m = { desc = 'fuzztime 10m', cmd = {flag = ' -fuzztime 10m'} },
 
   --- NOTE: 这里的 cmd 内容需要根据 input 来设置.
-  fuzz_input = { desc = 'Input fuzztime: 15s|20m|1h20m30s (duration) | 1000x (times)', cmd = function()
-    local fuzz_cmd
-    vim.ui.input({prompt = 'Input -fuzztime: '}, function(input)
-      if input then
-        fuzz_cmd = { flag = ' -fuzztime '..input}
-      end
-    end)
-    return fuzz_cmd
-  end },
+  fuzz_input = {
+    desc = 'Input fuzztime: 15s|20m|1h20m30s (duration) | 1000x (times)',
+    cmd = function(opts)
+      local fuzz_cmd
+      vim.ui.input({prompt = 'Input -fuzztime: '}, function(input)
+        if input then
+          fuzz_cmd = { flag = ' -fuzztime '..input}
+        end
+      end)
+      return fuzz_cmd
+    end
+  },
 }
 
 --- 返回 description
@@ -173,7 +185,7 @@ M.get_testflag_desc = function(flag)
 end
 
 --- 统一处理 flag 特殊情况
-M.parse_testflag_cmd = function(flag)
+M.parse_testflag_cmd = function(flag, opts)
   if not flag then
     Notify('flag is nil', "DEBUG")
     return
@@ -195,7 +207,7 @@ M.parse_testflag_cmd = function(flag)
   local flag_cmd
   local typ = type(f.cmd)
   if typ == 'function' then
-    flag_cmd = f.cmd()
+    flag_cmd = f.cmd(opts)
   elseif typ == 'table' then
     flag_cmd = f.cmd
   else
@@ -203,15 +215,11 @@ M.parse_testflag_cmd = function(flag)
     return
   end
 
-  if not flag_cmd then
-    --- 这里是提醒 flag.cmd 最终结果是 nil.
-    Notify('flag: "' .. flag .. '.cmd" is nil', "DEBUG")
-    return
+  if flag_cmd then
+    --- 确保 cmd.flag 不是 nil.
+    flag_cmd.flag = flag_cmd.flag or ''
+    return flag_cmd
   end
-
-  --- 确保 cmd.flag 不是 nil.
-  flag_cmd.flag = flag_cmd.flag or ''
-  return flag_cmd
 end
 
 return M

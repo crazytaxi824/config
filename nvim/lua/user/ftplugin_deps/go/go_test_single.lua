@@ -48,13 +48,6 @@ end
 --- opt.mode: 'run' | 'bench' | 'fuzz'
 --- return (cmd: string|nil), eg: cmd = "go test -v -run TestFoo ImportPath"
 local function go_test_single(testfn_name, opt)
-  opt = opt or {}
-  --- 判断 flag 是否存在. Internal
-  local flag_cmd = go_utils.parse_testflag_cmd(opt.flag)
-  if not flag_cmd then
-    return
-  end
-
   --- add regexp pattern to test function name
   local testfn_name_regexp = '"^' .. testfn_name .. '$" '
 
@@ -67,7 +60,20 @@ local function go_test_single(testfn_name, opt)
     return
   end
 
-  local cmd = 'cd ' .. dir .. ' &&'
+  --- 获取 go project root path, `cd src/xxx && go list -f '{{.Root}}'`
+  local project_root = go_utils.get_project_root(dir)
+  if not project_root then
+    return
+  end
+
+  opt = opt or {}
+  --- 判断 flag 是否存在. Internal
+  local flag_cmd = go_utils.parse_testflag_cmd(opt.flag, { project_root = project_root })
+  if not flag_cmd then
+    return
+  end
+
+  local cmd = 'cd ' .. project_root .. ' &&'
   if opt.mode == 'run' then
     --- go test -v -timeout 10s -run TestXxx ImportPath
     cmd = cmd .. ' go test -v' .. flag_cmd.flag
