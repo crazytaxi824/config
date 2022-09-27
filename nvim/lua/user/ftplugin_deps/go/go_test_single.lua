@@ -48,11 +48,13 @@ end
 --- opt.mode: 'run' | 'bench' | 'fuzz'
 --- return (cmd: string|nil), eg: cmd = "go test -v -run TestFoo ImportPath"
 local function go_test_single(testfn_name, opt)
+  opt = opt or {}
   --- 判断 flag 是否存在. Internal
   local flag_cmd = go_utils.parse_testflag_cmd(opt.flag)
   if not flag_cmd then
     return
   end
+  flag_cmd.flag = flag_cmd.flag or ''  -- 确保不是 nil.
 
   --- add regexp pattern to test function name
   local testfn_name_regexp = '"^' .. testfn_name .. '$" '
@@ -100,12 +102,9 @@ local function go_test_single(testfn_name, opt)
       go_utils.set_pprof_cmd_keymap()
     end
 
-    --- autocmd BufWipeout bg_term:shutdown()
-    go_utils.auto_shutdown_all_bg_terms()
-
-    --- run `go tool pprof ...` in background terminal
     if flag_cmd.suffix and flag_cmd.suffix ~= '' then
-      go_utils.bg_term_spawn(flag_cmd.suffix)
+      go_utils.auto_shutdown_all_bg_terms()  -- autocmd BufWipeout bg_term:shutdown()
+      go_utils.bg_term_spawn(flag_cmd.suffix)  -- run `go tool pprof ...` in background terminal
     end
   end
 

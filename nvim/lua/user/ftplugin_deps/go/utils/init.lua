@@ -21,7 +21,10 @@ local function select_pprof()
     end
   }, function(choice)
     if choice then
-      M.bg_term_spawn(M.parse_testflag_cmd(choice).suffix)
+      local flag_cmd = M.parse_testflag_cmd(choice)
+      if flag_cmd and flag_cmd.suffix and flag_cmd.suffix ~= '' then
+        M.bg_term_spawn(flag_cmd.suffix)
+      end
     end
   end)
 end
