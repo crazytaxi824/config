@@ -48,39 +48,37 @@ end
 --- opt.mode: 'run' | 'bench' | 'fuzz'
 --- return (cmd: string|nil), eg: cmd = "go test -v -run TestFoo ImportPath"
 local function go_test_single(testfn_name, opt)
-  opt = opt or {}
-  --- 判断 flag 是否存在. Internal
-  local flag_cmd = go_utils.parse_testflag_cmd(opt.flag)
-  if not flag_cmd then
-    return
-  end
-  flag_cmd.flag = flag_cmd.flag or ''  -- 确保不是 nil.
-
   --- add regexp pattern to test function name
   local testfn_name_regexp = '"^' .. testfn_name .. '$" '
 
   --- 获取当前文件所在文件夹路径.
   local dir = vim.fn.expand('%:h')
 
-  --- 获取 go import path, `cd src/xxx && go list -f '{{.ImportPath}}'`
-  local import_path = go_utils.get_import_path(dir)
-  if not import_path then
+  --- 获取 go list info, `cd src/xxx && go list -json`
+  local go_list = go_utils.go_list(dir)
+  if not go_list then
     return
   end
 
-  local cmd = 'cd ' .. dir .. ' &&'
+  --- 获取 flag_cmd {prefix, flag, suffix}
+  local flag_cmd = go_utils.parse_testflag_cmd(opt.flag, go_list)
+  if not flag_cmd then
+    return
+  end
+
+  local cmd = 'cd ' .. go_list.Root .. ' &&'
   if opt.mode == 'run' then
     --- go test -v -timeout 10s -run TestXxx ImportPath
     cmd = cmd .. ' go test -v' .. flag_cmd.flag
-      .. ' -timeout 10s -run ' .. testfn_name_regexp .. import_path
+      .. ' -timeout 10s -run ' .. testfn_name_regexp .. go_list.ImportPath
   elseif opt.mode == 'bench' then
     --- go test -v -timeout 10s -run ^$ -benchmem -bench BenchmarkXxx ImportPath
     cmd = cmd .. ' go test -v' .. flag_cmd.flag
-      .. ' -timeout 10s -run ^$ -benchmem -bench ' .. testfn_name_regexp .. import_path
+      .. ' -timeout 10s -run ^$ -benchmem -bench ' .. testfn_name_regexp .. go_list.ImportPath
   elseif opt.mode == 'fuzz' then
     --- go test -v -run ^$ -fuzztime 30s -fuzz FuzzXxx ImportPath
     cmd = cmd .. ' go test -v -fuzztime 15s' .. flag_cmd.flag
-      .. ' -run ^$ -fuzz ' .. testfn_name_regexp .. import_path
+      .. ' -run ^$ -fuzz ' .. testfn_name_regexp .. go_list.ImportPath
   else
     Notify("go test single function {opt.mode} should be: 'run' | 'bench' | 'fuzz'", "DEBUG")
     return

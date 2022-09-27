@@ -12,33 +12,31 @@ local function go_test_pkg(opt)
     return
   end
 
-  opt = opt or {}
-  --- 判断 flag 是否存在. Internal
-  local flag_cmd = go_utils.parse_testflag_cmd(opt.flag)
-  if not flag_cmd then
-    return
-  end
-  flag_cmd.flag = flag_cmd.flag or ''  -- 确保不是 nil.
-
   --- 获取当前文件所在文件夹路径.
   local dir = vim.fn.expand('%:h')
 
-  --- 获取 go import path, `cd src/xxx && go list -f '{{.ImportPath}}'`
-  local import_path = go_utils.get_import_path(dir)
-  if not import_path then
+  --- 获取 go list info, `cd src/xxx && go list -json`
+  local go_list = go_utils.go_list(dir)
+  if not go_list then
     return
   end
 
-  local cmd = 'cd ' .. dir .. ' &&'
+  --- 获取 flag_cmd {prefix, flag, suffix}
+  local flag_cmd = go_utils.parse_testflag_cmd(opt.flag, go_list)
+  if not flag_cmd then
+    return
+  end
+
+  local cmd = 'cd ' .. go_list.Root .. ' &&'
   --- NOTE: 不能同时运行多个 fuzz test. Error: will not fuzz, -fuzz matches more than one fuzz test.
   if opt.mode == 'run' then
     --- go test -v -timeout 30s -run "^Test.*" ImportPath
     cmd = cmd .. ' go test -v' .. flag_cmd.flag
-      .. ' -timeout 30s -run "^Test.*" ' .. import_path
+      .. ' -timeout 30s -run "^Test.*" ' .. go_list.ImportPath
   elseif opt.mode == 'bench' then
     --- go test -v -timeout 30s -run ^$ -benchmem -bench "^Benchmark.*" ImportPath
     cmd = cmd .. ' go test -v' .. flag_cmd.flag
-      .. ' -timeout 30s -run ^$ -benchmem -bench "^Benchmark.*" ' .. import_path
+      .. ' -timeout 30s -run ^$ -benchmem -bench "^Benchmark.*" ' .. go_list.ImportPath
   else  -- error
     Notify("go test package {opt.mode} should be: 'run' | 'bench'", "DEBUG")
     return
@@ -73,23 +71,29 @@ end
 --- go test run/bench multiple packages (Project) --------------------------------------------------
 --- opt.mode = 'run' | 'bench'
 local function go_test_proj(opt)
-  opt = opt or {}
-  --- 判断 flag 是否存在. Internal
-  local flag_cmd = go_utils.parse_testflag_cmd(opt.flag)
+  --- 获取当前文件所在文件夹路径.
+  local dir = vim.fn.expand('%:h')
+
+  --- 获取 go list info, `cd src/xxx && go list -json`
+  local go_list = go_utils.go_list(dir)
+  if not go_list then
+    return
+  end
+
+  --- 获取 flag_cmd {prefix, flag, suffix}
+  local flag_cmd = go_utils.parse_testflag_cmd(opt.flag, go_list)
   if not flag_cmd then
     return
   end
-  flag_cmd.flag = flag_cmd.flag or ''  -- 确保不是 nil.
-
-  --- './...' 表示当前 pwd 下的所有 packages, 即整个 Project.
-  local cmd
 
   --- NOTE: cannot use -fuzz flag with multiple packages.
+  --- './...' 表示当前 pwd 下的所有 packages, 即整个 Project.
+  local cmd = 'cd ' .. go_list.Root .. ' &&'
   if opt.mode == 'run' then
-    cmd = 'go test -v' .. flag_cmd.flag
+    cmd = cmd .. ' go test -v' .. flag_cmd.flag
       .. ' -timeout 3m ./...'
   elseif opt.mode == 'bench' then
-    cmd = 'go test -v' .. flag_cmd.flag
+    cmd = cmd .. ' go test -v' .. flag_cmd.flag
       .. ' -timeout 5m -run ^$ -benchmem -bench "^Benchmark.*" ./...'
   else  -- error
     Notify("go test multiple packages {opt.mode} should be: 'run' | 'bench'", "DEBUG")

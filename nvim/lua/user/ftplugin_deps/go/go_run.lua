@@ -9,16 +9,16 @@ M.go_run = function()
   --- 获取当前文件所在文件夹路径.
   local dir = vim.fn.expand('%:h')
 
-  --- 获取 go import path, `cd src/xxx && go list -f '{{.ImportPath}}'`
-  local import_path = go_utils.get_import_path(dir)
-  if not import_path then
+  --- 获取 go list info, `cd src/xxx && go list -json`
+  local go_list = go_utils.go_list(dir)
+  if not go_list then
     return
   end
 
   --- Q: 这里为什么要 `cd src/xxx` 之后再 `go run | go list`?
   --- A: 因为 cd 之后再去执行 go list / go run 可以忽略当前 pwd, 在任何 pwd 下执行其他路径中的代码.
   --- 例如: 可以在 projectA 路径下, ':e projectB/src/main.go', 然后使用 go_run() 运行 projectB 的代码.
-  local cmd = "cd " .. dir .. " && go run " .. import_path  -- go run local/src
+  local cmd = "cd " .. go_list.Root .. " && go run " .. go_list.ImportPath  -- go run local/src
   _Exec(cmd, true)  -- cache cmd for re-run.
 end
 

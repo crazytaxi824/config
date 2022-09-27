@@ -1,7 +1,8 @@
 --- `$ go help testflag` --------------------------------------------------------------------------- {{{
 --- go test run        能使用 pprof & cover & trace flags.
 --- go test benchmark  能使用 pprof & cover & trace flags.
---- go test fuzz       不能使用 pprof & cover & trace flags.
+--- go test fuzz       NOTE: 不能使用 pprof & cover & trace flags. 每次只能执行一个 fuzz test,
+---                    eg: 如果 package 中有多个 Fuzz test 函数 `go test -fuzz "^Fuzz.*"` 会报错.
 --- go test xxx multiple packages  不能使用 pprof flags, 但是可以使用 -cover -coverprofile flags
 
 --- VVI: go test flags
@@ -48,12 +49,8 @@
 
 local M = {}
 
---- NOTE: 这两个路径必须是绝对路径.
---- mkdir 用到必须是绝对路径.
+--- NOTE: 必须是绝对路径.
 local pprof_dir = vim.fn.fnamemodify(vim.fn.stdpath('cache')..'/go/pprof/', ':p')
-
---- '-coverprofile' 用到, 必须是绝对路径.
-local coverage_dir = vim.fn.fnamemodify(vim.fn.getcwd() .. '/coverage/', ':p')
 
 local pprof_flags = ' -o ' .. pprof_dir .. 'pkg.test'  -- [pkg].test 可执行文件生成位置,
                                                        -- 这个是 `$ go help build` 的 flag.
@@ -71,7 +68,7 @@ local pprof_flags = ' -o ' .. pprof_dir .. 'pkg.test'  -- [pkg].test 可执行�
                                                           -- 不在这里统一生成报告.
 
 --- VVI:
---- cmd 不能为 nil, 包含 {prefix, flag, suffix} 三个 shell command/flag.
+--- cmd - table|function, 不能为 nil, 包含 {prefix, flag, suffix} 三个 shell command/flag.
 --- prefix/suffix/flag 可以为 string | nil.
 local flag_desc_cmd = {
   --- 没有任何 testflag 的情况.
@@ -131,14 +128,25 @@ local flag_desc_cmd = {
   --- '-coverprofile /xxx/cover.out' 最好是是绝对路径, 避免和 '-outputdir' 冲突.
   coverprofile = {
     desc = 'Coverage profile (detail)',
-    cmd = {
-      prefix = 'mkdir -p ' .. coverage_dir,
-      flag = ' -coverprofile ' .. coverage_dir .. 'cover.out',
-      --- go tool cover -html=cover.out -o cover.html, 浏览器打开 cover.html 文件
-      suffix = 'go tool cover -html=' .. coverage_dir
-        .. 'cover.out -o ' .. coverage_dir .. 'cover.html'
-        .. ' && open ' .. coverage_dir .. 'cover.html',  -- 使用操作系统打开 cover.html 文件
-    }
+    cmd = function(go_list)
+      if not go_list then
+        Notify("{go_list} is nil", "ERROR")
+        return
+      end
+
+      local coverage_dir = go_list.Root .. '/coverage/'
+      return {
+        prefix = 'mkdir -p ' .. coverage_dir,
+
+        --- NOTE: 这里推荐使用绝对路径, 不受 pwd 影响.
+        flag = ' -coverprofile ' .. coverage_dir .. 'cover.out',
+
+        --- go tool cover -html=cover.out -o cover.html
+        --- NOTE: 执行 `go tool cover` 时 pwd 必须在 project 中.
+        suffix = 'cd ' .. coverage_dir .. ' && go tool cover -html=cover.out -o cover.html'
+          .. ' && open cover.html',  -- 使用操作系统打开 cover.html 文件
+      }
+    end
   },
 
   --- fuzztime flags
@@ -148,39 +156,69 @@ local flag_desc_cmd = {
   fuzz10m = { desc = 'fuzztime 10m', cmd = {flag = ' -fuzztime 10m'} },
 
   --- NOTE: 这里的 cmd 内容需要根据 input 来设置.
-  fuzz_input = { desc = 'Input fuzztime: 15s|20m|1h20m30s (duration) | 1000x (times)', cmd = {} },
+  fuzz_input = {
+    desc = 'Input fuzztime: 15s|20m|1h20m30s (duration) | 1000x (times)',
+    cmd = function()
+      local fuzz_cmd
+      vim.ui.input({prompt = 'Input -fuzztime: '}, function(input)
+        if input then
+          fuzz_cmd = { flag = ' -fuzztime '..input}
+        end
+      end)
+      return fuzz_cmd
+    end
+  },
 }
 
 --- 返回 description
 M.get_testflag_desc = function(flag)
-  return flag_desc_cmd[flag].desc
+  local f = flag_desc_cmd[flag]
+  if not f then
+    return '[flag: "' .. flag .. '" is NOT in "testflags.lua" table]'
+  end
+  if not f.desc then
+    return '[flag: "' .. flag .. '.desc" is MISSING from "testflags.lua" table]'
+  end
+
+  return f.desc
 end
 
 --- 统一处理 flag 特殊情况
-M.parse_testflag_cmd = function(flag)
+M.parse_testflag_cmd = function(flag, go_list)
   if not flag then
     Notify('flag is nil', "DEBUG")
     return
   end
 
-  --- NOTE: 根据用户 input 设置 -fuzztime cmd 内容.
-  if flag == 'fuzz_input' then
-    local fuzz_cmd
-    vim.ui.input({prompt = 'Input -fuzztime: '}, function(input)
-      if input then
-        fuzz_cmd = { flag = ' -fuzztime '..input}
-      end
-    end)
-    return fuzz_cmd
-  end
-
   local f = flag_desc_cmd[flag]
   if not f then
-    Notify('flag: "' .. flag .. '" is not in "testflags.lua" table', "DEBUG")
+    Notify('flag: "' .. flag .. '" is NOT in "testflags.lua" table', "DEBUG")
+    return
+  end
+  if not f.cmd then
+    --- 这里是提醒 flag.cmd 未设置.
+    Notify('flag: "' .. flag .. '.cmd" is MISSING from "testflags.lua" table', "DEBUG")
     return
   end
 
-  return f.cmd
+  --- VVI: 这里不能直接使用 f.cmd = f.cmd(), 因为第一次执行的时候 f.cmd 是一个 function,
+  --- 而第二次执行的时候 f.cmd 已经变成一个 table 了.
+  local flag_cmd
+  local typ = type(f.cmd)
+  if typ == 'function' then
+    flag_cmd = f.cmd(go_list)
+  elseif typ == 'table' then
+    flag_cmd = f.cmd
+  else
+    Notify('flag: "' .. flag .. '.cmd" type error', "DEBUG")
+    return
+  end
+
+  if flag_cmd then
+    --- 确保 cmd.flag 不是 nil.
+    flag_cmd.flag = flag_cmd.flag or ''
+    return flag_cmd
+  end
 end
 
 return M
