@@ -18,6 +18,7 @@ local function go_test_pkg(opt)
   if not flag_cmd then
     return
   end
+  flag_cmd.flag = flag_cmd.flag or ''  -- 确保不是 nil.
 
   --- 获取当前文件所在文件夹路径.
   local dir = vim.fn.expand('%:h')
@@ -59,12 +60,9 @@ local function go_test_pkg(opt)
       go_utils.set_pprof_cmd_keymap()
     end
 
-    --- autocmd BufWipeout bg_term:shutdown()
-    go_utils.auto_shutdown_all_bg_terms()
-
-    --- run `go tool pprof ...` in background terminal
     if flag_cmd.suffix and flag_cmd.suffix ~= '' then
-      go_utils.bg_term_spawn(flag_cmd.suffix)
+      go_utils.auto_shutdown_all_bg_terms()  -- autocmd BufWipeout bg_term:shutdown()
+      go_utils.bg_term_spawn(flag_cmd.suffix)  -- run `go tool pprof ...` in background terminal
     end
   end
 
@@ -81,6 +79,7 @@ local function go_test_proj(opt)
   if not flag_cmd then
     return
   end
+  flag_cmd.flag = flag_cmd.flag or ''  -- 确保不是 nil.
 
   --- './...' 表示当前 pwd 下的所有 packages, 即整个 Project.
   local cmd
@@ -108,12 +107,9 @@ local function go_test_proj(opt)
 
   --- toggleterm on_exit callback function
   local on_exit = function()
-    --- autocmd BufWipeout bg_term:shutdown()
-    go_utils.auto_shutdown_all_bg_terms()
-
-    --- NOTE: cannot use pprof flag with multiple packages
     if flag_cmd.suffix and flag_cmd.suffix ~= '' then
-      go_utils.bg_term_spawn(flag_cmd.suffix)
+      go_utils.auto_shutdown_all_bg_terms()  -- autocmd BufWipeout bg_term:shutdown()
+      go_utils.bg_term_spawn(flag_cmd.suffix)  -- run `go tool pprof ...` in background terminal
     end
   end
 

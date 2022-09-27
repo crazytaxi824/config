@@ -70,12 +70,18 @@ local pprof_flags = ' -o ' .. pprof_dir .. 'pkg.test'  -- [pkg].test 可执行�
   -- .. ' -coverprofile ' .. coverage_dir .. 'cover.out'  -- NOTE: 单独使用 -coverprofile,
                                                           -- 不在这里统一生成报告.
 
+--- VVI:
+--- cmd 不能为 nil, 包含 {prefix, flag, suffix} 三个 shell command/flag.
+--- prefix/suffix/flag 可以为 string | nil.
 local flag_desc_cmd = {
-  none = { desc = '[No Extra Flag]', cmd = {prefix='', flag='', suffix=''} },
+  --- 没有任何 testflag 的情况.
+  none = { desc = '[No Extra Flag]', cmd = {} },  -- VVI: cmd 不能为 nil.
+
+  --- pprof 的 4 个 testflag, '-cpuprofile', '-memprofile', '-blockprofile', '-mutexprofile'
   cpu = {
     desc = 'CPU profile',
     cmd = {
-      prefix = ' mkdir -p ' .. pprof_dir,
+      prefix = 'mkdir -p ' .. pprof_dir,
       flag = pprof_flags,
       suffix = 'go tool pprof -http=localhost: ' .. pprof_dir .. 'cpu.out'
     }
@@ -83,7 +89,7 @@ local flag_desc_cmd = {
   mem = {
     desc = 'Memory profile',
     cmd = {
-      prefix = ' mkdir -p ' .. pprof_dir,
+      prefix = 'mkdir -p ' .. pprof_dir,
       flag = pprof_flags,
       suffix = 'go tool pprof -http=localhost: ' .. pprof_dir .. 'mem.out'
     }
@@ -91,7 +97,7 @@ local flag_desc_cmd = {
   mutex = {
     desc = 'Mutex profile',
     cmd = {
-      prefix = ' mkdir -p ' .. pprof_dir,
+      prefix = 'mkdir -p ' .. pprof_dir,
       flag = pprof_flags,
       suffix = 'go tool pprof -http=localhost: ' .. pprof_dir .. 'mutex.out'
     }
@@ -99,15 +105,17 @@ local flag_desc_cmd = {
   block = {
     desc = 'Block profile',
     cmd = {
-      prefix = ' mkdir -p ' .. pprof_dir,
+      prefix = 'mkdir -p ' .. pprof_dir,
       flag = pprof_flags,
       suffix = 'go tool pprof -http=localhost: ' .. pprof_dir .. 'block.out'
     }
   },
+
+  --- '-trace' testflag
   trace = {
     desc = 'Trace',
     cmd = {
-      prefix = ' mkdir -p ' .. pprof_dir,
+      prefix = 'mkdir -p ' .. pprof_dir,
       flag = pprof_flags,
       suffix = 'go tool trace -http=localhost: ' .. pprof_dir .. 'trace.out'
     }
@@ -116,11 +124,7 @@ local flag_desc_cmd = {
   --- '-cover' flag 只在 terminal 中显示覆盖率, 不会生成任何文件.
   cover = {
     desc = 'Coverage print on screen',
-    cmd = {
-      prefix = '' ,
-      flag = ' -cover',
-      suffix = ''
-    }
+    cmd = { flag = ' -cover' },
   },
 
   --- NOTE: 使用 '-coverprofile' 生成的 'cover.out' 文件必须在 go workspace 中, 否则无法进行分析.
@@ -128,7 +132,7 @@ local flag_desc_cmd = {
   coverprofile = {
     desc = 'Coverage profile (detail)',
     cmd = {
-      prefix = ' mkdir -p ' .. coverage_dir,
+      prefix = 'mkdir -p ' .. coverage_dir,
       flag = ' -coverprofile ' .. coverage_dir .. 'cover.out',
       --- go tool cover -html=cover.out -o cover.html, 浏览器打开 cover.html 文件
       suffix = 'go tool cover -html=' .. coverage_dir
@@ -138,10 +142,10 @@ local flag_desc_cmd = {
   },
 
   --- fuzztime flags
-  fuzz30s = { desc = 'fuzztime 30s', cmd = {prefix='', flag=' -fuzztime 30s', suffix=''} },
-  fuzz60s = { desc = 'fuzztime 60s', cmd = {prefix='', flag=' -fuzztime 60s', suffix=''} },
-  fuzz5m  = { desc = 'fuzztime 5m',  cmd = {prefix='', flag=' -fuzztime 5m',  suffix=''} },
-  fuzz10m = { desc = 'fuzztime 10m', cmd = {prefix='', flag=' -fuzztime 10m', suffix=''} },
+  fuzz30s = { desc = 'fuzztime 30s', cmd = {flag = ' -fuzztime 30s'} },
+  fuzz60s = { desc = 'fuzztime 60s', cmd = {flag = ' -fuzztime 60s'} },
+  fuzz5m  = { desc = 'fuzztime 5m',  cmd = {flag = ' -fuzztime 5m' } },
+  fuzz10m = { desc = 'fuzztime 10m', cmd = {flag = ' -fuzztime 10m'} },
 
   --- NOTE: 这里的 cmd 内容需要根据 input 来设置.
   fuzz_input = { desc = 'Input fuzztime: 15s|20m|1h20m30s (duration) | 1000x (times)', cmd = {} },
@@ -164,7 +168,7 @@ M.parse_testflag_cmd = function(flag)
     local fuzz_cmd
     vim.ui.input({prompt = 'Input -fuzztime: '}, function(input)
       if input then
-        fuzz_cmd = { prefix = '', flag = ' -fuzztime '..input, suffix = '' }
+        fuzz_cmd = { flag = ' -fuzztime '..input}
       end
     end)
     return fuzz_cmd
@@ -172,7 +176,7 @@ M.parse_testflag_cmd = function(flag)
 
   local f = flag_desc_cmd[flag]
   if not f then
-    Notify('flag: "' .. flag .. '" is not exist', "DEBUG")
+    Notify('flag: "' .. flag .. '" is not in "testflags.lua" table', "DEBUG")
     return
   end
 

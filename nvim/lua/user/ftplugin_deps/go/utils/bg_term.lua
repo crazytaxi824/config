@@ -16,8 +16,9 @@ M.bg_term_spawn = function(cmd)
     --- 但是如果有相同 count 的 term job 还未结束时, 新的 term 无法运行.
     count = bg_term_count,
 
-    --- bg_term_spawn 窗口不打开, 不显示任何信息, 可以在执行完 job 之后自动退出.
-    close_on_exit = true,
+    --- bg_term_spawn 窗口不会打开, 可以设置为在执行完 job 之后自动退出, 即: close_on_exit = true,
+    --- NOTE: 但是如果 close_on_exit = true 会导致 bg_term job 结束后 cursor 自动跳转到其他 window.
+    close_on_exit = false,
 
     --- 不允许被 :ToggleTerm 控制.
     hidden = true,
