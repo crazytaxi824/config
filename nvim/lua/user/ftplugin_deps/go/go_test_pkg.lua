@@ -80,6 +80,10 @@ local function go_test_proj(opt)
     return
   end
 
+  --- NOTE: 标记为 test 整个 project,
+  --- 传递的 string 是 -coverprofile 的文件名. 这里为 project_cover.out
+  go_list.project = 'project'
+
   --- 获取 flag_cmd {prefix, flag, suffix}
   local flag_cmd = go_utils.parse_testflag_cmd(opt.flag, go_list)
   if not flag_cmd then
@@ -87,7 +91,8 @@ local function go_test_proj(opt)
   end
 
   --- NOTE: cannot use -fuzz flag with multiple packages.
-  --- './...' 表示当前 pwd 下的所有 packages, 即整个 Project.
+  --- 以下意思是 pwd 在 project root 下执行 'go test ./...', 即整个 Project.
+  --- './...' 表示当前 pwd 下的所有 packages
   local cmd = 'cd ' .. go_list.Root .. ' &&'
   if opt.mode == 'run' then
     cmd = cmd .. ' go test -v' .. flag_cmd.flag

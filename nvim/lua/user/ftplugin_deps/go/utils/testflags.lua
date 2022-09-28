@@ -43,7 +43,7 @@
 --   .. ' -mutexprofile mutex.out'   -- go tool pprof -http=localhost: mutex.out
 --   .. ' -trace trace.out'          -- go tool trace -http=localhost: trace.out
 --
---   .. ' -timeout 30s -run "^Test.*" ' .. import_path
+--   .. ' -timeout 30s -run "^Test.*" ' .. ImportPath
 --   .. ' && rm ./*.test'  -- remove pkg.text 可执行文件.
 -- -- }}}
 
@@ -134,17 +134,21 @@ local flag_desc_cmd = {
         return
       end
 
+      --- NOTE: 如果是 `go test -coverprofile ./...` , go_list 中需要传递 project 属性, 用于指定文件名.
+      local cover_filename = go_list.project or string.gsub(go_list.ImportPath, '/', '%%')
+
       local coverage_dir = go_list.Root .. '/coverage/'
       return {
         prefix = 'mkdir -p ' .. coverage_dir,
 
         --- NOTE: 这里推荐使用绝对路径, 不受 pwd 影响.
-        flag = ' -coverprofile ' .. coverage_dir .. 'cover.out',
+        flag = ' -coverprofile ' .. coverage_dir .. cover_filename .. '_cover.out',
 
         --- go tool cover -html=cover.out -o cover.html
         --- NOTE: 执行 `go tool cover` 时 pwd 必须在 project 中.
-        suffix = 'cd ' .. coverage_dir .. ' && go tool cover -html=cover.out -o cover.html'
-          .. ' && open cover.html',  -- 使用操作系统打开 cover.html 文件
+        suffix = 'cd ' .. coverage_dir .. ' && go tool cover -html=' .. cover_filename
+          .. '_cover.out -o ' .. cover_filename .. '_cover.html'
+          .. ' && open ' .. cover_filename .. '_cover.html',  -- 使用操作系统打开 cover.html 文件
       }
     end
   },
