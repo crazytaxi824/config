@@ -80,8 +80,7 @@ local function go_test_proj(opt)
     return
   end
 
-  --- NOTE: 标记为 test 整个 project,
-  --- 传递的 string 是 -coverprofile 的文件名. 这里为 project_cover.out
+  --- VVI: 标记为 test 整个 project, 传递的 string 是 -coverprofile 的文件名.
   go_list.project = 'project'
 
   --- 获取 flag_cmd {prefix, flag, suffix}

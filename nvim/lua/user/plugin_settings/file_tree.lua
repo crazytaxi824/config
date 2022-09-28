@@ -442,7 +442,7 @@ vim.cmd('hi! default link NvimTreeFileNew    NvimTreeGitStaged')
 
 --- autocmd ---------------------------------------------------------------------------------------- {{{
 --- automatically close the tab/vim when nvim-tree is the last window in the tab
-vim.cmd [[autocmd BufEnter * ++nested if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpagenr() | quit | endif]]
+--vim.cmd [[autocmd BufEnter * ++nested if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpagenr() | quit | endif]]
 
 --- refresh nvim-tree when enter/delete a buffer.
 --- BufEnter  用在打开 unloaded buffer 时.
@@ -450,9 +450,8 @@ vim.cmd [[autocmd BufEnter * ++nested if winnr('$') == 1 && bufname() == 'NvimTr
 vim.api.nvim_create_autocmd({"BufEnter", "BufDelete"}, {
   pattern = {"*"},
   callback = function(params)
-    --- VVI: 必须使用 vim.schedule(), 否则 bdelete 的时候不会刷新显示.
-    --- 因为 bnext | bdelete #, 先 Enter 其他 buffer, 这时之前的 buffer 还没有被 delete, 所以 reload()
-    --- 的时候 buffer highlight 还在.
+    --- VVI: 必须使用 vim.schedule(), 否则 bdelete hidden buffer 的时候不会刷新显示.
+    --- 因为 BufDelete 事件是在 buffer 被真正 delete 之前触发, 触发时 buffer 还未被 unlist.
     vim.schedule(function()
       nt_api.tree.reload()  -- refresh tree
     end)
