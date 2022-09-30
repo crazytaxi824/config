@@ -204,6 +204,13 @@ local function system_open(node)
 end
 -- -- }}}
 
+--- go back to pwd --- {{{
+local pwd = vim.fn.getcwd()  -- cache pwd
+local function back_to_pwd()
+  nt_api.tree.change_root(pwd)
+end
+-- --}}}
+
 --- nvim-tree buffer keymaps ---------------------------------------------------
 --- only works within "NvimTree_X" buffer.
 local nt_buffer_keymaps = {
@@ -225,12 +232,12 @@ local nt_buffer_keymaps = {
   { key = "<F8>",          action = "next_diag_item" },  -- next diagnostics item
   { key = "<F20>",         action = "prev_diag_item" },  -- <S-F8> previous diagnostics item
   { key = "<S-CR>",        action = "cd" },  -- `cd` in the directory under the cursor
-  { key = "<C-CR>",        action = "cd" },  -- `cd` in the directory under the cursor
   { key = "C",             action = "copy" },  -- copy file
   { key = "P",             action = "paste" }, -- paste file
 
   --- 自定义功能. NOTE: action 内容成为 help 中展示的文字.
   --- action_cb 意思是 callback 函数.
+  { key = "o",             action = "back to Original pwd", action_cb = back_to_pwd},
   { key = "<C-o>",         action = "system open", action_cb = system_open},
   { key = "<leader>c",     action = "compare two marked files", action_cb = compare_two_marked_files},
   { key = "<leader>D",     action = "git: Discard file changes", action_cb = git_discard_file_changes},
@@ -251,7 +258,7 @@ Keymap_set_and_register(tree_keymaps)
 nvim_tree.setup {
   auto_reload_on_write = true,  -- VVI: `:w` 时刷新 nvim-tree.
 
-  disable_netrw = false,   -- completely disable netrw. NOTE: netrw: vim's builtin file explorer.
+  disable_netrw = false,   -- VVI: completely disable netrw. NOTE: netrw: vim's builtin file explorer.
   hijack_netrw = true,     -- hijack netrw windows (overriden if |disable_netrw| is `true`)
   hijack_cursor = false,   -- keeps the cursor on the first letter of the filename
   hijack_directories = {   -- hijacks new directory buffers when they are opened (`:e dir`)

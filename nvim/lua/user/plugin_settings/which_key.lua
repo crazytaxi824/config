@@ -78,8 +78,13 @@ which_key.setup({
   },
 
   ignore_missing = false, -- enable this to hide mappings for which you didn't specify a label
-  hidden = { "<silent>", "<cmd>", "<Cmd>", "<CR>", "call", "lua", "^:", "^ "}, -- hide mapping boilerplate
   show_help = true, -- show help message 在下方 <bs> 返回上一层菜单, <esc> 退出.
+
+  --- VVI: hide mapping boilerplate, for-loop string.gsub(str, '<cmd>', '')
+  hidden = {
+    "<silent>", "<cmd>", "<Cmd>", "<CR>", "call", "lua", "require", "^:", "^ ",
+    "render.canvas'%)._mapping%('",  -- HACK: for 'dap-ui' default keymapping.
+  },
 
   triggers = "auto", -- automatically setup triggers
   --triggers = {"<leader>"} -- or specify a list manually
