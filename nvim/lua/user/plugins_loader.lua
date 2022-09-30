@@ -303,7 +303,7 @@ return packer.startup(function(use)
   --- 以下是使用了 treesitter 功能的插件. (这些插件也可以不使用 treesitter 的功能)
   --- 注释
   use {"numToStr/Comment.nvim",
-    commit = "f360925",  -- "30d23aa",
+    commit = "f360925",
     config = function() require("user.plugin_settings.comment") end,
     after = {"nvim-treesitter", "nvim-ts-context-commentstring"},
     requires = {
@@ -444,14 +444,14 @@ return packer.startup(function(use)
 
   --- Debug tools 安装 -----------------------------------------------------------------------------
   use {"mfussenegger/nvim-dap",  -- core debug tool
-    commit = "cf94cfb",  -- "e12496b",
+    commit = "cf94cfb",
     requires = "williamboman/mason.nvim",  -- install dap-debug tools. eg: 'delve'
     cmd = {'DapToggleBreakpoint', 'DapContinue', 'DapLoadLaunchJSON'},
     --- NOTE: dap-ui && dap 设置在同一文件中.
   }
 
   use {"rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
-    commit = "8d0768a",  -- "4af75ae",
+    commit = "8d0768a",
     after = "nvim-dap",
     config = function() require("user.plugin_settings.dap_debug") end,  -- dap-ui && dap 设置在同一文件中.
   }
