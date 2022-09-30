@@ -13,7 +13,7 @@ ts_configs.setup {
   --ensure_installed = { "go", "lua", "javascript", "typescript", "tsx", "html", "css", "scss" ... },
   ensure_installed = "all",  -- 白名单, "all" OR a list of languages
   sync_install = false,  -- install languages synchronously (only applied to `ensure_installed`)
-  ignore_install = {},  -- 黑名单, 不安装.
+  ignore_install = { "help" },  -- 黑名单, 不安装.
   parser_install_dir = treesitter_parsers_path,  -- path to store parsers.
 
   --- `:TSModuleInfo` 可以查看 module 设置.
@@ -22,7 +22,7 @@ ts_configs.setup {
     enable = true,  -- VVI: 如果使用 lazy 方式启动 highlight, 需要设置为 false,
                     -- 提前加载会严重拖慢 nvim 启动/文件打开速度.
 
-    disable = { "" },  -- list of language that will be disabled.
+    disable = { "help" },  -- list of language that will be disabled.
 
     --- NOTE: `:help :syn-manual`. nvim-treesitter 会强制将 syntax 设置为 `syntax manual`.
     ---        This will enable the syntax highlighting, but not switch it on automatically.
