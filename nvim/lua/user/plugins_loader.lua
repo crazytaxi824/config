@@ -489,14 +489,14 @@ return packer.startup(function(use)
   --- `ctags --list-languages` 查看支持的语言. 不支持 jsx/tsx, 支持 typescript, 勉强支持 javascript
   -- -- }}}
   use {"preservim/tagbar",
-    commit = "72cb099",
+    commit = "83933d5",
     config = function() require("user.plugin_settings.tagbar") end,
     opt = true,  -- 在 vim.schedule() 中 lazy load
   }
 
   --- markdown preview
   use {"iamcco/markdown-preview.nvim",
-    commit = "02cc387",
+    -- commit = "02cc387",
     run = function() vim.fn["mkdp#util#install"]() end,  -- VVI: Update 后需要重新安装 preview 插件, 否则可能出现无法运行的情况.
     config = function() vim.cmd('doautocmd mkdp_init BufEnter') end,  -- VVI: 需要这个设置才能使用 cmd 条件加载, 否则报错.
     cmd = {"MarkdownPreview", "MarkdownPreviewToggle", "MarkdownPreviewStop"},
