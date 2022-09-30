@@ -252,7 +252,7 @@ local function close_current_tab()
   end
 
   --- 获取当前 tab 中的所有 bufnr. return list.
-  --- 这里返回的 buffer list 是属于该 tab 的各个 win 正在显示的 buffer.
+  --- tabpagebuflist() 返回属于该 tab 的各个 win 正在显示的 buffer, NOTE: 包括 unlisted buffer.
   local cur_tab_buf_list = vim.fn.tabpagebuflist()
 
   --- 获取其他 tab 中的所有 buffer list.
@@ -269,6 +269,7 @@ local function close_current_tab()
   for _, bufnr in ipairs(cur_tab_buf_list) do
     if not vim.tbl_contains(exclude_buffer_list, bufnr)  -- 排除存在于其他 tab 中 buffer.
       and vim.fn.getbufinfo(bufnr)[1].changed == 0  -- 排除 unsaved buffer.
+      and vim.fn.buflisted(bufnr) == 1   -- 排除 unlisted buffer
     then
       table.insert(del_nochanged_buf_list, bufnr)
     end
@@ -322,11 +323,6 @@ end
 --- ignore_tab 用于避免 close 最后一个 tab 导致报错: "Cannot close last tab page"
 --- 如果 ignore_tab == true, 则不运行 close_current_tab()
 local function bufferline_del_current_buffer(ignore_tab)
-  --- 不删除 nvim-tree
-  if vim.bo.filetype == 'NvimTree' then
-    return
-  end
-
   --- NOTE: multi tab 的情况下, 使用 :tabclose 关闭整个 tab, 同时 bdelete 该 tab 中的所有 buffer.
   if not ignore_tab and close_current_tab() then  -- return true: 有多个 tab, 并已关闭当前 tab.
     return
