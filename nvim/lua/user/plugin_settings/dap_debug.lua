@@ -75,6 +75,7 @@ vim.fn.sign_define("DapStopped", { text = " →", texthl = "DapStoppedHL", numhl
 
 --- repl / debug console command --- {{{
 --    .exit               Closes the REPL
+--    .clear              clear dap-repl buffer 内容
 --    .c or .continue     Same as |dap.continue|
 --    .n or .next         Same as |dap.step_over|
 --    .into               Same as |dap.step_into|

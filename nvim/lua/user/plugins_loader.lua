@@ -441,14 +441,14 @@ return packer.startup(function(use)
 
   --- Debug tools 安装 -----------------------------------------------------------------------------
   use {"mfussenegger/nvim-dap",  -- core debug tool
-    commit = "e12496b",
+    commit = "cf94cfb",  -- "e12496b",
     requires = "williamboman/mason.nvim",  -- install dap-debug tools. eg: 'delve'
     cmd = {'DapToggleBreakpoint', 'DapContinue', 'DapLoadLaunchJSON'},
     --- NOTE: dap-ui && dap 设置在同一文件中.
   }
 
   use {"rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
-    commit = "4af75ae",
+    commit = "8d0768a",  -- "4af75ae",
     after = "nvim-dap",
     config = function() require("user.plugin_settings.dap_debug") end,  -- dap-ui && dap 设置在同一文件中.
   }

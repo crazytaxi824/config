@@ -171,6 +171,22 @@ vim.api.nvim_create_autocmd('TermOpen', {
   end,
 })
 
+--- for debug dap-repl buffer
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = {"dap-repl"},
+  callback = function(params)
+    vim.keymap.set('n', '<S-CR>',
+      "<cmd>lua Jump_to_file(vim.fn.expand('<cWORD>'))<CR>",
+      {
+        noremap = true,
+        silent = true,
+        buffer = params.buf,  -- local to Terminal buffer
+        desc = "Jump to file",
+      }
+    )
+  end
+})
+
 --- VISIAL 模式跳转文件 ----------------------------------------------------------------------------
 --- 获取 visual selected word.
 function Visual_selected()
