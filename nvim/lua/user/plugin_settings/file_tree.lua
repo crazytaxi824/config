@@ -247,7 +247,7 @@ local nt_buffer_keymaps = {
 local opts = {noremap=true, silent=true}
 local tree_keymaps = {
   {'n', '<leader>,', '<cmd>NvimTreeToggle<CR>', opts, 'tree: toggle'},
-  {'n', '<leader><CR>', '<cmd>NvimTreeFindFile<CR>', opts, 'tree: find file'},
+  {'n', '<leader><CR>', '<cmd>NvimTreeFindFile!<CR>', opts, 'tree: find file'},
 }
 
 Keymap_set_and_register(tree_keymaps)
@@ -258,14 +258,25 @@ Keymap_set_and_register(tree_keymaps)
 nvim_tree.setup {
   auto_reload_on_write = true,  -- VVI: `:w` 时刷新 nvim-tree.
 
-  disable_netrw = false,   -- VVI: completely disable netrw. NOTE: netrw: vim's builtin file explorer.
-  hijack_netrw = true,     -- hijack netrw windows (overriden if |disable_netrw| is `true`)
-  hijack_cursor = false,   -- keeps the cursor on the first letter of the filename
-  hijack_directories = {   -- hijacks new directory buffers when they are opened (`:e dir`)
-    enable = true,  -- NOTE: 和下面的 auto close the tab/vim when nvim-tree is the last window 一起使用时,
-                    -- 会导致 nvim 退出.
-    auto_open = true,
+  disable_netrw = false,  -- VVI: completely disable netrw. NOTE: netrw: vim's builtin file explorer.
+
+  --- true  - `:e dir` 时, 不显示 netrw file explorer.
+  --- false - `:e dir` 时, 在当前 window 中显示 netrw file explorer.
+  --- NOTE: 配合 hijack_directories 使用:
+  --- 如果 hijack_directories = true, 则在 nvim_tree 窗口打开 dir;
+  --- 如果 hijack_directories = false, NOTE: 则当前 window 中显示空文件;
+  hijack_netrw = false,
+
+  --- NOTE: 需要和 hijack_netrw = true 一起使用. 如果 hijack_netrw = false, 这里的设置无效.
+  --- true  - `:e dir` 时, 在 nvim_tree 窗口打开 dir;
+  --- false - `:e dir` 时, 当前 window 中显示空文件.
+  hijack_directories = {
+    enable = false,  -- NOTE: 和下面的 auto close the tab/vim when nvim-tree is the last window 一起使用时,
+                     -- 会导致 nvim 退出.
+    auto_open = true,  -- hijack_directories 时自动打开 nvim-tree.
   },
+
+  hijack_cursor = false,  -- keeps the cursor on the first letter of the filename
   hijack_unnamed_buffer_when_opening = false,  -- Opens in place of the unnamed buffer if it's empty. 默认 false.
 
   --- 启动 nvim 时, 打开 tree.
