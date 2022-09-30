@@ -78,7 +78,7 @@ which_key.setup({
   },
 
   ignore_missing = false, -- enable this to hide mappings for which you didn't specify a label
-  hidden = { "<silent>", "<cmd>", "<Cmd>", "<CR>", "call", "lua", "^:", "^ "}, -- hide mapping boilerplate
+  hidden = { "<silent>", "<cmd>", "<Cmd>", "<CR>", "call", "lua", "^:", "^ " }, -- VVI: hide mapping boilerplate
   show_help = true, -- show help message 在下方 <bs> 返回上一层菜单, <esc> 退出.
 
   triggers = "auto", -- automatically setup triggers

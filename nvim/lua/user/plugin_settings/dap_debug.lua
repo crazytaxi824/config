@@ -101,7 +101,7 @@ dapui.setup({
     remove = "d",
     repl = "r",
     open = "o",
-    toggle = "t",
+    toggle = "T",  -- 't' keymap 冲突.
   },
 
   layouts = {
