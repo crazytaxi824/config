@@ -80,20 +80,10 @@ local function jump_to_file(absolute_path, lnum, col)
   end
 end
 
---- TODO: jump to dir
-local function open_dir_in_nvimtree(dir)
-  Notify('"' .. dir .. '" is a directory', "DEBUG", {timeout = 1500})
-
-  -- local nt_status_ok, nt = pcall(require, "nvim-tree.api")
-  -- if not nt_status_ok then
-  --   return
-  -- end
-  --
-  -- --- open nvim-tree
-  -- nt.tree.focus()
-  --
-  -- --- cursor jump to dir
-  -- nt.tree.find_file(dir)
+--- jump to dir
+local function jump_to_dir(dir)
+  -- Notify('"' .. dir .. '" is a directory', "DEBUG", {timeout = 1500})
+  vim.cmd('tabnew ' .. dir)
 end
 
 --- file://xxxx
@@ -136,7 +126,7 @@ function Jump_to_file(content)
       Notify('cannot open file: "' .. filepath .. '"', "DEBUG", {timeout = 1500})
       return
     else
-      open_dir_in_nvimtree(absolute_path)
+      jump_to_dir(absolute_path)
       return
     end
   end
