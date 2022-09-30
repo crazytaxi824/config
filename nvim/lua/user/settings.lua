@@ -208,11 +208,46 @@ vim.opt.hidden = true      -- VVI: 很多插件需要用到 hidden buffer. When 
 --- markdown 文件自动执行 SpellCheck 命令
 --vim.cmd [[au Filetype pandoc,markdown setlocal spell spelllang=en,cjk]]
 
---- window / scroll 设置 ---------------------------------------------------------------------------
+--- window  设置 -----------------------------------------------------------------------------------
 vim.opt.splitbelow = true  -- force all horizontal splits to go below current window
 vim.opt.splitright = true  -- force all vertical splits to go to the right of current window
-vim.opt.scrolloff = 4      -- 没有到达文件顶部/底部时, 光标留空 n 行. 同时会影响 H / L 键行为.
-vim.opt.sidescrolloff = 16 -- 和上面类似, 横向留空 n 列.
+
+--- scroll / listchars 设置 ------------------------------------------------------------------------
+vim.opt.scrolloff = 4  -- 在光标到达文件顶部/底部之前, 始终在光标上下留空 n 行. 同时会影响 H / L 键行为.
+vim.opt.sidescrolloff = 16  -- 和上面类似, 横向留空 n 列. NOTE: 配合 listchars 设置一起使用.
+
+--- `:help win_gettype()`, 'popup' window setlocal scrolloff=0 | sidescrolloff=0
+vim.api.nvim_create_autocmd('WinEnter', {
+  pattern = {"*"},
+  callback = function(params)
+    local win_ids = vim.fn.getbufinfo(params.buf)[1].windows
+    for _, win_id in ipairs(win_ids) do
+      if vim.fn.win_gettype(win_id) == 'popup' then
+        vim.wo.scrolloff = 0
+        vim.wo.sidescrolloff = 0
+      end
+    end
+  end
+})
+
+--- 换行符, space, tab, cr ... 显示设置. `:help listchars`
+---   eol:↴ - 换行
+---   lead/trail - 行首(尾)的空格
+---   precedes/extends - 不换行(:set nowrap)的情况下, 内容长度超出屏幕的行会有该标记
+vim.opt.list = true
+vim.opt.listchars = 'tab:│ ,lead: ,trail:·,extends:→,precedes:←,nbsp:⎵'
+
+--- 填充符, `:help fillchars` ----------------------------------------------------------------------
+---   diff  - vimdiff 中被删除的行的填充字符.
+---   fold  - 折叠代码的行的填充字符.
+---   vert  - 竖着并排窗口的分隔符. eg: tagbar, nerdtree ...
+---   stl   - statusline 中间的填充字符.
+---   stlnc - non-current window 的 statusline 中间的填充字符.
+---   eob   - 文件最后一行之后, 空白行的行号.
+vim.opt.fillchars = 'fold: ,diff: ,vert:│,eob:~'
+
+--- `:h foldtext` 改变折叠代码的样式. NOTE: 配合 fillchars 使用.
+vim.opt.foldtext = 'printf("%s …", getline(v:foldstart))'
 
 --- search 设置，命令 `/` `?` ----------------------------------------------------------------------
 vim.opt.incsearch = true   -- 开始实时搜索
@@ -260,25 +295,6 @@ vim.api.nvim_create_autocmd("FileType", {
     end
   end
 })
-
---- 换行符, space, tab, cr ... 显示设置. `:help listchars`
----   eol:↴ - 换行
----   lead/trail - 行首(尾)的空格
----   precedes/extends - 不换行(:set nowrap)的情况下, 内容长度超出屏幕的行会有该标记
-vim.opt.list = true
-vim.opt.listchars = 'tab:│ ,lead: ,trail:·,extends:→,precedes:←,nbsp:⎵'
-
---- 填充符, `:help fillchars`
----   diff  - vimdiff 中被删除的行的填充字符.
----   fold  - 折叠代码的行的填充字符.
----   vert  - 竖着并排窗口的分隔符. eg: tagbar, nerdtree ...
----   stl   - statusline 中间的填充字符.
----   stlnc - non-current window 的 statusline 中间的填充字符.
----   eob   - 文件最后一行之后, 空白行的行号.
-vim.opt.fillchars = 'fold: ,diff: ,vert:│,eob:~'
-
---- `:h foldtext` 改变折叠代码的样式. 配合 fillchars 使用.
-vim.opt.foldtext = 'printf("%s …", getline(v:foldstart))'
 
 --- backup swapfile undofile -----------------------------------------------------------------------
 --- `:help backup-table`, 四种设置情况.

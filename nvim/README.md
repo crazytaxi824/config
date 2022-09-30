@@ -387,5 +387,5 @@ vim.api.nvim_create_autocmd({"BufEnter", "TextChanged", "TextChangedI", "FileCha
 
 - neovim v0.8 release date: 30/9/2022
 
-- nvim-tree go back to original getcwd()
+
 
