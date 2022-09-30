@@ -223,7 +223,7 @@ return packer.startup(function(use)
   --- Useful lua functions used by lots of plugins
   --- NOTE: plenary.nvim 合并了 popup.nvim
   use {"nvim-lua/plenary.nvim",
-    commit = "62dc2a7",
+    commit = "9e7c628",
   }
 
   --- FIXED: neovim v0.8.0, https://github.com/neovim/neovim/pull/20198
