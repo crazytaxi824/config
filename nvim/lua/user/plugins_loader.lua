@@ -419,7 +419,7 @@ return packer.startup(function(use)
   --- File Tree Display ----------------------------------------------------------------------------
   --use "kyazdani42/nvim-web-devicons"  -- 提供 icons 需要 patch 字体 (Nerd Fonts)
   use {"kyazdani42/nvim-tree.lua",      -- 类似 NerdTree
-    commit = "3676e0b",
+    commit = "43fd138",
     config = function() require("user.plugin_settings.file_tree") end,
     opt = true,
   }
