@@ -127,23 +127,22 @@ dapui.setup({
     },
   },
 
-  --- TODO: need winbar
-  -- controls = {  --- {{{
-  --   enabled = true,
-  --   -- Display controls in this element
-  --   element = "repl",
-  --   icons = {
-  --     pause = "",
-  --     play = "",
-  --     step_into = "",
-  --     step_over = "",
-  --     step_out = "",
-  --     step_back = "",
-  --     run_last = "↻",
-  --     terminate = "□",
-  --   },
-  -- },
-  -- -- }}}
+  --- winbar
+  controls = {
+    enabled = true,
+    -- Display controls in this element
+    element = "repl",
+    icons = {
+      pause = "[Pause]",
+      play = "[▶️ Play]",
+      step_into = "[⊻ Into <F11>]",  -- ⇩↧⊻
+      step_over = "[⨠ Over <F10>]",  -- ↷⨠
+      step_out = "[⊼ Out <S-F11>]",   -- ⇧↥⊼
+      step_back = "[↩︎ Back]",  -- ↶↩︎
+      run_last = "[⟳  Restart]",   -- ↻⟳
+      terminate = "[■ Stop]",
+    },
+  },
 
   floating = {
     max_height = nil, -- These can be integers or a float between 0 and 1.

@@ -47,7 +47,7 @@ toggleterm.setup({
   shell = vim.o.shell,
   float_opts = {
     border = "single",  -- `:help nvim_open_win()`
-    winblend = 0,
+    winblend = 0,  -- NOTE: 除非使用 termguicolors, 否则设置为 0.
   },
 
   --- 其他设置, NOTE: 以下最好不要全局设置, 可以根据具体情况在 :open() 前设置 ---
@@ -58,10 +58,14 @@ toggleterm.setup({
   --on_stderr = fun(t: Terminal, job: number, data: string[], name: string) -- callback for processing output on stderr
 
   --- NOTE: nightly version 才有 winbar 可以用.
-  --winbar = {
-  --  enabled = false,
-  --},
+  winbar = {
+   enabled = true,  -- NOTE: 会添加 highlight WinBarActive & WinBarInactive 两个颜色.
+  },
 })
+
+--- toggleterm winbar 颜色
+vim.cmd('hi WinBarActive cterm=bold,underline')
+vim.cmd('hi WinBarInactive ctermfg=246')
 
 --- terminal autocmd 设置 -------------------------------------------------------------------------- {{{
 --- #toggleterm#1-9 自动进入 insert mode.

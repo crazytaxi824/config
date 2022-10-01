@@ -419,4 +419,5 @@ vim.lsp.buf.format({
 
 - Add `:LspAttach` and `:LspDetach` autocommands
 
+- `:help winbar`, `:hi WinBar`
 
