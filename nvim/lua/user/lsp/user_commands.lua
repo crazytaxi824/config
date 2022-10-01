@@ -17,11 +17,17 @@ vim.api.nvim_create_user_command("GetLspClientsInfo",
     -- }
     -- -- }}}
     local bufnr = tonumber(opt.args)
+    local clients
     if bufnr then
-      print(vim.inspect(vim.tbl_values(vim.lsp.buf_get_clients(bufnr))))
+      clients = vim.tbl_values(vim.lsp.buf_get_clients(bufnr))
     else
-      print(vim.inspect(vim.tbl_values(vim.lsp.buf_get_clients())))
+      clients = vim.tbl_values(vim.lsp.buf_get_clients())
     end
+
+    print(vim.inspect(clients))
+    -- for _, c in ipairs(clients) do
+    --   print(c.name, c.supports_method('textDocument/documentHighlight'))
+    -- end
   end,
   {bang=true, nargs="?"}  -- command options
 )

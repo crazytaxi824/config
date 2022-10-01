@@ -368,6 +368,8 @@ vim.api.nvim_create_autocmd("FileType", {
 
 - method textDocument/documentHighlight is not supported by any of the servers registered for the current buffer
 
+- [LSP] Accessing client.resolved_capabilities is deprecated, update your plugins or configuration to access client.server_capabilities instead.The new key/value pairs in server_capabilities directly match those defined in the language server protocol
+
 <br />
 
 ## TODO
