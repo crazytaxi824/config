@@ -247,7 +247,8 @@ vim.opt.listchars = 'tab:│ ,lead: ,trail:·,extends:→,precedes:←,nbsp:⎵'
 vim.opt.fillchars = 'fold: ,diff: ,vert:│,eob:~'
 
 --- `:h foldtext` 改变折叠代码的样式. NOTE: 配合 fillchars 使用.
-vim.opt.foldtext = 'printf("%s …", getline(v:foldstart))'
+--vim.opt.foldtext = 'printf("%s … %s -- lvl %d", getline(v:foldstart), getline(v:foldend), v:foldlevel)'
+vim.opt.foldtext = 'printf("%s … %s", getline(v:foldstart), getline(v:foldend))'
 
 --- search 设置，命令 `/` `?` ----------------------------------------------------------------------
 vim.opt.incsearch = true   -- 开始实时搜索

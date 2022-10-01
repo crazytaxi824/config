@@ -385,7 +385,34 @@ vim.api.nvim_create_autocmd({"BufEnter", "TextChanged", "TextChangedI", "FileCha
 })
 ```
 
-- neovim v0.8 release date: 30/9/2022
+# neovim v0.8 release date: 30/9/2022
 
+- https://github.com/neovim/neovim/releases/tag/v0.8.0
+
+## Important changes
+
+- Add logging level "OFF"
+
+- Option to reuse_win for jump actions ([#18577](https://github.com/neovim/neovim/pull/18577))
+
+- `vim.lsp.buf.formatting_sync()` -> `vim.lsp.buf.format({ async = false })`
+
+```lua
+--- `:help vim.lsp.buf.format()`
+vim.lsp.buf.format({
+  async = false,
+  timeout_ms = 3000,
+  bufnr = bufnr,
+  filter = function(client)
+    -- format 时过滤 tsserver
+    return client.name ~= 'tsserver'
+  end
+  name = '',  -- Restrict formatting to the client with client.name
+})
+```
+
+- NEW lsp api: `vim.lsp.start()` 可能可以用于 au FileType *.go lua vim.lsp.start({cmd=,root=...})
+
+- Add `:LspAttach` and `:LspDetach` autocommands
 
 
