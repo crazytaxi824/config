@@ -78,7 +78,9 @@
 ---      如果必须设置 filetype on, 则下面两个设置必须放在 filetype on 前面.
 --- NOTE: `:help do_filetype_lua` 执行 runtimepath/filetype.lua
 --- 自定义 filetype remap 在 stdpath('config') .. '/filetype.lua' 中.
-vim.g.do_filetype_lua = 1
+if vim.fn.has('nvim-0.8') == 0 then
+  vim.g.do_filetype_lua = 1
+end
 
 --- NOTE: `:help did_load_filetypes`, 主要用于 "Disable filetype.vim".
 --- builtin filetype detection provided by Nvim can be disabled by setting the 'did_load_filetypes' global variable.
@@ -88,7 +90,12 @@ vim.g.do_filetype_lua = 1
 --- 1 - 不加载 nvim lua 'runtimepath/filetype.lua'. 相当于 `filetype off`.
 --- NOTE: 注意这里的 `:help $VIMRUNTIME` 不是 runtimepath, 而是 VIM 环境变量, 可以在 vim 中使用 `echo $VIMRUNTIME` 查看.
 --- 而且 `:set runtimepath?` 路径列表中包含 $VIMRUNTIME 路径.
-vim.g.did_load_filetypes = 0
+if vim.fn.has('nvim-0.8') == 0 then
+  --- 如果是 nvim-0.8 + 则不使用 g:did_load_filetypes.
+  --- 在 nvim-0.8 + 中, did_load_filetypes 如果存在则不加载 '$VIMRUNTIME/filetype.vim'
+  --- AND 'runtimepath/filetype.lua'. 相当于 `filetype off`.
+  vim.g.did_load_filetypes = 0
+end
 
 --- `:help filetype-overview` 可以查看 filetype 设置.
 --- `:help :filetype`, Detail: The ":filetype on" command will load these files:
@@ -366,7 +373,14 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.api.nvim_create_autocmd("FileType", {
   pattern = {"help"},
   callback = function(params)
-    vim.keymap.set('n', 'gO', '<cmd>call man#show_toc()<CR>', {
+    local cmd
+    if vim.fn.has('nvim-0.8') == 1 then
+      cmd = '<cmd>lua require("man").show_toc()<CR>'
+    else
+      cmd = '<cmd>call man#show_toc()<CR>'
+    end
+
+    vim.keymap.set('n', 'gO', cmd, {
       noremap=true,
       silent=true,
       buffer=params.buf,

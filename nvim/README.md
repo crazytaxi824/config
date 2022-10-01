@@ -391,6 +391,8 @@ vim.api.nvim_create_autocmd({"BufEnter", "TextChanged", "TextChangedI", "FileCha
 
 ## Important changes
 
+- DO NOT use `vim.g.do_filetype_lua` and `vim.g.did_load_filetypes` settings in neovim v0.8
+
 - Add logging level "OFF"
 
 - Option to reuse_win for jump actions ([#18577](https://github.com/neovim/neovim/pull/18577))
