@@ -348,7 +348,20 @@ vim.api.nvim_create_autocmd("FileType", {
   end
 })
 
---- NOTE: keymap 'gO' 被 g.no_plugin_maps disable
+--- NOTE: dirctory buffer set buflisted=false
+--- 在 nvim-tree 设置 hijack netrw & directories = false 的情况下使用.
+-- vim.api.nvim_create_autocmd("BufEnter", {
+--   pattern = {"*"},
+--   callback = function(params)
+--     if vim.fn.isdirectory(params.file) == 1 then
+--       --- setlocal nobuflisted
+--       vim.bo[params.buf].buflisted = false
+--     end
+--   end
+-- })
+
+--- NOTE: keymap 'gO' 被 g:no_plugin_maps disable.
+--- <cmd>call man#show_toc()<CR> 是 neovim 源代码中的设置.
 vim.api.nvim_create_autocmd("FileType", {
   pattern = {"help"},
   callback = function(params)

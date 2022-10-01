@@ -265,13 +265,13 @@ nvim_tree.setup {
   --- NOTE: 配合 hijack_directories 使用:
   --- 如果 hijack_directories = true, 则在 nvim_tree 窗口打开 dir;
   --- 如果 hijack_directories = false, NOTE: 则当前 window 中显示空文件;
-  hijack_netrw = false,
+  hijack_netrw = true,
 
   --- NOTE: 需要和 hijack_netrw = true 一起使用. 如果 hijack_netrw = false, 这里的设置无效.
   --- true  - `:e dir` 时, 在 nvim_tree 窗口打开 dir;
   --- false - `:e dir` 时, 当前 window 中显示空文件.
   hijack_directories = {
-    enable = false,  -- NOTE: 和下面的 auto close the tab/vim when nvim-tree is the last window 一起使用时,
+    enable = true,   -- NOTE: 和下面的 auto close the tab/vim when nvim-tree is the last window 一起使用时,
                      -- 会导致 nvim 退出.
     auto_open = true,  -- hijack_directories 时自动打开 nvim-tree.
   },

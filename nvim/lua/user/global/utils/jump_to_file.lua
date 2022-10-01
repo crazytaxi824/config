@@ -35,13 +35,15 @@ function Highlight_filepath()
 end
 
 --- Jump to file -----------------------------------------------------------------------------------
---- 利用 local list 跳转到 log 文件, vim.fn.setloclist(win_id/winnr, {item_list}, 'r'/'a')
---- vim.fn.setloclist(1000, { {filename='src/main.go', lnum=1, col=1, text='jump_to_log_file()'} }, 'r'/'a')
---- 'r' - replace items; 'a' - append items
---- `:help setqflist-what`
+--- NOTE: 在 `:edit +call\ cursor('a','b') foo.go` 命令中 lnum & col 都是 string 的情况下,
+--- cursor 会跳转到文件的第一行第一列;
+--- 单独执行 :call cursor('a','b') 的时候, cursor 不会动;
+--- 单独执行 :call cursor(3,'b')   的时候, cursor 跳转到第三行第一列;
+--- 单独执行 :call cursor('a',3)   的时候, cursor 跳转到本行第三列;
+--- 单独执行 :call cursor('3','3') 的时候, cursor 跳转到第三行第三列; NOTE: 这里 lnum & col 是 string, 可以跳转.
 local function jump_to_file(absolute_path, lnum, col)
-  --- 如果有 local list item, 则选择合适的 window 进行显示.
-  local log_display_win_id  -- 用于设置 setloclist()
+  --- 则选择合适的 window 显示文件.
+  local log_display_win_id
 
   --- 在本 tab 中寻找第一个显示 listed-buffer 的 window, 用于显示 log filepath.
   local tab_wins = vim.fn.winnr('$')
@@ -52,38 +54,24 @@ local function jump_to_file(absolute_path, lnum, col)
     end
   end
 
-  local loclist_item = {filename = absolute_path, lnum = lnum, col=col, text='jump_to_file()'}
-
+  --- NOTE: cmd 利用 cursor('lnum','col') 可以传入 string args 的特点.
+  local cmd
   if vim.fn.win_gotoid(log_display_win_id) == 1 then
-    --- 如果 log_display_win_id 可以跳转则直接跳转.
-    --- 给指定 window 设置 loclist, 'r' - replace, `:help setqflist-what`
-    vim.fn.setloclist(log_display_win_id, {loclist_item}, 'r')
-
-    --- jump to loclist first item
-    vim.cmd('silent lfirst')
-
-    --- VVI: clear loclist
-    vim.fn.setloclist(log_display_win_id, {}, 'r')
+    --- 如果 win_id 可以跳转, 则直接在该 window 中打开文件.
+    cmd = 'edit +lua\\ vim.fn.cursor("' .. lnum .. '","' .. col .. '") ' .. absolute_path
   else
-    --- 如果 log_display_win_id 不能跳转, 则在 terminal 正上方创建一个新的 window 用于显示 log filepath
-    vim.cmd('leftabove split ' .. loclist_item.filename)
-    log_display_win_id = vim.fn.win_getid()
-
-    --- 给指定 window 设置 loclist, 'r' - replace, `:help setqflist-what`
-    vim.fn.setloclist(log_display_win_id, {loclist_item}, 'r')
-
-    --- jump to loclist first item
-    vim.cmd('silent lfirst')
-
-    --- VVI: clear loclist
-    vim.fn.setloclist(log_display_win_id, {}, 'r')
+    --- 如果 win_id 不能跳转, 则在 terminal 正上方创建一个新的 window 用于显示 log filepath
+    cmd = 'leftabove split +lua\\ vim.fn.cursor("' .. lnum .. '","' .. col .. '") ' .. absolute_path
   end
+
+  vim.cmd(cmd)
 end
 
---- jump to dir
 local function jump_to_dir(dir)
-  -- Notify('"' .. dir .. '" is a directory', "DEBUG", {timeout = 1500})
-  vim.cmd('tabnew ' .. dir)
+  --- NOTE: 新窗口中打开 dir, 因为 nvim-tree 设置为 hijack netrw & directories,
+  --- 如果直接使用 `:edit dir` 会导致当前窗口被关闭 (hijack).
+  --- 如果不用 hijack netrw & directories, 则这里可以设置为 `:tabnew dir`
+  vim.cmd('new ' .. dir)
 end
 
 --- file://xxxx
@@ -101,13 +89,11 @@ local function parse_filepath(content)
 
   local file, lnum, col
   local fp = vim.split(vim.fn.trim(content), ":")
-  file = fp[1]
-  if fp[2] then
-    lnum = tonumber(fp[2])  -- tonumber(nil) = nil; tonumber('a') = nil
-  end
-  if lnum and fp[3] then
-    col = tonumber(fp[3])
-  end
+
+  --- file, lnum, col 都不能为 nil
+  file = fp[1] or ''
+  lnum = fp[2] or ''
+  col = fp[3] or ''
   return file, lnum, col
 end
 
@@ -120,26 +106,15 @@ function Jump_to_file(content)
 
   local absolute_path = vim.fn.fnamemodify(filepath, ':p')
 
-  --- 如果 filepath 不可读取, 则直接 return. eg: filepath 错误
-  if vim.fn.filereadable(absolute_path) == 0 then
-    if vim.fn.isdirectory(absolute_path) == 0 then
-      Notify('cannot open file: "' .. filepath .. '"', "DEBUG", {timeout = 1500})
-      return
-    else
-      jump_to_dir(absolute_path)
-      return
-    end
+  if vim.fn.filereadable(absolute_path) == 1 then  -- 是 file
+    jump_to_file(absolute_path, lnum, col)
+    return
+  elseif vim.fn.isdirectory(absolute_path) == 1 then  -- 是 dir
+    jump_to_dir(absolute_path)
+    return
   end
 
-  if not lnum then  --- 如果 lnum 不存在, 跳到文件第一行.
-    lnum = 1
-  end
-
-  if not col then
-    col = 1
-  end
-
-  jump_to_file(absolute_path, lnum, col)
+  Notify('cannot open file: "' .. filepath .. '"', "INFO", {timeout = 1500})
 end
 
 --- terminal normal 模式跳转文件 -------------------------------------------------------------------
