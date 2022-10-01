@@ -1,5 +1,5 @@
 --- https://github.com/LunarVim/Neovim-from-scratch/blob/master/lua/user/options.lua
---- [ 注意事项 ] ------------------------------------------------------------------------------------ {{{
+--- [ 注意事项 ] ----------------------------------------------------------------------------------- {{{
 -- `:set` in lua, 系统变量
 --      lua            command      global_value       local_value ~
 --    vim.o           :set                set                set
@@ -70,7 +70,7 @@
 --    vim.api.nvim_call_function()  -- call vim script function.
 --    vim.api.nvim_exec(), vim.cmd()
 
--- }}}
+-- -- }}}
 
 --- VVI: neovim 特殊设置 --------------------------------------------------------------------------- {{{
 --- filetype && syntax 设置

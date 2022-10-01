@@ -395,9 +395,9 @@ vim.api.nvim_create_autocmd({"BufEnter", "TextChanged", "TextChangedI", "FileCha
 
 - DO NOT use `vim.g.do_filetype_lua` and `vim.g.did_load_filetypes` settings in neovim v0.8
 
-- Add logging level "OFF"
+- LSP: Add logging level "OFF"
 
-- Option to reuse_win for jump actions ([#18577](https://github.com/neovim/neovim/pull/18577))
+- LSP: Option to reuse_win for jump actions ([#18577](https://github.com/neovim/neovim/pull/18577))
 
 - `vim.lsp.buf.formatting_sync()` -> `vim.lsp.buf.format({ async = false })`
 
@@ -415,9 +415,10 @@ vim.lsp.buf.format({
 })
 ```
 
-- NEW lsp api: `vim.lsp.start()` 可能可以用于 au FileType *.go lua vim.lsp.start({cmd=,root=...})
+- LSP NEW api: `vim.lsp.start()` 可能可以用于 au FileType *.go lua vim.lsp.start({cmd=,root=...})
 
-- Add `:LspAttach` and `:LspDetach` autocommands
+- LSP: Add `:LspAttach` and `:LspDetach` autocommands
 
 - `:help winbar`, `:hi WinBar`
 
+- ADD: `vim.fs.dirname(vim.fn.bufname('%'))` vs `vim.fn.expand('%:h')`
