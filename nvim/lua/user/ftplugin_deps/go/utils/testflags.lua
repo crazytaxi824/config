@@ -50,7 +50,16 @@
 local M = {}
 
 --- NOTE: 必须是绝对路径.
-local pprof_dir = vim.fn.fnamemodify(vim.fn.stdpath('cache')..'/go/pprof/', ':p')
+local pprof_dir = '/tmp/nvim/go_pprof/'
+
+--- mkdir when module required, NOTE: will run only once.
+local result = vim.fn.system('mkdir -p ' .. pprof_dir)
+if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
+  Notify(result, "ERROR")
+  return
+-- else  -- DEBUG: 用
+--   print('mkdir ppro_dir ok')
+end
 
 local pprof_flags = ' -o ' .. pprof_dir .. 'pkg.test'  -- [pkg].test 可执行文件生成位置,
                                                        -- 这个是 `$ go help build` 的 flag.
@@ -78,7 +87,7 @@ local flag_desc_cmd = {
   cpu = {
     desc = 'CPU profile',
     cmd = {
-      prefix = 'mkdir -p ' .. pprof_dir,
+      -- prefix = 'mkdir -p ' .. pprof_dir,  -- mkdir when module required, only run once
       flag = pprof_flags,
       suffix = 'go tool pprof -http=localhost: ' .. pprof_dir .. 'cpu.out'
     }
@@ -86,7 +95,7 @@ local flag_desc_cmd = {
   mem = {
     desc = 'Memory profile',
     cmd = {
-      prefix = 'mkdir -p ' .. pprof_dir,
+      -- prefix = 'mkdir -p ' .. pprof_dir,
       flag = pprof_flags,
       suffix = 'go tool pprof -http=localhost: ' .. pprof_dir .. 'mem.out'
     }
@@ -94,7 +103,7 @@ local flag_desc_cmd = {
   mutex = {
     desc = 'Mutex profile',
     cmd = {
-      prefix = 'mkdir -p ' .. pprof_dir,
+      -- prefix = 'mkdir -p ' .. pprof_dir,
       flag = pprof_flags,
       suffix = 'go tool pprof -http=localhost: ' .. pprof_dir .. 'mutex.out'
     }
@@ -102,7 +111,7 @@ local flag_desc_cmd = {
   block = {
     desc = 'Block profile',
     cmd = {
-      prefix = 'mkdir -p ' .. pprof_dir,
+      -- prefix = 'mkdir -p ' .. pprof_dir,
       flag = pprof_flags,
       suffix = 'go tool pprof -http=localhost: ' .. pprof_dir .. 'block.out'
     }
@@ -112,7 +121,7 @@ local flag_desc_cmd = {
   trace = {
     desc = 'Trace',
     cmd = {
-      prefix = 'mkdir -p ' .. pprof_dir,
+      -- prefix = 'mkdir -p ' .. pprof_dir,
       flag = pprof_flags,
       suffix = 'go tool trace -http=localhost: ' .. pprof_dir .. 'trace.out'
     }
