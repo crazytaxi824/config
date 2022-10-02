@@ -238,9 +238,9 @@ source $ZSH/oh-my-zsh.sh
 #         `nvim -- {}`  表示 edit 当前行的 file.
 #         `nvim -- {+}` 表示 edit selected file, 如果没有 selected file 则编辑当前行 file.
 #
-#    --preview-window '+10'                       scroll preview-window, 将第 10 行放到屏幕最上面.
-#    --preview-window '+50/2'                     scroll preview-window, 将第 50 行放到屏幕中间.
-#    --preview-window 'right,border-left,+50/2'   preview-window 在右侧, 没有边框, 将第 50 行放到屏幕中间.
+#    --preview-window '+10'                       将第 10 行放到 preview-window 最上面.
+#    --preview-window '+50/2'                     将第 50 行放到 preview-window 中间.
+#    --preview-window 'right,70%,border-left,+50/2'   preview-window 在右侧占 70%, 左边框, 将第 50 行放到屏幕中间.
 # }}}
 
 FZF_DEFAULT_COMMAND="fd --color=always --follow --hidden --no-ignore"  # fd 命令
@@ -259,12 +259,13 @@ FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --marker='✔' --pointer='▸'"
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --color='dark,hl:191:reverse,hl+:191:reverse,border:238,pointer:191,marker:191,gutter:-1'"
 # fzf preview 设置: 如果是 dir 则使用 tree; 如果是 file 使用 bat 进行 preview.
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --preview='([[ -d {} ]] && (tree -NC -L 3 {})) || ([[ -f {} ]] && (bat --color=always --style=numbers {}))'"
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --preview-window='right,66%,border-left'"
+FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --preview-window='right,60%,border-left'"
 # 以下是定义 fzf 快捷键作用
 # [XXX] Vim: Warning: Output not to a terminal. 解决方法: `vim/nvim file > /dev/tty`
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-e:abort+execute($EDITOR -- {+} > /dev/tty),ctrl-o:abort+execute(open {}),ctrl-a:select-all'"
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-p:change-preview-window(down,75%,border-top|hidden|)'"
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='shift-up:preview-half-page-up,shift-down:preview-half-page-down'"
+FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-l:change-preview-window(top,70%,border-bottom|hidden|)'" # change layout
+FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='shift-up:half-page-up,shift-down:half-page-down'"  # result scroll
+FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='pgup:preview-half-page-up,pgdn:preview-half-page-down'"  # preview scroll
 export FZF_DEFAULT_OPTS
 
 # --------------------------------------------------------------------------------------------------
@@ -365,6 +366,8 @@ _fzf_compgen_dir() {
 #   -o              只显示匹配的部分内容, 不显示整行内容
 #   --trim          不显示内容前后的空白
 #
+#   --sort=path     结果排序, 默认 'none'.
+#
 # rg 指定文件后不会显示文件(名)路径, 所以 fzf 中 preview 中不会显示文件名.
 #
 # --- [ bat flags ] --------------------------------------------------------------------------------
@@ -419,11 +422,13 @@ function Rg() {
 	# {1}   filepath. 是按照 --delimiter 分隔后的 str[0], --delimiter 默认是空格.
 	# {2}   line_num
 	# {3}   column
+	# --preview-window '+50/2'   将第 50 行放到 preview window 中间.
+	# --preview-window 'right,70%,border-left,+50/2'   preview-window 在右侧占 70%, 左边框, 将第 50 行放到屏幕中间.
 
 	# NOTE: command 中不要插入注释, 否则报错.
 	rg --colors="path:fg:81" --colors="line:fg:241" --colors="column:fg:241" \
 		--colors="match:fg:207" --colors="match:style:nobold" --colors="match:style:underline" \
-		--color=always -L --crlf --vimgrep --trim --smart-case $* | \
+		--color=always --sort=path -L --crlf --vimgrep --trim --smart-case $* | \
 	fzf --delimiter=':' \
 		--preview "bat --color=always --style=numbers --highlight-line={2} {1}" \
 		--preview-window '+{2}/2' \
