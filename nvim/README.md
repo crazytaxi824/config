@@ -353,40 +353,6 @@ vim.api.nvim_create_autocmd("FileType", {
 
 <br />
 
-# Note
-
-## Feature required
-
-### nvim-lspconfig new feature required
-
-- Feature/attach to unnamed buffer #1929, https://github.com/neovim/nvim-lspconfig/pull/1929.
-  for now: add file in nvim-tree, eg: 'tmp.json', 'tmp.go', and remove it later.
-
-<br />
-
-## FIXME
-
-- method textDocument/documentHighlight is not supported by any of the servers registered for the current buffer
-
-- [LSP] Accessing client.resolved_capabilities is deprecated, update your plugins or configuration to access client.server_capabilities instead.The new key/value pairs in server_capabilities directly match those defined in the language server protocol
-
-<br />
-
-## TODO
-
-- highlight path in filetyp='dap-repl' window.
-
-```lua
-vim.api.nvim_create_autocmd({"BufEnter", "TextChanged", "TextChangedI", "FileChangedShell", "FileChangedShellPost"}, {
-  pattern = {"\\[dap-repl\\]"},
-  callback = function(params)
-    print(params.event)
-    local output = vim.fn.getline(1, '$')
-    print(vim.inspect(output))
-  end
-})
-```
-
 # neovim v0.8 release date: 30/9/2022
 
 - https://github.com/neovim/neovim/releases/tag/v0.8.0
@@ -422,3 +388,44 @@ vim.lsp.buf.format({
 - `:help winbar`, `:hi WinBar`
 
 - ADD: `vim.fs.dirname(vim.fn.bufname('%'))` vs `vim.fn.expand('%:h')`
+
+<br />
+
+# Note
+
+## Feature required
+
+### nvim-lspconfig new feature required
+
+- Feature/attach to unnamed buffer #1929, https://github.com/neovim/nvim-lspconfig/pull/1929.
+  for now: add file in nvim-tree, eg: 'tmp.json', 'tmp.go', and remove it later.
+
+<br />
+
+## FIXME
+
+- method textDocument/documentHighlight is not supported by any of the servers registered for the current buffer
+
+- [LSP] Accessing client.resolved_capabilities is deprecated, update your plugins or configuration to access client.server_capabilities instead.The new key/value pairs in server_capabilities directly match those defined in the language server protocol
+
+<br />
+
+## TODO
+
+- highlight path in filetyp='dap-repl' window.
+
+```lua
+vim.api.nvim_create_autocmd({"BufEnter", "TextChanged", "TextChangedI", "FileChangedShell", "FileChangedShellPost"}, {
+  pattern = {"\\[dap-repl\\]"},
+  callback = function(params)
+    print(params.event)
+    local output = vim.fn.getline(1, '$')
+    print(vim.inspect(output))
+  end
+})
+```
+
+- telescope layout
+
+
+
