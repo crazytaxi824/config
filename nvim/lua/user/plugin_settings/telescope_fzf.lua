@@ -9,8 +9,19 @@ telescope.setup {
   defaults = {
     --- VVI: 这里必须使用占 2 格的 icon, 否则渲染会出 bug.
     prompt_prefix = "> ",
-    selection_caret = " ➜",
+    selection_caret = "➜ ",
+    multi_icon = ' ✓',
     path_display = { "absolute" },  -- `:help telescope.defaults.path_display`
+
+    --- `:help telescope.defaults.layout_config`
+    --layout_strategy = "vertical",  -- horizontal(*) - preview 在右边 | vertical - preview 在上面
+    layout_config = {
+      height = 0.9,
+      width = 0.92,
+      prompt_position = "top",
+    },
+
+    sorting_strategy = "ascending",  -- ascending | descending(*) - descending 在 prompt_position = "bottom" 时候用.
 
     --- rg defaults, `:help telescope.defaults.vimgrep_arguments`
     vimgrep_arguments = {
@@ -20,15 +31,6 @@ telescope.setup {
       "--only-matching",  -- only print matched text, 也可以使用 "--trim" 打印整行内容.
       "--smart-case",     -- 如果有大写则 case sensitive, 如果全小写则 ignore case.
     },
-
-    --- `:help telescope.defaults.layout_config`
-    --layout_strategy = "vertical",  -- horizontal(*) - preview 在右边 | vertical - preview 在上面
-    layout_config = {
-      height = 0.9,
-      width = 0.92,
-      prompt_position = "top",
-    },
-    sorting_strategy = "ascending",  -- ascending | descending(*) - 默认在 prompt_position = "bottom" 时候用.
 
     --- `:help telescope.defaults.mappings`         - 默认 key mapping 也能使用
     --- `:help telescope.defaults.default_mappings` - 只使用自定义 key mapping
@@ -150,12 +152,12 @@ Keymap_set_and_register(telescope_keymaps, {
   opts = {mode='n', prefix='<leader>'}
 })
 
---- 自定义 Rg command ------------------------------------------------------------------------------
---- NOTE: 修改自 telescope.builtin.grep_string() 定义在:
----       https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/builtin/__files.lua
----       files.grep_string = function(opts), opts 参数为 `:help grep_string()`, cwd, search ...
+--- HACK: 自定义 Rg command ------------------------------------------------------------------------
+--- 根据 telescope.builtin.grep_string() 修改, 函数定义在:
+---   https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/builtin/__files.lua
+---   files.grep_string = function(opts), opts 参数为 `:help grep_string()`, cwd, search ...
 --- make_entry 的内置函数定义在:
----       https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/make_entry.lua
+---   https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/make_entry.lua
 local finders = require("telescope.finders")
 local make_entry = require("telescope.make_entry")
 local pickers = require("telescope.pickers")

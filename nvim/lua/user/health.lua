@@ -13,6 +13,10 @@ M.check = function()
     "nvim-tree.renderer.components.git",
     "nvim-tree.renderer.builder",
     "nvim-treesitter.ts_utils",
+    "telescope.finders",
+    "telescope.make_entry",
+    "telescope.pickers",
+    "telescope.config",
   }
 
   for _, req in ipairs(require_list) do
