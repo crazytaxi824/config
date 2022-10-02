@@ -12,13 +12,15 @@
 
 ## 配置文件结构
 
-1. neovim 三个常用路径:
+1. neovim 几个常用路径: `:help stdpath()`
 
-   - `vim.fn.stdpath("config")` = `~/.config/nvim/`, 配置文件主要路径.
+- `vim.fn.stdpath("config")` = `~/.config/nvim/`, 配置文件主要路径.
 
-   - `vim.fn.stdpath("data")` = `~/.local/share/nvim/`, 插件安装路径.
+- `vim.fn.stdpath("data")` = `~/.local/share/nvim/`, 插件安装路径.
 
-   - `vim.fn.stdpath("cache")` = `~/.cache/nvim/`, 各种 log 文件储存路径.
+- `vim.fn.stdpath("cache")` = `~/.cache/nvim/`, plugins log 文件储存路径.
+
+- `vim.fn.stdpath("log")` = `vim.fn.stdpath("state")` = `~/.local/state/nvim`, nvim-log, undo, shada, swap ...
 
 2. neovim 启动时会首先执行 runtimepath (`:set runtimepath?`) 中的 `init.lua` 文件. 即 `~/.config/nvim/init.lua` 文件.
    然后根据 `init.lua` 文件中的 `require("xxx")` 在所有的 runtimepath 中查找对应的文件.

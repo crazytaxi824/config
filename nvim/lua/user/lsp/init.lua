@@ -4,11 +4,7 @@
 if __Debug_Neovim.lspconfig or __Debug_Neovim.null_ls then
   vim.lsp.set_log_level("DEBUG")
 else
-  if vim.fn.has('nvim-0.8') == 1 then
-    vim.lsp.set_log_level("OFF")
-  else
-    vim.lsp.set_log_level("ERROR")
-  end
+  vim.lsp.set_log_level("ERROR")
 end
 
 --- 加载 LSP 相关自定义设置.
