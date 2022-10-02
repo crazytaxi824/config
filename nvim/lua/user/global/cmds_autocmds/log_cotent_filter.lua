@@ -74,10 +74,11 @@ vim.api.nvim_create_autocmd("VimLeave", {
     --  vim.fn.stdpath('cache') .. '/log', 'a'
     --)
 
-    local lsplog = vim.fn.fnamemodify(vim.fn.stdpath('cache') .. '/lsp.log', ':p')
-    if vim.fn.filereadable(lsplog) then
-      clean_log_file(lsplog, "^%[START%]%[.*%] LSP logging initiated$")
-    end
+    --- FIXED: log [START] nvim v0.8
+    -- local lsplog = vim.fn.fnamemodify(vim.fn.stdpath('cache') .. '/lsp.log', ':p')
+    -- if vim.fn.filereadable(lsplog) then
+    --   clean_log_file(lsplog, "^%[START%]%[.*%] LSP logging initiated$")
+    -- end
 
     local daplog = vim.fn.fnamemodify(vim.fn.stdpath('cache') .. '/dap.log', ':p')
     if vim.fn.filereadable(daplog) then
