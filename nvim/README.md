@@ -20,7 +20,7 @@
 
 - `vim.fn.stdpath("cache")` = `~/.cache/nvim/`, plugins log 文件储存路径.
 
-- `vim.fn.stdpath("log")` = `vim.fn.stdpath("state")` = `~/.local/state/nvim`, nvim log 文件, undo, shada, swp...
+- `vim.fn.stdpath("log")` = `vim.fn.stdpath("state")` = `~/.local/state/nvim`, nvim-log, undo, shada, swap ...
 
 2. neovim 启动时会首先执行 runtimepath (`:set runtimepath?`) 中的 `init.lua` 文件. 即 `~/.config/nvim/init.lua` 文件.
    然后根据 `init.lua` 文件中的 `require("xxx")` 在所有的 runtimepath 中查找对应的文件.
