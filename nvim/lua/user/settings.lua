@@ -88,12 +88,12 @@ end
 --- 只要 g:did_load_filetypes 变量存在, 就不加载 '$VIMRUNTIME/filetype.vim';
 --- 0 - 加载 nvim lua 'runtimepath/filetype.lua'.
 --- 1 - 不加载 nvim lua 'runtimepath/filetype.lua'. 相当于 `filetype off`.
---- NOTE: 注意这里的 `:help $VIMRUNTIME` 不是 runtimepath, 而是 VIM 环境变量, 可以在 vim 中使用 `echo $VIMRUNTIME` 查看.
---- 而且 `:set runtimepath?` 路径列表中包含 $VIMRUNTIME 路径.
+--- NOTE: 注意这里的 `:help $VIMRUNTIME` 不是 runtimepath, 而是 VIM 环境变量,
+--- 可以在 vim 中使用 `echo $VIMRUNTIME` 查看.
+--- 同时 `:set runtimepath?` 路径列表中包含 $VIMRUNTIME 路径.
 if vim.fn.has('nvim-0.8') == 0 then
-  --- 如果是 nvim-0.8 + 则不使用 g:did_load_filetypes.
-  --- 在 nvim-0.8 + 中, did_load_filetypes 如果存在则不加载 '$VIMRUNTIME/filetype.vim'
-  --- AND 'runtimepath/filetype.lua'. 相当于 `filetype off`.
+  --- 在 nvim v0.8+ 中, did_load_filetypes 如果存在则不加载 '$VIMRUNTIME/filetype.vim' & 'runtimepath/filetype.lua'
+  --- 相当于 `filetype off`. 和 nvim v0.7 不同.
   vim.g.did_load_filetypes = 0
 end
 
