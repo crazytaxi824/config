@@ -57,9 +57,10 @@ toggleterm.setup({
   --on_stdout = fun(t: Terminal, job: number, data: string[], name: string) -- callback for processing output on stdout
   --on_stderr = fun(t: Terminal, job: number, data: string[], name: string) -- callback for processing output on stderr
 
-  --- NOTE: nightly version 才有 winbar 可以用.
+  --- NOTE: nvim v0.8+ 才有 winbar 可以用.
+  --- 会添加 highlight WinBarActive & WinBarInactive 两个颜色.
   winbar = {
-   enabled = true,  -- NOTE: 会添加 highlight WinBarActive & WinBarInactive 两个颜色.
+   enabled = false,  -- BUG: background spawn terminal 会引起 error. in function 'nvim_win_is_valid'
   },
 })
 
