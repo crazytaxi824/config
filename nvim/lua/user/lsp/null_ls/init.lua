@@ -25,19 +25,15 @@ local null_tools = {
     mason="buf"
   },
 
-  {
-    cmd="mypy",  -- 还有个 mypy-extensions 是 mypy 插件, experimental extensions
-    install="pip3 install mypy",
-    mason="mypy"
-  },
-
   {cmd="prettier", install=" brew info prettier", mason="prettier"},
-  --{cmd="stylua", install="brew info stylua", mason="stylua"},
   {cmd="shfmt", install="brew info shfmt", mason="shfmt"},
+  --{cmd="stylua", install="brew info stylua", mason="stylua"},
+
   {cmd="flake8", install="pip3 install flake8", mason="flake8"},
   {cmd="autopep8", install="pip3 install autopep8", mason="autopep8"},
+  {cmd="mypy", install="pip3 install mypy", mason="mypy"}, -- 还有个 mypy-extensions 是 mypy 插件
 
-  {cmd="eslint", install="npm install -g eslint"},  -- NOTE: mason 暂时不能安装 "eslint"
+  {cmd="eslint", install="npm install -g eslint"}, -- NOTE: mason 暂时不能安装 "eslint"
 }
 
 Check_cmd_tools(null_tools, {title= "check null-ls tools"})
