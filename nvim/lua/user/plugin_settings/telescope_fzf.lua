@@ -3,7 +3,8 @@ if not status_ok then
   return
 end
 
-local actions = require "telescope.actions"  -- actions 用来自定义 key mapping
+local actions = require("telescope.actions")  -- 自定义 key mapping 用
+local actions_layout = require("telescope.actions.layout")  -- 自定义 key mapping 用
 
 telescope.setup {
   defaults = {
@@ -11,22 +12,34 @@ telescope.setup {
     prompt_prefix = "> ",
     selection_caret = "➜ ",
     multi_icon = ' ✓',
-    path_display = { "absolute" },  -- `:help telescope.defaults.path_display`
+    path_display = { "absolute" },  -- table|func, `:help telescope.defaults.path_display`
 
     --- `:help telescope.defaults.layout_config`
-    --layout_strategy = "vertical",  -- horizontal(*) - preview 在右边 | vertical - preview 在上面
     layout_config = {
-      height = 0.9,
-      width = 0.92,
-      prompt_position = "top",
+      horizontal = {
+        height = 0.9,  -- 占整个 vim 窗口的百分比
+        width = 0.92,  -- 占整个 vim 窗口的百分比
+        preview_cutoff = 1,  -- When lines are less than this value, the preview will be disabled.
+        prompt_position = "top",  -- 搜索框位置, 默认是在 bottom.
+        preview_width = 0.6,  -- 占 telescope 窗口的百分比
+      },
+      vertical = {
+        height = 0.9,
+        width = 0.92,
+        preview_cutoff = 1,
+        prompt_position = "top",
+        preview_height = 0.5,
+      }
     },
-
+    layout_strategy = "horizontal",  -- horizontal(*) - preview 在右边 | vertical - preview 在上面
+    cycle_layout_list = {"vertical", "horizontal"},  -- NOTE: 影响 actions_layout.cycle_layout_next() 显示顺序.
     sorting_strategy = "ascending",  -- ascending | descending(*) - descending 在 prompt_position = "bottom" 时候用.
 
     --- rg defaults, `:help telescope.defaults.vimgrep_arguments`
     vimgrep_arguments = {
       "rg",
-      "--color=never",
+      "--color=never",    -- VVI: 必须为 never
+      "--sort=path",      -- ascending sort
       "--vimgrep",        -- --no-heading,--with-filename,--line-number,--column
       "--only-matching",  -- only print matched text, 也可以使用 "--trim" 打印整行内容.
       "--smart-case",     -- 如果有大写则 case sensitive, 如果全小写则 ignore case.
@@ -40,6 +53,7 @@ telescope.setup {
         --["<C-c>"] = actions.close,
         ["<C-n>"] = actions.cycle_history_next,  -- next 已输入过的搜索内容
         ["<C-p>"] = actions.cycle_history_prev,  -- prev 已输入过的搜索内容
+        ["<C-l>"] = actions_layout.cycle_layout_next,  -- layout window
 
         ["<Down>"] = actions.move_selection_next,
         ["<Up>"] = actions.move_selection_previous,
@@ -73,17 +87,7 @@ telescope.setup {
 
       n = {
         ["<ESC>"] = actions.close,
-        ["<CR>"] = actions.select_default,
-        ["<C-x>"] = actions.select_horizontal,
-        ["<C-v>"] = actions.select_vertical,
-        -- ["<C-t>"] = actions.select_tab,
-
-        ["<Tab>"] = actions.toggle_selection + actions.move_selection_next,
-        ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_previous,
-        --["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
-        --["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
-        --["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
-        --["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+        ["<C-l>"] = actions_layout.cycle_layout_next,  -- layout window
 
         ["<Down>"] = actions.move_selection_next,
         ["<Up>"] = actions.move_selection_previous,
@@ -91,12 +95,24 @@ telescope.setup {
         ["G"] = actions.move_to_bottom,
         --["M"] = actions.move_to_middle,
 
+        ["<CR>"] = actions.select_default,
+        ["<C-x>"] = actions.select_horizontal,
+        ["<C-v>"] = actions.select_vertical,
+        -- ["<C-t>"] = actions.select_tab,
+
         ["<C-u>"] = false,  -- NOTE: 为了配合上面 i 的设置.
         ["<C-d>"] = false,
         ["<PageUp>"] = actions.preview_scrolling_up,
         ["<PageDown>"] = actions.preview_scrolling_down,
         ["<S-Up>"] = actions.results_scrolling_up,
         ["<S-Down>"] = actions.results_scrolling_down,
+
+        ["<Tab>"] = actions.toggle_selection + actions.move_selection_next,
+        ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_previous,
+        --["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
+        --["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
+        --["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
+        --["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
 
         ["?"] = actions.which_key, -- key help
       },
@@ -112,6 +128,7 @@ telescope.setup {
       -- -E=**/.*/**              显示隐藏文件夹, 但不列出其中的文件.
       -- -E=**/node_modules/**    显示 node_modules 文件夹, 但不列出其中的文件.
       -- -- }}}
+      --theme = "dropdown",
       find_command = {"fd", "--follow",
         -- NOTE: 这里不搜索隐藏文件, 也不显示被 .gitignore 忽略的文件
         -- "--hidden", "--no-ignore", "-E=.DS_Store", "-E=.git", "-E=**/.*/**",
