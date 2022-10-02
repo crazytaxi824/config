@@ -33,7 +33,8 @@ vim.api.nvim_create_autocmd("FileType", {
 --- BUG: 'foldnestmax' 需要放在 'foldlevel' 之前设置, 否则不生效.
 vim.cmd([[
   au Filetype go,javascript,javascriptreact,typescript,typescriptreact,vue,svelte,python
-  \ nnoremap <buffer> <leader>k1 :setlocal foldmethod=expr foldexpr=nvim_treesitter#foldexpr()
+  \ nnoremap <buffer> <silent> <leader>k1
+  \ :setlocal foldmethod=expr foldexpr=nvim_treesitter#foldexpr()
   \ foldnestmax=1 foldlevel=0<CR>
 ]])
 

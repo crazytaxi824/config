@@ -68,7 +68,7 @@ which_key.setup({
     position = "bottom", -- bottom, top
     margin = { 1, 0, 1, 0 },  -- extra window margin  [top, right, bottom, left]
     padding = { 1, 0, 1, 0 }, -- extra window padding [top, right, bottom, left]
-    winblend = 0
+    winblend = 0,  -- NOTE: 除非使用 termguicolors, 否则设置为 0.
   },
   layout = {
     height = { min = 4, max = 25 }, -- min and max height of the columns

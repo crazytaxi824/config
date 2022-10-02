@@ -353,6 +353,44 @@ vim.api.nvim_create_autocmd("FileType", {
 
 <br />
 
+# neovim v0.8 release date: 30/9/2022
+
+- https://github.com/neovim/neovim/releases/tag/v0.8.0
+
+## Important changes
+
+- DO NOT use `vim.g.do_filetype_lua` and `vim.g.did_load_filetypes` settings in neovim v0.8
+
+- LSP: Add logging level "OFF"
+
+- LSP: Option to reuse_win for jump actions ([#18577](https://github.com/neovim/neovim/pull/18577))
+
+- `vim.lsp.buf.formatting_sync()` -> `vim.lsp.buf.format({ async = false })`
+
+```lua
+--- `:help vim.lsp.buf.format()`
+vim.lsp.buf.format({
+  async = false,
+  timeout_ms = 3000,
+  bufnr = bufnr,
+  filter = function(client)
+    -- format 时过滤 tsserver
+    return client.name ~= 'tsserver'
+  end
+  name = '',  -- Restrict formatting to the client with client.name
+})
+```
+
+- LSP NEW api: `vim.lsp.start()` 可能可以用于 au FileType *.go lua vim.lsp.start({cmd=,root=...})
+
+- LSP: Add `:LspAttach` and `:LspDetach` autocommands
+
+- `:help winbar`, `:hi WinBar`
+
+- ADD: `vim.fs.dirname(vim.fn.bufname('%'))` vs `vim.fn.expand('%:h')`
+
+<br />
+
 # Note
 
 ## Feature required
@@ -367,6 +405,8 @@ vim.api.nvim_create_autocmd("FileType", {
 ## FIXME
 
 - method textDocument/documentHighlight is not supported by any of the servers registered for the current buffer
+
+- [LSP] Accessing client.resolved_capabilities is deprecated, update your plugins or configuration to access client.server_capabilities instead.The new key/value pairs in server_capabilities directly match those defined in the language server protocol
 
 <br />
 
@@ -385,34 +425,7 @@ vim.api.nvim_create_autocmd({"BufEnter", "TextChanged", "TextChangedI", "FileCha
 })
 ```
 
-# neovim v0.8 release date: 30/9/2022
+- telescope layout
 
-- https://github.com/neovim/neovim/releases/tag/v0.8.0
-
-## Important changes
-
-- Add logging level "OFF"
-
-- Option to reuse_win for jump actions ([#18577](https://github.com/neovim/neovim/pull/18577))
-
-- `vim.lsp.buf.formatting_sync()` -> `vim.lsp.buf.format({ async = false })`
-
-```lua
---- `:help vim.lsp.buf.format()`
-vim.lsp.buf.format({
-  async = false,
-  timeout_ms = 3000,
-  bufnr = bufnr,
-  filter = function(client)
-    -- format 时过滤 tsserver
-    return client.name ~= 'tsserver'
-  end
-  name = '',  -- Restrict formatting to the client with client.name
-})
-```
-
-- NEW lsp api: `vim.lsp.start()` 可能可以用于 au FileType *.go lua vim.lsp.start({cmd=,root=...})
-
-- Add `:LspAttach` and `:LspDetach` autocommands
 
 

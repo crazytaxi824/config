@@ -1,5 +1,5 @@
 --- https://github.com/LunarVim/Neovim-from-scratch/blob/master/lua/user/options.lua
---- [ 注意事项 ] ------------------------------------------------------------------------------------ {{{
+--- [ 注意事项 ] ----------------------------------------------------------------------------------- {{{
 -- `:set` in lua, 系统变量
 --      lua            command      global_value       local_value ~
 --    vim.o           :set                set                set
@@ -70,7 +70,7 @@
 --    vim.api.nvim_call_function()  -- call vim script function.
 --    vim.api.nvim_exec(), vim.cmd()
 
--- }}}
+-- -- }}}
 
 --- VVI: neovim 特殊设置 --------------------------------------------------------------------------- {{{
 --- filetype && syntax 设置
@@ -78,7 +78,9 @@
 ---      如果必须设置 filetype on, 则下面两个设置必须放在 filetype on 前面.
 --- NOTE: `:help do_filetype_lua` 执行 runtimepath/filetype.lua
 --- 自定义 filetype remap 在 stdpath('config') .. '/filetype.lua' 中.
-vim.g.do_filetype_lua = 1
+if vim.fn.has('nvim-0.8') == 0 then
+  vim.g.do_filetype_lua = 1
+end
 
 --- NOTE: `:help did_load_filetypes`, 主要用于 "Disable filetype.vim".
 --- builtin filetype detection provided by Nvim can be disabled by setting the 'did_load_filetypes' global variable.
@@ -88,7 +90,12 @@ vim.g.do_filetype_lua = 1
 --- 1 - 不加载 nvim lua 'runtimepath/filetype.lua'. 相当于 `filetype off`.
 --- NOTE: 注意这里的 `:help $VIMRUNTIME` 不是 runtimepath, 而是 VIM 环境变量, 可以在 vim 中使用 `echo $VIMRUNTIME` 查看.
 --- 而且 `:set runtimepath?` 路径列表中包含 $VIMRUNTIME 路径.
-vim.g.did_load_filetypes = 0
+if vim.fn.has('nvim-0.8') == 0 then
+  --- 如果是 nvim-0.8 + 则不使用 g:did_load_filetypes.
+  --- 在 nvim-0.8 + 中, did_load_filetypes 如果存在则不加载 '$VIMRUNTIME/filetype.vim'
+  --- AND 'runtimepath/filetype.lua'. 相当于 `filetype off`.
+  vim.g.did_load_filetypes = 0
+end
 
 --- `:help filetype-overview` 可以查看 filetype 设置.
 --- `:help :filetype`, Detail: The ":filetype on" command will load these files:
@@ -112,13 +119,13 @@ vim.g.no_plugin_maps = 1
 
 --- VVI: neovim provider 设置. `:checkhealth` 中 "health#provider#check" 可以查看到以下设置是否正确.
 --- 以下设置可以提高 nvim 启动速度. Setting this makes startup faster.
---- NOTE: neovim v0.7.2 目前只支持 python3.9, 这里设置 python3.10 会报错.
 --- 设置后会提高以下文件加载速度:
 ---   - /.../nvim/runtime/autoload/provider/python3.vim
 ---   - /.../nvim/runtime/ftplugin/python.vim
-vim.g.python3_host_prog = "/usr/local/opt/python@3.9/bin/python3.9"  -- `:help python3_host_prog`
---vim.g.loaded_python3_provider = 0  -- Disable Python3 support
+--- NOTE: 需要安装 pynvim, `python3 -m pip install pynvim`
+vim.g.python3_host_prog = "python3"  -- `:help python3_host_prog`
 
+--vim.g.loaded_python3_provider = 0  -- Disable Python3 support
 vim.g.loaded_node_provider = 0  -- Disable Node support, `:help provider-node`
 vim.g.loaded_ruby_provider = 0  -- Disable Ruby support, `:help provider-ruby`
 vim.g.loaded_perl_provider = 0  -- Disable Perl support, `:help provider-perl`, 需要安装 `cpanm -n Neovim::Ext`
@@ -246,9 +253,11 @@ vim.opt.listchars = 'tab:│ ,lead: ,trail:·,extends:→,precedes:←,nbsp:⎵'
 ---   eob   - 文件最后一行之后, 空白行的行号.
 vim.opt.fillchars = 'fold: ,diff: ,vert:│,eob:~'
 
---- `:h foldtext` 改变折叠代码的样式. NOTE: 配合 fillchars 使用.
+--- `:help foldtext` 改变折叠代码的样式. NOTE: 配合 fillchars 使用.
 --vim.opt.foldtext = 'printf("%s … %s -- lvl %d", getline(v:foldstart), getline(v:foldend), v:foldlevel)'
-vim.opt.foldtext = 'printf("%s … %s", getline(v:foldstart), getline(v:foldend))'
+--- VVI: vim `:h pattern-overview` 中使用双引号和单引号是不一样的. 单引号 '\(\)\+' 在双引号中需要写成 "\\(\\)\\+"
+---  \@<= 用法: \(an\_s\+\)\@<=file, 返回 "file" after "an" and white space or an
+vim.opt.foldtext = "printf('%s … %s', getline(v:foldstart), matchstr(getline(v:foldend), '\\(.*\\)\\@<=[})]\\+'))"
 
 --- search 设置，命令 `/` `?` ----------------------------------------------------------------------
 vim.opt.incsearch = true   -- 开始实时搜索
@@ -366,7 +375,14 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.api.nvim_create_autocmd("FileType", {
   pattern = {"help"},
   callback = function(params)
-    vim.keymap.set('n', 'gO', '<cmd>call man#show_toc()<CR>', {
+    local cmd
+    if vim.fn.has('nvim-0.8') == 1 then
+      cmd = '<cmd>lua require("man").show_toc()<CR>'
+    else
+      cmd = '<cmd>call man#show_toc()<CR>'
+    end
+
+    vim.keymap.set('n', 'gO', cmd, {
       noremap=true,
       silent=true,
       buffer=params.buf,

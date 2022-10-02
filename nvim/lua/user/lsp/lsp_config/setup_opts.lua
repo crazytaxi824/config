@@ -54,7 +54,11 @@ M.on_init = function(client)
   --- lua 使用 'stylua'
   local disable_format = {"tsserver", "html", "jsonls"}  -- 使用 prettier format.
   if vim.tbl_contains(disable_format, client.name) then
-    client.resolved_capabilities.document_formatting = false
+    if vim.fn.has('nvim-0.8') == 1 then
+      client.server_capabilities.documentFormattingProvider = false
+    else
+      client.resolved_capabilities.document_formatting = false
+    end
   end
 
   --- NOTE: 加载项目本地设置, 覆盖 global settings -----------------------------

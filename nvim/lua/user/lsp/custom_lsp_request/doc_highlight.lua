@@ -24,7 +24,7 @@
 -- local function lsp_highlight(client)
 --   --- TODO: CursorHold 过程中不要 clear_references(), 在判断 word 改变之后再 clear.
 --   --- Set autocommands conditional on server_capabilities
---   if client.resolved_capabilities.document_highlight then
+--   if client.supports_method('textDocument/documentHighlight') then
 --     vim.cmd [[
 --       augroup lsp_document_highlight
 --         autocmd! * <buffer>

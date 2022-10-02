@@ -230,6 +230,7 @@ return packer.startup(function(use)
   --- CursorHold and CursorHoldI are blocked by timer_start()
   use {"antoinemadec/FixCursorHold.nvim",
     commit = "70a9516",
+    cond = function() return vim.fn.has('nvim-0.8') == 0 end,  -- nvim v0.8+ 时不加载
   }
 
   --- 本配置依赖插件 -------------------------------------------------------------------------------

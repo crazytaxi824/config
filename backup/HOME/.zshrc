@@ -7,7 +7,10 @@ export LC_ALL=en_US.UTF-8  # 设置 LC_ALL, 其他 LC_* 强制等于 LC_ALL, 单
 # put brew path in front of others, use brew cmd first, if there are different version of same cmd line tool.
 export PATH=/usr/local/sbin:$PATH
 
-export EDITOR=nvim
+# NOTE: testing neovim v8.0
+alias nvim=~/.nvim_0.8/nvim-macos/bin/nvim
+export EDITOR=~/.nvim_0.8/nvim-macos/bin/nvim
+#export EDITOR=nvim  # brew installed neovim v0.7+
 export VISUAL=$EDITOR
 
 # open/edit file
@@ -39,9 +42,9 @@ export GO111MODULE=on
 #alias vim='/usr/bin/vim'             # macos 内置 vim 路径
 
 # bat 主题颜色, 'bat --list-themes' 查看 theme 样式.
+# "base16" 使用 0-15 color 兼容性好.
+# "ansi" 只使用 0-7 color, 兼容性最好.
 export BAT_THEME="Visual Studio Dark+"
-#export BAT_THEME="base16"    # "base16" 使用 0-15 color 兼容性好.
-                              # "ansi" 只使用 0-7 color, 兼容性最好.
 
 # firefox chrome ssl key 文件位置, 用于 wireshark 解密 http tls 数据.
 # 需要使用 terminal 打开 firefox / chrome 才能生效, 'open -n /Applications/Firefox.app'
@@ -144,7 +147,7 @@ source $ZSH/oh-my-zsh.sh
 
 # `$(brew --prefix)/opt/fzf/install` - 安装 key bindings 和 fuzzy completion.
 # --- [ fzf ] -------------------------------------------------------------------------------------- {{{
-# --- [ 安装 ] -------------------------------------------------------------------------------------
+# --- [ fzf fd bat 使用说明 ] ---------------------------------------------------------------------- {{{
 #
 # 安装 fzf 命令行工具及相关工具:
 #   - `brew install fzf rg fd bat` - 安装命令行工具, 所有命令行都是 go/rust 开发.
@@ -188,6 +191,12 @@ source $ZSH/oh-my-zsh.sh
 #     node_modules    - node dependencies 文件.
 #     dist            - typescript tsc 自动生成的文件. 根据 tsconfig.json 文件中 "outDir" 指定位置.
 #     out             - typescript tsc 自动生成的文件. 同上.
+
+# --- [ bat flags ] --------------------------------------------------------------------------------
+# `man bat`
+#    -n   相当于 --style=numbers 只显示 line number 没有其他装饰, eg: file name, header...
+#    -H   高亮 line, -H=line_start:line_end; -H=line_start:+number_of_line
+#    -r   只显示指定行内容, -r=line_start:line_end; -r=line_start:+number_of_line, line_start 显示在最上方.
 #
 # --- [ fzf flags ] --------------------------------------------------------------------------------
 # `man fzf`
@@ -219,13 +228,20 @@ source $ZSH/oh-my-zsh.sh
 #        - 如果是文件夹 [[ -d {} ]] && tree {} 则使用 tree 来预览.
 #
 #    fzf 对 stdin 字符串的处理.
-#       {}     代表整个 stdin 的 string.
-#       {1}    代表 split 后的 str[0]. 和 --delimiter 配合使用. delimiter 默认是空格.
-#       {2}    代表 str[1].
+#       {}    代表当前行的 string.
+#       {1}   代表按照 --delimiter 分隔后的 str[0], --delimiter 默认是空格.
+#       {2}   代表 str[1].
+#       {+}   NOTE: 表示多个 <tab> selected item.
+#                   如果没有 selected items 则返回当前行;
+#                   如果有 selected items 则返回 selected items.
+#       eg:
+#         `nvim -- {}`  表示 edit 当前行的 file.
+#         `nvim -- {+}` 表示 edit selected file, 如果没有 selected file 则编辑当前行 file.
 #
-#    --preview-window '+10'                       scroll preview-window, 将第 10 行放到屏幕最上面.
-#    --preview-window '+50/2'                     scroll preview-window, 将第 50 行放到屏幕中间.
-#    --preview-window 'right,border-left,+50/2'   preview-window 在右侧, 没有边框, 将第 50 行放到屏幕中间.
+#    --preview-window '+10'                       将第 10 行放到 preview-window 最上面.
+#    --preview-window '+50/2'                     将第 50 行放到 preview-window 中间.
+#    --preview-window 'right,70%,border-left,+50/2'   preview-window 在右侧占 70%, 左边框, 将第 50 行放到屏幕中间.
+# }}}
 
 FZF_DEFAULT_COMMAND="fd --color=always --follow --hidden --no-ignore"  # fd 命令
 FZF_DEFAULT_COMMAND="$FZF_DEFAULT_COMMAND -E='.DS_Store' -E='.git' -E='*.swp'"  # skip 指定文件(夹)
@@ -236,12 +252,6 @@ export FZF_DEFAULT_COMMAND
 # 默认 'fzf' 设置
 #export FZF_DEFAULT_COMMAND='find * -type f'  # 默认值 'find * -type f', 不显示隐藏文件.
 
-# --- [ bat flags ] --------------------------------------------------------------------------------
-# `man bat`
-#    -n   相当于 --style=numbers 只显示 line number 没有其他装饰, eg: file name, header...
-#    -H   高亮 line, -H=line_start:line_end; -H=line_start:+number_of_line
-#    -r   只显示指定行内容, -r=line_start:line_end; -r=line_start:+number_of_line, line_start 显示在最上方.
-
 FZF_DEFAULT_OPTS="--height=80% --ansi --multi --layout=reverse --border"   # 可以添加 --no-mouse 禁用鼠标操作.
 # fzf 多选时, <TAB> 选中的项会出现 mark.
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --marker='✔' --pointer='▸'"
@@ -249,18 +259,19 @@ FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --marker='✔' --pointer='▸'"
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --color='dark,hl:191:reverse,hl+:191:reverse,border:238,pointer:191,marker:191,gutter:-1'"
 # fzf preview 设置: 如果是 dir 则使用 tree; 如果是 file 使用 bat 进行 preview.
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --preview='([[ -d {} ]] && (tree -NC -L 3 {})) || ([[ -f {} ]] && (bat --color=always --style=numbers {}))'"
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --preview-window='right,border-left'"
+FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --preview-window='right,60%,border-left'"
 # 以下是定义 fzf 快捷键作用
 # [XXX] Vim: Warning: Output not to a terminal. 解决方法: `vim/nvim file > /dev/tty`
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-e:abort+execute($EDITOR -- {} > /dev/tty),ctrl-o:abort+execute(open {}),ctrl-a:select-all'"
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-p:change-preview-window(down,border-top|hidden|)'"
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='shift-up:preview-half-page-up,shift-down:preview-half-page-down'"
+FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-e:abort+execute($EDITOR -- {+} > /dev/tty),ctrl-o:abort+execute(open {}),ctrl-a:select-all'"
+FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-l:change-preview-window(top,70%,border-bottom|hidden|)'" # change layout
+FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='shift-up:half-page-up,shift-down:half-page-down'"  # result scroll
+FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='pgup:preview-half-page-up,pgdn:preview-half-page-down'"  # preview scroll
 export FZF_DEFAULT_OPTS
 
-# --------------------------------------------------------------------------------------------------------
-# *** 注意:  以下设置需要先使用 '$(brew --prefix)/opt/fzf/install' 安装 key bindings 和 fuzzy completion.
-# --------------------------------------------------------------------------------------------------------
-# Ctrl+T 快捷键 command 设置
+# --------------------------------------------------------------------------------------------------
+# NOTE: 需要先使用 '$(brew --prefix)/opt/fzf/install' 安装 key bindings 和 fuzzy completion.
+# --------------------------------------------------------------------------------------------------
+# Ctrl+T 快捷键 command 设置, 这里通过 --type=d 指定只显示 dir
 FZF_CTRL_T_COMMAND="fd --type=d --follow --no-ignore --hidden --color=always"  # fd 命令, 这里通过 --type=d 指定只显示 dir
 FZF_CTRL_T_COMMAND="$FZF_CTRL_T_COMMAND -E='.git'"  # skip 指定文件夹.
 FZF_CTRL_T_COMMAND="$FZF_CTRL_T_COMMAND -E='**/.*/**'"  # 显示所有隐藏文件夹, 但 skip 隐藏文件夹中的文件
@@ -275,13 +286,14 @@ export FZF_CTRL_T_COMMAND
 
 # Ctrl+R 快捷键 options 设置, Ctrl+R 不能设置 Command.
 # 这里会继承 default 设置, 只需要覆盖设置. default 中 --bind ctrl-e, ctrl-o 会导致编辑报错.
-export FZF_CTRL_R_OPTS="--height=24 --preview-window=hidden --bind='ctrl-e:accept,ctrl-o:accept'"
+# NOTE: 使用 --no-multi 禁止 <tab> multi select.
+export FZF_CTRL_R_OPTS="--no-multi --height=24 --preview-window=hidden --bind='ctrl-e:accept,ctrl-o:accept'"
 
-# fzf auto completion 的设置 -----------------------------------------------------------------------------
-# *** 注意: fzf 的 auto completion 是智能触发的. 使用不同的前置命令会得到不同的结果.
-#      - '$ vim **<tab>' 这里会触发文件(filepath)查找命令;
-#      - '$ cd **<tab>' 会触发文件夹(dir)查找命令.
-# --------------------------------------------------------------------------------------------------------
+# fzf auto completion 的设置 -----------------------------------------------------------------------
+# NOTE: fzf 的 auto completion 是智能触发的. 使用不同的前置命令会得到不同的结果.
+#   - '$ vim **<tab>' 这里会触发文件(filepath)查找命令;
+#   - '$ cd **<tab>' 会触发文件夹(dir)查找命令.
+# --------------------------------------------------------------------------------------------------
 # 使用 '\\<tab>' 触发 fzf. 默认值是 '**<tab>'.
 export FZF_COMPLETION_TRIGGER='\\'
 
@@ -305,10 +317,126 @@ _fzf_compgen_dir() {
 	eval "$FZF_CTRL_T_COMMAND . $1"
 }
 
-# *** 该行必须放在整个文件的最后 ***
+# *** NOTE: 该行必须放在整个 fzf 设置的最后 ***
 # 下面 shell script 的意思是, 如果 ~/.fzf.zsh 文件存在, source it.
 # -f 指定是 file, -d 指定是 dir
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# Ripgrep 文件内容查找 ----------------------------------------------------------------------------- {{{
+# --- [ rg bat vim/nvim 使用说明 ] ----------------------------------------------------------------- {{{
+# 需要安装 ripgrep, fzf, bat, nvim - 'brew install rg fzf bat nvim' 命令行工具
+#
+# --- [ rg flags ] ---------------------------------------------------------------------------------
+# 'man rg' 查看命令行工具使用方法
+#   -l  --files-with-matches     只打印文件名.
+#   -H  --with-filename          在行内显示 filepath
+#   --vimgrep                    行内显示 line numbers and column numbers
+#
+#
+#   -L  --follow     软链接文件
+#   -.  --hidden     搜索隐藏文件和文件夹.
+#   -U  --multiline  多行查找, 配合 --multiline-dotall 一起使用.
+#
+#   -g    include/exclude files
+#         -g 'xxx' include filepath
+#         -g '!xxx' exclude filepath
+#         -g 'src/**' 表示只搜索 'src/' 文件夹
+#
+#   --no-ignore    不要忽略 .gitignore 排除的文件
+#                  默认不搜索 '.gitignore' 忽略的文件(夹), 但是必须是在 `git init` 之后.
+#                  如果只有 '.gitignore' 而没有 `git init` 则, 则搜索不会忽略 '.gitignore' 忽略的文件.
+#
+#   -P  --pcre2    允许 rg 使用更复杂的 regexp 表达式, eg: '^\s(?!//)' 排除 // 开头的行.
+#                  但是需要 rg 在编译时启用该选项, 否则使用时报错.
+#
+#   -i  --ignore-case   忽略大小写.
+#   -e  --regexp        正则匹配查找内容.
+#   -w  --word-regexp   匹配整个单词.
+#   --                  -- 后不能再设置其他 flag. eg: `rg -- "foo" -g "bar.md"` 这是错误的.
+#
+#   -color          auto(default), never, always
+#   -colors         {type}:{attribute}:{value}
+#                   style:      path 文件路径, line 行号, column 列号, match 匹配到的字符.
+#                   attribute:  fg, bg, style 三种属性.
+#                       style 有 nobold, bold, nointense, intense, nounderline or underline.
+#                       fg / bg 设置 fg:yellow - 16 color, fg:x - 256 color, fg:x,x,x - 24bit color.
+#                   eg: rg --colors="path:fg:4" --colors="match:fg:5" --colors="match:style:underline"
+#
+#   -C3             只显示前后3行内容.
+#   -o              只显示匹配的部分内容, 不显示整行内容
+#   --trim          不显示内容前后的空白
+#
+#   --sort=path     结果排序, 默认 'none'.
+#
+# rg 指定文件后不会显示文件(名)路径, 所以 fzf 中 preview 中不会显示文件名.
+#
+# --- [ bat flags ] --------------------------------------------------------------------------------
+# 'man bat'
+#   --color=always         显示 syntax 颜色, theme 根据上面设置的 BAT_THEME 显示.
+#   -n / --style=numbers   显示行号.
+#
+#   --line-range=30        只显示第 30 行的内容.
+#   --line-range 30:       显示第 30 ~ end 行内容.
+#   --line-range=30:40     只显示 30 ~ 40 行的内容.
+#   --line-range=:40       显示 1 ~ 40 行的内容.
+#   --line-range 30:+5     只显示第 30 行和后面的 5 行.
+#
+#   --highlight-line=n            高亮第 n 行.
+#   --highlight-line=start:end    高亮 start ~ end 行.
+#   ...                           后面和 --line-range 相同.
+#
+# --- [ vim flags ] --------------------------------------------------------------------------------
+# 'man vim'
+#   vim +10 -- file                      # 打开文件时 cursor 移动到第 10 行.
+#   vim '+call cursor(10,6)' -- file     # 打开文件时执行 :call cursor(ln,col), 即 cursor 移动到指定 line, column.
+# --------------------------------------------------------------------------------------------------
+# }}}
+
+# 查找文件中同一行内同时包括 'Foo.*Bar'
+# 每个文件不只会出现一次, 如果一个文件中有多行都能匹配上则会出现多次.
+#
+# 例子: 如果要使用正则表达式, 则需要使用 '' OR "" OR \(escape), 否则报错 zsh: no matches found.
+#   Rg foo\ bar == Rg 'foo bar' == Rg "foo bar" == Rg foo\ bar ./         # 在当前文件夹搜索
+#   Rg 'foo.*bar' == Rg "foo.*bar" == Rg foo.\*bar == Rg 'foo.*bar' ./    # 同上
+#
+# 搜索指定文件(夹)
+#   Rg 'foo bar'  ./src/main.go    # 在 main.go 文件中搜索 'foo bar'
+#   Rg 'foo bar'  ./src            # 在 src 文件夹下搜索 'foo bar'
+#   Rg 'foo.*bar' ./src ./tmp      # 在 ./src 和 ./tmp 两个文件夹下搜索 'foo.*bar'
+#
+# 搜索条件: -w -i -s ...
+#   Rg -w 'foo'   # 匹配整个单词, 而不是部分匹配. 类似 '\bWord\b'
+#   Rg -i 'foo'   # ignore case
+#   Rg -s 'foo'   # case sensitive
+#   Rg -S 'foo'   # --smart-case, 如果全小写则 ignore case, 如果有大写字母则 case sensitive.
+#
+#   Rg -wi 'foo' ./
+#   Rg -ws 'foo' ./src
+#   Rg -wS 'foo' ./src /tmp
+
+function Rg() {
+	# NOTE: fzf 的设置会从 FZF_DEFAULT_OPTS 继承过来, 这里不需要重复设置.
+	# --no-multi 表示不能使用 <tab> 多选, 这里可以覆盖 fzf default 设置.
+	# --delimiter=':' 意思是使用 ':' 分隔 string 结果.
+	# {}    代表当前行的 string.
+	# {1}   filepath. 是按照 --delimiter 分隔后的 str[0], --delimiter 默认是空格.
+	# {2}   line_num
+	# {3}   column
+	# --preview-window '+50/2'   将第 50 行放到 preview window 中间.
+	# --preview-window 'right,70%,border-left,+50/2'   preview-window 在右侧占 70%, 左边框, 将第 50 行放到屏幕中间.
+
+	# NOTE: command 中不要插入注释, 否则报错.
+	rg --colors="path:fg:81" --colors="line:fg:241" --colors="column:fg:241" \
+		--colors="match:fg:207" --colors="match:style:nobold" --colors="match:style:underline" \
+		--color=always --sort=path -L --crlf --vimgrep --trim --smart-case $* | \
+	fzf --delimiter=':' \
+		--preview "bat --color=always --style=numbers --highlight-line={2} {1}" \
+		--preview-window '+{2}/2' \
+		--bind "ctrl-e:abort+execute($EDITOR '+call cursor({2},{3})' -- {1})" \
+		--bind "ctrl-o:abort+execute(open {1})"
+}
+
+# }}}
 
 # }}}
 
@@ -316,7 +444,7 @@ _fzf_compgen_dir() {
 # do not move these functions to other places!!!
 # --- [core shell script functions] ---------------------------------------------------------------- {{{
 
-# 设置 'vimExistFile -- [filepath]' 命令, 不打开不存在的文件 --------------- {{{
+# 设置 'vimExistFile -- [filepath]' 命令, 不打开不存在的文件 ------------------- {{{
 # 'vim --'   Arguments after this will be handled as a file name.
 #            This can be used to edit a filename that starts with a '-'.
 #            默认 '--' 后的所有 args 都会被认为是 file. eg: vim -- foo.sh -n, 'foo.sh' & '-n' 会被当成两个文件.
@@ -356,7 +484,7 @@ function vimExistFile() {
 
 # }}}
 
-# 设置 'open' 命令, 在打开的文件不存在时, 打开当作 URL 打开 ---------------- {{{
+# 设置 'open' 命令, 在打开的文件不存在时, 打开当作 URL 打开 -------------------- {{{
 function openFileOrUrl() {
 	# `2>/dev/null` 不打印 error msg
 	# `echo $?` 返回上一个命令的 exitcode
@@ -376,115 +504,11 @@ function openFileOrUrl() {
 
 # }}}
 
-# Ripgrep 文件内容查找 ----------------------------------------------------- {{{
-# --- [ rg bat 使用说明 ] --------------------------------------- {{{
-### 需要安装 ripgrep, fzf, bat, nvim - 'brew install rg fzf bat nvim' 命令行工具
-# --- [ rg flags ] ---------------------------------------------------------------------------------
-# 'man rg' 查看命令行工具使用方法
-#   -l  --files-with-matches     只打印文件名.
-#   -H  --with-filename          在行内显示 filepath
-#   --vimgrep                    行内显示 line numbers and column numbers
-#
-#
-#   -L  --follow     软链接文件
-#   -.  --hidden     搜索隐藏文件和文件夹.
-#   -U  --multiline  多行查找, 配合 --multiline-dotall 一起使用.
-#
-#   -g    include/exclude files
-#         -g 'xxx' include filepath
-#         -g '!xxx' exclude filepath
-#         -g 'src/**' 表示只搜索 'src/' 文件夹
-#
-#   --no-ignore    不要忽略 .gitignore 排除的文件
-#                  默认不搜索 '.gitignore' 忽略的文件(夹), 但是必须是在 `git init` 之后.
-#                  如果只有 '.gitignore' 而没有 `git init` 则, 则搜索不会忽略 '.gitignore' 忽略的文件.
-#
-#   -P  --pcre2    允许 rg 使用更复杂的 regexp 表达式, eg: '^\s(?!//)' 排除 // 开头的行.
-#                  但是需要 rg 在编译时启用该选项, 否则使用时报错.
-#
-#   -i  --ignore-case   忽略大小写.
-#   -e  --regexp        正则匹配查找内容.
-#   -w  --word-regexp   匹配整个单词.
-#   --                  -- 后不能再设置其他 flag. eg: rg -- "foo" -g "bar.md" 这是错误的.
-#
-#   -color          auto(default), never, always
-#   -colors         {type}:{attribute}:{value}
-#                   style:      path 文件路径, line 行号, column 列号, match 匹配到的字符.
-#                   attribute:  fg, bg, style 三种属性.
-#                       style 有 nobold, bold, nointense, intense, nounderline or underline.
-#                       fg / bg 设置 fg:yellow - 16 color, fg:x - 256 color, fg:x,x,x - 24bit color.
-#                   eg: rg --colors="path:fg:4" --colors="match:fg:5" --colors="match:style:underline"
-#
-#   -C3             只显示前后3行内容.
-#   -o              只显示匹配的部分内容, 不显示整行内容
-#   --trim          不显示内容前后的空白
-#
-# rg 指定文件后不会显示文件(名)路径, 所以 fzf 中 preview 中不会显示文件名.
-#
-# --- [ bat flags ] --------------------------------------------------------------------------------
-# 'man bat'
-#   --color=always         显示 syntax 颜色, theme 根据上面设置的 BAT_THEME 显示.
-#   -n / --style=numbers   显示行号.
-#
-#   --line-range=30        只显示第 30 行的内容.
-#   --line-range 30:       显示第 30 ~ end 行内容.
-#   --line-range=30:40     只显示 30 ~ 40 行的内容.
-#   --line-range=:40       显示 1 ~ 40 行的内容.
-#   --line-range 30:+5     只显示第 30 行和后面的 5 行.
-#
-#   --highlight-line=n            高亮第 n 行.
-#   --highlight-line=start:end    高亮 start ~ end 行.
-#   ...                           后面和 --line-range 相同.
-#
-# --- [ vim flags ] --------------------------------------------------------------------------------
-# 'man vim'
-#   vim +10 -- file                      # 打开文件时 cursor 移动到第 10 行.
-#   vim '+call cursor(10,6)' -- file     # 打开文件时执行 :call cursor(ln,col), 即 cursor 移动到指定 line, column.
-# --------------------------------------------------------------------------------------------------
-#
-# }}}
-
-# 查找文件中同一行内同时包括 'Foo.*Bar'
-# 每个文件不只会出现一次, 如果一个文件中有多行都能匹配上则会出现多次.
-#
-# 例子: 如果要使用正则表达式, 则需要使用 '' OR "" OR \(escape), 否则报错 zsh: no matches found.
-#   Rg foo\ bar == Rg 'foo bar' == Rg "foo bar" == Rg foo\ bar ./         # 在当前文件夹搜索
-#   Rg 'foo.*bar' == Rg "foo.*bar" == Rg foo.\*bar == Rg 'foo.*bar' ./    # 同上
-#
-# 搜索指定文件(夹)
-#   Rg 'foo bar'  ./src/main.go    # 在 main.go 文件中搜索 'foo bar'
-#   Rg 'foo bar'  ./src            # 在 src 文件夹下搜索 'foo bar'
-#   Rg 'foo.*bar' ./src ./tmp      # 在 ./src 和 ./tmp 两个文件夹下搜索 'foo.*bar'
-#
-# 搜索条件: -w -i -s ...
-#   Rg -w 'foo'   # 匹配整个单词, 而不是部分匹配. 类似 '\bWord\b'
-#   Rg -i 'foo'   # ignore case
-#   Rg -s 'foo'   # case sensitive
-#   Rg -S 'foo'   # --smart-case, 如果全小写则 ignore case, 如果有大写字母则 case sensitive.
-#
-#   Rg -wi 'foo' ./
-#   Rg -ws 'foo' ./src
-#   Rg -wS 'foo' ./src /tmp
-
-function Rg() {
-	# 注意: fzf 的设置会从 FZF_DEFAULT_OPTS 继承过来, 这里不需要重复设置.
-	rg --colors="path:fg:81" --colors="line:fg:241" --colors="column:fg:241" \
-		--colors="match:fg:207" --colors="match:style:nobold" --colors="match:style:underline" \
-		--color=always -L --crlf --vimgrep --trim --smart-case $* | \
-	fzf --delimiter=':' \
-		--preview "bat --color=always --style=numbers --highlight-line={2} {1}" \
-		--preview-window '+{2}/2' \
-		--bind "ctrl-e:abort+execute($EDITOR '+call cursor({2},{3})' -- {1})" \
-		--bind "ctrl-o:abort+execute(open {1})"
-}
-
-# }}}
-
 # NOTE:
 # `cp -r src dst/`   注意 src 后面没有 /   copy src 整个文件夹到 dst 文件夹内, 结果: dst/src/...
 # `cp -r src/ dst/`  注意 src 后面有 /     copy src 内所有 file/dir 到 dst 内, 包括隐藏文件.
 # `cp -r src/* dst/` 注意 src 后面有 /*    copy src 内 file/dir 到 dst 内, 不包括隐藏文件.
-# backup - vimrc zshrc coc-setting lazygit snippets alacritty vscode ------- {{{
+# backup - vimrc zshrc coc-setting lazygit snippets alacritty vscode ----------- {{{
 function backupConfigFiles() {
 	# 多个备份文件夹地址
 	# ~/Library/Mobile\ Documents/com~apple~CloudDocs/myautobak  # icloud drive 文件夹
@@ -553,7 +577,7 @@ function backupConfigFiles() {
 
 # }}}
 
-# restore config files ----------------------------------------------------- {{{
+# restore config files --------------------------------------------------------- {{{
 function restoreConfigFiles() {
 	# 备份文件夹地址
 	local backup_folder=~/.config/backup
@@ -617,7 +641,7 @@ function restoreConfigFiles() {
 
 # }}}
 
-# 检查 command tools 是否安装 ---------------------------------------------- {{{
+# 检查 command tools 是否安装 -------------------------------------------------- {{{
 function checkZshTools() {
 	echo -e "\e[32mcheck homebrew installation:\e[0m"
 	if [[ -x "$(which brew)" ]]; then
@@ -695,7 +719,7 @@ source ~/.my_shell_functions/zshrc_custom_functions
 
 # 各种命令行工具的 autocomplete 文件路径 `/usr/local/share/zsh/site-functions`
 
-# ------------------ todo / test function  --------------------------
+# --- todo / test function  ------------------------------------------------------------------------
 
 
 

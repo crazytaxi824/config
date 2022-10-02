@@ -67,7 +67,7 @@ vim.api.nvim_create_autocmd("VimLeave", {
   pattern = {"*"},
   once = true,  -- VimLeave execute only once
   callback = function()
-    --- DEBUG: 退出 vim 时打印.
+    --- DEBUG: 退出 vim 时打印时间到指定文件.
     --local time_now = vim.fn.strftime('%Y-%m-%d %H:%M:%S')
     --vim.fn.writefile(
     --  {'[' .. time_now .. '] ' .. vim.fn.getcwd()},
