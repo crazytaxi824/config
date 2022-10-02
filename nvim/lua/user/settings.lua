@@ -119,13 +119,13 @@ vim.g.no_plugin_maps = 1
 
 --- VVI: neovim provider 设置. `:checkhealth` 中 "health#provider#check" 可以查看到以下设置是否正确.
 --- 以下设置可以提高 nvim 启动速度. Setting this makes startup faster.
---- NOTE: neovim v0.7.2 目前只支持 python3.9, 这里设置 python3.10 会报错.
 --- 设置后会提高以下文件加载速度:
 ---   - /.../nvim/runtime/autoload/provider/python3.vim
 ---   - /.../nvim/runtime/ftplugin/python.vim
-vim.g.python3_host_prog = "/usr/local/opt/python@3.9/bin/python3.9"  -- `:help python3_host_prog`
---vim.g.loaded_python3_provider = 0  -- Disable Python3 support
+--- NOTE: 需要安装 pynvim, `python3 -m pip install pynvim`
+vim.g.python3_host_prog = "python3"  -- `:help python3_host_prog`
 
+--vim.g.loaded_python3_provider = 0  -- Disable Python3 support
 vim.g.loaded_node_provider = 0  -- Disable Node support, `:help provider-node`
 vim.g.loaded_ruby_provider = 0  -- Disable Ruby support, `:help provider-ruby`
 vim.g.loaded_perl_provider = 0  -- Disable Perl support, `:help provider-perl`, 需要安装 `cpanm -n Neovim::Ext`
