@@ -2,7 +2,7 @@
 vim.cmd('hi Filepath cterm=underline')  -- 自定义颜色, for Highlight_filepath()
 vim.cmd('hi URL cterm=underline ctermfg=75')  -- 自定义颜色, for Highlight_filepath()
 
---- NOTE: `:help pattern-overview`, vim pattern.
+--- VVI: vim `:h pattern-overview` 中使用双引号和单引号是不一样的. 单引号 '\(\)\+' 在双引号中需要写成 "\\(\\)\\+"
 function Highlight_filepath()
   --- file:///abc/def.txt
   --- '\f' - isfname, 表示可用于 filename 的字符/数字/符号...

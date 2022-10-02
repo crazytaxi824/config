@@ -253,9 +253,11 @@ vim.opt.listchars = 'tab:│ ,lead: ,trail:·,extends:→,precedes:←,nbsp:⎵'
 ---   eob   - 文件最后一行之后, 空白行的行号.
 vim.opt.fillchars = 'fold: ,diff: ,vert:│,eob:~'
 
---- `:h foldtext` 改变折叠代码的样式. NOTE: 配合 fillchars 使用.
+--- `:help foldtext` 改变折叠代码的样式. NOTE: 配合 fillchars 使用.
 --vim.opt.foldtext = 'printf("%s … %s -- lvl %d", getline(v:foldstart), getline(v:foldend), v:foldlevel)'
-vim.opt.foldtext = 'printf("%s … %s", getline(v:foldstart), getline(v:foldend))'
+--- VVI: vim `:h pattern-overview` 中使用双引号和单引号是不一样的. 单引号 '\(\)\+' 在双引号中需要写成 "\\(\\)\\+"
+---  \@<= 用法: \(an\_s\+\)\@<=file, 返回 "file" after "an" and white space or an
+vim.opt.foldtext = "printf('%s … %s', getline(v:foldstart), matchstr(getline(v:foldend), '\\(.*\\)\\@<=[})]\\+'))"
 
 --- search 设置，命令 `/` `?` ----------------------------------------------------------------------
 vim.opt.incsearch = true   -- 开始实时搜索
