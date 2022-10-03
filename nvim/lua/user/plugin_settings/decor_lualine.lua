@@ -102,11 +102,11 @@ local function check_mixed_indent()
 end
 
 --- 合并两个 check, 同时检查 ---------------------------------------------------
+--- NOTE: 通过设置 setbufvar() / getbufvar() 来缓存 whitespace && mixed_indent 结果.
 local function my_check()
-  --- 通过设置 setbufvar() / getbufvar() 来缓存 whitespace && mixed_indent 结果.
   local bufvar_lualine = 'my_lualine_checks'
 
-  --- NOTE: 在退出 insert mode 之后再进行计算并更新 lualine, 可以减少计算量.
+  --- 在退出 insert mode 之后再进行计算并更新 lualine, 可以减少计算量.
   if vim.fn.mode() ~= 'i' then
     local mi = check_mixed_indent()
     local ts = check_trailing_whitespace()
@@ -147,20 +147,14 @@ local function modified_readonly()
 end
 
 local function readonly()
-  if vim.bo.modified and vim.bo.readonly then  -- 如果是 modified_readonly 则不显示
-    return ''
-  end
-  if vim.bo.readonly then
+  if vim.bo.readonly and not vim.bo.modified then  -- 如果是 modified_readonly 则不显示
     return "readonly"
   end
   return ''
 end
 
 local function modified()
-  if vim.bo.modified and vim.bo.readonly then  -- 如果是 modified_readonly 则不显示
-    return ''
-  end
-  if vim.bo.modified then
+  if vim.bo.modified and not vim.bo.readonly then  -- 如果是 modified_readonly 则不显示
     return "modified"
   end
   return ''
