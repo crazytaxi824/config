@@ -363,11 +363,16 @@ return packer.startup(function(use)
                          -- jsregexp 位置: stdpath('data') .. "/site/pack/packer/start/LuaSnip/lua/luasnip-jsregexp.so"
     run = "make install_jsregexp",  -- https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#transformations
     config = function() require("user.plugin_settings.luasnip_snippest") end,
-    after = "cmp_luasnip",
+
+    --- VVI: 不能使用 lazyload | conditional load,
+    --- 会导致当前 buffer 的 autocmd FileType & after/ftplugin 函数多次执行.
+    --after = "cmp_luasnip",
+
     requires = {
       {
         "rafamadriz/friendly-snippets",  -- snippets content, 自定义 snippets 可以借鉴这个结构.
         commit = "2be79d8",
+        after = "LuaSnip",
       },
     },
   }
@@ -466,8 +471,11 @@ return packer.startup(function(use)
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
     },
+
+    --- VVI: 不能使用 lazyload | conditional load,
+    --- 会导致当前 buffer 的 autocmd FileType & after/ftplugin 函数多次执行.
     --keys = {"<leader>f"},
-    opt = true,  -- 在 vim.schedule() 中 lazy load
+    --opt = true,  -- 在 vim.schedule() 中 lazy load
   }
 
   --- terminal

@@ -13,6 +13,8 @@ vim.api.nvim_create_autocmd("BufEnter", {
       require('packer').loader('nvim-cmp')
 
       --- LSP 一系列插件 lazy load
+      --- VVI: lazyload lspconfig 时需要手动 `:LspStart`, 否则当前 buffer 的 autocmd 不会被执行.
+      --- 使用 `:LspInfo` 查看会发现当前 bufnr 不在 LSP attach 中.
       require('packer').loader('nvim-lspconfig')
       --require('packer').loader('null-ls.nvim')  -- NOTE: 使用 after = "nvim-lspconfig" 加载
 
@@ -24,10 +26,14 @@ vim.api.nvim_create_autocmd("BufEnter", {
 
       --- Other useful tools
       require('packer').loader('nvim-autopairs')
-      require('packer').loader('telescope.nvim')
       require('packer').loader('toggleterm.nvim')
       require('packer').loader('gitsigns.nvim')
       require('packer').loader('tagbar')
+
+      --- VVI: 以下插件不要使用 lazyload
+      --- 会导致当前 buffer 的 autocmd FileType & after/ftplugin 函数多次执行. 可能是被重新 source 了.
+      --require('packer').loader('telescope.nvim')
+      --require('packer').loader('LuaSnip')
     end)
   end
 })
