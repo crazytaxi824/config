@@ -62,11 +62,7 @@ local lsp_servers_map = {
   },
 }
 
---- 检查 lsp tools 是否安装
-Check_cmd_tools(vim.tbl_values(lsp_servers_map), {title="LSP_config"})
-
---- 官方设置 ---------------------------------------------------------------------------------------
-for lsp_svr, _ in pairs(lsp_servers_map) do
+local function lspconfig_setup(lsp_svr)
   --- opts 必须包含 on_attach, capabilities 两个属性.
   --- 这里的 opts 获取到的是 require 文件中返回的 M.
   local opts = require("user.lsp.lsp_config.setup_opts")
@@ -87,39 +83,43 @@ for lsp_svr, _ in pairs(lsp_servers_map) do
   lspconfig[lsp_svr].setup(opts)
 end
 
---- HACK: 以下设置是为了 autocmd 根据 FileType 手动加载/启动不同的 lsp ----------------------------- {{{
--- for lsp_svr, v in pairs(lsp_servers_map) do
---   vim.api.nvim_create_autocmd("FileType", {
---     pattern = v.filetypes,
---     once = true,  --- VVI: only need to start LSP server once.
---     callback = function()
---       local opts = require("user.lsp.lsp_config.setup_opts")
+--- 官方设置 --------------------------------------------------------------------------------------- {{{
+-- --- 检查 lsp tools 是否安装
+-- Check_cmd_tools(vim.tbl_values(lsp_servers_map), {title="LSP_config"})
 --
---       --- 加载 lsp 配置文件, "~/.config/nvim/lua/user/lsp/lsp_config/langs/..."
---       --- 如果文件存在, 则加载自定义设置, 如果没有自定义设置则加载默认设置.
---       --- NOTE: 单独 lsp 设置: https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
---       if vim.fn.filereadable(vim.fn.stdpath('config') .. '/lua/user/lsp/lsp_config/langs/' .. lsp_svr .. '.lua') == 1 then
---         --- 使用 pcall() 是为了确保 xxx.lua 文件执行没有问题.
---         local lsp_custom_status_ok, lsp_custom_opts = pcall(require, "user.lsp.lsp_config.langs." .. lsp_svr)
---         if lsp_custom_status_ok then
---           opts = vim.tbl_deep_extend("force", opts, lsp_custom_opts)
---         end
---       end
---
---       lspconfig[lsp_svr].setup(opts)    -- 设置 lsp
---       vim.cmd('LspStart ' .. lsp_svr )  -- VVI: 第一次必须要手动启动 lsp.
---
---       --- 检查 lsp tools 是否安装
---       Check_cmd_tools({v}, {title="LSP_config"})
---
---       --- DEBUG: 用. 每个 lsp 应该只打印一次.
---       if __Debug_Neovim.lspconfig then
---         Notify(":LspStart " .. lsp_svr, "DEBUG", {title="LSP"})
---       end
---     end
---   })
+-- --- setup 所有 lsp
+-- for lsp_svr, _ in pairs(lsp_servers_map) do
+--   lspconfig_setup(lsp_svr)
 -- end
+--
+-- --- VVI: 第一次加载时手动启动所有 lsp, 主要是为了 lazyload.
+-- vim.cmd('LspStart ' .. table.concat(vim.tbl_keys(lsp_servers_map), " "))
 -- -- }}}
+
+--- 以下设置是为了 autocmd 根据 FileType 手动加载/启动不同的 lsp -----------------------------------
+for lsp_svr, v in pairs(lsp_servers_map) do
+  vim.api.nvim_create_autocmd("FileType", {
+    pattern = v.filetypes,
+    once = true,  --- VVI: only need to start LSP server once.
+    callback = function()
+      vim.schedule(function()
+        lspconfig_setup(lsp_svr)
+
+        --- VVI: 第一次必须要手动启动 lsp, 因为 vim.schedule() 会导致新 filetype 的 buffer 加载完成之后
+        --- 才执行 lspconfig.setup(), 所以该 buffer 没有 attach lsp. 需要通过 `:LspStart` 进行 attach.
+        vim.cmd('LspStart ' .. lsp_svr )
+
+        --- DEBUG: 用. 每个 lsp 应该只打印一次.
+        if __Debug_Neovim.lspconfig then
+          Notify(":LspStart " .. lsp_svr, "DEBUG", {title="LSP"})
+        end
+      end)
+
+      --- 检查 lsp tools 是否安装
+      Check_cmd_tools({v}, {title="LSP_config"})
+    end
+  })
+end
 
 
 

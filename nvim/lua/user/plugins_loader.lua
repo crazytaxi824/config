@@ -403,7 +403,7 @@ return packer.startup(function(use)
   use {"neovim/nvim-lspconfig",
     commit = "ad35a8c",
     config = function() require("user.lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
-    opt = true,  -- 在 vim.schedule() 中 lazy load
+    after = "mason.nvim",  -- 需要 mason 安装的 lsp cmd tool
     requires = {
       "nvim-cmp",  -- provide content to nvim-cmp Completion. cmp_nvim_lsp.update_capabilities(capabilities)
       "hrsh7th/cmp-nvim-lsp",
@@ -415,10 +415,8 @@ return packer.startup(function(use)
   use {"jose-elias-alvarez/null-ls.nvim",
     commit = "c862432",
     config = function() require("user.lsp.null_ls") end,
-    after = {
-      "nvim-lspconfig",  -- VVI: 这里是为了获取 lspconfig 分析出的 root_dir 用于 linter 执行时的 pwd.
-      "mason.nvim",  -- 需要用到 mason 安装的工具.
-    },
+    opt = true,  -- 在 vim.schedule() 中 lazy load
+    after = "mason.nvim",  -- 需要 mason 安装的 lsp cmd tool
     requires = {
       "nvim-lua/plenary.nvim",
       "williamboman/mason.nvim",  -- 安装 linter/formatter 命令行工具. eg: shfmt, stylua ...
