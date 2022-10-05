@@ -8,19 +8,19 @@
 --- "finding module for package xxx: cannot find module providing package xxx: module lookup disabled by GOPROXY=off"
 
 --- `$ go env GOROOT` | `$ go env GOMODCACHE`
-local function go_env()
-  local result = vim.fn.system('go env -json')
+--- NOTE: 不要使用 `go env -json`, 速度很慢.
+local function go_env(v)
+  local result = vim.fn.system('go env '..v)
   if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
     Notify(result, "ERROR")
-    return {}
+    return
   end
 
-  local env = vim.fn.json_decode(result)
-  return { env.GOROOT, env.GOMODCACHE }
+  return string.match(result, '[%S ]*')
 end
 
 --- NOTE: ignore following folds as workspace root directory.
-local ignore_workspace_folders = go_env()
+local ignore_workspace_folders = { go_env("GOROOT"), go_env("GOMODCACHE") }
 
 return {
   --cmd = { "gopls" },
