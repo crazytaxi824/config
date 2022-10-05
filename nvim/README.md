@@ -364,6 +364,8 @@ vim.api.nvim_create_autocmd("FileType", {
 
 ## Important changes
 
+- `:help deprecated.txt`
+
 - DO NOT use `vim.g.do_filetype_lua` and `vim.g.did_load_filetypes` settings in neovim v0.8
 
 - LSP: Add logging level "OFF"
@@ -432,5 +434,5 @@ vim.api.nvim_create_autocmd({"BufEnter", "TextChanged", "TextChangedI", "FileCha
 
 - telescope layout
 
-
+- auto Format: change vim.lsp.buf.formatting_seq_sync() to vim.lsp.buf.format()
 

@@ -48,20 +48,17 @@ M.capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
 --- 这里是为了能单独给 project 设置 LSP setting.
 --- init() runs Before attach().
 M.on_init = function(client)
-  --- NOTE: 禁止使用 LSP 的 formatting 功能, 在 null-ls 中使用其他 format 工具
-  --- `:lua print(vim.inspect(vim.lsp.buf_get_clients()))` 查看启动的 lsp 和所有相关设置
-  --- ts, js, html, json, jsonc ... 使用 'prettier'
-  --- lua 使用 'stylua'
-  local disable_format = { "tsserver", "html", "jsonls" }  -- 不使用 format 功能
-  if vim.tbl_contains(disable_format, client.name) then
-    if vim.fn.has('nvim-0.8') == 1 then
-      client.server_capabilities.documentFormattingProvider = false
-    else
-      client.resolved_capabilities.document_formatting = false
-    end
-  end
-
   --- NOTE: 加载项目本地设置, 覆盖 global settings -----------------------------
+  --- .nvim/settings.lua 中的 local 设置. --- {{{
+  -- return {
+  --   lsp_settings = {
+  --     gopls = {
+  --       -- ["ui.completion.usePlaceholders"] = false,
+  --       -- ["ui.diagnostic.staticcheck"] = false,
+  --     }
+  --   },
+  -- }
+  -- -- }}}
   local local_lspconfig_key = "lsp_settings"
 
   local proj_local_settings = require("user.lsp._load_proj_settings")

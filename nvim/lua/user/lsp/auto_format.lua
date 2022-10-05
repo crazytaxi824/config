@@ -1,31 +1,38 @@
 --- Auto Format ------------------------------------------------------------------------------------
 --- NOTE: save 时格式化文件. 自动格式化放在 Lsp 加载成功后.
----       null-ls 也是一个 Lsp client, 可以提供 formatting 功能. 可以通过 `:LspInfo` 查看.
----
----  VVI: 使用 vim.lsp.buf.formatting_sync() 进行 format 时, 如果有多个 Lsp 提供 format 功能, 则会 prompt.
----       使用 vim.lsp.buf.formatting_seq_sync(nil, 3000, {"null-ls"}) 时, 会按顺序执行各个 LSP 的 format,
----       formatting_seq_sync(...{"null-ls"}) 中指定的 Lsp client 最后执行, 但其他的 Lsp 也会执行 format.
----       如果 null-ls 没有设置对应的 format tool, formatting_seq_sync(...{"null-ls"}) 也不会报错.
+--- null-ls 也是一个 Lsp client, 可以提供 formatting 功能. 可以通过 `:LspInfo` 查看.
 
---- 如果有 LSP client 支持格式化 current buffer 则运行 vim.lsp.buf.formatting_seq_sync(); 否则 return.
+--- 如果 null-ls 可以格式化则使用 null-ls, 如果不行则使用其他 lsp client.
 local function lsp_format()
-  local clients = vim.tbl_values(vim.lsp.buf_get_clients())
-  for _, client in ipairs(clients) do
-    --- NOTE: 如果 lsp_client 支持 formatting, 但是禁用了 formatting 功能, 则:
-    --- supports_method('textDocument/formatting') 会返回 false
+  local bufnr = vim.fn.bufnr()
+
+  --- 获取所有 attached lsp clients
+  local lsp_clients = vim.lsp.get_active_clients({ bufnr = bufnr })
+
+  local format_client
+  for _, client in ipairs(lsp_clients) do
+    --- 首先 lsp 要支持 format.
     if client.supports_method('textDocument/formatting') then
-      --- `:help vim.lsp.buf.formatting_seq_sync()`
-      --- 先运行不在 {order} list 中的 client, 然后再按照 {order} list 中的指定顺序运行.
-      --- 这里的设置意思是: 最后执行 null-ls 的 formatting.
-      --vim.lsp.buf.formatting_sync()  -- NOTE: 如果有多个 Lsp 提供 format 功能, 则会 prompt.
-      vim.lsp.buf.formatting_seq_sync(nil, 3000, {"null-ls"})
-      return
+      if client.name == 'null-ls' then
+        --- 如果 null-ls 存在, 则使用 null-ls.
+        format_client = client
+        break
+      else
+        --- 如果 null-ls 不存在, 则选择其他可以 format 的 lsp.
+        format_client = client
+      end
     end
   end
 
-  -- 如果没有任何 LSP 支持 formating 则提醒.
+  --- format 文件.
+  if format_client then
+    vim.lsp.buf.format({ timeout_ms = 3000, bufnr = bufnr, name = format_client.name })
+    return
+  end
+
+  --- 如果没有任何 LSP 支持 formating 则提醒.
   Notify(
-    "no LSP support Formatting this file. please check `:LspInfo`",
+    'no LSP support Formatting "' .. vim.bo[bufnr].filetype .. '". please check `:LspInfo`',
     "WARN"
   )
 end
