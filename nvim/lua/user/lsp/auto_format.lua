@@ -8,12 +8,12 @@ if vim.fn.has('nvim-0.8') == 1 then
   lsp_format = function()
     local bufnr = vim.fn.bufnr()
 
-    --- 获取所有 attached lsp clients
+    --- 获取所有 attached/active lsp clients
     local lsp_clients = vim.lsp.get_active_clients({ bufnr = bufnr })
 
     local format_client
     for _, client in ipairs(lsp_clients) do
-      --- 首先 lsp 要支持 format.
+      --- 首先 lsp 要支持 format. 如果 lsp 支持 format 但是功能被手动禁用, 这里也会返回 false.
       if client.supports_method('textDocument/formatting') then
         if client.name == 'null-ls' then
           --- 如果 null-ls 存在, 则使用 null-ls.
