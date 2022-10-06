@@ -255,6 +255,8 @@ Keymap_set_and_register(tree_keymaps)
 -- -- }}}
 
 --- `:help nvim-tree-setup` ------------------------------------------------------------------------ {{{
+local open_dir_in_tree = true  -- `:e dir` 时是否在 nvim-tree 中打开 dir.
+
 nvim_tree.setup {
   auto_reload_on_write = true,  -- VVI: `:w` 时刷新 nvim-tree.
 
@@ -265,15 +267,16 @@ nvim_tree.setup {
   --- NOTE: 配合 hijack_directories 使用:
   --- 如果 hijack_directories = true, 则在 nvim_tree 窗口打开 dir;
   --- 如果 hijack_directories = false, NOTE: 则当前 window 中显示空文件;
-  hijack_netrw = true,
+  hijack_netrw = open_dir_in_tree,
 
   --- NOTE: 需要和 hijack_netrw = true 一起使用. 如果 hijack_netrw = false, 这里的设置无效.
   --- true  - `:e dir` 时, 在 nvim_tree 窗口打开 dir;
   --- false - `:e dir` 时, 当前 window 中显示空文件.
   hijack_directories = {
-    enable = true,   -- NOTE: 和下面的 auto close the tab/vim when nvim-tree is the last window 一起使用时,
-                     -- 会导致 nvim 退出.
-    auto_open = true,  -- hijack_directories 时自动打开 nvim-tree.
+    --- NOTE: 和 auto close the tab/vim when nvim-tree is the last window 一起使用时, 会导致 nvim 退出.
+    enable = open_dir_in_tree,
+    --- hijack_directories 时自动打开 nvim-tree open().
+    auto_open = true,
   },
 
   hijack_cursor = false,  -- keeps the cursor on the first letter of the filename
@@ -459,7 +462,7 @@ vim.cmd('hi! default link NvimTreeFileNew    NvimTreeGitStaged')
 -- -- }}}
 
 --- autocmd ---------------------------------------------------------------------------------------- {{{
---- automatically close the tab/vim when nvim-tree is the last window in the tab
+--- automatically close the tab/vim when nvim-tree is the last window in the tab.
 --vim.cmd [[autocmd BufEnter * ++nested if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpagenr() | quit | endif]]
 
 --- refresh nvim-tree when enter/delete a buffer.
@@ -475,6 +478,21 @@ vim.api.nvim_create_autocmd({"BufEnter", "BufDelete"}, {
     end)
   end
 })
+
+--- NOTE: 如果 open_dir_in_tree = false, 则 `setlocal nobuflisted` to dirctory buffer.
+--- 在 nvim-tree 设置 hijack netrw & directories = false 的情况下使用.
+if not open_dir_in_tree then
+  vim.api.nvim_create_autocmd("BufEnter", {
+    pattern = {"*"},
+    callback = function(params)
+      if vim.fn.isdirectory(params.file) == 1 then
+        --- setlocal nobuflisted
+        vim.bo[params.buf].buflisted = false
+      end
+    end
+  })
+end
+
 -- -- }}}
 
 --- HACK: keymaps toggle git icons and filename highlights ----------------------------------------- {{{
