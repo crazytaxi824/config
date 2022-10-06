@@ -288,6 +288,8 @@ vim.opt.signcolumn = 'yes:1'  -- 始终显示 signcolumn. line_number 左边用�
 vim.opt.showmatch = true      -- 跳到匹配的括号上, 包括 () {} []
 
 vim.opt.completeopt = { "menu", "menuone", "noselect" }  -- 代码补全设置, nvim-cmp 不受影响.
+--vim.opt.pumheight = 16  -- Maximum number of items to show in the popup menu. 默认 0
+--vim.opt.pumwidth = 15   -- Minimum width for the popup menu (ins-completion-menu). 默认 15
 
 --- 只在超出 textwidth 的行中显示 ColorColumn. 可以替代 `set colorcolumn`
 --vim.opt.colorcolumn = '+1'  -- :set cc=+1  " highlight column after 'textwidth'
