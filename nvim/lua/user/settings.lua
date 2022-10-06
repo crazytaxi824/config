@@ -326,7 +326,7 @@ vim.opt.undodir = '/tmp/nvim/undo'  -- undodir 是全局设置, 无法单独给�
 vim.api.nvim_create_autocmd("VimEnter", {
   pattern = {"*"},
   once = true,  -- "++once" 只在进入 neovim 时执行一次 autocmd
-  callback = function()
+  callback = function(params)
     --- 延迟执行
     vim.schedule(function()
       --- undodir 不存在的情况下, `mkdir -p` 创建该文件夹.

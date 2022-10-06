@@ -3,7 +3,7 @@
 vim.api.nvim_create_autocmd("BufEnter", {
   pattern = {"*"},
   once = true,
-  callback = function()
+  callback = function(params)
     --- VVI: 加载顺序很重要
     vim.schedule(function()
       --- TreeSitter 一系列插件

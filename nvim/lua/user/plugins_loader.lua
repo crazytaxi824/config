@@ -136,9 +136,9 @@ local packer_update_log = vim.fn.stdpath('cache') .. '/packer.myupdate.log'
 --- 记录 :PackerSync && :PackerUpdate ... 更新信息到指定文件.
 vim.api.nvim_create_autocmd("User", {
   pattern = { "PackerComplete" },
-  callback = function()
+  callback = function(params)
     --- NOTE: 如果打开了 packer 窗口, 则记录窗口中的所有内容.
-    if vim.bo.filetype == 'packer' then
+    if vim.bo[params.buf].filetype == 'packer' then
       --- 读取 packer 文件中的所有信息. 从第一行到最后一行.
       local update_info = vim.fn.getline(1, '$')
 

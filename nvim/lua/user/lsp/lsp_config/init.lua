@@ -101,7 +101,7 @@ for lsp_svr, v in pairs(lsp_servers_map) do
   vim.api.nvim_create_autocmd("FileType", {
     pattern = v.filetypes,
     once = true,  --- VVI: only need to start LSP server once.
-    callback = function()
+    callback = function(params)
       vim.schedule(function()
         lspconfig_setup(lsp_svr)
 

@@ -106,7 +106,7 @@ vim.cmd [[autocmd User Foo echo "foo"]]
 
 vim.api.nvim_create_autocmd("User", {
   pattern = {"Foo"},
-  callback = function() print("foo") end,
+  callback = function(params) print("foo") end,
 })
 
 ```
@@ -323,9 +323,23 @@ Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa
 
 ## 多行数字增加 `Ctrl-a` 和数字减少 `Ctrl-x`
 
-- Normal, \<C-a\> 光标下数字+1, 6\<C-a\> 光标下数字+6; \<C-x\> 光标下数字-1, 6\<C-x\> 光标下数字-6...
-- visual-block 选择多行数字, \<C-a\>, 每行数字+1, 3\<C-a\> 每行数字+3, g\<C-a\> (visual)第一行+1, 第二行+2, 第 n 行+n...
-- visual-block 选择多行数字, \<C-x\>, 每行数字-1, 3\<C-x\> 每行数字-3, g\<C-x\> (visual)第一行-1, 第二行-2, 第 n 行-n...
+Normal Mode
+- `<C-a>` 光标下数字+1, `6<C-a>` 光标下数字+6;
+- `<C-x>` 光标下数字-1, `6<C-x>` 光标下数字-6...
+
+Visual-Block 选择多行数字
+
+增加
+- `<C-a>`, 每行数字+1;
+- `3<C-a>` 每行数字+3;
+- `g<C-a>` 第一行+1, 第二行+2, 第 n 行+n...
+- `3g<C-a>` 第一行+3, 第二行+6, 第 n 行+3n...
+
+减少
+- `<C-x>`, 每行数字-1;
+- `3<C-x>` 每行数字-3;
+- `g<C-x>` 第一行-1, 第二行-2, 第 n 行-n...
+- `3g<C-x>` 第一行-3, 第二行-6, 第 n 行-3n...
 
 <br />
 
@@ -434,5 +448,5 @@ vim.api.nvim_create_autocmd({"BufEnter", "TextChanged", "TextChangedI", "FileCha
 
 - telescope layout
 
-- auto Format: change vim.lsp.buf.formatting_seq_sync() to vim.lsp.buf.format()
+
 
