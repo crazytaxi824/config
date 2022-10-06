@@ -335,10 +335,11 @@ return packer.startup(function(use)
     },
   }
 
-  --- NOTE: 以下是 nvim-cmp module 插件, 在 setup() 中启用的插件.
+  --- NOTE: 以下是 "nvim-cmp" 的 module 插件, 在 nvim-cmp.setup() 中启用的插件.
+  --- 只有 "cmp-nvim-lsp" 不需要在 "nvim-cmp" 之后加载,
+  --- 其他 module 插件都需要在 "nvim-cmp" 加载之后再加载, 否则报错.
   use {"hrsh7th/cmp-nvim-lsp",  -- LSP source for nvim-cmp
     commit = "affe808",
-    after = "nvim-cmp",
   }
 
   use {"hrsh7th/cmp-buffer",  -- 当前 buffer 中有的 word
@@ -403,7 +404,10 @@ return packer.startup(function(use)
   use {"neovim/nvim-lspconfig",
     commit = "ad35a8c",
     config = function() require("user.lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
-    after = "mason.nvim",  -- 需要 mason 安装的 lsp cmd tool
+    after = {
+      "mason.nvim",  -- 需要 mason 安装的 lsp cmd tool
+      "cmp-nvim-lsp",  -- cmp_nvim_lsp.update_capabilities(capabilities) 代码补全功能.
+    },
     requires = {
       "nvim-cmp",  -- provide content to nvim-cmp Completion. cmp_nvim_lsp.update_capabilities(capabilities)
       "hrsh7th/cmp-nvim-lsp",
