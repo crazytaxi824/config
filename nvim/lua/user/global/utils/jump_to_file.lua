@@ -87,13 +87,13 @@ end
 local function parse_filepath(content)
   content = parse_file_scheme(content)
 
-  local file, lnum, col
   local fp = vim.split(vim.fn.trim(content), ":")
 
   --- file, lnum, col 都不能为 nil
-  file = fp[1] or ''
-  lnum = fp[2] or ''
-  col = fp[3] or ''
+  local file = fp[1] or ''
+  local lnum = fp[2] or ''
+  local col  = fp[3] or ''
+
   return file, lnum, col
 end
 
