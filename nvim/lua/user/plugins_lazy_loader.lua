@@ -6,19 +6,20 @@ vim.api.nvim_create_autocmd("BufEnter", {
   callback = function(params)
     --- VVI: 加载顺序很重要
     vim.schedule(function()
-      --- TreeSitter 一系列插件
+      --- TreeSitter
       require('packer').loader('nvim-treesitter')
 
-      --- Auto Completion 一系列插件
+      --- Auto Completion
       require('packer').loader('nvim-cmp')
 
-      --- LSP 一系列插件
+      --- LSP
       require('packer').loader('null-ls.nvim')
+
       --- VVI: 如果要 lazyload lspconfig 时需要手动 `:LspStart`, 否则当前 buffer 的 autocmd 不会被执行.
       --- 使用 `:LspInfo` 查看会发现当前 bufnr 不在 LSP attach 中.
       --require('packer').loader('nvim-lspconfig')
 
-      --- Appearance plugins
+      --- Appearance
       require('packer').loader('nvim-tree.lua')
       require('packer').loader('lualine.nvim')
       require('packer').loader('bufferline.nvim')  -- NOTE: 需要先设置 showtabline=2 (always show tabline),
