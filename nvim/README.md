@@ -106,7 +106,7 @@ vim.cmd [[autocmd User Foo echo "foo"]]
 
 vim.api.nvim_create_autocmd("User", {
   pattern = {"Foo"},
-  callback = function() print("foo") end,
+  callback = function(params) print("foo") end,
 })
 
 ```
