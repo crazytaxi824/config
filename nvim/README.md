@@ -410,6 +410,8 @@ vim.lsp.buf.format({
 
 - ADD: `vim.fs.dirname(vim.fn.bufname('%'))` vs `vim.fn.expand('%:h')`
 
+- [LSP] Accessing client.resolved_capabilities is deprecated, update your plugins or configuration to access client.server_capabilities instead.The new key/value pairs in server_capabilities directly match those defined in the language server protocol
+
 <br />
 
 # Note
@@ -427,26 +429,9 @@ vim.lsp.buf.format({
 
 - method textDocument/documentHighlight is not supported by any of the servers registered for the current buffer
 
-- [LSP] Accessing client.resolved_capabilities is deprecated, update your plugins or configuration to access client.server_capabilities instead.The new key/value pairs in server_capabilities directly match those defined in the language server protocol
-
 <br />
 
 ## TODO
-
-- highlight path in filetyp='dap-repl' window.
-
-```lua
-vim.api.nvim_create_autocmd({"BufEnter", "TextChanged", "TextChangedI", "FileChangedShell", "FileChangedShellPost"}, {
-  pattern = {"\\[dap-repl\\]"},
-  callback = function(params)
-    print(params.event)
-    local output = vim.fn.getline(1, '$')
-    print(vim.inspect(output))
-  end
-})
-```
-
-- telescope layout
 
 
 
