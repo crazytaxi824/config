@@ -9,18 +9,23 @@
 
 --- `$ go env GOROOT` | `$ go env GOMODCACHE`
 --- NOTE: 不要使用 `go env -json`, 速度很慢.
-local function go_env(v)
-  local result = vim.fn.system('go env '..v)
-  if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
-    Notify(result, "ERROR")
-    return
+local function go_env(...)
+  local args_len = #{...}
+  if args_len < 1 then
+    return {}
   end
 
-  return string.match(result, '[%S ]*')
+  local result = vim.fn.system('go env ' .. table.concat({...}, ' '))
+  if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
+    Notify(result, "ERROR")
+    return {}
+  end
+
+  return vim.split(result, '\n', { trimempty = true })
 end
 
 --- NOTE: ignore following folds as workspace root directory.
-local ignore_workspace_folders = { go_env("GOROOT"), go_env("GOMODCACHE") }
+local ignore_workspace_folders = go_env("GOROOT", "GOMODCACHE")
 
 return {
   --cmd = { "gopls" },

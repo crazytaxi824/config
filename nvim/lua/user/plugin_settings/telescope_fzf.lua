@@ -195,7 +195,7 @@ local function my_rg_picker(opts)
   pickers.new(opts, {
     prompt_title = ":Rg",
     finder = finders.new_table({
-      results = vim.fn.split(result, '\n'),
+      results = vim.split(result, '\n', {trimempty=true}),
       entry_maker = make_entry.gen_from_vimgrep(),  -- VVI: gen_from_vimgrep() 设置作用: <CR> jump to <file:line:column>
     }),
     previewer = conf.grep_previewer(opts),

@@ -170,7 +170,7 @@ eg: `:call setbufvar(5, '&foo', 'bar')`, 报错 `E355: Unknown option: foo`
 
 - `vim.tbl_deep_extend("force", {map1}, {map2}, {map3}...)` -- 合并多个 map-like table
 
-- `vim.split({string}, {sep}, {kwargs})` -- strings.Split()
+- `vim.split({string}, {sep}, {trimempty})` -- strings.Split()
 
 ### vim 自带函数
 

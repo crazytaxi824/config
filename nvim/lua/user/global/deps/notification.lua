@@ -36,9 +36,7 @@ function Notify(msg, lvl, opt)
 
     local default_title = {}
     if string.sub(call_file, 1, 1) == '@' then
-      local file_path_list = vim.split(call_file, '/')
-      local script_filename = file_path_list[#file_path_list]
-      default_title = {title = script_filename}
+      default_title = {title = vim.fn.fnamemodify(call_file, ':t')}
     end
 
     opt = opt or {}  -- 确保 opt 是 table, 而不是 nil. 否则无法用于 vim.tbl_deep_extend()
