@@ -35,13 +35,21 @@ M.on_attach = function(client, bufnr)
 end
 
 --- NOTE: capabilities - Provides content to "hrsh7th/cmp-nvim-lsp" Completion ---------------------
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+
+--- NOTE: 以下是 cmp-nvim-lsp 官方示例, 但实际上不需要 update_capabilities() 也能提供代码补全.
+--- https://github.com/hrsh7th/cmp-nvim-lsp#setup
+--- lspconfig 须在 cmp_nvim_lsp 之后加载, 否则可能无法提供代码补全.
 local status_ok, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
 if not status_ok then
-  return
+  Notify({
+    '"cmp_nvim_lsp" can NOT be loaded when setup lsp.capabilities.',
+    'LSP Auto-Completion may NOT be able to use.',
+  }, 'INFO')
+  M.capabilities = capabilities
+else
+  M.capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
 end
-
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-M.capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
 
 --- https://github.com/neovim/nvim-lspconfig/wiki/Project-local-settings
 --- NOTE: LSP settings Hook ------------------------------------------------------------------------
