@@ -286,7 +286,12 @@ vim.opt.cursorline = true    -- 显示当前行. hi CursorLine, CursorLineNr
 --- NOTE: 进入 window 是显示 cursorline; 离开 window 时取消显示 cursorline
 vim.api.nvim_create_autocmd("WinEnter", {
   pattern = {"*"},
-  command = 'setlocal cursorline',
+  callback = function(params)
+    local win_id = vim.fn.win_getid()  -- get current window id
+    if vim.fn.win_gettype(win_id) ~= 'popup' then
+      vim.wo[win_id].cursorline = true  -- setlocal cursorline
+    end
+  end
 })
 
 vim.api.nvim_create_autocmd("WinLeave", {
