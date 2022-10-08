@@ -233,7 +233,7 @@ return packer.startup(function(use)
     cond = function() return vim.fn.has('nvim-0.8') == 0 end,  -- nvim v0.8+ 时不加载
   }
 
-  --- 本配置依赖插件 -------------------------------------------------------------------------------
+  --- Must install ---------------------------------------------------------------------------------
   --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   use {"folke/which-key.nvim",
     commit = "6885b66",
@@ -321,7 +321,7 @@ return packer.startup(function(use)
     requires = "nvim-treesitter/nvim-treesitter",
   }
 
-  --- Completion -----------------------------------------------------------------------------------
+  --- Auto Completion ------------------------------------------------------------------------------
   use {"hrsh7th/nvim-cmp",
     commit = "2427d06",
     config = function() require("user.plugin_settings.cmp_completion") end,

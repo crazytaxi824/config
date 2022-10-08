@@ -32,8 +32,9 @@
 
 --- for Debugging Neovim plugins. `:LspInfo`, `:LspLog`
 __Debug_Neovim = {
-  null_ls = false,    -- :NullLsLog & golangci-lint Notify Commands.
+  null_ls = false,  -- :NullLsLog & golangci-lint Notify Commands.
   lspconfig = false,  -- lspconfig DEBUG
+  autocmd = false,  -- 刚打开 nvim 的时候, autocmd 运行情况.
 }
 
 --- VVI: 在最开始加载 "lewis6991/impatient.nvim" 设置,
@@ -59,6 +60,7 @@ require "user.keymaps"  -- keymap 设置
 require "user.colors"   -- vim highlight 设置
 
 require "user.health"  -- 在 :checkhealth 时执行.
+require("user.global.utils.debug_autocmd")
 
 
 
