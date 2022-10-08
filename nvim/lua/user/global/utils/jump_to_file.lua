@@ -54,6 +54,10 @@ local function jump_to_file(absolute_path, lnum, col)
     end
   end
 
+  --- VVI: escape filename for Vim Command.
+  --- unscaped filename 可以被 lua vim.fn.fnamemodify() 读取, 但是不能被 Vim Command (:edit ...) 读取.
+  absolute_path = vim.fn.fnameescape(absolute_path)
+
   --- NOTE: cmd 利用 cursor('lnum','col') 可以传入 string args 的特点.
   local cmd
   if vim.fn.win_gotoid(log_display_win_id) == 1 then
