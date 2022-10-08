@@ -114,21 +114,34 @@ end
                           -- NOTE: 如果直接设置 `syntax off` 则, vim 不会加载 after/syntax. (但是不影响加载 after/ftplugin)
 
 --- VVI: 不使用 $VIMRUNTIME/ftplugin/xxx.vim 中预设的 keymap.
---- 会导致部分 keymaps 无法使用, 需要手动设置. eg: 'gO'
+--- disable plugin maps 后会导致部分 keymaps 无法使用, 需要手动设置. eg: 'gO'
 vim.g.no_plugin_maps = 1
 
 --- VVI: neovim provider 设置. `:checkhealth` 中 "health#provider#check" 可以查看到以下设置是否正确.
---- 以下设置可以提高 nvim 启动速度. Setting this makes startup faster.
---- 设置后会提高以下文件加载速度:
+--- `:help provider-python`
+--- "python3_host_prog" 设置后会提高下面两个文件的加载速度:
 ---   - /.../nvim/runtime/autoload/provider/python3.vim
 ---   - /.../nvim/runtime/ftplugin/python.vim
---- NOTE: 需要安装 pynvim, `python3 -m pip install pynvim`
-vim.g.python3_host_prog = "python3"  -- `:help python3_host_prog`
+--- "loaded_python3_provider = 0" 设置会禁止加载上面两个文件.
+--- NOTE: 这两个设置(二选一)都可以提高 nvim 打开 python 项目速度. Setting this makes startup faster.
+vim.g.loaded_python3_provider = 0  -- Disable Python3 |remote-plugin| support
+--vim.g.python3_host_prog = "python3" -- To use python3 remote-plugins with Nvim.
+                                      -- need to install `python3 -m pip install pynvim`
 
---vim.g.loaded_python3_provider = 0  -- Disable Python3 support
-vim.g.loaded_node_provider = 0  -- Disable Node support, `:help provider-node`
-vim.g.loaded_ruby_provider = 0  -- Disable Ruby support, `:help provider-ruby`
-vim.g.loaded_perl_provider = 0  -- Disable Perl support, `:help provider-perl`, 需要安装 `cpanm -n Neovim::Ext`
+--- `:help provider-node`, same as above.
+vim.g.loaded_node_provider = 0  -- Disable Node |remote-plugin| support
+--vim.g.node_host_prog = '' -- To use javascript remote-plugins with Nvim.
+                            -- need to install `npm install -g neovim`.
+
+--- `:help provider-ruby`, same as above.
+vim.g.loaded_ruby_provider = 0  -- Disable Ruby |remote-plugin| support
+--vim.g.ruby_host_prog = '' -- To use Ruby remote-plugins with Nvim.
+                            -- need to install `gem install neovim`
+
+--- `:help provider-perl`, same as above.
+vim.g.loaded_perl_provider = 0  -- Disable Perl |remote-plugin| support
+--vim.g.perl_host_prog = '' -- To use perl remote-plugins with Nvim.
+                            -- need to install `cpanm -n Neovim::Ext`.
 
 -- -- }}}
 
@@ -318,7 +331,9 @@ vim.api.nvim_create_autocmd("FileType", {
     if vim.bo[params.buf].buftype ~= '' then
       return
     end
-    if vim.bo.textwidth > 0 then  -- 如果 buffer 没有设置 textwidth, 即 textwidth=0 则不执行.
+
+    --- 如果 buffer 没有设置 textwidth, 即:textwidth=0, 则不 highlight virtual column.
+    if vim.bo.textwidth > 0 then
       vim.fn.matchadd('ColorColumn', '\\%' .. vim.bo.textwidth+1 .. 'v', 100)
     end
   end
