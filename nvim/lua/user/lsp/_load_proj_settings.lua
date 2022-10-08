@@ -55,9 +55,7 @@ end
 --- NOTE: 主要函数 keep_extend() 用 project local 设置覆盖 global 设置.
 --- 使用 tbl_deep_extend('keep', xx, xx, ...)
 M.keep_extend = function(section, tool, tbl, ...)
-  --- M._lazyload()  -- VVI: exists() 中已经 lazyload()
-
-  --- 如果项目本地设置存在
+  --- 如果项目本地设置存在. VVI: exists() 中调用 lazyload()
   if M.exists(section, tool) then
     return M.exists_keep_extend(section, tool, tbl, ...)
   end
