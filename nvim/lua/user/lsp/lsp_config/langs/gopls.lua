@@ -10,8 +10,7 @@
 --- `$ go env GOROOT` | `$ go env GOMODCACHE`
 --- NOTE: 不要使用 `go env -json`, 速度很慢.
 local function go_env(...)
-  local args_len = #{...}
-  if args_len < 1 then
+  if not ... then
     return {}
   end
 
