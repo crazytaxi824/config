@@ -7,7 +7,7 @@
 --- 如果一个项目中有多个不同的 filetype 对应多个不同的 lsp, linter, formatter, 可以在不同的 section 中设置多个 tool.
 return {
   --- nvim-lspconfig 设置
-  lsp_settings = {
+  lsp = {
     gopls = {
       ["ui.completion.usePlaceholders"] = true,
       ["ui.diagnostic.staticcheck"] = false,

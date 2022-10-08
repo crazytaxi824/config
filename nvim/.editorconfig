@@ -1,0 +1,32 @@
+# https://editorconfig.org/
+# 影响 prettier 格式化, 和 github 显示.
+# "prettier.useEditorConfig": true
+# end_of_line -> "prettier.endOfLine"
+# indent_style -> "prettier.useTabs"
+# indent_size/tab_width -> "prettier.tabWidth"
+
+# top-most EditorConfig file. 表示该文件是最顶层文件, 不用再向上查找 .editorconfig 文件了.
+root = true
+
+# all files
+[*]
+charset = utf-8
+indent_style = tab  # tab - leading 是 \t 则用 \t; 是 space 则用 space | space - leading \t 都会被转成 space.
+indent_size = 4     # 格式化的宽度. 相当于 VIM's tabstop and vscode tabSize.
+# tab_width = 4     # \t 的宽度. 默认值为 indent_size. github 显示 \t 宽度
+end_of_line = lf    # lf = \n | cr = \r | crlf = \r\n
+trim_trailing_whitespace = true  # 删除行最后的空白
+# insert_final_newline = true    # 所有文件最后都添加一个空行.
+
+# prettier supported files
+[*.{htm,html,js,jsx,ts,tsx,cjs,cts,ctsx,mjs,mts,mtsx,css,sass,scss,less,pcss,svg,vue,json,jsonc,yaml,yml,graphql,md}]
+indent_style = space
+indent_size = 2
+
+# js ts css 等相关语言使用单引号.
+[*.{js,jsx,ts,tsx,cjs,cts,ctsx,mjs,mts,mtsx,css,sass,scss,less,pcss,vue}]
+quote_type = single
+
+# python indent 4 个空格.
+[*.py]
+max_line_length = 79

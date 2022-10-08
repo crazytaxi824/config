@@ -59,7 +59,7 @@ M.on_init = function(client)
   --- NOTE: 加载项目本地设置, 覆盖 global settings -----------------------------
   --- .nvim/settings.lua 中的 local 设置. --- {{{
   -- return {
-  --   lsp_settings = {
+  --   lsp = {
   --     gopls = {
   --       -- ["ui.completion.usePlaceholders"] = false,
   --       -- ["ui.diagnostic.staticcheck"] = false,
@@ -67,7 +67,7 @@ M.on_init = function(client)
   --   },
   -- }
   -- -- }}}
-  local local_lspconfig_key = "lsp_settings"
+  local local_lspconfig_key = "lsp"
 
   local proj_local_settings = require("user.lsp._load_proj_settings")
   if proj_local_settings.exists(local_lspconfig_key, client.name) then
