@@ -59,7 +59,7 @@ M.on_init = function(client)
   --- NOTE: 加载项目本地设置, 覆盖 global settings -----------------------------
   --- .nvim/settings.lua 中的 local 设置. --- {{{
   -- return {
-  --   lsp_settings = {
+  --   lsp = {
   --     gopls = {
   --       -- ["ui.completion.usePlaceholders"] = false,
   --       -- ["ui.diagnostic.staticcheck"] = false,
@@ -67,12 +67,15 @@ M.on_init = function(client)
   --   },
   -- }
   -- -- }}}
-  local local_lspconfig_key = "lsp_settings"
+  local local_lspconfig_key = "lsp"
 
   local proj_local_settings = require("user.lsp._load_proj_settings")
-  if proj_local_settings.exists(local_lspconfig_key, client.name) then
-    client.config.settings[client.name] = proj_local_settings.exists_keep_extend(local_lspconfig_key, client.name,
-      client.config.settings[client.name])
+  local settings, local_settings_loaded = proj_local_settings.keep_extend(local_lspconfig_key, client.name,
+    client.config.settings[client.name])
+
+  if local_settings_loaded then
+    --- 使用 peoject local settings overwrite 默认设置.
+    client.config.settings[client.name] = settings
 
     --- VVI: tell LSP configs are changed.
     --- 有些 LSP server 不支持 didChangeConfiguration. eg: jsonls

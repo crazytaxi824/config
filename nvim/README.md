@@ -427,8 +427,6 @@ vim.lsp.buf.format({
 
 ## FIXME
 
-- method textDocument/documentHighlight is not supported by any of the servers registered for the current buffer
-
 <br />
 
 ## TODO

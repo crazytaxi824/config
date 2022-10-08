@@ -183,9 +183,12 @@ local code_action_settings = {
 
 --- 合并多个 list
 local function combine_lists(...)
-  local lists = {...}  --- NOTE: 获取 variable number of arguments
+  if not ... then
+    return {}
+  end
+
   local result = {}
-  for _, elem in ipairs(lists) do
+  for _, elem in ipairs({...}) do
     vim.list_extend(result, elem)
   end
   return result
