@@ -92,7 +92,9 @@ end
 --   lspconfig_setup(lsp_svr)
 -- end
 --
--- --- VVI: 第一次加载时手动启动所有 lsp, 主要是为了 lazyload.
+-- --- VVI: 如果使用 lazyload vim.schedule() 方式加载 lspconfig[xxx].setup() 的情况下,
+-- --- 启动 nvim 后需要手动 ":LspStart" 所有 lsp. 因为 lspconfig[xxx].setup() 在第一个加载的 buffer 
+-- --- 后面启动, 所以第一个 buffer 无法 attach lsp. ":LspStart" 可以让 lsp attach 该 buffer.
 -- vim.cmd('LspStart ' .. table.concat(vim.tbl_keys(lsp_servers_map), " "))
 -- -- }}}
 
@@ -106,7 +108,7 @@ for lsp_svr, v in pairs(lsp_servers_map) do
         lspconfig_setup(lsp_svr)
 
         --- VVI: 第一次必须要手动启动 lsp, 因为 vim.schedule() 会导致新 filetype 的 buffer 加载完成之后
-        --- 才执行 lspconfig.setup(), 所以该 buffer 没有 attach lsp. 需要通过 `:LspStart` 进行 attach.
+        --- 才执行 lspconfig[xxx].setup(), 所以该 buffer 没有 attach lsp. 需要通过 `:LspStart` 进行 attach.
         vim.cmd('LspStart ' .. lsp_svr )
 
         --- DEBUG: 用. 每个 lsp 应该只打印一次.
