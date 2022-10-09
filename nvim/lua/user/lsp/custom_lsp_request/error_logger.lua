@@ -20,6 +20,7 @@ M.log = function(name, req, err)
 
   --- 将内容写入文件中.
   vim.fn.writefile(msg, log_filepath, 'a')
+  vim.cmd('checktime')
 end
 
 return M

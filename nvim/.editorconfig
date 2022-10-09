@@ -29,4 +29,4 @@ quote_type = single
 
 # python indent 4 个空格.
 [*.py]
-max_line_length = 79
+indent_style = space

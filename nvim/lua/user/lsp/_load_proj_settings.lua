@@ -29,6 +29,17 @@ local function local_setting_dir_filepaths_to_root()
   return t
 end
 
+--- 从 pwd 向上寻找 .nvim/settings.lua 文件.
+local function available_local_settings_file()
+  local dirs = local_setting_dir_filepaths_to_root()
+  for _, dir in ipairs(dirs) do
+    local local_settings_filepath = dir .. '.nvim/settings.lua'
+    if vim.fn.filereadable(local_settings_filepath) == 1 then
+      return local_settings_filepath
+    end
+  end
+end
+
 --- 内部函数 lazyload() 保证只读取一次文件.
 local function lazyload_local_settings()
   --- 如果已经读取文件则不重复执行.
@@ -36,19 +47,13 @@ local function lazyload_local_settings()
     return
   end
 
-  local dirs = local_setting_dir_filepaths_to_root()
-
-  --- 如果文件不存在, 或执行错误(语法错误), 则忽略.
-  for _, dir in ipairs(dirs) do
-    local local_settings_filepath = dir .. '.nvim/settings.lua'
-    if vim.fn.filereadable(local_settings_filepath) then
-      --- 使用 pcall 确保 lua file 执行没有错误.
-      local ok, local_settings = pcall(dofile, local_settings_filepath)
-      if ok and local_settings then
-        --- '.nvim/settings.lua' 读取成功, 同时返回值不是 nil 的情况下缓存数据
-        content = local_settings  -- 缓存数据.
-        break
-      end
+  local local_settings_filepath = available_local_settings_file()
+  if local_settings_filepath then
+    --- 使用 pcall 确保 lua file 执行没有错误.
+    local ok, local_settings = pcall(dofile, local_settings_filepath)
+    if ok and local_settings then
+      --- '.nvim/settings.lua' 读取成功, 同时返回值不是 nil 的情况下缓存 settings 数据.
+      content = local_settings  -- 缓存数据.
     end
   end
 

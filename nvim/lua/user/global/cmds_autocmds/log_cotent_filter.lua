@@ -60,6 +60,7 @@ local function clean_log_file(filepath, regexp)
   -- f:close()
   -- -- }}}
   vim.fn.writefile(new_content, filepath)  -- flag: omit - 直接覆盖写入, 'a' - append 写入.
+  --- NOTE: ":checktime" 在下面统一执行.
 end
 
 --- 离开 vim 时, 清理 log 文件.
@@ -67,21 +68,23 @@ vim.api.nvim_create_autocmd("VimLeave", {
   pattern = {"*"},
   once = true,  -- VimLeave execute only once
   callback = function(params)
-    --- DEBUG: 退出 vim 时打印时间到指定文件.
+    --- DEBUG: 退出 vim 时打印时间到指定文件. 检查 autocmd 是否触发.
     --local time_now = vim.fn.strftime('%Y-%m-%d %H:%M:%S')
     --vim.fn.writefile(
     --  {'[' .. time_now .. '] ' .. vim.fn.getcwd()},
     --  vim.fn.stdpath('cache') .. '/log', 'a'
     --)
 
-    --- FIXED: log [START] nvim v0.8
-    -- local lsplog = vim.fn.fnamemodify(vim.fn.stdpath('cache') .. '/lsp.log', ':p')
-    -- if vim.fn.filereadable(lsplog) then
-    --   clean_log_file(lsplog, "^%[START%]%[.*%] LSP logging initiated$")
-    -- end
+    --- FIXED: lsplog [START] nvim v0.8
+    if vim.fn.has('nvim-0.8') == 0 then
+      local lsplog = vim.fn.fnamemodify(vim.fn.stdpath('cache') .. '/lsp.log', ':p')
+      if vim.fn.filereadable(lsplog) == 1 then
+        clean_log_file(lsplog, "^%[START%]%[.*%] LSP logging initiated$")
+      end
+    end
 
     local daplog = vim.fn.fnamemodify(vim.fn.stdpath('cache') .. '/dap.log', ':p')
-    if vim.fn.filereadable(daplog) then
+    if vim.fn.filereadable(daplog) == 1 then
       clean_log_file(daplog, "^$")
     end
 
