@@ -147,6 +147,7 @@ vim.api.nvim_create_autocmd("User", {
 
       --- 将内容写入文件中.
       vim.fn.writefile(update_info, packer_update_log, 'a')
+      vim.cmd('checktime')
     end
   end
 })
