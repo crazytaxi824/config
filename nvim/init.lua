@@ -60,7 +60,6 @@ require "user.keymaps"  -- keymap 设置
 require "user.colors"   -- vim highlight 设置
 
 require "user.health"  -- 在 :checkhealth 时执行.
-require("user.global.utils.debug_autocmd")
 
 
 
