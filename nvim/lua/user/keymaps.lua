@@ -62,18 +62,19 @@ end
 
 --- for Search Highlight --------------------------------------------------------------------------- {{{
 --- 在当前 search result 前放置 search_sign.
-local my_search_sign = {
-  --- {group} as a namespace for {id}, thus two groups can use the same IDs.
-  group = "MySearchSignGroup",
-  sign = "MySearchSign",
-  id = 10010,
-  text = "⚲",  -- 类似 icon, ⌕☌⚲⚯
+--- {group} as a namespace for {id}, thus two groups can use the same IDs.
+local my_search = {
+  sign = {
+    id = 10010,
+    group = "MySearchSignGroup",
+    name = "MySearchSign",
+    text = "⚲",  -- 类似 icon, ⌕☌⚲⚯
+  },
+  hl_group = "IncSearch",
+  cache_last_hl = nil  -- 缓存 { win_id=win_getid(), hl_id=matchadd() }, for vim.fn.matchdelete()
 }
 --- define my_search_sign
-vim.fn.sign_define(my_search_sign.sign, {text=my_search_sign.text, texthl="IncSearch", numhl="IncSearch"})
-
---- 缓存 { win_id=win_getid(), hl_id=matchadd() }, for vim.fn.matchdelete()
-local search_hl_cache
+vim.fn.sign_define(my_search.sign.name, {text=my_search.sign.text, texthl=my_search.hl_group, numhl=my_search.hl_group})
 
 local function hl_search(key)
   local status, errmsg = pcall(vim.cmd, 'normal! ' .. key)
@@ -82,41 +83,42 @@ local function hl_search(key)
     return
   end
 
-  --- VVI: 删除之前的 highlight. 必须删除, 然后重新 highlight.
-  if search_hl_cache then
-    vim.fn.matchdelete(search_hl_cache.hl_id, search_hl_cache.win_id)
+  --- VVI: 删除之前的 highlight. 必须删除上一个 matchadd(), 然后重新 matchadd().
+  if my_search.cache_last_hl then
+    vim.fn.matchdelete(my_search.cache_last_hl.hl_id, my_search.cache_last_hl.win_id)
   end
-  vim.fn.sign_unplace(my_search_sign.group)  -- clear my_search_sign
+  vim.fn.sign_unplace(my_search.sign.group)  -- clear search_sign
 
   --- NOTE: `:help /ordinary-atom`
-  --- `\%#` 意思是从 cursor 所在位置开始寻找 match.
+  --- `\%#` 意思是从 cursor 所在位置开始寻找第一个 match.
   --- `\c`  意思是 ignore-case.
+  --- getreg() 是获取 register 值.
   local search_pattern = '\\c\\%#' .. vim.fn.getreg('/')
-  local hl_id = vim.fn.matchadd('IncSearch', search_pattern, 101)
+  local hl_id = vim.fn.matchadd(my_search.hl_group, search_pattern, 101)
 
-  --- NOTE: place my_search_sign
+  --- NOTE: 通过 cursor position 来 place my_search_sign.
   local cur_pos = vim.fn.getpos('.')  -- [bufnum, lnum, col, off]
-  vim.fn.sign_place(my_search_sign.id, my_search_sign.group, my_search_sign.sign, vim.fn.bufnr(),
+  vim.fn.sign_place(my_search.sign.id, my_search.sign.group, my_search.sign.name, vim.fn.bufnr(),
     {lnum=cur_pos[2], priority=109})
 
   --- 缓存数据
-  search_hl_cache = {hl_id = hl_id, win_id = vim.fn.win_getid()}
+  my_search.cache_last_hl = {hl_id = hl_id, win_id = vim.fn.win_getid()}
 end
 
 --- NOTE: 这里必须使用 global function, 因为还没找到使用 vim.api 执行 '/' 的方法.
 function _Delete_search_hl()
   --- 删除之前的 highlight
-  if search_hl_cache then
+  if my_search.cache_last_hl then
     --- NOTE: 如果 win 已经关闭 (win_id 不存在), 则不能使用 matchdelete(win_id), 否则报错.
-    local win_info = vim.fn.getwininfo(search_hl_cache.win_id)
+    local win_info = vim.fn.getwininfo(my_search.cache_last_hl.win_id)
     if #win_info > 0 then
-      vim.fn.matchdelete(search_hl_cache.hl_id, search_hl_cache.win_id)
+      vim.fn.matchdelete(my_search.cache_last_hl.hl_id, my_search.cache_last_hl.win_id)
     end
 
-    search_hl_cache = nil  -- clear cache
+    my_search.cache_last_hl = nil  -- clear cache
   end
 
-  vim.fn.sign_unplace(my_search_sign.group)  -- clear my_search_sign
+  vim.fn.sign_unplace(my_search.sign.group)  -- clear my_search_sign
   vim.cmd[[nohlsearch]]
 
   --- NOTE: 以下方法无法进行 'incsearch'. 但是可以使函数变成 local function.
