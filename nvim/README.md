@@ -421,7 +421,7 @@ vim.lsp.buf.format({
 ### nvim-lspconfig new feature required
 
 - Feature/attach to unnamed buffer #1929, https://github.com/neovim/nvim-lspconfig/pull/1929.
-  for now: add file in nvim-tree, eg: 'tmp.json', 'tmp.go', and remove it later.
+  for now: add file in nvim-tree, eg: ':edit tmp.json', ':edit tmp.go', and remove it later.
 
 <br />
 

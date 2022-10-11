@@ -90,7 +90,7 @@ local function hl_search(key)
   vim.fn.sign_unplace(my_search.sign.group)  -- clear search_sign
 
   --- NOTE: `:help /ordinary-atom`
-  --- `\%#` 意思是从 cursor 所在位置开始寻找第一个 match.
+  --- `\%#` 意思是 match cursor 所在位置. Matches with the cursor position.
   --- `\c`  意思是 ignore-case.
   --- getreg() 是获取 register 值.
   local search_pattern = '\\c\\%#' .. vim.fn.getreg('/')
