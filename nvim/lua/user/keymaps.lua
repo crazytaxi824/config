@@ -327,20 +327,21 @@ local keymaps = {
 
   --- NOTE: <Ctrl-Up/Down/Left/Right> 被 mac 系统占用, 无法直接使用,
   --- 需要在 alacritty 中使用 <option-...> 代替.
-  {'n', '<C-Up>', '3<C-y>', opt, 'which_key_ignore'},
-  {'v', '<C-Up>', '3<C-y>', opt, 'which_key_ignore'},
-  {'i', '<C-Up>', '<C-o>3<C-y>', opt, 'which_key_ignore'},
-  {'n', '<C-Down>', '3<C-e>', opt, 'which_key_ignore'},
-  {'v', '<C-Down>', '3<C-e>', opt, 'which_key_ignore'},
-  {'i', '<C-Down>', '<C-o>3<C-e>', opt, 'which_key_ignore'},
+  {'n', '<C-Up>', '3<C-y>', opt, 'win: scroll Upwards'},
+  {'v', '<C-Up>', '3<C-y>', opt, 'win: scroll Upwards'},
+  {'i', '<C-Up>', '<C-o>3<C-y>', opt, 'win: scroll Upwards'},
+  {'n', '<C-Down>', '3<C-e>', opt, 'win: scroll Downwards'},
+  {'v', '<C-Down>', '3<C-e>', opt, 'win: scroll Downwards'},
+  {'i', '<C-Down>', '<C-o>3<C-e>', opt, 'win: scroll Downwards'},
 
-  --- NOTE: 需要在 alacritty 中将 <Shift-Option-...> remap 为 <Shift-Ctrl-...>
-  -- {'n', '<S-C-Up>', '3<C-U>', opt, 'which_key_ignore'},
-  -- {'v', '<S-C-Up>', '3<C-U>', opt, 'which_key_ignore'},
-  -- {'i', '<S-C-Up>', '<C-o>3<C-U>', opt, 'which_key_ignore'},
-  -- {'n', '<S-C-Down>', '3<C-D>', opt, 'which_key_ignore'},
-  -- {'v', '<S-C-Down>', '3<C-D>', opt, 'which_key_ignore'},
-  -- {'i', '<S-C-Down>', '<C-o>3<C-D>', opt, 'which_key_ignore'},
+  --- NOTE: zh | zl 在 wrap file 中无法使用.
+  --- scroll left/right 用到的机会比较少, 因为大部分情况下不会让 line 超出屏幕宽度.
+  {'n', '<C-S-Left>', '6zh', opt, 'win: scroll left'},
+  {'v', '<C-S-Left>', '6zh', opt, 'win: scroll left'},
+  {'i', '<C-S-Left>', '<C-o>6zh', opt, 'win: scroll left'},  -- 默认在 insert mode 下和 <S-Left> 相同.
+  {'n', '<C-S-Right>', '6zl', opt, 'win: scroll right'},
+  {'v', '<C-S-Right>', '6zl', opt, 'win: scroll right'},
+  {'i', '<C-S-Right>', '<C-o>6zl', opt, 'win: scroll right'},  -- 默认在 insert mode 下和 <S-Right> 相同.
 
   --- NOTE: <Home> 模拟 vscode 行为; <End> 使用默认行为.
   {'n', '<Home>', _Home_action_nowrap, opt, 'which_key_ignore'},
