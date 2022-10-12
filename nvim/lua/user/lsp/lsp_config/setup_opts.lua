@@ -16,9 +16,6 @@ M.flags = { debounce_text_changes = 500 }   --- 默认 150.
 --- NOTE: on_attach - 加载 Key mapping & highlight 设置 --------------------------------------------
 ---       这里传入的 client 是正在加载的 lsp_client, vim.inspect(client) 中可以看到 codeActionKind.
 M.on_attach = function(client, bufnr)
-  --- VVI: 设置 root_dir 到 buffer variables 中, 为了给 null-ls 提供 cwd 设置.
-  vim.fn.setbufvar(bufnr, "my_lspconfig", {root_dir = client.config.root_dir})
-
   --- 加载自定义设置 ---
   --- Same_ID
   require("user.lsp.lsp_config.highlights").highlight_references(client, bufnr)
@@ -70,17 +67,8 @@ M.on_init = function(client)
   local local_lspconfig_key = "lsp"
 
   local proj_local_settings = require("user.lsp._load_proj_settings")
-  local settings, local_settings_loaded = proj_local_settings.keep_extend(local_lspconfig_key, client.name,
+  client.config.settings[client.name] = proj_local_settings.keep_extend(local_lspconfig_key, client.name,
     client.config.settings[client.name])
-
-  if local_settings_loaded then
-    --- 使用 peoject local settings overwrite 默认设置.
-    client.config.settings[client.name] = settings
-
-    --- VVI: tell LSP configs are changed.
-    --- 有些 LSP server 不支持 didChangeConfiguration. eg: jsonls
-    client.notify("workspace/didChangeConfiguration")
-  end
 
   --- DEBUG: 用
   if __Debug_Neovim.lspconfig then

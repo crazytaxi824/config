@@ -13,11 +13,10 @@ vim.api.nvim_create_autocmd("BufEnter", {
       require('packer').loader('nvim-cmp')
 
       --- LSP
-      require('packer').loader('null-ls.nvim')
-
       --- VVI: 如果要 lazyload lspconfig 时需要手动 `:LspStart`, 否则当前 buffer 的 autocmd 不会被执行.
       --- 使用 `:LspInfo` 查看会发现当前 bufnr 不在 LSP attach 中.
       --require('packer').loader('nvim-lspconfig')
+      require('packer').loader('null-ls.nvim')  -- null-ls 和 lspconfig 没有依赖关系.
 
       --- Appearance
       require('packer').loader('nvim-tree.lua')

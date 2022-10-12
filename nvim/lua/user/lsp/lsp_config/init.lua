@@ -95,6 +95,7 @@ end
 -- --- VVI: 如果使用 lazyload vim.schedule() 方式加载 lspconfig[xxx].setup() 的情况下,
 -- --- 启动 nvim 后需要手动 ":LspStart" 所有 lsp. 因为 lspconfig[xxx].setup() 在第一个加载的 buffer 
 -- --- 后面启动, 所以第一个 buffer 无法 attach lsp. ":LspStart" 可以让 lsp attach 该 buffer.
+-- --- 如果 lsp 还没有被 setup 则不会启动. 所以这里可以放心 LspStart 所有 lsp.
 -- vim.cmd('LspStart ' .. table.concat(vim.tbl_keys(lsp_servers_map), " "))
 -- -- }}}
 
