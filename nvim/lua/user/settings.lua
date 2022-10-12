@@ -288,12 +288,13 @@ vim.opt.showmode = false  -- statusline 不显示 mode() 模式信息. airline/l
 vim.opt.showcmd = true  -- 屏幕右下角显示键入的快捷键, 不是 command.
 vim.opt.cmdheight = 2   -- 底部 command area (below statusline) 高度, {n} 行.
 
-vim.opt.number = true        -- 显示行号
---vim.opt.relativenumber = true  -- 相对行号
---vim.opt.numberwidth = 4    -- 默认行号占 4 列
+--- NOTE: number & relativenumber 可以同时开启.
+vim.opt.number = true  -- 显示行号
+vim.opt.relativenumber = true  -- 显示相对行号
+--vim.opt.numberwidth = 4  -- 默认行号占 4 列
 
 vim.opt.cursorline = true    -- 显示当前行. hi CursorLine, CursorLineNr
---vim.opt.cursorlineopt = "number"  -- cursorline 只突出行号, 没有背景色, 下划线...
+vim.opt.cursorlineopt = "number,screenline"  -- screenline 和 line 的区别在于 wrap line 显示.
 --vim.opt.cursorcolumn = true       -- 突出显示当前列. 包括: 背景色...
 
 --- NOTE: 进入 window 是显示 cursorline; 离开 window 时取消显示 cursorline

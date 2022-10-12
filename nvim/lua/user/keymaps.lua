@@ -296,13 +296,9 @@ local keymaps = {
   {'n', 'O', 'O<C-c><Down>', opt, "add new line above cursor"},
 
   --- move cursor ----------------------------------------------------------------------------------
-  {'n', '<S-Up>', '6gk', opt, 'which_key_ignore'},
-  {'v', '<S-Up>', '6gk', opt, 'which_key_ignore'},
-  {'i', '<S-Up>', '<C-o>6gk', opt, 'which_key_ignore'},
-  {'n', '<S-Down>', '6gj', opt, 'which_key_ignore'},
-  {'v', '<S-Down>', '6gj', opt, 'which_key_ignore'},
-  {'i', '<S-Down>', '<C-o>6gj', opt, 'which_key_ignore'},
-
+  --- NOTE: <PageUp> / <PageDown> / <Home> / <End> 在 mac 中的默认快捷键是 <fn-Up/Down/Left/Right>,
+  --- 需要在 alacritty 中将 <Command-...> 也设置为 <PageUp> / <PageDown> / <Home> / <End>.
+  --- 这里是模拟 vscode 中 PageUp / PageDown 的行为.
   {'n', '<PageUp>', 'zbH', opt, 'which_key_ignore'},
   {'v', '<PageUp>', 'zbH', opt, 'which_key_ignore'},
   {'i', '<PageUp>', '<C-o>zb<C-o>H', opt, 'which_key_ignore'},
@@ -310,12 +306,30 @@ local keymaps = {
   {'v', '<PageDown>', 'ztL', opt, 'which_key_ignore'},
   {'i', '<PageDown>', '<C-o>zt<C-o>L', opt, 'which_key_ignore'},
 
+  --- NOTE: vim 中 <S-Up> / <S-Down> 默认和 <PageUp> / <PageDown> 作用相同.
+  {'n', '<S-Up>', '3gk', opt, 'which_key_ignore'},
+  {'v', '<S-Up>', '3gk', opt, 'which_key_ignore'},
+  {'i', '<S-Up>', '<C-o>3gk', opt, 'which_key_ignore'},
+  {'n', '<S-Down>', '3gj', opt, 'which_key_ignore'},
+  {'v', '<S-Down>', '3gj', opt, 'which_key_ignore'},
+  {'i', '<S-Down>', '<C-o>3gj', opt, 'which_key_ignore'},
+
+  --- NOTE: <Ctrl-Up/Down/Left/Right> 被 mac 系统占用, 无法直接使用,
+  --- 需要在 alacritty 中使用 <option-...> 代替.
   {'n', '<C-Up>', '3<C-y>', opt, 'which_key_ignore'},
   {'v', '<C-Up>', '3<C-y>', opt, 'which_key_ignore'},
   {'i', '<C-Up>', '<C-o>3<C-y>', opt, 'which_key_ignore'},
   {'n', '<C-Down>', '3<C-e>', opt, 'which_key_ignore'},
   {'v', '<C-Down>', '3<C-e>', opt, 'which_key_ignore'},
   {'i', '<C-Down>', '<C-o>3<C-e>', opt, 'which_key_ignore'},
+
+  --- NOTE: 需要在 alacritty 中将 <Shift-Option-...> remap 为 <Shift-Ctrl-...>
+  -- {'n', '<S-C-Up>', '3<C-U>', opt, 'which_key_ignore'},
+  -- {'v', '<S-C-Up>', '3<C-U>', opt, 'which_key_ignore'},
+  -- {'i', '<S-C-Up>', '<C-o>3<C-U>', opt, 'which_key_ignore'},
+  -- {'n', '<S-C-Down>', '3<C-D>', opt, 'which_key_ignore'},
+  -- {'v', '<S-C-Down>', '3<C-D>', opt, 'which_key_ignore'},
+  -- {'i', '<S-C-Down>', '<C-o>3<C-D>', opt, 'which_key_ignore'},
 
   {'n', 'G', 'Gzz', opt, 'which_key_ignore'},  -- put last line in center
 
