@@ -50,10 +50,18 @@ local function lazyload_local_settings()
   local local_settings_filepath = available_local_settings_file()
   if local_settings_filepath then
     --- 使用 pcall 确保 lua file 执行没有错误.
-    local ok, local_settings = pcall(dofile, local_settings_filepath)
-    if ok and local_settings then
-      --- '.nvim/settings.lua' 读取成功, 同时返回值不是 nil 的情况下缓存 settings 数据.
-      content = local_settings  -- 缓存数据.
+    local ok, result = pcall(dofile, local_settings_filepath)
+    --- ok 文件执行 (dofile) 成功.
+    --- result 是执行结果. 可能为 nil, 可能是执行失败的 error message.
+    if ok then
+      if result then
+        --- '.nvim/settings.lua' 读取成功, 同时返回值不是 nil 的情况下缓存 settings 数据.
+        content = result  -- 缓存数据.
+      else
+        Notify('"' .. local_settings_filepath .. '" returns nil.', "INFO")
+      end
+    else
+      Notify(vim.split(result, '\n', {trimempty=true}), "WARN")
     end
   end
 
@@ -67,9 +75,7 @@ M.keep_extend = function(section, tool, tbl, ...)
 
   --- 如果项目本地设置存在.
   if content[section] and content[section][tool] then
-    --- VVI: 这里第二个出参返回 'true' 表明 local setting 加载成功.
-    --- 这里只能放在第二个出参上, 否则会影响本函数在 null-ls 中的使用.
-    return vim.tbl_deep_extend('keep', content[section][tool], tbl, ...), true
+    return vim.tbl_deep_extend('keep', content[section][tool], tbl, ...)
   end
 
   --- 如果传入多个 tbl config
