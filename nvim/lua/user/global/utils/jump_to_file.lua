@@ -1,37 +1,41 @@
+--- README: 利用了内置的 vimL function `matchadd()` 和 `matchstr()` 的统一性进行 filepath highlight 和分析.
+--- 所以只要是能被 `matchadd()` 正确 highlight 的 filepath 就能被 `matchstr()` 一字不差的分析出来.
+
 --- highlight <file:line:col> ----------------------------------------------------------------------
 vim.cmd('hi Filepath cterm=underline')  -- 自定义颜色, for Highlight_filepath()
 vim.cmd('hi URL cterm=underline ctermfg=75')  -- 自定义颜色, for Highlight_filepath()
 
 --- VVI: vim `:h pattern-overview` 中使用双引号和单引号是不一样的. 单引号 '\(\)\+' 在双引号中需要写成 "\\(\\)\\+"
+--- regex: (ipfs:|ipns:|magnet:|mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:)
+---   '\f' - isfname, 表示可用于 filename 的字符/数字/符号...
+---   '\<' - beginning of a word
+---   '\+' - 1~n
+---   '\?' - 0~1
+---   '\{0,2}' - 0~2
+
+--- 'file:///abc/def.txt', 'file://~/abc/def.txt', 'file://./abc/def.txt'
+local file_schema_pattern = '\\<file://' -- file://
+  .. '[~.]\\?/'  -- '~/' | './' | '/'
+  .. '\\f\\+'  -- filename 可以用字符. '\+' 表示至少有一个字符.
+  .. '\\(:[0-9]\\+\\)\\{0,2}'  -- ':num:num' | ':num' | '' (空)
+
+--- '/a/b/c', '~/a/b/c', './a/b/c'
+local filepath_pattern = '\\(^\\|\\s\\|\\[\\|<\\|{\\|(\\)\\@<='  -- '^' | whitespace | '(' | '[' | '{' | '<' 开头
+  .. '[~.]\\?/'  -- '~/' | './' | '/'
+  .. '\\f\\+'  -- filename 可以用字符. '\+' 表示至少有一个字符.
+  .. '\\(:[0-9]\\+\\)\\{0,2}'  -- ':num:num' | ':num' | '' (空)
+
+--- 'http://' | 'https://'
+local url_schema_pattern = '\\<http[s]\\?://'  -- 'http://' | 'https://' 开头
+  .. '\\f\\+'  -- filename 可以用字符. eg: 'www.abc.com'
+  .. '\\(:[0-9]\\+\\)\\?' -- port, eg: ':80'
+  .. '[/]\\?'
+  .. '\\(?\\f\\+\\(&\\f\\+\\)*\\)\\?'  -- '/?foo=fuz&bar=buz'
+
 function Highlight_filepath()
-  --- file:///abc/def.txt
-  --- '\f' - isfname, 表示可用于 filename 的字符/数字/符号...
-  --- '\<' - start of a word
-  vim.fn.matchadd('Filepath',
-    '\\<file://'  -- 'file://' 开头
-    .. '\\f\\+'  -- filename 可以用字符. '\+' 表示至少有一个字符.
-    .. '\\(:[0-9]\\+\\)\\{0,2}'  -- ':num:num' | ':num' | '' (空)
-  )
-
-  --- ~/xxx | ./xxx | /xxx
-  --- \@<! - eg: \(foo\)\@<!bar  - any "bar" that's not in "foobar"
-  --- \@!  - eg: foo\(bar\)\@!   - any "foo" not followed by "bar"
-  vim.fn.matchadd('Filepath',
-    '\\(\\S\\)\\@<!'   -- 表示前面不能是 (\S) non-whitespace, 意思是只能是 whitespace 或者 ^.
-    .. '[~.]\\{0,1}/'  -- '~/' | './' | '/' 开头
-    .. '\\f\\+'  -- filename 可以用字符. '\+' 表示至少有一个字符.
-    .. '\\(:[0-9]\\+\\)\\{0,2}'  -- ':num:num' | ':num' | '' (空)
-  )
-
-  --- highlight url
-  --- http:// | https://
-  vim.fn.matchadd('URL',
-    '\\<http[s]\\{0,1}://'  -- 'http://' | 'https://' 开头
-    .. '\\f\\+'  -- filename 可以用字符. eg: www.abc.com
-    .. '\\(:[0-9]\\+\\)\\{0,1}' -- port, eg:80
-    .. '[/]\\{0,1}[?]\\{0,1}'  -- /? | ? | ''
-    .. '\\f*\\(&\\f\\+\\)*'  -- '' | foo=bar | foo=fuz&bar=buz...
-  )
+  vim.fn.matchadd('Filepath', file_schema_pattern)
+  vim.fn.matchadd('Filepath', filepath_pattern)
+  vim.fn.matchadd('URL', url_schema_pattern)
 end
 
 --- Jump to file -----------------------------------------------------------------------------------
@@ -78,20 +82,28 @@ local function jump_to_dir(dir)
   vim.cmd('new ' .. dir)
 end
 
---- file://xxxx
-local function parse_file_scheme(content)
-  if string.match(content, '^file://') then
-    local _, e = string.find(content, 'file://')
-    return string.sub(content, e+1)
+--- VVI: 利用了内置的 vimL function `matchadd()` 和 `matchstr()` 的统一性进行 filepath highlight 和分析.
+--- 所以只要是能被 `matchadd()` 正确 highlight 的 filepath 就能被 `matchstr()` 一字不差的分析出来.
+local function matchstr_filepath(content)
+  local m = vim.fn.matchstr(content, file_schema_pattern)
+  if m ~= "" then
+    local _, e = string.find(m, 'file://')
+    return string.sub(m, e+1)
   end
+
+  m = vim.fn.matchstr(content, filepath_pattern)
+  if m ~= "" then
+    return m
+  end
+
   return content
 end
 
 --- split filepath:lnum
 local function parse_filepath(content)
-  content = parse_file_scheme(content)
+  local filepath = matchstr_filepath(content)
 
-  local fp = vim.split(vim.fn.trim(content), ":")
+  local fp = vim.split(vim.fn.trim(filepath), ":")
 
   --- file, lnum, col 都不能为 nil
   local file = fp[1] or ''
