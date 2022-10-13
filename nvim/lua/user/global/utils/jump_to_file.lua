@@ -99,9 +99,14 @@ local function matchstr_filepath(content)
   return content
 end
 
---- split filepath:lnum
-local function parse_filepath(content)
-  local filepath = matchstr_filepath(content)
+--- split filepath:lnum:col
+local function parse_filepath(content, ignore_matchstr)
+  local filepath
+  if ignore_matchstr then  -- 不需要 matchstr
+    filepath = content
+  else
+    filepath = matchstr_filepath(content)
+  end
 
   local fp = vim.split(vim.fn.trim(filepath), ":")
 
@@ -113,8 +118,8 @@ local function parse_filepath(content)
   return file, lnum, col
 end
 
-function Jump_to_file(content)
-  local filepath, lnum, col = parse_filepath(content)
+function Jump_to_file(content, ignore_matchstr)
+  local filepath, lnum, col = parse_filepath(content, ignore_matchstr)
 
   if not filepath or filepath == '' then  -- empty line
     return
@@ -189,7 +194,7 @@ end
 --- VISUAL 选中的 filepath, 不管在什么 filetype 中都跳转
 --- 操作方法: visual select 'filepath:lnum', 然后使用 <S-CR> 跳转到文件.
 vim.keymap.set('v', '<S-CR>',
-  "<C-c>:lua Jump_to_file(Visual_selected())<CR>",
+  "<C-c>:lua Jump_to_file(Visual_selected(), true)<CR>",
   {noremap = true, silent = true, desc = "Jump to file"}
 )
 
