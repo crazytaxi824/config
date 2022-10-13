@@ -60,6 +60,17 @@ local function delete_all_other_buffers()
   end
 end
 
+--- <Home> 快捷键先跳到 '^' first non-blank character of the line, 再跳到 '0' first character of the line.
+function _Home_action_nowrap()
+  local before_pos = vim.fn.getpos('.')
+  vim.cmd('normal! ^')
+
+  local after_pos = vim.fn.getpos('.')
+  if before_pos[2] == after_pos[2] and before_pos[3] == after_pos[3] then
+    vim.cmd('normal! 0')
+  end
+end
+
 --- for Search Highlight --------------------------------------------------------------------------- {{{
 --- 在当前 search result 前放置 search_sign.
 --- {group} as a namespace for {id}, thus two groups can use the same IDs.
@@ -296,13 +307,9 @@ local keymaps = {
   {'n', 'O', 'O<C-c><Down>', opt, "add new line above cursor"},
 
   --- move cursor ----------------------------------------------------------------------------------
-  {'n', '<S-Up>', '6gk', opt, 'which_key_ignore'},
-  {'v', '<S-Up>', '6gk', opt, 'which_key_ignore'},
-  {'i', '<S-Up>', '<C-o>6gk', opt, 'which_key_ignore'},
-  {'n', '<S-Down>', '6gj', opt, 'which_key_ignore'},
-  {'v', '<S-Down>', '6gj', opt, 'which_key_ignore'},
-  {'i', '<S-Down>', '<C-o>6gj', opt, 'which_key_ignore'},
-
+  --- NOTE: <PageUp> / <PageDown> / <Home> / <End> 在 mac 中的默认快捷键是 <fn-Up/Down/Left/Right>,
+  --- 需要在 alacritty 中将 <Command-...> 也设置为 <PageUp> / <PageDown> / <Home> / <End>.
+  --- 这里是模拟 vscode 中 PageUp / PageDown 的行为.
   {'n', '<PageUp>', 'zbH', opt, 'which_key_ignore'},
   {'v', '<PageUp>', 'zbH', opt, 'which_key_ignore'},
   {'i', '<PageUp>', '<C-o>zb<C-o>H', opt, 'which_key_ignore'},
@@ -310,12 +317,36 @@ local keymaps = {
   {'v', '<PageDown>', 'ztL', opt, 'which_key_ignore'},
   {'i', '<PageDown>', '<C-o>zt<C-o>L', opt, 'which_key_ignore'},
 
-  {'n', '<C-Up>', '3<C-y>', opt, 'which_key_ignore'},
-  {'v', '<C-Up>', '3<C-y>', opt, 'which_key_ignore'},
-  {'i', '<C-Up>', '<C-o>3<C-y>', opt, 'which_key_ignore'},
-  {'n', '<C-Down>', '3<C-e>', opt, 'which_key_ignore'},
-  {'v', '<C-Down>', '3<C-e>', opt, 'which_key_ignore'},
-  {'i', '<C-Down>', '<C-o>3<C-e>', opt, 'which_key_ignore'},
+  --- NOTE: vim 中 <S-Up> / <S-Down> 默认和 <PageUp> / <PageDown> 作用相同.
+  {'n', '<S-Up>', '3gk', opt, 'which_key_ignore'},
+  {'v', '<S-Up>', '3gk', opt, 'which_key_ignore'},
+  {'i', '<S-Up>', '<C-o>3gk', opt, 'which_key_ignore'},
+  {'n', '<S-Down>', '3gj', opt, 'which_key_ignore'},
+  {'v', '<S-Down>', '3gj', opt, 'which_key_ignore'},
+  {'i', '<S-Down>', '<C-o>3gj', opt, 'which_key_ignore'},
+
+  --- NOTE: <Ctrl-Up/Down/Left/Right> 被 mac 系统占用, 无法直接使用,
+  --- 需要在 alacritty 中使用 <option-...> 代替.
+  {'n', '<C-Up>', '3<C-y>', opt, 'win: scroll Upwards'},
+  {'v', '<C-Up>', '3<C-y>', opt, 'win: scroll Upwards'},
+  {'i', '<C-Up>', '<C-o>3<C-y>', opt, 'win: scroll Upwards'},
+  {'n', '<C-Down>', '3<C-e>', opt, 'win: scroll Downwards'},
+  {'v', '<C-Down>', '3<C-e>', opt, 'win: scroll Downwards'},
+  {'i', '<C-Down>', '<C-o>3<C-e>', opt, 'win: scroll Downwards'},
+
+  --- NOTE: zh | zl 在 wrap file 中无法使用.
+  --- scroll left/right 用到的机会比较少, 因为大部分情况下不会让 line 超出屏幕宽度.
+  {'n', '<C-S-Left>', '6zh', opt, 'win: scroll left'},
+  {'v', '<C-S-Left>', '6zh', opt, 'win: scroll left'},
+  {'i', '<C-S-Left>', '<C-o>6zh', opt, 'win: scroll left'},  -- 默认在 insert mode 下和 <S-Left> 相同.
+  {'n', '<C-S-Right>', '6zl', opt, 'win: scroll right'},
+  {'v', '<C-S-Right>', '6zl', opt, 'win: scroll right'},
+  {'i', '<C-S-Right>', '<C-o>6zl', opt, 'win: scroll right'},  -- 默认在 insert mode 下和 <S-Right> 相同.
+
+  --- NOTE: <Home> 模拟 vscode 行为; <End> 使用默认行为.
+  {'n', '<Home>', _Home_action_nowrap, opt, 'which_key_ignore'},
+  {'v', '<Home>', _Home_action_nowrap, opt, 'which_key_ignore'},
+  {'i', '<Home>', '<C-o><cmd>lua _Home_action_nowrap()<CR>', opt, 'which_key_ignore'},
 
   {'n', 'G', 'Gzz', opt, 'which_key_ignore'},  -- put last line in center
 

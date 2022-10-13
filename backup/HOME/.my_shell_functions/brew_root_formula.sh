@@ -57,7 +57,7 @@ function checkBrewRootFormula() {
 		# other tools
 		pandoc # 文档格式转换工具, 支持 word, pdf, markdown ... 各种格式
 		ffmpeg
-		youtube-dl
+		yt-dlp # fork youtube-dl
 	)
 
 	# brew list --formula   # 已经安装的所有 formula, 不包括 cask.
