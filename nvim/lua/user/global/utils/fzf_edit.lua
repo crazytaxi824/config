@@ -24,7 +24,7 @@ function FZF_multi_selected(content)
   vim.cmd(cmd)
 
   --- put other files in quickfix_list.
-  vim.fn.setqflist(filepath_list, 'r')  -- 'a' - append; 'r' - replace
+  vim.fn.setqflist(filepath_list, 'r')  -- 'a' - append to quickfix_list; 'r' - replace quickfix_list with new items.
   vim.cmd('copen')
 end
 

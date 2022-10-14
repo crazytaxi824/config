@@ -235,14 +235,17 @@ source $ZSH/oh-my-zsh.sh
 #
 #    fzf 对 stdin 字符串的处理.
 #       {}    代表光标所在行的 string.
-#       {1}   代表按照 --delimiter 分隔后的 str[0], --delimiter 默认是空格.
-#       {2}   代表 str[1].
+#       {1}   代表光标所在行按照 --delimiter 分隔后的 str[0], --delimiter 默认是空格.
+#       {2}   代表光标所在行 str[1].
+#
+#       {-1}     光标所在行 split string 中的最后一个.
+#       {1..3}   光标所在行 str[0:3]
+#       {-4..-2} 光标所在行 split string 中倒数第4个 ~ 倒数第2个. eg: ls -l | fzf --preview="echo user={3} when={-4..-2}; cat {-1}"
+#
 #       {+}   NOTE: 表示多个 <tab> selected item.
 #                   如果没有 selected items 则返回当前行;
 #                   如果有 selected items 则返回 selected items.
-#       {-1}  split string 中的最后一个.
-#       {-4..-2} split string 中倒数第4个 ~ 倒数第2个. eg: ls -l | fzf --preview="echo user={3} when={-4..-2}; cat {-1}"
-#       {+1}  表示多个 <tab> selected item 中的 []str[1]
+#       {+1}  表示多个 <tab> selected item 中的 []str[0]
 #
 #       eg:
 #         `nvim -- {}`  表示 edit 当前行的 file.
@@ -320,7 +323,7 @@ export FZF_COMPLETION_OPTS="--bind='ctrl-e:accept,ctrl-o:accept,ctrl-l:accept'"
 # eg: 'vim **<tab>'; '$ vim src/**<tab>'; '$ cat ~/**<tab>'
 _fzf_compgen_path() {
 	# find "$1" -type f
-	# "$1" 代表输入的前置路径, eg: "cat src/**" 从 src/ 开始搜索.
+	# "$1" 代表输入的前置路径, eg: "cat src/**<tab>" 从 src/ 开始搜索.
 	# "." 表示名字匹配
 	# 使用 FZF_DEFAULT_COMMAND 命令.
 	eval "$FZF_DEFAULT_COMMAND . $1"
