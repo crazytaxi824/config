@@ -8,9 +8,12 @@ export LC_ALL=en_US.UTF-8  # 设置 LC_ALL, 其他 LC_* 强制等于 LC_ALL, 单
 export PATH=/usr/local/sbin:$PATH
 
 # NOTE: testing neovim v8.0
-alias nvim=~/.nvim_0.8/nvim-macos/bin/nvim
-export EDITOR=~/.nvim_0.8/nvim-macos/bin/nvim
-#export EDITOR=nvim  # brew installed neovim v0.7+
+local nvim=~/.nvim_0.8/nvim-macos/bin/nvim  # brew installed neovim is v0.7.2
+alias nvim=$nvim
+# NOTE: $VISUAL is a more capable and interactive preference over $EDITOR
+# The EDITOR editor should be able to work without use of "advanced" terminal functionality.
+# A VISUAL editor could be a full screen editor as vi or emacs.
+export EDITOR=$nvim
 export VISUAL=$EDITOR
 
 # open/edit file
@@ -146,6 +149,7 @@ source $ZSH/oh-my-zsh.sh
 # }}}
 
 # `$(brew --prefix)/opt/fzf/install` - 安装 key bindings 和 fuzzy completion.
+# fuzzy completion 使用默认 **<tab>, 可以使用 export FZF_COMPLETION_TRIGGER 修改.
 # --- [ fzf ] -------------------------------------------------------------------------------------- {{{
 # --- [ fzf fd bat 使用说明 ] ---------------------------------------------------------------------- {{{
 #
@@ -220,7 +224,9 @@ source $ZSH/oh-my-zsh.sh
 #      ctrl-e:abort+execute(nvim -- {})   nvim/vim 编辑文件. 这里将 ctrl-e 绑定了两个命令, 命令间用 + 连接.
 #                                         先 abort 关闭 fzf 窗口, 然后执行 nvim 操作. 否则 fzf 窗口不会自动关闭.
 #      ctrl-o:abort+execute(open {})      打开文件.
-#      ctrl-p:change-preview-window(down,border-top|hidden|)'  #滚动切换 preview-window 展示方式, 注意最后有个 |
+#
+#      btab:change-preview-window(down,border-top|hidden|)'  # <Shift-Tab> 滚动切换 preview-window 展示方式,
+#                                                            # NOTE: 注意最后有个 |
 #
 #    --preview'  展示预览, 默认使用 cat.
 #      可以设置为:
@@ -234,6 +240,10 @@ source $ZSH/oh-my-zsh.sh
 #       {+}   NOTE: 表示多个 <tab> selected item.
 #                   如果没有 selected items 则返回当前行;
 #                   如果有 selected items 则返回 selected items.
+#       {-1}  split string 中的最后一个.
+#       {-4..-2} split string 中倒数第4个 ~ 倒数第2个. eg: ls -l | fzf --preview="echo user={3} when={-4..-2}; cat {-1}"
+#       {+1}  表示多个 <tab> selected item 中的 []str[1]
+#
 #       eg:
 #         `nvim -- {}`  表示 edit 当前行的 file.
 #         `nvim -- {+}` 表示 edit selected file, 如果没有 selected file 则编辑当前行 file.
@@ -244,6 +254,7 @@ source $ZSH/oh-my-zsh.sh
 # }}}
 
 FZF_DEFAULT_COMMAND="fd --color=always --follow --hidden --no-ignore"  # fd 命令
+FZF_DEFAULT_COMMAND="$FZF_DEFAULT_COMMAND --type=file --type=symlink"  # filetype: file | symlink | directory | executable
 FZF_DEFAULT_COMMAND="$FZF_DEFAULT_COMMAND -E='.DS_Store' -E='.git' -E='*.swp'"  # skip 指定文件(夹)
 FZF_DEFAULT_COMMAND="$FZF_DEFAULT_COMMAND -E='**/.*/**'"  # 显示所有隐藏文件夹, 但 skip 隐藏文件夹中的文件
 FZF_DEFAULT_COMMAND="$FZF_DEFAULT_COMMAND -E='**/node_modules/**' -E='**/coverage/**'"  # 指定显示某些文件夹, 但 skip 文件夹中的文件
@@ -262,17 +273,18 @@ FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --preview='([[ -d {} ]] && (tree -NC -L 3 {}
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --preview-window='right,60%,border-left'"
 # 以下是定义 fzf 快捷键作用
 # [XXX] Vim: Warning: Output not to a terminal. 解决方法: `vim/nvim file > /dev/tty`
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-e:abort+execute($EDITOR -- {+} > /dev/tty),ctrl-o:abort+execute(open {}),ctrl-a:select-all'"
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-l:change-preview-window(top,70%,border-bottom|hidden|)'" # change layout
+FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-e:abort+execute($EDITOR -- {} > /dev/tty),ctrl-o:abort+execute(open {}),ctrl-a:toggle-all'"
+FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='btab:change-preview-window(top,70%,border-bottom|hidden|)'" # change layout, btab=<Shift-Tab>
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='shift-up:half-page-up,shift-down:half-page-down'"  # result scroll
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='pgup:preview-half-page-up,pgdn:preview-half-page-down'"  # preview scroll
+FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-l:abort+execute($EDITOR \"+lua FZF_multi_selected([[{+}]])\" > /dev/tty)'"  # NOTE: use nvim Lua function to cache filepahts into quickfix
 export FZF_DEFAULT_OPTS
 
 # --------------------------------------------------------------------------------------------------
 # NOTE: 需要先使用 '$(brew --prefix)/opt/fzf/install' 安装 key bindings 和 fuzzy completion.
 # --------------------------------------------------------------------------------------------------
 # Ctrl+T 快捷键 command 设置, 这里通过 --type=d 指定只显示 dir
-FZF_CTRL_T_COMMAND="fd --type=d --follow --no-ignore --hidden --color=always"  # fd 命令, 这里通过 --type=d 指定只显示 dir
+FZF_CTRL_T_COMMAND="fd --type=directory --follow --no-ignore --hidden --color=always"  # fd 命令, 这里通过 --type 指定只显示 dir
 FZF_CTRL_T_COMMAND="$FZF_CTRL_T_COMMAND -E='.git'"  # skip 指定文件夹.
 FZF_CTRL_T_COMMAND="$FZF_CTRL_T_COMMAND -E='**/.*/**'"  # 显示所有隐藏文件夹, 但 skip 隐藏文件夹中的文件
 FZF_CTRL_T_COMMAND="$FZF_CTRL_T_COMMAND -E='**/node_modules/**' -E='**/coverage/**'"  # 指定显示某些文件夹, 但 skip 文件夹中的文件
@@ -282,12 +294,13 @@ export FZF_CTRL_T_COMMAND
 #export FZF_CTRL_T_COMMAND='find . -type f'  # 默认值, 'find' 是内置命令行工具, 可使用 'find .' 显示隐藏文件.
 
 # Ctrl+T 快捷键 options 设置. 这里会继承 default 设置, 只需要覆盖设置.
-# export FZF_CTRL_T_OPTS="--bind='ctrl-e:abort+execute($EDITOR -- {} > /dev/tty)'"
+# Ctrl+T 强制 --multi 多选.
+export FZF_CTRL_T_OPTS="--bind='ctrl-e:abort+execute(open {}),ctrl-o:abort+execute(open {}),ctrl-l:abort'"
 
 # Ctrl+R 快捷键 options 设置, Ctrl+R 不能设置 Command.
 # 这里会继承 default 设置, 只需要覆盖设置. default 中 --bind ctrl-e, ctrl-o 会导致编辑报错.
-# NOTE: 使用 --no-multi 禁止 <tab> multi select.
-export FZF_CTRL_R_OPTS="--no-multi --height=24 --preview-window=hidden --bind='ctrl-e:accept,ctrl-o:accept'"
+# CTRL+R 强制 --no-multi 禁止 <tab> multi select.
+export FZF_CTRL_R_OPTS="--height=24 --preview-window=hidden --bind='ctrl-e:accept,ctrl-o:accept,ctrl-l:abort'"
 
 # fzf auto completion 的设置 -----------------------------------------------------------------------
 # NOTE: fzf 的 auto completion 是智能触发的. 使用不同的前置命令会得到不同的结果.
@@ -432,7 +445,7 @@ function Rg() {
 	fzf --delimiter=':' \
 		--preview "bat --color=always --style=numbers --highlight-line={2} {1}" \
 		--preview-window '+{2}/2' \
-		--bind "ctrl-e:abort+execute($EDITOR '+call cursor({2},{3})' -- {1})" \
+		--bind "ctrl-e:abort+execute($EDITOR '+call cursor({2},{3})' -- {1} > /dev/tty)" \
 		--bind "ctrl-o:abort+execute(open {1})"
 }
 
