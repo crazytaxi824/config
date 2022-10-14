@@ -48,12 +48,12 @@ telescope.setup {
     --- `:help telescope.defaults.mappings`         - 默认 key mapping 也能使用
     --- `:help telescope.defaults.default_mappings` - 只使用自定义 key mapping
     --- https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/mappings.lua
+    --- https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/actions/init.lua
     mappings = {
       i = {
         --["<C-c>"] = actions.close,
         ["<C-n>"] = actions.cycle_history_next,  -- next 已输入过的搜索内容
         ["<C-p>"] = actions.cycle_history_prev,  -- prev 已输入过的搜索内容
-        ["<C-l>"] = actions_layout.cycle_layout_next,  -- layout window
 
         ["<Down>"] = actions.move_selection_next,
         ["<Up>"] = actions.move_selection_previous,
@@ -61,7 +61,7 @@ telescope.setup {
         ["<CR>"] = actions.select_default,
         ["<C-x>"] = actions.select_horizontal,
         ["<C-v>"] = actions.select_vertical,
-        --["<C-t>"] = actions.select_tab,
+        --["<C-t>"] = actions.select_tab,  -- open file in new tab.
 
         ["<C-u>"] = false,  -- NOTE: 为了在 insert 模式下使用 <C-u> 清空 input, 不能使用 nil.
         ["<C-d>"] = false,
@@ -74,20 +74,22 @@ telescope.setup {
         --- next 移动到下一个结果; worse 移动到搜索排序的下一个结果.
         --- worse 会根据 sorting_strategy = "ascending" / "descending" 改变方向, 而 next 不会.
         ["<Tab>"] = actions.toggle_selection + actions.move_selection_next,
-        ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_previous,
+        ["<S-Tab>"] = actions_layout.cycle_layout_next,  -- layout window
+        --["<S-Tab>"] = actions.toggle_selection + actions.move_selection_previous,
         --["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
         --["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
 
+        --- NOTE: put all <tab> selected files to quickfix list.
+        ["<C-l>"] = actions.send_selected_to_qflist + actions.open_qflist,
+        --["<C-l>"] = actions.complete_tag,
         --["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
         --["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
-        --["<C-l>"] = actions.complete_tag,
 
         ["<C-_>"] = actions.which_key, -- key help, <C-/> not working
       },
 
       n = {
         ["<ESC>"] = actions.close,
-        ["<C-l>"] = actions_layout.cycle_layout_next,  -- layout window
 
         ["<Down>"] = actions.move_selection_next,
         ["<Up>"] = actions.move_selection_previous,
@@ -98,7 +100,7 @@ telescope.setup {
         ["<CR>"] = actions.select_default,
         ["<C-x>"] = actions.select_horizontal,
         ["<C-v>"] = actions.select_vertical,
-        -- ["<C-t>"] = actions.select_tab,
+        --["<C-t>"] = actions.select_tab,
 
         ["<C-u>"] = false,  -- NOTE: 为了配合上面 i 的设置.
         ["<C-d>"] = false,
@@ -108,9 +110,10 @@ telescope.setup {
         ["<S-Down>"] = actions.results_scrolling_down,
 
         ["<Tab>"] = actions.toggle_selection + actions.move_selection_next,
-        ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_previous,
-        --["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
-        --["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
+        ["<S-Tab>"] = actions_layout.cycle_layout_next,  -- layout window
+
+        --- NOTE: put all <tab> selected files to quickfix list.
+        ["<C-l>"] = actions.send_selected_to_qflist + actions.open_qflist,
         --["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
         --["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
 
@@ -130,6 +133,7 @@ telescope.setup {
       -- -- }}}
       --theme = "dropdown",
       find_command = {"fd", "--follow",
+        "--type=file", "--type=symlink",
         -- NOTE: 这里不搜索隐藏文件, 也不显示被 .gitignore 忽略的文件
         -- "--hidden", "--no-ignore", "-E=.DS_Store", "-E=.git", "-E=**/.*/**",
         "-E=**/node_modules/**", "-E=*.swp", "-E=**/vendor/**",
