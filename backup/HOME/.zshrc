@@ -442,6 +442,8 @@ function Rg() {
 
 # the followings are core shell script functions, to make sure this `zshrc` working properly.
 # do not move these functions to other places!!!
+# NOTE: 本文件和 source 文件函数中的 for loop 变量必须先使用 local 定义,
+# 否则在函数执行后变量会变成 global variable.
 # --- [core shell script functions] ---------------------------------------------------------------- {{{
 
 # 设置 'vimExistFile -- [filepath]' 命令, 不打开不存在的文件 ------------------- {{{
@@ -459,6 +461,7 @@ function vimExistFile() {
 	local notexistmark=0     # 1 = 有不存在的文件; 0 = 文件都存在
 
 	# 遍历所有 args 查看是否有 '--', 如果有则将 '--' 后面不存在的文件存入 notexistfiles.
+	local arg  # 防止 for 循环中的变量变成 global variable.
 	for arg in $@
 	do
 		if (( $dashdash )) && [[ ! -f $arg ]] && [[ ! -d $arg ]]; then
@@ -489,13 +492,14 @@ function openFileOrUrl() {
 	# `2>/dev/null` 不打印 error msg
 	# `echo $?` 返回上一个命令的 exitcode
 
+	local file
 	for file in $@
 	do
-		echo $file
+		# echo $file
 		local exitcode=$(open $file 2>/dev/null; echo $?)
 
 		if (( $exitcode != 0 )); then
-			open -u "https://$file"
+			open -u "https://$file"  # TODO: "http://"
 		fi
 	done
 
@@ -521,6 +525,7 @@ function backupConfigFiles() {
 	local backupFoldersExist=true
 
 	# for 循环
+	local backup_folder
 	for backup_folder in $backup_folder_list
 	do
 		# 判断备份文件夹是否存在
@@ -597,6 +602,7 @@ function restoreConfigFiles() {
 	local restoreFolderExists=true
 
 	# for 循环
+	local restore_folder
 	for restore_folder in $restore_folder_list
 	do
 		# 判断 Restore 文件夹是否存在
@@ -616,8 +622,11 @@ function restoreConfigFiles() {
 	# ask before restore all the config files!
 	# echo -n 最后不换行
 	echo -n "\e[33mThis action will overwrite all config files. Restore All Config Files? [Yes/no]:\e[0m "
+
+	# read 用户 input (y/n ...) 到变量 restore
+	local restore
 	read restore
-	# echo $restore  # 打印 input
+	#echo $restore  # 打印 input
 
 	case $restore in
 		"yes"|"Yes")
@@ -708,9 +717,6 @@ alias packages="zsh ~/.my_shell_functions/packages.sh"
 alias checkBrewRootFormula="zsh ~/.my_shell_functions/brew_root_formula.sh"
 # 检查 brew dependency 属于哪个包
 alias checkBrewDependency="zsh ~/.my_shell_functions/brew_dep_check.sh"
-
-# cleanup vim undofiles
-# alias cleanVimUndoFiles="zsh ~/.my_shell_functions/clean_vim_undofiles.sh"
 
 # my test functions
 source ~/.my_shell_functions/zshrc_custom_functions

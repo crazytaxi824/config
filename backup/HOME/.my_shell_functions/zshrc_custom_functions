@@ -49,6 +49,9 @@ function testArg() {
 
 	echo "length of args:" ${#*[@]}  # args 数量, 意思是 $* array 的数量.
 
+	# NOTE: 防止 k v 变成 global variables
+	local k v
+
 	# 当 $* 和 $@ 不被双引号" "包围时, 它们之间没有任何区别. 都是以 `\n` 来分隔.
 	echo 'for loop $*, no quotes:'
 	for v in $*
@@ -138,9 +141,16 @@ function testInput() {
 function testForLoop() {
 	local list=(~/Desktop ~/Desktop/md)  # 这里不能使用 "", 否则无法解析 ~ 路径
 
+	local i
 	for i in $list
 	do
 		ls $i
+	done
+
+	local j
+	for (( j=0; j<3 ; j++ ))
+	do
+		echo $j
 	done
 }
 
@@ -203,6 +213,7 @@ function testSplitString() {
 	# print whole list
 	echo "after split:" ${parts[@]}
 
+	local elem
 	for elem in ${parts[@]}
 	do
 		echo "for range parts:" $elem
