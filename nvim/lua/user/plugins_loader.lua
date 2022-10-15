@@ -418,7 +418,7 @@ return packer.startup(function(use)
 
   --- null-ls 插件 formatters && linters, depends on "nvim-lua/plenary.nvim"
   use {"jose-elias-alvarez/null-ls.nvim",
-    commit = "c862432",
+    commit = "643c67a",  -- "c862432",
     config = function() require("user.lsp.null_ls") end,
     opt = true,  -- 在 vim.schedule() 中 lazy load
     after = "mason.nvim",  -- 需要 mason 安装的 lsp cmd tool
