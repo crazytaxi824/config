@@ -32,6 +32,8 @@ comment.setup {
   -- end,
   -- -- }}}
 
+  --post_hook = function(ctx)
+
   --- 禁用默认 key mapping
   mappings = {
     --- Operator-pending mapping
@@ -41,9 +43,6 @@ comment.setup {
     --- Extra mapping
     --- Includes `gco`, `gcO`, `gcA`
     extra = false,
-    --- Extended mapping
-    --- Includes `g>`, `g<`, `g>[count]{motion}` and `g<[count]{motion}`
-    extended = false,
   },
 }
 
