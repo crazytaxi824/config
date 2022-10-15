@@ -446,7 +446,7 @@ return packer.startup(function(use)
 
   --- statusline decorator, `:help 'statusline'`
   use {"nvim-lualine/lualine.nvim",   -- bottom status line
-    commit = "a52f078",
+    commit = "edca2b0",
     config = function() require("user.plugin_settings.decor_lualine") end,
     opt = true,  -- 在 vim.schedule() 中 lazy load
   }
