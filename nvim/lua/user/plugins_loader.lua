@@ -340,7 +340,7 @@ return packer.startup(function(use)
   --- 只有 "cmp-nvim-lsp" 不需要在 "nvim-cmp" 之后加载,
   --- 其他 module 插件都需要在 "nvim-cmp" 加载之后再加载, 否则报错.
   use {"hrsh7th/cmp-nvim-lsp",  -- LSP source for nvim-cmp
-    commit = "affe808",
+    commit = "389f06d",
   }
 
   use {"hrsh7th/cmp-buffer",  -- 当前 buffer 中有的 word
@@ -349,7 +349,7 @@ return packer.startup(function(use)
   }
 
   use {"hrsh7th/cmp-path",  -- filepath 补全
-    commit = "447c87c",
+    commit = "91ff86c",
     after = "nvim-cmp",
   }
 

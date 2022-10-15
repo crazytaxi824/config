@@ -45,7 +45,7 @@ if not status_ok then
   }, 'INFO')
   M.capabilities = capabilities
 else
-  M.capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
+  M.capabilities = cmp_nvim_lsp.default_capabilities()
 end
 
 --- https://github.com/neovim/nvim-lspconfig/wiki/Project-local-settings
