@@ -666,10 +666,24 @@ function restoreConfigFiles() {
 			# 检查 ~/.gitconfig 是否存在.
 			if [[ ! -f ~/.gitconfig ]]; then
 				cp $backup_folder/gitconfig_needs_setup ~/
+				# NOTE: 需要手动设置 ~/.gitconfig 文件.
 				echo -e "\e[35m!!! please SETUP restored file '~/gitconfig_needs_setup' !!!\e[0m"
 			fi
 
 			echo -e "\e[32mRestore all Done! Happy Coding!\e[0m"
+
+			# check zsh tools installation
+			echo -n "\e[33mcheck zsh tools installation? [Yes/no]:\e[0m "
+			local check_tools
+			read check_tools
+			case $check_tools in
+				"y"|"yes"|"Yes")
+					checkZshTools
+					;;
+				*)
+					echo "check zsh tools Canceled!"
+			esac
+			
 			;;
 		*)
 			echo -e "\e[31mRestore Canceled!\e[0m"
