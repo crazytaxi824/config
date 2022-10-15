@@ -133,7 +133,7 @@ telescope.setup {
       -- -- }}}
       --theme = "dropdown",
       find_command = {"fd", "--follow",
-        "--type=file", "--type=symlink",
+        "--type=file", "--type=symlink",  -- 不显示 directory | executable.
         -- NOTE: 这里不搜索隐藏文件, 也不显示被 .gitignore 忽略的文件
         -- "--hidden", "--no-ignore", "-E=.DS_Store", "-E=.git", "-E=**/.*/**",
         "-E=**/node_modules/**", "-E=*.swp", "-E=**/vendor/**",
