@@ -387,7 +387,7 @@ return packer.startup(function(use)
 
   --- 自动括号, 同时依赖 treesitter && cmp
   use {"windwp/nvim-autopairs",
-    commit = "14cc2a4",
+    commit = "4fc96c8",  -- "14cc2a4",
     config = function() require("user.plugin_settings.autopairs") end,
     after = {
       "nvim-treesitter",  -- setup() 中 `check_ts`, `ts_config` 需要 treesitter 支持.
