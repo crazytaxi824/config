@@ -433,7 +433,7 @@ return packer.startup(function(use)
   use {"kyazdani42/nvim-tree.lua",      -- 类似 NerdTree
     commit = "43fd138",
     config = function() require("user.plugin_settings.file_tree") end,
-    opt = true,
+    --opt = true,  -- NOTE: 不推荐使用 lazyload, 会导致 `$ nvim dir` 直接打开文件夹的时候出现问题.
   }
 
   --- Buffer & Status Line -------------------------------------------------------------------------

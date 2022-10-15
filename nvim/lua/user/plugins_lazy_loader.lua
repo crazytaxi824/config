@@ -19,7 +19,8 @@ vim.api.nvim_create_autocmd("BufEnter", {
       require('packer').loader('null-ls.nvim')  -- null-ls 和 lspconfig 没有依赖关系.
 
       --- Appearance
-      require('packer').loader('nvim-tree.lua')
+      --require('packer').loader('nvim-tree.lua')  -- NOTE: 不推荐使用 lazyload,
+                                                   -- 会导致 `$ nvim dir` 直接打开文件夹的时候出现问题.
       require('packer').loader('lualine.nvim')
       require('packer').loader('bufferline.nvim')  -- NOTE: 需要先设置 showtabline=2 (always show tabline),
                                                    -- 否则在加载 bufferline 后屏幕会向下移动一行.
