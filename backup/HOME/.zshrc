@@ -656,14 +656,18 @@ function restoreConfigFiles() {
 		"yes"|"Yes")
 			# .zshrc .my_shell_functions/ .oh-my-zsh/custom/themes/ .tmux.conf .ssh/config .gitignore_global ...
 			cp -r $backup_folder/HOME/ ~/
-			# NOTE: restore 之后需要设置 ~/.gitconfig 文件.
-			echo -e "\e[35m!!! please SETUP restored file '~/gitconfig_needs_setup' !!!\e[0m"
 
 			# lazygit ~/Library/Application Support/lazygit/config.yml
 			cp $backup_folder/lazygit/config.yml ~/Library/Application\ Support/lazygit/
 
 			# vscode settings.json keybindings.json & snippets
 			cp -r $backup_folder/vscode/ ~/Library/Application\ Support/Code/User/
+
+			# 检查 ~/.gitconfig 是否存在.
+			if [[ ! -f ~/.gitconfig ]]; then
+				cp $backup_folder/gitconfig_needs_setup ~/
+				echo -e "\e[35m!!! please SETUP restored file '~/gitconfig_needs_setup' !!!\e[0m"
+			fi
 
 			echo -e "\e[32mRestore all Done! Happy Coding!\e[0m"
 			;;
@@ -708,9 +712,8 @@ function checkZshTools() {
 	[ -x $brew_path/tree ] && echo -e "\e[32m - tree ✔\e[0m" || echo -e "\e[31m - tree ✗, 'brew info tree'\e[0m"
 	printf "\n"
 
+	# NOTE: 如果 brew install neovim, 会安装依赖: gettext, libtermkey, libuv, luajit, luv, msgpack, tree-sitter, unibilium
 	echo -e "\e[32mcheck nvim environment:\e[0m"
-	# 如果 brew install neovim, 会安装依赖: gettext, libtermkey, libuv, luajit, luv, msgpack, tree-sitter, unibilium
-	# node & python3 是 neovim 某些 plugin 的依赖. NOTE: python3 有可能需要 v3.9.x 版本
 	[ -x $brew_path/nvim ] && echo -e "\e[32m - nvim ✔\e[0m" || echo -e "\e[31m - nvim ✗, 'brew info nvim'\e[0m"
 	[ -x $brew_path/node ] && echo -e "\e[32m - node ✔\e[0m" || echo -e "\e[31m - node ✗, 'brew info node'\e[0m"
 	[ -x $brew_path/python3 ] && echo -e "\e[32m - python3 ✔\e[0m" || echo -e "\e[31m - python3 ✗, 'brew info python3'\e[0m"
