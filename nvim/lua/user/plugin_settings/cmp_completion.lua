@@ -81,6 +81,9 @@ cmp.setup {
 
   --- completion 菜单显示
   formatting = {
+    --- show the `~` expandable indicator in cmp's floating window. eg: 'fmtp~  [snip]'
+    expandable_indicator = true,
+
     --- abbr: suggestion
     --- kind: function, method, module...
     --- menu: [LSP], [Buffer]...
