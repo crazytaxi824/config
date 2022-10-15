@@ -247,6 +247,8 @@ source $ZSH/oh-my-zsh.sh
 #                   如果有 selected items 则返回 selected items.
 #       {+1}  表示多个 <tab> selected item 中的 []str[0]
 #
+#       {+f}  创建一个临时文件, 然后将多选 items 写入其中. 可用其他程序读取该文件.
+#
 #       eg:
 #         `nvim -- {}`  表示 edit 当前行的 file.
 #         `nvim -- {+}` 表示 edit selected file, 如果没有 selected file 则编辑当前行 file.
@@ -282,9 +284,9 @@ FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='pgup:preview-half-page-up,pgdn:previ
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-a:toggle-all'"  # multi-select
 # NOTE: Vim: Warning: Output not to a terminal. 解决方法: `vim/nvim file > /dev/tty`
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-e:abort+execute($EDITOR -- {} > /dev/tty)'"  # nvim edit 光标所在行 file.
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-o:abort+execute(open {})'"  # system open
-# NOTE: 将多选列表传入 nvim 函数 FZF_multi_selected() 中. 在 nvim 中处理多选文件, 包括 rg 传入的 lnum, col ...
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-l:abort+execute($EDITOR \"+lua FZF_multi_selected([[{+}]])\" > /dev/tty)'"
+FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-o:abort+execute(open {})'"  # system open 光标所在行 file.
+# NOTE: 将储存多选列表的临时文件 {+f} 传入 nvim 函数 FZF_selected() 中. 在 nvim 中处理文件名, 包括 rg 传入的 lnum, col ...
+FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-l:abort+execute($EDITOR \"+lua FZF_selected([[{+f}]])\" > /dev/tty)'"
 export FZF_DEFAULT_OPTS
 
 # --------------------------------------------------------------------------------------------------
@@ -301,7 +303,7 @@ export FZF_CTRL_T_COMMAND
 
 # Ctrl+T 快捷键 options 设置. 这里会继承 default 设置, 只需要覆盖设置.
 # Ctrl+T 强制 --multi 多选.
-export FZF_CTRL_T_OPTS="--bind='ctrl-e:abort+execute(open {}),ctrl-o:abort+execute(open {}),ctrl-l:accept'"
+export FZF_CTRL_T_OPTS="--bind='ctrl-l:accept'"
 
 # Ctrl+R 快捷键 options 设置, Ctrl+R 不能设置 Command.
 # 这里会继承 default 设置, 只需要覆盖设置. default 中 --bind ctrl-e, ctrl-o 会导致编辑报错.
@@ -454,8 +456,8 @@ function Rg() {
 		--preview-window '+{2}/2' \
 		--bind "ctrl-e:abort+execute($EDITOR '+call cursor({2},{3})' -- {1} > /dev/tty)" \
 		--bind "ctrl-o:abort+execute(open {1})"
-		# NOTE: 将多选列表传入 nvim 函数 FZF_multi_selected() 中. 在 nvim 中处理多选文件, 包括 rg 传入的 lnum, col ...
-		#--bind="ctrl-l:abort+execute($EDITOR \"+lua FZF_multi_selected([[{+}]])\" > /dev/tty)"
+		# NOTE: 将储存多选列表的临时文件 {+f} 传入 nvim 函数 FZF_selected() 中. 在 nvim 中处理文件名, 包括 rg 传入的 lnum, col ...
+		#--bind="ctrl-l:abort+execute($EDITOR \"+lua FZF_selected([[{+f}]])\" > /dev/tty)"
 }
 
 # }}}
