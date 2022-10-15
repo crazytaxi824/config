@@ -373,7 +373,7 @@ return packer.startup(function(use)
     requires = {
       {
         "rafamadriz/friendly-snippets",  -- snippets content, 自定义 snippets 可以借鉴这个结构.
-        commit = "2be79d8",
+        commit = "fd16b4d",
         after = "LuaSnip",
       },
     },
