@@ -264,7 +264,7 @@ return packer.startup(function(use)
   --- `:TSUpdateSync`         -- Update the installed languages synchronously
   -- -- }}}
   use {"nvim-treesitter/nvim-treesitter",
-    commit = "9bfaf62e",  -- BUG: foldmethod error with tab indent.
+    commit = "1da61c99",  -- BUG: foldmethod error with tab indent.
     run = ":TSUpdate",  -- Post-update/install hook.
     config = function() require("user.plugin_settings.treesitter") end,
     opt = true,  -- 在 vim.schedule() 中 lazy load
