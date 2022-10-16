@@ -4,9 +4,7 @@
 -- `:checkhealth`                    | (*) 检查 nvim 环境               | neovim
 -------------------------------------+----------------------------------+------------------------------------
 -- `:PackerClean`                    | Remove disabled/unused plugins.  | "wbthomason/packer.nvim"
--- `:PackerCompile`                  | Regenerate compiled loader file. |
--- `:PackerInstall`                  | Clean, Install missing plugins.  |
--- `:PackerUpdate`                   | Clean, Update, Install plugins.  |
+-- `:PackerCompile`                  | 每次修改 packer.startup() 设置都需要重新运行 PackerCompile 否则修改不生效.
 -- `:PackerSync`                     | :PackerUpdate, Compile plugins.  | *
 -- `:PackerSnapshot foo`             | 拍摄快照记录 plugins 版本        |
 -------------------------------------+----------------------------------+------------------------------------
@@ -14,9 +12,12 @@
 -------------------------------------+----------------------------------+------------------------------------
 -- `:Mason`                          | lsp servers 安装辅助工具         | "williamboman/mason.nvim"
 -------------------------------------+----------------------------------+------------------------------------
--- `:TSInstallInfo`, `:TSUpdate`     | treesitter 安装列表.             | "nvim-treesitter/nvim-treesitter"
+-- `:TSInstallInfo`                  | treesitter 安装列表.             | "nvim-treesitter/nvim-treesitter"
+-- `:TSUpdate`                       | treesitter 安装/更新.            |
+-- `:TSModuleInfo`                   | treesitter 模块当前状态.         |
 -------------------------------------+----------------------------------+------------------------------------
 -- `:TSHighlightCapturesUnderCursor` | 查看当前 word treesitter 颜色.   | "nvim-treesitter/playground"
+-- `:TSPlaygroundToggle`             | treesitter 解析整个文件的信息.   |
 -------------------------------------+----------------------------------+------------------------------------
 -- `:Notifications`                  | 查看 notify msg 列表             | "rcarriga/nvim-notify"
 -------------------------------------+----------------------------------+------------------------------------
