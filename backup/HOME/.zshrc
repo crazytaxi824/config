@@ -20,6 +20,8 @@ export VISUAL=$EDITOR
 alias o="openFileOrUrl"     # open file/url, openFileOrUrl() 函数定义在下面.
 alias e="vimExistFile --"   # edit file, vimExistFile() 函数定义在下面.
 
+alias rm="rm -i"  # prompt every time when rm file/dir.
+
 # --- [golang setting] ----------------------------------------------------------------------------- {{{
 # `go env` 查看
 #export GOROOT=/usr/local/go
