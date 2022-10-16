@@ -20,6 +20,39 @@ export VISUAL=$EDITOR
 alias o="openFileOrUrl"     # open file/url, openFileOrUrl() 函数定义在下面.
 alias e="vimExistFile --"   # edit file, vimExistFile() 函数定义在下面.
 
+# delete file/dir
+alias rm="rm -i"  # prompt every time when rm file/dir.
+# trash file/dir to ~/.Trash/ -------------------------------------------------- {{{
+function trash() {
+	# check file existence in '~/.Trash/'
+	# if file exists then using unix timestamp nano.
+	local trash_dir=~/.Trash/
+
+	# get time_now unix timestamp
+	local now_unix=$(date +%s)
+
+	local filepath  # 防止 for 循环中的变量变成 global variable.
+	for filepath in $@
+	do
+		# filepath_tail only, without path. could be filename.ext OR dir name.
+		local filepath_tail=$(basename $filepath)
+
+		if [[ -f "$trash_dir$filepath_tail" ]]; then
+			# 如果是移动文件, 且文件名在 ~/.Trash/ 中存在.
+			local fname="${filepath_tail%.*}"  # fname only, without ext
+			local ext="${filepath_tail##*.}"   # ext only
+			mv $filepath $trash_dir$fname-$now_unix.$ext  # mv filepath ~/.Trash/fname-timestamp.ext
+		elif [[ -d "$trash_dir$filepath_tail" ]]; then
+			# 如果是移动文件夹, 且文件夹名在 ~/.Trash/ 中存在.
+			mv $filepath $trash_dir$filepath_tail-$now_unix  # mv filepath ~/.Trash/dir-timestamp
+		else
+			# 如果文件/文件夹名在 ~/.Trash/ 中不存在, 则直接移动.
+			mv $filepath $trash_dir  # mv filepath ~/.Trash/
+		fi
+	done
+}
+# }}}
+
 # --- [golang setting] ----------------------------------------------------------------------------- {{{
 # `go env` 查看
 #export GOROOT=/usr/local/go
@@ -683,7 +716,7 @@ function restoreConfigFiles() {
 				*)
 					echo "check zsh tools Canceled!"
 			esac
-			
+
 			;;
 		*)
 			echo -e "\e[31mRestore Canceled!\e[0m"
