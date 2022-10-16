@@ -21,14 +21,18 @@ alias o="openFileOrUrl"     # open file/url, openFileOrUrl() 函数定义在下�
 alias e="vimExistFile --"   # edit file, vimExistFile() 函数定义在下面.
 
 # delete file/dir
-alias rm="rm -i"  # prompt every time when rm file/dir.
+#alias rm="rm -i"  # prompt every time when 'rm file/dir'
+alias rm="echo '\e[33muse \"trash\" instead\e[0m'; #ignore_rest_cmd"  # stop using 'rm'
 # trash file/dir to ~/.Trash/ -------------------------------------------------- {{{
 function trash() {
-	# check file existence in '~/.Trash/'
-	# if file exists then using unix timestamp nano.
 	local trash_dir=~/.Trash/
+	# NOTE: linux DO NOT have "~/.Trash/" dir
+	if [[ ! -d $trash_dir ]]; then
+		echo -e "\e[1;31m$trash_dir is NOT exist.\e[0m"
+		return
+	fi
 
-	# get time_now unix timestamp
+	# get time_now unix timestamp (second)
 	local now_unix=$(date +%s)
 
 	local filepath  # 防止 for 循环中的变量变成 global variable.
@@ -37,6 +41,7 @@ function trash() {
 		# filepath_tail only, without path. could be filename.ext OR dir name.
 		local filepath_tail=$(basename $filepath)
 
+		# check file/dir existence in '~/.Trash/', if file/dir exists then using unix timestamp.
 		if [[ -f "$trash_dir$filepath_tail" ]]; then
 			# 如果是移动文件, 且文件名在 ~/.Trash/ 中存在.
 			local fname="${filepath_tail%.*}"  # fname only, without ext
