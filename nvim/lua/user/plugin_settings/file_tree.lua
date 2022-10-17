@@ -218,7 +218,8 @@ local nt_buffer_keymaps = {
   { key = "<C-v>",         action = "vsplit" },  -- vsplit edit
   { key = "<C-x>",         action = "split" },
   { key = "a",             action = "create" },
-  { key = {"d", "D"},      action = "remove" },
+  { key = "d",             action = "remove" },
+  { key = "D",             action = "trash" },  -- NOTE: 需要在 setup() 中设置 'trash.cmd'
   { key = "R",             action = "rename" },  -- 类似 `$ mv foo bar`
   { key = "r",             action = "refresh" },
   { key = "y",             action = "copy_absolute_path" },

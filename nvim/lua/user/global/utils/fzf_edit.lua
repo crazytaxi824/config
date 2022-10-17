@@ -1,16 +1,26 @@
 function FZF_selected(fzf_tmp_file)
-  local fzf_contents = vim.fn.readfile(fzf_tmp_file)
+  --- 获取文件内容, readfile() 会按照 '\n' 返回一个 list.
+  local fzf_lines = vim.fn.readfile(fzf_tmp_file)
 
   local fp_qf_list = {}
-  for _, content in ipairs(fzf_contents) do
-    content = vim.fn.trim(content)
-    if content ~= '' then
-      local fp_lnum_col = vim.split(content, ":")
+  for _, line in ipairs(fzf_lines) do
+    line = vim.fn.trim(line)
+    if line ~= '' then
+      --- 按照 "filepath:lnum:col:content" split line.
+      local fp_line_split = vim.split(line, ":")
+
+      --- concat content 内容, 如果 content 中本身含有 ':'
+      local text = {}
+      for i = 4, #fp_line_split, 1 do
+        table.insert(text, fp_line_split[i])
+      end
+
+      --- insert quickfix_list item
       local fp_qf_item = {
-        filename = fp_lnum_col[1],
-        lnum = fp_lnum_col[2] or '1',
-        col  = fp_lnum_col[3] or '1',
-        text = fp_lnum_col[4] or '',
+        filename = fp_line_split[1],
+        lnum = fp_line_split[2] or '1',
+        col  = fp_line_split[3] or '1',
+        text = table.concat(text, ":"),
       }
       table.insert(fp_qf_list, fp_qf_item)
     end
