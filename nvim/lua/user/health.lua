@@ -8,6 +8,7 @@ M.check = function()
 
   health.report_info("check HACK function required modules.\n mostly rewrite plugins' internal functions.")
 
+  --- HACK 中用到的 modules, 大多 overwrite 源代码.
   local require_list = {
     "bufferline.state",
     "nvim-tree.renderer.components.git",
