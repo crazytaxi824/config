@@ -138,7 +138,7 @@ vim.cmd('hi FoldColumn cterm=bold ctermfg=42 ctermbg=NONE')
 
 --- 其他常用颜色 -----------------------------------------------------------------------------------
 vim.cmd('hi Title cterm=bold ctermfg=114')     -- markdown Title
-vim.cmd('hi Conceal ctermfg=81 ctermbg=None')  -- markdown 特殊符号颜色
+vim.cmd('hi Conceal ctermfg=246 ctermbg=None') -- markdown 特殊符号颜色
 vim.cmd('hi Label ctermfg=81')                 -- json key color
 
 --- diagnostics 颜色设置 ---------------------------------------------------------------------------
