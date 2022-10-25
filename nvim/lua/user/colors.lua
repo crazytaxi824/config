@@ -56,6 +56,10 @@
 --
 -- -- }}}
 
+--- TODO: nvim_set_hl() 中不要使用 cterm. 第一个参数 0 表示全局设置.
+--- vim.api.nvim_set_hl(0, "Foo", {ctermfg=123, ctermbg=234, bold=true, default=true, nocombine=true})
+--- vim.api.nvim_set_hl(0, "Foo", {link="Normal"})
+
 --- editor -----------------------------------------------------------------------------------------
 vim.cmd('hi Normal ctermbg=NONE ctermfg=251')      -- 透明背景 / 深色背景 - 一般文字颜色 251/188
 vim.cmd('hi Visual ctermbg=24')                    -- Visual 模式下 select 到的字符颜色. 类似 vscode 颜色
@@ -171,33 +175,71 @@ vim.cmd('hi LspReferenceWrite ctermbg=238')
 
 --- treesitter 颜色 --------------------------------------------------------------------------------
 --- treesitter global 颜色设置
-vim.cmd('hi! link TSField Normal')      -- golang struct field, when define
-vim.cmd('hi TSProperty ctermfg=81')     -- like TSField, eg: Foo.<Property>, 主要为 js, ts... 用.
-vim.cmd('hi! link TSParameter Normal')  -- 入参出参
+--- NOTE: nvim 0.8+ highlight 的重大变化: 弃用 TSxxx 命名方式, 使用 @xxx 方式.
+--- filetype based highlight 方式从 goTSProperty 改为 @property.go.
+--- `hi @property ...` 为全局设置 highlight;
+--- `hi @property.go ...` 单独为 filetype=go 的文件设置 highlight.
+--- https://github.com/nvim-treesitter/nvim-treesitter/pull/3656
+if vim.fn.has('nvim-0.8') == 1 then
+  vim.api.nvim_set_hl(0, '@field', { link = "Normal" })
+  vim.api.nvim_set_hl(0, '@property', { ctermfg = 81 })
+  vim.api.nvim_set_hl(0, '@parameter', { link = "Normal" })
 
-vim.cmd('hi! link TSFunction Function')
-vim.cmd('hi! link TSFuncBuiltin Function')  -- new() make() copy() ...
-vim.cmd('hi! link TSMethod Function')
+  --vim.api.nvim_set_hl(0, '@function', { link = "Function" })
+  --vim.api.nvim_set_hl(0, '@function.call', { link = "Function" })
+  vim.api.nvim_set_hl(0, '@function.builtin', { link = "Function" })
+  --vim.api.nvim_set_hl(0, '@method', { link = "Function" })
+  --vim.api.nvim_set_hl(0, '@method.call', { link = "Function" })
 
-vim.cmd('hi! link TSKeywordReturn Conditional')  -- return
-vim.cmd('hi! link TSNamespace Normal')           -- package <Namespace>
+  vim.api.nvim_set_hl(0, '@keyword.return', { link = "Conditional" })
+  vim.api.nvim_set_hl(0, '@namespace', { link = "Normal" })
 
---- golang, NOTE: 单独为 go 设置 Property 颜色.
-vim.cmd('hi! link goTSProperty Normal')  -- 设置 golang 的 Foo.Name 颜色为 Normal
+  --- html, tag <div></div>
+  vim.api.nvim_set_hl(0, '@tag', { ctermfg = 68 })  -- <div></div>, html 内置标签文字颜色 div
+  vim.api.nvim_set_hl(0, '@tag.delimiter', { ctermfg = 243 })  -- <div></div>, <> 括号颜色
+  vim.api.nvim_set_hl(0, '@tag.attribute', { link = "@property" })  -- <... width=..., height=... >
+  vim.api.nvim_set_hl(0, '@text.uri', { link = "String" })
 
---- typescript
-vim.cmd('hi! link TSConstructor Normal')  -- import <TSConstructor> from 'react'
-vim.cmd('hi! link TSKeywordOperator Keyword')  -- 关键字 new
+  --- typescript
+  vim.api.nvim_set_hl(0, '@constructor', { link = "Normal" })  -- import <TSConstructor> from 'react'
+  vim.api.nvim_set_hl(0, '@keyword.operator', { link = "Keyword" })  -- typescript 关键字 new
 
---- html, tag <div></div>
-vim.cmd('hi TSTag ctermfg=68')             -- <div></div>, html 内置标签文字颜色 div
-vim.cmd('hi TSTagDelimiter ctermfg=243')   -- <div></div>, <> 括号颜色
-vim.cmd('hi! link TSTagAttribute TSProperty')  -- <... width=..., height=... >
-vim.cmd('hi! link TSURI String')  -- <src="TSURI">
+  --- golang, NOTE: 单独为 go 设置 Property 颜色.
+  vim.api.nvim_set_hl(0, '@property.go', { link = "Normal" })
 
---- markdown, NOTE: 单独为 markdown 设置颜色.
-vim.cmd('hi markdown_inlineTSLiteral ctermbg=238')  -- `code`
-vim.cmd('hi markdownTSPunctSpecial ctermfg=246')    -- `- * #`
+  --- markdown, NOTE: 单独为 markdown 设置颜色.
+  vim.api.nvim_set_hl(0, '@text.literal.markdown_inline', { ctermfg = 238 })  -- `code`
+  vim.api.nvim_set_hl(0, '@punctuation.special.markdown', { link = "Conceal" })  -- `- * #`
+  vim.api.nvim_set_hl(0, '@punctuation.delimiter.markdown', { link = "Conceal" })  -- `- * #`
+else
+  vim.cmd('hi! link TSField Normal')      -- golang struct field, when define
+  vim.cmd('hi TSProperty ctermfg=81')     -- like TSField, eg: Foo.<Property>, 主要为 js, ts... 用.
+  vim.cmd('hi! link TSParameter Normal')  -- 入参出参
+
+  vim.cmd('hi! link TSFunction Function')
+  vim.cmd('hi! link TSFuncBuiltin Function')  -- new() make() copy() ...
+  vim.cmd('hi! link TSMethod Function')
+
+  vim.cmd('hi! link TSKeywordReturn Conditional')  -- return
+  vim.cmd('hi! link TSNamespace Normal')           -- package <Namespace>
+
+  --- html, tag <div></div>
+  vim.cmd('hi TSTag ctermfg=68')             -- <div></div>, html 内置标签文字颜色 div
+  vim.cmd('hi TSTagDelimiter ctermfg=243')   -- <div></div>, <> 括号颜色
+  vim.cmd('hi! link TSTagAttribute TSProperty')  -- <... width=..., height=... >
+  vim.cmd('hi! link TSURI String')  -- <src="TSURI">
+
+  --- typescript
+  vim.cmd('hi! link TSConstructor Normal')  -- import <TSConstructor> from 'react'
+  vim.cmd('hi! link TSKeywordOperator Keyword')  -- 关键字 new
+
+  --- golang, NOTE: 单独为 go 设置 Property 颜色.
+  vim.cmd('hi! link goTSProperty Normal')  -- 设置 golang 的 Foo.Name 颜色为 Normal
+
+  --- markdown, NOTE: 单独为 markdown 设置颜色.
+  vim.cmd('hi markdown_inlineTSLiteral ctermbg=238')  -- `code`
+  vim.cmd('hi markdownTSPunctSpecial ctermfg=246')    -- `- * #`
+end
 
 --- NOTE: 以下设置是为了配合 lazy load plugins -----------------------------------------------------
 --- 以下颜色为了 lazy load lualine
