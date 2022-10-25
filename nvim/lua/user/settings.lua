@@ -294,7 +294,7 @@ vim.opt.relativenumber = true  -- 显示相对行号
 --vim.opt.numberwidth = 4  -- 默认行号占 4 列
 
 vim.opt.cursorline = true    -- 显示当前行. hi CursorLine, CursorLineNr
-vim.opt.cursorlineopt = "number,screenline"  -- screenline 和 line 的区别在于 wrap line 显示.
+vim.opt.cursorlineopt = "number,screenline"  -- screenline 和 line 的区别在于 `set wrap` 情况下 cursorline 显示.
 --vim.opt.cursorcolumn = true       -- 突出显示当前列. 包括: 背景色...
 
 --- NOTE: 进入 window 是显示 cursorline; 离开 window 时取消显示 cursorline
@@ -334,6 +334,7 @@ vim.api.nvim_create_autocmd("FileType", {
     end
 
     --- 如果 buffer 没有设置 textwidth, 即:textwidth=0, 则不 highlight virtual column.
+    --- `:help pattern`, `\%23v` highlight virtual column 23.
     if vim.bo.textwidth > 0 then
       vim.fn.matchadd('ColorColumn', '\\%' .. vim.bo.textwidth+1 .. 'v', 100)
     end

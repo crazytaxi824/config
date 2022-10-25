@@ -602,6 +602,7 @@ Keymap_set_and_register(gitsigns_keymaps, {
 --- HACK: 利用 NvimTreeOpenedFile 只 highlight active buffer. 默认是显示 loaded buffer ------------- {{{
 --- 重写 nvim-tree.renderer.builder module 中的 _highlight_opened_files() 函数.
 --- 如果 buffer 没有显示在任何窗口则不要 highlight.
+--- https://github.com/nvim-tree/nvim-tree.lua/blob/master/lua/nvim-tree/renderer/builder.lua
 local builder_status_ok, builder = pcall(require, "nvim-tree.renderer.builder")
 if builder_status_ok then
   function builder:_highlight_opened_files(node, offset, icon_length, git_icons_length)
@@ -610,6 +611,7 @@ if builder_status_ok then
       return
     end
 
+    --- 以下是源代码 ---
     local from = offset
     local to = offset
 

@@ -1,5 +1,6 @@
 if __Debug_Neovim.autocmd then
   local common_events = {
+    "VimEnter", "VimLeave",
     "BufAdd", "BufNew", "BufNewFile",
     "BufEnter", "BufLeave",
     "BufReadPre", "BufReadPost", "BufWritePre", "BufWritePost", "BufFilePre", "BufFilePost",

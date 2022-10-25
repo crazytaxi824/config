@@ -63,10 +63,12 @@ ts_configs.setup {
   --- "windwp/nvim-ts-autotag", auto close tag <div></div>
   autotag = {
     enable = true,
-    filetypes = {'html', 'javascript', 'typescript',
+    filetypes = {
+      'html', 'javascript', 'typescript',
       'javascriptreact', 'typescriptreact',
       'svelte', 'vue', 'tsx', 'jsx',
-      'rescript', 'xml', 'markdown'},
+      'rescript', 'xml', 'markdown',
+    },
   },
 
   --- "nvim-treesitter/playground"

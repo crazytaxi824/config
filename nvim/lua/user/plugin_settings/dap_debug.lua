@@ -1,4 +1,5 @@
---- https://github.com/leoluz/nvim-dap-go
+--- https://github.com/mfussenegger/nvim-dap
+--- `:help dap.txt`
 local dap_status_ok, dap = pcall(require, "dap")
 if not dap_status_ok then
   return
@@ -168,7 +169,7 @@ local function open_new_tab_for_debug()
     end
   end
 
-  -- VVI: if debug tab NOT exist, open a new tab for debug.
+  --- VVI: if debug tab NOT exist, open a new tab for debug.
   vim.cmd('tabnew '..vim.fn.bufname())
 
   --- 标记该 tab 为 'my_debug.dap_tab = true'
@@ -225,8 +226,9 @@ end
 -- --}}}
 
 --- keymaps ----------------------------------------------------------------------------------------
---- dap 可用方法 --- {{{
+--- dap 可用方法, `:help dap-api` --- {{{
 --   dap.run({config})
+--   dap.run_last()  -- NOTE: run_last() 时, 当前 ('%') buffer 必须是之前运行 debug 时的 buffer.
 --   dap.launch({adapter}, {config})
 --   dap.terminate(terminate_opts, disconnect_opts, callback)
 --
@@ -243,11 +245,17 @@ end
 --   dap.session()
 --   dap.status()
 -- -- }}}
---- dap-ui 可用方法 --- {{{
+--- dap-ui 可用方法, `:help nvim-dap-ui` --- {{{
+--- debug window 控制.
 --   dapui.open()
 --   dapui.close()
 --   dapui.toggle()
---   dapui.eval()  -- 获取 var value under cursor
+--
+--- 在 float window 中显示 element. eg: scopes, watches, breakpoints, stacks, repl
+--   dapui.float_element({elem_name}, {settings})
+--
+--- 获取 var value under cursor. {expr} = nil 时, 使用 <cword>.
+--   dapui.eval({expr}, {settings})
 -- -- }}}
 local opt = { noremap = true, silent = true }
 local debug_keymaps = {
@@ -256,8 +264,8 @@ local debug_keymaps = {
   {'n', '<leader>cr', dap.run_last,  opt, 'debug: Restart'},
   {'n', '<leader>cq', close_debug_tab_and_buffers, opt, 'debug: Quit'},
 
-  --- NOTE: 这里是 dapui 的方法 eval(), 运行两次进入 float window.
-  {'n', '<leader>cc', function() dapui.eval() dapui.eval() end, opt, 'debug: Popup Value under cursor'},
+  --- NOTE: 这里是 dapui 的方法 eval(), {enter=true}进入 float window.
+  {'n', '<leader>cc', function() dapui.eval(nil, {enter=true}) end, opt, 'debug: Popup Value under cursor'},
 
   --{'n', '<F9>',  dap.toggle_breakpoint, opt, "debug: Toggle Breakpoint"},  -- 已经在 _trigger.lua 文件中设置.
   {'n', '<F21>', dap.clear_breakpoints, opt, "debug: Clear Breakpoints"},  -- <S-f9>
