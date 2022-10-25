@@ -435,4 +435,7 @@ vim.lsp.buf.format({
 - LSP `client.notify("workspace/didChangeConfiguration")`
 - `:LspRestart` - lspconfig command
 - null-ls restart? `vim.lsp.stop_client(id)`, `vim.lsp.start_client()`, `vim.lsp.start(svr)`
+- test lsp after `go mod init`, `go mod tidy`
+
+
 
