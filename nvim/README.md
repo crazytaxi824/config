@@ -108,7 +108,6 @@ vim.api.nvim_create_autocmd("User", {
   pattern = {"Foo"},
   callback = function(params) print("foo") end,
 })
-
 ```
 
 ## lua 全局变量 `_G`

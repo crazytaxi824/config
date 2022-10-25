@@ -208,7 +208,7 @@ if vim.fn.has('nvim-0.8') == 1 then
   vim.api.nvim_set_hl(0, '@property.go', { link = "Normal" })
 
   --- markdown, NOTE: 单独为 markdown 设置颜色.
-  vim.api.nvim_set_hl(0, '@text.literal.markdown_inline', { ctermfg = 238 })  -- `code`
+  vim.api.nvim_set_hl(0, '@text.literal.markdown_inline', { ctermfg = 173, ctermbg = 237 })  -- `code`
   vim.api.nvim_set_hl(0, '@punctuation.special.markdown', { link = "Conceal" })  -- `- * #`
   vim.api.nvim_set_hl(0, '@punctuation.delimiter.markdown', { link = "Conceal" })  -- `- * #`
 else
