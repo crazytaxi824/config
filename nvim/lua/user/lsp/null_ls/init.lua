@@ -105,6 +105,13 @@ local diagnostics_opts = {
   -- end,
 }
 
+--- NOTE: root_dir 中有 eslintrc.* 配置文件的情况下启动 eslint
+local eslint_opts = {
+  condition = function(utils)
+    return utils.root_has_file({ "eslintrc.json", "eslintrc-ts.json", "eslintrc-js.json", "eslintrc-react.json" })
+  end
+}
+
 --- linter / formatter / code action 设置 ----------------------------------------------------------
 --- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/MAIN.md  -- runtime_condition function 中的 params
 --- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/CONFIG.md    -- setup 设置
@@ -130,17 +137,17 @@ local linter_settings = {
   --- https://eslint.org/docs/user-guide/configuring/configuration-files
   -- -- }}}
   diagnostics.eslint.with(proj_local_settings.keep_extend(local_linter_key, 'eslint', {
-    extra_args = { "--config", "eslintrc-ts.json" },
+    extra_args = { "--config", "eslintrc-ts.json", "--cache" },
     filetypes = {"typescript"},
-  }, diagnostics_opts)),
+  }, vim.tbl_deep_extend('force', diagnostics_opts, eslint_opts))),
   diagnostics.eslint.with(proj_local_settings.keep_extend(local_linter_key, 'eslint', {
-    extra_args = { "--config", "eslintrc-react.json" },
+    extra_args = { "--config", "eslintrc-react.json", "--cache" },
     filetypes = {"typescriptreact"},
-  }, diagnostics_opts)),
+  }, vim.tbl_deep_extend('force', diagnostics_opts, eslint_opts))),
   diagnostics.eslint.with(proj_local_settings.keep_extend(local_linter_key, 'eslint', {
-    extra_args = { "--config", "eslintrc-js.json" },
+    extra_args = { "--config", "eslintrc-js.json", "--cache" },
     filetypes = {"javascript", "javascriptreact", "vue"},
-  }, diagnostics_opts)),
+  }, vim.tbl_deep_extend('force', diagnostics_opts, eslint_opts))),
 
   --- python, flake8, mypy
   diagnostics.flake8.with(proj_local_settings.keep_extend(local_linter_key, 'flake8', diagnostics_opts)),
@@ -184,7 +191,7 @@ local code_action_settings = {
 
   --- NOTE: null-ls 不是 autostart 的, 需要触发操作后才会加载.
   --- eslint 等工具启动速度慢, 会拖慢第一次使用 code action 的时间.
-  code_actions.eslint,
+  code_actions.eslint.with(eslint_opts),
 }
 
 --- 合并多个 list
