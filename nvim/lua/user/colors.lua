@@ -59,6 +59,9 @@
 --- TODO: nvim_set_hl() 中不要使用 cterm. 第一个参数 0 表示全局设置.
 --- vim.api.nvim_set_hl(0, "Foo", {ctermfg=123, ctermbg=234, bold=true, default=true, nocombine=true})
 --- vim.api.nvim_set_hl(0, "Foo", {link="Normal"})
+--- vim.api.nvim_set_hl(0, 'Visual', {})  NOTE: clear the highlight group.
+--- nvim_create_namespace({name})  namespace are used for buffer highlights.
+--- nvim_buf_add_highlight(),  有点类似 matchaddpos() 但是不安全一样.
 
 --- editor -----------------------------------------------------------------------------------------
 vim.cmd('hi Normal ctermbg=NONE ctermfg=251')      -- 透明背景 / 深色背景 - 一般文字颜色 251/188

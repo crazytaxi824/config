@@ -18,6 +18,7 @@ M.check = function()
     "telescope.make_entry",
     "telescope.pickers",
     "telescope.config",
+    "null-ls.utils",
   }
 
   for _, req in ipairs(require_list) do
