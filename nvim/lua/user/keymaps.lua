@@ -102,7 +102,7 @@ local function hl_search(key)
 
   --- NOTE: `:help /ordinary-atom`
   --- `\%#` 意思是 match cursor 所在位置. Matches with the cursor position.
-  --- `\c`  意思是 ignore-case.
+  --- `\c`  意思是 ignore-case. 可以被 overwrite 例如 `/foo\C`
   --- getreg() 是获取 register 值.
   local search_pattern = '\\c\\%#' .. vim.fn.getreg('/')
   local hl_id = vim.fn.matchadd(my_search.hl_group, search_pattern, 101)
