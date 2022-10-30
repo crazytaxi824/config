@@ -9,7 +9,7 @@ local colors = {
   black = 233,
   white = 251,
 
-  green = 190,
+  yellow = 190,
   light_green = 85,  -- filename saved
   light_blue = 81,   -- filename modified
 
@@ -30,7 +30,7 @@ local colors = {
 --- replace: a = white/124, b = white/27, c = white/17    -- red
 local my_theme = {
   normal = {
-    a = { fg = colors.black, bg = colors.green, gui = "bold" },
+    a = { fg = colors.black, bg = colors.yellow, gui = "bold" },
     b = { fg = colors.white, bg = colors.grey },
     c = { fg = colors.light_green, bg = colors.black },
   },
