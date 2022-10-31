@@ -75,8 +75,14 @@ cmp.setup {
   },
 
   window = {
-    --completion = cmp.config.window.bordered({border = "single"}),  -- `:help nvim_open_win()`
-    --documentation = cmp.config.window.bordered({border = "single"}),
+    -- completion = {
+    --   border = {"","","","│","","","",""},
+    --   winhighlight = 'Normal:Pmenu,FloatBorder:Pmenu,CursorLine:PmenuSel,Search:None',
+    -- },
+    documentation = {
+      border = {"", "", "", " ", "", "", "", "▏"},  -- `:help nvim_open_win()`
+      winhighlight = 'FloatBorder:NormalFloat',
+    },
   },
 
   --- completion 菜单显示
