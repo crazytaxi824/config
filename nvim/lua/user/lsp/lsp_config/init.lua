@@ -8,7 +8,7 @@ if not lspconfig_ok then
   return
 end
 
---- change :LspInfo border, `:help lspconfig-highlight`
+--- change `:LspInfo` border, `:help lspconfig-highlight`
 require('lspconfig.ui.windows').default_options.border = {"▄","▄","▄","█","▀","▀","▀","█"}
 vim.cmd('hi! link LspInfoBorder FloatBorder')
 
