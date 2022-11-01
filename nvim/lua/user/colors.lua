@@ -68,7 +68,7 @@
 --- 基础颜色 ---------------------------------------------------------------------------------------
 -- vim.cmd('hi Keyword ctermfg=170')           -- 最主要的颜色
 -- vim.cmd('hi Function ctermfg=85')           -- func <Function> {}, 定义 & call func 都使用该颜色
--- vim.cmd('hi Type ctermfg=43 cterm=italic')  -- type <Type> struct
+-- vim.cmd('hi Type ctermfg=79 cterm=italic')  -- type <Type> struct
 -- vim.cmd('hi! link Identifier Type')         -- typescriptTypeReference
 -- vim.cmd('hi! link Constant Normal')         -- 常量颜色. eg: const <Constant> = 100
 
@@ -85,7 +85,7 @@
 -- vim.cmd('hi Character ctermfg=173')     -- 'a'
 -- vim.cmd('hi Special ctermfg=75')        --  null (tsxTSConstBuiltin) | undefined (tsxTSVariableBuiltin)
 -- vim.cmd('hi SpecialChar ctermfg=81')    -- \n \t \" ... escape string
--- vim.cmd('hi Number ctermfg=43')         -- 100, int, uint ...
+-- vim.cmd('hi Number ctermfg=151')        -- 100, int, uint ...
 -- vim.cmd('hi Boolean ctermfg=75')        -- true / false
 -- vim.cmd('hi PreProc ctermfg=75')        -- tsxTSVariableBuiltin, tsxTSConstBuiltin ...
 -- vim.cmd('hi! link Float Number')        -- 10.02 float64, float32
