@@ -25,12 +25,11 @@ git_signs.setup({
   update_debounce = 300,  -- 更新频率, 默认 100
   attach_to_untracked = true,  -- 新建文件是否 attach gitsigns
 
+  --- NOTE: 除了 signcolumn 外, 其他不推荐开启. 可以使用 `:Gitsigns preview_hunk` 查看修改记录,
   signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
-  --- NOTE: 以下不推荐默认开启. 可以使用 `:Gitsigns preview_hunk` 查看修改记录,
-  ---       使用 `:Gitsigns next/prev_hunk` 跳转.
   --numhl      = false, -- Toggle with `:Gitsigns toggle_numhl`
   --linehl     = false, -- Toggle with `:Gitsigns toggle_linehl`
-  --word_diff  = false, -- Toggle with `:Gitsigns toggle_word_diff`
+  --word_diff  = false, -- Toggle with `:Gitsigns toggle_word_diff`, OR `git_signs.toggle_word_diff()`
   --show_deleted  = false, -- Toggle with `:Gitsigns toggle_deleted`
 
   preview_config = {
@@ -65,16 +64,26 @@ git_signs.setup({
 })
 
 --- highlights -------------------------------------------------------------------------------------
-vim.cmd('hi GitSignsCurrentLineBlame ctermfg=242')  -- current_line_blame 默认不开启.
+--- signcolumn 中显示的颜色
+vim.cmd('hi GitSignsAdd ctermfg=42')
+vim.cmd('hi GitSignsChange ctermfg=213')
+vim.cmd('hi GitSignsDelete ctermfg=167')
 
---- 通过 virtual_text 显示 deleted/changed 行的文字颜色. 
-vim.cmd('hi GitSignsDeleteVirtLn ctermfg=240')  -- default link to DiffDelete.
+--- inline/virtual_text 中 highlight 添加/修改/删除的字符
+vim.cmd('hi GitSignsAddInline ctermfg=233 ctermbg=42')
+vim.cmd('hi GitSignsChangeInline ctermfg=233 ctermbg=213')
+vim.cmd('hi GitSignsDeleteInline ctermfg=251 ctermbg=167')
 
---- signcolumn 中 delete 行显示的 ▁▔ 的颜色. default link to DiffDelete.
---vim.cmd('hi GitSignsDelete ctermfg=240')
+--- prev_hunk() 时, 文字颜色
+vim.cmd('hi GitSignsAddPreview ctermfg=42')
+vim.cmd('hi GitSignsDeletePreview ctermfg=213')
+vim.cmd('hi GitSignsDeletePreview ctermfg=240')
 
---- preview_hunk 中 deleted line 的颜色. default link to DiffDelete.
---vim.cmd('hi GitSignsDeletePreview ctermfg=240')
+--- word_diff() 时, 通过 virtual_text 显示 deleted/changed 行的文字颜色
+vim.cmd('hi GitSignsDeleteVirtLn ctermfg=240')
+
+--- current_line_blame 默认不开启.
+--vim.cmd('hi GitSignsCurrentLineBlame ctermfg=242')
 
 
 
