@@ -5,20 +5,21 @@ end
 
 --- 自定义 theme ----------------------------------------------------------------------------------- {{{
 --- https://github.com/nvim-lualine/lualine.nvim/blob/master/lua/lualine/themes/gruvbox_light.lua
-local colors = {
-  black = 233,
-  white = 251,
+local lualine_colors = {
+  black = Color.black,
+  white = Color.white,
 
-  yellow = 190,
-  light_green = 85,  -- filename saved
-  light_blue = 81,   -- filename modified
+  yellow = Color.statusline_yellow,
+  gold = Color.func_gold,  -- filename saved
+  light_blue = Color.special_cyan,   -- filename modified
 
   grey  = 236,       -- section_b
   light_grey = 246,  -- inactive, hint
 
-  red = 167,  -- error, readonly
-  orange = 214, -- warn
-  blue = 63,  -- info
+  red = Color.error_red,  -- error, readonly
+  orange = Color.warn_orange, -- warn
+  blue = Color.info_blue,  -- info background
+
   dark_orange = 202, -- trailing_whitespace && mixed_indent
 }
 
@@ -30,9 +31,9 @@ local colors = {
 --- replace: a = white/124, b = white/27, c = white/17    -- red
 local my_theme = {
   normal = {
-    a = { fg = colors.black, bg = colors.yellow, gui = "bold" },
-    b = { fg = colors.white, bg = colors.grey },
-    c = { fg = colors.light_green, bg = colors.black },
+    a = { fg = lualine_colors.black, bg = lualine_colors.yellow, gui = "bold" },
+    b = { fg = lualine_colors.white, bg = lualine_colors.grey },
+    c = { fg = lualine_colors.gold, bg = lualine_colors.black },
   },
 
   --- 其他模式如果缺省设置, 则继承 normal 的设置 --------------------------------------------------- {{{
@@ -55,9 +56,9 @@ local my_theme = {
   -- -- }}}
 
   inactive = {
-    a = { fg = colors.light_green, bg = colors.grey },
-    b = { fg = colors.white, bg = colors.black },
-    c = { fg = colors.light_grey, bg = colors.black },
+    a = { fg = lualine_colors.gold, bg = lualine_colors.grey },
+    b = { fg = lualine_colors.white, bg = lualine_colors.black },
+    c = { fg = lualine_colors.light_grey, bg = lualine_colors.black },
   },
 }
 -- -- }}}
@@ -199,13 +200,13 @@ lualine.setup {
         },
         color = function()
           if vim.bo.modified and vim.bo.readonly then  -- 对 readonly 文件做出修改
-            return {fg = colors.white, bg = colors.red, gui='bold'}
+            return {fg = lualine_colors.white, bg = lualine_colors.red, gui='bold'}
           elseif vim.bo.modified then  -- 修改后未保存的文件
-            return {fg = colors.light_blue, gui='bold'}
+            return {fg = lualine_colors.light_blue, gui='bold'}
           elseif vim.bo.readonly then  -- readonly 文件
-            return {fg = colors.dark_orange, gui='bold'}
+            return {fg = lualine_colors.dark_orange, gui='bold'}
           end
-          return {fg = colors.light_green} -- 其他情况
+          return {fg = lualine_colors.gold} -- 其他情况
         end,
 
         --- number of clicks incase of multiple clicks
@@ -218,16 +219,16 @@ lualine.setup {
     lualine_y = {my_progress},  -- 自定义 component, 修改自 builtin 'progress' component
     lualine_z = {
       {my_location},
-      {my_check, color = {bg=colors.dark_orange, fg=colors.black, gui='bold'}},  -- 自定义 component
+      {my_check, color = {bg=lualine_colors.dark_orange, fg=lualine_colors.black, gui='bold'}},  -- 自定义 component
       { 'diagnostics',
         symbols = {error = 'E:', warn = 'W:', info = 'I:', hint = 'H:'},
         update_in_insert = false, -- Update diagnostics in insert mode.
         diagnostics_color = {
           --error = 'ErrorMsg',  -- 也可以使用 highlight group.
-          error = {bg=colors.red, fg=colors.white, gui='bold'},        -- Changes diagnostics' error color.
-          warn  = {bg=colors.orange, fg=colors.black, gui='bold'},     -- Changes diagnostics' warn color.
-          info  = {bg=colors.blue, fg=colors.white, gui='bold'},       -- Changes diagnostics' info color.
-          hint  = {bg=colors.light_grey, fg=colors.black, gui='bold'}, -- Changes diagnostics' hint color.
+          error = {bg=lualine_colors.red, fg=lualine_colors.white, gui='bold'},        -- Changes diagnostics' error color.
+          warn  = {bg=lualine_colors.orange, fg=lualine_colors.black, gui='bold'},     -- Changes diagnostics' warn color.
+          info  = {bg=lualine_colors.blue, fg=lualine_colors.black, gui='bold'},       -- Changes diagnostics' info color.
+          hint  = {bg=lualine_colors.light_grey, fg=lualine_colors.black, gui='bold'}, -- Changes diagnostics' hint color.
         },
       },
     },
@@ -239,9 +240,9 @@ lualine.setup {
     lualine_b = {},
     lualine_c = {
       --- NOTE: 以下三个 components 主要是为了解决 inactive_sections 中的 filename 无法分别设置颜色.
-      {modified_readonly, color = {fg=colors.white, bg=colors.red, gui='bold'}},
-      {readonly, color = {fg=colors.dark_orange, gui='bold'}},
-      {modified, color = {fg=colors.light_blue, gui='bold'}},
+      {modified_readonly, color = {fg=lualine_colors.white, bg=lualine_colors.red, gui='bold'}},
+      {readonly, color = {fg=lualine_colors.dark_orange, gui='bold'}},
+      {modified, color = {fg=lualine_colors.light_blue, gui='bold'}},
       {'filename',
         path = 3,  -- Absolute path, with ~ as the home directory
         symbols = {
@@ -253,15 +254,15 @@ lualine.setup {
       },
     },
     lualine_x = {
-      {my_check, color = {fg=colors.dark_orange, gui='bold'}},  -- 自定义 components
+      {my_check, color = {fg=lualine_colors.dark_orange, gui='bold'}},  -- 自定义 components
       { 'diagnostics',
         symbols = {error = 'E:', warn = 'W:', info = 'I:', hint = 'H:'},
         diagnostics_color = {
           --error = 'ErrorMsg',  -- 也可以使用 highlight group.
-          error = {fg=colors.red, gui='bold'},        -- Changes diagnostics' error color.
-          warn  = {fg=colors.orange, gui='bold'},     -- Changes diagnostics' warn color.
-          info  = {fg=colors.blue, gui='bold'},       -- Changes diagnostics' info color.
-          hint  = {fg=colors.light_grey, gui='bold'}, -- Changes diagnostics' hint color.
+          error = {fg=lualine_colors.red, gui='bold'},        -- Changes diagnostics' error color.
+          warn  = {fg=lualine_colors.orange, gui='bold'},     -- Changes diagnostics' warn color.
+          info  = {fg=lualine_colors.blue, gui='bold'},       -- Changes diagnostics' info color.
+          hint  = {fg=lualine_colors.light_grey, gui='bold'}, -- Changes diagnostics' hint color.
         },
       },
     },
