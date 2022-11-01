@@ -65,25 +65,24 @@ git_signs.setup({
 
 --- highlights -------------------------------------------------------------------------------------
 --- signcolumn 中显示的颜色
-vim.cmd('hi GitSignsAdd ctermfg=42')
-vim.cmd('hi GitSignsChange ctermfg=213')
-vim.cmd('hi GitSignsDelete ctermfg=167')
+vim.api.nvim_set_hl(0, 'GitSignsAdd',    {ctermfg = Color.title_green})
+vim.api.nvim_set_hl(0, 'GitSignsChange', {ctermfg = Color.conditional_magenta})
+vim.api.nvim_set_hl(0, 'GitSignsDelete', {ctermfg = Color.error_red})
 
 --- inline/virtual_text 中 highlight 添加/修改/删除的字符
-vim.cmd('hi GitSignsAddInline ctermfg=233 ctermbg=42')
-vim.cmd('hi GitSignsChangeInline ctermfg=233 ctermbg=213')
-vim.cmd('hi GitSignsDeleteInline ctermfg=251 ctermbg=167')
+vim.api.nvim_set_hl(0, 'GitSignsAddInline',    {ctermfg = Color.black, ctermbg = Color.title_green})
+vim.api.nvim_set_hl(0, 'GitSignsChangeInline', {ctermfg = Color.black, ctermbg = Color.conditional_magenta})
+vim.api.nvim_set_hl(0, 'GitSignsDeleteInline', {ctermfg = Color.white, ctermbg = Color.error_red})
 
---- prev_hunk() 时, 文字颜色
-vim.cmd('hi GitSignsAddPreview ctermfg=42')
-vim.cmd('hi GitSignsDeletePreview ctermfg=213')
-vim.cmd('hi GitSignsDeletePreview ctermfg=240')
+--- prev_hunk() 时, 文字颜色. preview hunk 没有 'GitSignsChangePreview' 设置.
+vim.api.nvim_set_hl(0, 'GitSignsAddPreview',    {ctermfg = Color.title_green})
+vim.api.nvim_set_hl(0, 'GitSignsDeletePreview', {ctermfg = 240})
 
 --- word_diff() 时, 通过 virtual_text 显示 deleted/changed 行的文字颜色
-vim.cmd('hi GitSignsDeleteVirtLn ctermfg=240')
+vim.api.nvim_set_hl(0, 'GitSignsDeleteVirtLn', {ctermfg = 240})
 
 --- current_line_blame 默认不开启.
---vim.cmd('hi GitSignsCurrentLineBlame ctermfg=242')
+--vim.api.nvim_set_hl(0, 'GitSignsCurrentLineBlame', {ctermfg = 242})
 
 
 
