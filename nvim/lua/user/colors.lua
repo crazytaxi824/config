@@ -159,12 +159,14 @@
 --- {val} 中使用 cterm = {bold=true, underline=true, ...}, 也可以不使用 cterm.
 ---
 --- eg:
---- vim.api.nvim_set_hl(0, "Foo", {ctermfg=123, ctermbg=234, cterm={bold=true, default=true, nocombine=true}})
+--- vim.api.nvim_set_hl(0, "Foo", {ctermfg=123, ctermbg=234, cterm={bold=true, nocombine=true}})
 --- vim.api.nvim_set_hl(0, "Foo", {link="Normal"})
 --- vim.api.nvim_set_hl(0, 'Visual', {})  NOTE: clear the highlight group.
 ---
 --- nvim_create_namespace({name})  namespace are used for buffer highlights.
 --- nvim_buf_add_highlight(),  有点类似 matchaddpos() 但是不安全一样.
+--- 
+--- VVI: nvim_set_hl() 没有实现 `hi! default link Foo Bar` 和 `hi clear Foo` 功能.
 
 Color = {  -- {{{
   none = 'NONE',
