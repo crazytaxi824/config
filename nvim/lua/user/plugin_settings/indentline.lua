@@ -61,12 +61,12 @@ indent_blankline.setup({
 })
 
 --- 设置颜色 ---------------------------------------------------------------------------------------
-vim.cmd [[hi IndentBlanklineIndent1 ctermfg=172]]
-vim.cmd [[hi IndentBlanklineIndent2 ctermfg=25]]
-vim.cmd [[hi IndentBlanklineIndent3 ctermfg=29]]
-vim.cmd [[hi IndentBlanklineIndent4 ctermfg=128]]
-vim.cmd [[hi IndentBlanklineIndent5 ctermfg=198]]
-vim.cmd [[hi IndentBlanklineIndent6 ctermfg=105]]
+vim.api.nvim_set_hl(0, 'IndentBlanklineIndent1', {ctermfg=172})
+vim.api.nvim_set_hl(0, 'IndentBlanklineIndent2', {ctermfg=25})
+vim.api.nvim_set_hl(0, 'IndentBlanklineIndent3', {ctermfg=29})
+vim.api.nvim_set_hl(0, 'IndentBlanklineIndent4', {ctermfg=128})
+vim.api.nvim_set_hl(0, 'IndentBlanklineIndent5', {ctermfg=198})
+vim.api.nvim_set_hl(0, 'IndentBlanklineIndent6', {ctermfg=105})
 
 
 

@@ -65,32 +65,32 @@ notify.setup({
 
 --- 颜色只对 notify 有用 ---------------------------------------------------------------------------
 --- border 颜色
-vim.cmd [[hi NotifyERRORBorder ctermfg=167]] -- red
-vim.cmd [[hi NotifyWARNBorder  ctermfg=202]] -- orange
-vim.cmd [[hi NotifyINFOBorder  ctermfg=38]]  -- blue
-vim.cmd [[hi NotifyDEBUGBorder ctermfg=102]] -- grey
-vim.cmd [[hi NotifyTRACEBorder ctermfg=59]]  -- grey
+vim.api.nvim_set_hl(0, 'NotifyERRORBorder', {ctermfg=Color.error_red})
+vim.api.nvim_set_hl(0, 'NotifyWARNBorder',  {ctermfg=Color.warn_orange}) -- orange
+vim.api.nvim_set_hl(0, 'NotifyINFOBorder',  {ctermfg=Color.info_blue})  -- blue
+vim.api.nvim_set_hl(0, 'NotifyDEBUGBorder', {ctermfg=245}) -- grey
+vim.api.nvim_set_hl(0, 'NotifyTRACEBorder', {ctermfg=241}) -- grey
 
 --- Title 颜色
-vim.cmd [[hi NotifyERRORTitle ctermfg=197]]  -- magenta
-vim.cmd [[hi NotifyWARNTitle  ctermfg=214]]  -- orange
-vim.cmd [[hi NotifyINFOTitle  ctermfg=81]]   -- blue
-vim.cmd [[hi NotifyDEBUGTitle ctermfg=102]]  -- green
-vim.cmd [[hi NotifyTRACETitle ctermfg=59]]   -- grey
+vim.api.nvim_set_hl(0, 'NotifyERRORTitle', {ctermfg=Color.error_red})  -- magenta
+vim.api.nvim_set_hl(0, 'NotifyWARNTitle',  {ctermfg=Color.warn_orange})
+vim.api.nvim_set_hl(0, 'NotifyINFOTitle',  {ctermfg=Color.info_blue})
+vim.api.nvim_set_hl(0, 'NotifyDEBUGTitle', {ctermfg=245})  -- grey
+vim.api.nvim_set_hl(0, 'NotifyTRACETitle', {ctermfg=241})  -- grey
 
 --- icon 颜色, NOTE: 没用到
-vim.cmd [[hi NotifyERRORIcon ctermfg=197]]
-vim.cmd [[hi NotifyWARNIcon  ctermfg=214]]
-vim.cmd [[hi NotifyINFOIcon  ctermfg=81]]
-vim.cmd [[hi NotifyDEBUGIcon ctermfg=102]]
-vim.cmd [[hi NotifyTRACEIcon ctermfg=59]]
+vim.api.nvim_set_hl(0, 'NotifyERRORIcon', {ctermfg=Color.error_red})  -- magenta
+vim.api.nvim_set_hl(0, 'NotifyWARNIcon',  {ctermfg=Color.warn_orange})
+vim.api.nvim_set_hl(0, 'NotifyINFOIcon',  {ctermfg=Color.info_blue})
+vim.api.nvim_set_hl(0, 'NotifyDEBUGIcon', {ctermfg=245})  -- grey
+vim.api.nvim_set_hl(0, 'NotifyTRACEIcon', {ctermfg=241})   -- grey
 
---- 文字内容颜色
-vim.cmd [[hi! link NotifyERRORBody Normal]]
-vim.cmd [[hi! link NotifyWARNBody Normal]]
-vim.cmd [[hi! link NotifyINFOBody Normal]]
-vim.cmd [[hi! link NotifyDEBUGBody Normal]]
-vim.cmd [[hi! link NotifyTRACEBody Normal]]
+--- message 内容颜色, 包括背景颜色.
+vim.api.nvim_set_hl(0, 'NotifyERRORBody', {link = 'Normal'})
+vim.api.nvim_set_hl(0, 'NotifyWARNBody',  {link = 'Normal'})
+vim.api.nvim_set_hl(0, 'NotifyINFOBody',  {link = 'Normal'})
+vim.api.nvim_set_hl(0, 'NotifyDEBUGBody', {link = 'Normal'})
+vim.api.nvim_set_hl(0, 'NotifyTRACEBody', {link = 'Normal'})
 
 
 
