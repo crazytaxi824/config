@@ -428,5 +428,11 @@ vim.api.nvim_create_autocmd("CmdwinEnter", {
   end
 })
 
+--- spell check
+vim.opt.spelllang = "en_us,cjk"
+vim.api.nvim_create_user_command('SpellCheckToggle', function()
+  vim.wo.spell = not vim.wo.spell
+end, {bang=true, bar=true})
+
 
 

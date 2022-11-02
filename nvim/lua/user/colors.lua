@@ -300,6 +300,10 @@ local highlights = {
   Conceal = {ctermfg = 246}, -- `set conceallevel?`, markdown list, code block ...
   Label = {ctermfg = Color.special_cyan}, -- json key color
 
+  SpellBad = {ctermfg = Color.error_red, ctermbg = Color.dark_red, bold = true, underline = true},
+  SpellCap = {ctermfg = Color.warn_orange, ctermbg = Color.dark_red, bold = true, underline = true},
+  SpellLocal = {},  -- clear highlight
+
   --- NOTE: 以下设置是为了配合 lazy load plugins ---------------------------------------------------
   --- 以下颜色为了 lazy load lualine
   --- 无法使用 lualine 的情况下 StatusLine 颜色, eg: tagbar 有自己设置的 ':set statusline?' 颜色不受 lualine 控制.
