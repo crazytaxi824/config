@@ -276,6 +276,9 @@ local highlights = {
   DiagnosticWarn  = {ctermfg = Color.warn_orange},
   DiagnosticError = {ctermfg = Color.error_red},
 
+  DiagnosticUnderlineHint = {ctermfg = Color.hint_grey, cterm = {'underline'}}, -- 加入 bold
+  DiagnosticUnderlineInfo = {ctermfg = Color.info_blue, cterm = {'underline'}}, -- 加入 bold
+  DiagnosticUnderlineWarn = {ctermfg = Color.warn_orange, cterm = {'underline'}}, -- 加入 bold
   DiagnosticUnderlineError = {ctermfg = Color.error_red, cterm = {'bold', 'underline'}}, -- 加入 bold
 
   --- LSP 相关颜色 ---------------------------------------------------------------------------------
