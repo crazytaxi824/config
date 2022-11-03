@@ -2,8 +2,8 @@
 --- 所以只要是能被 `matchadd()` 正确 highlight 的 filepath 就能被 `matchstr()` 一字不差的分析出来.
 
 --- highlight <file:line:col> ----------------------------------------------------------------------
-vim.cmd('hi Filepath cterm=underline')  -- 自定义颜色, for Highlight_filepath()
-vim.cmd('hi URL cterm=underline ctermfg=75')  -- 自定义颜色, for Highlight_filepath()
+vim.api.nvim_set_hl(0, 'Filepath', {underline = true}) -- 自定义颜色, for Highlight_filepath()
+vim.api.nvim_set_hl(0, 'URL', {ctermfg = Color.info_blue, underline = true}) -- 自定义颜色, for Highlight_filepath()
 
 --- VVI: vim `:h pattern-overview` 中使用双引号和单引号是不一样的. 单引号 '\(\)\+' 在双引号中需要写成 "\\(\\)\\+"
 --- regex: (ipfs:|ipns:|magnet:|mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:)

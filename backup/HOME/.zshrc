@@ -285,7 +285,11 @@ source $ZSH/oh-my-zsh.sh
 #                   如果有 selected items 则返回 selected items.
 #       {+1}  表示多个 <tab> selected item 中的 []str[0]
 #
-#       {+f}  创建一个临时文件, 然后将多选 items 写入其中. 可用其他程序读取该文件.
+#       {+f}  NOTE: 创建一个临时文件, 然后将多选 items 写入其中. 可用其他程序读取该文件.
+#                   {+f} 临时文件的路径通常是固定的, 不会无限创建新文件. 只是每次多选后 replace 该文件中的内容.
+#                   如果是 fd 选择的结果, 则临时文件中记录的是 filepath/dir.
+#                   如果是 rg 返回的结果, 则临时文件中记录的是 <filepath:line:col:content>
+#                   结论: {+f} 临时文件中记录的是 fzf 中显示的结果.
 #
 #       eg:
 #         `nvim -- {}`  表示 edit 当前行的 file.

@@ -240,12 +240,10 @@ vim.opt.sidescrolloff = 16  -- 和上面类似, 横向留空 n 列. NOTE: 配合
 vim.api.nvim_create_autocmd('WinEnter', {
   pattern = {"*"},
   callback = function(params)
-    local win_ids = vim.fn.getbufinfo(params.buf)[1].windows
-    for _, win_id in ipairs(win_ids) do
-      if vim.fn.win_gettype(win_id) == 'popup' then
-        vim.wo.scrolloff = 0
-        vim.wo.sidescrolloff = 0
-      end
+    local win_id = vim.fn.win_getid()  -- get current window id
+    if vim.fn.win_gettype(win_id) == 'popup' then
+      vim.wo[win_id].scrolloff = 0
+      vim.wo[win_id].sidescrolloff = 0
     end
   end
 })
@@ -302,8 +300,10 @@ vim.api.nvim_create_autocmd("WinEnter", {
   pattern = {"*"},
   callback = function(params)
     local win_id = vim.fn.win_getid()  -- get current window id
+
+    --- popup window 不显示 cursorline, eg: nvim-notify
     if vim.fn.win_gettype(win_id) ~= 'popup' then
-      vim.wo[win_id].cursorline = true  -- setlocal cursorline
+      vim.wo[win_id].cursorline = true  -- `setlocal cursorline`
     end
   end
 })
@@ -427,6 +427,12 @@ vim.api.nvim_create_autocmd("CmdwinEnter", {
     --vim.keymap.set('n', '<ESC>', '<cmd>q<CR>', {noremap=true, buffer=params.buf, desc="close window"})
   end
 })
+
+--- spell check
+vim.opt.spelllang = "en_us,cjk"
+vim.api.nvim_create_user_command('SpellCheckToggle', function()
+  vim.wo.spell = not vim.wo.spell
+end, {bang=true, bar=true})
 
 
 

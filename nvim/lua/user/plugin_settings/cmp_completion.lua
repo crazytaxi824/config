@@ -75,8 +75,14 @@ cmp.setup {
   },
 
   window = {
-    --completion = cmp.config.window.bordered({border = "single"}),  -- `:help nvim_open_win()`
-    --documentation = cmp.config.window.bordered({border = "single"}),
+    -- completion = {
+    --   border = {"","","","│","","","",""},
+    --   winhighlight = 'Normal:Pmenu,FloatBorder:Pmenu,CursorLine:PmenuSel,Search:None',
+    -- },
+    documentation = {
+      border = {"", "", "", " ", "", "", "", "▏"},  -- `:help nvim_open_win()`
+      winhighlight = 'FloatBorder:NormalFloat',
+    },
   },
 
   --- completion 菜单显示
@@ -176,37 +182,37 @@ cmp.setup {
 -- https://github.com/hrsh7th/nvim-cmp/wiki/Menu-Appearance
 
 --- 匹配文字的颜色
-vim.cmd [[hi CmpItemAbbrMatch ctermfg=213]]
-vim.cmd [[hi CmpItemAbbrMatchFuzzy ctermfg=213]]
+vim.api.nvim_set_hl(0, 'CmpItemAbbrMatch', {ctermfg = Color.conditional_magenta})
+vim.api.nvim_set_hl(0, 'CmpItemAbbrMatchFuzzy', {ctermfg = Color.conditional_magenta})
 
 --- [lsp], [buffer], [path], [snippet] 颜色
-vim.cmd [[hi CmpItemMenu ctermfg=43]]
+vim.api.nvim_set_hl(0, 'CmpItemMenu', {ctermfg = Color.type_green})
 
 --- VVI: CmpItemKindXXX 默认颜色, 如果没有单独设置 CmpItemKindXXX 颜色则会使用该颜色.
-vim.cmd [[hi CmpItemKindDefault ctermfg=248]]
+vim.api.nvim_set_hl(0, 'CmpItemKindDefault', {ctermfg = 248})
 
-vim.cmd [[hi! link CmpItemKindInterface Type]]
-vim.cmd [[hi! link CmpItemKindClass Type]]
-vim.cmd [[hi! link CmpItemKindStruct Type]]
-vim.cmd [[hi! link CmpItemKindTypeParameter Type]]
-vim.cmd [[hi! link CmpItemKindFunction Function]]
-vim.cmd [[hi! link CmpItemKindMethod Function]]
-vim.cmd [[hi! link CmpItemKindConstructor Function]]
-vim.cmd [[hi! link CmpItemKindKeyword Keyword]]
-vim.cmd [[hi! link CmpItemKindVariable Keyword]]
-vim.cmd [[hi! link CmpItemKindConstant Keyword]]
-vim.cmd [[hi! link CmpItemKindEnum Keyword]]
-vim.cmd [[hi! link CmpItemKindModule String]]
+vim.api.nvim_set_hl(0, 'CmpItemKindInterface', {link = 'Type'})
+vim.api.nvim_set_hl(0, 'CmpItemKindClass',     {link = 'Type'})
+vim.api.nvim_set_hl(0, 'CmpItemKindStruct',    {link = 'Type'})
+vim.api.nvim_set_hl(0, 'CmpItemKindTypeParameter', {link = 'Type'})
+vim.api.nvim_set_hl(0, 'CmpItemKindFunction',    {link = 'Function'})
+vim.api.nvim_set_hl(0, 'CmpItemKindMethod',      {link = 'Function'})
+vim.api.nvim_set_hl(0, 'CmpItemKindConstructor', {link = 'Function'})
+vim.api.nvim_set_hl(0, 'CmpItemKindKeyword' , {link = 'Keyword'})
+vim.api.nvim_set_hl(0, 'CmpItemKindVariable', {link = 'Keyword'})
+vim.api.nvim_set_hl(0, 'CmpItemKindConstant', {link = 'Keyword'})
+vim.api.nvim_set_hl(0, 'CmpItemKindEnum',     {link = 'Keyword'})
+vim.api.nvim_set_hl(0, 'CmpItemKindModule',   {link = 'String'})
 
 --- cyan
-vim.cmd [[hi CmpItemKindFile ctermfg=81]]
-vim.cmd [[hi CmpItemKindFolder ctermfg=81]]
+vim.api.nvim_set_hl(0, 'CmpItemKindFile',   {ctermfg = Color.special_cyan})
+vim.api.nvim_set_hl(0, 'CmpItemKindFolder', {ctermfg = Color.special_cyan})
 
--- grey
-vim.cmd [[hi CmpItemAbbrDeprecated ctermfg=244 cterm=underline]]  -- 弃用的 suggestion.
+--- grey, 弃用的 suggestion.
+vim.api.nvim_set_hl(0, 'CmpItemAbbrDeprecated',  {ctermfg = 244, underline = true})
 
 -- blue
-vim.cmd [[hi CmpItemKindSnippet ctermfg=75]]
+vim.api.nvim_set_hl(0, 'CmpItemKindSnippet', {ctermfg = Color.boolean_blue})
 
 -- -- }}}
 

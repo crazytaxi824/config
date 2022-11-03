@@ -65,8 +65,8 @@ toggleterm.setup({
 })
 
 --- toggleterm winbar 颜色
-vim.cmd('hi WinBarActive cterm=bold,underline')
-vim.cmd('hi WinBarInactive ctermfg=246')
+vim.api.nvim_set_hl(0, 'WinBarActive', {bold = true, underline = true})
+vim.api.nvim_set_hl(0, 'WinBarInactive', {ctermfg=246})
 
 --- terminal autocmd 设置 -------------------------------------------------------------------------- {{{
 --- #toggleterm#1-9 自动进入 insert mode.

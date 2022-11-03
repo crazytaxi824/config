@@ -44,6 +44,7 @@ __Debug_Neovim = {
 require "user.plugin_settings.impatient"
 
 --- 读取设置: ~/.config/nvim/lua/user/xxx.lua
+require "user.colors"      -- vim highlight 设置, VVI: 必须放在最前面加载, 因为有全局变量.
 require "user.global"      -- [必要], 自定义函数, 很多设置用到的常用函数.
 require "user.settings"    -- vimrc 设置
 require "user.lsp"         -- 加载 vim.lsp/vim.diagnostic 相关设置. 这里不是插件设置, 是内置参数设置.
@@ -58,7 +59,6 @@ require "user.plugins_lazy_loader"  -- 利用vim.schedual() lazy load plugins
 
 --- 放在最后 overwirte 其他设置
 require "user.keymaps"  -- keymap 设置
-require "user.colors"   -- vim highlight 设置
 
 require "user.health"  -- 在 :checkhealth 时执行.
 
