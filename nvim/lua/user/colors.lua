@@ -286,8 +286,8 @@ local highlights = {
 
   --- diff 颜色 ------------------------------------------------------------------------------------
   DiffAdd    = {ctermfg = Color.black, ctermbg = Color.title_green},
-  DiffDelete = {ctermfg = Color.white, ctermbg = Color.error_red},
-  DiffChange = {ctermfg = Color.conditional_magenta},
+  DiffDelete = {ctermfg = Color.white, ctermbg = Color.dark_red},
+  DiffChange = {},  -- 有修改的一整行的文字的颜色
   DiffText   = {ctermfg = Color.black, ctermbg = Color.conditional_magenta}, -- changed text
 
   --- diff mode 下
