@@ -33,7 +33,7 @@ function checkBrewRootFormula() {
 		luarocks        # lua package manager
 		universal-ctags # 各种语言的 object 分析工具. vim/neovim tagbar 插件使用
 		prettier        # 格式化工具
-		clang-format    # c,c++,object-c 格式化工具
+		clang-format    # c,c++,object-c format tool
 		shfmt           # shell format tool
 
 		# dev tools
@@ -52,7 +52,8 @@ function checkBrewRootFormula() {
 		tmux # terminal session / split screen 工具
 		tree # terminal 显示 dir 结构
 		viu  # terminal 显示图片工具
-		w3m  # terminal 显示网页工具
+		#w3m  # terminal 显示网页工具
+		ranger # terminal file explorer
 
 		# other tools
 		pandoc # 文档格式转换工具, 支持 word, pdf, markdown ... 各种格式

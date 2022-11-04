@@ -8,7 +8,7 @@ export LC_ALL=en_US.UTF-8  # 设置 LC_ALL, 其他 LC_* 强制等于 LC_ALL, 单
 export PATH=/usr/local/sbin:$PATH
 
 # NOTE: testing neovim v8.0
-local nvim=~/.nvim_0.8/nvim-macos/bin/nvim  # brew installed neovim is v0.7.2
+local nvim=~/.nvim_0.8/nvim-macos/bin/nvim  # brew installed neovim is v0.7.2_1
 alias nvim=$nvim
 # $VISUAL is a more capable and interactive preference over $EDITOR.
 #  - EDITOR editor should be able to work without use of "advanced" terminal functionality.
