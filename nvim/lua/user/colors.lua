@@ -165,7 +165,7 @@
 ---
 --- nvim_create_namespace({name})  namespace are used for buffer highlights.
 --- nvim_buf_add_highlight(),  有点类似 matchaddpos() 但是不安全一样.
---- 
+---
 --- VVI: nvim_set_hl() 没有实现 `hi! default link Foo Bar` 和 `hi clear Foo` 功能.
 
 Color = {  -- {{{
@@ -276,10 +276,10 @@ local highlights = {
   DiagnosticWarn  = {ctermfg = Color.warn_orange},
   DiagnosticError = {ctermfg = Color.error_red},
 
-  DiagnosticUnderlineHint = {ctermfg = Color.hint_grey, cterm = {'underline'}}, -- 加入 bold
-  DiagnosticUnderlineInfo = {ctermfg = Color.info_blue, cterm = {'underline'}}, -- 加入 bold
-  DiagnosticUnderlineWarn = {ctermfg = Color.warn_orange, cterm = {'underline'}}, -- 加入 bold
-  DiagnosticUnderlineError = {ctermfg = Color.error_red, cterm = {'bold', 'underline'}}, -- 加入 bold
+  DiagnosticUnderlineHint = {ctermfg = Color.hint_grey, cterm = {'underline'}},
+  DiagnosticUnderlineInfo = {ctermfg = Color.info_blue, cterm = {'underline'}},
+  DiagnosticUnderlineWarn = {ctermfg = Color.warn_orange, cterm = {'underline'}},
+  DiagnosticUnderlineError = {ctermfg = Color.error_red, cterm = {'bold', 'underline'}},
 
   --- LSP 相关颜色 ---------------------------------------------------------------------------------
   --- vim.lsp.buf.document_highlight() 颜色, 类似 Same_ID
