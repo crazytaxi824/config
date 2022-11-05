@@ -211,7 +211,7 @@ local highlights = {
   PmenuThumb  = {ctermbg = 240}, -- Completion Menu scroll bar 滚动条颜色
   NormalFloat = {link = "Pmenu"}, -- NormalFloat 默认 link to Pmenu
   FloatBorder = {ctermfg = Color.black}, -- Floating Window border 颜色需要和 Pmenu 的背景色相同
-                                            -- border = {"▄","▄","▄","█","▀","▀","▀","█"}
+                                         -- border = {"▄","▄","▄","█","▀","▀","▀","█"}
 
   Comment    = {ctermfg = Color.comment_green}, -- 注释颜色
   Folded     = {ctermfg = 67, ctermbg = 235}, -- 折叠行颜色
