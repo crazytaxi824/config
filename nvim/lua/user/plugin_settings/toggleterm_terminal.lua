@@ -50,7 +50,8 @@ toggleterm.setup({
     winblend = 0,  -- NOTE: 除非使用 termguicolors, 否则设置为 0.
   },
 
-  --- 其他设置, NOTE: 以下最好不要全局设置, 可以根据具体情况在 :open() 前设置 ---
+  --- 其他设置, NOTE: 以下除 on_create 之外最好不要全局设置, 可以根据具体情况在 :open() 前设置 ---
+  --on_create = fun(t: Terminal), -- function to run when the terminal is first created.
   --on_open  = fun(t: Terminal), -- toggleterm win open.  NOTE: term:spawn() 无法触发.
   --on_close = fun(t: Terminal), -- toggleterm win close. NOTE: close_on_exit=true 的时候才能触发.
   --on_exit  = fun(t: Terminal, job: number, exit_code: number, name: string) -- TermClose, job ends
