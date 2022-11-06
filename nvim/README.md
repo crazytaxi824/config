@@ -426,6 +426,17 @@ vim.lsp.buf.format({
 
 ## FIXME
 
+which-key 有时候报错.
+
+- ERROR: Failed to run healthcheck for "which_key" plugin. Exception:
+  function health#check[20]..health#which_key#check, line 1
+  Vim(lua):E5108: Error executing lua .../pack/packer/start/which-key.nvim/lua/which-key/keys.lua:426: Invalid buffer id: 3
+  stack traceback:
+  [C]: in function 'nvim_buf_get_keymap'
+  .../pack/packer/start/which-key.nvim/lua/which-key/keys.lua:426: in function 'update_keymaps'
+  .../pack/packer/start/which-key.nvim/lua/which-key/keys.lua:363: in function 'check_health'
+  [string ":lua"]:1: in main chunk
+
 <br />
 
 ## TODO
@@ -435,6 +446,8 @@ vim.lsp.buf.format({
 - `:LspRestart` - lspconfig command
 - null-ls restart? `vim.lsp.stop_client(id)`, `vim.lsp.start_client()`, `vim.lsp.start(svr)`
 - test lsp after `go mod init`, `go mod tidy`
+
+- checktools after mason loaded
 
 
 
