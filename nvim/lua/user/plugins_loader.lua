@@ -263,6 +263,10 @@ return packer.startup(function(use)
   --- `:TSUpdate`             -- Update the installed languages
   --- `:TSUpdateSync`         -- Update the installed languages synchronously
   -- -- }}}
+  --- README: https://github.com/nvim-treesitter/nvim-treesitter#adding-queries
+  --- All queries found in the runtime directories will be combined.
+  --- By convention, if you want to write a query, use the `queries/` directory,
+  --- but if you want to extend a query use the `after/queries/` directory.
   use {"nvim-treesitter/nvim-treesitter",
     commit = "3256eb2c",  -- BUG: foldmethod error with tab indent.
     run = ":TSUpdateSync",  -- Post-update/install hook.
