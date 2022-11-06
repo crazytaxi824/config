@@ -1,4 +1,24 @@
 --- https://github.com/mfussenegger/nvim-dap
+--- README: repl / debug console command --- {{{
+--    .exit               Closes the REPL
+--    .clear              clear dap-repl buffer 内容
+--    .c or .continue     Same as |dap.continue|
+--    .n or .next         Same as |dap.step_over|
+--    .into               Same as |dap.step_into|
+--    .into_target        Same as |dap.step_into{askForTargets=true}|
+--    .out                Same as |dap.step_out|
+--    .up                 Same as |dap.up|
+--    .down               Same as |dap.down|
+--    .goto               Same as |dap.goto_|
+--    .scopes             Prints the variables in the current scopes
+--    .threads            Prints all threads
+--    .frames             Print the stack frames
+--    .capabilities       Print the capabilities of the debug adapter
+--    .b or .back         Same as |dap.step_back|
+--    .rc or
+--    .reverse-continue   Same as |dap.reverse_continue|
+-- -- }}}
+
 --- `:help dap.txt`
 local dap_status_ok, dap = pcall(require, "dap")
 if not dap_status_ok then
@@ -72,26 +92,6 @@ vim.cmd([[
 vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "DapBreakpointHL", numhl = "", linehl="" })
 vim.fn.sign_define("DapBreakpointRejected", { text = "◌", texthl = "DapBreakpointRejectedHL", numhl = "", linehl="" })
 vim.fn.sign_define("DapStopped", { text = " →", texthl = "DapStoppedHL", numhl = "", linehl="DapStoppedLineHL" })
--- -- }}}
-
---- repl / debug console command --- {{{
---    .exit               Closes the REPL
---    .clear              clear dap-repl buffer 内容
---    .c or .continue     Same as |dap.continue|
---    .n or .next         Same as |dap.step_over|
---    .into               Same as |dap.step_into|
---    .into_target        Same as |dap.step_into{askForTargets=true}|
---    .out                Same as |dap.step_out|
---    .up                 Same as |dap.up|
---    .down               Same as |dap.down|
---    .goto               Same as |dap.goto_|
---    .scopes             Prints the variables in the current scopes
---    .threads            Prints all threads
---    .frames             Print the stack frames
---    .capabilities       Print the capabilities of the debug adapter
---    .b or .back         Same as |dap.step_back|
---    .rc or
---    .reverse-continue   Same as |dap.reverse_continue|
 -- -- }}}
 
 --- nvim-dap-ui settings ---------------------------------------------------------------------------

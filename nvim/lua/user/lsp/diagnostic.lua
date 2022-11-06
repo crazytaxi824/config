@@ -17,20 +17,20 @@ end
 local config = {
   --- NOTE: signs & underline & virtual_text 默认 true, 也可以使用 table.
   signs = true,  -- 显示 sign DiagnosticSignError/Warn/Info/Hint.
-                 -- {severity, priority}
-                 --  severity: Only show signs for diagnostics matching the given severity,
-                 --  priority: DiagnosticSignError/Warn/Info/Hint 的 priority (all signs use the same priority),
-                 --  默认值 10.
-                 --  NOTE: 除非 severity_sort = true, 则:
-                 --    - DiagnosticSignHint  priority=priority
-                 --    - DiagnosticSignInfo  priority=priority + 1
-                 --    - DiagnosticSignWarn  priority=priority + 2
-                 --    - DiagnosticSignError priority=priority + 3
+                 -- 可以为 table: { severity, priority }
+                 -- severity: Only show signs for diagnostics matching the given severity,
+                 -- priority: 默认值 10. NOTE: DiagnosticSignError/Warn/Info/Hint use the same priority, unless:
+                 -- 如果 severity_sort = false, 则所有 priority 都是 10;
+                 -- 如果 severity_sort = true, 则:
+                 --   - DiagnosticSignHint  priority=priority
+                 --   - DiagnosticSignInfo  priority=priority + 1
+                 --   - DiagnosticSignWarn  priority=priority + 2
+                 --   - DiagnosticSignError priority=priority + 3
 
   severity_sort = true,  -- DiagnosticSignError > Warn > Info > Hint 优先级 (priority) 设置.
 
-  underline = true,  -- 给错误的源代码使用 hi DiagnosticUnderlineError/Warn/Info/Hint
-                     -- {severity}
+  underline = true,  -- 给错误的源代码使用 `hi DiagnosticUnderlineError/Warn/Info/Hint`
+                     -- {severity}: Only underline diagnostics matching the given severity.
 
   virtual_text = false,  -- 使用 virtual_text 显示 diagnostic_message.
                          -- {severity, source, spacing, prefix, format}

@@ -177,7 +177,7 @@ font:
   # the default being at the bottom. Increasing `x` moves the glyph to the
   # right, increasing `y` moves the glyph upward.
   glyph_offset:
-    x: 0  # glyph move right `N` px
+    x: 0  # glyph move right `N` px. █
     y: 5  # glyph move up `N` px, 根据实际测试调整得到的值.
 
   # Use built-in font for box drawing characters.

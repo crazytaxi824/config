@@ -1,4 +1,4 @@
---- README: `:h toggleterm`
+--- README: `:help toggleterm`
 --- 常用命令:
 ---    `:ToggleTerm` - toggle terminal 列表中最后一个 terminal.
 ---    `:<ID>ToggleTerm` - toggle 一个指定 id 的 terminal. eg: `:16ToggleTerm`, `:100ToggleTerm`
@@ -60,7 +60,7 @@ toggleterm.setup({
   --- NOTE: nvim v0.8+ 才有 winbar 可以用.
   --- 会添加 highlight WinBarActive & WinBarInactive 两个颜色.
   winbar = {
-   enabled = false,  -- BUG: background spawn terminal 会引起 error. in function 'nvim_win_is_valid'
+    enabled = false,  -- BUG: background spawn terminal 会引起 error. in function 'nvim_win_is_valid'
   },
 })
 

@@ -165,7 +165,7 @@
 ---
 --- nvim_create_namespace({name})  namespace are used for buffer highlights.
 --- nvim_buf_add_highlight(),  有点类似 matchaddpos() 但是不安全一样.
---- 
+---
 --- VVI: nvim_set_hl() 没有实现 `hi! default link Foo Bar` 和 `hi clear Foo` 功能.
 
 Color = {  -- {{{
@@ -211,7 +211,7 @@ local highlights = {
   PmenuThumb  = {ctermbg = 240}, -- Completion Menu scroll bar 滚动条颜色
   NormalFloat = {link = "Pmenu"}, -- NormalFloat 默认 link to Pmenu
   FloatBorder = {ctermfg = Color.black}, -- Floating Window border 颜色需要和 Pmenu 的背景色相同
-                                            -- border = {"▄","▄","▄","█","▀","▀","▀","█"}
+                                         -- border = {"▄","▄","▄","█","▀","▀","▀","█"}
 
   Comment    = {ctermfg = Color.comment_green}, -- 注释颜色
   Folded     = {ctermfg = 67, ctermbg = 235}, -- 折叠行颜色
@@ -276,7 +276,10 @@ local highlights = {
   DiagnosticWarn  = {ctermfg = Color.warn_orange},
   DiagnosticError = {ctermfg = Color.error_red},
 
-  DiagnosticUnderlineError = {ctermfg = Color.error_red, cterm = {'bold', 'underline'}}, -- 加入 bold
+  DiagnosticUnderlineHint = {ctermfg = Color.hint_grey, cterm = {'underline'}},
+  DiagnosticUnderlineInfo = {ctermfg = Color.info_blue, cterm = {'underline'}},
+  DiagnosticUnderlineWarn = {ctermfg = Color.warn_orange, cterm = {'underline'}},
+  DiagnosticUnderlineError = {ctermfg = Color.error_red, cterm = {'bold', 'underline'}},
 
   --- LSP 相关颜色 ---------------------------------------------------------------------------------
   --- vim.lsp.buf.document_highlight() 颜色, 类似 Same_ID
@@ -286,8 +289,8 @@ local highlights = {
 
   --- diff 颜色 ------------------------------------------------------------------------------------
   DiffAdd    = {ctermfg = Color.black, ctermbg = Color.title_green},
-  DiffDelete = {ctermfg = Color.white, ctermbg = Color.error_red},
-  DiffChange = {ctermfg = Color.conditional_magenta},
+  DiffDelete = {ctermfg = Color.white, ctermbg = Color.dark_red},
+  DiffChange = {},  -- 有修改的一整行的文字的颜色
   DiffText   = {ctermfg = Color.black, ctermbg = Color.conditional_magenta}, -- changed text
 
   --- diff mode 下

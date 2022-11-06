@@ -313,8 +313,11 @@ vim.api.nvim_create_autocmd("WinLeave", {
   command = 'setlocal nocursorline',
 })
 
-vim.opt.signcolumn = 'yes:1'  -- 始终显示 signcolumn. line_number 左边用来标记错误, 打断点的位置. 术语 gutter.
-                              -- '1' 表示 signcolumn 宽度. 宽度为 1*2=2 格; 如果设置为 2, 则宽度为 2*2=4 格.
+vim.opt.signcolumn = 'yes:1'  -- 'auto:1-3', 最少预留 1 个 sign 的宽度, 最多显示 3 个 sign 的宽度.
+                              -- 'yes:1' 表示永远显示 1 个 sign 的宽度.
+                              -- '1' 表示同一行可同时显示最多 1 个 sign. 宽度为 1*2=2 格, 根据 priority 显示;
+                              -- 如果值为 '3', 则可以在同一行显示最多 3 个 sign. signcolumn 宽度为 3*2=6 ...
+
 vim.opt.showmatch = true      -- 跳到匹配的括号上, 包括 () {} []
 
 vim.opt.completeopt = { "menu", "menuone", "noselect" }  -- 代码补全设置, nvim-cmp 不受影响.

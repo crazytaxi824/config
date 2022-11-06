@@ -85,7 +85,7 @@ local my_search = {
   cache_last_hl = nil  -- 缓存 { win_id=win_getid(), hl_id=matchadd() }, for vim.fn.matchdelete()
 }
 --- define my_search_sign
-vim.fn.sign_define(my_search.sign.name, {text=my_search.sign.text, texthl=my_search.hl_group, numhl=my_search.hl_group})
+vim.fn.sign_define(my_search.sign.name, {text=my_search.sign.text, texthl=my_search.hl_group})
 
 local function hl_search(key)
   local status, errmsg = pcall(vim.cmd, 'normal! ' .. key)
@@ -110,7 +110,7 @@ local function hl_search(key)
   --- NOTE: 通过 cursor position 来 place my_search_sign.
   local cur_pos = vim.fn.getpos('.')  -- [bufnum, lnum, col, off]
   vim.fn.sign_place(my_search.sign.id, my_search.sign.group, my_search.sign.name, vim.fn.bufnr(),
-    {lnum=cur_pos[2], priority=109})
+    {lnum=cur_pos[2], priority=101})
 
   --- 缓存数据
   my_search.cache_last_hl = {hl_id = hl_id, win_id = vim.fn.win_getid()}
