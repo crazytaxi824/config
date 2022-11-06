@@ -520,9 +520,4 @@ return packer.startup(function(use)
   --use "goolord/alpha-nvim"          -- neovim 启动页面
   --use "ahmedkhalf/project.nvim"     -- project manager
 
-  --- Colorschemes
-  --use "lunarvim/colorschemes"       -- A bunch of colorschemes you can try out
-  --use "lunarvim/darkplus.nvim"
-  --use "Mofiqul/vscode.nvim"
-
 end)

@@ -13,7 +13,7 @@ ts_configs.setup {
   --ensure_installed = { "go", "lua", "javascript", "typescript", "tsx", "html", "css", "scss" ... },
   ensure_installed = "all",  -- 白名单, "all" OR a list of languages
   sync_install = false,  -- install languages synchronously (only applied to `ensure_installed`)
-  ignore_install = { "help" },  -- 黑名单, 不安装.
+  ignore_install = {},  -- 黑名单, 不安装.
 
   --- VVI: opt 加载 nvim-treesitter 时最好使用默认路径. 否则 run=":TSUpdate" 会在本 config 文件加载之前进行安装,
   --- 这时候 nvim-treesitter 并没有读取到 parser_install_dir 导致 parser 被安装在默认位置.
@@ -106,7 +106,7 @@ ts_configs.setup {
   -- },
 }
 
---- rainbow colors ---------------------------------------------------------------------------------
+--- rainbow colors --------------------------------------------------------------------------------- {{{
 --vim.cmd [[hi rainbowcol1 ctermfg=220]]  -- yellow
 --vim.cmd [[hi rainbowcol2 ctermfg=33]]   -- blue
 --vim.cmd [[hi rainbowcol3 ctermfg=81]]   -- cyan
@@ -114,6 +114,7 @@ ts_configs.setup {
 --vim.cmd [[hi rainbowcol5 ctermfg=42]]   -- green
 --vim.cmd [[hi rainbowcol6 ctermfg=167]]  -- red
 --vim.cmd [[hi rainbowcol7 ctermfg=248]]  -- grey
+-- -- }}}
 
 --- HACK: autocmd lazy highlight, setup() 中的 highlight module 需要设为 false --------------------- {{{
 --- NOTE: 使用 lazy 方式启动 highlight, 提前加载 treesitter 会严重拖慢文件打开速度.
