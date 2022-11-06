@@ -80,7 +80,7 @@ cmp.setup {
     --   winhighlight = 'Normal:Pmenu,FloatBorder:Pmenu,CursorLine:PmenuSel,Search:None',
     -- },
     documentation = {
-      border = {"", "", "", " ", "", "", "", "▏"},  -- `:help nvim_open_win()`
+      border = {"", "", "", "▕", "", "", "", "▏"},  -- `:help nvim_open_win()`
       winhighlight = 'FloatBorder:NormalFloat',
     },
   },
