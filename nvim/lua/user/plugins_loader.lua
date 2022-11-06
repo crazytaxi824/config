@@ -293,7 +293,7 @@ return packer.startup(function(use)
 
   --- 第三方 module 插件 ---
   use {"JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
-    commit = "2941f00",
+    commit = "32d9627",
     after = "nvim-treesitter",
   }
 
