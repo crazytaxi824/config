@@ -237,7 +237,7 @@ return packer.startup(function(use)
   --- Must install ---------------------------------------------------------------------------------
   --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   use {"folke/which-key.nvim",
-    commit = "6885b66",
+    commit = "61553ae", -- FEAT: allow mapping to have multiple modes as a table.
     config = function() require("user.plugin_settings.which_key") end,
   }
 
