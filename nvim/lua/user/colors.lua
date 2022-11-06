@@ -363,6 +363,10 @@ end
 --- `hi @property.go ...` 单独为 filetype=go 的文件设置 highlight.
 --- https://github.com/nvim-treesitter/nvim-treesitter/pull/3656
 if vim.fn.has('nvim-0.8') == 1 then
+  vim.api.nvim_set_hl(0, '@text.warning', { link = "Todo" })
+  vim.api.nvim_set_hl(0, '@text.danger', { link = "WarningMsg" })
+  vim.api.nvim_set_hl(0, '@text.note', { link = "SpecialComment" })
+
   vim.api.nvim_set_hl(0, '@field', { link = "Normal" })
   vim.api.nvim_set_hl(0, '@property', { ctermfg = 81 })
   vim.api.nvim_set_hl(0, '@parameter', { link = "Normal" })
