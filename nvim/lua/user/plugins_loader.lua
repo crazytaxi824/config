@@ -354,7 +354,7 @@ return packer.startup(function(use)
   }
 
   use {"saadparwaiz1/cmp_luasnip",  -- Snippets source for nvim-cmp
-    commit = "a9de941",
+    commit = "1809552",
     after = "nvim-cmp",
     requires = "L3MON4D3/LuaSnip",
   }
