@@ -308,14 +308,16 @@ local highlights = {
   SpellLocal = {},  -- clear highlight
 
   --- NOTE: treesitter 颜色设置 --------------------------------------------------------------------
-  ['@text.warning'] = { link = "Todo" },
-  ['@text.danger'] = { link = "WarningMsg" },
-  ['@text.note'] = { link = "SpecialComment" },
+  ['@text.warning'] = { link = "Todo" }, -- TODO, HACK 颜色
+  ['@text.danger'] = { link = "WarningMsg" }, -- XXX FIXME BUG 颜色
+  ['@text.note'] = { link = "SpecialComment" }, -- NOTE: DEBUG: FOO: 颜色
+  ['@text.title'] = { link = "Title" }, -- markdown # title
 
   ['@variable'] = { link = "Normal" },
   ['@constant'] = { link = "Constant" },
 
   ['@field'] = { link = "Normal" },
+  ['@field.private'] = { ctermfg = Color.hint_grey }, -- after/queries/go 中自定义的颜色.
   ['@property'] = { ctermfg = 81 },
   ['@parameter'] = { link = "Normal" },
 
@@ -329,6 +331,7 @@ local highlights = {
   ['@namespace'] = { link = "Normal" },  -- package [@namespace]
 
   ['@punctuation.special'] = { link = 'Special' },  -- ${ ... }
+  ['@string.escape'] = { ctermfg = 186 },  -- \n \t ...
 
   --- html, tag <div></div>
   ['@tag'] = { ctermfg = 68 },  -- <div></div>, html 内置标签文字颜色 div
