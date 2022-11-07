@@ -415,12 +415,11 @@ vim.lsp.buf.format({
 
 # Note
 
-## Feature required
+## Pull request
 
-### nvim-lspconfig new feature required
+### nvim-treesitter
 
-- Feature/attach to unnamed buffer #1929, https://github.com/neovim/nvim-lspconfig/pull/1929.
-  for now: add file in nvim-tree, eg: ':edit tmp.json', ':edit tmp.go', and remove it later.
+- golang (placeholder | format verbs %v %d), https://github.com/tree-sitter/tree-sitter-go/pull/88
 
 <br />
 
