@@ -9,7 +9,6 @@ require("user.global.utils.fzf_edit")
 
 require("user.global.cmds_autocmds.log_cotent_filter")
 require("user.global.cmds_autocmds.del_marks")
-require("user.global.cmds_autocmds.markdown")
 
 require("user.global.get_infos")
 
