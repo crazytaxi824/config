@@ -311,10 +311,18 @@ local highlights = {
   ['@text.warning'] = { link = "Todo" }, -- TODO, HACK 颜色
   ['@text.danger'] = { link = "WarningMsg" }, -- XXX FIXME BUG 颜色
   ['@text.note'] = { link = "SpecialComment" }, -- NOTE: DEBUG: FOO: 颜色
-  ['@text.title'] = { link = "Title" }, -- markdown # title
+  ['@text.uri'] = { link = "String" },  -- html, <href="@text.uri">
+  ['@text.title'] = { link = "Title" }, -- markdown, # title
+  ['@text.literal'] = { ctermfg = 173, ctermbg = 237 },  -- markdown, `code`
+  ['@text.strong'] = { cterm = {"bold"} }, -- markdown, **bold**
+  ['@text.emphasis'] = { cterm = {"italic"} },  -- markdown, *italic*, _italic_
+  ['@text.underline'] = { cterm = {"underline"} },  -- markdown, *italic*, _italic_
+  ['@text.reference'] = { ctermfg = Color.special_cyan },  -- markdown, [@text.reference](http://...)
 
+  --- programs ---------------------------------------------
   ['@variable'] = { link = "Normal" },
   ['@constant'] = { link = "Constant" },
+  ['@string.escape'] = { ctermfg = 180 },  -- \n \t ...
 
   ['@field'] = { link = "Normal" },
   ['@field.private'] = { ctermfg = Color.hint_grey }, -- after/queries/go 中自定义的颜色.
@@ -330,26 +338,21 @@ local highlights = {
   ['@keyword.return'] = { link = "Conditional" },
   ['@namespace'] = { link = "Normal" },  -- package [@namespace]
 
-  ['@punctuation.special'] = { link = 'Special' },  -- ${ ... }
-  ['@string.escape'] = { ctermfg = 186 },  -- \n \t ...
+  ['@tag'] = { ctermfg = 68 },  -- html, <@tag></@tag>
+  ['@tag.delimiter'] = { ctermfg = 243 },  -- html, <div></div>, <> 括号颜色
+  ['@tag.attribute'] = { link = "@property" },  -- html, <... width=..., @tag.attribute=... >
 
-  --- html, tag <div></div>
-  ['@tag'] = { ctermfg = 68 },  -- <div></div>, html 内置标签文字颜色 div
-  ['@tag.delimiter'] = { ctermfg = 243 },  -- <div></div>, <> 括号颜色
-  ['@tag.attribute'] = { link = "@property" },  -- <... width=..., height=... >
-  ['@text.uri'] = { link = "String" },
-
-  --- typescript
-  ['@constructor'] = { link = "Normal" },  -- import <@constructor> from 'react'
+  ['@punctuation.special'] = { link = 'Special' },  -- js, ts, console.log(`${ ... }`)
+  ['@constructor'] = { link = "Normal" },  -- typescript, import <@constructor> from 'react'
   ['@keyword.operator'] = { link = "Keyword" },  -- typescript 关键字 'new'
   ['@variable.builtin'] = { ctermfg = Color.boolean_blue },  -- typescript 关键字 'undefined', 'this', 'console' ...
   ['@constant.builtin'] = { ctermfg = Color.boolean_blue },  -- typescript 关键字 'null' ...
 
-  --- golang, NOTE: 单独为 go 设置 Property 颜色.
+  --- NOTE: 单独为 golang 设置 Property 颜色.
   ['@property.go'] = { link = "Normal" },
 
-  --- markdown, NOTE: 单独为 markdown 设置颜色.
-  ['@text.literal.markdown_inline'] = { ctermfg = 173, ctermbg = 237 },  -- `code`
+  --- NOTE: 单独为 markdown / markdown_inline 设置颜色.
+  ['@text.uri.markdown_inline'] = { link = "Underlined" },  -- html, <href="@text.uri">
   ['@punctuation.special.markdown'] = { link = "Conceal" },  -- `- * #`
   ['@punctuation.delimiter.markdown'] = { link = "Conceal" },  -- `- * #`
 
