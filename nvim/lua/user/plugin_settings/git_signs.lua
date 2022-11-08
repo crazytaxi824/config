@@ -25,6 +25,8 @@ git_signs.setup({
   update_debounce = 300,  -- 更新频率, 默认 100
   attach_to_untracked = true,  -- 新建文件是否 attach gitsigns
 
+  current_line_blame_formatter = '  ● git blame: <author>, <author_time:%d-%m-%Y> - <summary>',
+
   --- NOTE: 除了 signcolumn 外, 其他不推荐开启. 可以使用 `:Gitsigns preview_hunk` 查看修改记录,
   signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
   --numhl      = false, -- Toggle with `:Gitsigns toggle_numhl`
@@ -48,6 +50,7 @@ git_signs.setup({
       {'n', '<leader>gP', git_signs.preview_hunk, opt, "git: Preview Hunk"},
       {'n', '<leader>gn', git_signs.next_hunk, opt, "git: Jump to Next Hunk"},
       {'n', '<leader>gp', git_signs.prev_hunk, opt, "git: Jump to Prev Hunk"},
+      {'n', '<leader>gb', git_signs.toggle_current_line_blame, opt, "git: Toggle Blame line"},
       {'n', '<leader>gd', function()
         git_signs.toggle_deleted()
         git_signs.toggle_word_diff()
@@ -82,7 +85,7 @@ vim.api.nvim_set_hl(0, 'GitSignsDeletePreview', {ctermfg = 240})
 vim.api.nvim_set_hl(0, 'GitSignsDeleteVirtLn', {ctermfg = 240})
 
 --- current_line_blame 默认不开启.
---vim.api.nvim_set_hl(0, 'GitSignsCurrentLineBlame', {ctermfg = 242})
+vim.api.nvim_set_hl(0, 'GitSignsCurrentLineBlame', {ctermfg = 246})
 
 
 
