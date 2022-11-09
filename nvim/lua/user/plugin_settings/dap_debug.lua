@@ -82,16 +82,20 @@ dap.configurations.go = {
 -- `DapLogPoint` for log points (default: `L`)
 -- `DapStopped` to indicate where the debugee is stopped (default: `→`)
 -- `DapBreakpointRejected` to indicate breakpoints rejected by the debug adapter (default: `R`)
-vim.cmd([[
-  hi DapBreakpointHL ctermfg=190
-  hi DapBreakpointRejectedHL ctermfg=190
-  hi DapStoppedHL ctermfg=75
-  hi DapStoppedLineHL ctermbg=238
-]])
+-- vim.cmd([[
+--   hi DapBreakpointHL ctermfg=190
+--   hi DapBreakpointRejectedHL ctermfg=190
+--   hi DapStoppedHL ctermfg=75
+--   hi DapStoppedLineHL ctermbg=238
+-- ]])
+vim.api.nvim_set_hl(0, 'DapBreakpointHL', { ctermfg = Color.statusline_yellow })
+vim.api.nvim_set_hl(0, 'DapBreakpointRejectedHL', { ctermfg = Color.statusline_yellow })
+vim.api.nvim_set_hl(0, 'DapStoppedHL', { ctermfg = Color.info_blue })
+vim.api.nvim_set_hl(0, 'DapStoppedLineHL', { ctermbg = 238 })
 
 vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "DapBreakpointHL", numhl = "", linehl="" })
 vim.fn.sign_define("DapBreakpointRejected", { text = "◌", texthl = "DapBreakpointRejectedHL", numhl = "", linehl="" })
-vim.fn.sign_define("DapStopped", { text = " →", texthl = "DapStoppedHL", numhl = "", linehl="DapStoppedLineHL" })
+vim.fn.sign_define("DapStopped", { text = "→", texthl = "DapStoppedHL", numhl = "", linehl="DapStoppedLineHL" })
 -- -- }}}
 
 --- nvim-dap-ui settings ---------------------------------------------------------------------------

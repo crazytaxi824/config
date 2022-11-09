@@ -198,7 +198,7 @@ Color = {  -- {{{
 }
 -- -- }}}
 
--- vim.api.nvim_set_hl(0, '@property', { ctermfg = 81 })
+--- highlight api 设置: vim.api.nvim_set_hl(0, '@property', { ctermfg = 81 })
 local highlights = {
   --- editor ---------------------------------------------------------------------------------------
   Normal = {ctermfg = Color.white},
@@ -217,7 +217,7 @@ local highlights = {
   Folded     = {ctermfg = 67, ctermbg = 235}, -- 折叠行颜色
   NonText    = {ctermfg = 238}, -- 影响 listchars indentLine 颜色
   VertSplit  = {ctermfg = 242}, -- window 之间的分隔线颜色
-  MatchParen = {ctermfg = 220, cterm = {'bold', 'underline'}}, -- 括号匹配颜色
+  MatchParen = {ctermfg = Color.bracket_yellow, cterm = {'bold', 'underline'}}, -- 括号匹配颜色
 
   LineNr       = {ctermfg = 240}, -- 行号颜色
   CursorLine   = {ctermbg = 236}, -- 光标所在行颜色
@@ -326,7 +326,7 @@ local highlights = {
 
   ['@field'] = { link = "Normal" },
   ['@field.private'] = { ctermfg = Color.hint_grey }, -- after/queries/go 中自定义的颜色.
-  ['@property'] = { ctermfg = 81 },
+  ['@property'] = { ctermfg = Color.cyan },
   ['@parameter'] = { link = "Normal" },
 
   --['@function'] = { link = "Function" },

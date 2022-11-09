@@ -424,7 +424,7 @@ nvim_tree.setup {
 -- -- }}}
 
 --- `:help nvim-tree-highlight` -------------------------------------------------------------------- {{{
-vim.api.nvim_set_hl(0, 'NvimTreeFolderName', {ctermfg=81, bold=true})
+vim.api.nvim_set_hl(0, 'NvimTreeFolderName', {ctermfg=Color.cyan, bold=true})
 vim.cmd('hi! default link NvimTreeFolderIcon NvimTreeFolderName')
 vim.cmd('hi! default link NvimTreeEmptyFolderName NvimTreeFolderName')
 vim.cmd('hi! default link NvimTreeOpenedFolderName NvimTreeFolderName')  -- 已打开文件夹的颜色

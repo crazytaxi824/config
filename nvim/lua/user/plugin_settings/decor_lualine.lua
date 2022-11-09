@@ -20,7 +20,7 @@ local lualine_colors = {
   orange = Color.warn_orange, -- warn
   blue = Color.info_blue,  -- info background
 
-  dark_orange = 202, -- trailing_whitespace && mixed_indent
+  dark_orange = Color.dark_orange, -- trailing_whitespace && mixed_indent
 }
 
 --- Airline theme color
