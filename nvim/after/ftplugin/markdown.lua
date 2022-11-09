@@ -68,7 +68,7 @@ vim.api.nvim_buf_create_user_command(
 )
 
 --- conceal ----------------------------------------------------------------------------------------
-vim.wo.conceallevel = 2
+--vim.wo.conceallevel = 2  -- NOTE: 默认不开启 conceal
 vim.wo.concealcursor = "nc"  -- 'nc' Normal & Command Mode 不显示 Concealed text.
 
 --- `:help syn-cchar`, `:help syn-conceal`
