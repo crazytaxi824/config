@@ -19,8 +19,8 @@ local bufferline_colors = {
   tab_separator_fg = 243, -- grey
   duplicate_fg = 243,  -- grey
 
-  modified_fg  = Color.special_cyan,
-  indicator_fg = Color.special_cyan,
+  modified_fg  = Color.cyan,
+  indicator_fg = Color.cyan,
   separator_fg = 238,  -- grey
 
   error_fg   = Color.error_red,
