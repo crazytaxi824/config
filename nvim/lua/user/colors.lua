@@ -171,13 +171,13 @@
 Color = {  -- {{{
   none = 'NONE',
 
-  white     = 251,  -- foreground, text
-  black       = 233,  -- black background
+  white = 251,  -- foreground, text
+  black = 233,  -- black background
+  cyan  = 81,   -- VVI: one of vim's main color. SpecialChar, Underlined, Label ...
 
   keyword_purple = 170,  -- keyword, eg: func, type, struct, var, const ...
   func_gold      = 85,   -- func, function_call, method, method_call ... | bufferline, lualine
   string_orange  = 212,  -- string
-  special_cyan   = 81,   -- SpecialChar, fmt.Printf("%s \n")
   boolean_blue   = 74,   -- Special, boolean
   comment_green  = 71,   -- comments
   type_green     = 79,   -- type, 数据类型
@@ -198,7 +198,7 @@ Color = {  -- {{{
 }
 -- -- }}}
 
--- vim.api.nvim_set_hl(0, '@property', { ctermfg = 81 })
+--- highlight api 设置: vim.api.nvim_set_hl(0, '@property', { ctermfg = 81 })
 local highlights = {
   --- editor ---------------------------------------------------------------------------------------
   Normal = {ctermfg = Color.white},
@@ -217,7 +217,7 @@ local highlights = {
   Folded     = {ctermfg = 67, ctermbg = 235}, -- 折叠行颜色
   NonText    = {ctermfg = 238}, -- 影响 listchars indentLine 颜色
   VertSplit  = {ctermfg = 242}, -- window 之间的分隔线颜色
-  MatchParen = {ctermfg = 220, cterm = {'bold', 'underline'}}, -- 括号匹配颜色
+  MatchParen = {ctermfg = Color.bracket_yellow, cterm = {'bold', 'underline'}}, -- 括号匹配颜色
 
   LineNr       = {ctermfg = 240}, -- 行号颜色
   CursorLine   = {ctermbg = 236}, -- 光标所在行颜色
@@ -257,7 +257,7 @@ local highlights = {
   Float  = {link = "Number"}, -- 10.02 float64, float32
   Boolean = {ctermfg = Color.boolean_blue},
   Special = {link = "Boolean"},  -- console.log(`${ ... }`)
-  SpecialChar = {ctermfg = Color.special_cyan}, -- format verbs %v %d ...
+  SpecialChar = {ctermfg = Color.cyan}, -- format verbs %v %d ...
   PreProc = {ctermfg = Color.boolean_blue}, -- tsxTSVariableBuiltin, tsxTSConstBuiltin ...
 
   Delimiter = {link = "Normal"},  -- 符号颜色, [] () {} ; : ...
@@ -301,7 +301,7 @@ local highlights = {
   --- 其他常用颜色 ---------------------------------------------------------------------------------
   Title = {ctermfg = Color.title_green, cterm = {'bold'}}, -- markdown title
   Conceal = {ctermfg = 246}, -- `set conceallevel?`, markdown list, code block ...
-  Label = {ctermfg = Color.special_cyan}, -- json key color
+  Label = {ctermfg = Color.cyan}, -- json key color
 
   SpellBad = {ctermfg = Color.error_red, ctermbg = Color.dark_red, bold = true, underline = true},
   SpellCap = {ctermfg = Color.warn_orange, ctermbg = Color.dark_red, bold = true, underline = true},
@@ -317,7 +317,7 @@ local highlights = {
   ['@text.strong'] = { cterm = {"bold"} }, -- markdown, **bold**
   ['@text.emphasis'] = { cterm = {"italic"} },  -- markdown, *italic*, _italic_
   ['@text.underline'] = { cterm = {"underline"} },  -- markdown, *italic*, _italic_
-  ['@text.reference'] = { ctermfg = Color.special_cyan },  -- markdown, [@text.reference](http://...)
+  ['@text.reference'] = { ctermfg = Color.cyan },  -- markdown, [@text.reference](http://...)
 
   --- programs ---------------------------------------------
   ['@variable'] = { link = "Normal" },
@@ -326,7 +326,7 @@ local highlights = {
 
   ['@field'] = { link = "Normal" },
   ['@field.private'] = { ctermfg = Color.hint_grey }, -- after/queries/go 中自定义的颜色.
-  ['@property'] = { ctermfg = 81 },
+  ['@property'] = { ctermfg = Color.cyan },
   ['@parameter'] = { link = "Normal" },
 
   --['@function'] = { link = "Function" },

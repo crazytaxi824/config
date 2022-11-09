@@ -107,7 +107,7 @@ which_key.setup({
 
 --- highlight --------------------------------------------------------------------------------------
 --- WhichKeyFloat && WhichKeyBorder 可以设置
-vim.api.nvim_set_hl(0, 'WhichKeyDesc', {ctermfg = Color.special_cyan})
+vim.api.nvim_set_hl(0, 'WhichKeyDesc', {ctermfg = Color.cyan})
 
 
 

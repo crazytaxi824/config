@@ -205,8 +205,8 @@ vim.api.nvim_set_hl(0, 'CmpItemKindEnum',     {link = 'Keyword'})
 vim.api.nvim_set_hl(0, 'CmpItemKindModule',   {link = 'String'})
 
 --- cyan
-vim.api.nvim_set_hl(0, 'CmpItemKindFile',   {ctermfg = Color.special_cyan})
-vim.api.nvim_set_hl(0, 'CmpItemKindFolder', {ctermfg = Color.special_cyan})
+vim.api.nvim_set_hl(0, 'CmpItemKindFile',   {ctermfg = Color.cyan})
+vim.api.nvim_set_hl(0, 'CmpItemKindFolder', {ctermfg = Color.cyan})
 
 --- grey, 弃用的 suggestion.
 vim.api.nvim_set_hl(0, 'CmpItemAbbrDeprecated',  {ctermfg = 244, underline = true})

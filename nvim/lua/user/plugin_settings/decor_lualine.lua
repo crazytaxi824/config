@@ -11,7 +11,7 @@ local lualine_colors = {
 
   yellow = Color.statusline_yellow,
   gold = Color.func_gold,  -- filename saved
-  light_blue = Color.special_cyan,   -- filename modified
+  cyan = Color.cyan,   -- filename modified
 
   grey  = 236,       -- section_b
   light_grey = 246,  -- inactive, hint
@@ -20,7 +20,7 @@ local lualine_colors = {
   orange = Color.warn_orange, -- warn
   blue = Color.info_blue,  -- info background
 
-  dark_orange = 202, -- trailing_whitespace && mixed_indent
+  dark_orange = Color.dark_orange, -- trailing_whitespace && mixed_indent
 }
 
 --- Airline theme color
@@ -202,7 +202,7 @@ lualine.setup {
           if vim.bo.modified and vim.bo.readonly then  -- 对 readonly 文件做出修改
             return {fg = lualine_colors.white, bg = lualine_colors.red, gui='bold'}
           elseif vim.bo.modified then  -- 修改后未保存的文件
-            return {fg = lualine_colors.light_blue, gui='bold'}
+            return {fg = lualine_colors.cyan, gui='bold'}
           elseif vim.bo.readonly then  -- readonly 文件
             return {fg = lualine_colors.dark_orange, gui='bold'}
           end
@@ -242,7 +242,7 @@ lualine.setup {
       --- NOTE: 以下三个 components 主要是为了解决 inactive_sections 中的 filename 无法分别设置颜色.
       {modified_readonly, color = {fg=lualine_colors.white, bg=lualine_colors.red, gui='bold'}},
       {readonly, color = {fg=lualine_colors.dark_orange, gui='bold'}},
-      {modified, color = {fg=lualine_colors.light_blue, gui='bold'}},
+      {modified, color = {fg=lualine_colors.cyan, gui='bold'}},
       {'filename',
         path = 3,  -- Absolute path, with ~ as the home directory
         symbols = {
