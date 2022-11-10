@@ -7,13 +7,13 @@ export LC_ALL=en_US.UTF-8  # 设置 LC_ALL, 其他 LC_* 强制等于 LC_ALL, 单
 # put brew path in front of others, use brew cmd first, if there are different version of same cmd line tool.
 export PATH=/usr/local/sbin:$PATH
 
-# NOTE: testing neovim v8.0
-local nvim=~/.nvim_0.8/nvim-macos/bin/nvim  # brew installed neovim is v0.7.2_1
-alias nvim=$nvim
+# NOTE: testing newer neovim version. 手动安装 https://github.com/neovim/neovim/releases/
+#local nvim=~/.nvim_0.8/nvim-macos/bin/nvim  # brew installed neovim now is v0.8.0
+#alias nvim=$nvim
 # $VISUAL is a more capable and interactive preference over $EDITOR.
 #  - EDITOR editor should be able to work without use of "advanced" terminal functionality.
 #  - VISUAL editor could be a full screen editor as vi or emacs.
-export EDITOR=$nvim
+export EDITOR=nvim
 export VISUAL=$EDITOR
 
 # open/edit file
@@ -87,10 +87,12 @@ export GO111MODULE=on
 # "ansi" 只使用 0-7 color, 兼容性最好.
 export BAT_THEME="Visual Studio Dark+"
 
-# firefox chrome ssl key 文件位置, 用于 wireshark 解密 http tls 数据.
-# 需要使用 terminal 打开 firefox / chrome 才能生效, 'open -n /Applications/Firefox.app'
-export SSLKEYLOGFILE=/tmp/sslkey.log  # /tmp 文件夹会被系统自动清理
-alias firefox='open -n /Applications/Firefox.app'  # 使用终端打开 firefox 才会生效
+# firefox chrome ssl key 文件保存位置, 用于 wireshark 解密 https tls 数据.
+# wireshark `设置 -> Protocols -> TLS -> (Pre)-Master-Secret log filename` 中
+# 输入 SSLKEYLOGFILE 相同文件路径. 这样 wireshark 就能使用 ssl-key 解密 https 消息.
+# NOTE: 需要使用 terminal 打开 firefox / chrome 才能使 SSLKEYLOGFILE 环境变量生效.
+export SSLKEYLOGFILE=/tmp/sslkey.log  # /tmp 文件夹会被系统自动清理.
+alias firefox='open -n /Applications/Firefox.app'  # 使用终端打开 firefox
 
 # alias set time zone
 alias setny='sudo systemsetup -settimezone America/New_York'
