@@ -199,9 +199,6 @@ packer.init {
 }
 -- -- }}}
 
---- VVI: 加载 packer plugins trigger 设置, 用于 lazy load plugins.
-require("user.plugin_settings._trigger")
-
 --- 官方文档 https://github.com/wbthomason/packer.nvim
 --- 插件推荐 https://github.com/LunarVim/Neovim-from-scratch/blob/master/lua/user/plugins.lua
 ---          https://github.com/LunarVim/LunarVim/blob/master/lua/lvim/plugins.lua
