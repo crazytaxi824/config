@@ -75,8 +75,10 @@ export GO111MODULE=on
 # }}}
 
 # --- [other setting] ------------------------------------------------------------------------------ {{{
-# python3 different version
-# export PATH=/usr/local/opt/python@3.8/bin:$PATH
+# python3 设置多个 version, 可以用 python3, python3.9, python3.10, python3.11 等命令.
+# eg: `python3.11 -m pip --version`. brew 安装 python 默认设置了多个 version.
+#export PATH=/usr/local/opt/python@3.9/bin:$PATH
+#alias python3=/usr/local/opt/python@3.9/bin/python3.9  # 指定 python3 命令的版本.
 
 # vim path
 #alias vim=$(brew --prefix)/bin/vim   # brew install vim 路径, 下面设置了 vim() 函数.
