@@ -171,7 +171,7 @@ packer.init {
   --- VVI: 最好在 startup() 的每个 use() 中使用 commit && lock 固化插件版本 curing plugins.
   --snapshot = "2022.07.18",
 
-  snapshot_path = vim.fn.stdpath('cache') .. '/snapshots',  -- 默认路径是 stdpath('cache') .. '/packer.nvim'
+  snapshot_path = vim.fn.stdpath('cache') .. '/packer_snapshots',  -- 默认路径是 stdpath('cache') .. '/packer.nvim'
   --package_root = vim.fn.stdpath('data') .. '/site/pack'),  -- 默认值
   --compile_path = vim.fn.stdpath('config') .. '/plugin/packer_compiled.lua'),  -- VVI: 不要修改. /plugin 文件夹会自动加载.
 
@@ -198,9 +198,6 @@ packer.init {
   log = { level = 'warn' }, -- "trace", "debug", "info", "warn"(*), "error", "fatal".
 }
 -- -- }}}
-
---- VVI: 加载 packer plugins trigger 设置, 用于 lazy load plugins.
-require("user.plugin_settings._trigger")
 
 --- 官方文档 https://github.com/wbthomason/packer.nvim
 --- 插件推荐 https://github.com/LunarVim/Neovim-from-scratch/blob/master/lua/user/plugins.lua

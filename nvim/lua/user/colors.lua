@@ -214,7 +214,7 @@ local highlights = {
                                          -- border = {"▄","▄","▄","█","▀","▀","▀","█"}
 
   Comment    = {ctermfg = Color.comment_green}, -- 注释颜色
-  Folded     = {ctermfg = 67, ctermbg = 235}, -- 折叠行颜色
+  Folded     = {ctermfg = 67},  -- 折叠行颜色
   NonText    = {ctermfg = 238}, -- 影响 listchars indentLine 颜色
   VertSplit  = {ctermfg = 242}, -- window 之间的分隔线颜色
   MatchParen = {ctermfg = Color.bracket_yellow, cterm = {'bold', 'underline'}}, -- 括号匹配颜色
@@ -353,8 +353,12 @@ local highlights = {
 
   --- NOTE: 单独为 markdown / markdown_inline 设置颜色.
   ['@text.uri.markdown_inline'] = { link = "Underlined" },  -- html, <href="@text.uri">
-  ['@punctuation.special.markdown'] = { link = "Conceal" },  -- `- * #`
-  ['@punctuation.delimiter.markdown'] = { link = "Conceal" },  -- `- * #`
+  ['@punctuation.special.markdown'] = { link = "Conceal" }, -- `#(title) *(list)`
+  ['@punctuation.delimiter.markdown'] = { cterm={ "bold" } }, -- ``` code block, 因为 treesitter 中 markdown 强制
+                                                              -- 将其设置为 @conceal 所以 fg 颜色无法被改变.
+  ['@punctuation.delimiter.markdown_inline'] = { link = "@text" }, -- ` code, [foo](http://) inline_link ...
+                                                                   -- BUG: inline_link 中最后一个括号 ) 不属于
+                                                                   -- delimiter, 所以这里只能更改 []( 的颜色.
 
   --- NOTE: 以下设置是为了配合 lazy load plugins ---------------------------------------------------
   --- 以下颜色为了 lazy load lualine
