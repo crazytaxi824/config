@@ -75,7 +75,7 @@ vim.api.nvim_create_autocmd("VimLeave", {
     --  vim.fn.stdpath('cache') .. '/log', 'a'
     --)
 
-    --- FIXED: lsplog [START] nvim v0.8
+    --- FIXED: nvim v0.8 fixed lsplog `[START] xxx`
     if vim.fn.has('nvim-0.8') == 0 then
       local lsplog = vim.fn.fnamemodify(vim.fn.stdpath('cache') .. '/lsp.log', ':p')
       if vim.fn.filereadable(lsplog) == 1 then

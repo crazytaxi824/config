@@ -39,7 +39,7 @@ if vim.fn.has('nvim-0.8') == 1 then
     )
   end
 else
-  --- 使用所有 lsp 进行 format (同步运行), 设置 null-ls 为最后一个进行 format 的 lsp.
+  --- 使用所有 lsp 进行 format (按顺序同步运行), 设置 null-ls 为最后一个进行 format 的 lsp.
   lsp_format = function() vim.lsp.buf.formatting_seq_sync(nil, 3000, {"null-ls"}) end
 end
 
