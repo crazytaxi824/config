@@ -81,7 +81,7 @@ vim.api.nvim_set_hl(0, 'WinBarInactive', {ctermfg=246})
 vim.cmd [[au TermOpen term://* tnoremap <buffer> <ESC> <ESC><C-\><C-n>]]
 
 --- 设置 terminal 不显示行号.
-vim.cmd [[au TermOpen term://* :setlocal nonumber]]
+vim.cmd [[au TermOpen term://* :setlocal nonumber norelativenumber]]
 
 -- -- }}}
 

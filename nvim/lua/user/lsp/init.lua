@@ -12,6 +12,8 @@ require("user.lsp.diagnostic")   -- 加载 diagnostic 设置
 require("user.lsp.auto_format")  -- save(:w) 时 format
 require("user.lsp._user_handlers")  -- overwrite 默认 handlers 设置
 require("user.lsp.user_commands")   -- 自定义 lsp 相关 command
+require("user.lsp.lsp_restart")   -- `:LspRestart` after new module/package added,
+                                  -- otherwise could not found new module/package.
 
 
 
