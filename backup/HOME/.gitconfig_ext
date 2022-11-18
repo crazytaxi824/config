@@ -1,0 +1,45 @@
+; 自定义 command, `git tree`, `git vtree`
+[alias]
+	; https://stackoverflow.com/questions/1057564/pretty-git-branch-graphs
+	; `$ git log` 是 git 原生命令. https://devhints.io/git-log-format
+	; `$ git tree` 自定义命令, 显示缩略信息. 显示的信息有两行，第二行给一个空格, 否则有的行间距会变成2行.
+	; %C(xx) - 打印颜色, 256 color
+	tree = log --graph --all --format=format:'%C(42)%h%C(reset) -%C(207)%d%C(reset) %C(251)%s%C(reset) %C(243)(%ar)%C(reset)%n'' '
+	; `$ git vtree` - 显示详细信息. 一共有三行: 第二行开头的空格数量是固定的, 因为都是 commit hash 宽度固定; 第三行给一个空格.
+	vtree = log --date=format:'%d-%b-%Y %H:%M:%S' --graph --all --format=format:'%C(42)%h%C(reset) -%C(207)%d%C(reset) %C(74)%ad%C(reset) %C(243)(%ar) - %C(173)%an%C(reset)%n''          %C(251)%s%C(reset)%n'' '
+
+; diff & merge tools
+[difftool]
+	prompt = true
+[mergetool]
+	prompt = true
+
+; neovim
+[difftool "nvimdiff"]
+	cmd = nvim -d \"$LOCAL\" \"$REMOTE\"
+[mergetool "nvim"]
+	cmd = nvim -f -c \"Gdiffsplit!\" \"$MERGED\"
+
+; sourcetree
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	; path =
+[mergetool "sourcetree"]
+	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+
+; delta diff tool
+; [pager]
+;     diff = delta
+;     show = delta
+;     log = delta
+;     reflog = delta
+; [interactive]
+;     diffFilter = delta --color-only
+; [delta]
+;     side-by-side = true
+;     features = decorations
+;     width = variable
+; [delta "decorations"]
+;     file-decoration-style="yellow ol"
+;     file-style="yellow"
