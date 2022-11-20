@@ -495,7 +495,7 @@ return packer.startup(function(use)
   --- `:Gitsigns setqflist/seqloclist` will open Trouble instead of quickfix or location list windows.
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   use {"lewis6991/gitsigns.nvim",
-    commit = "2b4fc5e",
+    commit = "9ff7dfb",
     config = function() require("user.plugin_settings.git_signs") end,
     opt = true,
   }
