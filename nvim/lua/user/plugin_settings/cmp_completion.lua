@@ -75,10 +75,11 @@ cmp.setup {
   },
 
   window = {
-    -- completion = {
-    --   border = {"","","","│","","","",""},
-    --   winhighlight = 'Normal:Pmenu,FloatBorder:Pmenu,CursorLine:PmenuSel,Search:None',
-    -- },
+    completion = {
+      -- border = {"","","","│","","","",""},
+      -- winhighlight = 'Normal:Pmenu,FloatBorder:Pmenu,CursorLine:PmenuSel,Search:None',
+      scrollbar = true,  -- true: 需要时显示 scrollbar; false: 永远不显示 scrollbar.
+    },
     documentation = {
       border = {"", "", "", "▕", "", "", "", "▏"},  -- `:help nvim_open_win()`
       winhighlight = 'FloatBorder:NormalFloat',
@@ -120,8 +121,8 @@ cmp.setup {
 
   --- key mapping -------
   mapping = {
-    ["<Up>"] = cmp.mapping.select_prev_item(),
-    ["<Down>"] = cmp.mapping.select_next_item(),
+    ["<Up>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior, count = 1 }),
+    ["<Down>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior, count = 1 }),
     ["<C-y>"] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
     ["<Esc>"] = cmp.mapping.abort(),
 
