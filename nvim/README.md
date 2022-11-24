@@ -436,6 +436,11 @@ which-key 有时候报错.
   .../pack/packer/start/which-key.nvim/lua/which-key/keys.lua:363: in function 'check_health'
   [string ":lua"]:1: in main chunk
 
+LSP documentHighlight 有时候报错.
+
+- Error detected while processing CursorHold Autocommands for "<buffer=4>":
+  method textDocument/documentHighlight is not supported by any of the servers registered for the current buffer
+
 <br />
 
 ## TODO
