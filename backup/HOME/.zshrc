@@ -330,7 +330,7 @@ FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='pgup:preview-half-page-up,pgdn:previ
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-a:toggle-all'"  # multi-select
 # NOTE: Vim: Warning: Output not to a terminal. 解决方法: `vim/nvim file > /dev/tty`
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-e:abort+execute($EDITOR -- {} > /dev/tty)'"  # nvim edit 光标所在行 file.
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-o:abort+execute(open {})'"  # system open 光标所在行 file.
+FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-o:execute(open {})'"  # system open 光标所在行 file.
 # NOTE: 将储存多选列表的临时文件 {+f} 传入 nvim 函数 FZF_selected() 中. 在 nvim 中处理文件名, 包括 rg 传入的 lnum, col ...
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-l:abort+execute($EDITOR \"+lua FZF_selected([[{+f}]])\" > /dev/tty)'"
 export FZF_DEFAULT_OPTS
@@ -501,7 +501,7 @@ function Rg() {
 		--preview "bat --color=always --style=numbers --highlight-line={2} {1}" \
 		--preview-window '+{2}/2' \
 		--bind "ctrl-e:abort+execute($EDITOR '+call cursor({2},{3})' -- {1} > /dev/tty)" \
-		--bind "ctrl-o:abort+execute(open {1})"
+		--bind "ctrl-o:execute(open {1})"
 		# NOTE: 将储存多选列表的临时文件 {+f} 传入 nvim 函数 FZF_selected() 中. 在 nvim 中处理文件名, 包括 rg 传入的 lnum, col ...
 		#--bind="ctrl-l:abort+execute($EDITOR \"+lua FZF_selected([[{+f}]])\" > /dev/tty)"
 }
