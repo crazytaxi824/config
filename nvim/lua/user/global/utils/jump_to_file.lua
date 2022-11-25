@@ -194,7 +194,19 @@ end
 --- VISUAL 选中的 filepath, 不管在什么 filetype 中都跳转
 --- 操作方法: visual select 'filepath:lnum', 然后使用 <S-CR> 跳转到文件.
 vim.keymap.set('v', '<S-CR>',
-  "<C-c>:lua Jump_to_file(Visual_selected(), true)<CR>",
+  "<C-c><cmd>lua Jump_to_file(Visual_selected(), true)<CR>",
+  {noremap = true, silent = true, desc = "Jump to file"}
+)
+
+--- 使用 system 打开文件.
+function System_open(filepath)
+  local result = vim.fn.system('open "' .. filepath .. '"')
+  if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
+    Notify("system open error: " .. result, "ERROR")
+  end
+end
+vim.keymap.set('v', '<C-o>',
+  '<C-c><cmd>lua System_open(Visual_selected())<CR>',
   {noremap = true, silent = true, desc = "Jump to file"}
 )
 
