@@ -363,7 +363,7 @@ return packer.startup(function(use)
 
   --- snippet engine, for "cmp_luasnip", 每次打开文件都会有一个 [Scratch] buffer.
   use {"L3MON4D3/LuaSnip",
-    commit = "59bb7ea",  -- BUG: opt 加载无法 load jsregexp 插件.
+    commit = "79f6472",  -- BUG: opt 加载无法 load jsregexp 插件.
                          -- jsregexp 位置: stdpath('data') .. "/site/pack/packer/start/LuaSnip/lua/luasnip-jsregexp.so"
     run = "make install_jsregexp",  -- https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#transformations
     config = function() require("user.plugin_settings.luasnip_snippest") end,
