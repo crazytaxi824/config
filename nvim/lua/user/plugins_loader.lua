@@ -470,7 +470,7 @@ return packer.startup(function(use)
   --- Useful Tools ---------------------------------------------------------------------------------
   --- fzf rg fd, preview 使用的是 treesitter, 而不用 bat
   use {"nvim-telescope/telescope.nvim",
-    commit = "7a4ffef",
+    commit = "cea9c75",
     config = function() require("user.plugin_settings.telescope_fzf") end,
     requires = {
       "nvim-lua/plenary.nvim",
