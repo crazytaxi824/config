@@ -40,8 +40,8 @@
 
 --- ADD Tags and Options ---------------------------------------------------------------------------
 --- NOTE: *.go 被重新加载时, 本文件会被重新读取. 会造成重复设置 command, 所以必须使用 `command!`
---  eg: `:GoAddTags json,xml c`, `:GoAddTags json,xml camel`, `:GoAddTags json`
--- command! -buffer -nargs=+ GoAddTags :lua _GoAddTags(<f-args>)
+--- eg: `:GoAddTags json,xml c`, `:GoAddTags json,xml camel`, `:GoAddTags json`
+--- command! -buffer -nargs=+ GoAddTags :lua _GoAddTags(<f-args>)
 local go_add_tags_cmd = "GoTagAdd"
 vim.api.nvim_buf_create_user_command(
   0,
