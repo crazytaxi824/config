@@ -163,6 +163,7 @@ local telescope_keymaps = {
   {'n', '<leader>fk', builtin.keymaps,    opt, 'telescope: Keymap normal Mode'},
   {'n', '<leader>f:', builtin.command_history, opt, 'telescope: Command History'},
   {'n', '<leader>f/', builtin.search_history,  opt, 'telescope: Search History'},
+  {'n', '<leader>f?', builtin.search_history,  opt, 'telescope: Search History'},
   {'n', '<leader>fl', builtin.highlights,  opt, 'telescope: Search Highlight'},
   {'n', 'z=', builtin.spell_suggest, opt, 'telescope: Spell Suggests'},  -- 也可以使用 which-key 显示.
   --{'n', '<leader>fg', builtin.live_grep,  opt, 'telescope: rg'},  -- NOTE: 使用自定义 :Rg 命令更灵活.
