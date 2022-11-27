@@ -31,20 +31,18 @@ M.on_attach = function(client, bufnr)
   end
 end
 
---- NOTE: capabilities - Provides content to "hrsh7th/cmp-nvim-lsp" Completion ---------------------
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-
---- NOTE: 以下是 cmp-nvim-lsp 官方示例, 但实际上不需要 update_capabilities() 也能提供代码补全.
 --- https://github.com/hrsh7th/cmp-nvim-lsp#setup
---- lspconfig 须在 cmp_nvim_lsp 之后加载, 否则可能无法提供代码补全.
+--- VVI: lspconfig 必须在 cmp_nvim_lsp 之后加载, 否则可能无法提供代码补全.
 local status_ok, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
 if not status_ok then
+  --- "cmp_nvim_lsp" 不存在的情况, 可以使用 lsp 功能, 但是无法提供 lsp 代码补全.
   Notify({
     '"cmp_nvim_lsp" can NOT be loaded when setup lsp.capabilities.',
     'LSP Auto-Completion may NOT be able to use.',
   }, 'INFO')
-  M.capabilities = capabilities
+  M.capabilities = vim.lsp.protocol.make_client_capabilities()
 else
+  --- "cmp_nvim_lsp" 存在的情况, 可以使用 lsp 功能, 也可以提供 lsp 代码补全.
   M.capabilities = cmp_nvim_lsp.default_capabilities()
 end
 
