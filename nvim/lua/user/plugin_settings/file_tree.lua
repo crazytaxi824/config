@@ -629,5 +629,27 @@ if builder_status_ok then
 end
 -- -- }}}
 
+--- Event Hooks, `:help nvim-tree-events` ---------------------------------------------------------- {{{
+--- FolderCreated 在创建 folder 和 file 时都会触发.
+--- FileCreated 只在创建 file 时会触发.
+-- local Event = nt_api.events.Event
+-- nt_api.events.subscribe(Event.FolderCreated, function(data)
+--   print('folder add:', vim.inspect(data))
+-- end)
+--
+-- nt_api.events.subscribe(Event.FolderRemoved, function(data)
+--   print('folder remove:', vim.inspect(data))
+-- end)
+--
+-- nt_api.events.subscribe(Event.FileCreated, function(data)
+--   print('file add:', vim.inspect(data))
+-- end)
+--
+-- nt_api.events.subscribe(Event.FileRemoved, function(data)
+--   print('file remove:', vim.inspect(data))
+-- end)
+
+-- -- }}}
+
 
 

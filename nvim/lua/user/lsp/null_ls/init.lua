@@ -15,6 +15,10 @@ local null_tools = {
     mason="goimports",
   },
   {
+    cmd="goimports-reviser",
+    mason="goimports-reviser",
+  },
+  {
     cmd="golangci-lint",
     install="go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest",
     mason="golangci-lint",

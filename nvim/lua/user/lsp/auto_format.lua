@@ -60,5 +60,21 @@ vim.cmd([[
     \ Format
 ]])
 
+--- VVI: goimports-reviser 一定要在 goimports 后面执行.
+--- 因为 goimports-reviser 只会对文件当前的 imports(...) 排序,
+--- 如果在 goimports 之前执行, 则排序时有可能有些 import 还未被导入.
+vim.api.nvim_create_autocmd("BufWritePost", {
+  pattern = {"*.go"},
+  callback = function(params)
+    --- 分类&排序 -imports-order (default "std,general,company,project")
+    --- 即(默认): 标准包, github.com, local/src/...
+    local r = vim.fn.system('goimports-reviser -output file ' .. params.file)
+    if vim.v.shell_error ~= 0 then
+      Notify(r, "ERROR")
+    end
+    vim.cmd('checktime')
+  end
+})
+
 
 
