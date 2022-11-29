@@ -433,6 +433,7 @@ bufferline.setup({
 
     always_show_bufferline = true, -- VVI: 一直显示 bufferline
     show_tab_indicators = true, -- 多个 tab 时在右上角显示 1 | 2 | ...
+    show_duplicate_prefix = true, -- VVI: whether to show duplicate buffer prefix
 
     --- icon 显示
     color_icons = false, -- whether or not to add the filetype icon highlights
@@ -488,6 +489,12 @@ bufferline.setup({
       {filetype="NvimTree", text="File Explorer", text_align="center", highlight="Directory", separator=true},
       -- {filetype="tagbar", text="TagBar", text_align="center", highlight="Directory", separator=true},
     },
+    --- 要使用 hover 必须 enable 'mousemoveevent'
+    -- hover = {
+    --   enabled = true,
+    --   delay = 200,
+    --   reveal = {'close'}
+    -- },
 
     --- NOTE: this will be called a lot so don't do any heavy processing here --- {{{
     -- custom_filter = function(buf_number, buf_numbers)
