@@ -383,7 +383,7 @@ local highlights = {
 for hl_group, hl_val in pairs(highlights) do
   local vals = {}
   for key, value in pairs(hl_val) do
-    if key == 'cterm' then
+    if key == 'cterm' and type(value) == 'table' then
       --- {bold=true, underline=true, italic=true, ...}
       for _, k in ipairs(value) do
         vals[k] = true
