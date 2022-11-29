@@ -170,11 +170,20 @@ lualine.setup {
     theme = my_theme,  -- https://github.com/nvim-lualine/lualine.nvim/blob/master/THEMES.md
     icons_enabled = false, -- 不使用默认 icon, 可以在 sections 中设置自定义 icon. `:help lualine-Global-options`
     component_separators = { left = '', right = ''},  -- 'mode', 'filename', 'branch' ... 这些属于 components
-    section_separators = { left = ' ', right = ' '},
-    disabled_filetypes = {},
+    section_separators = { left = ' ', right = ' '},  -- lualine_a, lualine_b, ...
+    disabled_filetypes = {
+      statusline = {},
+      winbar = {},
+    },
+    ignore_focus = {'tagbar'},  -- If current filetype is in this list it'll always be drawn as inactive statusline
     always_divide_middle = true,
     globalstatus = false,  -- true - 则全局所有 window 使用同一个 status line;
                            -- false - 每个window 单独自己的 status line.
+    refresh = {
+      statusline = 1000, -- (ms)
+      tabline = 1000,
+      winbar = 1000,
+    }
   },
 
   --- VVI: https://github.com/nvim-lualine/lualine.nvim#changing-components-in-lualine-sections
@@ -267,11 +276,23 @@ lualine.setup {
       },
     },
     lualine_y = {},
-    lualine_z = {}
+    lualine_z = {},
   },
 
-  --- display components in tabline at top.
-  tabline = {},
+  --- You can use lualine to display components in tabline. The configuration for
+  --- tabline sections is exactly the same as that of the statusline(sections).
+  --- tabline, winbar --- {{{
+  -- tabline = {
+  --   lualine_a = {'buffers'},
+  --   lualine_b = {'branch'},
+  --   lualine_c = {'filename'},
+  --   lualine_x = {},
+  --   lualine_y = {},
+  --   lualine_z = {'tabs'},
+  -- },
+  -- winbar = {},  -- 设置方法都一样.
+  -- inactive_winbar = {},
+  -- -- }}}
 
   --- lualine extensions change statusline appearance for a window/buffer with specified filetypes.
   --- https://github.com/nvim-lualine/lualine.nvim#extensions
