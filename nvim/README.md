@@ -441,6 +441,10 @@ LSP documentHighlight 有时候报错.
 - Error detected while processing CursorHold Autocommands for "<buffer=4>":
   method textDocument/documentHighlight is not supported by any of the servers registered for the current buffer
 
+gopls, workspace `go.work` lsp.log 中报错:
+
+- stderr: go: finding module for package github.com/my/foo\nbar/src imports\n\tgithub.com/my/foo: cannot find module providing package github.com/my/foo: module lookup disabled by GOPROXY=off\n\n"
+
 <br />
 
 ## TODO

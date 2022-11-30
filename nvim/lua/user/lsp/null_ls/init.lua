@@ -255,18 +255,11 @@ null_ls.setup({
   diagnostics_format = "#{m} [null-ls]",  -- 错误信息显示格式,
                                           -- #{m} - message, #{s} - source, #{c} - err_code
 
-  --- NOTE: 以下 callback 函数中都会传入 on_init = function(client, init_result) 两个参数.
-  --- null-ls 退出的时候提醒.
-  on_exit = function()
-    Notify("Null-Ls exit. Please check ':NullLsInfo' & ':NullLsLog'","WARN",
-      {title = {"Null-ls", "null_ls/init.lua"}, timeout = false})
-  end,
-
+  --- 以下callback 都是 DEBUG: 用
   --- 设置 key_mapping vim.diagnostic.goto_next() ...
   on_attach = function(client, bufnr)
     require("user.lsp.lsp_keymaps").diagnostic_keymaps(0)
 
-    --- DEBUG: 用
     if __Debug_Neovim.null_ls then
       Notify("LSP Server attach: " .. client.name, "DEBUG", {title="Null-ls"})
     end
@@ -278,6 +271,9 @@ null_ls.setup({
       Notify("LSP Server init: " .. client.name, "DEBUG", {title="Null-ls"})
     end
   end,
+
+  --- null-ls 退出的时候触发.
+  --on_exit = function() ... end,
 })
 
 
