@@ -64,7 +64,7 @@ function trash() {
 export GOPATH=$HOME/gopath
 export GOBIN=$GOPATH/bin
 export PATH=$PATH:$GOBIN
-export GO111MODULE=on
+export GO111MODULE=on  # on | off | auto
 #export GOPROXY=off  # 默认值 "https://proxy.golang.org,direct"
 #export GOSUMDB=off  # Disable the Go checksum database
 
