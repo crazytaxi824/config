@@ -224,13 +224,6 @@ return packer.startup(function(use)
     commit = "4b7e520",
   }
 
-  --- FIXED: neovim v0.8.0, https://github.com/neovim/neovim/pull/20198
-  --- CursorHold and CursorHoldI are blocked by timer_start()
-  use {"antoinemadec/FixCursorHold.nvim",
-    commit = "70a9516",
-    cond = function() return vim.fn.has('nvim-0.8') == 0 end,  -- nvim v0.8+ 时不加载
-  }
-
   --- Must install ---------------------------------------------------------------------------------
   --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   use {"folke/which-key.nvim",
