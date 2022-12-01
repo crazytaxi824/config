@@ -425,7 +425,7 @@ vim.lsp.buf.format({
 
 ## FIXME
 
-which-key 有时候报错.
+### which-key 有时候报错.
 
 - ERROR: Failed to run healthcheck for "which_key" plugin. Exception:
   function health#check[20]..health#which_key#check, line 1
@@ -436,12 +436,12 @@ which-key 有时候报错.
   .../pack/packer/start/which-key.nvim/lua/which-key/keys.lua:363: in function 'check_health'
   [string ":lua"]:1: in main chunk
 
-LSP documentHighlight 有时候报错.
+### LSP documentHighlight 有时候报错.
 
 - Error detected while processing CursorHold Autocommands for "<buffer=4>":
   method textDocument/documentHighlight is not supported by any of the servers registered for the current buffer
 
-gopls, workspace `go.work` lsp.log 中报错:
+### https://github.com/golang/go/issues/50750, gopls, workspace `go.work` lsp.log 中报错:
 
 - stderr: go: finding module for package github.com/my/foo\nbar/src imports\n\tgithub.com/my/foo: cannot find module providing package github.com/my/foo: module lookup disabled by GOPROXY=off\n\n"
 

@@ -27,11 +27,10 @@ return {
       --- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/HELPERS.md#args
       --- 不能使用 $FILENAME lint 单个文件. 会导致其他 package 中定义的 var 无法被 golangci 找到.
       --- 如果缺省设置, 相当于 $DIRNAME.
-      -- "$DIRNAME",
+      "$DIRNAME",
 
       --- Path prefix to add to output.
-      --- VVI: 必须要, 否则找不到文件. 默认是 pwd,
-      --- 需要改为 cwd 执行时的 path.
+      --- VVI: 必须要, 否则找不到文件. 默认是 pwd, 需要设置为 cwd 执行时的 path.
       "--path-prefix", "$DIRNAME",
 
       "--print-issued-lines=false",

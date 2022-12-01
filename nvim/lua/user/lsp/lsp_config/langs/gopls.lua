@@ -3,7 +3,7 @@
 --- https://github.com/golang/tools/blob/master/gopls/doc/settings.md
 --- https://github.com/golang/tools/blob/master/gopls/doc/vim.md#neovim-config
 
---- BUG: gopls v0.9.4: https://github.com/golang/go/issues/50750
+--- BUG: https://github.com/golang/go/issues/50750
 --- 使用 workspace 'go.work' 的情况下, `:LspLog` 打印错误 `go mod tidy` Error.
 --- "finding module for package xxx: cannot find module providing package xxx: module lookup disabled by GOPROXY=off"
 
