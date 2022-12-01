@@ -58,9 +58,9 @@
 -- vim.cmd('hi Search ctermfg=0 ctermbg=190')                -- / ? * # g* g# 搜索颜色
 
 -- vim.cmd('hi ErrorMsg ctermfg=253 ctermbg=167')     -- echoerr 颜色
--- vim.cmd('hi WarningMsg ctermfg=236 ctermbg=214')   -- echohl 颜色, XXX FIXME BUG 颜色
--- vim.cmd('hi Todo cterm=bold ctermfg=251 ctermbg=22')            -- TODO, HACK 颜色
--- vim.cmd('hi SpecialComment cterm=bold ctermfg=251 ctermbg=63')  -- NOTE: DEBUG: FOO: 颜色
+-- vim.cmd('hi WarningMsg ctermfg=236 ctermbg=214')   -- echohl 颜色
+-- vim.cmd('hi Todo cterm=bold ctermfg=251 ctermbg=22')  -- TODO 颜色
+-- vim.cmd('hi SpecialComment cterm=bold ctermfg=251 ctermbg=63')  -- NOTE 颜色
 
 -- vim.cmd('hi WildMenu cterm=bold ctermfg=235 ctermbg=39')     -- command 模式自动补全
 -- vim.cmd('hi Directory cterm=bold,underline ctermfg=246 ctermbg=234')  -- for bufferline 在 nvim-tree 显示 "File Explorer"
@@ -230,10 +230,10 @@ local highlights = {
   Search    = {ctermfg = Color.black, ctermbg = Color.statusline_yellow}, -- / ? * # g* g# 搜索颜色
 
   ErrorMsg   = {ctermfg = Color.white, ctermbg = Color.error_red}, -- echoerr 颜色
-  WarningMsg = {ctermfg = Color.black, ctermbg = Color.warn_orange}, -- echohl 颜色, XXX FIXME BUG 颜色
+  WarningMsg = {ctermfg = Color.black, ctermbg = Color.warn_orange}, -- echohl 颜色
 
-  Todo = {ctermfg = Color.white, ctermbg = 22, cterm = {'bold'}}, -- TODO, HACK 颜色
-  SpecialComment = {ctermfg = Color.white, ctermbg = 63, cterm = {'bold'}}, -- NOTE: DEBUG: FOO: 颜色
+  Todo = {ctermfg = Color.white, ctermbg = 22, cterm = {'bold'}}, -- TODO 颜色
+  SpecialComment = {ctermfg = Color.white, ctermbg = 63, cterm = {'bold'}}, -- NOTE 颜色
 
   WildMenu = {ctermfg = Color.black, ctermbg = 39, cterm = {'bold'}}, -- command 模式自动补全
   Directory = {ctermfg = 246, ctermbg = 234, cterm = {'bold', 'underline'}}, -- for bufferline 在 nvim-tree 显示 "File Explorer"
@@ -308,9 +308,11 @@ local highlights = {
   SpellLocal = {},  -- clear highlight
 
   --- NOTE: treesitter 颜色设置 --------------------------------------------------------------------
-  ['@text.warning'] = { link = "Todo" }, -- TODO, HACK 颜色
-  ['@text.danger'] = { link = "WarningMsg" }, -- XXX FIXME BUG 颜色
-  ['@text.note'] = { link = "SpecialComment" }, -- NOTE: DEBUG: FOO: 颜色
+  ['@text.danger'] = { link = "ErrorMsg" },     -- FIXME, BUG
+  ['@text.warning'] = { link = "WarningMsg" },  -- HACK, WARNING, VVI
+  ['@text.note'] = { link = "SpecialComment" }, -- XXX, NOTE
+  ['@text.todo'] = { link = "Todo" },           -- TODO, FOO: BAR:
+
   ['@text.uri'] = { link = "String" },  -- html, <href="@text.uri">
   ['@text.title'] = { link = "Title" }, -- markdown, # title
   ['@text.literal'] = { ctermfg = 173, ctermbg = 237 },  -- markdown, `code`
