@@ -33,7 +33,7 @@ which_key.setup({
     --- 但是进行了二次绑定, 所以会覆盖 keymaps.lua 中的设置.
     presets = {
       --- https://github.com/folke/which-key.nvim/blob/main/lua/which-key/plugins/presets/init.lua
-      ---  BUG: operators 和 text_objects 中都有 'a', 'i' 设置, 重复显示.
+      ---  BUG: 下面的 operators 和 text_objects 设置中都有 'a', 'i' 设置, 重复显示.
       operators = false,  -- 'c', 'd', 'y', 'v' ... 例如: 'ciw', 'caw', 'diw' ...
                           -- VVI: 设为 true 会影响 <, > buffer 跳转.
       motions = false,   -- 'g', 例如: 'gg', 'ge' ...
