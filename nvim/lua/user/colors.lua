@@ -308,7 +308,7 @@ local highlights = {
   SpellLocal = {},  -- clear highlight
 
   --- NOTE: treesitter 颜色设置 --------------------------------------------------------------------
-  ['@text.danger'] = { link = "ErrorMsg" },     -- FIXME, BUG
+  ['@text.danger'] = { ctermfg = Color.white, ctermbg = 196 }, -- FIXME, BUG
   ['@text.warning'] = { link = "WarningMsg" },  -- HACK, WARNING, VVI
   ['@text.note'] = { link = "SpecialComment" }, -- XXX, NOTE
   ['@text.todo'] = { link = "Todo" },           -- TODO, FOO: BAR:
@@ -355,10 +355,10 @@ local highlights = {
 
   --- NOTE: 单独为 markdown / markdown_inline 设置颜色.
   ['@text.uri.markdown_inline'] = { link = "Underlined" },  -- html, <href="@text.uri">
-  ['@punctuation.special.markdown'] = { link = "Conceal" }, -- `#(title) *(list)`
-  ['@punctuation.delimiter.markdown'] = { cterm={ "bold" } }, -- ``` code block, 因为 treesitter 中 markdown 强制
+  ['@punctuation.special.markdown'] = { link = "Conceal" }, -- "#" - title; "*" - list
+  ['@punctuation.delimiter.markdown'] = { cterm={ "bold" } }, -- "```" code block, 因为 treesitter 中 markdown 强制
                                                               -- 将其设置为 @conceal 所以 fg 颜色无法被改变.
-  ['@punctuation.delimiter.markdown_inline'] = { link = "@text" }, -- ` code, [foo](http://) inline_link ...
+  ['@punctuation.delimiter.markdown_inline'] = { link = "@text" }, -- "`" - code; [foo](http://) inline_link ...
                                                                    -- BUG: inline_link 中最后一个括号 ) 不属于
                                                                    -- delimiter, 所以这里只能更改 []( 的颜色.
 
