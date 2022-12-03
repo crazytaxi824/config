@@ -362,6 +362,7 @@ nvim_tree.setup {
   diagnostics = {  --- VVI: 显示 vim diagnostics (Hint|Info|Warn|Error) 需要设置 vim.signcolumn='yes'
     enable = true,
     show_on_dirs = true,  -- 在文件所属的 dir name 前也显示 sign.
+    show_on_open_dirs = false,  -- 打开的文件夹上不显示 sign.
     icons = diagnostics_icons,
   },
   filters = {
@@ -374,6 +375,7 @@ nvim_tree.setup {
                     -- 需要开启 renderer.highlight_git 和 renderer.icons.show.git
     ignore = false,  -- 不显示 .gitignore files
     show_on_dirs = true,  -- 在文件所属的 dir name 前也显示 sign.
+    show_on_open_dirs = false,  -- 在打开的文件夹上不显示 sign.
     timeout = 400,
   },
   actions = {

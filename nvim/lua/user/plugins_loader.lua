@@ -237,13 +237,13 @@ return packer.startup(function(use)
 
   --- 通知功能
   use {"rcarriga/nvim-notify",
-    commit = "e7cffd0",
+    commit = "859056f",
     config = function() require("user.plugin_settings.nvim_notify") end,
   }
 
   --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件
   use {"williamboman/mason.nvim",
-    commit = "bfc5997",
+    commit = "22129c7",
     config = function() require("user.plugin_settings.mason_tool_installer") end,
     --- NOTE: 不能 opt 加载 mason 否则其他插件无法找到 mason 安装的工具.
   }
@@ -262,11 +262,9 @@ return packer.startup(function(use)
   --- By convention, if you want to write a query, use the `queries/` directory,
   --- but if you want to extend a query use the `after/queries/` directory.
   use {"nvim-treesitter/nvim-treesitter",
-    commit = "4b900527",  -- BUG: foldmethod error with tab indent.
-                          -- FEAT: `@nospell` for defining regions that should NOT be spellchecked.
+    commit = "44289d81",  -- BUG: foldmethod error with tab indent.
     run = ":TSUpdateSync",  -- Post-update/install hook.
     config = function() require("user.plugin_settings.treesitter") end,
-    opt = true,  -- 在 vim.schedule() 中 lazy load
     requires = {
       --- 以下都是 treesitter modules 插件, 在 setup() 中启用的插件.
       "nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
@@ -275,29 +273,34 @@ return packer.startup(function(use)
       "windwp/nvim-ts-autotag",  -- auto close tag <div></div>
       --"p00f/nvim-ts-rainbow",  -- 括号颜色. treesitter 解析, 严重拖慢文件打开速度.
     },
+
+    opt = true,  -- 在 vim.schedule() 中 lazy load
   }
 
   --- 第一方 module 插件 ---
   use {"nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
     commit = "5fda0b9",
-    --- https://github.com/nvim-treesitter/nvim-treesitter-context#configuration
     config = function() require("user.plugin_settings.treesitter_ctx") end,
+
     after = "nvim-treesitter",
   }
 
   use {"nvim-treesitter/playground",  -- 用于获取 treesitter 信息, 调整颜色很有用.
     commit = "1290fdf",
+
     cmd = {"TSPlaygroundToggle", "TSHighlightCapturesUnderCursor"},
   }
 
   --- 第三方 module 插件 ---
   use {"windwp/nvim-ts-autotag",  -- auto close tag <div></div>
     commit = "fdefe46",
+
     after = "nvim-treesitter",
   }
 
   use {"JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
     commit = "32d9627",
+
     after = "nvim-treesitter",
   }
 
@@ -306,26 +309,27 @@ return packer.startup(function(use)
   use {"numToStr/Comment.nvim",
     commit = "5f01c1a",
     config = function() require("user.plugin_settings.comment") end,
-    after = {"nvim-treesitter", "nvim-ts-context-commentstring"},
     requires = {
       "nvim-treesitter/nvim-treesitter",
       "JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 context-commentstring.
     },
+
+    after = {"nvim-treesitter", "nvim-ts-context-commentstring"},
   }
 
   --- indent line
   use {"lukas-reineke/indent-blankline.nvim",
     commit = "db7cbcb",
     config = function() require("user.plugin_settings.indentline") end,  -- setup() 设置 use_treesitter = true
-    after = "nvim-treesitter",
     requires = "nvim-treesitter/nvim-treesitter",
+
+    after = "nvim-treesitter",
   }
 
   --- Auto Completion ------------------------------------------------------------------------------
   use {"hrsh7th/nvim-cmp",
-    commit = "4c05626",
+    commit = "93f385c",
     config = function() require("user.plugin_settings.cmp_completion") end,
-    opt = true,  -- 在 vim.schedule() 中 lazy load
     requires = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全
       "hrsh7th/cmp-buffer",  -- 当前 buffer 中有的 word
@@ -333,6 +337,8 @@ return packer.startup(function(use)
       --"hrsh7th/cmp-cmdline",  -- cmdline completions, 不好用.
       "saadparwaiz1/cmp_luasnip",  -- snippets
     },
+
+    opt = true,  -- 在 vim.schedule() 中 lazy load
   }
 
   --- NOTE: 以下是 "nvim-cmp" 的 module 插件, 在 nvim-cmp.setup() 中启用的插件.
@@ -344,25 +350,29 @@ return packer.startup(function(use)
 
   use {"hrsh7th/cmp-buffer",  -- 当前 buffer 中有的 word
     commit = "3022dbc",
+
     after = "nvim-cmp",
   }
 
   use {"hrsh7th/cmp-path",  -- filepath 补全
     commit = "91ff86c",
+
     after = "nvim-cmp",
   }
 
   use {"saadparwaiz1/cmp_luasnip",  -- Snippets source for nvim-cmp
     commit = "1809552",
-    after = "nvim-cmp",
     requires = "L3MON4D3/LuaSnip",
+
+    after = "nvim-cmp",
   }
 
   --- snippet engine, for "cmp_luasnip", 每次打开文件都会有一个 [Scratch] buffer.
   use {"L3MON4D3/LuaSnip",
-    commit = "79f6472",
+    commit = "bc9ba28",
     run = "make install_jsregexp",  -- https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#transformations
     config = function() require("user.plugin_settings.luasnip_snippest") end,
+    requires = "rafamadriz/friendly-snippets",  -- snippets content
 
     --- BUG: 如果使用 opt/after ... 等设置, 一旦 LuaSnip 被安装在 opt/ 文件夹则无法加载内置 jsregexp 插件.
     --- jsregexp 位置: stdpath('data') .. "/site/pack/packer/start/LuaSnip/lua/luasnip-jsregexp.so"
@@ -371,13 +381,12 @@ return packer.startup(function(use)
     --- VVI: 默认 bufread=true, 在 lazyload 该 plugin 之后马上再次触发 Filetype event.
     --- 导致连续多次触发 FileType event.
     bufread = false,
-
-    requires = "rafamadriz/friendly-snippets",  -- snippets content
   }
 
   --- snippets content, 自定义 snippets 可以借鉴这个结构.
   use {"rafamadriz/friendly-snippets",
-    commit = "ef8caa5",
+    commit = "b4f857a",
+
     after = "LuaSnip",
   }
 
@@ -389,53 +398,57 @@ return packer.startup(function(use)
 
   --- 自动括号, 同时依赖 treesitter && cmp
   use {"windwp/nvim-autopairs",
-    commit = "5d75276",
+    commit = "99f6963",
     config = function() require("user.plugin_settings.autopairs") end,
+    requires = {
+      "nvim-treesitter/nvim-treesitter",
+      "hrsh7th/nvim-cmp",
+    },
+
     -- after = {
     --   "nvim-treesitter",  -- setup() 中 `check_ts`, `ts_config` 需要 treesitter 支持.
     --   "nvim-cmp",  -- cmp.event:on() 设置.
     -- },
     opt = true,  -- 在 vim.schedule() 中 lazy load
-    requires = {
-      "nvim-treesitter/nvim-treesitter",
-      "hrsh7th/nvim-cmp",
-    },
   }
 
   --- LSP ------------------------------------------------------------------------------------------
   --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
   --- 官方 LSP 引擎.
   use {"neovim/nvim-lspconfig",
-    commit = "b835c95",
+    commit = "9f49f35",
     config = function() require("user.lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
-    after = {
-      "mason.nvim",  -- 需要 mason 安装的 lsp cmd tool
-      "cmp-nvim-lsp",  -- cmp_nvim_lsp.update_capabilities(capabilities) 代码补全功能.
-    },
     requires = {
       "nvim-cmp",  -- provide content to nvim-cmp Completion. cmp_nvim_lsp.update_capabilities(capabilities)
       "hrsh7th/cmp-nvim-lsp",
       "williamboman/mason.nvim",  -- 安装 lsp 命令行工具.
     },
+
+    after = {
+      "mason.nvim",  -- 需要 mason 安装的 lsp cmd tool
+      "cmp-nvim-lsp",  -- cmp_nvim_lsp.update_capabilities(capabilities) 代码补全功能.
+    },
   }
 
   --- null-ls 插件 formatters && linters, depends on "nvim-lua/plenary.nvim"
   use {"jose-elias-alvarez/null-ls.nvim",
-    commit = "c51978f",
+    commit = "a678972",
     config = function() require("user.lsp.null_ls") end,
-    opt = true,  -- 在 vim.schedule() 中 lazy load
-    --after = "mason.nvim",  -- 需要 mason 安装的 lsp cmd tool
     requires = {
       "nvim-lua/plenary.nvim",
       "williamboman/mason.nvim",  -- 安装 linter/formatter 命令行工具. eg: shfmt, stylua ...
     },
+
+    --after = "mason.nvim",  -- 需要 mason 安装的 lsp cmd tool
+    opt = true,  -- 在 vim.schedule() 中 lazy load
   }
 
   --- File Tree Display ----------------------------------------------------------------------------
   --use "kyazdani42/nvim-web-devicons"  -- 提供 icons 需要 patch 字体 (Nerd Fonts)
   use {"kyazdani42/nvim-tree.lua",      -- 类似 NerdTree
-    commit = "68a2a09",
+    commit = "f8489c9",
     config = function() require("user.plugin_settings.file_tree") end,
+
     --opt = true,  -- VVI: 不推荐使用 lazyload, 会导致 `$ nvim dir` 直接打开文件夹的时候出现问题.
   }
 
@@ -444,34 +457,38 @@ return packer.startup(function(use)
   use {"akinsho/bufferline.nvim",
     commit = "4ecfa81",
     config = function() require("user.plugin_settings.decor_bufferline") end,
+
     opt = true,  -- 在 vim.schedule() 中 lazy load
   }
 
   --- statusline decorator, `:help 'statusline'`
   use {"nvim-lualine/lualine.nvim",   -- bottom status line
-    commit = "3325d5d",
+    commit = "bfa0d99",
     config = function() require("user.plugin_settings.decor_lualine") end,
+
     opt = true,  -- 在 vim.schedule() 中 lazy load
   }
 
   --- Debug tools 安装 -----------------------------------------------------------------------------
+  --- NOTE: dap-ui && dap 设置在同一文件中.
   use {"mfussenegger/nvim-dap",  -- core debug tool
-    commit = "6164368",
+    commit = "8f396b7",
     requires = "williamboman/mason.nvim",  -- install dap-debug tools. eg: 'delve'
+
     cmd = {'DapToggleBreakpoint', 'DapContinue', 'DapLoadLaunchJSON'},
-    --- NOTE: dap-ui && dap 设置在同一文件中.
   }
 
   use {"rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
     commit = "54365d2",
-    after = "nvim-dap",
     config = function() require("user.plugin_settings.dap_debug") end,  -- dap-ui && dap 设置在同一文件中.
+
+    after = "nvim-dap",
   }
 
   --- Useful Tools ---------------------------------------------------------------------------------
   --- fzf rg fd, preview 使用的是 treesitter, 而不用 bat
   use {"nvim-telescope/telescope.nvim",
-    commit = "cea9c75",
+    commit = "cabf991",
     config = function() require("user.plugin_settings.telescope_fzf") end,
     requires = {
       "nvim-lua/plenary.nvim",
@@ -489,6 +506,7 @@ return packer.startup(function(use)
   use {"akinsho/toggleterm.nvim",
     commit = "3ba6838",
     config = function() require("user.plugin_settings.toggleterm_terminal") end,
+
     opt = true,  -- 在 vim.schedule() 中 lazy load
   }
 
@@ -497,8 +515,9 @@ return packer.startup(function(use)
   --- `:Gitsigns setqflist/seqloclist` will open Trouble instead of quickfix or location list windows.
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   use {"lewis6991/gitsigns.nvim",
-    commit = "9ff7dfb",
+    commit = "d076301",
     config = function() require("user.plugin_settings.git_signs") end,
+
     opt = true,  -- 在 vim.schedule() 中 lazy load
   }
 
@@ -508,8 +527,9 @@ return packer.startup(function(use)
   --- `ctags --list-languages` 查看支持的语言. 不支持 jsx/tsx, 支持 typescript, 勉强支持 javascript
   -- -- }}}
   use {"preservim/tagbar",
-    commit = "6c3e15e",
+    commit = "af3ce7c",
     config = function() require("user.plugin_settings.tagbar") end,
+
     opt = true,  -- 在 vim.schedule() 中 lazy load
   }
 
@@ -518,6 +538,7 @@ return packer.startup(function(use)
     commit = "02cc387",
     run = function() vim.fn["mkdp#util#install"]() end,  -- VVI: Update 后需要重新安装 preview 插件, 否则可能出现无法运行的情况.
     config = function() vim.cmd('doautocmd mkdp_init BufEnter') end,  -- VVI: 需要这个设置才能使用 cmd 条件加载, 否则报错.
+
     cmd = {"MarkdownPreview", "MarkdownPreviewToggle", "MarkdownPreviewStop"},
   }
 

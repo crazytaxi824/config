@@ -6,7 +6,7 @@
 function Notify(msg, lvl, opt)
   --- switch to vim.log.levels
   local l = nil
-  if type(lvl) == 'number' then
+  if type(lvl) == 'number' then  -- vim.log.levels.ERROR & vim.lsp.log_levels.ERROR 都是 number.
     l = lvl
   elseif type(lvl) == 'string' then
     if string.upper(lvl) == "TRACE" then
