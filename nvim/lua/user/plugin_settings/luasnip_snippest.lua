@@ -16,21 +16,19 @@ luasnip.config.set_config({
 --- 可以参照 https://github.com/rafamadriz/friendly-snippets 自己定义 snippets
 -- -- }}}
 --- NOTE: `:help luasnip-loaders`
-vim.schedule(function()
-  require("luasnip.loaders.from_vscode").lazy_load({
-    --- 指定读取 "~/.config/nvim/snip/package.json"
-    --- 这里是加载自定义 snippets, 地址是 runtimepath/snip/package.json
-    --- 这里的 runtimepath 是 ~/.config/nvim/
-    paths = {"./snip"},  -- 这里的路径是相对于 runtimepath
-  })
-  require("luasnip.loaders.from_vscode").lazy_load({
-    --- paths 缺省时自动加载 runtimepath/package.json 这里是加载 friendly-snippets
-    --- 这里的 runtimepath 是 ~/.local/share/nvim/site/pack/*/start/*/,
-    --- 即: ~/.local/share/nvim/site/pack/packer/start/friendly-snippets/
-    --paths = {},
-    exclude = {"go"},  -- 排除 go, 使用自定义的 snippets
-  })
-end)
+require("luasnip.loaders.from_vscode").lazy_load({
+  --- 指定读取 "~/.config/nvim/snip/package.json"
+  --- 这里是加载自定义 snippets, 地址是 runtimepath/snip/package.json
+  --- 这里的 runtimepath 是 ~/.config/nvim/
+  paths = {"./snip"},  -- 这里的路径是相对于 runtimepath
+})
+require("luasnip.loaders.from_vscode").lazy_load({
+  --- paths 缺省时自动加载 runtimepath/package.json 这里是加载 friendly-snippets
+  --- 这里的 runtimepath 是 ~/.local/share/nvim/site/pack/*/start/*/,
+  --- 即: ~/.local/share/nvim/site/pack/packer/start/friendly-snippets/
+  --paths = {},
+  exclude = {"go"},  -- 排除 go, 使用自定义的 snippets
+})
 
 --- HACK: 从 insert/select mode 退出时取消 jumpable ------------------------------------------------
 --- https://github.com/L3MON4D3/LuaSnip/issues/258
