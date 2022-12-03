@@ -10,6 +10,7 @@
 --   当 plugin 有加载条件的时候, plugin 的安装地址会从 ~/.local/share/nvim/site/pack/packer/start -> opt
 --   plugin 的 opt 属性会被改为 true, `:PackerStatus`
 --
+-- `:help packer.use()`
 -- use {
 --   'myusername/example',        -- The plugin location string
 --
@@ -25,17 +26,20 @@
 --                                -- packer.nvim 提供一个全局变量 packer_plugins 在 plugin/packer_compiled.lua 中.
 --                                -- print(vim.inspect(packer_plugins)) 可以用来判断 plugins 是否安装, 是否加载 (loaded=true)
 --
+--   bufread = boolean,           -- Manually specifying if a plugin needs BufRead after being loaded
+--
 --   -- 固定 plugin 版本
 --   branch = string,             -- VVI: Specifies a git branch to use
 --   tag = string,                -- VVI: Specifies a git tag to use. Supports '*' for "latest tag"
 --   commit = string,             -- VVI: Specifies a git commit to use
 --   lock = boolean,              -- VVI: Skip updating this plugin in updates/syncs. Still cleans.
 --
---   run = string, function, or table, -- VVI: UPDATE 之后执行, 不是 loaded. 类似 vim-plug { 'do' }
+--   run = string, function, or table, -- VVI: UPDATE 到 new version 之后执行. `:PackerUpdate`, `:PackerSync` ...
 --   requires = string or list,   -- VVI: 只要求安装 requires 中的插件 (插件在 plugins table 中), 但不要求加载. 这也是和 after 最大的区别.
 --                                -- requires 插件名需要写全名, requires = "hrsh7th/nvim-cmp"
 --   config = string or function, -- VVI: after plugin loaded. `config = function() ... end`,
 --   rocks = string or list,      -- Specifies `Luarocks` dependencies for the plugin
+--
 --   -- NOTE: The `setup` implies `opt = true`
 --   setup = string or function,  -- VVI: Specifies code to run before this plugin is loaded.
 --
@@ -207,7 +211,7 @@ packer.init {
 --- `:PackerSync` - install / update / clean 插件包.
 return packer.startup(function(use)
   use {"wbthomason/packer.nvim",  -- VVI: 必要. Have packer manage itself
-    commit = "6afb674",
+    commit = "dcd2f38",
   }
 
   --- Performence & Functions ----------------------------------------------------------------------
@@ -356,22 +360,25 @@ return packer.startup(function(use)
 
   --- snippet engine, for "cmp_luasnip", 每次打开文件都会有一个 [Scratch] buffer.
   use {"L3MON4D3/LuaSnip",
-    commit = "79f6472",  -- BUG: opt 加载无法 load jsregexp 插件.
-                         -- jsregexp 位置: stdpath('data') .. "/site/pack/packer/start/LuaSnip/lua/luasnip-jsregexp.so"
+    commit = "79f6472",
     run = "make install_jsregexp",  -- https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#transformations
     config = function() require("user.plugin_settings.luasnip_snippest") end,
 
-    --- VVI: 不能使用 lazyload | conditional load,
-    --- 会导致当前 buffer 的 autocmd FileType & after/ftplugin 函数多次执行.
-    --after = "cmp_luasnip",
+    --- BUG: 如果使用 opt/after ... 等设置, 一旦 LuaSnip 被安装在 opt/ 文件夹则无法加载内置 jsregexp 插件.
+    --- jsregexp 位置: stdpath('data') .. "/site/pack/packer/start/LuaSnip/lua/luasnip-jsregexp.so"
+    opt = true,
 
-    requires = {
-      {
-        "rafamadriz/friendly-snippets",  -- snippets content, 自定义 snippets 可以借鉴这个结构.
-        commit = "ef8caa5",
-        after = "LuaSnip",
-      },
-    },
+    --- VVI: 默认 bufread=true, 在 lazyload 该 plugin 之后马上再次触发 Filetype event.
+    --- 导致连续多次触发 FileType event.
+    bufread = false,
+
+    requires = "rafamadriz/friendly-snippets",  -- snippets content
+  }
+
+  --- snippets content, 自定义 snippets 可以借鉴这个结构.
+  use {"rafamadriz/friendly-snippets",
+    commit = "ef8caa5",
+    after = "LuaSnip",
   }
 
   --- cmdline completions, 不好用.
@@ -384,10 +391,11 @@ return packer.startup(function(use)
   use {"windwp/nvim-autopairs",
     commit = "5d75276",
     config = function() require("user.plugin_settings.autopairs") end,
-    after = {
-      "nvim-treesitter",  -- setup() 中 `check_ts`, `ts_config` 需要 treesitter 支持.
-      "nvim-cmp",  -- cmp.event:on() 设置.
-    },
+    -- after = {
+    --   "nvim-treesitter",  -- setup() 中 `check_ts`, `ts_config` 需要 treesitter 支持.
+    --   "nvim-cmp",  -- cmp.event:on() 设置.
+    -- },
+    opt = true,  -- 在 vim.schedule() 中 lazy load
     requires = {
       "nvim-treesitter/nvim-treesitter",
       "hrsh7th/nvim-cmp",
@@ -416,7 +424,7 @@ return packer.startup(function(use)
     commit = "c51978f",
     config = function() require("user.lsp.null_ls") end,
     opt = true,  -- 在 vim.schedule() 中 lazy load
-    after = "mason.nvim",  -- 需要 mason 安装的 lsp cmd tool
+    --after = "mason.nvim",  -- 需要 mason 安装的 lsp cmd tool
     requires = {
       "nvim-lua/plenary.nvim",
       "williamboman/mason.nvim",  -- 安装 linter/formatter 命令行工具. eg: shfmt, stylua ...
@@ -428,7 +436,7 @@ return packer.startup(function(use)
   use {"kyazdani42/nvim-tree.lua",      -- 类似 NerdTree
     commit = "68a2a09",
     config = function() require("user.plugin_settings.file_tree") end,
-    --opt = true,  -- NOTE: 不推荐使用 lazyload, 会导致 `$ nvim dir` 直接打开文件夹的时候出现问题.
+    --opt = true,  -- VVI: 不推荐使用 lazyload, 会导致 `$ nvim dir` 直接打开文件夹的时候出现问题.
   }
 
   --- Buffer & Status Line -------------------------------------------------------------------------
@@ -470,10 +478,11 @@ return packer.startup(function(use)
       "nvim-treesitter/nvim-treesitter",
     },
 
-    --- VVI: 不能使用 lazyload | conditional load,
-    --- 会导致当前 buffer 的 autocmd FileType & after/ftplugin 函数多次执行.
+    --- VVI: 默认 bufread=true, 在 lazyload 该 plugin 之后马上再次触发 Filetype event.
+    --- 导致连续多次触发 FileType event.
     --keys = {"<leader>f"},
-    --opt = true,  -- 在 vim.schedule() 中 lazy load
+    opt = true,  -- 在 vim.schedule() 中 lazy load
+    bufread = false,
   }
 
   --- terminal
@@ -490,7 +499,7 @@ return packer.startup(function(use)
   use {"lewis6991/gitsigns.nvim",
     commit = "9ff7dfb",
     config = function() require("user.plugin_settings.git_signs") end,
-    opt = true,
+    opt = true,  -- 在 vim.schedule() 中 lazy load
   }
 
   --- tagbar --- {{{
