@@ -262,8 +262,7 @@ return packer.startup(function(use)
   --- By convention, if you want to write a query, use the `queries/` directory,
   --- but if you want to extend a query use the `after/queries/` directory.
   use {"nvim-treesitter/nvim-treesitter",
-    commit = "4b900527",  -- BUG: foldmethod error with tab indent.
-                          -- FEAT: `@nospell` for defining regions that should NOT be spellchecked.
+    commit = "44289d81",  -- BUG: foldmethod error with tab indent.
     run = ":TSUpdateSync",  -- Post-update/install hook.
     config = function() require("user.plugin_settings.treesitter") end,
     opt = true,  -- 在 vim.schedule() 中 lazy load
