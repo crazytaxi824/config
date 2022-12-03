@@ -63,7 +63,7 @@
 
 查看 `.../packer_compiled.lua` 耗时详情可以使用:
 
-- `PackerCompile profile=true`
+- `:PackerCompile profile=true`
 - `:PackerProfile`
 
 造成 `opening buffers` 时间长的原因:
@@ -236,6 +236,12 @@ XXX number
 ### lua 运行 shell cmd, 获取 output.
 
 ```lua
+local result = vim.fn.system(cmd)
+if vim.v.shell_error ~= 0 then
+  print(result)
+  return
+end
+
 local handle = io.popen(cmd)
 local result = handle:read("a")  -- "a" - read all output
 handle:close()
@@ -278,12 +284,12 @@ using filter, `:help filter` 使用方法:
 
 1. 在行内写入 shell 代码. `cal -h -3`
 
-2. filter command, `!!`, 不需要 `:`, 会在底部命令行区域出现 `:.!`, 进入 (filter) command 模式.
+2. filter command, `!!` == `:.!`, 进入 (filter) command 模式.
 
    - `.` 表示当前行.
    - `!` 表示后面是 shell command.
 
-3. `!` 后输入 bash, cat, grep ... 等支持 pipe 的 shell command.
+3. `:.!` 后输入 bash, cat, grep ... 等支持 pipe 的 shell command.
 
 4. 如果不支持 pipe 的命令需要使用 `xargs` 来传递参数. 例如 `echo`, 需要使用 `echo "omg" | xargs echo`
 
@@ -373,19 +379,19 @@ vim.api.nvim_create_autocmd("FileType", {
 
 # neovim v0.8 release date: 30/9/2022
 
+- `:help deprecated.txt`
+
 - https://github.com/neovim/neovim/releases/tag/v0.8.0
 
 ## Important changes
 
-- `:help deprecated.txt`
-
 - DO NOT use `vim.g.do_filetype_lua` and `vim.g.did_load_filetypes` settings in neovim v0.8
 
-- LSP: Add logging level "OFF"
+- LSP: Add logging level "OFF", eg: `vim.lsp.set_log_level("OFF")`
 
 - LSP: Option to reuse_win for jump actions ([#18577](https://github.com/neovim/neovim/pull/18577))
 
-- `vim.lsp.buf.formatting_sync()` -> `vim.lsp.buf.format({ async = false })`
+- `vim.lsp.buf.formatting_sync()` => `vim.lsp.buf.format({ async = false })`
 
 ```lua
 --- `:help vim.lsp.buf.format()`
@@ -401,15 +407,15 @@ vim.lsp.buf.format({
 })
 ```
 
-- LSP NEW api: `vim.lsp.start()` 可能可以用于 au FileType *.go lua vim.lsp.start({cmd=,root=...})
+- LSP NEW api: `vim.lsp.start()` 可能可以用于 `au FileType *.go lua vim.lsp.start({cmd=,root=...})`
 
-- LSP: Add `:LspAttach` and `:LspDetach` autocommands
+- LSP: Add `:LspAttach` and `:LspDetach` lsp-events, `au LspAttach * ...`
 
 - `:help winbar`, `:hi WinBar`
 
-- ADD: `vim.fs.dirname(vim.fn.bufname('%'))` vs `vim.fn.expand('%:h')`
+- ADD: `vim.fs.dirname(vim.fn.bufname('%'))` == `vim.fn.expand('%:h')`
 
-- [LSP] Accessing client.resolved_capabilities is deprecated, update your plugins or configuration to access client.server_capabilities instead.The new key/value pairs in server_capabilities directly match those defined in the language server protocol
+- [LSP] Accessing client.resolved_capabilities => client.server_capabilities instead.
 
 <br />
 

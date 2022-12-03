@@ -284,8 +284,8 @@ nvim_tree.setup {
   hijack_unnamed_buffer_when_opening = false,  -- Opens in place of the unnamed buffer if it's empty. 默认 false.
 
   --- 启动 nvim 时, 打开 tree.
-  open_on_setup = true,  -- 启动 nvim 打开文件时, 自动打开 tree. eg: `nvim dir`
-  open_on_setup_file = false,  -- 启动 nvim 打开文件, 且文件存在的情况下, 自动打开 tree. eg: `nvim file`
+  open_on_setup = true,  -- 启动 nvim 打开 dir 时, 自动打开 tree. eg: `nvim dir`
+  open_on_setup_file = false,  -- 启动 nvim 打开文件, 且文件存在的情况下, 自动打开 tree. eg: `nvim <file>`
   open_on_tab = false,  -- 在 tree 打开的状态下 open new tab, 则在新 tab 中自动打开 tree.
   ignore_buffer_on_setup = false,  -- Will ignore the buffer, when deciding to open the tree on setup.
   ignore_ft_on_setup = {},  -- List of filetypes that will prevent `open_on_setup` to open.
