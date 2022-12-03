@@ -376,7 +376,7 @@ return packer.startup(function(use)
 
   --- snippets content, 自定义 snippets 可以借鉴这个结构.
   use {"rafamadriz/friendly-snippets",
-    commit = "ef8caa5",
+    commit = "b4f857a",
     after = "LuaSnip",
   }
 
