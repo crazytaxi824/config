@@ -9,6 +9,7 @@ end
 --- https://github.com/L3MON4D3/LuaSnip#config
 luasnip.config.set_config({
   history = false,
+  --update_events = 'TextChanged,TextChangedI', -- 默认: 'InsertLeave'
 })
 
 --- VVI: 读取配置文件地址 --- {{{
