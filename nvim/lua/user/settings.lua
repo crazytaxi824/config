@@ -304,7 +304,8 @@ vim.opt.signcolumn = 'yes:1'  -- 'auto:1-3', 最少预留 1 个 sign 的宽度, 
 
 vim.opt.showmatch = true      -- 跳到匹配的括号上, 包括 () {} []
 
-vim.opt.completeopt = { "menu", "menuone", "noselect" }  -- 代码补全设置, nvim-cmp 不受影响.
+vim.opt.completeopt = { "menu", "menuone", "noselect" } -- 代码补全, nvim-cmp 设置.
+                                                        -- https://github.com/hrsh7th/nvim-cmp#setup
 --vim.opt.pumheight = 16  -- Maximum number of items to show in the popup menu. 默认 0
 --vim.opt.pumwidth = 15   -- Minimum width for the popup menu (ins-completion-menu). 默认 15
 
