@@ -96,7 +96,7 @@ end
 
 --- NOTE: 如果 packer 不存在则自动 install "packer.nvim" ------------------------------------------- {{{
 --- DOC: https://github.com/wbthomason/packer.nvim#bootstrapping
-local packer_bootstrap = false  -- 是否第一次安装 packer.
+local packer_bootstrap = false  -- 是否需要安装 packer.
 
 local packer_status_ok, packer = pcall(require, "packer")
 if not packer_status_ok then
@@ -120,6 +120,7 @@ if not packer_status_ok then
   vim.cmd('packadd packer.nvim')  -- 加载 module
   packer = require('packer')  -- 重新 load packer, 重新赋值.
 
+  --- 需要安装 packer.
   packer_bootstrap = true
 
   --- PackerSync 结束时, 加载 lazyload 中的 plugins.
@@ -229,7 +230,10 @@ packer.init {
 -- -- }}}
 
 --- vim.schedule() lazyload plugins ---------------------------------------------------------------- {{{
+--- 不需要安装 packer 的情况下, lazyload plugins.
 if not packer_bootstrap then
+  --- 在读取 buffer 之后再加载 plugins.
+  --- 这里不能使用 FileType, 因为打开无法识别的文件类型时不会触发该 autocmd. eg: `xxx.log` 文件.
   vim.api.nvim_create_autocmd("BufEnter", {
     pattern = {"*"},
     once = true,  -- VVI: 只需要执行一次
@@ -584,7 +588,7 @@ return packer.startup(function(use)
   --use "goolord/alpha-nvim"          -- neovim 启动页面
   --use "ahmedkhalf/project.nvim"     -- project manager
 
-  --- VVI: 第一次安装 packer 时, 同时安装其他插件.
+  --- VVI: 需要安装 packer 的情况下, 同时安装其他插件.
   if packer_bootstrap then
     packer.sync()
   end
