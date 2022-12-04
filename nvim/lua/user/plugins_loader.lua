@@ -169,11 +169,21 @@ vim.api.nvim_create_autocmd("User", {
   callback = function(params)
     --- NOTE: 如果打开了 packer 窗口, 则记录窗口中的所有内容.
     if vim.bo[params.buf].filetype == 'packer' then
-      --- 读取 packer 文件中的所有信息. 从第一行到最后一行.
+      --- 读取 packer 面板 buffer 中的所有信息. 从第一行到最后一行.
       local update_info = vim.fn.getline(1, '$')
 
+      --- 读取 log 文件中的最后几行, 判断内容是否相同.
+      local line_num = #update_info
+      local log_content = vim.fn.readfile(packer_update_log, '', -line_num) -- 负数从后向前读.
+
+      --- 查看 content 是否相同
+      if table.concat(update_info, '') == table.concat(log_content, '') then
+        return
+      end
+
       --- 给内容添加时间信息.
-      update_info = vim.list_extend({"", vim.fn.strftime(" [%Y-%m-%d %H:%M:%S]")}, update_info)
+      local time_now = vim.fn.strftime(" [%Y-%m-%d %H:%M:%S]")
+      update_info = vim.list_extend({"", time_now}, update_info)
 
       --- 将内容写入文件中.
       vim.fn.writefile(update_info, packer_update_log, 'a')
@@ -459,7 +469,7 @@ return packer.startup(function(use)
   --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
   --- 官方 LSP 引擎.
   use {"neovim/nvim-lspconfig",
-    commit = "9f49f35",
+    commit = "ac132be",
     config = function() require("user.lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     requires = {
       "nvim-cmp",  -- provide content to nvim-cmp Completion. cmp_nvim_lsp.update_capabilities(capabilities)
