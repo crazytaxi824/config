@@ -34,7 +34,7 @@ return {
   --- project_lsp_config 中设置 root_dir 直接使用 string. eg: root_dir = "/a/b/c"; root_dir = vim.fn.getcwd().
   --- 设置参考 https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig/server_configurations/gopls.lua
   root_dir = function(fname)  -- fname == :echo expand('%:p') 当前文件绝对路径.
-    --- FIXED: nvim-lspconfig 已经通过不允许多个 lsp 实例对应多个 root_dir/workspace 的方法修复了该问题.
+    --- FIXED: nvim-lspconfig 通过不允许多个 lsp 实例对应多个 root_dir/workspace 的方法修复了该问题.
     --- NOTE: 如果文件在 ignore dir 中, 则返回当前路径 vim.fn.getcwd()
     -- for _, ignored in ipairs(ignore_workspace_folders) do
     --   if string.match(fname, vim.fn.expand(ignored)) then
