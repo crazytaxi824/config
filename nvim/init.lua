@@ -38,7 +38,8 @@ __Debug_Neovim = {
   autocmd = false,  -- 刚打开 nvim 的时候, autocmd 运行情况.
 }
 
---- VVI: 在最开始加载 "lewis6991/impatient.nvim" 设置,
+--- VVI: 在最开始加载 "lewis6991/impatient.nvim" 设置.
+--- DOC: https://github.com/lewis6991/impatient.nvim#setup
 --- it is recommended you add the following near the start of your 'init.vim'.
 --- Speed up loading Lua modules in Neovim to improve startup time.
 require "user.plugin_settings.impatient"

@@ -173,12 +173,14 @@ vim.api.nvim_create_autocmd("User", {
       local update_info = vim.fn.getline(1, '$')
 
       --- 读取 log 文件中的最后几行, 判断内容是否相同.
-      local line_num = #update_info
-      local log_content = vim.fn.readfile(packer_update_log, '', -line_num) -- 负数从后向前读.
+      if vim.fn.filereadable(packer_update_log) == 1 then
+        local line_num = #update_info
+        local log_content = vim.fn.readfile(packer_update_log, '', -line_num) -- 负数从后向前读.
 
-      --- 查看 content 是否相同
-      if table.concat(update_info, '') == table.concat(log_content, '') then
-        return
+        --- 查看 content 是否相同
+        if table.concat(update_info, '') == table.concat(log_content, '') then
+          return
+        end
       end
 
       --- 给内容添加时间信息.
