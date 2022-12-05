@@ -4,6 +4,11 @@
 --- 如果是 rg 返回的结果, 则临时文件中记录的是 <filepath:line:col:content>
 --- 结论: {+f} 临时文件中记录的是 fzf 中显示的结果.
 function FZF_selected(fzf_tmp_file)
+  if vim.fn.filereadable(fzf_tmp_file) == 0 then
+    Notify({"fzf `{+f}` tmp file is NOT readable.", "path: `" .. fzf_tmp_file .. "`"}, "ERROR")
+    return
+  end
+
   --- 获取文件内容, readfile() 会按照 '\n' 返回一个 list.
   local fzf_selected_items = vim.fn.readfile(fzf_tmp_file)
 
