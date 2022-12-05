@@ -46,11 +46,11 @@ return {
     return golangci_args
   end,
 
-  --- golangci-lint 配置文件位置自动查找 --- {{{
+  --- README: golangci-lint 配置文件位置自动查找 --- {{{
+  --- DOC: https://golangci-lint.run/usage/configuration/#linters-configuration
   --- golangci-lint 会自动寻找 '.golangci.yml', '.golangci.yaml', '.golangci.toml', '.golangci.json'.
   --- GolangCI-Lint also searches for config files in all directories from the directory of
   --- the first analyzed path up to the root.
-  --- https://golangci-lint.run/usage/configuration/#linters-configuration
   -- -- }}}
   --extra_args = { '--config', vim.fn.getcwd() .. "/.golangci.yml"},  -- NOTE: 相对上面 cwd 的路径, 也可以使用绝对路径.
 

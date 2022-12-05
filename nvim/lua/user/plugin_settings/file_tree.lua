@@ -261,7 +261,8 @@ local open_dir_in_tree = true  -- `:e dir` 时是否在 nvim-tree 中打开 dir.
 nvim_tree.setup {
   auto_reload_on_write = true,  -- VVI: `:w` 时刷新 nvim-tree.
 
-  disable_netrw = false,  -- VVI: completely disable netrw. NOTE: netrw: vim's builtin file explorer.
+  --- NOTE: netrw: vim's builtin file explorer.
+  disable_netrw = open_dir_in_tree,  -- VVI: completely disable netrw.
 
   --- true  - `:e dir` 时, 不显示 netrw file explorer.
   --- false - `:e dir` 时, 在当前 window 中显示 netrw file explorer.
