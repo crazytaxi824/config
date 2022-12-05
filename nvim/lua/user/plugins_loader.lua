@@ -290,7 +290,7 @@ return packer.startup(function(use)
 
   --- 通知功能
   use {"rcarriga/nvim-notify",
-    commit = "859056f",
+    commit = "e7cffd0",
     config = function() require("user.plugin_settings.nvim_notify") end,
   }
 
@@ -469,6 +469,7 @@ return packer.startup(function(use)
   --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
   --- 官方 LSP 引擎.
   use {"neovim/nvim-lspconfig",
+    --- MERGE: https://github.com/neovim/nvim-lspconfig/pull/2287
     --- "f938e3b" 之后 FIXED: https://github.com/neovim/nvim-lspconfig/issues/2285
     --- 修复 lsp goto_definition 出现的问题. eg: golang 中 goto_definition 后, 因源文件的 workspace 不同
     --- 导致无法继续向下 goto_definition. "github.com/hashicorp/consul" 问题最严重.
