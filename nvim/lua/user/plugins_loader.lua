@@ -96,7 +96,7 @@ end
 
 --- NOTE: 如果 packer 不存在则自动 install "packer.nvim" ------------------------------------------- {{{
 --- DOC: https://github.com/wbthomason/packer.nvim#bootstrapping
-local packer_bootstrap = false  -- 是否第一次安装 packer.
+local packer_bootstrap = false  -- 是否需要安装 packer.
 
 local packer_status_ok, packer = pcall(require, "packer")
 if not packer_status_ok then
@@ -120,6 +120,7 @@ if not packer_status_ok then
   vim.cmd('packadd packer.nvim')  -- 加载 module
   packer = require('packer')  -- 重新 load packer, 重新赋值.
 
+  --- 需要安装 packer.
   packer_bootstrap = true
 
   --- PackerSync 结束时, 加载 lazyload 中的 plugins.
@@ -168,11 +169,21 @@ vim.api.nvim_create_autocmd("User", {
   callback = function(params)
     --- NOTE: 如果打开了 packer 窗口, 则记录窗口中的所有内容.
     if vim.bo[params.buf].filetype == 'packer' then
-      --- 读取 packer 文件中的所有信息. 从第一行到最后一行.
+      --- 读取 packer 面板 buffer 中的所有信息. 从第一行到最后一行.
       local update_info = vim.fn.getline(1, '$')
 
+      --- 读取 log 文件中的最后几行, 判断内容是否相同.
+      local line_num = #update_info
+      local log_content = vim.fn.readfile(packer_update_log, '', -line_num) -- 负数从后向前读.
+
+      --- 查看 content 是否相同
+      if table.concat(update_info, '') == table.concat(log_content, '') then
+        return
+      end
+
       --- 给内容添加时间信息.
-      update_info = vim.list_extend({"", vim.fn.strftime(" [%Y-%m-%d %H:%M:%S]")}, update_info)
+      local time_now = vim.fn.strftime(" [%Y-%m-%d %H:%M:%S]")
+      update_info = vim.list_extend({"", time_now}, update_info)
 
       --- 将内容写入文件中.
       vim.fn.writefile(update_info, packer_update_log, 'a')
@@ -229,7 +240,10 @@ packer.init {
 -- -- }}}
 
 --- vim.schedule() lazyload plugins ---------------------------------------------------------------- {{{
+--- 不需要安装 packer 的情况下, lazyload plugins.
 if not packer_bootstrap then
+  --- 在读取 buffer 之后再加载 plugins.
+  --- 这里不能使用 FileType, 因为打开无法识别的文件类型时不会触发该 autocmd. eg: `xxx.log` 文件.
   vim.api.nvim_create_autocmd("BufEnter", {
     pattern = {"*"},
     once = true,  -- VVI: 只需要执行一次
@@ -276,7 +290,7 @@ return packer.startup(function(use)
 
   --- 通知功能
   use {"rcarriga/nvim-notify",
-    commit = "859056f",
+    commit = "e7cffd0",
     config = function() require("user.plugin_settings.nvim_notify") end,
   }
 
@@ -455,7 +469,12 @@ return packer.startup(function(use)
   --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
   --- 官方 LSP 引擎.
   use {"neovim/nvim-lspconfig",
-    commit = "9f49f35",
+    --- MERGE: https://github.com/neovim/nvim-lspconfig/pull/2287
+    --- "f938e3b" 之后 FIXED: https://github.com/neovim/nvim-lspconfig/issues/2285
+    --- 修复 lsp goto_definition 出现的问题. eg: golang 中 goto_definition 后, 因源文件的 workspace 不同
+    --- 导致无法继续向下 goto_definition. "github.com/hashicorp/consul" 问题最严重.
+    --- SIDE_EFFECT: 现在不能多 workspace 编辑了. eg: :e foo/src/main.go & :e bar/src/main.go
+    commit = "ac132be",
     config = function() require("user.lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     requires = {
       "nvim-cmp",  -- provide content to nvim-cmp Completion. cmp_nvim_lsp.update_capabilities(capabilities)
@@ -584,7 +603,7 @@ return packer.startup(function(use)
   --use "goolord/alpha-nvim"          -- neovim 启动页面
   --use "ahmedkhalf/project.nvim"     -- project manager
 
-  --- VVI: 第一次安装 packer 时, 同时安装其他插件.
+  --- VVI: 需要安装 packer 的情况下, 同时安装其他插件.
   if packer_bootstrap then
     packer.sync()
   end
