@@ -27,6 +27,12 @@ mason.setup {
   --- NOTE: LSP server 下载位置默认在 "~/.local/share/nvim/mason/"
   install_root_dir = vim.fn.stdpath("data") .. "/mason_tools",
 
+  --- Where Mason should put its bin location in your PATH. Can be one of:
+  --- - "prepend" (default, Mason's bin location is put first in PATH), 优先找到 Mason 的命令行工具.
+  --- - "append" (Mason's bin location is put at the end of PATH)
+  --- - "skip" (doesn't modify PATH)
+  PATH = "prepend",
+
   max_concurrent_installers = 4,  -- 并发安装数量.
 
   ui = {
