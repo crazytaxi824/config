@@ -60,10 +60,14 @@ vim.api.nvim_create_autocmd("BufWritePost", {
   callback = function(params)
     --- 分类&排序 -imports-order (default "std,general,company,project")
     --- 即(默认): 标准包, github.com, local/src/...
+    --- 将排序后的结果写入文件 -output file, 如果有错误则不写入.
     local r = vim.fn.system('goimports-reviser -output file ' .. params.file)
     if vim.v.shell_error ~= 0 then
-      Notify(r, "ERROR")
+      --Notify(r, "ERROR")  -- NOTE: go 语法错误会触发这里的 error, 可以不打印.
+      return
     end
+
+    --- 文件写入后需要 checktime 刷新 buffer 内容.
     vim.cmd('checktime')
   end
 })
