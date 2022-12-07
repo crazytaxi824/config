@@ -68,15 +68,15 @@ local function go_test_single(testfn_name, opt)
 
   local cmd = 'cd ' .. go_list.Root .. ' &&'
   if opt.mode == 'run' then
-    --- go test -v -timeout 10s -run TestXxx ImportPath
+    --- go test -v -timeout 10m -run TestXxx ImportPath
     cmd = cmd .. ' go test -v' .. flag_cmd.flag
-      .. ' -timeout 10s -run ' .. testfn_name_regexp .. go_list.ImportPath
+      .. ' -timeout 10m -run ' .. testfn_name_regexp .. go_list.ImportPath
   elseif opt.mode == 'bench' then
-    --- go test -v -timeout 10s -run ^$ -benchmem -bench BenchmarkXxx ImportPath
+    --- go test -v -timeout 10m -run ^$ -benchmem -bench BenchmarkXxx ImportPath
     cmd = cmd .. ' go test -v' .. flag_cmd.flag
-      .. ' -timeout 10s -run ^$ -benchmem -bench ' .. testfn_name_regexp .. go_list.ImportPath
+      .. ' -timeout 10m -run ^$ -benchmem -bench ' .. testfn_name_regexp .. go_list.ImportPath
   elseif opt.mode == 'fuzz' then
-    --- go test -v -run ^$ -fuzztime 30s -fuzz FuzzXxx ImportPath
+    --- go test -v -run ^$ -fuzztime 15s -fuzz FuzzXxx ImportPath
     cmd = cmd .. ' go test -v -fuzztime 15s' .. flag_cmd.flag
       .. ' -run ^$ -fuzz ' .. testfn_name_regexp .. go_list.ImportPath
   else
