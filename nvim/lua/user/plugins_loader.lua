@@ -606,6 +606,11 @@ return packer.startup(function(use)
   --use "goolord/alpha-nvim"          -- neovim 启动页面
   --use "ahmedkhalf/project.nvim"     -- project manager
 
+  --- https://docs.github.com/en/enterprise-cloud@latest/copilot/getting-started-with-github-copilot/getting-started-with-github-copilot-in-neovim
+  use {"github/copilot.vim",  -- NOTE: 目前不需要锁定版本.
+    cmd = {"Copilot"},  -- `:Copilot setup`, `:help copilot` 查看可用命令.
+  }
+
   --- VVI: 需要安装 packer 的情况下, 同时安装其他插件.
   if packer_bootstrap then
     packer.sync()
