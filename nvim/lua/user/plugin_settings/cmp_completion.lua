@@ -30,9 +30,9 @@ local kind_icon_txt = {  --- {{{
   Keyword = "keywd",
   Snippet = "snip",
   Color = "color",
-  File = "file",
+  File = "file~",
   Reference = "ref",
-  Folder = "dir",
+  Folder = "dir/",
   Variable = "var",
   Constant = "const",
   Event = "event",
@@ -65,7 +65,7 @@ cmp.setup {
     { name = "luasnip",  group_index = 1, priority = 999 }, -- "saadparwaiz1/cmp_luasnip" -> "L3MON4D3/LuaSnip"
     { name = "nvim_lsp", group_index = 1 },  -- "hrsh7th/cmp-nvim-lsp"
     { name = "buffer",   group_index = 1, max_item_count = 6 }, -- "hrsh7th/cmp-buffer", 最多显示 n 条.
-    { name = "path",     group_index = 2 },  -- "hrsh7th/cmp-path"
+    { name = "path",     group_index = 1 },  -- "hrsh7th/cmp-path"
     --- NOTE: other snippets engine --- {{{
     --{ name = 'vsnip' },      -- For vsnip users      -- "hrsh7th/vim-vsnip" vim-script
     --{ name = 'luasnip' },    -- For luasnip users    -- "L3MON4D3/LuaSnip" lua
@@ -82,7 +82,7 @@ cmp.setup {
     },
     documentation = {
       border = {"", "", "", "▕", "", "", "", "▏"},  -- `:help nvim_open_win()`
-      winhighlight = 'FloatBorder:NormalFloat',
+      --winhighlight = 'FloatBorder:NormalFloat',
     },
   },
 
@@ -190,7 +190,7 @@ vim.api.nvim_set_hl(0, 'CmpItemAbbrMatchFuzzy', {ctermfg = Color.conditional_mag
 vim.api.nvim_set_hl(0, 'CmpItemMenu', {ctermfg = Color.type_green})
 
 --- VVI: CmpItemKindXXX 默认颜色, 如果没有单独设置 CmpItemKindXXX 颜色则会使用该颜色.
-vim.api.nvim_set_hl(0, 'CmpItemKindDefault', {ctermfg = 248})
+vim.api.nvim_set_hl(0, 'CmpItemKindDefault', {ctermfg = 246})
 
 vim.api.nvim_set_hl(0, 'CmpItemKindInterface', {link = 'Type'})
 vim.api.nvim_set_hl(0, 'CmpItemKindClass',     {link = 'Type'})
@@ -205,15 +205,13 @@ vim.api.nvim_set_hl(0, 'CmpItemKindConstant', {link = 'Keyword'})
 vim.api.nvim_set_hl(0, 'CmpItemKindEnum',     {link = 'Keyword'})
 vim.api.nvim_set_hl(0, 'CmpItemKindModule',   {link = 'String'})
 
---- cyan
-vim.api.nvim_set_hl(0, 'CmpItemKindFile',   {ctermfg = Color.cyan})
-vim.api.nvim_set_hl(0, 'CmpItemKindFolder', {ctermfg = Color.cyan})
-
---- grey, 弃用的 suggestion.
-vim.api.nvim_set_hl(0, 'CmpItemAbbrDeprecated',  {ctermfg = 244, underline = true})
-
 -- blue
 vim.api.nvim_set_hl(0, 'CmpItemKindSnippet', {ctermfg = Color.boolean_blue})
+vim.api.nvim_set_hl(0, 'CmpItemKindFile',    {ctermfg = Color.boolean_blue})
+vim.api.nvim_set_hl(0, 'CmpItemKindFolder',  {ctermfg = Color.boolean_blue, bold = true})
+
+--- grey, 弃用的 suggestion.
+vim.api.nvim_set_hl(0, 'CmpItemAbbrDeprecated',  {ctermfg = 242, underline = true})
 
 -- -- }}}
 
