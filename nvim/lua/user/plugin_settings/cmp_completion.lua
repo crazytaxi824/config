@@ -151,8 +151,9 @@ cmp.setup {
         cmp.confirm({ select = true })  -- 确认选择
       elseif luasnip.expand_or_locally_jumpable() then
         --- expand   是指展开 snippest
-        --- jumpable 是指 cursor 跳转到 placeholder ${1}
-        luasnip.expand_or_jump()  -- 展开 snippet OR 跳转到下一个 snippets placeholder
+        --- jumpable 是指有可以 jump 的 node, eg: ${1}
+        --- locally_jumpable  same as jumpable except it ignored if the cursor is not inside the current snippet.
+        luasnip.expand_or_jump()  -- 展开 snippet OR 跳转到下一个 jumpable node
       else
         --cmp.complete()  -- 手动触发 completion menu.
         fallback()  -- 执行原本的功能
@@ -160,8 +161,8 @@ cmp.setup {
     end, {"i","s"}), -- 在 insert select 模式下使用
 
     ["<S-Tab>"] = cmp.mapping(function(fallback)
-      if luasnip.jumpable(-1) then  -- 如果存在上一个 snippets placeholder
-        luasnip.jump(-1)  -- 跳转到上一个 snippets placeholder
+      if luasnip.locally_jumpable(-1) then  -- 如果存在 previous jumpable node
+        luasnip.jump(-1)  -- 跳转到 previous jumpable node
       else
         fallback()
       end

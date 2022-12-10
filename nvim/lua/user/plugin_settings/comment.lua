@@ -7,7 +7,7 @@ end
 comment.setup {
   padding = true, -- Add a space between '//' and content. (boolean|fun():boolean)
   sticky = true,  -- Whether the cursor should stay at its position. (boolean)
-  ignore = nil,   -- 忽略行, eg: ^func.*
+  ignore = nil,   -- 忽略行, eg: ignore = "^func.*"
 
   --- NOTE: pre_hook 配合 "JoosepAlviste/nvim-ts-context-commentstring" 设置.
   --- https://github.com/JoosepAlviste/nvim-ts-context-commentstring#commentnvim
