@@ -159,14 +159,13 @@ cmp.setup {
       end
     end, {"i","s"}), -- 在 insert select 模式下使用
 
-    -- ["<S-Tab>"] = cmp.mapping(function(fallback)  --- {{{
-    --   if luasnip.jumpable(-1) then  -- 如果存在上一个 snippets placeholder
-    --     luasnip.jump(-1)  -- 跳转到上一个 snippets placeholder
-    --   else
-    --     fallback()
-    --   end
-    -- end, {"i","s"}),
-    -- -- }}}
+    ["<S-Tab>"] = cmp.mapping(function(fallback)
+      if luasnip.jumpable(-1) then  -- 如果存在上一个 snippets placeholder
+        luasnip.jump(-1)  -- 跳转到上一个 snippets placeholder
+      else
+        fallback()
+      end
+    end, {"i","s"}),
   },
 }
 
