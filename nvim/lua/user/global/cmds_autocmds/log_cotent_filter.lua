@@ -2,6 +2,8 @@
 local file_list = {
   vim.fn.stdpath('log') .. '/log',
   vim.fn.stdpath('log') .. '/lsp.log',
+  vim.fn.stdpath('log') .. '/mason.log',
+
   vim.fn.stdpath('cache') .. '/dap.log',
   vim.fn.stdpath('cache') .. '/null-ls.log',
   vim.fn.stdpath('cache') .. '/null-tree.log',

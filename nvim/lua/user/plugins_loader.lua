@@ -424,7 +424,7 @@ return packer.startup(function(use)
 
   --- snippet engine, for "cmp_luasnip", 每次打开文件都会有一个 [Scratch] buffer.
   use {"L3MON4D3/LuaSnip",
-    commit = "bc9ba28",
+    commit = "5ce70a0",
     run = "make install_jsregexp",  -- https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#transformations
     config = function() require("user.plugin_settings.luasnip_snippest") end,
     requires = "rafamadriz/friendly-snippets",  -- snippets content
@@ -440,9 +440,7 @@ return packer.startup(function(use)
 
   --- snippets content, 自定义 snippets 可以借鉴这个结构.
   use {"rafamadriz/friendly-snippets",
-    commit = "b4f857a",
-
-    after = "LuaSnip",
+    commit = "b4f857a",  -- VVI: friendly-snippets 不能安装在 opt/ 文件夹下, 否则不生效.
   }
 
   --- cmdline completions, 不好用.
@@ -605,6 +603,11 @@ return packer.startup(function(use)
 
   --use "goolord/alpha-nvim"          -- neovim 启动页面
   --use "ahmedkhalf/project.nvim"     -- project manager
+
+  --- https://docs.github.com/en/enterprise-cloud@latest/copilot/getting-started-with-github-copilot/getting-started-with-github-copilot-in-neovim
+  use {"github/copilot.vim",  -- NOTE: 目前不需要锁定版本.
+    cmd = {"Copilot"},  -- `:Copilot setup`, `:help copilot` 查看可用命令.
+  }
 
   --- VVI: 需要安装 packer 的情况下, 同时安装其他插件.
   if packer_bootstrap then

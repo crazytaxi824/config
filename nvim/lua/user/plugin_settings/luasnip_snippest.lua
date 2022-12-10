@@ -33,19 +33,22 @@ require("luasnip.loaders.from_vscode").lazy_load({
 
 --- HACK: 从 insert/select mode 退出时取消 jumpable ------------------------------------------------
 --- https://github.com/L3MON4D3/LuaSnip/issues/258
-local function leave_snippet()
-    -- NOTE: 如果从 's' -> 'n', 或者 'i' -> 'any' mode. 打断 jumpable.
-    --if ((vim.v.event.old_mode == 's' and vim.v.event.new_mode == 'n') or vim.v.event.old_mode == 'i')
-    if vim.v.event.new_mode == 'n'
-        and luasnip.session.current_nodes[vim.api.nvim_get_current_buf()]
-        and not luasnip.session.jump_active
-    then
-        require('luasnip').unlink_current()
-    end
+--- https://github.com/L3MON4D3/LuaSnip/issues/656
+local function leave_snippet(params)
+  if luasnip.session  -- luasnip session 存在.
+    and luasnip.session.current_nodes[params.buf]  -- luasnip session 在当前 buffer 中存在.
+    and not luasnip.session.jump_active
+  then
+    --- VVI: 使用 vim.schedule 是为了让 ${1:err} and $1 同步内容.
+    vim.schedule(function ()
+      luasnip.unlink_current()
+    end)
+  end
 end
 
 vim.api.nvim_create_autocmd("ModeChanged", {
-  pattern = {"*"},
+  --pattern = {'s:n', 'i:*'},  -- NOTE: 如果从 'Select' -> 'Normal', 或者 'Insert' -> 'any' mode.
+  pattern = {'*:n'},  -- any -> Normal mode
   callback = leave_snippet,
 })
 
