@@ -370,7 +370,7 @@ local function bufferline_del_current_buffer(ignore_tab)
   if #listed_buffers == 1 then
     --- listed_buffers 只剩一个, 而且 current_bufinfo.listed == 1,
     --- 说明 current buffer 一定是最后一个 listed buffer.
-    Notify("can't close the Only listed-buffer", "WARN")
+    Notify("can't close the Last listed-buffer", "WARN")
     return
   end
 
