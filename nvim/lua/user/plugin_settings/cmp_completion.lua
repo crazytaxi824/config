@@ -45,9 +45,9 @@ cmp.setup {
   preselect = cmp.PreselectMode.None,  -- NOTE: cmp.PreselectMode.None | cmp.PreselectMode.Item
 
   performance = {
-   debounce = 120,  --- 停止输入文字的时间超过该数值, 则向 sources 请求更新 completion Item. 默认 60.
-   throttle = 60,   --- 停止输入文字的时间超过该数值, 则匹配和过滤本地已获取的 completion Item. 默认 30.
-   -- fetching_timeout = 200,  --- 默认 200.
+    debounce = 120,  --- 停止输入文字的时间超过该数值, 则向 sources 请求更新 completion Item. 默认 60.
+    throttle = 60,   --- 停止输入文字的时间超过该数值, 则匹配和过滤本地已获取的 completion Item. 默认 30.
+    -- fetching_timeout = 200,  --- 默认 200.
   },
 
   snippet = {  -- 给 "saadparwaiz1/cmp_luasnip" 设置 snippet
@@ -121,10 +121,14 @@ cmp.setup {
 
   --- key mapping -------
   mapping = {
-    ["<Up>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior, count = 1 }),
+    --["<Up>"] = cmp.mapping.select_prev_item(),  -- 选择 item 的时候会将内容填到行内.
+    --["<Down>"] = cmp.mapping.select_next_item(),
+    ["<Up>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior, count = 1 }),  -- 选择 item 的时候不会将内容填到行内.
     ["<Down>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior, count = 1 }),
     ["<C-y>"] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
-    ["<Esc>"] = cmp.mapping.abort(),
+    ["<Esc>"] = cmp.mapping.abort(), -- 当使用 select_prev/next_item() 的时候. abort() 关闭代码提示窗, 同时回到代码之前的状态;
+                                     -- cmp.mapping.close() 也可以关闭代码提示窗口, 但是会保持代码现在的状态.
+                                     -- 当使用 select_prev_item({behavior=cmp.SelectBehavior}) 的时候, abort() & close() 效果相同.
 
     --- 其他 cmp.mapping 设置方式 --- {{{
     -- ["<C-e>"] = cmp.mapping {  -- 默认 <C-e>, 对 insert, command 模式分别设置不同的行为.
