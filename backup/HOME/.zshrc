@@ -1,13 +1,23 @@
-# utf-8, `locale` 查看 LC_* 设置.
+### PATH 设置
+# ${PATH+:$PATH}    - 如果 PATH 不为空时, 在 PATH 前面加入一个 `:` 冒号. `brew shellenv` 有使用实例.
+# ${PATH:+${PATH}:} - 如果 PATH 不为空时, 在 PATH 后面加入一个 `:` 冒号. `cat ~/.fzf.zsh` 有使用实例.
+
+### UTF-8, `locale` 查看 LC_* 设置
 export LC_ALL=en_US.UTF-8  # 设置 LC_ALL, 其他 LC_* 强制等于 LC_ALL, 单独设置 LC_* 无效.
 #export LANG=en_US.UTF-8   # 设置 LANG, 其他 LC_* 默认值等于 LANG, 但可以单独设置 LC_*.
 
-# homebrew, https://brew.sh/
+### homebrew, https://brew.sh/
 # brew 命令行工具安装路径 'echo $(brew --prefix)/bin'
 # put brew path in front of others, use brew cmd first, if there are different version of same cmd line tool.
 export PATH=/usr/local/sbin:$PATH
+# 不要每次安装/更新软件时自动清理, 手动清理 `brew cleanup`
+export HOMEBREW_NO_INSTALL_CLEANUP=true
+# 使用 `brew shellenv` 查看 brew 环境变量
+#export HOMEBREW_PREFIX
+#export HOMEBREW_CELLAR
+#export HOMEBREW_REPOSITORY
 
-# NOTE: testing newer neovim version. 手动安装 https://github.com/neovim/neovim/releases/
+### NOTE: testing newer neovim version. 手动安装 https://github.com/neovim/neovim/releases/
 #local nvim=~/.nvim_0.8/nvim-macos/bin/nvim  # brew installed neovim now is v0.8.0
 #alias nvim=$nvim
 # $VISUAL is a more capable and interactive preference over $EDITOR.
@@ -16,14 +26,14 @@ export PATH=/usr/local/sbin:$PATH
 export EDITOR=nvim
 export VISUAL=$EDITOR
 
-# open/edit file
+### open/edit file
 alias o="openFileOrUrl"     # open file/url, openFileOrUrl() 函数定义在下面.
 alias e="vimExistFile --"   # edit file, vimExistFile() 函数定义在下面.
 
-# delete file/dir
+### delete file/dir
 #alias rm="rm -i"  # prompt every time when 'rm file/dir'
 alias rm="echo '\e[33muse \"trash\" instead\e[0m'; #ignore_rest_cmd"  # stop using 'rm'
-# trash file/dir to ~/.Trash/ -------------------------------------------------- {{{
+# trash file/dir to ~/.Trash/ ---------------------------------------------------------------------- {{{
 function trash() {
 	local trash_dir=~/.Trash/
 	# NOTE: linux DO NOT have "~/.Trash/" dir
@@ -59,7 +69,7 @@ function trash() {
 # }}}
 
 # --- [golang setting] ----------------------------------------------------------------------------- {{{
-# `go env` 查看
+### `go env` 查看
 #export GOROOT=/usr/local/go
 export GOPATH=$HOME/gopath
 export GOBIN=$GOPATH/bin
@@ -68,47 +78,47 @@ export GO111MODULE=on  # on | off | auto
 #export GOPROXY=off  # 默认值 "https://proxy.golang.org,direct"
 #export GOSUMDB=off  # Disable the Go checksum database
 
-# DEBUG use only
-# export PATH=/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin
-# export PATH=/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:$GOBIN
+### DEBUG use only
+#export PATH=/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin
+#export PATH=/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:$GOBIN
 
 # }}}
 
 # --- [other setting] ------------------------------------------------------------------------------ {{{
-# python3 设置多个 version, 可以用 python3, python3.9, python3.10, python3.11 等命令.
+### python3 设置多个 version, 可以用 python3, python3.9, python3.10, python3.11 等命令.
 # eg: `python3.11 -m pip --version`. brew 安装 python 默认设置了多个 version.
 #export PATH=/usr/local/opt/python@3.9/bin:$PATH
 #alias python3=/usr/local/opt/python@3.9/bin/python3.9  # 指定 python3 命令的版本.
 
-# vim path
+### vim path
 #alias vim=$(brew --prefix)/bin/vim   # brew install vim 路径, 下面设置了 vim() 函数.
 #alias vim='/usr/bin/vim'             # macos 内置 vim 路径
 
-# bat 主题颜色, 'bat --list-themes' 查看 theme 样式.
+### bat 主题颜色, 'bat --list-themes' 查看 theme 样式.
 # "base16" 使用 0-15 color 兼容性好.
 # "ansi" 只使用 0-7 color, 兼容性最好.
 export BAT_THEME="Visual Studio Dark+"
 
-# firefox chrome ssl key 文件保存位置, 用于 wireshark 解密 https tls 数据.
+### firefox chrome ssl key 文件保存位置, 用于 wireshark 解密 https tls 数据.
 # wireshark `设置 -> Protocols -> TLS -> (Pre)-Master-Secret log filename` 中
 # 输入 SSLKEYLOGFILE 相同文件路径. 这样 wireshark 就能使用 ssl-key 解密 https 消息.
 # NOTE: 需要使用 terminal 打开 firefox / chrome 才能使 SSLKEYLOGFILE 环境变量生效.
 export SSLKEYLOGFILE=/tmp/sslkey.log  # /tmp 文件夹会被系统自动清理.
 alias firefox='open -n /Applications/Firefox.app'  # 使用终端打开 firefox
 
-# alias set time zone
+### alias 快速设置本地 time zone
 alias setny='sudo systemsetup -settimezone America/New_York'
 alias setsy='sudo systemsetup -settimezone Australia/Sydney'
 
-# lazygit
+### lazygit
 # brew info lazygit; https://github.com/jesseduffield/lazygit
 # brew info git-delta; https://github.com/dandavison/delta
 alias lg=$(brew --prefix)/bin/lazygit
 
-# delta, 需要安装 'brew info git-delta'
+### delta, 需要安装 'brew info git-delta'
 alias diff="$(brew --prefix)/bin/delta --dark --line-numbers --side-by-side --syntax-theme=none --line-numbers-minus-style=196"
 
-# man 命令颜色设置
+### man 命令颜色设置
 export LESS_TERMCAP_md=$(printf "\e[1;32m")    # md      bold      start bold
 export LESS_TERMCAP_me=$(printf "\e[0m")       # me      sgr0      turn off bold, blink and underline
 export LESS_TERMCAP_so=$(printf "\e[30;43m")   # so      smso      start standout (eg: search result)
@@ -121,7 +131,6 @@ export LESS_TERMCAP_ue=$(printf "\e[0m")       # ue      rmul      stop underlin
 
 # '~/.oh-my-zsh/lib/directories.zsh' 中定义了 `function d ()`, 相当于 dirs 的作用.
 # --- [oh my zsh setting] -------------------------------------------------------------------------- {{{
-#
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
