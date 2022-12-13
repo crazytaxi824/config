@@ -6,17 +6,6 @@
 export LC_ALL=en_US.UTF-8  # 设置 LC_ALL, 其他 LC_* 强制等于 LC_ALL, 单独设置 LC_* 无效.
 #export LANG=en_US.UTF-8   # 设置 LANG, 其他 LC_* 默认值等于 LANG, 但可以单独设置 LC_*.
 
-### homebrew, https://brew.sh/
-# brew 命令行工具安装路径 'echo $(brew --prefix)/bin'
-# put brew path in front of others, use brew cmd first, if there are different version of same cmd line tool.
-export PATH=/usr/local/sbin:$PATH
-# 不要每次安装/更新软件时自动清理, 手动清理 `brew cleanup`
-export HOMEBREW_NO_INSTALL_CLEANUP=true
-# 使用 `brew shellenv` 查看 brew 环境变量
-#export HOMEBREW_PREFIX
-#export HOMEBREW_CELLAR
-#export HOMEBREW_REPOSITORY
-
 ### NOTE: testing newer neovim version. 手动安装 https://github.com/neovim/neovim/releases/
 #local nvim=~/.nvim_0.8/nvim-macos/bin/nvim  # brew installed neovim now is v0.8.0
 #alias nvim=$nvim
@@ -30,45 +19,28 @@ export VISUAL=$EDITOR
 alias o="openFileOrUrl"     # open file/url, openFileOrUrl() 函数定义在下面.
 alias e="vimExistFile --"   # edit file, vimExistFile() 函数定义在下面.
 
-### delete file/dir
-#alias rm="rm -i"  # prompt every time when 'rm file/dir'
-alias rm="echo '\e[33muse \"trash\" instead\e[0m'; #ignore_rest_cmd"  # stop using 'rm'
-# trash file/dir to ~/.Trash/ ---------------------------------------------------------------------- {{{
-function trash() {
-	local trash_dir=~/.Trash/
-	# NOTE: linux DO NOT have "~/.Trash/" dir
-	if [[ ! -d $trash_dir ]]; then
-		echo -e "\e[1;31m$trash_dir is NOT exist.\e[0m"
-		return
-	fi
+# --- [ homebrew ] --------------------------------------------------------------------------------- {{{
+# https://brew.sh/
+# `man brew` 查看命令
+# brew 命令行工具安装路径 'echo $(brew --prefix)/bin'
+# put brew path in front of others, use brew cmd first, if there are different version of same cmd line tool.
+export PATH=/usr/local/sbin:$PATH
 
-	# get time_now unix timestamp (second)
-	local now_unix=$(date +%s)
+# 不要每次安装/更新软件时自动清理, 手动清理 `brew cleanup`
+export HOMEBREW_NO_INSTALL_CLEANUP=true
+# 使用 `brew shellenv` 查看 brew 环境变量
+#export HOMEBREW_PREFIX
+#export HOMEBREW_CELLAR
+#export HOMEBREW_REPOSITORY
 
-	local filepath  # 防止 for 循环中的变量变成 global variable.
-	for filepath in $@
-	do
-		# filepath_tail only, without path. could be filename.ext OR dir name.
-		local filepath_tail=$(basename $filepath)
+# brew bundle, 可以使用
+# `brew bundle`  - Install and upgrade (by default) all dependencies from the Brewfile.
+# `brew bundle check`, `brew bundle cleanup`, `brew bundle list` ...
+export HOMEBREW_BUNDLE_FILE=~/.config/Brewfile
 
-		# check file/dir existence in '~/.Trash/', if file/dir exists then using unix timestamp.
-		if [[ -f "$trash_dir$filepath_tail" ]]; then
-			# 如果是移动文件, 且文件名在 ~/.Trash/ 中存在.
-			local fname="${filepath_tail%.*}"  # fname only, without ext
-			local ext="${filepath_tail##*.}"   # ext only
-			mv $filepath $trash_dir$fname-$now_unix.$ext  # mv filepath ~/.Trash/fname-timestamp.ext
-		elif [[ -d "$trash_dir$filepath_tail" ]]; then
-			# 如果是移动文件夹, 且文件夹名在 ~/.Trash/ 中存在.
-			mv $filepath $trash_dir$filepath_tail-$now_unix  # mv filepath ~/.Trash/dir-timestamp
-		else
-			# 如果文件/文件夹名在 ~/.Trash/ 中不存在, 则直接移动.
-			mv $filepath $trash_dir  # mv filepath ~/.Trash/
-		fi
-	done
-}
 # }}}
 
-# --- [golang setting] ----------------------------------------------------------------------------- {{{
+# --- [ golang setting ] --------------------------------------------------------------------------- {{{
 ### `go env` 查看
 #export GOROOT=/usr/local/go
 export GOPATH=$HOME/gopath
@@ -84,7 +56,7 @@ export GO111MODULE=on  # on | off | auto
 
 # }}}
 
-# --- [other setting] ------------------------------------------------------------------------------ {{{
+# --- [ other setting ] ---------------------------------------------------------------------------- {{{
 ### python3 设置多个 version, 可以用 python3, python3.9, python3.10, python3.11 等命令.
 # eg: `python3.11 -m pip --version`. brew 安装 python 默认设置了多个 version.
 #export PATH=/usr/local/opt/python@3.9/bin:$PATH
@@ -130,7 +102,7 @@ export LESS_TERMCAP_ue=$(printf "\e[0m")       # ue      rmul      stop underlin
 # }}}
 
 # '~/.oh-my-zsh/lib/directories.zsh' 中定义了 `function d ()`, 相当于 dirs 的作用.
-# --- [oh my zsh setting] -------------------------------------------------------------------------- {{{
+# --- [ oh my zsh setting ] ------------------------------------------------------------------------ {{{
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
@@ -173,7 +145,7 @@ source $ZSH/oh-my-zsh.sh
 # }}}
 
 # 自定义 LS 颜色显示, 覆盖 ohmyzsh 默认设置. 需要放到 ohmyzsh 后面.
-# --- [LSCOLORS & LS_COLORS] ----------------------------------------------------------------------- {{{
+# --- [ LSCOLORS & LS_COLORS ] --------------------------------------------------------------------- {{{
 # *** 注意: macos 使用 LSCOLORS, linux 使用 LS_COLORS
 #
 # --- LSCOLORS 设置 --------------------------------------------------------------------------------
@@ -523,7 +495,7 @@ function Rg() {
 # do not move these functions to other places!!!
 # NOTE: 本文件和 source 文件函数中的 for loop 变量必须先使用 local 定义,
 # 否则在函数执行后变量会变成 global variable.
-# --- [core shell script functions] ---------------------------------------------------------------- {{{
+# --- [ core shell script functions ] -------------------------------------------------------------- {{{
 
 # 设置 'vimExistFile -- [filepath]' 命令, 不打开不存在的文件 ------------------- {{{
 # 'vim --'   Arguments after this will be handled as a file name.
@@ -585,6 +557,46 @@ function openFileOrUrl() {
 	return 0   # 手动返回 0, 否则会返回 1.
 }
 
+# }}}
+
+# trash file/dir to ~/.Trash/ -------------------------------------------------- {{{
+# NOTE: stop using 'rm'
+#alias rm="rm -i"  # prompt every time when 'rm file/dir'
+alias rm="echo '\e[33muse \"trash\" instead\e[0m'; #ignore_rest_cmd"
+
+# using `trash` function
+function trash() {
+	local trash_dir=~/.Trash/
+	# NOTE: linux DO NOT have "~/.Trash/" dir
+	if [[ ! -d $trash_dir ]]; then
+		echo -e "\e[1;31m$trash_dir is NOT exist.\e[0m"
+		return
+	fi
+
+	# get time_now unix timestamp (second)
+	local now_unix=$(date +%s)
+
+	local filepath  # 防止 for 循环中的变量变成 global variable.
+	for filepath in $@
+	do
+		# filepath_tail only, without path. could be filename.ext OR dir name.
+		local filepath_tail=$(basename $filepath)
+
+		# check file/dir existence in '~/.Trash/', if file/dir exists then using unix timestamp.
+		if [[ -f "$trash_dir$filepath_tail" ]]; then
+			# 如果是移动文件, 且文件名在 ~/.Trash/ 中存在.
+			local fname="${filepath_tail%.*}"  # fname only, without ext
+			local ext="${filepath_tail##*.}"   # ext only
+			mv $filepath $trash_dir$fname-$now_unix.$ext  # mv filepath ~/.Trash/fname-timestamp.ext
+		elif [[ -d "$trash_dir$filepath_tail" ]]; then
+			# 如果是移动文件夹, 且文件夹名在 ~/.Trash/ 中存在.
+			mv $filepath $trash_dir$filepath_tail-$now_unix  # mv filepath ~/.Trash/dir-timestamp
+		else
+			# 如果文件/文件夹名在 ~/.Trash/ 中不存在, 则直接移动.
+			mv $filepath $trash_dir  # mv filepath ~/.Trash/
+		fi
+	done
+}
 # }}}
 
 # NOTE:
@@ -810,21 +822,20 @@ alias checkDevEnv="zsh ~/.my_shell_functions/check_dev_env.sh"
 # 只能使用 zsh 执行, 语法不兼容 sh & bash.
 alias packages="zsh ~/.my_shell_functions/packages.sh"
 
+# NOTE: 现在可以使用 `brew bundle check`, `brew bundle cleanup` 来检查不属于 Brewfile 的包.
 # 检查 brew 中所有不属于任何别的包依赖的包.
-alias checkBrewRootFormula="zsh ~/.my_shell_functions/brew_root_formula.sh"
-# 检查 brew dependency 属于哪个包
-alias checkBrewDependency="zsh ~/.my_shell_functions/brew_dep_check.sh"
+#alias checkBrewRootFormula="zsh ~/.my_shell_functions/brew_root_formula.sh"
+# 检查 brew dependency 属于哪个包.
+#alias checkBrewDependency="zsh ~/.my_shell_functions/brew_dep_check.sh"
 
-# my test functions
-source ~/.my_shell_functions/zshrc_custom_functions
+# NOTE: DEBUG 用, my test functions
+#source ~/.my_shell_functions/zshrc_custom_functions
 
 # }}}
 
 # 各种命令行工具的 autocomplete 文件路径 `/usr/local/share/zsh/site-functions`
 
 # --- todo / test function  ------------------------------------------------------------------------
-
-
 
 
 

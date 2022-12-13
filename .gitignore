@@ -3,6 +3,7 @@
 
 # exclude file
 !/.gitignore
+!/Brewfile
 
 # exclude folder
 !/alacritty
