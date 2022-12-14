@@ -74,12 +74,12 @@
 
 --- VVI: neovim 特殊设置 --------------------------------------------------------------------------- {{{
 --- filetype && syntax 设置
---- VVI: `help g:did_load_filetypes` 如果存在(不论值是多少), 
+--- VVI: `help g:did_load_filetypes` 如果存在(不论值是多少),
 --- 则不加载 '$VIMRUNTIME/filetype.vim' & 'runtimepath/filetype.lua', 相当于 `filetype off`.
 --vim.g.did_load_filetypes = 0
 
 --- VVI: `:help g:do_legacy_filetype` 使用 vim filetype 而不使用 neovim filetype.
---vim.g.do_legacy_filetype = 1  
+--vim.g.do_legacy_filetype = 1
 
 --- `:help filetype-overview` 可以查看 filetype 设置.
 --- `:help :filetype`, Detail: The ":filetype on" command will load these files:
@@ -250,9 +250,24 @@ vim.opt.fillchars = 'fold: ,diff: ,vert:│,eob:~'
 
 --- `:help foldtext` 改变折叠代码的样式. NOTE: 配合 fillchars 使用.
 --vim.opt.foldtext = 'printf("%s … %s -- lvl %d", getline(v:foldstart), getline(v:foldend), v:foldlevel)'
---- VVI: vim `:h pattern-overview` 中使用双引号和单引号是不一样的. 单引号 '\(\)\+' 在双引号中需要写成 "\\(\\)\\+"
+--- NOTE: vim `:h pattern-overview` 中使用双引号和单引号是不一样的. 单引号 '\(\)\+' 在双引号中需要写成 "\\(\\)\\+"
 ---  \@<= 用法: \(an\_s\+\)\@<=file, 返回 "file" after "an" and white space or an
-vim.opt.foldtext = "printf('%s … %s', getline(v:foldstart), matchstr(getline(v:foldend), '\\(.*\\)\\@<=[})]\\+'))"
+--vim.opt.foldtext = "printf('%s … %s', getline(v:foldstart), matchstr(getline(v:foldend), '\\(.*\\)\\@<=[})]\\+'))"
+
+--- NOTE: 使用 lua 函数返回 foldtext string.
+vim.opt.foldtext = "v:lua.__Folded_line_text()"  -- VVI: 运行 lua Global function. `v:lua.xxx()` 只能运行 global function.
+function __Folded_line_text()
+  --- VVI: replace '\t' with 'N-spaces'. 否则 \t 会被认为是一个 char, 导致 line 开头的内容部分被隐藏.
+  --- N-spaces 根据 buffer 的 tabstop 决定.
+  local fs = string.gsub(vim.fn.getline(vim.v.foldstart), '\t', string.rep(' ', vim.bo.tabstop))
+  local fe = string.gsub(vim.fn.getline(vim.v.foldend), '^%s+', '')
+
+  --- 这里主要是使用 setlocal foldmethod=expr foldexpr=nvim_treesitter#foldexpr() 功能.
+  if vim.wo.foldmethod == 'expr' then
+    return fs .. ' … ' .. fe
+  end
+  return fs .. ' ' .. fe
+end
 
 --- search 设置，命令 `/` `?` ----------------------------------------------------------------------
 vim.opt.incsearch = true   -- 开始实时搜索
