@@ -225,7 +225,6 @@ local nt_buffer_keymaps = {
   { key = "y",             action = "copy_absolute_path" },
   { key = "E",             action = "collapse_all" },  -- vscode 自定义按键为 cmd+E
   { key = "W",             action = "expand_all" },
-  { key = "I",             action = "toggle_git_ignored" },
   { key = "H",             action = "toggle_dotfiles" },  -- 隐藏文件
   { key = "m",             action = "toggle_mark" }, -- paste file
   { key = "q",             action = "close" },  -- close nvim-tree window
@@ -236,12 +235,15 @@ local nt_buffer_keymaps = {
   { key = "C",             action = "copy" },  -- copy file
   { key = "P",             action = "paste" }, -- paste file
 
+  { key = "<leader>gi",             action = "toggle_git_ignored" },
+  { key = "<leader>gf",             action = "toggle_git_clean" },
+
   --- 自定义功能. NOTE: action 内容成为 help 中展示的文字.
   --- action_cb 意思是 callback 函数.
   { key = "o",             action = "back to Original pwd", action_cb = back_to_pwd},
   { key = "<C-o>",         action = "system open", action_cb = system_open},
   { key = "<leader>c",     action = "compare two marked files", action_cb = compare_two_marked_files},
-  { key = "<leader>D",     action = "git: Discard file changes", action_cb = git_discard_file_changes},
+  { key = "<leader>gD",    action = "git: Discard file changes", action_cb = git_discard_file_changes},
 }
 
 --- global keymap --------------------------------------------------------------
@@ -256,13 +258,13 @@ Keymap_set_and_register(tree_keymaps)
 -- -- }}}
 
 --- `:help nvim-tree-setup` ------------------------------------------------------------------------ {{{
-local open_dir_in_tree = true  -- `:e dir` 时是否在 nvim-tree 中打开 dir.
+local open_dir_in_tree = true  -- VVI: `:e dir` 时是否在 nvim-tree 中打开 dir.
 
 nvim_tree.setup {
-  auto_reload_on_write = true,  -- VVI: `:w` 时刷新 nvim-tree.
+  auto_reload_on_write = true,  -- NOTE: `:w` 时刷新 nvim-tree.
 
   --- NOTE: netrw: vim's builtin file explorer.
-  disable_netrw = open_dir_in_tree,  -- VVI: completely disable netrw.
+  disable_netrw = open_dir_in_tree,  -- NOTE: completely disable netrw.
 
   --- true  - `:e dir` 时, 不显示 netrw file explorer.
   --- false - `:e dir` 时, 在当前 window 中显示 netrw file explorer.
@@ -292,7 +294,7 @@ nvim_tree.setup {
   ignore_ft_on_setup = {},  -- List of filetypes that will prevent `open_on_setup` to open.
   ignore_buf_on_tab_change = {},  -- List of filetypes or buffer names that will prevent `open_on_tab` to open.
 
-  sort_by = "name",
+  sort_by = "name",  -- sort by file name.
   sync_root_with_cwd = false,  -- Changes the tree root directory on `DirChanged` and refreshes the tree.
 
   view = {
