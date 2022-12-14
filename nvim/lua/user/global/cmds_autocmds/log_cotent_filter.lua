@@ -16,6 +16,12 @@ local file_list = {
   vim.fn.stdpath('cache') .. '/packer.myupdate.log',
 }
 
+--- 有大量空白行的 log 文件.
+local blankline_list = {
+  vim.fn.stdpath('log') .. '/luasnip.log',
+  vim.fn.stdpath('cache') .. '/dap.log',
+}
+
 --- 判断文件大小是否超过 n(MB)
 local function file_size_over_MB(fpath, size)
   --- 判断文件是否存在
@@ -33,6 +39,7 @@ local function file_size_over_MB(fpath, size)
   end
 end
 
+--- 删除文件中的旧内容以达到 reduce file size 的目的.
 local function reduce_filesize(fpath)
   --- Read File
   local content_list = vim.fn.readfile(fpath)
@@ -45,6 +52,7 @@ local function reduce_filesize(fpath)
   --- ":checktime" 在下面统一执行.
 end
 
+--- 根据 regexp 删除文件行内容.
 local function clean_log_file(filepath, regexp)
   --- lua read file --- {{{
   -- local f, err = io.open(filepath, 'r')  -- read mode
@@ -114,10 +122,11 @@ vim.api.nvim_create_autocmd("VimLeave", {
   pattern = {"*"},
   once = true,  -- VimLeave execute only once
   callback = function(params)
-    --- BUG: nvim-dap 的 dap.log 中会打印大量空白行, 特殊处理.
-    local daplog = vim.fn.stdpath('cache') .. '/dap.log'
-    if vim.fn.filereadable(daplog) == 1 then
-      clean_log_file(daplog, "^$")
+    --- 特殊处理 log 文件中大量的空白行.
+    for _, fpath in ipairs(blankline_list) do
+      if vim.fn.filereadable(fpath) == 1 then
+        clean_log_file(fpath, "^$")
+      end
     end
 
     --- 如果 log 文件超过指定大小, 则删除文件前半部分的数据.
