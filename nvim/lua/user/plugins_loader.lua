@@ -375,7 +375,7 @@ return packer.startup(function(use)
 
   --- indent line
   use {"lukas-reineke/indent-blankline.nvim",
-    commit = "db7cbcb",
+    commit = "c4c203c",
     config = function() require("user.plugin_settings.indentline") end,  -- setup() 设置 use_treesitter = true
     requires = "nvim-treesitter/nvim-treesitter",
 
