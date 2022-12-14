@@ -471,13 +471,7 @@ return packer.startup(function(use)
   --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
   --- 官方 LSP 引擎.
   use {"neovim/nvim-lspconfig",
-    --- MERGE: https://github.com/neovim/nvim-lspconfig/pull/2287
-    --- "f938e3b" 之后 FIXED: https://github.com/neovim/nvim-lspconfig/issues/2285
-    --- 修复 lsp goto_definition 出现的问题. eg: golang 中 goto_definition 后, 因源文件的 root_dir/workspace 不同
-    --- 导致无法继续向下 goto_definition. "github.com/hashicorp/consul" 问题最严重.
-    --- SIDE_EFFECT: 现在不能多 workspace 编辑了. eg: :e foo/src/main.go & :e bar/src/main.go
-    --- VSCODE: 实现方式 https://code.visualstudio.com/docs/editor/multi-root-workspaces
-    commit = "ac132be",
+    commit = "cbf8762",
     config = function() require("user.lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     requires = {
       "nvim-cmp",  -- provide content to nvim-cmp Completion. cmp_nvim_lsp.update_capabilities(capabilities)
