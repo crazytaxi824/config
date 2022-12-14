@@ -250,8 +250,9 @@ if not packer_bootstrap then
     pattern = {"*"},
     once = true,  -- VVI: 只需要执行一次
     callback = function(params)
+      --- NOTE: 利用vim.schedual() lazyload plugins
       vim.schedule(function()
-        require("user.plugins_lazy_loader")  -- 利用vim.schedual() lazyload plugins
+        require("user.plugins_lazy_loader")
       end)
     end
   })
@@ -266,7 +267,7 @@ end
 --- `:PackerSync` - install / update / clean 插件包.
 return packer.startup(function(use)
   use {"wbthomason/packer.nvim",  -- VVI: 必要. Have packer manage itself
-    commit = "dcd2f38",
+    commit = "64ae65f",
   }
 
   --- Performence & Functions ----------------------------------------------------------------------
@@ -292,13 +293,13 @@ return packer.startup(function(use)
 
   --- 通知功能
   use {"rcarriga/nvim-notify",
-    commit = "e7cffd0",
+    commit = "b005821",
     config = function() require("user.plugin_settings.nvim_notify") end,
   }
 
   --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件
   use {"williamboman/mason.nvim",
-    commit = "22129c7",
+    commit = "b3c82a2",
     config = function() require("user.plugin_settings.mason_tool_installer") end,
     --- NOTE: 不能 opt 加载 mason 否则其他插件无法找到 mason 安装的工具.
   }
@@ -317,8 +318,8 @@ return packer.startup(function(use)
   --- By convention, if you want to write a query, use the `queries/` directory,
   --- but if you want to extend a query use the `after/queries/` directory.
   use {"nvim-treesitter/nvim-treesitter",
-    commit = "44289d81",  -- BUG: foldmethod error with tab indent.
-    run = ":TSUpdateSync",  -- Post-update/install hook.
+    commit = "69388e84",  -- BUG: foldmethod error with tab indent.
+    --run = ":TSUpdate",  -- Post-update/install hook. NOTE: 推荐手动执行.
     config = function() require("user.plugin_settings.treesitter") end,
     requires = {
       --- 以下都是 treesitter modules 插件, 在 setup() 中启用的插件.
@@ -374,7 +375,7 @@ return packer.startup(function(use)
 
   --- indent line
   use {"lukas-reineke/indent-blankline.nvim",
-    commit = "db7cbcb",
+    commit = "c4c203c",
     config = function() require("user.plugin_settings.indentline") end,  -- setup() 设置 use_treesitter = true
     requires = "nvim-treesitter/nvim-treesitter",
 
@@ -424,7 +425,7 @@ return packer.startup(function(use)
 
   --- snippet engine, for "cmp_luasnip", 每次打开文件都会有一个 [Scratch] buffer.
   use {"L3MON4D3/LuaSnip",
-    commit = "5ce70a0",
+    commit = "8b25e74",
     run = "make install_jsregexp",  -- https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#transformations
     config = function() require("user.plugin_settings.luasnip_snippest") end,
     requires = "rafamadriz/friendly-snippets",  -- snippets content
@@ -440,7 +441,8 @@ return packer.startup(function(use)
 
   --- snippets content, 自定义 snippets 可以借鉴这个结构.
   use {"rafamadriz/friendly-snippets",
-    commit = "b4f857a",  -- VVI: friendly-snippets 不能安装在 opt/ 文件夹下, 否则不生效.
+    commit = "2379c62",
+    --- VVI: friendly-snippets 不能安装在 opt/ 文件夹下, 否则不生效.
   }
 
   --- cmdline completions, 不好用.
@@ -451,7 +453,7 @@ return packer.startup(function(use)
 
   --- 自动括号, 同时依赖 treesitter && cmp
   use {"windwp/nvim-autopairs",
-    commit = "99f6963",
+    commit = "9fa9961",
     config = function() require("user.plugin_settings.autopairs") end,
     requires = {
       "nvim-treesitter/nvim-treesitter",
@@ -469,13 +471,7 @@ return packer.startup(function(use)
   --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
   --- 官方 LSP 引擎.
   use {"neovim/nvim-lspconfig",
-    --- MERGE: https://github.com/neovim/nvim-lspconfig/pull/2287
-    --- "f938e3b" 之后 FIXED: https://github.com/neovim/nvim-lspconfig/issues/2285
-    --- 修复 lsp goto_definition 出现的问题. eg: golang 中 goto_definition 后, 因源文件的 root_dir/workspace 不同
-    --- 导致无法继续向下 goto_definition. "github.com/hashicorp/consul" 问题最严重.
-    --- SIDE_EFFECT: 现在不能多 workspace 编辑了. eg: :e foo/src/main.go & :e bar/src/main.go
-    --- VSCODE: 实现方式 https://code.visualstudio.com/docs/editor/multi-root-workspaces
-    commit = "ac132be",
+    commit = "cbf8762",
     config = function() require("user.lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     requires = {
       "nvim-cmp",  -- provide content to nvim-cmp Completion. cmp_nvim_lsp.update_capabilities(capabilities)
@@ -491,7 +487,7 @@ return packer.startup(function(use)
 
   --- null-ls 插件 formatters && linters, depends on "nvim-lua/plenary.nvim"
   use {"jose-elias-alvarez/null-ls.nvim",
-    commit = "a678972",
+    commit = "deba57c",  -- NOTE: "6cc5477" 之后 remove support for neovim v0.7
     config = function() require("user.lsp.null_ls") end,
     requires = {
       "nvim-lua/plenary.nvim",
@@ -505,7 +501,7 @@ return packer.startup(function(use)
   --- File Tree Display ----------------------------------------------------------------------------
   --use "kyazdani42/nvim-web-devicons"  -- 提供 icons 需要 patch 字体 (Nerd Fonts)
   use {"kyazdani42/nvim-tree.lua",      -- 类似 NerdTree
-    commit = "f8489c9",
+    commit = "0cd8ac4",
     config = function() require("user.plugin_settings.file_tree") end,
 
     --opt = true,  -- VVI: 不推荐使用 lazyload, 会导致 `$ nvim dir` 直接打开文件夹的时候出现问题.
@@ -531,7 +527,7 @@ return packer.startup(function(use)
   --- Debug tools 安装 -----------------------------------------------------------------------------
   --- NOTE: dap-ui && dap 设置在同一文件中.
   use {"mfussenegger/nvim-dap",  -- core debug tool
-    commit = "8f396b7",
+    commit = "68d9687",
     requires = "williamboman/mason.nvim",  -- install dap-debug tools. eg: 'delve'
 
     cmd = {'DapToggleBreakpoint', 'DapContinue', 'DapLoadLaunchJSON'},
@@ -563,7 +559,7 @@ return packer.startup(function(use)
 
   --- terminal
   use {"akinsho/toggleterm.nvim",
-    commit = "3ba6838",
+    commit = "b02a167",
     config = function() require("user.plugin_settings.toggleterm_terminal") end,
 
     opt = true,  -- 在 vim.schedule() 中 lazy load

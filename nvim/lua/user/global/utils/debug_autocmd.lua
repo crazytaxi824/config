@@ -1,4 +1,4 @@
-if __Debug_Neovim.autocmd then
+if __Debug_Neovim.autocmd_events then
   local common_events = {
     "VimEnter", "VimLeave",
     "BufAdd", "BufNew", "BufNewFile",

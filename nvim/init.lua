@@ -33,9 +33,11 @@
 
 --- for Debugging Neovim plugins. `:LspInfo`, `:LspLog`
 __Debug_Neovim = {
-  null_ls = false,  -- :NullLsLog & golangci-lint Notify Commands.
-  lspconfig = false,  -- lspconfig DEBUG
-  autocmd = false,  -- 刚打开 nvim 的时候, autocmd 运行情况.
+  null_ls = false,  -- null-ls DEBUG, `:NullLsLog` & golangci-lint Notify msg.
+  lspconfig = false,  -- lspconfig DEBUG, Notify msg.
+  luasnip = false,  -- LuaSnip DEBUG, stdpath('log') .. '/luasnip.log' set_loglevel().
+
+  autocmd_events = false,  -- autocmd 中 `:help events` 运行情况.
 }
 
 --- VVI: 在最开始加载 "lewis6991/impatient.nvim" 设置.

@@ -31,6 +31,11 @@ require("luasnip.loaders.from_vscode").lazy_load({
   exclude = {"go"},  -- 排除 go, 使用自定义的 snippets
 })
 
+--- luasnip log level
+if __Debug_Neovim.luasnip then
+  luasnip.log.set_loglevel('debug')  -- "error"|"warn"(*)|"info"|"debug"
+end
+
 --- HACK: 从 insert/select mode 退出时取消 jumpable ------------------------------------------------
 --- https://github.com/L3MON4D3/LuaSnip/issues/258
 --- https://github.com/L3MON4D3/LuaSnip/issues/656
