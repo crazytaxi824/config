@@ -250,8 +250,9 @@ if not packer_bootstrap then
     pattern = {"*"},
     once = true,  -- VVI: 只需要执行一次
     callback = function(params)
+      --- NOTE: 利用vim.schedual() lazyload plugins
       vim.schedule(function()
-        require("user.plugins_lazy_loader")  -- 利用vim.schedual() lazyload plugins
+        require("user.plugins_lazy_loader")
       end)
     end
   })
