@@ -425,7 +425,7 @@ return packer.startup(function(use)
 
   --- snippet engine, for "cmp_luasnip", 每次打开文件都会有一个 [Scratch] buffer.
   use {"L3MON4D3/LuaSnip",
-    commit = "5ce70a0",
+    commit = "8b25e74",
     run = "make install_jsregexp",  -- https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#transformations
     config = function() require("user.plugin_settings.luasnip_snippest") end,
     requires = "rafamadriz/friendly-snippets",  -- snippets content
