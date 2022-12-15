@@ -35,7 +35,7 @@ vim.cmd([[
   au Filetype go,javascript,javascriptreact,typescript,typescriptreact,vue,svelte,python
   \ nnoremap <buffer> <silent> <leader>k1
   \ :setlocal foldmethod=expr foldexpr=nvim_treesitter#foldexpr()
-  \ foldnestmax=1 foldlevel=0<CR>
+  \ foldnestmax=3 foldlevel=0<CR>
 ]])
 
 --- 非代码文件不使用 'foldnestmax', 打开文件时也不进行折叠. 但是设置了 foldmethod, 可以直接使用 zc zo ... 等快捷键.
@@ -46,6 +46,16 @@ vim.cmd([[
 
 --- 'foldnestmax' 设置对 marker 不生效. 打开文件时自动按照 marker {{{xxx}}} 折叠.
 vim.cmd([[au Filetype vim,zsh,yaml setlocal foldmethod=marker foldlevel=0]])
+
+--- 切换 foldmethod
+vim.api.nvim_create_user_command('FoldmethodToggle', function()
+  if vim.wo.foldmethod == 'expr' then
+    vim.wo.foldmethod = 'marker'
+  else
+    vim.wo.foldmethod = 'expr'
+    vim.wo.foldexpr='nvim_treesitter#foldexpr()'
+  end
+end, {bang=true, bar=true})
 
 
 
