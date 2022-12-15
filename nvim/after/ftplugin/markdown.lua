@@ -68,8 +68,8 @@ vim.api.nvim_buf_create_user_command(
 )
 
 --- conceal ----------------------------------------------------------------------------------------
---vim.wo.conceallevel = 2  -- NOTE: 默认不开启 conceal
-vim.wo.concealcursor = "nc"  -- 'nc' Normal & Command Mode 不显示 Concealed text.
+--vim.opt_local.conceallevel = 2  -- NOTE: 默认不开启 conceal
+vim.opt_local.concealcursor = "nc"  -- 'nc' Normal & Command Mode 不显示 Concealed text.
 
 --- `:help syn-cchar`, `:help syn-conceal`
 --- vim.cmd([[ syntax match Entity "\(^\s*\)\@<=-\(\s\S\+\)\@=" conceal cchar=● ]])

@@ -404,8 +404,9 @@ local keymaps = {
   {'v', '<leader>y', '"*y', opt, 'Copy to system clipboard'},
 
   --- fold code, 这里是模拟 vscode keymaps.
-  {'n', '<leader>k1', 'zM', opt, "Close all folds"},
   {'n', '<leader>kj', 'zR', opt, "Open all folds"},
+  {'n', '<leader>k0', 'zM', opt, "Close all folds"},
+  {'n', '<leader>k1', 'zMzO', opt, "Focus current text"},
 
   {'n', '<leader>l', '<cmd>copen<CR>', opt, "Open quickfix window"},
 

@@ -206,7 +206,6 @@ vim.opt.wildmenu = true    -- Command 模式下 <Tab> completion. `:help wildmen
 vim.opt.wildmode = "full"  -- Complete the next full match.
 vim.opt.wildoptions = ""   -- default "pum,tagfile", pum - popupmenu | tagfile - <C-d> list matches
 vim.opt.wildignorecase = true  -- command 自动补全时忽略大小写.
-vim.opt.foldenable = true  -- 折叠代码.
 vim.opt.hidden = true      -- VVI: 很多插件需要用到 hidden buffer. When 'false' a buffer is unloaded when it is abandoned.
 
 --- markdown 文件自动执行 SpellCheck 命令
@@ -254,7 +253,9 @@ vim.opt.fillchars = 'fold: ,diff: ,vert:│,eob:~'
 ---  \@<= 用法: \(an\_s\+\)\@<=file, 返回 "file" after "an" and white space or an
 --vim.opt.foldtext = "printf('%s … %s', getline(v:foldstart), matchstr(getline(v:foldend), '\\(.*\\)\\@<=[})]\\+'))"
 
---- NOTE: 使用 lua 函数返回 foldtext string.
+--- fold 设置
+vim.opt.foldenable = true  -- 折叠代码.
+vim.opt.foldnestmax = 3    -- 最多折叠3层.
 vim.opt.foldtext = "v:lua.__Folded_line_text()"  -- VVI: 运行 lua Global function. `v:lua.xxx()` 只能运行 global function.
 function __Folded_line_text()
   --- VVI: replace '\t' with 'N-spaces'. 否则 \t 会被认为是一个 char, 导致 line 开头的内容部分被隐藏.
@@ -300,7 +301,7 @@ vim.api.nvim_create_autocmd("WinEnter", {
   callback = function(params)
     local win_id = vim.fn.win_getid()  -- get current window id
 
-    --- popup window 不显示 cursorline, eg: nvim-notify
+    --- 除 popup window 外, 显示 cursorline, eg: nvim-notify 是 popup window
     if vim.fn.win_gettype(win_id) ~= 'popup' then
       vim.wo[win_id].cursorline = true  -- `setlocal cursorline`
     end
@@ -428,7 +429,11 @@ vim.api.nvim_create_autocmd("CmdwinEnter", {
 --- spell check
 vim.opt.spelllang = "en_us,cjk"
 vim.api.nvim_create_user_command('SpellCheckToggle', function()
-  vim.wo.spell = not vim.wo.spell
+  if vim.wo.spell then
+    vim.opt_local.spell = false
+  else
+    vim.opt_local.spell = true
+  end
 end, {bang=true, bar=true})
 
 
