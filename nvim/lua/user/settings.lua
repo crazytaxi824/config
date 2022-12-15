@@ -253,9 +253,20 @@ vim.opt.fillchars = 'fold: ,diff: ,vert:│,eob:~'
 ---  \@<= 用法: \(an\_s\+\)\@<=file, 返回 "file" after "an" and white space or an
 --vim.opt.foldtext = "printf('%s … %s', getline(v:foldstart), matchstr(getline(v:foldend), '\\(.*\\)\\@<=[})]\\+'))"
 
---- fold 设置
+--- fold 设置 -------------------------------------------------------------------------------------- {{{
+--- VVI: 不要在打开代码前设置 foldmethod=syntax, 会严重拖慢文件切换速度. eg: jump to definition.
+---
+--- foldmethod     treesitter experimental function. 默认 manual.
+---
+--- foldnestmax=1  只 fold 最外层(第一层). 默认 20, 最大值也是 20, 设置超过该值不生效.
+---                对 foldmethod=marker 不生效. 打开文件时自动按照 marker {{{xxx}}} 折叠.
+---                NOTE: 'setlocal foldnestmax' 需要放在 'setlocal foldlevel' 之前设置, 否则不生效.
+---
+--- foldlevel=n    从 level > n 的层开始折叠. 最外层 foldlevel=0, 越内部 foldlevel 越高.
+---                999 表示从 1000 层开始 fold, 即不进行 fold.
+---
 vim.opt.foldenable = true  -- 折叠代码.
-vim.opt.foldnestmax = 3    -- 最多折叠3层.
+vim.opt.foldnestmax = 3    -- 最多折叠3层. NOTE: 'setlocal foldnestmax' 需要放在 'foldlevel' 之前设置, 否则不生效.
 vim.opt.foldtext = "v:lua.__Folded_line_text()"  -- VVI: 运行 lua Global function. `v:lua.xxx()` 只能运行 global function.
 function __Folded_line_text()
   --- VVI: replace '\t' with 'N-spaces'. 否则 \t 会被认为是一个 char, 导致 line 开头的内容部分被隐藏.
@@ -269,6 +280,23 @@ function __Folded_line_text()
   end
   return fs .. ' ' .. fe
 end
+
+--- 放在最上面, 因为如果 stdpath('config') 路径下有 json ... 等文件, 可以通过下面的 autocmd 覆盖这里的设置.
+--- 这里不能使用 'BufEnter' 否则每次切换窗口或者文件的时候都会重新设置.
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = {"*"},
+  callback = function(params)
+    --- "~/.config/nvim/*" 中的所有 file 都使用 marker {{{xxx}}} 折叠.
+    if string.match(vim.fn.fnamemodify(params.file, ":p"), '^'..vim.fn.stdpath('config')) then
+      vim.opt_local.foldmethod = "marker"
+      vim.opt_local.foldlevel = 0
+    end
+  end
+})
+
+vim.cmd([[au Filetype vim,zsh,yaml setlocal foldmethod=marker foldlevel=0]])
+
+-- -- }}}
 
 --- search 设置，命令 `/` `?` ----------------------------------------------------------------------
 vim.opt.incsearch = true   -- 开始实时搜索
