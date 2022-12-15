@@ -24,10 +24,6 @@ notify.setup({
     --vim.api.nvim_buf_set_option(bufnr, "filetype", "markdown")
     vim.bo[bufnr].filetype = "markdown"
 
-    --- 配合 markdown highlight.
-    --vim.wo[win_id].conceallevel = 2
-    --vim.wo[win_id].concealcursor = "nc"  -- 'nc' Normal & Command Mode 不显示 Concealed text.
-
     --- set keymap to close window
     vim.keymap.set('n', 'q', '<cmd>q<CR>', {noremap=true, buffer=bufnr, desc="close window"})
     --vim.keymap.set('n', '<ESC>', '<cmd>q<CR>', {noremap=true, buffer=bufnr, desc="close window"})

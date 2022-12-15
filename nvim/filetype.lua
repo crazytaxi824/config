@@ -1,3 +1,5 @@
+--- `:help vim.filetype.add()`, Add new filetype mappings.
+--- extension, filename, pattern
 vim.filetype.add({
   extension = {
     json = "jsonc",
