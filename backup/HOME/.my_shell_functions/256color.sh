@@ -28,7 +28,6 @@ function fgGrayscale() {
 	printf "\e[0m\n\n"
 }
 
-
 # cube text color
 function fgCube() {
 	for (( line=0; line < 6; line++ ))
