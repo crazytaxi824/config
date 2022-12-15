@@ -16,13 +16,13 @@
 
 - `stdpath("config")` = `~/.config/nvim/`, 配置文件主要路径.
 
-- `stdpath("data")`   = `~/.local/share/nvim/`, 插件安装路径.
+- `stdpath("data")` = `~/.local/share/nvim/`, 插件安装路径.
 
-- `stdpath("state")`  = `~/.local/state/nvim/`, undo, shada, swap ...
+- `stdpath("state")` = `~/.local/state/nvim/`, undo, shada, swap ...
 
-- `stdpath("log")`    = `~/.local/state/nvim/`, 目前只有 nvim-log. 目前和 `stdpath("state")` 路径相同.
+- `stdpath("log")` = `~/.local/state/nvim/`, 目前只有 nvim-log. 目前和 `stdpath("state")` 路径相同.
 
-- `stdpath("cache")`  = `~/.cache/nvim/`, temporary storage for plugins. 目前 plugins 用于储存 log 文件, 以后可能会移到
+- `stdpath("cache")` = `~/.cache/nvim/`, temporary storage for plugins. 目前 plugins 用于储存 log 文件, 以后可能会移到
   `stdpath("log")` 地址下.
 
 2. neovim 启动时会首先执行 runtimepath (`:set runtimepath?`) 中的 `init.lua` 文件. 即 `~/.config/nvim/init.lua` 文件.
@@ -123,23 +123,37 @@ lua 中有一个 `_G` 全局变量. 自定义的所有全局变量和函数都�
 
 ## lua 设置 vim 属性
 
-### vim 内置属性
+### vim 内置属性 set setlocal
 
-eg: `wrap` is local to window
+`:set` = `vim.o.xxx`, `vim.opt.xxx`, 区别: `:help vim.opt`
 
-| vim script        | neovim lua            | set to specific win_id        | set to specific winnr                     |
-| ----------------- | --------------------- | ----------------------------- | ----------------------------------------- |
-| `setlocal wrap`   | `vim.wo.wrap = true`  | `vim.wo[win_id].wrap = true`  | `vim.fn.setwinvar(winnr, '&wrap', 1)`     |
-| `setlocal nowrap` | `vim.wo.wrap = false` | `vim.wo[win_id].wrap = false` | `vim.fn.setwinvar(winnr, '&wrap', 0)`     |
-| `set wrap?`       | `print(vim.wo.wrap)`  | `print(vim.wo[win_id].wrap)`  | `print(vim.fn.getwinvar(winnr, '&wrap'))` |
+`:setlocal` = `vim.opt_local.xxx`
 
-如果不是 vim 内置 option 则使用 '&xxx' 变量名 set 时会报错.
+`:setglobal` = `vim.opt_global.xxx`
 
-eg: `:call setbufvar(5, '&foo', 'bar')`, 报错 `E355: Unknown option: foo`
+eg: `foldmethod` is local to window.
+
+- `:set fdm=marker` 是针对当前的 window, 所有在该 window 中打开的 buffer 都会被设置为 `marker`, 同时新打开的 window 也继承该设置;
+- `:setlocal fdm=marker` 是针对当前 buffer, 其他 buffer 在该 window 中打开也不会被设置为 `marker`, 新打开的 window 不会继承该设置.
+
+| vim script            | neovim lua                   | set to specific win_id        | set to specific winnr                              |
+| --------------------- | ---------------------------- | ----------------------------- | -------------------------------------------------- |
+| `set fdm=marker`      | `vim.wo.fdm='marker'`        | `vim.wo[win_id].fdm='marker'` |                                                    |
+| `setlocal fdm=marker` | `vim.opt_local.fdm='marker'` |                               | `vim.fn.setwinvar(winnr, '&foldmethod', 'marker')` |
+| `set fdm?`            | `print(vim.wo.fdm)`          | `print(vim.wo[win_id].fdm)`   | `print(vim.fn.getwinvar(winnr, '&fdm'))`           |
+
+⭐️ 如果不是 vim 内置 option 则使用 '&xxx' 变量名 set 时会报错. eg: `:call setbufvar(5, '&foo', 'bar')`, 报错 `E355: Unknown option: foo`
+
+其他案例:
+
+- `wrap` is local to window. 但是 `set wrap` 和 `setlocal wrap` 都是针对当前 buffer 的, 其他 buffer 在该 window 中打开也不会被设置为 `wrap`, 新打开的 window 不会继承该设置.
+- `scrolloff` is local to window. 但是 `set scrolloff=8` 和 `setlocal scrolloff=8` 都只针对当前 window, 其他 buffer 在该 window 中打开都会被设置为 `scrolloff=8`, 但新打开的 window 不会继承该设置.
+
+所以 local to window 的实际 scope 需要测试才知道. 最保险的用法是 `set` 用 `vim.o.xxx`; `setlocal` 用 `vim.opt_local.xxx`
 
 <br />
 
-### vim 变量
+### vim 变量 g:var
 
 | vim script         | neovim lua         |
 | ------------------ | ------------------ |
@@ -329,18 +343,21 @@ Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa
 ## 多行数字增加 `Ctrl-a` 和数字减少 `Ctrl-x`
 
 Normal Mode
+
 - `<C-a>` 光标下数字+1, `6<C-a>` 光标下数字+6;
 - `<C-x>` 光标下数字-1, `6<C-x>` 光标下数字-6...
 
 Visual-Block 选择多行数字
 
 增加
+
 - `<C-a>`, 每行数字+1;
 - `3<C-a>` 每行数字+3;
 - `g<C-a>` 第一行+1, 第二行+2, 第 n 行+n...
 - `3g<C-a>` 第一行+3, 第二行+6, 第 n 行+3n...
 
 减少
+
 - `<C-x>`, 每行数字-1;
 - `3<C-x>` 每行数字-3;
 - `g<C-x>` 第一行-1, 第二行-2, 第 n 行-n...
@@ -462,6 +479,3 @@ vim.lsp.buf.format({
 - test lsp after `go mod init`, `go mod tidy`
 
 - checktools after mason loaded
-
-
-

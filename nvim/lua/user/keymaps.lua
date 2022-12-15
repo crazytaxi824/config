@@ -153,8 +153,9 @@ end
 -- -- }}}
 
 --- [[, ]], jump to previous/next section ---------------------------------------------------------- {{{
+--- NOTE: `:help treesitter-languagetree`, `lang` will default to 'filetype'.
+--- 利用 nvim-treesitter 获取 buffer `lang`.
 local function parse_buffer_lang()
-  --- 利用 nvim-treesitter 获取 buffer lang.
   local nvim_ts_ok, nvim_ts_parsers = pcall(require, "nvim-treesitter.parsers")
   if nvim_ts_ok then
     return nvim_ts_parsers.get_buf_lang(0)  -- 如果 nvim-treesitter 存在, 则 parse
