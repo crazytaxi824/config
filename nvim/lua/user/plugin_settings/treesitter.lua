@@ -111,6 +111,7 @@ local ts_filetypes = {'go','javascript','javascriptreact','typescript','typescri
     'svelte','python','css','less','scss','html','json','jsonc','graphql','markdown','sh','bash'}
 
 --- VVI: 不要设置 setlocal foldmethod=syntax, 会严重拖慢文件切换速度. eg: jump to definition.
+--- nvim-treesitter lazyload 时必须对已打开的文件设置 foldmethod ...
 if vim.tbl_contains(ts_filetypes, vim.bo.filetype)then
   vim.opt_local.foldmethod='expr'
   vim.opt_local.foldexpr='nvim_treesitter#foldexpr()'

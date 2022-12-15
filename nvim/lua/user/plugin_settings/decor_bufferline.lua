@@ -427,7 +427,7 @@ bufferline.setup({
   options = {
     mode = "buffers", -- set to "tabs" to only show tabpages instead
     numbers = "ordinal", -- "none" | "ordinal" | "buffer_id" | "both" | func({ordinal,id,lower,raise}):string
-    sort_by = 'id',  -- 其他选项有 BUG.
+    sort_by = 'id',  -- 其他选项有 bug
     persist_buffer_sort = true, -- whether or not custom sorted buffers should persist between sessions.
                                 -- 会创建一个全局变量 g:BufferlinePositions 保存自 state.custom_sort
 
@@ -608,24 +608,25 @@ vim.api.nvim_create_autocmd("BufDelete", {
   end
 })
 
---- DEBUG: 用
-function Bufferline_info(index)
-  -- print("state.components:", vim.inspect(state.components))
-  print("state.custom_sort (bufnrs order):", vim.inspect(state.custom_sort))
-  if index then
-    bufferline.exec(index, function(index_info, vis_infos)
-      if index then
-        print("ordinal:", index_info.ordinal, "; bufnr:", index_info.id, "; bufname:", index_info.path)
-      end
-    end)
-  else
-    bufferline.exec(1, function(i, vis_infos)
-      for i, value in ipairs(vis_infos) do
-        print("index:", i, "ordinal:", value.ordinal, "; bufnr:", value.id, "; bufname:", value.path)
-      end
-    end)
-  end
-end
+--- DEBUG: 用, 查看 ordinal, bufnr, list index, 之间的关系
+-- function Bufferline_info(bufferline_index)
+--   -- print("state.components:", vim.inspect(state.components))
+--   print("state.custom_sort (bufnrs order):", vim.inspect(state.custom_sort))
+--   if bufferline_index then
+--     bufferline.exec(bufferline_index, function(index_info, visible_infos)
+--       --- 如果 index 不存在, 则 callback funciton 不执行.
+--       if index_info then
+--         print("index:", bufferline_index, "ordinal:", index_info.ordinal, "; bufnr:", index_info.id, "; bufname:", index_info.path)
+--       end
+--     end)
+--   else
+--     bufferline.exec(1, function(index_info, visible_infos)
+--       for i, value in ipairs(visible_infos) do
+--         print("index:", i, "ordinal:", value.ordinal, "; bufnr:", value.id, "; bufname:", value.path)
+--       end
+--     end)
+--   end
+-- end
 
 
 

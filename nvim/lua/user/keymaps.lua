@@ -303,6 +303,7 @@ local opt = { noremap = true, silent = true }
 --- NOTE: { mode, key, remap, opt, description }  - description for 'which-key'
 local keymaps = {
   --- common use -----------------------------------------------------------------------------------
+  --- `:help registers`
   {'n', 'D', '"_dd', opt, "delete line No Copy"},
   {'v', 'D', '"_x', opt, "delete line No Copy"},
   {'n', 'O', 'O<C-c><Down>', opt, "add new line above cursor"},
@@ -408,7 +409,7 @@ local keymaps = {
   {'n', '<leader>k0', 'zM', opt, "Close all folds"},
   {'n', '<leader>k1', 'zMzO', opt, "Focus current text"},
 
-  {'n', '<leader>l', '<cmd>copen<CR>', opt, "Open quickfix window"},
+  --{'n', '<leader>l', '<cmd>copen<CR>', opt, "Open quickfix window"},
 
   --- <leader> keymaps 默认会显示在 which-key list 中, 所以需要使用 'which_key_ignore' 阻止显示
   {'n', '<leader>"', 'viw<C-c>`>a"<C-c>`<i"<C-c>', opt, 'which_key_ignore'},
@@ -458,10 +459,14 @@ local keymaps = {
   {'n', 'ZZ', '<Nop>', opt},
   {'v', 'ZZ', '<Nop>', opt},
 
+  --- ` 和 ' 默认都是 `:help marks`, 这里禁止使用 ` 因为有时候 ` 需要作为 <leader>.
+  {'n', '`', '<Nop>', opt},
+
+  --- 利用 treesitter 跳转到 prev/next root node.
   {'n', '[[', jump_to_prev_section, opt, 'Jump to Prev Section'},
   {'n', ']]', jump_to_next_section, opt, 'Jump to Next Section'},
 
-  --- 切换 buffer, NOTE: 目前使用 airline <Plug>AirlineSelectPrevTab 进行 buffer 切换
+  --- 切换 buffer, 目前使用 bufferline 进行 buffer 切换, 如果不使用 buffer line 则使用以下设置.
   --{'n', '<lt>', ':bprevious<CR>', opt, 'go to previous buffer'},
   --{'n', '>', ':bnext<CR>', opt, 'go to next buffer'},
 }
