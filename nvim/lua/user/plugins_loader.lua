@@ -252,7 +252,10 @@ if not packer_bootstrap then
     callback = function(params)
       --- NOTE: 利用vim.schedual() lazyload plugins
       vim.schedule(function()
-        require("user.plugins_lazy_loader")
+        local lazyload_list = require("user.plugins_lazy_loader")
+        for _, plugin in ipairs(lazyload_list) do
+          packer.loader(plugin)
+        end
       end)
     end
   })

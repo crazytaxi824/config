@@ -188,7 +188,7 @@ vim.opt.mouse = 'a'  -- allow the mouse to be used in neovim, `:help mouse`
 vim.opt.timeout = true    -- 组合键延迟开启.
 vim.opt.timeoutlen = 600  -- 组合键延迟时间, 默认1000ms. eg: <leader>w, <C-W><C-O>...
 
-vim.opt.ttimeout = false  -- <ESC> (\x1b byte) 组合键是否开启.
+vim.opt.ttimeout = false  -- <ESC> (\x1b) 组合键是否开启.
 --vim.opt.ttimeoutlen = 0   -- <ESC> 延迟时间, 默认 50ms.  <ESC> 的主要作用是切换模式.
                           -- <ESC> 是发送 ^[ 相当于是 <C-[> 组合键.
                           -- ttimeoutlen>0 的情况下, 其他模式转成 normal 模式需要 <ESC><ESC> 两次, 或者等待延迟结束;
@@ -254,7 +254,7 @@ vim.opt.fillchars = 'fold: ,diff: ,vert:│,eob:~'
 --vim.opt.foldtext = "printf('%s … %s', getline(v:foldstart), matchstr(getline(v:foldend), '\\(.*\\)\\@<=[})]\\+'))"
 
 --- fold 设置 -------------------------------------------------------------------------------------- {{{
---- VVI: 不要在打开代码前设置 foldmethod=syntax, 会严重拖慢文件切换速度. eg: jump to definition.
+--- VVI: 不要设置 foldmethod=syntax, 会严重拖慢文件切换速度. eg: jump to definition.
 ---
 --- foldmethod     treesitter experimental function. 默认 manual.
 ---
