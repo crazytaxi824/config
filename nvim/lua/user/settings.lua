@@ -254,7 +254,7 @@ vim.opt.fillchars = 'fold: ,diff: ,vert:│,eob:~'
 --vim.opt.foldtext = "printf('%s … %s', getline(v:foldstart), matchstr(getline(v:foldend), '\\(.*\\)\\@<=[})]\\+'))"
 
 --- fold 设置 -------------------------------------------------------------------------------------- {{{
---- VVI: 不要在打开代码前设置 foldmethod=syntax, 会严重拖慢文件切换速度. eg: jump to definition.
+--- VVI: 不要设置 foldmethod=syntax, 会严重拖慢文件切换速度. eg: jump to definition.
 ---
 --- foldmethod     treesitter experimental function. 默认 manual.
 ---

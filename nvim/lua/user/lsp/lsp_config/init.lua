@@ -107,6 +107,7 @@ for lsp_svr, v in pairs(lsp_servers_map) do
     callback = function(params)
       --- NOTE: lazyload lspconfig
       vim.schedule(function()
+        --- lspconfig[lsp_svr].setup(opt), 根据 filetype 设置 lsp
         lspconfig_setup(lsp_svr)
 
         --- VVI: 第一次必须要手动启动 lsp, 因为 vim.schedule() 会导致新 filetype 的 buffer 加载完成之后
