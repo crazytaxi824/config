@@ -117,7 +117,7 @@ local function set_treesitter_fold_method(foldlevel)
   vim.opt_local.foldlevel=foldlevel
 end
 
---- 如果 nvim-treesitter 是 lazyload, 则必须对已经打开的文件设置 foldmethod, foldexpr ...
+--- VVI: Lazyload nvim-treesitter 时, 必须对已经打开的文件设置 foldmethod, foldexpr ...
 local lazyload_list = require("user.plugins_lazy_loader")
 if vim.tbl_contains(lazyload_list, 'nvim-treesitter') and vim.tbl_contains(ts_filetypes, vim.bo.filetype) then
   set_treesitter_fold_method(999)
