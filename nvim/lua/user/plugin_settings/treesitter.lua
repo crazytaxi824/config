@@ -3,6 +3,11 @@ if not nv_ts_status_ok then
   return
 end
 
+local nvim_ts_ok, nvim_ts_parsers = pcall(require, "nvim-treesitter.parsers")
+if not nvim_ts_ok then
+  return
+end
+
 --- path to store parsers. VVI: directory must be writeable and must be explicitly added to the runtimepath.
 --- 需要在 setup() 中设置 parser_install_dir, 同时将 path 添加到 vim 的 runtimepath 中.
 --local treesitter_parsers_path = vim.fn.stdpath('data') .. '/treesitter_parser'
@@ -107,42 +112,34 @@ ts_configs.setup {
 }
 
 --- fold 设置 -------------------------------------------------------------------------------------- {{{
-local ts_filetypes = {'go','javascript','javascriptreact','typescript','typescriptreact','vue',
-  'svelte','python','css','less','scss','html','json','jsonc','graphql','markdown','sh','bash'}
-
 --- 设置 nvim-treesitter 提供的 foldexpr.
+--- VVI: 不要设置 foldmethod=syntax, 会严重拖慢文件切换速度. eg: jump to definition.
 local function set_treesitter_fold_method(foldlevel)
-  vim.opt_local.foldmethod='expr'
-  vim.opt_local.foldexpr='nvim_treesitter#foldexpr()'
-  vim.opt_local.foldlevel=foldlevel
+  --- treesitter 是否有对应的 parser for current buffer.
+  local has_parser = nvim_ts_parsers.has_parser(nvim_ts_parsers.get_buf_lang())
+
+  --- 如果当前 foldmethod 不是默认值 manual 说明已经被设置过了, 这里就不再设置 foldmethod.
+  if vim.wo.foldmethod == 'manual' and has_parser then
+    vim.opt_local.foldmethod='expr'
+    vim.opt_local.foldexpr='nvim_treesitter#foldexpr()'
+    vim.opt_local.foldlevel=foldlevel
+  end
 end
 
---- 如果 nvim-treesitter 是 lazyload, 则必须对已经打开的文件设置 foldmethod, foldexpr ...
+--- VVI: Lazyload nvim-treesitter 时, 必须对已经打开的文件设置 foldmethod, foldexpr ...
 local lazyload_list = require("user.plugins_lazy_loader")
-if vim.tbl_contains(lazyload_list, 'nvim-treesitter') and vim.tbl_contains(ts_filetypes, vim.bo.filetype) then
+if vim.tbl_contains(lazyload_list, 'nvim-treesitter') then
   set_treesitter_fold_method(999)
 end
 
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = ts_filetypes,
+  pattern = {"*"},
   callback = function(params)
-    --- NOTE: 如果超大文件切换速度慢, 则不要直接设置 foldmethod. 使用 keymap 在有需要的时候设置 foldmethod.
-    --- 使用这种设置方式时, 在使用 \k1 \k0 之前无法使用 zo zc ... 等快捷键.
     set_treesitter_fold_method(999)
-
-    --- 设置 keymaps 用来折叠代码, 类似 vscode 的 keymaps 设置.
-    vim.keymap.set('n', '<leader>k0', function()
-      set_treesitter_fold_method(0)
-    end, {buffer=params.buf, silent=true, noremap=true, desc='Close all folds'})
-
-    vim.keymap.set('n', '<leader>k1', function()
-      set_treesitter_fold_method(0)
-      vim.cmd('silent! foldopen!')  -- NOTE: `:foldopen!` 相当于 `zO`
-    end, {buffer=params.buf, silent=true, noremap=true, desc='Focus current text'})
   end
 })
 
---- Command 切换 foldmethod
+--- Command 手动切换 foldmethod
 vim.api.nvim_create_user_command('FoldmethodToggle', function()
   if vim.wo.foldmethod == 'expr' then
     vim.opt_local.foldmethod='marker'

@@ -11,13 +11,18 @@ M.check = function()
   --- HACK 中用到的 modules, 大多 overwrite 源代码.
   local require_list = {
     "bufferline.state",
+
     "nvim-tree.renderer.components.git",
     "nvim-tree.renderer.builder",
+
     "nvim-treesitter.ts_utils",
+    "nvim-treesitter.parsers",
+
     "telescope.finders",
     "telescope.make_entry",
     "telescope.pickers",
     "telescope.config",
+
     "null-ls.utils",
   }
 

@@ -1,7 +1,7 @@
 --- lazy load opt plugins, loader() 名字可以查看 `plugin/packer_compiled.lua`
 --- VVI: 加载顺序很重要
 local lazyload_plugins = {
-  'nvim-treesitter',  -- TreeSitter, 必须要 lazyload, 否则严重影响 neovim startup 速度.
+  'nvim-treesitter',  -- TreeSitter, NOTE: 必须要 lazyload, 否则严重影响 neovim startup 速度.
   'nvim-cmp',  -- Auto Completion
 
   --- VVI: 如果要 lazyload lspconfig 时需要手动 `:LspStart`, 否则当前 buffer 的 autocmd 不会被执行.

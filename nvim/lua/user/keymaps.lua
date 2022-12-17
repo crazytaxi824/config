@@ -3,7 +3,7 @@
 --- vim.keymap.set() & vim.keymap.del()
 --- vim.api.nvim_set_keymap() & vim.api.nvim_del_keymap()
 --- vim.api.nvim_buf_set_keymap() & vim.api.nvim_buf_del_keymap()
---- vim.keymap.set() 可以同时设置多个模式, vim.api.nvim_set_keymap() 每次只能设置一个模式
+--- vim.keymap.set({'n','i'}, ...) 可以同时设置多个 Mode, vim.api.nvim_(buf)_set_keymap('n', ...) 每次只能设置一个模式.
 --- <S-F12> 在 neovim 中是 <F24>, <C-F12> 是 <F36>, <C-S-F12> 是 <F48>. 其他组合键都可以通过 insert 模式打印出来.
 -- -- }}}
 --- 常用组合键前缀:
@@ -13,8 +13,9 @@
 ---   - i_CTRL-R | c_CTRL-R  NOTE: 在 insert/command 模式下 paste register 到 file/command line.
 ---                          eg: insert/command 模式下输入 <CTRL-R>0 相当于 normal 模式下 "0p
 ---                          后面接 = 可以填入 expr. eg: insert/command 模式下输入 <CTRL-R>=100-80, 得到 20.
----   - "  - select register for paste. 可以用在 y,p,d,x 等复制/剪切/粘贴功能上. eg: "*y
----   - @  - execute content of register, like macro.
+---   - "        - registers. 可以用在 y,p,d,x 等复制/剪切/粘贴功能上. eg: "*y
+---   - @        - execute content of register, like macro.
+---   - ` 和 '   - marks
 ---   - [ | ]  - navigation in file
 ---
 --- 常用固定组合键:
@@ -294,10 +295,10 @@ end
 --- { noremap = true },
 --- { nowait = true },
 --- { silent = true },
---- { buffer = true },  -- buffer 有效
+--- { buffer = number },  -- 针对 bufnr 有效, 0 - current buffer
 --- { script = true },
 --- { expr = true },
---- { desc = "key_description" }
+--- { desc = "key_description" }  -- 会影响 which-key 显示.
 local opt = { noremap = true, silent = true }
 
 --- NOTE: { mode, key, remap, opt, description }  - description for 'which-key'
