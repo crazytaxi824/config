@@ -495,6 +495,12 @@ function TestLSP(id)
     client.stop() -- remove null-ls lsp
   end
 end
+
+function TestNull()
+  local golangci = require("null-ls").get_source({name="golangci_lint"})[1]
+  print(vim.inspect(golangci))
+  -- print(vim.inspect(golangci.generator))
+end
 ```
 
 
