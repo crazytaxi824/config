@@ -16,12 +16,6 @@ local file_list = {
   vim.fn.stdpath('cache') .. '/packer.myupdate.log',
 }
 
---- 有大量空白行的 log 文件.
-local blankline_list = {
-  vim.fn.stdpath('log') .. '/luasnip.log',
-  vim.fn.stdpath('cache') .. '/dap.log',
-}
-
 --- 判断文件大小是否超过 n(MB)
 local function file_size_over_MB(fpath, size)
   --- 判断文件是否存在
@@ -53,7 +47,7 @@ local function reduce_filesize(fpath)
 end
 
 --- 根据 regexp 删除文件行内容.
-local function clean_log_file(filepath, regexp)
+local function trim_prefix_blankline(filepath, regexp)
   --- lua read file --- {{{
   -- local f, err = io.open(filepath, 'r')  -- read mode
   -- if err then
@@ -83,11 +77,18 @@ local function clean_log_file(filepath, regexp)
   local content_list = vim.fn.readfile(filepath)
 
   --- filter content
-  local new_content = {}
-  for _, content in ipairs(content_list) do
+  local line_num
+  for i, content in ipairs(content_list) do
     if not string.match(content, regexp) then
-      table.insert(new_content, content)
+      line_num = i
+      break
     end
+  end
+
+  if not line_num then
+    line_num = #content_list+1
+  elseif line_num == 1 then
+    return
   end
 
   --- Write File
@@ -113,7 +114,7 @@ local function clean_log_file(filepath, regexp)
   -- --f:flush()  --- save to file
   -- f:close()
   -- -- }}}
-  vim.fn.writefile(new_content, filepath)  -- flag: omit - 直接覆盖写入, 'a' - append 写入.
+  vim.fn.writefile(vim.list_slice(content_list, line_num), filepath)  -- flag: omit - 直接覆盖写入, 'a' - append 写入.
   --- ":checktime" 在下面统一执行.
 end
 
@@ -122,11 +123,10 @@ vim.api.nvim_create_autocmd("VimLeave", {
   pattern = {"*"},
   once = true,  -- VimLeave execute only once
   callback = function(params)
-    --- 特殊处理 log 文件中大量的空白行.
-    for _, fpath in ipairs(blankline_list) do
-      if vim.fn.filereadable(fpath) == 1 then
-        clean_log_file(fpath, "^$")
-      end
+    --- 特殊处理 dap.log 文件中大量的空白行.
+    local daplog = vim.fn.stdpath('cache') .. '/dap.log'
+    if vim.fn.filereadable(daplog) == 1 then
+      trim_prefix_blankline(daplog, "^$")
     end
 
     --- 如果 log 文件超过指定大小, 则删除文件前半部分的数据.
