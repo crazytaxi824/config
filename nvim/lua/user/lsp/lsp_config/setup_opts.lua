@@ -68,6 +68,9 @@ M.on_init = function(client)
   client.config.settings[client.name] = proj_local_settings.keep_extend(local_lspconfig_key, client.name,
     client.config.settings[client.name])
 
+  --- NOTE: notify lsp config is changed.
+  client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
+
   --- DEBUG: 用
   if __Debug_Neovim.lspconfig then
     Notify("LSP Server init: " .. client.name, "DEBUG", {title="LSP"})
