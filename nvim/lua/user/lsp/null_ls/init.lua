@@ -189,9 +189,7 @@ local formatter_settings = {
 --- code actions 设置 -------------------------------------------------------------------------------
 local code_action_settings = {
   --- "lewis6991/gitsigns.nvim" 插件
-  code_actions.gitsigns.with({
-    disabled_filetypes = { "NvimTree", "tagbar" },
-  }),
+  code_actions.gitsigns,
 
   --- NOTE: null-ls 不是 autostart 的, 需要触发操作后才会加载.
   --- eslint 等工具启动速度慢, 会拖慢第一次使用 code action 的时间.

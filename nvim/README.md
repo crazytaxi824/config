@@ -472,10 +472,30 @@ vim.lsp.buf.format({
 
 ## TODO
 
-- `:help watch-file`
-- LSP `client.notify("workspace/didChangeConfiguration")`
-- `:LspRestart` - lspconfig command
-- null-ls restart? `vim.lsp.stop_client(id)`, `vim.lsp.start_client()`, `vim.lsp.start(svr)`
-- test lsp after `go mod init`, `go mod tidy`
+动态加载 lsp 本地 config.
 
-- checktools after mason loaded
+- `:help watch-file`, when `.nvim/settings.lua` changed OR added.
+
+- `:LspRestart` - lspconfig command
+
+- LSP `client.notify("workspace/didChangeConfiguration")`
+
+```lua
+function TestLSP(id)
+  --- get client
+  local client = vim.lsp.get_client_by_id(id)
+  -- print(vim.inspect(client.config.settings))
+
+  if client.name == 'gopls' then
+    client.config.settings.gopls["ui.completion.usePlaceholders"] = false
+    client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
+  end
+
+  if client.name == 'null-ls' then
+    client.stop() -- remove null-ls lsp
+  end
+end
+```
+
+
+
