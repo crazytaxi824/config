@@ -231,27 +231,23 @@ vim.api.nvim_create_autocmd('WinEnter', {
   end
 })
 
---- 换行符, space, tab, cr ... 显示设置. `:help listchars`
+--- 换行符, space, tab, cr ... 显示设置. `:help listchars` ----------------------------------------- {{{
 ---   eol:↴ - 换行
 ---   lead/trail - 行首(尾)的空格
 ---   precedes/extends - 不换行(:set nowrap)的情况下, 内容长度超出屏幕的行会有该标记
+-- -- }}}
 vim.opt.list = true
 vim.opt.listchars = 'tab:│ ,lead: ,trail:·,extends:→,precedes:←,nbsp:⎵'
 
---- 填充符, `:help fillchars` ----------------------------------------------------------------------
+--- 填充符, `:help fillchars` ---------------------------------------------------------------------- {{{
 ---   diff  - vimdiff 中被删除的行的填充字符.
 ---   fold  - 折叠代码的行的填充字符.
 ---   vert  - 竖着并排窗口的分隔符. eg: tagbar, nerdtree ...
 ---   stl   - statusline 中间的填充字符.
 ---   stlnc - non-current window 的 statusline 中间的填充字符.
 ---   eob   - 文件最后一行之后, 空白行的行号.
+-- -- }}}
 vim.opt.fillchars = 'fold: ,diff: ,vert:│,eob:~'
-
---- `:help foldtext` 改变折叠代码的样式. NOTE: 配合 fillchars 使用.
---vim.opt.foldtext = 'printf("%s … %s -- lvl %d", getline(v:foldstart), getline(v:foldend), v:foldlevel)'
---- NOTE: vim `:h pattern-overview` 中使用双引号和单引号是不一样的. 单引号 '\(\)\+' 在双引号中需要写成 "\\(\\)\\+"
----  \@<= 用法: \(an\_s\+\)\@<=file, 返回 "file" after "an" and white space or an
---vim.opt.foldtext = "printf('%s … %s', getline(v:foldstart), matchstr(getline(v:foldend), '\\(.*\\)\\@<=[})]\\+'))"
 
 --- fold 设置 -------------------------------------------------------------------------------------- {{{
 --- VVI: 不要设置 foldmethod=syntax, 会严重拖慢文件切换速度. eg: jump to definition.
@@ -265,8 +261,16 @@ vim.opt.fillchars = 'fold: ,diff: ,vert:│,eob:~'
 --- foldlevel=n    从 level > n 的层开始折叠. 最外层 foldlevel=0, 越内部 foldlevel 越高.
 ---                999 表示从 1000 层开始 fold, 即不进行 fold.
 ---
+--- `:help foldtext` 改变折叠代码的样式. NOTE: 配合 fillchars 使用.
+--- vim.opt.foldtext = 'printf("%s … %s -- lvl %d", getline(v:foldstart), getline(v:foldend), v:foldlevel)'
+---
+--- vim `:h pattern-overview` 中使用双引号和单引号是不一样的. 单引号 '\(\)\+' 在双引号中需要写成 "\\(\\)\\+"
+--- \@<= 用法: \(an\_s\+\)\@<=file, 返回 "file" after "an" and white space or an
+--- vim.opt.foldtext = "printf('%s … %s', getline(v:foldstart), matchstr(getline(v:foldend), '\\(.*\\)\\@<=[})]\\+'))"
+-- -- }}}
 vim.opt.foldenable = true  -- 折叠代码.
 vim.opt.foldnestmax = 3    -- 最多折叠3层. NOTE: 'setlocal foldnestmax' 需要放在 'foldlevel' 之前设置, 否则不生效.
+
 vim.opt.foldtext = "v:lua.__Folded_line_text()"  -- VVI: 运行 lua Global function. `v:lua.xxx()` 只能运行 global function.
 function __Folded_line_text()
   --- VVI: replace '\t' with 'N-spaces'. 否则 \t 会被认为是一个 char, 导致 line 开头的内容部分被隐藏.
@@ -295,8 +299,6 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 vim.cmd([[au Filetype vim,zsh,yaml setlocal foldmethod=marker foldlevel=0]])
-
--- -- }}}
 
 --- search 设置，命令 `/` `?` ----------------------------------------------------------------------
 vim.opt.incsearch = true   -- 开始实时搜索

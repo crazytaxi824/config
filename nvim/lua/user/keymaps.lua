@@ -295,10 +295,10 @@ end
 --- { noremap = true },
 --- { nowait = true },
 --- { silent = true },
---- { buffer = true },  -- buffer 有效
+--- { buffer = number },  -- 针对 bufnr 有效, 0 - current buffer
 --- { script = true },
 --- { expr = true },
---- { desc = "key_description" }
+--- { desc = "key_description" }  -- 会影响 which-key 显示.
 local opt = { noremap = true, silent = true }
 
 --- NOTE: { mode, key, remap, opt, description }  - description for 'which-key'
