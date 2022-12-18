@@ -39,7 +39,7 @@ local function del_cursor_move_in_wrap(bufnr)
   local keys = {'<Up>','<Down>','<Home>','<End>'}
   local modes = {'n', 'v', 'i'}
 
-  --- NOTE: 也可以使用 :silent! nunmap <UP>/<Down> ... remove keymaps.
+  --- NOTE: 不能使用 :nunmap <UP>/<Down> ..., 不生效.
   for _, mode in ipairs(modes) do
     local buf_keymaps = vim.api.nvim_buf_get_keymap(bufnr, mode)
     for _, key in ipairs(keys) do
