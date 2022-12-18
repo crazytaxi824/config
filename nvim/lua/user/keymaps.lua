@@ -5,6 +5,22 @@
 --- vim.api.nvim_buf_set_keymap() & vim.api.nvim_buf_del_keymap()
 --- vim.keymap.set({'n','i'}, ...) 可以同时设置多个 Mode, vim.api.nvim_(buf)_set_keymap('n', ...) 每次只能设置一个模式.
 --- <S-F12> 在 neovim 中是 <F24>, <C-F12> 是 <F36>, <C-S-F12> 是 <F48>. 其他组合键都可以通过 insert 模式打印出来.
+---
+---  `:help map-table`
+---           Mode  | Norm | Ins | Cmd | Vis | Sel | Opr | Term | Lang | ~
+---  Command        +------+-----+-----+-----+-----+-----+------+------+ ~
+---  [nore]map      | yes  |  -  |  -  | yes | yes | yes |  -   |  -   |
+---  n[nore]map     | yes  |  -  |  -  |  -  |  -  |  -  |  -   |  -   |
+---  [nore]map!     |  -   | yes | yes |  -  |  -  |  -  |  -   |  -   |
+---  i[nore]map     |  -   | yes |  -  |  -  |  -  |  -  |  -   |  -   |
+---  c[nore]map     |  -   |  -  | yes |  -  |  -  |  -  |  -   |  -   |
+---  v[nore]map     |  -   |  -  |  -  | yes | yes |  -  |  -   |  -   |
+---  x[nore]map     |  -   |  -  |  -  | yes |  -  |  -  |  -   |  -   |
+---  s[nore]map     |  -   |  -  |  -  |  -  | yes |  -  |  -   |  -   |
+---  o[nore]map     |  -   |  -  |  -  |  -  |  -  | yes |  -   |  -   |
+---  t[nore]map     |  -   |  -  |  -  |  -  |  -  |  -  | yes  |  -   |
+---  l[nore]map     |  -   | yes | yes |  -  |  -  |  -  |  -   | yes  |
+---
 -- -- }}}
 --- 常用组合键前缀:
 ---   - <leader>
