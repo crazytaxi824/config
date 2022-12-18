@@ -74,29 +74,6 @@
 
 <br />
 
-# vim options 设置 local to window / local to buffer
-
-官方解释
-
-```
-global              one option for all buffers and windows
-local to window     each window has its own copy of this option
-local to buffer     each buffer has its own copy of this option
-```
-
-`local to buffer` 相当于 buffer 的属性. eg: filetype, keymap, textwidth ...
-
-`local to window` 并不只是 window 的属性, 而是 buffer 在该 window 的属性. 需要同时满足 bufnr & win_id (不是 winnr) 两个条件的属性.
-所以可以看作是 buffer 在指定 window 中的属性. 也可以看作 window 中不同 buffer 的属性.
-
-测试: `setlocal number` 显示行号. 是一个 `local to window` option.
-
-- 当我们在不同的 window 中加载同一个 buffer, 可以通过 `setlocal number` / `setlocal nonumber` 分别显示不同的样式.
-- 当我们在同一个 window 中加载不同 buffer 的情况下, buffer-A `setlocal nonumber`; buffer-B `setlocal number`, 切换显示文件
-  的时候 `number` 显示也会根据 buffer 切换.
-
-<br />
-
 # neovim lua 使用
 
 ## nvim_create_autocmd User Event
@@ -118,48 +95,6 @@ lua 中有一个 `_G` 全局变量. 自定义的所有全局变量和函数都�
 - 自定义了 `__Proj_local_settings` 变量, 则可以使用 `__Proj_local_settings` 或者 `_G.__Proj_local_settings` 访问.
 
 - 自定义全局函数 `Notify()`, 则可以使用 `Notify()`, 或者 `_G.Notify()` 调用函数.
-
-<br />
-
-## lua 设置 vim 属性
-
-### vim 内置属性 set setlocal
-
-`:set` = `vim.o.xxx`, `vim.opt.xxx`, 区别: `:help vim.opt`
-
-`:setlocal` = `vim.opt_local.xxx`
-
-`:setglobal` = `vim.opt_global.xxx`
-
-eg: `foldmethod` is local to window.
-
-- `:set fdm=marker` 是针对当前的 window, 所有在该 window 中打开的 buffer 都会被设置为 `marker`, 同时新打开的 window 也继承该设置;
-- `:setlocal fdm=marker` 是针对当前 buffer, 其他 buffer 在该 window 中打开也不会被设置为 `marker`, 新打开的 window 不会继承该设置.
-
-| vim script            | neovim lua                   | set to specific win_id        | set to specific winnr                              |
-| --------------------- | ---------------------------- | ----------------------------- | -------------------------------------------------- |
-| `set fdm=marker`      | `vim.wo.fdm='marker'`        | `vim.wo[win_id].fdm='marker'` |                                                    |
-| `setlocal fdm=marker` | `vim.opt_local.fdm='marker'` |                               | `vim.fn.setwinvar(winnr, '&foldmethod', 'marker')` |
-| `set fdm?`            | `print(vim.wo.fdm)`          | `print(vim.wo[win_id].fdm)`   | `print(vim.fn.getwinvar(winnr, '&fdm'))`           |
-
-⭐️ 如果不是 vim 内置 option 则使用 '&xxx' 变量名 set 时会报错. eg: `:call setbufvar(5, '&foo', 'bar')`, 报错 `E355: Unknown option: foo`
-
-其他案例:
-
-- `wrap` is local to window. 但是 `set wrap` 和 `setlocal wrap` 都是针对当前 buffer 的, 其他 buffer 在该 window 中打开也不会被设置为 `wrap`, 新打开的 window 不会继承该设置.
-- `scrolloff` is local to window. 但是 `set scrolloff=8` 和 `setlocal scrolloff=8` 都只针对当前 window, 其他 buffer 在该 window 中打开都会被设置为 `scrolloff=8`, 但新打开的 window 不会继承该设置.
-
-所以 local to window 的实际 scope 需要测试才知道. 最保险的用法是 `set` 用 `vim.o.xxx`; `setlocal` 用 `vim.opt_local.xxx`
-
-<br />
-
-### vim 变量 g:var
-
-| vim script         | neovim lua         |
-| ------------------ | ------------------ |
-| `let g:foo=1`      | `vim.g.foo=1`      |
-| `let g:foo=v:true` | `vim.g.foo=true`   |
-| `echo g:foo`       | `print(vim.g.foo)` |
 
 <br />
 
@@ -374,7 +309,9 @@ Visual-Block 选择多行数字
 
 ## VVI: FileType vs BufEnter 区别
 
-'xxx.log' 文件不会触发 FileType, 因为没有该 filetype, 但是会触发 BufEnter.
+- 'xxx.log' 文件不会触发 `FileType`, 因为没有该 filetype, 但是会触发 `BufEnter`.
+
+- 每次切换 buffer 时 (hide -> display) 时, 会触发 `BufEnter` 但不会触发 `FileType`.
 
 <br />
 

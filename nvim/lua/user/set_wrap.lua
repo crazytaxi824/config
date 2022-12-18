@@ -39,6 +39,7 @@ local function del_cursor_move_in_wrap(bufnr)
   local keys = {'<Up>','<Down>','<Home>','<End>'}
   local modes = {'n', 'v', 'i'}
 
+  --- NOTE: 也可以使用 :silent! nunmap <UP>/<Down> ... remove keymaps.
   for _, mode in ipairs(modes) do
     local buf_keymaps = vim.api.nvim_buf_get_keymap(bufnr, mode)
     for _, key in ipairs(keys) do
@@ -51,84 +52,57 @@ local function del_cursor_move_in_wrap(bufnr)
   end
 end
 
---- 通过 bufnr 给所有显示该 buffer 的 window 设置 wrap.
-local function bufnr_set_wrap_to_all_windows(bufnr, on_off)
-  --- 通过 bufinfo 的 windows 属性获取 {win_id}
-  local buf_win_ids = vim.fn.getbufinfo(bufnr)[1].windows
+--- buffer 被 `:bdelete` 之后设置的属性会消失.
+--- 同一个 file 被 `:bwipeout` 之后再次打开, 会被分配一个新的 bufnr.
+--- 缓存文件绝对路径. buffer 被 `:bwipeout` 之后再次打开时继承之前的设置.
+--- `:bwipeout` / `:bdelete` 的 buffer 再次打开时 wrap & keymap 设置不变.
+local wrap_list = {}  -- cache fullpath
 
-  for _, win_id in ipairs(buf_win_ids) do
-    vim.wo[win_id].wrap = on_off  -- setlocal wrap to specific window
-  end
+function wrap_list.add(bufnr)
+  local bufname = vim.api.nvim_buf_get_name(bufnr)  -- full path
+  wrap_list[bufname] = true
 end
 
---- NOTE: 缓存 :WrapToggle 的 filepath / bufnr -----------------------------------------------------
---- 同一个 file 被 :bwipeout 之后再次打开, 会被分配一个新的 bufnr.
---- 如果 bufname() ~= '' 则缓存文件绝对路径. buffer 被 :bwipeout 之后再次打开时继承之前的设置.
---- 如果 bufname() == '' 则缓存 bufnr. 没有名字的 buffer 只能通过 bufnr 来缓存.
---- :bwipeout / :bdelete 的 buffer 再次打开时 wrap & keymap 设置不变.
-local wrap_list = {}
-
---- 使用 command 手动切换 wrap 设置.
-vim.api.nvim_create_user_command("WrapToggle", function()
-  local bufnr = vim.fn.bufnr()
+function wrap_list.remove(bufnr)
   local bufname = vim.api.nvim_buf_get_name(bufnr)  -- full path
+  wrap_list[bufname] = nil
+end
 
-  --- 如果 bufname() ~= '' 则缓存文件绝对路径. buffer 被 :bwipeout 之后再次打开时继承之前的设置.
-  --- 如果 bufname() == '' 则缓存 bufnr. 没有名字的 buffer 只能通过 bufnr 来缓存.
-  local buf
-  if bufname == '' then
-    buf = bufnr  -- [No Name] buffer, 缓存 bufnr
-  else
-    buf = bufname  -- 缓存文件的绝对路径
-  end
+function wrap_list.exist(bufnr)
+  local bufname = vim.api.nvim_buf_get_name(bufnr)  -- full path
+  return wrap_list[bufname]
+end
 
-  if not vim.wo.wrap then
-    --- setlocal wrap to window
-    bufnr_set_wrap_to_all_windows(bufnr, true)  -- vim.wo.wrap = true
-
-    --- cache filepath/bufnr
-    wrap_list[buf] = true
-
-    --- 设置 keymaps
-    set_cursor_move_in_wrap(bufnr)
-  else
-    --- setlocal nowrap to window
-    bufnr_set_wrap_to_all_windows(bufnr, false)  -- vim.wo.wrap = false
-
-    --- delete cache
-    wrap_list[buf] = nil
-
-    --- 删除 keymaps 设置
-    del_cursor_move_in_wrap(bufnr)
-  end
-end, {bar=true})
-
---- BufEnter 在同一个 window 中切换 buffer 时重新设置 wrap, 因为 wrap 是 local to window.
---- WinEnter 同一个 buffer 在不同的 window 中显示时重新设置 wrap.
-vim.api.nvim_create_autocmd({"BufEnter", "WinEnter"}, {
-  pattern = {"*"},
+--- 设置 :set wrap 时触发.
+vim.api.nvim_create_autocmd('OptionSet', {
+  pattern = {"wrap"},
   callback = function(params)
-    --- 如果 bufname() ~= '' 则缓存文件绝对路径. buffer 被 :bwipeout 之后再次打开时继承之前的设置.
-    --- 如果 bufname() == '' 则缓存 bufnr. 没有名字的 buffer 只能通过 bufnr 来缓存.
-    --- NOTE: params.file 不一定是文件的绝对路径. [No Name] buffer 的 params.file == ''.
-    local buf
-    if params.file == '' then  -- [No Name] buffer
-      buf = params.buf  -- [No Name] buffer, 缓存 bufnr
+    if vim.wo.wrap then
+      wrap_list.add(params.buf)  -- 加入到 list
+      set_cursor_move_in_wrap(params.buf)  -- 设置 keymaps
     else
-      buf = vim.fn.fnamemodify(params.file, ":p")
-    end
-
-    if wrap_list[buf] then
-      --vim.wo.wrap = true
-      bufnr_set_wrap_to_all_windows(params.buf, true)
-      set_cursor_move_in_wrap(params.buf)
-    else
-      --vim.wo.wrap = false
-      bufnr_set_wrap_to_all_windows(params.buf, false)
-      del_cursor_move_in_wrap(params.buf)
+      wrap_list.remove(params.buf)  -- 从 list 中移除
+      del_cursor_move_in_wrap(params.buf)  -- 删除 keymaps 设置
     end
   end
 })
+
+vim.api.nvim_create_autocmd('BufEnter', {
+  pattern = {"*"},
+  callback = function(params)
+    if wrap_list.exist(params.buf) then
+      vim.opt_local.wrap = true  -- setlocal wrap
+    end
+    if vim.wo.wrap then
+      set_cursor_move_in_wrap(params.buf)  -- 设置 keymaps
+    end
+  end
+})
+
+--- 使用 command 手动切换 wrap 设置.
+vim.api.nvim_create_user_command("WrapToggle", function()
+  vim.opt_local.wrap = not vim.wo.wrap
+end, {bang=true, bar=true})
 
 
 

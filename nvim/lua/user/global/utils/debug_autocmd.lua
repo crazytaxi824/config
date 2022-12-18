@@ -15,7 +15,7 @@
 ---   BufLeave     -- Before leaving to another buffer.
 ---   BufWinLeave  -- Before a buffer is removed from a window.
 
---- NOTE: bwipeout 的情况, 前两个是 bdelete 的情况.
+--- NOTE: bdelete/bwipeout 的情况, 前两个是 bdelete 的情况.
 ---   BufUnload
 ---   BufDelete
 ---   BufWipeout

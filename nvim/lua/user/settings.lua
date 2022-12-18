@@ -1,75 +1,116 @@
 --- https://github.com/LunarVim/Neovim-from-scratch/blob/master/lua/user/options.lua
 --- [ 注意事项 ] ----------------------------------------------------------------------------------- {{{
--- `:set` in lua, 系统变量
---      lua            command      global_value       local_value ~
---    vim.o           :set                set                set
---    vim.bo/vim.wo   :setlocal            -                 set
---    vim.go          :setglobal          set                 -
---
--- VVI: local to buffer / local to window
--- 官方解释:
---    global              one option for all buffers and windows
---    local to window     each window has its own copy of this option
---    local to buffer     each buffer has its own copy of this option
---
---  - `local to buffer` 相当于 buffer 的属性. eg: 'filetype', 'keymap', 'textwidth' ...
---  - `local to window` 并不只是 window 的属性, 而是 buffer 在该 window 的属性. 需要同时满足 buffer & window 两个条件的属性.
---     所以可以看作是 buffer 在指定 window 中的属性. 也可以看作 window 中不同 buffer 的属性.
---
--- 测试: `setlocal number` 显示行号. 是一个 `local to window` option.
---     - 当我们在不同的 window 中加载同一个 buffer, 可以通过 `setlocal number` / `setlocal nonumber` 分别显示不同的样式.
---     - 当我们在同一个 window 中加载不同 buffer 的情况下, buffer-A `setlocal nonumber`; buffer-B `setlocal number`, 切换显示文件
---       的时候 `number` 显示也会根据 buffer 切换.
-
--- NOTE: vim.o & vim.opt 区别:
---    vim.opt.shortmess:append('F') 可以表示 :set shortmess+=F
---    而 vim.o 没办法做到.
---    `:lua print(vim.o.readonly)` = bool
---    `:lua print(vim.opt.readonly)` = table
---    `:lua print(vim.inspect(vim.opt.readonly))` print table
-
--- vim lua 自定义变量
---    vim.g.foo = let g:foo   -- global variables
---    vim.b.foo = let b:foo   -- buffer variables
-
--- neovim 中 vimscript 和 lua 互相调用变量.
---  eg1:
---    `:lua vim.g.foo = "omg"`
---    `:echo g:foo`
---  eg2:
---    `:let g:bar="bar" | lua print(vim.g.bar)`
-
--- NOTE: neovim 7.0 新 api, 也可以直接使用 vim.cmd() 执行 vim command
--- `autocmd` in lua -> `vim.api.nvim_create_autocmd("BufEnter", {pattern, buffer=0, command/callback})`.
--- `command` in lua -> `vim.api.nvim_create_user_command()`, `vim.api.nvim_buf_create_user_command()`
---    vim.cmd('echo "omg"')       -- 单行 cmd
---    vim.cmd([[ autocmd ... ]])  -- 多行 cmd
---    vim.cmd('execute "normal! j"')   -- execute "normal! j"
-
--- vim lua function - local, 类似 function! s:foo() ...
---    local foo = function(a, b)
---        print("A is:", a)
---        print("B is:", b)
---    end
-
--- vim lua function - global, 类似 function! Foo() ..., lua 中 global function 可以小写开头.
---    foo = function(a, b)
---        print("A is:", a)
---        print("B is:", b)
---    end
-
--- call lua global function in neovim.
---    `:lua print("foo")`
---    `:lua foo("a", "b")`
---
--- call vim 自带 function in lua. eg: `:help expand()`
---    `:lua print(vim.fn.expand("%:p"))`
-
--- lua buildin functions
---    vim.api.nvim_command()  -- 执行 vim command.
---    vim.api.nvim_call_function()  -- call vim script function.
---    vim.api.nvim_exec(), vim.cmd()
-
+--- 三种 `set` 的使用场景:
+---    - `:setglobal` 用于设置普遍的情况. `:setlocal` 用于设置特殊情况.
+---    - `:setlocal` 如果有 `local to buffer/window` 设置, 则设置到 local 值上, 如果 option 没有 `local to buffer/window` 设置, 则设置在 global 上.
+---    - `:set` 相当于 `:setglobal` & `:setlocal` 同时设置.
+---
+----------------------------------------------------------------------------------------------------
+--- 三种 `set` 的设置区别, `:help :setglobal`
+---            Command          global value      local value ~
+---          :set option=value      set               set
+---     :setlocal option=value       -                set
+---    :setglobal option=value      set                -
+---          :set option?            -               display
+---     :setlocal option?            -               display
+---    :setglobal option?          display             -
+---
+----------------------------------------------------------------------------------------------------
+--- Options 的 5 中不同的 scope:
+---
+---  `local to buffer` 属性的情况: `modifiable`, `shiftwidth` ...
+---
+---    影响的是 buffer 属性. `vim.bo` 效果和 `:setlocal` 一样.
+---
+---    | set       | vim                     | 已加载的 hidden buffer | 当前 buffer | 后续打开的 buffer |
+---    | --------- | ----------------------- | ---------------------- | ----------- | ----------------- |
+---    | setglobal | vim.go / vim.opt_global |                        |             | ✔                 |
+---    | setlocal  | vim.bo / vim.opt_local  |                        | ✔           |                   |
+---    | set       | vim.o / vim.opt         |                        | ✔           | ✔                 |
+---    特殊情况: `readonly` 是 `local to buffer`, 但是 `setglobal` 不起作用, 导致 `set` == `setlocal` 只能作用在当前 buffer.
+---
+----------------------------------------------------------------------------------------------------
+---  `local to window` 属性的情况: `number`, `wrap`, `spell`, `foldmethod` ...
+---
+---    VVI: 这里影响的还是 buffer 属性.
+---         `vim.wo` 效果和 `:set` 一样, 如果要达到 `:setlocal` 的效果需要使用:
+---            - `vim.opt_local.xxx`
+---            - `nvim_set_option_value(OPTION, VALUE, { scope='local', win/buf=win_id/bufnr })`
+---
+---    | set       | vim                      | 已加载的 hidden buffer | 当前 buffer | 后续打开的 buffer |
+---    | --------- | ------------------------ | ---------------------- | ----------- | ----------------- |
+---    | setglobal | vim.go / vim.opt_global  |                        |             | ✔                 |
+---    | setlocal  | vim.opt_local            |                        | ✔           |                   |
+---    | set       | vim.wo / vim.o / vim.opt |                        | ✔           | ✔                 |
+---
+----------------------------------------------------------------------------------------------------
+---  `global` 属性的情况: `undodir`, `cmdwinheight` ...
+---
+---    影响的是所有的 buffer/window.
+---
+----------------------------------------------------------------------------------------------------
+---  `global or local to buffer` 的属性: `undolevels` ...
+---
+---    影响的是 buffer 属性.
+---
+---    | set       | vim                     | 已加载的 hidden buffer | 当前 buffer | 后续打开的 buffer |
+---    | --------- | ----------------------- | ---------------------- | ----------- | ----------------- |
+---    | setglobal | vim.go / vim.opt_global | ✔                      | ✔           | ✔                 |
+---    | setlocal  | vim.bo / vim.opt_local  |                        | ✔           |                   |
+---    | set       | vim.o / vim.opt         | ✔                      | ✔           | ✔                 |
+---
+----------------------------------------------------------------------------------------------------
+---  `global or local to window` 的属性: `scrolloff`, `statusline` ...
+---
+---    NOTE: 影响的是 window 属性, 和 buffer 无关.
+---
+---    | set       | vim                     | 已打开的 window | 当前 window | 后续打开的 window |
+---    | --------- | ----------------------- | --------------- | ----------- | ----------------- |
+---    | setglobal | vim.go / vim.opt_global | ✔               | ✔           | ✔                 |
+---    | setlocal  | vim.wo / vim.opt_local  |                 | ✔           |                   |
+---    | set       | vim.o / vim.opt         | ✔               | ✔           | ✔                 |
+---
+----------------------------------------------------------------------------------------------------
+--- lua 设置 options 的方法:
+---
+---    | set       | neovim                 | nvim api                                                                       |
+---    | --------- | ---------------------- | ------------------------------------------------------------------------------ |
+---    | set       | vim.o.xxx, vim.opt.xxx | nvim_set_option_value(OPTION, VALUE, {})                                       |
+---    | setlocal  | vim.opt_local.xxx      | nvim_set_option_value(OPTION, VALUE, { scope='local', win/buf=win_id/bufnr })  |
+---    | setglobal | vim.opt_global.xxx     | nvim_set_option_value(OPTION, VALUE, { scope='global', win/buf=win_id/bufnr }) |
+---
+---    - `vim.go` 相当于 `:setglobal`;
+---    - `vim.bo` 相当于 `:setlocal`;
+---    - `vim.wo` 在 `local to window` 时相当于 `:set`; 而在 `global or local to window` 时相当于 `:setlocal`.
+---
+---    其他方法: `vim.fn.setwinvar(winnr, '&foldmethod', 'marker')`, 设置 option 也可以使用这个方法. `:echo &foldmethod` 也可以用于读取
+---    option 的值.
+---
+----------------------------------------------------------------------------------------------------
+--- NOTE: vim.o & vim.opt 区别:
+---    vim.opt.shortmess:append('F') 可以表示 :set shortmess+=F
+---    而 vim.o 没办法做到.
+---    `:lua print(vim.o.readonly)` = bool
+---    `:lua print(vim.opt.readonly)` = table
+---    `:lua print(vim.inspect(vim.opt.readonly))` print table
+---
+--- vim lua 自定义变量
+---    vim.g.foo = g:foo   -- global-scoped variables
+---    vim.b.foo = b:foo   -- buffer-scoped variables
+---    vim.w.foo = w:foo   -- window-scoped variables
+---    vim.t.foo = t:foo   -- tabpage-scoped variables
+---
+---    常用 system variables
+---    vim.v.shell_error = v:shell_error
+---    vim.v.count1 = v:count1
+---
+--- neovim 中 vimscript 和 lua 互相调用变量.
+---  eg1:
+---    `:lua vim.g.foo = "omg"`
+---    `:echo g:foo`
+---  eg2:
+---    `:let g:bar="bar" | lua print(vim.g.bar)`
+---
 -- -- }}}
 
 --- VVI: neovim 特殊设置 --------------------------------------------------------------------------- {{{
@@ -333,7 +374,7 @@ vim.api.nvim_create_autocmd("WinEnter", {
 
     --- 除 popup window 外, 显示 cursorline, eg: nvim-notify 是 popup window
     if vim.fn.win_gettype(win_id) ~= 'popup' then
-      vim.wo[win_id].cursorline = true  -- `setlocal cursorline`
+      vim.wo[win_id].cursorline = true  -- `set cursorline` 这里不能用 setlocal 否则会作用在 buffer 上.
     end
   end
 })
@@ -369,8 +410,8 @@ vim.api.nvim_create_autocmd("FileType", {
 
     --- 如果 buffer 没有设置 textwidth, 即:textwidth=0, 则不 highlight virtual column.
     --- `:help pattern`, `\%23v` highlight virtual column 23.
-    if vim.bo.textwidth > 0 then
-      vim.fn.matchadd('ColorColumn', '\\%' .. vim.bo.textwidth+1 .. 'v', 100)
+    if vim.bo[params.buf].textwidth > 0 then
+      vim.fn.matchadd('ColorColumn', '\\%' .. vim.bo[params.buf].textwidth+1 .. 'v', 100)
     end
   end
 })
@@ -427,25 +468,10 @@ vim.api.nvim_create_autocmd("FileType", {
   end
 })
 
---- NOTE: keymap 'gO' 被 g:no_plugin_maps disable.
---- <cmd>call man#show_toc()<CR> 是 neovim 源代码中的设置.
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = {"help"},
-  callback = function(params)
-    local cmd = '<cmd>lua require("man").show_toc()<CR>'
-    vim.keymap.set('n', 'gO', cmd, {
-      noremap=true,
-      silent=true,
-      buffer=params.buf,
-      desc='table of contents',
-    })
-  end
-})
-
 --- `:help command-line-window`, 包括 q: q/ q? 打开的窗口.
 --vim.cmd([[autocmd CmdwinEnter * nnoremap <buffer> q <cmd>q<CR>]])
 vim.api.nvim_create_autocmd("CmdwinEnter", {
-  pattern = {"*"},  -- 包括: * / ?
+  pattern = {"*"},  -- 包括: ":" "/" "?"
   callback = function(params)
     --- setlocal nobuflisted
     vim.bo[params.buf].buflisted = false
@@ -456,7 +482,7 @@ vim.api.nvim_create_autocmd("CmdwinEnter", {
   end
 })
 
---- spell check
+--- spell check Command
 vim.opt.spelllang = "en_us,cjk"
 vim.api.nvim_create_user_command('SpellCheckToggle', function()
   if vim.wo.spell then
@@ -465,6 +491,23 @@ vim.api.nvim_create_user_command('SpellCheckToggle', function()
     vim.opt_local.spell = true
   end
 end, {bang=true, bar=true})
+
+--- 其他设置 --------------------------------------------------------------------------------------- {{{
+--- NOTE: keymap 'gO' 被 g:no_plugin_maps disable. 没什么作用.
+--- <cmd>call man#show_toc()<CR> 是 neovim 源代码中的设置.
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = {"help"},
+--   callback = function(params)
+--     local cmd = '<cmd>lua require("man").show_toc()<CR>'
+--     vim.keymap.set('n', 'gO', cmd, {
+--       noremap=true,
+--       silent=true,
+--       buffer=params.buf,
+--       desc='table of contents',
+--     })
+--   end
+-- })
+-- -- }}}
 
 
 
