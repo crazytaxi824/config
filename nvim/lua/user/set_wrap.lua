@@ -73,7 +73,8 @@ function wrap_list.exist(bufnr)
   return wrap_list[bufname]
 end
 
---- 设置 :set wrap 时触发.
+--- 手动设置 :setlocal wrap 时, 将文件 cache 到 list 中, 同时 set keymaps
+--- 手动设置 :setlocal nowrap 时, 将文件 从 list 中移除, 同时 del keymaps
 vim.api.nvim_create_autocmd('OptionSet', {
   pattern = {"wrap"},
   callback = function(params)
@@ -87,6 +88,7 @@ vim.api.nvim_create_autocmd('OptionSet', {
   end
 })
 
+--- :bdelete/:bwipeout 之后再次打开已经设置为 wrap 的文件时, 自动设置为 wrap.
 vim.api.nvim_create_autocmd('BufEnter', {
   pattern = {"*"},
   callback = function(params)
@@ -95,6 +97,16 @@ vim.api.nvim_create_autocmd('BufEnter', {
     end
     if vim.wo.wrap then
       set_cursor_move_in_wrap(params.buf)  -- 设置 keymaps
+    end
+  end
+})
+
+--- :write 保存 [No Name] file 时, 如果文件是 wrap, 则 cache 到 list 中.
+vim.api.nvim_create_autocmd('BufWritePre', {
+  pattern = {"*"},
+  callback = function(params)
+    if vim.wo.wrap then
+      wrap_list.add(params.buf)  -- 加入到 list
     end
   end
 })
