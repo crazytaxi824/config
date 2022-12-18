@@ -11,7 +11,7 @@ end
 
 --- 使用 gj / gk / g0 / g$ 在 wrap buffer 中移动 cursor.
 local function set_cursor_move_in_wrap(bufnr)
-  local opts = {buffer=bufnr, silent=true}
+  local opts = {buffer=bufnr, silent=true, noremap=true}
   local cursor_move_keymaps = {
     {'n', '<Down>', 'gj', opts, 'which_key_ignore'},
     {'n', '<Up>',   'gk', opts, 'which_key_ignore'},
@@ -39,7 +39,7 @@ local function del_cursor_move_in_wrap(bufnr)
   local keys = {'<Up>','<Down>','<Home>','<End>'}
   local modes = {'n', 'v', 'i'}
 
-  --- NOTE: 不能使用 :nunmap <UP>/<Down> ..., 不生效.
+  --- 也可以使用 :silent! nunmap <buffer> <UP> ... 但无法指定 bufnr.
   for _, mode in ipairs(modes) do
     local buf_keymaps = vim.api.nvim_buf_get_keymap(bufnr, mode)
     for _, key in ipairs(keys) do

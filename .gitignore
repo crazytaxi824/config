@@ -9,7 +9,7 @@
 !/alacritty
 !/backup
 
-# exclude folder and then include file & sub-folder
+# exclude folder, and then ignore 'file' & 'sub-folder' inside the folder.
 !/nvim
 /nvim/plugin
 /nvim/todo.md

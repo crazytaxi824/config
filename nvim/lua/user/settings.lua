@@ -29,6 +29,8 @@
 ---    | set       | vim.o / vim.opt         |                        | ✔           | ✔                 |
 ---    特殊情况: `readonly` 是 `local to buffer`, 但是 `setglobal` 不起作用, 导致 `set` == `setlocal` 只能作用在当前 buffer.
 ---
+---  NOTE: 搜索 vim.bo 的设置 `:Rg "vim\.bo(\[.*\]){0,1}\.\w+ ?=[^=]"`
+---
 ----------------------------------------------------------------------------------------------------
 ---  `local to window` 属性的情况: `number`, `wrap`, `spell`, `foldmethod` ...
 ---
@@ -43,6 +45,8 @@
 ---    | setlocal  | vim.opt_local            |                        | ✔           |                   |
 ---    | set       | vim.wo / vim.o / vim.opt |                        | ✔           | ✔                 |
 ---
+---  NOTE: 搜索 vim.wo 的设置 `:Rg "vim\.wo(\[.*\]){0,1}\.\w+ ?=[^=]"`
+--- 
 ----------------------------------------------------------------------------------------------------
 ---  `global` 属性的情况: `undodir`, `cmdwinheight` ...
 ---
@@ -266,6 +270,8 @@ vim.api.nvim_create_autocmd('WinEnter', {
   callback = function(params)
     local win_id = vim.fn.win_getid()  -- get current window id
     if vim.fn.win_gettype(win_id) == 'popup' then
+      --- 'scrolloff' & 'sidescrolloff' 都是 `global or local to window`,
+      --- 这里使用 'vim.wo' 相当于 ':setlocal'
       vim.wo[win_id].scrolloff = 0
       vim.wo[win_id].sidescrolloff = 0
     end
@@ -374,7 +380,9 @@ vim.api.nvim_create_autocmd("WinEnter", {
 
     --- 除 popup window 外, 显示 cursorline, eg: nvim-notify 是 popup window
     if vim.fn.win_gettype(win_id) ~= 'popup' then
-      vim.wo[win_id].cursorline = true  -- `set cursorline` 这里不能用 setlocal 否则会作用在 buffer 上.
+      --- 'cursorline' 是 `local to window`, 这里使用 vim.wo.cursorline 相当于 `:set cursorline`,
+      --- 不能用 ':setlocal cursorline' 否则会作用在当前 buffer 上, 这里需要作用在整个 window 上.
+      vim.wo[win_id].cursorline = true
     end
   end
 })

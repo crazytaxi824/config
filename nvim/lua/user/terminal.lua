@@ -16,8 +16,8 @@
 -- :startinsert 进入 insert mode
 -- :stopinsert  进入 insert mode, terminal 模式下无法使用.
 --
--- :set winfixheight / vim.wo.winfixheight = true 固定 window 高度
--- :set winfixwidth / vim.wo.winfixwidth = true   固定 window 宽度
+-- :set winfixheight 固定 window 高度
+-- :set winfixwidth  固定 window 宽度
 
 local reusable_term_size = 12
 local winvar_reusable = "my_reusable"
