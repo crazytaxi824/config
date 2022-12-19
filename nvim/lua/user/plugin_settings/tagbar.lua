@@ -38,6 +38,23 @@ vim.g.tagbar_visibility_symbols = {
 --         \ '?:unknown',
 --     \ ],
 -- \ }
+
+vim.g.tagbar_type_go = {
+  kinds = {
+    'p:package:1:0',
+    'i:imports:1:0',
+    'c:constants:1:0',
+    'v:variables:1:0',
+    't:types:0:0',
+    'n:intefaces:0:0',
+    'w:fields:0:0',
+    'e:embedded:0:0',
+    'm:methods:0:0',
+    'r:constructors:0:0',
+    'f:functions:0:0',
+    '?:unknown',
+  }
+}
 -- -- }}}
 
 --- Tagbar 颜色 ------------------------------------------------------------------------------------
