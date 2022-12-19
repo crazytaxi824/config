@@ -123,7 +123,7 @@ function _Exec(cmd, cache, on_exit_fn)
   exec_term:shutdown()
 
   --- 缓存执行 _Exec() 的 window id
-  local exec_wid = vim.fn.win_getid(vim.fn.winnr())
+  local exec_win_id = vim.fn.win_getid(vim.fn.winnr())
 
   --- 该 terminal buffer wipeout 的时候回到之前的窗口.
   exec_term.on_open = function()
@@ -133,7 +133,7 @@ function _Exec(cmd, cache, on_exit_fn)
       buffer = 0,
       callback = function(params)
         --- 如果 goto 的 win_id 不存在, 则会自动跳到别的 window.
-        vim.fn.win_gotoid(exec_wid)  -- 这里会返回 true | false.
+        vim.fn.win_gotoid(exec_win_id)  -- 这里会返回 true | false.
       end,
       desc = 'go back to window which execute _Exec()',
     })
