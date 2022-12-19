@@ -247,10 +247,15 @@ local nt_buffer_keymaps = {
 }
 
 --- global keymap --------------------------------------------------------------
+local function nvim_tree_toggle(cmd)
+  vim.cmd('TagbarClose')
+  vim.cmd(cmd)
+end
+
 local opts = {noremap=true, silent=true}
 local tree_keymaps = {
-  {'n', '<leader>,', '<cmd>NvimTreeToggle<CR>', opts, 'tree: toggle'},
-  {'n', '<leader><CR>', '<cmd>NvimTreeFindFile!<CR>', opts, 'tree: find file'},
+  {'n', '<leader>,', function() nvim_tree_toggle('NvimTreeToggle') end, opts, 'filetree: toggle'},
+  {'n', '<leader><CR>', function() nvim_tree_toggle('NvimTreeFindFile!') end, opts, 'filetree: jump to file'},
 }
 
 Keymap_set_and_register(tree_keymaps)

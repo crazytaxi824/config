@@ -487,7 +487,7 @@ bufferline.setup({
     --- ':help bufferline-configuration', 在 nvim-tree 上显示 "File Explorer"
     offsets = {
       {filetype="NvimTree", text="File Explorer", text_align="center", highlight="Directory", separator=true},
-      -- {filetype="tagbar", text="TagBar", text_align="center", highlight="Directory", separator=true},
+      {filetype="tagbar", text="TagBar", text_align="center", highlight="Directory", separator=true},
     },
     --- 要使用 hover 必须 enable 'mousemoveevent'
     -- hover = {
