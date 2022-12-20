@@ -448,6 +448,10 @@ vim.api.nvim_set_hl(0, 'NvimTreeSymlink', {ctermfg=Color.conditional_magenta}) -
 vim.api.nvim_set_hl(0, 'NvimTreeExecFile', {ctermfg=Color.error_red}) -- 可执行文件, red
 vim.api.nvim_set_hl(0, 'NvimTreeSpecialFile', {ctermfg=179})  -- 自定义 Sepcial 文件, orange
 
+--- window_picker color
+vim.api.nvim_set_hl(0, 'NvimTreeWindowPicker',
+  {ctermfg=Color.black, ctermbg=Color.conditional_magenta, bold=true})
+
 --- nvim-tree Git color, 需要开启 highlight_git=true, render={git={enable=true}}
 --- 这里设置了 git icon color
 vim.api.nvim_set_hl(0, 'NvimTreeGitDirty',   {ctermfg=Color.error_red})
