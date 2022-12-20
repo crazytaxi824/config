@@ -74,6 +74,30 @@
 
 <br />
 
+# VIM Mode
+
+| mode                    | Name                                  | tigger               |
+| ----------------------- | ------------------------------------- | -------------------- |
+| n                       | Normal                                |                      |
+| no                      | Operator-pending                      | c,y,d ..., eg: ciw   |
+| niI                     | Normal using i_CTRL-O in Insert-mode  | Insert 下 <C-o>      |
+| niR                     | Normal using i_CTRL-O in Replace-mode | Replace 下 <C-o>     |
+| i                       | Insert                                | a,i,s,o ...          |
+| R                       | Replace                               | R                    |
+| c                       | Command                               | :                    |
+| v                       | Visual by character                   | v                    |
+| vs                      | Visual by character                   | Select 下 <C-o>      |
+| V                       | Visual by line                        | V                    |
+| Vs                      | Visual by line                        | Select 下 <C-o>      |
+| ^V - vim.fn.nr2char(22) | Visual by block                       | <C-v>                |
+| s                       | Select by character                   | v<C-g>               |
+| S                       | Select by line                        | V<C-g>               |
+| ^S - vim.fn.nr2char(19) | Select by block                       | <C-v><C-g>           |
+| t                       | Terminal mode                         | Terminal insert mode |
+| r                       | Hit-enter prompt                      |                      |
+
+<br />
+
 # neovim lua 使用
 
 ## lua 全局变量 `_G`
@@ -93,7 +117,7 @@ lua 中有一个 `_G` 全局变量. 自定义的所有全局变量和函数都�
 
 - `pcall(vim.cmd, "normal! n")` -- 获取 command 返回信息
 
-- `dofile(file/path)`  -- lua execute file.
+- `dofile(file/path)` -- lua execute file.
 
 - `table.insert({list}, elem)` -- 向 list 中插入元素
 
@@ -430,6 +454,3 @@ function TestNull()
   -- print(vim.inspect(golangci.generator))
 end
 ```
-
-
-

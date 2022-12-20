@@ -14,21 +14,17 @@ local lualine_colors = {
   cyan = Color.cyan,   -- filename modified
 
   grey  = 236,       -- section_b
-  light_grey = 246,  -- inactive, hint
+  light_grey = 245,  -- inactive, hint
 
   red = Color.error_red,  -- error, readonly
   orange = Color.warn_orange, -- warn
   blue = Color.info_blue,  -- info background
+  green = Color.comment_green,  -- Command mode
 
   dark_orange = Color.dark_orange, -- trailing_whitespace && mixed_indent
 }
 
---- Airline theme color
---- black = 233; white = 251
---- normal: a = black/190, b = white/grey, c = 190/black  -- yellow
---- insert: a = black/45, b = white/27, c = white/17      -- blue
---- visual: a = black/214, b = black/202, c = white/52    -- orange
---- replace: a = white/124, b = white/27, c = white/17    -- red
+--- airline 颜色设置 https://github.com/vim-airline/vim-airline/blob/master/autoload/airline/themes/dark.vim
 local my_theme = {
   normal = {
     a = { fg = lualine_colors.black, bg = lualine_colors.yellow, gui = "bold" },
@@ -36,24 +32,27 @@ local my_theme = {
     c = { fg = lualine_colors.gold, bg = lualine_colors.black },
   },
 
-  --- 其他模式如果缺省设置, 则继承 normal 的设置 --------------------------------------------------- {{{
-  -- insert = {
-  --   a = { fg = colors.black, bg = 45, gui = 'bold' },
-  --   b = { fg = colors.white, bg = 27},
-  --   c = { fg = colors.white, bg = 17},
-  -- },
-  -- visual = {
-  --   a = { fg = colors.black, bg = 214, gui = 'bold' },
-  --   b = { fg = colors.black, bg = 202},
-  --   c = { fg = colors.white, bg = 52},
-  -- },
-  -- replace = {
-  --   a = { fg = colors.white, bg = 124, gui = 'bold' },
-  --   b = { fg = colors.white, bg = 27},
-  --   c = { fg = colors.white, bg = 17},
-  -- },
-  -- command = {},
-  -- -- }}}
+  --- 其他模式如果缺省设置, 则继承 normal 的设置
+  insert = {
+    a = { fg = lualine_colors.black, bg = 45, gui = 'bold' },
+    b = { fg = lualine_colors.white, bg = 20 },
+    c = { fg = lualine_colors.white, bg = 17 },
+  },
+  visual = {
+    a = { fg = lualine_colors.black, bg = lualine_colors.orange, gui = 'bold' },
+    b = { fg = lualine_colors.black, bg = lualine_colors.dark_orange },
+    c = { fg = lualine_colors.white, bg = 52 },
+  },
+  replace = {
+    a = { fg = lualine_colors.white, bg = 124, gui = 'bold' },
+    b = { fg = lualine_colors.white, bg = 20 },
+    c = { fg = lualine_colors.white, bg = 17 },
+  },
+  command = {
+    a = { fg = lualine_colors.black, bg = Color.comment_green, gui = 'bold' },
+    b = { fg = lualine_colors.white, bg = lualine_colors.grey },
+    c = { fg = lualine_colors.white, bg = lualine_colors.black },
+  },
 
   inactive = {
     a = { fg = lualine_colors.gold, bg = lualine_colors.grey },
@@ -113,9 +112,13 @@ local function my_check()
     local ts = check_trailing_whitespace()
 
     if mi ~= '' and ts ~= '' then
-      vim.fn.setbufvar(vim.fn.bufnr(), bufvar_lualine, mi .. ' ' .. ts)
+      vim.fn.setbufvar(vim.fn.bufnr(), bufvar_lualine, ' '..mi..' '..ts)
+    elseif mi ~= '' and ts == '' then
+      vim.fn.setbufvar(vim.fn.bufnr(), bufvar_lualine, ' '..mi)
+    elseif mi == '' and ts ~= '' then
+      vim.fn.setbufvar(vim.fn.bufnr(), bufvar_lualine, ' '..ts)
     else
-      vim.fn.setbufvar(vim.fn.bufnr(), bufvar_lualine, mi .. ts)
+      vim.fn.setbufvar(vim.fn.bufnr(), bufvar_lualine, '')
     end
   end
 
@@ -192,7 +195,7 @@ lualine.setup {
     lualine_b = {
       {'branch',
         icons_enabled = true, -- 单独设置 branch 使用 icon.
-        icon = {'', color={fg='green'}},
+        icon = {'', color={ gui='bold' }},
       },
     },
     lualine_c = {
@@ -228,16 +231,16 @@ lualine.setup {
     lualine_y = {my_progress},  -- 自定义 component, 修改自 builtin 'progress' component
     lualine_z = {
       {my_location},
-      {my_check, color = {bg=lualine_colors.dark_orange, fg=lualine_colors.black, gui='bold'}},  -- 自定义 component
+      {my_check, color = {bg=lualine_colors.black, fg=lualine_colors.light_grey, gui='bold'}},  -- 自定义 component
       { 'diagnostics',
         symbols = {error = 'E:', warn = 'W:', info = 'I:', hint = 'H:'},
         update_in_insert = false, -- Update diagnostics in insert mode.
         diagnostics_color = {
           --error = 'ErrorMsg',  -- 也可以使用 highlight group.
-          error = {bg=lualine_colors.red, fg=lualine_colors.white, gui='bold'},        -- Changes diagnostics' error color.
-          warn  = {bg=lualine_colors.orange, fg=lualine_colors.black, gui='bold'},     -- Changes diagnostics' warn color.
-          info  = {bg=lualine_colors.blue, fg=lualine_colors.black, gui='bold'},       -- Changes diagnostics' info color.
-          hint  = {bg=lualine_colors.light_grey, fg=lualine_colors.black, gui='bold'}, -- Changes diagnostics' hint color.
+          error = {bg=lualine_colors.black, fg=lualine_colors.red, gui='bold'},        -- Changes diagnostics' error color.
+          warn  = {bg=lualine_colors.black, fg=lualine_colors.orange, gui='bold'},     -- Changes diagnostics' warn color.
+          info  = {bg=lualine_colors.black, fg=lualine_colors.blue, gui='bold'},       -- Changes diagnostics' info color.
+          hint  = {bg=lualine_colors.black, fg=lualine_colors.light_grey, gui='bold'}, -- Changes diagnostics' hint color.
         },
       },
     },
@@ -263,15 +266,15 @@ lualine.setup {
       },
     },
     lualine_x = {
-      {my_check, color = {fg=lualine_colors.dark_orange, gui='bold'}},  -- 自定义 components
+      {my_check, color = {bg=lualine_colors.black, fg=lualine_colors.light_grey, gui='bold'}},  -- 自定义 component
       { 'diagnostics',
         symbols = {error = 'E:', warn = 'W:', info = 'I:', hint = 'H:'},
         diagnostics_color = {
           --error = 'ErrorMsg',  -- 也可以使用 highlight group.
-          error = {fg=lualine_colors.red, gui='bold'},        -- Changes diagnostics' error color.
-          warn  = {fg=lualine_colors.orange, gui='bold'},     -- Changes diagnostics' warn color.
-          info  = {fg=lualine_colors.blue, gui='bold'},       -- Changes diagnostics' info color.
-          hint  = {fg=lualine_colors.light_grey, gui='bold'}, -- Changes diagnostics' hint color.
+          error = {bg=lualine_colors.black, fg=lualine_colors.red, gui='bold'},        -- Changes diagnostics' error color.
+          warn  = {bg=lualine_colors.black, fg=lualine_colors.orange, gui='bold'},     -- Changes diagnostics' warn color.
+          info  = {bg=lualine_colors.black, fg=lualine_colors.blue, gui='bold'},       -- Changes diagnostics' info color.
+          hint  = {bg=lualine_colors.black, fg=lualine_colors.light_grey, gui='bold'}, -- Changes diagnostics' hint color.
         },
       },
     },
