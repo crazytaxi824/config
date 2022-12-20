@@ -247,10 +247,15 @@ local nt_buffer_keymaps = {
 }
 
 --- global keymap --------------------------------------------------------------
+local function nvim_tree_toggle(cmd)
+  vim.cmd('TagbarClose')
+  vim.cmd(cmd)
+end
+
 local opts = {noremap=true, silent=true}
 local tree_keymaps = {
-  {'n', '<leader>,', '<cmd>NvimTreeToggle<CR>', opts, 'tree: toggle'},
-  {'n', '<leader><CR>', '<cmd>NvimTreeFindFile!<CR>', opts, 'tree: find file'},
+  {'n', '<leader>;', function() nvim_tree_toggle('NvimTreeToggle') end, opts, 'filetree: toggle'},
+  {'n', '<leader><CR>', function() nvim_tree_toggle('NvimTreeFindFile!') end, opts, 'filetree: jump to file'},
 }
 
 Keymap_set_and_register(tree_keymaps)
@@ -394,9 +399,12 @@ nvim_tree.setup {
     open_file = {
       quit_on_open = false,  -- VVI: 打开文件后自动关闭 Nvimtree
       resize_window = true,  -- VVI: 重新渲染 nvimtree 窗口大小.
+
+      --- 有多个 win 的情况下, 在 nvim-tree 中打开文件时需要选择 window.
       window_picker = {
         enable = true,  -- false: 总在 vsplit 窗口中打开新文件.
-        exclude = {     -- 以下类型的窗口不能用于 nvim-tree 打开文件.
+        chars = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ",  -- 多选窗口的标识.
+        exclude = {   -- 以下类型的窗口不能用于 nvim-tree 打开文件.
           filetype = {
             "qf", "help", "diff", "notify", "packer", "NvimTree",
             "tagbar", "fugitive", "fugitiveblame",
@@ -439,6 +447,10 @@ vim.api.nvim_set_hl(0, 'NvimTreeIndentMarker', {ctermfg=242}) -- └ │ 颜色
 vim.api.nvim_set_hl(0, 'NvimTreeSymlink', {ctermfg=Color.conditional_magenta}) -- 链接文件, magenta
 vim.api.nvim_set_hl(0, 'NvimTreeExecFile', {ctermfg=Color.error_red}) -- 可执行文件, red
 vim.api.nvim_set_hl(0, 'NvimTreeSpecialFile', {ctermfg=179})  -- 自定义 Sepcial 文件, orange
+
+--- window_picker color
+vim.api.nvim_set_hl(0, 'NvimTreeWindowPicker',
+  {ctermfg=Color.black, ctermbg=Color.conditional_magenta, bold=true})
 
 --- nvim-tree Git color, 需要开启 highlight_git=true, render={git={enable=true}}
 --- 这里设置了 git icon color

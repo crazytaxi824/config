@@ -487,7 +487,7 @@ bufferline.setup({
     --- ':help bufferline-configuration', 在 nvim-tree 上显示 "File Explorer"
     offsets = {
       {filetype="NvimTree", text="File Explorer", text_align="center", highlight="Directory", separator=true},
-      -- {filetype="tagbar", text="TagBar", text_align="center", highlight="Directory", separator=true},
+      {filetype="tagbar", text="TagBar", text_align="center", highlight="Directory", separator=true},
     },
     --- 要使用 hover 必须 enable 'mousemoveevent'
     -- hover = {
@@ -556,7 +556,7 @@ local bufferline_keymaps = {
 
 Keymap_set_and_register(bufferline_keymaps)
 
---- HACK: 被 bdelete / bwipeout 的 buffer 重新打开时, 分配到 bufferline list 的最后 ----------------
+--- HACK: 被 bdelete / bwipeout 的 buffer 重新打开时, 分配到 bufferline list 的最后 ---------------- {{{
 --- 原理: 在 buffer 被 bdelete / bwipeout 的时候修改 state.custom_sort = {bufnr ...},
 --- 来改变 bufferline 的显示顺序.
 --- 需要用到 state.components, 即 bufferline.exec(callback()) 中的 visible_buffers_info
@@ -607,8 +607,9 @@ vim.api.nvim_create_autocmd("BufDelete", {
     remove_bufnr_from_custom_sort(params.buf)
   end
 })
+-- -- }}}
 
---- DEBUG: 用, 查看 ordinal, bufnr, list index, 之间的关系
+--- DEBUG: 用, 查看 ordinal, bufnr, list index, 之间的关系 ----------------------------------------- {{{
 -- function Bufferline_info(bufferline_index)
 --   -- print("state.components:", vim.inspect(state.components))
 --   print("state.custom_sort (bufnrs order):", vim.inspect(state.custom_sort))
@@ -627,6 +628,6 @@ vim.api.nvim_create_autocmd("BufDelete", {
 --     end)
 --   end
 -- end
-
+-- -- }}}
 
 

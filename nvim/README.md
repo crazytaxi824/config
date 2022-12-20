@@ -76,17 +76,6 @@
 
 # neovim lua 使用
 
-## nvim_create_autocmd User Event
-
-```lua
-vim.cmd [[autocmd User Foo echo "foo"]]
-
-vim.api.nvim_create_autocmd("User", {
-  pattern = {"Foo"},
-  callback = function(params) print("foo") end,
-})
-```
-
 ## lua 全局变量 `_G`
 
 lua 中有一个 `_G` 全局变量. 自定义的所有全局变量和函数都会被放在 `_G` 内.
@@ -103,6 +92,8 @@ lua 中有一个 `_G` 全局变量. 自定义的所有全局变量和函数都�
 ### lua 常用函数
 
 - `pcall(vim.cmd, "normal! n")` -- 获取 command 返回信息
+
+- `dofile(file/path)`  -- lua execute file.
 
 - `table.insert({list}, elem)` -- 向 list 中插入元素
 

@@ -3,8 +3,8 @@ vim.g.tagbar_sort = 0             -- tagbar 按照函数顺序排序, 使用 's'
 vim.g.tagbar_autoclose = 1        -- enter 选择后自动关闭 tagbar
 vim.g.tagbar_show_tag_count = 1   -- 显示 tag 数量, eg; functions (5)
 vim.g.tagbar_autoshowtag = 2      -- 打开 tagbar 时, 不要打开 folded tag, 例如: imports
-vim.g.tagbar_position = "vertical botright"        -- tagbar 打开位置.
---vim.g.tagbar_width = max([25, winwidth(0) / 5])  -- tagbar 窗口大小, 默认40
+vim.g.tagbar_position = "vertical topleft"  -- tagbar 打开位置.
+vim.g.tagbar_width = 36  -- tagbar 窗口大小和 nvim-tree 设置相同, 默认值 40.
 
 --- VVI: 注意这里不要改, 会影响 TagbarHightligh 显示.
 vim.g.tagbar_visibility_symbols = {
@@ -38,6 +38,23 @@ vim.g.tagbar_visibility_symbols = {
 --         \ '?:unknown',
 --     \ ],
 -- \ }
+
+vim.g.tagbar_type_go = {
+  kinds = {
+    'p:package:1:0',
+    'i:imports:1:0',
+    'c:constants:1:0',
+    'v:variables:1:0',
+    't:types:0:0',
+    'n:intefaces:0:0',
+    'w:fields:0:0',
+    'e:embedded:0:0',
+    'm:methods:0:0',
+    'r:constructors:0:0',
+    'f:functions:0:0',
+    '?:unknown',
+  }
+}
 -- -- }}}
 
 --- Tagbar 颜色 ------------------------------------------------------------------------------------
@@ -48,7 +65,7 @@ vim.cmd [[ hi! link TagbarType Type ]]  -- Keyword "struct", "string",
 vim.cmd [[ hi TagbarSignature ctermfg=220 ]]  -- function signature "(...)"
 
 --- keymaps ----------------------------------------------------------------------------------------
-vim.keymap.set('n', '<leader>.', ':TagbarToggle<CR>', { noremap=true, silent=true, desc='toggle TagBar' })
+vim.keymap.set('n', '<leader>:', '<cmd>NvimTreeClose | TagbarToggle<CR>', { noremap=true, silent=true, desc='TagBar: toggle' })
 
 
 
