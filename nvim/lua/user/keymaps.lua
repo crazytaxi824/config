@@ -41,7 +41,7 @@
 ---   - v_CTRL-G  - 切换 visual/select mode, select mode 是 visual 的一个子模式, 多用于代码补全的默认值.
 
 --- functions for key mapping ---------------------------------------------------------------------- {{{
---- wipeout all terminals --------------------------------------------------------------------------
+--- wipeout all terminals ------------------------------------------------------ {{{
 --- NOTE: close all terminals' window; stop all terminals' job; wipeout all terminals' buffer.
 local function wipeout_all_terminals()
   local buf_list = {}
@@ -57,8 +57,9 @@ local function wipeout_all_terminals()
     vim.cmd('bw! ' .. table.concat(buf_list, ' '))  -- NOTE: 需要使用 '!' 强制结束 job, 并且关闭 term 窗口.
   end
 end
+-- -- }}}
 
---- delete all other buffers -----------------------------------------------------------------------
+--- delete all other buffers --------------------------------------------------- {{{
 --- NOTE: `:bdelete` 本质是 unlist buffer. 即: listed = 0
 local function delete_all_other_buffers()
   local buf_list = {}
@@ -76,8 +77,10 @@ local function delete_all_other_buffers()
     vim.cmd('bdelete ' .. table.concat(buf_list, ' '))
   end
 end
+-- -- }}}
 
---- <Home> 快捷键先跳到 '^' first non-blank character of the line, 再跳到 '0' first character of the line.
+--- <Home> 快捷键 -------------------------------------------------------------- {{{
+--- 先跳到 '^' first non-blank character of the line, 再跳到 '0' first character of the line.
 function _Home_action_nowrap()
   local before_pos = vim.fn.getpos('.')
   vim.cmd('normal! ^')
@@ -87,8 +90,9 @@ function _Home_action_nowrap()
     vim.cmd('normal! 0')
   end
 end
+-- -- }}}
 
---- for Search Highlight --------------------------------------------------------------------------- {{{
+--- for Search Highlight ------------------------------------------------------- {{{
 --- 在当前 search result 前放置 search_sign.
 --- {group} as a namespace for {id}, thus two groups can use the same IDs.
 local my_search = {
@@ -169,7 +173,7 @@ end
 
 -- -- }}}
 
---- [[, ]], jump to previous/next section ---------------------------------------------------------- {{{
+--- [[, ]], jump to previous/next section -------------------------------------- {{{
 --- NOTE: `:help treesitter-languagetree`, `lang` will default to 'filetype'.
 --- 利用 nvim-treesitter 获取 buffer `lang`.
 local function parse_buffer_lang()
@@ -305,7 +309,7 @@ local function jump_to_next_section()
 end
 -- -- }}}
 
---- choose window to jump -------------------------------------------------------------------------- {{{
+--- choose window to jump ------------------------------------------------------ {{{
 --- 受到 nvim-tree 启发.
 vim.api.nvim_set_hl(0, 'MyWindowPicker',
   {ctermfg=Color.black, ctermbg=Color.conditional_magenta, bold=true})
