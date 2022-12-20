@@ -254,7 +254,7 @@ end
 
 local opts = {noremap=true, silent=true}
 local tree_keymaps = {
-  {'n', '<leader>,', function() nvim_tree_toggle('NvimTreeToggle') end, opts, 'filetree: toggle'},
+  {'n', '<leader>;', function() nvim_tree_toggle('NvimTreeToggle') end, opts, 'filetree: toggle'},
   {'n', '<leader><CR>', function() nvim_tree_toggle('NvimTreeFindFile!') end, opts, 'filetree: jump to file'},
 }
 
