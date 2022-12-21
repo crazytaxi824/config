@@ -79,17 +79,6 @@ local function delete_all_other_buffers()
 end
 -- -- }}}
 
---- <Home> 快捷键 -------------------------------------------------------------- {{{
---- 先跳到 '^' first non-blank character of the line, 再跳到 '0' first character of the line.
-function _Home_action_nowrap()
-  local before_pos = vim.fn.getpos('.')
-  vim.cmd('normal! ^')
-
-  local after_pos = vim.fn.getpos('.')
-  if before_pos[2] == after_pos[2] and before_pos[3] == after_pos[3] then
-    vim.cmd('normal! 0')
-  end
-end
 -- -- }}}
 
 -- -- }}}
@@ -150,9 +139,9 @@ local keymaps = {
   {'i', '<C-S-Right>', '<C-o>6zl', opt, 'win: scroll right'},  -- 默认在 insert mode 下和 <S-Right> 相同.
 
   --- NOTE: <Home> 模拟 vscode 行为; <End> 使用默认行为.
-  {'n', '<Home>', _Home_action_nowrap, opt, 'which_key_ignore'},
-  {'v', '<Home>', _Home_action_nowrap, opt, 'which_key_ignore'},
-  {'i', '<Home>', '<C-o><cmd>lua _Home_action_nowrap()<CR>', opt, 'which_key_ignore'},
+  {'n', '<Home>', require('user.keymaps.home_key').nowrap, opt, 'which_key_ignore'},
+  {'v', '<Home>', require('user.keymaps.home_key').nowrap, opt, 'which_key_ignore'},
+  {'i', '<Home>', '<C-o><cmd>lua require("user.keymaps.home_key").nowrap()<CR>', opt, 'which_key_ignore'},
 
   {'n', 'G', 'Gzz', opt, 'which_key_ignore'},  -- put last line in center
 

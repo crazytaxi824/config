@@ -1,31 +1,20 @@
---- <Home> 快捷键先跳到 'g^' first non-blank character of the line, 再跳到 'g0' first character of the line.
-function _Home_action_wrap()
-  local before_pos = vim.fn.getpos('.')
-  vim.cmd('normal! g^')
-
-  local after_pos = vim.fn.getpos('.')
-  if before_pos[2] == after_pos[2] and before_pos[3] == after_pos[3] then
-    vim.cmd('normal! g0')
-  end
-end
-
 --- 使用 gj / gk / g0 / g$ 在 wrap buffer 中移动 cursor.
 local function set_cursor_move_in_wrap(bufnr)
   local opts = {buffer=bufnr, silent=true, noremap=true}
   local cursor_move_keymaps = {
     {'n', '<Down>', 'gj', opts, 'which_key_ignore'},
     {'n', '<Up>',   'gk', opts, 'which_key_ignore'},
-    {'n', '<Home>', _Home_action_wrap, opts, 'which_key_ignore'},  -- g0 相当于 g<Home>
+    {'n', '<Home>', require('user.keymaps.home_key').wrap, opts, 'which_key_ignore'},  -- g0 相当于 g<Home>
     {'n', '<End>',  'g$', opts, 'which_key_ignore'},  -- g$ 相当于 g<End>
 
     {'v', '<Down>', 'gj', opts, 'which_key_ignore'},
     {'v', '<Up>',   'gk', opts, 'which_key_ignore'},
-    {'v', '<Home>', _Home_action_wrap, opts, 'which_key_ignore'},
+    {'v', '<Home>', require('user.keymaps.home_key').wrap, opts, 'which_key_ignore'},
     {'v', '<End>',  'g$', opts, 'which_key_ignore'},
 
     {'i', '<Down>', '<C-o>gj', opts, 'which_key_ignore'},
     {'i', '<Up>',   '<C-o>gk', opts, 'which_key_ignore'},
-    {'i', '<Home>', '<C-o><cmd>lua _Home_action_wrap()<CR>', opts, 'which_key_ignore'},
+    {'i', '<Home>', '<C-o><cmd>lua require("user.keymaps.home_key").wrap()<CR>', opts, 'which_key_ignore'},
     {'i', '<End>',  '<C-o>g$', opts, 'which_key_ignore'},
   }
 
