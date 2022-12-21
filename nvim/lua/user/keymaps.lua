@@ -92,63 +92,6 @@ function _Home_action_nowrap()
 end
 -- -- }}}
 
---- choose window to jump ------------------------------------------------------ {{{
---- 受到 nvim-tree 启发.
-vim.api.nvim_set_hl(0, 'MyWindowPicker',
-  {ctermfg=Color.black, ctermbg=Color.conditional_magenta, bold=true})
-
---- 获取单个 char 的输入
-local function get_user_input_char()
-  local c = vim.fn.getchar()
-  while type(c) ~= "number" do
-    c = vim.fn.getchar()
-  end
-  return vim.fn.nr2char(c)
-end
-
-local function choose_win()
-  local win_map = {}  -- cache window id map
-  local win_marker = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ"  -- 窗口标识.
-
-  local window_ids = vim.api.nvim_tabpage_list_wins(0)
-  if #window_ids < 2 then
-    vim.notify("There is only 1 window to choose.")
-    return
-  elseif #window_ids > #win_marker then
-    Notify("There are too many windows, (> #win_marker)", "WARN")
-    return
-  end
-
-  for i, win_id in ipairs(window_ids) do
-    local key = string.sub(win_marker,i,i)
-    --- `:help 'statusline'`
-    --- %=   Separation point between alignment sections.
-    ---      Each section will be separated by an equal number of spaces.
-    --- %#   use %#HLname# for highlight group HLname.
-    vim.wo[win_id].statusline = '%#MyWindowPicker#%=%#MyWindowPicker#' .. key .. '%='
-
-    --- cache win_map
-    win_map[key] = win_id
-  end
-
-  vim.cmd('redraw')  -- VVI: 刷新 statusline 显示.
-
-  --- prompt choose window
-  print("Choose window: ")
-  local char = string.upper(get_user_input_char())  -- 这里返回的是 string 类型
-
-  --- jump to window
-  local win_jump_id = win_map[char]
-  if win_jump_id then
-    vim.fn.win_gotoid(win_jump_id)
-  end
-
-  --- clear command line prompt message.
-  vim.cmd("normal! :")
-end
-
--- -- }}}
-
 -- -- }}}
 
 --- vim.keymap.set() - option `:help :map-arguments`
@@ -311,7 +254,7 @@ local keymaps = {
   --{'n', '<leader>d', 'bdelete', opt, 'buf: Close Current Buffer'},
 
   --- Window 控制
-  {'n', '<leader>w', choose_win, opt, 'win: Jump to Window'},  -- 跳转到指定 window
+  {'n', '<leader>w', require('user.keymaps.jump_to_win').choose, opt, 'win: Jump to Window'},  -- 跳转到指定 window
   {'n', '<leader>W', '<C-w><C-o>', opt, 'win: Close All Other Windows'},  -- 关闭所有其他窗口
 
   --- NOTE: terminal key mapping 在 "toggleterm.lua" 中设置了.
