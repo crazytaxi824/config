@@ -279,7 +279,7 @@ local debug_keymaps = {
 }
 
 --- 这里是 global keymaps 设置
-Keymap_set_and_register(debug_keymaps)
+require('user.utils.keymaps').set(debug_keymaps)
 
 --- Highlight filepath -----------------------------------------------------------------------------
 --- 给 dap-repl 添加 filepath highlight, 这里不能使用 "FileType",

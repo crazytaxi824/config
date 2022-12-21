@@ -58,7 +58,7 @@ git_signs.setup({
       end, opt, "git: Toggle Show Diff Line & Word"},
     }
 
-    Keymap_set_and_register(gitsigns_keymaps, {
+    require('user.utils.keymaps').set(gitsigns_keymaps, {
       key_desc = {
         g = {name = "Git"}, --- NOTE: 需要和 nvim-tree 中的设置相同.
       },

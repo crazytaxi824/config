@@ -33,7 +33,7 @@ local js_keymaps = {
   {'n', '<F18>', function() js_jest(vim.fn.expand('%'), true) end, opt, "code: Run Test --coverage"},  -- <S-F6>
 }
 
-Keymap_set_and_register(js_keymaps)
+require('user.utils.keymaps').set(js_keymaps)
 
 
 

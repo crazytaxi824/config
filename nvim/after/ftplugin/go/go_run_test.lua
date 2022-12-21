@@ -25,7 +25,7 @@ local go_keymaps = {
   {'n', '<F18>', '<cmd>lua require("user.ftplugin_deps.go").go_test_single_func(true)<CR>', opt, "code: Run Test (Package)"},   -- <S-F6>
 }
 
-Keymap_set_and_register(go_keymaps)
+require('user.utils.keymaps').set(go_keymaps)
 
 --- commands --------------------------------------------------------------------------------------- {{{
 -- - go test Run current Package

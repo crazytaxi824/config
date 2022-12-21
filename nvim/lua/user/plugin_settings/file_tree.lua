@@ -258,7 +258,7 @@ local tree_keymaps = {
   {'n', '<leader><CR>', function() nvim_tree_toggle('NvimTreeFindFile!') end, opts, 'filetree: jump to file'},
 }
 
-Keymap_set_and_register(tree_keymaps)
+require('user.utils.keymaps').set(tree_keymaps)
 
 -- -- }}}
 
@@ -593,7 +593,7 @@ local gitsigns_keymaps = {
   {'n', '<leader>gh', git_hide_highlights, opt, "git: Hide highlights"},
 }
 
-Keymap_set_and_register(gitsigns_keymaps, {
+require('user.utils.keymaps').set(gitsigns_keymaps, {
   key_desc = {
     g = {name = "Git"},
   },

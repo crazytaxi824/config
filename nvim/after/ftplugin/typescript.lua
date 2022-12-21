@@ -52,7 +52,7 @@ local ts_keymaps = {
   {'n', '<F18>', function() ts_jest(vim.fn.expand('%:.:r'), true) end, opt, "code: Run Test --coverage"},  -- <S-F6>
 }
 
-Keymap_set_and_register(ts_keymaps)
+require('user.utils.keymaps').set(ts_keymaps)
 
 
 

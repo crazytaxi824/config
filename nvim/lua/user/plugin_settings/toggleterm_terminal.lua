@@ -300,7 +300,7 @@ local toggleterm_keymaps = {
   {'n', '<F29>', exec_last_cmd, opt, "code: Re-Run Last cmd"},    -- <C-F5> re-run last cmd.
 }
 
-Keymap_set_and_register(toggleterm_keymaps, {
+require('user.utils.keymaps').set(toggleterm_keymaps, {
   key_desc = {
     t = {name="Terminal"},
   },

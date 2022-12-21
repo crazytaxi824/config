@@ -169,7 +169,7 @@ local telescope_keymaps = {
   --{'n', '<leader>fg', builtin.live_grep,  opt, 'telescope: rg'},  -- NOTE: 使用自定义 :Rg 命令更灵活.
 }
 
-Keymap_set_and_register(telescope_keymaps, {
+require('user.utils.keymaps').set(telescope_keymaps, {
   key_desc = {f = {name = "Telescope Find"}},
   opts = {mode='n', prefix='<leader>'}
 })

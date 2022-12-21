@@ -1,3 +1,5 @@
+local key_fn = require('user.utils.keymaps')
+
 --- NOTE: 全局 keymap 设置
 --- Readme ----------------------------------------------------------------------------------------- {{{
 --- vim.keymap.set() & vim.keymap.del()
@@ -139,9 +141,9 @@ local keymaps = {
   {'i', '<C-S-Right>', '<C-o>6zl', opt, 'win: scroll right'},  -- 默认在 insert mode 下和 <S-Right> 相同.
 
   --- NOTE: <Home> 模拟 vscode 行为; <End> 使用默认行为.
-  {'n', '<Home>', require('user.keymaps.home_key').nowrap, opt, 'which_key_ignore'},
-  {'v', '<Home>', require('user.keymaps.home_key').nowrap, opt, 'which_key_ignore'},
-  {'i', '<Home>', '<C-o><cmd>lua require("user.keymaps.home_key").nowrap()<CR>', opt, 'which_key_ignore'},
+  {'n', '<Home>', key_fn.home_key.nowrap, opt, 'which_key_ignore'},
+  {'v', '<Home>', key_fn.home_key.nowrap, opt, 'which_key_ignore'},
+  {'i', '<Home>', '<C-o><cmd>lua require("user.utils.keymaps").home_key.nowrap()<CR>', opt, 'which_key_ignore'},
 
   {'n', 'G', 'Gzz', opt, 'which_key_ignore'},  -- put last line in center
 
@@ -149,26 +151,26 @@ local keymaps = {
   {'n', '<Tab>', '<C-w><C-w>', opt, 'which_key_ignore'},  -- 切换到另一个窗口.
 
   --- Search ---------------------------------------------------------------------------------------
-  {'n','*',  require("user.keymaps.hl_search").normal("*"),  opt, 'search: \\<cword\\> Forward'},
-  {'n','#',  require("user.keymaps.hl_search").normal("#"),  opt, 'search: \\<cword\\> Backward'},
-  {'n','g*', require("user.keymaps.hl_search").normal("g*"), opt, 'search: <cword> Forward'},
-  {'n','g#', require("user.keymaps.hl_search").normal("g#"), opt, 'search: <cword> Backward'},
+  {'n','*',  key_fn.hl_search.normal("*"),  opt, 'search: \\<cword\\> Forward'},
+  {'n','#',  key_fn.hl_search.normal("#"),  opt, 'search: \\<cword\\> Backward'},
+  {'n','g*', key_fn.hl_search.normal("g*"), opt, 'search: <cword> Forward'},
+  {'n','g#', key_fn.hl_search.normal("g#"), opt, 'search: <cword> Backward'},
 
   --- NOTE: "fy - copy VISUAL selected text to register "f"
   --    `let @/ = @f` - copy register "f" to register "/" (search register)
-  {'v', '*',  require("user.keymaps.hl_search").visual('n', true), opt, 'search: \\<cword\\> Forward'},
-  {'v', '#',  require("user.keymaps.hl_search").visual('N', true), opt, 'search: \\<cword\\> Backward'},
-  {'v', 'g*', require("user.keymaps.hl_search").visual('n'), opt, 'search: <cword> Forward'},
-  {'v', 'g#', require("user.keymaps.hl_search").visual('N'), opt, 'search: <cword> Backward'},
+  {'v', '*',  key_fn.hl_search.visual('n', true), opt, 'search: \\<cword\\> Forward'},
+  {'v', '#',  key_fn.hl_search.visual('N', true), opt, 'search: \\<cword\\> Backward'},
+  {'v', 'g*', key_fn.hl_search.visual('n'), opt, 'search: <cword> Forward'},
+  {'v', 'g#', key_fn.hl_search.visual('N'), opt, 'search: <cword> Backward'},
 
   --- hl next/prev result
-  {'n','n', require("user.keymaps.hl_search").normal("n"), opt, 'search: Forward'},
-  {'n','N', require("user.keymaps.hl_search").normal("N"), opt, 'search: Backward'},
+  {'n','n', key_fn.hl_search.normal("n"), opt, 'search: Forward'},
+  {'n','N', key_fn.hl_search.normal("N"), opt, 'search: Backward'},
 
   --- NOTE: 这里不能使用 silent, 否则 command line 中不显示 '?' 和 '/'
   --- ':echo v:hlsearch' 显示目前 hlsearch 状态.
-  {'n', '?', "<cmd>lua require('user.keymaps.hl_search').delete()<CR>?", {noremap=true}, 'which_key_ignore'},
-  {'n', '/', "<cmd>lua require('user.keymaps.hl_search').delete()<CR>/", {noremap=true}, 'which_key_ignore'},
+  {'n', '?', "<cmd>lua require('user.utils.keymaps').hl_search.delete()<CR>?", {noremap=true}, 'which_key_ignore'},
+  {'n', '/', "<cmd>lua require('user.utils.keymaps').hl_search.delete()<CR>/", {noremap=true}, 'which_key_ignore'},
 
   --- CTRL -----------------------------------------------------------------------------------------
   --- 可以使用的 Ctrl keymap --- {{{
@@ -243,7 +245,7 @@ local keymaps = {
   --{'n', '<leader>d', 'bdelete', opt, 'buf: Close Current Buffer'},
 
   --- Window 控制
-  {'n', '<leader>w', require('user.keymaps.jump_to_win').choose, opt, 'win: Jump to Window'},  -- 跳转到指定 window
+  {'n', '<leader>w', key_fn.win_choose, opt, 'win: Jump to Window'},  -- 跳转到指定 window
   {'n', '<leader>W', '<C-w><C-o>', opt, 'win: Close All Other Windows'},  -- 关闭所有其他窗口
 
   --- NOTE: terminal key mapping 在 "toggleterm.lua" 中设置了.
@@ -258,8 +260,8 @@ local keymaps = {
   {'n', '`', '<Nop>', opt},
 
   --- 利用 treesitter 跳转到 prev/next root node.
-  {'n', '[[', require('user.keymaps.jump_to_section').prev, opt, 'Jump to Prev Section'},
-  {'n', ']]', require('user.keymaps.jump_to_section').next, opt, 'Jump to Next Section'},
+  {'n', '[[', key_fn.section.goto_prev, opt, 'Jump to Prev Section'},
+  {'n', ']]', key_fn.section.goto_next, opt, 'Jump to Next Section'},
 
   --- 切换 buffer, 目前使用 bufferline 进行 buffer 切换, 如果不使用 buffer line 则使用以下设置.
   --{'n', '<lt>', ':bprevious<CR>', opt, 'go to previous buffer'},
@@ -267,7 +269,7 @@ local keymaps = {
 }
 
 --- 这里是设置所有 key mapping 的地方 --------------------------------------------------------------
-Keymap_set_and_register(keymaps, {
+key_fn.set(keymaps, {
   key_desc = {
     k = {name = "Fold Method"},
     D = {name = "Close Buffers"},
@@ -276,7 +278,7 @@ Keymap_set_and_register(keymaps, {
 })
 
 --- for key desc only
-Keymap_set_and_register({}, {
+key_fn.set({}, {
   key_desc = {
     ['['] = {name="Section Jump"},
     [']'] = {name="Section Jump"},

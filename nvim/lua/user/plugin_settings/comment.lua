@@ -59,7 +59,7 @@ local comment_keymaps = {
   {'v', '<C-j>', '<Plug>(comment_toggle_linewise_visual)', opt, 'which_key_ignore'},
 }
 
-Keymap_set_and_register(comment_keymaps)
+require('user.utils.keymaps').set(comment_keymaps)
 
 
 

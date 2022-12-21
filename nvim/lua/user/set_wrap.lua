@@ -1,24 +1,26 @@
+local key_fn = require('user.utils.keymaps')
+
 --- 使用 gj / gk / g0 / g$ 在 wrap buffer 中移动 cursor.
 local function set_cursor_move_in_wrap(bufnr)
   local opts = {buffer=bufnr, silent=true, noremap=true}
   local cursor_move_keymaps = {
     {'n', '<Down>', 'gj', opts, 'which_key_ignore'},
     {'n', '<Up>',   'gk', opts, 'which_key_ignore'},
-    {'n', '<Home>', require('user.keymaps.home_key').wrap, opts, 'which_key_ignore'},  -- g0 相当于 g<Home>
+    {'n', '<Home>', key_fn.home_key.wrap, opts, 'which_key_ignore'},  -- g0 相当于 g<Home>
     {'n', '<End>',  'g$', opts, 'which_key_ignore'},  -- g$ 相当于 g<End>
 
     {'v', '<Down>', 'gj', opts, 'which_key_ignore'},
     {'v', '<Up>',   'gk', opts, 'which_key_ignore'},
-    {'v', '<Home>', require('user.keymaps.home_key').wrap, opts, 'which_key_ignore'},
+    {'v', '<Home>', key_fn.home_key.wrap, opts, 'which_key_ignore'},
     {'v', '<End>',  'g$', opts, 'which_key_ignore'},
 
     {'i', '<Down>', '<C-o>gj', opts, 'which_key_ignore'},
     {'i', '<Up>',   '<C-o>gk', opts, 'which_key_ignore'},
-    {'i', '<Home>', '<C-o><cmd>lua require("user.keymaps.home_key").wrap()<CR>', opts, 'which_key_ignore'},
+    {'i', '<Home>', '<C-o><cmd>lua require("user.utils.keymaps").home_key.wrap()<CR>', opts, 'which_key_ignore'},
     {'i', '<End>',  '<C-o>g$', opts, 'which_key_ignore'},
   }
 
-  Keymap_set_and_register(cursor_move_keymaps)
+  require('user.utils.keymaps').set(cursor_move_keymaps)
 end
 
 --- VVI: 不能直接使用 vim.keymap.del(), 因为如果在 '<Up>' ... 等 key 没有 set() 的情况下, del() 会报错.

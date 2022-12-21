@@ -1,6 +1,5 @@
 require("user.global.deps.common_funcs")
 require("user.global.deps.notification")
-require("user.global.deps.keymaps_register")
 
 require("user.global.utils.check_tools")
 require("user.global.utils.jump_to_file")
