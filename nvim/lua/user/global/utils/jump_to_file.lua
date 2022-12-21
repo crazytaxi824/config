@@ -32,6 +32,7 @@ local url_schema_pattern = '\\<http[s]\\?://'  -- 'http://' | 'https://' 开头
   .. '[/]\\?'
   .. '\\(?\\f\\+\\(&\\f\\+\\)*\\)\\?'  -- '/?foo=fuz&bar=buz'
 
+--- NOTE: matchadd() 每次执行只能作用在 current window 上.
 function Highlight_filepath()
   vim.fn.matchadd('Filepath', file_schema_pattern)
   vim.fn.matchadd('Filepath', filepath_pattern)

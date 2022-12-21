@@ -109,7 +109,9 @@ local exec_term = Terminal:new({
   --- 导致 :open() 在执行下一个命令的过程中 terminal 退出.
   close_on_exit = false,
 })
-local cache_cmd     -- string, 缓存 _Exec() 中运行的 cmd.
+
+--- string, 缓存 _Exec() 中运行的 cmd.
+local cache_cmd
 
 --- cache 是一个标记, 如果为 true, 则在将 cmd 记录在 last_cmd 中.
 --- callback 在 on_exit = func() 的时候执行.
