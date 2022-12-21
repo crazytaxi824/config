@@ -1,3 +1,4 @@
+--- highlight search result
 local M = {}
 
 --- 在当前 search result 前放置 search_sign.
