@@ -33,6 +33,7 @@ local url_schema_pattern = '\\<http[s]\\?://'  -- 'http://' | 'https://' 开头
   .. '\\(?\\f\\+\\(&\\f\\+\\)*\\)\\?'  -- '/?foo=fuz&bar=buz'
 
 --- NOTE: matchadd() 每次执行只能作用在 current window 上.
+--- 而且状态持续, 当该 window 打开别的 buffer 时, highlight 一样会存在.
 function Highlight_filepath()
   vim.fn.matchadd('Filepath', file_schema_pattern)
   vim.fn.matchadd('Filepath', filepath_pattern)
@@ -144,9 +145,15 @@ end
 
 --- TermClose 意思是 job done
 --- TermLeave 意思是 term 关闭
+--- TermOpen 类似 FileType 只在第一次打开 terminal 的时候触发.
 vim.api.nvim_create_autocmd('TermOpen', {
   pattern = {"term://*"},
   callback = function(params)
+    --- 显示 filepath, NOTE: 第一次打开 terminal 的时候不会触发 "BufEnter", 只能使用 "TermOpen"
+    --- 但是 "TermOpen" 类似 "FileType" 只在第一次打开 terminal 的时候触发.
+    Highlight_filepath()
+
+    --- 设置 keymaps
     vim.keymap.set('n', '<S-CR>',
       "<cmd>lua Jump_to_file(vim.fn.expand('<cWORD>'))<CR>",
       {
@@ -159,20 +166,10 @@ vim.api.nvim_create_autocmd('TermOpen', {
   end,
 })
 
---- for debug dap-repl buffer
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = {"dap-repl"},
-  callback = function(params)
-    vim.keymap.set('n', '<S-CR>',
-      "<cmd>lua Jump_to_file(vim.fn.expand('<cWORD>'))<CR>",
-      {
-        noremap = true,
-        silent = true,
-        buffer = params.buf,  -- local to Terminal buffer
-        desc = "Jump to file",
-      }
-    )
-  end
+--- 这里是保证 terminal hidden 之后, 再次打开时显示 filepath
+vim.api.nvim_create_autocmd('BufWinEnter', {
+  pattern = {"term://*"},
+  callback = Highlight_filepath,
 })
 
 --- VISIAL 模式跳转文件 ----------------------------------------------------------------------------

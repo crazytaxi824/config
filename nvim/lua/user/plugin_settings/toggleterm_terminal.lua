@@ -129,8 +129,6 @@ function _Exec(cmd, cache, on_exit_fn)
 
   --- 该 terminal buffer wipeout 的时候回到之前的窗口.
   exec_term.on_open = function()
-    Highlight_filepath()
-
     vim.api.nvim_create_autocmd("BufWipeout", {
       buffer = 0,
       callback = function(params)
