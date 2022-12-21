@@ -92,87 +92,6 @@ function _Home_action_nowrap()
 end
 -- -- }}}
 
---- for Search Highlight ------------------------------------------------------- {{{
---- 在当前 search result 前放置 search_sign.
---- {group} as a namespace for {id}, thus two groups can use the same IDs.
-local my_search = {
-  sign = {
-    id = 10010,
-    group = "MySearchSignGroup",
-    name = "MySearchSign",
-    text = "⚲",  -- 类似 icon, ⌕☌⚲⚯
-  },
-  hl_group = "IncSearch",
-  cache_last_hl = nil  -- 缓存 { win_id=win_getid(), hl_id=matchadd() }, for vim.fn.matchdelete()
-}
---- define my_search_sign
-vim.fn.sign_define(my_search.sign.name, {text=my_search.sign.text, texthl=my_search.hl_group})
-
-local function hl_search(key)
-  local status, errmsg = pcall(vim.cmd, 'normal! ' .. key)
-  if not status then
-    vim.notify(errmsg, vim.log.levels.ERROR) -- 这里不要使用 notify 插件, 显示错误信息.
-    return
-  end
-
-  --- VVI: 删除之前的 highlight. 必须删除上一个 matchadd(), 然后重新 matchadd().
-  if my_search.cache_last_hl then
-    vim.fn.matchdelete(my_search.cache_last_hl.hl_id, my_search.cache_last_hl.win_id)
-  end
-  vim.fn.sign_unplace(my_search.sign.group)  -- clear search_sign
-
-  --- NOTE: `:help /ordinary-atom`
-  --- `\%#` 意思是 match cursor 所在位置. Matches with the cursor position.
-  --- `\c`  意思是 ignore-case. 可以被 overwrite 例如 `/foo\C`
-  --- getreg() 是获取 register 值.
-  local search_pattern = '\\c\\%#' .. vim.fn.getreg('/')
-  local hl_id = vim.fn.matchadd(my_search.hl_group, search_pattern, 101)
-
-  --- NOTE: 通过 cursor position 来 place my_search_sign.
-  local cur_pos = vim.fn.getpos('.')  -- [bufnum, lnum, col, off]
-  vim.fn.sign_place(my_search.sign.id, my_search.sign.group, my_search.sign.name, vim.fn.bufnr(),
-    {lnum=cur_pos[2], priority=101})
-
-  --- 缓存数据
-  my_search.cache_last_hl = {hl_id = hl_id, win_id = vim.fn.win_getid()}
-end
-
---- NOTE: 这里必须使用 global function, 因为还没找到使用 vim.api 执行 '/' 的方法.
-function _Delete_search_hl()
-  --- 删除之前的 highlight
-  if my_search.cache_last_hl then
-    --- NOTE: 如果 win 已经关闭 (win_id 不存在), 则不能使用 matchdelete(win_id), 否则报错.
-    local win_info = vim.fn.getwininfo(my_search.cache_last_hl.win_id)
-    if #win_info > 0 then
-      vim.fn.matchdelete(my_search.cache_last_hl.hl_id, my_search.cache_last_hl.win_id)
-    end
-
-    my_search.cache_last_hl = nil  -- clear cache
-  end
-
-  vim.fn.sign_unplace(my_search.sign.group)  -- clear my_search_sign
-  vim.cmd[[nohlsearch]]
-
-  --- NOTE: 以下方法无法进行 'incsearch'. 但是可以使函数变成 local function.
-  --local search_input = vim.fn.input('/')
-  --vim.cmd('/' .. search_input)
-end
-
---- word: bool, 是否使用 \<word\>
-local function hl_visual_search(key, whole_word)
-  --- 利用 register "f
-  vim.cmd[[normal! "fy]]  -- copy VISUAL select to register 'f'
-  local tmp_search = vim.fn.getreg("f")
-  if whole_word then
-    vim.fn.setreg('/', '\\<' .. tmp_search .. '\\>')
-  else
-    vim.fn.setreg('/', tmp_search)
-  end
-  hl_search(key)
-end
-
--- -- }}}
-
 --- [[, ]], jump to previous/next section -------------------------------------- {{{
 --- NOTE: `:help treesitter-languagetree`, `lang` will default to 'filetype'.
 --- 利用 nvim-treesitter 获取 buffer `lang`.
@@ -434,25 +353,26 @@ local keymaps = {
   {'n', '<Tab>', '<C-w><C-w>', opt, 'which_key_ignore'},  -- 切换到另一个窗口.
 
   --- Search ---------------------------------------------------------------------------------------
-  {'n','*',  function() hl_search("*")  end, opt, 'search: \\<cword\\> Forward'},
-  {'n','#',  function() hl_search("#")  end, opt, 'search: \\<cword\\> Backward'},
-  {'n','g*', function() hl_search("g*") end, opt, 'search: <cword> Forward'},
-  {'n','g#', function() hl_search("g#") end, opt, 'search: <cword> Backward'},
+  {'n','*',  require("user.keymaps.hl_search").normal("*"),  opt, 'search: \\<cword\\> Forward'},
+  {'n','#',  require("user.keymaps.hl_search").normal("#"),  opt, 'search: \\<cword\\> Backward'},
+  {'n','g*', require("user.keymaps.hl_search").normal("g*"), opt, 'search: <cword> Forward'},
+  {'n','g#', require("user.keymaps.hl_search").normal("g#"), opt, 'search: <cword> Backward'},
 
   --- NOTE: "fy - copy VISUAL selected text to register "f"
   --    `let @/ = @f` - copy register "f" to register "/" (search register)
-  {'v', '*',  function() hl_visual_search('n', true) end, opt, 'search: \\<cword\\> Forward'},
-  {'v', '#',  function() hl_visual_search('N', true) end, opt, 'search: \\<cword\\> Backward'},
-  {'v', 'g*', function() hl_visual_search('n') end, opt, 'search: <cword> Forward'},
-  {'v', 'g#', function() hl_visual_search('N') end, opt, 'search: <cword> Backward'},
+  {'v', '*',  require("user.keymaps.hl_search").visual('n', true), opt, 'search: \\<cword\\> Forward'},
+  {'v', '#',  require("user.keymaps.hl_search").visual('N', true), opt, 'search: \\<cword\\> Backward'},
+  {'v', 'g*', require("user.keymaps.hl_search").visual('n'), opt, 'search: <cword> Forward'},
+  {'v', 'g#', require("user.keymaps.hl_search").visual('N'), opt, 'search: <cword> Backward'},
 
-  {'n','n', function() hl_search("n") end, opt, 'search: Forward'},
-  {'n','N', function() hl_search("N") end, opt, 'search: Backward'},
+  --- hl next/prev result
+  {'n','n', require("user.keymaps.hl_search").normal("n"), opt, 'search: Forward'},
+  {'n','N', require("user.keymaps.hl_search").normal("N"), opt, 'search: Backward'},
 
   --- NOTE: 这里不能使用 silent, 否则 command line 中不显示 '?' 和 '/'
   --- ':echo v:hlsearch' 显示目前 hlsearch 状态.
-  {'n', '?', "<cmd>lua _Delete_search_hl()<CR>?", {noremap=true}, 'which_key_ignore'},
-  {'n', '/', "<cmd>lua _Delete_search_hl()<CR>/", {noremap=true}, 'which_key_ignore'},
+  {'n', '?', "<cmd>lua require('user.keymaps.hl_search').delete()<CR>?", {noremap=true}, 'which_key_ignore'},
+  {'n', '/', "<cmd>lua require('user.keymaps.hl_search').delete()<CR>/", {noremap=true}, 'which_key_ignore'},
 
   --- CTRL -----------------------------------------------------------------------------------------
   --- 可以使用的 Ctrl keymap --- {{{
