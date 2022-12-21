@@ -3,6 +3,7 @@ if not comment_status_ok then
   return
 end
 
+--- `:help comment-nvim`
 --- https://github.com/numToStr/Comment.nvim
 comment.setup {
   padding = true, -- Add a space between '//' and content. (boolean|fun():boolean)
@@ -47,31 +48,15 @@ comment.setup {
 }
 
 --- keymaps ----------------------------------------------------------------------------------------
-local c_api = require("Comment.api")
-
-function _Comment_exclude_file(mode)
-  if not vim.bo.modifiable then
-    vim.notify("cannot Comment on Unmodifiable file", vim.log.levels.WARN)
-    return
-  end
-
-  if mode == 'current' then
-    c_api.toggle.linewise.current()
-  elseif mode == 'visual' then
-    --- 方法拷贝自 '<Plug>(comment_toggle_linewise_visual)' 源代码
-    --- https://github.com/numToStr/Comment.nvim/blob/master/plugin/Comment.lua
-    c_api.locked("toggle.linewise")(vim.fn.visualmode())
-  end
-end
-
 local opt = { noremap = true, silent = true }
 local comment_keymaps = {
-  {'n', '<C-j>', function() _Comment_exclude_file("current") end, opt, 'which_key_ignore'},
-  {'i', '<C-j>', '<C-o><CMD>lua _Comment_exclude_file("current")<CR>', opt, 'which_key_ignore'},
-  {'v', '<C-j>', '<C-c><CMD>lua _Comment_exclude_file("visual")<CR>', opt, 'which_key_ignore'},
+  -- {'n', '<C-j>', require("Comment.api").toggle.linewise.current, opt, 'which_key_ignore'},
+  -- {'i', '<C-j>', '<C-o><CMD>lua require("Comment.api").toggle.linewise.current()<CR>', opt, 'which_key_ignore'},
+  -- {'v', '<C-j>', '<C-c><CMD>lua require("Comment.api").locked("toggle.linewise")(vim.fn.visualmode())<CR>', opt, 'which_key_ignore'},
 
-  -- {'n', '<leader>\\', '<Plug>(comment_toggle_linewise_current)', opt, 'toggle Comment'},
-  -- {'v', '<leader>\\', '<Plug>(comment_toggle_linewise_visual)',  opt, 'toggle Comment'},
+  {'n', '<C-j>', '<Plug>(comment_toggle_linewise_current)', opt, 'which_key_ignore'},
+  {'i', '<C-j>', '<C-o><Plug>(comment_toggle_linewise_current)', opt, 'which_key_ignore'},
+  {'v', '<C-j>', '<Plug>(comment_toggle_linewise_visual)', opt, 'which_key_ignore'},
 }
 
 Keymap_set_and_register(comment_keymaps)
