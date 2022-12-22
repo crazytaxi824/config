@@ -46,4 +46,10 @@ vim.keymap.set('v', '<C-o>',
   {noremap = true, silent = true, desc = "System Open file"}
 )
 
+--- <ESC> 进入 terminal Normal 模式,
+--- VVI: 同时也 press <ESC>, 用于退出 fzf 等 terminal 中的操作. 只对本 buffer 有效.
+vim.cmd [[au TermOpen term://* tnoremap <buffer> <ESC> <ESC><C-\><C-n>]]
+
+--- 设置 terminal 不显示行号.
+vim.cmd [[au TermOpen term://* :setlocal nonumber norelativenumber]]
 

@@ -32,7 +32,7 @@ toggleterm.setup({
   close_on_exit = true,     -- job 执行完成之后退出 terminal. 输入 `$ exit` 之后自动关闭 terminal.
   start_in_insert = false,  -- VVI: 打开 terminal 时进入 insert 模式.
                             -- 类似 `au TermOpen|BufWinEnter term://*#toggleterm#* :startinsert`
-                            -- 全局设置, 不好用. 可以单独设置.
+                            -- 全局设置, 会造成 go run 等 terminal 在运行完成后时是 insert 模式. 可以对 terminal 进行单独设置.
 
   direction = "horizontal",  -- vertical | horizontal | tab | float
 
@@ -75,13 +75,6 @@ vim.api.nvim_set_hl(0, 'WinBarInactive', {ctermfg=246})
 --- 可以通过 `:au ToggleTermCommands` 查看.
 --vim.cmd [[au TermOpen term://*#toggleterm#[1-9] :startinsert]]
 --vim.cmd [[au BufWinEnter term://*#toggleterm#[1-9] :startinsert]]
-
---- <ESC> 进入 terminal Normal 模式,
---- VVI: 同时也 press <ESC>, 用于退出 fzf 等 terminal 中的操作. 只对本 buffer 有效.
-vim.cmd [[au TermOpen term://* tnoremap <buffer> <ESC> <ESC><C-\><C-n>]]
-
---- 设置 terminal 不显示行号.
-vim.cmd [[au TermOpen term://* :setlocal nonumber norelativenumber]]
 
 -- -- }}}
 
