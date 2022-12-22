@@ -9,7 +9,6 @@
 --- 全局变量
 local M = {}
 
-local once = nil    -- 是否已经读取过 file. true - 已经读取过, false|nil - 未读取 file.
 local content = {}  -- 缓存 file 内容. VVI: 这里不要使用 nil, 因为 nil 无法 index [lsp] / [null-ls].
 
 --- 从 pwd 向上获取 dir 直到 root "/".
@@ -40,39 +39,28 @@ local function available_local_settings_file()
   end
 end
 
---- 内部函数 lazyload() 保证只读取一次文件.
-local function lazyload_local_settings()
-  --- 如果已经读取文件则不重复执行.
-  if once then
-    return
-  end
-
-  local local_settings_filepath = available_local_settings_file()
-  if local_settings_filepath then
-    --- 使用 pcall 确保 lua file 执行没有错误.
-    local ok, result = pcall(dofile, local_settings_filepath)
-    --- ok 文件执行 (dofile) 成功.
-    --- result 是执行结果. 可能为 nil, 可能是执行失败的 error message.
-    if ok then
-      if result then
-        --- '.nvim/settings.lua' 读取成功, 同时返回值不是 nil 的情况下缓存 settings 数据.
-        content = result  -- 缓存数据.
-      else
-        Notify('"' .. local_settings_filepath .. '" returns nil.', "INFO")
-      end
+--- VVI: 这里不是一个函数, 而是直接获取 content, 该段代码只会在第一次 require() 的时候运行一次.
+local local_settings_filepath = available_local_settings_file()
+if local_settings_filepath then
+  --- 使用 pcall 确保 lua file 执行没有错误.
+  local ok, result = pcall(dofile, local_settings_filepath)
+  --- ok 文件执行 (dofile) 成功.
+  --- result 是执行结果. 可能为 nil, 可能是执行失败的 error message.
+  if ok then
+    if result then
+      --- '.nvim/settings.lua' 读取成功, 同时返回值不是 nil 的情况下缓存 settings 数据.
+      content = result  -- 缓存数据.
     else
-      Notify(vim.split(result, '\n', {trimempty=true}), "WARN")
+      Notify('"' .. local_settings_filepath .. '" returns nil.', "INFO")
     end
+  else
+    Notify(vim.split(result, '\n', {trimempty=true}), "WARN")
   end
-
-  once = true  -- 标记为已读.
 end
 
 --- NOTE: 主要函数 keep_extend() 用 project local 设置覆盖 global 设置.
 --- 使用 tbl_deep_extend('keep', xx, xx, ...)
 M.keep_extend = function(section, tool, tbl, ...)
-  lazyload_local_settings()
-
   --- 如果项目本地设置存在.
   if content[section] and content[section][tool] then
     return vim.tbl_deep_extend('keep', content[section][tool], tbl, ...)
