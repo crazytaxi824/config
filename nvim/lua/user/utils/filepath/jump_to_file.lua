@@ -1,4 +1,4 @@
-local pat = require('user.global.filepath.pattern')
+local pat = require('user.utils.filepath.pattern')
 
 local M = {}
 
@@ -81,7 +81,23 @@ local function parse_filepath(content, ignore_matchstr)
   return file, lnum, col
 end
 
-M.jump_to_file = function(content, ignore_matchstr)
+--- 获取 visual selected word.
+local function visual_selected()
+  --- NOTE: getpos("'<") 和 getpos("'>") 必须在 normal 模式执行,
+  --- 即: <C-c> 从 visual mode 退出后再执行以下函数.
+  --- `:echo getline("'<")[getpos("'<")[2]-1:getpos("'>")[2]-1]`
+  local startpos = vim.fn.getpos("'<")
+  local endpos = vim.fn.getpos("'>")
+
+  --- 如果不在同一行则 return
+  if startpos[2] ~= endpos[2] then
+    return
+  end
+
+  return string.sub(vim.fn.getline("'<"), startpos[3], endpos[3])
+end
+
+local function jump(content, ignore_matchstr)
   local filepath, lnum, col = parse_filepath(content, ignore_matchstr)
 
   if not filepath or filepath == '' then  -- empty line
@@ -100,5 +116,17 @@ M.jump_to_file = function(content, ignore_matchstr)
 
   Notify('cannot open file: "' .. filepath .. '"', "INFO", {timeout = 1500})
 end
+
+--- NOTE: 为保险起见, 不在 Normal 模式下使用 system_open 打开 <cWORD>
+local function system_open(filepath)
+  local result = vim.fn.system('open "' .. filepath .. '"')
+  if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
+    Notify("system open error: " .. result, "ERROR")
+  end
+end
+
+M.n_jump_cWORD = function() jump(vim.fn.expand('<cWORD>')) end
+M.v_jump_selected = function() jump(visual_selected(), true) end
+M.v_system_open_selected = function() system_open(visual_selected()) end
 
 return M

@@ -1,64 +1,49 @@
--- NOTE: reusable terminal -------------------------------------------------------------------------
--- bot 12split term:///bin/zsh;\#reusable#normal
--- bot 12vsplit term://ls -l;\#reusable#exec
---
--- winnr('$')  -- last window number
--- bufnr('$')  -- last buffer number
--- bufnr('%')  -- return bufnr
--- bufname(bufnr)  -- return buffer name
---
--- setlocal nobuflisted bufhidden=wipe
--- bot sbuffer {bufnr}  -- NOTE: load unlisted buffer, 但是不能有 bufhidden=wipe
---
--- getwinvar() & setwinvar()
--- win_getid() & win_gotoid()
---
--- :startinsert 进入 insert mode
--- :stopinsert  进入 insert mode, terminal 模式下无法使用.
---
--- :set winfixheight 固定 window 高度
--- :set winfixwidth  固定 window 宽度
+local fp = require('user.utils.filepath')
 
-local reusable_term_size = 12
-local winvar_reusable = "my_reusable"
+--- terminal normal 模式跳转文件 -------------------------------------------------------------------
+--- 操作方法: 在 Terminal Normal 模式中, 在行的任意位置使用 <CR> 跳转到文件.
 
-function Terminal_exec(term_id, cmd)
-  -- 获取 term win_id
-  for winnr = vim.fn.winnr('$'), 1, -1 do
-    if vim.fn.getwinvar(winnr, winvar_reusable) == term_id then
-      vim.cmd(winnr .. 'q!')  -- 关闭之前的 terminal window
-    end
-  end
+--- TermClose 意思是 job done
+--- TermLeave 意思是 term 关闭
+--- TermOpen 类似 FileType 只在第一次打开 terminal 的时候触发.
+vim.api.nvim_create_autocmd('TermOpen', {
+  pattern = {"term://*"},
+  callback = function(params)
+    --- 显示 filepath, NOTE: 第一次打开 terminal 的时候不会触发 "BufEnter", 只能使用 "TermOpen"
+    --- 但是 "TermOpen" 类似 "FileType" 只在第一次打开 terminal 的时候触发.
+    fp.highlight()
 
-  vim.cmd('bot split term://'..cmd..';\\#reusable\\#'..term_id .. ' | setlocal winfixheight nobuflisted bufhidden=wipe filetype=myterm')
-  vim.fn.setwinvar(vim.fn.win_getid(), winvar_reusable, term_id)
-end
+    --- 设置 keymaps
+    vim.keymap.set('n', '<S-CR>',
+      function() fp.n_jump(vim.fn.expand('<cWORD>')) end,
+      {
+        noremap = true,
+        silent = true,
+        buffer = params.buf,  -- local to Terminal buffer
+        desc = "Jump to file",
+      }
+    )
+  end,
+})
 
-function Terminal_normal()
-  -- 获取 term win_id
-  for winnr = vim.fn.winnr('$'), 1, -1 do
-    if vim.fn.getwinvar(winnr, winvar_reusable) == "normal" then
-      vim.cmd(winnr .. 'q!')  -- 关闭之前的 terminal window
-    end
-  end
+--- 这里是保证 terminal hidden 之后, 再次打开时显示 filepath
+vim.api.nvim_create_autocmd('BufWinEnter', {
+  pattern = {"term://*"},
+  callback = fp.highlight,
+})
 
-  -- 开启新的 terminal normal
-  vim.cmd('bot split term:///bin/zsh;\\#reusable\\#normal | setlocal winfixheight nobuflisted filetype=myterm')
-  vim.fn.setwinvar(vim.fn.win_getid(), winvar_reusable, "normal")
-end
+--- VISIAL 模式跳转文件 ----------------------------------------------------------------------------
+--- VISUAL 选中的 filepath, 不管在什么 filetype 中都跳转
+--- 操作方法: visual select 'filepath:lnum', 然后使用 <S-CR> 跳转到文件.
+vim.keymap.set('v', '<S-CR>',
+  "<C-c><cmd>lua require('user.utils.filepath').v_jump()<CR>",
+  {noremap = true, silent = true, desc = "Jump to file"}
+)
 
-
---- Terminal autocmd -------------------------------------------------------------------------------
---- VVI: 绑定 <ESC> 进入 terminal normal 模式, 只对本 buffer 有效.
-vim.cmd [[au TermOpen term://* tnoremap <buffer> <ESC> <C-\><C-n>]]
-
---- normal terminal 进入时打开 insert mode
-vim.cmd [[au TermOpen  term://*#reusable#normal startinsert]]
---- normal terminal job done 时 quit! / bd! / bw!
-vim.cmd [[au TermClose term://*#reusable#normal quit!]]
-
---- resize reusable terminal, 这里是为了避免 term 窗口 size 是屏幕的一半.
-vim.cmd('au BufEnter term://*#reusable#* resize '..reusable_term_size)
-
+--- 使用 system 打开文件.
+vim.keymap.set('v', '<C-o>',
+  "<C-c><cmd>lua require('user.utils.filepath').v_system_open()<CR>",
+  {noremap = true, silent = true, desc = "System Open file"}
+)
 
 
