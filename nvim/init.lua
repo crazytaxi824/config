@@ -62,7 +62,5 @@ require "user.plugins_loader"  -- packer 加载 plugin
 --- 放在最后 overwirte 其他设置
 require "user.keymaps"  -- keymap 设置
 
-require "user.health"  -- 在 :checkhealth 时执行.
-
 
 
