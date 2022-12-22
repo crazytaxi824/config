@@ -10,14 +10,23 @@ local M = {}
 --- 单独执行 :call cursor('3','3') 的时候, cursor 跳转到第三行第三列; NOTE: 这里 lnum & col 是 string, 可以跳转.
 local function jump_to_file(absolute_path, lnum, col)
   --- 则选择合适的 window 显示文件.
-  local log_display_win_id
+  local display_win_id
 
-  --- 在本 tab 中寻找第一个显示 listed-buffer 的 window, 用于显示 log filepath.
+  --- 在本 tab 中寻找第一个显示 listed-buffer 的 window, 用于显示 filepath.
   local tab_wins = vim.api.nvim_tabpage_list_wins(0)
   for _, win_id in ipairs(tab_wins) do
-    if vim.fn.buflisted(vim.api.nvim_win_get_buf(win_id)) == 1 then
-      log_display_win_id = win_id
+    local bufnr = vim.api.nvim_win_get_buf(win_id)
+    local buffer_fullpath = vim.api.nvim_buf_get_name(bufnr)
+
+    --- 寻找是否有 window 已经显示了指定文件.
+    if buffer_fullpath == absolute_path then
+      display_win_id = win_id
       break
+    end
+
+    --- 记录本 tab 中第一个显示 listed-buffer 的 window, 用于显示 filepath.
+    if not display_win_id and vim.fn.buflisted(bufnr) == 1 then
+      display_win_id = win_id
     end
   end
 
@@ -27,7 +36,7 @@ local function jump_to_file(absolute_path, lnum, col)
 
   --- NOTE: cmd 利用 cursor('lnum','col') 可以传入 string args 的特点.
   local cmd
-  if vim.fn.win_gotoid(log_display_win_id) == 1 then
+  if vim.fn.win_gotoid(display_win_id) == 1 then
     --- 如果 win_id 可以跳转, 则直接在该 window 中打开文件.
     cmd = 'edit +lua\\ vim.fn.cursor("' .. lnum .. '","' .. col .. '") ' .. absolute_path
   else
@@ -97,6 +106,7 @@ local function visual_selected()
   return string.sub(vim.fn.getline("'<"), startpos[3], endpos[3])
 end
 
+--- jump controller
 local function jump(content, ignore_matchstr)
   local filepath, lnum, col = parse_filepath(content, ignore_matchstr)
 
