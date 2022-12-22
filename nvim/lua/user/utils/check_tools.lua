@@ -31,9 +31,16 @@ local function check_tool(tool, notify_opt)
   end
 end
 
-M.check_cmd_tools = function(tools, notify_opt)
+M.check = function(tools, notify_opt)
   --- NOTE: "vim.schedule(function() ... end)" is a async function
   vim.schedule(function()
+    --- check tools after "mason" is loaded.
+    local mason_ok = pcall(require, "mason")
+    if not mason_ok then
+      Notify("Mason is not loaded", "INFO")
+      return
+    end
+
     local result = {"Tools should be installed:"}
     local count = 0
     if #tools > 0 then

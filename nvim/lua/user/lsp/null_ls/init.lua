@@ -40,7 +40,7 @@ local null_tools = {
   {cmd="eslint", install="npm install -g eslint"}, -- NOTE: mason 暂时不能安装 "eslint"
 }
 
-Check_cmd_tools(null_tools, {title= "check null-ls tools"})
+require('user.utils.check_tools').check(null_tools, {title= "check null-ls tools"})
 -- -- }}}
 
 --- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/formatting
