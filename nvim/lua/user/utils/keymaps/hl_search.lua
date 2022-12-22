@@ -11,7 +11,7 @@ local my_search = {
     text = "⚲",  -- 类似 icon, ⌕☌⚲⚯
   },
   hl_group = "IncSearch",
-  cache_last_hl = nil  -- 缓存 { win_id=win_getid(), hl_id=matchadd() }, for vim.fn.matchdelete()
+  cache_last_hl = nil  -- 缓存 { win_id=win_id, hl_id=matchadd() }, for vim.fn.matchdelete()
 }
 --- define my_search_sign
 vim.fn.sign_define(my_search.sign.name, {text=my_search.sign.text, texthl=my_search.hl_group})
@@ -42,7 +42,7 @@ local function hl_search(key)
     {lnum=cur_pos[2], priority=101})
 
   --- 缓存数据
-  my_search.cache_last_hl = {hl_id = hl_id, win_id = vim.fn.win_getid()}
+  my_search.cache_last_hl = {hl_id = hl_id, win_id = vim.api.nvim_get_current_win()}
 end
 
 --- whole_word: bool, 是否使用 \<word\>

@@ -13,11 +13,11 @@ local function jump_to_file(absolute_path, lnum, col)
   local log_display_win_id
 
   --- 在本 tab 中寻找第一个显示 listed-buffer 的 window, 用于显示 log filepath.
-  local tab_wins = vim.fn.winnr('$')
-  for i=1, tab_wins, 1 do
-    local winid = vim.fn.win_getid(i)
-    if vim.fn.buflisted(vim.api.nvim_win_get_buf(winid)) == 1 then
-      log_display_win_id = winid
+  local tab_wins = vim.api.nvim_tabpage_list_wins(0)
+  for _, win_id in ipairs(tab_wins) do
+    if vim.fn.buflisted(vim.api.nvim_win_get_buf(win_id)) == 1 then
+      log_display_win_id = win_id
+      break
     end
   end
 

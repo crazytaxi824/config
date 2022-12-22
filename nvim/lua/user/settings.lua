@@ -268,7 +268,7 @@ vim.opt.sidescrolloff = 16  -- 和上面类似, 横向留空 n 列. NOTE: 配合
 vim.api.nvim_create_autocmd('WinEnter', {
   pattern = {"*"},
   callback = function(params)
-    local win_id = vim.fn.win_getid()  -- get current window id
+    local win_id = vim.api.nvim_get_current_win()  -- get current window id
     if vim.fn.win_gettype(win_id) == 'popup' then
       --- 'scrolloff' & 'sidescrolloff' 都是 `global or local to window`,
       --- 这里使用 'vim.wo' 相当于 ':setlocal'
@@ -376,7 +376,7 @@ vim.opt.cursorlineopt = "number,screenline"  -- screenline 和 line 的区别在
 vim.api.nvim_create_autocmd("WinEnter", {
   pattern = {"*"},
   callback = function(params)
-    local win_id = vim.fn.win_getid()  -- get current window id
+    local win_id = vim.api.nvim_get_current_win()  -- get current window id
 
     --- 除 popup window 外, 显示 cursorline, eg: nvim-notify 是 popup window
     if vim.fn.win_gettype(win_id) ~= 'popup' then
@@ -389,7 +389,7 @@ vim.api.nvim_create_autocmd("WinEnter", {
 
 vim.api.nvim_create_autocmd("WinLeave", {
   pattern = {"*"},
-  command = 'setlocal nocursorline',
+  command = 'set nocursorline',
 })
 
 vim.opt.signcolumn = 'yes:1'  -- 'auto:1-3', 最少预留 1 个 sign 的宽度, 最多显示 3 个 sign 的宽度.
