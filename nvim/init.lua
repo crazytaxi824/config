@@ -52,7 +52,7 @@ require "user.global"      -- [必要], 自定义函数, 很多设置用到的�
 require "user.settings"    -- vimrc 设置
 require "user.lsp"         -- 加载 vim.lsp/vim.diagnostic 相关设置. 这里不是插件设置, 是内置参数设置.
                            -- user/lsp 是个文件夹, 这里是加载的 user/lsp/init.lua
-require "user.set_wrap"    -- autocmd 根据 filetype 设置 set wrap && cursor move.
+require "user.wrap"    -- autocmd 根据 filetype 设置 set wrap && cursor move.
 require "user.terminal"    -- terminal settings
 require "user.misc"        -- 其他杂项 settings
 
