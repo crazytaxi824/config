@@ -376,20 +376,22 @@ vim.opt.cursorlineopt = "number,screenline"  -- screenline 和 line 的区别在
 vim.api.nvim_create_autocmd("WinEnter", {
   pattern = {"*"},
   callback = function(params)
-    local win_id = vim.api.nvim_get_current_win()  -- get current window id
+    local curr_win_id = vim.api.nvim_get_current_win()  -- get current window id
 
     --- 除 popup window 外, 显示 cursorline, eg: nvim-notify 是 popup window
-    if vim.fn.win_gettype(win_id) ~= 'popup' then
+    if vim.fn.win_gettype(curr_win_id) ~= 'popup' then
       --- 'cursorline' 是 `local to window`, 这里使用 vim.wo.cursorline 相当于 `:set cursorline`,
       --- 不能用 ':setlocal cursorline' 否则会作用在当前 buffer 上, 这里需要作用在整个 window 上.
-      vim.wo[win_id].cursorline = true
+      vim.wo[curr_win_id].cursorline = true
+    end
+
+    --- 删除别的 window 中的 cursorline
+    for _, win_id in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+      if win_id ~= curr_win_id then
+        vim.wo[win_id].cursorline = false
+      end
     end
   end
-})
-
-vim.api.nvim_create_autocmd("WinLeave", {
-  pattern = {"*"},
-  command = 'set nocursorline',
 })
 
 vim.opt.signcolumn = 'yes:1'  -- 'auto:1-3', 最少预留 1 个 sign 的宽度, 最多显示 3 个 sign 的宽度.
