@@ -29,10 +29,10 @@ toggleterm.setup({
   insert_mappings = false,       -- 是否在 insert 模式下使用 open_mapping 快捷键.
   terminal_mappings = false,     -- 是否在 terminal insert && normal 模式下使用 open_mapping 快捷键.
 
-  close_on_exit = true,     -- job 执行完成之后退出 terminal. 输入 `$ exit` 之后自动关闭 terminal.
-  start_in_insert = false,  -- VVI: 打开 terminal 时进入 insert 模式.
-                            -- 类似 `au TermOpen|BufWinEnter term://*#toggleterm#* :startinsert`
-                            -- 全局设置, 会造成 go run 等 terminal 在运行完成后时是 insert 模式. 可以对 terminal 进行单独设置.
+  close_on_exit = true,    -- job 执行完成之后退出 terminal. 输入 `$ exit` 之后自动关闭 terminal.
+  start_in_insert = true,  -- 打开 terminal 时进入 insert 模式.
+                           -- 类似 `au TermOpen|BufWinEnter term://*#toggleterm#* :startinsert`
+                           -- NOTE: 全局设置, 不可对 terminal 进行单独设置.
 
   direction = "horizontal",  -- vertical | horizontal | tab | float
 
@@ -41,9 +41,12 @@ toggleterm.setup({
   persist_size = true,   -- 保持 window size
   persist_mode = true,   -- if set to true (default) the previous terminal mode will be remembered
 
+  auto_scroll = true,  -- automatically scroll to the bottom on terminal output
+
   shade_terminals = false,  -- `set termguicolors` 用
   --shade_filetypes = {},
   --shading_factor = 2,     -- the degree by which to darken to terminal colour, 1 | 2 | 3
+
   shell = vim.o.shell,
   float_opts = {
     border = "single",  -- `:help nvim_open_win()`
@@ -86,11 +89,6 @@ vim.api.nvim_set_hl(0, 'WinBarInactive', {ctermfg=246})
 ---   term:shutdown()  NOTE: exit terminal. 终止 terminal job, 然后关闭 term 窗口.
 local Terminal = require("toggleterm.terminal").Terminal
 
---- on_open callback function
-local function term_startinsert()
-  vim.cmd('startinsert')  -- 使用 on_open 相当于启动了 TermOpen 事件.
-end
-
 --- VVI: execute: golang / javascript / typescript / python... ----------------- {{{
 local exec_term_id = 1001
 local exec_term = Terminal:new({
@@ -98,8 +96,7 @@ local exec_term = Terminal:new({
   --- 但是如果有相同 count 的 term job 还未结束时, 新的 term 无法运行.
   count = exec_term_id,
 
-  --- VVI: 必须要, 否则在 :shutdown() 的时候会因为 close_on_exit 开始退出,
-  --- 导致 :open() 在执行下一个命令的过程中 terminal 退出.
+  --- job done 之后会自动关闭 terminal window, 无法查看运行结果.
   close_on_exit = false,
 })
 
@@ -118,17 +115,36 @@ function _Exec(cmd, cache, on_exit_fn)
   exec_term:shutdown()
 
   --- 缓存执行 _Exec() 的 window id
-  local exec_win_id = vim.fn.win_getid(vim.fn.winnr())
+  local exec_win_id = vim.api.nvim_get_current_win()
 
   --- 该 terminal buffer wipeout 的时候回到之前的窗口.
   exec_term.on_open = function()
+    vim.cmd('stopinsert')
+
+    local group_id = vim.api.nvim_create_augroup("my_back_to_prev_window",{clear=true})
     vim.api.nvim_create_autocmd("BufWipeout", {
+      group = group_id,
       buffer = 0,
       callback = function(params)
         --- 如果 goto 的 win_id 不存在, 则会自动跳到别的 window.
-        vim.fn.win_gotoid(exec_win_id)  -- 这里会返回 true | false.
+        vim.fn.win_gotoid(exec_win_id)
+        vim.wo[exec_win_id].cursorline = true  -- VVI: 必须要, 因为这里无法触发 WinEnter, 导致 cursorline 无法设置.
+
+        --- 删除 augroup
+        vim.api.nvim_del_augroup_by_id(group_id)
       end,
       desc = 'go back to window which execute _Exec()',
+    })
+
+    vim.api.nvim_create_autocmd("WinClosed", {
+      group = group_id,
+      buffer = 0,
+      callback = function(params)
+        --- 如果 goto 的 win_id 不存在, 则会自动跳到别的 window.
+        vim.fn.win_gotoid(exec_win_id)
+        vim.wo[exec_win_id].cursorline = true  -- VVI: 必须要, 因为这里无法触发 WinEnter, 导致 cursorline 无法设置.
+      end,
+      desc = 'back to prev window which execute _Exec()',
     })
   end
 
@@ -137,10 +153,6 @@ function _Exec(cmd, cache, on_exit_fn)
 
   --- 设置 cmd
   exec_term.cmd = 'echo -e "\\e[32m' .. vim.fn.escape(cmd,'"') .. ' \\e[0m" && ' .. cmd
-
-  --- NOTE: 如果使用 :new() 生成了新的实例, 需要重新缓存新生成的实例, 否则无法 open() / close() ...
-  --exec_term = exec_term:new(vim.tbl_deep_extend('error', exec_opts, {cmd = cmd}))
-  --my_terminals[exec_term_id] = exec_term  -- VVI: 缓存新的 exec terminal
 
   --- run cmd
   exec_term:open()
@@ -188,7 +200,6 @@ local node_term = Terminal:new({
   hidden = true,  -- true: 该 term 不受 :ToggleTerm :ToggleTermToggleAll ... 命令影响.
   direction = "float",  -- horizontal(*) | vertical | float | tab
   count = node_term_id,
-  on_open = term_startinsert,
 })
 
 function _NODE_TOGGLE()
@@ -203,7 +214,6 @@ local python_term = Terminal:new({
   hidden = true,
   direction = "float",
   count = py_term_id,
-  on_open = term_startinsert,
 })
 
 function _PYTHON_TOGGLE()
@@ -212,15 +222,15 @@ end
 -- -- }}}
 
 --- normal terminals -----------------------------------------------------------
-local n1_term = Terminal:new({count = 1, on_open = term_startinsert})
-local n2_term = Terminal:new({count = 2, on_open = term_startinsert})
-local n3_term = Terminal:new({count = 3, on_open = term_startinsert})
-local n4_term = Terminal:new({count = 4, on_open = term_startinsert})
-local n5_term = Terminal:new({count = 5, on_open = term_startinsert})
-local n6_term = Terminal:new({count = 6, on_open = term_startinsert})
-local n7_term = Terminal:new({count = 7, direction = "vertical", on_open = term_startinsert})
-local n8_term = Terminal:new({count = 8, direction = "vertical", on_open = term_startinsert})
-local n9_term = Terminal:new({count = 9, direction = "vertical", on_open = term_startinsert})
+local n1_term = Terminal:new({count = 1})
+local n2_term = Terminal:new({count = 2})
+local n3_term = Terminal:new({count = 3})
+local n4_term = Terminal:new({count = 4})
+local n5_term = Terminal:new({count = 5})
+local n6_term = Terminal:new({count = 6})
+local n7_term = Terminal:new({count = 7, direction = "vertical"})
+local n8_term = Terminal:new({count = 8, direction = "vertical"})
+local n9_term = Terminal:new({count = 9, direction = "vertical"})
 
 -- -- }}}
 
