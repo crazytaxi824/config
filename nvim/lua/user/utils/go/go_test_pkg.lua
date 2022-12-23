@@ -1,4 +1,4 @@
-local go_utils = require("user.ftplugin_deps.go.utils")
+local go_utils = require("user.utils.go.utils")
 
 local M = {}
 

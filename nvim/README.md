@@ -455,6 +455,11 @@ function TestNull()
 end
 ```
 
-- chore: highlight filepath / jump to file
-- chore: global -> utils (module)
+- chore: ftplugin_deps/go
+
 - toggleterm: bg_term, Exec(), PYTHON_term, NODE_term()
+
+- highlight filepath: matchdelete()
+
+- 全局替换. Rg gn <CTRL-V>
+

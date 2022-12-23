@@ -1,9 +1,9 @@
-local go_run            = require("user.ftplugin_deps.go.go_run")
-local go_test_single    = require("user.ftplugin_deps.go.go_test_single")
-local go_test_pkg       = require("user.ftplugin_deps.go.go_test_pkg")
-local tool_gomodifytags = require("user.ftplugin_deps.go.tool_gomodifytags")
-local tool_gotests      = require("user.ftplugin_deps.go.tool_gotests")
-local tool_impl         = require("user.ftplugin_deps.go.tool_impl")
+local go_run            = require("user.utils.go.go_run")
+local go_test_single    = require("user.utils.go.go_test_single")
+local go_test_pkg       = require("user.utils.go.go_test_pkg")
+local tool_gomodifytags = require("user.utils.go.tool_gomodifytags")
+local tool_gotests      = require("user.utils.go.tool_gotests")
+local tool_impl         = require("user.utils.go.tool_impl")
 
 local M = {
   --- methods

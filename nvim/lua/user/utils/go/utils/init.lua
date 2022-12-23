@@ -1,6 +1,6 @@
-local go_list_module = require("user.ftplugin_deps.go.utils.go_list")
-local go_testflags   = require("user.ftplugin_deps.go.utils.testflags")
-local bg_term        = require("user.ftplugin_deps.go.utils.bg_term")
+local go_list_module = require("user.utils.go.utils.go_list")
+local go_testflags   = require("user.utils.go.utils.testflags")
+local bg_term        = require("user.utils.go.utils.bg_term")
 
 local M = {
   go_list = go_list_module.go_list,
