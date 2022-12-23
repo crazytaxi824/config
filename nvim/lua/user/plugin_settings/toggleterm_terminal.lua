@@ -100,17 +100,9 @@ local exec_term = Terminal:new({
   close_on_exit = false,
 })
 
---- string, 缓存 _Exec() 中运行的 cmd.
-local cache_cmd
-
 --- cache 是一个标记, 如果为 true, 则在将 cmd 记录在 last_cmd 中.
 --- callback 在 on_exit = func() 的时候执行.
-function _Exec(cmd, cache, on_exit_fn)
-  --- 缓存 cmd
-  if cache then
-    cache_cmd = cmd
-  end
-
+function _Exec(cmd, on_exit_fn)
   --- 删除之前的 terminal, 同时终止 job.
   exec_term:shutdown()
 
@@ -153,23 +145,6 @@ function _Exec(cmd, cache, on_exit_fn)
 
   --- 设置 cmd
   exec_term.cmd = 'echo -e "\\e[32m' .. vim.fn.escape(cmd,'"') .. ' \\e[0m" && ' .. cmd
-
-  --- run cmd
-  exec_term:open()
-end
-
---- 重新执行 cached cmd
-local function exec_cached_cmd()
-  if not cache_cmd then
-    Notify("no Command has been Cached", "Info")
-    return
-  end
-
-  --- 删除之前的 terminal, 同时终止 job.
-  exec_term:shutdown()
-
-  --- 设置 cmd
-  exec_term.cmd = 'echo -e "\\e[32m' .. vim.fn.escape(cache_cmd,'"') .. ' \\e[0m" && ' .. cache_cmd
 
   --- run cmd
   exec_term:open()
@@ -299,8 +274,7 @@ local toggleterm_keymaps = {
   {'n', 'tt', toggle_normal_term, opt, "terminal: toggle Terminal #(1-9)"},
   {'n', '<leader>t', toggle_all_terms, opt, "terminal: toggle All Terminals"},
 
-  {'n', '<F17>', exec_cached_cmd, opt, "code: Re-Run Cached cmd"},  -- <S-F5> run cache cmd.
-  {'n', '<F29>', exec_last_cmd, opt, "code: Re-Run Last cmd"},    -- <C-F5> re-run last cmd.
+  {'n', '<F17>', exec_last_cmd, opt, "code: Re-Run Last cmd"},    -- <S-F5> re-run last cmd.
 }
 
 require('user.utils.keymaps').set(toggleterm_keymaps, {

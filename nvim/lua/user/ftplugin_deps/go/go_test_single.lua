@@ -107,7 +107,7 @@ local function go_test_single(testfn_name, opt)
   end
 
   --- toggleterm 执行 command
-  _Exec(cmd, false, on_exit)
+  _Exec(cmd, on_exit)
 end
 
 M.go_test_single_func = function(prompt)
