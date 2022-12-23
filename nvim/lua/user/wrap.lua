@@ -6,12 +6,12 @@ local function set_cursor_move_in_wrap(bufnr)
   local cursor_move_keymaps = {
     {'n', '<Down>', 'gj', opts, 'which_key_ignore'},
     {'n', '<Up>',   'gk', opts, 'which_key_ignore'},
-    {'n', '<Home>', key_fn.home_key.wrap, opts, 'which_key_ignore'},  -- g0 相当于 g<Home>
+    {'n', '<Home>', function() key_fn.home_key.wrap() end, opts, 'which_key_ignore'},  -- g0 相当于 g<Home>
     {'n', '<End>',  'g$', opts, 'which_key_ignore'},  -- g$ 相当于 g<End>
 
     {'v', '<Down>', 'gj', opts, 'which_key_ignore'},
     {'v', '<Up>',   'gk', opts, 'which_key_ignore'},
-    {'v', '<Home>', key_fn.home_key.wrap, opts, 'which_key_ignore'},
+    {'v', '<Home>', function() key_fn.home_key.wrap() end, opts, 'which_key_ignore'},
     {'v', '<End>',  'g$', opts, 'which_key_ignore'},
 
     {'i', '<Down>', '<C-o>gj', opts, 'which_key_ignore'},
@@ -20,7 +20,7 @@ local function set_cursor_move_in_wrap(bufnr)
     {'i', '<End>',  '<C-o>g$', opts, 'which_key_ignore'},
   }
 
-  require('user.utils.keymaps').set(cursor_move_keymaps)
+  key_fn.set(cursor_move_keymaps)
 end
 
 --- VVI: 不能直接使用 vim.keymap.del(), 因为如果在 '<Up>' ... 等 key 没有 set() 的情况下, del() 会报错.

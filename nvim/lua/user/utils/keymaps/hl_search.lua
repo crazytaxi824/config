@@ -16,7 +16,7 @@ local my_search = {
 --- define my_search_sign
 vim.fn.sign_define(my_search.sign.name, {text=my_search.sign.text, texthl=my_search.hl_group})
 
-local function hl_search(key)
+M.hl_search = function(key)
   local status, errmsg = pcall(vim.cmd, 'normal! ' .. key)
   if not status then
     vim.notify(errmsg, vim.log.levels.ERROR) -- 这里不要使用 notify 插件, 显示错误信息.
@@ -46,7 +46,7 @@ local function hl_search(key)
 end
 
 --- whole_word: bool, 是否使用 \<word\>
-local function hl_visual_search(key, whole_word)
+M.hl_visual_search = function(key, whole_word)
   --- 利用 register "f
   vim.cmd[[normal! "fy]]  -- copy VISUAL select to register 'f'
   local tmp_search = vim.fn.getreg("f")
@@ -55,7 +55,7 @@ local function hl_visual_search(key, whole_word)
   else
     vim.fn.setreg('/', tmp_search)
   end
-  hl_search(key)
+  M.hl_search(key)
 end
 
 --- 删除之前的 highlight
@@ -72,19 +72,6 @@ M.delete = function()
 
   vim.fn.sign_unplace(my_search.sign.group)  -- clear my_search_sign
   vim.cmd[[nohlsearch]]
-end
-
---- 返回闭包函数是为了方便 vim.keymap.set()
-M.normal = function(key)
-  return function()
-    hl_search(key)
-  end
-end
-
-M.visual = function(key, whole_word)
-  return function()
-    hl_visual_search(key, whole_word)
-  end
 end
 
 return M

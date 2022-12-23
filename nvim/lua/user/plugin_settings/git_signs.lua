@@ -48,10 +48,10 @@ git_signs.setup({
   on_attach = function(bufnr)
     local opt = { noremap = true, silent = true, buffer=bufnr}
     local gitsigns_keymaps = {
-      {'n', '<leader>gP', git_signs.preview_hunk, opt, "git: Preview Hunk"},
-      {'n', '<leader>gn', git_signs.next_hunk, opt, "git: Jump to Next Hunk"},
-      {'n', '<leader>gp', git_signs.prev_hunk, opt, "git: Jump to Prev Hunk"},
-      {'n', '<leader>gb', git_signs.toggle_current_line_blame, opt, "git: Toggle Blame line"},
+      {'n', '<leader>gP', function() git_signs.preview_hunk() end, opt, "git: Preview Hunk"},
+      {'n', '<leader>gn', function() git_signs.next_hunk() end, opt, "git: Jump to Next Hunk"},
+      {'n', '<leader>gp', function() git_signs.prev_hunk() end, opt, "git: Jump to Prev Hunk"},
+      {'n', '<leader>gb', function() git_signs.toggle_current_line_blame() end, opt, "git: Toggle Blame line"},
       {'n', '<leader>gd', function()
         git_signs.toggle_deleted()
         git_signs.toggle_word_diff()

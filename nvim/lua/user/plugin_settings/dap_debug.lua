@@ -263,19 +263,19 @@ end
 -- -- }}}
 local opt = { noremap = true, silent = true }
 local debug_keymaps = {
-  {'n', '<leader>cs', dap.continue,  opt, 'debug: Start(Continue)'},
-  {'n', '<leader>ce', dap.terminate, opt, 'debug: Stop(End)'},
-  {'n', '<leader>cr', dap.run_last,  opt, 'debug: Restart'},
-  {'n', '<leader>cq', close_debug_tab_and_buffers, opt, 'debug: Quit'},
+  {'n', '<leader>cs', function() dap.continue() end,  opt, 'debug: Start(Continue)'},
+  {'n', '<leader>ce', function() dap.terminate() end, opt, 'debug: Stop(End)'},
+  {'n', '<leader>cr', function() dap.run_last() end,  opt, 'debug: Restart'},
+  {'n', '<leader>cq', function() close_debug_tab_and_buffers() end, opt, 'debug: Quit'},
 
   --- NOTE: 这里是 dapui 的方法 eval(), {enter=true}进入 float window.
   {'n', '<leader>cc', function() dapui.eval(nil, {enter=true}) end, opt, 'debug: Popup Value under cursor'},
 
-  --{'n', '<F9>',  dap.toggle_breakpoint, opt, "debug: Toggle Breakpoint"},  -- 已经在 _trigger.lua 文件中设置.
-  {'n', '<F21>', dap.clear_breakpoints, opt, "debug: Clear Breakpoints"},  -- <S-f9>
-  {'n', '<F10>', dap.step_over, opt, "debug: Step Over"},
-  {'n', '<F11>', dap.step_into, opt, "debug: Step Into"},
-  {'n', '<F23>', dap.step_out,  opt, "debug: Step Out"},  -- <S-F11>
+  --{'n', '<F9>', function() dap.toggle_breakpoint() end, opt, "debug: Toggle Breakpoint"},  -- 已经在 _trigger.lua 文件中设置.
+  {'n', '<F21>', function() dap.clear_breakpoints() end, opt, "debug: Clear Breakpoints"},  -- <S-f9>
+  {'n', '<F10>', function() dap.step_over() end, opt, "debug: Step Over"},
+  {'n', '<F11>', function() dap.step_into() end, opt, "debug: Step Into"},
+  {'n', '<F23>', function() dap.step_out() end,  opt, "debug: Step Out"},  -- <S-F11>
 }
 
 --- 这里是 global keymaps 设置

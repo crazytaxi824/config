@@ -271,10 +271,10 @@ end
 
 local opt = {noremap = true, silent = true}
 local toggleterm_keymaps = {
-  {'n', 'tt', toggle_normal_term, opt, "terminal: toggle Terminal #(1-9)"},
-  {'n', '<leader>t', toggle_all_terms, opt, "terminal: toggle All Terminals"},
+  {'n', 'tt', function() toggle_normal_term() end, opt, "terminal: toggle Terminal #(1-9)"},
+  {'n', '<leader>t', function() toggle_all_terms() end, opt, "terminal: toggle All Terminals"},
 
-  {'n', '<F17>', exec_last_cmd, opt, "code: Re-Run Last cmd"},    -- <S-F5> re-run last cmd.
+  {'n', '<F17>', function() exec_last_cmd() end, opt, "code: Re-Run Last cmd"},    -- <S-F5> re-run last cmd.
 }
 
 require('user.utils.keymaps').set(toggleterm_keymaps, {

@@ -50,7 +50,7 @@ comment.setup {
 --- keymaps ----------------------------------------------------------------------------------------
 local opt = { noremap = true, silent = true }
 local comment_keymaps = {
-  -- {'n', '<C-j>', require("Comment.api").toggle.linewise.current, opt, 'which_key_ignore'},
+  -- {'n', '<C-j>', function() require("Comment.api").toggle.linewise.current() end, opt, 'which_key_ignore'},
   -- {'i', '<C-j>', '<C-o><CMD>lua require("Comment.api").toggle.linewise.current()<CR>', opt, 'which_key_ignore'},
   -- {'v', '<C-j>', '<C-c><CMD>lua require("Comment.api").locked("toggle.linewise")(vim.fn.visualmode())<CR>', opt, 'which_key_ignore'},
 
