@@ -22,6 +22,7 @@ local gotests = term.Terminal:new({
   hidden = true,
   direction = "float",
   close_on_exit = false,
+  auto_scroll = false,  -- automatically scroll to the bottom on terminal output.
 })
 
 local M = {}
@@ -36,6 +37,10 @@ M.gotests_cmd_tool = function()
   --- 删除之前的 terminal, 同时终止 job.
   --- NOTE: 这一步放在 cmd 生成的后面, 防止 shutdown() 导致 buffer 意外改变.
   gotests:shutdown()
+
+  gotests.on_open = function()
+    vim.cmd('stopinsert')
+  end
 
   --- 设置 cmd
   vim.notify(cmd)
