@@ -121,7 +121,7 @@ for lsp_svr, v in pairs(lsp_servers_map) do
       end)
 
       --- 检查 lsp tools 是否安装
-      Check_cmd_tools({v}, {title="LSP_config"})
+      require('user.utils.check_tools').check(v, {title="LSP_config"})
     end
   })
 end

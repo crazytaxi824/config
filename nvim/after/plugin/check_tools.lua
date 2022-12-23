@@ -21,7 +21,7 @@ local function check_go_tools()
     {cmd="golangci-lint", install="go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest", mason="golangci-lint"},
   }
 
-  Check_cmd_tools(gotools, {title = "check go tools"})
+  require('user.utils.check_tools').check(gotools, {title = "check go tools"})
 end
 
 vim.api.nvim_create_autocmd("FileType", {

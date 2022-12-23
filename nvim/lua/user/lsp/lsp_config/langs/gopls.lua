@@ -7,24 +7,26 @@
 --- 使用 workspace 'go.work' 的情况下, `:LspLog` 打印错误 `go mod tidy` Error.
 --- "finding module for package xxx: cannot find module providing package xxx: module lookup disabled by GOPROXY=off"
 
---- `$ go env GOROOT` | `$ go env GOMODCACHE`
---- NOTE: 不要使用 `go env -json`, 速度很慢.
-local function go_env(...)
-  if not ... then
-    return {}
-  end
-
-  local result = vim.fn.system('go env ' .. table.concat({...}, ' '))
-  if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
-    Notify(result, "ERROR")
-    return {}
-  end
-
-  return vim.split(result, '\n', { trimempty = true })
-end
+--- `$ go env GOROOT` | `$ go env GOMODCACHE` ------------------------------------------------------ {{{
+--- VVI: 不要使用 `go env -json`, 速度很慢.
+-- local function go_env(...)
+--   if not ... then
+--     return {}
+--   end
+--
+--   local result = vim.fn.system('go env ' .. table.concat({...}, ' '))
+--   if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
+--     Notify(result, "ERROR")
+--     return {}
+--   end
+--
+--   return vim.split(result, '\n', { trimempty = true })
+-- end
 
 --- NOTE: ignore following folds as workspace root directory.
-local ignore_workspace_folders = go_env("GOROOT", "GOMODCACHE")
+--local ignore_workspace_folders = go_env("GOROOT", "GOMODCACHE")
+
+-- -- }}}
 
 return {
   --cmd = { "gopls" },

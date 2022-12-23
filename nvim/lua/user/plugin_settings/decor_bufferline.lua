@@ -554,7 +554,7 @@ local bufferline_keymaps = {
   {'n', '<leader>D<Left>', '<cmd>BufferLineCloseLeft<CR>', opt, 'buffer: Close Left Side Buffers'},
 }
 
-Keymap_set_and_register(bufferline_keymaps)
+require('user.utils.keymaps').set(bufferline_keymaps)
 
 --- HACK: 被 bdelete / bwipeout 的 buffer 重新打开时, 分配到 bufferline list 的最后 ---------------- {{{
 --- 原理: 在 buffer 被 bdelete / bwipeout 的时候修改 state.custom_sort = {bufnr ...},

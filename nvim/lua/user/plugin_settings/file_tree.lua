@@ -258,7 +258,7 @@ local tree_keymaps = {
   {'n', '<leader><CR>', function() nvim_tree_toggle('NvimTreeFindFile!') end, opts, 'filetree: jump to file'},
 }
 
-Keymap_set_and_register(tree_keymaps)
+require('user.utils.keymaps').set(tree_keymaps)
 
 -- -- }}}
 
@@ -269,7 +269,7 @@ nvim_tree.setup {
   auto_reload_on_write = true,  -- NOTE: `:w` 时刷新 nvim-tree.
 
   --- NOTE: netrw: vim's builtin file explorer.
-  disable_netrw = open_dir_in_tree,  -- NOTE: completely disable netrw.
+  disable_netrw = false,  -- NOTE: completely disable netrw.
 
   --- true  - `:e dir` 时, 不显示 netrw file explorer.
   --- false - `:e dir` 时, 在当前 window 中显示 netrw file explorer.
@@ -497,20 +497,6 @@ vim.api.nvim_create_autocmd({"BufEnter", "BufDelete"}, {
   end
 })
 
---- NOTE: 如果 open_dir_in_tree = false, 则 `setlocal nobuflisted` to dirctory buffer.
---- 在 nvim-tree 设置 hijack netrw & directories = false 的情况下使用.
-if not open_dir_in_tree then
-  vim.api.nvim_create_autocmd("BufEnter", {
-    pattern = {"*"},
-    callback = function(params)
-      if vim.fn.isdirectory(params.file) == 1 then
-        --- setlocal nobuflisted
-        vim.bo[params.buf].buflisted = false
-      end
-    end
-  })
-end
-
 -- -- }}}
 
 --- HACK: keymaps toggle git icons and filename highlights ----------------------------------------- {{{
@@ -607,7 +593,7 @@ local gitsigns_keymaps = {
   {'n', '<leader>gh', git_hide_highlights, opt, "git: Hide highlights"},
 }
 
-Keymap_set_and_register(gitsigns_keymaps, {
+require('user.utils.keymaps').set(gitsigns_keymaps, {
   key_desc = {
     g = {name = "Git"},
   },

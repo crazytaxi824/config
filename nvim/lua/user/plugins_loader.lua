@@ -94,12 +94,27 @@ else
 end
 -- -- }}}
 
+--- vim.schedule() lazyload plugins ---------------------------------------------------------------- {{{
+local function lazyload_plugins()
+  --- NOTE: 利用vim.schedual() lazyload plugins
+  vim.schedule(function()
+    local lazyload_list = require("user.plugins_lazy_loader")
+    for _, plugin in ipairs(lazyload_list) do
+      require('packer').loader(plugin)
+    end
+  end)
+end
+-- -- }}}
+
 --- NOTE: 如果 packer 不存在则自动 install "packer.nvim" ------------------------------------------- {{{
 --- DOC: https://github.com/wbthomason/packer.nvim#bootstrapping
 local packer_bootstrap = false  -- 是否需要安装 packer.
 
-local packer_status_ok, packer = pcall(require, "packer")
+local packer_status_ok = pcall(require, "packer")
 if not packer_status_ok then
+  --- 需要安装 packer. NOTE: 其他插件的安装在 packer.startup() 函数的最后启动.
+  packer_bootstrap = true
+
   print('installing packer.nvim ...')
 
   --- install "packer.nvim"
@@ -116,21 +131,24 @@ if not packer_status_ok then
   print('packer.nvim is installed.')
   print('installing plugins ...')
 
-  --- VVI: 加载 packer.
+  --- VVI: 手动加载 packer. 否则其他的 require("packer") 无法使用.
   vim.cmd('packadd packer.nvim')  -- 加载 module
-  packer = require('packer')  -- 重新 load packer, 重新赋值.
 
-  --- 需要安装 packer.
-  packer_bootstrap = true
-
-  --- PackerSync 结束时, 加载 lazyload 中的 plugins.
+  --- packer plugin 安装完成后, 安装 treesitter lang parsers.
   vim.api.nvim_create_autocmd("User", {
-    pattern = { "PackerComplete" },
+    pattern = {"PackerComplete"},
+    once = true,
     callback = function(params)
-      require("user.plugins_lazy_loader")  -- lazyload plugins
-      print('plugins are installed. Happy Coding.')
-    end
+      vim.cmd('packadd nvim-treesitter')  -- 手动加载 treesitter
+      vim.cmd('TSInstall all')  -- 安装 all lang parsers
+
+      --- TODO :Mason install list
+    end,
   })
+
+else
+  --- 不需要安装 packer 的情况下, lazyload plugins.
+  lazyload_plugins()
 end
 -- -- }}}
 
@@ -207,7 +225,7 @@ vim.api.nvim_create_user_command("PackerUpdateLog",
 -- -- }}}
 
 --- packer.init(), Have packer use a popup window, "nvim-lua/popup.nvim" --------------------------- {{{
-packer.init {
+require('packer').init {
   --- Name of the snapshot File you would like to load at startup.
   --- 该设置需要联网, 如果无法访问 github.com 则直接报错.
   --- VVI: 最好在 startup() 的每个 use() 中使用 commit && lock 固化插件版本 curing plugins.
@@ -241,34 +259,13 @@ packer.init {
 }
 -- -- }}}
 
---- vim.schedule() lazyload plugins ---------------------------------------------------------------- {{{
---- 不需要安装 packer 的情况下, lazyload plugins.
-if not packer_bootstrap then
-  --- 在读取 buffer 之后再加载 plugins.
-  --- 这里不能使用 FileType, 因为打开无法识别的文件类型时不会触发该 autocmd. eg: `xxx.log` 文件.
-  vim.api.nvim_create_autocmd("BufEnter", {
-    pattern = {"*"},
-    once = true,  -- VVI: 只需要执行一次
-    callback = function(params)
-      --- NOTE: 利用vim.schedual() lazyload plugins
-      vim.schedule(function()
-        local lazyload_list = require("user.plugins_lazy_loader")
-        for _, plugin in ipairs(lazyload_list) do
-          packer.loader(plugin)
-        end
-      end)
-    end
-  })
-end
--- -- }}}
-
 --- 官方文档 https://github.com/wbthomason/packer.nvim
 --- 插件推荐 https://github.com/LunarVim/Neovim-from-scratch/blob/master/lua/user/plugins.lua
 ---          https://github.com/LunarVim/LunarVim/blob/master/lua/lvim/plugins.lua
 --- `:echo stdpath("data")` == "~/.local/share/nvim"
 --- 插件的安装位置在 "~/.local/share/nvim/site/pack/packer/start/..."
 --- `:PackerSync` - install / update / clean 插件包.
-return packer.startup(function(use)
+return require('packer').startup(function(use)
   use {"wbthomason/packer.nvim",  -- VVI: 必要. Have packer manage itself
     commit = "64ae65f",
   }
@@ -278,7 +275,7 @@ return packer.startup(function(use)
   --- VVI: impatient needs to be setup before any other lua plugin is loaded.
   use {"lewis6991/impatient.nvim",  -- NOTE: 这里只是安装, 设置在 init.lua 中. impatient 不是通过 setup() 设置.
     commit = "d3dd30f",
-    run = ":LuaCacheClear",  -- 更新后清空 luacache_chunks && luacache_modpaths, 下次启动 nvim 时重新生成.
+    --run = ":LuaCacheClear",  -- 更新后清空 luacache_chunks && luacache_modpaths, 下次启动 nvim 时重新生成.
   }
 
   --- Useful lua functions used by lots of plugins
@@ -610,6 +607,6 @@ return packer.startup(function(use)
 
   --- VVI: 需要安装 packer 的情况下, 同时安装其他插件.
   if packer_bootstrap then
-    packer.sync()
+    require('packer').sync()
   end
 end)

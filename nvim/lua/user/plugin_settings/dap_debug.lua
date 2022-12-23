@@ -279,13 +279,32 @@ local debug_keymaps = {
 }
 
 --- 这里是 global keymaps 设置
-Keymap_set_and_register(debug_keymaps)
+require('user.utils.keymaps').set(debug_keymaps)
 
 --- Highlight filepath -----------------------------------------------------------------------------
+local fp = require('user.utils.filepath')
+
+--- 给 dap-repl 添加 filepath highlight, 这里不能使用 "FileType",
+--- 因为 "FileType" 只能触发一次, 而 matchadd() 每次执行后只会影响当前窗口,
+--- 所以如果多个窗口显示 dap-repl 时, 只有一个窗口会有 highlight.
+vim.api.nvim_create_autocmd('BufEnter', {
+  pattern = {"\\[dap-repl\\]"},
+  callback = fp.highlight,
+})
+
+--- jump to file
 vim.api.nvim_create_autocmd("FileType", {
   pattern = {"dap-repl"},
   callback = function(params)
-    Highlight_filepath()
+    vim.keymap.set('n', '<S-CR>',
+      function() fp.n_jump(vim.fn.expand('<cWORD>')) end,
+      {
+        noremap = true,
+        silent = true,
+        buffer = params.buf,  -- local to Terminal buffer
+        desc = "Jump to file",
+      }
+    )
   end,
 })
 

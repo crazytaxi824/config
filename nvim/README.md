@@ -454,3 +454,7 @@ function TestNull()
   -- print(vim.inspect(golangci.generator))
 end
 ```
+
+- chore: highlight filepath / jump to file
+- chore: global -> utils (module)
+- toggleterm: bg_term, Exec(), PYTHON_term, NODE_term()

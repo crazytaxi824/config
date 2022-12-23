@@ -1,4 +1,7 @@
 --- 使用 `$ which` 查看插件所需 tools 是否存在 -----------------------------------------------------
+
+local M = {}
+
 --- lsp tools:
 ---   {cmd="gopls", lspconfig="gopls", mason="gopls", install="go install golang.org/x/tools/gopls@latest"}
 ---   {cmd="vscode-json-language-server", lspconfig="jsonls", mason="json-lsp"}
@@ -28,9 +31,16 @@ local function check_tool(tool, notify_opt)
   end
 end
 
-function Check_cmd_tools(tools, notify_opt)
+M.check = function(tools, notify_opt)
   --- NOTE: "vim.schedule(function() ... end)" is a async function
   vim.schedule(function()
+    --- check tools after "mason" is loaded.
+    local mason_ok = pcall(require, "mason")
+    if not mason_ok then
+      Notify("Mason is not loaded", "INFO")
+      return
+    end
+
     local result = {"Tools should be installed:"}
     local count = 0
     if #tools > 0 then
@@ -59,5 +69,4 @@ function Check_cmd_tools(tools, notify_opt)
   end)
 end
 
-
-
+return M

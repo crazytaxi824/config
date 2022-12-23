@@ -1,3 +1,5 @@
+local key_fn = require('user.utils.keymaps')
+
 --- NOTE: 全局 keymap 设置
 --- Readme ----------------------------------------------------------------------------------------- {{{
 --- vim.keymap.set() & vim.keymap.del()
@@ -79,291 +81,6 @@ local function delete_all_other_buffers()
 end
 -- -- }}}
 
---- <Home> 快捷键 -------------------------------------------------------------- {{{
---- 先跳到 '^' first non-blank character of the line, 再跳到 '0' first character of the line.
-function _Home_action_nowrap()
-  local before_pos = vim.fn.getpos('.')
-  vim.cmd('normal! ^')
-
-  local after_pos = vim.fn.getpos('.')
-  if before_pos[2] == after_pos[2] and before_pos[3] == after_pos[3] then
-    vim.cmd('normal! 0')
-  end
-end
--- -- }}}
-
---- for Search Highlight ------------------------------------------------------- {{{
---- 在当前 search result 前放置 search_sign.
---- {group} as a namespace for {id}, thus two groups can use the same IDs.
-local my_search = {
-  sign = {
-    id = 10010,
-    group = "MySearchSignGroup",
-    name = "MySearchSign",
-    text = "⚲",  -- 类似 icon, ⌕☌⚲⚯
-  },
-  hl_group = "IncSearch",
-  cache_last_hl = nil  -- 缓存 { win_id=win_getid(), hl_id=matchadd() }, for vim.fn.matchdelete()
-}
---- define my_search_sign
-vim.fn.sign_define(my_search.sign.name, {text=my_search.sign.text, texthl=my_search.hl_group})
-
-local function hl_search(key)
-  local status, errmsg = pcall(vim.cmd, 'normal! ' .. key)
-  if not status then
-    vim.notify(errmsg, vim.log.levels.ERROR) -- 这里不要使用 notify 插件, 显示错误信息.
-    return
-  end
-
-  --- VVI: 删除之前的 highlight. 必须删除上一个 matchadd(), 然后重新 matchadd().
-  if my_search.cache_last_hl then
-    vim.fn.matchdelete(my_search.cache_last_hl.hl_id, my_search.cache_last_hl.win_id)
-  end
-  vim.fn.sign_unplace(my_search.sign.group)  -- clear search_sign
-
-  --- NOTE: `:help /ordinary-atom`
-  --- `\%#` 意思是 match cursor 所在位置. Matches with the cursor position.
-  --- `\c`  意思是 ignore-case. 可以被 overwrite 例如 `/foo\C`
-  --- getreg() 是获取 register 值.
-  local search_pattern = '\\c\\%#' .. vim.fn.getreg('/')
-  local hl_id = vim.fn.matchadd(my_search.hl_group, search_pattern, 101)
-
-  --- NOTE: 通过 cursor position 来 place my_search_sign.
-  local cur_pos = vim.fn.getpos('.')  -- [bufnum, lnum, col, off]
-  vim.fn.sign_place(my_search.sign.id, my_search.sign.group, my_search.sign.name, vim.fn.bufnr(),
-    {lnum=cur_pos[2], priority=101})
-
-  --- 缓存数据
-  my_search.cache_last_hl = {hl_id = hl_id, win_id = vim.fn.win_getid()}
-end
-
---- NOTE: 这里必须使用 global function, 因为还没找到使用 vim.api 执行 '/' 的方法.
-function _Delete_search_hl()
-  --- 删除之前的 highlight
-  if my_search.cache_last_hl then
-    --- NOTE: 如果 win 已经关闭 (win_id 不存在), 则不能使用 matchdelete(win_id), 否则报错.
-    local win_info = vim.fn.getwininfo(my_search.cache_last_hl.win_id)
-    if #win_info > 0 then
-      vim.fn.matchdelete(my_search.cache_last_hl.hl_id, my_search.cache_last_hl.win_id)
-    end
-
-    my_search.cache_last_hl = nil  -- clear cache
-  end
-
-  vim.fn.sign_unplace(my_search.sign.group)  -- clear my_search_sign
-  vim.cmd[[nohlsearch]]
-
-  --- NOTE: 以下方法无法进行 'incsearch'. 但是可以使函数变成 local function.
-  --local search_input = vim.fn.input('/')
-  --vim.cmd('/' .. search_input)
-end
-
---- word: bool, 是否使用 \<word\>
-local function hl_visual_search(key, whole_word)
-  --- 利用 register "f
-  vim.cmd[[normal! "fy]]  -- copy VISUAL select to register 'f'
-  local tmp_search = vim.fn.getreg("f")
-  if whole_word then
-    vim.fn.setreg('/', '\\<' .. tmp_search .. '\\>')
-  else
-    vim.fn.setreg('/', tmp_search)
-  end
-  hl_search(key)
-end
-
--- -- }}}
-
---- [[, ]], jump to previous/next section -------------------------------------- {{{
---- NOTE: `:help treesitter-languagetree`, `lang` will default to 'filetype'.
---- 利用 nvim-treesitter 获取 buffer `lang`.
-local function parse_buffer_lang()
-  local nvim_ts_ok, nvim_ts_parsers = pcall(require, "nvim-treesitter.parsers")
-  if nvim_ts_ok then
-    return nvim_ts_parsers.get_buf_lang(0)  -- 如果 nvim-treesitter 存在, 则 parse
-  else
-    return vim.bo.filetype  -- 如果 nvim-treesitter 不存在, 则使用 filetype
-  end
-end
-
-local function find_ts_root_node()
-  local lang = parse_buffer_lang()
-  if not lang or lang == '' then
-    vim.notify('treesitter-parser for current buffer is not available', vim.log.levels.WARN)
-    return
-  end
-
-  --- vim.treesitter.get_parser(bufnr, lang)
-  --- "bufnr", 0 current buffer
-  --- "lang", default filetype.
-  local tsparser_status_ok, tsparser = pcall(vim.treesitter.get_parser, 0, lang)
-  if not tsparser_status_ok then
-    vim.notify(tsparser, vim.log.levels.WARN)
-    return
-  end
-
-  --- tsparser:parse() return a {table} of immutable trees
-  local tstree = tsparser:parse()[1]
-  if tstree then
-    return tstree:root()
-  end
-end
-
-local function ts_root_children()
-  local root = find_ts_root_node()
-  if not root then
-    return
-  end
-
-  local child_without_comment = {}  -- cache named child without comment.
-
-  local child_count = root:named_child_count()
-  for i = 0, child_count-1 do
-    local child = root:named_child(i)
-    if child:type() ~= "comment" then
-      table.insert(child_without_comment, child)
-    end
-  end
-
-  if #child_without_comment>0 then
-    return child_without_comment
-  end
-end
-
-local function nodes_around_cursor()
-  local root_children = ts_root_children()
-  if not root_children then
-    return
-  end
-
-  local cursor_lnum = vim.fn.getpos('.')[2]  -- {bufnr, line, col, bytes}, table_list/array, 从 1 开始计算.
-
-  for index in ipairs(root_children) do
-    local node_line = root_children[index]:start()  -- {line, col, bytes}, 从 0 开始计算.
-    if cursor_lnum < node_line+1 then
-      return {
-        prev = root_children[index-2],
-        current = root_children[index-1],
-        next = root_children[index],
-        cursor_lnum = cursor_lnum,
-      }
-    end
-  end
-
-  -- cursor at last node
-  return {
-    prev = root_children[#root_children-1],
-    current = root_children[#root_children],
-    next = nil,
-    cursor_lnum = cursor_lnum,
-  }
-end
-
-local function jump_to_prev_section()
-  local result = nodes_around_cursor()
-  if not result then
-    return
-  end
-
-  if result.current then
-    --- NOTE: cursor line < first non comment node 的情况下 result.current = nil.
-    local current_node_lnum = result.current:start()
-
-    if result.cursor_lnum == current_node_lnum+1 then
-      -- cursor 在 current_node 第一行.
-      if result.prev then
-        local prev_node_lnum = result.prev:start()
-        vim.fn.cursor(prev_node_lnum+1, 1)
-      else
-        --- 自己是 first node's first line 的情况
-        vim.notify("it's first node in this buffer", vim.log.levels.INFO)
-      end
-    else
-      --- jump to cursor current node first line.
-      vim.fn.cursor(current_node_lnum+1, 1)
-    end
-  else
-    vim.notify("it's first node in this buffer", vim.log.levels.INFO)
-  end
-end
-
-local function jump_to_next_section()
-  local result = nodes_around_cursor()
-  if not result then
-    return
-  end
-
-  if result.next then
-    local next_node_lnum = result.next:start()
-    vim.fn.cursor(next_node_lnum+1, 1)
-  else
-    --- NOTE: cursor_line > last node's last line 的情况.
-    local current_node_last_line = result.current:end_()
-    if result.cursor_lnum < current_node_last_line+1 then
-      -- jump to last node's last line
-      vim.fn.cursor(current_node_last_line+1, 1)
-    else
-      --- 自己在 last node's last line 的情况
-      vim.notify("it's last node in this buffer", vim.log.levels.INFO)
-    end
-  end
-end
--- -- }}}
-
---- choose window to jump ------------------------------------------------------ {{{
---- 受到 nvim-tree 启发.
-vim.api.nvim_set_hl(0, 'MyWindowPicker',
-  {ctermfg=Color.black, ctermbg=Color.conditional_magenta, bold=true})
-
---- 获取单个 char 的输入
-local function get_user_input_char()
-  local c = vim.fn.getchar()
-  while type(c) ~= "number" do
-    c = vim.fn.getchar()
-  end
-  return vim.fn.nr2char(c)
-end
-
-local function choose_win()
-  local win_map = {}  -- cache window id map
-  local win_marker = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ"  -- 窗口标识.
-
-  local window_ids = vim.api.nvim_tabpage_list_wins(0)
-  if #window_ids < 2 then
-    vim.notify("There is only 1 window to choose.")
-    return
-  elseif #window_ids > #win_marker then
-    Notify("There are too many windows, (> #win_marker)", "WARN")
-    return
-  end
-
-  for i, win_id in ipairs(window_ids) do
-    local key = string.sub(win_marker,i,i)
-    --- `:help 'statusline'`
-    --- %=   Separation point between alignment sections.
-    ---      Each section will be separated by an equal number of spaces.
-    --- %#   use %#HLname# for highlight group HLname.
-    vim.wo[win_id].statusline = '%#MyWindowPicker#%=%#MyWindowPicker#' .. key .. '%='
-
-    --- cache win_map
-    win_map[key] = win_id
-  end
-
-  vim.cmd('redraw')  -- VVI: 刷新 statusline 显示.
-
-  --- prompt choose window
-  print("Choose window: ")
-  local char = string.upper(get_user_input_char())  -- 这里返回的是 string 类型
-
-  --- jump to window
-  local win_jump_id = win_map[char]
-  if win_jump_id then
-    vim.fn.win_gotoid(win_jump_id)
-  end
-
-  --- clear command line prompt message.
-  vim.cmd("normal! :")
-end
-
 -- -- }}}
 
 -- -- }}}
@@ -424,9 +141,9 @@ local keymaps = {
   {'i', '<C-S-Right>', '<C-o>6zl', opt, 'win: scroll right'},  -- 默认在 insert mode 下和 <S-Right> 相同.
 
   --- NOTE: <Home> 模拟 vscode 行为; <End> 使用默认行为.
-  {'n', '<Home>', _Home_action_nowrap, opt, 'which_key_ignore'},
-  {'v', '<Home>', _Home_action_nowrap, opt, 'which_key_ignore'},
-  {'i', '<Home>', '<C-o><cmd>lua _Home_action_nowrap()<CR>', opt, 'which_key_ignore'},
+  {'n', '<Home>', key_fn.home_key.nowrap, opt, 'which_key_ignore'},
+  {'v', '<Home>', key_fn.home_key.nowrap, opt, 'which_key_ignore'},
+  {'i', '<Home>', '<C-o><cmd>lua require("user.utils.keymaps").home_key.nowrap()<CR>', opt, 'which_key_ignore'},
 
   {'n', 'G', 'Gzz', opt, 'which_key_ignore'},  -- put last line in center
 
@@ -434,25 +151,26 @@ local keymaps = {
   {'n', '<Tab>', '<C-w><C-w>', opt, 'which_key_ignore'},  -- 切换到另一个窗口.
 
   --- Search ---------------------------------------------------------------------------------------
-  {'n','*',  function() hl_search("*")  end, opt, 'search: \\<cword\\> Forward'},
-  {'n','#',  function() hl_search("#")  end, opt, 'search: \\<cword\\> Backward'},
-  {'n','g*', function() hl_search("g*") end, opt, 'search: <cword> Forward'},
-  {'n','g#', function() hl_search("g#") end, opt, 'search: <cword> Backward'},
+  {'n','*',  key_fn.hl_search.normal("*"),  opt, 'search: \\<cword\\> Forward'},
+  {'n','#',  key_fn.hl_search.normal("#"),  opt, 'search: \\<cword\\> Backward'},
+  {'n','g*', key_fn.hl_search.normal("g*"), opt, 'search: <cword> Forward'},
+  {'n','g#', key_fn.hl_search.normal("g#"), opt, 'search: <cword> Backward'},
 
   --- NOTE: "fy - copy VISUAL selected text to register "f"
   --    `let @/ = @f` - copy register "f" to register "/" (search register)
-  {'v', '*',  function() hl_visual_search('n', true) end, opt, 'search: \\<cword\\> Forward'},
-  {'v', '#',  function() hl_visual_search('N', true) end, opt, 'search: \\<cword\\> Backward'},
-  {'v', 'g*', function() hl_visual_search('n') end, opt, 'search: <cword> Forward'},
-  {'v', 'g#', function() hl_visual_search('N') end, opt, 'search: <cword> Backward'},
+  {'v', '*',  key_fn.hl_search.visual('n', true), opt, 'search: \\<cword\\> Forward'},
+  {'v', '#',  key_fn.hl_search.visual('N', true), opt, 'search: \\<cword\\> Backward'},
+  {'v', 'g*', key_fn.hl_search.visual('n'), opt, 'search: <cword> Forward'},
+  {'v', 'g#', key_fn.hl_search.visual('N'), opt, 'search: <cword> Backward'},
 
-  {'n','n', function() hl_search("n") end, opt, 'search: Forward'},
-  {'n','N', function() hl_search("N") end, opt, 'search: Backward'},
+  --- hl next/prev result
+  {'n','n', key_fn.hl_search.normal("n"), opt, 'search: Forward'},
+  {'n','N', key_fn.hl_search.normal("N"), opt, 'search: Backward'},
 
   --- NOTE: 这里不能使用 silent, 否则 command line 中不显示 '?' 和 '/'
   --- ':echo v:hlsearch' 显示目前 hlsearch 状态.
-  {'n', '?', "<cmd>lua _Delete_search_hl()<CR>?", {noremap=true}, 'which_key_ignore'},
-  {'n', '/', "<cmd>lua _Delete_search_hl()<CR>/", {noremap=true}, 'which_key_ignore'},
+  {'n', '?', "<cmd>lua require('user.utils.keymaps').hl_search.delete()<CR>?", {noremap=true}, 'which_key_ignore'},
+  {'n', '/', "<cmd>lua require('user.utils.keymaps').hl_search.delete()<CR>/", {noremap=true}, 'which_key_ignore'},
 
   --- CTRL -----------------------------------------------------------------------------------------
   --- 可以使用的 Ctrl keymap --- {{{
@@ -527,7 +245,7 @@ local keymaps = {
   --{'n', '<leader>d', 'bdelete', opt, 'buf: Close Current Buffer'},
 
   --- Window 控制
-  {'n', '<leader>w', choose_win, opt, 'win: Jump to Window'},  -- 跳转到指定 window
+  {'n', '<leader>w', key_fn.win_choose, opt, 'win: Jump to Window'},  -- 跳转到指定 window
   {'n', '<leader>W', '<C-w><C-o>', opt, 'win: Close All Other Windows'},  -- 关闭所有其他窗口
 
   --- NOTE: terminal key mapping 在 "toggleterm.lua" 中设置了.
@@ -542,8 +260,8 @@ local keymaps = {
   {'n', '`', '<Nop>', opt},
 
   --- 利用 treesitter 跳转到 prev/next root node.
-  {'n', '[[', jump_to_prev_section, opt, 'Jump to Prev Section'},
-  {'n', ']]', jump_to_next_section, opt, 'Jump to Next Section'},
+  {'n', '[[', key_fn.section.goto_prev, opt, 'Jump to Prev Section'},
+  {'n', ']]', key_fn.section.goto_next, opt, 'Jump to Next Section'},
 
   --- 切换 buffer, 目前使用 bufferline 进行 buffer 切换, 如果不使用 buffer line 则使用以下设置.
   --{'n', '<lt>', ':bprevious<CR>', opt, 'go to previous buffer'},
@@ -551,7 +269,7 @@ local keymaps = {
 }
 
 --- 这里是设置所有 key mapping 的地方 --------------------------------------------------------------
-Keymap_set_and_register(keymaps, {
+key_fn.set(keymaps, {
   key_desc = {
     k = {name = "Fold Method"},
     D = {name = "Close Buffers"},
@@ -560,7 +278,7 @@ Keymap_set_and_register(keymaps, {
 })
 
 --- for key desc only
-Keymap_set_and_register({}, {
+key_fn.set({}, {
   key_desc = {
     ['['] = {name="Section Jump"},
     [']'] = {name="Section Jump"},

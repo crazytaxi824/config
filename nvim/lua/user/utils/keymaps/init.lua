@@ -1,0 +1,25 @@
+local hl_search = require('user.utils.keymaps.hl_search')
+local home_key = require('user.utils.keymaps.home_key')
+local section = require('user.utils.keymaps.jump_to_section')
+local win = require('user.utils.keymaps.jump_to_win')
+local set = require('user.utils.keymaps.set_register')
+
+local M = {
+  hl_search = {
+    normal = hl_search.normal,
+    visual = hl_search.visual,
+    delete = hl_search.delete,
+  },
+  home_key = {
+    wrap = home_key.wrap,
+    nowrap = home_key.nowrap,
+  },
+  section = {
+    goto_prev = section.prev,
+    goto_next = section.next,
+  },
+  win_choose = win.choose,
+  set = set.keymap_set_and_register,
+}
+
+return M

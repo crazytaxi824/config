@@ -37,7 +37,7 @@ M.textDocument_keymaps = function(bufnr)
     -- {"n", "K", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts}, 
   }
 
-  Keymap_set_and_register(textdoc_keymaps)
+  require('user.utils.keymaps').set(textdoc_keymaps)
 end
 
 --- for lspconfig && null-ls, format && diagnostic -------------------------------------------------
@@ -56,7 +56,7 @@ M.diagnostic_keymaps = function(bufnr)
     {"n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts, 'LSP: Code Action'},
   }
 
-  Keymap_set_and_register(diag_keymaps, {
+  require('user.utils.keymaps').set(diag_keymaps, {
     key_desc = { c = {name = "Code"} },
     opts = {mode='n',prefix='<leader>', buffer=bufnr},
   })

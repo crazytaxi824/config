@@ -69,47 +69,22 @@ local function sort_table(list)
       return i.kind < j.kind
     end)
   end
+
   table.sort(list, function(i, j)  -- sort start.line
+    --- line 相同时对比 character.
+    if i.range.start.line == j.range.start.line then
+      return i.range.start.character < j.range.start.character
+    end
+    --- line 不同时对比 line.
     return i.range.start.line < j.range.start.line
   end)
-  table.sort(list, function(i, j)  -- sort start.character, 同一行中多个 var 排序.
-    return i.range.start.character < j.range.start.character
-  end)
-end
--- -- }}}
-
---- 判断两个 list 是否相同 ----------------------------------------------------- {{{
-local function compare_sorted_table(t1, t2)
-  if #t1 ~= #t2 then
-    -- print('lists length are not the same')
-    return
-  end
-
-  for i=1, #t1, 1 do
-    --- NOTE: some lsp response DO NOT have 'kind'.
-    if t1.kind and t1.kind ~= t2.kind then
-      -- print('kind value not the same')
-      return
-    end
-
-    --- 这里不需要检查 end, 因为一个 highlight 的 start~end 不会和另一个 highlight 有任何重叠部分.
-    --- 也不会有两个 highlight 出现在同一个 start position 上.
-    for key, _ in pairs(t1[i].range.start) do
-      if t1[i].range.start[key] ~= t2[i].range.start[key] then
-        -- print(key, 'value not the same')
-        return
-      end
-    end
-  end
-
-  return true  -- 认为两个 list 相同
 end
 -- -- }}}
 
 local M = {}
 
---- cache 上一次的 documentHighlight 结果.
-local prev_doc_hi_pos = {}
+--- 将上一次的 documentHighlight 结果缓存到 setbufvar()
+local prev_doc_hl_key = "my_lsp_doc_hl"
 
 --- `:help lsp-handler`
 --- custom lsp.buf_request() handler -------------------------------------------
@@ -122,8 +97,8 @@ local function doc_hl_handler(err, result, req, config)
 
   --- VVI: 没有结果的情况下, 有些 lsp 会返回 nil, 有些会返回 empty table {}. eg: cursor 在空白行.
   if not result or #result == 0 then
-    --- clear cached result
-    prev_doc_hi_pos = {}
+    --- clear previous result
+    vim.fn.setbufvar(req.bufnr, prev_doc_hl_key, '')
 
     --- VVI: 这里不要使用 vim.lsp.buf.clear_references() 方法,
     --- 这个方法只能清除当前 buffer 的 highlight.
@@ -131,20 +106,25 @@ local function doc_hl_handler(err, result, req, config)
     return
   end
 
+  --- 给结果排序
   sort_table(result)
-  local r = compare_sorted_table(prev_doc_hi_pos, result)
 
-  --- cache result to prev_doc_hi_pos
-  prev_doc_hi_pos = result
+  --- json_encode result
+  local je = vim.fn.json_encode(result)
 
+  --- compare previous result with new result
+  local r = vim.fn.getbufvar(req.bufnr, prev_doc_hl_key) == je
+
+  --- cache new result
+  vim.fn.setbufvar(req.bufnr, prev_doc_hl_key, je)
+
+  --- previous result 和 new result 不相同的情况.
   if not r then
-    -- print('changed')  -- documentHighlight position changed
-
     --- VVI: 这里不要使用 vim.lsp.buf.clear_references() 方法,
     --- 这个方法只能清除当前 buffer 的 highlight.
     vim.lsp.util.buf_clear_references(req.bufnr)  -- clear previous highlight
 
-    --- 为了获取 offset_encoding
+    --- 获取 client.offset_encoding
     local client = vim.lsp.get_client_by_id(req.client_id)
     if not client then
       return
@@ -175,7 +155,7 @@ end
 --- VVI: 这里不要使用 vim.lsp.buf.clear_references() 方法, 这个方法只能清除当前 buffer 的 highlight.
 M.doc_clear = function(bufnr)
   --- clear cached result
-  prev_doc_hi_pos = {}
+  vim.fn.setbufvar(bufnr, prev_doc_hl_key, '')
 
   --- clear previous highlight
   vim.lsp.util.buf_clear_references(bufnr)
