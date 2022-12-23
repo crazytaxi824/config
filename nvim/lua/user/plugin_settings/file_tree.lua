@@ -589,8 +589,8 @@ end
 --- 设置 keymaps ---------------------------------------------------------------
 local opt = { noremap = true, silent = true}
 local gitsigns_keymaps = {
-  {'n', '<leader>gs', git_show_highlights, opt, "git: Show highlights"},
-  {'n', '<leader>gh', git_hide_highlights, opt, "git: Hide highlights"},
+  {'n', '<leader>gs', function() git_show_highlights() end, opt, "git: Show highlights"},
+  {'n', '<leader>gh', function() git_hide_highlights() end, opt, "git: Hide highlights"},
 }
 
 require('user.utils.keymaps').set(gitsigns_keymaps, {

@@ -6,8 +6,8 @@ local set = require('user.utils.keymaps.set_register')
 
 local M = {
   hl_search = {
-    normal = hl_search.normal,
-    visual = hl_search.visual,
+    normal = hl_search.hl_search,
+    visual = hl_search.hl_visual_search,
     delete = hl_search.delete,
   },
   home_key = {

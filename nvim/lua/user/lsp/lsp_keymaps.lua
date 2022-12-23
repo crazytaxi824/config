@@ -23,8 +23,8 @@ M.textDocument_keymaps = function(bufnr)
     {"i", "<F4>", "<C-o><cmd>lua vim.lsp.buf.hover()<CR>", opts, "LSP: Hover"},
 
     -- NOTE: 自定义的 hover_short() request, 在 hover() 基础上只显示 function signature, 不显示 comments.
-    {"n", "<S-CR>", custom_lsp_req.hover_short, opts, "LSP: Hover_Short"},
-    {"i", "<S-CR>", custom_lsp_req.hover_short, opts, "LSP: Hover_Short"},
+    {"n", "<S-CR>", function() custom_lsp_req.hover_short() end, opts, "LSP: Hover_Short"},
+    {"i", "<S-CR>", function() custom_lsp_req.hover_short() end, opts, "LSP: Hover_Short"},
 
     {"n", "<F12>", "<cmd>lua vim.lsp.buf.definition()<CR>", opts, "LSP: Definition"},
     {"n", "<F24>", "<cmd>lua vim.lsp.buf.references()<CR>", opts, "LSP: References"},  -- <S-F12>

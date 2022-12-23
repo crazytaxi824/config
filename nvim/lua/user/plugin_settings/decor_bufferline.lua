@@ -547,7 +547,7 @@ local bufferline_keymaps = {
   --- 关闭 buffer
   --- bufnr("#") > 0 表示 '#' (previous buffer) 存在, 如果不存在则 bufnr('#') = -1.
   --- 如果 # 存在, 但处于 unlisted 状态, 则 bdelete # 报错. 因为 `:bdelete` 本质就是 unlist buffer.
-  {'n', '<leader>d', bufferline_del_current_buffer, opt, 'buffer: Close Current Buffer/Tab'},
+  {'n', '<leader>d', function() bufferline_del_current_buffer() end, opt, 'buffer: Close Current Buffer/Tab'},
 
   --- NOTE: ":BufferLineCloseRight" and ":BufferLineCloseRight" skip unwritten buffers without a bang [!].
   {'n', '<leader>D<Right>', '<cmd>BufferLineCloseRight<CR>', opt, 'buffer: Close Right Side Buffers'},
