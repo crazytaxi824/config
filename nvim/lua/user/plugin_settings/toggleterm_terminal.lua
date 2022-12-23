@@ -110,26 +110,7 @@ function _Exec(cmd, on_exit_fn)
   local exec_win_id = vim.api.nvim_get_current_win()
 
   --- 该 terminal buffer wipeout 的时候回到之前的窗口.
-  exec_term.on_open = function()
-    vim.cmd('stopinsert')
-
-    local group_id = vim.api.nvim_create_augroup("my_back_to_prev_window",{clear=true})
-    vim.api.nvim_create_autocmd("BufWipeout", {
-      group = group_id,
-      buffer = 0,
-      callback = function(params)
-        --- 如果 goto 的 win_id 不存在, 则会自动跳到别的 window.
-        if vim.fn.win_gotoid(exec_win_id) == 1 then
-          --- VVI: 必须要, 因为这里无法触发 WinEnter, 导致 cursorline 无法设置.
-          vim.wo[exec_win_id].cursorline = true
-        end
-
-        --- 删除 augroup
-        vim.api.nvim_del_augroup_by_id(group_id)
-      end,
-      desc = 'go back to window which execute _Exec()',
-    })
-  end
+  exec_term.on_open = require("user.utils.term.goto_winid").fn(exec_win_id, "stopinsert")
 
   --- NOTE: callback 不存在的时候 on_exit 就会清除, 相当于: on_exit = nil
   exec_term.on_exit = on_exit_fn
