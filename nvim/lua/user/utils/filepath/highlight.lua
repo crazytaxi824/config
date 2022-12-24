@@ -22,7 +22,8 @@ M.highlight_filepath = function(bufnr, win_id)
       vim.fn.matchdelete(m1, win_id)
       vim.fn.matchdelete(m2, win_id)
       vim.fn.matchdelete(m3, win_id)
-    end
+    end,
+    desc = "delete filepath highlight",
   })
 
   --- NOTE: terminal 都是 unlisted buffer, 所以不会触发 BufDelete event. 这里需要使用 BufWipeout.
@@ -31,7 +32,8 @@ M.highlight_filepath = function(bufnr, win_id)
     buffer = bufnr,
     callback = function(params)
       vim.api.nvim_del_augroup_by_id(group_id)
-    end
+    end,
+    desc = "delete filepath highlight augroup",
   })
 end
 

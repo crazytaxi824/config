@@ -39,9 +39,9 @@ end
 --- HACK: 从 insert/select mode 退出时取消 jumpable ------------------------------------------------
 --- https://github.com/L3MON4D3/LuaSnip/issues/258
 --- https://github.com/L3MON4D3/LuaSnip/issues/656
-local function leave_snippet(params)
+local function leave_snippet(bufnr)
   if luasnip.session  -- luasnip session 存在.
-    and luasnip.session.current_nodes[params.buf]  -- luasnip session 在当前 buffer 中存在.
+    and luasnip.session.current_nodes[bufnr]  -- luasnip session 在当前 buffer 中存在.
     and not luasnip.session.jump_active
   then
     --- VVI: 使用 vim.schedule 是为了让 ${1:err} and $1 同步内容.
@@ -54,7 +54,8 @@ end
 vim.api.nvim_create_autocmd("ModeChanged", {
   --pattern = {'s:n', 'i:*'},  -- NOTE: 如果从 'Select' -> 'Normal', 或者 'Insert' -> 'any' mode.
   pattern = {'*:n'},  -- any -> Normal mode
-  callback = leave_snippet,
+  callback = function(params) leave_snippet(params.buf) end,
+  desc = "HACK: unlink_current snippet's session",
 })
 
 

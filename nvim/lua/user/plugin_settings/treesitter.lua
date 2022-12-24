@@ -136,7 +136,8 @@ vim.api.nvim_create_autocmd("FileType", {
   pattern = {"*"},
   callback = function(params)
     set_treesitter_fold_method(999)
-  end
+  end,
+  desc = "treesitter: setlocal foldmethod = 'expr'",
 })
 
 --- Command 手动切换 foldmethod

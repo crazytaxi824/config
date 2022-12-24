@@ -293,6 +293,7 @@ vim.api.nvim_create_autocmd('BufEnter', {
     local curr_win_id = vim.api.nvim_get_current_win()
     fp.highlight(params.buf, curr_win_id)
   end,
+  desc = "filepath highlight",
 })
 
 --- jump_to_file keymaps 设置
@@ -309,6 +310,7 @@ vim.api.nvim_create_autocmd("FileType", {
       }
     )
   end,
+  desc = "keymap for jump_to_file",
 })
 
 

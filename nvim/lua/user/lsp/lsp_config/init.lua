@@ -122,7 +122,8 @@ for lsp_svr, v in pairs(lsp_servers_map) do
 
       --- 检查 lsp tools 是否安装
       require('user.utils.check_tools').check(v, {title="LSP_config"})
-    end
+    end,
+    desc = "setup LSP based on FileType",
   })
 end
 

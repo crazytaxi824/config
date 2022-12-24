@@ -2,11 +2,11 @@ local Terminal = require("toggleterm.terminal").Terminal
 
 local M = {}
 
-local cache_bg_terms = {}  -- 缓存 bg_term
+local cache_bg_terms = {}  -- 缓存 bg_term, [job_num] = {bg_term, ... }
 
 local bg_term_count = 3001  -- bg_term count 从这个数字开始增长.
 
-M.bg_term_spawn = function(cmd)
+M.bg_term_spawn = function(cmd, job)
   local bg_term = Terminal:new({
     --- NOTE: count 在 term job end 之后可以被新的 term 使用, :ls! 中可以看到两个相同 count 的 buffer.
     --- 但是如果有相同 count 的 term job 还未结束时, 新的 term 无法运行.
@@ -18,10 +18,19 @@ M.bg_term_spawn = function(cmd)
 
     --- 不允许被 :ToggleTerm 控制.
     hidden = true,
+
+    --- BUG: bg_term:shutdown() 的时候不会触发 BufWipeout, 所以要手动清除 filepath highlight augroup.
+    on_exit = function(term)
+      vim.api.nvim_del_augroup_by_name('my_filepath_hl_' .. tostring(term.bufnr))
+    end
   })
 
   --- 缓存当前 bg_term
-  table.insert(cache_bg_terms, bg_term)
+  if cache_bg_terms[job] then
+    table.insert(cache_bg_terms[job], bg_term)
+  else
+    cache_bg_terms[job] = {bg_term}
+  end
 
   --- 设置下一个 bg_term 的 count
   bg_term_count = bg_term_count + 1
@@ -33,13 +42,13 @@ M.bg_term_spawn = function(cmd)
   bg_term:spawn()
 end
 
-M.bg_term_shutdown_all = function()
-  for _, bg_term in ipairs(cache_bg_terms) do
+M.bg_term_shutdown_all = function(job)
+  for _, bg_term in ipairs(cache_bg_terms[job]) do
     bg_term:shutdown()
   end
 
   --- 清空 cache
-  cache_bg_terms = {}
+  cache_bg_terms[job] = {}
 end
 
 return M

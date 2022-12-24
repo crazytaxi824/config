@@ -144,6 +144,7 @@ if not packer_status_ok then
 
       --- TODO :Mason install list
     end,
+    desc = "install treesitter's parsers after packer is installed",
   })
 
 else
@@ -167,6 +168,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
   group = packer_user_config_id,
   pattern = {this_file},
   command = 'source ' .. this_file .. ' | PackerCompile profile=true',  -- 相当于 'source <afile>',
+  desc = "PackerCompile after packer config is changed",
 })
 -- -- }}}
 
@@ -209,7 +211,8 @@ vim.api.nvim_create_autocmd("User", {
       vim.fn.writefile(update_info, packer_update_log, 'a')
       vim.cmd('checktime')
     end
-  end
+  end,
+  desc = "log packer update logs",
 })
 
 --- 显示上述文件的内容.

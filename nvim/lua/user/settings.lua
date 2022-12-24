@@ -275,7 +275,8 @@ vim.api.nvim_create_autocmd('WinEnter', {
       vim.wo[win_id].scrolloff = 0
       vim.wo[win_id].sidescrolloff = 0
     end
-  end
+  end,
+  desc = "setlocal scrolloff when enter floating window",
 })
 
 --- 换行符, space, tab, cr ... 显示设置. `:help listchars` ----------------------------------------- {{{
@@ -342,7 +343,8 @@ vim.api.nvim_create_autocmd("FileType", {
       vim.opt_local.foldmethod = "marker"
       vim.opt_local.foldlevel = 0
     end
-  end
+  end,
+  desc = "setlocal foldmethod = 'marker'",
 })
 
 vim.cmd([[au Filetype vim,zsh,yaml setlocal foldmethod=marker foldlevel=0]])
@@ -391,7 +393,8 @@ vim.api.nvim_create_autocmd("WinEnter", {
         vim.wo[win_id].cursorline = false
       end
     end
-  end
+  end,
+  desc = "`set cursorline` when enter window, `set nocursorline` to other windows",
 })
 
 vim.opt.signcolumn = 'yes:1'  -- 'auto:1-3', 最少预留 1 个 sign 的宽度, 最多显示 3 个 sign 的宽度.
@@ -423,7 +426,8 @@ vim.api.nvim_create_autocmd("FileType", {
     if vim.bo[params.buf].textwidth > 0 then
       vim.fn.matchadd('ColorColumn', '\\%' .. vim.bo[params.buf].textwidth+1 .. 'v', 100)
     end
-  end
+  end,
+  desc = "using matchadd() set colorcolumn",
 })
 
 --- backup swapfile undofile -----------------------------------------------------------------------
@@ -460,6 +464,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
       end
     end)
   end,
+  desc = "mkdir -p undodir",
 })
 
 --- NOTE: 'quickfix' & 'location-list' 的 filetype 都是 'qf'.
@@ -475,7 +480,8 @@ vim.api.nvim_create_autocmd("FileType", {
     --- close window
     vim.keymap.set('n', 'q', '<cmd>q<CR>', {noremap=true, buffer=params.buf, desc="close window"})
     --vim.keymap.set('n', '<ESC>', '<cmd>q<CR>', {noremap=true, buffer=params.buf, desc="close window"})
-  end
+  end,
+  desc = "<q> close quickfix window",
 })
 
 --- `:help command-line-window`, 包括 q: q/ q? 打开的窗口.
@@ -489,7 +495,8 @@ vim.api.nvim_create_autocmd("CmdwinEnter", {
     --- close window
     vim.keymap.set('n', 'q', '<cmd>q<CR>', {noremap=true, buffer=params.buf, desc="close window"})
     --vim.keymap.set('n', '<ESC>', '<cmd>q<CR>', {noremap=true, buffer=params.buf, desc="close window"})
-  end
+  end,
+  desc = "<q> close command window",
 })
 
 --- spell check Command

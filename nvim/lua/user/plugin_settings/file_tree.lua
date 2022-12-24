@@ -494,7 +494,8 @@ vim.api.nvim_create_autocmd({"BufEnter", "BufDelete"}, {
     vim.schedule(function()
       nt_api.tree.reload()  -- refresh tree
     end)
-  end
+  end,
+  desc = "refresh nvim-tree",
 })
 
 -- -- }}}
