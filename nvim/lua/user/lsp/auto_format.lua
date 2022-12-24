@@ -69,7 +69,8 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 
     --- 文件写入后需要 checktime 刷新 buffer 内容.
     vim.cmd('checktime')
-  end
+  end,
+  desc = "goimports-reviser organize imports",
 })
 
 

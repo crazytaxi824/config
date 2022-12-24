@@ -138,7 +138,8 @@ vim.api.nvim_create_autocmd("VimLeave", {
 
     --- VVI: Check if any buffers were changed outside of Vim.
     vim.cmd('checktime')
-  end
+  end,
+  desc = "clean log files",
 })
 
 

@@ -41,7 +41,8 @@ if __Debug_Neovim.autocmd_events then
     -- once = true,
     callback = function(params)
       print(params.buf, params.event)
-    end
+    end,
+    desc = "autocmd debug",
   })
 end
 

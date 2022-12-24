@@ -16,6 +16,7 @@ M.fn = function(client, bufnr)
       callback = function(params)
         custom_lsp_req.doc.highlight(params.buf)
       end,
+      desc = "documentHighlight",
     })
 
     --- 清除 clear highlight
@@ -27,7 +28,8 @@ M.fn = function(client, bufnr)
       buffer = bufnr,  -- NOTE: 本 autocmd 只对指定 buffer 有效.
       callback = function(params)
         custom_lsp_req.doc.clear(params.buf)
-      end
+      end,
+      desc = "clear documentHighlight",
     })
 
     --- delete augroup by group_id
@@ -36,7 +38,8 @@ M.fn = function(client, bufnr)
       buffer = bufnr,
       callback = function(params)
         vim.api.nvim_del_augroup_by_id(group_id)
-      end
+      end,
+      desc = "delete documentHighlight augroup",
     })
   end
 end

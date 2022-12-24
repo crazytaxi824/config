@@ -36,10 +36,8 @@ M.set_pprof_cmd_keymap = function(job)
   vim.api.nvim_buf_set_keymap(0, 'n', '<F6>', '', {
     noremap = true,
     silent = true,
+    callback = function() select_pprof(job) end,
     desc = 'Go tool pprof/trace',
-    callback = function()
-      select_pprof(job)
-    end,
   })
 
   --- info Keymap and Command setup

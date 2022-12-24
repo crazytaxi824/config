@@ -605,7 +605,8 @@ vim.api.nvim_create_autocmd("BufDelete", {
   pattern = {"*"},
   callback = function(params)
     remove_bufnr_from_custom_sort(params.buf)
-  end
+  end,
+  desc = "bufferline: remove ':bdelete' buffer from custom sort order",
 })
 -- -- }}}
 
