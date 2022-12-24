@@ -19,9 +19,10 @@ M.highlight_references = function(client, bufnr)
     })
 
     --- 清除 clear highlight
-    --- WinLeave: 在 cursor 进入另外一个 window 前
-    --- BufWinLeave: 在 window 显示其他的 buffer 前
-    vim.api.nvim_create_autocmd({"WinLeave", "BufWinLeave"}, {
+    --- BufLeave: cursor 离开该 buffer 的 event. eg:
+    ---  - window load 其他 buffer.
+    ---  - cursor 进入其他 window.
+    vim.api.nvim_create_autocmd("BufLeave", {
       group = group_id,
       buffer = bufnr,  -- NOTE: 本 autocmd 只对指定 buffer 有效.
       callback = function(params)
