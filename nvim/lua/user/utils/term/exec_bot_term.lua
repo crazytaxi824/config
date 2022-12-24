@@ -30,7 +30,10 @@ M.exec = function(cmd, on_exit_fn)
   local exec_win_id = vim.api.nvim_get_current_win()
 
   --- 该 terminal buffer wipeout 的时候回到之前的窗口.
-  M.exec_bot_term.on_open = goto_win.fn(exec_win_id, "stopinsert")
+  M.exec_bot_term.on_open = function()
+    vim.cmd('stopinsert')
+    goto_win.autocmd(exec_win_id)
+  end
 
   --- NOTE: callback 不存在的时候 on_exit 就会清除, 相当于: on_exit = nil
   M.exec_bot_term.on_exit = on_exit_fn
