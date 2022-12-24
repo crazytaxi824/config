@@ -18,6 +18,11 @@ M.bg_term_spawn = function(cmd, job)
 
     --- 不允许被 :ToggleTerm 控制.
     hidden = true,
+
+    --- BUG: bg_term:shutdown() 的时候不会触发 BufWipeout, 所以要手动清除 filepath highlight augroup.
+    on_exit = function(term)
+      vim.api.nvim_del_augroup_by_name('my_filepath_hl_' .. tostring(term.bufnr))
+    end
   })
 
   --- 缓存当前 bg_term
