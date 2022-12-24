@@ -31,7 +31,7 @@ M.highlight_references = function(client, bufnr)
     })
 
     --- delete augroup by group_id
-    vim.api.nvim_create_autocmd('BufDelete', {
+    vim.api.nvim_create_autocmd('BufWipeout', {
       group = group_id,
       buffer = bufnr,
       callback = function(params)
