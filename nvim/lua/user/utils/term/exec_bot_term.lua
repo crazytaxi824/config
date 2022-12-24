@@ -11,10 +11,11 @@ local M = {}
 ---   term:shutdown()  NOTE: exit terminal. 终止 terminal job, 然后关闭 term 窗口.
 
 --- NOTE: execute: golang / javascript / typescript / python ...
+M.term_id = 1001
 M.exec_bot_term = Terminal:new({
   --- NOTE: count 在 term job end 之后可以被新的 term 使用, :ls! 中可以看到两个相同 count 的 buffer.
   --- 但是如果有相同 count 的 term job 还未结束时, 新的 term 无法运行.
-  count = 1001,
+  count = M.term_id,
 
   --- job done 之后会自动关闭 terminal window, 无法查看运行结果.
   close_on_exit = false,

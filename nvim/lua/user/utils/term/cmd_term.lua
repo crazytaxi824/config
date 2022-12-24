@@ -14,12 +14,11 @@ M.v8_term = Terminal:new({count = 8, direction = "vertical"})
 M.v9_term = Terminal:new({count = 9, direction = "vertical"})
 
 --- node -----------------------------------------------------------------------
-local node_term_id = 201
+M.node_term_id = 201
 M.node_term = Terminal:new({
   cmd = "node",
-  hidden = true,  -- true: 该 term 不受 :ToggleTerm :ToggleTermToggleAll ... 命令影响.
-  direction = "float",  -- horizontal(*) | vertical | float | tab
-  count = node_term_id,
+  direction = "vertical",  -- horizontal(*) | vertical | float | tab
+  count = M.node_term_id,
 })
 
 function _NODE_TOGGLE()
@@ -27,12 +26,11 @@ function _NODE_TOGGLE()
 end
 
 --- python3 --------------------------------------------------------------------
-local py_term_id = 202
+M.py_term_id = 202
 M.python_term = Terminal:new({
   cmd = "python3",
-  hidden = true,  -- true: 该 term 不受 :ToggleTerm :ToggleTermToggleAll ... 命令影响.
-  direction = "float",
-  count = py_term_id,
+  direction = "vertical",
+  count = M.py_term_id,
 })
 
 function _PYTHON_TOGGLE()

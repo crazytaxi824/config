@@ -65,7 +65,7 @@ local function go_test_pkg(opt)
   end
 
   --- toggleterm 执行 command
-  _Exec(cmd, on_exit)
+  require("user.utils.term").bottom.run(cmd, on_exit)
 end
 
 --- go test run/bench multiple packages (Project) --------------------------------------------------
@@ -122,7 +122,7 @@ local function go_test_proj(opt)
   end
 
   --- toggleterm 执行 command
-  _Exec(cmd, on_exit)
+  require("user.utils.term").bottom.run(cmd, on_exit)
 end
 
 --- export functions -------------------------------------------------------------------------------

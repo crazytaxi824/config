@@ -3,7 +3,7 @@ local Terminal = require("toggleterm.terminal").Terminal
 local M = {}
 
 M.exec_float_term = Terminal:new({
-  count = 2860,
+  count = 2001,
   hidden = true,
   direction = "float",
   close_on_exit = false,
