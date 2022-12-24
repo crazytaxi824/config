@@ -1,15 +1,12 @@
 local go_list_module = require("user.utils.go.utils.go_list")
 local go_testflags   = require("user.utils.go.utils.testflags")
-local bg_term        = require("user.utils.go.utils.bg_term")
+local my_term = require("user.utils.term")
 
 local M = {
   go_list = go_list_module.go_list,
 
   parse_testflag_cmd = go_testflags.parse_testflag_cmd,
   get_testflag_desc = go_testflags.get_testflag_desc,
-
-  bg_term_spawn = bg_term.bg_term_spawn,
-  bg_term_shutdown_all = bg_term.bg_term_shutdown_all,
 }
 
 local function select_pprof()
@@ -24,7 +21,7 @@ local function select_pprof()
     if choice then
       local flag_cmd = M.parse_testflag_cmd(choice)
       if flag_cmd and flag_cmd.suffix and flag_cmd.suffix ~= '' then
-        M.bg_term_spawn(flag_cmd.suffix)
+        my_term.bg.spawn(flag_cmd.suffix)
       end
     end
   end)
@@ -54,7 +51,7 @@ M.auto_shutdown_all_bg_terms = function()
     buffer = 0,
     callback = function(params)
       --- delete all running bg_term
-      M.bg_term_shutdown_all()
+      my_term.bg.shutdown_all()
     end,
     desc = 'delete all bg_term when this buffer is deleted',
   })
