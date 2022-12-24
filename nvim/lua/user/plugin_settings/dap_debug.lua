@@ -289,10 +289,13 @@ local fp = require('user.utils.filepath')
 --- 所以如果多个窗口显示 dap-repl 时, 只有一个窗口会有 highlight.
 vim.api.nvim_create_autocmd('BufEnter', {
   pattern = {"\\[dap-repl\\]"},
-  callback = fp.highlight,
+  callback = function(params)
+    local curr_win_id = vim.api.nvim_get_current_win()
+    fp.highlight(params.buf, curr_win_id)
+  end,
 })
 
---- jump to file
+--- jump_to_file keymaps 设置
 vim.api.nvim_create_autocmd("FileType", {
   pattern = {"dap-repl"},
   callback = function(params)
