@@ -30,7 +30,7 @@ if __Debug_Neovim.autocmd_events then
     "BufAdd", "BufNew", "BufNewFile",
     "BufEnter", "BufLeave",
     "BufReadPre", "BufReadPost", "BufWritePre", "BufWritePost", "BufFilePre", "BufFilePost",
-    "BufDelete", "BufUnload", "BufWipeout",
+    "BufHidden", "BufDelete", "BufUnload", "BufWipeout",
     "BufWinEnter", "BufWinLeave",
     "WinNew", "WinEnter", "WinLeave", "WinClosed",
     "FileType",

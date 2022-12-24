@@ -11,7 +11,8 @@ vim.api.nvim_create_autocmd('TermOpen', {
   callback = function(params)
     --- 显示 filepath, NOTE: 第一次打开 terminal 的时候不会触发 "BufEnter", 只能使用 "TermOpen"
     --- 但是 "TermOpen" 类似 "FileType" 只在第一次打开 terminal 的时候触发.
-    fp.highlight()
+    local curr_win_id = vim.api.nvim_get_current_win()
+    fp.highlight(params.buf, curr_win_id)
 
     --- 设置 keymaps
     vim.keymap.set('n', '<S-CR>',
@@ -29,7 +30,10 @@ vim.api.nvim_create_autocmd('TermOpen', {
 --- 这里是保证 terminal hidden 之后, 再次打开时显示 filepath
 vim.api.nvim_create_autocmd('BufWinEnter', {
   pattern = {"term://*"},
-  callback = fp.highlight,
+  callback = function(params)
+    local curr_win_id = vim.api.nvim_get_current_win()
+    fp.highlight(params.buf, curr_win_id)
+  end
 })
 
 --- VISIAL 模式跳转文件 ----------------------------------------------------------------------------

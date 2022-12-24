@@ -454,12 +454,3 @@ function TestNull()
   -- print(vim.inspect(golangci.generator))
 end
 ```
-
-- chore: ftplugin_deps/go
-
-- toggleterm: bg_term, Exec(), PYTHON_term, NODE_term()
-
-- highlight filepath: matchdelete()
-
-- 全局替换. Rg gn <CTRL-V>
-
