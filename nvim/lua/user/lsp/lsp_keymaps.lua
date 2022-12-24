@@ -17,12 +17,13 @@ M.textDocument_keymaps = function(bufnr)
     {"n", "<F2>", "<cmd>lua vim.lsp.buf.rename()<CR>", opts, "LSP: Rename"},
     {"i", "<F2>", "<C-o><cmd>lua vim.lsp.buf.rename()<CR>", opts, "LSP: Rename"},
 
-    -- NOTE: 连续两次 F4 会进入 floating window, q 退出 floating window.
-    -- 如果在 handlers.lua 中 overwrite 设置 {focusable = false}, 则不会进入 floating window.
+    --- NOTE: 连续两次 F4 会进入 floating window, q 退出 floating window.
+    --- 如果在 handlers.lua 中 overwrite 设置 {focusable = false}, 则不会进入 floating window.
     {"n", "<F4>", "<cmd>lua vim.lsp.buf.hover()<CR>", opts, "LSP: Hover"},
     {"i", "<F4>", "<C-o><cmd>lua vim.lsp.buf.hover()<CR>", opts, "LSP: Hover"},
 
-    -- NOTE: 自定义的 hover_short() request, 在 hover() 基础上只显示 function signature, 不显示 comments.
+    --- NOTE: 自定义的 hover_short() request, 在 hover() 基础上只显示 function signature, 不显示 comments.
+    --- 只有在 cursor inside 括号 Add(|) 中时才能使用, 主要是为了方便在使用函数的过程中查看函数的入参.
     {"n", "<S-CR>", function() custom_lsp_req.hover_short() end, opts, "LSP: Hover_Short"},
     {"i", "<S-CR>", function() custom_lsp_req.hover_short() end, opts, "LSP: Hover_Short"},
 

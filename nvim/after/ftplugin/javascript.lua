@@ -1,7 +1,7 @@
 --- javascript -------------------------------------------------------------------------------------
 --- node js_file -----------------------------------------------------------------------------------
 local function js_run(file)
-  _Exec("node " .. file)  -- cache cmd for re-run.
+  require("user.utils.term").bottom.run("node " .. file)
 end
 
 --- jest js_file -----------------------------------------------------------------------------------
@@ -19,7 +19,7 @@ local function js_jest(file, coverage)
     cmd = "jest " .. file
   end
 
-  _Exec(cmd)
+  require("user.utils.term").bottom.run(cmd)
 end
 
 --- keymap -----------------------------------------------------------------------------------------

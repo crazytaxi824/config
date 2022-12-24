@@ -1,4 +1,5 @@
-local go_utils = require("user.ftplugin_deps.go.utils")
+local go_utils = require("user.utils.go.utils")
+local my_term = require("user.utils.term")
 
 local M = {}
 
@@ -60,12 +61,12 @@ local function go_test_pkg(opt)
 
     if flag_cmd.suffix and flag_cmd.suffix ~= '' then
       go_utils.auto_shutdown_all_bg_terms()  -- autocmd BufWipeout bg_term:shutdown()
-      go_utils.bg_term_spawn(flag_cmd.suffix)  -- run `go tool pprof ...` in background terminal
+      my_term.bg.spawn(flag_cmd.suffix)  -- run `go tool pprof ...` in background terminal
     end
   end
 
   --- toggleterm 执行 command
-  _Exec(cmd, on_exit)
+  require("user.utils.term").bottom.run(cmd, on_exit)
 end
 
 --- go test run/bench multiple packages (Project) --------------------------------------------------
@@ -117,12 +118,12 @@ local function go_test_proj(opt)
   local on_exit = function()
     if flag_cmd.suffix and flag_cmd.suffix ~= '' then
       go_utils.auto_shutdown_all_bg_terms()  -- autocmd BufWipeout bg_term:shutdown()
-      go_utils.bg_term_spawn(flag_cmd.suffix)  -- run `go tool pprof ...` in background terminal
+      my_term.bg.spawn(flag_cmd.suffix)  -- run `go tool pprof ...` in background terminal
     end
   end
 
   --- toggleterm 执行 command
-  _Exec(cmd, on_exit)
+  require("user.utils.term").bottom.run(cmd, on_exit)
 end
 
 --- export functions -------------------------------------------------------------------------------

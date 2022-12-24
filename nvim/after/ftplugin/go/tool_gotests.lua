@@ -2,7 +2,7 @@
 vim.api.nvim_buf_create_user_command(
   0,          -- bufnr = 0 表示 current buffer.
   "GoTestsGenerator",  -- command name
-  function() require("user.ftplugin_deps.go").gotests_cmd_tool() end,
+  function() require("user.utils.go").tool.gotests() end,
   {bang = true, bar = true}  -- options: {bang = true, nargs = "+"}
 )
 

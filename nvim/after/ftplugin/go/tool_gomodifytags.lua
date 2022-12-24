@@ -53,7 +53,7 @@ vim.api.nvim_buf_create_user_command(
     local offset = vim.fn.line2byte('.')
     --- 'gomodifytags -add-tags [tags] -offset [n]'
     --- 'gomodifytags -add-tags [tags] -add-options [tag=option] -offset [n]'
-    require("user.ftplugin_deps.go").go_add_tags_and_opts(params.fargs, go_add_tags_cmd, offset)
+    require("user.utils.go").tag.add(params.fargs, go_add_tags_cmd, offset)
   end,
   {nargs = "+", bang = true}
 )
@@ -66,7 +66,7 @@ vim.api.nvim_buf_create_user_command(
     --- 通过判断 offset 是否为 nil, 来确定是否需要使用 '-all'.
     --- 'gomodifytags -add-tags [tags] -all'
     --- 'gomodifytags -add-tags [tags] -add-options [tag=option] -all'
-    require("user.ftplugin_deps.go").go_add_tags_and_opts(params.fargs, go_add_tags_all_struct_cmd)
+    require("user.utils.go").tag.add(params.fargs, go_add_tags_all_struct_cmd)
   end,
   {nargs = "+", bang = true}
 )
@@ -83,7 +83,7 @@ vim.api.nvim_buf_create_user_command(
     local offset = vim.fn.line2byte('.')
     --- 'gomodifytags -clear-tags -offset n'
     --- 'gomodifytags -remove-tags [tags] -offset n'
-    require("user.ftplugin_deps.go").go_remove_tags(params.fargs, go_remove_tags_cmd, offset)
+    require("user.utils.go").tag.remove(params.fargs, go_remove_tags_cmd, offset)
   end,
   {bang = true, nargs = "*"}
 )
@@ -96,7 +96,7 @@ vim.api.nvim_buf_create_user_command(
     --- 通过判断 offset 是否为 nil, 来确定是否需要使用 '-all'.
     --- 'gomodifytags -clear-tags -all'
     --- 'gomodifytags -remove-tags [tags] -all'
-    require("user.ftplugin_deps.go").go_remove_tags(params.fargs, go_remove_tags_all_struct_cmd)
+    require("user.utils.go").tag.remove(params.fargs, go_remove_tags_all_struct_cmd)
   end,
   {bang = true, nargs = "*"}
 )
@@ -114,7 +114,7 @@ vim.api.nvim_buf_create_user_command(
 
     --- 'gomodifytags -clear-options -offset n'
     --- 'gomodifytags -remove-options [tag=option] -offset n'
-    require("user.ftplugin_deps.go").go_remove_tags_opts(params.fargs, go_remove_tag_opts_cmd, offset)
+    require("user.utils.go").tag.remove_opts(params.fargs, go_remove_tag_opts_cmd, offset)
   end,
   {bang = true, nargs = "*"}
 )
@@ -127,7 +127,7 @@ vim.api.nvim_buf_create_user_command(
     --- 通过判断 offset 是否为 nil, 来确定是否需要使用 '-all'.
     --- 'gomodifytags -clear-options -all'
     --- 'gomodifytags -remove-options [tag=option] -all'
-    require("user.ftplugin_deps.go").go_remove_tags_opts(params.fargs, go_remove_tag_opts_all_struct_cmd)
+    require("user.utils.go").tag.remove_opts(params.fargs, go_remove_tag_opts_all_struct_cmd)
   end,
   {bang = true, nargs = "*"}
 )

@@ -13,7 +13,7 @@ local function ts_run(file)
     return
   end
 
-  _Exec("tsc -p ./tsconfig.json && node dist/" .. file .. '.js')  -- cache cmd for re-run.
+  require("user.utils.term").bottom.run("tsc -p ./tsconfig.json && node dist/" .. file .. '.js')
 end
 
 --- jest js_file -----------------------------------------------------------------------------------
@@ -38,7 +38,7 @@ local function ts_jest(file, coverage)
     cmd = "tsc -p ./tsconfig.json && jest dist/" .. file ..'.js'
   end
 
-  _Exec(cmd)
+  require("user.utils.term").bottom.run(cmd)
 end
 
 --- keymap -----------------------------------------------------------------------------------------
