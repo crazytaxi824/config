@@ -47,7 +47,8 @@ toggleterm.setup({
   --shade_filetypes = {},
   --shading_factor = 2,     -- the degree by which to darken to terminal colour, 1 | 2 | 3
 
-  shell = vim.o.shell,
+  shell = vim.o.shell,  -- system shell
+
   float_opts = {
     border = "single",  -- `:help nvim_open_win()`
     winblend = 0,  -- NOTE: 除非使用 termguicolors, 否则设置为 0.
