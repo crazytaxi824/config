@@ -1,4 +1,3 @@
-local my_term = require("user.utils.term")
 local go_utils = require("user.utils.go.utils")
 
 local M = {}
@@ -102,7 +101,7 @@ local function go_test_single(testfn_name, opt)
 
     if flag_cmd.suffix and flag_cmd.suffix ~= '' then
       go_utils.auto_shutdown_all_bg_terms()  -- autocmd BufWipeout bg_term:shutdown()
-      my_term.bg.spawn(flag_cmd.suffix)  -- run `go tool pprof ...` in background terminal
+      require("user.utils.term").bg.spawn(flag_cmd.suffix)  -- run `go tool pprof ...` in background terminal
     end
   end
 

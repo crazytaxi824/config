@@ -82,13 +82,14 @@ vim.api.nvim_set_hl(0, 'WinBarInactive', {ctermfg=246})
 
 -- -- }}}
 
-local term_instance = require("user.utils.term")
+local my_term = require("user.utils.term")
+
 local opt = {noremap = true, silent = true}
 local toggleterm_keymaps = {
-  {'n', 'tt', function() term_instance.toggle.my_term() end, opt, "terminal: toggle Terminal #(1-9)"},
-  {'n', '<leader>t', function() term_instance.toggle.all_terms() end, opt, "terminal: toggle All Terminals"},
+  {'n', 'tt', function() my_term.toggle.my_term() end, opt, "terminal: toggle Terminal #(1-9)"},
+  {'n', '<leader>t', function() my_term.toggle.all_terms() end, opt, "terminal: toggle All Terminals"},
 
-  {'n', '<F17>', function() term_instance.bottom.run_last() end, opt, "code: Re-Run Last cmd"},    -- <S-F5> re-run last cmd.
+  {'n', '<F17>', function() my_term.bottom.run_last() end, opt, "code: Re-Run Last cmd"},    -- <S-F5> re-run last cmd.
 }
 
 require('user.utils.keymaps').set(toggleterm_keymaps, {
