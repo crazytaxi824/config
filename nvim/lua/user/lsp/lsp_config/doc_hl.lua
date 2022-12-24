@@ -5,7 +5,7 @@ local M = {}
 
 --- NOTE: 本函数只会在 buffer on_attach() 的时候执行一次,
 --- 对可以执行 'textDocument/documentHighlight' 请求的 buffer 设置两个 autocmd.
-M.highlight_references = function(client, bufnr)
+M.fn = function(client, bufnr)
   if client.supports_method('textDocument/documentHighlight') then
     --- VVI: 这里必须使用 augroup, 否则在 `:LspRestart` 的情况下会叠加多个 autocmd.
     local group_id = vim.api.nvim_create_augroup("my_documentHighlight_"..tostring(bufnr), {clear=true})

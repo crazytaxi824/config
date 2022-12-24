@@ -18,7 +18,7 @@ M.flags = { debounce_text_changes = 500 }   --- 默认 150.
 M.on_attach = function(client, bufnr)
   --- 加载自定义设置 ---
   --- Same_ID
-  require("user.lsp.lsp_config.highlights").highlight_references(client, bufnr)
+  require("user.lsp.lsp_config.doc_hl").fn(client, bufnr)
 
   --- 设置 lsp 专用 keymaps
   local lsp_keymaps = require("user.lsp.lsp_keymaps")
