@@ -246,7 +246,7 @@ local keymaps = {
 
   --- Window 控制
   {'n', '<leader>w', function() key_fn.win_choose() end, opt, 'win: Jump to Window'},  -- 跳转到指定 window
-  {'n', '<leader>W', '<C-w><C-o>', opt, 'win: Close All Other Windows'},  -- 关闭所有其他窗口
+  {'n', '<leader>W', '<cmd>only!<CR>', opt, 'win: Close All Other Windows'},  -- 关闭所有其他窗口, 类似 <C-w><C-o>
 
   --- NOTE: terminal key mapping 在 "toggleterm.lua" 中设置了.
   {'n', '<leader>T', function() wipeout_all_terminals() end, opt, "terminal: Wipeout All Terminals"},
