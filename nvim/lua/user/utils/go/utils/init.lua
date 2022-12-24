@@ -30,7 +30,7 @@ end
 --- create :GoPprof command & <F6> keymap
 M.set_pprof_cmd_keymap = function()
   --- user command
-  vim.api.nvim_buf_create_user_command(0, 'GoPprof', select_pprof, {bang=true})
+  vim.api.nvim_buf_create_user_command(0, 'GoPprof', function() select_pprof() end, {bang=true})
 
   --- keymap
   vim.api.nvim_buf_set_keymap(0, 'n', '<F6>', '', {
