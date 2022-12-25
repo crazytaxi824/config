@@ -52,7 +52,7 @@ vim.cmd([[
     \ Format
 ]])
 
---- VVI: goimports-reviser 一定要在 goimports 后面执行.
+--- VVI: goimports-reviser 一定要在 goimports 后面执行 ---------------------------------------------
 --- 因为 goimports-reviser 只会对文件当前的 imports(...) 排序,
 --- 如果在 goimports 之前执行, 则排序时有可能有些 import 还未被导入.
 vim.api.nvim_create_autocmd("BufWritePost", {
