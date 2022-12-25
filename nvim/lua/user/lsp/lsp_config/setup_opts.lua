@@ -17,7 +17,7 @@ M.flags = { debounce_text_changes = 500 }   --- 默认 150.
 ---       这里传入的 client 是正在加载的 lsp_client, vim.inspect(client) 中可以看到 codeActionKind.
 M.on_attach = function(client, bufnr)
   --- 加载自定义设置 ---
-  --- Same_ID
+  --- textDocument/documentHighlight, 显示 references
   require("user.lsp.lsp_config.doc_hl").fn(client, bufnr)
 
   --- 设置 lsp 专用 keymaps

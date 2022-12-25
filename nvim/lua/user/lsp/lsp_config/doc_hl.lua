@@ -3,7 +3,7 @@ local custom_lsp_req = require("user.lsp.custom_lsp_request")
 --- 返回自定义 documentHighlight 处理方法 ----------------------------------------------------------
 local M = {}
 
---- NOTE: 本函数只会在 buffer on_attach() 的时候执行一次,
+--- NOTE: 本函数需要在 buffer on_attach() 的时候执行,
 --- 对可以执行 'textDocument/documentHighlight' 请求的 buffer 设置两个 autocmd.
 M.fn = function(client, bufnr)
   if client.supports_method('textDocument/documentHighlight') then
