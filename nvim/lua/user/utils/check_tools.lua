@@ -34,7 +34,8 @@ end
 M.check = function(tools, notify_opt)
   --- NOTE: "vim.schedule(function() ... end)" is a async function
   vim.schedule(function()
-    --- check tools after "mason" is loaded.
+    --- check Mason 是否 loaded, 因为很多 tools 是通过 mason 安装,
+    --- 所以需要在 check tools 之前保证 mason 的 runtimepath 加载成功.
     local mason_ok = pcall(require, "mason")
     if not mason_ok then
       Notify("Mason is not loaded", "INFO")
