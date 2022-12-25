@@ -49,6 +49,7 @@ toggleterm.setup({
 
   shell = vim.o.shell,  -- system shell
 
+  --- This field is only relevant if direction is set to 'float'.
   float_opts = {
     border = "single",  -- `:help nvim_open_win()`
     winblend = 0,  -- NOTE: 除非使用 termguicolors, 否则设置为 0.
