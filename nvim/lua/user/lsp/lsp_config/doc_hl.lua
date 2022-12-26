@@ -10,6 +10,7 @@ M.fn = function(client, bufnr)
     --- VVI: 这里必须使用 augroup, 否则在 `:LspRestart` 的情况下会叠加多个 autocmd.
     local group_id = vim.api.nvim_create_augroup("my_documentHighlight_"..tostring(bufnr), {clear=true})
 
+    --- documentHighlight
     vim.api.nvim_create_autocmd({"CursorHold", "CursorHoldI"}, {
       group = group_id,
       buffer = bufnr,  -- NOTE: 本 autocmd 只对指定 buffer 有效.
@@ -19,7 +20,7 @@ M.fn = function(client, bufnr)
       desc = "documentHighlight",
     })
 
-    --- 清除 clear highlight
+    --- 清除 clear documentHighlight
     --- BufLeave: cursor 离开该 buffer 的 event. eg:
     ---  - window load 其他 buffer.
     ---  - cursor 进入其他 window.
@@ -32,7 +33,7 @@ M.fn = function(client, bufnr)
       desc = "clear documentHighlight",
     })
 
-    --- delete augroup by group_id
+    --- delete documentHighlight augroup
     vim.api.nvim_create_autocmd('BufWipeout', {
       group = group_id,
       buffer = bufnr,

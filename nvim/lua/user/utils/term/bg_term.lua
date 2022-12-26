@@ -2,7 +2,7 @@ local Terminal = require("toggleterm.terminal").Terminal
 
 local M = {}
 
-local cache_bg_terms = {}  -- 缓存 bg_term, [job_num] = {bg_term, ... }
+local cache_bg_terms = {}  -- 缓存 bg_term, map-table: [job_id] = {bg_term, ... }
 
 local bg_term_starting_count = 3001  -- bg_term count 从这个数字开始增长.
 
