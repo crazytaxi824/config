@@ -19,9 +19,9 @@ vim.api.nvim_create_user_command("GetLspClientsInfo",
     local bufnr = tonumber(params.args)
     local clients
     if bufnr then
-      clients = vim.tbl_values(vim.lsp.buf_get_clients(bufnr))
+      clients = vim.tbl_values(vim.lsp.get_active_clients({bufnr = bufnr}))
     else
-      clients = vim.tbl_values(vim.lsp.buf_get_clients())
+      clients = vim.tbl_values(vim.lsp.get_active_clients())
     end
 
     print(vim.inspect(clients))
