@@ -11,6 +11,7 @@ local function lsp_format(buf)
   local format_client
   for _, client in ipairs(lsp_clients) do
     --- 首先 lsp 要支持 format. 如果 lsp 支持 format 但是功能被手动禁用, 这里也会返回 false.
+    --- null-ls 会根据不同的文件类型返回是否支持 formatting.
     if client.supports_method('textDocument/formatting') then
       if client.name == 'null-ls' then
         --- 如果 null-ls 存在, 则使用 null-ls.
