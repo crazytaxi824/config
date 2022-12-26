@@ -2,10 +2,10 @@
 --- NOTE: save 时格式化文件. 自动格式化放在 Lsp 加载成功后.
 --- null-ls 也是一个 Lsp client, 可以提供 formatting 功能. 可以通过 `:LspInfo` 查看.
 
-local function lsp_format()
-  local bufnr = vim.fn.bufnr()
+local function lsp_format(buf)
+  local bufnr = buf or vim.api.nvim_get_current_buf() or vim.fn.bufnr()
 
-  --- 获取所有 attached/active lsp clients
+  --- get all attached/active lsp clients attached to bufnr
   local lsp_clients = vim.lsp.get_active_clients({ bufnr = bufnr })
 
   local format_client
@@ -41,16 +41,20 @@ end
 vim.api.nvim_create_user_command("Format", function() lsp_format() end, {bang=true, bar=true})
 
 --- BufWritePre 在写入文件之前执行 Format.
---- NOTE: yaml, markdown, lua 不在 autocmd 中, 这些文件可以手动执行 `:Format` 命令.
-vim.cmd([[
-  autocmd BufWritePre *.go,go.mod,go.work,
-    \*.css,*.less,*.scss,*.html,*.htm,
-    \*.js,*.jsx,*.cjs,*.mjs,
-    \*.ts,*.tsx,*.cts,*.ctsx,*.mts,*.mtsx,
-    \*.vue,*.svelte,*.graphql,
-    \*.json,*.jsonc,*.py,*.sh,*.proto
-    \ Format
-]])
+vim.api.nvim_create_autocmd('BufWritePre', {
+  pattern = {
+    '*.go','go.mod','go.work',
+    '*.css','*.less','*.scss','*.html','*.htm',
+    '*.js','*.jsx','*.cjs','*.mjs',
+    '*.ts','*.tsx','*.cts','*.ctsx','*.mts','*.mtsx',
+    '*.vue','*.svelte','*.graphql',
+    '*.json','*.jsonc',
+    '*.py','*.sh','*.proto',
+  },
+  callback = function(params)
+    lsp_format(params.buf)
+  end
+})
 
 --- VVI: goimports-reviser 一定要在 goimports 后面执行 ---------------------------------------------
 --- 因为 goimports-reviser 只会对文件当前的 imports(...) 排序,
