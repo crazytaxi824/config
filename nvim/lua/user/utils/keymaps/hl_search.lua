@@ -23,8 +23,9 @@ M.hl_search = function(key)
     return
   end
 
-  --- VVI: 删除之前的 highlight. 必须删除上一个 matchadd(), 然后重新 matchadd().
-  if my_search.cache_last_hl then
+  --- NOTE: 必须删除上一个 matchadd(), 然后重新 matchadd().
+  --- VVI: win_gettype(win_id) == "unknown", window not found. 避免 cache 中的 window 被关闭了.
+  if my_search.cache_last_hl and vim.fn.win_gettype(my_search.cache_last_hl.win_id) ~= "unknown" then
     vim.fn.matchdelete(my_search.cache_last_hl.hl_id, my_search.cache_last_hl.win_id)
   end
   vim.fn.sign_unplace(my_search.sign.group)  -- clear search_sign
