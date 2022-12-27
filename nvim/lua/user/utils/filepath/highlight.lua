@@ -7,11 +7,13 @@ vim.api.nvim_set_hl(0, 'URL', {ctermfg = Color.info_blue, underline = true}) -- 
 
 --- NOTE: matchadd() 每次执行只能作用在 current window 上. 所有在该 window 打开的 buffer 都会收到影响.
 --- 而且状态持续, 当该 window 打开别的 buffer 时, highlight 一样会存在.
-M.highlight_filepath = function(bufnr, win_id)
+M.highlight_filepath = function(bufnr, win_id, priority)
+  priority = priority or 0
   --- highlight filepath
-  local m1 = vim.fn.matchadd('Filepath', pat.file_schema_pattern)
-  local m2 = vim.fn.matchadd('Filepath', pat.filepath_pattern)
-  local m3 = vim.fn.matchadd('URL', pat.url_schema_pattern)
+  --- matchadd() 默认的 highlight priority 是 10. 这时 Search 的 highlight 会被 matchadd() 覆盖.
+  local m1 = vim.fn.matchadd('Filepath', pat.file_schema_pattern, priority, -1, { window = win_id })
+  local m2 = vim.fn.matchadd('Filepath', pat.filepath_pattern,    priority, -1, { window = win_id })
+  local m3 = vim.fn.matchadd('URL',      pat.url_schema_pattern,  priority, -1, { window = win_id })
 
   --- 自动删除 filepath highlight
   local group_id = vim.api.nvim_create_augroup('my_filepath_hl_'.. tostring(bufnr), {clear=true})
