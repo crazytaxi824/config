@@ -2,8 +2,8 @@
 --- NOTE: save 时格式化文件. 自动格式化放在 Lsp 加载成功后.
 --- null-ls 也是一个 Lsp client, 可以提供 formatting 功能. 可以通过 `:LspInfo` 查看.
 
-local function lsp_format(buf)
-  local bufnr = buf or vim.api.nvim_get_current_buf() or vim.fn.bufnr()
+local function lsp_format(bufnr)
+  bufnr = bufnr or vim.api.nvim_get_current_buf() or vim.fn.bufnr()
 
   --- get all attached/active lsp clients attached to bufnr
   local lsp_clients = vim.lsp.get_active_clients({ bufnr = bufnr })
