@@ -24,6 +24,3 @@ local lazyload_plugins = {
 }
 
 return lazyload_plugins
-
-
-

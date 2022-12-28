@@ -16,20 +16,7 @@ local my_search = {
 --- define my_search_sign
 vim.fn.sign_define(my_search.sign.name, {text=my_search.sign.text, texthl=my_search.hl_group})
 
-M.hl_search = function(key)
-  local status, errmsg = pcall(vim.cmd, 'normal! ' .. key)
-  if not status then
-    vim.notify(errmsg, vim.log.levels.ERROR) -- 这里不要使用 notify 插件, 显示错误信息.
-    return
-  end
-
-  --- NOTE: 必须删除上一个 matchadd(), 然后重新 matchadd().
-  --- VVI: win_gettype(win_id) == "unknown", window not found. 避免 cache 中的 window 被关闭了.
-  if my_search.cache_last_hl and vim.fn.win_gettype(my_search.cache_last_hl.win_id) ~= "unknown" then
-    vim.fn.matchdelete(my_search.cache_last_hl.hl_id, my_search.cache_last_hl.win_id)
-  end
-  vim.fn.sign_unplace(my_search.sign.group)  -- clear search_sign
-
+local function hl_search_at_cursor_pos()
   --- NOTE: `:help /ordinary-atom`
   --- `\%#` 意思是 match cursor 所在位置. Matches with the cursor position.
   --- `\c`  意思是 ignore-case. 可以被 overwrite 例如 `/foo\C`
@@ -42,10 +29,37 @@ M.hl_search = function(key)
   vim.fn.sign_place(my_search.sign.id, my_search.sign.group, my_search.sign.name, vim.fn.bufnr(),
     {lnum=cur_pos[2], priority=101})
 
-  --- 缓存数据
+  --- 缓存 matchadd() 数据, 为了后面 matchdelete()
   my_search.cache_last_hl = {hl_id = hl_id, win_id = vim.api.nvim_get_current_win()}
 end
 
+--- 删除 matchadd() and unplace sign
+local function delete_prev_hl()
+  --- VVI: 如果 win 已经关闭 (win_id 不存在), 则不能使用 matchdelete(win_id), 否则报错.
+  --- win_gettype(win_id) == "unknown", window not found. 避免 cache 中的 window 被关闭了.
+  if my_search.cache_last_hl and vim.fn.win_gettype(my_search.cache_last_hl.win_id) ~= "unknown" then
+    vim.fn.matchdelete(my_search.cache_last_hl.hl_id, my_search.cache_last_hl.win_id)
+  end
+
+  vim.fn.sign_unplace(my_search.sign.group)  -- clear search_sign
+  my_search.cache_last_hl = nil  -- clear cache
+end
+
+M.hl_search = function(key)
+  local status, errmsg = pcall(vim.cmd, 'normal! ' .. key)
+  if not status then
+    vim.notify(errmsg, vim.log.levels.ERROR) -- 这里不要使用 notify 插件, 显示错误信息.
+    return
+  end
+
+  --- 删除上一个 matchadd()
+  delete_prev_hl()
+
+  --- 重新在新的 cursor position 添加 matchadd()
+  hl_search_at_cursor_pos()
+end
+
+--- search VISUAL selected word | \<word\>
 --- whole_word: bool, 是否使用 \<word\>
 M.hl_visual_search = function(key, whole_word)
   --- 利用 register "f
@@ -56,23 +70,14 @@ M.hl_visual_search = function(key, whole_word)
   else
     vim.fn.setreg('/', tmp_search)
   end
+
   M.hl_search(key)
 end
 
 --- 删除之前的 highlight
 M.delete = function()
-  if my_search.cache_last_hl then
-    --- NOTE: 如果 win 已经关闭 (win_id 不存在), 则不能使用 matchdelete(win_id), 否则报错.
-    local win_info = vim.fn.getwininfo(my_search.cache_last_hl.win_id)
-    if #win_info > 0 then
-      vim.fn.matchdelete(my_search.cache_last_hl.hl_id, my_search.cache_last_hl.win_id)
-    end
-
-    my_search.cache_last_hl = nil  -- clear cache
-  end
-
-  vim.fn.sign_unplace(my_search.sign.group)  -- clear my_search_sign
-  vim.cmd[[nohlsearch]]
+  delete_prev_hl()
+  vim.cmd('nohlsearch')
 end
 
 return M
