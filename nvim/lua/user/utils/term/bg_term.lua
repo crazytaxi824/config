@@ -21,7 +21,7 @@ M.bg_term_spawn = function(cmd, job)
 
     --- BUG: bg_term:shutdown() 的时候不会触发 BufWipeout, 所以要手动清除 filepath highlight augroup.
     on_exit = function(term)
-      vim.api.nvim_del_augroup_by_name('my_filepath_hl_' .. tostring(term.bufnr))
+      vim.api.nvim_del_augroup_by_name('my_filepath_hl_' .. term.bufnr)
     end
   })
 

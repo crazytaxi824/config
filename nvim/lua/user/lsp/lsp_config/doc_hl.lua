@@ -8,7 +8,7 @@ local M = {}
 M.fn = function(client, bufnr)
   if client.supports_method('textDocument/documentHighlight') then
     --- VVI: 这里必须使用 augroup, 否则在 `:LspRestart` 的情况下会叠加多个 autocmd.
-    local group_id = vim.api.nvim_create_augroup("my_documentHighlight_"..tostring(bufnr), {clear=true})
+    local group_id = vim.api.nvim_create_augroup("my_documentHighlight_"..bufnr, {clear=true})
 
     --- documentHighlight
     vim.api.nvim_create_autocmd({"CursorHold", "CursorHoldI"}, {
