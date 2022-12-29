@@ -217,31 +217,48 @@ buf_highlights.hint_selected = buf_highlights.buffer_selected
 
 -- -- }}}
 
---- functions for delete buffer/tab ---------------------------------------------------------------- {{{
---- 用于 <leader>d 快捷键和 mouse actions 设置.
+--- functions for gotoable ------------------------------------------------------------------------- {{{
 --- 是否可以 go_to() 到别的 buffer.
-local function gotoable()
+local function check_buftype_buflisted_filetype(bufnr)
   --- 自定义: 不允许使用 bufferline.go_to() 的 filetype
   local exclude_filetypes = {
     'help', 'qf',  --- 'quickfix' && 'location-list' 的 filetype 都是 'qf'.
     'vimfiler', 'nerdtree', 'tagbar', 'NvimTree',
-    'toggleterm', 'myterm',
+    'toggleterm',
   }
 
+  bufnr = bufnr or vim.api.nvim_get_current_buf()
+
   --- `:help 'buftype'`, exclude buftype: nofile, terminal, quickfix, prompt, help ...
-  if vim.bo.buftype ~= '' or vim.tbl_contains(exclude_filetypes, vim.bo.filetype) then
-    --- 如果有其他任何 window 中显示的是 listed buffer 则 current win 不能 go_to() 到别的 buffer.
+  if vim.bo[bufnr].buftype == ''
+    and vim.fn.buflisted(bufnr) == 1  -- listed buffer
+    and not vim.tbl_contains(exclude_filetypes, vim.bo[bufnr].filetype)
+  then
+    return true
+  end
+
+  return false
+end
+
+local function gotoable()
+  if check_buftype_buflisted_filetype() then
+    return true
+  else
+    --- 如果有任意一个 window 符合要求 go_to() 要求. 则当前 window 不允许 go_to() 到别的 buffer.
     for _, wininfo in ipairs(vim.fn.getwininfo()) do
-      if vim.fn.buflisted(wininfo.bufnr) == 1 then
+      if check_buftype_buflisted_filetype(wininfo.bufnr) then
         return false
       end
     end
   end
 
-  --- 如果所有 window 都显示的是 unlisted buffer, 则 current win 可以 go_to() 别的 buffer.
-  --- 如果 buftype == '' 或者 filetype 不是 exclude_filetypes, 则 current win 可以 go_to() 别的 buffer.
+  --- 如果所有 window 都不符合要求. 则当前 window 允许 go_to() 到别的 buffer.
   return true
 end
+-- -- }}}
+
+--- functions for delete buffer/tab ---------------------------------------------------------------- {{{
+--- 用于 <leader>d 快捷键和 mouse actions 设置.
 
 --- tab 是一组 win 的集合. `:tabclose` 本质是关闭 tab 中所有的 win. 并不 bdelete buffer.
 --- 关闭整个 tab 以及其中的 buffer. 如果 tab 中的 buffer 同时存在于其他的 tab 中, 则不删除.
