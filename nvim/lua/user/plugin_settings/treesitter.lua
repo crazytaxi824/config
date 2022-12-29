@@ -114,7 +114,7 @@ ts_configs.setup {
 --- fold 设置 -------------------------------------------------------------------------------------- {{{
 --- 设置 nvim-treesitter 提供的 foldexpr.
 --- VVI: 不要设置 foldmethod=syntax, 会严重拖慢文件切换速度. eg: jump to definition.
-local function set_treesitter_fold_method(foldlevel)
+local function set_treesitter_fold_method_if_has_parser(foldlevel)
   --- treesitter 是否有对应的 parser for current buffer.
   local has_parser = nvim_ts_parsers.has_parser(nvim_ts_parsers.get_buf_lang())
 
@@ -129,13 +129,13 @@ end
 --- VVI: Lazyload nvim-treesitter 时, 必须对已经打开的文件设置 foldmethod, foldexpr ...
 local lazyload_list = require("user.plugins_lazy_loader")
 if vim.tbl_contains(lazyload_list, 'nvim-treesitter') then
-  set_treesitter_fold_method(999)
+  set_treesitter_fold_method_if_has_parser(999)
 end
 
 vim.api.nvim_create_autocmd("FileType", {
   pattern = {"*"},
   callback = function(params)
-    set_treesitter_fold_method(999)
+    set_treesitter_fold_method_if_has_parser(999)
   end,
   desc = "treesitter: setlocal foldmethod = 'expr'",
 })

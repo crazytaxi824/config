@@ -406,12 +406,13 @@ vim.opt.showmatch = true      -- 跳到匹配的括号上, 包括 () {} []
 
 vim.opt.completeopt = { "menu", "menuone", "noselect" } -- 代码补全, nvim-cmp 设置.
                                                         -- https://github.com/hrsh7th/nvim-cmp#setup
---vim.opt.pumheight = 16  -- Maximum number of items to show in the popup menu. 默认 0
+vim.opt.pumheight = 16  -- Maximum number of items to show in the popup menu. 默认 0
 --vim.opt.pumwidth = 15   -- Minimum width for the popup menu (ins-completion-menu). 默认 15
 
 --- 只在超出 textwidth 的行中显示 ColorColumn. 可以替代 `set colorcolumn`
 --vim.opt.colorcolumn = '+1'  -- :set cc=+1  " highlight column after 'textwidth'
                               -- :set cc=+1,+2,+3  " highlight three columns after 'textwidth'
+--- NOTE: autocmd FileType 时, 如果文件的 filetype 无法识别, 则不会触发该 autocmd.
 --vim.cmd [[ au FileType * call matchadd('ColorColumn', '\%' .. (&textwidth+1) .. 'v', 100) ]]
 vim.api.nvim_create_autocmd("FileType", {
   pattern = {"*"},

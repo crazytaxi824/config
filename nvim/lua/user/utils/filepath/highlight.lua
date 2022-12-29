@@ -16,7 +16,7 @@ M.highlight_filepath = function(bufnr, win_id, priority)
   local m3 = vim.fn.matchadd('URL',      pat.url_schema_pattern,  priority, -1, { window = win_id })
 
   --- 自动删除 filepath highlight
-  local group_id = vim.api.nvim_create_augroup('my_filepath_hl_'.. tostring(bufnr), {clear=true})
+  local group_id = vim.api.nvim_create_augroup('my_filepath_hl_'.. bufnr, {clear=true})
   vim.api.nvim_create_autocmd("BufWinLeave", {
     group = group_id,
     buffer = bufnr,

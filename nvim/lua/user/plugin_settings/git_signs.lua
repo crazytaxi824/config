@@ -52,6 +52,10 @@ git_signs.setup({
       {'n', '<leader>gn', function() git_signs.next_hunk() end, opt, "git: Jump to Next Hunk"},
       {'n', '<leader>gp', function() git_signs.prev_hunk() end, opt, "git: Jump to Prev Hunk"},
       {'n', '<leader>gb', function() git_signs.toggle_current_line_blame() end, opt, "git: Toggle Blame line"},
+      {'n', '<leader>gf', function()
+        vim.cmd('tabnew '..vim.fn.bufname())  --- open current file in new Tab.
+        git_signs.diffthis('~')  -- diff this file with old comment.
+      end, opt, "git: Diff file"},
       {'n', '<leader>gd', function()
         git_signs.toggle_deleted()
         git_signs.toggle_word_diff()
