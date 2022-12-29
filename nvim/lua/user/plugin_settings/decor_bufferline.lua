@@ -275,12 +275,17 @@ local function close_current_tab()
     end
   end
 
+  vim.cmd('tabclose')
+
   --- `:tabclose` 关闭整个 tab
   --- `:bdelete 1 2 3` 删除 tab 中的所有 buffer
   if #del_nochanged_buf_list > 0 then
-    vim.cmd([[ tabclose | bdelete ]] .. table.concat(del_nochanged_buf_list, ' '))
-  else
-    vim.cmd([[ tabclose ]])
+    --- TODO tabclose 之后, 判断 buffer 是否存在.
+    for _, bufnr in ipairs(del_nochanged_buf_list) do
+      if vim.fn.bufexists(bufnr) == 1 and vim.fn.buflisted(bufnr) == 1 then
+        vim.cmd('bdelete ' .. bufnr)  -- 这里可以不用 tostring()
+      end
+    end
   end
 
   return true  -- 已经成功 close tab.
