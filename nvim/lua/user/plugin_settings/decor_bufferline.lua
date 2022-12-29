@@ -418,7 +418,7 @@ local function bufferline_del_buffer_by_bufnr(bufnr)
 
   if vim.fn.bufnr() == bufnr then
     --- NOTE: 删除的 buffer 是当前 buffer 时, 避免直接退出 nvim.
-    bufferline_del_current_buffer(true)
+    bufferline_del_current_buffer('ignore_tab')
   else
     --- 如果关闭的不是当前 buffer, 则直接删除.
     vim.cmd('bdelete! ' .. bufnr)

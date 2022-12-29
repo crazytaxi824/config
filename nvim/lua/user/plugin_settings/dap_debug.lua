@@ -191,6 +191,11 @@ local function close_debug_tab_and_buffers()
     dap.repl.close()  -- close dap-repl console window && delete dap-repl buffer.
     dapui.close()  -- close all dap-ui windows
 
+    --- 如果自己是 last tab 则不执行 tabclose
+    if vim.fn.tabpagenr('$') < 2 then
+      return
+    end
+
     --- VVI: close 'my_debug.dap_tab = true' tab
     for _, tab_info in pairs(vim.fn.gettabinfo()) do
       if vim.fn.gettabvar(tab_info.tabnr, tabvar_debug).dap_tab then
