@@ -98,6 +98,21 @@
 
 <br />
 
+# autocmd 无法链式反应
+
+猜测是为了安全性, 防止 autocmd 无限循环造成内存泄漏.
+
+在 autocmd 中执行的命令/函数无法触发另一个 autocmd. eg:
+
+```vim
+au BufDelete <buffer=1> :bdelete 2
+au BufDelete <buffer=2> :lua print(2)
+```
+
+由于 `:bdelete 2` 是在 autocmd 中执行的, 所以无法触发第二个 autocmd. 造成 buffer 2 被删除, 但是 `print(2)` 却没有执行.
+
+<br />
+
 # neovim lua 使用
 
 ## lua 全局变量 `_G`

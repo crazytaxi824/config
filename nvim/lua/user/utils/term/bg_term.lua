@@ -8,6 +8,9 @@ local bg_term_starting_count = 3001  -- bg_term count 从这个数字开始增�
 
 M.bg_term_spawn = function(cmd, job)
   local bg_term = Terminal:new({
+    --- 设置 cmd
+    cmd = cmd,
+
     --- NOTE: count 在 term job end 之后可以被新的 term 使用, :ls! 中可以看到两个相同 count 的 buffer.
     --- 但是如果有相同 count 的 term job 还未结束时, 新的 term 无法运行.
     count = bg_term_starting_count,
@@ -19,9 +22,10 @@ M.bg_term_spawn = function(cmd, job)
     --- 不允许被 :ToggleTerm 控制.
     hidden = true,
 
-    --- BUG: bg_term:shutdown() 的时候不会触发 BufWipeout, 所以要手动清除 filepath highlight augroup.
+    --- VVI: autocmd 无法链式反应, 所以这里要手动清除 filepath highlight augroup.
     on_exit = function(term)
-      vim.api.nvim_del_augroup_by_name('my_filepath_hl_' .. term.bufnr)
+      --vim.api.nvim_del_augroup_by_name('my_filepath_hl_' .. term.bufnr)  -- 如果手动删除了 term.buffer 会导致这里报错
+      vim.cmd('silent! augroup! my_filepath_hl_' .. term.bufnr)  -- 禁止报错
     end
   })
 
@@ -34,9 +38,6 @@ M.bg_term_spawn = function(cmd, job)
 
   --- 设置下一个 bg_term 的 count
   bg_term_starting_count = bg_term_starting_count + 1
-
-  --- 设置 cmd
-  bg_term.cmd = cmd
 
   --- run cmd at background.
   bg_term:spawn()
