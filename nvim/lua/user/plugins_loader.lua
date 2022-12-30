@@ -146,7 +146,6 @@ if not packer_status_ok then
     end,
     desc = "install treesitter's parsers after packer is installed",
   })
-
 else
   --- 不需要安装 packer 的情况下, lazyload plugins.
   lazyload_plugins()

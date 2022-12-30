@@ -52,14 +52,14 @@ local function go_test_pkg(opt)
   end
 
   --- toggleterm on_exit callback function
-  local on_exit = function(_, job)
+  local on_exit = function(term, job)
     --- :GoPprof command
     if vim.tbl_contains({'cpu', 'mem', 'mutex', 'block', 'trace'}, opt.flag) then
       go_utils.set_pprof_cmd_keymap(job)
     end
 
     if flag_cmd.suffix and flag_cmd.suffix ~= '' then
-      go_utils.auto_shutdown_all_bg_terms(job)  -- autocmd BufWipeout bg_term:shutdown()
+      go_utils.autocmd_shutdown_all_bg_terms(job, term.bufnr)  -- autocmd BufWipeout bg_term:shutdown()
       require("user.utils.term").bg.spawn(flag_cmd.suffix, job)  -- run `go tool pprof ...` in background terminal
     end
   end
@@ -114,9 +114,9 @@ local function go_test_proj(opt)
   end
 
   --- toggleterm on_exit callback function
-  local on_exit = function(_, job)
+  local on_exit = function(term, job)
     if flag_cmd.suffix and flag_cmd.suffix ~= '' then
-      go_utils.auto_shutdown_all_bg_terms(job)  -- autocmd BufWipeout bg_term:shutdown()
+      go_utils.autocmd_shutdown_all_bg_terms(job, term.bufnr)  -- autocmd BufWipeout bg_term:shutdown()
       require("user.utils.term").bg.spawn(flag_cmd.suffix, job)  -- run `go tool pprof ...` in background terminal
     end
   end

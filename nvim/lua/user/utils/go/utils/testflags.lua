@@ -3,7 +3,7 @@
 --- go test benchmark  能使用 pprof & cover & trace flags.
 --- go test fuzz       NOTE: 不能使用 pprof & cover & trace flags. 每次只能执行一个 fuzz test,
 ---                    eg: 如果 package 中有多个 Fuzz test 函数 `go test -fuzz "^Fuzz.*"` 会报错.
---- go test xxx multiple packages  不能使用 pprof flags, 但是可以使用 -cover -coverprofile flags
+--- go test xxx multiple packages  无法使用 pprof flags, 但是可以使用 -cover -coverprofile flags
 
 --- VVI: go test flags
 --- 使用 -memprofile ... flags 时会先生成一个 [pkg].test 文件, 然后 [pkg].test 会自动运行生成 profile 文件.
