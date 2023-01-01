@@ -167,8 +167,7 @@ local tabvar_debug = "my_debug_dap"
 local function open_new_tab_for_debug()
   --- if debug tab exists, jump to debug tab.
   for _, tab_info in pairs(vim.fn.gettabinfo()) do
-    local ok = pcall(vim.api.nvim_tabpage_get_var, tab_info.tabnr, tabvar_debug)
-    if ok then
+    if vim.t[tab_info.tabnr][tabvar_debug] then
       vim.cmd('normal! '.. tab_info.tabnr .. 'gt')  -- 1gt | 2gt jump to tab
       return
     end
@@ -178,7 +177,8 @@ local function open_new_tab_for_debug()
   vim.cmd('tabnew '..vim.fn.bufname())
 
   --- 标记该 tab.
-  vim.api.nvim_tabpage_set_var(vim.api.nvim_get_current_tabpage(), tabvar_debug, true)
+  local curr_tab = vim.api.nvim_get_current_tabpage()
+  vim.t[curr_tab][tabvar_debug] = true
 end
 
 --- terminate debug && close debug tab/buffers
@@ -199,10 +199,8 @@ local function close_debug_tab_and_buffers()
 
     --- VVI: close 'my_debug.dap_tab = true' tab
     for _, tab_info in pairs(vim.fn.gettabinfo()) do
-      local ok = pcall(vim.api.nvim_tabpage_get_var, tab_info.tabnr, tabvar_debug)
-      if ok then
-        vim.cmd(tab_info.tabnr .. 'tabclose') -- 2tabclose
-        return
+      if vim.t[tab_info.tabnr][tabvar_debug] then
+        vim.cmd(tab_info.tabnr .. 'tabclose') -- eg :6tabclose
       end
     end
   end)
