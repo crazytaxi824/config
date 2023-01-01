@@ -162,8 +162,8 @@ local highlights = {
   DiffChange = {},  -- 有修改的一整行的文字的颜色
   DiffText   = {ctermfg = Color.black, ctermbg = Color.conditional_magenta}, -- changed text
 
-  --- diff mode 下
-  --- `set foldcolumn?`=2 在 foldcolumn 显示在 SignColumn 前面.
+  --- diff mode 下, fold 自动设置为:
+  --- `set foldcolumn?`=2, 在 foldcolumn 显示在 SignColumn 前面.
   --- `set foldmethod?`=diff
   FoldColumn = {ctermfg = Color.title_green},
 

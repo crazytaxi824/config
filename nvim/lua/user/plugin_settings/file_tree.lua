@@ -358,6 +358,7 @@ nvim_tree.setup {
     symlink_destination = true,  -- Whether to show the destination of the symlink.
   },
   update_focused_file = {
+    --- 可以使用 `:NvimTreeFindFile!`
     enable = false,  -- `:e file` 时, 更新 tree, 展开文件夹直到找到该文件.
     update_root = false,  -- VVI: Update the root directory of the tree if
                           -- the file is not under current root directory.
@@ -505,7 +506,7 @@ vim.api.nvim_create_autocmd({"BufEnter", "BufDelete"}, {
 local cache_git_icons  -- cache git icons table
 
 --- 清除 git icons && file highlights ------------------------------------------ {{{
-local function git_file_icons_and_highlight_clear()
+local function git_file_icons_and_highlight_remove()
   local git_component_ok, git_comp = pcall(require, "nvim-tree.renderer.components.git")
   if not git_component_ok then
     Notify('"nvim-tree.renderer.components.git" load error.', "WARN")
@@ -579,7 +580,7 @@ end
 
 --- 隐藏 nvim-tree icons and highlights & gitsigns signs
 local function git_hide_highlights()
-  git_file_icons_and_highlight_clear()
+  git_file_icons_and_highlight_remove()
 
   local git_signs_ok, git_signs = pcall(require, 'gitsigns')
   if git_signs_ok then

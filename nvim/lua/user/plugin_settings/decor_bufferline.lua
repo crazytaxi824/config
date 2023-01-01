@@ -361,7 +361,7 @@ local function bufferline_del_current_buffer(ignore_tab)
 
   --- current buffer 修改后未保存.
   if current_bufinfo.changed == 1 then
-    Notify("can't close Unsaved buffer", "WARN")
+    Notify("Cannot close Unsaved buffer", "WARN")
     return
   end
 
@@ -392,7 +392,7 @@ local function bufferline_del_current_buffer(ignore_tab)
   if #listed_buffers == 1 then
     --- listed_buffers 只剩一个, 而且 current_bufinfo.listed == 1,
     --- 说明 current buffer 一定是最后一个 listed buffer.
-    Notify("can't close the Last listed-buffer", "WARN")
+    Notify("Cannot close last listed-buffer", "WARN")
     return
   end
 
@@ -412,7 +412,7 @@ local function bufferline_del_buffer_by_bufnr(bufnr)
   --- 判断指定 bufnr 是否为仅剩的最后一个 listed buffer
   local listed_buffers = vim.fn.getbufinfo({buflisted=1})
   if #listed_buffers < 2 then
-    Notify("can't close the Only listed-buffer", "WARN")
+    Notify("Cannot close last listed-buffer", "WARN")
     return
   end
 
@@ -430,12 +430,22 @@ end
 --- functions for left_mouse_command --------------------------------------------------------------- {{{
 --- load 鼠标点击的 buffer
 local function load_bufnr_on_left_click(bufnr)
-  --- 如果当前 window 中是一个 unlisted-buffer 则 return.
-  if vim.fn.getbufinfo('%')[1].listed == 0 then
-    Notify("can't load buffer {" .. bufnr .. "} in this window (unlisted-buffer)", "WARN")
+  --- 如果当前 window 中是一个 listed-buffer, 则允许加载指定 bufnr.
+  if vim.fn.buflisted(vim.api.nvim_get_current_buf()) == 1 then
+    vim.cmd(bufnr..'buffer')  -- load 指定 buffer
     return
   end
 
+  --- 当前 window 中的 buffer 是 unlisted-buffer 的情况
+  for _, win_id in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+    --- 如果有任意 window 是 listed-buffer 则不允许加载指定 bufnr.
+    if vim.fn.buflisted(vim.api.nvim_win_get_buf(win_id)) == 1 then
+      Notify("Cannot load buffer {" .. bufnr .. "} in this window (unlisted-buffer)", "WARN")
+      return
+    end
+  end
+
+  --- 如果所有 window 都是 unlisted-buffer 则允许加载指定 bufnr.
   vim.cmd(bufnr..'buffer')  -- load 指定 buffer
 end
 -- -- }}}
