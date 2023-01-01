@@ -34,7 +34,8 @@ M.fn = function(client, bufnr)
     })
 
     --- delete documentHighlight augroup
-    vim.api.nvim_create_autocmd('BufWipeout', {
+    --- NOTE: 这里必须使用 BufDelete, 否则 buffer 如果更改了 filetype 只能使用 :bwipeout 来删除 documentHighlight
+    vim.api.nvim_create_autocmd({'BufWipeout', 'BufDelete'}, {
       group = group_id,
       buffer = bufnr,
       callback = function(params)

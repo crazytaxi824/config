@@ -190,11 +190,47 @@ XXX number
 
 - `vim.fn.tabpagenr()` / `vim.fn.tabpagebuflist()` / `vim.fn.tabpagewinnr()`
 
-### nvim.api - win / tab / buffer 函数
+### nvim.api - win / tab / buffer var
 
-- `vim.api.nvim_win_get_var()` / `vim.api.nvim_win_set_var()` / `vim.api.nvim_win_del_var()` / `vim.w.xxx`
-- `vim.api.nvim_buf_get_var()` / `vim.api.nvim_buf_set_var()` / `vim.api.nvim_buf_del_var()` / `vim.b.xxx`
-- `vim.api.nvim_tabpage_get_var()` / `vim.api.nvim_tabpage_set_var()` / `vim.api.nvim_tabpage_del_var()`  / `vim.t.xxx`
+get var
+
+| vimL                           | vimL variables (1) | lua vim api                        | lua vim variables        |
+| ------------------------------ | ------------------ | ---------------------------------- | ------------------------ |
+| getbufvar(bufnr, 'foo')        | echo b:foo         | nvim_buf_get_var(bufnr, 'foo')     | print(vim.b[bufnr].foo)  |
+| getwinvar(winnr/win_id, 'foo') | echo w:foo         | nvim_win_get_var(win_id, 'foo')    | print(vim.w[win_id].foo) |
+| gettabvar(tabnr, 'foo')        | echo t:foo         | nvim_tabpage_get_var(tabnr, 'foo') | print(vim.t[tabnr].foo)  |
+
+set var
+
+| vimL                                  | vimL variables (1) | lua vim api                               | lua vim variables       |
+| ------------------------------------- | ------------------ | ----------------------------------------- | ----------------------- |
+| setbufvar(bufnr, 'foo', 'bar')        | let b:foo='bar'    | nvim_buf_set_var(bufnr, 'foo', 'bar')     | vim.b[bufnr].foo='bar'  |
+| setwinvar(winnr/win_id, 'foo', 'bar') | let w:foo='bar'    | nvim_win_set_var(win_id, 'foo', 'bar')    | vim.w[win_id].foo='bar' |
+| settabvar(tabnr, 'foo', 'bar')        | let t:foo='bar'    | nvim_tabpage_set_var(tabnr, 'foo', 'bar') | vim.t[tabnr].foo='bar'  |
+
+delete var
+
+| lua vim api                        | lua vim variables     |
+| ---------------------------------- | --------------------- |
+| nvim_buf_del_var(bufnr, 'foo')     | vim.b[bufnr].foo=nil  |
+| nvim_win_del_var(win_id, 'foo')    | vim.w[win_id].foo=nil |
+| nvim_tabpage_del_var(tabnr, 'foo') | vim.t[tabnr].foo=nil  |
+
+get option - 必须是 local to buffer 的属性.
+
+| vimL                             | vimL variables (1) | lua vim api                            | lua vim variables             |
+| -------------------------------- | ------------------ | -------------------------------------- | ----------------------------- |
+| getbufvar(bufnr, '&filetype')    | set filetype?      | nvim_buf_get_option(bufnr, 'filetype') | print(vim.bo[bufnr].filetype) |
+| getwinvar(winnr/win_id, '&wrap') | set wrap?          | nvim_win_get_var(win_id, 'wrap')       | print(vim.wo[win_id].wrap)    |
+
+set option
+
+| vimL                                     | vimL variables (1) | lua vim api                                   | lua vim variables            |
+| ---------------------------------------- | ------------------ | --------------------------------------------- | ---------------------------- |
+| setbufvar(bufnr, '&filetype', 'lua')     | set filetype=lua   | nvim_buf_set_option(bufnr, 'filetype', 'lua') | vim.bo[bufnr].filetype='lua' |
+| setwinvar(winnr/win_id, '&wrap', v:true) | set wrap           | nvim_win_get_var(win_id, 'wrap', true)        | vim.wo[win_id].wrap=true     |
+
+> (1) vimL variables 需在对应的 buffer/window/tab 中使用.
 
 ==还有很多 nvim.api 函数和 vim 的函数对应.==
 
