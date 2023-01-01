@@ -113,22 +113,22 @@ local function my_check()
     local ts = check_trailing_whitespace()
 
     if mi ~= '' and ts ~= '' then
-      vim.api.nvim_buf_set_var(curr_bufnr, bufvar_lualine, ' '..mi..' '..ts)
+      vim.b[curr_bufnr][bufvar_lualine] = ' '..mi..' '..ts
     elseif mi ~= '' and ts == '' then
-      vim.api.nvim_buf_set_var(curr_bufnr, bufvar_lualine, ' '..mi)
+      vim.b[curr_bufnr][bufvar_lualine] = ' '..mi
     elseif mi == '' and ts ~= '' then
-      vim.api.nvim_buf_set_var(curr_bufnr, bufvar_lualine, ' '..ts)
+      vim.b[curr_bufnr][bufvar_lualine] = ' '..ts
     else
-      pcall(vim.api.nvim_buf_del_var, curr_bufnr, bufvar_lualine)
+      vim.b[curr_bufnr][bufvar_lualine] = nil
     end
   end
 
-  local ok, v = pcall(vim.api.nvim_buf_get_var, curr_bufnr, bufvar_lualine)
-  if not ok then
+  local r = vim.b[curr_bufnr][bufvar_lualine]
+  if not r then
     return ''
   end
 
-  return v
+  return r
 end
 -- -- }}}
 

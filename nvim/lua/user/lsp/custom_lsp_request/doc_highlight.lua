@@ -98,7 +98,7 @@ local function doc_hl_handler(err, result, req, config)
   --- VVI: 没有结果的情况下, 有些 lsp 会返回 nil, 有些会返回 empty table {}. eg: cursor 在空白行.
   if not result or #result == 0 then
     --- clear previous result
-    pcall(vim.api.nvim_buf_del_var, req.bufnr, prev_doc_hl_key)
+    vim.b[req.bufnr][prev_doc_hl_key] = nil
 
     --- VVI: 这里不要使用 vim.lsp.buf.clear_references() 方法,
     --- 这个方法只能清除当前 buffer 的 highlight.
@@ -113,11 +113,10 @@ local function doc_hl_handler(err, result, req, config)
   local je = vim.fn.json_encode(result)
 
   --- compare previous result with new result
-  local ok, re = pcall(vim.api.nvim_buf_get_var, req.bufnr, prev_doc_hl_key)
-  local r = ok and re == je
+  local r = vim.b[req.bufnr][prev_doc_hl_key] and vim.b[req.bufnr][prev_doc_hl_key] == je
 
   --- cache new result
-  vim.api.nvim_buf_set_var(req.bufnr, prev_doc_hl_key, je)
+  vim.b[req.bufnr][prev_doc_hl_key] = je
 
   --- previous result 和 new result 不相同的情况.
   if not r then
@@ -156,7 +155,7 @@ end
 --- VVI: 这里不要使用 vim.lsp.buf.clear_references() 方法, 这个方法只能清除当前 buffer 的 highlight.
 M.doc_clear = function(bufnr)
   --- clear cached result
-  pcall(vim.api.nvim_buf_del_var, bufnr, prev_doc_hl_key)
+  vim.b[bufnr][prev_doc_hl_key] = nil
 
   --- clear previous highlight
   vim.lsp.util.buf_clear_references(bufnr)
