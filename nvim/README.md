@@ -192,9 +192,9 @@ XXX number
 
 ### nvim.api - win / tab / buffer 函数
 
-- `vim.api.nvim_win_get_var()` / `vim.api.nvim_win_set_var()` / `vim.api.nvim_win_del_var()`
-- `vim.api.nvim_buf_get_var()` / `vim.api.nvim_buf_set_var()` / `vim.api.nvim_buf_del_var()`
-- `vim.api.nvim_tabpage_get_var()` / `vim.api.nvim_tabpage_set_var()` / `vim.api.nvim_tabpage_del_var()`
+- `vim.api.nvim_win_get_var()` / `vim.api.nvim_win_set_var()` / `vim.api.nvim_win_del_var()` / `vim.w.xxx`
+- `vim.api.nvim_buf_get_var()` / `vim.api.nvim_buf_set_var()` / `vim.api.nvim_buf_del_var()` / `vim.b.xxx`
+- `vim.api.nvim_tabpage_get_var()` / `vim.api.nvim_tabpage_set_var()` / `vim.api.nvim_tabpage_del_var()`  / `vim.t.xxx`
 
 ==还有很多 nvim.api 函数和 vim 的函数对应.==
 
