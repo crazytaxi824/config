@@ -102,9 +102,10 @@ local function check_mixed_indent()
 end
 
 --- 合并两个 check, 同时检查 ---------------------------------------------------
---- NOTE: 通过设置 setbufvar() / getbufvar() 来缓存 whitespace && mixed_indent 结果.
+--- NOTE: 通过设置 set/get buffer var 来缓存 whitespace && mixed_indent 结果.
 local function my_check()
   local bufvar_lualine = 'my_lualine_checks'
+  local curr_bufnr = vim.api.nvim_get_current_buf()
 
   --- 在退出 insert mode 之后再进行计算并更新 lualine, 可以减少计算量.
   if vim.fn.mode() ~= 'i' then
@@ -112,17 +113,22 @@ local function my_check()
     local ts = check_trailing_whitespace()
 
     if mi ~= '' and ts ~= '' then
-      vim.fn.setbufvar(vim.fn.bufnr(), bufvar_lualine, ' '..mi..' '..ts)
+      vim.api.nvim_buf_set_var(curr_bufnr, bufvar_lualine, ' '..mi..' '..ts)
     elseif mi ~= '' and ts == '' then
-      vim.fn.setbufvar(vim.fn.bufnr(), bufvar_lualine, ' '..mi)
+      vim.api.nvim_buf_set_var(curr_bufnr, bufvar_lualine, ' '..mi)
     elseif mi == '' and ts ~= '' then
-      vim.fn.setbufvar(vim.fn.bufnr(), bufvar_lualine, ' '..ts)
+      vim.api.nvim_buf_set_var(curr_bufnr, bufvar_lualine, ' '..ts)
     else
-      vim.fn.setbufvar(vim.fn.bufnr(), bufvar_lualine, '')
+      pcall(vim.api.nvim_buf_del_var, curr_bufnr, bufvar_lualine)
     end
   end
 
-  return vim.fn.getbufvar(vim.fn.bufnr(), bufvar_lualine)
+  local ok, v = pcall(vim.api.nvim_buf_get_var, curr_bufnr, bufvar_lualine)
+  if not ok then
+    return ''
+  end
+
+  return v
 end
 -- -- }}}
 
