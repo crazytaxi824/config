@@ -24,8 +24,7 @@ M.bg_term_spawn = function(cmd, job)
 
     --- VVI: autocmd 无法链式反应, 所以这里要手动清除 filepath highlight augroup.
     on_exit = function(term)
-      --vim.api.nvim_del_augroup_by_name('my_filepath_hl_' .. term.bufnr)  -- 如果手动删除了 term.buffer 会导致这里报错
-      vim.cmd('silent! augroup! my_filepath_hl_' .. term.bufnr)  -- 禁止报错
+      pcall(vim.api.nvim_del_augroup_by_name, 'my_filepath_hl_' .. term.bufnr)  -- pcall() 防止报错
     end
   })
 
