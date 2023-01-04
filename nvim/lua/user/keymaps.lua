@@ -181,9 +181,9 @@ local keymaps = {
   --- <C-t> 默认 tag stack. NOTE: 还未 remap.
   --- <C-g> 默认 print current filename. NOTE: 还未 remap.
   -- -- }}}
-  {'n', '<C-s>', ':update<CR>', opt, 'which_key_ignore'},
-  {'v', '<C-s>', '<C-c>:update<CR>', opt, 'which_key_ignore'},
-  {'i', '<C-s>', '<C-c>:update<CR>', opt, 'which_key_ignore'},
+  {'n', '<C-s>', function() key_fn.save_file() end, opt, 'which_key_ignore'},
+  {'v', '<C-s>', '<C-c><cmd>lua require("user.utils.keymaps").save_file()<CR>', opt, 'which_key_ignore'},
+  {'i', '<C-s>', '<C-c><cmd>lua require("user.utils.keymaps").save_file()<CR>', opt, 'which_key_ignore'},
 
   --- VVI: <Ctrl-Z> 是危险操作. 意思是 :stop. Suspend vim, 退出到 terminal 界面, 但保留 job.
   --- 需要使用 `jobs -l` 列出 Suspended 列表,
