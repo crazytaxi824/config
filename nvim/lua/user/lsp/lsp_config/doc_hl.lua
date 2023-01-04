@@ -15,12 +15,14 @@ M.fn = function(client, bufnr)
       group = group_id,
       buffer = bufnr,  -- NOTE: 本 autocmd 只对指定 buffer 有效.
       callback = function(params)
+        --- 判断当前是否有 lsp 支持 documentHighlight
         local lsp_clients = vim.lsp.get_active_clients({ bufnr = params.buf })
 
         local doc_hl_mark
         for _, c in ipairs(lsp_clients) do
           if c.supports_method('textDocument/documentHighlight') then
             doc_hl_mark = true
+            break
           end
         end
 

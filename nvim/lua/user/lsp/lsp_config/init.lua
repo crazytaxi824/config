@@ -127,5 +127,22 @@ for lsp_svr, v in pairs(lsp_servers_map) do
   })
 end
 
+--- VVI: detach 之前的 lsp, 这里是为了防止 `set filetype=xxx` 时, 原 lsp 仍然 attached 到该 buffer 上.
+--- lsp on_attach() 在 FileType event 之后运行.
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = {"*"},
+  callback = function(params)
+    local lsp_clients = vim.lsp.get_active_clients({ bufnr = params.buf })
+    for _, c in ipairs(lsp_clients) do
+      --- set filetype 后, detach 所有不匹配该 buffer 新 filetype 的 lsp client.
+      if c.name ~= 'null-ls'  -- NOTE: 排除 null-ls 是因为 gitsigns 等工具是不分 filetype 的.
+        and not vim.tbl_contains(c.config.filetypes, vim.bo[params.buf].filetype)
+      then
+        vim.lsp.buf_detach_client(params.buf, c.id)
+      end
+    end
+  end
+})
+
 
 
