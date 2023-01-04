@@ -86,6 +86,7 @@ local function git_discard_file_changes(node)
   ---       Delete file && Rename file 必须在下次进入 nvim 时才能看到.
   -- -- }}}
 
+  --- node.type = file | directory
   if node.type ~= 'file' then
     Notify("Cannot Discard on ".. node.type, "INFO")
     return
@@ -93,7 +94,8 @@ local function git_discard_file_changes(node)
 
   local cmd
 
-  if node.git_status == "MM" then
+  local git_status = node.git_status.file
+  if git_status == "MM" then
     --- prompt
     local prompt = "git: Discard file changes " .. node.name .. " ? a[ll]/u[nstaged]/n: "
     vim.ui.input({ prompt = prompt }, function(choice)
@@ -105,7 +107,7 @@ local function git_discard_file_changes(node)
         cmd = 'git checkout -- "' .. node.absolute_path .. '"'
       end
     end)
-  elseif node.git_status == "M " then
+  elseif git_status == "M " then
     local prompt = "git: Discard file changes " .. node.name .. " ? a[ll]/n: "
     vim.ui.input({ prompt = prompt }, function(choice)
       vim.cmd("normal! :")  -- clear command line prompt message.
@@ -114,7 +116,7 @@ local function git_discard_file_changes(node)
           '" && git checkout -- "' .. node.absolute_path .. '"'
       end
     end)
-  elseif node.git_status == " M" then
+  elseif git_status == " M" then
     local prompt = "git: Discard file changes " .. node.name .. " ? a[ll]/n: "
     vim.ui.input({ prompt = prompt }, function(choice)
       vim.cmd("normal! :")  -- clear command line prompt message.
@@ -122,7 +124,7 @@ local function git_discard_file_changes(node)
         cmd = 'git checkout -- "' .. node.absolute_path .. '"'
       end
     end)
-  elseif node.git_status == "AM" then
+  elseif git_status == "AM" then
     local prompt = "git: Discard file changes " .. node.name .. " ? a[ll]/u[nstaged]/n: "
     vim.ui.input({ prompt = prompt }, function(choice)
       vim.cmd("normal! :")  -- clear command line prompt message.
@@ -133,7 +135,7 @@ local function git_discard_file_changes(node)
         cmd = 'git checkout -- "' .. node.absolute_path .. '"'
       end
     end)
-  elseif node.git_status == "??" or node.git_status == " A" then
+  elseif git_status == "??" or git_status == " A" then
     local prompt = "git: Discard file changes " .. node.name .. " ? a[ll]/n: "
     vim.ui.input({ prompt = prompt }, function(choice)
       vim.cmd("normal! :")  -- clear command line prompt message.
@@ -141,7 +143,7 @@ local function git_discard_file_changes(node)
         cmd = 'rm "' .. node.absolute_path .. '"'
       end
     end)
-  elseif node.git_status == "A " then
+  elseif git_status == "A " then
     local prompt = "git: Discard file changes " .. node.name .. " ? a[ll]/n: "
     vim.ui.input({ prompt = prompt }, function(choice)
       vim.cmd("normal! :")  -- clear command line prompt message.
