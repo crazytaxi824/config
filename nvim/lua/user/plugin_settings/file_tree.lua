@@ -237,8 +237,8 @@ local nt_buffer_keymaps = {
   { key = "C",             action = "copy" },  -- copy file
   { key = "P",             action = "paste" }, -- paste file
 
-  { key = "<leader>gi",             action = "toggle_git_ignored" },
-  { key = "<leader>gf",             action = "toggle_git_clean" },
+  { key = "<leader>gi",    action = "toggle_git_ignored" },  -- toggle show git ignored files
+  { key = "<leader>gf",    action = "toggle_git_clean" },    -- toggle show git_status changed files ONLY
 
   --- 自定义功能. NOTE: action 内容成为 help 中展示的文字.
   --- action_cb 意思是 callback 函数.

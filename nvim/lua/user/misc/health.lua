@@ -3,12 +3,11 @@ local health = require("health")
 
 local M = {}
 
-M.check = function()
+--- HACK 中用到的 modules, 大多 overwrite 源代码.
+local function check_module()
   health.report_start("check HACK required modules")
-
   health.report_info("check HACK function required modules.\n mostly rewrite plugins' internal functions.")
 
-  --- HACK 中用到的 modules, 大多 overwrite 源代码.
   local require_list = {
     "bufferline.state",
 
@@ -34,8 +33,10 @@ M.check = function()
       health.report_warn('require("' .. req .. '") Failed')
     end
   end
+end
 
-  -- health.report_error("error")  -- red
+M.check = function()
+  check_module()
 end
 
 return M
