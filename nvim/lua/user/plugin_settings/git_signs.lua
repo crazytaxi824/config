@@ -26,7 +26,8 @@ git_signs.setup({
   update_debounce = 300,  -- 更新频率, 默认 100
   attach_to_untracked = true,  -- 新建文件是否 attach gitsigns
 
-  current_line_blame_formatter = '  ● git blame: <author>, <author_time:%d-%m-%Y> - <summary>',
+  --- `:help current_line_blame_formatter`, check placeholder
+  current_line_blame_formatter = '  ● [<abbrev_sha>], git blame: [<author>], <author_time:%d-%m-%Y> - <summary>',
 
   --- NOTE: 除了 signcolumn 外, 其他不推荐开启. 可以使用 `:Gitsigns preview_hunk` 查看修改记录,
   signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
@@ -51,7 +52,8 @@ git_signs.setup({
       {'n', '<leader>gP', function() git_signs.preview_hunk() end, opt, "git: Preview Hunk"},
       {'n', '<leader>gn', function() git_signs.next_hunk() end, opt, "git: Jump to Next Hunk"},
       {'n', '<leader>gp', function() git_signs.prev_hunk() end, opt, "git: Jump to Prev Hunk"},
-      {'n', '<leader>gb', function() git_signs.toggle_current_line_blame() end, opt, "git: Toggle Blame line"},
+      {'n', '<leader>gb', function() git_signs.blame_line{full=true} end, opt, "git: Blame"},
+      {'n', '<leader>gl', function() git_signs.toggle_current_line_blame() end, opt, "git: Toggle Blame line"},
       {'n', '<leader>gf', function()
         vim.cmd('tabnew '..vim.fn.bufname())  --- open current file in new Tab.
         git_signs.diffthis('~')  -- diff this file with old comment.
