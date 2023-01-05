@@ -166,7 +166,6 @@ local linter_settings = {
 --- formatter 设置 ---------------------------------------------------------------------------------
 local local_formatter_key = "formatter"
 local formatter_settings = {
-  --- NOTE: 需要在 lsp.setup(opts) 中的 on_attach 中排除 tsserver & sumneko_lua 的 formatting 功能
   formatting.prettier.with(proj_local_settings.keep_extend(local_formatter_key, 'prettier',
     require("user.lsp.null_ls.tools.prettier")  -- NOTE: 加载单独设置 null_ls/tools/prettier.lua
   )),
@@ -256,7 +255,7 @@ null_ls.setup({
   --- 以下callback 都是 DEBUG: 用
   --- 设置 key_mapping vim.diagnostic.goto_next() ...
   on_attach = function(client, bufnr)
-    require("user.lsp.lsp_keymaps").diagnostic_keymaps(0)
+    require("user.lsp.lsp_keymaps").diagnostic_keymaps(bufnr)
 
     if __Debug_Neovim.null_ls then
       Notify("LSP Server attach: " .. client.name, "DEBUG", {title="Null-ls"})
