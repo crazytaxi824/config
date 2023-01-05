@@ -86,7 +86,7 @@ vim.lsp.util.make_floating_popup_options = function(width, height, opts)
   --   row = 0
   -- end
 
-  --- 自定义设置
+  --- 自定义设置部分 ---
   if vim.fn.winline() < height+2 then  -- +2 border width
     anchor = anchor..'N'
     height = math.min(lines_below, height)
@@ -96,6 +96,7 @@ vim.lsp.util.make_floating_popup_options = function(width, height, opts)
     height = math.min(lines_above, height)
     row = 0
   end
+  --- 自定义设置结束 ---
 
   if vim.fn.wincol() + width + (opts.offset_x or 0) <= vim.api.nvim_get_option('columns') then
     anchor = anchor..'W'

@@ -83,7 +83,7 @@ which_key.setup({
   --- VVI: hide mapping boilerplate, for-loop string.gsub(str, '<cmd>', '')
   hidden = {
     "<silent>", "<cmd>", "<Cmd>", "<CR>", "call", "lua", "require", "^:", "^ ",
-    "render.canvas'%)._mapping%('",  -- HACK: for 'dap-ui' default keymapping.
+    "render.canvas'%)._mapping%('",  -- 'dap-ui' default keymap desc.
   },
 
   triggers = "auto", -- automatically setup triggers
