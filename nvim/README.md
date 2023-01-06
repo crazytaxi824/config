@@ -366,6 +366,48 @@ Visual-Block 选择多行数字
 
 <br />
 
+# :help watch-file
+
+```lua
+local watch = vim.loop.new_fs_event()
+
+--- Watch file/dir 时, file/dir 必须存在. 否则 watch:start() 无效.
+--- watch file 时, 监控单个 file 的情况.
+---   如果 file 被删除, 则 watch 失效, 但是并没有 watch:stop(), 需要手动 watch:stop(), 否则无法再次 watch:start().
+---   如果 file 被删除, 然后又创建一个相同的 file 则同上.
+---   如果 file 被 mv, 则自动监测新的 file. NOTE: 这里可能是因为 watch 的是 file discriptor, file rename 并不修改 file discriptor.
+--- watch dir  时, 监控 dir 下所有 file & dir 的情况. 但只 watch 当前级, 不会自动 watch 子文件夹中的文件.
+---   eg: Watch_file('./'), Watch_file('src/')
+---   watch dir 时, 不是 watch file discriptor, 而是一个固定的路径. 但是 watch:start() 时该 dir 必须存在.
+---   一旦 watch 成功, 就算删除 dir 再重新创建同名 dir 也是在 watch 状态.
+---   如果 watch:start() 时 dir 不存在, 则没有效果.
+function Watch_file(fname)
+  local fullpath = vim.api.nvim_call_function(
+    'fnamemodify', {fname, ':p'})
+  -- print(fullpath)
+
+  --- NOTE: 如果 file 不存在则 watch:start() 无效, 且不会报错, 也不会执行 callback.
+  watch:start(fullpath, {}, vim.schedule_wrap(function(err, changed_fname, status)
+    if err then
+      Notify(err, "ERROR")
+      return
+    end
+
+    --- Do work...
+    print(changed_fname, 'on_change', vim.inspect(status))
+
+    vim.api.nvim_command('checktime')
+
+    --- Debounce: stop/start.
+    --- watch a new file.
+    --watch:stop()
+    --Watch_file(fname)
+  end))
+end
+```
+
+<br />
+
 # 其他
 
 - 键位查看 `:help key-notation`
@@ -470,17 +512,21 @@ vim.lsp.buf.format({
 
 ## TODO
 
-动态加载 lsp 本地 config.
+### 动态加载 lsp 本地 config.
 
 - `:help watch-file`, when `.nvim/settings.lua` changed OR added.
 
-- `:LspRestart` - lspconfig command
+- `:LspRestart` - lspconfig command, 不能直接用, jsonls, lualsp 都无法 attach 成功.
 
 - LSP `client.notify("workspace/didChangeConfiguration")`
 
 ```lua
 function TestLSP(id)
   --- get client
+  -- local client = vim.lsp.get_active_clients({name = lsp_name})[1]
+  -- if client then
+  -- end
+
   local client = vim.lsp.get_client_by_id(id)
   -- print(vim.inspect(client.config.settings))
 
@@ -488,15 +534,32 @@ function TestLSP(id)
     client.config.settings.gopls["ui.completion.usePlaceholders"] = false
     client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
   end
-
-  if client.name == 'null-ls' then
-    client.stop() -- remove null-ls lsp
-  end
 end
+```
 
-function TestNull()
-  local golangci = require("null-ls").get_source({name="golangci_lint"})[1]
-  print(vim.inspect(golangci))
-  -- print(vim.inspect(golangci.generator))
+### restart null-ls tools
+
+```lua
+lua print(vim.inspect(require('null-ls').get_source('golangci_lint')))
+lua require('null-ls').deregister('golangci_lint')
+
+lua require('null-ls').disable('golangci_lint')
+lua require('null-ls').deregister('golangci_lint')
+lua require('null-ls').register(require('null-ls').builtins.diagnostics.golangci_lint)
+lua require('null-ls').enable('golangci_lint')
+
+lua print(require('null-ls').is_registered('golangci_lint'))  -- not working
+
+--- 手动 re-register
+function Restart_nullls_tool(tool_name)
+  null_ls.disable(tool_name)
+  null_ls.deregister(tool_name)
+
+  local tool = diagnostics.golangci_lint.with(proj_local_settings.keep_extend(local_linter_key, tool_name,
+    require("user.lsp.null_ls.tools."..tool_name),  -- NOTE: 加载单独设置 null_ls/tools/xxx.lua
+    diagnostics_opts
+  ))
+
+  null_ls.register(tool)  -- register 后, 自动 enable source.
 end
 ```
