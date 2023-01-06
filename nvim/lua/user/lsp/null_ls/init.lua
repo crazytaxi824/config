@@ -9,7 +9,7 @@ local sources = require("user.lsp.null_ls.sources")
 local function combine_sources()
   local list = {}
 
-  for _, tools in pairs(sources) do
+  for _, tools in pairs(sources.setup()) do
     for _, tool_cfg in pairs(tools) do
       table.insert(list, tool_cfg)
     end

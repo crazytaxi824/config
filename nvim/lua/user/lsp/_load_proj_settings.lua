@@ -59,6 +59,71 @@ end
 --- VVI: 这里不要使用 nil, 因为 nil 无法 index [lsp] / [null-ls].
 local content = M.get_local_settings_content() or {}
 
+--- compare content, 如果内容不同则执行 callback.
+local function compare_content_settings(old_content, new_content, key, callback)
+  if not old_content[key] and new_content[key] then
+    for tool, _ in pairs(new_content[key]) do
+      callback(tool)
+    end
+  elseif old_content[key] and not new_content[key] then
+    for tool, _ in pairs(old_content[key]) do
+      callback(tool)
+    end
+  elseif old_content[key] and new_content[key] then
+    for tool, cfg in pairs(old_content[key]) do
+      if not new_content[key][tool] or vim.fn.json_encode(cfg) ~= vim.fn.json_encode(new_content[key][tool]) then
+        callback(tool)
+      end
+    end
+
+    --- NOTE: 这里不用再对比 json_encode(), 避免重复对比.
+    for tool, _ in pairs(new_content[key]) do
+      if not old_content[key][tool] then
+        callback(tool)
+      end
+    end
+  end
+end
+
+--- 如果找到不同的设置则重新加载 lsp/null-ls
+local function reload_local_settings(old_content, new_content)
+  compare_content_settings(old_content, new_content, "lsp", function(lsp_name)
+    local clients = vim.lsp.get_active_clients({name = lsp_name})
+    for _, c in ipairs(clients) do
+      c.config.settings[lsp_name] = new_content.lsp[lsp_name]  -- 直接替换设置.
+      c.notify("workspace/didChangeConfiguration", { settings = c.config.settings })
+    end
+  end)
+
+  local sources = require("user.lsp.null_ls.sources")
+  local null_ls_tool_types = {sources.local_linter_key, sources.local_formatter_key, sources.local_code_actions_key}
+  for _, typ in ipairs(null_ls_tool_types) do
+    compare_content_settings(old_content, new_content, typ, function(tool_name)
+      local null_ls_status_ok, null_ls = pcall(require, "null-ls")
+      if not null_ls_status_ok then
+        Notify("`null-ls` is not loaded.", "INFO")
+        return
+      end
+
+      null_ls.disable(tool_name)
+      null_ls.deregister(tool_name)
+      null_ls.register(sources.setup()[typ][tool_name])  -- register 后, 自动 enable source.
+    end)
+  end
+end
+
+--- command 手动重新加载 local settings
+vim.api.nvim_create_user_command("ReloadLocalSettings", function()
+  --- lua 中 table 是 deep copy
+  local old_content = content
+
+  --- VVI: 给 content 重新赋值
+  content = M.get_local_settings_content()
+
+  --- 重新加载 local settings.
+  reload_local_settings(old_content, content)
+end, { bang=true, bar=true, desc = 'reload "lsp" and "null-ls" after change ".nvim/settings.lua"' })
+
 --- NOTE: 主要函数 keep_extend() 用 project local 设置覆盖 global 设置.
 --- 使用 tbl_deep_extend('keep', xx, xx, ...)
 M.keep_extend = function(section, tool, tbl, ...)
