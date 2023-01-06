@@ -222,7 +222,7 @@ local nt_buffer_keymaps = {
   { key = "a",             action = "create" },
   { key = "d",             action = "remove" },
   { key = "D",             action = "trash" },  -- NOTE: 需要在 setup() 中设置 'trash.cmd'
-  { key = "R",             action = "rename" },  -- 类似 `$ mv foo bar`
+  { key = "R",             action = "full_rename" },  -- 类似 `$ mv foo bar`
   { key = "r",             action = "refresh" },
   { key = "y",             action = "copy_absolute_path" },
   { key = "E",             action = "collapse_all" },  -- vscode 自定义按键为 cmd+E
