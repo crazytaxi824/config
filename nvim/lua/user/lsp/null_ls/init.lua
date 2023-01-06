@@ -3,217 +3,26 @@ if not null_ls_status_ok then
   return
 end
 
-local proj_local_settings = require("user.lsp._load_proj_settings")
+local sources = require("user.lsp.null_ls.sources")
 
---- 检查 null-ls 所需 tools ------------------------------------------------------------------------ {{{
---- 在 null_ls.setup() 的时候, 如果命令行工具不存在不会报错;
---- 在使用的时候 (eg:Format) 如果命令行工具不存在才会报错.
-local null_tools = {
-  {
-    cmd="goimports",
-    install="go install golang.org/x/tools/cmd/goimports@latest",
-    mason="goimports",
-  },
-  {
-    cmd="goimports-reviser",
-    mason="goimports-reviser",
-  },
-  {
-    cmd="golangci-lint",
-    install="go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest",
-    mason="golangci-lint",
-  },
-  {
-    cmd="buf",  -- protobuf formatter & linter
-    install="go install github.com/bufbuild/buf/cmd/buf@latest",
-    mason="buf"
-  },
+--- 合并 sources 到一个 list
+local function combine_sources()
+  local list = {}
 
-  {cmd="prettier", install=" brew info prettier", mason="prettier"},
-  {cmd="shfmt", install="brew info shfmt", mason="shfmt"},
-  --{cmd="stylua", install="brew info stylua", mason="stylua"},
-
-  {cmd="flake8", install="pip3 install flake8", mason="flake8"},
-  {cmd="autopep8", install="pip3 install autopep8", mason="autopep8"},
-  {cmd="mypy", install="pip3 install mypy", mason="mypy"}, -- 还有个 mypy-extensions 是 mypy 插件
-
-  {cmd="eslint", install="npm install -g eslint"}, -- NOTE: mason 暂时不能安装 "eslint"
-}
-
-require('user.utils.check_tools').check(null_tools, {title= "check null-ls tools"})
--- -- }}}
-
---- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/formatting
-local formatting = null_ls.builtins.formatting
---- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
-local diagnostics = null_ls.builtins.diagnostics
---- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/code_actions
-local code_actions = null_ls.builtins.code_actions
-
---- diagnostics_opts 用于下面的 sources diagnostics 设置
-local diagnostics_opts = {
-  --- 只在 save 的时候执行 diagnostics.
-  --- 其他 methods --- {{{
-  --- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/master/lua/null-ls/methods.lua
-  -- local internal_methods = {
-  --     --- for code_actions
-  --     CODE_ACTION = "NULL_LS_CODE_ACTION",
-  --
-  --     --- for linter diagnostics
-  --     DIAGNOSTICS = "NULL_LS_DIAGNOSTICS",
-  --     DIAGNOSTICS_ON_OPEN = "NULL_LS_DIAGNOSTICS_ON_OPEN",
-  --     DIAGNOSTICS_ON_SAVE = "NULL_LS_DIAGNOSTICS_ON_SAVE",
-  --
-  --     --- for formatter
-  --     FORMATTING = "NULL_LS_FORMATTING",
-  --     RANGE_FORMATTING = "NULL_LS_RANGE_FORMATTING",
-  --
-  --     --- for hover
-  --     HOVER = "NULL_LS_HOVER",
-  --
-  --     --- for COMPLETION
-  --     COMPLETION = "NULL_LS_COMPLETION",
-  -- }
-  --- --}}}
-  method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
-
-  --- VVI: 耗资源, 每次运行 linter 前都要运行该函数, 不要进行复杂运算.
-  runtime_condition = function(params)
-    --- DO NOT lint readonly files
-    if vim.bo.readonly then
-      return false  -- false 不执行 lint
+  for _, tools in pairs(sources.setup()) do
+    for _, tool_cfg in pairs(tools) do
+      table.insert(list, tool_cfg)
     end
-
-    --- ignore 文件夹中的文件不进行 lint
-    local ignore_lint_folders = {"node_modules"}  -- readonly 中包括了 'go env GOROOT GOMODCACHE'
-    for _, ignored in ipairs(ignore_lint_folders) do
-      if string.match(params.bufname, ignored) then
-        return false  -- false 不执行 lint
-      end
-    end
-
-    return true
-  end,
-
-  --timeout = 3000,   -- 单独给 linter 设置超时时间. 全局设置了 default_timeout.
-  --diagnostics_format = "#{m} [null-ls:#{s}]",  -- 单独给 linter 设置 diagnostics_format.
-
-  --- NOTE: Post Hook, 会导致 diagnostics_format 设置失效. 可以单独给 linter 设置 post hook.
-  --- This option is not compatible with 'diagnostics_format'.
-  -- diagnostics_postprocess = function(diagnostic)
-  --   --- 会导致所有 error msg 都是设置的 severity level, ERROR(1) | WARN(2) | INFO(3) | HINT(4)
-  --   diagnostic.severity = vim.diagnostic.severity.WARN
-  --
-  --   --- 相当于重新设置 diagnostics_format.
-  --   diagnostic.message = diagnostic.message .. ' [null-ls]'
-  -- end,
-}
-
---- NOTE: root_dir 中有 eslintrc.* 配置文件的情况下启动 eslint
-local eslint_opts = {
-  condition = function(utils)
-    return utils.root_has_file({ "eslintrc.json", "eslintrc-ts.json", "eslintrc-js.json", "eslintrc-react.json" })
-  end
-}
-
---- linter / formatter / code action 设置 ----------------------------------------------------------
---- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/MAIN.md  -- runtime_condition function 中的 params
---- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/CONFIG.md    -- setup 设置
---- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md  -- formatter & linter 列表
---- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTIN_CONFIG.md  -- with() 设置
---- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/HELPERS.md -- $FILENAME, $DIRNAME, $ROOT ...
---- linters 设置 -----------------------------------------------------------------------------------
-local local_linter_key = "linter"
-local linter_settings = {
-  --- golangci-lint
-  diagnostics.golangci_lint.with(proj_local_settings.keep_extend(local_linter_key, 'golangci_lint',
-    require("user.lsp.null_ls.tools.golangci_lint"),  -- NOTE: 加载单独设置 null_ls/tools/golangci_lint.lua
-    diagnostics_opts
-  )),
-
-  --- NOTE: eslint 分别对不同的 filetype 做不同的设置. --- {{{
-  --- eslint 运行必须有配置文件, 如果没有配置文件则 eslint 运行错误.
-  --- VVI: eslint 运行所需的插件下载时会生成 package.json 文件, package.json 文件必须和 .eslintrc.* 文件在同一个文件夹中.
-  --- 否则 eslint 无法找到运行所需的插件.
-  --- eslint 会自动寻找 .eslintrc.* 文件, '.eslintrc.js', '.eslintrc.cjs', '.eslintrc.yaml', '.eslintrc.yml', '.eslintrc.json'.
-  --- eslint will searches for directory of the file and successive parent directories all the way up to the root directory.
-  --- 可以使用 '--config /xxx' 指定配置文件位置.
-  --- https://eslint.org/docs/user-guide/configuring/configuration-files
-  -- -- }}}
-  diagnostics.eslint.with(proj_local_settings.keep_extend(local_linter_key, 'eslint', {
-    extra_args = { "--config", "eslintrc-ts.json", "--cache" },
-    filetypes = {"typescript"},
-  }, vim.tbl_deep_extend('force', diagnostics_opts, eslint_opts))),
-  diagnostics.eslint.with(proj_local_settings.keep_extend(local_linter_key, 'eslint', {
-    extra_args = { "--config", "eslintrc-react.json", "--cache" },
-    filetypes = {"typescriptreact"},
-  }, vim.tbl_deep_extend('force', diagnostics_opts, eslint_opts))),
-  diagnostics.eslint.with(proj_local_settings.keep_extend(local_linter_key, 'eslint', {
-    extra_args = { "--config", "eslintrc-js.json", "--cache" },
-    filetypes = {"javascript", "javascriptreact", "vue"},
-  }, vim.tbl_deep_extend('force', diagnostics_opts, eslint_opts))),
-
-  --- python, flake8, mypy
-  diagnostics.flake8.with(proj_local_settings.keep_extend(local_linter_key, 'flake8', diagnostics_opts)),
-  diagnostics.mypy.with(proj_local_settings.keep_extend(local_linter_key, 'mypy', {
-    extra_args = {"--follow-imports=silent", "--ignore-missing-imports"},
-  }, diagnostics_opts)),
-
-  --- protobuf, buf
-  diagnostics.buf.with(proj_local_settings.keep_extend(local_linter_key, 'buf', diagnostics_opts)),
-}
-
---- formatter 设置 ---------------------------------------------------------------------------------
-local local_formatter_key = "formatter"
-local formatter_settings = {
-  --- NOTE: 需要在 lsp.setup(opts) 中的 on_attach 中排除 tsserver & sumneko_lua 的 formatting 功能
-  formatting.prettier.with(proj_local_settings.keep_extend(local_formatter_key, 'prettier',
-    require("user.lsp.null_ls.tools.prettier")  -- NOTE: 加载单独设置 null_ls/tools/prettier.lua
-  )),
-
-  --- python, autopep8, black, YAPF
-  formatting.autopep8.with(proj_local_settings.keep_extend(local_formatter_key, 'autopep8', {})),
-
-  --- go, gofmt, goimports, gofumpt
-  --- go 需要在这里使用 'goimports', 因为 gopls 默认不会处理 "source.organizeImports",
-  --- 但是需要 gopls 格式化 go.mod 文件.
-  formatting.goimports.with(proj_local_settings.keep_extend(local_formatter_key, 'goimports', {})),
-
-  --- sh shell
-  formatting.shfmt.with(proj_local_settings.keep_extend(local_formatter_key, 'shfmt', {})),
-
-  --- protobuf, buf
-  formatting.buf.with(proj_local_settings.keep_extend(local_formatter_key, 'buf', {})),
-}
-
---- code actions 设置 -------------------------------------------------------------------------------
-local code_action_settings = {
-  --- "lewis6991/gitsigns.nvim" 插件
-  code_actions.gitsigns,
-
-  --- NOTE: null-ls 不是 autostart 的, 需要触发操作后才会加载.
-  --- eslint 等工具启动速度慢, 会拖慢第一次使用 code action 的时间.
-  code_actions.eslint.with(eslint_opts),
-}
-
---- 合并多个 list
-local function combine_lists(...)
-  if not ... then
-    return {}
   end
 
-  local result = {}
-  for _, elem in ipairs({...}) do
-    vim.list_extend(result, elem)
-  end
-  return result
+  return list
 end
 
 --- null-ls setup() 在这里加载上面设置的 formatting & linter ---------------------------------------
 --- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/CONFIG.md
 null_ls.setup({
   --- VVI: 设置 linter / formatter / code actions
-  sources = combine_lists(linter_settings, formatter_settings, code_action_settings),
+  sources = combine_sources(),
 
   --- VVI: project root, 影响 linter 执行时的 pwd. 这里的 root_dir 是一个全局设置,
   --- 对 null-ls 中的所有 linter 有效. root_dir 需要传入一个回调函数 func(params):string.
@@ -256,7 +65,7 @@ null_ls.setup({
   --- 以下callback 都是 DEBUG: 用
   --- 设置 key_mapping vim.diagnostic.goto_next() ...
   on_attach = function(client, bufnr)
-    require("user.lsp.lsp_keymaps").diagnostic_keymaps(0)
+    require("user.lsp.lsp_keymaps").diagnostic_keymaps(bufnr)
 
     if __Debug_Neovim.null_ls then
       Notify("LSP Server attach: " .. client.name, "DEBUG", {title="Null-ls"})

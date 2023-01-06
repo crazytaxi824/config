@@ -43,7 +43,9 @@ return {
 	  }
       filetypes = { "go" },
     },
-    eslint = { ... },
+    eslint = {
+	  extra_args = { "--config", "eslintrc-react.json", "--cache" },
+	},
     flake8 = { ... },
     buf = { ... },
   },
@@ -55,6 +57,10 @@ return {
     stylua = { ... },
     autopep8 = { ... },
     buf = { ... },
+  },
+
+  code_actions = {
+	eslint = { ... },
   },
 }
 ```
