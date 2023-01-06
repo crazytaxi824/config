@@ -95,78 +95,100 @@ M.local_linter_key = "linter"
 M.local_formatter_key = "formatter"
 M.local_code_actions_key = "code_actions"
 
---- VVI: 这里使用函数来返回 table, 而不是直接定义一个 table 的原因是: require() 只会执行一次, 导致无法实时改变 settings.
-M.setup = function ()
-  return {
-    [M.local_linter_key] = {
-      --- golangci-lint 配置文件位置自动查找 --- {{{
-      --- DOC: https://golangci-lint.run/usage/configuration/#linters-configuration
-      --- golangci-lint 会自动寻找 '.golangci.yml', '.golangci.yaml', '.golangci.toml', '.golangci.json'.
-      --- GolangCI-Lint also searches for config files in all directories from the directory of
-      --- the first analyzed path up to the root.
-      -- -- }}}
-      golangci_lint = diagnostics.golangci_lint.with(proj_local_settings.keep_extend(M.local_linter_key, 'golangci_lint',
+--- VVI: 这里使用函数来返回 table, 而不是直接定义一个 table 的原因是:
+--- 直接定义一个 table 的问题是: module 在第一次 require() 之后 table 中的内容就缓存了.
+--- 而调用函数返回 table 的好处是: 每次执行函数时 table 中的内容都会重新生成.
+M.sources =  {
+  [M.local_linter_key] = {
+    --- golangci-lint 配置文件位置自动查找 --- {{{
+    --- DOC: https://golangci-lint.run/usage/configuration/#linters-configuration
+    --- golangci-lint 会自动寻找 '.golangci.yml', '.golangci.yaml', '.golangci.toml', '.golangci.json'.
+    --- GolangCI-Lint also searches for config files in all directories from the directory of
+    --- the first analyzed path up to the root.
+    -- -- }}}
+    golangci_lint = function()
+      return diagnostics.golangci_lint.with(proj_local_settings.keep_extend(M.local_linter_key, 'golangci_lint',
         require("user.lsp.null_ls.tools.golangci_lint"),  -- NOTE: 加载单独设置 null_ls/tools/golangci_lint.lua
-        diagnostics_opts)),
+        diagnostics_opts))
+    end,
 
-      --- eslint 分别对不同的 filetype 做不同的设置. --- {{{
-      --- eslint 运行必须有配置文件, 如果没有配置文件则 eslint 运行错误.
-      --- VVI: eslint 运行所需的插件下载时会生成 package.json 文件, package.json 文件必须和 .eslintrc.* 文件在同一个文件夹中.
-      --- 否则 eslint 无法找到运行所需的插件.
-      --- eslint 会自动寻找 .eslintrc.* 文件, '.eslintrc.js', '.eslintrc.cjs', '.eslintrc.yaml', '.eslintrc.yml', '.eslintrc.json'.
-      --- eslint will searches for directory of the file and successive parent directories all the way up to the root directory.
-      --- 可以使用 '--config /xxx' 指定配置文件位置.
-      --- https://eslint.org/docs/user-guide/configuring/configuration-files
-      -- -- }}}
-      eslint = diagnostics.eslint.with(proj_local_settings.keep_extend(M.local_linter_key, 'eslint',
-        eslint_opts, diagnostics_opts)),
+    --- eslint 分别对不同的 filetype 做不同的设置. --- {{{
+    --- eslint 运行必须有配置文件, 如果没有配置文件则 eslint 运行错误.
+    --- VVI: eslint 运行所需的插件下载时会生成 package.json 文件, package.json 文件必须和 .eslintrc.* 文件在同一个文件夹中.
+    --- 否则 eslint 无法找到运行所需的插件.
+    --- eslint 会自动寻找 .eslintrc.* 文件, '.eslintrc.js', '.eslintrc.cjs', '.eslintrc.yaml', '.eslintrc.yml', '.eslintrc.json'.
+    --- eslint will searches for directory of the file and successive parent directories all the way up to the root directory.
+    --- 可以使用 '--config /xxx' 指定配置文件位置.
+    --- https://eslint.org/docs/user-guide/configuring/configuration-files
+    -- -- }}}
+    eslint = function()
+      return diagnostics.eslint.with(proj_local_settings.keep_extend(M.local_linter_key, 'eslint',
+        eslint_opts, diagnostics_opts))
+    end,
 
-      --- python: flake8, mypy
-      flake8 = diagnostics.flake8.with(proj_local_settings.keep_extend(M.local_linter_key, 'flake8', diagnostics_opts)),
-      mypy = diagnostics.mypy.with(proj_local_settings.keep_extend(M.local_linter_key, 'mypy', {
+    --- python: flake8, mypy
+    flake8 = function()
+      return diagnostics.flake8.with(proj_local_settings.keep_extend(M.local_linter_key, 'flake8', diagnostics_opts))
+    end,
+    mypy = function()
+      return diagnostics.mypy.with(proj_local_settings.keep_extend(M.local_linter_key, 'mypy', {
         extra_args = {"--follow-imports=silent", "--ignore-missing-imports"},
-      }, diagnostics_opts)),
+      }, diagnostics_opts))
+    end,
 
-      --- protobuf: buf
-      buf = diagnostics.buf.with(proj_local_settings.keep_extend(M.local_linter_key, 'buf', diagnostics_opts)),
-    },
+    --- protobuf: buf
+    buf = function()
+      return diagnostics.buf.with(proj_local_settings.keep_extend(M.local_linter_key, 'buf', diagnostics_opts))
+    end,
+  },
 
-    [M.local_formatter_key] = {
-      prettier = formatting.prettier.with(proj_local_settings.keep_extend(M.local_formatter_key, 'prettier',
-        require("user.lsp.null_ls.tools.prettier")  -- NOTE: 加载单独设置 null_ls/tools/prettier.lua
-      )),
+  [M.local_formatter_key] = {
+    prettier = function()
+      return formatting.prettier.with(proj_local_settings.keep_extend(M.local_formatter_key, 'prettier',
+        require("user.lsp.null_ls.tools.prettier")))  -- NOTE: 加载单独设置 null_ls/tools/prettier.lua
+    end,
 
-      --- python: autopep8, black, YAPF
-      autopep8 = formatting.autopep8.with(proj_local_settings.keep_extend(M.local_formatter_key, 'autopep8', {})),
+    --- python: autopep8, black, YAPF
+    autopep8 = function()
+      return formatting.autopep8.with(proj_local_settings.keep_extend(M.local_formatter_key, 'autopep8', {}))
+    end,
 
-      --- go: goimports, goimports_reviser, gofmt, gofumpt
-      --- go 需要在这里使用 'goimports', 因为 gopls 默认不会处理 "source.organizeImports",
-      --- 但是需要 gopls 格式化 go.mod 文件.
-      goimports = formatting.goimports.with(proj_local_settings.keep_extend(M.local_formatter_key, 'goimports', {})),
+    --- go: goimports, goimports_reviser, gofmt, gofumpt
+    --- go 需要在这里使用 'goimports', 因为 gopls 默认不会处理 "source.organizeImports",
+    --- 但是需要 gopls 格式化 go.mod 文件.
+    goimports = function()
+      return formatting.goimports.with(proj_local_settings.keep_extend(M.local_formatter_key, 'goimports', {}))
+    end,
 
-      --- goimports_reviser 只是对 import (...) 排序, 无法进行 format 操作.
-      --- BUG: 目前 goimports_reviser 和 goimports 执行顺序上有问题. 导致 goimports_reviser 无法排序.
-      --- 目前在 'auto_format.lua' 的 autocmd BufWritePost 中执行.
-      --goimports_reviser = null_ls.builtins.formatting.goimports_reviser,
+    --- goimports_reviser 只是对 import (...) 排序, 无法进行 format 操作.
+    --- BUG: 目前 goimports_reviser 和 goimports 执行顺序上有问题. 导致 goimports_reviser 无法排序.
+    --- 目前在 'auto_format.lua' 的 autocmd BufWritePost 中执行.
+    --goimports_reviser = null_ls.builtins.formatting.goimports_reviser,
 
-      --- sh shell: shfmt
-      shfmt = formatting.shfmt.with(proj_local_settings.keep_extend(M.local_formatter_key, 'shfmt', {})),
+    --- sh shell: shfmt
+    shfmt = function()
+      return formatting.shfmt.with(proj_local_settings.keep_extend(M.local_formatter_key, 'shfmt', {}))
+    end,
 
-      --- protobuf: buf
-      buf = formatting.buf.with(proj_local_settings.keep_extend(M.local_formatter_key, 'buf', {})),
-    },
+    --- protobuf: buf
+    buf = function()
+      return formatting.buf.with(proj_local_settings.keep_extend(M.local_formatter_key, 'buf', {}))
+    end,
+  },
 
-    [M.local_code_actions_key] = {
-      --- "lewis6991/gitsigns.nvim" 插件
-      gitsigns = code_actions.gitsigns.with({
-        disabled_filetypes = {"NvimTree", "tagbar"},
-      }),
+  [M.local_code_actions_key] = {
+    --- "lewis6991/gitsigns.nvim" 插件
+    --- NOTE: gitsigns 不加载 local settings
+    gitsigns = function()
+      return code_actions.gitsigns.with({ disabled_filetypes = {"NvimTree", "tagbar"} })
+    end,
 
-      --- NOTE: null-ls 不是 autostart 的, 需要触发操作后才会加载.
-      --- eslint 等工具启动速度慢, 会拖慢第一次使用 code action 的时间.
-      eslint = code_actions.eslint.with(proj_local_settings.keep_extend(M.local_code_actions_key, 'eslint', eslint_opts)),
-    },
-  }
-end
+    --- NOTE: null-ls 不是 autostart 的, 需要触发操作后才会加载.
+    --- eslint 等工具启动速度慢, 会拖慢第一次使用 code action 的时间.
+    eslint = function()
+      return code_actions.eslint.with(proj_local_settings.keep_extend(M.local_code_actions_key, 'eslint', eslint_opts))
+    end,
+  },
+}
 
 return M

@@ -3,7 +3,7 @@ if not null_ls_status_ok then
   return
 end
 
-local sources = require("user.lsp.null_ls.sources")
+local s = require("user.lsp.null_ls.sources")
 
 --- 检查 null-ls 所需 tools ------------------------------------------------------------------------ {{{
 --- 在 null_ls.setup() 的时候, 如果命令行工具不存在不会报错;
@@ -47,9 +47,9 @@ require('user.utils.check_tools').check(null_tools, {title= "check null-ls tools
 local function combine_sources()
   local list = {}
 
-  for _, tools in pairs(sources.setup()) do
-    for _, tool_cfg in pairs(tools) do
-      table.insert(list, tool_cfg)
+  for _, tools in pairs(s.sources) do
+    for _, tool_setup in pairs(tools) do
+      table.insert(list, tool_setup())
     end
   end
 

@@ -512,54 +512,5 @@ vim.lsp.buf.format({
 
 ## TODO
 
-### 动态加载 lsp 本地 config.
 
-- `:help watch-file`, when `.nvim/settings.lua` changed OR added.
 
-- `:LspRestart` - lspconfig command, 不能直接用, jsonls, lualsp 都无法 attach 成功.
-
-- LSP `client.notify("workspace/didChangeConfiguration")`
-
-```lua
-function TestLSP(id)
-  --- get client
-  -- local client = vim.lsp.get_active_clients({name = lsp_name})[1]
-  -- if client then
-  -- end
-
-  local client = vim.lsp.get_client_by_id(id)
-  -- print(vim.inspect(client.config.settings))
-
-  if client.name == 'gopls' then
-    client.config.settings.gopls["ui.completion.usePlaceholders"] = false
-    client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
-  end
-end
-```
-
-### restart null-ls tools
-
-```lua
-lua print(vim.inspect(require('null-ls').get_source('golangci_lint')))
-lua require('null-ls').deregister('golangci_lint')
-
-lua require('null-ls').disable('golangci_lint')
-lua require('null-ls').deregister('golangci_lint')
-lua require('null-ls').register(require('null-ls').builtins.diagnostics.golangci_lint)
-lua require('null-ls').enable('golangci_lint')
-
-lua print(require('null-ls').is_registered('golangci_lint'))  -- not working
-
---- 手动 re-register
-function Restart_nullls_tool(tool_name)
-  null_ls.disable(tool_name)
-  null_ls.deregister(tool_name)
-
-  local tool = diagnostics.golangci_lint.with(proj_local_settings.keep_extend(local_linter_key, tool_name,
-    require("user.lsp.null_ls.tools."..tool_name),  -- NOTE: 加载单独设置 null_ls/tools/xxx.lua
-    diagnostics_opts
-  ))
-
-  null_ls.register(tool)  -- register 后, 自动 enable source.
-end
-```
