@@ -112,7 +112,11 @@ local diagnostics_opts = {
 --- NOTE: root_dir 中有 eslintrc.* 配置文件的情况下启动 eslint
 local eslint_opts = {
   condition = function(utils)
-    return utils.root_has_file({ "eslintrc.json", "eslintrc-ts.json", "eslintrc-js.json", "eslintrc-react.json" })
+    --- `:help match()`, `:help pattern`, '-' 需要 escape '%-'
+    return utils.root_has_file_matches("eslintrc")
+
+    --- 也可以使用:
+    --return utils.root_has_file({ "eslintrc.json", "eslintrc-ts.json", "eslintrc-js.json", "eslintrc-react.json" })
   end
 }
 
@@ -128,8 +132,7 @@ local linter_settings = {
   --- golangci-lint
   diagnostics.golangci_lint.with(proj_local_settings.keep_extend(local_linter_key, 'golangci_lint',
     require("user.lsp.null_ls.tools.golangci_lint"),  -- NOTE: 加载单独设置 null_ls/tools/golangci_lint.lua
-    diagnostics_opts
-  )),
+    diagnostics_opts)),
 
   --- NOTE: eslint 分别对不同的 filetype 做不同的设置. --- {{{
   --- eslint 运行必须有配置文件, 如果没有配置文件则 eslint 运行错误.
@@ -140,18 +143,8 @@ local linter_settings = {
   --- 可以使用 '--config /xxx' 指定配置文件位置.
   --- https://eslint.org/docs/user-guide/configuring/configuration-files
   -- -- }}}
-  diagnostics.eslint.with(proj_local_settings.keep_extend(local_linter_key, 'eslint', {
-    extra_args = { "--config", "eslintrc-ts.json", "--cache" },
-    filetypes = {"typescript"},
-  }, vim.tbl_deep_extend('force', diagnostics_opts, eslint_opts))),
-  diagnostics.eslint.with(proj_local_settings.keep_extend(local_linter_key, 'eslint', {
-    extra_args = { "--config", "eslintrc-react.json", "--cache" },
-    filetypes = {"typescriptreact"},
-  }, vim.tbl_deep_extend('force', diagnostics_opts, eslint_opts))),
-  diagnostics.eslint.with(proj_local_settings.keep_extend(local_linter_key, 'eslint', {
-    extra_args = { "--config", "eslintrc-js.json", "--cache" },
-    filetypes = {"javascript", "javascriptreact", "vue"},
-  }, vim.tbl_deep_extend('force', diagnostics_opts, eslint_opts))),
+  diagnostics.eslint.with(proj_local_settings.keep_extend(local_linter_key, 'eslint',
+    eslint_opts, diagnostics_opts)),
 
   --- python, flake8, mypy
   diagnostics.flake8.with(proj_local_settings.keep_extend(local_linter_key, 'flake8', diagnostics_opts)),
@@ -186,6 +179,7 @@ local formatter_settings = {
 }
 
 --- code actions 设置 -------------------------------------------------------------------------------
+local local_code_actions_key = "code_actions"
 local code_action_settings = {
   --- "lewis6991/gitsigns.nvim" 插件
   code_actions.gitsigns.with({
@@ -194,7 +188,7 @@ local code_action_settings = {
 
   --- NOTE: null-ls 不是 autostart 的, 需要触发操作后才会加载.
   --- eslint 等工具启动速度慢, 会拖慢第一次使用 code action 的时间.
-  code_actions.eslint.with(eslint_opts),
+  code_actions.eslint.with(proj_local_settings.keep_extend(local_code_actions_key, 'eslint', eslint_opts)),
 }
 
 --- 合并多个 list
