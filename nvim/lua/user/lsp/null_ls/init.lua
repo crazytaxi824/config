@@ -47,8 +47,8 @@ require('user.utils.check_tools').check(null_tools, {title= "check null-ls tools
 local function combine_sources()
   local list = {}
 
-  for _, tools in pairs(s.sources) do
-    for _, tool_setup in pairs(tools) do
+  for _, tool_types in pairs(s.sources) do
+    for _, tool_setup in pairs(tool_types) do
       table.insert(list, tool_setup())
     end
   end

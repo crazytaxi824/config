@@ -57,25 +57,25 @@ end
 local content = M.get_local_settings_content() or {}
 
 --- compare content, 如果内容不同则执行 callback.
-local function compare_content_settings(old_content, new_content, key, callback)
-  if not old_content[key] and new_content[key] then
-    for tool, _ in pairs(new_content[key]) do
+local function compare_content_settings(old_content, new_content, typ, callback)
+  if not old_content[typ] and new_content[typ] then
+    for tool, _ in pairs(new_content[typ]) do
       callback(tool)
     end
-  elseif old_content[key] and not new_content[key] then
-    for tool, _ in pairs(old_content[key]) do
+  elseif old_content[typ] and not new_content[typ] then
+    for tool, _ in pairs(old_content[typ]) do
       callback(tool)
     end
-  elseif old_content[key] and new_content[key] then
-    for tool, cfg in pairs(old_content[key]) do
-      if not new_content[key][tool] or vim.fn.json_encode(cfg) ~= vim.fn.json_encode(new_content[key][tool]) then
+  elseif old_content[typ] and new_content[typ] then
+    for tool, cfg in pairs(old_content[typ]) do
+      if not new_content[typ][tool] or vim.fn.json_encode(cfg) ~= vim.fn.json_encode(new_content[typ][tool]) then
         callback(tool)
       end
     end
 
     --- NOTE: 这里不用再对比 json_encode(), 避免重复对比.
-    for tool, _ in pairs(new_content[key]) do
-      if not old_content[key][tool] then
+    for tool, _ in pairs(new_content[typ]) do
+      if not old_content[typ][tool] then
         callback(tool)
       end
     end
