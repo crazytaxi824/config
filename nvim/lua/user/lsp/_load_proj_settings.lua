@@ -56,7 +56,7 @@ end
 --- VVI: 这里不要使用 nil, 因为 nil 无法 index [lsp] / [null-ls].
 local content = get_local_settings_content() or {}
 
---- load project local settings if '.nvim/settings.lua' exists -------------------------------------
+--- extend project local settings if '.nvim/settings.lua' exists -----------------------------------
 --- NOTE: 主要函数 keep_extend() 用 project local 设置覆盖 global 设置.
 --- 使用 tbl_deep_extend('keep', xx, xx, ...)
 M.keep_extend = function(section, tool, tbl, ...)
@@ -150,7 +150,7 @@ local function reload_local_settings(old_content, new_content)
 end
 
 --- command 手动重新加载 local settings
-vim.api.nvim_create_user_command("ReloadLocalSettings", function()
+vim.api.nvim_create_user_command("LocalSettingsReload", function()
   --- lua 中 table 是 deep copy
   local old_content = content
 
@@ -165,5 +165,22 @@ vim.api.nvim_create_user_command("ReloadLocalSettings", function()
   --- 重新加载 local settings.
   reload_local_settings(old_content, content)
 end, { bang=true, bar=true, desc = 'reload "lsp" and "null-ls" after change ".nvim/settings.lua"' })
+
+--- command 显示 project local settings 示例.
+vim.api.nvim_create_user_command("LocalSettingsExample", function ()
+  --- NOTE: 主要保证 key 设置正确.
+  local lsp_typ = require("user.lsp.lsp_config.setup_opts").local_lspconfig_key
+  local s = require("user.lsp.null_ls.sources")
+
+  local example = {
+    [lsp_typ] = { gopls = { "..." }, tsserver = { "..." } },
+    [s.local_linter_key] = { golangci_lint = { "..." }, eslint = { "..." } },
+    [s.local_formatter_key] = { prettier = { "..." }, goimports = { "..." } },
+    [s.local_code_actions_key] = { eslint = { "..." } },
+  }
+
+  vim.notify('".nvim/settings.lua" example:\n```lua\nreturn ' .. vim.inspect(example) .. '\n```', vim.log.levels.INFO)
+
+end, { bang=true, bar=true, desc = '".nvim/settings.lua" example.' })
 
 return M

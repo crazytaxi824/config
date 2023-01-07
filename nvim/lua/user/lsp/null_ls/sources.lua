@@ -130,6 +130,7 @@ M.sources =  {
     flake8 = function()
       return diagnostics.flake8.with(proj_local_settings.keep_extend(M.local_linter_key, 'flake8', diagnostics_opts))
     end,
+
     mypy = function()
       return diagnostics.mypy.with(proj_local_settings.keep_extend(M.local_linter_key, 'mypy', {
         extra_args = {"--follow-imports=silent", "--ignore-missing-imports"},
