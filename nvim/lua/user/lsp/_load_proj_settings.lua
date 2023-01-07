@@ -41,15 +41,12 @@ M.get_local_settings_content = function()
     local ok, result = pcall(dofile, local_settings_filepath)
     --- ok 文件执行 (dofile) 成功.
     --- result 是执行结果. 可能为 nil, 可能是执行失败的 error message.
-    if ok then
-      if result then
-        --- '.nvim/settings.lua' 读取成功, 同时返回值不是 nil 的情况下缓存 settings 数据.
-        return result
-      else
-        Notify('"' .. local_settings_filepath .. '" returns nil.', "INFO")
-      end
-    else
-      Notify(vim.split(result, '\n', {trimempty=true}), "WARN")
+    if not ok then
+      Notify(vim.split(result, '\n', {trimempty=true}), "ERROR")
+      return nil, "dofile_error"
+    elseif result then
+      --- '.nvim/settings.lua' 读取成功, 同时返回值不是 nil 的情况下缓存 settings 数据.
+      return result
     end
   end
 end
@@ -87,12 +84,21 @@ end
 
 --- 如果找到不同的设置则重新加载 lsp/null-ls
 local function reload_local_settings(old_content, new_content)
+  local update_settings = {} -- cache tool name, 用于 notify.
+
   compare_content_settings(old_content, new_content, "lsp", function(lsp_name)
     local clients = vim.lsp.get_active_clients({name = lsp_name})
     for _, c in ipairs(clients) do
-      c.config.settings[lsp_name] = new_content.lsp[lsp_name]  -- 直接替换设置.
+      if new_content.lsp and new_content.lsp[lsp_name] then
+        c.config.settings[lsp_name] = new_content.lsp[lsp_name]  -- 直接替换设置
+      else
+        c.config.settings[lsp_name] = nil
+      end
+
       c.notify("workspace/didChangeConfiguration", { settings = c.config.settings })
     end
+
+    table.insert(update_settings, lsp_name)
   end)
 
   local s = require("user.lsp.null_ls.sources")
@@ -109,7 +115,13 @@ local function reload_local_settings(old_content, new_content)
       null_ls.disable(tool_name)  -- 清除 diagnostic messages & signs
       null_ls.deregister(tool_name)  -- 注销, 删除原服务.
       null_ls.register(s.sources[typ][tool_name]())  -- 重新注册. register 后, 自动 enable.
+
+      table.insert(update_settings, tool_name)
     end)
+  end
+
+  if #update_settings > 0 then
+    vim.notify('local settings changed: ' .. table.concat(update_settings, ' | '), vim.log.levels.INFO)
   end
 end
 
@@ -119,7 +131,12 @@ vim.api.nvim_create_user_command("ReloadLocalSettings", function()
   local old_content = content
 
   --- VVI: 给 content 重新赋值
-  content = M.get_local_settings_content()
+  local new_content, err = M.get_local_settings_content()
+  if err then  -- dofile error
+    return
+  end
+
+  content = new_content or {}
 
   --- 重新加载 local settings.
   reload_local_settings(old_content, content)
