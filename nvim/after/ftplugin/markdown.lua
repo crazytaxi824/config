@@ -7,10 +7,7 @@ local function markdown_create_table(arglist)  -- args: 创建一个 row * col �
 
   -- if arglist < 1, vim 会提示需要 Argument required
   if #arglist > 2 then
-    Notify(
-      'args error. eg: "MarkdownCreateTable row:number col:number"',
-      "ERROR"
-    )
+    Notify('args error. eg: "MarkdownCreateTable row:number col:number"', "ERROR")
     return
   end
 

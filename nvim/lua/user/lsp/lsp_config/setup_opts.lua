@@ -50,22 +50,23 @@ end
 --- NOTE: LSP settings Hook ------------------------------------------------------------------------
 --- 这里是为了能单独给 project 设置 LSP setting.
 --- init() runs Before attach().
+
+--- .nvim/settings.lua 中的 local 设置. --- {{{
+-- return {
+--   lsp = {
+--     gopls = {
+--       -- ["ui.completion.usePlaceholders"] = false,
+--       -- ["ui.diagnostic.staticcheck"] = false,
+--     }
+--   },
+-- }
+-- -- }}}
+M.local_lspconfig_key = "lsp"
+
 M.on_init = function(client)
   --- NOTE: 加载项目本地设置, 覆盖 global settings -----------------------------
-  --- .nvim/settings.lua 中的 local 设置. --- {{{
-  -- return {
-  --   lsp = {
-  --     gopls = {
-  --       -- ["ui.completion.usePlaceholders"] = false,
-  --       -- ["ui.diagnostic.staticcheck"] = false,
-  --     }
-  --   },
-  -- }
-  -- -- }}}
-  local local_lspconfig_key = "lsp"
-
   local proj_local_settings = require("user.lsp._load_proj_settings")
-  client.config.settings[client.name] = proj_local_settings.keep_extend(local_lspconfig_key, client.name,
+  client.config.settings[client.name] = proj_local_settings.keep_extend(M.local_lspconfig_key, client.name,
     client.config.settings[client.name])
 
   --- NOTE: notify lsp config is changed.
