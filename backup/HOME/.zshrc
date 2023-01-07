@@ -824,9 +824,9 @@ alias packages="zsh ~/.my_shell_functions/packages.sh"
 
 # NOTE: 现在可以使用 `brew bundle check`, `brew bundle cleanup` 来检查不属于 Brewfile 的包.
 # 检查 brew 中所有不属于任何别的包依赖的包.
-#alias checkBrewRootFormula="zsh ~/.my_shell_functions/brew_root_formula.sh"
+alias checkBrewRootFormula="zsh ~/.my_shell_functions/brew_root_formula.sh"
 # 检查 brew dependency 属于哪个包.
-#alias checkBrewDependency="zsh ~/.my_shell_functions/brew_dep_check.sh"
+alias checkBrewDeps="zsh ~/.my_shell_functions/brew_dep_check.sh"
 
 # NOTE: DEBUG 用, my test functions
 #source ~/.my_shell_functions/zshrc_custom_functions

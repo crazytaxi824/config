@@ -43,7 +43,7 @@ brew "clang-format" # c,c++,object-c 格式化工具
 # dev tools
 brew "graphviz" # 图表绘制工具, go 性能分析需要用到
 brew "protobuf" # `protoc` 命令行工具
-#brew "curl"    # http(s) 请求工具
+#brew "curl"    # http(s) 请求工具, 自带.
 brew "wget"     # http(s) 下载工具
 brew "grpcurl"  # gprc 请求工具, 类似 "curl".
 brew "rclone"   # ftp / sftp / webstorage ... 工具
@@ -52,7 +52,10 @@ brew "siege"    # http request 压力测试工具
 # others
 brew "ffmpeg"
 brew "yt-dlp"  # fork youtube-dl
-brew "openssl@1.1"  # openssl@1.1 was designated an LTS release.
+
+# deps 不同版本
+brew "openssl@1.1"  # openssl@1.1 was designated an LTS release. 有些 app 依赖 openssl@3
+brew "ca-certificates"
 
 ### `brew install --cask`
 # 开发工具
@@ -61,8 +64,10 @@ cask "iterm2"
 cask "visual-studio-code" # vscode
 cask "postman"   # http(s) 测试工具
 cask "wireshark" # http 请求分析工具
-cask "tableplus" # 数据库客户端
-cask "keycastr"  # 按键输入显示工具
+cask "beekeeper-studio"  # Postgre, Mysql, MariaDB, SQLite, CockroachDB, AWS Redshift, MS SQL server
+cask "tableplus"         # Postgre, Mysql, MariaDB, SQLite, CockroachDB, AWS Redshift, MS SQL server, redis, MongoDB, Oracle, Cassandra, Snowflake, Vertica
+#cask "pgadmin4"   # Postgre GUI client
+#cask "another-redis-desktop-manager"  # redis GUI client
 #cask "sourcetree" # git 工具, 好用但不开源
 
 # 个人工具
@@ -74,6 +79,7 @@ cask "keka"  # 压缩工具
 cask "the-unarchiver"  # 解压工具
 cask "typora"  # markdown 编辑软件
 cask "joplin"  # 加密的 markdown 笔记管理工具
+cask "keycastr"  # 按键输入显示工具
 
 cask "signal"   # 加密聊天工具
 cask "telegram" # 加密聊天工具
