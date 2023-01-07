@@ -34,7 +34,7 @@ local function available_local_settings_file()
   end
 end
 
-M.get_local_settings_content = function()
+local function get_local_settings_content()
   local local_settings_filepath = available_local_settings_file()
   if local_settings_filepath then
     --- 使用 pcall 确保 lua file 执行没有错误.
@@ -54,8 +54,27 @@ end
 --- 缓存 file 内容.
 --- VVI: 直接获取 content, 该段代码只会在第一次 require() 的时候运行一次, 以后再次 require() 的时候不会多次运行.
 --- VVI: 这里不要使用 nil, 因为 nil 无法 index [lsp] / [null-ls].
-local content = M.get_local_settings_content() or {}
+local content = get_local_settings_content() or {}
 
+--- load project local settings if '.nvim/settings.lua' exists -------------------------------------
+--- NOTE: 主要函数 keep_extend() 用 project local 设置覆盖 global 设置.
+--- 使用 tbl_deep_extend('keep', xx, xx, ...)
+M.keep_extend = function(section, tool, tbl, ...)
+  --- 如果项目本地设置存在.
+  if content[section] and content[section][tool] then
+    return vim.tbl_deep_extend('keep', content[section][tool], tbl, ...)
+  end
+
+  --- 如果传入多个 tbl config
+  if ... then
+    return vim.tbl_deep_extend('keep', tbl, ...)
+  end
+
+  --- 如果只有一个 tbl config
+  return tbl
+end
+
+--- set command for Reload local project settings --------------------------------------------------
 --- compare content, 如果内容不同则执行 callback.
 local function compare_content_settings(old_content, new_content, typ, callback)
   if not old_content[typ] and new_content[typ] then
@@ -86,7 +105,9 @@ end
 local function reload_local_settings(old_content, new_content)
   local update_settings = {} -- cache tool name, 用于 notify.
 
-  compare_content_settings(old_content, new_content, "lsp", function(lsp_name)
+  --- lsp = { gopls = { ... }, tsserver = { ... } }
+  local lsp_typ = require("user.lsp.lsp_config.setup_opts").local_lspconfig_key
+  compare_content_settings(old_content, new_content, lsp_typ, function(lsp_name)
     local clients = vim.lsp.get_active_clients({name = lsp_name})
     for _, c in ipairs(clients) do
       if new_content.lsp and new_content.lsp[lsp_name] then
@@ -101,6 +122,9 @@ local function reload_local_settings(old_content, new_content)
     table.insert(update_settings, lsp_name)
   end)
 
+  --- linter = { golangci_lint = { ... }, eslint = { ... } }
+  --- formatter = { prettier = { ... }, goimports = { ... } }
+  --- code_actions = { eslint = { ... } }
   local s = require("user.lsp.null_ls.sources")
   local null_ls_tool_types = {s.local_linter_key, s.local_formatter_key, s.local_code_actions_key}
   for _, typ in ipairs(null_ls_tool_types) do
@@ -131,7 +155,7 @@ vim.api.nvim_create_user_command("ReloadLocalSettings", function()
   local old_content = content
 
   --- VVI: 给 content 重新赋值
-  local new_content, err = M.get_local_settings_content()
+  local new_content, err = get_local_settings_content()
   if err then  -- dofile error
     return
   end
@@ -141,22 +165,5 @@ vim.api.nvim_create_user_command("ReloadLocalSettings", function()
   --- 重新加载 local settings.
   reload_local_settings(old_content, content)
 end, { bang=true, bar=true, desc = 'reload "lsp" and "null-ls" after change ".nvim/settings.lua"' })
-
---- NOTE: 主要函数 keep_extend() 用 project local 设置覆盖 global 设置.
---- 使用 tbl_deep_extend('keep', xx, xx, ...)
-M.keep_extend = function(section, tool, tbl, ...)
-  --- 如果项目本地设置存在.
-  if content[section] and content[section][tool] then
-    return vim.tbl_deep_extend('keep', content[section][tool], tbl, ...)
-  end
-
-  --- 如果传入多个 tbl config
-  if ... then
-    return vim.tbl_deep_extend('keep', tbl, ...)
-  end
-
-  --- 如果只有一个 tbl config
-  return tbl
-end
 
 return M
