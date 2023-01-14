@@ -5,7 +5,7 @@ end
 
 --- `:help gitsigns`
 git_signs.setup({
-  --- sign define, 'BOX DRAWINGS HEAVY VERTICAL' & 'UPPER/LOWER ONE EIGHTH BLOCK', 'Left One Quarter Block'
+  --- sign text font: 'BOX DRAWINGS HEAVY VERTICAL', 'UPPER/LOWER ONE EIGHTH BLOCK', 'Left One Quarter Block'
   signs = {
     add    = {hl = 'GitSignsAdd'   , text = '┃', numhl='GitSignsAddNr'   , linehl='GitSignsAddLn'},
     change = {hl = 'GitSignsChange', text = '┃', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
@@ -21,6 +21,10 @@ git_signs.setup({
     changedelete = {hl = 'GitSignsChange', text = '╋━', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
     untracked    = {hl = 'GitSignsAdd', text = '┆', numhl='GitSignsAddNr', linehl='GitSignsAddLn'},
   },
+
+  --- TODO: new hidden feature.
+  -- _signs_staged_enable = true,
+
   sign_priority = 6,  -- 默认是 6, vim.diagnostic DiagnosticSignHint priority 默认是 10.
                       -- 这里设置为 10 会覆盖 DiagnosticSignHint(10), 但是不会覆盖 DiagnosticSignInfo(11).
   update_debounce = 300,  -- 更新频率, 默认 100
