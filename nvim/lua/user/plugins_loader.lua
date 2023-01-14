@@ -357,7 +357,7 @@ return require('packer').startup(function(use)
   }
 
   use {"JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
-    commit = "32d9627",
+    commit = "4a42b30",
 
     after = "nvim-treesitter",
   }
