@@ -269,7 +269,7 @@ require('packer').init {
 --- `:PackerSync` - install / update / clean 插件包.
 return require('packer').startup(function(use)
   use {"wbthomason/packer.nvim",  -- VVI: 必要. Have packer manage itself
-    commit = "dac4088",
+    commit = "1d0cf98",
   }
 
   --- Performence & Functions ----------------------------------------------------------------------
