@@ -301,7 +301,7 @@ return require('packer').startup(function(use)
 
   --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件
   use {"williamboman/mason.nvim",
-    commit = "86409b6",
+    commit = "5ab101a",
     config = function() require("user.plugin_settings.mason_tool_installer") end,
     --- NOTE: 不能 opt 加载 mason 否则其他插件无法找到 mason 安装的工具.
   }
