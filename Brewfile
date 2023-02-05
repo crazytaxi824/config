@@ -87,7 +87,7 @@ cask "iina"     # 视频播放器
 cask "calibre"  # 电子书工具, epub, mobi ...
 
 # 浏览器
-#cask "firefox"
+cask "firefox"
 cask "google-chrome"
 cask "microsoft-edge"
 cask "tor-browser"
