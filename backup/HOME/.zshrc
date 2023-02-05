@@ -59,8 +59,8 @@ export GO111MODULE=on  # on | off | auto
 # --- [ other setting ] ---------------------------------------------------------------------------- {{{
 ### python3 设置多个 version, 可以用 python3, python3.9, python3.10, python3.11 等命令.
 # eg: `python3.11 -m pip --version`. brew 安装 python 默认设置了多个 version.
-#export PATH=/usr/local/opt/python@3.9/bin:$PATH
-#alias python3=/usr/local/opt/python@3.9/bin/python3.9  # 指定 python3 命令的版本.
+#export PATH=/usr/local/opt/python@3.9/bin:$PATH  # brew 安装的 python 默认在 PATH 中.
+alias python3=/usr/local/bin/python3.11  # 指定 python3 命令的版本.
 
 ### vim path
 #alias vim=$(brew --prefix)/bin/vim   # brew install vim 路径, 下面设置了 vim() 函数.
@@ -798,10 +798,12 @@ function checkZshTools() {
 	echo -e "\e[32mcheck nvim environment:\e[0m"
 	[ -x $brew_path/nvim ] && echo -e "\e[32m - nvim ✔\e[0m" || echo -e "\e[31m - nvim ✗, 'brew info nvim'\e[0m"
 	[ -x $brew_path/node ] && echo -e "\e[32m - node ✔\e[0m" || echo -e "\e[31m - node ✗, 'brew info node'\e[0m"
-	[ -x $brew_path/python3 ] && echo -e "\e[32m - python3 ✔\e[0m" || echo -e "\e[31m - python3 ✗, 'brew info python3'\e[0m"
 	[ -x $brew_path/pandoc ] && echo -e "\e[32m - pandoc ✔\e[0m" || echo -e "\e[31m - pandoc ✗, 'brew info pandoc'\e[0m"
 	[ -x $brew_path/prettier ] && echo -e "\e[32m - prettier ✔\e[0m" || echo -e "\e[31m - prettier ✗, 'brew info prettier'\e[0m"
 	[ -x $brew_path/ctags ] && echo -e "\e[32m - ctags (universal-ctags) ✔\e[0m" || echo -e "\e[31m - ctags (universal-ctags) ✗, 'brew info universal-ctags'\e[0m"
+
+	# check `which python3`, `echo $?` 返回上一个命令的 exitcode.
+	[ $(which python3 > /dev/null; echo $?) -eq 0 ] && echo -e "\e[32m - python3 ✔\e[0m" || echo -e "\e[31m - python3 ✗, 'brew info python3'\e[0m"
 	printf "\n"
 }
 
@@ -824,9 +826,9 @@ alias packages="zsh ~/.my_shell_functions/packages.sh"
 
 # NOTE: 现在可以使用 `brew bundle check`, `brew bundle cleanup` 来检查不属于 Brewfile 的包.
 # 检查 brew 中所有不属于任何别的包依赖的包.
-alias checkBrewRootFormula="zsh ~/.my_shell_functions/brew_root_formula.sh"
+#alias checkBrewRootFormula="zsh ~/.my_shell_functions/brew_root_formula.sh"
 # 检查 brew dependency 属于哪个包.
-alias checkBrewDeps="zsh ~/.my_shell_functions/brew_dep_check.sh"
+alias checkBrewDependency="zsh ~/.my_shell_functions/brew_dep_check.sh"
 
 # NOTE: DEBUG 用, my test functions
 #source ~/.my_shell_functions/zshrc_custom_functions
