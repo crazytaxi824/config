@@ -60,6 +60,11 @@ local lsp_servers_map = {
     mason = "json-lsp",
     filetypes = {'json', 'jsonc'}
   },
+  bufls = {
+    cmd = "bufls",
+    mason = "buf-language-server",
+    filetypes = {'proto'},
+  }
 }
 
 local function lspconfig_setup(lsp_svr)
