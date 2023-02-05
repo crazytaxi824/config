@@ -207,6 +207,8 @@ source $ZSH/oh-my-zsh.sh
 #                     -E="/foo"       不显示当前 pwd 的根路径下名为 foo 的 file & dir;
 #                                     但如果 foo 不在当前根目录下, 而在子文件夹内则会显示出来. eg: `./bar/foo` 会显示.
 #
+#    --max-results 99999   限制搜索结果, 如果结果超出该值则立即停止继续搜索.
+#
 # fd 需要排除的常用文件和文件夹.
 #     .DS_Store       - macos 文件.
 #     *.swp           - vim 缓存文件.
