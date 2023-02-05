@@ -8,6 +8,7 @@
 # exclude folder
 !/alacritty
 !/backup
+!/.my_shell_functions
 
 # exclude folder, and then ignore 'file' & 'sub-folder' inside the folder.
 !/nvim

@@ -645,7 +645,6 @@ function backupConfigFiles() {
 
 		# zshrc
 		cp ~/.zshrc $backup_folder/HOME/
-		cp -r ~/.my_shell_functions $backup_folder/HOME/  # 自定义 sh 函数文件
 
 		# oh-my-zsh custom themes
 		cp -r ~/.oh-my-zsh/custom/themes $backup_folder/HOME/.oh-my-zsh/custom/
@@ -722,7 +721,7 @@ function restoreConfigFiles() {
 
 	case $restore in
 		"yes"|"Yes")
-			# .zshrc .my_shell_functions/ .oh-my-zsh/custom/themes/ .tmux.conf .ssh/config .gitignore_global ...
+			# .zshrc .oh-my-zsh/custom/themes/ .tmux.conf .ssh/config .gitignore_global ...
 			cp -r $backup_folder/HOME/ ~/
 
 			# lazygit ~/Library/Application Support/lazygit/config.yml
@@ -812,26 +811,26 @@ function checkZshTools() {
 # 检查 terminal 是否支持 256-color
 # 256color [fg | bg | all]
 # 256color 可以直接 sh / bash 执行, 语法兼容.
-alias 256color="sh ~/.my_shell_functions/256color.sh"
+alias 256color="sh ~/.config/.my_shell_functions/256color.sh"
 
 # 检查 vscode 开发环境.
 # checkDevelopEnv [go | js | ts | react | py]
 # 只能使用 zsh 执行, 语法不兼容 sh & bash.
-alias checkDevEnv="zsh ~/.my_shell_functions/check_dev_env.sh"
+alias checkDevEnv="zsh ~/.config/.my_shell_functions/check_dev_env.sh"
 
 # 检查 brew / npm / pip3 包.
 # packages [outdated | clean]
 # 只能使用 zsh 执行, 语法不兼容 sh & bash.
-alias packages="zsh ~/.my_shell_functions/packages.sh"
+alias packages="zsh ~/.config/.my_shell_functions/packages.sh"
 
 # NOTE: 现在可以使用 `brew bundle check`, `brew bundle cleanup` 来检查不属于 Brewfile 的包.
 # 检查 brew 中所有不属于任何别的包依赖的包.
-#alias checkBrewRootFormula="zsh ~/.my_shell_functions/brew_root_formula.sh"
+#alias checkBrewRootFormula="zsh ~/.config/.my_shell_functions/brew_root_formula.sh"
 # 检查 brew dependency 属于哪个包.
-alias checkBrewDependency="zsh ~/.my_shell_functions/brew_dep_check.sh"
+alias checkBrewDependency="zsh ~/.config/.my_shell_functions/brew_dep_check.sh"
 
 # NOTE: DEBUG 用, my test functions
-#source ~/.my_shell_functions/zshrc_custom_functions
+#source ~/.config/.my_shell_functions/zshrc_custom_functions
 
 # }}}
 
