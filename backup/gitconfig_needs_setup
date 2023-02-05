@@ -3,7 +3,7 @@
 	excludesfile = ~/.gitignore_global
 	quotepath = off  ; cjk chars shows unicode, eg: cn, jp, kr ...
 
-; NOTE: Only needs to setup [user] settings.
+; NOTE: Only needs to setup [user] settings. check Password-Manager APP.
 [user]
 	; name = foo
 	; email = foo@bar.com
