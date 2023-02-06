@@ -80,6 +80,7 @@ cask "joplin"  # 加密的 markdown 笔记管理工具
 # 个人工具
 cask "squirrel"   # RIME 输入法客户端
 cask "appcleaner" # app 卸载工具
+cask "app-cleaner"  # mac 系统清理工具, 类似 CleanMyMac
 cask "keepassxc"  # keepass 客户端, 密码管理工具, eg: "macpass", "authpass" ...
 cask "keka"  # 压缩工具
 cask "the-unarchiver"  # 解压工具
