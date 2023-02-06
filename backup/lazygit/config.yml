@@ -40,14 +40,14 @@ git:
     pager: delta --dark --line-numbers --paging=never
       \--file-style='42' --file-decoration-style='42 ol'
       \--syntax-theme=none --width=variable
-      \--line-numbers-minus-style='#EA3223' --minus-style='"#626262" "#3F0000"' --minus-emph-style='normal "#803030"'
-      \--plus-style='normal "#003000"' --plus-emph-style='normal "#005F00"'
+      \--line-numbers-minus-style='#D75F5F' --minus-style='"#626262" "#3F0000"' --minus-emph-style='normal "#803030"'
+      \--line-numbers-plus-style='#008700' --plus-style='normal "#003000"' --plus-emph-style='normal "#005F00"'
     # 256-color - 没有 gui 的 linux server 环境用
     # pager: delta --dark --line-numbers --paging=never
     #   \--file-style='42' --file-decoration-style='42 ol'
     #   \--syntax-theme=none --width=variable
-    #   \--line-numbers-minus-style='196' --minus-style='241 52' --minus-emph-style='normal 167'
-    #   \--plus-style='normal 22' --plus-emph-style='255 28'
+    #   \--line-numbers-minus-style='167' --minus-style='241 52' --minus-emph-style='normal 167'
+    #   \--line-numbers-plus-style='28' --plus-style='normal 22' --plus-emph-style='255 28'
 
   # 默认为 true, auto fetch remote repo.
   # `git fetch origin` 可以将 remote 版本下载到本地仓库. 用于检查 local & remote 中的文件是否不同.
