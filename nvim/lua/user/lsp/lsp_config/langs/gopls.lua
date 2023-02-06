@@ -67,8 +67,9 @@ return {
 
   settings = {
     gopls = {
-      ["ui.completion.usePlaceholders"] = true,
-      ["ui.diagnostic.staticcheck"] = false,
+      usePlaceholders = true,
+      staticcheck = false,
+      vulncheck = "Imports",  -- check Go Vulnerability Database check known Vulnerability in your dependencies.
     },
   },
   single_file_support = true,  -- 默认开启.
