@@ -289,7 +289,7 @@ return require('packer').startup(function(use)
   --- Must install ---------------------------------------------------------------------------------
   --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   use {"folke/which-key.nvim",
-    commit = "e4fa445",
+    commit = "684e96c",
     config = function() require("user.plugin_settings.which_key") end,
   }
 
