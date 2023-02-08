@@ -295,7 +295,7 @@ return require('packer').startup(function(use)
 
   --- 通知功能
   use {"rcarriga/nvim-notify",
-    commit = "b005821",
+    commit = "bdd647f",
     config = function() require("user.plugin_settings.nvim_notify") end,
   }
 
