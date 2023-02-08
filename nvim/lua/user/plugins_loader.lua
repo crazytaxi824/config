@@ -320,7 +320,7 @@ return require('packer').startup(function(use)
   --- By convention, if you want to write a query, use the `queries/` directory,
   --- but if you want to extend a query use the `after/queries/` directory.
   use {"nvim-treesitter/nvim-treesitter",
-    commit = "51d220e0",
+    commit = "f6df07be",
     --run = ":TSUpdate",  -- Post-update/install hook. NOTE: 推荐手动执行.
     config = function() require("user.plugin_settings.treesitter") end,
     requires = {
