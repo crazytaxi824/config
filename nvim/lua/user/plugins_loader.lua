@@ -404,7 +404,7 @@ return require('packer').startup(function(use)
   --- 只有 "cmp-nvim-lsp" 不需要在 "nvim-cmp" 之后加载,
   --- 其他 module 插件都需要在 "nvim-cmp" 加载之后再加载, 否则报错.
   use {"hrsh7th/cmp-nvim-lsp",  -- LSP source for nvim-cmp
-    commit = "5922477",
+    commit = "0e6b2ed",
   }
 
   use {"hrsh7th/cmp-buffer",  -- 当前 buffer 中有的 word
