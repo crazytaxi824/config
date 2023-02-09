@@ -76,7 +76,7 @@ dap.configurations.go = {
 
 --- NOTE: put Other Debug adapters & configurations settings here ---
 
---- signs setting --- {{{
+--- highlight && sign setting --- {{{
 -- `DapBreakpoint` for breakpoints (default: `B`)
 -- `DapBreakpointCondition` for conditional breakpoints (default: `C`)
 -- `DapLogPoint` for log points (default: `L`)
@@ -97,7 +97,7 @@ vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "DapBreakpointHL", 
 vim.fn.sign_define("DapBreakpointRejected", { text = "◌", texthl = "DapBreakpointRejectedHL", numhl = "", linehl="" })
 vim.fn.sign_define("DapStopped", { text = "→", texthl = "DapStoppedHL", numhl = "", linehl="DapStoppedLineHL" })
 
---vim.api.nvim_set_hl(0, 'DapUINormal', { ctermbg = 190 })  -- dapui 中的文字颜色.
+--vim.api.nvim_set_hl(0, 'DapUINormal', { ctermfg = 190 })  -- dapui 中的文字颜色.
 -- -- }}}
 
 --- nvim-dap-ui settings ---------------------------------------------------------------------------
