@@ -5,15 +5,6 @@ end
 
 local nt_api = require("nvim-tree.api")
 
-vim.api.nvim_create_autocmd('BufEnter', {
-  pattern = {"*"},
-  callback = function(params)
-    if vim.fn.isdirectory(params.file) == 1 then
-      nt_api.tree.open()
-    end
-  end
-})
-
 --- file/dir icons --------------------------------------------------------------------------------- {{{
 local nt_indent_line = {
   corner = "└ ",
@@ -274,27 +265,25 @@ require('user.utils.keymaps').set(tree_keymaps)
 -- -- }}}
 
 --- `:help nvim-tree-setup` ------------------------------------------------------------------------ {{{
-local open_dir_in_tree = true  -- VVI: `:e dir` 时是否在 nvim-tree 中打开 dir.
-
 nvim_tree.setup {
   auto_reload_on_write = true,  -- NOTE: `:w` 时刷新 nvim-tree.
 
   --- NOTE: netrw: vim's builtin file explorer.
-  disable_netrw = false,  -- NOTE: completely disable netrw.
+  disable_netrw = false,  -- completely disable netrw. VVI: 最好不要设为 true.
 
-  --- true  - `:e dir` 时, 不显示 netrw file explorer.
-  --- false - `:e dir` 时, 在当前 window 中显示 netrw file explorer.
-  --- NOTE: 配合 hijack_directories 使用:
-  --- 如果 hijack_directories = true, 则在 nvim_tree 窗口打开 dir;
-  --- 如果 hijack_directories = false, NOTE: 则当前 window 中显示空文件;
-  hijack_netrw = open_dir_in_tree,
+  --- NOTE: 是否显示 netrw file-explorer 内容. `:e dir` 时, 默认会显示 netrw file-explorer 内容.
+  ---   true  - `:e dir` 时, 当前 window 中不显示 netrw file-explorer 内容;
+  ---   false - `:e dir` 时, 当前 window 中显示 netrw file-explorer 内容.
+  --- 配合 hijack_directories 使用.
+  hijack_netrw = true,
 
-  --- NOTE: 需要和 hijack_netrw = true 一起使用. 如果 hijack_netrw = false, 这里的设置无效.
-  --- true  - `:e dir` 时, 在 nvim_tree 窗口打开 dir;
-  --- false - `:e dir` 时, 当前 window 中显示空文件.
+  --- NOTE: hijacks new directory buffers when they are opened.
+  --- 如果 `hijack_netrw` & `disable_netrw` 都是 false, 则 `hijack_directories` 的设置无效.
+  ---   true  - `:e dir` 时, 在 nvim_tree 窗口打开 dir;
+  ---   false - `:e dir` 时, 当前 window 中显示空文件.
   hijack_directories = {
     --- NOTE: 和 auto close the tab/vim when nvim-tree is the last window 一起使用时, 会导致 nvim 退出.
-    enable = open_dir_in_tree,
+    enable = true,
     --- hijack_directories 时自动打开 nvim-tree open().
     auto_open = true,
   },
@@ -490,6 +479,19 @@ vim.cmd('hi! default link NvimTreeFileNew    NvimTreeGitStaged')
 --- autocmd ---------------------------------------------------------------------------------------- {{{
 --- automatically close the tab/vim when nvim-tree is the last window in the tab.
 --vim.cmd [[autocmd BufEnter * ++nested if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpagenr() | quit | endif]]
+
+--- VVI: 如果打开的是文件夹 `:e dir`, 则打开/跳转到 nvim-tree 窗口.
+vim.api.nvim_create_autocmd('BufEnter', {
+  pattern = {"*"},
+  callback = function(params)
+    if vim.fn.isdirectory(params.file) == 1 then
+      --- 打开/跳转到 nvim-tree 窗口.
+      nt_api.tree.open()
+      --- bwipeout directory buffer. 必须放在 tree.open() 之后.
+      vim.cmd("bwipeout " .. params.file)
+    end
+  end
+})
 
 --- refresh nvim-tree when enter/delete a buffer.
 --- BufEnter  用在打开 unloaded buffer 时.
