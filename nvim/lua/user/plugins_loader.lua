@@ -433,12 +433,9 @@ return require('packer').startup(function(use)
     config = function() require("user.plugin_settings.luasnip_snippest") end,
     requires = "rafamadriz/friendly-snippets",  -- snippets content
 
-    --- BUG: 如果使用 opt/after ... 等设置, 一旦 LuaSnip 被安装在 opt/ 文件夹则无法加载内置 jsregexp 插件.
-    --- jsregexp 位置: stdpath('data') .. "/site/pack/packer/start/LuaSnip/lua/luasnip-jsregexp.so"
-    opt = true,
-
     --- VVI: 默认 bufread=true, 在 lazyload 该 plugin 之后马上再次触发 Filetype event.
     --- 导致连续多次触发 FileType event.
+    opt = true,  -- 在 vim.schedule() 中 lazy load
     bufread = false,
   }
 
