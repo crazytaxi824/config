@@ -7,7 +7,8 @@ function checkBrewDep() {
 		return 2
 	fi
 
-	brew deps --installed | grep "[^^]\b$1\b" | awk "{print \$1,\"-\",\"$1\"}"
+	# [^^] 表示要查询的 word 不能在行的最开始.
+	brew deps --installed | grep --color=always "[^^]$1"
 }
 
 # 运行函数
