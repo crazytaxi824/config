@@ -182,7 +182,7 @@ local highlights = {
   ['@text.note'] = { link = "SpecialComment" }, -- XXX, NOTE
   ['@text.todo'] = { link = "Todo" },           -- TODO, FOO: BAR:
 
-  ['@text.uri'] = { link = "String" },  -- html, <href="@text.uri">
+  ['@text.uri'] = { link = "Underlined" },  -- url
   ['@text.title'] = { link = "Title" }, -- markdown, # title
   ['@text.literal'] = { ctermfg = 173, ctermbg = 237 },  -- markdown, `code`
   ['@text.strong'] = { cterm = {"bold"} }, -- markdown, **bold**
@@ -223,13 +223,18 @@ local highlights = {
   ['@property.go'] = { link = "Normal" },
 
   --- NOTE: 单独为 markdown / markdown_inline 设置颜色.
-  ['@text.uri.markdown_inline'] = { link = "Underlined" },  -- html, <href="@text.uri">
   ['@punctuation.special.markdown'] = { link = "Conceal" }, -- "#" - title; "*" - list
   ['@punctuation.delimiter.markdown'] = { cterm={ "bold" } }, -- "```" code block, 因为 treesitter 中 markdown 强制
                                                               -- 将其设置为 @conceal 所以 fg 颜色无法被改变.
-  ['@punctuation.delimiter.markdown_inline'] = { link = "@text" }, -- "`" - code; [foo](http://) inline_link ...
-                                                                   -- BUG: inline_link 中最后一个括号 ) 不属于
-                                                                   -- delimiter, 所以这里只能更改 []( 的颜色.
+  ['@punctuation.delimiter.markdown_inline'] = { link = "Conceal" }, -- "`" - code
+                                                                     -- "*italic*", "_italic_"
+                                                                     -- "**Bold**"
+                                                                     -- "***Bold italic***"
+
+  --- NOTE: 单独为 html/react 设置颜色.
+  ['@text.uri.html'] = { link = "String" },  -- html, <href="@text.uri">
+  ['@text.uri.jsx']  = { link = "String" },  -- html, <href="@text.uri">
+  ['@text.uri.tsx']  = { link = "String" },  -- html, <href="@text.uri">
 
   --- NOTE: 以下设置是为了配合 lazy load plugins ---------------------------------------------------
   --- 以下颜色为了 lazy load lualine
