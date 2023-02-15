@@ -6,6 +6,7 @@ require("user.global.notification")  -- Notify() 函数
 require("user.global.common_funcs")
 require("user.global.get_infos")
 require("user.global.win_close_and_goto")
+require("user.global.screen_size")
 
 
 
