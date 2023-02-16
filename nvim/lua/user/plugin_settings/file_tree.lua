@@ -311,9 +311,8 @@ nvim_tree.setup {
     --   },
     -- },
     -- -- }}}
-    side = "left",
-    width = 36,
-    --height = 10,  -- side = "top" 时有效
+    side = "left",  -- left / right
+    width = 36,  -- same as tagbar, OR "25%"
     preserve_window_proportions = false,
     number = false,          -- 显示 line number
     relativenumber = false,  -- 显示 relative number
