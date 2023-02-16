@@ -246,6 +246,8 @@ source $ZSH/oh-my-zsh.sh
 #    --bind     key binding 设置.
 #      eg:  --bind='shift-up:preview-half-page-up,shift-down:preview-half-page-down'" 绑定多个 key 用 , 分隔.
 #      shift-up/down                      可以上下滚动 preview-window 内容.
+#
+#      ctrl-e:become(...)                 become(...) 相当于 abort+execute(...)
 #      ctrl-e:abort+execute(nvim -- {})   nvim/vim 编辑文件. 这里将 ctrl-e 绑定了两个命令, 命令间用 + 连接.
 #                                         先 abort 关闭 fzf 窗口, 然后执行 nvim 操作. 否则 fzf 窗口不会自动关闭.
 #      ctrl-o:abort+execute(open {})      打开文件.
@@ -312,10 +314,10 @@ FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='shift-up:half-page-up,shift-down:hal
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='pgup:preview-half-page-up,pgdn:preview-half-page-down'"  # preview scroll
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-a:toggle-all'"  # multi-select
 # NOTE: Vim: Warning: Output not to a terminal. 解决方法: `vim/nvim file > /dev/tty`
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-e:abort+execute($EDITOR -- {} > /dev/tty)'"  # nvim edit 光标所在行 file.
+FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-e:become($EDITOR -- {} > /dev/tty)'"  # nvim edit 光标所在行 file.
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-o:execute(open {})'"  # system open 光标所在行 file.
 # NOTE: 将储存多选列表的临时文件 {+f} 传入 nvim 函数 FZF_selected() 中. 在 nvim 中处理文件名, 包括 rg 传入的 lnum, col ...
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-l:abort+execute($EDITOR \"+lua FZF_selected([[{+f}]])\" > /dev/tty)'"
+FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-l:become($EDITOR \"+lua FZF_selected([[{+f}]])\" > /dev/tty)'"
 export FZF_DEFAULT_OPTS
 
 # --------------------------------------------------------------------------------------------------
@@ -483,10 +485,10 @@ function Rg() {
 	fzf --delimiter=':' \
 		--preview "bat --color=always --style=numbers --highlight-line={2} {1}" \
 		--preview-window '+{2}/2' \
-		--bind "ctrl-e:abort+execute($EDITOR '+call cursor({2},{3})' -- {1} > /dev/tty)" \
+		--bind "ctrl-e:become($EDITOR '+call cursor({2},{3})' -- {1} > /dev/tty)" \
 		--bind "ctrl-o:execute(open {1})"
 		# NOTE: 将储存多选列表的临时文件 {+f} 传入 nvim 函数 FZF_selected() 中. 在 nvim 中处理文件名, 包括 rg 传入的 lnum, col ...
-		#--bind="ctrl-l:abort+execute($EDITOR \"+lua FZF_selected([[{+f}]])\" > /dev/tty)"
+		#--bind="ctrl-l:become($EDITOR \"+lua FZF_selected([[{+f}]])\" > /dev/tty)"
 }
 
 # }}}
