@@ -125,7 +125,6 @@ ZSH_THEME="my-final"  # my-gnzh | my-simple | gnzh | af-magic
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-	# git  # git 命令的 alias
 	extract  # 一个命令解压所有类型的文件. 命令为 `x`, eg: 'x <filepath>'
 	z
 	wd  # 给常用文件夹做标记
