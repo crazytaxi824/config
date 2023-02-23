@@ -280,7 +280,7 @@ local debug_keymaps = {
   --- NOTE: 这里是 dapui 的方法 eval(), {enter=true}进入 float window.
   {'n', '<leader>cc', function() dapui.eval(nil, {enter=true}) end, opt, 'debug: Popup Value under cursor'},
 
-  --{'n', '<F9>', function() dap.toggle_breakpoint() end, opt, "debug: Toggle Breakpoint"},  -- 已经在 _trigger.lua 文件中设置.
+  --{'n', '<F9>', function() dap.toggle_breakpoint() end, opt, "debug: Toggle Breakpoint"},  -- 在 after/ftplugin/go/debug_cmd.lua 中设置.
   {'n', '<F21>', function() dap.clear_breakpoints() end, opt, "debug: Clear Breakpoints"},  -- <S-f9>
   {'n', '<F10>', function() dap.step_over() end, opt, "debug: Step Over"},
   {'n', '<F11>', function() dap.step_into() end, opt, "debug: Step Into"},
