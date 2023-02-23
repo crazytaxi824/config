@@ -148,6 +148,7 @@ dapui.setup({
       step_out = "[⊼ Out <S-F11>]",   -- ⇧↥⊼
       step_back = "[↩︎ Back]",  -- ↶↩︎
       run_last = "[⟳  Restart]",   -- ↻⟳
+      disconnect = "[✕ disconnect]",
       terminate = "[■ Stop]",
     },
   },
