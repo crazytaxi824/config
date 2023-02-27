@@ -26,6 +26,7 @@ local null_tools = {
   {
     cmd="buf",  -- protobuf formatter & linter
     install="go install github.com/bufbuild/buf/cmd/buf@latest",
+    mason = "buf",
   },
 
   {cmd="prettier", install=" brew info prettier", mason="prettier"},
