@@ -16,7 +16,7 @@ vim.cmd('hi! link LspInfoBorder FloatBorder')
 --- filetypes: 可以通过 `:LspInfo` 查看. 用于 autocmd.
 --- lspconfig_name: filetype
 local lsp_servers_map = {
-  sumneko_lua = {
+  lua_ls = {
     cmd = "lua-language-server",
     mason = "lua-language-server",
     filetypes = {'lua'}
