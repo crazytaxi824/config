@@ -344,7 +344,7 @@ return require('packer').startup(function(use)
   }
 
   use {"nvim-treesitter/playground",  -- 用于获取 treesitter 信息, 调整颜色很有用.
-    commit = "c481c66",
+    commit = "4044b53",
 
     cmd = {"TSPlaygroundToggle", "TSHighlightCapturesUnderCursor"},
   }
