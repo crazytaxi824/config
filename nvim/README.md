@@ -512,5 +512,5 @@ vim.lsp.buf.format({
 
 ## TODO
 
-
+- golangci-lint v1.51.2
 
