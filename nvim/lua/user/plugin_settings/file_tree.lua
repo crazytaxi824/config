@@ -479,8 +479,8 @@ vim.cmd('hi! default link NvimTreeFileNew    NvimTreeGitStaged')
 --- automatically close the tab/vim when nvim-tree is the last window in the tab.
 --vim.cmd [[autocmd BufEnter * ++nested if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpagenr() | quit | endif]]
 
---- VVI: 如果打开的是文件夹 `:e dir`, 则打开/跳转到 nvim-tree 窗口.
-vim.api.nvim_create_autocmd('BufEnter', {
+--- VVI: 进入 nvim 时, 如果打开的是文件夹 `:e dir`, 则打开/跳转到 nvim-tree 窗口.
+vim.api.nvim_create_autocmd('VimEnter', {
   pattern = {"*"},
   callback = function(params)
     if vim.fn.isdirectory(params.file) == 1 then
@@ -610,36 +610,6 @@ require('user.utils.keymaps').set(gitsigns_keymaps, {
   opts = {mode='n', prefix='<leader>'}
 })
 
--- -- }}}
-
---- HACK: 利用 NvimTreeOpenedFile 只 highlight active buffer. 默认是显示 loaded buffer ------------- {{{
---- 重写 nvim-tree.renderer.builder module 中的 _highlight_opened_files() 函数.
---- 如果 buffer 没有显示在任何窗口则不要 highlight.
---- https://github.com/nvim-tree/nvim-tree.lua/blob/master/lua/nvim-tree/renderer/builder.lua
-local builder_status_ok, builder = pcall(require, "nvim-tree.renderer.builder")
-if builder_status_ok then
-  function builder:_highlight_opened_files(node, offset, icon_length, git_icons_length)
-    --- VVI: 如果 buffer 没有显示在任何窗口则不要 highlight.
-    if #vim.fn.getbufinfo(node.absolute_path)[1].windows == 0 then
-      return
-    end
-
-    --- 以下是源代码 ---
-    local from = offset
-    local to = offset
-
-    if self.highlight_opened_files == "icon" then
-      to = from + icon_length
-    elseif self.highlight_opened_files == "name" then
-      from = offset + icon_length + git_icons_length
-      to = from + #node.name
-    elseif self.highlight_opened_files == "all" then
-      to = from + icon_length + git_icons_length + #node.name
-    end
-
-    self:_insert_highlight("NvimTreeOpenedFile", from, to)
-  end
-end
 -- -- }}}
 
 --- Event Hooks, `:help nvim-tree-events` ---------------------------------------------------------- {{{

@@ -283,19 +283,19 @@ return require('packer').startup(function(use)
   --- Useful lua functions used by lots of plugins
   --- NOTE: plenary.nvim 合并了 popup.nvim
   use {"nvim-lua/plenary.nvim",
-    commit = "9a0d3bf",
+    commit = "253d348",
   }
 
   --- Must install ---------------------------------------------------------------------------------
   --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   use {"folke/which-key.nvim",
-    commit = "684e96c",
+    tag = "v1.1.1",  -- commit = "5224c26",
     config = function() require("user.plugin_settings.which_key") end,
   }
 
   --- 通知功能
   use {"rcarriga/nvim-notify",
-    commit = "bdd647f",
+    tag = "v3.11.0",  -- commit = "bdd647f",
     config = function() require("user.plugin_settings.nvim_notify") end,
   }
 
@@ -320,7 +320,7 @@ return require('packer').startup(function(use)
   --- By convention, if you want to write a query, use the `queries/` directory,
   --- but if you want to extend a query use the `after/queries/` directory.
   use {"nvim-treesitter/nvim-treesitter",
-    commit = "f6df07be",
+    tag = "v0.8.5.2",  -- commit = "f6df07be",
     --run = ":TSUpdate",  -- Post-update/install hook. NOTE: 推荐手动执行.
     config = function() require("user.plugin_settings.treesitter") end,
     requires = {
@@ -337,14 +337,14 @@ return require('packer').startup(function(use)
 
   --- 第一方 module 插件 ---
   use {"nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-    commit = "cacee48",
+    commit = "895ec44",
     config = function() require("user.plugin_settings.treesitter_ctx") end,
 
     after = "nvim-treesitter",
   }
 
   use {"nvim-treesitter/playground",  -- 用于获取 treesitter 信息, 调整颜色很有用.
-    commit = "c481c66",
+    commit = "4044b53",
 
     cmd = {"TSPlaygroundToggle", "TSHighlightCapturesUnderCursor"},
   }
@@ -365,7 +365,7 @@ return require('packer').startup(function(use)
   --- 以下是使用了 treesitter 功能的插件. (这些插件也可以不使用 treesitter 的功能)
   --- 注释
   use {"numToStr/Comment.nvim",
-    commit = "eab2c83",
+    commit = "6821b3a",
     config = function() require("user.plugin_settings.comment") end,
     requires = {
       "nvim-treesitter/nvim-treesitter",
@@ -377,8 +377,7 @@ return require('packer').startup(function(use)
 
   --- indent line
   use {"lukas-reineke/indent-blankline.nvim",
-    -- commit = "8299fe7",  -- version 2.20.3 == commit '8299fe7'
-    tag = '*',  -- '*' means "latest tag". NOTE: 该插件更新不频繁, 可以使用最新 tag.
+    tag = 'v2.20.4',  -- commit = "018bd04",
     config = function() require("user.plugin_settings.indentline") end,  -- setup() 设置 use_treesitter = true
     requires = "nvim-treesitter/nvim-treesitter",
 
@@ -387,7 +386,7 @@ return require('packer').startup(function(use)
 
   --- Auto Completion ------------------------------------------------------------------------------
   use {"hrsh7th/nvim-cmp",
-    commit = "cfafe0a",
+    commit = "01f697a",
     config = function() require("user.plugin_settings.cmp_completion") end,
     requires = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全
@@ -428,7 +427,7 @@ return require('packer').startup(function(use)
 
   --- snippet engine, for "cmp_luasnip", 每次打开文件都会有一个 [Scratch] buffer.
   use {"L3MON4D3/LuaSnip",
-    commit = "9bff06b",
+    commit = "f7c8457",
     run = "make install_jsregexp",  -- https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#transformations
     config = function() require("user.plugin_settings.luasnip_snippest") end,
     requires = "rafamadriz/friendly-snippets",  -- snippets content
@@ -441,7 +440,7 @@ return require('packer').startup(function(use)
 
   --- snippets content, 自定义 snippets 可以借鉴这个结构.
   use {"rafamadriz/friendly-snippets",
-    commit = "a6f7a16",
+    commit = "6fa50a9",
     --- VVI: friendly-snippets 不能安装在 opt/ 文件夹下, 否则不生效.
   }
 
@@ -453,7 +452,7 @@ return require('packer').startup(function(use)
 
   --- 自动括号, 同时依赖 treesitter && cmp
   use {"windwp/nvim-autopairs",
-    commit = "45ae312",
+    commit = "6a5faea",
     config = function() require("user.plugin_settings.autopairs") end,
     requires = {
       "nvim-treesitter/nvim-treesitter",
@@ -471,7 +470,7 @@ return require('packer').startup(function(use)
   --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
   --- 官方 LSP 引擎.
   use {"neovim/nvim-lspconfig",
-    commit = "aeb7606",
+    commit = "62856b2",
     config = function() require("user.lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     requires = {
       "nvim-cmp",  -- provide content to nvim-cmp Completion. cmp_nvim_lsp.update_capabilities(capabilities)
@@ -487,7 +486,7 @@ return require('packer').startup(function(use)
 
   --- null-ls 插件 formatters && linters, depends on "nvim-lua/plenary.nvim"
   use {"jose-elias-alvarez/null-ls.nvim",
-    commit = "60b4a71",  -- NOTE: "6cc5477" 之后 remove support for neovim v0.7
+    commit = "689cdd7",  -- NOTE: "6cc5477" 之后 remove support for neovim v0.7
     config = function() require("user.lsp.null_ls") end,
     requires = {
       "nvim-lua/plenary.nvim",
@@ -501,7 +500,7 @@ return require('packer').startup(function(use)
   --- File Tree Display ----------------------------------------------------------------------------
   --use "kyazdani42/nvim-web-devicons"  -- 提供 icons 需要 patch 字体 (Nerd Fonts)
   use {"kyazdani42/nvim-tree.lua",      -- 类似 NerdTree
-    commit = "02fdc26",
+    commit = "9c97e64",
     config = function() require("user.plugin_settings.file_tree") end,
 
     --opt = true,  -- VVI: 不推荐使用 lazyload, 会导致 `$ nvim dir` 直接打开文件夹的时候出现问题.
@@ -510,7 +509,7 @@ return require('packer').startup(function(use)
   --- Buffer & Status Line -------------------------------------------------------------------------
   --- tabline decorator, `:help 'tabline'`
   use {"akinsho/bufferline.nvim",
-    commit = "c7492a7",
+    tag = "v3.3.0",
     config = function() require("user.plugin_settings.decor_bufferline") end,
 
     opt = true,  -- 在 vim.schedule() 中 lazy load
@@ -518,7 +517,7 @@ return require('packer').startup(function(use)
 
   --- statusline decorator, `:help 'statusline'`
   use {"nvim-lualine/lualine.nvim",   -- bottom status line
-    commit = "0050b30",
+    commit = "e99d733",
     config = function() require("user.plugin_settings.decor_lualine") end,
 
     opt = true,  -- 在 vim.schedule() 中 lazy load
@@ -527,14 +526,14 @@ return require('packer').startup(function(use)
   --- Debug tools 安装 -----------------------------------------------------------------------------
   --- NOTE: dap-ui && dap 设置在同一文件中.
   use {"mfussenegger/nvim-dap",  -- core debug tool
-    commit = "0d77088",
+    tag = "0.5.0",
     requires = "williamboman/mason.nvim",  -- install dap-debug tools. eg: 'delve'
 
     cmd = {'DapToggleBreakpoint', 'DapContinue', 'DapLoadLaunchJSON'},
   }
 
   use {"rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
-    commit = "94aa67d",
+    tag = "v3.8.0",
     config = function() require("user.plugin_settings.dap_debug") end,  -- dap-ui && dap 设置在同一文件中.
 
     after = "nvim-dap",
@@ -543,7 +542,7 @@ return require('packer').startup(function(use)
   --- Useful Tools ---------------------------------------------------------------------------------
   --- fzf rg fd, preview 使用的是 treesitter, 而不用 bat
   use {"nvim-telescope/telescope.nvim",
-    commit = "203bf56",
+    commit = "a3f17d3",
     config = function() require("user.plugin_settings.telescope_fzf") end,
     requires = {
       "nvim-lua/plenary.nvim",
@@ -559,7 +558,7 @@ return require('packer').startup(function(use)
 
   --- terminal
   use {"akinsho/toggleterm.nvim",
-    commit = "19aad0f",
+    commit = "31d38d1",
     config = function() require("user.plugin_settings.toggleterm_terminal") end,
 
     opt = true,  -- 在 vim.schedule() 中 lazy load
@@ -570,7 +569,7 @@ return require('packer').startup(function(use)
   --- `:Gitsigns setqflist/seqloclist` will open Trouble instead of quickfix or location list windows.
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   use {"lewis6991/gitsigns.nvim",
-    commit = "ec4742a",
+    commit = "f388995",
     config = function() require("user.plugin_settings.git_signs") end,
 
     opt = true,  -- 在 vim.schedule() 中 lazy load

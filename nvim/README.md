@@ -514,3 +514,4 @@ vim.lsp.buf.format({
 
 - golangci-lint v1.51.2
 
+- nvim-tree upgrade, highlight HACK
