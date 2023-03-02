@@ -47,13 +47,13 @@ return {
     -- end
 
     local util = require("lspconfig.util")
-    --- NOTE: 优先获取 go.work 文件夹位置, 如果不存在则获取 go.mod / .git 文件夹位置.
-    local root = util.root_pattern('go.work')(fname) or util.root_pattern('go.mod', '.git')(fname)
+    --- NOTE: 优先获取 go.work 文件夹位置, 如果不存在则获取 go.mod 文件夹位置.
+    local root = util.root_pattern('go.work')(fname) or util.root_pattern('go.mod')(fname)
 
     --- 如果没找到 root 则返回 pwd/cwd
     if not root then
       Notify(
-        {"'go.mod' file not found in current directory or any parent directory.",
+        {"'go.mod' & 'go.work' NOT found in current or any parent directory.",
           "Please run 'go mod init xxx'."},
         "WARN",
         {title={"LSP", "gopls.lua"}, timeout = false}
