@@ -280,8 +280,8 @@ key_fn.set(keymaps, {
 --- for key desc only
 key_fn.set({}, {
   key_desc = {
-    ['['] = {name="Section Jump"},
-    [']'] = {name="Section Jump"},
+    ['['] = {name="Section Jump Prev"},
+    [']'] = {name="Section Jump Next"},
     g = {name="g"},
     z = {name="z"},
     ['<leader>'] = {name="\\"},
