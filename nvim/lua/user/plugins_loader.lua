@@ -289,7 +289,7 @@ return require('packer').startup(function(use)
   --- Must install ---------------------------------------------------------------------------------
   --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   use {"folke/which-key.nvim",
-    tag = "v1.1.1",  -- commit = "5224c26",
+    tag = "v1.2.0",
     config = function() require("user.plugin_settings.which_key") end,
   }
 
@@ -301,7 +301,7 @@ return require('packer').startup(function(use)
 
   --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件
   use {"williamboman/mason.nvim",
-    commit = "0efc7ce",
+    commit = "add6d1d",
     config = function() require("user.plugin_settings.mason_tool_installer") end,
     --- NOTE: 不能 opt 加载 mason 否则其他插件无法找到 mason 安装的工具.
   }
@@ -386,7 +386,7 @@ return require('packer').startup(function(use)
 
   --- Auto Completion ------------------------------------------------------------------------------
   use {"hrsh7th/nvim-cmp",
-    commit = "01f697a",
+    commit = "feed47f",
     config = function() require("user.plugin_settings.cmp_completion") end,
     requires = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全
@@ -427,7 +427,7 @@ return require('packer').startup(function(use)
 
   --- snippet engine, for "cmp_luasnip", 每次打开文件都会有一个 [Scratch] buffer.
   use {"L3MON4D3/LuaSnip",
-    commit = "f7c8457",
+    commit = "e650efa",
     run = "make install_jsregexp",  -- https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#transformations
     config = function() require("user.plugin_settings.luasnip_snippest") end,
     requires = "rafamadriz/friendly-snippets",  -- snippets content
@@ -440,7 +440,7 @@ return require('packer').startup(function(use)
 
   --- snippets content, 自定义 snippets 可以借鉴这个结构.
   use {"rafamadriz/friendly-snippets",
-    commit = "6fa50a9",
+    commit = "009887b",
     --- VVI: friendly-snippets 不能安装在 opt/ 文件夹下, 否则不生效.
   }
 
@@ -470,7 +470,7 @@ return require('packer').startup(function(use)
   --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
   --- 官方 LSP 引擎.
   use {"neovim/nvim-lspconfig",
-    commit = "62856b2",
+    commit = "f3e6c03",
     config = function() require("user.lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     requires = {
       "nvim-cmp",  -- provide content to nvim-cmp Completion. cmp_nvim_lsp.update_capabilities(capabilities)
@@ -486,7 +486,7 @@ return require('packer').startup(function(use)
 
   --- null-ls 插件 formatters && linters, depends on "nvim-lua/plenary.nvim"
   use {"jose-elias-alvarez/null-ls.nvim",
-    commit = "689cdd7",  -- NOTE: "6cc5477" 之后 remove support for neovim v0.7
+    commit = "900c38c",  -- NOTE: "6cc5477" 之后 remove support for neovim v0.7
     config = function() require("user.lsp.null_ls") end,
     requires = {
       "nvim-lua/plenary.nvim",
@@ -509,7 +509,7 @@ return require('packer').startup(function(use)
   --- Buffer & Status Line -------------------------------------------------------------------------
   --- tabline decorator, `:help 'tabline'`
   use {"akinsho/bufferline.nvim",
-    tag = "v3.3.0",
+    tag = "v3.5.0",
     config = function() require("user.plugin_settings.decor_bufferline") end,
 
     opt = true,  -- 在 vim.schedule() 中 lazy load
@@ -569,7 +569,7 @@ return require('packer').startup(function(use)
   --- `:Gitsigns setqflist/seqloclist` will open Trouble instead of quickfix or location list windows.
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   use {"lewis6991/gitsigns.nvim",
-    commit = "f388995",
+    commit = "b1f9cf7",
     config = function() require("user.plugin_settings.git_signs") end,
 
     opt = true,  -- 在 vim.schedule() 中 lazy load
