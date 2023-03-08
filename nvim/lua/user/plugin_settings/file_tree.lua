@@ -16,7 +16,7 @@ local nt_indent_line = {
 local glyphs = {
   default = '',
   symlink = '',  -- 这里的 symlink 和 symlink_arrow 设置不一样, 这里是文件名前面的 icon.
-  bookmark = '★',
+  bookmark = '➜',
   folder = {
     arrow_closed = "▶︎",  -- folder_arrow
     arrow_open = "▽",    -- folder_arrow
@@ -49,7 +49,8 @@ local diagnostics_icons = {
 
 --- nvim-tree keymaps ------------------------------------------------------------------------------ {{{
 --- git: Discard file changes --- {{{
-local function git_discard_file_changes(node)
+local function git_discard_file_changes()
+  local node = nt_api.tree.get_node_under_cursor()
   --print(node.name, node.absolute_path, vim.inspect(node.git_status), node.type)
 
   --- READMD: node.name: filename, not prefix path --- {{{
@@ -171,7 +172,7 @@ end
 -- -- }}}
 
 --- compare two marked files, using `:vert diffsplit <filename>` --- {{{
-local function compare_two_marked_files(node)
+local function compare_two_marked_files()
   local marks_list = nt_api.marks.list()  -- 获取 mark 的 nodes
   if #marks_list ~= 2 then
     Notify("more than 2 marks available, can only campare exactly 2 files")
@@ -184,7 +185,9 @@ end
 -- -- }}}
 
 --- system open file --- {{{
-local function system_open(node)
+local function system_open()
+  local node = nt_api.tree.get_node_under_cursor()
+
   --- 根据文件属性使用对应的 application 打开.
   --- NOTE: 有些 filepath 中有空格, 需要使用引号 ""
   vim.fn.system('open "' .. node.absolute_path .. '"')
@@ -215,37 +218,40 @@ end
 
 --- nvim-tree buffer keymaps ---------------------------------------------------
 --- only works within "NvimTree_X" buffer.
+--- ":help nvim-tree-mappings-default"
 local nt_buffer_keymaps = {
-  { key = {"<CR>", "e"},   action = "edit" },
-  { key = "<C-v>",         action = "vsplit" },  -- vsplit edit
-  { key = "<C-x>",         action = "split" },
-  { key = "a",             action = "create" },
-  { key = "d",             action = "remove" },
-  { key = "D",             action = "trash" },  -- NOTE: 需要在 setup() 中设置 'trash.cmd'
-  { key = "R",             action = "full_rename" },  -- 类似 `$ mv foo bar`
-  { key = "r",             action = "refresh" },
-  { key = "y",             action = "copy_absolute_path" },
-  { key = "E",             action = "collapse_all" },  -- vscode 自定义按键为 cmd+E
-  { key = "W",             action = "expand_all" },
-  { key = "H",             action = "toggle_dotfiles" },  -- 隐藏文件
-  { key = "m",             action = "toggle_mark" }, -- paste file
-  { key = "q",             action = "close" },  -- close nvim-tree window
-  { key = "?",             action = "toggle_help" },
-  { key = "<F8>",          action = "next_diag_item" },  -- next diagnostics item
-  { key = "<F20>",         action = "prev_diag_item" },  -- <S-F8> previous diagnostics item
-  { key = "<S-CR>",        action = "cd" },  -- `cd` in the directory under the cursor
-  { key = "C",             action = "copy" },  -- copy file
-  { key = "P",             action = "paste" }, -- paste file
+  { "<CR>",        nt_api.node.open.edit,   "Open" },
+  { "e",           nt_api.node.open.edit,   "Open" },
+  { "<C-v>",       nt_api.node.open.vertical,     "Open vsplit" },  -- vsplit edit
+  { "<C-x>",       nt_api.node.open.horizontal,   "Open split" },
+  { "<F8>",        nt_api.node.navigate.diagnostics.next,   "Next Diagnostic Item" },  -- next diagnostics item
+  { "<F20>",       nt_api.node.navigate.diagnostics.prev,   "Prev Diagnostic Item" },  -- <S-F8> previous diagnostics item
 
-  { key = "<leader>gi",    action = "toggle_git_ignored" },  -- toggle show git ignored files
-  { key = "<leader>gf",    action = "toggle_git_clean" },    -- toggle show git_status changed files ONLY
+  { "E",           nt_api.tree.collapse_all,   "Collapse All" },  -- vscode 自定义按键为 cmd+E
+  { "W",           nt_api.tree.expand_all,     "Expand All" },
+  { "r",           nt_api.tree.reload,         "Refresh" },
+  { "H",           nt_api.tree.toggle_hidden_filter,      "Toggle Hidden Files" },  -- 隐藏文件
+  { "<leader>gi",  nt_api.tree.toggle_gitignore_filter,   "Toggle Git Ignored" },   -- toggle show git ignored files
+  { "<leader>gf",  nt_api.tree.toggle_git_clean_filter,   "Toggle Git Status Changed" },  -- toggle show git_status changed files ONLY
+  { "<S-CR>",      nt_api.tree.change_root_to_node,   "cd" },  -- `cd` in the directory under the cursor
+  { "q",           nt_api.tree.close,          "Close" },  -- close nvim-tree window
+  { "?",           nt_api.tree.toggle_help,    "Help" },
 
-  --- 自定义功能. NOTE: action 内容成为 help 中展示的文字.
-  --- action_cb 意思是 callback 函数.
-  { key = "o",             action = "back to Original pwd", action_cb = back_to_pwd},
-  { key = "<C-o>",         action = "system open", action_cb = system_open},
-  { key = "<leader>c",     action = "compare two marked files", action_cb = compare_two_marked_files},
-  { key = "<leader>gD",    action = "git: Discard file changes", action_cb = git_discard_file_changes},
+  { "a",           nt_api.fs.create,   "Create File" },
+  { "d",           nt_api.fs.remove,   "Remove File" },
+  { "R",           nt_api.fs.rename_sub,   "Full Rename" },  -- 类似 `$ mv foo bar`
+  { "y",           nt_api.fs.copy.absolute_path,   "Copy Absolute Path" },
+  { "C",           nt_api.fs.copy.node,   "Copy File" },
+  { "P",           nt_api.fs.paste,       "Paste File" },
+
+  { "m",           nt_api.marks.toggle,   "Toggle Mark" },
+  { "M",           nt_api.marks.clear,    "Clear All Marks" },
+
+  --- 自定义功能
+  {  "o",            back_to_pwd,                "back to Original pwd" },
+  {  "<C-o>",        system_open,                "system open" },
+  {  "<leader>c",    compare_two_marked_files,   "compare two marked files" },
+  {  "<leader>gD",   git_discard_file_changes,   "git: Discard file changes" },
 }
 
 --- global keymap --------------------------------------------------------------
@@ -317,12 +323,28 @@ nvim_tree.setup {
     number = false,          -- 显示 line number
     relativenumber = false,  -- 显示 relative number
     signcolumn = "yes",      -- VVI: 显示 signcolumn, "yes" | "auto" | "no"
-    --- ":help nvim-tree-default-mappings"
-    mappings = {
-      custom_only = true,  -- NOTE: 只使用 custom key mapping
-      list = nt_buffer_keymaps,   -- user mappings go here
-    },
+    --- NOTE: ":help nvim-tree-mappings-legacy" 已弃用. 使用 on_attach 设置 keymaps. -- {{{
+    -- mappings = {
+    --   custom_only = true,  -- NOTE: 只使用 custom key mapping
+    --   list = nt_buffer_keymaps,   -- user mappings go here
+    -- },
+    -- -- }}}
   },
+
+  --- NOTE: on_attach 主要是设置 keymaps 的.
+  --- ":help nvim-tree.on_attach" & ":help nvim-tree-mappings"
+  on_attach = function(bufnr)
+    local function opt(desc)
+      if not desc then
+        return {  buffer = bufnr, noremap = true, silent = true, nowait = true }
+      end
+      return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+    end
+
+    for _, keymap in ipairs(nt_buffer_keymaps) do
+      vim.keymap.set('n', keymap[1], keymap[2], opt(keymap[3]))
+    end
+  end,
 
   renderer = {
     highlight_git = true,  -- 开启 git filename 颜色. 需要设置 git.enable = true
