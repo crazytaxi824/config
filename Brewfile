@@ -56,6 +56,7 @@ brew "ca-certificates"
 # 其他工具
 brew "ffmpeg"
 brew "yt-dlp"  # fork youtube-dl
+brew "wimlib"  # 解决 FAT32 不能保存大于 4GB ios 文件的问题. 解决 FAT32 启动盘的制作问题.
 
 ### `brew install --cask` --------------------------------------------------------------------------
 # 开发工具
