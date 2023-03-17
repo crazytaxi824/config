@@ -33,7 +33,8 @@ brew "universal-ctags"  # 各种语言的 object 分析工具. vim/neovim tagbar
 
 # language & tools
 brew "node"
-#brew "go"  # 推荐使用 https://go.dev 中下载安装.
+brew "node@16"  # LTS version for Github Copilot 和某些其他应用
+#brew "go"      # 推荐使用 https://go.dev 中下载安装.
 #brew "rust"
 #brew "lua"     # "luajit", "luarocks", "stylua" ...
 brew "prettier" # 格式化工具
