@@ -599,12 +599,16 @@ return require('packer').startup(function(use)
   --use "goolord/alpha-nvim"          -- neovim 启动页面
   --use "ahmedkhalf/project.nvim"     -- project manager
 
-  --- https://docs.github.com/en/enterprise-cloud@latest/copilot/getting-started-with-github-copilot/getting-started-with-github-copilot-in-neovim#prerequisites
+  --- https://docs.github.com/en/copilot
+  --- https://docs.github.com/en/copilot/getting-started-with-github-copilot?tool=neovim#prerequisites-3
   use {"github/copilot.vim",  -- NOTE: 目前不需要锁定版本.
-    cmd = {"Copilot"},  -- `:Copilot setup`, `:help copilot` 查看可用命令.
     config = function()
-      vim.g.copilot_node_command = "/usr/local/opt/node@16/bin/node"  -- NOTE: nodejs <= v17
+      --- NOTE: Neovim >= 0.6 and Node.js <= 17
+      --- 指定 nodejs 版本. 这里使用的是 `brew install node@16`
+      vim.g.copilot_node_command = "/usr/local/opt/node@16/bin/node"
     end,
+
+    cmd = {"Copilot"},  -- `:Copilot setup`, `:Copilot enable`, `:help copilot` 查看可用命令.
   }
 
   --- VVI: 需要安装 packer 的情况下, 同时安装其他插件.
