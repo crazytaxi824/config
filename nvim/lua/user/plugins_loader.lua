@@ -320,7 +320,7 @@ return require('packer').startup(function(use)
   --- By convention, if you want to write a query, use the `queries/` directory,
   --- but if you want to extend a query use the `after/queries/` directory.
   use {"nvim-treesitter/nvim-treesitter",
-    tag = "v0.8.5.2",  -- commit = "f6df07be",
+    commit = "871f5665",  -- tag = "v0.8.5.2", NOTE: tag 更新太慢, commit 更新太快, 最好两周更新一次.
     --run = ":TSUpdate",  -- Post-update/install hook. NOTE: 推荐手动执行.
     config = function() require("user.plugin_settings.treesitter") end,
     requires = {
@@ -337,7 +337,7 @@ return require('packer').startup(function(use)
 
   --- 第一方 module 插件 ---
   use {"nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-    commit = "895ec44",
+    commit = "68eaeb8", -- NOTE: "895ec44", last commit before refactor.
     config = function() require("user.plugin_settings.treesitter_ctx") end,
 
     after = "nvim-treesitter",
@@ -351,13 +351,13 @@ return require('packer').startup(function(use)
 
   --- 第三方 module 插件 ---
   use {"windwp/nvim-ts-autotag",  -- auto close tag <div></div>
-    commit = "fdefe46",
+    commit = "25698e4",
 
     after = "nvim-treesitter",
   }
 
   use {"JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
-    commit = "a0f8956",
+    commit = "729d83e",
 
     after = "nvim-treesitter",
   }
@@ -365,7 +365,7 @@ return require('packer').startup(function(use)
   --- 以下是使用了 treesitter 功能的插件. (这些插件也可以不使用 treesitter 的功能)
   --- 注释
   use {"numToStr/Comment.nvim",
-    commit = "6821b3a",
+    commit = "8d3aa5c",
     config = function() require("user.plugin_settings.comment") end,
     requires = {
       "nvim-treesitter/nvim-treesitter",

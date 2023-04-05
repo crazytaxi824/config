@@ -7,7 +7,7 @@ end
 --- https://github.com/numToStr/Comment.nvim
 comment.setup {
   padding = true, -- Add a space between '//' and content. (boolean|fun():boolean)
-  sticky = true,  -- Whether the cursor should stay at its position. (boolean)
+  sticky = true,  -- Whether the cursor should stay at its position. (boolean), NOTE: 设置为 false 也没什么效果.
   ignore = nil,   -- 忽略行, eg: ignore = "^func.*"
 
   --- NOTE: pre_hook 配合 "JoosepAlviste/nvim-ts-context-commentstring" 设置.
@@ -35,7 +35,7 @@ comment.setup {
 
   --post_hook = function(ctx)
 
-  --- 禁用默认 key mapping
+  --- VVI: 禁用 Comment 默认提供的 key mapping
   mappings = {
     --- Operator-pending mapping
     --- Includes `gcc`, `gbc`, `gc[count]{motion}` and `gb[count]{motion}`

@@ -31,7 +31,7 @@ ts_configs.setup {
     enable = true,  -- VVI: 如果使用 lazy 方式启动 highlight, 需要设置为 false,
                     -- 提前加载会严重拖慢 nvim 启动/文件打开速度.
 
-    disable = { "help" },  -- list of language that will be disabled.
+    disable = { "vimdoc" },  -- list of language that will be disabled.
 
     --- NOTE: `:help :syn-manual`. nvim-treesitter 会强制将 syntax 设置为 `syntax manual`.
     ---        This will enable the syntax highlighting, but not switch it on automatically.
