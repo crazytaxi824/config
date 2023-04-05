@@ -16,7 +16,7 @@ local bufferline_colors = {
 
   tab_sel_fg = Color.black,
   tab_sel_bg = Color.statusline_yellow,
-  tab_separator_fg = 243, -- grey
+  tab_separator_fg = 234, -- grey
   duplicate_fg = 243,  -- grey
 
   modified_fg  = Color.cyan,
@@ -451,7 +451,6 @@ end
 -- -- }}}
 
 --- `:help bufferline-configuration`
---- https://github.com/akinsho/bufferline.nvim#configuration
 bufferline.setup({
   --- 颜色设置
   highlights = buf_highlights,
