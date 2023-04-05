@@ -486,7 +486,7 @@ return require('packer').startup(function(use)
 
   --- null-ls 插件 formatters && linters, depends on "nvim-lua/plenary.nvim"
   use {"jose-elias-alvarez/null-ls.nvim",
-    commit = "900c38c",  -- NOTE: "6cc5477" 之后 remove support for neovim v0.7
+    commit = "13be3e3",
     config = function() require("user.lsp.null_ls") end,
     requires = {
       "nvim-lua/plenary.nvim",
