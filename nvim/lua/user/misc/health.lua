@@ -1,5 +1,10 @@
 --- require vim.health. `:help health-dev`
-local health = require("health")
+local health
+if vim.fn.has("nvim-0.9") == 1 then
+  health = vim.health
+else
+  health = require("health")
+end
 
 local M = {}
 

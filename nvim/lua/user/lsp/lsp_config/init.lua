@@ -117,7 +117,7 @@ for lsp_svr, v in pairs(lsp_servers_map) do
 
         --- VVI: 第一次必须要手动启动 lsp, 因为 vim.schedule() 会导致新 filetype 的 buffer 加载完成之后
         --- 才执行 lspconfig[xxx].setup(), 所以该 buffer 没有 attach lsp. 需要手动 `:LspStart` 进行 attach.
-        vim.cmd('LspStart ' .. lsp_svr )
+        vim.cmd('LspStart ' .. lsp_svr)
 
         --- DEBUG: 用. 每个 lsp 应该只打印一次.
         if __Debug_Neovim.lspconfig then

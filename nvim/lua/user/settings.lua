@@ -46,7 +46,7 @@
 ---    | set       | vim.wo / vim.o / vim.opt |                        | ✔           | ✔                 |
 ---
 ---  NOTE: 搜索 vim.wo 的设置 `:Rg "vim\.wo(\[.*\]){0,1}\.\w+ ?=[^=]"`
---- 
+---
 ----------------------------------------------------------------------------------------------------
 ---  `global` 属性的情况: `undodir`, `cmdwinheight` ...
 ---
@@ -175,11 +175,22 @@ vim.g.loaded_perl_provider = 0  -- Disable Perl |remote-plugin| support
 -- -- }}}
 
 --- tabstop / shiftwidth - prettier indent 设置 ---------------------------------------------------- {{{
+--- NOTE: nvim-0.9 中默认读取 editorconfig 文件来设置以下属性.
+--- 如果有 .editorconfig 文件则优先使用 editorconfig 的设置.
+
+--- `:help editorconfig`
+--- 如果不想使用 editorconfig, 可以设置 `vim.g.editorconfig = false`
+--if vim.fn.has("nvim-0.9") == 1 then
+--  vim.g.editorconfig = false
+--end
+
 --- VVI: 以下设置不要随便改动, 需要配合 vscode & prettier & .editorconfig 一起改动.
-vim.opt.expandtab = false  -- set noexpandtab 设置: 当1个或者多个 softtabstop 长度等于 tabstop 的时候会被转成 \t;
-                           -- 当 softtabstop=4, tabstop=4, 则 <Tab> 键是 \t. backspace 删除 \t;
-                           -- 当 softtabstop=2, tabstop=4, 则第一个 <Tab> 是两个空格, 连续两个 <Tab> 会变成 \t;
-                           -- 每个 backspace 删除1个 softtabstop, 即2个空格.
+vim.opt.expandtab = false  -- 类似 editorconfig 中 indent_style 设置 <Tab> 键使用 "tab" or "space";
+                           -- true : `set expandtab` 所有的 \t 都会被转成 space;
+                           -- false: `set noexpandtab` 当1个或者多个 softtabstop 长度等于 tabstop 的时候会被转成 \t;
+                           --   当 softtabstop=4, tabstop=4, 则 <Tab> 键是 \t. backspace 删除 \t;
+                           --   当 softtabstop=2, tabstop=4, 则第一个 <Tab> 是两个空格, 连续两个 <Tab> 会变成 \t;
+                           --   每个 <Backspace> 删除1个 softtabstop, 即2个空格.
 
 vim.opt.tabstop = 4      -- \t 缩进宽度. vscode 中的 editor.tabSize 设置, .editorconfig 中 tab_width 设置.
                          -- 只作为编辑器显示 \t 宽度用.
@@ -208,9 +219,9 @@ vim.opt.textwidth = 120  -- 文字自动(硬)换行长度. 即文字写在下一
 --   单独设置文件 shiftwidth 宽度, 在 let g:prettier#config#tab_width='auto' 时影响 prettier indent 的宽度.
 --   同时影响 indentLine 画线的宽度.
 vim.cmd [[
-  au Filetype json,jsonc,javascript,javascriptreact,typescript,typescriptreact,
-    \vue,svelte,html,css,less,scss,graphql,yaml,lua
-    \ setlocal expandtab softtabstop=2 shiftwidth=2
+au Filetype json,jsonc,javascript,javascriptreact,typescript,typescriptreact,
+  \vue,svelte,html,css,less,scss,graphql,yaml,lua
+  \ setlocal expandtab softtabstop=2 shiftwidth=2
 ]]
 
 -- pandoc / markdown 需要使用到 \t 和 space, 所以这里不设置 expandtab.
