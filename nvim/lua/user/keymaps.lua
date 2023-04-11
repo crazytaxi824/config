@@ -266,6 +266,10 @@ local keymaps = {
   --- 切换 buffer, 目前使用 bufferline 进行 buffer 切换, 如果不使用 buffer line 则使用以下设置.
   --{'n', '<lt>', ':bprevious<CR>', opt, 'go to previous buffer'},
   --{'n', '>', ':bnext<CR>', opt, 'go to next buffer'},
+
+  --- alacritty settings window.option_as_alt 设置 Option 当做 ALT key 使用.
+  {'n', '<M-a>', function() print("Alt-A") end, opt, 'Test ALT key'},
+  {'n', '<A-s>', function() print("Alt-S") end, opt, 'Test ALT key'},
 }
 
 --- 这里是设置所有 key mapping 的地方 --------------------------------------------------------------

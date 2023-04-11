@@ -46,7 +46,7 @@
 ---    | set       | vim.wo / vim.o / vim.opt |                        | ✔           | ✔                 |
 ---
 ---  NOTE: 搜索 vim.wo 的设置 `:Rg "vim\.wo(\[.*\]){0,1}\.\w+ ?=[^=]"`
---- 
+---
 ----------------------------------------------------------------------------------------------------
 ---  `global` 属性的情况: `undodir`, `cmdwinheight` ...
 ---
@@ -175,49 +175,83 @@ vim.g.loaded_perl_provider = 0  -- Disable Perl |remote-plugin| support
 -- -- }}}
 
 --- tabstop / shiftwidth - prettier indent 设置 ---------------------------------------------------- {{{
---- VVI: 以下设置不要随便改动, 需要配合 vscode & prettier & .editorconfig 一起改动.
-vim.opt.expandtab = false  -- set noexpandtab 设置: 当1个或者多个 softtabstop 长度等于 tabstop 的时候会被转成 \t;
-                           -- 当 softtabstop=4, tabstop=4, 则 <Tab> 键是 \t. backspace 删除 \t;
-                           -- 当 softtabstop=2, tabstop=4, 则第一个 <Tab> 是两个空格, 连续两个 <Tab> 会变成 \t;
-                           -- 每个 backspace 删除1个 softtabstop, 即2个空格.
+--- NOTE: nvim-0.9 中默认读取 editorconfig 文件来设置以下属性.
+--- 如果有 .editorconfig 文件则优先使用 editorconfig 的设置;
+--- 如果没有 ,editorconfig 文件则使用以下 tabstop, softtabstop, shiftwidth ... 设置.
+-- if vim.fn.has("nvim-0.9") == 1 then
+--   --- `:help editorconfig`, 禁止使用 editorconfig.
+--   vim.g.editorconfig = false
+-- end
 
-vim.opt.tabstop = 4      -- \t 缩进宽度. vscode 中的 editor.tabSize 设置, .editorconfig 中 tab_width 设置.
+--- VVI: 以下设置不要随便改动, 需要配合 vscode & prettier & .editorconfig 一起改动.
+--- 最简单的办法是将 tabstop = softtabstop = shiftwidth 设置为同一个值.
+local tab_width = 4
+
+vim.opt.expandtab = false  -- 类似 editorconfig 中 indent_style 设置 <Tab> 键使用 "tab" or "space";
+                           -- true : `set expandtab` 所有的 \t 都会被转成 space;
+                           -- false: `set noexpandtab` 当1个或者多个 softtabstop 长度等于 tabstop 的时候会被转成 \t;
+                           --   当 softtabstop=4, tabstop=4, 则 <Tab> 键是 \t. backspace 删除 \t;
+                           --   当 softtabstop=2, tabstop=4, 则第一个 <Tab> 是两个空格, 连续两个 <Tab> 会变成 \t;
+                           --   每个 <Backspace> 删除1个 softtabstop, 即2个空格.
+
+vim.opt.smarttab = true  -- 默认开启.
+                         -- true: 在每行开头的地方 <Tab> 使用 shiftwidth 宽度, 在其他地方 <Tab> 使用 tabstop / softtabstop 宽度.
+                         -- false: 在任何地方 <Tab> 都使用 tabstop/softtabstop 宽度, shiftwidth 只在 >> 时使用.
+
+vim.opt.tabstop = tab_width  -- \t 缩进宽度. vscode 中的 editor.tabSize 设置, .editorconfig 中 tab_width 设置.
                          -- 只作为编辑器显示 \t 宽度用.
 
-vim.opt.softtabstop = 4  -- <Tab> / <BackSpace> 键宽度. 默认值不开启, 这时候 <Tab> 键就是 tabstop 的宽度;
-                         -- 但是 <BackSpace> 就只能删除 1 个字符.
+vim.opt.softtabstop = -1 -- =0, 不使用 softtabstop.
+                         -- <0, eg:-1, 和 shiftwidth 保持一致.
+                         -- >0, eg:6, 在 insert <Tab> 的情况下取代 tabstop 的作用.
+                         -- tabstop=4, softtabstop=6, noexpandtab 情况下按下 <Tab> 时, 插入1个 \t 和2个空格.
+                         -- tabstop=4, softtabstop=0, noexpandtab 情况下按下 <Tab> 时, 插入1个 \t.
+                         -- tabstop=4, softtabstop=6, expandtab 情况下按下 <Tab> 时, 插入6个空格.
+                         -- tabstop=4, softtabstop=0, expandtab 情况下按下 <Tab> 时, 插入4个空格.
+                         -- tabstop=4, softtabstop=-1, shiftwidth=2 情况下按下 <Tab> 时, 插入2个空格.
 
-vim.opt.shiftwidth = 4   -- shift 缩进宽度, <Shift-,> / <Shift-.>
+vim.opt.shiftwidth = tab_width  -- <Tab> & <BackSpace> & <Shift> 键宽度.
                          -- 在 let g:prettier#config#tab_width='auto' 时影响 prettier indent 的宽度.
                          -- 在 let g:prettier#config#tab_width=2 时不影响 prettier.
                          -- 同时影响 indentLine 画线的宽度.
 
-vim.opt.wrap = false     -- 单行文字是否可以超出屏幕. local to window, 所以如果想要区别设置只能使用 BufEnter.
-                         -- nowrap - 单行可以超出屏幕, 不换行;
-                         -- wrap(默认) - 超出屏幕则(软)换行. 即行号不变, 文字在下一行显示.
-
 vim.opt.textwidth = 120  -- 文字自动(硬)换行长度. 即文字写在下一行(增加行号).
                          -- 这里的设置和 golangci-lint lll 长度一样.
-                         -- 默认值 78;
-                         -- 设置为 0 则不换行, 文字可以超出屏幕.
+                         -- 默认值为 0 即不换行, 文字可以超出屏幕.
+
+vim.opt.wrap = false     -- wrap(默认) - 超出屏幕则(软)换行. 即行号不变, 文字在下一行显示.
+                         -- nowrap - 单行可以超出屏幕, 不换行;
 
 --vim.opt.formatoptions='tcq'   -- `:help fo-table` 自动(硬)换行 breakline 的 options. 一般情况下只会 break Comments.
                                 -- 常用 options: `tcq`(默认), `cq`(go,json...), `croql`(vim,ts,js...)
 
--- prettier 支持的文件, 默认都是使用 2 个 space 来 indent.
---   单独设置文件 shiftwidth 宽度, 在 let g:prettier#config#tab_width='auto' 时影响 prettier indent 的宽度.
---   同时影响 indentLine 画线的宽度.
-vim.cmd [[
-  au Filetype json,jsonc,javascript,javascriptreact,typescript,typescriptreact,
-    \vue,svelte,html,css,less,scss,graphql,yaml,lua
-    \ setlocal expandtab softtabstop=2 shiftwidth=2
-]]
+--- prettier 支持的文件, 默认都是使用 2 个 space 来 indent.
+--- 同时 shiftwidth 会影响 indent line 画线的宽度.
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = {'json','jsonc','javascript','javascriptreact','typescript','typescriptreact',
+    'vue','svelte','html','css','less','scss','graphql','yaml','lua'},
+  callback = function(params)
+    local tab_w = 2
+    vim.bo[params.buf].expandtab = true
+    vim.bo[params.buf].tabstop = tab_w
+    vim.bo[params.buf].shiftwidth = tab_w
+  end
+})
 
--- pandoc / markdown 需要使用到 \t 和 space, 所以这里不设置 expandtab.
-vim.cmd [[au Filetype pandoc,markdown setlocal shiftwidth=2]]
+--- python 默认是 4 个 space indent. 所以这里不设置 shiftwidth.
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = {'python'},
+  callback = function(params)
+    vim.bo[params.buf].expandtab = true
+    vim.bo[params.buf].textwidth = 79
+  end
+})
 
--- python 默认是 4 个 space indent. 所以这里不设置 shiftwidth.
-vim.cmd [[au Filetype python setlocal expandtab textwidth=79]]
+--- pandoc / markdown 需要使用到 \t 和 space, 所以这里不设置 expandtab.
+if vim.fn.has("nvim-0.9") == 1 then
+  -- `:help ft-markdown-plugin`
+  vim.g.markdown_recommended_style = 0
+end
 
 -- -- }}}
 
@@ -335,19 +369,21 @@ end
 
 --- 放在最上面, 因为如果 stdpath('config') 路径下有 json ... 等文件, 可以通过下面的 autocmd 覆盖这里的设置.
 --- 这里不能使用 'BufEnter' 否则每次切换窗口或者文件的时候都会重新设置.
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = {"*"},
+vim.api.nvim_create_autocmd("BufEnter", {
+  --- "~/.config/nvim/*" 中的所有 file 都使用 marker {{{xxx}}} 折叠.
+  pattern = {vim.fn.stdpath('config') .. "/*"},
   callback = function(params)
-    --- "~/.config/nvim/*" 中的所有 file 都使用 marker {{{xxx}}} 折叠.
-    if string.match(vim.fn.fnamemodify(params.file, ":p"), '^'..vim.fn.stdpath('config')) then
-      vim.opt_local.foldmethod = "marker"
-      vim.opt_local.foldlevel = 0
-    end
+    vim.opt_local.foldmethod = "marker"
+    vim.opt_local.foldlevel = 0
   end,
   desc = "setlocal foldmethod = 'marker'",
 })
 
 vim.cmd([[au Filetype vim,zsh,yaml setlocal foldmethod=marker foldlevel=0]])
+
+--- `:help *ft-markdown-plugin`, 设置 markdown folding
+vim.g.markdown_folding = 1
+vim.cmd([[au Filetype markdown setlocal foldlevel=999]])
 
 --- search 设置，命令 `/` `?` ----------------------------------------------------------------------
 vim.opt.incsearch = true   -- 开始实时搜索
