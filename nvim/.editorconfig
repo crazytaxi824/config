@@ -1,9 +1,10 @@
 # https://editorconfig.org/
 # 影响 prettier 格式化, 和 github 显示.
 # "prettier.useEditorConfig": true
-# end_of_line -> "prettier.endOfLine"
-# indent_style -> "prettier.useTabs"
-# indent_size/tab_width -> "prettier.tabWidth"
+# "end_of_line" -> "prettier.endOfLine"
+# "indent_style" -> "prettier.useTabs"
+# "indent_size"/"tab_width" -> "prettier.tabWidth"
+# NOTE: "max_line_length" has Deprecated by editorconfig.org
 
 # top-most EditorConfig file. 表示该文件是最顶层文件, 不用再向上查找 .editorconfig 文件了.
 root = true
@@ -11,26 +12,26 @@ root = true
 # all files, `:help editorconfig` in nvim-0.9+
 [*]
 charset = utf-8
-# \t 会被转成 space, nvim 中设置 expandtab.
+# \t 会被转成 space. nvim 中设置 `:help expandtab`.
 indent_style = tab
-# 格式化 tab 的宽度. nvim 中同时设置 shiftwidth & softtabstop.
+# 格式化 tab 的宽度. nvim 中同时设置 `:help shiftwidth` & `:help softtabstop`.
 indent_size = 4
-# \t 的宽度. 默认值为 indent_size. nvim 中设置 tabstop.
-tab_width = 4
-# lf = \n | cr = \r | crlf = \r\n
+# \t 的宽度. NOTE: 默认值为 indent_size, 不需要特别设置. nvim 中设置 `:help tabstop`.
+#tab_width = 4
+# lf = \n | cr = \r | crlf = \r\n. nvim 中设置 `:help fileformat`.
 end_of_line = lf
 # 删除行最后的空白
 trim_trailing_whitespace = true
-# 所有文件最后都添加一个空行.
+# 所有文件最后都添加一个空行. nvim 中设置 `:help fixendofline` & `:help endofline`.
 #insert_final_newline = true
 
 # prettier supported files
-[*.{htm,html,js,jsx,ts,tsx,cjs,cts,ctsx,mjs,mts,mtsx,css,sass,scss,less,pcss,svg,vue,json,jsonc,yaml,yml,graphql,md}]
+[*.{htm,html,js,jsx,ts,tsx,cjs,cts,ctsx,mjs,mts,mtsx,css,sass,scss,less,pcss,svg,vue,json,jsonc,yaml,yml,graphql,md,lua}]
 indent_style = space
 indent_size = 2
 
 # js ts css 等相关语言使用单引号.
-[*.{js,jsx,ts,tsx,cjs,cts,ctsx,mjs,mts,mtsx,css,sass,scss,less,pcss,vue}]
+[*.{htm,html,js,jsx,ts,tsx,cjs,cts,ctsx,mjs,mts,mtsx,css,sass,scss,less,pcss,vue}]
 quote_type = single
 
 # python indent 4 个空格.
