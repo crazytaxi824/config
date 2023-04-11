@@ -369,14 +369,12 @@ end
 
 --- 放在最上面, 因为如果 stdpath('config') 路径下有 json ... 等文件, 可以通过下面的 autocmd 覆盖这里的设置.
 --- 这里不能使用 'BufEnter' 否则每次切换窗口或者文件的时候都会重新设置.
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = {"*"},
+vim.api.nvim_create_autocmd("BufEnter", {
+  --- "~/.config/nvim/*" 中的所有 file 都使用 marker {{{xxx}}} 折叠.
+  pattern = {vim.fn.stdpath('config') .. "/*"},
   callback = function(params)
-    --- "~/.config/nvim/*" 中的所有 file 都使用 marker {{{xxx}}} 折叠.
-    if string.match(vim.fn.fnamemodify(params.file, ":p"), '^'..vim.fn.stdpath('config')) then
-      vim.opt_local.foldmethod = "marker"
-      vim.opt_local.foldlevel = 0
-    end
+    vim.opt_local.foldmethod = "marker"
+    vim.opt_local.foldlevel = 0
   end,
   desc = "setlocal foldmethod = 'marker'",
 })
