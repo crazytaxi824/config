@@ -144,6 +144,7 @@ local highlights = {
   DiagnosticInfo  = {ctermfg = Color.info_blue},
   DiagnosticWarn  = {ctermfg = Color.warn_orange},
   DiagnosticError = {ctermfg = Color.error_red},
+  DiagnosticUnnecessary = {link = "DiagnosticHint"},
 
   DiagnosticUnderlineHint = {ctermfg = Color.hint_grey, cterm = {'underline'}},
   DiagnosticUnderlineInfo = { cterm = {'underline'} },
