@@ -337,7 +337,7 @@ return require('packer').startup(function(use)
 
   --- 第一方 module 插件 ---
   use {"nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-    commit = "68eaeb8", -- NOTE: "895ec44", last commit before refactor.
+    commit = "38203f5", -- NOTE: "895ec44", last commit before refactor.
     config = function() require("user.plugin_settings.treesitter_ctx") end,
 
     after = "nvim-treesitter",
