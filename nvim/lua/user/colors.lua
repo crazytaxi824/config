@@ -180,8 +180,8 @@ local highlights = {
   --- NOTE: treesitter 颜色设置 --------------------------------------------------------------------
   ['@text.danger'] = { ctermfg = Color.white, ctermbg = 196 }, -- FIXME, BUG
   ['@text.warning'] = { link = "WarningMsg" },  -- HACK, WARNING, VVI
-  ['@text.note'] = { link = "SpecialComment" }, -- XXX, NOTE
-  ['@text.todo'] = { link = "Todo" },           -- TODO, FOO: BAR:
+  ['@text.note'] = { link = "SpecialComment" }, -- XXX, NOTE, README
+  ['@text.todo'] = { link = "Todo" },           -- TODO
 
   ['@text.uri'] = { link = "Underlined" },  -- url
   ['@text.title'] = { link = "Title" }, -- markdown, # title
