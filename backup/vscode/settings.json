@@ -290,7 +290,8 @@
   // "python.formatting.provider": "black", // autopep8 (默认) | black | yapf
   "[python]": {
     // "editor.formatOnSave": true,
-    "editor.defaultFormatter": "ms-python.python" // python 不能用 prettier 格式化
+    "editor.defaultFormatter": "ms-python.python",
+    "editor.formatOnType": true // python 不能用 prettier 格式化
   },
 
   // jupyter
@@ -332,6 +333,11 @@
   "prettier.endOfLine": "lf", // lf = \n | cr = \r | crlf = \r\n
   "prettier.printWidth": 120, // 换行长度, 和 golangci-lint lll 长度一样. 默认 80
   // "prettier.singleQuote": true,  // 针对不同的项目设置
+
+  // ****************************
+  // *    AWS code whisperer    *
+  // ****************************
+  "aws.telemetry": false,
 
   // ****************************
   // *          others          *

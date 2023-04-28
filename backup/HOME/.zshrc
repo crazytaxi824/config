@@ -1,23 +1,19 @@
-### PATH 设置
-# ${PATH+:$PATH}    - 如果 PATH 不为空时, 在 PATH 前面加入一个 `:` 冒号. `brew shellenv` 有使用实例.
-# ${PATH:+${PATH}:} - 如果 PATH 不为空时, 在 PATH 后面加入一个 `:` 冒号. `cat ~/.fzf.zsh` 有使用实例.
-
 ### UTF-8, `locale` 查看 LC_* 设置
 export LC_ALL=en_US.UTF-8  # 设置 LC_ALL, 其他 LC_* 强制等于 LC_ALL, 单独设置 LC_* 无效.
 #export LANG=en_US.UTF-8   # 设置 LANG, 其他 LC_* 默认值等于 LANG, 但可以单独设置 LC_*.
 
-### NOTE: testing newer neovim version. 手动安装 https://github.com/neovim/neovim/releases/
-#local nvim=~/.nvim_0.8/nvim-macos/bin/nvim  # brew installed neovim now is v0.8.0
-#alias nvim=$nvim
-# $VISUAL is a more capable and interactive preference over $EDITOR.
-#  - EDITOR editor should be able to work without use of "advanced" terminal functionality.
-#  - VISUAL editor could be a full screen editor as vi or emacs.
-export EDITOR=nvim
-export VISUAL=$EDITOR
+# --- [ PATH 设置 ] -------------------------------------------------------------------------------- {{{
+# ${PATH+:$PATH}    - 如果 ${PATH} 的值存在并非空, 则输出 ${PATH} 的值; 否则, 输出空字符串.
+# ${PATH:+${PATH}:} - 如果 ${PATH} 的值存在并非空, 则在 ${PATH} 的值的前后分别添加一个冒号, 然后输出结果; 否则, 输出空字符串.
+# 如果 ${PATH} 的值是 /usr/bin:/usr/local/bin, 那么:
+#     ${PATH+:$PATH} 输出 /usr/bin:/usr/local/bin
+#     ${PATH:+${PATH}:} 输出 :/usr/bin:/usr/local/bin:
+#
+# 如果 ${PATH} 没有被设置, 那么:
+#     ${PATH+:$PATH} 不输出任何内容
+#     ${PATH:+${PATH}:} 不输出任何内容
 
-### open/edit file
-alias o="openFileOrUrl"     # open file/url, openFileOrUrl() 函数定义在下面.
-alias e="vimExistFile --"   # edit file, vimExistFile() 函数定义在下面.
+# }}}
 
 # --- [ homebrew ] --------------------------------------------------------------------------------- {{{
 # https://brew.sh/
@@ -40,7 +36,24 @@ export HOMEBREW_BUNDLE_FILE=~/.config/Brewfile
 
 # }}}
 
-# --- [ golang setting ] --------------------------------------------------------------------------- {{{
+# --- [ editor ] ----------------------------------------------------------------------------------- {{{
+### NOTE: testing newer neovim version. 手动安装 https://github.com/neovim/neovim/releases/
+alias nvim9=~/.nvim_0.9/nvim-macos/bin/nvim  # 测试使用 nvim v0.9, brew install 版本为 v0.8.3
+# $VISUAL is a more capable and interactive preference over $EDITOR.
+#  - EDITOR editor should be able to work without use of "advanced" terminal functionality.
+#  - VISUAL editor could be a full screen editor as vi or emacs.
+export EDITOR=nvim
+export VISUAL=$EDITOR
+
+### open/edit file
+alias o="openFileOrUrl"     # open file/url, openFileOrUrl() 函数定义在下面.
+alias e="vimExistFile --"   # edit file, vimExistFile() 函数定义在下面.
+
+# }}}
+
+# --- [ languages ] -------------------------------------------------------------------------------- {{{
+
+# --- [ golang ] --------------------------------------------------------------- {{{
 ### `go env` 查看
 #export GOROOT=/usr/local/go
 export GOPATH=$HOME/gopath
@@ -56,16 +69,20 @@ export GO111MODULE=on  # on | off | auto
 
 # }}}
 
-# --- [ other setting ] ---------------------------------------------------------------------------- {{{
+# --- [ python ] --------------------------------------------------------------- {{{
 ### python3 设置多个 version, 可以用 python3, python3.9, python3.10, python3.11 等命令.
 # eg: `python3.11 -m pip --version`. brew 安装 python 默认设置了多个 version.
 #export PATH=/usr/local/opt/python@3.9/bin:$PATH  # brew 安装的 python 默认在 PATH 中.
-alias python3=/usr/local/bin/python3.11  # 指定 python3 命令的版本.
+# 指定 python3 命令的版本.
+alias python3=/usr/local/bin/python3.11  
+#alias python3=/usr/local/opt/python@3.11/bin/python3
+#alias python3=/usr/local/opt/python@3.11/bin/python3.11
 
-### vim path
-#alias vim=$(brew --prefix)/bin/vim   # brew install vim 路径, 下面设置了 vim() 函数.
-#alias vim='/usr/bin/vim'             # macos 内置 vim 路径
+# }}}
 
+# }}}
+
+# --- [ others ] ----------------------------------------------------------------------------------- {{{
 ### bat 主题颜色, 'bat --list-themes' 查看 theme 样式.
 # "base16" 使用 0-15 color 兼容性好.
 # "ansi" 只使用 0-7 color, 兼容性最好.
@@ -102,7 +119,7 @@ export LESS_TERMCAP_ue=$(printf "\e[0m")       # ue      rmul      stop underlin
 # }}}
 
 # '~/.oh-my-zsh/lib/directories.zsh' 中定义了 `function d ()`, 相当于 dirs 的作用.
-# --- [ oh my zsh setting ] ------------------------------------------------------------------------ {{{
+# --- [ oh my zsh ] -------------------------------------------------------------------------------- {{{
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
