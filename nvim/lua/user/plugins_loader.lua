@@ -351,7 +351,7 @@ return require('packer').startup(function(use)
 
   --- 第三方 module 插件 ---
   use {"windwp/nvim-ts-autotag",  -- auto close tag <div></div>
-    commit = "b525525",
+    commit = "40615e9",
 
     after = "nvim-treesitter",
   }
