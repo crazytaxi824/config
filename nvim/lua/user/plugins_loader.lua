@@ -589,7 +589,6 @@ return require('packer').startup(function(use)
 
   --- markdown preview
   use {"iamcco/markdown-preview.nvim",
-    commit = "02cc387",
     run = function() vim.fn["mkdp#util#install"]() end,  -- VVI: Update 后需要重新安装 preview 插件, 否则可能出现无法运行的情况.
     config = function() vim.cmd('doautocmd mkdp_init BufEnter') end,  -- VVI: 需要这个设置才能使用 cmd 条件加载, 否则报错.
 
