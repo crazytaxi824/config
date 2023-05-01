@@ -277,7 +277,7 @@ return require('packer').startup(function(use)
   --- VVI: impatient needs to be setup before any other lua plugin is loaded.
   use {"lewis6991/impatient.nvim",  -- NOTE: 这里只是安装, 设置在 init.lua 中. impatient 不是通过 setup() 设置.
     commit = "c90e273",
-    --run = ":LuaCacheClear",  -- 更新后清空 luacache_chunks && luacache_modpaths, 下次启动 nvim 时重新生成.
+    run = ":LuaCacheClear",  -- Update 后清空 luacache_chunks && luacache_modpaths, 下次启动 nvim 时重新生成.
   }
 
   --- Useful lua functions used by lots of plugins
@@ -302,6 +302,7 @@ return require('packer').startup(function(use)
   --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件
   use {"williamboman/mason.nvim",
     tag = "v1.0.1",
+    run = ":MasonUpdate", -- :MasonUpdate updates All Registries, NOT packages.
     config = function() require("user.plugin_settings.mason_tool_installer") end,
     --- NOTE: 不能 opt 加载 mason 否则其他插件无法找到 mason 安装的工具.
   }
@@ -321,7 +322,7 @@ return require('packer').startup(function(use)
   --- but if you want to extend a query use the `after/queries/` directory.
   use {"nvim-treesitter/nvim-treesitter",
     commit = "54909e8d",  -- tag = "v0.9.0", NOTE: tag 更新太慢, commit 更新太快, 最好两周更新一次.
-    --run = ":TSUpdate",  -- Post-update/install hook. NOTE: 推荐手动执行.
+    --run = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量安装 parser 容易卡死.
     config = function() require("user.plugin_settings.treesitter") end,
     requires = {
       --- 以下都是 treesitter modules 插件, 在 setup() 中启用的插件.
