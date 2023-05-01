@@ -495,14 +495,14 @@ vim.lsp.buf.format({
 
 ### which-key 有时候报错.
 
-- ERROR: Failed to run healthcheck for "which_key" plugin. Exception:
-  function health#check[20]..health#which_key#check, line 1
-  Vim(lua):E5108: Error executing lua .../pack/packer/start/which-key.nvim/lua/which-key/keys.lua:426: Invalid buffer id: 3
+- ERROR Failed to run healthcheck for "which-key" plugin. Exception:
+  function health#check, line 25
+  Vim(eval):E5108: Error executing lua .../pack/packer/start/which-key.nvim/lua/which-key/keys.lua:400: Invalid buffer id: 5
   stack traceback:
   [C]: in function 'nvim_buf_get_keymap'
-  .../pack/packer/start/which-key.nvim/lua/which-key/keys.lua:426: in function 'update_keymaps'
-  .../pack/packer/start/which-key.nvim/lua/which-key/keys.lua:363: in function 'check_health'
-  [string ":lua"]:1: in main chunk
+  .../pack/packer/start/which-key.nvim/lua/which-key/keys.lua:400: in function 'update_keymaps'
+  ...ack/packer/start/which-key.nvim/lua/which-key/health.lua:14: in function 'check'
+  [string "luaeval()"]:1: in main chunk
 
 ### https://github.com/golang/go/issues/50750, gopls, workspace `go.work` lsp.log 中报错:
 
