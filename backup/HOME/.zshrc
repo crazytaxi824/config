@@ -320,7 +320,7 @@ FZF_DEFAULT_OPTS="--height=80% --ansi --multi --layout=reverse --border"   # 可
 # fzf 多选时, <TAB> 选中的项会出现 mark.
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --marker='✔' --pointer='▸'"
 # fzf 颜色主题 - dark; hl,hl+ 搜索匹配字符颜色; border 边框颜色; marker 颜色; pointer > 颜色; gutter 使用默认颜色.
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --color='dark,hl:191:reverse,hl+:191:reverse,border:238,pointer:191,marker:191,gutter:-1'"
+FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --color='dark,hl:191:reverse,hl+:191:reverse,border:238,scrollbar:74,pointer:191,marker:191,gutter:-1,header:71:italic:underline'"
 # fzf preview 设置: 如果是 dir 则使用 tree; 如果是 file 使用 bat 进行 preview.
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --preview='([[ -d {} ]] && (tree -NC -L 3 {})) || ([[ -f {} ]] && (bat --color=always --style=numbers {}))'"
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --preview-window='right,60%,border-left'"
@@ -334,6 +334,8 @@ FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-e:become($EDITOR -- {} > /dev/t
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-o:execute(open {})'"  # system open 光标所在行 file.
 # NOTE: 将储存多选列表的临时文件 {+f} 传入 nvim 函数 FZF_selected() 中. 在 nvim 中处理文件名, 包括 rg 传入的 lnum, col ...
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-l:become($EDITOR \"+lua FZF_selected([[{+f}]])\" > /dev/tty)'"
+# header 中加入快捷键说明.
+FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --header='# <C-e>:Edit; <C-l>:Edit-lnum; <C-o>:Open; <S-Tab>:Preview-win; <Tab>:Select; <C-a>:Toggle-All-Selected'"
 export FZF_DEFAULT_OPTS
 
 # --------------------------------------------------------------------------------------------------
@@ -349,13 +351,20 @@ FZF_CTRL_T_COMMAND="$FZF_CTRL_T_COMMAND -E='**/vendor/**' -E='**/dist/**' -E='**
 export FZF_CTRL_T_COMMAND
 
 # Ctrl+T 快捷键 options 设置. 这里会继承 default 设置, 只需要覆盖设置.
-# Ctrl+T 强制 --multi 多选.
-export FZF_CTRL_T_OPTS="--bind='ctrl-l:accept'"
+# NOTE: Ctrl+T 强制使用 --multi 多选, 无论 FZF_DEFAULT_OPTS 有没有设置 --multi, 这里都可以多选.
+# unbind ctrl-l & ctrl-o 快捷键设置.
+FZF_CTRL_T_OPTS="--bind='ctrl-l:unbind(ctrl-l),ctrl-o:unbind(ctrl-o)'"
+# header 中加入快捷键说明.
+FZF_CTRL_T_OPTS="$FZF_CTRL_T_OPTS --header='# <C-e>:Edit; <S-Tab>:Preview-win; <Tab>:Select; <C-a>:Toggle-All-Selected'"
+export FZF_CTRL_T_OPTS
 
 # Ctrl+R 快捷键 options 设置, Ctrl+R 不能设置 Command.
 # 这里会继承 default 设置, 只需要覆盖设置. default 中 --bind ctrl-e, ctrl-o 会导致编辑报错.
-# CTRL+R 强制 --no-multi 禁止 <tab> multi select.
-export FZF_CTRL_R_OPTS="--height=24 --preview-window=hidden --bind='ctrl-e:accept,ctrl-o:accept,ctrl-l:accept'"
+# NOTE: CTRL+R 强制 --no-multi 禁止 <tab> multi select.
+FZF_CTRL_R_OPTS="--height=24 --preview-window=hidden"
+FZF_CTRL_R_OPTS="$FZF_CTRL_R_OPTS --bind='ctrl-e:unbind(ctrl-e),ctrl-l:unbind(ctrl-l),ctrl-o:unbind(ctrl-o)'"
+FZF_CTRL_R_OPTS="$FZF_CTRL_R_OPTS --header='# <Enter>:accept; <Esc>:cancel'"
+export FZF_CTRL_R_OPTS
 
 # fzf auto completion 的设置 -----------------------------------------------------------------------
 # NOTE: fzf 的 auto completion 是智能触发的. 使用不同的前置命令会得到不同的结果.
