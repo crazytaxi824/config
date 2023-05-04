@@ -7,12 +7,11 @@ gui:
   scrollHeight: 5                    # main pannel (右侧主窗口) pageup/pagedown 滚动 n 行, 不要超过 commandLogSize.
   sidePanelWidth: 0.25               # 左侧边栏屏幕占比 (0~1)
   expandFocusedSidePanel: true       # 选中的 pannel 会变高
-  mainPanelSplitMode: "horizontal"   # main pannel 分屏方式 'horizontal' | 'flexible' | 'vertical'
+  #mainPanelSplitMode: "horizontal"  # main pannel 分屏方式 'horizontal' | 'flexible'(*) | 'vertical'
   language: "en"                     # one of 'auto' | 'en' | 'zh' | 'pl' | 'nl'
   commandLogSize: 8                  # 右下角 log 提示窗口所占行高
   showFileTree: true                 # 左侧边栏文件显示使用 tree 模式(可折叠)
   theme:
-    lightTheme: false # For terminals with a light background
     activeBorderColor:
       - yellow
       - bold
@@ -71,7 +70,7 @@ git:
   allBranchesLogCmd: "git log --date=format:'%d-%b-%Y %H:%M:%S' --graph --all --format=format:'%C(42)%h%C(reset) -%C(207)%d%C(reset) %C(74)%ad%C(reset) %C(243)(%ar) - %C(173)%an%C(reset)%n''          %C(251)%s%C(reset)%n'' '"
 
   # git 状态刷新
-  autoFetch: true  # 自动执行 git fetch
+  autoFetch: true    # 自动执行 git fetch, 可以检查 remote 和 local git 的状态不同.
   autoRefresh: true  # 自动刷新本地 git 文件状态
 
 # open & edit file
