@@ -38,7 +38,8 @@ export HOMEBREW_BUNDLE_FILE=~/.config/Brewfile
 
 # --- [ editor ] ----------------------------------------------------------------------------------- {{{
 ### NOTE: testing newer neovim version. 手动安装 https://github.com/neovim/neovim/releases/
-alias nvim9=~/.nvim_0.9/nvim-macos/bin/nvim  # 测试使用 nvim v0.9, brew install 版本为 v0.8.3
+#alias nvim9=~/.nvim_0.9/nvim-macos/bin/nvim  # 试用 neovim 新版本
+
 # $VISUAL is a more capable and interactive preference over $EDITOR.
 #  - EDITOR editor should be able to work without use of "advanced" terminal functionality.
 #  - VISUAL editor could be a full screen editor as vi or emacs.
