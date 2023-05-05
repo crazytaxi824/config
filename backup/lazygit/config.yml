@@ -17,12 +17,15 @@ gui:
       - bold
     inactiveBorderColor:  # 未选中窗口的文字和边框颜色, 241
       - '#626262'
+    optionsTextColor:     # 最下方跨键键提示文字颜色
+      - blue
     cherryPickedCommitFgColor:  # Commits window 中使用 'c' 选择 cherry pick 的文字颜色
       - magenta
       - bold
+      - reverse
     cherryPickedCommitBgColor:  # 不使用任何 bg 颜色, 默认为 cyan.
       - ''
-    selectedLineBgColor:   # left-side menu line color
+    selectedLineBgColor:   # 左侧菜单中 cursor line bg 颜色.
       - '#4E4E4E'
     selectedRangeBgColor:  # stage / unstage line color
       - reverse
