@@ -76,7 +76,7 @@ telescope.setup {
     mappings = {
       i = {
         ["<CR>"] = my_action.edit_or_qf,
-        ["<C-e>"] = actions.select_default,
+        ["<C-e>"] = my_action.edit_or_qf,
         ["<C-x>"] = actions.select_horizontal,  -- open file in split horizontal
         ["<C-v>"] = actions.select_vertical,    -- open file in split vertical
         --["<C-t>"] = actions.select_tab,  -- open file in new tab
@@ -117,7 +117,7 @@ telescope.setup {
         --["<ESC>"] = actions.close,
 
         ["<CR>"] = my_action.edit_or_qf,
-        ["<C-e>"] = actions.select_default,
+        ["<C-e>"] = my_action.edit_or_qf,
         ["<C-x>"] = actions.select_horizontal,  -- open file in split horizontal
         ["<C-v>"] = actions.select_vertical,    -- open file in split vertical
         --["<C-t>"] = actions.select_tab,  -- open file in new tab
