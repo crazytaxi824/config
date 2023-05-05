@@ -36,11 +36,22 @@ function FZF_selected(fzf_tmp_file)
     end
   end
 
-  --- 一般不会出现传入 0 个 items 的情况.
+  --- 一般不会出现传入 0 个 item 的情况.
   --- 就算在 fzf 中没有使用 <tab> 选择任何一个 item, fzf 会将当前 cursor 指向的 item 作为选中的 item.
   --- 所以一般情况下至少会有一个 item.
   if #fp_qf_list == 0 then
     Notify("fzf selected items is 0, please check fzf result.", "ERROR")
+    return
+  end
+
+  --- 只有 1 个 item 的情况下, 不显示 quickfix list.
+  if #fp_qf_list == 1 then
+    --- VVI: 必须有 `:edit` 命令, 否则会打开一个 [No Name] file.
+    --- VVI: 使用 vim cmd `:edit` 必须 escape filename.
+    --- edit/open first item(file) in the list.
+    local cmd = 'edit +lua\\ vim.fn.cursor("' .. fp_qf_list[1].lnum .. '","' .. fp_qf_list[1].col .. '") '
+     .. vim.fn.fnameescape(fp_qf_list[1].filename)
+    vim.cmd(cmd)
     return
   end
 

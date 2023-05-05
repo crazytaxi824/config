@@ -292,9 +292,9 @@ source $ZSH/oh-my-zsh.sh
 #
 #       {+f}  NOTE: 创建一个临时文件, 然后将多选 items 写入其中. 可用其他程序读取该文件.
 #                   {+f} 临时文件的路径通常是固定的, 不会无限创建新文件. 只是每次多选后 replace 该文件中的内容.
-#                   如果是 fd 选择的结果, 则临时文件中记录的是 filepath/dir.
+#                   如果是 fd 选择的结果, 则临时文件中记录的是 filepath|dir.
 #                   如果是 rg 返回的结果, 则临时文件中记录的是 <filepath:line:col:content>
-#                   结论: {+f} 临时文件中记录的是 fzf 中显示的结果.
+#                   结论: {+f} 临时文件中记录的是 fzf 中(单选/多选)的结果.
 #
 #       eg:
 #         `nvim -- {}`  表示 edit 当前行的 file.
@@ -330,12 +330,13 @@ FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='shift-up:half-page-up,shift-down:hal
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='pgup:preview-half-page-up,pgdn:preview-half-page-down'"  # preview scroll
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-a:toggle-all'"  # multi-select
 # NOTE: Vim: Warning: Output not to a terminal. 解决方法: `vim/nvim file > /dev/tty`
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-e:become($EDITOR -- {} > /dev/tty)'"  # nvim edit 光标所在行 file.
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-o:execute(open {})'"  # system open 光标所在行 file.
-# NOTE: 将储存多选列表的临时文件 {+f} 传入 nvim 函数 FZF_selected() 中. 在 nvim 中处理文件名, 包括 rg 传入的 lnum, col ...
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-l:become($EDITOR \"+lua FZF_selected([[{+f}]])\" > /dev/tty)'"
+# NOTE: 将储存多选列表的临时文件路径 {+f} 传入 nvim 函数 FZF_selected() 中. 在 nvim 中处理文件名, 包括 rg 传入的 lnum, col ...
+FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-e:become($EDITOR \"+lua FZF_selected([[{+f}]])\" > /dev/tty)'"
+#FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-e:become($EDITOR -- {} > /dev/tty)'"  # nvim edit 光标所在行 file.
+# system open 光标所在行 file.
+FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-o:execute(open {})'"
 # header 中加入快捷键说明.
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --header='# <C-e>:Edit; <C-l>:Edit-lnum; <C-o>:Open; <S-Tab>:Preview-win; <Tab>:Select; <C-a>:Toggle-All-Selected'"
+FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --header='# <C-e>:Edit; <C-o>:Open; <S-Tab>:Preview-win; <Tab>:Select; <C-a>:Toggle-All-Selected'"
 export FZF_DEFAULT_OPTS
 
 # --------------------------------------------------------------------------------------------------
@@ -351,19 +352,19 @@ FZF_CTRL_T_COMMAND="$FZF_CTRL_T_COMMAND -E='**/vendor/**' -E='**/dist/**' -E='**
 export FZF_CTRL_T_COMMAND
 
 # Ctrl+T 快捷键 options 设置. 这里会继承 default 设置, 只需要覆盖设置.
-# NOTE: Ctrl+T 强制使用 --multi 多选, 无论 FZF_DEFAULT_OPTS 有没有设置 --multi, 这里都可以多选.
-# unbind ctrl-l & ctrl-o 快捷键设置.
-FZF_CTRL_T_OPTS="--bind='ctrl-l:unbind(ctrl-l),ctrl-o:unbind(ctrl-o)'"
+# NOTE: Ctrl+T 强制使用多选. 无论 FZF_CTRL_T_OPTS 有没有设置 --no-multi, 这里都强制多选.
+# unbind ctrl-e & ctrl-o 快捷键设置.
+FZF_CTRL_T_OPTS="--bind='ctrl-e:unbind(ctrl-e),ctrl-o:unbind(ctrl-o)'"
 # header 中加入快捷键说明.
-FZF_CTRL_T_OPTS="$FZF_CTRL_T_OPTS --header='# <C-e>:Edit; <S-Tab>:Preview-win; <Tab>:Select; <C-a>:Toggle-All-Selected'"
+FZF_CTRL_T_OPTS="$FZF_CTRL_T_OPTS --header='# Dirs only, <Enter>:accept; <S-Tab>:Preview-win; <Tab>:Select; <C-a>:Toggle-All-Selected'"
 export FZF_CTRL_T_OPTS
 
 # Ctrl+R 快捷键 options 设置, Ctrl+R 不能设置 Command.
 # 这里会继承 default 设置, 只需要覆盖设置. default 中 --bind ctrl-e, ctrl-o 会导致编辑报错.
 # NOTE: CTRL+R 强制 --no-multi 禁止 <tab> multi select.
 FZF_CTRL_R_OPTS="--height=24 --preview-window=hidden"
-FZF_CTRL_R_OPTS="$FZF_CTRL_R_OPTS --bind='ctrl-e:unbind(ctrl-e),ctrl-l:unbind(ctrl-l),ctrl-o:unbind(ctrl-o)'"
-FZF_CTRL_R_OPTS="$FZF_CTRL_R_OPTS --header='# <Enter>:accept; <Esc>:cancel'"
+FZF_CTRL_R_OPTS="$FZF_CTRL_R_OPTS --bind='ctrl-e:unbind(ctrl-e),ctrl-o:unbind(ctrl-o)'"
+FZF_CTRL_R_OPTS="$FZF_CTRL_R_OPTS --header='# Command history, <Enter>:accept; <Esc>:cancel'"
 export FZF_CTRL_R_OPTS
 
 # fzf auto completion 的设置 -----------------------------------------------------------------------
@@ -374,8 +375,8 @@ export FZF_CTRL_R_OPTS
 # 使用 '\\<tab>' 触发 fzf. 默认值是 '**<tab>'.
 export FZF_COMPLETION_TRIGGER='\\'
 
-# 这里会继承 default 设置, 只需要覆盖设置.
-export FZF_COMPLETION_OPTS="--bind='ctrl-e:accept,ctrl-o:accept,ctrl-l:accept'"
+# 这里会继承 default 设置, 需要 unbind.
+export FZF_COMPLETION_OPTS="--bind='ctrl-e:unbind(ctrl-e),ctrl-o:unbind(ctrl-o)'"
 
 # 定义 fzf autocomplete 文件路径(filepath)的 command.
 # eg: 'vim **<tab>'; '$ vim src/**<tab>'; '$ cat ~/**<tab>'
@@ -510,10 +511,8 @@ function Rg() {
 	fzf --delimiter=':' \
 		--preview "bat --color=always --style=numbers --highlight-line={2} {1}" \
 		--preview-window '+{2}/2' \
-		--bind "ctrl-e:become($EDITOR '+call cursor({2},{3})' -- {1} > /dev/tty)" \
 		--bind "ctrl-o:execute(open {1})"
-		# NOTE: 将储存多选列表的临时文件 {+f} 传入 nvim 函数 FZF_selected() 中. 在 nvim 中处理文件名, 包括 rg 传入的 lnum, col ...
-		#--bind="ctrl-l:become($EDITOR \"+lua FZF_selected([[{+f}]])\" > /dev/tty)"
+		#--bind "ctrl-e:become($EDITOR '+call cursor({2},{3})' -- {1} > /dev/tty)"  # 打开光标所在文件
 }
 
 # }}}
