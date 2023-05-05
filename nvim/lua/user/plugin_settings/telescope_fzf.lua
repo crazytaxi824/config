@@ -6,6 +6,30 @@ end
 local actions = require("telescope.actions")  -- 自定义 key mapping 用
 local actions_layout = require("telescope.actions.layout")  -- 自定义 key mapping 用
 
+--- custom actions --------------------------------------------------------------------------------- {{{
+--- 多选的情况下 send_selected_to_qflist; 没有任何选择的情况下 edit 光标所在行的 file.
+local action_state = require "telescope.actions.state"
+local transform_mod = require('telescope.actions.mt').transform_mod
+
+local my_action = transform_mod({
+  edit_or_qf = function(prompt_bufnr)
+    --- 参考 https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/actions/init.lua
+    --- 中 send_selected_to_qf 函数设置.
+    local picker = action_state.get_current_picker(prompt_bufnr)
+    local selected_items = picker:get_multi_selection()
+    -- print(vim.inspect(selected_items), #selected_items)
+
+    if #selected_items == 0 then
+      actions.select_default(prompt_bufnr)
+    else
+      actions.send_selected_to_qflist(prompt_bufnr)
+      vim.cmd('copen')
+    end
+  end,
+})
+
+-- -- }}}
+
 telescope.setup {
   defaults = {
     --- VVI: 这里必须使用占 2 格的 icon, 否则渲染会出 bug.
@@ -51,17 +75,18 @@ telescope.setup {
     --- https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/actions/init.lua
     mappings = {
       i = {
+        ["<CR>"] = my_action.edit_or_qf,
+        ["<C-e>"] = actions.select_default,
+        ["<C-x>"] = actions.select_horizontal,  -- open file in split horizontal
+        ["<C-v>"] = actions.select_vertical,    -- open file in split vertical
+        --["<C-t>"] = actions.select_tab,  -- open file in new tab
+
         --["<C-c>"] = actions.close,
         ["<C-n>"] = actions.cycle_history_next,  -- next 已输入过的搜索内容
         ["<C-p>"] = actions.cycle_history_prev,  -- prev 已输入过的搜索内容
 
         ["<Down>"] = actions.move_selection_next,
         ["<Up>"] = actions.move_selection_previous,
-
-        ["<CR>"] = actions.select_default,
-        ["<C-x>"] = actions.select_horizontal,
-        ["<C-v>"] = actions.select_vertical,
-        --["<C-t>"] = actions.select_tab,  -- open file in new tab.
 
         ["<C-u>"] = false,  -- NOTE: 为了在 insert 模式下使用 <C-u> 清空 input, 不能使用 nil.
         ["<C-d>"] = false,
@@ -89,18 +114,19 @@ telescope.setup {
       },
 
       n = {
-        ["<ESC>"] = actions.close,
+        --["<ESC>"] = actions.close,
+
+        ["<CR>"] = my_action.edit_or_qf,
+        ["<C-e>"] = actions.select_default,
+        ["<C-x>"] = actions.select_horizontal,  -- open file in split horizontal
+        ["<C-v>"] = actions.select_vertical,    -- open file in split vertical
+        --["<C-t>"] = actions.select_tab,  -- open file in new tab
 
         ["<Down>"] = actions.move_selection_next,
         ["<Up>"] = actions.move_selection_previous,
         ["gg"] = actions.move_to_top,
         ["G"] = actions.move_to_bottom,
         --["M"] = actions.move_to_middle,
-
-        ["<CR>"] = actions.select_default,
-        ["<C-x>"] = actions.select_horizontal,
-        ["<C-v>"] = actions.select_vertical,
-        --["<C-t>"] = actions.select_tab,
 
         ["<C-u>"] = false,  -- NOTE: 为了配合上面 i 的设置.
         ["<C-d>"] = false,
