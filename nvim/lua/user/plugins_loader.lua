@@ -387,7 +387,7 @@ return require('packer').startup(function(use)
 
   --- Auto Completion ------------------------------------------------------------------------------
   use {"hrsh7th/nvim-cmp",
-    commit = "11102d3",
+    commit = "1cad30f",
     config = function() require("user.plugin_settings.cmp_completion") end,
     requires = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全
