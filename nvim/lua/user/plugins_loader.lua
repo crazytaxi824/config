@@ -289,7 +289,7 @@ return require('packer').startup(function(use)
   --- Must install ---------------------------------------------------------------------------------
   --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   use {"folke/which-key.nvim",
-    tag = "v1.4.1",
+    tag = "v1.4.2",
     config = function() require("user.plugin_settings.which_key") end,
   }
 
@@ -534,7 +534,7 @@ return require('packer').startup(function(use)
   }
 
   use {"rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
-    commit = "749bfe1",  -- tag = "v3.8.0",
+    tag = "v3.8.1",
     config = function() require("user.plugin_settings.dap_debug") end,  -- dap-ui && dap 设置在同一文件中.
 
     after = "nvim-dap",
