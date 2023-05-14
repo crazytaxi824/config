@@ -534,7 +534,7 @@ return require('packer').startup(function(use)
   }
 
   use {"rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
-    commit = "749bfe1",  -- tag = "v3.8.0",
+    tag = "v3.8.1",
     config = function() require("user.plugin_settings.dap_debug") end,  -- dap-ui && dap 设置在同一文件中.
 
     after = "nvim-dap",
