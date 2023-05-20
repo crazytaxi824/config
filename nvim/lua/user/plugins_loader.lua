@@ -378,7 +378,7 @@ return require('packer').startup(function(use)
 
   --- indent line
   use {"lukas-reineke/indent-blankline.nvim",
-    tag = 'v2.20.4',  -- commit = "018bd04",
+    tag = 'v2.20.4',
     config = function() require("user.plugin_settings.indentline") end,  -- setup() 设置 use_treesitter = true
     requires = "nvim-treesitter/nvim-treesitter",
 
@@ -471,7 +471,7 @@ return require('packer').startup(function(use)
   --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
   --- 官方 LSP 引擎.
   use {"neovim/nvim-lspconfig",
-    commit = "5ba7ab7",
+    commit = "6f1d124",
     config = function() require("user.lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     requires = {
       "nvim-cmp",  -- provide content to nvim-cmp Completion. cmp_nvim_lsp.update_capabilities(capabilities)
