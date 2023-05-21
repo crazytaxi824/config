@@ -487,7 +487,7 @@ return require('packer').startup(function(use)
 
   --- null-ls 插件 formatters && linters, depends on "nvim-lua/plenary.nvim"
   use {"jose-elias-alvarez/null-ls.nvim",
-    commit = "71797bb",
+    commit = "77e53bc",
     config = function() require("user.lsp.null_ls") end,
     requires = {
       "nvim-lua/plenary.nvim",
@@ -603,7 +603,7 @@ return require('packer').startup(function(use)
   --- https://docs.github.com/en/copilot/getting-started-with-github-copilot?tool=neovim#prerequisites-3
   use {"github/copilot.vim",  -- NOTE: 目前不需要锁定版本.
     config = function()
-      --- NOTE: Neovim >= 0.6 and Node.js <= 17
+      --- VVI: Neovim >= 0.6 and Node.js <= 17
       --- 指定 nodejs 版本. 这里使用的是 `brew install node@16`
       vim.g.copilot_node_command = "/usr/local/opt/node@16/bin/node"
     end,
