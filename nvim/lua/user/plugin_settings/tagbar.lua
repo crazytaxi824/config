@@ -1,6 +1,6 @@
 vim.g.tagbar_autofocus = 1        -- 打开 tagbar 的时候光标自动跳到窗口
 vim.g.tagbar_sort = 0             -- tagbar 按照函数顺序排序, 使用 's' 切换 sort 方法.
-vim.g.tagbar_autoclose = 1        -- enter 选择后自动关闭 tagbar
+vim.g.tagbar_autoclose = 0        -- enter 选择后自动关闭 tagbar
 vim.g.tagbar_show_tag_count = 1   -- 显示 tag 数量, eg; functions (5)
 vim.g.tagbar_autoshowtag = 2      -- 打开 tagbar 时, 不要打开 folded tag, 例如: imports
 vim.g.tagbar_position = "vertical topleft"  -- tagbar 打开位置.
