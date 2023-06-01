@@ -453,8 +453,6 @@ vim.api.nvim_create_autocmd("FileType", {
 
 - LSP: Option to reuse_win for jump actions ([#18577](https://github.com/neovim/neovim/pull/18577))
 
-- `vim.lsp.buf.formatting_sync()` => `vim.lsp.buf.format({ async = false })`
-
 ```lua
 --- `:help vim.lsp.buf.format()`
 vim.lsp.buf.format({

@@ -38,7 +38,6 @@ local function lsp_format(bufnr)
 end
 
 --- 定义 `:Format` command. NOTE: 有些文件类型 (markdown, lua ...) 需要手动执行 Format 命令.
---vim.cmd [[command! Format lua vim.lsp.buf.formatting_sync()]]  -- 基本原理
 vim.api.nvim_create_user_command("Format", function() lsp_format() end, {bang=true, bar=true})
 
 --- BufWritePre 在写入文件之前执行 Format.
