@@ -453,7 +453,7 @@ return require('packer').startup(function(use)
 
   --- 自动括号, 同时依赖 treesitter && cmp
   use {"windwp/nvim-autopairs",
-    commit = "7747bba",
+    commit = "59df87a",
     config = function() require("user.plugin_settings.autopairs") end,
     requires = {
       "nvim-treesitter/nvim-treesitter",
