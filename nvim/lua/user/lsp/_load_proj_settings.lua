@@ -167,7 +167,7 @@ vim.api.nvim_create_user_command("LocalSettingsReload", function()
 end, { bang=true, bar=true, desc = 'reload "lsp" and "null-ls" after change ".nvim/settings.lua"' })
 
 --- command 显示 project local settings 示例.
-vim.api.nvim_create_user_command("LocalSettingsExample", function ()
+vim.api.nvim_create_user_command("LocalSettingsExample", function()
   --- NOTE: 主要保证 key 设置正确.
   local lsp_typ = require("user.lsp.lsp_config.setup_opts").local_lspconfig_key
   local s = require("user.lsp.null_ls.sources")
@@ -180,7 +180,6 @@ vim.api.nvim_create_user_command("LocalSettingsExample", function ()
   }
 
   vim.notify('".nvim/settings.lua" example:\n```lua\nreturn ' .. vim.inspect(example) .. '\n```', vim.log.levels.INFO)
-
 end, { bang=true, bar=true, desc = '".nvim/settings.lua" example.' })
 
 return M
