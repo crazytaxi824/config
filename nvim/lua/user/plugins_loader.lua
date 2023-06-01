@@ -559,7 +559,7 @@ return require('packer').startup(function(use)
 
   --- terminal
   use {"akinsho/toggleterm.nvim",
-    commit = "26f16d3",  -- tag = "v2.6.0",
+    tag = "v2.7.0",
     config = function() require("user.plugin_settings.toggleterm_terminal") end,
 
     opt = true,  -- 在 vim.schedule() 中 lazy load
