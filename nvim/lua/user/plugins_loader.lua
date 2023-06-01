@@ -441,7 +441,7 @@ return require('packer').startup(function(use)
 
   --- snippets content, 自定义 snippets 可以借鉴这个结构.
   use {"rafamadriz/friendly-snippets",
-    commit = "28ee666",
+    commit = "0dd6114",
     --- VVI: friendly-snippets 不能安装在 opt/ 文件夹下, 否则不生效.
   }
 
