@@ -25,13 +25,14 @@ return {
       "run", "--fix=false", "--fast",
 
       --- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/HELPERS.md#args
-      --- 不能使用 $FILENAME lint 单个文件. 会导致其他 package 中定义的 var 无法被 golangci 找到.
-      --- 如果缺省设置, 相当于 $DIRNAME.
+      --- NOTE: 不能使用 $FILENAME lint 单个文件. 会导致其他 package 中定义的 var 无法被 golangci 找到.
+      --- 如果缺省该设置则会 lint 整个 project.
       "$DIRNAME",
 
       --- Path prefix to add to output.
-      --- VVI: 必须要, 否则找不到文件. 默认是 pwd, 需要设置为 cwd 执行时的 path.
-      "--path-prefix", "$DIRNAME",
+      --- VVI: 默认情况下运行 golangci-lint run 时 output 中 filename 是一个相对 pwd/cwd 的相对文件路径.
+      --- null-ls 中已经处理了 cwd 和 golangci-lint output 中 filename 的 filepath 拼接, 所以这里不要自己设置 --path-prefix.
+      -- "--path-prefix", "$DIRNAME",
 
       "--print-issued-lines=false",
       "--out-format=json",
