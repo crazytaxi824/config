@@ -96,7 +96,7 @@ null_ls.setup({
                    -- NOTE: 这里相当于是 null-ls 的 "flags = {debounce_text_changes = xxx}" 设置.
                    -- 停止输入文字的时间超过该数值, 则向 null-ls 发送请求.
                    -- 如果 "update_in_insert = false", 则该设置应该不生效.
-  default_timeout = 5000,  -- lint 超时时间
+  default_timeout = 30000,  -- lint 超时时间, 30s. 默认为 5000, 5s.
   diagnostics_format = "#{m} [null-ls]",  -- 错误信息显示格式,
                                           -- #{m} - message, #{s} - source, #{c} - err_code
 
