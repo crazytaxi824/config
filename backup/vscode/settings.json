@@ -203,8 +203,9 @@
   // golangci-lint 设置
   "go.lintTool": "golangci-lint",
   "go.lintFlags": [
-    // "--fast", // without --fast can freeze your editor.
-    "--config=~/.config/lints/golangci.yml" // golangci-lint 全局配置文件地址
+    "--fast" // without --fast can freeze your editor.
+    // "--config=~/.config/lints/golangci.yml"   // golangci-lint 全局配置文件地址
+    // "--config=${workspaceRoot}/.golangci.yml" // golangci-lint 本地配置文件地址
   ],
   "go.lintOnSave": "package", // NOTE lint 整个 package，使用 file 检查可能有引用问题导致报错。
 
