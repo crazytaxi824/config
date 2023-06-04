@@ -11,6 +11,17 @@
 	# `$ git vtree` - 显示详细信息. 一共有三行: 第二行开头的空格数量是固定的, 因为都是 commit hash 宽度固定; 第三行给一个空格.
 	vtree = log --date=format:'%d-%b-%Y %H:%M:%S' --graph --all --format=format:'%C(42)%h%C(reset) -%C(207)%d%C(reset) %C(74)%ad%C(reset) %C(243)(%ar) - %C(173)%an%C(reset)%n''          %C(251)%s%C(reset)%n'' '
 
+[color "diff"]
+	meta = bold ul 251   # metainformation, eg: file name
+	# frag = yellow   # hunk header, eg: @@ -1,45 +1,50 @@
+	# func = yellow   # function in hunk header
+	# commit = yellow # commit header
+	context = 248  # unchanged text
+	old = 241 "#3F0000" # 241 52  # - removed lines, fg bg
+	new = 251 "#003000" # 252 22  # + added lines, fg bg
+	oldMoved = bold 213 "#3F0000" # line moved to a new place
+	newMoved = bold 81 "#003000"  # line moved to a new place
+
 # diff tool neovim
 [difftool "nvimdiff"]
 	cmd = nvim -d \"$LOCAL\" \"$REMOTE\"
