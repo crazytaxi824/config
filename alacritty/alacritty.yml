@@ -1,4 +1,5 @@
 # 官方文档: https://github.com/alacritty/alacritty/blob/master/alacritty.yml
+# multi Fonts issue: https://github.com/alacritty/alacritty/issues/957
 
 # Configuration for Alacritty, the GPU enhanced terminal emulator.
 
