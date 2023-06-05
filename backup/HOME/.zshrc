@@ -686,6 +686,7 @@ function backupConfigFiles() {
 		# git setting
 		# NOTE: '~/.gitconfig' is a private file, SHOULD NOT be uploaded to internet.
 		cp ~/.gitconfig_ext $backup_folder/HOME/
+		cp ~/.gitmessage $backup_folder/HOME/
 		cp ~/.gitignore_global $backup_folder/HOME/
 
 		# tmux

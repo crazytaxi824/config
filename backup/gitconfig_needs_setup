@@ -9,7 +9,7 @@
 	; email = foo@bar.com
 
 [commit]
-	template = ~/.stCommitMsg
+	template = ~/.gitmessage
 
 ; extend gitconfig file
 [include]
