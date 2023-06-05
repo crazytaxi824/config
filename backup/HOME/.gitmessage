@@ -1,11 +1,11 @@
+
+# feat(go): update to version ...
+
 # feat | fix | docs | test | (<Scope>): [<Subject>] #TASK_NAME
 #
 # <Body>
 #
 # In Progress | Closes: [#TASK_NAME](http://)
-
-# eg: 
-#   feat(go): highlight constructors, remove _ as `@constant`
 
 # Type:
 #   - build - Build related changes
@@ -20,10 +20,11 @@
 #   - style - Markup, white-space, formatting, missing semi-colons...
 #   - test - Adding missing tests
 
-# Scope: (feature | function ...)
-#   - main, build, util, parser, view, help ...
+# Scope (feature | function ...):
+#   - eg: main, build, util, parser, view, help ...
 
-# Subject: (Title) succinct description of the change. eg: "add style_preset tests"
+# Subject (Title):
+#   - succinct description of the change. eg: "add style_preset tests"
 
 # Body:
 #   - reason and motivation for the changes.
