@@ -274,25 +274,27 @@ require('user.utils.keymaps').set(tree_keymaps)
 nvim_tree.setup {
   auto_reload_on_write = true,  -- NOTE: `:w` 时刷新 nvim-tree.
 
-  --- NOTE: netrw: vim's builtin file explorer.
-  disable_netrw = false,  -- completely disable netrw. VVI: 最好不要设为 true.
+  --- VVI: Don't change disable_netrw, hijack_netrw, hijack_directories settings. --- {{{
+  --- `:help nvim-tree-netrw`, netrw: vim's builtin file explorer.
+  --disable_netrw = false,  -- completely disable netrw. VVI: 不要设为 true, 否则 netrw 的所有功能都无法使用.
 
   --- NOTE: 是否显示 netrw file-explorer 内容. `:e dir` 时, 默认会显示 netrw file-explorer 内容.
   ---   true  - `:e dir` 时, 当前 window 中不显示 netrw file-explorer 内容;
   ---   false - `:e dir` 时, 当前 window 中显示 netrw file-explorer 内容.
   --- 配合 hijack_directories 使用.
-  hijack_netrw = true,
+  --hijack_netrw = true,
 
   --- NOTE: hijacks new directory buffers when they are opened.
   --- 如果 `hijack_netrw` & `disable_netrw` 都是 false, 则 `hijack_directories` 的设置无效.
   ---   true  - `:e dir` 时, 在 nvim_tree 窗口打开 dir;
   ---   false - `:e dir` 时, 当前 window 中显示空文件.
-  hijack_directories = {
-    --- NOTE: 和 auto close the tab/vim when nvim-tree is the last window 一起使用时, 会导致 nvim 退出.
-    enable = true,
-    --- hijack_directories 时自动打开 nvim-tree open().
-    auto_open = true,
-  },
+  --hijack_directories = {
+  --  --- NOTE: 和 auto close the tab/vim when nvim-tree is the last window 一起使用时, 会导致 nvim 退出.
+  --  enable = true,
+  --  --- hijack_directories 时自动打开 nvim-tree open().
+  --  auto_open = true,
+  --},
+  -- -- }}}
 
   hijack_cursor = false,  -- keeps the cursor on the first letter of the filename
   hijack_unnamed_buffer_when_opening = false,  -- Opens in place of the unnamed buffer if it's empty. 默认 false.
@@ -323,12 +325,6 @@ nvim_tree.setup {
     number = false,          -- 显示 line number
     relativenumber = false,  -- 显示 relative number
     signcolumn = "yes",      -- VVI: 显示 signcolumn, "yes" | "auto" | "no"
-    --- NOTE: ":help nvim-tree-mappings-legacy" 已弃用. 使用 on_attach 设置 keymaps. -- {{{
-    -- mappings = {
-    --   custom_only = true,  -- NOTE: 只使用 custom key mapping
-    --   list = nt_buffer_keymaps,   -- user mappings go here
-    -- },
-    -- -- }}}
   },
 
   --- NOTE: on_attach 主要是设置 keymaps 的.
