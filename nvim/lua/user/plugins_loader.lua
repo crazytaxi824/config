@@ -295,7 +295,7 @@ return require('packer').startup(function(use)
 
   --- 通知功能
   use {"rcarriga/nvim-notify",
-    tag = "v3.11.0",  -- commit = "bdd647f",
+    tag = "v3.12.0",
     config = function() require("user.plugin_settings.nvim_notify") end,
   }
 
@@ -321,7 +321,7 @@ return require('packer').startup(function(use)
   --- By convention, if you want to write a query, use the `queries/` directory,
   --- but if you want to extend a query use the `after/queries/` directory.
   use {"nvim-treesitter/nvim-treesitter",
-    commit = "a6063b22",  -- NOTE: tag 更新太慢, commit 更新太快, 最好两周更新一次.
+    commit = "1b5a7334",  -- NOTE: tag 更新太慢, commit 更新太快, 最好两周更新一次.
     --run = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量安装 parser 容易卡死.
     config = function() require("user.plugin_settings.treesitter") end,
     requires = {
@@ -338,7 +338,7 @@ return require('packer').startup(function(use)
 
   --- 第一方 module 插件 ---
   use {"nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-    commit = "2182556",
+    commit = "e2ea376",
     config = function() require("user.plugin_settings.treesitter_ctx") end,
 
     after = "nvim-treesitter",
@@ -366,7 +366,7 @@ return require('packer').startup(function(use)
   --- 以下是使用了 treesitter 功能的插件. (这些插件也可以不使用 treesitter 的功能)
   --- 注释
   use {"numToStr/Comment.nvim",
-    commit = "e1fe531",
+    commit = "c804329",
     config = function() require("user.plugin_settings.comment") end,
     requires = {
       "nvim-treesitter/nvim-treesitter",
@@ -441,8 +441,8 @@ return require('packer').startup(function(use)
 
   --- snippets content, 自定义 snippets 可以借鉴这个结构.
   use {"rafamadriz/friendly-snippets",
-    commit = "0dd6114",
-    --- VVI: friendly-snippets 不能安装在 opt/ 文件夹下, 否则不生效.
+    commit = "9025d37",
+    --- NOTE: friendly-snippets 不能安装在 opt/ 文件夹下, 否则不生效. 该 plugin 不会对启动性能有影响, 可以直接加载.
   }
 
   --- cmdline completions, 不好用.
@@ -471,7 +471,7 @@ return require('packer').startup(function(use)
   --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
   --- 官方 LSP 引擎.
   use {"neovim/nvim-lspconfig",
-    commit = "9166622",
+    commit = "664de12",
     config = function() require("user.lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     requires = {
       "nvim-cmp",  -- provide content to nvim-cmp Completion. cmp_nvim_lsp.update_capabilities(capabilities)
@@ -501,7 +501,7 @@ return require('packer').startup(function(use)
   --- File Tree Display ----------------------------------------------------------------------------
   --use "kyazdani42/nvim-web-devicons"  -- 提供 icons 需要 patch 字体 (Nerd Fonts)
   use {"kyazdani42/nvim-tree.lua",      -- 类似 NerdTree
-    commit = "e2a4c9d",
+    commit = "f5d970d",
     config = function() require("user.plugin_settings.file_tree") end,
 
     --opt = true,  -- VVI: 不推荐使用 lazyload, 会导致 `$ nvim dir` 直接打开文件夹的时候出现问题.

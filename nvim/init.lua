@@ -40,6 +40,11 @@ __Debug_Neovim = {
   autocmd_events = false,  -- autocmd 中 `:help events` 运行情况.
 }
 
+--- for "nvim-tree.lua", `:help nvim-tree-netrw`
+--- keep using |netrw| without its file browser features.
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
 --- VVI: 在最开始加载 "lewis6991/impatient.nvim" 设置.
 --- DOC: https://github.com/lewis6991/impatient.nvim#setup
 --- it is recommended you add the following near the start of your 'init.vim'.
