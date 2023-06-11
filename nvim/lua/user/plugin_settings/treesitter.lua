@@ -30,7 +30,8 @@ ts_configs.setup {
   sync_install = false,
 
   --- VVI: 黑名单, ts 启动时不安装. list 中的 lang 在 :TSUpdate & :TSInstall 时安装速度太慢.
-  ignore_install = {"scala", "rust"},
+  --- ignore 的 lang 可以手动更新 `:TSUpdate rust`, 但是不能使用 `:TSUpdate` 自动更新.
+  ignore_install = {"d", "scala", "rust"},
 
   --- VVI: opt 加载 nvim-treesitter 时最好使用默认路径. 否则 run=":TSUpdate" 会在本 config 文件加载之前进行安装,
   --- 这时候 nvim-treesitter 并没有读取到 parser_install_dir 导致 parser 被安装在默认位置.
