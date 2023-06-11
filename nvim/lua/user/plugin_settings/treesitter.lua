@@ -15,10 +15,22 @@ end
 
 ts_configs.setup {
   --- supported langs, https://github.com/nvim-treesitter/nvim-treesitter#supported-languages
-  --ensure_installed = { "go", "lua", "javascript", "typescript", "tsx", "html", "css", "scss" ... },
-  ensure_installed = "all",  -- 白名单, "all" OR a list of languages
-  sync_install = false,  -- install languages synchronously (only applied to `ensure_installed`)
-  ignore_install = {},  -- 黑名单, 不安装.
+  --- 白名单, ts 启动时自动安装, "all" OR a list of languages.
+  ensure_installed = "all",
+  -- ensure_installed = {  --- {{{
+  --   "vim", "vimdoc", "query", "lua",  -- for neovim itself
+  --   "javascript", "typescript", "tsx", "html", "css", "scss",
+  --   "python", "go",
+  --   "markdown", "markdown_inline", "latex",
+  --   "toml", "yaml", "json", "jsonc",
+  -- },
+  -- -- }}}
+
+  --- install languages synchronously (only applied to `ensure_installed`)
+  sync_install = false,
+
+  --- VVI: 黑名单, ts 启动时不安装. list 中的 lang 在 :TSUpdate & :TSInstall 时安装速度太慢.
+  ignore_install = {"scala", "rust"},
 
   --- VVI: opt 加载 nvim-treesitter 时最好使用默认路径. 否则 run=":TSUpdate" 会在本 config 文件加载之前进行安装,
   --- 这时候 nvim-treesitter 并没有读取到 parser_install_dir 导致 parser 被安装在默认位置.
@@ -28,10 +40,23 @@ ts_configs.setup {
   --- `:TSModuleInfo` 可以查看 module 设置.
   --- treesitter 自带 modules 设置 -----------------------------------------------------------------
   highlight = {
-    enable = true,  -- VVI: 如果使用 lazy 方式启动 highlight, 需要设置为 false,
-                    -- 提前加载会严重拖慢 nvim 启动/文件打开速度.
+    --- VVI: 如果使用 lazy 方式启动 highlight, 需要设置为 false,
+    --- 提前加载会严重拖慢 nvim 启动/文件打开速度.
+    enable = true,
 
-    disable = { "vimdoc" },  -- list of language that will be disabled.
+    --- list of language that will be disabled.
+    disable = function(lang, buf)
+      local disabled_langs = {}  --- vimdoc 即 :help 文档.
+      if vim.tbl_contains(disabled_langs, lang) then
+        return true
+      end
+
+      local max_filesize = 300 * 1024 -- 300 KB
+      local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))  -- 获取 filesize
+      if ok and stats and stats.size > max_filesize then
+        return true
+      end
+    end,
 
     --- NOTE: `:help :syn-manual`. nvim-treesitter 会强制将 syntax 设置为 `syntax manual`.
     ---        This will enable the syntax highlighting, but not switch it on automatically.
@@ -154,7 +179,7 @@ end, {bang=true, bar=true})
 
 -- -- }}}
 
---- rainbow colors --------------------------------------------------------------------------------- {{{
+--- `nvim-ts-rainbow` color settings --------------------------------------------------------------- {{{
 --vim.cmd [[hi rainbowcol1 ctermfg=220]]  -- yellow
 --vim.cmd [[hi rainbowcol2 ctermfg=33]]   -- blue
 --vim.cmd [[hi rainbowcol3 ctermfg=81]]   -- cyan
@@ -162,6 +187,30 @@ end, {bang=true, bar=true})
 --vim.cmd [[hi rainbowcol5 ctermfg=42]]   -- green
 --vim.cmd [[hi rainbowcol6 ctermfg=167]]  -- red
 --vim.cmd [[hi rainbowcol7 ctermfg=248]]  -- grey
+-- -- }}}
+
+--- prompt before install missing parser for languages --------------------------------------------- {{{
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = {"*"},
+--   callback = function(params)
+--     --- get filetype from bufnr
+--     local ft = vim.bo[params.buf].filetype
+--
+--     --- get lang from filetype
+--     local lang = vim.treesitter.language.get_lang(ft)
+--     if not lang then
+--       --- treesitter doesn't have a lang for specified filetype.
+--       return
+--     end
+--
+--     --- Checks if treesitter parser for language is installed.
+--     local ok, err_msg = pcall(vim.treesitter.language.add, lang)
+--     if not ok then
+--       --- treesitter lang is not installed.
+--       Notify("run `:TSInstall " .. lang .. "` to install parser", "INFO", {title = "treesitter install", timeout = false})
+--     end
+--   end
+-- })
 -- -- }}}
 
 --- HACK: autocmd lazy highlight, setup() 中的 highlight module 需要设为 false --------------------- {{{
@@ -214,6 +263,3 @@ end, {bang=true, bar=true})
 --   end
 -- })
 -- -- }}}
-
-
-
