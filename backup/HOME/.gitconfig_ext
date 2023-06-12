@@ -1,6 +1,10 @@
 # This is the config file, and a '#' or ';' character indicates a comment.
 # ; 或者 # 都表示注释.
 
+# change `git init` generated branch name. Default branch name is "master".
+[init]
+	defaultBranch = main
+
 # 自定义 command, `git tree`, `git vtree`
 [alias]
 	# https://stackoverflow.com/questions/1057564/pretty-git-branch-graphs
@@ -24,26 +28,34 @@
 	newMoved = bold 81 "#003000"  # line moved to a new place
 
 # diff tool neovim
-[difftool "nvimdiff"]
-	cmd = nvim -d \"$LOCAL\" \"$REMOTE\"
-[difftool]
-	prompt = true
 [diff]
-	# 可以使用 git difftool --tool-help 查看可以使用的 tools.
-	# 如果这里缺省设置, 则在执行 `git difftool` 命令时默认会询问是否使用 `vimdiff`.
+	# 可以使用 git difftool --tool-help 查看可以使用的 tools. 有 vimdiff opendiff nvimdiff ...
+	# 如果 [diff] 缺省设置, 则在执行 `git difftool` 命令时默认会询问是否使用 `vimdiff`.
 	# 也可以使用 `git difftool --tool=nvimdiff master..feature/dev` 来指定 difftool.
+	# NOTE: 使用自定义 tool 时需要和自定义名字 [difftool "nvimdiff"] 相同.
 	tool = nvimdiff
 	colorMoved = default
+[difftool]
+	# prompt 主要是询问需要 diff 的文件, 而不是询问 difftool.
+	# eg: git difftool master..develop 时多个文件有不同, 则 prompt 会询问每个文件是否需要打开.
+	prompt = true
+[difftool "nvimdiff"]
+	cmd = nvim -d \"$LOCAL\" \"$REMOTE\"
 
 # merge tool neovim
-[mergetool "neovim"]
-	cmd = nvim -d \"$LOCAL\" \"$MERGED\" \"$BASE\" \"$REMOTE\" -c \"wincmd w\" -c \"wincmd J\"
-[mergetool]
-	prompt = true
 [merge]
-	# merge tool 必须设置否则无法使用 git mergetool <...> 命令.
+	# NOTE: merge tool 必须设置否则无法使用 git mergetool <...> 命令.
+	# 可以使用 git mergetool --tool-help 查看可以使用的 tools.
+	# 也可以使用 `git mergetool --tool=neovim` 来指定 mergetool.
+	# NOTE: 使用自定义 tool 时需要和自定义名字 [mergetool "neovim"] 相同.
+	# git merge 使用方法: `git checkout main`, `git merge dev`, Conflict: `git mergetool`
 	tool = neovim
 	conflictstyle = diff3
+[mergetool]
+	# prompt 主要是询问需要 merge 的文件, 而不是询问 mergetool.
+	prompt = true
+[mergetool "neovim"]
+	cmd = nvim -d \"$LOCAL\" \"$MERGED\" \"$BASE\" \"$REMOTE\" -c \"wincmd w\" -c \"wincmd J\"
 
 # delta diff tool
 # https://dandavison.github.io/delta/configuration.html
