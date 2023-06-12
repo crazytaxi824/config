@@ -274,16 +274,5 @@ for hl_group, hl_val in pairs(highlights) do
   vim.api.nvim_set_hl(0, hl_group, vals)
 end
 
---- diff mode 模式下 CursorLine 样式 --- {{{
--- vim.cmd([[
---   if &diff
---     hi CursorLine cterm=underline
---   endif
--- ]])
--- -- }}}
-if vim.wo.diff then
-  vim.api.nvim_set_hl(0, 'CursorLine', {cterm = {underline = true}})
-end
-
 
 
