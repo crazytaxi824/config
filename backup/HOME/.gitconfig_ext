@@ -56,7 +56,7 @@
 	# prompt 主要是询问需要 merge 的文件, 而不是询问 mergetool.
 	prompt = true
 # [mergetool "foo"]
-	# cmd = nvim -d \"$LOCAL\" \"$MERGED\" \"$BASE\" \"$REMOTE\" -c \"wincmd w\" -c \"wincmd J\"
+# 	cmd = nvim -d \"$LOCAL\" \"$MERGED\" \"$BASE\" \"$REMOTE\" -c \"wincmd w\" -c \"wincmd J\"
 
 # delta diff tool
 # https://dandavison.github.io/delta/configuration.html
