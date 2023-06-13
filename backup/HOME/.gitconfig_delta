@@ -38,10 +38,10 @@
 
 	# syntax 表示 text fg 使用 syntax-theme highlight.
 	# 如果 syntax-theme 设置为 none, 则会使用 white/normal 作为 fg 颜色.
-	line-numbers-minus-style = "#D75F5F"  # 167
-	line-numbers-plus-style  = "#008700"  # 28
 	minus-style = 241 "#300000"           # 241 52
-	plus-style  = 251 "#001C00"           # 251 22
 	minus-emph-style = 246 "#803030"      # 246 167
-	plus-emph-style  = 255 "#005A00"      # 255 28
+	line-numbers-minus-style = "#D75F5F"  # 167
+	plus-style  = green                   # 251 "#001C00" # 251 22
+	plus-emph-style  = black green        # 255 "#005A00" # 255 28
+	line-numbers-plus-style  = "#008700"  # 28
 

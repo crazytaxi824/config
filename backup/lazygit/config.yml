@@ -43,12 +43,17 @@ git:
     # --no-gitconfig: Do not read any settings from git config.
     # --line-numbers: Display line numbers.
     # --syntax-theme: diff text block syntax highlight. `delta --list-syntax-themes`
-    # syntax color:	# syntax 表示 text fg 使用 syntax-theme highlight. 如果 syntax-theme=none, 则会使用 white/normal 作为 fg 颜色.
     pager: delta --dark --line-numbers --paging=never --syntax-theme=none
       \--file-style='42' --file-decoration-style='42 ol'
       \--line-numbers-minus-style='#D75F5F' --minus-style='241 "#300000"' --minus-emph-style='246 "#803030"'
-      \--line-numbers-plus-style='#008700' --plus-style='251 "#001C00"' --plus-emph-style='255 "#005A00"'
-    # 256-color - 没有 gui 的 linux server 环境用
+      \--line-numbers-plus-style='#008700' --plus-style='green' --plus-emph-style='black green'
+    ### syntax-theme 开启
+    # syntax color:	# syntax 表示 text fg 使用 syntax-theme highlight. 如果 syntax-theme=none, 则会使用 white/normal 作为 fg 颜色.
+    # pager: delta --dark --line-numbers --paging=never --syntax-theme='Visual Studio Dark+'
+    #   \--file-style='42' --file-decoration-style='42 ol'
+    #   \--line-numbers-minus-style='#D75F5F' --minus-style='241 "#300000"' --minus-emph-style='246 "#803030"'
+    #   \--line-numbers-plus-style='#008700' --plus-style='syntax "#001C00"' --plus-emph-style='255 "#005A00"'
+    ### 256-color - 没有 gui 的 linux server 环境用
     # pager: delta --dark --line-numbers --paging=never --syntax-theme=none
     #   \--file-style='42' --file-decoration-style='42 ol'
     #   \--line-numbers-minus-style='167' --minus-style='241 52' --minus-emph-style='246 167'

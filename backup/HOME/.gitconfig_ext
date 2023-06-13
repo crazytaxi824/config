@@ -21,7 +21,7 @@
 	# frag = black yellow   # hunk header, eg: @@ -1,45 +1,50 @@
 	# func = black yellow   # function in hunk header
 	# commit = black yellow # commit header
-	# context = 251         # unchanged text
+	context = 248         # unchanged text
 	old = 241 "#300000" # 241 52  # - removed lines, fg bg, 默认为 red
 	new = green         # 252 22  # + added lines, fg bg, 默认为 green
 	oldMoved = bold 213 # line moved to a new place
