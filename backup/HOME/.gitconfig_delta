@@ -1,0 +1,47 @@
+# delta diff tool
+# https://dandavison.github.io/delta/configuration.html
+[core]
+	pager = delta
+
+[interactive]
+	diffFilter = delta --color-only
+
+[merge]
+	conflictstyle = diff3
+
+[diff]
+	colorMoved = default
+
+[delta]
+	navigate = true    # use n and N to move between diff sections
+	light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
+	line-numbers = true  # Display line numbers.
+	# delta --no-gitconfig BUG: https://github.com/dandavison/delta/issues/1271
+	#side-by-side = true  # Display diffs in side-by-side.
+	features = decorations  # 读取下面的 [delta "decorations"] 设置.
+
+[delta "decorations"]
+	# The width of underline/overline decorations.
+	# variable: to the end of the text only
+	# -2: screen_size - 2
+	# omit: full terminal width
+	#width = variable
+
+	# syntax highlight. cmd: `delta --list-syntax-themes`
+	# none: 表示不使用 syntax highlight.
+	syntax-theme = none
+
+	# filename decoration color and overline
+	file-decoration-style = 42 ol
+	# filename color
+	file-style = 42
+
+	# syntax 表示 text fg 使用 syntax-theme highlight.
+	# 如果 syntax-theme 设置为 none, 则会使用 white/normal 作为 fg 颜色.
+	line-numbers-minus-style = "#D75F5F"  # 167
+	line-numbers-plus-style  = "#008700"  # 28
+	minus-style = 241 "#300000"           # 241 52
+	plus-style  = 251 "#001C00"           # 251 22
+	minus-emph-style = 246 "#803030"      # 246 167
+	plus-emph-style  = 255 "#005A00"      # 255 28
+

@@ -1,17 +1,21 @@
-; This file should be '~/.gitconfig'
+# This file should be '~/.gitconfig'
 [core]
+	# Git will globally ignore files that are defined in this file.
 	excludesfile = ~/.gitignore_global
-	quotepath = off  ; cjk chars shows unicode, eg: cn, jp, kr ...
+	# If true, then CJK chars will be displayed as Unicode. eg: cn, jp, kr ...
+	quotepath = off
 
-; NOTE: Only needs to setup [user] settings. check Password-Manager APP.
+# NOTE: Only needs to setup [user] settings. check Password-Manager APP.
 [user]
-	; name = foo
-	; email = foo@bar.com
+	# name = foo
+	# email = foo@bar.com
 
 [commit]
 	template = ~/.gitmessage
 
-; extend gitconfig file
+# extend gitconfig file
+# No error will occur if any or all of these files do not exist.
 [include]
 	path = ~/.gitconfig_ext
+	path = ~/.gitconfig_delta
 

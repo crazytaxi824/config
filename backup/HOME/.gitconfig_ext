@@ -21,11 +21,11 @@
 	# frag = black yellow   # hunk header, eg: @@ -1,45 +1,50 @@
 	# func = black yellow   # function in hunk header
 	# commit = black yellow # commit header
-	context = 248  # unchanged text
-	old = 241 "#3F0000" # 241 52  # - removed lines, fg bg
-	new = 251 "#003000" # 252 22  # + added lines, fg bg
-	oldMoved = bold 213 "#3F0000" # line moved to a new place
-	newMoved = bold 81 "#003000"  # line moved to a new place
+	# context = 251         # unchanged text
+	old = 241 "#300000" # 241 52  # - removed lines, fg bg, 默认为 red
+	new = green         # 252 22  # + added lines, fg bg, 默认为 green
+	oldMoved = bold 213 # line moved to a new place
+	newMoved = bold 81  # line moved to a new place
 
 # diff tool neovim
 [diff]
@@ -34,6 +34,7 @@
 	# 也可以使用 `git difftool --tool=nvimdiff master..feature/dev` 来指定 difftool.
 	# NOTE: 使用自定义 tool 时需要和自定义名字 [difftool "foo"] 相同.
 	tool = nvimdiff
+	# no | default(=zebra) | plain | blocks | zebra | dimmed-zebra
 	colorMoved = default
 [difftool]
 	# prompt 主要是询问需要 diff 的文件, 而不是询问 difftool.
@@ -57,19 +58,3 @@
 	prompt = true
 # [mergetool "foo"]
 # 	cmd = nvim -d \"$LOCAL\" \"$MERGED\" \"$BASE\" \"$REMOTE\" -c \"wincmd w\" -c \"wincmd J\"
-
-# delta diff tool
-# https://dandavison.github.io/delta/configuration.html
-#[core]
-#	pager = delta
-#[interactive]
-#	diffFilter = delta --color-only
-#[delta]
-#	navigate = true    # use n and N to move between diff sections
-#	light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
-#	side-by-side = true
-#	width = variable
-#	features = decorations  # 读取下面的 [delta "decorations"] 设置.
-#[delta "decorations"]
-#	file-decoration-style="yellow ol"
-#	file-style="yellow"
