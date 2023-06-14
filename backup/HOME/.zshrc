@@ -319,7 +319,7 @@ export FZF_DEFAULT_COMMAND
 # fzf 样式设置
 FZF_DEFAULT_OPTS="--height=80% --ansi --multi --layout=reverse --border --scrollbar='▌▐'"   # 可以添加 --no-mouse 禁用鼠标操作.
 # fzf 多选时, <TAB> 选中的项会出现 mark.
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --marker='✔' --pointer='▸'"
+FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --marker='✔' --pointer='▸' --info='inline-right'"
 # fzf 颜色主题 - dark; hl,hl+ 搜索匹配字符颜色; border 边框颜色; marker 颜色; pointer > 颜色; gutter 使用默认颜色.
 #FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --color='preview-scrollbar:240,preview-border:240'"  # 可以单独设置 preview
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --color='dark,hl:191:reverse,hl+:191:reverse,fg+:underline,bg+:238:bold,border:240'"
