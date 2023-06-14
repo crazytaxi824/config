@@ -72,7 +72,7 @@ local function trim_prefix_blankline(filepath, regexp)
   --   content = f:read("l") -- 重新赋值, 否则无限循环
   -- end
   -- f:close()
-  -- --print(vim.inspect(new_content))
+  -- --vim.print(new_content)
   -- -- }}}
   --- Read File
   local content_list = vim.fn.readfile(filepath)

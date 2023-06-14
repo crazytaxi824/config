@@ -96,7 +96,7 @@
 ---    而 vim.o 没办法做到.
 ---    `:lua print(vim.o.readonly)` = bool
 ---    `:lua print(vim.opt.readonly)` = table
----    `:lua print(vim.inspect(vim.opt.readonly))` print table
+---    `:lua vim.print(vim.opt.readonly)` print table
 ---
 --- vim lua 自定义变量
 ---    vim.g.foo = g:foo   -- global-scoped variables

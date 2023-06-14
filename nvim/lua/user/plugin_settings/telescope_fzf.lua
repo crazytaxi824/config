@@ -17,7 +17,7 @@ local my_action = transform_mod({
     --- 中 send_selected_to_qf 函数设置.
     local picker = action_state.get_current_picker(prompt_bufnr)
     local selected_items = picker:get_multi_selection()
-    -- print(vim.inspect(selected_items), #selected_items)
+    -- vim.print(selected_items, #selected_items)
 
     if #selected_items == 0 then
       actions.select_default(prompt_bufnr)

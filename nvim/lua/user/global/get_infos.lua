@@ -34,7 +34,7 @@ function Get_win_info()
     table.insert(infos, info)
   end
 
-  print(vim.inspect(infos))
+  vim.print(infos)
 end
 
 --- 获取 cursor treesitter node --------------------------------------------------------------------

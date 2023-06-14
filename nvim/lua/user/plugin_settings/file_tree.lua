@@ -51,7 +51,7 @@ local diagnostics_icons = {
 --- git: Discard file changes --- {{{
 local function git_discard_file_changes()
   local node = nt_api.tree.get_node_under_cursor()
-  --print(node.name, node.absolute_path, vim.inspect(node.git_status), node.type)
+  --vim.print(node.name, node.absolute_path, node.git_status, node.type)
 
   --- READMD: node.name: filename, not prefix path --- {{{
   --- node.absolute_path
@@ -636,19 +636,19 @@ require('user.utils.keymaps').set(gitsigns_keymaps, {
 --- FileCreated 只在创建 file 时会触发.
 -- local Event = nt_api.events.Event
 -- nt_api.events.subscribe(Event.FolderCreated, function(data)
---   print('folder add:', vim.inspect(data))
+--   vim.print('folder add:', data)
 -- end)
 --
 -- nt_api.events.subscribe(Event.FolderRemoved, function(data)
---   print('folder remove:', vim.inspect(data))
+--   vim.print('folder remove:', data)
 -- end)
 --
 -- nt_api.events.subscribe(Event.FileCreated, function(data)
---   print('file add:', vim.inspect(data))
+--   vim.print('file add:', data)
 -- end)
 --
 -- nt_api.events.subscribe(Event.FileRemoved, function(data)
---   print('file remove:', vim.inspect(data))
+--   vim.print('file remove:', data)
 -- end)
 
 -- -- }}}
