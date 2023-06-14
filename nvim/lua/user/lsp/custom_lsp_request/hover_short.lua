@@ -127,7 +127,7 @@ local function hover_short_handler(err, result, req, config)
     end
   end
 
-  --print(vim.inspect(markdown_lines))  -- DEBUG
+  --vim.print(markdown_lines)  -- DEBUG
 
   if vim.tbl_isempty(markdown_lines) then
     vim.notify('No information available')

@@ -13,7 +13,7 @@ local function fn_key_rename()
     fn_keys['<F' .. i+36 .. '>'] = '<C-S-F' .. i .. '>'
   end
 
-  -- print(vim.inspect(fn_keys))
+  -- vim.print(fn_keys)
   return fn_keys
 end
 -- -- }}}

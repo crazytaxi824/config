@@ -24,7 +24,7 @@ vim.api.nvim_create_user_command("GetLspClientsInfo",
       clients = vim.tbl_values(vim.lsp.get_active_clients())
     end
 
-    print(vim.inspect(clients))
+    vim.print(clients)
     -- for _, c in ipairs(clients) do
     --   print(c.name, c.supports_method('textDocument/documentHighlight'))
     -- end

@@ -636,7 +636,7 @@ local function remove_bufnr_from_custom_sort(bufnr)
 
   --- 手动改变 sort 顺序, 下次 bufferline 刷新的时候会根据该顺序显示.
   state.custom_sort = list
-  -- print(vim.inspect(state.custom_sort))
+  -- vim.print(state.custom_sort)
 end
 
 --- BufDelete 触发条件: bdelete, bwipeout
@@ -651,8 +651,8 @@ vim.api.nvim_create_autocmd("BufDelete", {
 
 --- DEBUG: 用, 查看 ordinal, bufnr, list index, 之间的关系 ----------------------------------------- {{{
 -- function Bufferline_info(bufferline_index)
---   -- print("state.components:", vim.inspect(state.components))
---   print("state.custom_sort (bufnrs order):", vim.inspect(state.custom_sort))
+--   -- vim.print("state.components:", state.components)
+--   vim.print("state.custom_sort (bufnrs order):", state.custom_sort)
 --   if bufferline_index then
 --     bufferline.exec(bufferline_index, function(index_info, visible_infos)
 --       --- 如果 index 不存在, 则 callback funciton 不执行.

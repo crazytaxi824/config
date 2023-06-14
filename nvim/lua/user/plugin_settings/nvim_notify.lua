@@ -55,7 +55,7 @@ notify.setup({
 
 --- 使用方法:
 -- require('telescope').extensions.notify.notify(<opts>)  -- 整合到 telescope
--- print(vim.inspect(require("notify").history()))  -- `:Notifications` 查看 msg 列表
+-- vim.print(require("notify").history())              -- `:Notifications` 查看 msg 列表
 -- require("notify")("omg", "DEBUG", {title = "TTT"})  -- send notify message
 -- require("notify")("omg", 0, {title = "TTT"})        -- send notify message
 

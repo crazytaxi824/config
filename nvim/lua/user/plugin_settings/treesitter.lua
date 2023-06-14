@@ -16,6 +16,7 @@ end
 ts_configs.setup {
   --- supported langs, https://github.com/nvim-treesitter/nvim-treesitter#supported-languages
   --- 白名单, ts 启动时自动安装, "all" OR a list of languages.
+  --- NOTE: 推荐使用黑名单 (ignore_install), 因为某些语言有多个 parsers, 使用白名单时可能导致遗漏.
   ensure_installed = "all",
   -- ensure_installed = {  --- {{{
   --   "vim", "vimdoc", "query", "lua",  -- for neovim itself
@@ -26,12 +27,12 @@ ts_configs.setup {
   -- },
   -- -- }}}
 
+  --- 黑名单, ts 启动时不安装. list 中的 lang 在 :TSUpdate & :TSInstall 时安装速度太慢.
+  --- ignore 的 lang 可以手动更新 `:TSUpdate rust`, 但是不能使用 `:TSUpdate` 自动更新.
+  ignore_install = {"d", "scala", "rust"},  -- compile too slow.
+
   --- install languages synchronously (only applied to `ensure_installed`)
   sync_install = false,
-
-  --- VVI: 黑名单, ts 启动时不安装. list 中的 lang 在 :TSUpdate & :TSInstall 时安装速度太慢.
-  --- ignore 的 lang 可以手动更新 `:TSUpdate rust`, 但是不能使用 `:TSUpdate` 自动更新.
-  ignore_install = {"d", "scala", "rust"},
 
   --- VVI: opt 加载 nvim-treesitter 时最好使用默认路径. 否则 run=":TSUpdate" 会在本 config 文件加载之前进行安装,
   --- 这时候 nvim-treesitter 并没有读取到 parser_install_dir 导致 parser 被安装在默认位置.
@@ -191,27 +192,28 @@ end, {bang=true, bar=true})
 -- -- }}}
 
 --- prompt before install missing parser for languages --------------------------------------------- {{{
--- vim.api.nvim_create_autocmd("FileType", {
---   pattern = {"*"},
---   callback = function(params)
---     --- get filetype from bufnr
---     local ft = vim.bo[params.buf].filetype
---
---     --- get lang from filetype
---     local lang = vim.treesitter.language.get_lang(ft)
---     if not lang then
---       --- treesitter doesn't have a lang for specified filetype.
---       return
---     end
---
---     --- Checks if treesitter parser for language is installed.
---     local ok, err_msg = pcall(vim.treesitter.language.add, lang)
---     if not ok then
---       --- treesitter lang is not installed.
---       Notify("run `:TSInstall " .. lang .. "` to install parser", "INFO", {title = "treesitter install", timeout = false})
---     end
---   end
--- })
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = {"*"},
+  callback = function(params)
+    --- get filetype from bufnr
+    local ft = vim.bo[params.buf].filetype
+
+    --- get lang from filetype
+    local lang = vim.treesitter.language.get_lang(ft)
+    if not lang then
+      --- treesitter doesn't have a lang for specified filetype.
+      return
+    end
+
+    --- Checks if treesitter parser for language is installed.
+    local ok, err_msg = pcall(vim.treesitter.language.add, lang)
+    if not ok then
+      --- treesitter lang is not installed.
+      Notify("run `:TSInstall " .. lang .. "` to install parser", "INFO", {title = "treesitter install", timeout = false})
+    end
+  end,
+  desc = "Check treesitter parser for filetypes"
+})
 -- -- }}}
 
 --- HACK: autocmd lazy highlight, setup() 中的 highlight module 需要设为 false --------------------- {{{
@@ -261,6 +263,7 @@ end, {bang=true, bar=true})
 --     --vim.defer_fn(function()
 --     --  enable_module('highlight', params.buf)
 --     --end, 200)  -- delay (N)ms, then run callback()
---   end
+--   end,
+--   desc = "treesitter highlight after FileType event",
 -- })
 -- -- }}}

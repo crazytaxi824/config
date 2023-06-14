@@ -142,7 +142,7 @@ lua 中有一个 `_G` 全局变量. 自定义的所有全局变量和函数都�
 
 ### nvim 常用函数
 
-- `vim.inspect(table)` -- 打印 table 中的内容, 类似 fmt.Printf("%+v", struct)
+- `vim.inspect(table)` & `vim.print(table)` -- 打印 table 中的内容, 类似 fmt.Printf("%+v", struct)
 
 - `vim.list_extend({list1}, {list2})` -- 合并两个 list-like table
 
@@ -394,7 +394,7 @@ function Watch_file(fname)
     end
 
     --- Do work...
-    print(changed_fname, 'on_change', vim.inspect(status))
+    vim.print(changed_fname, 'on_change', status)
 
     vim.api.nvim_command('checktime')
 
@@ -433,7 +433,8 @@ vim.api.nvim_create_autocmd("FileType", {
   callback = function(params)
     local bufinfo = vim.fn.getbufinfo(params.buf)[1]
     print('bufnr():', vim.fn.bufnr(), '| params.buf:', params.buf, '| bufname():', vim.fn.bufname(), "| getbufinfo(params.buf):", bufinfo.bufnr, bufinfo.name)
-  end
+  end,
+  desc = "Description for this autocmd",
 })
 ```
 

@@ -24,7 +24,7 @@
 --   opt = boolean,               -- Manually marks a plugin as optional.
 --                                -- VVI: 可以通过 `:PackerLoad foo bar` OR require('packer').loader('foo bar') 手动加载
 --                                -- packer.nvim 提供一个全局变量 packer_plugins 在 plugin/packer_compiled.lua 中.
---                                -- print(vim.inspect(packer_plugins)) 可以用来判断 plugins 是否安装, 是否加载 (loaded=true)
+--                                -- vim.print(packer_plugins) 可以用来判断 plugins 是否安装, 是否加载 (loaded=true)
 --
 --   bufread = boolean,           -- Manually specifying if a plugin needs BufRead after being loaded
 --
