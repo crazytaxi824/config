@@ -507,7 +507,8 @@ vim.api.nvim_create_autocmd('VimEnter', {
       --- bwipeout directory buffer. 必须放在 tree.open() 之后.
       vim.cmd("bwipeout " .. params.file)
     end
-  end
+  end,
+  desc = "when `:e dir` opens nvim-tree",
 })
 
 --- refresh nvim-tree when enter/delete a buffer.

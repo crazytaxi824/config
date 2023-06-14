@@ -98,7 +98,7 @@ end
 -- end
 --
 -- --- VVI: 如果使用 lazyload vim.schedule() 方式加载 lspconfig[xxx].setup() 的情况下,
--- --- 启动 nvim 后需要手动 ":LspStart" 所有 lsp. 因为 lspconfig[xxx].setup() 在第一个加载的 buffer 
+-- --- 启动 nvim 后需要手动 ":LspStart" 所有 lsp. 因为 lspconfig[xxx].setup() 在第一个加载的 buffer
 -- --- 后面启动, 所以第一个 buffer 无法 attach lsp. ":LspStart" 可以让 lsp attach 该 buffer.
 -- --- 如果 lsp 还没有被 setup 则不会启动. 所以这里可以放心 LspStart 所有 lsp.
 -- vim.cmd('LspStart ' .. table.concat(vim.tbl_keys(lsp_servers_map), " "))
@@ -132,21 +132,22 @@ for lsp_svr, v in pairs(lsp_servers_map) do
   })
 end
 
---- VVI: detach 之前的 lsp, 这里是为了防止 `set filetype=xxx` 时, 原 lsp 仍然 attached 到该 buffer 上.
---- lsp on_attach() 在 FileType event 之后运行.
+--- `set filetype=xxx` 时 detach previous LSP.
 vim.api.nvim_create_autocmd("FileType", {
   pattern = {"*"},
   callback = function(params)
     local lsp_clients = vim.lsp.get_active_clients({ bufnr = params.buf })
     for _, c in ipairs(lsp_clients) do
-      --- set filetype 后, detach 所有不匹配该 buffer 新 filetype 的 lsp client.
-      if c.name ~= 'null-ls'  -- NOTE: 排除 null-ls 是因为 gitsigns 等工具是不分 filetype 的.
+      --- `set filetype` 后, detach 所有不匹配该 buffer 新 filetype 的 lsp client.
+      --- NOTE: 排除 null-ls 是因为 gitsigns 等工具是不分 filetype 的.
+      if c.name ~= 'null-ls'
         and not vim.tbl_contains(c.config.filetypes, vim.bo[params.buf].filetype)
       then
         vim.lsp.buf_detach_client(params.buf, c.id)
       end
     end
-  end
+  end,
+  desc = "detach previous LSP when `set filetype=xxx`",
 })
 
 

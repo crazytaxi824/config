@@ -235,7 +235,8 @@ vim.api.nvim_create_autocmd('FileType', {
     vim.bo[params.buf].expandtab = true
     vim.bo[params.buf].tabstop = tab_w
     vim.bo[params.buf].shiftwidth = tab_w
-  end
+  end,
+  desc = "set expandtab, tabstop, shiftwidth for js,ts,html ...",
 })
 
 --- python 默认是 4 个 space indent. 所以这里不设置 shiftwidth.
@@ -244,7 +245,8 @@ vim.api.nvim_create_autocmd('FileType', {
   callback = function(params)
     vim.bo[params.buf].expandtab = true
     vim.bo[params.buf].textwidth = 79
-  end
+  end,
+  desc = "set expandtab, tabstop, shiftwidth for python",
 })
 
 --- pandoc / markdown 需要使用到 \t 和 space, 所以这里不设置 expandtab.
@@ -563,7 +565,8 @@ end, {bang=true, bar=true})
 --       buffer=params.buf,
 --       desc='table of contents',
 --     })
---   end
+--   end,
+--   desc = "set keymap for `gO` when g:no_plugin_maps disabled.",
 -- })
 -- -- }}}
 

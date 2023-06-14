@@ -263,6 +263,7 @@ vim.api.nvim_create_autocmd("FileType", {
 --     --vim.defer_fn(function()
 --     --  enable_module('highlight', params.buf)
 --     --end, 200)  -- delay (N)ms, then run callback()
---   end
+--   end,
+--   desc = "treesitter highlight after FileType event",
 -- })
 -- -- }}}

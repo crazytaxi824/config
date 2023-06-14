@@ -118,7 +118,9 @@ null_ls.setup({
   end,
 
   --- null-ls 退出的时候触发.
-  --on_exit = function() ... end,
+  on_exit = function()
+    Notify("Null-ls on_exit() event.", "WARN", {title = "Null-ls"})
+  end,
 })
 
 
