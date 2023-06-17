@@ -284,7 +284,7 @@ return require('packer').startup(function(use)
   --- Useful lua functions used by lots of plugins
   --- NOTE: plenary.nvim 合并了 popup.nvim
   use {"nvim-lua/plenary.nvim",
-    commit = "499e074",
+    commit = "36aaceb",
   }
 
   --- Must install ---------------------------------------------------------------------------------
