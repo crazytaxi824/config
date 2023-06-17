@@ -429,7 +429,7 @@ return require('packer').startup(function(use)
 
   --- snippet engine, for "cmp_luasnip", 每次打开文件都会有一个 [Scratch] buffer.
   use {"L3MON4D3/LuaSnip",
-    commit = "a13af80",
+    commit = "4964cd1",
     run = "make install_jsregexp",  -- https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#transformations
     config = function() require("user.plugin_settings.luasnip_snippest") end,
     requires = "rafamadriz/friendly-snippets",  -- snippets content
@@ -442,7 +442,7 @@ return require('packer').startup(function(use)
 
   --- snippets content, 自定义 snippets 可以借鉴这个结构.
   use {"rafamadriz/friendly-snippets",
-    commit = "b71d1dd",
+    commit = "70b727d",
     --- NOTE: friendly-snippets 不能安装在 opt/ 文件夹下, 否则不生效. 该 plugin 不会对启动性能有影响, 可以直接加载.
   }
 
