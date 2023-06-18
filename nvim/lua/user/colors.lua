@@ -171,7 +171,7 @@ local highlights = {
   --- 其他常用颜色 ---------------------------------------------------------------------------------
   Title = {ctermfg = Color.title_green, cterm = {'bold'}}, -- markdown title
   Conceal = {ctermfg = 246}, -- `set conceallevel?`, markdown list, code block ...
-  Label = {ctermfg = Color.cyan}, -- json key color
+  Label = {ctermfg = Color.cyan}, -- json: key color; markdown: code block language(```go)
 
   SpellBad = {ctermfg = Color.error_red, ctermbg = Color.dark_red, bold = true, underline = true},
   SpellCap = {ctermfg = Color.warn_orange, ctermbg = Color.dark_red, bold = true, underline = true},
@@ -225,9 +225,10 @@ local highlights = {
 
   --- NOTE: 单独为 markdown / markdown_inline 设置颜色.
   ['@punctuation.special.markdown'] = { link = "Conceal" }, -- "#" - title; "*" - list
-  ['@punctuation.delimiter.markdown'] = { cterm={ "bold" } }, -- "```" code block, 因为 treesitter 中 markdown 强制
-                                                              -- 将其设置为 @conceal 所以 fg 颜色无法被改变.
-  ['@punctuation.delimiter.markdown_inline'] = { link = "Conceal" }, -- "`" - code
+  ['@punctuation.delimiter.markdown'] = { cterm={ "bold" } }, -- "```" code block.
+                                                              -- treesitter 的 queries/markdown_inline 中强制将 delimiter
+                                                              -- 设置为 @conceal, 所以 fg/bg 颜色无法被改变.
+  ['@punctuation.delimiter.markdown_inline'] = { link = "Conceal" }, -- "`" - code; "*" - bold ...
                                                                      -- "*italic*", "_italic_"
                                                                      -- "**Bold**"
                                                                      -- "***Bold italic***"
