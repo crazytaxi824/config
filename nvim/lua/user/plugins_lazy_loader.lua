@@ -6,7 +6,7 @@ local lazyload_plugins = {
 
   --- VVI: 如果要 lazyload lspconfig 时需要手动 `:LspStart`, 否则当前 buffer 的 autocmd 不会被执行.
   --- 使用 `:LspInfo` 查看会发现当前 bufnr 不在 LSP attach 中.
-  --'nvim-lspconfig', -- NOTE: lazyload lspconfig 不会提高 neovim startup 速度, 同时会引起一些 bug.
+  --- NOTE: lazyload 'nvim-lspconfig' 不会提高 neovim startup 速度, 同时会引起一些 bug.
   'null-ls.nvim',  -- null-ls 和 lspconfig 没有依赖关系.
 
   --'nvim-tree.lua',  -- NOTE: 不推荐使用 lazyload, 会导致 `$ nvim dir` 直接打开文件夹的时候出现问题.
