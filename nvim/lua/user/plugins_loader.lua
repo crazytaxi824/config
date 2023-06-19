@@ -607,6 +607,15 @@ return require('packer').startup(function(use)
     config = function()
       --- VVI: Neovim >= 0.6 and Node.js <= 17
       --- 指定 nodejs 版本. 这里使用的是 `brew install node@16`
+      local node_path = "/usr/local/opt/node@16/bin/node"
+
+      --- check node existence
+      if vim.fn.filereadable(node_path) == 0 then
+        vim.api.nvim_echo({{"node@16 '" .. node_path .. "' is NOT Exist.", "WarningMsg"}}, true, {})
+        return
+      end
+
+      --- node version 17 or below
       vim.g.copilot_node_command = "/usr/local/opt/node@16/bin/node"
     end,
 
