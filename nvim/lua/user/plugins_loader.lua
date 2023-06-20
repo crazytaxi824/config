@@ -611,7 +611,7 @@ return require('packer').startup(function(use)
 
       --- check node existence
       if vim.fn.filereadable(node_path) == 0 then
-        vim.api.nvim_echo({{"node@16 '" .. node_path .. "' is NOT Exist.", "WarningMsg"}}, true, {})
+        Notify({"'" .. node_path .. "' is NOT Exist."}, "WARN", {title = "github/copilot", timeout = false})
         return
       end
 
