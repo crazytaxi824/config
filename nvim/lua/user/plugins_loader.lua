@@ -442,7 +442,7 @@ return require('packer').startup(function(use)
 
   --- snippets content, 自定义 snippets 可以借鉴这个结构.
   use {"rafamadriz/friendly-snippets",
-    commit = "70b727d",
+    commit = "5749f09",
     --- NOTE: friendly-snippets 不能安装在 opt/ 文件夹下, 否则不生效. 该 plugin 不会对启动性能有影响, 可以直接加载.
   }
 
