@@ -503,7 +503,7 @@ return require('packer').startup(function(use)
   --use "kyazdani42/nvim-web-devicons"  -- 提供 icons 需要 patch 字体 (Nerd Fonts)
   --- file explorer
   use {"kyazdani42/nvim-tree.lua",
-    commit = "f873625",
+    commit = "c3c6544",
     config = function() require("user.plugin_settings.file_tree") end,
 
     --opt = true,  -- VVI: 不推荐使用 lazyload, 会导致 `$ nvim dir` 直接打开文件夹的时候出现问题.
