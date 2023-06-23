@@ -45,24 +45,24 @@ Color = {  -- {{{
   cyan  = 81,   -- VVI: one of vim's main color. SpecialChar, Underlined, Label ...
 
   purple = 170,  -- keyword, eg: func, type, struct, var, const ...
-  func_gold      = 85,   -- func, function_call, method, method_call ... | bufferline, lualine
-  string_orange  = 173,  -- string
-  boolean_blue   = 74,   -- Special, boolean
-  comment_green  = 71,   -- comments
-  type_green     = 79,   -- type, 数据类型
-  green    = 42,   -- markdown title
-  magenta  = 213,  -- IncSearch, return, if, else, break, package, import
-  yellow   = 191,  -- Search, lualine: Insert Mode background && tabline: tab seleced background
+  func_gold     = 85,   -- func, function_call, method, method_call ... | bufferline, lualine
+  string_orange = 173,  -- string
+  boolean_blue  = 74,   -- Special, boolean
+  comment_green = 71,   -- comments
+  type_green    = 79,   -- type, 数据类型
+  green   = 42,   -- markdown title
+  magenta = 213,  -- IncSearch, return, if, else, break, package, import
+  yellow  = 191,  -- Search, lualine: Insert Mode background && tabline: tab seleced background
 
   --- message 颜色
-  hint_grey   = 244,  -- hint message
+  hint_grey = 244,  -- hint message
   blue   = 75,   -- info message
   orange = 214,  -- warning message
   red    = 167,  -- error message
 
   --- 其他颜色
-  dark_orange    = 202,  -- trailing_whitespace & mixed_indent, nvim-notify warn message border
-  dark_red       = 52,   -- 256 color 中最深的红色, 接近黑色. 通常用于 bg.
+  dark_orange = 202,  -- trailing_whitespace & mixed_indent, nvim-notify warn message border
+  dark_red    = 52,   -- 256 color 中最深的红色, 接近黑色. 通常用于 bg.
   bracket_yellow = 220,  -- 匹配括号 () 颜色.
 }
 -- -- }}}
