@@ -31,6 +31,10 @@
 	# none: 表示不使用 syntax highlight.
 	syntax-theme = none
 
+	# commit hash 颜色
+	#commit-decoration-style = yellow ol
+	#commit-style = yellow
+
 	# filename decoration color and overline
 	file-decoration-style = 42 ol
 	# filename color

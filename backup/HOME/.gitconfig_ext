@@ -7,10 +7,10 @@
 
 # 自定义 command, `git tree`, `git vtree`
 [alias]
-	# https://stackoverflow.com/questions/1057564/pretty-git-branch-graphs
+	# https://www.git-scm.com/docs/git-log#Documentation/git-log.txt-emnem
+	# %C(xx) - 打印颜色, 256 color
 	# `$ git log` 是 git 原生命令. https://devhints.io/git-log-format
 	# `$ git tree` 自定义命令, 显示缩略信息. 显示的信息有两行，第二行给一个空格, 否则有的行间距会变成2行.
-	# %C(xx) - 打印颜色, 256 color
 	tree = log --graph --all --format=format:'%C(42)%h%C(reset) -%C(207)%d%C(reset) %C(251)%s%C(reset) %C(243)(%ar)%C(reset)%n'' '
 	# `$ git vtree` - 显示详细信息. 一共有三行: 第二行开头的空格数量是固定的, 因为都是 commit hash 宽度固定; 第三行给一个空格.
 	vtree = log --date=format:'%d-%b-%Y %H:%M:%S' --graph --all --format=format:'%C(42)%h%C(reset) -%C(207)%d%C(reset) %C(74)%ad%C(reset) %C(243)(%ar) - %C(173)%an%C(reset)%n''          %C(251)%s%C(reset)%n'' '
