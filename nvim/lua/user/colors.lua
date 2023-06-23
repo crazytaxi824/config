@@ -8,8 +8,8 @@
 --- NOTE: 只有 ':hi[!] link' 才有 [!] 设置.
 --- 如果是 ':hi <group>' 只会覆盖对应的 kv 颜色值.
 --- eg: 'hi Foo cterm=bold ctermfg=201 ctermbg=233'
----     'hi Foo ctermfg=190'
----     最终结果为 'hi Foo cterm=bold ctermfg=190 ctermbg=233'
+---     'hi Foo ctermfg=191'
+---     最终结果为 'hi Foo cterm=bold ctermfg=191 ctermbg=233'
 ---
 --- 颜色设置 cmd
 ---   ':hi <group> ctermfg...'           Set color
@@ -52,7 +52,7 @@ Color = {  -- {{{
   type_green     = 79,   -- type, 数据类型
   title_green    = 42,   -- markdown title
   conditional_magenta = 213,  -- IncSearch, return, if, else, break, package, import
-  statusline_yellow   = 190,  -- Search, lualine: Insert Mode background && tabline: tab seleced background
+  statusline_yellow   = 191,  -- Search, lualine: Insert Mode background && tabline: tab seleced background
 
   --- message 颜色
   hint_grey   = 244,  -- hint message
