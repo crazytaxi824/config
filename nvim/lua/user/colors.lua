@@ -8,8 +8,8 @@
 --- NOTE: 只有 ':hi[!] link' 才有 [!] 设置.
 --- 如果是 ':hi <group>' 只会覆盖对应的 kv 颜色值.
 --- eg: 'hi Foo cterm=bold ctermfg=201 ctermbg=233'
----     'hi Foo ctermfg=190'
----     最终结果为 'hi Foo cterm=bold ctermfg=190 ctermbg=233'
+---     'hi Foo ctermfg=191'
+---     最终结果为 'hi Foo cterm=bold ctermfg=191 ctermbg=233'
 ---
 --- 颜色设置 cmd
 ---   ':hi <group> ctermfg...'           Set color
@@ -44,21 +44,21 @@ Color = {  -- {{{
   black = 233,  -- black background
   cyan  = 81,   -- VVI: one of vim's main color. SpecialChar, Underlined, Label ...
 
-  keyword_purple = 170,  -- keyword, eg: func, type, struct, var, const ...
+  purple = 170,  -- keyword, eg: func, type, struct, var, const ...
   func_gold      = 85,   -- func, function_call, method, method_call ... | bufferline, lualine
-  string_orange  = 212,  -- string
+  string_orange  = 173,  -- string
   boolean_blue   = 74,   -- Special, boolean
   comment_green  = 71,   -- comments
   type_green     = 79,   -- type, 数据类型
-  title_green    = 42,   -- markdown title
-  conditional_magenta = 213,  -- IncSearch, return, if, else, break, package, import
-  statusline_yellow   = 190,  -- Search, lualine: Insert Mode background && tabline: tab seleced background
+  green    = 42,   -- markdown title
+  magenta  = 213,  -- IncSearch, return, if, else, break, package, import
+  yellow   = 191,  -- Search, lualine: Insert Mode background && tabline: tab seleced background
 
   --- message 颜色
   hint_grey   = 244,  -- hint message
-  info_blue   = 75,   -- info message
-  warn_orange = 214,  -- warning message
-  error_red   = 167,  -- error message
+  blue   = 75,   -- info message
+  orange = 214,  -- warning message
+  red    = 167,  -- error message
 
   --- 其他颜色
   dark_orange    = 202,  -- trailing_whitespace & mixed_indent, nvim-notify warn message border
@@ -90,16 +90,16 @@ local highlights = {
 
   LineNr       = {ctermfg = 240}, -- 行号颜色
   CursorLine   = {ctermbg = 236}, -- 光标所在行颜色
-  CursorLineNr = {ctermfg = Color.statusline_yellow, cterm = {'bold'}}, -- 光标所在行号的颜色
+  CursorLineNr = {ctermfg = Color.yellow, cterm = {'bold'}}, -- 光标所在行号的颜色
   SignColumn   = {ctermbg = Color.none}, -- line_number 左边用来标记错误, 打断点的位置. 术语 gutter
   ColorColumn  = {ctermbg = 238}, -- textwidth column 颜色
   QuickFixLine = {ctermfg = Color.boolean_blue, cterm = {'bold'}}, -- Quick Fix 选中行颜色
 
-  IncSearch = {ctermfg = Color.black, ctermbg = Color.conditional_magenta, cterm = {'bold'}}, -- / ? 搜索颜色
-  Search    = {ctermfg = Color.black, ctermbg = Color.statusline_yellow}, -- / ? * # g* g# 搜索颜色
+  IncSearch = {ctermfg = Color.black, ctermbg = Color.magenta, cterm = {'bold'}}, -- / ? 搜索颜色
+  Search    = {ctermfg = Color.black, ctermbg = Color.yellow}, -- / ? * # g* g# 搜索颜色
 
-  ErrorMsg   = {ctermfg = Color.white, ctermbg = Color.error_red}, -- echoerr 颜色
-  WarningMsg = {ctermfg = Color.black, ctermbg = Color.warn_orange}, -- echohl 颜色
+  ErrorMsg   = {ctermfg = Color.white, ctermbg = Color.red}, -- echoerr 颜色
+  WarningMsg = {ctermfg = Color.black, ctermbg = Color.orange}, -- echohl 颜色
 
   Todo = {ctermfg = Color.white, ctermbg = 22, cterm = {'bold'}}, -- TODO 颜色
   SpecialComment = {ctermfg = Color.white, ctermbg = 63, cterm = {'bold'}}, -- NOTE 颜色
@@ -108,19 +108,19 @@ local highlights = {
   Directory = {ctermfg = 246, ctermbg = 234, cterm = {'bold', 'underline'}}, -- for bufferline 在 nvim-tree 显示 "File Explorer"
 
   --- 基础颜色 -------------------------------------------------------------------------------------
-  Keyword  = {ctermfg = Color.keyword_purple}, -- 最主要的颜色
+  Keyword  = {ctermfg = Color.purple}, -- 最主要的颜色
   Function = {ctermfg = Color.func_gold}, -- func <Function> {}, 定义 & call func 都使用该颜色
   Type     = {ctermfg = Color.type_green, cterm = {'italic'}}, -- type <Type> struct
   Identifier = {link = "Type"}, -- typescriptTypeReference
   Constant   = {link = "Normal"}, -- 常量颜色. eg: const <Constant> = 100
   --Structure  = {ctermfg = color.special_cyan}, -- luaTable
 
-  Conditional = {ctermfg = Color.conditional_magenta}, -- if, switch, case ...
+  Conditional = {ctermfg = Color.magenta}, -- if, switch, case ...
   Repeat    = {link = "Conditional"}, -- for range
   Statement = {link = "Conditional"}, -- syntax 中 'package' & 'import' 关键字
   Include   = {link = "Conditional"}, -- treesitter 中 'package', 'import', 'from' ... 关键字
 
-  String    = {ctermfg = 173},
+  String    = {ctermfg = Color.string_orange},
   Character = {link = "String"},
   Number = {ctermfg = 151}, -- 100, int, uint ...
   Float  = {link = "Number"}, -- 10.02 float64, float32
@@ -141,15 +141,15 @@ local highlights = {
   --- DiagnosticUnderlineXXX - code 中显示错误的位置.
   --- 以上 highlight 默认 link to DiagnosticXXX.
   DiagnosticHint  = {ctermfg = Color.hint_grey},
-  DiagnosticInfo  = {ctermfg = Color.info_blue},
-  DiagnosticWarn  = {ctermfg = Color.warn_orange},
-  DiagnosticError = {ctermfg = Color.error_red},
+  DiagnosticInfo  = {ctermfg = Color.blue},
+  DiagnosticWarn  = {ctermfg = Color.orange},
+  DiagnosticError = {ctermfg = Color.red},
   DiagnosticUnnecessary = {link = "DiagnosticHint"},
 
   DiagnosticUnderlineHint = {ctermfg = Color.hint_grey, cterm = {'underline'}},
   DiagnosticUnderlineInfo = { cterm = {'underline'} },
   DiagnosticUnderlineWarn = { cterm = {'underline'} },
-  DiagnosticUnderlineError = {ctermfg = Color.error_red, cterm = {'bold', 'underline'}},
+  DiagnosticUnderlineError = {ctermfg = Color.red, cterm = {'bold', 'underline'}},
 
   --- LSP 相关颜色 ---------------------------------------------------------------------------------
   --- vim.lsp.buf.document_highlight() 颜色, 类似 Same_ID
@@ -158,23 +158,23 @@ local highlights = {
   LspReferenceWrite = {ctermbg=238},
 
   --- diff 颜色 ------------------------------------------------------------------------------------
-  DiffAdd    = {ctermfg = Color.black, ctermbg = Color.title_green},
+  DiffAdd    = {ctermfg = Color.black, ctermbg = Color.green},
   DiffDelete = {ctermfg = Color.white, ctermbg = Color.dark_red},
   DiffChange = {},  -- 有修改的一整行的文字的颜色
-  DiffText   = {ctermfg = Color.black, ctermbg = Color.conditional_magenta}, -- changed text
+  DiffText   = {ctermfg = Color.black, ctermbg = Color.magenta}, -- changed text
 
   --- diff mode 下, fold 自动设置为:
   --- `set foldcolumn?`=2, 在 foldcolumn 显示在 SignColumn 前面.
   --- `set foldmethod?`=diff
-  FoldColumn = {ctermfg = Color.title_green},
+  FoldColumn = {ctermfg = Color.green},
 
   --- 其他常用颜色 ---------------------------------------------------------------------------------
-  Title = {ctermfg = Color.title_green, cterm = {'bold'}}, -- markdown title
+  Title = {ctermfg = Color.green, cterm = {'bold'}}, -- markdown title
   Conceal = {ctermfg = 246}, -- `set conceallevel?`, markdown list, code block ...
   Label = {ctermfg = Color.cyan}, -- json: key color; markdown: code block language(```go)
 
-  SpellBad = {ctermfg = Color.error_red, ctermbg = Color.dark_red, bold = true, underline = true},
-  SpellCap = {ctermfg = Color.warn_orange, ctermbg = Color.dark_red, bold = true, underline = true},
+  SpellBad = {ctermfg = Color.red, ctermbg = Color.dark_red, bold = true, underline = true},
+  SpellCap = {ctermfg = Color.orange, ctermbg = Color.dark_red, bold = true, underline = true},
   SpellLocal = {},  -- clear highlight
 
   --- NOTE: treesitter 颜色设置 --------------------------------------------------------------------
@@ -185,7 +185,7 @@ local highlights = {
 
   ['@text.uri'] = { link = "Underlined" },  -- url
   ['@text.title'] = { link = "Title" }, -- markdown, # title
-  ['@text.literal'] = { ctermfg = 173, ctermbg = 237 },  -- markdown, `code`
+  ['@text.literal'] = { ctermfg = Color.string_orange, ctermbg = 237 },  -- markdown, `code`
   ['@text.strong'] = { cterm = {"bold"} }, -- markdown, **bold**
   ['@text.emphasis'] = { cterm = {"italic"} },  -- markdown, *italic*, _italic_
   ['@text.underline'] = { cterm = {"underline"} },  -- markdown, *italic*, _italic_

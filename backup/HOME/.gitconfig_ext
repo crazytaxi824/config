@@ -7,25 +7,41 @@
 
 # 自定义 command, `git tree`, `git vtree`
 [alias]
-	# https://stackoverflow.com/questions/1057564/pretty-git-branch-graphs
-	# `$ git log` 是 git 原生命令. https://devhints.io/git-log-format
+	# https://www.git-scm.com/docs/git-log#Documentation/git-log.txt-emnem
+	# https://devhints.io/git-log-format
+	# %C(xx) - 打印颜色, 256 位颜色.
+	# %C(auto) - 使用 git 的 [color] 设置.
+	# %C(reset) - 重置颜色为 white.
 	# `$ git tree` 自定义命令, 显示缩略信息. 显示的信息有两行，第二行给一个空格, 否则有的行间距会变成2行.
-	# %C(xx) - 打印颜色, 256 color
-	tree = log --graph --all --format=format:'%C(42)%h%C(reset) -%C(207)%d%C(reset) %C(251)%s%C(reset) %C(243)(%ar)%C(reset)%n'' '
+	tree = log --graph --all --format=format:'%C(auto)%h -%d %s %C(243)(%ar)%C(reset)%n'' '
 	# `$ git vtree` - 显示详细信息. 一共有三行: 第二行开头的空格数量是固定的, 因为都是 commit hash 宽度固定; 第三行给一个空格.
-	vtree = log --date=format:'%d-%b-%Y %H:%M:%S' --graph --all --format=format:'%C(42)%h%C(reset) -%C(207)%d%C(reset) %C(74)%ad%C(reset) %C(243)(%ar) - %C(173)%an%C(reset)%n''          %C(251)%s%C(reset)%n'' '
+	vtree = log --date=format:'%d-%b-%Y %H:%M:%S' --graph --all --format=format:'%C(auto)%h -%d %C(74)%ad %C(243)(%ar) - %C(173)%an%C(reset)%n''          %C(auto)%s%n'' '
 
 # https://git-scm.com/docs/git-config#Documentation/git-config.txt-coloradvice
+# color value 为 style ... fg bg, bold ul 234 191 意思是 bold, underline, fg=234, bg=191
+[color]
+	# if color.branch color.diff color.grep color.advice color.interactive color.remote ... unset,
+	# then the value of color.ui is used (`auto` by default)
+	ui = auto
 [color "diff"]
-	meta = bold ul 251   # metainformation, eg: file name
-	# frag = black yellow   # hunk header, eg: @@ -1,45 +1,50 @@
-	# func = black yellow   # function in hunk header
-	# commit = black yellow # commit header
-	context = 248         # unchanged text
-	old = 241 "#300000" # 241 52  # - removed lines, fg bg, 默认为 red
-	new = green         # 252 22  # + added lines, fg bg, 默认为 green
+	commit = 191        # commit header, eg: commit abcdefg...xyz
+	meta = bold ul 251  # metainformation, eg: file name
+	#frag = 234 191     # hunk header, eg: @@ -1,45 +1,50 @@
+	context = 248       # unchanged text
+	old = 241 "#300000" # - removed lines, 默认为 red
+	new = 42            # + added lines, 默认为 green
 	oldMoved = bold 213 # line moved to a new place
 	newMoved = bold 81  # line moved to a new place
+[color "decorate"]
+	HEAD = bold 207    # HEAD
+	branch = bold 42  # local branch
+	remoteBranch = bold 167
+	tag = bold 191
+	#stash = bold 75
+[color "branch"]  # `git branch` or `git branch --remote` 可查看 branch list
+	current = bold 42
+	local = 251
+	remote = 167
 
 # diff tool neovim
 [diff]

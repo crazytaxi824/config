@@ -18,6 +18,7 @@
 	line-numbers = true  # Display line numbers.
 	# delta --no-gitconfig BUG: https://github.com/dandavison/delta/issues/1271
 	#side-by-side = true  # Display diffs in side-by-side.
+	#max-line-length = 80  # chars 超过该值会被丢弃.
 	features = decorations  # 读取下面的 [delta "decorations"] 设置.
 
 [delta "decorations"]
@@ -31,17 +32,21 @@
 	# none: 表示不使用 syntax highlight.
 	syntax-theme = none
 
+	# commit hash 颜色
+	#commit-decoration-style = 191 ol  # yellow
+	#commit-style = 191  # yellow
+
 	# filename decoration color and overline
-	file-decoration-style = 42 ol
+	file-decoration-style = 75 ol  # blue
 	# filename color
-	file-style = 42
+	file-style = 75  # blue
 
 	# syntax 表示 text fg 使用 syntax-theme highlight.
 	# 如果 syntax-theme 设置为 none, 则会使用 white/normal 作为 fg 颜色.
 	minus-style = 241 "#300000"           # 241 52
 	minus-emph-style = 246 "#803030"      # 246 167
 	line-numbers-minus-style = "#D75F5F"  # 167
-	plus-style  = green                   # 251 "#001C00" # 251 22
-	plus-emph-style  = black green        # 255 "#005A00" # 255 28
-	line-numbers-plus-style  = "#008700"  # 28
+	plus-style = 42  # green  # 251 "#001C00" # 251 22
+	plus-emph-style = 234 42  # 255 "#005A00" # 255 28
+	line-numbers-plus-style = "#008700"  # 28
 
