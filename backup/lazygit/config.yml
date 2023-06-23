@@ -44,18 +44,18 @@ git:
     # --line-numbers: Display line numbers.
     # --syntax-theme: diff text block syntax highlight. `delta --list-syntax-themes`
     pager: delta --dark --line-numbers --paging=never --syntax-theme=none
-      \--file-style='42' --file-decoration-style='42 ol'
+      \--file-style='75' --file-decoration-style='75 ol'
       \--line-numbers-minus-style='#D75F5F' --minus-style='241 "#300000"' --minus-emph-style='246 "#803030"'
-      \--line-numbers-plus-style='#008700' --plus-style='green' --plus-emph-style='black green'
+      \--line-numbers-plus-style='#008700' --plus-style='42' --plus-emph-style='234 42'
     ### syntax-theme 开启
     # syntax color:	# syntax 表示 text fg 使用 syntax-theme highlight. 如果 syntax-theme=none, 则会使用 white/normal 作为 fg 颜色.
     # pager: delta --dark --line-numbers --paging=never --syntax-theme='Visual Studio Dark+'
-    #   \--file-style='42' --file-decoration-style='42 ol'
+    #   \--file-style='75' --file-decoration-style='75 ol'
     #   \--line-numbers-minus-style='#D75F5F' --minus-style='241 "#300000"' --minus-emph-style='246 "#803030"'
     #   \--line-numbers-plus-style='#008700' --plus-style='syntax "#001C00"' --plus-emph-style='255 "#005A00"'
     ### 256-color - 没有 gui 的 linux server 环境用
     # pager: delta --dark --line-numbers --paging=never --syntax-theme=none
-    #   \--file-style='42' --file-decoration-style='42 ol'
+    #   \--file-style='75' --file-decoration-style='75 ol'
     #   \--line-numbers-minus-style='167' --minus-style='241 52' --minus-emph-style='246 167'
     #   \--line-numbers-plus-style='28' --plus-style='251 22' --plus-emph-style='255 28'
 
@@ -72,13 +72,15 @@ git:
   # DOC: git log format 配置: https://www.git-scm.com/docs/git-log#Documentation/git-log.txt-emnem
   # 最后的换行是为了让每一个 commit 都占2行位置. 如果不换行则有些占一行，有些占两行.
   # 显示 current branch git log
-  branchLogCmd: "git log --graph {{branchName}} --format=format:'%C(42)%h%C(reset) -%C(207)%d%C(reset) %C(251)%s%C(reset) %C(243)(%ar)%C(reset)%n'' '"
+  #branchLogCmd: "git log --graph {{branchName}} --format=format:'%C(42)%h%C(reset) -%C(207)%d%C(reset) %C(251)%s%C(reset) %C(243)(%ar)%C(reset)%n'' '"
+  branchLogCmd: "git log --graph {{branchName}} --format=format:'%C(auto)%h -%d %s %C(243)(%ar)%C(reset)%n'' '"
 
   # Status window (window No.1) 按 'a' 键显示 all Branches commit tree.
   # 显示 all branches git log
   # DOC: strftime format, --date, https://stackoverflow.com/questions/7853332/how-to-change-git-log-date-formats#34778736
   # 第2行之前的空格是为了对齐.
-  allBranchesLogCmd: "git log --date=format:'%d-%b-%Y %H:%M:%S' --graph --all --format=format:'%C(42)%h%C(reset) -%C(207)%d%C(reset) %C(74)%ad%C(reset) %C(243)(%ar) - %C(173)%an%C(reset)%n''          %C(251)%s%C(reset)%n'' '"
+  #allBranchesLogCmd: "git log --date=format:'%d-%b-%Y %H:%M:%S' --graph --all --format=format:'%C(42)%h%C(reset) -%C(207)%d%C(reset) %C(74)%ad%C(reset) %C(243)(%ar) - %C(173)%an%C(reset)%n''          %C(251)%s%C(reset)%n'' '"
+  allBranchesLogCmd: "git log --date=format:'%d-%b-%Y %H:%M:%S' --graph --all --format=format:'%C(auto)%h -%d %C(74)%ad %C(243)(%ar) - %C(173)%an%C(reset)%n''          %C(auto)%s%n'' '"
 
   # git 状态刷新
   autoFetch: true    # 自动执行 git fetch, 可以检查 remote 和 local git 的状态不同.
