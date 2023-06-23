@@ -46,7 +46,7 @@ Color = {  -- {{{
 
   keyword_purple = 170,  -- keyword, eg: func, type, struct, var, const ...
   func_gold      = 85,   -- func, function_call, method, method_call ... | bufferline, lualine
-  string_orange  = 212,  -- string
+  string_orange  = 173,  -- string
   boolean_blue   = 74,   -- Special, boolean
   comment_green  = 71,   -- comments
   type_green     = 79,   -- type, 数据类型
@@ -120,7 +120,7 @@ local highlights = {
   Statement = {link = "Conditional"}, -- syntax 中 'package' & 'import' 关键字
   Include   = {link = "Conditional"}, -- treesitter 中 'package', 'import', 'from' ... 关键字
 
-  String    = {ctermfg = 173},
+  String    = {ctermfg = Color.string_orange},
   Character = {link = "String"},
   Number = {ctermfg = 151}, -- 100, int, uint ...
   Float  = {link = "Number"}, -- 10.02 float64, float32
@@ -185,7 +185,7 @@ local highlights = {
 
   ['@text.uri'] = { link = "Underlined" },  -- url
   ['@text.title'] = { link = "Title" }, -- markdown, # title
-  ['@text.literal'] = { ctermfg = 173, ctermbg = 237 },  -- markdown, `code`
+  ['@text.literal'] = { ctermfg = Color.string_orange, ctermbg = 237 },  -- markdown, `code`
   ['@text.strong'] = { cterm = {"bold"} }, -- markdown, **bold**
   ['@text.emphasis'] = { cterm = {"italic"} },  -- markdown, *italic*, _italic_
   ['@text.underline'] = { cterm = {"underline"} },  -- markdown, *italic*, _italic_
