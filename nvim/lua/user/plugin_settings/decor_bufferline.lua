@@ -15,7 +15,7 @@ local bufferline_colors = {
   buf_vis_bg = Color.black,
 
   tab_sel_fg = Color.black,
-  tab_sel_bg = Color.statusline_yellow,
+  tab_sel_bg = Color.yellow,
   tab_separator_fg = 234, -- grey
   duplicate_fg = 243,  -- grey
 
@@ -23,9 +23,9 @@ local bufferline_colors = {
   indicator_fg = Color.cyan,
   separator_fg = 238,  -- grey
 
-  error_fg   = Color.error_red,
-  warning_fg = Color.warn_orange,
-  info_fg    = Color.info_blue,
+  error_fg   = Color.red,
+  warning_fg = Color.orange,
+  info_fg    = Color.blue,
   hint_fg    = Color.hint_grey,
 }
 

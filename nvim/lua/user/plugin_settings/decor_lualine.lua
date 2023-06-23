@@ -9,16 +9,16 @@ local lualine_colors = {
   black = Color.black,
   white = Color.white,
 
-  yellow = Color.statusline_yellow,
+  yellow = Color.yellow,
   gold = Color.func_gold,  -- filename saved
   cyan = Color.cyan,   -- filename modified
 
   grey  = 236,       -- section_b
   light_grey = 245,  -- inactive, hint
 
-  red = Color.error_red,  -- error, readonly
-  orange = Color.warn_orange, -- warn
-  blue = Color.info_blue,  -- info background
+  red = Color.red,  -- error, readonly
+  orange = Color.orange, -- warn
+  blue = Color.blue,  -- info background
   green = Color.comment_green,  -- Command mode
 
   dark_orange = Color.dark_orange, -- trailing_whitespace && mixed_indent

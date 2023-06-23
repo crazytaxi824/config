@@ -88,9 +88,9 @@ dap.configurations.go = {
 --   hi DapStoppedHL ctermfg=75
 --   hi DapStoppedLineHL ctermbg=238
 -- ]])
-vim.api.nvim_set_hl(0, 'DapBreakpointHL', { ctermfg = Color.statusline_yellow })
-vim.api.nvim_set_hl(0, 'DapBreakpointRejectedHL', { ctermfg = Color.statusline_yellow })
-vim.api.nvim_set_hl(0, 'DapStoppedHL', { ctermfg = Color.info_blue })
+vim.api.nvim_set_hl(0, 'DapBreakpointHL', { ctermfg = Color.yellow })
+vim.api.nvim_set_hl(0, 'DapBreakpointRejectedHL', { ctermfg = Color.yellow })
+vim.api.nvim_set_hl(0, 'DapStoppedHL', { ctermfg = Color.blue })
 vim.api.nvim_set_hl(0, 'DapStoppedLineHL', { ctermbg = 238 })
 
 vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "DapBreakpointHL", numhl = "", linehl="" })
