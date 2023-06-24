@@ -64,6 +64,7 @@ telescope.setup {
       "rg",
       "--color=never",    -- VVI: 必须为 never
       "--sort=path",      -- ascending sort
+      "--follow",         -- descend into symlinked directories.
       "--vimgrep",        -- --no-heading,--with-filename,--line-number,--column
       "--only-matching",  -- only print matched text, 也可以使用 "--trim" 打印整行内容.
       "--smart-case",     -- 如果有大写则 case sensitive, 如果全小写则 ignore case.
@@ -158,7 +159,9 @@ telescope.setup {
       -- -E=**/node_modules/**    显示 node_modules 文件夹, 但不列出其中的文件.
       -- -- }}}
       --theme = "dropdown",
-      find_command = {"fd", "--follow",
+      find_command = {
+        "fd",
+        "--follow",  -- descend into symlinked directories.
         "--type=file", "--type=symlink",  -- 不显示 directory | executable.
         -- NOTE: 这里不搜索隐藏文件, 也不显示被 .gitignore 忽略的文件
         -- "--hidden", "--no-ignore", "-E=.DS_Store", "-E=.git", "-E=**/.*/**",

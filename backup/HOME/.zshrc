@@ -474,6 +474,7 @@ _fzf_compgen_dir() {
 # --------------------------------------------------------------------------------------------------
 # }}}
 
+# NOTE: 使用方法
 # 查找文件中同一行内同时包括 'Foo.*Bar'
 # 每个文件不只会出现一次, 如果一个文件中有多行都能匹配上则会出现多次.
 #
@@ -510,7 +511,7 @@ function Rg() {
 	# NOTE: command 中不要插入注释, 否则报错.
 	rg --colors="path:fg:81" --colors="line:fg:241" --colors="column:fg:241" \
 		--colors="match:fg:207" --colors="match:style:nobold" --colors="match:style:underline" \
-		--color=always --sort=path -L --crlf --vimgrep --trim --smart-case $* | \
+		--color=always --sort=path --follow --crlf --vimgrep --trim --smart-case $* | \
 	fzf --delimiter=':' \
 		--preview "bat --color=always --style=numbers --highlight-line={2} {1}" \
 		--preview-window '+{2}/2' \
