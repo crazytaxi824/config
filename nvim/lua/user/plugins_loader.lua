@@ -604,6 +604,7 @@ return require('packer').startup(function(use)
   --- https://docs.github.com/en/copilot
   --- https://docs.github.com/en/copilot/getting-started-with-github-copilot?tool=neovim#prerequisites-3
   use {"github/copilot.vim",  -- NOTE: 目前不需要锁定版本.
+    tag = "v1.9.0",
     config = function()
       --- VVI: Neovim >= 0.6 and Node.js <= 17
       --- 指定 nodejs 版本. 这里使用的是 `brew install node@16`
