@@ -1,3 +1,5 @@
+--- regexp pattern for filepath and URL in terminal.
+
 local M = {}
 
 --- VVI: vim `:h pattern-overview` 中使用双引号和单引号是不一样的. 单引号 '\(\)\+' 在双引号中需要写成 "\\(\\)\\+"

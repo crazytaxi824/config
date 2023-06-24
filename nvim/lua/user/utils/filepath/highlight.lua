@@ -1,3 +1,5 @@
+--- 通过 matchadd() 来 highlight filepath 和 URL
+
 local pat = require('user.utils.filepath.pattern')
 
 local M = {}

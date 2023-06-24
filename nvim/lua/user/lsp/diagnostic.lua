@@ -1,6 +1,6 @@
 --- Diagnostic 设置 --------------------------------------------------------------------------------
---- README: 这里的设置都是和 neovim 编辑器显示效果相关的设置.
----         所有设置通过 vim.diagnostic.config() 函数加载.
+--- 这里的设置都是和 neovim 编辑器显示效果相关的设置.
+--- 所有设置通过 vim.diagnostic.config() 函数加载.
 
 --- 自定义 diagnostic sign 样式
 local signs = {

@@ -1,7 +1,7 @@
+--- 全局 keymap 设置
 local key_fn = require('user.utils.keymaps')
 
---- NOTE: 全局 keymap 设置
---- Readme ----------------------------------------------------------------------------------------- {{{
+--- README ----------------------------------------------------------------------------------------- {{{
 --- vim.keymap.set() & vim.keymap.del()
 --- vim.api.nvim_set_keymap() & vim.api.nvim_del_keymap()
 --- vim.api.nvim_buf_set_keymap() & vim.api.nvim_buf_del_keymap()
@@ -23,7 +23,6 @@ local key_fn = require('user.utils.keymaps')
 ---  t[nore]map     |  -   |  -  |  -  |  -  |  -  |  -  | yes  |  -   |
 ---  l[nore]map     |  -   | yes | yes |  -  |  -  |  -  |  -   | yes  |
 ---
--- -- }}}
 --- 常用组合键前缀:
 ---   - <leader>
 ---   - g
@@ -41,6 +40,7 @@ local key_fn = require('user.utils.keymaps')
 ---   - i_CTRL-O  - 用于在 insert mode 中执行一个 command 然后回到 insert mode.
 ---   - i_CTRL-C | v_CTRL-C  - insert/visual 退回到 normal mode.
 ---   - v_CTRL-G  - 切换 visual/select mode, select mode 是 visual 的一个子模式, 多用于代码补全的默认值.
+-- -- }}}
 
 --- functions for key mapping ---------------------------------------------------------------------- {{{
 --- wipeout all terminals ------------------------------------------------------ {{{
@@ -79,8 +79,6 @@ local function delete_all_other_buffers()
     vim.cmd('bdelete ' .. table.concat(buf_list, ' '))
   end
 end
--- -- }}}
-
 -- -- }}}
 
 -- -- }}}

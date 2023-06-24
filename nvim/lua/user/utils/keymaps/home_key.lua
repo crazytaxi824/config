@@ -1,6 +1,7 @@
+--- <Home> key in `:set nowrap` and `:set wrap` situation.
 local M = {}
 
---- <HOME> key in `:set nowrap` situation.
+--- <Home> key in `:set nowrap` situation.
 --- 先跳到 '^' first non-blank character of the line, 再跳到 '0' first character of the line.
 M.nowrap = function()
   local before_pos = vim.fn.getpos('.')
@@ -12,7 +13,7 @@ M.nowrap = function()
   end
 end
 
---- <HOME> key in `:set wrap` situation.
+--- <Home> key in `:set wrap` situation.
 --- <Home> 快捷键先跳到 'g^' first non-blank character of the line, 再跳到 'g0' first character of the line.
 M.wrap = function()
   local before_pos = vim.fn.getpos('.')

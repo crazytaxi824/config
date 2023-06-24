@@ -1,3 +1,5 @@
+--- background terminal 是 toggleterm 实例, 在后台运行. 目前主要用于显示 `go tool pprof`
+
 local Terminal = require("toggleterm.terminal").Terminal
 
 local M = {}

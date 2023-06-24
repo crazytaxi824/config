@@ -1,3 +1,5 @@
+--- `:set wrap` 的情况下使用 gj / gk / g0 / g$ 移动 cursor.
+
 local key_fn = require('user.utils.keymaps')
 
 --- 使用 gj / gk / g0 / g$ 在 wrap buffer 中移动 cursor.

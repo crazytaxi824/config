@@ -1,3 +1,5 @@
+--- go list -json 用于获取 ImportPath, Root, (pkg)Name, Imports, Deps ... 等数据.
+
 local M = {}
 
 M.go_list = function(dir)

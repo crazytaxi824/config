@@ -1,4 +1,4 @@
---- NOTE: 以下并没有用到, 作为 go Auto Format 备选方案.
+--- 以下并没有用到, 作为 go Auto Format 备选方案.
 --- Auto goimports ---------------------------------------------------------------------------------
 --- README: 使用 code_action 执行 organizeImports, 不会询问.
 ---         该方法只针对 golang 有效, 其他语言无法使用该方法进行 OrganizeImports, eg: tsx

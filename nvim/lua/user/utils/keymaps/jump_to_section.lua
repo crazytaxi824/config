@@ -1,4 +1,5 @@
 --- [[, ]], jump to previous/next section
+
 local M = {}
 
 --- NOTE: `:help treesitter-languagetree`, `lang` will default to 'filetype'.

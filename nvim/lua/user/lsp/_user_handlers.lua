@@ -1,6 +1,6 @@
 --- Overwrite handler 设置 -------------------------------------------------------------------------
---- NOTE: 使用 with() 方法. `:help lsp-handler-configuration`
----      `:help lsp-api` lsp-method 显示 textDocument/... 列表
+--- 使用 with() 方法. `:help lsp-handler-configuration`
+--- `:help lsp-api` lsp-method 显示 textDocument/... 列表
 
 --- handler config examples ------------------------------------------------------------------------ {{{
 --- signatureHelp 是用来显示函数入参出参的.

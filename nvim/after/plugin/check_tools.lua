@@ -1,4 +1,4 @@
---- NOTE: after/plugin 只会运行一次, after/ftplugin 每次打开 buffer 都会运行.
+--- VVI: after/plugin 只会运行一次, after/ftplugin 每次打开 buffer 都会运行.
 
 --- check Golang tools -----------------------------------------------------------------------------
 --- tools: goimports, gomodifytags, gotests, impl, gopls, dlv, golangci-lint ...

@@ -1,3 +1,5 @@
+--- 通过 autocmd 在 terminal 中 highlight filepath, jump to filepath.
+
 local fp = require('user.utils.filepath')
 
 --- terminal normal 模式跳转文件 -------------------------------------------------------------------

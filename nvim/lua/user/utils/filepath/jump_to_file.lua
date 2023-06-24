@@ -1,3 +1,5 @@
+--- 跳转到 cursor 所在 filepath
+
 local pat = require('user.utils.filepath.pattern')
 
 local M = {}

@@ -1,4 +1,4 @@
---- NOTE: fzf 中使用 {+f} placeholder 会将所有 selected 的结果写入一个临时文件, {+f} 则是这个临时文件的路径.
+--- fzf 中使用 {+f} placeholder 会将所有 selected 的结果写入一个临时文件, {+f} 则是这个临时文件的路径.
 --- {+f} 临时文件的路径通常是固定的, 不会无限创建新文件. 只是每次多选后 replace 该文件中的内容.
 --- 如果是 fd 选择的结果, 则临时文件中记录的是 filepath/dir.
 --- 如果是 rg 返回的结果, 则临时文件中记录的是 <filepath:line:col:content>

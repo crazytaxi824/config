@@ -1,4 +1,4 @@
---- README: packer 主要是一个 plugin 安装/管理插件.
+--- packer 主要是一个 plugin 安装/管理插件.
 --- install packer.nvim: `git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim`
 --- packer 设置 ------------------------------------------------------------------------------------ {{{
 --- VVI: debug.getinfo() 函数获取本文件路径 ------------------------------------ {{{
@@ -188,7 +188,7 @@ require('packer').init {
 
 -- -- }}}
 
---- NOTE: packer 加载 plugins
+--- packer 加载 plugins
 --- 插件的安装位置在 "~/.local/share/nvim/site/pack/packer/...", 即 stdpath("data") .. "/site/pack/packer/"
 --- packer 加载 plugin 设置文档 -------------------------------------------------------------------- {{{
 -- 官方文档 https://github.com/wbthomason/packer.nvim

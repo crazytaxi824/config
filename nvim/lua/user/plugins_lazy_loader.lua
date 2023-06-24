@@ -20,7 +20,7 @@ local lazyload_plugins = {
 
   --- VVI: 以下插件使用 lazyload 时, 需要设置 {bufread = false}. 否则会多次触发 FileType event.
   'telescope.nvim',
-  'LuaSnip',  -- BUG: 目前 LuaSnip 使用 use({opt=true}) 时, 无法加载内置 jsregexp 插件.
+  'LuaSnip',
 }
 
 return lazyload_plugins

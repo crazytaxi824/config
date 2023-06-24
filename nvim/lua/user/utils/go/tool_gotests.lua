@@ -1,4 +1,4 @@
---- NOTE: <cword> under the cursor need to be a function name.
+--- <cword> under the cursor need to be a function name.
 --  gotests -only [func_name] filepath, eg: `gotest -only Foo /xxx/src/foo.go`
 --     -only   match regex func_name
 --     -excl   exclude regex func_name
