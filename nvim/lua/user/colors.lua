@@ -84,7 +84,6 @@ local highlights = {
                                          -- border = {"▄","▄","▄","█","▀","▀","▀","█"}
 
   Comment    = {ctermfg = Color.comment_green}, -- 注释颜色
-  Folded     = {ctermfg = 67},  -- 折叠行颜色
   NonText    = {ctermfg = 238}, -- 影响 listchars indentLine 颜色
   VertSplit  = {ctermfg = 242}, -- window 之间的分隔线颜色
   MatchParen = {ctermfg = Color.bracket_yellow, cterm = {'bold', 'underline'}}, -- 括号匹配颜色
@@ -164,10 +163,13 @@ local highlights = {
   DiffChange = {},  -- 有修改的一整行的文字的颜色
   DiffText   = {ctermfg = Color.black, ctermbg = Color.magenta}, -- changed text
 
-  --- diff mode 下, fold 自动设置为:
-  --- `set foldcolumn?`=2, 在 foldcolumn 显示在 SignColumn 前面.
-  --- `set foldmethod?`=diff
-  FoldColumn = {ctermfg = Color.green},
+  --- fold 颜色 ------------------------------------------------------------------------------------
+  --- diff mode 下, 会自动设置:
+  --- `set foldcolumn=2`, 在 foldcolumn 显示在 SignColumn 前面.
+  --- `set foldmethod=diff`
+  Folded     = {ctermfg = 67},  -- 折叠行文字颜色
+  FoldColumn = {ctermfg = Color.green},    -- foldcolumn 中 + - | 的颜色
+  CursorLineFold = {link = "FoldColumn"},  -- cursor 所在行 foldcolumn 中 + - | 号颜色
 
   --- 其他常用颜色 ---------------------------------------------------------------------------------
   Title = {ctermfg = Color.green, cterm = {'bold'}}, -- markdown title
