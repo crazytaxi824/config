@@ -1,10 +1,200 @@
---- 安装: `git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim`
 --- README: packer 主要是一个 plugin 安装/管理插件.
---- nvim 加载插件的时候读取的是 packer.compile() 之后的文件. 所以在修改了插件设置后需要 `:PackerCompile` 来使设置生效.
---- `:PackerSync` 的时候会自动运行 compile(), 重新生成 compile 文件. 主要影响 setup() 设置文件加载.
---- `:PackerLoad a b` 相当于 lua require('packer').loader('a b')
---- Packer.nvim 设置文档 --------------------------------------------------------------------------- {{{
--- https://github.com/wbthomason/packer.nvim#specifying-plugins
+--- install packer.nvim: `git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim`
+--- packer 设置 ------------------------------------------------------------------------------------ {{{
+--- VVI: debug.getinfo() 函数获取本文件路径 ------------------------------------ {{{
+--- source 返回的内容中:
+---   If source starts with a '@', it means that the function was defined in a file;
+---   If source starts with a '=', the remainder of its contents describes the source in a user-dependent manner.
+---   Otherwise, the function was defined in a string where source is that string. eg: `:lua print(debug.getinfo(1, 'S').source)`, result `:lua`
+local this_file = debug.getinfo(1, 'S').source
+if string.sub(this_file, 1, 1) ~= '@' then
+  Notify("packer config file error", "ERROR", {title = "packer.nvim", timeout = false})
+  return
+else
+  this_file = string.sub(this_file, 2)
+  --- print(this_file)
+end
+-- -- }}}
+
+--- vim.schedule() lazyload plugins -------------------------------------------- {{{
+local function lazyload_plugins()
+  --- NOTE: 利用vim.schedual() lazyload plugins
+  vim.schedule(function()
+    local lazyload_list = require("user.plugins_lazy_loader")
+    for _, plugin in ipairs(lazyload_list) do
+      require('packer').loader(plugin)
+    end
+  end)
+end
+-- -- }}}
+
+--- NOTE: 如果 packer 不存在则自动 install "packer.nvim" ----------------------- {{{
+--- DOC: https://github.com/wbthomason/packer.nvim#bootstrapping
+local packer_bootstrap = false  -- 是否需要安装 packer.
+
+local packer_status_ok = pcall(require, "packer")
+if not packer_status_ok then
+  --- 需要安装 packer. NOTE: 其他插件的安装在 packer.startup() 函数的最后启动.
+  packer_bootstrap = true
+
+  print('installing packer.nvim ...')
+
+  --- install "packer.nvim"
+  --- DOC: https://github.com/wbthomason/packer.nvim#quickstart
+  local packer_install_path = vim.fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
+  local packer_install_cmd = 'git clone --depth 1 https://github.com/wbthomason/packer.nvim ' .. packer_install_path
+
+  local result = vim.fn.system(packer_install_cmd)
+  if vim.v.shell_error ~= 0 then  -- 判断 system() 结果是否错误
+    vim.notify(result, vim.log.levels.ERROR)
+    return
+  end
+
+  print('packer.nvim is installed.')
+  print('installing plugins ...')
+
+  --- VVI: 手动加载 packer. 否则其他的 require("packer") 无法使用.
+  vim.cmd('packadd packer.nvim')  -- 加载 module
+
+  --- packer plugin 安装完成后, 安装 treesitter lang parsers.
+  vim.api.nvim_create_autocmd("User", {
+    pattern = {"PackerComplete"},
+    once = true,
+    callback = function(params)
+      vim.cmd('packadd nvim-treesitter')  -- 手动加载 treesitter
+      vim.cmd('TSInstall all')  -- 安装 all lang parsers
+
+      --- TODO :Mason install list
+    end,
+    desc = "install treesitter's parsers after packer is installed",
+  })
+else
+  --- 不需要安装 packer 的情况下, lazyload plugins.
+  lazyload_plugins()
+end
+-- -- }}}
+
+--- save plugins.lua (本文件) 时自动运行 `:PackerSync` | `:PackerCompile` 命令 - {{{
+--- VVI: 修改本文件后必须进行 `:PackerCompile` / packer.compile(), 因为 nvim 加载插件的时候读取的
+--- 是 compile 的文件 "plugin/packer_compiled.lua".
+---  `:PackerSync` 的时候会自动运行 packer.compile()
+---
+--- NOTE: 这里必须使用 autogroup 否则每次 `:source <this_file>` 都会生成一个新的 autocmd, 导致很多个相同的 autocmd 存在.
+--- 通过 'autogroup <group_name> au! ... ' 可以覆盖之前的 autogroup 设置. 所以每次 `:source <this_file>` 之后
+--- 只有一个 autogroup 存在.
+local packer_user_config_id = vim.api.nvim_create_augroup(
+  "packer_user_config",
+  {clear = true}  -- NOTE: clear=true 表示 'au!'
+)
+
+--- this_file 保存之后自动执行 `source <this_file> | PackerCompile`
+vim.api.nvim_create_autocmd("BufWritePost", {
+  group = packer_user_config_id,
+  pattern = {this_file},
+  command = 'source ' .. this_file .. ' | PackerCompile profile=true',  -- 相当于 'source <afile>',
+  desc = "PackerCompile after packer config is changed",
+})
+-- -- }}}
+
+--- packer 记录 update info & :PackerUpdateLog --------------------------------- {{{
+--- NOTE: 使用 :PackerSync :PackerUpdate ... 之后记录 update info 到指定文件.
+--- doautocmd User PackerComplete     -- Fires after install, update, clean, and sync asynchronous operations finish.
+--- doautocmd User PackerCompileDone  -- Fires after compiling.
+--- 使用方法 vim.cmd [[ autocmd User PackerComplete :set filetype? ]]
+--- getline(1, '$') 获取文件所有内容. return list.
+--- writefile(["foo", "bar"], "foo.log", "a")  -- a - append mode
+
+--- packer update log 文件写入位置.
+local packer_update_log = vim.fn.stdpath('cache') .. '/packer.myupdate.log'
+
+--- 记录 :PackerSync && :PackerUpdate ... 更新信息到指定文件.
+vim.api.nvim_create_autocmd("User", {
+  pattern = { "PackerComplete" },
+  callback = function(params)
+    --- NOTE: 如果打开了 packer 窗口, 则记录窗口中的所有内容.
+    if vim.bo[params.buf].filetype == 'packer' then
+      --- 读取 packer 面板 buffer 中的所有信息. 从第一行到最后一行.
+      local update_info = vim.fn.getline(1, '$')
+
+      --- 读取 log 文件中的最后几行, 判断内容是否相同.
+      if vim.fn.filereadable(packer_update_log) == 1 then
+        local line_num = #update_info
+        local log_content = vim.fn.readfile(packer_update_log, '', -line_num) -- 负数从后向前读.
+
+        --- 查看 content 是否相同
+        if table.concat(update_info, '') == table.concat(log_content, '') then
+          return
+        end
+      end
+
+      --- 给内容添加时间信息.
+      local time_now = vim.fn.strftime(" [%Y-%m-%d %H:%M:%S]")
+      update_info = vim.list_extend({"", time_now}, update_info)
+
+      --- 将内容写入文件中.
+      vim.fn.writefile(update_info, packer_update_log, 'a')
+      vim.cmd('checktime')
+    end
+  end,
+  desc = "log packer update logs",
+})
+
+--- 显示上述文件的内容.
+vim.api.nvim_create_user_command("PackerUpdateLog",
+  function()
+    --- nobuflisted
+    --- nomodifiable 不能修改原文件, 但是可以将修改后的文件保存到另一个文件中.
+    --- readonly     不能 :w 保存修改, 但是可以 :w! 强制保存修改到原文件.
+    vim.cmd([[edit +setlocal\ readonly ]] .. packer_update_log)
+  end,
+  {bang=true, bar=true}
+)
+-- -- }}}
+
+--- packer.init(), Have packer use a popup window, "nvim-lua/popup.nvim" ------- {{{
+require('packer').init {
+  --- Name of the snapshot File you would like to load at startup.
+  --- 该设置需要联网, 如果无法访问 github.com 则直接报错.
+  --- VVI: 最好在 startup() 的每个 use() 中使用 commit && lock 固化插件版本 curing plugins.
+  --snapshot = "2022.07.18",
+
+  snapshot_path = vim.fn.stdpath('cache') .. '/packer_snapshots',  -- 默认路径是 stdpath('cache') .. '/packer.nvim'
+  --package_root = vim.fn.stdpath('data') .. '/site/pack',  -- 默认值
+  --compile_path = vim.fn.stdpath('config') .. '/plugin/packer_compiled.lua',  -- VVI: 默认值, 文件放在 plugin/ 文件夹下, nvim 会自动加载.
+
+  ensure_dependencies = true, -- Should packer install plugin dependencies?
+  auto_clean = true, -- During sync(), remove unused plugins
+  autoremove = false, -- Remove disabled or unused plugins without prompting the user
+  compile_on_sync = true, -- During sync(), run packer.compile()
+  auto_reload_compiled = true, -- Automatically reload the compiled file after creating it.
+
+  display = {
+    open_fn = function()
+      --- require("packer.util").float() 使用 float window 打开 packer info 面板. 默认在右侧打开新 window.
+      --- border = { ... } 面板 border 样式.
+      return require("packer.util").float({ border = {"▄","▄","▄","█","▀","▀","▀","█"} })  -- `:help nvim_open_win()`
+    end,
+    prompt_border = {"▄","▄","▄","█","▀","▀","▀","█"},  -- prompt 面板样式. eg: delete plugins
+    keybindings = { -- Keybindings for the display window
+      quit = 'q',  -- close window, 默认是 'q'
+      toggle_info = '<CR>',
+      diff = 'd',
+      prompt_revert = 'r',
+    },
+  },
+  log = { level = 'warn' }, -- "trace", "debug", "info", "warn"(*), "error", "fatal".
+}
+-- -- }}}
+
+-- -- }}}
+
+--- NOTE: packer 加载 plugins
+--- 插件的安装位置在 "~/.local/share/nvim/site/pack/packer/...", 即 stdpath("data") .. "/site/pack/packer/"
+--- packer 加载 plugin 设置文档 -------------------------------------------------------------------- {{{
+-- 官方文档 https://github.com/wbthomason/packer.nvim
+--          https://github.com/wbthomason/packer.nvim#specifying-plugins
+-- 插件推荐 https://github.com/LunarVim/Neovim-from-scratch/blob/master/lua/user/plugins.lua
+--          https://github.com/LunarVim/LunarVim/blob/master/lua/lvim/plugins.lua
 --
 -- opt 属性:
 --   当 plugin 有加载条件的时候, plugin 的安装地址会从 ~/.local/share/nvim/site/pack/packer/start -> opt
@@ -65,6 +255,7 @@
 --   `:PackerClean`      -- Remove any disabled or unused plugins
 --   `:PackerInstall`    -- Clean, then install missing plugins
 --   `:PackerUpdate`     -- Clean, then update and install plugins
+--   `:PackerLoad a b`   -- 相当于 lua require('packer').loader('a b')
 --
 --   `:PackerSnapshot foo`     -- 创建一个 snapshot
 --   `:PackerSnapshotDelete foo`  -- 删除一个 snapshot
@@ -76,197 +267,8 @@
 -- Packer opt 设置
 --   NOTE: Only required if you have packer configured as `opt`
 --   vim.cmd [[packadd packer.nvim]]  -- 会在 stdpath('cache') 中创建 "packer.nvim" 文件夹
-
+--
 -- -- }}}
-
---- VVI: debug.getinfo() 函数获取本文件路径 -------------------------------------------------------- {{{
---- source 返回的内容中:
----   If source starts with a '@', it means that the function was defined in a file;
----   If source starts with a '=', the remainder of its contents describes the source in a user-dependent manner.
----   Otherwise, the function was defined in a string where source is that string. eg: `:lua print(debug.getinfo(1, 'S').source)`, result `:lua`
-local this_file = debug.getinfo(1, 'S').source
-if string.sub(this_file, 1, 1) ~= '@' then
-  Notify("packer config file error", "ERROR", {title = "packer.nvim", timeout = false})
-  return
-else
-  this_file = string.sub(this_file, 2)
-  --- print(this_file)
-end
--- -- }}}
-
---- vim.schedule() lazyload plugins ---------------------------------------------------------------- {{{
-local function lazyload_plugins()
-  --- NOTE: 利用vim.schedual() lazyload plugins
-  vim.schedule(function()
-    local lazyload_list = require("user.plugins_lazy_loader")
-    for _, plugin in ipairs(lazyload_list) do
-      require('packer').loader(plugin)
-    end
-  end)
-end
--- -- }}}
-
---- NOTE: 如果 packer 不存在则自动 install "packer.nvim" ------------------------------------------- {{{
---- DOC: https://github.com/wbthomason/packer.nvim#bootstrapping
-local packer_bootstrap = false  -- 是否需要安装 packer.
-
-local packer_status_ok = pcall(require, "packer")
-if not packer_status_ok then
-  --- 需要安装 packer. NOTE: 其他插件的安装在 packer.startup() 函数的最后启动.
-  packer_bootstrap = true
-
-  print('installing packer.nvim ...')
-
-  --- install "packer.nvim"
-  --- DOC: https://github.com/wbthomason/packer.nvim#quickstart
-  local packer_install_path = vim.fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
-  local packer_install_cmd = 'git clone --depth 1 https://github.com/wbthomason/packer.nvim ' .. packer_install_path
-
-  local result = vim.fn.system(packer_install_cmd)
-  if vim.v.shell_error ~= 0 then  -- 判断 system() 结果是否错误
-    vim.notify(result, vim.log.levels.ERROR)
-    return
-  end
-
-  print('packer.nvim is installed.')
-  print('installing plugins ...')
-
-  --- VVI: 手动加载 packer. 否则其他的 require("packer") 无法使用.
-  vim.cmd('packadd packer.nvim')  -- 加载 module
-
-  --- packer plugin 安装完成后, 安装 treesitter lang parsers.
-  vim.api.nvim_create_autocmd("User", {
-    pattern = {"PackerComplete"},
-    once = true,
-    callback = function(params)
-      vim.cmd('packadd nvim-treesitter')  -- 手动加载 treesitter
-      vim.cmd('TSInstall all')  -- 安装 all lang parsers
-
-      --- TODO :Mason install list
-    end,
-    desc = "install treesitter's parsers after packer is installed",
-  })
-else
-  --- 不需要安装 packer 的情况下, lazyload plugins.
-  lazyload_plugins()
-end
--- -- }}}
-
---- save plugins.lua (本文件) 时自动运行 `:PackerSync` OR `:PackerCompile` 命令 -------------------- {{{
---- NOTE: 修改本文件后必须进行 `:PackerCompile`, 否则设置无法生效.
---- 这里必须使用 autogroup 否则每次 `:source <this_file>` 都会生成一个新的 autocmd, 导致很多个相同的 autocmd 存在.
---- 通过 'autogroup <group_name> au! ... ' 可以覆盖之前的 autogroup 设置. 所以每次 `:source <this_file>` 之后
---- 只有一个 autogroup 存在.
-local packer_user_config_id = vim.api.nvim_create_augroup(
-  "packer_user_config",
-  {clear = true}  -- NOTE: clear=true 表示 'au!'
-)
-
---- this_file 保存之后自动执行 `source <this_file> | PackerCompile`
-vim.api.nvim_create_autocmd("BufWritePost", {
-  group = packer_user_config_id,
-  pattern = {this_file},
-  command = 'source ' .. this_file .. ' | PackerCompile profile=true',  -- 相当于 'source <afile>',
-  desc = "PackerCompile after packer config is changed",
-})
--- -- }}}
-
---- packer 记录 update info & :PackerUpdateLog ----------------------------------------------------- {{{
---- NOTE: 使用 :PackerSync :PackerUpdate ... 之后记录 update info 到指定文件.
---- doautocmd User PackerComplete     -- Fires after install, update, clean, and sync asynchronous operations finish.
---- doautocmd User PackerCompileDone  -- Fires after compiling.
---- 使用方法 vim.cmd [[ autocmd User PackerComplete :set filetype? ]]
---- getline(1, '$') 获取文件所有内容. return list.
---- writefile(["foo", "bar"], "foo.log", "a")  -- a - append mode
-
---- packer update log 文件写入位置.
-local packer_update_log = vim.fn.stdpath('cache') .. '/packer.myupdate.log'
-
---- 记录 :PackerSync && :PackerUpdate ... 更新信息到指定文件.
-vim.api.nvim_create_autocmd("User", {
-  pattern = { "PackerComplete" },
-  callback = function(params)
-    --- NOTE: 如果打开了 packer 窗口, 则记录窗口中的所有内容.
-    if vim.bo[params.buf].filetype == 'packer' then
-      --- 读取 packer 面板 buffer 中的所有信息. 从第一行到最后一行.
-      local update_info = vim.fn.getline(1, '$')
-
-      --- 读取 log 文件中的最后几行, 判断内容是否相同.
-      if vim.fn.filereadable(packer_update_log) == 1 then
-        local line_num = #update_info
-        local log_content = vim.fn.readfile(packer_update_log, '', -line_num) -- 负数从后向前读.
-
-        --- 查看 content 是否相同
-        if table.concat(update_info, '') == table.concat(log_content, '') then
-          return
-        end
-      end
-
-      --- 给内容添加时间信息.
-      local time_now = vim.fn.strftime(" [%Y-%m-%d %H:%M:%S]")
-      update_info = vim.list_extend({"", time_now}, update_info)
-
-      --- 将内容写入文件中.
-      vim.fn.writefile(update_info, packer_update_log, 'a')
-      vim.cmd('checktime')
-    end
-  end,
-  desc = "log packer update logs",
-})
-
---- 显示上述文件的内容.
-vim.api.nvim_create_user_command("PackerUpdateLog",
-  function()
-    --- nobuflisted
-    --- nomodifiable 不能修改原文件, 但是可以将修改后的文件保存到另一个文件中.
-    --- readonly     不能 :w 保存修改, 但是可以 :w! 强制保存修改到原文件.
-    vim.cmd([[edit +setlocal\ readonly ]] .. packer_update_log)
-  end,
-  {bang=true, bar=true}
-)
--- -- }}}
-
---- packer.init(), Have packer use a popup window, "nvim-lua/popup.nvim" --------------------------- {{{
-require('packer').init {
-  --- Name of the snapshot File you would like to load at startup.
-  --- 该设置需要联网, 如果无法访问 github.com 则直接报错.
-  --- VVI: 最好在 startup() 的每个 use() 中使用 commit && lock 固化插件版本 curing plugins.
-  --snapshot = "2022.07.18",
-
-  snapshot_path = vim.fn.stdpath('cache') .. '/packer_snapshots',  -- 默认路径是 stdpath('cache') .. '/packer.nvim'
-  --package_root = vim.fn.stdpath('data') .. '/site/pack',  -- 默认值
-  --compile_path = vim.fn.stdpath('config') .. '/plugin/packer_compiled.lua',  -- VVI: 默认值, 文件放在 plugin/ 文件夹下, nvim 会自动加载.
-
-  ensure_dependencies = true, -- Should packer install plugin dependencies?
-  auto_clean = true, -- During sync(), remove unused plugins
-  autoremove = false, -- Remove disabled or unused plugins without prompting the user
-  compile_on_sync = true, -- During sync(), run packer.compile()
-  auto_reload_compiled = true, -- Automatically reload the compiled file after creating it.
-
-  display = {
-    open_fn = function()
-      --- require("packer.util").float() 使用 float window 打开 packer info 面板. 默认在右侧打开新 window.
-      --- border = { ... } 面板 border 样式.
-      return require("packer.util").float({ border = {"▄","▄","▄","█","▀","▀","▀","█"} })  -- `:help nvim_open_win()`
-    end,
-    prompt_border = {"▄","▄","▄","█","▀","▀","▀","█"},  -- prompt 面板样式. eg: delete plugins
-    keybindings = { -- Keybindings for the display window
-      quit = 'q',  -- close window, 默认是 'q'
-      toggle_info = '<CR>',
-      diff = 'd',
-      prompt_revert = 'r',
-    },
-  },
-  log = { level = 'warn' }, -- "trace", "debug", "info", "warn"(*), "error", "fatal".
-}
--- -- }}}
-
---- 官方文档 https://github.com/wbthomason/packer.nvim
---- 插件推荐 https://github.com/LunarVim/Neovim-from-scratch/blob/master/lua/user/plugins.lua
----          https://github.com/LunarVim/LunarVim/blob/master/lua/lvim/plugins.lua
---- `:echo stdpath("data")` == "~/.local/share/nvim"
---- 插件的安装位置在 "~/.local/share/nvim/site/pack/packer/start/..."
---- `:PackerSync` - install / update / clean 插件包.
 return require('packer').startup(function(use)
   use {"wbthomason/packer.nvim",  -- VVI: 必要. Have packer manage itself
     commit = "1d0cf98",

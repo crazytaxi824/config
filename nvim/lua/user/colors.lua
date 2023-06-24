@@ -1,4 +1,4 @@
---- README: ----------------------------------------------------------------------------------------
+--- README: ---------------------------------------------------------------------------------------- {{{
 --- 注意: 自定义 color 放在最后，用来 override 之前插件定义的颜色.
 ---   ':hi'                查看所有 color scheme
 ---   'ctermfg, ctermbg'   表示 color terminal (256 色)
@@ -36,8 +36,10 @@
 ---   nvim_buf_add_highlight(), 有点类似 matchaddpos() 但是不是完全一样.
 ---
 --- VVI: nvim_set_hl() 没有实现 `hi! default link Foo Bar` 和 `hi clear Foo` 功能.
+---
+-- -- }}}
 
-Color = {  -- {{{
+Color = {
   none = 'NONE',
 
   white = 251,  -- foreground, text
@@ -65,7 +67,6 @@ Color = {  -- {{{
   dark_red    = 52,   -- 256 color 中最深的红色, 接近黑色. 通常用于 bg.
   bracket_yellow = 220,  -- 匹配括号 () 颜色.
 }
--- -- }}}
 
 --- highlight api 设置: vim.api.nvim_set_hl(0, '@property', { ctermfg = 81 })
 local highlights = {
