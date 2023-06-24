@@ -9,9 +9,9 @@ tap "homebrew/services"
 ### `brew install` ---------------------------------------------------------------------------------
 # fzf
 brew "fzf"
-brew "fd"
-brew "ripgrep" # rg
-brew "bat"
+brew "fd"      # rust find
+brew "bat"     # rust cat
+brew "ripgrep" # rust grep, `rg`
 brew "tree"
 
 # git
