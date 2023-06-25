@@ -25,16 +25,15 @@ M.on_attach = function(client, bufnr)
   lsp_keymaps.textDocument_keymaps(bufnr)
   lsp_keymaps.diagnostic_keymaps(bufnr)
 
-  --- VVI: nvim-0.9 中禁止 LSP semantic token 否则 highlight 显示不正确.
-  --- `:help lsp-semantic_tokens`
-  --- NOTE: `vim.lsp.semantic_tokens.start()` This is currently called automatically by
+  --- VVI: nvim-0.9 中禁止 LSP semantic highlight (根据语义的 highlight) 否则 highlight 显示不正确.
+  --- `:help vim.lsp.semantic_tokens.start()`
+  --- NOTE: This is currently called automatically by
   --- |vim.lsp.buf_attach_client()|. To opt-out of semantic highlighting with a
   --- server that supports it, you can delete the semanticTokensProvider table
   --- from the {server_capabilities} of your client in your |LspAttach| callback
   --- or your configuration's `on_attach` callback: >lua
-  if vim.fn.has("nvim-0.9") == 1 then
-    client.server_capabilities.semanticTokensProvider = nil
-  end
+  --- NOTE: 如果需要更改 LSP semantic highlight 颜色, 使用 `:hi @lsp.type...`
+  client.server_capabilities.semanticTokensProvider = nil
 
   --- DEBUG: 用
   if __Debug_Neovim.lspconfig then
