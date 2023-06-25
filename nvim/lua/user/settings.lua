@@ -1,5 +1,7 @@
---- https://github.com/LunarVim/Neovim-from-scratch/blob/master/lua/user/options.lua
+--- vim & neovim 设置
 --- [ 注意事项 ] ----------------------------------------------------------------------------------- {{{
+--- 参考: https://github.com/LunarVim/Neovim-from-scratch/blob/master/lua/user/options.lua
+---
 --- 三种 `set` 的使用场景:
 ---    - `:setglobal` 用于设置普遍的情况. `:setlocal` 用于设置特殊情况.
 ---    - `:setlocal` 如果有 `local to buffer/window` 设置, 则设置到 local 值上, 如果 option 没有 `local to buffer/window` 设置, 则设置在 global 上.
@@ -118,31 +120,30 @@
 -- -- }}}
 
 --- VVI: neovim 特殊设置 --------------------------------------------------------------------------- {{{
---- filetype && syntax 设置
---- VVI: `help g:did_load_filetypes` 如果存在(不论值是多少),
---- 则不加载 '$VIMRUNTIME/filetype.vim' & 'runtimepath/filetype.lua', 相当于 `filetype off`.
---vim.g.did_load_filetypes = 0
-
---- VVI: `:help g:do_legacy_filetype` 使用 vim filetype 而不使用 neovim filetype.
---vim.g.do_legacy_filetype = 1
-
+--- filetype && syntax
 --- `:help filetype-overview` 可以查看 filetype 设置.
 --- `:help :filetype`, Detail: The ":filetype on" command will load these files:
----    $VIMRUNTIME/filetype.lua
----    $VIMRUNTIME/filetype.vim
+---    $VIMRUNTIME/filetype.lua   -- vim 中使用 script 定义 filetype 的文件.
+---    $VIMRUNTIME/filetype.vim   -- neovim 中使用 lua 定义 filetype 的文件.
 --- `:filetype` 命令打印结果 'filetype detection:ON  plugin:ON  indent:ON'
---- VVI: 因此设置了 did_load_filetypes 之后不要再设置 `:filetype on/off`, 都会产生冲突.
+---
+--- VVI: `:help g:did_load_filetypes` 如果存在(不论值是多少), 则
+--- 不加载 '$VIMRUNTIME/filetype.vim' & 'runtimepath/filetype.lua', 相当于 `filetype off`.
+--vim.g.did_load_filetypes = 0
+
+--- VVI: 设置了 did_load_filetypes 之后不要再设置 `:filetype on/off`, 都会产生冲突.
 --vim.cmd('filetype on')  -- 不要手动设置. 使用 vim.g.did_load_filetypes 来代替.
 
---- NOTE: https://github.com/nvim-treesitter/nvim-treesitter/issues/359
---- When you activate treesitter highlighting, syntax gets automatically turned off for that file type
+--- Q: Do i need turn off other syntax plugins when using treesitter?
+--- A: When you activate treesitter highlighting, syntax gets automatically turned off for that file type
 --- while you can keep it for the file types WITHOUT parser.
+--- https://github.com/nvim-treesitter/nvim-treesitter/issues/359
 --- vim 内置语法高亮, 基于正则表达式的语法高亮.
 --vim.cmd('syntax on')    -- 默认开启. `:echo g:syntax_on`, 可以查看 syntax 是否开启.
                           -- nvim-treesitter 插件会强制将 syntax 设置为 `syntax manual`. `:help :syn-manual`
                           -- NOTE: 如果直接设置 `syntax off` 则, vim 不会加载 after/syntax. (但是不影响加载 after/ftplugin)
 
---- VVI: 不使用 $VIMRUNTIME/ftplugin/xxx.vim 中预设的 keymap.
+--- VVI: 不使用 $VIMRUNTIME/ftplugin/xxx.vim 中预设的 keymaps.
 --- disable plugin maps 后会导致部分 keymaps 无法使用, 需要手动设置. eg: 'gO'
 vim.g.no_plugin_maps = 1
 
