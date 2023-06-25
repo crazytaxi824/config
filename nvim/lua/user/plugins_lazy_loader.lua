@@ -1,4 +1,6 @@
---- lazy load opt plugins, loader() 名字可以查看 `plugin/packer_compiled.lua`
+--- lazy load opt plugins,
+--- require('packer').loader("foo bar ..."), 名字可以查看 `plugin/packer_compiled.lua`
+
 --- VVI: 加载顺序很重要
 local lazyload_plugins = {
   'nvim-treesitter',  -- TreeSitter, NOTE: 必须要 lazyload, 否则严重影响 neovim startup 速度.

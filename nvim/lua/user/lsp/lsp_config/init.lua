@@ -1,4 +1,4 @@
---- README: lspconfig 设置方法: require("lspconfig")["jsonls"].setup(opts), 设置后 jsonls 才会自动启动.
+--- lspconfig 设置方法: require("lspconfig")["jsonls"].setup(opts), 设置后 jsonls 才会自动启动.
 --- 通过 mason 安装 lsp 时需要对应名字. https://github.com/williamboman/mason-lspconfig.nvim/blob/main/doc/server-mapping.md
 --- 要手动启动 lsp, 使用 `:LspStart xxx`
 
