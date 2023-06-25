@@ -16,14 +16,12 @@ else
 end
 -- -- }}}
 
---- vim.schedule() lazyload plugins -------------------------------------------- {{{
+--- lazyload plugins ----------------------------------------------------------- {{{
 local function lazyload_plugins()
-  --- NOTE: 利用vim.schedual() lazyload plugins
+  --- 利用 vim.schedual() lazyload plugins
   vim.schedule(function()
     local lazyload_list = require("user.plugins_lazy_loader")
-    for _, plugin in ipairs(lazyload_list) do
-      require('packer').loader(plugin)
-    end
+    require('packer').loader(table.concat(lazyload_list, ' '))
   end)
 end
 -- -- }}}
