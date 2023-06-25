@@ -176,13 +176,10 @@ vim.g.loaded_perl_provider = 0  -- Disable Perl |remote-plugin| support
 -- -- }}}
 
 --- tabstop / shiftwidth - prettier indent 设置 ---------------------------------------------------- {{{
---- NOTE: nvim-0.9 中默认读取 editorconfig 文件来设置以下属性.
+--- VVI: `:help editorconfig`, nvim-0.9 中默认读取 editorconfig 文件来设置以下属性.
 --- 如果有 .editorconfig 文件则优先使用 editorconfig 的设置;
 --- 如果没有 ,editorconfig 文件则使用以下 tabstop, softtabstop, shiftwidth ... 设置.
--- if vim.fn.has("nvim-0.9") == 1 then
---   --- `:help editorconfig`, 禁止使用 editorconfig.
---   vim.g.editorconfig = false
--- end
+--vim.g.editorconfig = false  -- false: 禁止使用 editorconfig, 默认值为 true.
 
 --- VVI: 以下设置不要随便改动, 需要配合 vscode & prettier & .editorconfig 一起改动.
 --- 最简单的办法是将 tabstop = softtabstop = shiftwidth 设置为同一个值.
