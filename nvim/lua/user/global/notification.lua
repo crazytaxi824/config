@@ -1,4 +1,4 @@
---- 提醒使用 notify 插件或者 vim.notify() 函数 -----------------------------------------------------
+--- 提醒使用 notify 插件或者 vim.notify() 函数
 --- msg - string|[]string
 --- lvl - string|number. "TRACE"-0, "DEBUG"-1, "INFO"-2, "WARN"-3, "ERROR"-4,
 ---       `:help vim.log.levels`, `:help notify.setup`

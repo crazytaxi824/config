@@ -1,8 +1,8 @@
---- 以下并没有用到, 作为 go Auto Format 备选方案.
+--- NOTE: 以下并没有用到, 作为 go Auto Format 备选方案.
 --- Auto goimports ---------------------------------------------------------------------------------
---- README: 使用 code_action 执行 organizeImports, 不会询问.
----         该方法只针对 golang 有效, 其他语言无法使用该方法进行 OrganizeImports, eg: tsx
---- NOTE:   目前在 null-ls 中使用 formatting.goimports 替代.
+--- 使用 code_action 执行 organizeImports, 不会询问.
+--- 该方法只针对 golang 有效, 其他语言无法使用该方法进行 OrganizeImports, eg: tsx
+--- 目前在 null-ls 中使用 formatting.goimports 替代.
 --- https://cs.opensource.google/go/x/tools/+/refs/tags/gopls/v0.8.3:gopls/doc/vim.md#neovim-imports
 --- https://github.com/neovim/nvim-lspconfig/issues/115
 

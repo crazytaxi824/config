@@ -1,3 +1,5 @@
+--- 用于 execute 编程调试命令的 terminal, eg: `go run ...`, `go test ...`, `python3 ...`
+
 local Terminal = require("toggleterm.terminal").Terminal
 local goto_win = require("user.utils.term.goto_winid")
 

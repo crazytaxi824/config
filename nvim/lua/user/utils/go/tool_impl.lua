@@ -1,3 +1,4 @@
+--- 使用 `impl` 命令给指定 interface 生成代码, 实现该 interface 的所有方法.
 --- <cword> under the cursor need to be a interface name.
 --  `impl -dir src Cat IAnimal`
 --      - 'Cat'      是我们需要定义的 type, 也就是以下传入的 obj.

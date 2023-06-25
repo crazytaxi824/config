@@ -1,3 +1,6 @@
+--- 使用 autocmd "CursorHold", "CursorHoldI" 使用自定义的 doc_highlight.lua 设置.
+--- autocmd "BufLeave" (cursor 离开该 buffer 的时候) 清除 clear documentHighlight.
+
 local custom_lsp_req = require("user.lsp.custom_lsp_request")
 
 --- 返回自定义 documentHighlight 处理方法 ----------------------------------------------------------

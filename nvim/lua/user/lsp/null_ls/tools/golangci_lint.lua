@@ -1,3 +1,5 @@
+--- 在 null-ls 中设置 golangci-lint
+
 return {
   --command = "path/to/golangci-lint",
 

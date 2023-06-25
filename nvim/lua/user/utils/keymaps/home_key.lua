@@ -1,4 +1,5 @@
 --- <Home> key in `:set nowrap` and `:set wrap` situation.
+
 local M = {}
 
 --- <Home> key in `:set nowrap` situation.

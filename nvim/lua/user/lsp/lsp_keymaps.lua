@@ -1,4 +1,4 @@
---- LSP buffer 专用 keymaps.
+--- LSP buffer 专用 keymaps
 --- 只在有 LSP 的时候生效. 针对 buffer 设置 keymap.
 --- 主要用在: null-ls.setup() on_attach 和 lspconfig.setup() on_attach 设置中.
 --- 当有 client 可以 attach 的时候设置 keymap.

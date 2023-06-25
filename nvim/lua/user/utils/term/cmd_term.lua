@@ -1,3 +1,7 @@
+--- 编辑器内的 terminal. 常用于在编辑器内执行 cmd.
+--- 是 toggleterm 的实例. 预设了多个实例, 包括 horizontal, vertical, float.
+--- 也包括 Node, python3.
+
 local Terminal = require("toggleterm.terminal").Terminal
 
 local M = {}

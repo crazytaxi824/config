@@ -1,4 +1,4 @@
---- Overwrite handler 设置 -------------------------------------------------------------------------
+--- Overwrite handler 设置
 --- 使用 with() 方法. `:help lsp-handler-configuration`
 --- `:help lsp-api` lsp-method 显示 textDocument/... 列表
 

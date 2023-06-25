@@ -1,4 +1,5 @@
 --- 自定义 health check
+
 --- require vim.health. `:help health-dev`
 local health = vim.health
 
