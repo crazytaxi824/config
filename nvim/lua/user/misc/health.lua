@@ -1,10 +1,6 @@
+--- 自定义 health check
 --- require vim.health. `:help health-dev`
-local health
-if vim.fn.has("nvim-0.9") == 1 then
-  health = vim.health
-else
-  health = require("health")
-end
+local health = vim.health
 
 local M = {}
 
