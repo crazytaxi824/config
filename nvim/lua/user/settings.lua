@@ -247,11 +247,9 @@ vim.api.nvim_create_autocmd('FileType', {
   desc = "set expandtab, tabstop, shiftwidth for python",
 })
 
---- pandoc / markdown 需要使用到 \t 和 space, 所以这里不设置 expandtab.
-if vim.fn.has("nvim-0.9") == 1 then
-  -- `:help ft-markdown-plugin`
-  vim.g.markdown_recommended_style = 0
-end
+--- `:help ft-markdown-plugin`. markdown 中 'expandtab' will be set by default.
+--- 如果需要使用到 \t 则使用设置:
+vim.g.markdown_recommended_style = 0
 
 -- -- }}}
 
