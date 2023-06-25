@@ -1,4 +1,4 @@
---- LSP 常用功能函数 -------------------------------------------------------------------------------
+--- LSP 常用功能函数
 --- `:GetLspClientsInfo`   表示所有启动的 lsp
 --- `:GetLspClientsInfo 0` 表示当前 buffer 的 attached lsp
 vim.api.nvim_create_user_command("GetLspClientsInfo",

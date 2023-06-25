@@ -1,4 +1,5 @@
---- 离开 vim 时, 清理 log 文件 ---------------------------------------------------------------------
+--- 离开 vim 时, 清理 log 文件
+
 local file_list = {
   vim.fn.stdpath('log') .. '/log',
   vim.fn.stdpath('log') .. '/lsp.log',
