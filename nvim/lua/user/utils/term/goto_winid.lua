@@ -1,3 +1,5 @@
+--- go back to previous window when terminal window closed.
+
 local M = {}
 
 M.autocmd = function(win_id)
@@ -16,7 +18,7 @@ M.autocmd = function(win_id)
       --- 删除 augroup
       vim.api.nvim_del_augroup_by_id(group_id)
     end,
-    desc = 'back to exec window',
+    desc = 'back to previous (cmd execute) window',
   })
 end
 

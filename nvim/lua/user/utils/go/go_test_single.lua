@@ -1,3 +1,6 @@
+--- `go test run/bench` single test function.
+--- `go test run/bench=^TEST_Func_Name$ ImportPath`, test 单独的 package.
+
 local go_utils = require("user.utils.go.utils")
 
 local M = {}

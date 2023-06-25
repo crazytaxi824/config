@@ -1,5 +1,6 @@
---- 使用 gomodifytags 给 struct 添加/移除 tags ----------------------------------------------------- {{{
---- 操作方法: cursor 在 struct 的 {} 内, 使用以下 Command
+--- 使用 gomodifytags 给 struct 添加/移除 tags
+--- 操作方法 --------------------------------------------------------------------------------------- {{{
+--- cursor 在 struct 的 {} 内, 使用以下 Command
 ---   :GoTagAdd json,xml            -- 默认: snakecase. use '-add-tags'
 ---   :GoTagAdd json,xml camelcase  -- camelcase. use '-add-tags' & '-transform'
 ---   :GoTagAdd json=foo,xml=bar    -- use '-add-tags' & '-add-options'

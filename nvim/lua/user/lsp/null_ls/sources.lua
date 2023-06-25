@@ -1,3 +1,5 @@
+--- null-ls 提供的各种 builtin tools 的加载和设置
+
 local null_ls_status_ok, null_ls = pcall(require, "null-ls")
 if not null_ls_status_ok then
   return

@@ -1,3 +1,5 @@
+--- 用于执行各种 tool 命令并能够通过 float 窗口(可视面积)显示结果的 terminal, eg: `gomodifytags`, `impl` ...
+
 local Terminal = require("toggleterm.terminal").Terminal
 
 local M = {}

@@ -1,3 +1,7 @@
+--- `go test run/bench` whole package or whole project
+--- `go test run/bench ImportPath`, test 单独的 package.
+--- 在 project root 下执行 'go test ./...', 即 test 整个 Project.
+
 local go_utils = require("user.utils.go.utils")
 
 local M = {}
