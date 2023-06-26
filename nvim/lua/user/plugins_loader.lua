@@ -625,19 +625,19 @@ local plugins = {
   --"ahmedkhalf/project.nvim",  -- project manager
 }
 
---- packer 检查 plugins 是否有更新 ----------------------------------------------------------------- {{{
+--- 通过 github api 检查 plugins 是否有更新 -------------------------------------------------------- {{{
+--- make a HTTP request to get commit sha and tag
+--- DOC: https://docs.github.com/en/rest/commits/commits?apiVersion=2022-11-28#list-commits
+--- rate-limiting
+--- DOC: https://docs.github.com/en/rest/overview/resources-in-the-rest-api?apiVersion=2022-11-28#rate-limiting
+--- without github token 60/hour, with Personal access tokens (classic) 5000/hour.
+--- check api rate-limit limit, `curl -i -H "Authorization: Bearer <YOUR-TOKEN>" https://api.github.com/users/octocat`
+--- Q: how to get github Personal access tokens (classic)?
+--- A: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic
+
+--- api_type 包括: commits, tags, releases, folks, issues ...
+--- api_type 可以通过 `curl -sL "https://api.github.com/repos/OWNER/REPO"` 查看.
 local function github_api(plugin_name, api_type)
-  --- github api --------------------------------------------------------------- {{{
-  --- make a HTTP request to get commit sha and tag
-  --- https://docs.github.com/en/rest/git/tags?apiVersion=2022-11-28#get-a-tag
-  --- https://docs.github.com/en/rest/commits/commits?apiVersion=2022-11-28#list-commits
-  --- rate-limiting
-  --- https://docs.github.com/en/rest/overview/resources-in-the-rest-api?apiVersion=2022-11-28#rate-limiting
-  --- without github token 60/hour, with Personal access tokens (classic) 5000/hour.
-  --- check api rate-limit limit, `curl -i -H "Authorization: Bearer <YOUR-TOKEN>" https://api.github.com/users/octocat`
-  --- Q: how to get github Personal access tokens (classic)?
-  --- A: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic
-  -- -- }}}
   --- `curl -sL "https://api.github.com/repos/OWNER/REPO/tags?per_page=1&page=1"`
   --- `curl -sL "https://api.github.com/repos/OWNER/REPO/commits?per_page=1&page=1"`
   local url = '"https://api.github.com/repos/' .. plugin_name .. '/' .. api_type .. '?per_page=1&page=1"'
@@ -665,10 +665,11 @@ local function packerCheckUpdate()
   local log = "/tmp/nvim/packer_check_update.log"
   local new_content = {}
 
-  --- 时间小于 1 小时则不重新发送请求, 直接打印已有数据.
+  --- 时间小于 2 小时则不重新发送请求, 直接打印已有数据.
   if vim.fn.filereadable(log) == 1 then
     local log_content = vim.fn.readfile(log, '')
-    if time_now_unix - tonumber(log_content[1]) < 3600 then
+    if time_now_unix - tonumber(log_content[1]) < 7200 then
+      table.remove(log_content, 1)  -- remove time stamp
       vim.print(log_content)
       return
     end
@@ -683,6 +684,7 @@ local function packerCheckUpdate()
           goto continue
         end
 
+        --- abbrev_sha is short version of commmit sha.
         local abbrev_sha = string.sub(repo_latest.sha, 1, 7)
         if value ~= abbrev_sha then
           table.insert(new_content, plugin[1] .. ", commit="..abbrev_sha)
