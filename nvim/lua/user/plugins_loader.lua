@@ -625,6 +625,98 @@ local plugins = {
   --"ahmedkhalf/project.nvim",  -- project manager
 }
 
+--- packer 检查 plugins 是否有更新 ----------------------------------------------------------------- {{{
+local function github_api(plugin_name, api_type)
+  --- github api --------------------------------------------------------------- {{{
+  --- make a HTTP request to get commit sha and tag
+  --- https://docs.github.com/en/rest/git/tags?apiVersion=2022-11-28#get-a-tag
+  --- https://docs.github.com/en/rest/commits/commits?apiVersion=2022-11-28#list-commits
+  --- rate-limiting
+  --- https://docs.github.com/en/rest/overview/resources-in-the-rest-api?apiVersion=2022-11-28#rate-limiting
+  --- without github token 60/hour, with Personal access tokens (classic) 5000/hour.
+  --- check api rate-limit limit, `curl -i -H "Authorization: Bearer <YOUR-TOKEN>" https://api.github.com/users/octocat`
+  --- Q: how to get github Personal access tokens (classic)?
+  --- A: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic
+  -- -- }}}
+  --- `curl -sL "https://api.github.com/repos/OWNER/REPO/tags?per_page=1&page=1"`
+  --- `curl -sL "https://api.github.com/repos/OWNER/REPO/commits?per_page=1&page=1"`
+  local url = '"https://api.github.com/repos/' .. plugin_name .. '/' .. api_type .. '?per_page=1&page=1"'
+  local cmd = 'curl -sL -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" ' .. url
+
+  -- clear command line prompt message.
+  vim.cmd("normal! :")
+  --- NOTE: nvim_echo() print without saving in message history.
+  vim.api.nvim_echo({{'checking "' .. plugin_name .. '" ...', "Normal"}}, false, {})
+
+  local result = vim.fn.system(cmd)
+  if vim.v.shell_error ~= 0 then
+    vim.notify(result, vim.log.levels.ERROR)
+    return
+  end
+
+  if result ~= '' then
+    --- NOTE: 如果无法解析 result 则 decode 值为 nil. 例如在 result 是 error 的情况下.
+    return vim.json.decode(result)[1]
+  end
+end
+
+local function packerCheckUpdate()
+  local time_now_unix = vim.fn.localtime()
+  local log = "/tmp/nvim/packer_check_update.log"
+  local new_content = {}
+
+  --- 时间小于 1 小时则不重新发送请求, 直接打印已有数据.
+  if vim.fn.filereadable(log) == 1 then
+    local log_content = vim.fn.readfile(log, '')
+    if time_now_unix - tonumber(log_content[1]) < 3600 then
+      vim.print(log_content)
+      return
+    end
+  end
+
+  for _, plugin in ipairs(plugins) do
+    for key, value in pairs(plugin) do
+      if key == 'commit' then
+        local repo_latest = github_api(plugin[1], "commits")
+        if not repo_latest then
+          vim.notify("repo latest info is nil, github api rate-limit may be reached.", vim.log.levels.WARN)
+          goto continue
+        end
+
+        local abbrev_sha = string.sub(repo_latest.sha, 1, 7)
+        if value ~= abbrev_sha then
+          table.insert(new_content, plugin[1] .. ", commit="..abbrev_sha)
+        end
+
+      elseif key == 'tag' then
+        local repo_latest = github_api(plugin[1], "tags")
+        if not repo_latest then
+          vim.notify("repo latest info is nil, github api rate-limit may be reached.", vim.log.levels.WARN)
+          goto continue
+        end
+
+        local tag = repo_latest.name
+        if value ~= tag then
+          table.insert(new_content, plugin[1] .. ", tag="..tag)
+        end
+      end
+    end
+  end
+
+  ::continue::
+
+  if #new_content > 1 then
+    vim.print(new_content)
+    table.insert(new_content, 1, time_now_unix)
+    vim.fn.writefile(new_content, log)
+  end
+end
+
+--- user command
+vim.api.nvim_create_user_command("PackerUpdateCheck", packerCheckUpdate, {bang=true, bar=true})
+
+-- -- }}}
+
 return require('packer').startup(function(use)
   --- load plugins
   for _, plugin in ipairs(plugins) do
