@@ -1,5 +1,5 @@
 --- packer 主要是一个 plugin 安装/管理插件.
---- install packer.nvim: `git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim`
+--- install packer.nvim: https://github.com/wbthomason/packer.nvim#quickstart
 --- packer 设置 ------------------------------------------------------------------------------------ {{{
 --- VVI: debug.getinfo() 函数获取本文件路径 ------------------------------------ {{{
 --- source 返回的内容中:
@@ -189,8 +189,7 @@ require('packer').init {
 --- packer 加载 plugins
 --- 插件的安装位置在 "~/.local/share/nvim/site/pack/packer/...", 即 stdpath("data") .. "/site/pack/packer/"
 --- packer 加载 plugin 设置文档 -------------------------------------------------------------------- {{{
--- 官方文档 https://github.com/wbthomason/packer.nvim
---          https://github.com/wbthomason/packer.nvim#specifying-plugins
+-- 官方文档 https://github.com/wbthomason/packer.nvim#specifying-plugins
 -- 插件推荐 https://github.com/LunarVim/Neovim-from-scratch/blob/master/lua/user/plugins.lua
 --          https://github.com/LunarVim/LunarVim/blob/master/lua/lvim/plugins.lua
 --
@@ -198,7 +197,7 @@ require('packer').init {
 --   当 plugin 有加载条件的时候, plugin 的安装地址会从 ~/.local/share/nvim/site/pack/packer/start -> opt
 --   plugin 的 opt 属性会被改为 true, `:PackerStatus`
 --
--- `:help packer.use()`
+-- NOTE: `:help packer.use()`
 -- use {
 --   'myusername/example',        -- The plugin location string
 --
