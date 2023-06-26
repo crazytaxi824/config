@@ -655,7 +655,7 @@ vim.api.nvim_create_autocmd("BufDelete", {
 --   vim.print("state.custom_sort (bufnrs order):", state.custom_sort)
 --   if bufferline_index then
 --     bufferline.exec(bufferline_index, function(index_info, visible_infos)
---       --- 如果 index 不存在, 则 callback funciton 不执行.
+--       --- 如果 index 不存在, 则 callback function 不执行.
 --       if index_info then
 --         print("index:", bufferline_index, "ordinal:", index_info.ordinal, "; bufnr:", index_info.id, "; bufname:", index_info.path)
 --       end

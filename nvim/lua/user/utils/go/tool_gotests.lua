@@ -1,5 +1,5 @@
 --- 使用 `gotests` 命令给指定 function 自动生成测试代码.
---- 操作方法: cursor 指向 funciton Name <cword>, 使用 Command `:GoTests`
+--- 操作方法: cursor 指向 function Name <cword>, 使用 Command `:GoTests`
 --- <cword> under the cursor need to be a function name.
 --  gotests -only [func_name] filepath, eg: `gotest -only Foo /xxx/src/foo.go`
 --     -only   match regex func_name
