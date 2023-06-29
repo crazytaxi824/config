@@ -107,26 +107,28 @@ notARepository: 'skip' # one of: 'prompt' | 'create' | 'skip'
 keybinding:
   # 通用快捷键
   universal:
-    undo: '<f12>'       # ctrl-z, 危险操作
-    redo: '<f12>'       # shift-z
-    pullFiles: '<f12>'  # use 'fetch' instead of 'pull', 慎用.
-    gotoTop: 'g'        # go to top of list
-    gotoBottom: 'G'     # go to bottom of list
+    remove: null
+    undo: null       # ctrl-z, 危险操作
+    redo: null       # shift-z
+    pullFiles: null  # use 'fetch' instead of 'pull', 慎用.
+    gotoTop: 'g'     # go to top of list
+    gotoBottom: 'G'  # go to bottom of list
   # file (window No.1)
   files:
-    fetch: '<f12>'        # submodules 项目子仓库, 使用 'b' 打开 menu 操作
-    commitChangesWithoutHook: '<f12>'
+    fetch: null
+    commitChangesWithoutHook: null
   submodules:
-    init: '<f12>'         # submodules 项目子仓库, 使用 'b' 打开 menu 操作
+    init: null  # [Submodules] 项目子仓库, 使用 'b' 打开 menu 操作
   # branch (window No.3)
   branches:
-    rebaseBranch: '<f12>' # use 'rebase-checkout' carefully.
-    fastForward: '<f12>'  # fast-forward this branch from its upstream
-    forceCheckoutBranch: '<f12>'
+    rebaseBranch: null # use 'rebase-checkout' carefully.
+    fastForward: null  # fast-forward this branch from its upstream
+    forceCheckoutBranch: null
+    #fetchRemote: 'f'   # 切换至 [Remotes] 才能 fetch, 默认为 'f'
   # commit (window No.4)
   commits:
-    revertCommit: '<f12>' # use 'revert-commit' carefully. no confirm required
-    viewResetOptions: '<f12>'  # 默认为 'g', 这里是为了避免按键冲突
+    revertCommit: null  # use 'revert-commit' carefully. no confirm required
+    viewResetOptions: null  # 默认为 'g', 这里是为了避免按键冲突
   # stash (window No.5)
   stash:
     popStash: 'p'  # 默认为 'g', 这里是为了避免按键冲突
