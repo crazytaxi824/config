@@ -267,8 +267,8 @@ local keymaps = {
   --{'n', '>', ':bnext<CR>', opt, 'go to next buffer'},
 
   --- alacritty settings window.option_as_alt 设置 Option 当做 ALT key 使用.
-  {'n', '<M-a>', function() print("Alt-A") end, opt, 'Test ALT key'},
-  {'n', '<A-s>', function() print("Alt-S") end, opt, 'Test ALT key'},
+  {'n', '<M-a>', function() print("<M-a> Option/Alt-A") end, opt, 'Test Option/ALT key'},
+  {'n', '<A-s>', function() print("<A-s> Option/Alt-S") end, opt, 'Test Option/ALT key'},
 }
 
 --- 这里是设置所有 key mapping 的地方 --------------------------------------------------------------
