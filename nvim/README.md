@@ -511,29 +511,7 @@ vim.lsp.buf.format({
 
 ## TODO
 
-- CHECKING update commit & tag: `git log`
-https://docs.github.com/en/rest/commits/commits?apiVersion=2022-11-28#list-commits
+- change PackerUpdateCheck print format
 
-curl -sL "https://api.github.com/repos/<OWNER>/<REPO>/tags?per_page=1&page=1"
-curl -sL "https://api.github.com/repos/<OWNER>/<REPO>/commits?per_page=1&page=1"
--s   Do not print error message.
--L   (3XX redirect) if the page has moved to a different location, curl redo the request on the new place.
--H "Accept: application/vnd.github+json"
--H "X-GitHub-Api-Version: 2022-11-28"
+- fzf/telescope horizontal scroll previewer: <Ctrl-H/J/K/L>, result: <Shift-LEFT/RIGHT/UP/DOWN>
 
-```lua
-function Test()
-  local url = '"https://api.github.com/repos/crazytaxi824/config/commits?per_page=1&page=1"'
-  local cmd = 'curl -sL -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" ' .. url
-
-  --- make a HTTP request
-  local job_id = vim.fn.jobstart(cmd, {on_stdout = function(_, output)
-    local json_str = table.concat(output, '')
-    if json_str ~= '' then
-      local repo_latest = vim.json.decode(json_str)[1]
-      print(string.sub(repo_latest.sha, 1, 7))
-    end
-  end})
-  vim.fn.jobwait({job_id}, 3000)
-end
-```

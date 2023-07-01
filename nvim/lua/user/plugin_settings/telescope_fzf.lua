@@ -72,6 +72,7 @@ telescope.setup {
 
     --- `:help telescope.defaults.mappings`         - 默认 key mapping 也能使用
     --- `:help telescope.defaults.default_mappings` - 只使用自定义 key mapping
+    --- `:help telescope.actions`  -- 查看可用 actions
     --- https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/mappings.lua
     --- https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/actions/init.lua
     mappings = {
@@ -133,8 +134,10 @@ telescope.setup {
         ["<C-d>"] = false,
         ["<PageUp>"] = actions.preview_scrolling_up,
         ["<PageDown>"] = actions.preview_scrolling_down,
+        --- actions.preview_scrolling_left(), actions.preview_scrolling_right()
         ["<S-Up>"] = actions.results_scrolling_up,
         ["<S-Down>"] = actions.results_scrolling_down,
+        --- actions.results_scrolling_left(), actions.results_scrolling_right()
 
         ["<Tab>"] = actions.toggle_selection + actions.move_selection_next,
         ["<S-Tab>"] = actions_layout.cycle_layout_next,  -- layout window
