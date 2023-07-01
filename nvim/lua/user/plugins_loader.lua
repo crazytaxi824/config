@@ -338,7 +338,7 @@ local plugins = {
 
   --- 第一方 module 插件 ---
   {"nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-    commit = "6eccc44",
+    commit = "63f3ffc",
     config = function() require("user.plugin_settings.treesitter_ctx") end,
 
     after = "nvim-treesitter",
