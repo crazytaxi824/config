@@ -321,7 +321,7 @@ local plugins = {
   --- By convention, if you want to write a query, use the `queries/` directory,
   --- but if you want to extend a query use the `after/queries/` directory.
   {"nvim-treesitter/nvim-treesitter",
-    commit = "c9d5812b",  -- NOTE: tag 更新太慢, commit 更新太快, 最好两周更新一次.
+    commit = "393bc5b",  -- NOTE: tag 更新太慢, commit 更新太快, 最好两周更新一次.
     --run = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量安装 parser 容易卡死.
     config = function() require("user.plugin_settings.treesitter") end,
     requires = {
