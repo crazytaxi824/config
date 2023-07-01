@@ -283,7 +283,7 @@ local plugins = {
   --- Useful lua functions used by lots of plugins
   --- NOTE: plenary.nvim 合并了 popup.nvim
   {"nvim-lua/plenary.nvim",
-    commit = "36aaceb",
+    commit = "102c029",
   },
 
   --- Must install ---------------------------------------------------------------------------------
