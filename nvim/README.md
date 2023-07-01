@@ -511,5 +511,3 @@ vim.lsp.buf.format({
 
 ## TODO
 
-- fzf/telescope horizontal scroll previewer: <Ctrl-H/J/K/L>, result: <Shift-LEFT/RIGHT/UP/DOWN>
-

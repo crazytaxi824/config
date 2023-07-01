@@ -30,6 +30,7 @@ local my_action = transform_mod({
 
 -- -- }}}
 
+--- `:help telescope.setup()`
 telescope.setup {
   defaults = {
     --- VVI: 这里必须使用占 2 格的 icon, 否则渲染会出 bug.
@@ -37,6 +38,7 @@ telescope.setup {
     selection_caret = "➜ ",
     multi_icon = ' ✓',
     path_display = { "absolute" },  -- table|func, `:help telescope.defaults.path_display`
+    --wrap_results = true,  -- result window `set wrap`
 
     --- `:help telescope.defaults.layout_config`
     layout_config = {
@@ -182,6 +184,27 @@ telescope.setup {
   },
 }
 
+--- keymap: toggle `set wrap` for filetype = TelescopePrompt only
+vim.api.nvim_create_autocmd("User", {
+  pattern = "TelescopePreviewerLoaded",
+  callback = function(params)
+    local preview_winid = vim.api.nvim_get_current_win()
+    --- keymap.set
+    for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+      if vim.bo[bufnr].filetype == 'TelescopePrompt' then
+        for _, mode in ipairs({'n', 'i'}) do
+          vim.api.nvim_buf_set_keymap(bufnr, mode, '<C-k>', '', {callback = function()
+            --- toggle `set wrap`
+            vim.wo[preview_winid].wrap = not vim.wo[preview_winid].wrap
+          end,
+          noremap = true,
+          silent = true,
+          desc = 'telescope: toggle preview wrap'})
+        end
+      end
+    end
+  end,
+})
 
 --- keymaps ----------------------------------------------------------------------------------------
 local builtin = require("telescope.builtin")
