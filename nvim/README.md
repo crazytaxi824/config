@@ -511,7 +511,5 @@ vim.lsp.buf.format({
 
 ## TODO
 
-- change PackerUpdateCheck print format
-
 - fzf/telescope horizontal scroll previewer: <Ctrl-H/J/K/L>, result: <Shift-LEFT/RIGHT/UP/DOWN>
 

@@ -670,7 +670,7 @@ local function packerCheckUpdate()
     local log_content = vim.fn.readfile(log, '')
     if time_now_unix - tonumber(log_content[1]) < 7200 then
       table.remove(log_content, 1)  -- remove time stamp
-      vim.print(log_content)
+      vim.notify(table.concat(log_content, '\n'), vim.log.levels.INFO)
       return
     end
   end
@@ -687,7 +687,7 @@ local function packerCheckUpdate()
         --- abbrev_sha is short version of commmit sha.
         local abbrev_sha = string.sub(repo_latest.sha, 1, 7)
         if value ~= abbrev_sha then
-          table.insert(new_content, plugin[1] .. ", commit="..abbrev_sha)
+          table.insert(new_content, plugin[1] .. ", commit = "..abbrev_sha)
         end
 
       elseif key == 'tag' then
@@ -699,7 +699,7 @@ local function packerCheckUpdate()
 
         local tag = repo_latest.name
         if value ~= tag then
-          table.insert(new_content, plugin[1] .. ", tag="..tag)
+          table.insert(new_content, plugin[1] .. ", tag = "..tag)
         end
       end
     end
@@ -708,7 +708,7 @@ local function packerCheckUpdate()
   ::continue::
 
   if #new_content > 1 then
-    vim.print(new_content)
+    vim.notify(table.concat(new_content, '\n'), vim.log.levels.INFO)
     table.insert(new_content, 1, time_now_unix)
     vim.fn.writefile(new_content, log)
   end
