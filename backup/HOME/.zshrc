@@ -329,6 +329,7 @@ FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --preview='([[ -d {} ]] && (tree -NC -L 3 {}
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --preview-window='right,60%,border-left'"
 # 以下是定义 fzf 快捷键作用
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='btab:change-preview-window(top,70%,border-bottom|hidden|)'" # change layout, btab=<Shift-Tab>
+FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-k:toggle-preview-wrap,ctrl-j:unbind(ctrl-j)'" # toggle wrap preview text. NOTE: ctr-k,ctrl-j 默认是 up/down
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='shift-up:half-page-up,shift-down:half-page-down'"  # result scroll
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='pgup:preview-half-page-up,pgdn:preview-half-page-down'"  # preview scroll
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-a:toggle-all'"  # multi-select
