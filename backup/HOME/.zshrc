@@ -340,7 +340,7 @@ FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-e:become($EDITOR \"+lua FZF_sel
 # system open 光标所在行 file.
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-o:execute(open {})'"
 # header 中加入快捷键说明.
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --header='# <C-e>:Edit; <C-o>:Open; <S-Tab>:Preview-win; <Tab>:Select; <C-a>:Toggle-All-Selected'"
+FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --header='# <C-e>:Edit; <C-o>:Open; <S-Tab>:P-win; <C-k>:P-wrap, <Tab>:Select; <C-a>:Toggle-All-Selected'"
 export FZF_DEFAULT_OPTS
 
 # --------------------------------------------------------------------------------------------------
