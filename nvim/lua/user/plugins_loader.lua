@@ -546,7 +546,7 @@ local plugins = {
   --- Useful Tools ---------------------------------------------------------------------------------
   --- fzf rg fd, preview 使用的是 treesitter, 而不用 bat
   {"nvim-telescope/telescope.nvim",
-    commit = "b14de80",  -- tag = "0.1.2", 半年更新一次 tag
+    commit = "0e06009",  -- tag = "0.1.2", 半年更新一次 tag
     config = function() require("user.plugin_settings.telescope_fzf") end,
     requires = {
       "nvim-lua/plenary.nvim",
