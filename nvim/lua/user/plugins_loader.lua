@@ -321,7 +321,7 @@ local plugins = {
   --- By convention, if you want to write a query, use the `queries/` directory,
   --- but if you want to extend a query use the `after/queries/` directory.
   {"nvim-treesitter/nvim-treesitter",
-    commit = "393bc5b",  -- NOTE: tag 更新太慢, commit 更新太快, 最好两周更新一次.
+    commit = "254f3da6",  -- NOTE: tag 更新太慢, commit 更新太快, 最好两周更新一次.
     --run = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量安装 parser 容易卡死.
     config = function() require("user.plugin_settings.treesitter") end,
     requires = {
@@ -678,19 +678,20 @@ local function packerCheckUpdate()
   for _, plugin in ipairs(plugins) do
     for key, value in pairs(plugin) do
       if key == 'commit' then
+        --- get repo commit sha from github api
         local repo_latest = github_api(plugin[1], "commits")
         if not repo_latest then
           vim.notify("repo latest info is nil, github api rate-limit may be reached.", vim.log.levels.WARN)
           goto continue
         end
 
-        --- abbrev_sha is short version of commmit sha.
-        local abbrev_sha = string.sub(repo_latest.sha, 1, 7)
-        if value ~= abbrev_sha then
-          table.insert(new_content, plugin[1] .. ", commit = "..abbrev_sha)
+        --- NOTE: abbrev_sha is short version of commmit sha.
+        if not string.match(repo_latest.sha, '^'..value) then
+          table.insert(new_content, plugin[1])
         end
 
       elseif key == 'tag' then
+        --- get repo tag from github api
         local repo_latest = github_api(plugin[1], "tags")
         if not repo_latest then
           vim.notify("repo latest info is nil, github api rate-limit may be reached.", vim.log.levels.WARN)
@@ -699,7 +700,7 @@ local function packerCheckUpdate()
 
         local tag = repo_latest.name
         if value ~= tag then
-          table.insert(new_content, plugin[1] .. ", tag = "..tag)
+          table.insert(new_content, plugin[1])
         end
       end
     end
@@ -707,7 +708,7 @@ local function packerCheckUpdate()
 
   ::continue::
 
-  if #new_content > 1 then
+  if #new_content > 0 then
     vim.notify(table.concat(new_content, '\n'), vim.log.levels.INFO)
     table.insert(new_content, 1, time_now_unix)
     vim.fn.writefile(new_content, log)
