@@ -504,7 +504,7 @@ local plugins = {
 
   --- file explorer
   {"kyazdani42/nvim-tree.lua",
-    commit = "1fe3228",
+    commit = "4af5722",
     config = function() require("user.plugin_settings.file_tree") end,
 
     --opt = true,  -- VVI: 不推荐使用 lazyload, 会导致 `$ nvim dir` 直接打开文件夹的时候出现问题.
