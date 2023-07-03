@@ -687,7 +687,7 @@ local function packerCheckUpdate()
 
         --- NOTE: abbrev_sha is short version of commmit sha.
         if not string.match(repo_latest.sha, '^'..value) then
-          table.insert(new_content, plugin[1])
+          table.insert(new_content, plugin[1] .. ", commit = " .. repo_latest.sha)
         end
 
       elseif key == 'tag' then
@@ -698,9 +698,8 @@ local function packerCheckUpdate()
           goto continue
         end
 
-        local tag = repo_latest.name
-        if value ~= tag then
-          table.insert(new_content, plugin[1])
+        if value ~= repo_latest.name then
+          table.insert(new_content, plugin[1] .. ", tag = " .. repo_latest.name)
         end
       end
     end
