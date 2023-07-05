@@ -25,7 +25,7 @@ local function file_size_over_MB(fpath, size)
     return false
   end
 
-  --- size 大小默认为 10
+  --- size 大小 fallback 为 10MB
   size = size or 10
 
   --- 判断文件大小是否超过
