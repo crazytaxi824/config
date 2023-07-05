@@ -86,7 +86,7 @@ local highlights = {
 
   Comment    = {ctermfg = Color.comment_green}, -- 注释颜色
   NonText    = {ctermfg = 238}, -- 影响 listchars indentLine 颜色
-  VertSplit  = {ctermfg = 242}, -- window 之间的分隔线颜色
+  VertSplit  = {ctermfg = 236}, -- window 之间的分隔线颜色
   MatchParen = {ctermfg = Color.bracket_yellow, cterm = {'bold', 'underline'}}, -- 括号匹配颜色
 
   LineNr       = {ctermfg = 240}, -- 行号颜色

@@ -64,7 +64,7 @@ indent_blankline.setup({
 })
 
 --- 设置颜色 `:help indent-blankline-highlights` ---------------------------------------------------
---vim.api.nvim_set_hl(0, 'IndentBlanklineChar', {ctermfg=238})  -- indentLine 默认颜色 238.
+--vim.api.nvim_set_hl(0, 'IndentBlanklineChar', {link = 'NonText'})  -- indentLine 默认 link to 'NonText'.
 vim.api.nvim_set_hl(0, 'IndentBlanklineContextChar', {ctermfg=242})  -- show_current_context color
 
 --- char_highlight_list 颜色

@@ -16,7 +16,6 @@ local bufferline_colors = {
 
   tab_sel_fg = Color.black,
   tab_sel_bg = Color.yellow,
-  tab_separator_fg = 234, -- grey
   duplicate_fg = 243,  -- grey
 
   modified_fg  = Color.cyan,
@@ -95,24 +94,7 @@ local buf_highlights = {
     ctermbg = bufferline_colors.tab_sel_bg,
   },
 
-  --- tab 之间分隔线颜色, 样式不能自定义, 为 '▕'
-  tab_separator = {  -- tab 之间分隔线的颜色.
-    ctermfg = bufferline_colors.tab_separator_fg,
-    -- ctermbg = ,
-  },
-  tab_separator_selected = {  -- selected tab 后面一个分隔线'▕'的颜色. 最好和 tab_sel_bg 颜色相同.
-    -- ctermfg = ,
-    ctermbg = bufferline_colors.tab_sel_bg,
-  },
-
-  --- buffer 之间分隔线颜色, 样式为 setup 中 separator_style 设置.
-  -- separator = {
-  --   ctermfg = colors.separator_fg,
-  --   ctermbg = colors.tab_sel_bg,
-  -- },
-  -- separator_selected = {},  -- NOTE: 好像没有任何作用
-
-  --- ONLY modified_icon color. ●
+  --- ONLY the modified_icon color. ●
   modified = {
     ctermfg = bufferline_colors.modified_fg,
     ctermbg = bufferline_colors.buf_bg,
@@ -126,7 +108,27 @@ local buf_highlights = {
     ctermbg = bufferline_colors.buf_sel_bg,
   },
 
-  --- error, warning, info, hint 颜色设置.
+  --- NOTE: separator 颜色 -------------------------------------------------------------------------
+  --- "separator" 为 buffer 之间分隔线颜色, 样式可以使用 setup() 中 separator_style 设置.
+  -- separator = {
+  --   ctermfg = colors.separator_fg,
+  --   ctermbg = colors.tab_sel_bg,
+  -- },
+  -- separator_selected = {},  -- NOTE: 好像没有任何作用
+
+  --- tab_separator 为 tab 之间分隔线颜色, 样式不能自定义
+  tab_separator = {  -- tab 之间分隔线的颜色.
+    ctermfg = bufferline_colors.fill_bg,
+  },
+  tab_separator_selected = {  -- selected tab 后面一个分隔线'▕'的颜色. 最好和 tab_sel_bg 颜色相同.
+    ctermfg = bufferline_colors.tab_sel_bg,
+    ctermbg = bufferline_colors.tab_sel_bg,
+  },
+
+  --- "offset_separator" 为 File Explorer 和 bufferline 之间的 separator, 样式不能自定义
+  offset_separator = { link = 'VertSplit' },
+
+  --- error, warning, info, hint 颜色 --------------------------------------------------------------
   --- NOTE: 这里只是 diagnostic 部分的颜色显示, 不包括 buffer_num && buffer_name 颜色. eg: (1)
   error_diagnostic = {           -- hi BufferLineErrorDiagnostic
     ctermfg = bufferline_colors.error_fg,
