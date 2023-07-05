@@ -107,7 +107,7 @@ notARepository: 'skip' # one of: 'prompt' | 'create' | 'skip'
 keybinding:
   # 通用快捷键
   universal:
-    remove: null
+    remove: null     # delete commit, discard changes
     undo: null       # ctrl-z, 危险操作
     redo: null       # shift-z
     pullFiles: null  # use 'fetch' instead of 'pull', 慎用.
