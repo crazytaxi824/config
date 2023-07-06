@@ -41,6 +41,7 @@ local kind_icon_txt = {  --- {{{
 -- -- }}}
 
 --- 默认设置: https://github.com/hrsh7th/nvim-cmp/blob/main/lua/cmp/config/default.lua
+--- `:help nvim-cmp`
 cmp.setup {
   preselect = cmp.PreselectMode.None,  -- NOTE: cmp.PreselectMode.None | cmp.PreselectMode.Item
 
@@ -119,27 +120,23 @@ cmp.setup {
     native_menu = false,   -- VVI: disable it.
   },
 
-  --- key mapping -------
+  --- key mapping, `:help cmp-mapping`
   mapping = {
     --["<Up>"] = cmp.mapping.select_prev_item(),  -- 选择 item 的时候会将内容填到行内.
     --["<Down>"] = cmp.mapping.select_next_item(),
     ["<Up>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior, count = 1 }),  -- 选择 item 的时候不会将内容填到行内.
     ["<Down>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior, count = 1 }),
-    ["<C-y>"] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
     ["<Esc>"] = cmp.mapping.abort(), -- 当使用 select_prev/next_item() 的时候. abort() 关闭代码提示窗, 同时回到代码之前的状态;
                                      -- cmp.mapping.close() 也可以关闭代码提示窗口, 但是会保持代码现在的状态.
                                      -- 当使用 select_prev_item({behavior=cmp.SelectBehavior}) 的时候, abort() & close() 效果相同.
 
-    --- 其他 cmp.mapping 设置方式 --- {{{
-    -- ["<C-e>"] = cmp.mapping {  -- 默认 <C-e>, 对 insert, command 模式分别设置不同的行为.
+    -- ["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),  -- 手动触发 completion window. NOTE: 不需要.
+    -- ["{"] = cmp.mapping(cmp.mapping.scroll_docs(-1), { "i", "c" }),
+    -- ["}"] = cmp.mapping(cmp.mapping.scroll_docs(1), { "i", "c" }),
+    -- ["<C-e>"] = cmp.mapping {  -- 对 insert, command 模式分别设置不同的行为.
     --   i = cmp.mapping.abort(),
     --   c = cmp.mapping.close(),
     -- },
-    --
-    -- ["{"] = cmp.mapping(cmp.mapping.scroll_docs(-1), { "i", "c" }),
-    -- ["}"] = cmp.mapping(cmp.mapping.scroll_docs(1), { "i", "c" }),
-    -- ["<C-s>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),   -- 手动触发 completion. NOTE: 不需要.
-    -- -- }}}
 
     --- Accept currently selected item. If none selected, `select` first item.
     --- Set `select` to `false` to only confirm explicitly selected items.
@@ -150,13 +147,13 @@ cmp.setup {
       if cmp.visible() then
         cmp.confirm({ select = true })  -- 确认选择
       elseif luasnip.expand_or_locally_jumpable() then
-        --- expand   是指展开 snippest
-        --- jumpable 是指有可以 jump 的 node, eg: ${1}
-        --- locally_jumpable  same as jumpable except it ignored if the cursor is not inside the current snippet.
+        --- expand    指展开 snippest, eg: fmtp -> fmt.Println(|)
+        --- jumpable  指有可以 jump 的 node, eg: ${1}
+        --- locally_jumpable  same as jumpable, except it ignored if the cursor is not inside the current snippet.
         luasnip.expand_or_jump()  -- 展开 snippet OR 跳转到下一个 jumpable node
       else
         --cmp.complete()  -- 手动触发 completion menu.
-        fallback()  -- 执行原本的功能
+        fallback()  -- 执行快捷键原本的功能
       end
     end, {"i","s"}), -- 在 insert select 模式下使用
 
@@ -164,7 +161,7 @@ cmp.setup {
       if luasnip.locally_jumpable(-1) then  -- 如果存在 previous jumpable node
         luasnip.jump(-1)  -- 跳转到 previous jumpable node
       else
-        fallback()
+        fallback()  -- 执行快捷键原本的功能
       end
     end, {"i","s"}),
   },
