@@ -2,7 +2,7 @@
 
 # neovim 配置
 
-## 教学
+## References
 
 - https://github.com/glepnir/nvim-lua-guide-zh
 - https://github.com/LunarVim/Neovim-from-scratch
@@ -76,25 +76,23 @@
 
 # VIM Mode
 
-| mode                    | Name                                  | tigger               |
-| ----------------------- | ------------------------------------- | -------------------- |
-| n                       | Normal                                |                      |
-| no                      | Operator-pending                      | c,y,d ..., eg: ciw   |
-| niI                     | Normal using i_CTRL-O in Insert-mode  | Insert 下 <C-o>      |
-| niR                     | Normal using i_CTRL-O in Replace-mode | Replace 下 <C-o>     |
-| i                       | Insert                                | a,i,s,o ...          |
-| R                       | Replace                               | R                    |
-| c                       | Command                               | :                    |
-| v                       | Visual by character                   | v                    |
-| vs                      | Visual by character                   | Select 下 <C-o>      |
-| V                       | Visual by line                        | V                    |
-| Vs                      | Visual by line                        | Select 下 <C-o>      |
-| ^V - vim.fn.nr2char(22) | Visual by block                       | <C-v>                |
-| s                       | Select by character                   | v<C-g>               |
-| S                       | Select by line                        | V<C-g>               |
-| ^S - vim.fn.nr2char(19) | Select by block                       | <C-v><C-g>           |
-| t                       | Terminal mode                         | Terminal insert mode |
-| r                       | Hit-enter prompt                      |                      |
+`:help vim-modes` & `:help mode()`
+
+| Name                                  | tigger                                   |
+| ------------------------------------- | ---------------------------------------- |
+| Normal                                | <ESC>, <i_CTRL-C>                        |
+| Normal using i_CTRL-O in Insert-mode  | Insert 下 <i_CTRL-O>                     |
+| Normal using i_CTRL-O in Replace-mode | Replace 下 <i_CTRL-O>                    |
+| Insert                                | a,i,s,o,c ...                            |
+| Replace                               | R                                        |
+| Command                               | :, !! ...                                |
+| Visual by character                   | v                                        |
+| Visual by line                        | V                                        |
+| Visual by block                       | <CTRL-V>                                 |
+| Select by character                   | vC-g>, gh, SELECT 和 Visual 是一一对应的 |
+| Select by line                        | V<C-g>, gH                               |
+| Select by block                       | <C-v><C-g>, g<C-h>                       |
+| Terminal mode                         |                                          |
 
 <br />
 
