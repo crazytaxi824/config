@@ -38,7 +38,6 @@ if __Debug_Neovim.luasnip then
 end
 
 --- HACK: 从 insert/select mode 退出时取消 jumpable ------------------------------------------------
---- https://github.com/L3MON4D3/LuaSnip/issues/258
 --- https://github.com/L3MON4D3/LuaSnip/issues/656
 local function leave_snippet(bufnr)
   if luasnip.session  -- luasnip session 存在.
@@ -52,11 +51,14 @@ local function leave_snippet(bufnr)
   end
 end
 
+local unlink_group = vim.api.nvim_create_augroup( 'UnlinkSnipGroup', {clear = true})
+
 vim.api.nvim_create_autocmd("ModeChanged", {
+  group = unlink_group,
   --pattern = {'s:n', 'i:*'},  -- NOTE: 如果从 'Select' -> 'Normal', 或者 'Insert' -> 'any' mode.
   pattern = {'*:n'},  -- any -> Normal mode
   callback = function(params) leave_snippet(params.buf) end,
-  desc = "HACK: unlink_current snippet's session",
+  desc = "HACK: unlink current snippet's session, exit current snippet jumplist",
 })
 
 
