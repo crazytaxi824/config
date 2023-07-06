@@ -49,7 +49,7 @@ vim.keymap.set('v', '<S-CR>',
 )
 
 --- 使用 system 打开文件.
-vim.keymap.set('v', '<C-o>',
+vim.keymap.set('v', '<C-S-CR>',
   "<C-c><cmd>lua require('user.utils.filepath').v_system_open()<CR>",
   {noremap = true, silent = true, desc = "System Open file"}
 )
