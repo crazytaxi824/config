@@ -281,7 +281,6 @@ local plugins = {
   },
 
   --- Useful lua functions used by lots of plugins
-  --- NOTE: plenary.nvim 合并了 popup.nvim
   {"nvim-lua/plenary.nvim",
     commit = "bda256f",
   },
@@ -304,7 +303,7 @@ local plugins = {
     tag = "v1.6.0",
     run = ":MasonUpdate", -- :MasonUpdate updates All Registries, NOT packages.
     config = function() require("user.plugin_settings.mason_tool_installer") end,
-    --- NOTE: 不能 opt 加载 mason 否则其他插件无法找到 mason 安装的工具.
+    --- NOTE: 不能 lazyload mason, 否则其他插件无法找到 mason 安装的工具.
   },
 
   --- Treesitter -----------------------------------------------------------------------------------
@@ -321,8 +320,8 @@ local plugins = {
   --- By convention, if you want to write a query, use the `queries/` directory,
   --- but if you want to extend a query use the `after/queries/` directory.
   {"nvim-treesitter/nvim-treesitter",
-    commit = "254f3da6",  -- NOTE: tag 更新太慢, commit 更新太快, 最好两周更新一次.
-    --run = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量安装 parser 容易卡死.
+    commit = "254f3da6",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    --run = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
     config = function() require("user.plugin_settings.treesitter") end,
     requires = {
       --- 以下都是 treesitter modules 插件, 在 setup() 中启用的插件.
@@ -330,7 +329,7 @@ local plugins = {
       "nvim-treesitter/playground",  -- 用于获取 treesitter 信息, 调整颜色很有用.
       "JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
       "windwp/nvim-ts-autotag",  -- auto close tag <div></div>
-      --"p00f/nvim-ts-rainbow",  -- 括号颜色. treesitter 解析, 严重拖慢文件打开速度.
+      --"p00f/nvim-ts-rainbow",  -- 括号颜色, 需要 treesitter 解析. NOTE: 严重拖慢文件打开速度.
     },
 
     opt = true,  -- 在 vim.schedule() 中 lazy load
@@ -401,8 +400,7 @@ local plugins = {
   },
 
   --- NOTE: 以下是 "nvim-cmp" 的 module 插件, 在 nvim-cmp.setup() 中启用的插件.
-  --- 只有 "cmp-nvim-lsp" 不需要在 "nvim-cmp" 之后加载,
-  --- 其他 module 插件都需要在 "nvim-cmp" 加载之后再加载, 否则报错.
+  --- VVI: 只有 "cmp-nvim-lsp" 不需要在 "nvim-cmp" 之后加载, 其他 module 插件都需要在 "nvim-cmp" 加载之后再加载, 否则报错.
   {"hrsh7th/cmp-nvim-lsp",  -- LSP source for nvim-cmp
     commit = "44b16d1",
   },
@@ -434,7 +432,7 @@ local plugins = {
     requires = "rafamadriz/friendly-snippets",  -- snippets content
 
     --- VVI: 默认 bufread=true, 在 lazyload 该 plugin 之后马上再次触发 Filetype event.
-    --- 导致连续多次触发 FileType event.
+    --- 导致连续多次触发 FileType event, 可以通过 bufread = false 解决.
     opt = true,  -- 在 vim.schedule() 中 lazy load
     bufread = false,
   },
@@ -445,7 +443,7 @@ local plugins = {
     --- NOTE: friendly-snippets 不能安装在 opt/ 文件夹下, 否则不生效. 该 plugin 不会对启动性能有影响, 可以直接加载.
   },
 
-  --- cmdline completions, 不好用.
+  --- cmdline completions, NOTE: 不好用.
   -- {"hrsh7th/cmp-cmdline",
   --   commit = ,
   --   after = "nvim-cmp",
@@ -554,8 +552,8 @@ local plugins = {
     },
 
     --- VVI: 默认 bufread=true, 在 lazyload 该 plugin 之后马上再次触发 Filetype event.
-    --- 导致连续多次触发 FileType event.
-    --keys = {"<leader>f"},
+    --- 导致连续多次触发 FileType event, 可以通过 bufread = false 解决.
+    --keys = {"<leader>f"},  -- 通过快捷键触发 lazyload.
     opt = true,  -- 在 vim.schedule() 中 lazy load
     bufread = false,
   },
