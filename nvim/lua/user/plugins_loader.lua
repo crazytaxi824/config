@@ -95,7 +95,6 @@ local plugins = {
 
   {"JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
     commit = "7f62520",
-    dependencies = {"numToStr/Comment.nvim"},
 
     lazy = true,
   },
@@ -105,8 +104,15 @@ local plugins = {
   {"numToStr/Comment.nvim",
     commit = "176e85e",
     config = function() require("user.plugin_settings.comment") end,
+    dependencies = {"JoosepAlviste/nvim-ts-context-commentstring"},  -- https://github.com/numToStr/Comment.nvim#-hooks
 
     lazy = true,
+    keys = {
+      --- VVI: alacritty 中已将 <Command + /> 映射为 <CTRL-J>
+      {'<C-j>', '<Plug>(comment_toggle_linewise_current)',      mode = 'n', desc = 'Comment current line'},
+      {'<C-j>', '<C-o><Plug>(comment_toggle_linewise_current)', mode = 'i', desc = 'Comment current line'},
+      {'<C-j>', '<Plug>(comment_toggle_linewise_visual)',       mode = 'v', desc = 'Comment Visual selected'},
+    },
   },
 
   --- indent line
@@ -273,7 +279,6 @@ local plugins = {
     },
 
     lazy = true,
-    --keys = {"<leader>f"},  -- 通过快捷键触发 lazyload.
   },
 
   --- terminal

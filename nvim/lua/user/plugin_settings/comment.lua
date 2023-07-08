@@ -47,19 +47,7 @@ comment.setup {
   },
 }
 
---- keymaps ----------------------------------------------------------------------------------------
-local opt = { noremap = true, silent = true }
-local comment_keymaps = {
-  -- {'n', '<C-j>', function() require("Comment.api").toggle.linewise.current() end, opt, 'which_key_ignore'},
-  -- {'i', '<C-j>', '<C-o><CMD>lua require("Comment.api").toggle.linewise.current()<CR>', opt, 'which_key_ignore'},
-  -- {'v', '<C-j>', '<C-c><CMD>lua require("Comment.api").locked("toggle.linewise")(vim.fn.visualmode())<CR>', opt, 'which_key_ignore'},
-
-  {'n', '<C-j>', '<Plug>(comment_toggle_linewise_current)', opt, 'which_key_ignore'},
-  {'i', '<C-j>', '<C-o><Plug>(comment_toggle_linewise_current)', opt, 'which_key_ignore'},
-  {'v', '<C-j>', '<Plug>(comment_toggle_linewise_visual)', opt, 'which_key_ignore'},
-}
-
-require('user.utils.keymaps').set(comment_keymaps)
+--- NOTE: keymaps 在 plugins loader 的时候设置了.
 
 
 
