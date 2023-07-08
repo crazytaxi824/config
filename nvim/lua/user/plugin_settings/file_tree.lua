@@ -256,7 +256,7 @@ local nt_buffer_keymaps = {
 
 --- global keymap --------------------------------------------------------------
 local function nvim_tree_toggle(cmd)
-  vim.cmd('TagbarClose')
+  vim.cmd('silent! TagbarClose')
   vim.cmd(cmd)
 end
 

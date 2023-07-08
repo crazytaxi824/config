@@ -309,7 +309,7 @@ local plugins = {
     commit = "be56353",
     config = function() require("user.plugin_settings.tagbar") end,
 
-    -- VVI: 不要 lazyload, 和 nvim-tree.lua 冲突.
+    lazy = true,
   },
 
   --- markdown preview

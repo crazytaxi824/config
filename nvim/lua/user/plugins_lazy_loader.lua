@@ -9,6 +9,7 @@ local lazyload_plugins = {
   'telescope.nvim',
   'toggleterm.nvim',
   'gitsigns.nvim',
+  'tagbar',
 }
 
 return lazyload_plugins
