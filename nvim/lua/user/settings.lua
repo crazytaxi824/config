@@ -1,7 +1,5 @@
 --- vim & neovim 设置
 --- [ 注意事项 ] ----------------------------------------------------------------------------------- {{{
---- 参考: https://github.com/LunarVim/Neovim-from-scratch/blob/master/lua/user/options.lua
----
 --- 三种 `set` 的使用场景:
 ---    - `:setglobal` 用于设置普遍的情况. `:setlocal` 用于设置特殊情况.
 ---    - `:setlocal` 如果有 `local to buffer/window` 设置, 则设置到 local 值上, 如果 option 没有 `local to buffer/window` 设置, 则设置在 global 上.

@@ -1,4 +1,4 @@
---- lazy 主要是一个 plugin 安装/管理插件.
+--- lazy 主要是一个 plugin 安装/管理插件. `:help lazy.nvim.txt`
 --- bootstrap
 local lazydir = vim.fn.stdpath("data") .. "/lazy"
 local lazypath = lazydir .. "/lazy.nvim"
@@ -239,7 +239,7 @@ local plugins = {
 
   --- File Tree Display ----------------------------------------------------------------------------
   -- 提供 icons 需要 patch 字体 (Nerd Fonts)
-  --"kyazdani42/nvim-web-devicons",
+  --{"kyazdani42/nvim-web-devicons"},
 
   --- file explorer
   {"kyazdani42/nvim-tree.lua",
@@ -249,6 +249,8 @@ local plugins = {
     -- VVI: 本文件最后设置: 在 `nvim dir` 直接打开文件夹的时直接加载 nvim-tree.lua.
     event = {"VeryLazy"},
   },
+
+  --{"nvim-neo-tree/neo-tree.nvim"},  -- NOTE: nvim-tree.lua 替代
 
   --- Buffer & Status Line -------------------------------------------------------------------------
   --- tabline decorator, `:help 'tabline'`
@@ -361,8 +363,8 @@ local plugins = {
     cmd = {"Copilot"},  -- `:Copilot setup`, `:Copilot enable`, `:help copilot` 查看可用命令.
   },
 
-  --"goolord/alpha-nvim",       -- neovim 启动页面
-  --"ahmedkhalf/project.nvim",  -- project manager
+  --{"goolord/alpha-nvim"},       -- neovim 启动页面
+  --{"ahmedkhalf/project.nvim"},  -- project manager
 }
 
 --- load plugins
