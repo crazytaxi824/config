@@ -15,7 +15,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 --- 用于批量检查 plugins 升级. true 的时候, commit 和 tag 都会被设置为 nil.
-local nil_value = true
+local nil_value = false
 local function str_or_nil(str)
   if nil_value then
     return
@@ -201,7 +201,7 @@ local plugins = {
 
   --- snippets content, 自定义 snippets 可以借鉴这个结构.
   {"rafamadriz/friendly-snippets",
-    commit = str_or_nil("1723ae0"),
+    commit = str_or_nil("7f6681b"),
 
     lazy = true,  -- LuaSnip 加载时自动加载.
   },
