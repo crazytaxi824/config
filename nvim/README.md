@@ -7,6 +7,7 @@
 - https://github.com/glepnir/nvim-lua-guide-zh
 - https://github.com/LunarVim/Neovim-from-scratch
 - https://github.com/LunarVim/LunarVim
+- https://github.com/LazyVim/LazyVim
 
 <br />
 
