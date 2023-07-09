@@ -14,6 +14,16 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+--- 用于批量检查 plugins 升级. true 的时候, commit 和 tag 都会被设置为 nil.
+local nil_value = true
+local function str_or_nil(str)
+  if nil_value then
+    return
+  else
+    return str
+  end
+end
+
 --- 插件设置
 --- https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/editor.lua
 local plugins = {
@@ -24,27 +34,27 @@ local plugins = {
   --- Performence & Functions ----------------------------------------------------------------------
   --- Useful lua functions used by lots of plugins
   {"nvim-lua/plenary.nvim",
-    commit = "bda256f",
+    commit = str_or_nil("bda256f"),
   },
 
   --- Must install ---------------------------------------------------------------------------------
   --- 通知功能
   {"rcarriga/nvim-notify",
-    tag = "v3.12.0",
+    tag = str_or_nil("v3.12.0"),
     priority = 1000,  -- 影响加载顺序, 默认为 50.
     config = function() require("user.plugin_settings.nvim_notify") end,
   },
 
   --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   {"folke/which-key.nvim",
-    tag = "v1.4.3",
+    tag = str_or_nil("v1.4.3"),
     priority = 999,
     config = function() require("user.plugin_settings.which_key") end,
   },
 
   --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件
   {"williamboman/mason.nvim",
-    tag = "v1.6.0",
+    tag = str_or_nil("v1.6.0"),
     build = ":MasonUpdate", -- :MasonUpdate updates All Registries, NOT packages.
     config = function() require("user.plugin_settings.mason_tool_installer") end,
     --- NOTE: 不能 lazyload mason, 否则其他插件无法找到 mason 安装的工具.
@@ -64,7 +74,7 @@ local plugins = {
   --- By convention, if you want to write a query, use the `queries/` directory,
   --- but if you want to extend a query use the `after/queries/` directory.
   {"nvim-treesitter/nvim-treesitter",
-    commit = "d9104a1",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = str_or_nil("d9104a1"),  -- NOTE: tag 更新太慢, 建议两周更新一次.
     --build = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
     config = function() require("user.plugin_settings.treesitter") end,
     dependencies = {
@@ -80,14 +90,14 @@ local plugins = {
 
   --- 第一方 module 插件 ---
   {"nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-    commit = "63f3ffc",
+    commit = str_or_nil("63f3ffc"),
     config = function() require("user.plugin_settings.treesitter_ctx") end,
 
     lazy = true,  -- nvim-treesitter 加载时自动加载.
   },
 
   {"nvim-treesitter/playground",  -- 用于获取 treesitter 信息, 调整颜色很有用.
-    commit = "2b81a01",
+    commit = str_or_nil("2b81a01"),
     dependencies = {"nvim-treesitter/nvim-treesitter"},
 
     cmd = {"TSPlaygroundToggle", "TSHighlightCapturesUnderCursor"},
@@ -95,13 +105,13 @@ local plugins = {
 
   --- 第三方 module 插件 ---
   {"windwp/nvim-ts-autotag",  -- auto close tag <div></div>
-    commit = "6be1192",
+    commit = str_or_nil("6be1192"),
 
     lazy = true,  -- nvim-treesitter 加载时自动加载.
   },
 
   {"JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
-    commit = "7f62520",
+    commit = str_or_nil("7f62520"),
 
     lazy = true,  -- nvim-treesitter 加载时自动加载.
   },
@@ -109,7 +119,7 @@ local plugins = {
   --- 以下是使用了 treesitter 功能的插件. (这些插件也可以不使用 treesitter 的功能)
   --- 注释
   {"numToStr/Comment.nvim",
-    commit = "176e85e",
+    commit = str_or_nil("176e85e"),
     config = function() require("user.plugin_settings.comment") end,
     dependencies = {"JoosepAlviste/nvim-ts-context-commentstring"},  -- https://github.com/numToStr/Comment.nvim#-hooks
 
@@ -123,7 +133,7 @@ local plugins = {
 
   --- indent line
   {"lukas-reineke/indent-blankline.nvim",
-    tag = 'v2.20.7',
+    tag = str_or_nil("v2.20.7"),
     config = function() require("user.plugin_settings.indentline") end,  -- setup() 设置 use_treesitter = true
     dependencies = {"nvim-treesitter/nvim-treesitter"},
 
@@ -132,7 +142,7 @@ local plugins = {
 
   --- Auto Completion ------------------------------------------------------------------------------
   {"hrsh7th/nvim-cmp",
-    commit = "2743dd9",
+    commit = str_or_nil("2743dd9"),
     config = function() require("user.plugin_settings.cmp_completion") end,
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全
@@ -150,30 +160,30 @@ local plugins = {
   --- NOTE: 以下是 "nvim-cmp" 的 module 插件, 在 nvim-cmp.setup() 中启用的插件.
   --- VVI: 只有 "cmp-nvim-lsp" 不需要在 "nvim-cmp" 之后加载, 其他 module 插件都需要在 "nvim-cmp" 加载之后再加载, 否则报错.
   {"hrsh7th/cmp-nvim-lsp",  -- LSP source for nvim-cmp
-    commit = "44b16d1",
+    commit = str_or_nil("44b16d1"),
 
     lazy = true,  -- nvim-cmp 加载时自动加载.
   },
 
   {"hrsh7th/cmp-buffer",  -- 当前 buffer 中有的 word
-    commit = "3022dbc",
+    commit = str_or_nil("3022dbc"),
 
     lazy = true,  -- nvim-cmp 加载时自动加载.
   },
 
   {"hrsh7th/cmp-path",  -- filepath 补全
-    commit = "91ff86c",
+    commit = str_or_nil("91ff86c"),
 
     lazy = true,  -- nvim-cmp 加载时自动加载.
   },
 
   --- cmdline completions, NOTE: 不好用.
   -- {"hrsh7th/cmp-cmdline",
-  --   commit = ,
+  --   commit = str_or_nil(nil),
   -- },
 
   {"saadparwaiz1/cmp_luasnip",  -- Snippets source for nvim-cmp
-    commit = "1809552",
+    commit = str_or_nil("1809552"),
     dependencies = {"L3MON4D3/LuaSnip"},  -- snippets content
 
     lazy = true,  -- nvim-cmp 加载时自动加载.
@@ -181,7 +191,7 @@ local plugins = {
 
   --- snippet engine, for "cmp_luasnip", 每次打开文件都会有一个 [Scratch] buffer.
   {"L3MON4D3/LuaSnip",
-    commit = "a658ae2",
+    commit = str_or_nil("a658ae2"),
     build = "make install_jsregexp",  -- https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#transformations
     config = function() require("user.plugin_settings.luasnip_snippest") end,
     dependencies = {"rafamadriz/friendly-snippets"},  -- snippets content
@@ -191,14 +201,14 @@ local plugins = {
 
   --- snippets content, 自定义 snippets 可以借鉴这个结构.
   {"rafamadriz/friendly-snippets",
-    commit = "1723ae0",
+    commit = str_or_nil("1723ae0"),
 
     lazy = true,  -- LuaSnip 加载时自动加载.
   },
 
   --- 自动括号, 同时依赖 treesitter && cmp
   {"windwp/nvim-autopairs",
-    commit = "e8f7dd7",
+    commit = str_or_nil("e8f7dd7"),
     config = function() require("user.plugin_settings.autopairs") end,
     dependencies = {
       "nvim-treesitter/nvim-treesitter",  -- setup() 中 `check_ts`, `ts_config` 需要 treesitter 支持.
@@ -212,7 +222,7 @@ local plugins = {
   --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
   --- 官方 LSP 引擎.
   {"neovim/nvim-lspconfig",
-    commit = "0011c43",
+    commit = str_or_nil("0011c43"),
     config = function() require("user.lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     dependencies = {
       "williamboman/mason.nvim",  -- 安装 lsp 命令行工具.
@@ -221,7 +231,7 @@ local plugins = {
 
   --- null-ls 插件 formatters && linters, depends on "nvim-lua/plenary.nvim"
   {"jose-elias-alvarez/null-ls.nvim",
-    commit = "0789777",
+    commit = str_or_nil("0789777"),
     config = function() require("user.lsp.null_ls") end,
     dependencies = {
       "nvim-lua/plenary.nvim",
@@ -237,7 +247,7 @@ local plugins = {
 
   --- file explorer
   {"kyazdani42/nvim-tree.lua",
-    commit = "a708bd2",
+    commit = str_or_nil("a708bd2"),
     config = function() require("user.plugin_settings.file_tree") end,
 
     -- VVI: 本文件最后设置: 在 `nvim dir` 直接打开文件夹的时直接加载 nvim-tree.lua.
@@ -247,7 +257,7 @@ local plugins = {
   --- Buffer & Status Line -------------------------------------------------------------------------
   --- tabline decorator, `:help 'tabline'`
   {"akinsho/bufferline.nvim",
-    tag = "v4.2.0",
+    tag = str_or_nil("v4.2.0"),
     config = function() require("user.plugin_settings.decor_bufferline") end,
 
     event = {"VeryLazy"},
@@ -255,7 +265,7 @@ local plugins = {
 
   --- statusline decorator, `:help 'statusline'`
   {"nvim-lualine/lualine.nvim",   -- bottom status line
-    commit = "05d78e9",
+    commit = str_or_nil("05d78e9"),
     config = function() require("user.plugin_settings.decor_lualine") end,
 
     event = {"VeryLazy"},
@@ -264,14 +274,14 @@ local plugins = {
   --- Debug tools 安装 -----------------------------------------------------------------------------
   --- NOTE: dap-ui && dap 设置在同一文件中.
   {"mfussenegger/nvim-dap",  -- core debug tool
-    tag = "0.6.0",
+    tag = str_or_nil("0.6.0"),
     dependencies = {"williamboman/mason.nvim"},  -- install dap-debug tools. eg: 'delve'
 
     lazy = true,  -- nvim-dap-ui 加载时自动加载.
   },
 
   {"rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
-    tag = "v3.8.3",
+    tag = str_or_nil("v3.8.3"),
     config = function() require("user.plugin_settings.dap_debug") end,  -- dap-ui && dap 设置在同一文件中.
     dependencies = {"mfussenegger/nvim-dap"},
 
@@ -281,7 +291,7 @@ local plugins = {
   --- Useful Tools ---------------------------------------------------------------------------------
   --- fzf rg fd, preview 使用的是 treesitter, 而不用 bat
   {"nvim-telescope/telescope.nvim",
-    commit = "276362a",  -- tag = "0.1.2", 半年更新一次 tag
+    commit = str_or_nil("276362a"),  -- tag = "0.1.2", 半年更新一次 tag
     config = function() require("user.plugin_settings.telescope_fzf") end,
     dependencies = {
       "nvim-lua/plenary.nvim",
@@ -293,7 +303,7 @@ local plugins = {
 
   --- terminal
   {"akinsho/toggleterm.nvim",
-    tag = "v2.7.0",  -- NOTE: 尽量少更新, 更新后需要检查 user/utils/term/bg_term 运行情况.
+    tag = str_or_nil("v2.7.0"),  -- NOTE: 尽量少更新, 更新后需要检查 user/utils/term/bg_term 运行情况.
     config = function() require("user.plugin_settings.toggleterm_terminal") end,
 
     event = {"VeryLazy"},
@@ -304,7 +314,7 @@ local plugins = {
   --- `:Gitsigns setqflist/seqloclist` will open Trouble instead of quickfix or location list windows.
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {"lewis6991/gitsigns.nvim",
-    commit = "dc2962f",
+    commit = str_or_nil("dc2962f"),
     config = function() require("user.plugin_settings.git_signs") end,
 
     --- VVI: 这里不能用 VeryLazy.
@@ -319,7 +329,7 @@ local plugins = {
   --- `ctags --list-languages` 查看支持的语言. 不支持 jsx/tsx, 支持 typescript, 勉强支持 javascript
   -- -- }}}
   {"preservim/tagbar",
-    commit = "be56353",
+    commit = str_or_nil("be56353"),
     config = function() require("user.plugin_settings.tagbar") end,
 
     event = {"VeryLazy"},
@@ -336,7 +346,7 @@ local plugins = {
   --- https://docs.github.com/en/copilot
   --- https://docs.github.com/en/copilot/getting-started-with-github-copilot?tool=neovim#prerequisites-3
   {"github/copilot.vim",
-    tag = "v1.9.1",
+    tag = str_or_nil("v1.9.1"),
     config = function()
       --- VVI: Neovim >= 0.6 and Node.js <= 17
       --- 指定 nodejs 版本. 这里使用的是 `brew install node@16`
@@ -358,100 +368,6 @@ local plugins = {
   --"goolord/alpha-nvim",       -- neovim 启动页面
   --"ahmedkhalf/project.nvim",  -- project manager
 }
-
---- 通过 github api 检查 plugins 是否有更新 -------------------------------------------------------- {{{
---- make a HTTP request to get commit sha and tag
---- DOC: https://docs.github.com/en/rest/commits/commits?apiVersion=2022-11-28#list-commits
---- rate-limiting
---- DOC: https://docs.github.com/en/rest/overview/resources-in-the-rest-api?apiVersion=2022-11-28#rate-limiting
---- without github token 60/hour, with Personal access tokens (classic) 5000/hour.
---- check api rate-limit limit, `curl -i -H "Authorization: Bearer <YOUR-TOKEN>" https://api.github.com/users/octocat`
---- Q: how to get github Personal access tokens (classic)?
---- A: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic
-
---- api_type 包括: commits, tags, releases, folks, issues ...
---- api_type 可以通过 `curl -sL "https://api.github.com/repos/OWNER/REPO"` 查看.
-local function github_api(plugin_name, api_type)
-  --- `curl -sL "https://api.github.com/repos/OWNER/REPO/tags?per_page=1&page=1"`
-  --- `curl -sL "https://api.github.com/repos/OWNER/REPO/commits?per_page=1&page=1"`
-  local url = '"https://api.github.com/repos/' .. plugin_name .. '/' .. api_type .. '?per_page=1&page=1"'
-  local cmd = 'curl -sL -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" ' .. url
-
-  -- clear command line prompt message.
-  vim.cmd("normal! :")
-  --- NOTE: nvim_echo() print without saving in message history.
-  vim.api.nvim_echo({{'checking "' .. plugin_name .. '" ...', "Normal"}}, false, {})
-
-  local result = vim.fn.system(cmd)
-  if vim.v.shell_error ~= 0 then
-    vim.notify(result, vim.log.levels.ERROR)
-    return
-  end
-
-  if result ~= '' then
-    --- NOTE: 如果无法解析 result 则 decode 值为 nil. 例如在 result 是 error 的情况下.
-    return vim.json.decode(result)[1]
-  end
-end
-
-local function packerCheckUpdate()
-  local time_now_unix = vim.fn.localtime()
-  local log = "/tmp/nvim/packer_check_update.log"
-  local new_content = {}
-
-  --- 时间小于 2 小时则不重新发送请求, 直接打印已有数据.
-  if vim.fn.filereadable(log) == 1 then
-    local log_content = vim.fn.readfile(log, '')
-    if time_now_unix - tonumber(log_content[1]) < 7200 then
-      table.remove(log_content, 1)  -- remove time stamp
-      vim.notify(table.concat(log_content, '\n'), vim.log.levels.INFO)
-      return
-    end
-  end
-
-  for _, plugin in ipairs(plugins) do
-    for key, value in pairs(plugin) do
-      if key == 'commit' then
-        --- get repo commit sha from github api
-        local repo_latest = github_api(plugin[1], "commits")
-        if not repo_latest then
-          vim.notify("repo latest info is nil, github api rate-limit may be reached.", vim.log.levels.WARN)
-          goto continue
-        end
-
-        --- NOTE: abbrev_sha is short version of commmit sha.
-        if not string.match(repo_latest.sha, '^'..value) then
-          table.insert(new_content, plugin[1] .. ", commit = " .. repo_latest.sha)
-        end
-
-      elseif key == 'tag' then
-        --- get repo tag from github api
-        local repo_latest = github_api(plugin[1], "tags")
-        if not repo_latest then
-          vim.notify("repo latest info is nil, github api rate-limit may be reached.", vim.log.levels.WARN)
-          goto continue
-        end
-
-        if value ~= repo_latest.name then
-          table.insert(new_content, plugin[1] .. ", tag = " .. repo_latest.name)
-        end
-      end
-    end
-  end
-
-  ::continue::
-
-  if #new_content > 0 then
-    vim.notify(table.concat(new_content, '\n'), vim.log.levels.INFO)
-    table.insert(new_content, 1, time_now_unix)
-    vim.fn.writefile(new_content, log)
-  end
-end
-
---- user command
-vim.api.nvim_create_user_command("LazyUpdateCheck", packerCheckUpdate, {bang=true, bar=true})
-
--- -- }}}
 
 --- load plugins
 local opts = {
