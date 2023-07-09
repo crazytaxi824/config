@@ -67,7 +67,7 @@ local plugins = {
       --"p00f/nvim-ts-rainbow",  -- 括号颜色, 需要 treesitter 解析. NOTE: 严重拖慢文件打开速度.
     },
 
-    lazy = true,
+    lazy = true,  -- 使用 vim.schedual() lazy 加载.
   },
 
   --- 第一方 module 插件 ---
@@ -75,14 +75,13 @@ local plugins = {
     commit = "63f3ffc",
     config = function() require("user.plugin_settings.treesitter_ctx") end,
 
-    lazy = true,
+    lazy = true,  -- nvim-treesitter 加载时自动加载.
   },
 
   {"nvim-treesitter/playground",  -- 用于获取 treesitter 信息, 调整颜色很有用.
     commit = "2b81a01",
     dependencies = {"nvim-treesitter/nvim-treesitter"},
 
-    lazy = true,
     cmd = {"TSPlaygroundToggle", "TSHighlightCapturesUnderCursor"},
   },
 
@@ -90,13 +89,13 @@ local plugins = {
   {"windwp/nvim-ts-autotag",  -- auto close tag <div></div>
     commit = "6be1192",
 
-    lazy = true,
+    lazy = true,  -- nvim-treesitter 加载时自动加载.
   },
 
   {"JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
     commit = "7f62520",
 
-    lazy = true,
+    lazy = true,  -- nvim-treesitter 加载时自动加载.
   },
 
   --- 以下是使用了 treesitter 功能的插件. (这些插件也可以不使用 treesitter 的功能)
@@ -106,7 +105,6 @@ local plugins = {
     config = function() require("user.plugin_settings.comment") end,
     dependencies = {"JoosepAlviste/nvim-ts-context-commentstring"},  -- https://github.com/numToStr/Comment.nvim#-hooks
 
-    lazy = true,
     keys = {
       --- VVI: alacritty 中已将 <Command + /> 映射为 <CTRL-J>
       {'<C-j>', '<Plug>(comment_toggle_linewise_current)',      mode = 'n', desc = 'Comment current line'},
@@ -121,7 +119,7 @@ local plugins = {
     config = function() require("user.plugin_settings.indentline") end,  -- setup() 设置 use_treesitter = true
     dependencies = {"nvim-treesitter/nvim-treesitter"},
 
-    lazy = true,
+    lazy = true,  -- 使用 vim.schedual() lazy 加载.
   },
 
   --- Auto Completion ------------------------------------------------------------------------------
@@ -138,7 +136,6 @@ local plugins = {
       "windwp/nvim-autopairs",
     },
 
-    lazy = true,
     event = "InsertEnter",
   },
 
@@ -146,17 +143,20 @@ local plugins = {
   --- VVI: 只有 "cmp-nvim-lsp" 不需要在 "nvim-cmp" 之后加载, 其他 module 插件都需要在 "nvim-cmp" 加载之后再加载, 否则报错.
   {"hrsh7th/cmp-nvim-lsp",  -- LSP source for nvim-cmp
     commit = "44b16d1",
-    lazy = true,
+
+    lazy = true,  -- nvim-cmp 加载时自动加载.
   },
 
   {"hrsh7th/cmp-buffer",  -- 当前 buffer 中有的 word
     commit = "3022dbc",
-    lazy = true,
+
+    lazy = true,  -- nvim-cmp 加载时自动加载.
   },
 
   {"hrsh7th/cmp-path",  -- filepath 补全
     commit = "91ff86c",
-    lazy = true,
+
+    lazy = true,  -- nvim-cmp 加载时自动加载.
   },
 
   --- cmdline completions, NOTE: 不好用.
@@ -167,7 +167,8 @@ local plugins = {
   {"saadparwaiz1/cmp_luasnip",  -- Snippets source for nvim-cmp
     commit = "1809552",
     dependencies = {"L3MON4D3/LuaSnip"},  -- snippets content
-    lazy = true,
+
+    lazy = true,  -- nvim-cmp 加载时自动加载.
   },
 
   --- snippet engine, for "cmp_luasnip", 每次打开文件都会有一个 [Scratch] buffer.
@@ -177,13 +178,14 @@ local plugins = {
     config = function() require("user.plugin_settings.luasnip_snippest") end,
     dependencies = {"rafamadriz/friendly-snippets"},  -- snippets content
 
-    lazy = true,
+    lazy = true,  -- cmp_luasnip 加载时自动加载.
   },
 
   --- snippets content, 自定义 snippets 可以借鉴这个结构.
   {"rafamadriz/friendly-snippets",
     commit = "1723ae0",
-    lazy = true,
+
+    lazy = true,  -- LuaSnip 加载时自动加载.
   },
 
   --- 自动括号, 同时依赖 treesitter && cmp
@@ -195,7 +197,7 @@ local plugins = {
       "hrsh7th/nvim-cmp",  -- cmp.event:on() 设置.
     },
 
-    lazy = true,
+    lazy = true,  -- nvim-cmp 加载时自动加载.
   },
 
   --- LSP ------------------------------------------------------------------------------------------
@@ -218,7 +220,6 @@ local plugins = {
       "williamboman/mason.nvim",  -- 安装 linter/formatter 命令行工具. eg: shfmt, stylua ...
     },
 
-    lazy = true,
     event = "BufWritePre",  -- save file 的时候 lazyload null-ls
   },
 
@@ -239,7 +240,7 @@ local plugins = {
     tag = "v4.2.0",
     config = function() require("user.plugin_settings.decor_bufferline") end,
 
-    lazy = true,
+    lazy = true,  -- 使用 vim.schedual() lazy 加载.
   },
 
   --- statusline decorator, `:help 'statusline'`
@@ -247,7 +248,7 @@ local plugins = {
     commit = "05d78e9",
     config = function() require("user.plugin_settings.decor_lualine") end,
 
-    lazy = true,
+    lazy = true,  -- 使用 vim.schedual() lazy 加载.
   },
 
   --- Debug tools 安装 -----------------------------------------------------------------------------
@@ -256,7 +257,7 @@ local plugins = {
     tag = "0.6.0",
     dependencies = {"williamboman/mason.nvim"},  -- install dap-debug tools. eg: 'delve'
 
-    lazy = true,
+    lazy = true,  -- nvim-dap-ui 加载时自动加载.
   },
 
   {"rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
@@ -264,7 +265,6 @@ local plugins = {
     config = function() require("user.plugin_settings.dap_debug") end,  -- dap-ui && dap 设置在同一文件中.
     dependencies = {"mfussenegger/nvim-dap"},
 
-    lazy = true,
     cmd = {'DapToggleBreakpoint', 'DapContinue', 'DapLoadLaunchJSON'},
   },
 
@@ -278,7 +278,7 @@ local plugins = {
       "nvim-treesitter/nvim-treesitter",
     },
 
-    lazy = true,
+    lazy = true,  -- 使用 vim.schedual() lazy 加载.
   },
 
   --- terminal
@@ -286,7 +286,7 @@ local plugins = {
     tag = "v2.7.0",  -- NOTE: 尽量少更新, 更新后需要检查 user/utils/term/bg_term 运行情况.
     config = function() require("user.plugin_settings.toggleterm_terminal") end,
 
-    lazy = true,
+    lazy = true,  -- 使用 vim.schedual() lazy 加载.
   },
 
   --- Git
@@ -297,7 +297,7 @@ local plugins = {
     commit = "dc2962f",
     config = function() require("user.plugin_settings.git_signs") end,
 
-    lazy = true,
+    lazy = true,  -- 使用 vim.schedual() lazy 加载.
   },
 
   --- tagbar --- {{{
@@ -309,7 +309,7 @@ local plugins = {
     commit = "be56353",
     config = function() require("user.plugin_settings.tagbar") end,
 
-    lazy = true,
+    lazy = true,  -- 使用 vim.schedual() lazy 加载.
   },
 
   --- markdown preview
