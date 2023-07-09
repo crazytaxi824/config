@@ -235,7 +235,7 @@ local plugins = {
   {"kyazdani42/nvim-tree.lua",
     commit = "4af5722",
     config = function() require("user.plugin_settings.file_tree") end,
-    -- VVI: 不推荐使用 lazyload, 会导致 `$ nvim dir` 直接打开文件夹的时候出现问题.
+    -- VVI: 不推荐使用 lazyload, 会导致 `nvim dir` 直接打开文件夹的时候出现问题.
   },
 
   --- Buffer & Status Line -------------------------------------------------------------------------
@@ -302,7 +302,8 @@ local plugins = {
     config = function() require("user.plugin_settings.git_signs") end,
 
     --- VVI: 这里不能用 VeryLazy.
-    --- `nvim dir` 启动时直接打开 dir 会造成 gitsign 报错. 必须是 buffer 类型才加载 gitsings 否则报错.
+    --- BufReadPre 在打开 file 时会触发, 打开 dir 时不会触发.
+    --- `nvim dir` 启动时直接打开 dir 会造成 gitsign 报错.
     event = { "BufReadPre", "BufNewFile" },
   },
 
