@@ -14,3 +14,4 @@
 !/nvim
 /nvim/plugin
 /nvim/todo.md
+/nvim/lazy-lock.json

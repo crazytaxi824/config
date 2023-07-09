@@ -417,7 +417,8 @@ vim.api.nvim_create_autocmd("WinEnter", {
     --- 延迟执行避免 bug.
     vim.schedule(function()
       --- WinEnter 时如果自己是 popup window 则不显示 cursorline, eg: nvim-notify 是 popup window.
-      if vim.fn.win_gettype(curr_win_id) ~= 'popup' then
+      local win_type = vim.fn.win_gettype(curr_win_id)
+      if win_type ~= 'popup' and win_type ~= 'unknown' then
         --- 'cursorline' 是 `local to window`, 这里使用 vim.wo.cursorline 相当于 `:set cursorline`,
         --- 不能用 ':setlocal cursorline' 否则会作用在当前 buffer 上, 这里需要作用在整个 window 上.
         vim.wo[curr_win_id].cursorline = true
