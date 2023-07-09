@@ -71,7 +71,7 @@ local plugins = {
       --"p00f/nvim-ts-rainbow",  -- 括号颜色, 需要 treesitter 解析. NOTE: 严重拖慢文件打开速度.
     },
 
-    lazy = true,  -- 使用 vim.schedule() lazy 加载.
+    event = {"VeryLazy"},
   },
 
   --- 第一方 module 插件 ---
@@ -123,7 +123,7 @@ local plugins = {
     config = function() require("user.plugin_settings.indentline") end,  -- setup() 设置 use_treesitter = true
     dependencies = {"nvim-treesitter/nvim-treesitter"},
 
-    lazy = true,  -- 使用 vim.schedule() lazy 加载.
+    event = {"VeryLazy"},
   },
 
   --- Auto Completion ------------------------------------------------------------------------------
@@ -244,7 +244,7 @@ local plugins = {
     tag = "v4.2.0",
     config = function() require("user.plugin_settings.decor_bufferline") end,
 
-    lazy = true,  -- 使用 vim.schedule() lazy 加载.
+    event = {"VeryLazy"},
   },
 
   --- statusline decorator, `:help 'statusline'`
@@ -252,7 +252,7 @@ local plugins = {
     commit = "05d78e9",
     config = function() require("user.plugin_settings.decor_lualine") end,
 
-    lazy = true,  -- 使用 vim.schedule() lazy 加载.
+    event = {"VeryLazy"},
   },
 
   --- Debug tools 安装 -----------------------------------------------------------------------------
@@ -282,7 +282,7 @@ local plugins = {
       "nvim-treesitter/nvim-treesitter",
     },
 
-    lazy = true,  -- 使用 vim.schedule() lazy 加载.
+    event = {"VeryLazy"},
   },
 
   --- terminal
@@ -290,7 +290,7 @@ local plugins = {
     tag = "v2.7.0",  -- NOTE: 尽量少更新, 更新后需要检查 user/utils/term/bg_term 运行情况.
     config = function() require("user.plugin_settings.toggleterm_terminal") end,
 
-    lazy = true,  -- 使用 vim.schedule() lazy 加载.
+    event = {"VeryLazy"},
   },
 
   --- Git
@@ -301,7 +301,8 @@ local plugins = {
     commit = "dc2962f",
     config = function() require("user.plugin_settings.git_signs") end,
 
-    --- VVI: 这里不能用 vim.schedule(), 必须是 buffer 类型才加载 gitsings 否则报错.
+    --- VVI: 这里不能用 VeryLazy.
+    --- `nvim dir` 启动时直接打开 dir 会造成 gitsign 报错. 必须是 buffer 类型才加载 gitsings 否则报错.
     event = { "BufReadPre", "BufNewFile" },
   },
 
@@ -314,7 +315,7 @@ local plugins = {
     commit = "be56353",
     config = function() require("user.plugin_settings.tagbar") end,
 
-    lazy = true,  -- 使用 vim.schedule() lazy 加载.
+    event = {"VeryLazy"},
   },
 
   --- markdown preview
@@ -453,10 +454,5 @@ require('lazy').setup(plugins, {
   }
 })
 
---- 利用 vim.schedule() lazyload plugins
-vim.schedule(function()
-  local lazyload_list = require("user.plugins_lazy_loader")
-  require('lazy').load({plugins = lazyload_list})
-end)
 
 
