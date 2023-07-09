@@ -448,12 +448,41 @@ vim.api.nvim_create_user_command("LazyUpdateCheck", packerCheckUpdate, {bang=tru
 -- -- }}}
 
 --- load plugins
-require('lazy').setup(plugins, {
+local opts = {
   root = lazydir, -- directory where plugins will be installed
+  lockfile = vim.fn.stdpath("config") .. "/lazy-lock.json", -- lockfile generated after running update.
   defaults = {
     lazy = false, -- should plugins be lazy-loaded?
-  }
-})
+  },
+  ui = {  --- {{{
+    icons = {
+      cmd = " cmd:",
+      config = " conf:",
+      event = " event:",
+      ft = " ft:",
+      init = " init:",
+      import = " import:",
+      keys = " key:",
+      lazy = " ● ",
+      loaded = "●",
+      not_loaded = "○",
+      plugin = " plugin:",
+      runtime = " runtime:",
+      source = " source:",
+      start = " ",
+      task = "✔ ",
+      list = {
+        "●",
+        "➜",
+        "★",
+        "‒",
+      },
+    },
+  },
+  -- -- }}}
+}
+
+require('lazy').setup(plugins, opts)
 
 
 
