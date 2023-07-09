@@ -45,12 +45,6 @@ __Debug_Neovim = {
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
---- VVI: 在最开始加载 "lewis6991/impatient.nvim" 设置.
---- DOC: https://github.com/lewis6991/impatient.nvim#setup
---- it is recommended you add the following near the start of your 'init.vim'.
---- Speed up loading Lua modules in Neovim to improve startup time.
-require "user.plugin_settings.impatient"
-
 --- 读取设置: ~/.config/nvim/lua/user/xxx.lua
 require "user.colors"   -- vim highlight 设置, VVI: 必须放在最前面加载, 因为有全局变量.
 require "user.global"   -- [必要], 自定义函数, 很多设置用到的常用函数.
@@ -64,7 +58,7 @@ require "user.misc"     -- 其他杂项 settings
 --- 加载 plugins 和 settings
 require "user.plugins_loader"  -- packer 加载 plugin
 
---- 放在最后 overwirte 其他设置
+--- VVI: keymap 放在最后 overwirte 其他设置.
 require "user.keymaps"  -- keymap 设置
 
 
