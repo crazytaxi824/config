@@ -22,16 +22,18 @@ local plugins = {
   },
 
   --- Must install ---------------------------------------------------------------------------------
-  --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
-  {"folke/which-key.nvim",
-    tag = "v1.4.3",
-    config = function() require("user.plugin_settings.which_key") end,
-  },
-
   --- 通知功能
   {"rcarriga/nvim-notify",
     tag = "v3.12.0",
+    priority = 1000,  -- 影响加载顺序, 默认为 50.
     config = function() require("user.plugin_settings.nvim_notify") end,
+  },
+
+  --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
+  {"folke/which-key.nvim",
+    tag = "v1.4.3",
+    priority = 999,
+    config = function() require("user.plugin_settings.which_key") end,
   },
 
   --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件
