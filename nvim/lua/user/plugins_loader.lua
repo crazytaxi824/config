@@ -17,6 +17,10 @@ vim.opt.rtp:prepend(lazypath)
 --- 插件设置
 --- https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/editor.lua
 local plugins = {
+  { "folke/lazy.nvim",
+    version = "*", -- install the latest stable version of plugins that support Semver.
+  },
+
   --- Performence & Functions ----------------------------------------------------------------------
   --- Useful lua functions used by lots of plugins
   {"nvim-lua/plenary.nvim",
@@ -235,7 +239,9 @@ local plugins = {
   {"kyazdani42/nvim-tree.lua",
     commit = "3d2fd90",
     config = function() require("user.plugin_settings.file_tree") end,
-    -- VVI: 不推荐使用 lazyload, 会导致 `nvim dir` 直接打开文件夹的时候出现问题.
+
+    -- VVI: 本文件最后设置: 在 `nvim dir` 直接打开文件夹的时直接加载 nvim-tree.lua.
+    event = {"VeryLazy"},
   },
 
   --- Buffer & Status Line -------------------------------------------------------------------------
@@ -482,7 +488,19 @@ local opts = {
   -- -- }}}
 }
 
-require('lazy').setup(plugins, opts)
+local lazy = require('lazy')
+lazy.setup(plugins, opts)
+
+--- `nvim dir` 打开文件夹时直接加载 nvim-tree.lua, `nvim file` 打开 file 时不加载 nvim-tree.lua, 通过快捷键加载.
+--- VVI: 这里只能使用 BufWinEnter, 不能使用 BufEnter.
+vim.api.nvim_create_autocmd({"BufWinEnter"}, {
+  pattern = {"*"},
+  callback = function (params)
+    if vim.fn.isdirectory(vim.api.nvim_buf_get_name(params.buf)) == 1 then
+      lazy.load({plugins = {"nvim-tree.lua"}})
+    end
+  end
+})
 
 
 
