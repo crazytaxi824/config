@@ -17,11 +17,7 @@ vim.opt.rtp:prepend(lazypath)
 --- 用于批量检查 plugins 升级. true 的时候, commit 和 tag 都会被设置为 nil.
 local nil_value = false
 local function str_or_nil(str)
-  if nil_value then
-    return
-  else
-    return str
-  end
+  return (not nil_value and str or nil)
 end
 
 --- 插件设置
@@ -231,7 +227,7 @@ local plugins = {
 
   --- null-ls 插件 formatters && linters, depends on "nvim-lua/plenary.nvim"
   {"jose-elias-alvarez/null-ls.nvim",
-    commit = str_or_nil("0789777"),
+    commit = str_or_nil("db09b6c"),
     config = function() require("user.lsp.null_ls") end,
     dependencies = {
       "nvim-lua/plenary.nvim",
