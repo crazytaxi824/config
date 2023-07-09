@@ -233,7 +233,7 @@ local plugins = {
 
   --- file explorer
   {"kyazdani42/nvim-tree.lua",
-    commit = "4af5722",
+    commit = "3d2fd90",
     config = function() require("user.plugin_settings.file_tree") end,
     -- VVI: 不推荐使用 lazyload, 会导致 `nvim dir` 直接打开文件夹的时候出现问题.
   },
@@ -443,7 +443,7 @@ local function packerCheckUpdate()
 end
 
 --- user command
-vim.api.nvim_create_user_command("PackerUpdateCheck", packerCheckUpdate, {bang=true, bar=true})
+vim.api.nvim_create_user_command("LazyUpdateCheck", packerCheckUpdate, {bang=true, bar=true})
 
 -- -- }}}
 
