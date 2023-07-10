@@ -301,5 +301,8 @@ vim.api.nvim_create_user_command("Rg",
   end,
 {nargs="+"})
 
+--- highlights
+vim.api.nvim_set_hl(0, "TelescopeMatching", {reverse = true})
+
 
 

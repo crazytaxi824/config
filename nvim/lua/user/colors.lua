@@ -112,9 +112,9 @@ local highlights = {
   Keyword  = {ctermfg = Color.purple}, -- 最主要的颜色
   Function = {ctermfg = Color.func_gold}, -- func <Function> {}, 定义 & call func 都使用该颜色
   Type     = {ctermfg = Color.type_green, cterm = {'italic'}}, -- type <Type> struct
-  Identifier = {link = "Type"}, -- typescriptTypeReference
+  Identifier = {link = "Normal"}, -- property & parameter
   Constant   = {link = "Normal"}, -- 常量颜色. eg: const <Constant> = 100
-  --Structure  = {ctermfg = color.special_cyan}, -- luaTable
+  --Structure = {link = "Type"},  -- 默认 link to Type
 
   Conditional = {ctermfg = Color.magenta}, -- if, switch, case ...
   Repeat    = {link = "Conditional"}, -- for range
