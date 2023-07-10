@@ -19,9 +19,12 @@ local M = {
     goto_prev = section.prev,
     goto_next = section.next,
   },
+
   win_choose = win.choose,
-  set = set.keymap_set_and_register,
   save_file = save_file.save,
+
+  --- set & register keymap
+  set = set.keymap_set_and_register,
 }
 
 return M

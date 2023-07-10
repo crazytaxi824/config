@@ -53,6 +53,8 @@ local plugins = {
   {"folke/which-key.nvim",
     tag = str_or_nil("v1.4.3"),
     config = function() require("user.plugin_settings.which_key") end,
+
+    event = {"VeryLazy"}
   },
 
   --- Treesitter -----------------------------------------------------------------------------------
