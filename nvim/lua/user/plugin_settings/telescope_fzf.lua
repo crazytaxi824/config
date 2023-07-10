@@ -182,15 +182,22 @@ telescope.setup {
     },
   },
   extensions = {
-    -- Your extension configuration goes here:
-    -- extension_name = {
-    --   extension_config_key = value,
-    -- }
-    -- please take a look at the readme of the extension you want to configure
+    --- https://github.com/nvim-telescope/telescope-fzf-native.nvim#telescope-setup-and-configuration
+    fzf = {
+      fuzzy = true,                    -- false will only do exact matching
+      override_generic_sorter = true,  -- override the generic sorter
+      override_file_sorter = true,     -- override the file sorter
+      case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
+                                       -- the default case_mode is "smart_case"
+    },
   },
 }
 
---- keymap: toggle `set wrap` for filetype = TelescopePrompt only
+--- VVI: load extension after setup()
+telescope.load_extension('fzf')
+
+--- keymap: toggle `set wrap` for filetype = TelescopePrompt only.
+--- 打开 telescope 时, 设置快捷键用于显示超出 preview window 的内容.
 vim.api.nvim_create_autocmd("User", {
   pattern = "TelescopePreviewerLoaded",
   callback = function(params)
@@ -218,8 +225,7 @@ local opt = { noremap = true, silent = true }
 local telescope_keymaps = {
   --- Picker functions, https://github.com/nvim-telescope/telescope.nvim#pickers
   --- 使用 `:Telescope` 列出所有 Picker
-  {'n', '<leader>ff', function() builtin.find_files() end, opt, 'telescope: fd'},
-  {'n', '<leader>fb', function() builtin.buffers() end,    opt, 'telescope: Buffer List'},
+  {'n', '<leader>fd', function() builtin.find_files() end, opt, 'telescope: fd'},
   {'n', '<leader>fh', function() builtin.help_tags() end,  opt, 'telescope: Vim Help Doc'},
   {'n', '<leader>fk', function() builtin.keymaps() end,    opt, 'telescope: Keymap normal Mode'},
   {'n', '<leader>f:', function() builtin.command_history() end, opt, 'telescope: Command History'},

@@ -282,10 +282,16 @@ local plugins = {
     config = function() require("user.plugin_settings.telescope_fzf") end,
     dependencies = {
       "nvim-lua/plenary.nvim",
-      "nvim-treesitter/nvim-treesitter",
+      "nvim-telescope/telescope-fzf-native.nvim",
     },
 
     event = {"VeryLazy"},
+  },
+
+  { "nvim-telescope/telescope-fzf-native.nvim",
+    build = "make",
+
+    lazy = true,  -- telescope 加载时自动加载.
   },
 
   --- terminal
@@ -355,6 +361,7 @@ local plugins = {
   --{"kyazdani42/nvim-web-devicons"}, -- Nerd Fonts 提供 icons 需要 patch 字体
   --{"nvim-neo-tree/neo-tree.nvim"},  -- File explorer. nvim-tree.lua 替代
   --{"Tastyep/structlog.nvim"},   -- log 工具.
+  --{"folke/trouble.nvim"},       -- quickfix/loclist 替代.
   --{"goolord/alpha-nvim"},       -- neovim 启动页面
   --{"ahmedkhalf/project.nvim"},  -- project manager
 
