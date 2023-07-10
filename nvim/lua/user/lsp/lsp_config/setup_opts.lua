@@ -25,16 +25,6 @@ M.on_attach = function(client, bufnr)
   lsp_keymaps.textDocument_keymaps(bufnr)
   lsp_keymaps.diagnostic_keymaps(bufnr)
 
-  --- VVI: nvim-0.9 中禁止 LSP semantic highlight (根据语义的 highlight) 否则 highlight 显示不正确.
-  --- `:help vim.lsp.semantic_tokens.start()`
-  --- NOTE: This is currently called automatically by
-  --- |vim.lsp.buf_attach_client()|. To opt-out of semantic highlighting with a
-  --- server that supports it, you can delete the semanticTokensProvider table
-  --- from the {server_capabilities} of your client in your |LspAttach| callback
-  --- or your configuration's `on_attach` callback: >lua
-  --- NOTE: 如果需要更改 LSP semantic highlight 颜色, 使用 `:hi @lsp.type...`
-  client.server_capabilities.semanticTokensProvider = nil
-
   --- DEBUG: 用
   if __Debug_Neovim.lspconfig then
     Notify("LSP Server attach: " .. client.name, "DEBUG", {title="LSP"})
@@ -78,6 +68,15 @@ M.on_init = function(client)
   local proj_local_settings = require("user.lsp._load_proj_settings")
   client.config.settings[client.name] = proj_local_settings.keep_extend(M.local_lspconfig_key, client.name,
     client.config.settings[client.name])
+
+  --- semantic token: https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide
+  --- nvim-0.9 中禁止 LSP semantic highlight (根据语义的 highlight) 否则 highlight 显示不正确.
+  --- VVI: https://github.com/neovim/nvim-lspconfig/issues/2542
+  --- DONOT follow `:help vim.lsp.semantic_tokens.start()` place this in on_attach() function.
+  --- 如果需要更改 LSP semantic highlight 颜色, 使用 `:hi @lsp.type...`
+  if client.server_capabilities then
+    client.server_capabilities.semanticTokensProvider = nil
+  end
 
   --- NOTE: notify lsp config is changed.
   client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
