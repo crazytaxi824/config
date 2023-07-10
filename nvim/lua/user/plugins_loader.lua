@@ -24,7 +24,9 @@ end
 --- https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/editor.lua
 local plugins = {
   { "folke/lazy.nvim",
-    version = "*", -- install the latest stable version of plugins that support Semver.
+    --- install the latest stable version of plugins that support Semver.
+    -- version = "*",  -- 相当于 tag='stable'
+    tag = str_or_nil("v10.0.2"),
   },
 
   --- Performence & Functions ----------------------------------------------------------------------
