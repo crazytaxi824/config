@@ -30,13 +30,14 @@ local plugins = {
   --- Performence & Functions ----------------------------------------------------------------------
   --- Useful lua functions used by lots of plugins
   {"nvim-lua/plenary.nvim",
+    priority = 1000,  -- 影响加载顺序, 默认为 50.
     commit = str_or_nil("bda256f"),
   },
 
   --- 通知功能
   {"rcarriga/nvim-notify",
     tag = str_or_nil("v3.12.0"),
-    priority = 1000,  -- 影响加载顺序, 默认为 50.
+    priority = 999,
     config = function() require("user.plugin_settings.nvim_notify") end,
   },
 
@@ -51,10 +52,7 @@ local plugins = {
   --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   {"folke/which-key.nvim",
     tag = str_or_nil("v1.4.3"),
-    priority = 999,
     config = function() require("user.plugin_settings.which_key") end,
-
-    event = {"VeryLazy"},
   },
 
   --- Treesitter -----------------------------------------------------------------------------------
