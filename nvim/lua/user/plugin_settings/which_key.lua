@@ -78,7 +78,7 @@ which_key.setup({
   ignore_missing = false, -- enable this to hide mappings for which you didn't specify a label
   show_help = true, -- show help message 在下方 <bs> 返回上一层菜单, <esc> 退出.
 
-  --- VVI: hide mapping boilerplate, for-loop string.gsub(str, '<cmd>', '')
+  --- NOTE: hide mapping boilerplate, for-loop string.gsub(str, '<cmd>', '')
   hidden = {
     "<silent>", "<cmd>", "<Cmd>", "<CR>", "call", "lua", "require", "^:", "^ ",
     "render.canvas'%)._mapping%('",  -- 'dap-ui' default keymap desc.
@@ -102,6 +102,9 @@ which_key.setup({
     filetypes = { "NvimTree", "TelescopePrompt", "mason", "packer", "null-ls-info", "lspinfo" },
   },
 })
+
+--- VVI: mark which key is loaded. vim.cmd('doautocmd User LoadedWhichKey')
+vim.api.nvim_exec_autocmds("User", { pattern = { "LoadedWhichKey" }})
 
 --- highlight --------------------------------------------------------------------------------------
 --- WhichKeyFloat && WhichKeyBorder 可以设置

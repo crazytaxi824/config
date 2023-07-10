@@ -30,14 +30,16 @@ local plugins = {
   --- Performence & Functions ----------------------------------------------------------------------
   --- Useful lua functions used by lots of plugins
   {"nvim-lua/plenary.nvim",
+    priority = 1000,  -- 影响加载顺序, 默认值为 50.
     commit = str_or_nil("bda256f"),
   },
 
   --- 通知功能
   {"rcarriga/nvim-notify",
     tag = str_or_nil("v3.12.0"),
-    priority = 1000,  -- 影响加载顺序, 默认为 50.
     config = function() require("user.plugin_settings.nvim_notify") end,
+
+    event = {"VeryLazy"}
   },
 
   --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件
@@ -51,10 +53,9 @@ local plugins = {
   --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   {"folke/which-key.nvim",
     tag = str_or_nil("v1.4.3"),
-    priority = 999,
     config = function() require("user.plugin_settings.which_key") end,
 
-    event = {"VeryLazy"},
+    event = {"VeryLazy"}
   },
 
   --- Treesitter -----------------------------------------------------------------------------------
@@ -79,7 +80,6 @@ local plugins = {
       "nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
       "JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
       "windwp/nvim-ts-autotag",  -- auto close tag <div></div>
-      --"p00f/nvim-ts-rainbow",  -- 括号颜色, 需要 treesitter 解析. NOTE: 严重拖慢文件打开速度.
     },
 
     event = {"VeryLazy"},
@@ -145,10 +145,9 @@ local plugins = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全
       "hrsh7th/cmp-buffer",  -- 当前 buffer 中有的 word
       "hrsh7th/cmp-path",  -- filepath 补全
-      --"hrsh7th/cmp-cmdline",  -- cmdline completions, 不好用.
 
       "saadparwaiz1/cmp_luasnip",  -- snippets
-      "windwp/nvim-autopairs",
+      "windwp/nvim-autopairs",  -- 括号补全
     },
 
     event = "InsertEnter",
@@ -173,11 +172,6 @@ local plugins = {
 
     lazy = true,  -- nvim-cmp 加载时自动加载.
   },
-
-  --- cmdline completions, NOTE: 不好用.
-  -- {"hrsh7th/cmp-cmdline",
-  --   commit = str_or_nil(nil),
-  -- },
 
   {"saadparwaiz1/cmp_luasnip",  -- Snippets source for nvim-cmp
     commit = str_or_nil("1809552"),
@@ -238,11 +232,7 @@ local plugins = {
     event = "BufWritePre",  -- save file 的时候 lazyload null-ls
   },
 
-  --- File Tree Display ----------------------------------------------------------------------------
-  -- 提供 icons 需要 patch 字体 (Nerd Fonts)
-  --{"kyazdani42/nvim-web-devicons"},
-
-  --- file explorer
+  --- File explorer --------------------------------------------------------------------------------
   {"kyazdani42/nvim-tree.lua",
     commit = str_or_nil("a708bd2"),
     config = function() require("user.plugin_settings.file_tree") end,
@@ -250,8 +240,6 @@ local plugins = {
     -- VVI: 本文件最后设置: 在 `nvim dir` 直接打开文件夹的时直接加载 nvim-tree.lua.
     event = {"VeryLazy"},
   },
-
-  --{"nvim-neo-tree/neo-tree.nvim"},  -- NOTE: nvim-tree.lua 替代
 
   --- Buffer & Status Line -------------------------------------------------------------------------
   --- tabline decorator, `:help 'tabline'`
@@ -295,10 +283,16 @@ local plugins = {
     config = function() require("user.plugin_settings.telescope_fzf") end,
     dependencies = {
       "nvim-lua/plenary.nvim",
-      "nvim-treesitter/nvim-treesitter",
+      "nvim-telescope/telescope-fzf-native.nvim",
     },
 
     event = {"VeryLazy"},
+  },
+
+  { "nvim-telescope/telescope-fzf-native.nvim",
+    build = "make",
+
+    lazy = true,  -- telescope 加载时自动加载.
   },
 
   --- terminal
@@ -365,8 +359,15 @@ local plugins = {
     cmd = {"Copilot"},  -- `:Copilot setup`, `:Copilot enable`, `:help copilot` 查看可用命令.
   },
 
+  --{"kyazdani42/nvim-web-devicons"}, -- Nerd Fonts 提供 icons 需要 patch 字体
+  --{"nvim-neo-tree/neo-tree.nvim"},  -- File explorer. nvim-tree.lua 替代
+  --{"Tastyep/structlog.nvim"},   -- log 工具.
+  --{"folke/trouble.nvim"},       -- quickfix/loclist 替代.
   --{"goolord/alpha-nvim"},       -- neovim 启动页面
   --{"ahmedkhalf/project.nvim"},  -- project manager
+
+  --{"p00f/nvim-ts-rainbow"},  -- rainbow 括号颜色, treesitter 插件. NOTE: 严重拖慢文件打开速度.
+  --{"hrsh7th/cmp-cmdline"},  -- 自动补全 cmd. nvim-cmp 插件. NOTE: 不好用.
 }
 
 --- load plugins
