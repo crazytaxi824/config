@@ -30,15 +30,16 @@ local plugins = {
   --- Performence & Functions ----------------------------------------------------------------------
   --- Useful lua functions used by lots of plugins
   {"nvim-lua/plenary.nvim",
-    priority = 1000,  -- 影响加载顺序, 默认为 50.
+    priority = 1000,  -- 影响加载顺序, 默认值为 50.
     commit = str_or_nil("bda256f"),
   },
 
   --- 通知功能
   {"rcarriga/nvim-notify",
     tag = str_or_nil("v3.12.0"),
-    priority = 999,
     config = function() require("user.plugin_settings.nvim_notify") end,
+
+    event = {"VeryLazy"}
   },
 
   --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件
