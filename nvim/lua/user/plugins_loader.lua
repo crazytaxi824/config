@@ -141,7 +141,7 @@ local plugins = {
 
   --- Auto Completion ------------------------------------------------------------------------------
   {"hrsh7th/nvim-cmp",
-    commit = str_or_nil("2743dd9"),
+    commit = str_or_nil("c4e491a"),
     config = function() require("user.plugin_settings.cmp_completion") end,
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全
