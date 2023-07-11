@@ -22,6 +22,7 @@ end
 
 --- 插件设置
 --- https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/editor.lua
+--- NOTE: 如果插件被 require(xxx) or pcall(require, xxx) 会马上加载.
 local plugins = {
   { "folke/lazy.nvim",
     --- install the latest stable version of plugins that support Semver.
