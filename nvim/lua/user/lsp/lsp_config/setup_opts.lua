@@ -1,11 +1,9 @@
---- NOTE: handlers.lua 主要返回一个 table, 带 "on_attach", "capabilities" 属性.
---  - on_attach     当 LSP 存在时加载设置 key_mapping, highlight ... 等设置.
+--- DOC: `:help vim.lsp.start_client()`.
 --  - capabilities  给 cmp 自动补全提供内容.
---
---- 其他非必需属性:
+--  - on_attach     当 LSP 存在时加载设置 key_mapping, highlight ... 等设置.
 --  - on_init = function(lsp_client) -- https://github.com/neovim/nvim-lspconfig/wiki/Project-local-settings
---    可以用来加载 project local settings.
---    修改之后使用 lsp_client.notify("workspace/didChangeConfiguration") 通知 LSP server.
+--      可以用来加载 project local settings.
+--      修改之后使用 lsp_client.notify("workspace/didChangeConfiguration") 通知 LSP server.
 
 local M = {}
 
@@ -13,25 +11,17 @@ local M = {}
 --- 如果 "diagnostic.config({update_in_insert = false})", 则该设置应该不生效.
 M.flags = { debounce_text_changes = 500 }   --- 默认 150.
 
---- NOTE: on_attach - 加载 Key mapping & highlight 设置 --------------------------------------------
----       这里传入的 client 是正在加载的 lsp_client, vim.print(client) 中可以看到 codeActionKind.
-M.on_attach = function(client, bufnr)
-  --- 加载自定义设置 ---
-  --- textDocument/documentHighlight, 显示 references
-  require("user.lsp.lsp_config.doc_hl").fn(client, bufnr)
+--- NOTE: before_init() can be used to debug lsp configs.
+-- M.before_init = function(initialize_params, config)
+--   vim.print(initialize_params)
+--   vim.print(config)
+-- end
 
-  --- 设置 lsp 专用 keymaps
-  local lsp_keymaps = require("user.lsp.lsp_keymaps")
-  lsp_keymaps.textDocument_keymaps(bufnr)
-  lsp_keymaps.diagnostic_keymaps(bufnr)
-
-  --- DEBUG: 用
-  if __Debug_Neovim.lspconfig then
-    Notify("LSP Server attach: " .. client.name, "DEBUG", {title="LSP"})
-  end
+--- NOTE: on_error() invoked when the client operation throws an error.
+M.on_error = function (code)
+  Notify(vim.inspect(vim.lsp.rpc.client_errors[code]), "ERROR", {title = "lspconfig/setup_opts.lua"})
 end
 
---- https://github.com/hrsh7th/cmp-nvim-lsp#setup
 --- VVI: lspconfig 必须在 cmp_nvim_lsp 之后加载, 否则可能无法提供代码补全.
 local status_ok, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
 if not status_ok then
@@ -40,9 +30,11 @@ if not status_ok then
     '"cmp_nvim_lsp" can NOT be loaded when setup lsp.capabilities.',
     'LSP Auto-Completion may NOT be able to use.',
   }, 'INFO')
-  M.capabilities = vim.lsp.protocol.make_client_capabilities()
+  -- https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig/util.lua
+  -- M.capabilities = vim.lsp.protocol.make_client_capabilities()  -- lspconfig default_config 中 capabilities 有默认设置.
 else
   --- "cmp_nvim_lsp" 存在的情况, 可以使用 lsp 功能, 也可以提供 lsp 代码补全.
+  --- https://github.com/hrsh7th/cmp-nvim-lsp#setup
   M.capabilities = cmp_nvim_lsp.default_capabilities()
 end
 
@@ -63,6 +55,7 @@ end
 -- -- }}}
 M.local_lspconfig_key = "lsp"
 
+--- NOTE: on_init() run before on_attach(), 可以通过打印看出先后顺序.
 M.on_init = function(client)
   --- NOTE: 加载项目本地设置, 覆盖 global settings -----------------------------
   local proj_local_settings = require("user.lsp._load_proj_settings")
@@ -87,6 +80,24 @@ M.on_init = function(client)
   end
 
   return true  -- VVI: 如果 return false 则 LSP 不启动.
+end
+
+--- NOTE: on_attach - 加载 Key mapping & highlight 设置
+---       这里传入的 client 是正在加载的 lsp_client, vim.print(client) 中可以看到 codeActionKind.
+M.on_attach = function(client, bufnr)
+  --- 加载自定义设置 ---
+  --- textDocument/documentHighlight, 显示 references
+  require("user.lsp.lsp_config.doc_hl").fn(client, bufnr)
+
+  --- 设置 lsp 专用 keymaps
+  local lsp_keymaps = require("user.lsp.lsp_keymaps")
+  lsp_keymaps.textDocument_keymaps(bufnr)
+  lsp_keymaps.diagnostic_keymaps(bufnr)
+
+  --- DEBUG: 用
+  if __Debug_Neovim.lspconfig then
+    Notify("LSP Server attach: " .. client.name, "DEBUG", {title="LSP"})
+  end
 end
 
 --- VVI: autostart 不要设置为 false, 会造成很多问题.
