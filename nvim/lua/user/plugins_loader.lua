@@ -22,6 +22,7 @@ end
 
 --- 插件设置
 --- https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/editor.lua
+--- NOTE: 如果插件被 require(xxx) or pcall(require, xxx) 会马上加载.
 local plugins = {
   { "folke/lazy.nvim",
     --- install the latest stable version of plugins that support Semver.
@@ -41,7 +42,7 @@ local plugins = {
     tag = str_or_nil("v3.12.0"),
     config = function() require("user.plugin_settings.nvim_notify") end,
 
-    event = {"VeryLazy"}
+    event = "VeryLazy",
   },
 
   --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件
@@ -57,7 +58,7 @@ local plugins = {
     tag = str_or_nil("v1.4.3"),
     config = function() require("user.plugin_settings.which_key") end,
 
-    event = {"VeryLazy"}
+    event = "VeryLazy",
   },
 
   --- Treesitter -----------------------------------------------------------------------------------
@@ -84,7 +85,7 @@ local plugins = {
       "windwp/nvim-ts-autotag",  -- auto close tag <div></div>
     },
 
-    event = {"VeryLazy"},
+    event = "VeryLazy",
   },
 
   --- 第一方 module 插件 ---
@@ -136,12 +137,12 @@ local plugins = {
     config = function() require("user.plugin_settings.indentline") end,  -- setup() 设置 use_treesitter = true
     dependencies = {"nvim-treesitter/nvim-treesitter"},
 
-    event = {"VeryLazy"},
+    event = "VeryLazy",
   },
 
   --- Auto Completion ------------------------------------------------------------------------------
   {"hrsh7th/nvim-cmp",
-    commit = str_or_nil("2743dd9"),
+    commit = str_or_nil("c4e491a"),
     config = function() require("user.plugin_settings.cmp_completion") end,
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全
@@ -149,7 +150,6 @@ local plugins = {
       "hrsh7th/cmp-path",  -- filepath 补全
 
       "saadparwaiz1/cmp_luasnip",  -- snippets
-      "windwp/nvim-autopairs",  -- 括号补全
     },
 
     event = "InsertEnter",
@@ -184,7 +184,7 @@ local plugins = {
 
   --- snippet engine, for "cmp_luasnip", 每次打开文件都会有一个 [Scratch] buffer.
   {"L3MON4D3/LuaSnip",
-    commit = str_or_nil("a658ae2"),
+    commit = str_or_nil("45a4e89"),
     build = "make install_jsregexp",  -- https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#transformations
     config = function() require("user.plugin_settings.luasnip_snippest") end,
     dependencies = {"rafamadriz/friendly-snippets"},  -- snippets content
@@ -208,7 +208,7 @@ local plugins = {
       "hrsh7th/nvim-cmp",  -- cmp.event:on() 设置.
     },
 
-    lazy = true,  -- nvim-cmp 加载时自动加载.
+    event = "InsertEnter",
   },
 
   --- LSP ------------------------------------------------------------------------------------------
@@ -219,6 +219,7 @@ local plugins = {
     config = function() require("user.lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     dependencies = {
       "williamboman/mason.nvim",  -- 安装 lsp 命令行工具.
+      "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全. NOTE: lspconfig 必须在 cmp_nvim_lsp 之后加载, 否则可能无法提供代码补全.
     },
   },
 
@@ -240,7 +241,7 @@ local plugins = {
     config = function() require("user.plugin_settings.file_tree") end,
 
     -- VVI: 本文件最后设置: 在 `nvim dir` 直接打开文件夹的时直接加载 nvim-tree.lua.
-    event = {"VeryLazy"},
+    event = "VeryLazy",
   },
 
   --- Buffer & Status Line -------------------------------------------------------------------------
@@ -249,7 +250,7 @@ local plugins = {
     tag = str_or_nil("v4.2.0"),
     config = function() require("user.plugin_settings.decor_bufferline") end,
 
-    event = {"VeryLazy"},
+    event = "VeryLazy",
   },
 
   --- statusline decorator, `:help 'statusline'`
@@ -257,7 +258,7 @@ local plugins = {
     commit = str_or_nil("05d78e9"),
     config = function() require("user.plugin_settings.decor_lualine") end,
 
-    event = {"VeryLazy"},
+    event = "VeryLazy",
   },
 
   --- Debug tools 安装 -----------------------------------------------------------------------------
@@ -288,7 +289,7 @@ local plugins = {
       "nvim-telescope/telescope-fzf-native.nvim",
     },
 
-    event = {"VeryLazy"},
+    event = "VeryLazy",
   },
 
   { "nvim-telescope/telescope-fzf-native.nvim",
@@ -302,7 +303,7 @@ local plugins = {
     tag = str_or_nil("v2.7.0"),  -- NOTE: 尽量少更新, 更新后需要检查 user/utils/term/bg_term 运行情况.
     config = function() require("user.plugin_settings.toggleterm_terminal") end,
 
-    event = {"VeryLazy"},
+    event = "VeryLazy",
   },
 
   --- Git
@@ -310,7 +311,7 @@ local plugins = {
   --- `:Gitsigns setqflist/seqloclist` will open Trouble instead of quickfix or location list windows.
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {"lewis6991/gitsigns.nvim",
-    commit = str_or_nil("dc2962f"),
+    commit = str_or_nil("48c3ae8"),
     config = function() require("user.plugin_settings.git_signs") end,
 
     --- VVI: 这里不能用 VeryLazy.
@@ -328,7 +329,7 @@ local plugins = {
     commit = str_or_nil("be56353"),
     config = function() require("user.plugin_settings.tagbar") end,
 
-    event = {"VeryLazy"},
+    event = "VeryLazy",
   },
 
   --- markdown preview

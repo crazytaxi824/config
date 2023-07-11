@@ -117,7 +117,7 @@ null_ls.setup({
     end
   end,
 
-  --- null-ls 退出的时候触发, 每次退出 nvim 时也会触发.
+  --- null-ls 退出的时候触发, 每次退出 vim 时也会触发.
   -- on_exit = function()
   --   Notify("Null-ls on_exit() event.", "WARN", {title = "Null-ls"})
   -- end,
