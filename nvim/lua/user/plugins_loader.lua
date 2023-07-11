@@ -280,13 +280,13 @@ local plugins = {
 
   --- Useful Tools ---------------------------------------------------------------------------------
   --- 依赖 rg fd, 但不依赖 fzf. 没有 fzf 命令行工具也可以运行.
-  --- telescope 的 preview syntax 使用的是 treesitter, 而 fzf 用的是 bat.
+  --- telescope 的 preview syntax 默认使用的是 treesitter, 如果没有 treesitter 则使用 vim syntax highlights.
   {"nvim-telescope/telescope.nvim",
     commit = str_or_nil("276362a"),  -- tag = "0.1.2", 半年更新一次 tag
     config = function() require("user.plugin_settings.telescope_fzf") end,
     dependencies = {
       "nvim-lua/plenary.nvim",
-      "nvim-telescope/telescope-fzf-native.nvim",
+      "nvim-telescope/telescope-fzf-native.nvim",  -- telescope extension
     },
 
     event = "VeryLazy",
