@@ -48,14 +48,14 @@ autopairs.get_rule('`'):with_pair(cond.not_filetypes({"markdown"}))  -- exclude 
 autopairs.add_rule(Rule('$','$',{"tex", "latex", "markdown"}))
 autopairs.add_rule(Rule('$$','$$',{"tex", "markdown"}))
 
---- VVI: 自动补全 cmp 配合使用 ---------------------------------------------------------------------
+--- NOTE: 自动补全 cmp 配合使用 --------------------------------------------------------------------
 --- https://github.com/windwp/nvim-autopairs#mapping-cr
 --- If you want insert `(` after select function or method item
-local cmp_autopairs = require("nvim-autopairs.completion.cmp")
 local cmp_status_ok, cmp = pcall(require, "cmp")
 if not cmp_status_ok then
   return
 end
+local cmp_autopairs = require("nvim-autopairs.completion.cmp")
 cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done({map_char={tex=""}}))
 
 
