@@ -374,6 +374,7 @@ local plugins = {
 }
 
 --- load plugins
+local lazy = require('lazy')
 local opts = {
   root = lazydir, -- directory where plugins will be installed
   lockfile = vim.fn.stdpath("config") .. "/lazy-lock.json", -- lockfile generated after running update.
@@ -409,14 +410,13 @@ local opts = {
   },
   -- -- }}}
 }
-
-local lazy = require('lazy')
 lazy.setup(plugins, opts)
 
 --- `nvim dir` 打开文件夹时直接加载 nvim-tree.lua, `nvim file` 打开 file 时不加载 nvim-tree.lua, 通过快捷键加载.
 --- VVI: 这里只能使用 BufWinEnter, 不能使用 BufEnter.
 vim.api.nvim_create_autocmd({"BufWinEnter"}, {
   pattern = {"*"},
+  once = true,
   callback = function (params)
     if vim.fn.isdirectory(vim.api.nvim_buf_get_name(params.buf)) == 1 then
       lazy.load({plugins = {"nvim-tree.lua"}})
