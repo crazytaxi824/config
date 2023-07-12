@@ -12,6 +12,5 @@
 
 # exclude folder, and then ignore 'file' & 'sub-folder' inside the folder.
 !/nvim
-/nvim/plugin
 /nvim/todo.md
 /nvim/lazy-lock.json
