@@ -34,13 +34,23 @@ local function check_module()
     if status_ok then
       health.report_ok('require("' .. req .. '") Success')
     else
-      health.report_warn('require("' .. req .. '") Failed')
+      health.report_error('require("' .. req .. '") Failed')
     end
+  end
+end
+
+local function check_HACK()
+  health.report_start("check HACK required functions")
+  if vim.lsp.buf_request ~= nil then
+    health.report_ok('vim.lsp.buf_request() Exists')
+  else
+    health.report_error('vim.lsp.buf_request() is not Exist.\ncheck user/lsp "textDocument/documentHighlight" custom handlers')
   end
 end
 
 M.check = function()
   check_module()
+  check_HACK()
 end
 
 return M

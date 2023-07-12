@@ -314,14 +314,13 @@ local plugins = {
     commit = str_or_nil("48c3ae8"),
     config = function() require("user.plugin_settings.git_signs") end,
 
-    --- VVI: 这里不能用 VeryLazy.
+    --- VVI: 这里不能用 VeryLazy. `nvim dir` 启动时直接打开 dir 会造成 gitsigns 报错.
     --- BufReadPre 在打开 file 时会触发, 打开 dir 时不会触发.
-    --- `nvim dir` 启动时直接打开 dir 会造成 gitsign 报错.
     event = { "BufReadPre", "BufNewFile" },
   },
 
   --- tagbar --- {{{
-  --- 函数/类型列表，需要安装 Universal Ctags - `brew info universal-ctags`, 注意不要安装错了.
+  --- NOTE: 函数/类型列表，需要安装 `brew info universal-ctags`, 注意不要安装错了.
   --- https://github.com/universal-ctags/ctags/blob/master/docs/news.rst#new-parsers
   --- `ctags --list-languages` 查看支持的语言. 不支持 jsx/tsx, 支持 typescript, 勉强支持 javascript
   -- -- }}}
@@ -374,6 +373,7 @@ local plugins = {
 }
 
 --- load plugins
+local lazy = require('lazy')
 local opts = {
   root = lazydir, -- directory where plugins will be installed
   lockfile = vim.fn.stdpath("config") .. "/lazy-lock.json", -- lockfile generated after running update.
@@ -409,8 +409,6 @@ local opts = {
   },
   -- -- }}}
 }
-
-local lazy = require('lazy')
 lazy.setup(plugins, opts)
 
 --- `nvim dir` 打开文件夹时直接加载 nvim-tree.lua, `nvim file` 打开 file 时不加载 nvim-tree.lua, 通过快捷键加载.

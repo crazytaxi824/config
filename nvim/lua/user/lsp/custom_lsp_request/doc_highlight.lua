@@ -16,28 +16,18 @@
 ---    highlight_references() 和 clear_references()
 
 --- 官方设置方法, `:help vim.lsp.buf.document_highlight()` ------------------------------------ {{{
----   NOTE: Usage of |vim.lsp.buf.document_highlight()| requires the
----   following highlight groups to be defined or you won't be able
----   to see the actual highlights. |LspReferenceText|
----   |LspReferenceRead| |LspReferenceWrite|
+--- color: "LspReferenceText", "LspReferenceRead", "LspReferenceWrite"
 --
--- local function lsp_highlight(client)
---   --- TODO: CursorHold 过程中不要 clear_references(), 在判断 word 改变之后再 clear.
---   --- Set autocommands conditional on server_capabilities
---   if client.supports_method('textDocument/documentHighlight') then
---     vim.cmd [[
---       augroup lsp_document_highlight
---         autocmd! * <buffer>
---         "autocmd ModeChanged * lua vim.lsp.buf.clear_references()
---         autocmd CursorHold <buffer> lua vim.lsp.buf.clear_references() vim.lsp.buf.document_highlight()
---         autocmd CursorHoldI <buffer> lua vim.lsp.buf.clear_references() vim.lsp.buf.document_highlight()  -- insert mode
---         "autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
---         "autocmd CursorMovedI <buffer> lua vim.lsp.buf.clear_references()   -- insert mode
---       augroup END
---     ]]
---   end
--- end
---
+--  vim.cmd [[
+--    augroup lsp_document_highlight
+--      autocmd! * <buffer>
+--      autocmd CursorHold <buffer> lua vim.lsp.buf.clear_references() vim.lsp.buf.document_highlight()
+--      autocmd CursorHoldI <buffer> lua vim.lsp.buf.clear_references() vim.lsp.buf.document_highlight()  -- insert mode
+--      autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
+--      autocmd CursorMovedI <buffer> lua vim.lsp.buf.clear_references()   -- insert mode
+--      autocmd ModeChanged * lua vim.lsp.buf.clear_references()
+--    augroup END
+--  ]]
 -- -- }}}
 
 --- sort response list 方便 compare -------------------------------------------- {{{
@@ -153,6 +143,7 @@ M.doc_highlight = function(bufnr)
 end
 
 --- VVI: 这里不要使用 vim.lsp.buf.clear_references() 方法, 这个方法只能清除当前 buffer 的 highlight.
+--- vim.lsp.util.buf_clear_references(bufnr) 清除指定 bufnr 的 highlight.
 M.doc_clear = function(bufnr)
   --- clear cached result
   prev_doc_hl = nil
