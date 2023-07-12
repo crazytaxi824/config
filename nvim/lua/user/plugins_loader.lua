@@ -194,7 +194,7 @@ local plugins = {
 
   --- snippets content, 自定义 snippets 可以借鉴这个结构.
   {"rafamadriz/friendly-snippets",
-    commit = str_or_nil("7f6681b"),
+    commit = str_or_nil("ca668b7"),
 
     lazy = true,  -- LuaSnip 加载时自动加载.
   },
