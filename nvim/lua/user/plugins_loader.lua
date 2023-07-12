@@ -417,6 +417,7 @@ lazy.setup(plugins, opts)
 --- VVI: 这里只能使用 BufWinEnter, 不能使用 BufEnter.
 vim.api.nvim_create_autocmd({"BufWinEnter"}, {
   pattern = {"*"},
+  once = true,
   callback = function (params)
     if vim.fn.isdirectory(vim.api.nvim_buf_get_name(params.buf)) == 1 then
       lazy.load({plugins = {"nvim-tree.lua"}})
