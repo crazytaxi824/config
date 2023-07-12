@@ -381,6 +381,8 @@ local opts = {
     lazy = false, -- should plugins be lazy-loaded?
   },
   ui = {  --- {{{
+    size = { width = 0.8, height = 0.9 },
+    border = {"▄","▄","▄","█","▀","▀","▀","█"},
     icons = {
       cmd = " cmd:",
       config = " conf:",
