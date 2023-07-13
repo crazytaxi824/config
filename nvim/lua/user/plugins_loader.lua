@@ -15,7 +15,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 --- 用于批量检查 plugins 升级. true 的时候, commit 和 tag 都会被设置为 nil.
-local nil_value = false
+local nil_value = true
 local function str_or_nil(str)
   return (not nil_value and str or nil)
 end
@@ -90,7 +90,7 @@ local plugins = {
 
   --- 第一方 module 插件 ---
   {"nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-    commit = str_or_nil("63f3ffc"),
+    commit = str_or_nil("6f8f788"),
     config = function() require("user.plugin_settings.treesitter_ctx") end,
 
     lazy = true,  -- nvim-treesitter 加载时自动加载.
