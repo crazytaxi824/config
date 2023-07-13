@@ -201,7 +201,7 @@ local plugins = {
 
   --- 自动括号, 同时依赖 treesitter && cmp
   {"windwp/nvim-autopairs",
-    commit = str_or_nil("e8f7dd7"),
+    commit = str_or_nil("a16989a"),
     config = function() require("user.plugin_settings.autopairs") end,
     dependencies = {
       "nvim-treesitter/nvim-treesitter",  -- setup() 中 `check_ts`, `ts_config` 需要 treesitter 支持.
