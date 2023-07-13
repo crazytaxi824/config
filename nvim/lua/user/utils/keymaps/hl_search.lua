@@ -47,7 +47,8 @@ local function delete_prev_hl()
 end
 
 M.hl_search = function(key)
-  local status, errmsg = pcall(vim.cmd, 'normal! ' .. key)
+  --- pcall vim.cmd()
+  local status, errmsg = pcall(vim.api.nvim_exec2, 'normal! ' .. key, {output = true})
   if not status then
     vim.notify(errmsg, vim.log.levels.ERROR) -- 这里不要使用 notify 插件, 显示错误信息.
     return
