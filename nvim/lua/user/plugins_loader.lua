@@ -27,14 +27,14 @@ local plugins = {
   { "folke/lazy.nvim",
     --- install the latest stable version of plugins that support Semver.
     -- version = "*",  -- 相当于 tag='stable'
-    tag = str_or_nil("v10.0.2"),
+    tag = str_or_nil("v10.1.0"),
   },
 
   --- Performence & Functions ----------------------------------------------------------------------
   --- Useful lua functions used by lots of plugins
   {"nvim-lua/plenary.nvim",
     priority = 1000,  -- 影响加载顺序, 默认值为 50.
-    commit = str_or_nil("bda256f"),
+    commit = str_or_nil("1a6a7c9"),
   },
 
   --- 通知功能
