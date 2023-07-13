@@ -3,6 +3,12 @@ if not status_ok then
   return
 end
 
+--- for "nvim-tree.lua", `:help nvim-tree-netrw`
+--- keep using |netrw| without its file browser features.
+--- 将以下设置放入 init.lua 会导致 BUG: `:echo v:errmsg`, E216: No such group or event: FileExplorer *
+--vim.g.loaded_netrw = 1
+--vim.g.loaded_netrwPlugin = 1
+
 local nt_api = require("nvim-tree.api")
 
 --- file/dir icons --------------------------------------------------------------------------------- {{{

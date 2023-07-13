@@ -40,11 +40,6 @@ __Debug_Neovim = {
   autocmd_events = false,  -- autocmd 中 `:help events` 运行情况.
 }
 
---- for "nvim-tree.lua", `:help nvim-tree-netrw`
---- keep using |netrw| without its file browser features.
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
-
 --- 读取设置: ~/.config/nvim/lua/user/xxx.lua
 require "user.colors"   -- vim highlight 设置, VVI: 必须放在最前面加载, 因为有全局变量.
 require "user.global"   -- [必要], 自定义函数, 很多设置用到的常用函数.
