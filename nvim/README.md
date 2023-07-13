@@ -129,7 +129,7 @@ lua 中有一个 `_G` 全局变量. 自定义的所有全局变量和函数都�
 
 ### lua 常用函数
 
-- `pcall(vim.cmd, "normal! n")` -- 获取 command 返回信息
+- `pcall(vim.api.nvim_exec2, "normal! n", {output=false})` -- 获取 command 返回信息, 相当于执行 pcall(vim.cmd, ...)
 
 - `dofile(file/path)` -- lua execute file.
 
@@ -362,6 +362,31 @@ Visual-Block 选择多行数字
 - `3<C-x>` 每行数字-3;
 - `g<C-x>` 第一行-1, 第二行-2, 第 n 行-n...
 - `3g<C-x>` 第一行-3, 第二行-6, 第 n 行-3n...
+
+<br />
+
+# nvim_cmd(), nvim_command(), nvim_exec2() 区别
+
+首选 nvim_exec2(), 然后是 nvim_cmd(), 不推荐 nvim_command().
+
+```lua
+foo = vim.api.nvim_cmd({cmd='echo', args={'"ok"'}}, {output=true})
+vim.print(foo)
+-- 如果 {output = true} 则 foo 为 "ok";
+-- 如果 {output = false} 则运行时直接打印 ok, foo 为空 string "", 而不是 nil.
+```
+
+```lua
+lua foo = vim.api.nvim_exec2('echo "ok"', {output = true})
+lua vim.print(foo)
+-- 如果 {output = true} 则 foo 为 table: { output = "ok" };
+-- 如果 {output = false} 则直接打印 ok, foo 为 vim.empty_dict()
+```
+
+```lua
+-- 类似于 vim.cmd(), 不推荐使用.
+vim.api.nvim_command('echo "ok"')
+```
 
 <br />
 

@@ -19,8 +19,8 @@ M.fn = function(client, bufnr)
       buffer = bufnr,  -- 对指定 buffer 有效
       callback = function(params)
         --- VVI: 在 change filetype (`set filetype=xxx`) 的过程中,
-        --- 如果先 LspAttach new_lsp, 然后再 LspDetach old_lsp, 则需要用到以下代码.
-        --- 如果先 LspDetach old_lsp, 然后再 LspAttach new_lsp, 则不需要修改. 默认在 LspDetach 的时候 del augroup.
+        --- 如果先 LspAttach new_lsp, 然后再 LspDetach old_lsp, 或 async 执行 LspAttach 和 LspDetach, 则需要用到以下代码.
+        --- 如果先 LspDetach old_lsp, 然后再 LspAttach new_lsp, 则不需要修改. 默认在 LspDetach 的时候 del_augroup.
         --- 判断当前是否有 lsp 支持 documentHighlight --- {{{
         -- local lsp_clients = vim.lsp.get_active_clients({ bufnr = params.buf })
         --
