@@ -81,24 +81,21 @@ null_ls.setup({
   --- is the same as setting log.level to "trace" 记录 log, `:NullLsLog` 打印 log.
   debug = __Debug_Neovim.null_ls,
 
-  --- log 输出到 stdpath('cache') .. '/null-ls.log'
-  log = {
-    enable = true,
-    level = 'warn',  -- "error", "warn"(*), "info", "debug", "trace"
+  --- log 输出到 stdpath('cache') .. '/null-ls.log', 目前无法修改.
+  log_level = 'warn',  -- "error", "warn"(*), "info", "debug", "trace"
 
-    --- show log output in Neovim's ':messages'.
-    --- sync is slower but guarantees that messages will appear in order.
-    use_console = 'async',  -- "sync", "async"(*), false.
-  },
+  --- 一边输入一边检查. false: 节省资源.
+  update_in_insert = false,
 
-  update_in_insert = false,  -- 节省资源, 一边输入一边检查
+  --- 两次请求的时间超过该设置才会向 null-ls 发送请求. 如果两次请求的时间小于该设置则不发送请求.
+  --- NOTE: 这里相当于是 null-ls 的 "flags = {debounce_text_changes = xxx}" 设置.
   debounce = 500,  -- 默认 250.
-                   -- NOTE: 这里相当于是 null-ls 的 "flags = {debounce_text_changes = xxx}" 设置.
-                   -- 停止输入文字的时间超过该数值, 则向 null-ls 发送请求.
-                   -- 如果 "update_in_insert = false", 则该设置应该不生效.
-  default_timeout = 30000,  -- lint 超时时间, 30s. 默认为 5000, 5s.
-  diagnostics_format = "#{m} [null-ls]",  -- 错误信息显示格式,
-                                          -- #{m} - message, #{s} - source, #{c} - err_code
+
+  --- lint 超时时间, 30s. 默认为 5000, 5s.
+  default_timeout = 30000,
+
+  --- 错误信息显示格式. #{m} - err_msg; #{s} - source_name; #{c} - err_code
+  diagnostics_format = "#{m} [null-ls]",
 
   --- 以下callback 都是 DEBUG: 用
   --- 设置 key_mapping vim.diagnostic.goto_next() ...
@@ -119,7 +116,7 @@ null_ls.setup({
 
   --- null-ls 退出的时候触发, 每次退出 vim 时也会触发.
   -- on_exit = function()
-  --   Notify("Null-ls on_exit() event.", "WARN", {title = "Null-ls"})
+  --   Notify("Null-ls on_exit() event.", "warn", {title = "Null-ls"})
   -- end,
 })
 
