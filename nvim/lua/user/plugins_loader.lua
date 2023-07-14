@@ -267,7 +267,7 @@ local plugins = {
   },
 
   {"rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
-    tag = "v3.8.3",
+    tag = "v3.8.4",
     config = function() require("user.plugin_settings.dap_debug") end,  -- dap-ui && dap 设置在同一文件中.
     dependencies = {"mfussenegger/nvim-dap"},
 
