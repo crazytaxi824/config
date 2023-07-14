@@ -407,11 +407,9 @@ local opts = {
 }
 
 --- NOTE: 用于批量检查 plugins 升级
-for _, p in ipairs(plugins) do
-  p.commit = nil
-  p.tag = nil
-  p.version = nil
-end
+-- for _, p in ipairs(plugins) do
+--   p.commit, p.tag, p.version = nil, nil, nil
+-- end
 
 lazy.setup(plugins, opts)
 
