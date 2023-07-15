@@ -919,7 +919,7 @@ key_bindings:
   # 切换实例(App) <Command-Tab>, 系统级应用切换.
   - { key: N,              mods: Command|Shift,       action: SpawnNewInstance      }
 
-  # NOTE: <Ctrl-Left/Right/Up/Down> 被 MacOS 系统占用了, 所以这里使用 Option 代替.
+  # NOTE: <Ctrl-Left/Right/Up/Down> 被 MacOS 系统占用了, 所以这里使用 Option 代替. 这些设置不止是用在 vim/nvim 中.
   # VVI: `window.option_as_alt` 不会覆盖这里的 Option key 设置.
   # 如果要取消/修改系统默认 ctrl 快捷键, 修改 MacOS "设置/键盘/键盘快捷键/调度中心/..." 中的设置.
   # 默认 <Option-Backspace> 按照单词删除.

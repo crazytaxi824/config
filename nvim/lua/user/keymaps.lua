@@ -138,6 +138,13 @@ local keymaps = {
   {'n', '<C-S-Right>', '6zl', opt, 'win: scroll right'},
   {'v', '<C-S-Right>', '6zl', opt, 'win: scroll right'},
   {'i', '<C-S-Right>', '<C-o>6zl', opt, 'win: scroll right'},  -- 默认在 insert mode 下和 <S-Right> 相同.
+  --- 需要在 alacritty 中使用 <option-...> 代替.
+  {'n', '<M-S-Left>', '6zh', opt, 'win: scroll left'},
+  {'v', '<M-S-Left>', '6zh', opt, 'win: scroll left'},
+  {'i', '<M-S-Left>', '<C-o>6zh', opt, 'win: scroll left'},  -- 默认在 insert mode 下和 <S-Left> 相同.
+  {'n', '<M-S-Right>', '6zl', opt, 'win: scroll right'},
+  {'v', '<M-S-Right>', '6zl', opt, 'win: scroll right'},
+  {'i', '<M-S-Right>', '<C-o>6zl', opt, 'win: scroll right'},  -- 默认在 insert mode 下和 <S-Right> 相同.
 
   --- NOTE: <Home> 模拟 vscode 行为; <End> 使用默认行为.
   {'n', '<Home>', function() key_fn.home_key.nowrap() end, opt, 'which_key_ignore'},
@@ -287,9 +294,12 @@ key_fn.set({}, {
     [']'] = {name="Section Jump Next"},
     g = {name="g"},
     z = {name="z"},
-    ['<leader>'] = {name="\\"},
+    ['<leader>'] = {name=vim.g.mapleader or "\\"},
+
+    --- 以下 key 默认显示为 'Nvim builtin'
     Y = {'copy whole line without "\\n"'},
-    ['<C-L>'] = {'which_key_ignore'},
+    ['<C-L>'] = {':nohlsearch | diffupdate'},
+    ['&'] = {"repeat last ':s' replace command"},
   },
   opts = {mode='n'},
 })

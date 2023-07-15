@@ -256,7 +256,7 @@ vim.g.markdown_recommended_style = 0
 --vim.opt.encoding = 'utf-8'
 --vim.opt.fileencoding = 'utf-8'
 
---vim.g.mapleader = '\\'
+--vim.g.mapleader = '\\'  -- 设置 <leader>, 默认值是 \
 vim.opt.mouse = 'a'  -- allow the mouse to be used in neovim, `:help mouse`
 
 --- 快捷键延迟时间设置 -----------------------------------------------------------------------------
