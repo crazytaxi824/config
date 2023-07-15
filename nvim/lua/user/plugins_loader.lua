@@ -50,7 +50,7 @@ local plugins = {
 
   --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   {"folke/which-key.nvim",
-    tag = "v1.4.3",
+    tag = "v1.5.0",
     config = function() require("user.plugin_settings.which_key") end,
 
     event = "VeryLazy",
@@ -196,7 +196,7 @@ local plugins = {
 
   --- 自动括号, 同时依赖 treesitter && cmp
   {"windwp/nvim-autopairs",
-    commit = "e6adb87",
+    commit = "ae5b41c",
     config = function() require("user.plugin_settings.autopairs") end,
     dependencies = {
       "nvim-treesitter/nvim-treesitter",  -- setup() 中 `check_ts`, `ts_config` 需要 treesitter 支持.
@@ -267,7 +267,7 @@ local plugins = {
   },
 
   {"rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
-    tag = "v3.8.3",
+    tag = "v3.8.4",
     config = function() require("user.plugin_settings.dap_debug") end,  -- dap-ui && dap 设置在同一文件中.
     dependencies = {"mfussenegger/nvim-dap"},
 
@@ -296,7 +296,7 @@ local plugins = {
 
   --- terminal
   {"akinsho/toggleterm.nvim",
-    tag = "v2.7.0",  -- NOTE: 尽量少更新, 更新后需要检查 user/utils/term/bg_term 运行情况.
+    tag = "v2.7.1",  -- NOTE: 尽量少更新, 更新后需要检查 user/utils/term/bg_term 运行情况.
     config = function() require("user.plugin_settings.toggleterm_terminal") end,
 
     event = "VeryLazy",
