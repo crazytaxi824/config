@@ -287,9 +287,12 @@ key_fn.set({}, {
     [']'] = {name="Section Jump Next"},
     g = {name="g"},
     z = {name="z"},
-    ['<leader>'] = {name="\\"},
+    ['<leader>'] = {name=vim.g.mapleader or "\\"},
+
+    --- 以下 key 默认显示为 'Nvim builtin'
     Y = {'copy whole line without "\\n"'},
-    ['<C-L>'] = {'which_key_ignore'},
+    ['<C-L>'] = {':nohlsearch | diffupdate'},
+    ['&'] = {"repeat last ':s' replace command"},
   },
   opts = {mode='n'},
 })
