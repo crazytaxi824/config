@@ -22,10 +22,10 @@ end
 which_key.setup({
   plugins = {
     marks = false,     -- shows a list of your marks on ' and `
-    registers = true,  -- shows your registers on "/@ in NORMAL or <C-r> in INSERT mode
+    registers = true,  -- shows your registers on " in NORMAL or <C-r> in INSERT mode
     spelling = {
       enabled = false,  -- z= select spelling suggestions, NOTE: 目前使用的 telescope
-      suggestions = 36, -- how many suggestions should be shown in the list?
+      suggestions = 20, -- how many suggestions should be shown in the list?
     },
     --- the presets plugin, adds help for a bunch of default keybindings in Neovim,
     --- No actual key bindings are created.
@@ -44,7 +44,10 @@ which_key.setup({
       g = true,    -- 'gn', 'gN', 'gi', 'gv', 'gx', 'gf', 'g%'
     },
   },
-  operators = { gc = "Comments" },  -- NOTE: 手动 trigger which-key 显示.
+  --- add operators that will trigger motion and text object completion.
+  --- 用法: 先设置 gc 为注释功能, 然后在 gc 触发注释功能的时候提供 motion 提示, 用于注释: word / line ...
+  --- 可以配合 Comment.nvim 使用.
+  operators = { gc = "Comments" },
 
   --- NOTE: override the label used to display some keys.
   --- 这里是将 <F24> rename 到 <S-F12> ...
