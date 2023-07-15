@@ -227,7 +227,7 @@ local plugins = {
       "williamboman/mason.nvim",  -- 安装 linter/formatter 命令行工具. eg: shfmt, stylua ...
     },
 
-    event = "BufWritePre",  -- save file 的时候 lazyload null-ls
+    event = "VeryLazy",
   },
 
   --- File explorer --------------------------------------------------------------------------------
