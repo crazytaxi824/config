@@ -1,36 +1,40 @@
---- 通过 autocmd 在 terminal 中 highlight filepath, jump to filepath.
+--- terminal 相关设置和 autocmd
 
 local fp = require('user.utils.filepath')
 
---- terminal normal 模式跳转文件 -------------------------------------------------------------------
---- 操作方法: 在 Terminal Normal 模式中, 在行的任意位置使用 <CR> 跳转到文件.
-
 --- TermClose 意思是 job done
 --- TermLeave 意思是 term 关闭
---- TermOpen 类似 FileType 只在第一次打开 terminal 的时候触发.
+--- TermOpen 在第一次打开 terminal 的时候触发. VVI: 不会触发 "BufEnter".
 vim.api.nvim_create_autocmd('TermOpen', {
   pattern = {"term://*"},
   callback = function(params)
-    --- 显示 filepath, NOTE: 第一次打开 terminal 的时候不会触发 "BufEnter", 只能使用 "TermOpen"
-    --- 但是 "TermOpen" 类似 "FileType" 只在第一次打开 terminal 的时候触发.
     local curr_win_id = vim.api.nvim_get_current_win()
+
+    --- highlight filepath in terminal -----------------------------------------
     fp.highlight(params.buf, curr_win_id)
 
-    --- 设置 keymaps
-    vim.keymap.set('n', '<S-CR>',
-      function() fp.n_jump(vim.fn.expand('<cWORD>')) end,
-      {
+    --- 设置 keymaps -----------------------------------------------------------
+    local function opts(desc)
+      return {
+        buffer = params.buf,  -- local to Terminal buffer
         noremap = true,
         silent = true,
-        buffer = params.buf,  -- local to Terminal buffer
-        desc = "Jump to file",
+        desc = desc,
       }
-    )
+    end
+    --- 跳转到 cursor <cWORD> 文件.
+    vim.keymap.set('n', '<S-CR>', function() fp.n_jump() end, opts("Jump to file"))
+    --- VVI: <ESC> 进入 terminal Normal 模式, 同时也触发 <ESC>, 用于退出 fzf 等 terminal 中的操作.
+    vim.keymap.set('t', '<ESC>', '<ESC><C-\\><C-n>', opts("Ternimal: Normal Mode"))
+
+    --- 设置 terminal 不显示行号 -----------------------------------------------
+    vim.wo[curr_win_id].number = false
+    vim.wo[curr_win_id].relativenumber = false
   end,
   desc = "filepath highlight",
 })
 
---- 这里是保证 terminal hidden 之后, 再次打开时显示 filepath
+--- NOTE: 这里是保证 terminal hidden 之后, 再次打开时显示 filepath
 vim.api.nvim_create_autocmd('BufWinEnter', {
   pattern = {"term://*"},
   callback = function(params)
@@ -54,10 +58,5 @@ vim.keymap.set('v', '<C-S-CR>',
   {noremap = true, silent = true, desc = "System Open file"}
 )
 
---- <ESC> 进入 terminal Normal 模式,
---- VVI: 同时也 press <ESC>, 用于退出 fzf 等 terminal 中的操作. 只对本 buffer 有效.
-vim.cmd [[au TermOpen term://* tnoremap <buffer> <ESC> <ESC><C-\><C-n>]]
 
---- 设置 terminal 不显示行号.
-vim.cmd [[au TermOpen term://* :setlocal nonumber norelativenumber]]
 

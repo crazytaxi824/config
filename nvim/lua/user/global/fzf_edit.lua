@@ -64,6 +64,7 @@ function FZF_selected(fzf_tmp_file)
 
   --- put all items in quickfix_list.
   vim.fn.setqflist(fp_qf_list, 'r')  -- 'a' - append to quickfix_list; 'r' - replace quickfix_list with new items.
+  vim.fn.setqflist({}, 'a', {title = 'fzf_selected'})  -- set quickfix title
 
   --- 这里使用 cfirst 主要是为了让 cursor 跳回到文件窗口, 而不是留在 quickfix window 中.
   vim.cmd('copen | cfirst')
