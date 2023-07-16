@@ -200,8 +200,6 @@ M.go_remove_tags = function(arglist, go_remove_tags_cmd, offset)
 
   vim.notify(sh_cmd)
   local result = vim.fn.system(sh_cmd)
-
-  --- 判断结果是否错误
   if vim.v.shell_error ~= 0 then
     Notify(result, "ERROR")
     return
@@ -260,8 +258,6 @@ M.go_remove_tags_opts = function(arglist, go_remove_tag_opts_cmd, offset)
 
   vim.notify(sh_cmd)
   local result = vim.fn.system(sh_cmd)
-
-  --- 判断结果是否错误
   if vim.v.shell_error ~= 0 then
     Notify(result, "ERROR")
     return

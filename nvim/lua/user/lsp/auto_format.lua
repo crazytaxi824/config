@@ -66,9 +66,9 @@ vim.api.nvim_create_autocmd("BufWritePost", {
     --- 分类&排序 -imports-order (default "std,general,company,project")
     --- 即(默认): 标准包, github.com, local/src/...
     --- 将排序后的结果写入文件 -output file, 如果有错误则不写入.
-    local r = vim.fn.system('goimports-reviser -output file ' .. params.file)
+    local result = vim.fn.system('goimports-reviser -output file ' .. params.file)
     if vim.v.shell_error ~= 0 then
-      --Notify(r, "ERROR")  -- NOTE: go 语法错误会触发这里的 error, 可以不打印.
+      --Notify(result, "ERROR")  -- NOTE: go 语法错误会触发这里的 error, 可以不打印.
       return
     end
 

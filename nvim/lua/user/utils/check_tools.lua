@@ -15,7 +15,7 @@ local function check_tool(tool, notify_opt)
   end
 
   local msg = {}
-  vim.fn.system('which '.. tool.cmd)
+  local result = vim.fn.system('which '.. tool.cmd)
   if vim.v.shell_error ~= 0 then
     table.insert(msg, " - " .. tool.cmd)
     if tool.mason then

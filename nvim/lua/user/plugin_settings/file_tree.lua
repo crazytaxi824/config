@@ -194,23 +194,23 @@ end
 local function system_open()
   local node = nt_api.tree.get_node_under_cursor()
 
-  --- 根据文件属性使用对应的 application 打开.
+  --- 根据文件属性使用对应的 application 打开. 依次使用 `open`, `open -a`, `open -R` 打开文件.
   --- NOTE: 有些 filepath 中有空格, 需要使用引号 ""
-  vim.fn.system('open "' .. node.absolute_path .. '"')
+  local r1 = vim.fn.system('open "' .. node.absolute_path .. '"')
   if vim.v.shell_error == 0 then
     return
   end
 
   --- `open -a file` Specifies the application to use for opening the file.
-  vim.fn.system('open -a "/Applications/Visual Studio Code.app/" "' .. node.absolute_path .. '"')
+  local r2 = vim.fn.system('open -a "/Applications/Visual Studio Code.app/" "' .. node.absolute_path .. '"')
   if vim.v.shell_error == 0 then
     return
   end
 
   --- `open -R file` Reveals the file(s) in the Finder instead of opening them.
-  local r = vim.fn.system('open -R "' .. node.absolute_path .. '"')
+  local r3 = vim.fn.system('open -R "' .. node.absolute_path .. '"')
   if vim.v.shell_error ~= 0 then
-    Notify(r, "ERROR")
+    Notify({r1, r2, r3}, "ERROR")
   end
 end
 -- -- }}}

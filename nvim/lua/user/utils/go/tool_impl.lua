@@ -28,8 +28,6 @@ M.go_impl = function(arglist)
   local sh_cmd = 'impl -dir ' .. dir .. ' ' .. arglist[1] .. ' ' .. iface_name
   vim.notify(sh_cmd)
   local result = vim.fn.system(sh_cmd)
-
-  --- 判断结果是否错误
   if vim.v.shell_error ~= 0 then
     Notify(result,"ERROR")
     return
