@@ -211,8 +211,6 @@ local keymaps = {
   {'n', '<leader>k0', 'zM', opt, "Close all folds"},
   {'n', '<leader>k1', 'zMzO', opt, "Context Focus & Close other folds"},
 
-  --{'n', '<leader>l', '<cmd>copen<CR>', opt, "Open quickfix window"},
-
   --- <leader> keymaps 默认会显示在 which-key list 中, 所以需要使用 'which_key_ignore' 阻止显示
   {'n', '<leader>"', 'viw<C-c>`>a"<C-c>`<i"<C-c>', opt, 'which_key_ignore'},
   {'n', "<leader>'", "viw<C-c>`>a'<C-c>`<i'<C-c>", opt, 'which_key_ignore'},
