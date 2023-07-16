@@ -34,6 +34,8 @@ if __Debug_Neovim.autocmd_events then
     "BufWinEnter", "BufWinLeave",
     "WinNew", "WinEnter", "WinLeave", "WinClosed",
     "FileType",
+
+    "TermOpen", "TermEnter", "TermLeave", "TermClose", "TermResponse",
   }
 
   vim.api.nvim_create_autocmd(common_events, {
