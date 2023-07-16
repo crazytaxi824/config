@@ -295,7 +295,7 @@ local plugins = {
 
   --- terminal
   {"akinsho/toggleterm.nvim",
-    tag = "v2.7.1",  -- NOTE: 尽量少更新, 更新后需要检查 user/utils/term/bg_term 运行情况.
+    tag = "v2.7.1",  -- NOTE: 尽量少更新, 更新后需要检查 user/utils/term/... 运行情况.
     config = function() require("user.plugin_settings.toggleterm_terminal") end,
 
     event = "VeryLazy",
