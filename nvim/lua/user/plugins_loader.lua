@@ -50,7 +50,7 @@ local plugins = {
 
   --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   {"folke/which-key.nvim",
-    tag = "v1.5.0",
+    commit = "366864a",  -- tag = "v1.5.0",
     config = function() require("user.plugin_settings.which_key") end,
 
     event = "VeryLazy",
@@ -259,8 +259,7 @@ local plugins = {
   --- Debug tools 安装 -----------------------------------------------------------------------------
   --- NOTE: dap-ui && dap 设置在同一文件中.
   {"mfussenegger/nvim-dap",  -- core debug tool
-    -- tag = "0.6.0",
-    commit = "3bde6f7",
+    commit = "3bde6f7",  -- tag = "0.6.0",
     dependencies = {"williamboman/mason.nvim"},  -- install dap-debug tools. eg: 'delve'
 
     lazy = true,  -- nvim-dap-ui 加载时自动加载.
@@ -278,7 +277,7 @@ local plugins = {
   --- 依赖 rg fd, 但不依赖 fzf. 没有 fzf 命令行工具也可以运行.
   --- telescope 的 preview syntax 默认使用的是 treesitter, 如果没有 treesitter 则使用 vim syntax highlights.
   {"nvim-telescope/telescope.nvim",
-    commit = "276362a",  -- tag = "0.1.2", 半年更新一次 tag
+    commit = "276362a",  -- 半年更新一次 tag
     config = function() require("user.plugin_settings.telescope_fzf") end,
     dependencies = {
       "nvim-lua/plenary.nvim",
