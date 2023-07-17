@@ -457,10 +457,11 @@ bufferline.setup({
   --- 颜色设置
   highlights = buf_highlights,
 
+  --- NOTE: id = bufnr; ordinal = bufferline_index
   options = {
     mode = "buffers", -- set to "tabs" to only show tabpages instead
     numbers = "ordinal", -- "none" | "ordinal" | "buffer_id" | "both" | func({ordinal,id,lower,raise}):string
-    sort_by = 'id',  -- 其他选项有 bug
+    sort_by = 'id',  -- insert_after_current |insert_at_end | id | extension | relative_directory | directory | tabs | func(buf_a, buf_b)
     persist_buffer_sort = true, -- whether or not custom sorted buffers should persist between sessions.
                                 -- 会创建一个全局变量 g:BufferlinePositions 保存自 state.custom_sort
 
@@ -653,7 +654,7 @@ vim.api.nvim_create_autocmd("BufDelete", {
 })
 -- -- }}}
 
---- DEBUG: 用, 查看 ordinal, bufnr, list index, 之间的关系 ----------------------------------------- {{{
+--- DEBUG: 用, 查看 ordinal, bufnr/id, list_index, 之间的关系 -------------------------------------- {{{
 -- function Bufferline_info(bufferline_index)
 --   -- vim.print("state.components:", state.components)
 --   vim.print("state.custom_sort (bufnrs order):", state.custom_sort)
