@@ -608,6 +608,7 @@ if not state_ok then
   return
 end
 
+--- 获取 elem 在 list 中的 pos
 local function table_index(list, elem)
   for index, value in ipairs(list) do
     if value == elem then
@@ -616,12 +617,12 @@ local function table_index(list, elem)
   end
 end
 
-local function remove_bufnr_from_custom_sort(bufnr)
+--- 获取当前 bufferline 中 custom_sort 排序
+local function bufferline_custom_sort_order()
   local list = {}
-
   if state.custom_sort then
     --- 如果 custom_sort 存在, 说明 buffer 位置排序已经被改变过.
-    --- 从 state.components 中获取位置顺序
+    --- VVI: 从 state.components 中获取位置顺序
     list = vim.tbl_map(function(item)
       return item.id
     end, state.components)
@@ -632,20 +633,21 @@ local function remove_bufnr_from_custom_sort(bufnr)
       return item.bufnr
     end, listed_buffer)
   end
-
-  --- 从 list 中移除被删除的 bufnr
-  table.remove(list, table_index(list, bufnr))
-
-  --- 手动改变 sort 顺序, 下次 bufferline 刷新的时候会根据该顺序显示.
-  state.custom_sort = list
-  -- vim.print(state.custom_sort)
+  return list
 end
 
 --- BufDelete 触发条件: bdelete, bwipeout
 vim.api.nvim_create_autocmd("BufDelete", {
   pattern = {"*"},
   callback = function(params)
-    remove_bufnr_from_custom_sort(params.buf)
+    --- 获取 bufferline 中 custom_sort 排序
+    local list = bufferline_custom_sort_order()
+
+    --- 从 list 中移除被删除的 bufnr
+    table.remove(list, table_index(list, params.buf))
+
+    --- VVI: 手动给 custom_sort 赋值, 下次 bufferline 刷新的时候会根据该顺序显示.
+    state.custom_sort = list
   end,
   desc = "bufferline: remove ':bdelete' buffer from custom sort order",
 })

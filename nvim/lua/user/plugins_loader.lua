@@ -54,7 +54,7 @@ local plugins = {
 
   --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   {"folke/which-key.nvim",
-    commit = "366864a",  -- tag = "v1.5.0",
+    tag = "v1.5.1",
     config = function() require("user.plugin_settings.which_key") end,
 
     event = "VeryLazy",
@@ -74,7 +74,7 @@ local plugins = {
   --- By convention, if you want to write a query, use the `queries/` directory,
   --- but if you want to extend a query use the `after/queries/` directory.
   {"nvim-treesitter/nvim-treesitter",
-    commit = "a51236f",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "51ea343",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     --build = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
     config = function() require("user.plugin_settings.treesitter") end,
     dependencies = {
@@ -193,7 +193,7 @@ local plugins = {
 
   --- snippets content, 自定义 snippets 可以借鉴这个结构.
   {"rafamadriz/friendly-snippets",
-    commit = "ca668b7",
+    commit = "8f5db6c",
 
     lazy = true,  -- LuaSnip 加载时自动加载.
   },
@@ -214,7 +214,7 @@ local plugins = {
   --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
   --- 官方 LSP 引擎.
   {"neovim/nvim-lspconfig",
-    commit = "b88b227",
+    commit = "4b26897",
     config = function() require("user.lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     dependencies = {
       "williamboman/mason.nvim",  -- 安装 lsp 命令行工具.
@@ -310,7 +310,7 @@ local plugins = {
   --- `:Gitsigns setqflist/seqloclist` will open Trouble instead of quickfix or location list windows.
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {"lewis6991/gitsigns.nvim",
-    commit = "48c3ae8",
+    commit = "5a04466",
     config = function() require("user.plugin_settings.git_signs") end,
 
     --- VVI: 这里不能用 VeryLazy. `nvim dir` 启动时直接打开 dir 会造成 gitsigns 报错.
