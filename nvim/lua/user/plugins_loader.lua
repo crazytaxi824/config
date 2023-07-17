@@ -330,12 +330,12 @@ local plugins = {
     event = "VeryLazy",
   },
 
-  --- markdown preview
+  --- markdown, VVI: 安装 preview 插件后需要一段时间来执行 vim.fn["mkdp#util#install"]() 如果无法运行可以重装该插件.
   {"iamcco/markdown-preview.nvim",
-    build = function() vim.fn["mkdp#util#install"]() end,  -- VVI: Update 后需要重新安装 preview 插件, 否则可能出现无法运行的情况.
-    config = function() vim.cmd('doautocmd mkdp_init BufEnter') end,  -- VVI: 需要这个设置才能使用 cmd 条件加载, 否则报错.
+    build = function() vim.fn["mkdp#util#install"]() end,  -- VVI: 每次 Update 后需要重新执行 vim.fn["mkdp#util#install"](), 否则可能出现无法运行的情况.
 
-    cmd = {"MarkdownPreview", "MarkdownPreviewToggle", "MarkdownPreviewStop"},
+    --- NOTE: 无法使用 cmd = { "MarkdownPreview", "MarkdownPreviewStop", "MarkdownPreviewToggle" }, 作为加载条件.
+    ft = {"markdown"},  -- markdown-preview 加载时间 < 1ms
   },
 
   --- https://docs.github.com/en/copilot
