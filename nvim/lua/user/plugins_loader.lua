@@ -380,7 +380,7 @@ local opts = {
     lazy = false, -- should plugins be lazy-loaded?
   },
   ui = {  --- {{{
-    size = { width = 0.8, height = 0.9 },
+    size = { width = 0.7, height = 0.9 },
     border = {"▄","▄","▄","█","▀","▀","▀","█"},
     icons = {
       cmd = " cmd:",
@@ -411,7 +411,8 @@ local opts = {
 
 --- NOTE: 用于批量检查 plugins 升级
 -- for _, p in ipairs(plugins) do
---   p.commit, p.tag, p.version = nil, nil, nil
+--   p.commit = nil
+--   p.tag, p.version = nil, nil
 -- end
 
 lazy.setup(plugins, opts)
