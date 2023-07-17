@@ -1,4 +1,5 @@
 --- terminal 相关设置和 autocmd
+--- `:help terminal-start`
 
 local fp = require('user.utils.filepath')
 
