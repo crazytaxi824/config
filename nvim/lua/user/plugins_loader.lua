@@ -54,7 +54,7 @@ local plugins = {
 
   --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   {"folke/which-key.nvim",
-    commit = "366864a",  -- tag = "v1.5.0",
+    tag = "v1.5.1",
     config = function() require("user.plugin_settings.which_key") end,
 
     event = "VeryLazy",
