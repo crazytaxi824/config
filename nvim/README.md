@@ -365,7 +365,54 @@ Visual-Block 选择多行数字
 
 <br />
 
-# nvim_cmd(), nvim_command(), nvim_exec2() 区别
+# 其他
+
+- 键位查看 `:help key-notation`
+- floating window 设置: `:help nvim_open_win()`
+- lua pattern: eg: `string.match()`, https://fhug.org.uk/kb/kb-article/understanding-lua-patterns/
+- vim pattern: `:help pattern-overview`
+
+## FileType vs BufEnter 区别
+
+- 'xxx.log' 文件不会触发 `FileType`, 因为没有该 filetype, 但是会触发 `BufEnter`.
+
+- 每次切换 buffer 时 (hide -> display) 时, 会触发 `BufEnter` 但不会触发 `FileType`.
+
+<br />
+
+## 打开 terminal 的几种方法
+
+`:help terminal-start`
+
+### open term://cmd file
+
+最简单的方法, 主要用于打开 terminal emulator.
+
+- `:edit term://ls`, `new term://ls`, `split term://ls`, `vsplit term://ls` - 直接执行 `ls` 命令.
+
+- `:edit term:///bin/zsh` - 打开 zsh terminal emulator.
+
+### jobstart(cmd) and jobstop(job_id)
+
+静默执行命令, 不会打开 terminal. 推荐使用 `system(cmd)` 替代.
+
+`jobstart()` 主要用于静默开启 http 服务等需要长时间执行的命令.
+
+- `echo jobstart('ls')` - 执行命令同时返回 job_id.
+
+- `call jobstop(job_id)` - 强制终止 job.
+
+### termopen(cmd) 返回 job_id
+
+`termopen()` 主要用于需要打开 terminal emulator, 同时需要获取 job_id 的情况.
+
+- `echo termopen('ls')` - 在当前 buffer 中打开 terminal, 同时返回 job_id.
+
+- 可以使用 `jobstop(job_id)` 来强制终止 job.
+
+<br />
+
+## nvim_cmd(), nvim_command(), nvim_exec2() 区别
 
 首选 nvim_exec2(), 然后是 nvim_cmd(), 不推荐 nvim_command().
 
@@ -390,7 +437,7 @@ vim.api.nvim_command('echo "ok"')
 
 <br />
 
-# :help watch-file
+## :help watch-file
 
 ```lua
 local watch = vim.loop.new_fs_event()
@@ -429,21 +476,6 @@ function Watch_file(fname)
   end))
 end
 ```
-
-<br />
-
-# 其他
-
-- 键位查看 `:help key-notation`
-- floating window 设置: `:help nvim_open_win()`
-- lua pattern: eg: `string.match()`, https://fhug.org.uk/kb/kb-article/understanding-lua-patterns/
-- vim pattern: `:help pattern-overview`
-
-## VVI: FileType vs BufEnter 区别
-
-- 'xxx.log' 文件不会触发 `FileType`, 因为没有该 filetype, 但是会触发 `BufEnter`.
-
-- 每次切换 buffer 时 (hide -> display) 时, 会触发 `BufEnter` 但不会触发 `FileType`.
 
 <br />
 
