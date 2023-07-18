@@ -1,4 +1,4 @@
-local M = {}
+-- local M = {}
 
 local name_tag=';#my_term#'
 
@@ -19,12 +19,16 @@ local persist_size = {
 }
 
 --- 根据 term name_tag wipeout terminal buffer.
-local function jobdone_exit(opts)
+local function jobdone_autocmd(opts)
   vim.api.nvim_create_autocmd("TermClose", {
     pattern = {'term://*' .. name_tag .. opts.count},
     once = true,
     callback = function(params)
-      vim.cmd('bwipeout ' .. params.buf)
+      if opts.jobdone_exit then
+        vim.cmd('bwipeout ' .. params.buf)
+      else
+        vim.cmd('stopinsert')
+      end
     end
   })
 end
@@ -89,9 +93,7 @@ function Create_term(cmd, opts)
   --- TODO: set winvar for terminal
   -- nvim_win_set_var()
 
-  if opts.jobdone_exit then
-    jobdone_exit(opts)
-  end
+  jobdone_autocmd(opts)
 
   open_term(cmd, opts)
 end
