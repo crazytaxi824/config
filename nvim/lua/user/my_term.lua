@@ -16,6 +16,20 @@ local persist_size = {
   win_height = default_opts.win_height,
 }
 
+local function exist_term_win()
+  local win_id = -1
+  for _, wi in ipairs(vim.fn.getwininfo()) do
+    if wi.terminal == 1 and wi.winid > win_id then
+      win_id = wi.winid
+    end
+  end
+  if win_id < 0 then
+    return nil
+  else
+    return win_id
+  end
+end
+
 local function startinsert(win_id, opts)
   if opts.startinsert then
     --- go back to terminal window for `:startinsert`
@@ -41,11 +55,13 @@ local function jobdone_autocmd(opts)
 end
 
 --- terminal open command
-local function open_term(cmd, opts)
-  --- 使用 termopen() 开打 terminal
-  cmd = cmd .. name_tag  .. opts.count
-  local job_id = vim.fn.termopen(cmd)
-  return job_id
+local function open_term(cmd, win_id, opts)
+  if vim.fn.win_gotoid(win_id) == 1 then
+    --- 使用 termopen() 开打 terminal
+    cmd = cmd .. name_tag  .. opts.count
+    local job_id = vim.fn.termopen(cmd)
+    return job_id
+  end
 end
 
 --- NOTE: 创建一个 window 用于 terminal 运行.
@@ -81,8 +97,9 @@ function Create_term(cmd, opts)
 
   jobdone_autocmd(opts)
 
-  open_term(cmd, opts)
+  open_term(cmd, win_id, opts)
 
+  --- after exec cmd
   startinsert(win_id, opts)
 end
 
