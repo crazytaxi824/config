@@ -5,18 +5,14 @@
 local name_tag=';#my_term#'
 
 local default_opts = {
+  cmd = vim.go.shell,  --- 相当于 os.getenv('SHELL')
   startinsert = true,
   jobdone_exit = true,
   win_height = 16,
   count = 1,  -- v:count1
 }
 
---- TODO: cache term window height
-local persist_size = {
-  win_height = default_opts.win_height,
-}
-
-local function exist_term_win()
+local function find_exist_term_win()
   local win_id = -1
   for _, wi in ipairs(vim.fn.getwininfo()) do
     if wi.terminal == 1
@@ -56,11 +52,11 @@ local function jobdone_autocmd(opts, bufnr)
   })
 end
 
---- terminal open command
-local function open_term(cmd, win_id, opts)
+--- terminal open and exec command
+local function open_term(win_id, opts)
   if vim.fn.win_gotoid(win_id) == 1 then
     --- 使用 termopen() 开打 terminal
-    cmd = cmd .. name_tag  .. opts.count
+    local cmd = opts.cmd .. name_tag  .. opts.count
     local job_id = vim.fn.termopen(cmd)
     return job_id
   end
@@ -70,7 +66,7 @@ end
 
 --- NOTE: 创建一个 window 用于 terminal 运行.
 local function create_new_term_win(opts)
-  local exist_win_id = exist_term_win()
+  local exist_win_id = find_exist_term_win()
 
   if exist_win_id and vim.fn.win_gotoid(exist_win_id) == 1 then
     vim.cmd('vertical rightbelow new')  --- at least 1 terminal window exist
@@ -85,8 +81,9 @@ local function create_new_term_win(opts)
   return win_id, bufnr
 end
 
+--- load a hidden term buffer to split window next to exist term window
 function Reload_exist_term_buffer(bufnr)
-  local exist_win_id = exist_term_win()
+  local exist_win_id = find_exist_term_win()
 
   if exist_win_id and vim.fn.win_gotoid(exist_win_id) == 1 then
     vim.cmd('vertical rightbelow sbuffer ' .. bufnr)  --- at least 1 terminal window exist
@@ -107,8 +104,7 @@ local function set_term_qf(win_id, opts)
 end
 
 --- main terminal control function
-function Create_term(cmd, opts)
-  cmd = cmd or os.getenv('SHELL')
+function Create_term(opts)
   opts = opts or {}
   opts = vim.tbl_deep_extend('force', default_opts, opts)
 
@@ -117,9 +113,9 @@ function Create_term(cmd, opts)
 
   jobdone_autocmd(opts, bufnr)
 
-  open_term(cmd, win_id, opts)
+  open_term(win_id, opts)
 
-  --- after exec cmd, 单独执行避免过程中跳转到其他 window.
+  --- NOTE: after exec cmd, 单独执行避免过程中跳转到其他 window.
   startinsert(win_id, opts)
 end
 
