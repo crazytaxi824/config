@@ -30,7 +30,7 @@ local function jobdone_exit(opts)
 end
 
 local function open_term(cmd, opts)
-  cmd = 'edit ' .. vim.fn.fnameescape('term://' .. cmd ..  name_tag  .. opts.count)
+  cmd = 'edit ' .. vim.fn.fnameescape('term://' .. cmd ..  name_tag  .. opts.count) .. ' | setlocal nobuflisted'
   if opts.startinsert then
     cmd = cmd .. ' | startinsert'
   end
