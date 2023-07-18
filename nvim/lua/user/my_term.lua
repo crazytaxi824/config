@@ -9,7 +9,7 @@ local default_opts = {
   win_height = 12,
   win_width = 60,
   count = 1,  -- v:count1
-  direction = 'horizontal'  -- 'v' 'vertical' | 'h' 'horizontal' | 'f' 'float'
+  direction = 'horizontal'  -- 'v' 'vertical' | 'h' 'horizontal' | TODO; 'f' 'float'
 }
 
 local persist_size = {
@@ -78,6 +78,14 @@ local function create_new_term_win(opts, split_cmd)
   return win_id
 end
 
+--- set quickfix list for terminal list.
+local function set_term_qf(win_id, opts)
+  local bufnr = vim.api.nvim_win_get_buf(win_id)
+  vim.fn.setqflist({{bufnr=bufnr, module="my_term" .. opts.count}}, 'a')
+  vim.cmd('vertical botright copen 20')  -- 最小值为 20
+  vim.fn.win_gotoid(win_id)  -- go back to terminal window for `:startinsert`
+end
+
 --- main terminal control function
 function Create_term(cmd, opts)
   --- TODO 判断 #my_term#opts.count buffer 是否存在.
@@ -123,3 +131,6 @@ function Term_toggle_direction()
   vim.cmd(bufnr .. 'buf')
 end
 
+--- TODO: multi term window
+
+--- TODO: attach a quickfix list.
