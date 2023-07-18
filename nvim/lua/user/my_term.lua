@@ -19,7 +19,10 @@ local persist_size = {
 local function exist_term_win()
   local win_id = -1
   for _, wi in ipairs(vim.fn.getwininfo()) do
-    if wi.terminal == 1 and wi.winid > win_id then
+    if wi.terminal == 1
+      and string.match(vim.api.nvim_buf_get_name(wi.bufnr), 'term://.*' .. name_tag .. '%d+')  --- it is my_term
+      and wi.winid > win_id
+    then
       win_id = wi.winid
     end
   end
@@ -69,8 +72,17 @@ end
 --- new: 用于开启一个新的 terminal.
 --- split/vsplit: 用于加载已经存在的 terminal buffer.
 local function create_new_term_win(opts, split_cmd)
+  local exist_win_id = exist_term_win()
   split_cmd = split_cmd or "new"
-  vim.cmd('horizontal botright ' .. opts.win_height .. split_cmd)
+
+  if exist_win_id and vim.fn.win_gotoid(exist_win_id) == 1 then
+    vim.cmd('vertical rightbelow ' .. split_cmd)  --- at least 1 terminal window exist
+  else
+    vim.cmd('horizontal botright ' .. opts.win_height .. split_cmd)  --- no terminal window exist
+  end
+
+  vim.bo.buflisted = false
+
   local win_id = vim.api.nvim_get_current_win()
   return win_id
 end
