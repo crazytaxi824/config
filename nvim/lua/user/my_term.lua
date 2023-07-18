@@ -43,10 +43,9 @@ local function startinsert(win_id, opts)
 end
 
 --- 根据 term name_tag :bwipeout terminal buffer.
-local function jobdone_autocmd(opts)
+local function jobdone_autocmd(opts, bufnr)
   vim.api.nvim_create_autocmd("TermClose", {
-    pattern = {'term://*' .. name_tag .. opts.count},
-    once = true,
+    buffer = bufnr,
     callback = function(params)
       if opts.jobdone_exit then
         vim.cmd('bwipeout ' .. params.buf)
@@ -65,6 +64,8 @@ local function open_term(cmd, win_id, opts)
     local job_id = vim.fn.termopen(cmd)
     return job_id
   end
+
+  --- TODO; 如果 count 相同则 bw 之前的 buffer. 先打开新的 term 再删除就的
 end
 
 --- NOTE: 创建一个 window 用于 terminal 运行.
@@ -81,10 +82,11 @@ local function create_new_term_win(opts, split_cmd)
     vim.cmd('horizontal botright ' .. opts.win_height .. split_cmd)  --- no terminal window exist
   end
 
-  vim.bo.buflisted = false
-
   local win_id = vim.api.nvim_get_current_win()
-  return win_id
+  local bufnr = vim.api.nvim_get_current_buf()
+  vim.bo[bufnr].buflisted = false
+
+  return win_id, bufnr
 end
 
 --- set quickfix list for terminal list.
@@ -102,12 +104,9 @@ function Create_term(cmd, opts)
   opts = vim.tbl_deep_extend('force', default_opts, opts)
 
   --- first: open a window for terminal, get win_id.
-  local win_id = create_new_term_win(opts)
+  local win_id, bufnr = create_new_term_win(opts)
 
-  --- TODO: set winvar for terminal
-  -- nvim_win_set_var()
-
-  jobdone_autocmd(opts)
+  jobdone_autocmd(opts, bufnr)
 
   open_term(cmd, win_id, opts)
 
