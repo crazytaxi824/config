@@ -56,5 +56,5 @@ require "user.plugins_loader"  -- packer 加载 plugin
 --- VVI: keymap 放在最后 overwirte 其他设置.
 require "user.keymaps"  -- keymap 设置
 
-
+require("user.my_term")
 
