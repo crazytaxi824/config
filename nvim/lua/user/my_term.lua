@@ -1,22 +1,29 @@
+--- open terminal at bottom only.
+
 -- local M = {}
 
 local name_tag=';#my_term#'
 
 local default_opts = {
-  cmd = os.getenv("SHELL"),  -- bash | zsh | ...
   startinsert = true,
   jobdone_exit = true,
-  win_height = 12,
-  win_width = 60,
+  win_height = 16,
   count = 1,  -- v:count1
-  direction = 'horizontal'  -- 'v' 'vertical' | 'h' 'horizontal' | TODO; 'f' 'float'
 }
 
+--- cache term window height
 local persist_size = {
-  direction = default_opts.direction,
   win_height = default_opts.win_height,
-  win_width = default_opts.win_width,
 }
+
+local function startinsert(win_id, opts)
+  if opts.startinsert then
+    --- go back to terminal window for `:startinsert`
+    if vim.fn.win_gotoid(win_id) == 1 then
+      vim.cmd('startinsert')
+    end
+  end
+end
 
 --- 根据 term name_tag :bwipeout terminal buffer.
 local function jobdone_autocmd(opts)
@@ -35,46 +42,20 @@ end
 
 --- terminal open command
 local function open_term(cmd, opts)
-  cmd = 'edit ' .. vim.fn.fnameescape('term://' .. cmd ..  name_tag  .. opts.count) .. ' | setlocal nobuflisted'
-  if opts.startinsert then
-    cmd = cmd .. ' | startinsert'
-  end
-  vim.cmd(cmd)
-
-  --- 使用 termopen() 开打 terminal --- {{{
-  -- cmd = cmd .. name_tag  .. opts.count
-  -- vim.fn.termopen(cmd)
-  -- if opts.startinsert then
-  --   vim.cmd('startinsert')
-  -- end
-  -- -- }}}
+  --- 使用 termopen() 开打 terminal
+  cmd = cmd .. name_tag  .. opts.count
+  local job_id = vim.fn.termopen(cmd)
+  return job_id
 end
 
---- 创建一个 window 用于 terminal 运行.
+--- NOTE: 创建一个 window 用于 terminal 运行.
+--- split_cmd = "new" | "split" | "vsplit"
+--- new: 用于开启一个新的 terminal.
+--- split/vsplit: 用于加载已经存在的 terminal buffer.
 local function create_new_term_win(opts, split_cmd)
   split_cmd = split_cmd or "new"
-  local new_win_cmd
-  if opts.direction == 'v' or opts.direction == 'vert' or opts.direction == 'vertical' then
-    new_win_cmd = 'vertical botright ' .. opts.win_width .. split_cmd
-  --- TODO: float window --- {{{
-  -- elseif opts.direction == 'f' or opts.direction == 'float' then
-  --   local scratch_bufnr = vim.api.nvim_create_buf(false, {})  -- create a [scratch] buffer
-  --   return vim.api.nvim_open_win(scratch_bufnr, true, {
-  --     relative='editor',  -- 'win' | 'cursor' | 'editor'
-  --     col = 12,  -- margin
-  --     row = 3,   -- margin
-  --     width = 80,  -- float win size
-  --     height = 30, -- float win size
-  --   })
-  -- -- }}}
-  else
-    new_win_cmd = 'horizontal botright ' .. opts.win_height .. split_cmd
-  end
-
-  vim.cmd(new_win_cmd)
+  vim.cmd('horizontal botright ' .. opts.win_height .. split_cmd)
   local win_id = vim.api.nvim_get_current_win()
-
-  --- return win_id
   return win_id
 end
 
@@ -88,8 +69,6 @@ end
 
 --- main terminal control function
 function Create_term(cmd, opts)
-  --- TODO 判断 #my_term#opts.count buffer 是否存在.
-
   cmd = cmd or os.getenv('SHELL')
   opts = opts or {}
   opts = vim.tbl_deep_extend('force', default_opts, opts)
@@ -103,34 +82,9 @@ function Create_term(cmd, opts)
   jobdone_autocmd(opts)
 
   open_term(cmd, opts)
-end
 
---- change terminal direction
-function Term_toggle_direction()
-  local win_id = vim.api.nvim_get_current_win()
-  local bufnr = vim.api.nvim_win_get_buf(win_id)
-
-  if vim.fn.getwininfo(win_id)[1].terminal ~= 1 then
-    vim.notify("this is not a terminal window", vim.log.levels.WARN)
-    return
-  end
-
-  --- close current term window
-  vim.api.nvim_win_close(win_id, 'force')
-
-  if persist_size.direction == 'horizontal' then
-    persist_size.direction = 'vertical'
-  else
-    persist_size.direction = 'horizontal'
-  end
-
-  --- open a new window for term
-  create_new_term_win(persist_size, 'split')
-
-  --- load term buffer
-  vim.cmd(bufnr .. 'buf')
+  startinsert(win_id, opts)
 end
 
 --- TODO: multi term window
 
---- TODO: attach a quickfix list.
