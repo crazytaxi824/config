@@ -9,13 +9,13 @@ local default_opts = {
   win_height = 12,
   win_width = 60,
   count = 1,  -- v:count1
-  direction = 'h'  -- 'v' 'vertical' | 'h' 'horizontal' | 'f' 'float'
+  direction = 'horizontal'  -- 'v' 'vertical' | 'h' 'horizontal' | 'f' 'float'
 }
 
 local persist_size = {
-  direction = 'horizontal',  -- horizontal | vertical
-  win_height = 12,
-  win_width = 60,
+  direction = default_opts.direction,
+  win_height = default_opts.win_height,
+  win_width = default_opts.win_width,
 }
 
 --- 根据 term name_tag :bwipeout terminal buffer.
@@ -51,12 +51,11 @@ local function open_term(cmd, opts)
 end
 
 --- 创建一个 window 用于 terminal 运行.
-local function create_new_term_win(opts)
-  local direction
+local function create_new_term_win(opts, split_cmd)
+  split_cmd = split_cmd or "new"
   local new_win_cmd
   if opts.direction == 'v' or opts.direction == 'vert' or opts.direction == 'vertical' then
-    direction = 'vertical'
-    new_win_cmd = 'vertical botright ' .. opts.win_width .. 'new'
+    new_win_cmd = 'vertical botright ' .. opts.win_width .. split_cmd
   --- TODO: float window --- {{{
   -- elseif opts.direction == 'f' or opts.direction == 'float' then
   --   local scratch_bufnr = vim.api.nvim_create_buf(false, {})  -- create a [scratch] buffer
@@ -69,13 +68,11 @@ local function create_new_term_win(opts)
   --   })
   -- -- }}}
   else
-    direction = 'horizontal'
-    new_win_cmd = 'horizontal botright ' .. opts.win_height .. 'new'
+    new_win_cmd = 'horizontal botright ' .. opts.win_height .. split_cmd
   end
 
   vim.cmd(new_win_cmd)
   local win_id = vim.api.nvim_get_current_win()
-  vim.api.nvim_win_set_var(win_id, "my_term", {direction = direction})
 
   --- return win_id
   return win_id
@@ -100,5 +97,29 @@ function Create_term(cmd, opts)
   open_term(cmd, opts)
 end
 
+--- change terminal direction
+function Term_toggle_direction()
+  local win_id = vim.api.nvim_get_current_win()
+  local bufnr = vim.api.nvim_win_get_buf(win_id)
 
+  if vim.fn.getwininfo(win_id)[1].terminal ~= 1 then
+    vim.notify("this is not a terminal window", vim.log.levels.WARN)
+    return
+  end
+
+  --- close current term window
+  vim.api.nvim_win_close(win_id, 'force')
+
+  if persist_size.direction == 'horizontal' then
+    persist_size.direction = 'vertical'
+  else
+    persist_size.direction = 'horizontal'
+  end
+
+  --- open a new window for term
+  create_new_term_win(persist_size, 'split')
+
+  --- load term buffer
+  vim.cmd(bufnr .. 'buf')
+end
 
