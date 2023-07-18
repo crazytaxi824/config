@@ -11,7 +11,7 @@ local default_opts = {
   count = 1,  -- v:count1
 }
 
---- cache term window height
+--- TODO: cache term window height
 local persist_size = {
   win_height = default_opts.win_height,
 }
@@ -69,17 +69,13 @@ local function open_term(cmd, win_id, opts)
 end
 
 --- NOTE: 创建一个 window 用于 terminal 运行.
---- split_cmd = "new" | "split" | "vsplit"
---- new: 用于开启一个新的 terminal.
---- split/vsplit: 用于加载已经存在的 terminal buffer.
-local function create_new_term_win(opts, split_cmd)
+local function create_new_term_win(opts)
   local exist_win_id = exist_term_win()
-  split_cmd = split_cmd or "new"
 
   if exist_win_id and vim.fn.win_gotoid(exist_win_id) == 1 then
-    vim.cmd('vertical rightbelow ' .. split_cmd)  --- at least 1 terminal window exist
+    vim.cmd('vertical rightbelow new')  --- at least 1 terminal window exist
   else
-    vim.cmd('horizontal botright ' .. opts.win_height .. split_cmd)  --- no terminal window exist
+    vim.cmd('horizontal botright ' .. opts.win_height .. 'new')  --- no terminal window exist
   end
 
   local win_id = vim.api.nvim_get_current_win()
@@ -87,6 +83,19 @@ local function create_new_term_win(opts, split_cmd)
   vim.bo[bufnr].buflisted = false
 
   return win_id, bufnr
+end
+
+function Reload_exist_term_buffer(bufnr)
+  local exist_win_id = exist_term_win()
+
+  if exist_win_id and vim.fn.win_gotoid(exist_win_id) == 1 then
+    vim.cmd('vertical rightbelow sbuffer ' .. bufnr)  --- at least 1 terminal window exist
+  else
+    vim.cmd('horizontal botright sbuffer' .. bufnr .. ' | resize ' .. default_opts.win_height)  --- no terminal window exist
+  end
+
+  local win_id = vim.api.nvim_get_current_win()
+  return win_id
 end
 
 --- set quickfix list for terminal list.
@@ -110,9 +119,8 @@ function Create_term(cmd, opts)
 
   open_term(cmd, win_id, opts)
 
-  --- after exec cmd
+  --- after exec cmd, 单独执行避免过程中跳转到其他 window.
   startinsert(win_id, opts)
 end
 
---- TODO: multi term window
 
