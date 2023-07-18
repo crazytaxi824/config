@@ -18,7 +18,7 @@ local persist_size = {
   win_width = 60,
 }
 
---- 根据 term name_tag wipeout terminal buffer.
+--- 根据 term name_tag :bwipeout terminal buffer.
 local function jobdone_autocmd(opts)
   vim.api.nvim_create_autocmd("TermClose", {
     pattern = {'term://*' .. name_tag .. opts.count},
@@ -33,6 +33,7 @@ local function jobdone_autocmd(opts)
   })
 end
 
+--- terminal open command
 local function open_term(cmd, opts)
   cmd = 'edit ' .. vim.fn.fnameescape('term://' .. cmd ..  name_tag  .. opts.count) .. ' | setlocal nobuflisted'
   if opts.startinsert then
@@ -49,6 +50,7 @@ local function open_term(cmd, opts)
   -- -- }}}
 end
 
+--- 创建一个 window 用于 terminal 运行.
 local function create_new_term_win(opts)
   local direction
   local new_win_cmd
@@ -79,7 +81,7 @@ local function create_new_term_win(opts)
   return win_id
 end
 
---- create a terminal window at bottom of the screen with hight=12
+--- main terminal control function
 function Create_term(cmd, opts)
   --- TODO 判断 #my_term#opts.count buffer 是否存在.
 
