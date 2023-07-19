@@ -1,5 +1,6 @@
 --- open terminal at bottom only.
 --- NOTE: my_term 和 id 绑定, 同时只能有 0/1 个 buffer, 可能会有多个 window 显示.
+--- getbufinfo(bufnr) -> windows
 
 -- local M = {}
 
@@ -144,35 +145,58 @@ end
 -- -- }}}
 
 --- return an term object
-function NewTerm(opts)
+function GetTerm(id)
+  return global_my_term_cache[id]
+end
+
+function New(opts)
   opts = opts or {}
   opts = vim.tbl_deep_extend('force', default_opts, opts)
 
+  --- 已经存在的 terminal
   if global_my_term_cache[opts.id] then
-    vim.notify("terminal instance is already init", vim.log.levels.WARN)
-    return global_my_term_cache[opts.id]
+    vim.notify('terminal instance is already exist, please use function "get_term(id)"', vim.log.levels.WARN)
+    return
   end
 
+  --- 新的 terminal
   local my_term = opts
   global_my_term_cache[my_term.id] = my_term
 
   my_term.run = function()
     local win_id = __enter_term_win(my_term)
-
     __exec_cmd(my_term, win_id)
-
     __jobdone_autocmd(my_term)
-
     --- TODO: hooks on_open
-
     __start_insert(my_term.startinsert, win_id)  --- NOTE: after exec cmd, 单独执行避免过程中跳转到其他 window.
   end
 
-  my_term.open = function()
+  my_term.open_win = function()
     if __term_buf_exist(my_term) then
       __reload_exist_term_buffer(my_term)
     else
-      vim.notify('Terminal: "#' .. my_term.id .. '" is not Active', vim.log.levels.WARN)
+      vim.notify("terminal buffer is not exist", vim.log.levels.WARN)
+    end
+  end
+
+  my_term.open_or_run = function()
+    if __term_buf_exist(my_term) then
+      __reload_exist_term_buffer(my_term)
+    else
+      local win_id = __create_new_term_win(my_term)
+      __exec_cmd(my_term, win_id)
+      __jobdone_autocmd(my_term)
+      --- TODO: hooks on_open
+      __start_insert(my_term.startinsert, win_id)  --- NOTE: after exec cmd, 单独执行避免过程中跳转到其他 window.
+    end
+  end
+
+  my_term.close_win = function()
+    if __term_buf_exist(my_term) then
+      local wins = vim.fn.getbufinfo(my_term.bufnr)[1].windows
+      for _, w in ipairs(wins) do
+        vim.api.nvim_win_close(w, 'force')
+      end
     end
   end
 
