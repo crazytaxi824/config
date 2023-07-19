@@ -47,7 +47,8 @@ local function __jobdone_autocmd(term_obj)
     buffer = term_obj.bufnr,
     callback = function(params)
       if term_obj.jobdone_exit then
-        vim.cmd('bwipeout! ' .. params.buf)
+        --- 必须使用 silent 否则可能因为重复 wipeout buffer 而报错.
+        vim.cmd('silent! bwipeout! ' .. params.buf)
       end
     end
   })
