@@ -1,6 +1,6 @@
 --- open terminal at bottom only.
---- NOTE: my_term 和 id 绑定, 同时只能有 0/1 个 buffer, 可能会有多个 window 显示.
---- getbufinfo(bufnr) -> windows
+--- NOTE: my_term 和 id 绑定, 同时只能有 0/1 个 buffer, bufnr 可能会变更.
+---       my_term 可能会有多个 window 同时显示, win_id 随时可能变化. getbufinfo(bufnr) -> windows
 
 local M = {}
 
@@ -182,6 +182,7 @@ M.new = function(opts)
     vim.notify('terminal instance is already exist, please use function "get_term_by_id()"', vim.log.levels.WARN)
     return global_my_term_cache[opts.id]
   end
+  -- local my_term = vim.tbl_deep_extend('force', global_my_term_cache[opts.id] or {}, opts)
 
   --- 新的 terminal
   local my_term = opts
