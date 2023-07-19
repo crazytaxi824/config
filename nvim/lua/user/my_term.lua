@@ -233,13 +233,23 @@ function New(opts)
     end
   end
 
+  --- 清除 terminal opts
+  my_term.clear = function()
+    my_term = default_opts
+  end
+
+  --- 终止 job, 会触发 jobdone.
+  my_term.jobstop = function()
+    vim.fn.jobstop(my_term.job_id)
+  end
+
   --- terminate 之后, 如果要使用相同 id 的 terminal 需要重新 New()
   my_term.terminate = function()
     if my_term.bufnr and vim.fn.bufexists(my_term.bufnr) == 1 then
       vim.cmd('bwipeout! ' .. my_term.bufnr)
     end
 
-    --- clear cache
+    --- clear global cache and delete terminal
     global_my_term_cache[my_term.id] = nil
     my_term = nil
   end
