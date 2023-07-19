@@ -14,9 +14,10 @@ local default_opts = {
   cmd = vim.go.shell,  --- 相当于 os.getenv('SHELL')
   startinsert = true,
   jobdone_exit = true,
-  id = 1,  -- v:count1
+  id = 1,  -- v:count1, 保证每个 id 只和一个 bufnr 对应
 }
 
+--- 调大/调小 terminal window
 local function __keymap_resize(bufnr)
   local opt = {buffer = bufnr, silent = true, noremap = true}
   vim.keymap.set('n', 't<Up>', '<cmd>resize +5<CR>', opt)
@@ -41,14 +42,14 @@ local function __find_exist_term_win()
   end
 end
 
---- private functions
+--- 判断 terminal bufnr 是否存在, 是否有效.
 local function __term_buf_exist(term_obj)
   if term_obj.bufnr and vim.fn.bufexists(term_obj.bufnr) == 1 then
     return true
   end
 end
 
---- 根据 term name_tag 来 wipeout terminal buffer.
+--- 根据 terminal bufnr 来 wipeout terminal buffer.
 local function __autocmd_jobdone(term_obj)
   vim.api.nvim_create_autocmd("TermClose", {
     buffer = term_obj.bufnr,
@@ -65,6 +66,7 @@ local function __autocmd_jobdone(term_obj)
   })
 end
 
+--- terminal window open/close 时的 autocmd
 local function __autocmd_open_close(term_obj)
   vim.api.nvim_create_autocmd({"BufWinEnter", "BufWinLeave"}, {
     buffer = term_obj.bufnr,
@@ -85,7 +87,8 @@ local function __autocmd_open_close(term_obj)
   })
 end
 
---- terminal open and exec command
+--- terminal goto win_id 执行 command, 然后`可选择`是否要返回 previous window.
+--- 返回 previous window 不等待 jobdone. eg: 开启 http 服务后直接返回 previous window.
 local function __exec_cmd(term_obj, win_id, prev_win_id)
   if win_id and vim.fn.win_gotoid(win_id) == 1 then
     --- 使用 termopen() 开打 terminal
@@ -101,7 +104,7 @@ local function __exec_cmd(term_obj, win_id, prev_win_id)
   end
 end
 
---- NOTE: 创建一个 window 用于 terminal 运行.
+--- 创建一个 window 用于 terminal 运行.
 local function __create_new_term_win(term_obj)
   term_obj.bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
 
@@ -117,6 +120,7 @@ local function __create_new_term_win(term_obj)
   return vim.api.nvim_get_current_win()
 end
 
+--- 创建一个新的 window 用于加载 exist terminal bufnr.
 local function __reload_exist_term_buffer(term_obj)
   local exist_win_id = __find_exist_term_win()
 
@@ -130,6 +134,7 @@ local function __reload_exist_term_buffer(term_obj)
   return vim.api.nvim_get_current_win()
 end
 
+--- 进入指定的 terminal window. 用于 run() 函数.
 local function __enter_term_win(term_obj)
   local win_id
 
@@ -186,6 +191,7 @@ function New(opts)
   --- 新的 terminal
   local my_term = opts
   global_my_term_cache[my_term.id] = my_term
+
   if my_term.on_init then
     my_term.on_init(my_term)
   end
@@ -225,6 +231,17 @@ function New(opts)
         vim.api.nvim_win_close(w, 'force')
       end
     end
+  end
+
+  --- terminate 之后, 如果要使用相同 id 的 terminal 需要重新 New()
+  my_term.terminate = function()
+    if my_term.bufnr and vim.fn.bufexists(my_term.bufnr) == 1 then
+      vim.cmd('bwipeout! ' .. my_term.bufnr)
+    end
+
+    --- clear cache
+    global_my_term_cache[my_term.id] = nil
+    my_term = nil
   end
 
   my_term.debug = function()
