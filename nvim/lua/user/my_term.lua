@@ -4,17 +4,24 @@
 
 -- local M = {}
 
+local global_my_term_cache = {}
+
 local name_tag=';#my_term#'
 
-local global_my_term_cache = {}
+local win_height = 16  -- persist window height
 
 local default_opts = {
   cmd = vim.go.shell,  --- 相当于 os.getenv('SHELL')
   startinsert = true,
   jobdone_exit = true,
-  win_height = 16,
   id = 1,  -- v:count1
 }
+
+local function __keymap_resize(bufnr)
+  local opt = {buffer = bufnr, silent = true, noremap = true}
+  vim.keymap.set('n', 't<Up>', '<cmd>resize +5<CR>', opt)
+  vim.keymap.set('n', 't<Down>', '<cmd>resize -5<CR>', opt)
+end
 
 --- 判断当前 windows 中是否有 my_term window, 返回 win_id.
 local function __find_exist_term_win()
@@ -62,12 +69,17 @@ local function __autocmd_open_close(term_obj)
   vim.api.nvim_create_autocmd({"BufWinEnter", "BufWinLeave"}, {
     buffer = term_obj.bufnr,
     callback = function(params)
-      print(params.event)
       if params.event == "BufWinEnter" and term_obj.on_open then
         term_obj.on_open(term_obj)
       end
-      if params.event == "BufWinLeave" and term_obj.on_close then
-        term_obj.on_close(term_obj)
+
+      if params.event == "BufWinLeave" then
+        --- persist window height
+        win_height = vim.api.nvim_win_get_height(vim.api.nvim_get_current_win())
+
+        if term_obj.on_close then
+          term_obj.on_close(term_obj)
+        end
       end
     end
   })
@@ -98,7 +110,7 @@ local function __create_new_term_win(term_obj)
     -- vim.cmd('vertical rightbelow new')  --- at least 1 terminal window exist
     vim.cmd('vertical rightbelow sbuffer ' .. term_obj.bufnr)  --- at least 1 terminal window exist
   else
-    vim.cmd('horizontal botright sbuffer' .. term_obj.bufnr .. ' | resize ' .. term_obj.win_height)  --- no terminal window exist
+    vim.cmd('horizontal botright sbuffer' .. term_obj.bufnr .. ' | resize ' .. win_height)  --- no terminal window exist
   end
 
   --- return win_id
@@ -111,7 +123,7 @@ local function __reload_exist_term_buffer(term_obj)
   if vim.fn.win_gotoid(exist_win_id) == 1 then
     vim.cmd('vertical rightbelow sbuffer ' .. term_obj.bufnr)  --- at least 1 terminal window exist
   else
-    vim.cmd('horizontal botright sbuffer' .. term_obj.bufnr .. ' | resize ' .. term_obj.win_height)  --- no terminal window exist
+    vim.cmd('horizontal botright sbuffer' .. term_obj.bufnr .. ' | resize ' .. win_height)  --- no terminal window exist
   end
 
   --- return win_id
@@ -184,6 +196,7 @@ function New(opts)
     --- VVI: autocmd 放在这里运行主要是为了保证获取到 bufnr.
     __autocmd_jobdone(my_term)
     __autocmd_open_close(my_term)
+    __keymap_resize(my_term.bufnr)
 
     if my_term.before_exec then
       my_term.before_exec(my_term, win_id)
