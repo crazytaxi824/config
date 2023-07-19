@@ -16,7 +16,6 @@ local default_opts = {
 }
 
 --- 判断当前 windows 中是否有 my_term window, 返回 win_id.
---- TODO: 通过 global_my_term_cache 中 getbufinfo(term.bufnr)[1].windows 来判断
 local function __find_exist_term_win()
   local win_id = -1
   for _, wi in ipairs(vim.fn.getwininfo()) do
@@ -106,6 +105,35 @@ local function __reload_exist_term_buffer(term_obj)
   return vim.api.nvim_get_current_win()
 end
 
+local function __enter_term_win(term_obj)
+  local win_id
+
+  --- 这里是为了 re-use term window
+  if __term_buf_exist(term_obj) then
+    local wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
+    if #wins > 0 and vim.fn.win_gotoid(wins[1]) == 1 then
+      --- 如果 term buffer 存在, 同时 window 存在:
+      --- 创建一个 scratch buffer, 加载到 window 中, 然后 bwipeout term buffer.
+      win_id = wins[1]
+      local bw_bufnr = term_obj.bufnr
+      term_obj.bufnr = vim.api.nvim_create_buf(false, true)
+
+      vim.cmd('buffer ' .. term_obj.bufnr)
+      vim.cmd('bwipeout! '.. bw_bufnr)
+    else
+      --- 如果 term buffer 存在, 但是 window 不存在:
+      --- 创建一个新的 term window, 然后 bwipeout term buffer.
+      win_id = __create_new_term_win(term_obj)
+      vim.cmd('bw '..term_obj.bufnr)
+    end
+  else
+    --- 如果 term buffer 不存在: 创建一个新的 term window.
+    win_id = __create_new_term_win(term_obj)
+  end
+
+  return win_id
+end
+
 --- set quickfix list for terminal list. --- {{{
 -- local function set_term_qf(win_id, opts)
 --   local bufnr = vim.api.nvim_win_get_buf(win_id)
@@ -118,27 +146,18 @@ end
 --- return an term object
 function NewTerm(opts)
   opts = opts or {}
-  local my_term = vim.tbl_deep_extend('force', default_opts, opts)
+  opts = vim.tbl_deep_extend('force', default_opts, opts)
+
+  if global_my_term_cache[opts.id] then
+    vim.notify("terminal instance is already init", vim.log.levels.WARN)
+    return global_my_term_cache[opts.id]
+  end
+
+  local my_term = opts
+  global_my_term_cache[my_term.id] = my_term
 
   my_term.run = function()
-    local win_id
-    --- first: open a window for terminal, get win_id.
-    if __term_buf_exist(my_term) then
-      local wins = vim.fn.getbufinfo(my_term.bufnr)[1].windows
-      if #wins > 0 and vim.fn.win_gotoid(wins[1]) == 1 then
-        win_id = wins[1]
-        local bw_bufnr = my_term.bufnr
-        my_term.bufnr = vim.api.nvim_create_buf(false, true)
-
-        vim.cmd('buffer ' .. my_term.bufnr)
-        vim.cmd('bwipeout! '.. bw_bufnr)
-      else
-        win_id = __create_new_term_win(my_term)
-        vim.cmd('bw '..my_term.bufnr)
-      end
-    else
-      win_id = __create_new_term_win(my_term)
-    end
+    local win_id = __enter_term_win(my_term)
 
     __exec_cmd(my_term, win_id)
 
@@ -155,6 +174,10 @@ function NewTerm(opts)
     else
       vim.notify('Terminal: "#' .. my_term.id .. '" is not Active', vim.log.levels.WARN)
     end
+  end
+
+  my_term.debug = function()
+    print(global_my_term_cache[my_term.id])
   end
 
   return my_term
