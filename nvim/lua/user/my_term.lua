@@ -2,7 +2,7 @@
 --- NOTE: my_term 和 id 绑定, 同时只能有 0/1 个 buffer, 可能会有多个 window 显示.
 --- getbufinfo(bufnr) -> windows
 
--- local M = {}
+local M = {}
 
 local global_my_term_cache = {}
 
@@ -174,17 +174,17 @@ end
 -- -- }}}
 
 --- return an term object
-function GetTerm(id)
+M.get_term_by_id = function(id)
   return global_my_term_cache[id]
 end
 
-function New(opts)
+M.new = function(opts)
   opts = opts or {}
   opts = vim.tbl_deep_extend('force', default_opts, opts)
 
   --- 已经存在的 terminal
   if global_my_term_cache[opts.id] then
-    vim.notify('terminal instance is already exist, please use function "get_term(id)"', vim.log.levels.WARN)
+    vim.notify('terminal instance is already exist, please use function "get_term_by_id()"', vim.log.levels.WARN)
     return global_my_term_cache[opts.id]
   end
 
@@ -260,3 +260,5 @@ function New(opts)
 
   return my_term
 end
+
+return M
