@@ -256,7 +256,6 @@ M.new = function(opts)
   return my_term
 end
 
---- TODO: close_all
 M.close_all = function()
   for _, wi in ipairs(vim.fn.getwininfo()) do
     if wi.terminal == 1
@@ -277,6 +276,27 @@ M.open_all = function()
       end
     end
   end
+end
+
+M.toggle_all = function()
+  local open_winid_list= {}
+
+  for _, wi in ipairs(vim.fn.getwininfo()) do
+    if wi.terminal == 1
+      and string.match(vim.api.nvim_buf_get_name(wi.bufnr), 'term://.*' .. name_tag .. '%d+')  --- it is my_term
+    then
+      table.insert(open_winid_list, wi.winid)
+    end
+  end
+
+  if #open_winid_list > 0 then
+    for _, win_id in ipairs(open_winid_list) do
+      vim.api.nvim_win_close(win_id, 'force')
+    end
+    return
+  end
+
+  M.open_all()
 end
 
 return M
