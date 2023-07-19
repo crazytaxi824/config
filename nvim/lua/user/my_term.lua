@@ -16,6 +16,7 @@ local default_opts = {
 }
 
 --- 判断当前 windows 中是否有 my_term window, 返回 win_id.
+--- TODO: 通过 global_my_term_cache 中 getbufinfo(term.bufnr)[1].windows 来判断
 local function __find_exist_term_win()
   local win_id = -1
   for _, wi in ipairs(vim.fn.getwininfo()) do
@@ -34,6 +35,12 @@ local function __find_exist_term_win()
 end
 
 --- private functions
+local function __term_buf_exist(term_obj)
+  if term_obj.bufnr and vim.fn.bufexists(term_obj.bufnr) == 1 then
+    return true
+  end
+end
+
 local function __start_insert(startinsert, win_id)
   if startinsert then
     --- go back to terminal window for `:startinsert`
@@ -51,7 +58,7 @@ local function __jobdone_autocmd(term_obj)
     buffer = term_obj.bufnr,
     callback = function(params)
       if term_obj.jobdone_exit then
-        vim.cmd('bwipeout ' .. params.buf)
+        vim.cmd('bwipeout! ' .. params.buf)
       else
         vim.cmd('stopinsert')
       end
@@ -72,19 +79,18 @@ end
 
 --- NOTE: 创建一个 window 用于 terminal 运行.
 local function __create_new_term_win(term_obj)
-  local exist_win_id = __find_exist_term_win()
+  term_obj.bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
 
+  local exist_win_id = __find_exist_term_win()
   if vim.fn.win_gotoid(exist_win_id) == 1 then
-    vim.cmd('vertical rightbelow new')  --- at least 1 terminal window exist
+    -- vim.cmd('vertical rightbelow new')  --- at least 1 terminal window exist
+    vim.cmd('vertical rightbelow sbuffer ' .. term_obj.bufnr)  --- at least 1 terminal window exist
   else
-    vim.cmd('horizontal botright ' .. term_obj.win_height .. 'new')  --- no terminal window exist
+    vim.cmd('horizontal botright sbuffer' .. term_obj.bufnr .. ' | resize ' .. term_obj.win_height)  --- no terminal window exist
   end
 
-  local win_id = vim.api.nvim_get_current_win()
-  term_obj.bufnr = vim.api.nvim_get_current_buf()
-  vim.bo[term_obj.bufnr].buflisted = false
-
-  return win_id
+  --- return win_id
+  return vim.api.nvim_get_current_win()
 end
 
 local function __reload_exist_term_buffer(term_obj)
@@ -96,13 +102,8 @@ local function __reload_exist_term_buffer(term_obj)
     vim.cmd('horizontal botright sbuffer' .. term_obj.bufnr .. ' | resize ' .. term_obj.win_height)  --- no terminal window exist
   end
 
-  term_obj.win_id = vim.api.nvim_get_current_win()
-end
-
-local function __term_buf_exist(term_obj)
-  if term_obj.bufnr and vim.fn.bufexists(term_obj.bufnr) == 1 then
-    return true
-  end
+  --- return win_id
+  return vim.api.nvim_get_current_win()
 end
 
 --- set quickfix list for terminal list. --- {{{
@@ -120,15 +121,24 @@ function NewTerm(opts)
   local my_term = vim.tbl_deep_extend('force', default_opts, opts)
 
   my_term.run = function()
+    local win_id
     --- first: open a window for terminal, get win_id.
     if __term_buf_exist(my_term) then
-      --- TODO scrach buffer
-      -- local scratch_bufnr = vim.api.nvim_create_buf(false, true)
+      local wins = vim.fn.getbufinfo(my_term.bufnr)[1].windows
+      if #wins > 0 and vim.fn.win_gotoid(wins[1]) == 1 then
+        win_id = wins[1]
+        local bw_bufnr = my_term.bufnr
+        my_term.bufnr = vim.api.nvim_create_buf(false, true)
 
-      vim.cmd('bw '..my_term.bufnr)
+        vim.cmd('buffer ' .. my_term.bufnr)
+        vim.cmd('bwipeout! '.. bw_bufnr)
+      else
+        win_id = __create_new_term_win(my_term)
+        vim.cmd('bw '..my_term.bufnr)
+      end
+    else
+      win_id = __create_new_term_win(my_term)
     end
-
-    local win_id = __create_new_term_win(my_term)
 
     __exec_cmd(my_term, win_id)
 
