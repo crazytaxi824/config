@@ -29,70 +29,75 @@ local function find_exist_term_win()
   end
 end
 
-local function startinsert(win_id, opts)
-  if opts.startinsert then
-    --- go back to terminal window for `:startinsert`
-    if vim.fn.win_gotoid(win_id) == 1 then
-      vim.cmd('startinsert')
-    end
-  end
-end
+local function new_term_obj(opts)
+  opts = opts or {}
+  local term_obj = vim.tbl_deep_extend('force', default_opts, opts)
 
---- 根据 term name_tag :bwipeout terminal buffer.
-local function jobdone_autocmd(opts, bufnr)
-  vim.api.nvim_create_autocmd("TermClose", {
-    buffer = bufnr,
-    callback = function(params)
-      if opts.jobdone_exit then
-        vim.cmd('bwipeout ' .. params.buf)
-      else
-        vim.cmd('stopinsert')
+  term_obj.__start_insert = function()
+    if term_obj.startinsert then
+      --- go back to terminal window for `:startinsert`
+      if vim.fn.win_gotoid(term_obj.win_id) == 1 then
+        vim.cmd('startinsert')
       end
     end
-  })
-end
-
---- terminal open and exec command
-local function open_term(win_id, opts)
-  if vim.fn.win_gotoid(win_id) == 1 then
-    --- 使用 termopen() 开打 terminal
-    local cmd = opts.cmd .. name_tag  .. opts.count
-    local job_id = vim.fn.termopen(cmd)
-    return job_id
   end
 
-  --- TODO; 如果 count 相同则 bw 之前的 buffer. 先打开新的 term 再删除就的
-end
-
---- NOTE: 创建一个 window 用于 terminal 运行.
-local function create_new_term_win(opts)
-  local exist_win_id = find_exist_term_win()
-
-  if exist_win_id and vim.fn.win_gotoid(exist_win_id) == 1 then
-    vim.cmd('vertical rightbelow new')  --- at least 1 terminal window exist
-  else
-    vim.cmd('horizontal botright ' .. opts.win_height .. 'new')  --- no terminal window exist
+  --- 根据 term name_tag :bwipeout terminal buffer.
+  term_obj.__jobdone_autocmd = function()
+    vim.api.nvim_create_autocmd("TermClose", {
+      buffer = term_obj.bufnr,
+      callback = function(params)
+        if term_obj.jobdone_exit then
+          vim.cmd('bwipeout ' .. params.buf)
+        else
+          vim.cmd('stopinsert')
+        end
+      end
+    })
   end
 
-  local win_id = vim.api.nvim_get_current_win()
-  local bufnr = vim.api.nvim_get_current_buf()
-  vim.bo[bufnr].buflisted = false
+  --- terminal open and exec command
+  term_obj.__exec_cmd = function()
+    if vim.fn.win_gotoid(term_obj.win_id) == 1 then
+      --- 使用 termopen() 开打 terminal
+      local cmd = term_obj.cmd .. name_tag  .. term_obj.count
+      term_obj.job_id = vim.fn.termopen(cmd)
+    else
+      vim.notify("win_id: " .. term_obj.win_id .. " is not exist", vim.log.levels.WARN)
+    end
 
-  return win_id, bufnr
-end
-
---- load a hidden term buffer to split window next to exist term window
-function Reload_exist_term_buffer(bufnr)
-  local exist_win_id = find_exist_term_win()
-
-  if exist_win_id and vim.fn.win_gotoid(exist_win_id) == 1 then
-    vim.cmd('vertical rightbelow sbuffer ' .. bufnr)  --- at least 1 terminal window exist
-  else
-    vim.cmd('horizontal botright sbuffer' .. bufnr .. ' | resize ' .. default_opts.win_height)  --- no terminal window exist
+    --- TODO; 如果 count 相同则 bw 之前的 buffer. 先打开新的 term 再删除就的
   end
 
-  local win_id = vim.api.nvim_get_current_win()
-  return win_id
+  --- NOTE: 创建一个 window 用于 terminal 运行.
+  term_obj.__create_new_term_win = function()
+    local exist_win_id = find_exist_term_win()
+
+    if exist_win_id and vim.fn.win_gotoid(exist_win_id) == 1 then
+      vim.cmd('vertical rightbelow new')  --- at least 1 terminal window exist
+    else
+      vim.cmd('horizontal botright ' .. term_obj.win_height .. 'new')  --- no terminal window exist
+    end
+
+    term_obj.win_id = vim.api.nvim_get_current_win()
+    term_obj.bufnr = vim.api.nvim_get_current_buf()
+
+    vim.bo[term_obj.bufnr].buflisted = false
+  end
+
+  term_obj.__reload_exist_term_buffer = function()
+    local exist_win_id = find_exist_term_win()
+
+    if exist_win_id and vim.fn.win_gotoid(exist_win_id) == 1 then
+      vim.cmd('vertical rightbelow sbuffer ' .. term_obj.bufnr)  --- at least 1 terminal window exist
+    else
+      vim.cmd('horizontal botright sbuffer' .. term_obj.bufnr .. ' | resize ' .. term_obj.win_height)  --- no terminal window exist
+    end
+
+    term_obj.win_id = vim.api.nvim_get_current_win()
+  end
+
+  return term_obj
 end
 
 --- set quickfix list for terminal list.
@@ -103,20 +108,26 @@ local function set_term_qf(win_id, opts)
   vim.fn.win_gotoid(win_id)  -- go back to terminal window for `:startinsert`
 end
 
---- main terminal control function
-function Create_term(opts)
-  opts = opts or {}
-  opts = vim.tbl_deep_extend('force', default_opts, opts)
+--- return an term object
+function NewTerm(opts)
+  local my_term = new_term_obj(opts)
 
-  --- first: open a window for terminal, get win_id.
-  local win_id, bufnr = create_new_term_win(opts)
+  my_term.run = function()
+    --- first: open a window for terminal, get win_id.
+    my_term.__create_new_term_win()
 
-  jobdone_autocmd(opts, bufnr)
+    my_term.__exec_cmd()
 
-  open_term(win_id, opts)
+    my_term.__jobdone_autocmd()
 
-  --- NOTE: after exec cmd, 单独执行避免过程中跳转到其他 window.
-  startinsert(win_id, opts)
+    --- TODO: hooks on_open
+
+    my_term.__start_insert()  --- NOTE: after exec cmd, 单独执行避免过程中跳转到其他 window.
+  end
+
+  my_term.open = function()
+    my_term.__reload_exist_term_buffer()
+  end
+
+  return my_term
 end
-
-
