@@ -42,13 +42,32 @@ local function __term_buf_exist(term_obj)
 end
 
 --- 根据 term name_tag 来 wipeout terminal buffer.
-local function __jobdone_autocmd(term_obj)
+local function __autocmd_jobdone(term_obj)
   vim.api.nvim_create_autocmd("TermClose", {
     buffer = term_obj.bufnr,
     callback = function(params)
+      if term_obj.on_exit then
+        term_obj.on_exit(term_obj)
+      end
+
       if term_obj.jobdone_exit then
         --- 必须使用 silent 否则可能因为重复 wipeout buffer 而报错.
         vim.cmd('silent! bwipeout! ' .. params.buf)
+      end
+    end
+  })
+end
+
+local function __autocmd_open_close(term_obj)
+  vim.api.nvim_create_autocmd({"BufWinEnter", "BufWinLeave"}, {
+    buffer = term_obj.bufnr,
+    callback = function(params)
+      print(params.event)
+      if params.event == "BufWinEnter" and term_obj.on_open then
+        term_obj.on_open(term_obj)
+      end
+      if params.event == "BufWinLeave" and term_obj.on_close then
+        term_obj.on_close(term_obj)
       end
     end
   })
@@ -155,24 +174,27 @@ function New(opts)
   --- 新的 terminal
   local my_term = opts
   global_my_term_cache[my_term.id] = my_term
+  if my_term.on_init then
+    my_term.on_init(my_term)
+  end
 
   my_term.run = function(prev_win_id)
     local win_id = __enter_term_win(my_term)
-    __jobdone_autocmd(my_term)
+
+    --- VVI: autocmd 放在这里运行主要是为了保证获取到 bufnr.
+    __autocmd_jobdone(my_term)
+    __autocmd_open_close(my_term)
+
+    if my_term.before_exec then
+      my_term.before_exec(my_term, win_id)
+    end
+
     __exec_cmd(my_term, win_id, prev_win_id)
 
-    --- TODO: hooks on_open / on_close
+    if my_term.after_exec then
+      my_term.after_exec(my_term, win_id)
+    end
   end
-
-  -- my_term.open_or_run = function(perv_win_id)
-  --   if __term_buf_exist(my_term) then
-  --     __reload_exist_term_buffer(my_term)
-  --   else
-  --     local win_id = __create_new_term_win(my_term)
-  --     __jobdone_autocmd(my_term)
-  --     __exec_cmd(my_term, win_id, perv_win_id)
-  --   end
-  -- end
 
   my_term.open_win = function()
     if __term_buf_exist(my_term) then
