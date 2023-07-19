@@ -41,39 +41,31 @@ local function __term_buf_exist(term_obj)
   end
 end
 
-local function __start_insert(startinsert, win_id)
-  if startinsert then
-    --- go back to terminal window for `:startinsert`
-    if win_id and vim.fn.win_gotoid(win_id) == 1 then
-      vim.cmd('startinsert')
-    else
-      vim.notify("win_id: " .. win_id .. " is not exist", vim.log.levels.WARN)
-    end
-  end
-end
-
---- 根据 term name_tag :bwipeout terminal buffer.
+--- 根据 term name_tag 来 wipeout terminal buffer.
 local function __jobdone_autocmd(term_obj)
   vim.api.nvim_create_autocmd("TermClose", {
     buffer = term_obj.bufnr,
     callback = function(params)
       if term_obj.jobdone_exit then
         vim.cmd('bwipeout! ' .. params.buf)
-      else
-        vim.cmd('stopinsert')
       end
     end
   })
 end
 
 --- terminal open and exec command
-local function __exec_cmd(term_obj, win_id)
+local function __exec_cmd(term_obj, win_id, prev_win_id)
   if win_id and vim.fn.win_gotoid(win_id) == 1 then
     --- 使用 termopen() 开打 terminal
     local cmd = term_obj.cmd .. name_tag  .. term_obj.id
     term_obj.job_id = vim.fn.termopen(cmd)
+
+    --- VVI: goto prev_win 必须放在最后执行.
+    if vim.fn.win_gotoid(prev_win_id) == 0 and term_obj.startinsert then
+      vim.cmd('startinsert')
+    end
   else
-    vim.notify("win_id: " .. win_id .. " is not exist", vim.log.levels.WARN)
+    vim.notify("win_id: " .. win_id .. " is not exist", vim.log.levels.ERROR)
   end
 end
 
@@ -111,21 +103,21 @@ local function __enter_term_win(term_obj)
 
   --- 这里是为了 re-use term window
   if __term_buf_exist(term_obj) then
-    local wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
-    if #wins > 0 and vim.fn.win_gotoid(wins[1]) == 1 then
+    local term_wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
+    if #term_wins > 0 and vim.fn.win_gotoid(term_wins[1]) == 1 then
       --- 如果 term buffer 存在, 同时 window 存在:
-      --- 创建一个 scratch buffer, 加载到 window 中, 然后 bwipeout term buffer.
-      win_id = wins[1]
-      local bw_bufnr = term_obj.bufnr
+      --- 创建一个 scratch buffer, 加载到当前 term window 中, 然后 wipeout term buffer.
+      win_id = term_wins[1]
+      local term_bufnr = term_obj.bufnr
       term_obj.bufnr = vim.api.nvim_create_buf(false, true)
 
       vim.cmd('buffer ' .. term_obj.bufnr)
-      vim.cmd('bwipeout! '.. bw_bufnr)
+      vim.cmd('bwipeout! '.. term_bufnr)
     else
       --- 如果 term buffer 存在, 但是 window 不存在:
-      --- 创建一个新的 term window, 然后 bwipeout term buffer.
+      --- 先 wipeout term buffer, 然后创建一个新的 term window. 因为 create_new_term_win 会给 term.bufnr 重新赋值.
+      vim.cmd('bwipeout! '..term_obj.bufnr)
       win_id = __create_new_term_win(term_obj)
-      vim.cmd('bw '..term_obj.bufnr)
     end
   else
     --- 如果 term buffer 不存在: 创建一个新的 term window.
@@ -156,39 +148,38 @@ function New(opts)
   --- 已经存在的 terminal
   if global_my_term_cache[opts.id] then
     vim.notify('terminal instance is already exist, please use function "get_term(id)"', vim.log.levels.WARN)
-    return
+    return global_my_term_cache[opts.id]
   end
 
   --- 新的 terminal
   local my_term = opts
   global_my_term_cache[my_term.id] = my_term
 
-  my_term.run = function()
+  my_term.run = function(prev_win_id)
     local win_id = __enter_term_win(my_term)
-    __exec_cmd(my_term, win_id)
     __jobdone_autocmd(my_term)
-    --- TODO: hooks on_open
-    __start_insert(my_term.startinsert, win_id)  --- NOTE: after exec cmd, 单独执行避免过程中跳转到其他 window.
+    __exec_cmd(my_term, win_id, prev_win_id)
+
+    --- TODO: hooks on_open / on_close
   end
+
+  -- my_term.open_or_run = function(perv_win_id)
+  --   if __term_buf_exist(my_term) then
+  --     __reload_exist_term_buffer(my_term)
+  --   else
+  --     local win_id = __create_new_term_win(my_term)
+  --     __jobdone_autocmd(my_term)
+  --     __exec_cmd(my_term, win_id, perv_win_id)
+  --   end
+  -- end
 
   my_term.open_win = function()
     if __term_buf_exist(my_term) then
       __reload_exist_term_buffer(my_term)
-    else
-      vim.notify("terminal buffer is not exist", vim.log.levels.WARN)
+      return true
     end
-  end
-
-  my_term.open_or_run = function()
-    if __term_buf_exist(my_term) then
-      __reload_exist_term_buffer(my_term)
-    else
-      local win_id = __create_new_term_win(my_term)
-      __exec_cmd(my_term, win_id)
-      __jobdone_autocmd(my_term)
-      --- TODO: hooks on_open
-      __start_insert(my_term.startinsert, win_id)  --- NOTE: after exec cmd, 单独执行避免过程中跳转到其他 window.
-    end
+    -- terminal buffer is not exist
+    return false
   end
 
   my_term.close_win = function()
