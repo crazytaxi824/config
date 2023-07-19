@@ -24,7 +24,7 @@ local function __keymap_resize(bufnr)
   vim.keymap.set('n', 't<Down>', '<cmd>resize -5<CR>', opt)
 end
 
---- 判断当前 windows 中是否有 my_term window, 返回 win_id.
+--- 判断当前 windows 中是否有 my_term window, 返回 win_id ------------------------------------------ {{{
 local function __find_exist_term_win()
   local win_id = -1
   for _, wi in ipairs(vim.fn.getwininfo()) do
@@ -41,6 +41,7 @@ local function __find_exist_term_win()
     return win_id
   end
 end
+-- -- }}}
 
 --- 判断 terminal bufnr 是否存在, 是否有效.
 local function __term_buf_exist(term_obj)
@@ -104,7 +105,7 @@ local function __exec_cmd(term_obj, win_id, prev_win_id)
   end
 end
 
---- 创建一个 window 用于 terminal 运行.
+--- 创建一个 window 用于 terminal 运行 ------------------------------------------------------------- {{{
 local function __create_new_term_win(term_obj)
   term_obj.bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
 
@@ -119,8 +120,9 @@ local function __create_new_term_win(term_obj)
   --- return win_id
   return vim.api.nvim_get_current_win()
 end
+-- -- }}}
 
---- 创建一个新的 window 用于加载 exist terminal bufnr.
+--- 创建一个新的 window 用于加载 exist terminal bufnr ---------------------------------------------- {{{
 local function __reload_exist_term_buffer(term_obj)
   local exist_win_id = __find_exist_term_win()
 
@@ -133,8 +135,9 @@ local function __reload_exist_term_buffer(term_obj)
   --- return win_id
   return vim.api.nvim_get_current_win()
 end
+-- -- }}}
 
---- 进入指定的 terminal window. 用于 run() 函数.
+--- 进入指定的 terminal window. 用于 run() 函数 ---------------------------------------------------- {{{
 local function __enter_term_win(term_obj)
   local win_id
 
@@ -163,14 +166,6 @@ local function __enter_term_win(term_obj)
 
   return win_id
 end
-
---- set quickfix list for terminal list. --- {{{
--- local function set_term_qf(win_id, opts)
---   local bufnr = vim.api.nvim_win_get_buf(win_id)
---   vim.fn.setqflist({{bufnr=bufnr, module="my_term" .. opts.id}}, 'a')
---   vim.cmd('vertical botright copen 20')  -- 最小值为 20
---   vim.fn.win_gotoid(win_id)  -- go back to terminal window for `:startinsert`
--- end
 -- -- }}}
 
 --- return an term object
@@ -255,10 +250,33 @@ M.new = function(opts)
   end
 
   my_term.debug = function()
-    print(global_my_term_cache[my_term.id])
+    vim.print(global_my_term_cache)
   end
 
   return my_term
+end
+
+--- TODO: close_all
+M.close_all = function()
+  for _, wi in ipairs(vim.fn.getwininfo()) do
+    if wi.terminal == 1
+      and string.match(vim.api.nvim_buf_get_name(wi.bufnr), 'term://.*' .. name_tag .. '%d+')  --- it is my_term
+    then
+      vim.api.nvim_win_close(wi.winid, 'force')
+    end
+  end
+end
+
+M.open_all = function()
+  for id, term_obj in pairs(global_my_term_cache) do
+    -- nvim_win_set_buf()
+    if __term_buf_exist(term_obj) then
+      local term_wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
+      if #term_wins < 1 then
+        __reload_exist_term_buffer(term_obj)
+      end
+    end
+  end
 end
 
 return M
