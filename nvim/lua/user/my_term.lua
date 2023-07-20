@@ -118,7 +118,7 @@ local function __exec_cmd(term_obj, term_win_id, prev_win_id)
     --- VVI: goto previous window 必须放在最后执行.
     --- 如果需要 goto previous window 则不执行判 startinsert.
     if prev_win_id and vim.fn.win_gotoid(prev_win_id) == 0 then
-      vim.notify("prev_win_id: " .. prev_win_id .. " is not exist", vim.log.levels.WARN)
+      Notify("prev_win_id: `" .. prev_win_id .. "` is not exist", "WARN", {title="my_term"})
     elseif not prev_win_id and term_obj.startinsert then
       vim.cmd('startinsert')
     end
@@ -215,7 +215,7 @@ M.new = function(opts)
 
   my_term.run = function(prev_win_id)
     if my_term.status() == -1 then
-      vim.notify("job_id is still running, please use term.stop() first.", vim.log.levels.WARN)
+      Notify("job_id is still running, please use `term.stop()` first.", "WARN", {title="my_term"})
       return
     end
 
@@ -235,6 +235,11 @@ M.new = function(opts)
     if my_term.after_exec then
       my_term.after_exec(my_term, win_id)
     end
+  end
+
+  --- 终止 job, 会触发 jobdone.
+  my_term.stop = function()
+    vim.fn.jobstop(my_term._job_id)
   end
 
   my_term.open_win = function()
@@ -268,11 +273,6 @@ M.new = function(opts)
   my_term.status = function()
     --- `:help jobwait()`
     return vim.fn.jobwait({my_term._job_id}, 0)[1]
-  end
-
-  --- 终止 job, 会触发 jobdone.
-  my_term.stop = function()
-    vim.fn.jobstop(my_term._job_id)
   end
 
   --- terminate 之后, 如果要使用相同 id 的 terminal 需要重新 New()
