@@ -1,8 +1,8 @@
 --- open terminal at bottom only.
 --- NOTE: my_term 和 id 绑定, 同时只能有 0/1 个 buffer, bufnr 可能会变更.
 --- my_term 可能会有多个 window 同时显示, win_id 随时可能变化. getbufinfo(bufnr) -> windows
---- startinsert & stopinsert 尽量不要用. mode 是全局的, 不论 cursor 在哪一个 window 都会改变 mode.
---- 可能会受到 win_gotoid() 的影响.
+--- startinsert & stopinsert 慎用. mode 是全局的, 无论 cursor 在哪一个 window 都会改变 mode,
+--- 所以很有可能会受到 win_gotoid() 的影响.
 
 local M = {}
 
@@ -15,6 +15,7 @@ local win_height = 16  -- persist window height
 local default_opts = {
   id = 1,  -- v:count1, 保证每个 id 只和一个 bufnr 对应
   cmd = vim.go.shell,  -- 相当于 os.getenv('SHELL')
+
   startinsert = nil, -- true | false, 第一次 run() 的时候触发 startinsert, 在 goto previous window 的情况下不适用.
   jobdone = nil,  -- 'exit' | 'stopinsert'
 
@@ -22,13 +23,13 @@ local default_opts = {
   on_init = nil,  -- func(term), new()
   on_open = nil,  -- func(term), BufWinEnter
   on_close = nil, -- func(term), BufWinLeave
-  on_exit = nil,  -- func(term), TermClose
+  on_exit = nil,  -- func(term), TermClose, jobstop()
   before_exec = nil, -- func(term), run() before exec
   after_exec = nil,  -- func(term), run() after exec
 
   --- private property, should not be readonly.
-  -- _bufnr = nil,
-  -- _job_id = nil,
+  _bufnr = nil,
+  _job_id = nil,
 }
 
 --- 调大/调小 terminal window
