@@ -121,7 +121,7 @@ local function __exec_cmd(term_obj, term_win_id, prev_win_id)
       vim.cmd('startinsert')
     end
   else
-    vim.notify("term_win_id: " .. term_win_id .. " is not exist", vim.log.levels.ERROR)
+    error("term_win_id: " .. term_win_id .. " is not exist")
   end
 end
 
@@ -232,11 +232,16 @@ M.new = function(opts)
 
   my_term.open_win = function()
     if __term_buf_exist(my_term) then
-      __reload_exist_term_buffer(my_term)
+      local wins = vim.fn.getbufinfo(my_term._bufnr)[1].windows
+      if #wins > 0 then
+        if vim.fn.win_gotoid(wins[1]) == 0 then
+          error('vim cannot win_gotoid(' .. wins[1] .. ')')
+        end
+      else
+        __reload_exist_term_buffer(my_term)
+      end
       return true
     end
-    -- terminal buffer is not exist
-    return false
   end
 
   my_term.close_win = function()
@@ -269,7 +274,7 @@ M.new = function(opts)
     my_term = nil
   end
 
-  my_term._debug = function()
+  my_term.__debug = function()
     vim.print(global_my_term_cache)
   end
 
