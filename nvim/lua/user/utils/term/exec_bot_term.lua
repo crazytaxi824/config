@@ -1,7 +1,6 @@
 --- 用于 execute 编程调试命令的 terminal, eg: `go run ...`, `go test ...`, `python3 ...`
 
 local Terminal = require("toggleterm.terminal").Terminal
-local goto_win = require("user.utils.term.goto_winid")
 
 local M = {}
 
@@ -33,7 +32,7 @@ M.exec = function(cmd, on_exit_fn)
   --- 该 terminal buffer wipeout 的时候回到之前的窗口.
   M.exec_bot_term.on_open = function()
     vim.cmd('stopinsert')
-    goto_win.autocmd(exec_win_id)
+    vim.fn.win_gotoid(exec_win_id)
   end
 
   --- NOTE: callback 不存在的时候 on_exit 就会清除, 相当于: on_exit = nil
