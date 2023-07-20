@@ -212,6 +212,11 @@ M.new = function(opts)
   end
 
   my_term.run = function(prev_win_id)
+    if my_term.status() == -1 then
+      vim.notify("job_id is still running, please use term.stop() first.", vim.log.levels.WARN)
+      return
+    end
+
     local win_id = __enter_term_win(my_term)
 
     --- VVI: autocmd 放在这里运行主要是为了保证获取到 bufnr.
@@ -258,8 +263,13 @@ M.new = function(opts)
     my_term = default_opts
   end
 
+  my_term.status = function()
+    --- `:help jobwait()`
+    return vim.fn.jobwait({my_term._job_id}, 0)[1]
+  end
+
   --- 终止 job, 会触发 jobdone.
-  my_term.jobstop = function()
+  my_term.stop = function()
     vim.fn.jobstop(my_term._job_id)
   end
 
