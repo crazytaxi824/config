@@ -11,10 +11,10 @@ local name_tag=';#my_term#'
 local win_height = 16  -- persist window height
 
 local default_opts = {
-  cmd = vim.go.shell,  --- 相当于 os.getenv('SHELL')
-  startinsert = true,
-  jobdone_exit = true,
   id = 1,  -- v:count1, 保证每个 id 只和一个 bufnr 对应
+  cmd = vim.go.shell,  -- 相当于 os.getenv('SHELL')
+  startinsert = nil, -- true | false, 第一次 run() 的时候触发 startinsert, 在 goto previous window 的情况下不适用.
+  jobdone = nil,  -- 'exit' | 'stopinsert'
 }
 
 --- 调大/调小 terminal window
@@ -59,9 +59,11 @@ local function __autocmd_jobdone(term_obj)
         term_obj.on_exit(term_obj)
       end
 
-      if term_obj.jobdone_exit then
+      if term_obj.jobdone == 'exit' then
         --- 必须使用 silent 否则可能因为重复 wipeout buffer 而报错.
         vim.cmd('silent! bwipeout! ' .. params.buf)
+      elseif term_obj.jobdone == 'stopinsert' then
+        vim.cmd('stopinsert')
       end
     end
   })
@@ -90,18 +92,21 @@ end
 
 --- terminal goto win_id 执行 command, 然后`可选择`是否要返回 previous window.
 --- 返回 previous window 不等待 jobdone. eg: 开启 http 服务后直接返回 previous window.
-local function __exec_cmd(term_obj, win_id, prev_win_id)
-  if win_id and vim.fn.win_gotoid(win_id) == 1 then
+local function __exec_cmd(term_obj, term_win_id, prev_win_id)
+  if term_win_id and vim.fn.win_gotoid(term_win_id) == 1 then
     --- 使用 termopen() 开打 terminal
     local cmd = term_obj.cmd .. name_tag  .. term_obj.id
     term_obj.job_id = vim.fn.termopen(cmd)
 
-    --- VVI: goto prev_win 必须放在最后执行.
-    if vim.fn.win_gotoid(prev_win_id) == 0 and term_obj.startinsert then
+    --- VVI: goto previous window 必须放在最后执行.
+    --- 如果需要 goto previous window 则不执行判 startinsert.
+    if prev_win_id and vim.fn.win_gotoid(prev_win_id) == 0 then
+      vim.notify("prev_win_id: " .. prev_win_id .. " is not exist", vim.log.levels.WARN)
+    elseif not prev_win_id and term_obj.startinsert then
       vim.cmd('startinsert')
     end
   else
-    vim.notify("win_id: " .. win_id .. " is not exist", vim.log.levels.ERROR)
+    vim.notify("term_win_id: " .. term_win_id .. " is not exist", vim.log.levels.ERROR)
   end
 end
 
@@ -250,7 +255,7 @@ M.new = function(opts)
     my_term = nil
   end
 
-  my_term.debug = function()
+  my_term._debug = function()
     vim.print(global_my_term_cache)
   end
 
