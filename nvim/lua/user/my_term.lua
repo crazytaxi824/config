@@ -4,6 +4,8 @@
 --- startinsert & stopinsert 慎用. mode 是全局的, 无论 cursor 在哪一个 window 都会改变 mode,
 --- 所以很有可能会受到 win_gotoid() 的影响.
 
+--- 原理: nvim_create_buf() -> <cmd>botright sbuffer bufnr -> win_gotoid(win_id) -> termopen(cmd)
+
 local M = {}
 
 local global_my_term_cache = {}
@@ -274,7 +276,7 @@ M.new = function(opts)
   end
 
   --- terminate 之后, 如果要使用相同 id 的 terminal 需要重新 New()
-  my_term.terminate = function()
+  my_term.__terminate = function()
     if my_term._bufnr and vim.fn.bufexists(my_term._bufnr) == 1 then
       vim.cmd('bwipeout! ' .. my_term._bufnr)
     end
