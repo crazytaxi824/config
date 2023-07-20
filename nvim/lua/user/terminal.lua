@@ -25,12 +25,13 @@ vim.api.nvim_create_autocmd('TermOpen', {
     end
     --- 跳转到 cursor <cWORD> 文件.
     vim.keymap.set('n', '<S-CR>', function() fp.n_jump() end, opts("Jump to file"))
-    --- VVI: <ESC> 进入 terminal Normal 模式, 同时也触发 <ESC>, 用于退出 fzf 等 terminal 中的操作.
-    vim.keymap.set('t', '<ESC>', '<ESC><C-\\><C-n>', opts("Ternimal: Normal Mode"))
+    --- VVI: <ESC> 进入 terminal Normal 模式.
+    vim.keymap.set('t', '<ESC>', '<C-\\><C-n>', opts("Ternimal: Normal Mode"))
 
     --- 设置 terminal 不显示行号 -----------------------------------------------
     vim.wo[curr_win_id].number = false
     vim.wo[curr_win_id].relativenumber = false
+    vim.wo[curr_win_id].signcolumn = "no"
   end,
   desc = "filepath highlight",
 })
