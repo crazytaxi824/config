@@ -27,7 +27,7 @@ local default_opts = {
   on_close = nil, -- func(term), BufWinLeave
   on_exit = nil,  -- func(term), TermClose, jobstop()
   before_exec = nil, -- func(term), run() before exec, 可以用检查/修改设置.
-  after_exec = nil,  -- func(term), run() after exec, 可用于 goto previous window.
+  after_exec = nil,  -- func(term), run() after exec, 不等待 jobdone. NOTE: 可用于 goto previous window.
 
   --- private property, should not be readonly.
   _bufnr = nil,
@@ -134,10 +134,11 @@ end
 local function __open_term_win(term_obj)
   local exist_win_id = __find_exist_term_win()
   if vim.fn.win_gotoid(exist_win_id) == 1 then
-    -- vim.cmd('vertical rightbelow new')  --- at least 1 terminal window exist
-    vim.cmd('vertical rightbelow sbuffer ' .. term_obj._bufnr)  --- at least 1 terminal window exist
+    --- at least 1 terminal window exist
+    vim.cmd('vertical rightbelow sbuffer ' .. term_obj._bufnr)
   else
-    vim.cmd('horizontal botright sbuffer' .. term_obj._bufnr .. ' | resize ' .. win_height)  --- no terminal window exist
+    --- no terminal window exist, create a botright window for terminals.
+    vim.cmd('horizontal botright sbuffer' .. term_obj._bufnr .. ' | resize ' .. win_height)
   end
 
   --- return win_id
@@ -208,7 +209,9 @@ M.new = function(opts)
     end
 
     local win_id = __prepare_term_win(my_term)
-    __autocmd_callback(my_term)  -- VVI: autocmd 放在后面运行主要是为了保证获取到 bufnr.
+
+    --- VVI: 以下函数放在后面运行主要是为了保证获取到 bufnr.
+    __autocmd_callback(my_term)
     __keymap_resize(my_term._bufnr)
     __exec_cmd(my_term, win_id)
   end
@@ -230,6 +233,7 @@ M.new = function(opts)
       else
         __open_term_win(my_term)
       end
+
       return true
     end
   end
@@ -283,7 +287,6 @@ end
 
 M.open_all = function()
   for id, term_obj in pairs(global_my_term_cache) do
-    -- nvim_win_set_buf()
     if __term_buf_exist(term_obj) then
       local term_wins = vim.fn.getbufinfo(term_obj._bufnr)[1].windows
       if #term_wins < 1 then
