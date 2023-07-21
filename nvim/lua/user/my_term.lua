@@ -141,7 +141,7 @@ local function __exec_cmd(term_obj)
       elseif term_obj.jobdone == 'stopinsert' then
         vim.cmd('stopinsert')
       end
-    end
+    end,
   })
 
   --- callback
@@ -236,30 +236,10 @@ M.new = function(opts)
     __autocmd_callback(my_term)
     __keymap_resize(my_term._bufnr)
 
-    if term_win_id and vim.fn.win_gotoid(term_win_id) == 1 then
-      __exec_cmd(my_term)
-    else
+    if vim.fn.win_gotoid(term_win_id) == 0 then
       error("term_win_id: " .. term_win_id .. " is not exist")
     end
-  end
-
-  --- unlisted scratch buffer termopen(cmd)
-  my_term.spawn = function()
-    if my_term.status() == -1 then
-      Notify("job_id is still running, please use `term.stop()` first.", "WARN", {title="my_term"})
-      return
-    end
-
-    --- 如果 term bufnr 存在则删除, 因为 termopen() 不能用在 modified buffer 上.
-    if __term_buf_exist(my_term) then
-      vim.api.nvim_buf_delete(my_term._bufnr, {force=true})
-    end
-
-    --- 生成一个新的 scratch buffer 用于执行 termopen()
-    my_term._bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
-    vim.api.nvim_buf_call(my_term._bufnr, function()
-      __exec_cmd(my_term)
-    end)
+    __exec_cmd(my_term)
   end
 
   --- 终止 job, 会触发 jobdone.
