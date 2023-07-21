@@ -78,8 +78,8 @@ M.go_add_tags_and_opts = function(arglist, go_add_tags_cmd, offset)
   --- parse tag name and tag options from arglist[1].
   local tag_list = {}
   local tag_opt_list = {}
-  for _, tag_opt in ipairs(vim.split(arglist[1], ',')) do
-    local to = vim.split(tag_opt, '=')
+  for _, tag_opt in ipairs(vim.split(vim.trim(arglist[1]), ',', {trimempty=false})) do
+    local to = vim.split(vim.trim(tag_opt), '=', {trimempty=false})
     if #to > 0 and to[1] ~= '' then  -- 'json'|'json=foo'
       table.insert(tag_list, to[1])
     end

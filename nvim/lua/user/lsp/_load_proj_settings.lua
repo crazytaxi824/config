@@ -12,7 +12,7 @@ local M = {}
 --- 从 pwd 向上获取 dir 直到 root "/".
 local function local_settings_dir_filepaths_to_root()
   local absolute_dir = vim.fn.fnamemodify(vim.fn.getcwd(), ':p')
-  local path_slice = vim.split(absolute_dir, '/')
+  local path_slice = vim.split(absolute_dir, '/', {trimempty=false})
 
   local t = {}
   for i = #path_slice-1, 1, -1 do
@@ -42,7 +42,7 @@ local function get_local_settings_content()
     --- ok 文件执行 (dofile) 成功.
     --- result 是执行结果. 可能为 nil, 可能是执行失败的 error message.
     if not ok then
-      Notify(vim.split(result, '\n', {trimempty=true}), "ERROR")
+      Notify(vim.trim(result), "ERROR")
       return nil, "dofile_error"
     elseif result then
       --- '.nvim/settings.lua' 读取成功, 同时返回值不是 nil 的情况下缓存 settings 数据.

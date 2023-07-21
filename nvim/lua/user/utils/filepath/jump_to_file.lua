@@ -82,7 +82,7 @@ local function parse_filepath(content, ignore_matchstr)
     filepath = matchstr_filepath(content)
   end
 
-  local fp = vim.split(vim.fn.trim(filepath), ":")
+  local fp = vim.split(vim.trim(filepath), ":", {trimempty=false})
 
   --- file, lnum, col 都不能为 nil
   local file = fp[1] or ''

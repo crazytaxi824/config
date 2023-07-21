@@ -29,7 +29,7 @@ M.gotests_cmd_tool = function()
   end
 
   --- HACK: 判断 result 是否 "Generated" 开头.
-  local s = vim.split(vim.trim(result), ' ')
+  local s = vim.split(vim.trim(result), ' ', {trimempty=false})
   if s[1] == "Generated" then
     --- 执行完成后打开 _test.go file.
     local test_fp = vim.fn.fnamemodify(fp, ':r') .. '_test.go'
