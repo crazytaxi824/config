@@ -34,7 +34,7 @@ local default_opts = {
   after_exec = nil,  -- func(term), run() after exec, 不等待 jobdone. NOTE: 可用于 win_gotoid(prev_win), `:startinsert` ...
 
   startinsert = nil, -- true | false, 在 before_exec() 之前触发.
-  jobdone = nil,  -- 'exit' | 'stopinsert', on_exit() 时触发, 执行 `:silent! bwipeout! term_bufnr`
+  jobdone = nil,     -- 'exit' | 'stopinsert', on_exit() 时触发, 执行 `:silent! bwipeout! term_bufnr`
   auto_scroll = true,  -- goto bottom of the terminal. 会影响 :startinsert
 
   --- private property, should not be readonly.
@@ -273,6 +273,7 @@ M.new = function(opts)
     end
   end
 
+  --- open terminal window or goto terminal window
   my_term.open_win = function()
     if __term_buf_exist(my_term) then
       local wins = vim.fn.getbufinfo(my_term._bufnr)[1].windows
@@ -284,7 +285,7 @@ M.new = function(opts)
         __open_term_win(my_term)
       end
 
-      return true
+      return true  -- 打开成功返回 true.
     end
   end
 
