@@ -128,9 +128,9 @@ local function __exec_cmd(term_obj, term_win_id, prev_win_id)
 end
 
 --- 创建一个 window 用于 terminal 运行 ------------------------------------------------------------- {{{
-local function __create_new_term_win(term_obj)
-  term_obj._bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
-
+--- creat: 创建一个 window, load scratch buffer 用于执行 termopen()
+--- load:  创建一个 window, load exist terminal buffer.
+local function __open_term_win(term_obj)
   local exist_win_id = __find_exist_term_win()
   if vim.fn.win_gotoid(exist_win_id) == 1 then
     -- vim.cmd('vertical rightbelow new')  --- at least 1 terminal window exist
@@ -144,46 +144,33 @@ local function __create_new_term_win(term_obj)
 end
 -- -- }}}
 
---- 创建一个新的 window 用于加载 exist terminal bufnr ---------------------------------------------- {{{
-local function __reload_exist_term_buffer(term_obj)
-  local exist_win_id = __find_exist_term_win()
-
-  if vim.fn.win_gotoid(exist_win_id) == 1 then
-    vim.cmd('vertical rightbelow sbuffer ' .. term_obj._bufnr)  --- at least 1 terminal window exist
-  else
-    vim.cmd('horizontal botright sbuffer' .. term_obj._bufnr .. ' | resize ' .. win_height)  --- no terminal window exist
+--- 进入指定的 terminal window. 用于 run() 函数 ---------------------------------------------------- {{{
+local function __prepare_term_win(term_obj)
+  --- 如果 term buffer 不存在: 创建一个新的 term window.
+  if not __term_buf_exist(term_obj) then
+    term_obj._bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
+    return __open_term_win(term_obj)
   end
 
-  --- return win_id
-  return vim.api.nvim_get_current_win()
-end
--- -- }}}
-
---- 进入指定的 terminal window. 用于 run() 函数 ---------------------------------------------------- {{{
-local function __enter_term_win(term_obj)
-  local win_id
-
   --- 这里是为了 re-use term window
-  if __term_buf_exist(term_obj) then
-    local term_wins = vim.fn.getbufinfo(term_obj._bufnr)[1].windows
-    if #term_wins > 0 and vim.fn.win_gotoid(term_wins[1]) == 1 then
-      --- 如果 term buffer 存在, 同时 window 存在:
-      --- 创建一个 scratch buffer, 加载到当前 term window 中, 然后 wipeout term buffer.
-      win_id = term_wins[1]
-      local term_bufnr = term_obj._bufnr
-      term_obj._bufnr = vim.api.nvim_create_buf(false, true)
+  local win_id
+  local term_wins = vim.fn.getbufinfo(term_obj._bufnr)[1].windows
+  if #term_wins > 0 and vim.fn.win_gotoid(term_wins[1]) == 1 then
+    --- 如果 term buffer 存在, 同时 window 存在:
+    --- 创建一个 scratch buffer, 加载到当前 term window 中, 然后 wipeout term buffer.
+    win_id = term_wins[1]
+    local term_bufnr = term_obj._bufnr
+    term_obj._bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
 
-      vim.cmd('buffer ' .. term_obj._bufnr)
-      vim.cmd('bwipeout! '.. term_bufnr)
-    else
-      --- 如果 term buffer 存在, 但是 window 不存在:
-      --- 先 wipeout term buffer, 然后创建一个新的 term window. 因为 create_new_term_win 会给 term.bufnr 重新赋值.
-      vim.cmd('bwipeout! '..term_obj._bufnr)
-      win_id = __create_new_term_win(term_obj)
-    end
+    --- 先 load scratch buffer, 再 wipeout 之前的 terminal buffer, 否则会导致 window close.
+    vim.cmd('buffer ' .. term_obj._bufnr)
+    vim.cmd('bwipeout! '.. term_bufnr)
   else
-    --- 如果 term buffer 不存在: 创建一个新的 term window.
-    win_id = __create_new_term_win(term_obj)
+    --- 如果 term buffer 存在, 但是 window 不存在:
+    --- 先 wipeout term buffer, 然后创建一个新的 term window 加载 scratch buffer.
+    vim.cmd('bwipeout! '..term_obj._bufnr)
+    term_obj._bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
+    win_id = __open_term_win(term_obj)
   end
 
   return win_id
@@ -219,7 +206,7 @@ M.new = function(opts)
       return
     end
 
-    local win_id = __enter_term_win(my_term)
+    local win_id = __prepare_term_win(my_term)
 
     --- VVI: autocmd 放在这里运行主要是为了保证获取到 bufnr.
     __autocmd_jobdone(my_term)
@@ -239,7 +226,9 @@ M.new = function(opts)
 
   --- 终止 job, 会触发 jobdone.
   my_term.stop = function()
-    vim.fn.jobstop(my_term._job_id)
+    if my_term._job_id then
+      vim.fn.jobstop(my_term._job_id)
+    end
   end
 
   my_term.open_win = function()
@@ -250,7 +239,7 @@ M.new = function(opts)
           error('vim cannot win_gotoid(' .. wins[1] .. ')')
         end
       else
-        __reload_exist_term_buffer(my_term)
+        __open_term_win(my_term)
       end
       return true
     end
@@ -309,7 +298,7 @@ M.open_all = function()
     if __term_buf_exist(term_obj) then
       local term_wins = vim.fn.getbufinfo(term_obj._bufnr)[1].windows
       if #term_wins < 1 then
-        __reload_exist_term_buffer(term_obj)
+        __open_term_win(term_obj)
       end
     end
   end
