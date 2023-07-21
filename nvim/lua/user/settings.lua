@@ -496,7 +496,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
         --vim.cmd([[silent !mkdir -p ]] .. vim.go.undodir)
         local result = vim.fn.system('mkdir -p '.. vim.go.undodir)
         if vim.v.shell_error ~= 0 then
-          Notify(result, "ERROR")
+          Notify(vim.trim(result), "ERROR")
           return
         end
       end

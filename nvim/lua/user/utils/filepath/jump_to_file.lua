@@ -82,7 +82,7 @@ local function parse_filepath(content, ignore_matchstr)
     filepath = matchstr_filepath(content)
   end
 
-  local fp = vim.split(vim.fn.trim(filepath), ":")
+  local fp = vim.split(vim.trim(filepath), ":", {trimempty=false})
 
   --- file, lnum, col 都不能为 nil
   local file = fp[1] or ''
@@ -133,7 +133,7 @@ end
 local function system_open(filepath)
   local result = vim.fn.system('open "' .. filepath .. '"')
   if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
-    Notify("system open error: " .. result, "ERROR")
+    Notify(vim.trim(result), "ERROR")
   end
 end
 

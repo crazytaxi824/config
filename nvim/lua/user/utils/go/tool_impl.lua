@@ -29,15 +29,12 @@ M.go_impl = function(arglist)
   vim.notify(sh_cmd)
   local result = vim.fn.system(sh_cmd)
   if vim.v.shell_error ~= 0 then
-    Notify(result,"ERROR")
+    Notify(vim.trim(result),"ERROR")
     return
   end
 
   --- 删除 result 最后的空行.
-  local content = vim.split(result, '\n')
-  while content[#content] == '' do
-    table.remove(content, #content)
-  end
+  local content = vim.split(result, '\n', {trimempty=true})
 
   --- add 'type Foo struct{}'
   local msg = vim.list_extend({"", "type " .. arglist[1] .. " struct{}", ""}, content)

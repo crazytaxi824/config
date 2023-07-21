@@ -259,7 +259,7 @@ local function my_rg_picker(opts)
     if result == "" then
       vim.notify("Rg: no result found", vim.log.levels.WARN)
     else
-      Notify(result, "ERROR")
+      Notify(vim.trim(result), "ERROR")
     end
     return
   end
