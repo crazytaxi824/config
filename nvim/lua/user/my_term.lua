@@ -30,7 +30,9 @@ local default_opts = {
   on_init = nil,  -- func(term), new()
   on_open = nil,  -- func(term), BufWinEnter
   on_close = nil, -- func(term), BufWinLeave
-  on_exit = nil,  -- func(term), TermClose, jobstop()
+  on_stdout = nil, -- func(term, jobid, data, event)
+  on_stderr = nil, -- func(term, jobid, data, event)
+  on_exit = nil,   -- func(term), TermClose, jobstop()
   before_exec = nil, -- func(term), run() before exec, 可以用检查/修改设置.
   after_exec = nil,  -- func(term), run() after exec, 不等待 jobdone. NOTE: 可用于 goto previous window.
 
@@ -73,21 +75,21 @@ end
 
 --- 根据 terminal bufnr 来触发 autocmd ------------------------------------------------------------- {{{
 local function __autocmd_callback(term_obj)
-  vim.api.nvim_create_autocmd("TermClose", {
-    buffer = term_obj._bufnr,
-    callback = function(params)
-      if term_obj.on_exit then
-        term_obj.on_exit(term_obj)
-      end
-
-      if term_obj.jobdone == 'exit' then
-        --- VVI: 必须使用 silent 否则可能因为重复 wipeout buffer 而报错.
-        vim.cmd('silent! bwipeout! ' .. params.buf)
-      elseif term_obj.jobdone == 'stopinsert' then
-        vim.cmd('stopinsert')
-      end
-    end
-  })
+  -- vim.api.nvim_create_autocmd("TermClose", {
+  --   buffer = term_obj._bufnr,
+  --   callback = function(params)
+  --     if term_obj.on_exit then
+  --       term_obj.on_exit(term_obj)
+  --     end
+  --
+  --     if term_obj.jobdone == 'exit' then
+  --       --- VVI: 必须使用 silent 否则可能因为重复 wipeout buffer 而报错.
+  --       vim.cmd('silent! bwipeout! ' .. params.buf)
+  --     elseif term_obj.jobdone == 'stopinsert' then
+  --       vim.cmd('stopinsert')
+  --     end
+  --   end
+  -- })
 
   --- NOTE: 第一次运行 terminal 时触发 TermOpen, 但不会触发 BufWinEnter.
   --- 关闭 terminal window 之后再打开时触发 BufWinEnter, 但不会触发 TermOpen.
@@ -127,7 +129,41 @@ local function __exec_cmd(term_obj, term_win_id)
   end
 
   --- 使用 termopen() 开打 terminal
-  term_obj._job_id = vim.fn.termopen(term_obj.cmd .. name_tag  .. term_obj.id)
+  term_obj._job_id = vim.fn.termopen(term_obj.cmd .. name_tag  .. term_obj.id, {
+    on_stdout = function(job_id, data, event)  -- event 是 'stdout'
+      vim.api.nvim_buf_call(term_obj._bufnr, function()
+        local info = vim.api.nvim_get_mode()
+        if info and (info.mode == "n" or info.mode == "nt") then vim.cmd("normal! G") end
+      end)
+      if term_obj.on_stdout then
+        term_obj.on_stdout(term_obj, job_id, data, event)
+      end
+    end,
+
+    on_stderr = function(job_id, data, event)  -- event 是 'stdout'
+      vim.print(job_id, data, event)
+      vim.api.nvim_buf_call(term_obj._bufnr, function()
+        local info = vim.api.nvim_get_mode()
+        if info and (info.mode == "n" or info.mode == "nt") then vim.cmd("normal! G") end
+      end)
+      if term_obj.on_stderr then
+        term_obj.on_stderr(term_obj, job_id, data, event)
+      end
+    end,
+
+    on_exit = function(job_id, exit_code, event)  -- event 是 'exit'
+      if term_obj.on_exit then
+        term_obj.on_exit(term_obj, job_id, exit_code, event)
+      end
+
+      if term_obj.jobdone == 'exit' then
+        --- VVI: 必须使用 silent 否则手动删除 buffer 时会触发 TermClose, 导致重复 wipeout buffer 而报错.
+        vim.cmd('silent! bwipeout! ' .. term_obj._bufnr)
+      elseif term_obj.jobdone == 'stopinsert' then
+        vim.cmd('stopinsert')
+      end
+    end
+  })
 
   --- callback
   if term_obj.after_exec then
