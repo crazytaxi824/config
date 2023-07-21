@@ -6,6 +6,11 @@
 
 --- 原理: nvim_create_buf() -> <cmd>botright sbuffer bufnr -> win_gotoid(win_id) -> termopen(cmd)
 
+--- TODO:
+--- jobstart() -> termopen()
+--- auto_scroll
+--- on_stdout, on_stderr
+
 local M = {}
 
 local global_my_term_cache = {}
