@@ -33,7 +33,7 @@ vim.api.nvim_create_autocmd('TermOpen', {
     vim.wo[curr_win_id].relativenumber = false
     vim.wo[curr_win_id].signcolumn = "no"
   end,
-  desc = "filepath highlight",
+  desc = "highlight filepath in terminal window",
 })
 
 --- NOTE: 这里是保证 terminal hidden 之后, 再次打开时显示 filepath

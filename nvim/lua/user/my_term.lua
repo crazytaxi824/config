@@ -23,18 +23,19 @@ local default_opts = {
   id = 1,  -- v:count1, 保证每个 id 只和一个 bufnr 对应
   cmd = vim.go.shell,  -- 相当于 os.getenv('SHELL')
 
-  startinsert = nil, -- true | false, 第一次 run() 的时候触发 startinsert, 在 goto previous window 的情况下不适用.
-  jobdone = nil,  -- 'exit' | 'stopinsert'
-
   --- callback function
   on_init = nil,  -- func(term), new()
   on_open = nil,  -- func(term), BufWinEnter
   on_close = nil, -- func(term), BufWinLeave
-  on_stdout = nil, -- func(term, jobid, data, event)
-  on_stderr = nil, -- func(term, jobid, data, event)
-  on_exit = nil,   -- func(term), TermClose, jobstop()
-  before_exec = nil, -- func(term), run() before exec, 可以用检查/修改设置.
-  after_exec = nil,  -- func(term), run() after exec, 不等待 jobdone. NOTE: 可用于 goto previous window.
+  on_stdout = nil, -- func(term, jobid, data, event), 可用于 auto_scroll.
+  on_stderr = nil, -- func(term, jobid, data, event), 可用于 auto_scroll.
+  on_exit = nil,   -- func(term, job_id, exit_code, event), TermClose, jobstop(), 可用于 `:silent! bwipeout! term_bufnr` ...
+  before_exec = nil, -- func(term), run() before exec, 可以用检查/修改设置, `:stopinsert` ...
+  after_exec = nil,  -- func(term), run() after exec, 不等待 jobdone. NOTE: 可用于 win_gotoid(prev_win), `:startinsert` ...
+
+  startinsert = nil, -- true | false, 在 before_exec() 之前触发.
+  jobdone = nil,  -- 'exit' | 'stopinsert', on_exit() 时触发, 执行 `:silent! bwipeout! term_bufnr`
+  auto_scroll = true,  -- goto bottom of the terminal. 会影响 :startinsert
 
   --- private property, should not be readonly.
   _bufnr = nil,
@@ -77,9 +78,12 @@ end
 local function __autocmd_callback(term_obj)
   --- NOTE: 第一次运行 terminal 时触发 TermOpen, 但不会触发 BufWinEnter.
   --- 关闭 terminal window 之后再打开时触发 BufWinEnter, 但不会触发 TermOpen.
+  -- local g_id = vim.api.nvim_create_augroup('my_term_' .. term_obj.id, {clear=true})
   vim.api.nvim_create_autocmd({"TermOpen", "BufWinEnter"}, {
+    -- group = g_id,
     buffer = term_obj._bufnr,
     callback = function(params)
+      print(params.event)
       if term_obj.on_open then
         term_obj.on_open(term_obj)
       end
@@ -87,6 +91,7 @@ local function __autocmd_callback(term_obj)
   })
 
   vim.api.nvim_create_autocmd("BufWinLeave", {
+    -- group = g_id,
     buffer = term_obj._bufnr,
     callback = function(params)
       --- persist window height
@@ -107,23 +112,31 @@ local function __exec_cmd(term_obj)
     term_obj.before_exec(term_obj)
   end
 
+  if term_obj.startinsert then
+    vim.cmd('startinsert')
+  end
+
   --- 使用 termopen() 开打 terminal
   term_obj._job_id = vim.fn.termopen(term_obj.cmd .. name_tag  .. term_obj.id, {
     on_stdout = function(job_id, data, event)  -- event 是 'stdout'
       vim.api.nvim_buf_call(term_obj._bufnr, function()
-        local info = vim.api.nvim_get_mode()
-        if info and (info.mode == "n" or info.mode == "nt") then vim.cmd("normal! G") end
+        if term_obj.auto_scroll then
+          local info = vim.api.nvim_get_mode()
+          if info and (info.mode == "n" or info.mode == "nt") then vim.cmd("normal! G") end
+        end
       end)
       if term_obj.on_stdout then
         term_obj.on_stdout(term_obj, job_id, data, event)
       end
     end,
 
-    on_stderr = function(job_id, data, event)  -- event 是 'stdout'
+    on_stderr = function(job_id, data, event)  -- event 是 'stderr'
       vim.print(job_id, data, event)
       vim.api.nvim_buf_call(term_obj._bufnr, function()
-        local info = vim.api.nvim_get_mode()
-        if info and (info.mode == "n" or info.mode == "nt") then vim.cmd("normal! G") end
+        if term_obj.auto_scroll then
+          local info = vim.api.nvim_get_mode()
+          if info and (info.mode == "n" or info.mode == "nt") then vim.cmd("normal! G") end
+        end
       end)
       if term_obj.on_stderr then
         term_obj.on_stderr(term_obj, job_id, data, event)
