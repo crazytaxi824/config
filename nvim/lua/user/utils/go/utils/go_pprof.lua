@@ -45,6 +45,7 @@ end
 
 M.autocmd_shutdown_all_jobs = function(job, bufnr)
   --- jobstop() all jobs after this buffer removed.
+  --- NOTE: 这里使用 group_id 是为了避免多次重复设置同一个 autocmd.
   --- NOTE: 这里不能用 BufDelete, 因为 terminal 本来就不在 buflist 中, 所以不会触发 BufDelete.
   local group_id = vim.api.nvim_create_augroup("my_term_job_" .. job, {clear = true})
   vim.api.nvim_create_autocmd("BufWipeout", {
@@ -80,12 +81,12 @@ local function select_pprof(job)
 end
 
 --- create :GoPprof command & <F6> keymap
-M.set_cmd_and_keymaps = function(job)
+M.set_cmd_and_keymaps = function(job, term_bufnr)
   --- user command
-  vim.api.nvim_buf_create_user_command(0, 'GoPprof', function() select_pprof(job) end, {bang=true})
+  vim.api.nvim_buf_create_user_command(term_bufnr, 'GoPprof', function() select_pprof(job) end, {bang=true})
 
   --- keymap
-  vim.api.nvim_buf_set_keymap(0, 'n', '<F6>', '', {
+  vim.api.nvim_buf_set_keymap(term_bufnr, 'n', '<F6>', '', {
     noremap = true,
     silent = true,
     callback = function() select_pprof(job) end,
