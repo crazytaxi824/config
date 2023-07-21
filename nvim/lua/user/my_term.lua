@@ -45,16 +45,15 @@ end
 local function __find_exist_term_win()
   local win_id = -1
   for _, wi in ipairs(vim.fn.getwininfo()) do
-    if wi.terminal == 1
+    if wi.terminal == 1  -- is a terminal window
+      and wi.winid > win_id  -- get last win_id
       and string.match(vim.api.nvim_buf_get_name(wi.bufnr), 'term://.*' .. name_tag .. '%d+')  --- it is my_term
-      and wi.winid > win_id
     then
-      win_id = wi.winid
+      win_id = wi.winid  -- cache win_id
     end
   end
-  if win_id < 0 then
-    return nil
-  else
+
+  if win_id > 0 then
     return win_id
   end
 end
