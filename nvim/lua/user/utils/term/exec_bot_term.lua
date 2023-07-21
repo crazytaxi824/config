@@ -29,10 +29,9 @@ M.exec = function(cmd, on_exit_fn)
   --- 缓存执行 _Exec() 的 window id
   local exec_win_id = vim.api.nvim_get_current_win()
 
-  --- 该 terminal open 的时候 goto previous window.
+  --- toggleterm 中 startinsert 是全局设置, 无法为每一个 term 单独设置, 只能在这里 stopinsert.
   M.exec_bot_term.on_open = function()
     vim.cmd('stopinsert')
-    vim.fn.win_gotoid(exec_win_id)
   end
 
   --- NOTE: callback 不存在的时候 on_exit 就会清除, 相当于: on_exit = nil

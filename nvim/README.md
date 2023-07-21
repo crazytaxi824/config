@@ -559,6 +559,15 @@ vim.lsp.buf.format({
   ...ack/packer/start/which-key.nvim/lua/which-key/health.lua:14: in function 'check'
   [string "luaeval()"]:1: in main chunk
 
+E5108: Error executing lua ...al/share/nvim/lazy/which-key.nvim/lua/which-key/view.lua:137: Expected Lua number
+stack traceback:
+        [C]: in function 'nvim_win_get_height'
+        ...al/share/nvim/lazy/which-key.nvim/lua/which-key/view.lua:137: in function 'scroll'
+        ...al/share/nvim/lazy/which-key.nvim/lua/which-key/view.lua:324: in function 'on_keys'
+        ...al/share/nvim/lazy/which-key.nvim/lua/which-key/view.lua:254: in function 'open'
+        ...al/share/nvim/lazy/which-key.nvim/lua/which-key/init.lua:49: in function 'show'
+        [string ":lua"]:1: in main chunk
+
 ### https://github.com/golang/go/issues/50750, gopls, workspace `go.work` lsp.log 中报错:
 
 - stderr: go: finding module for package github.com/my/foo\nbar/src imports\n\tgithub.com/my/foo: cannot find module providing package github.com/my/foo: module lookup disabled by GOPROXY=off\n\n"

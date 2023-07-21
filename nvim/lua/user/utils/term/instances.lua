@@ -34,7 +34,7 @@ M.toggle_all_my_terms = function()
     --- 如果 term.bufnr 是 terminal 正在使用的 buffer number.
     --- 如果 term 被 wipeout, NOTE: term.bufnr 不会被重置为 nil.
     --- 如果 term 被 wipeout 又被重新打开, 则会更新 term.bufnr.
-    if term.bufnr and vim.fn.bufexists(term.bufnr) == 1 then
+    if term.bufnr and vim.api.nvim_buf_is_valid(term.bufnr) then
       if term:is_open() then
         local wins = vim.fn.getbufinfo(term.bufnr)[1].windows
         vim.list_extend(opened_terms_wins, wins)

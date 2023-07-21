@@ -99,7 +99,7 @@ local function go_test_single(testfn_name, opt)
   local on_exit = function(term, job)
     --- :GoPprof command
     if vim.tbl_contains({'cpu', 'mem', 'mutex', 'block', 'trace'}, opt.flag) then
-      go_utils.go_pprof.set_cmd_and_keymaps(job)
+      go_utils.go_pprof.set_cmd_and_keymaps(job, term.bufnr)
     end
 
     if flag_cmd.suffix and flag_cmd.suffix ~= '' then

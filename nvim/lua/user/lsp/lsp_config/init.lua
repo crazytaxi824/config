@@ -128,7 +128,7 @@ for lsp_svr, v in pairs(lsp_servers_map) do
       --- 检查 lsp tools 是否安装
       require('user.utils.check_tools').check(v, {title="LSP_config"})
     end,
-    desc = "setup LSP based on FileType",
+    desc = "LSP: setup LSP based on FileType",
   })
 end
 
@@ -147,7 +147,7 @@ vim.api.nvim_create_autocmd("FileType", {
       end
     end
   end,
-  desc = "detach previous LSP when `set filetype=xxx`",
+  desc = "LSP: detach previous LSP when `set filetype=xxx`",
 })
 
 

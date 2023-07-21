@@ -33,7 +33,7 @@ vim.api.nvim_create_autocmd('TermOpen', {
     vim.wo[curr_win_id].relativenumber = false
     vim.wo[curr_win_id].signcolumn = "no"
   end,
-  desc = "filepath highlight",
+  desc = "terminal: highlight filepath in terminal window",
 })
 
 --- NOTE: 这里是保证 terminal hidden 之后, 再次打开时显示 filepath
@@ -43,7 +43,7 @@ vim.api.nvim_create_autocmd('BufWinEnter', {
     local curr_win_id = vim.api.nvim_get_current_win()
     fp.highlight(params.buf, curr_win_id)
   end,
-  desc = "filepath highlight",
+  desc = "terminal: filepath highlight",
 })
 
 --- VISIAL 模式跳转文件 ----------------------------------------------------------------------------

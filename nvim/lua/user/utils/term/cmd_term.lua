@@ -13,9 +13,9 @@ M.h3_term = Terminal:new({count = 3})
 M.h4_term = Terminal:new({count = 4})
 M.h5_term = Terminal:new({count = 5})
 M.h6_term = Terminal:new({count = 6})
-M.v7_term = Terminal:new({count = 7, direction = "vertical"})
-M.v8_term = Terminal:new({count = 8, direction = "vertical"})
-M.v9_term = Terminal:new({count = 9, direction = "vertical"})
+M.v7_term = Terminal:new({count = 7})
+M.v8_term = Terminal:new({count = 8})
+M.v9_term = Terminal:new({count = 9})
 
 --- node -----------------------------------------------------------------------
 M.node_term = Terminal:new({

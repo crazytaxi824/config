@@ -79,7 +79,7 @@ vim.api.nvim_create_autocmd('OptionSet', {
       del_cursor_move_in_wrap(params.buf)  -- 删除 keymaps 设置
     end
   end,
-  desc = "set (no)wrap triggers keymaps change, eg: <UP>, <HOME> ...",
+  desc = "wrap: set (no)wrap triggers keymaps change, eg: <UP>, <HOME> ...",
 })
 
 --- :bdelete/:bwipeout 之后再次打开已经设置为 wrap 的文件时, 自动设置为 wrap.
@@ -93,7 +93,7 @@ vim.api.nvim_create_autocmd('BufEnter', {
       set_cursor_move_in_wrap(params.buf)  -- 设置 keymaps
     end
   end,
-  desc = "set (no)wrap based on cached results",
+  desc = "wrap: set (no)wrap based on cached results",
 })
 
 --- :write 保存 [No Name] file 时, 如果文件是 wrap, 则 cache 到 list 中.
@@ -104,7 +104,7 @@ vim.api.nvim_create_autocmd('BufWritePre', {
       wrap_list.add(params.buf)  -- 加入到 list
     end
   end,
-  desc = "[No Name] file cache to wrap_list",
+  desc = "wrap: [No Name] file cache to wrap_list",
 })
 
 --- 使用 command 手动切换 wrap 设置.

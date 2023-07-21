@@ -23,6 +23,7 @@ M.exec = function(cmd)
   --- NOTE: 这一步放在 cmd 生成的后面, 防止 shutdown() 导致 buffer 意外改变.
   M.exec_float_term:shutdown()
 
+  --- toggleterm 中 startinsert 是全局设置, 无法为每一个 term 单独设置, 只能在这里 stopinsert.
   M.exec_float_term.on_open = function()
     vim.cmd('stopinsert')
   end
