@@ -15,7 +15,16 @@ local cache_jobs = {}  -- 缓存 job_id, map-table: [term_job_id] = {job_id, ...
 M.job_exec = function (cmd, term_job)
   --- 执行 cmd
   --- `:help channel-callback` for on_stdout() & on_stderr()
-  local j_id = vim.fn.jobstart(cmd)
+  local scratch_bufnr = vim.api.nvim_create_buf(false, true)
+
+  local j_id
+  vim.api.nvim_buf_call(scratch_bufnr, function()
+    j_id = vim.fn.termopen(cmd, {
+      on_exit = function()
+        vim.api.nvim_buf_delete(scratch_bufnr, {force=true})
+      end
+    })
+  end)
 
   --- 缓存当前 job_id 到 term_job_id
   if cache_jobs[term_job] then
