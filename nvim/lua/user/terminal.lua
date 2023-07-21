@@ -9,12 +9,18 @@ local fp = require('user.utils.filepath')
 vim.api.nvim_create_autocmd('TermOpen', {
   pattern = {"term://*"},
   callback = function(params)
-    local curr_win_id = vim.api.nvim_get_current_win()
+    local wins = vim.fn.getbufinfo(params.buf)[1].windows
+    for _, win_id in ipairs(wins) do
+      --- highlight filepath in terminal
+      fp.highlight(params.buf, win_id)
 
-    --- highlight filepath in terminal -----------------------------------------
-    fp.highlight(params.buf, curr_win_id)
+      --- 设置 terminal 不显示行号
+      vim.wo[win_id].number = false
+      vim.wo[win_id].relativenumber = false
+      vim.wo[win_id].signcolumn = "no"
+    end
 
-    --- 设置 keymaps -----------------------------------------------------------
+    --- 设置 keymaps
     local function opts(desc)
       return {
         buffer = params.buf,  -- local to Terminal buffer
@@ -23,15 +29,11 @@ vim.api.nvim_create_autocmd('TermOpen', {
         desc = desc,
       }
     end
+
     --- 跳转到 cursor <cWORD> 文件.
     vim.keymap.set('n', '<S-CR>', function() fp.n_jump() end, opts("Jump to file"))
     --- VVI: <ESC> 进入 terminal Normal 模式.
     vim.keymap.set('t', '<ESC>', '<C-\\><C-n>', opts("Ternimal: Normal Mode"))
-
-    --- 设置 terminal 不显示行号 -----------------------------------------------
-    vim.wo[curr_win_id].number = false
-    vim.wo[curr_win_id].relativenumber = false
-    vim.wo[curr_win_id].signcolumn = "no"
   end,
   desc = "terminal: highlight filepath in terminal window",
 })
@@ -40,8 +42,11 @@ vim.api.nvim_create_autocmd('TermOpen', {
 vim.api.nvim_create_autocmd('BufWinEnter', {
   pattern = {"term://*"},
   callback = function(params)
-    local curr_win_id = vim.api.nvim_get_current_win()
-    fp.highlight(params.buf, curr_win_id)
+    local wins = vim.fn.getbufinfo(params.buf)[1].windows
+    for _, win_id in ipairs(wins) do
+      --- highlight filepath in terminal
+      fp.highlight(params.buf, win_id)
+    end
   end,
   desc = "terminal: filepath highlight",
 })

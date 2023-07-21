@@ -297,11 +297,13 @@ local fp = require('user.utils.filepath')
 --- 给 dap-repl 添加 filepath highlight, 这里不能使用 "FileType",
 --- 因为 "FileType" 只能触发一次, 而 matchadd() 每次执行后只会影响当前窗口,
 --- 所以如果多个窗口显示 dap-repl 时, 只有一个窗口会有 highlight.
-vim.api.nvim_create_autocmd('BufEnter', {
+vim.api.nvim_create_autocmd('BufWinEnter', {
   pattern = {"\\[dap-repl\\]"},
   callback = function(params)
-    local curr_win_id = vim.api.nvim_get_current_win()
-    fp.highlight(params.buf, curr_win_id)
+    local wins = vim.fn.getbufinfo(params.buf)[1].windows
+    for _, win_id in ipairs(wins) do
+      fp.highlight(params.buf, win_id)
+    end
   end,
   desc = "dap: filepath highlight",
 })
