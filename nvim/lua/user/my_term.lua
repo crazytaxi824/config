@@ -66,7 +66,7 @@ end
 
 --- 判断 terminal bufnr 是否存在, 是否有效.
 local function __term_buf_exist(term_obj)
-  if term_obj._bufnr and vim.fn.bufexists(term_obj._bufnr) == 1 then
+  if term_obj._bufnr and vim.api.nvim_buf_is_valid(term_obj._bufnr) then
     return true
   end
 end
@@ -266,7 +266,7 @@ M.new = function(opts)
 
   --- terminate 之后, 如果要使用相同 id 的 terminal 需要重新 New()
   my_term.__terminate = function()
-    if my_term._bufnr and vim.fn.bufexists(my_term._bufnr) == 1 then
+    if my_term._bufnr and vim.api.nvim_buf_is_valid(my_term._bufnr) then
       vim.cmd('bwipeout! ' .. my_term._bufnr)
     end
 

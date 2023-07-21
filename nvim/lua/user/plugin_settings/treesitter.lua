@@ -231,7 +231,7 @@ vim.api.nvim_create_autocmd("FileType", {
 --   --- VVI: 判断 bufnr 是否存在.
 --   --- 遇到的问题: WhichKey window 打开后很快关闭, 造成 error.
 --   --- 分析: 因为 defer_fn() 的原因, 指定的 buffer 有可能在打开后 N(ms) 内就被关闭了, 引起 error.
---   if vim.fn.bufexists(bufnr) == 0 then
+--   if not vim.api.nvim_buf_is_valid(bufnr) then
 --     return
 --   end
 --
