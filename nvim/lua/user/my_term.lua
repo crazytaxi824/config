@@ -75,22 +75,6 @@ end
 
 --- 根据 terminal bufnr 来触发 autocmd ------------------------------------------------------------- {{{
 local function __autocmd_callback(term_obj)
-  -- vim.api.nvim_create_autocmd("TermClose", {
-  --   buffer = term_obj._bufnr,
-  --   callback = function(params)
-  --     if term_obj.on_exit then
-  --       term_obj.on_exit(term_obj)
-  --     end
-  --
-  --     if term_obj.jobdone == 'exit' then
-  --       --- VVI: 必须使用 silent 否则可能因为重复 wipeout buffer 而报错.
-  --       vim.cmd('silent! bwipeout! ' .. params.buf)
-  --     elseif term_obj.jobdone == 'stopinsert' then
-  --       vim.cmd('stopinsert')
-  --     end
-  --   end
-  -- })
-
   --- NOTE: 第一次运行 terminal 时触发 TermOpen, 但不会触发 BufWinEnter.
   --- 关闭 terminal window 之后再打开时触发 BufWinEnter, 但不会触发 TermOpen.
   vim.api.nvim_create_autocmd({"TermOpen", "BufWinEnter"}, {
@@ -152,8 +136,8 @@ local function __exec_cmd(term_obj)
       end
 
       if term_obj.jobdone == 'exit' then
-        --- VVI: 必须使用 silent 否则手动删除 buffer 时会触发 TermClose, 导致重复 wipeout buffer 而报错.
-        vim.cmd('silent! bwipeout! ' .. term_obj._bufnr)
+        --- VVI: 必须使用 `:silent! bwipeout! bufnr` 否则手动删除 buffer 时会触发 TermClose, 导致重复 wipeout buffer 而报错.
+        pcall(vim.api.nvim_buf_delete, term_obj._bufnr, {force=true})
       elseif term_obj.jobdone == 'stopinsert' then
         vim.cmd('stopinsert')
       end
@@ -204,11 +188,11 @@ local function __prepare_term_win(term_obj)
 
     --- 先 load scratch buffer, 再 wipeout 之前的 terminal buffer, 否则会导致 window close.
     vim.api.nvim_set_current_buf(term_obj._bufnr)  -- ':buffer term_obj._bufnr'
-    vim.cmd('bwipeout! '.. term_bufnr)
+    vim.api.nvim_buf_delete(term_bufnr, {force=true})
   else
     --- 如果 term buffer 存在, 但是 window 不存在:
     --- 先 wipeout term buffer, 然后创建一个新的 term window 加载 scratch buffer.
-    vim.cmd('bwipeout! '..term_obj._bufnr)
+    vim.api.nvim_buf_delete(term_obj._bufnr, {force=true})
     term_obj._bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
     win_id = __open_term_win(term_obj)
   end
@@ -322,7 +306,7 @@ M.new = function(opts)
   --- terminate 之后, 如果要使用相同 id 的 terminal 需要重新 New()
   my_term.__terminate = function()
     if my_term._bufnr and vim.api.nvim_buf_is_valid(my_term._bufnr) then
-      vim.cmd('bwipeout! ' .. my_term._bufnr)
+      vim.api.nvim_buf_delete(my_term._bufnr, {force=true})
     end
 
     --- clear global cache and delete terminal

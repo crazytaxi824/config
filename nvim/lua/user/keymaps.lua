@@ -51,13 +51,9 @@ local function wipeout_all_terminals()
 
   -- 获取所有 bufnr, 判断 bufname 是否匹配 term://*
   for bufnr = vim.fn.bufnr('$'), 1, -1 do
-    if string.match(vim.fn.bufname(bufnr), "^term://*") then
-      table.insert(buf_list, bufnr)
+    if vim.bo[bufnr].buftype == 'terminal' then
+      vim.api.nvim_buf_delete(bufnr, {force=true})
     end
-  end
-
-  if #buf_list > 0 then
-    vim.cmd('bw! ' .. table.concat(buf_list, ' '))  -- NOTE: 需要使用 '!' 强制结束 job, 并且关闭 term 窗口.
   end
 end
 -- -- }}}
