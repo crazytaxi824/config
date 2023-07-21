@@ -44,7 +44,7 @@ M.fn = function(client, bufnr)
         -- -- }}}
         custom_lsp_req.doc.highlight(params.buf)
       end,
-      desc = "documentHighlight",
+      desc = "LSP: documentHighlight",
     })
 
     --- 清除 clear documentHighlight
@@ -57,7 +57,7 @@ M.fn = function(client, bufnr)
       callback = function(params)
         custom_lsp_req.doc.clear(params.buf)
       end,
-      desc = "clear documentHighlight",
+      desc = "LSP: clear documentHighlight",
     })
 
     --- delete documentHighlight augroup
@@ -68,7 +68,7 @@ M.fn = function(client, bufnr)
       callback = function(params)
         vim.api.nvim_del_augroup_by_id(group_id)
       end,
-      desc = "delete documentHighlight augroup",
+      desc = "LSP: delete documentHighlight augroup",
     })
   end
 end

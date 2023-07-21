@@ -23,7 +23,7 @@ local function wk_reg(key_reg)
     --   nowait = false, -- use `nowait` when creating keymaps
     -- }
     -- -- }}}
-      require("which-key").register(key_reg.key_desc, key_reg.opts)
+    require("which-key").register(key_reg.key_desc, key_reg.opts)
   else
     --- cache key register for which-key.
     table.insert(keymap_cache, key_reg)
@@ -39,9 +39,10 @@ vim.api.nvim_create_autocmd("User", {
       require("which-key").register(key_reg.key_desc, key_reg.opts)
     end
 
-    loaded_whichkey = 1
-    keymap_cache = {}
-  end
+    loaded_whichkey = 1  -- 记录 which_key is already loaded.
+    keymap_cache = {}  -- 清空缓存.
+  end,
+  desc = "which-key: register cached keymaps"
 })
 
 --- keymap_list: { mode, key, rhs, opts, description }

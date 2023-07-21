@@ -87,7 +87,8 @@ local function __autocmd_callback(term_obj)
       if term_obj.on_open then
         term_obj.on_open(term_obj)
       end
-    end
+    end,
+    desc = "my_term: on_open() callback",
   })
 
   vim.api.nvim_create_autocmd("BufWinLeave", {
@@ -100,14 +101,16 @@ local function __autocmd_callback(term_obj)
       if term_obj.on_close then
         term_obj.on_close(term_obj)
       end
-    end
+    end,
+    desc = "my_term: on_close() callback",
   })
 
   --- delete augroup
   vim.api.nvim_create_autocmd("BufWinLeave", {
     group = g_id,
     buffer = term_obj._bufnr,
-    callback = function(params) vim.api.nvim_del_augroup_by_id(g_id) end
+    callback = function(params) vim.api.nvim_del_augroup_by_id(g_id) end,
+    desc = "my_term: delete augroup by id",
   })
 end
 -- -- }}}

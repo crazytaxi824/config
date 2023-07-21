@@ -28,7 +28,7 @@ vim.api.nvim_create_autocmd("FileType", {
   pattern = {"go"},
   once = true,  -- VVI: Run check once only.
   callback = function() check_go_tools() end,
-  desc = "check go tools",
+  desc = "Go: check go tools",
 })
 
 

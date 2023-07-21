@@ -426,7 +426,8 @@ vim.api.nvim_create_autocmd({"BufWinEnter"}, {
     if vim.fn.isdirectory(vim.api.nvim_buf_get_name(params.buf)) == 1 then
       lazy.load({plugins = {"nvim-tree.lua"}})
     end
-  end
+  end,
+  desc = "Lazy: load nvim-tree.lua on condition",
 })
 
 

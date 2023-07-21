@@ -58,7 +58,7 @@ M.autocmd_shutdown_all_jobs = function(job, bufnr)
       --- delete augroup
       vim.api.nvim_del_augroup_by_id(group_id)
     end,
-    desc = 'delete all jobs when this buffer is wiped out',
+    desc = 'go_pprof: delete all jobs when this buffer is wiped out',
   })
 end
 
@@ -90,7 +90,7 @@ M.set_cmd_and_keymaps = function(job, term_bufnr)
     noremap = true,
     silent = true,
     callback = function() select_pprof(job) end,
-    desc = 'Go tool pprof/trace',
+    desc = 'go_pprof: Go tool pprof/trace',
   })
 
   --- info Keymap and Command setup

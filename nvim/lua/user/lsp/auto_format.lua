@@ -54,7 +54,7 @@ vim.api.nvim_create_autocmd('BufWritePre', {
   callback = function(params)
     lsp_format(params.buf)
   end,
-  desc = "Format file while saving",
+  desc = "LSP: format file while saving",
 })
 
 --- VVI: goimports-reviser 一定要在 goimports 后面执行 ---------------------------------------------
@@ -75,7 +75,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
     --- 文件写入后需要 checktime 刷新 buffer 内容.
     vim.cmd('checktime')
   end,
-  desc = "goimports-reviser organize imports",
+  desc = "Go: goimports-reviser organize imports",
 })
 
 

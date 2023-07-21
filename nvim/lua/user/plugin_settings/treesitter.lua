@@ -209,7 +209,7 @@ vim.api.nvim_create_autocmd("FileType", {
       Notify("run `:TSInstall " .. lang .. "` to install parser", "INFO", {title = "treesitter install", timeout = false})
     end
   end,
-  desc = "Check treesitter parser for filetypes"
+  desc = "treesitter: Check treesitter parser for filetypes"
 })
 -- -- }}}
 
