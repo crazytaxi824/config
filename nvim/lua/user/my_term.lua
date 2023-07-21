@@ -116,16 +116,11 @@ local function __autocmd_callback(term_obj)
 end
 -- -- }}}
 
---- terminal goto win_id 执行 command, 然后`可选择`是否要返回 previous window.
---- 返回 previous window 不等待 jobdone. eg: 开启 http 服务后直接返回 previous window.
-local function __exec_cmd(term_obj, term_win_id)
-  if not term_win_id or vim.fn.win_gotoid(term_win_id) == 0 then
-    error("term_win_id: " .. term_win_id .. " is not exist")
-  end
-
+--- 使用 termopen() 执行 cmd.
+local function __exec_cmd(term_obj)
   --- callback
   if term_obj.before_exec then
-    term_obj.before_exec(term_obj, term_win_id)
+    term_obj.before_exec(term_obj)
   end
 
   --- 使用 termopen() 开打 terminal
@@ -167,7 +162,7 @@ local function __exec_cmd(term_obj, term_win_id)
 
   --- callback
   if term_obj.after_exec then
-    term_obj.after_exec(term_obj, term_win_id)
+    term_obj.after_exec(term_obj)
   end
 end
 
@@ -251,12 +246,36 @@ M.new = function(opts)
       return
     end
 
-    local win_id = __prepare_term_win(my_term)
+    local term_win_id = __prepare_term_win(my_term)
 
     --- VVI: 以下函数放在后面运行主要是为了保证获取到 bufnr.
     __autocmd_callback(my_term)
     __keymap_resize(my_term._bufnr)
-    __exec_cmd(my_term, win_id)
+
+    if term_win_id and vim.fn.win_gotoid(term_win_id) == 1 then
+      __exec_cmd(my_term)
+    else
+      error("term_win_id: " .. term_win_id .. " is not exist")
+    end
+  end
+
+  --- unlisted scratch buffer termopen(cmd)
+  my_term.spawn = function()
+    if my_term.status() == -1 then
+      Notify("job_id is still running, please use `term.stop()` first.", "WARN", {title="my_term"})
+      return
+    end
+
+    --- 如果 term bufnr 存在则删除, 因为 termopen() 不能用在 modified buffer 上.
+    if __term_buf_exist(my_term) then
+      vim.api.nvim_buf_delete(my_term._bufnr, {force=true})
+    end
+
+    --- 生成一个新的 scratch buffer 用于执行 termopen()
+    my_term._bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
+    vim.api.nvim_buf_call(my_term._bufnr, function()
+      __exec_cmd(my_term)
+    end)
   end
 
   --- 终止 job, 会触发 jobdone.
