@@ -100,7 +100,7 @@ local function __autocmd_callback(term_obj)
 end
 -- -- }}}
 
---- 使用 termopen() 执行 cmd.
+--- 使用 termopen() 执行 cmd ----------------------------------------------------------------------- {{{
 local function __exec_cmd(term_obj)
   --- callback
   if term_obj.before_exec then
@@ -149,6 +149,7 @@ local function __exec_cmd(term_obj)
     term_obj.after_exec(term_obj)
   end
 end
+-- -- }}}
 
 --- 创建一个 window 用于 terminal 运行 ------------------------------------------------------------- {{{
 --- creat: 创建一个 window, load scratch buffer 用于执行 termopen()
@@ -212,7 +213,7 @@ M.new = function(opts)
   --- 已经存在的 terminal
   if global_my_term_cache[opts.id] then
     vim.notify('terminal instance is already exist, please use function "get_term_by_id()"', vim.log.levels.WARN)
-    return global_my_term_cache[opts.id]
+    return
   end
   -- local my_term = vim.tbl_deep_extend('force', global_my_term_cache[opts.id] or {}, opts)
 
