@@ -32,7 +32,6 @@ M.exec = function(cmd, on_exit_fn)
   --- 该 terminal open 的时候 goto previous window.
   M.exec_bot_term.on_open = function()
     vim.cmd('stopinsert')
-    vim.fn.win_gotoid(exec_win_id)
   end
 
   --- NOTE: callback 不存在的时候 on_exit 就会清除, 相当于: on_exit = nil
