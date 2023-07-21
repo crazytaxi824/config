@@ -78,9 +78,9 @@ end
 local function __autocmd_callback(term_obj)
   --- NOTE: 第一次运行 terminal 时触发 TermOpen, 但不会触发 BufWinEnter.
   --- 关闭 terminal window 之后再打开时触发 BufWinEnter, 但不会触发 TermOpen.
-  -- local g_id = vim.api.nvim_create_augroup('my_term_' .. term_obj.id, {clear=true})
+  local g_id = vim.api.nvim_create_augroup('my_term_' .. term_obj.id, {clear=true})
   vim.api.nvim_create_autocmd({"TermOpen", "BufWinEnter"}, {
-    -- group = g_id,
+    group = g_id,
     buffer = term_obj._bufnr,
     callback = function(params)
       print(params.event)
@@ -91,7 +91,7 @@ local function __autocmd_callback(term_obj)
   })
 
   vim.api.nvim_create_autocmd("BufWinLeave", {
-    -- group = g_id,
+    group = g_id,
     buffer = term_obj._bufnr,
     callback = function(params)
       --- persist window height
@@ -101,6 +101,13 @@ local function __autocmd_callback(term_obj)
         term_obj.on_close(term_obj)
       end
     end
+  })
+
+  --- delete augroup
+  vim.api.nvim_create_autocmd("BufWinLeave", {
+    group = g_id,
+    buffer = term_obj._bufnr,
+    callback = function(params) vim.api.nvim_del_augroup_by_id(g_id) end
   })
 end
 -- -- }}}
