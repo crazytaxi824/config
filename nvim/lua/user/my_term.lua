@@ -172,7 +172,7 @@ local function __prepare_term_win(term_obj)
     term_obj._bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
 
     --- 先 load scratch buffer, 再 wipeout 之前的 terminal buffer, 否则会导致 window close.
-    vim.cmd('buffer ' .. term_obj._bufnr)
+    vim.api.nvim_set_current_buf(term_obj._bufnr)  -- ':buffer term_obj._bufnr'
     vim.cmd('bwipeout! '.. term_bufnr)
   else
     --- 如果 term buffer 存在, 但是 window 不存在:
