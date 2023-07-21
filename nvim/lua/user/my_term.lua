@@ -26,8 +26,8 @@ local default_opts = {
   on_open = nil,  -- func(term), BufWinEnter
   on_close = nil, -- func(term), BufWinLeave
   on_exit = nil,  -- func(term), TermClose, jobstop()
-  before_exec = nil, -- func(term), run() before exec
-  after_exec = nil,  -- func(term), run() after exec
+  before_exec = nil, -- func(term), run() before exec, 可以用检查/修改设置.
+  after_exec = nil,  -- func(term), run() after exec, 可用于 goto previous window.
 
   --- private property, should not be readonly.
   _bufnr = nil,
@@ -66,8 +66,8 @@ local function __term_buf_exist(term_obj)
   end
 end
 
---- 根据 terminal bufnr 来 wipeout terminal buffer.
-local function __autocmd_jobdone(term_obj)
+--- 根据 terminal bufnr 来触发 autocmd ------------------------------------------------------------- {{{
+local function __autocmd_callback(term_obj)
   vim.api.nvim_create_autocmd("TermClose", {
     buffer = term_obj._bufnr,
     callback = function(params)
@@ -76,53 +76,55 @@ local function __autocmd_jobdone(term_obj)
       end
 
       if term_obj.jobdone == 'exit' then
-        --- 必须使用 silent 否则可能因为重复 wipeout buffer 而报错.
+        --- VVI: 必须使用 silent 否则可能因为重复 wipeout buffer 而报错.
         vim.cmd('silent! bwipeout! ' .. params.buf)
       elseif term_obj.jobdone == 'stopinsert' then
         vim.cmd('stopinsert')
       end
     end
   })
-end
 
---- terminal window open/close 时的 autocmd
-local function __autocmd_open_close(term_obj)
-  vim.api.nvim_create_autocmd({"BufWinEnter", "BufWinLeave"}, {
+  vim.api.nvim_create_autocmd("BufWinEnter", {
     buffer = term_obj._bufnr,
     callback = function(params)
-      if params.event == "BufWinEnter" and term_obj.on_open then
+      if term_obj.on_open then
         term_obj.on_open(term_obj)
       end
+    end
+  })
 
-      if params.event == "BufWinLeave" then
-        --- persist window height
-        win_height = vim.api.nvim_win_get_height(vim.api.nvim_get_current_win())
+  vim.api.nvim_create_autocmd("BufWinLeave", {
+    buffer = term_obj._bufnr,
+    callback = function(params)
+      --- persist window height
+      win_height = vim.api.nvim_win_get_height(vim.api.nvim_get_current_win())
 
-        if term_obj.on_close then
-          term_obj.on_close(term_obj)
-        end
+      if term_obj.on_close then
+        term_obj.on_close(term_obj)
       end
     end
   })
 end
+-- -- }}}
 
 --- terminal goto win_id 执行 command, 然后`可选择`是否要返回 previous window.
 --- 返回 previous window 不等待 jobdone. eg: 开启 http 服务后直接返回 previous window.
-local function __exec_cmd(term_obj, term_win_id, prev_win_id)
-  if term_win_id and vim.fn.win_gotoid(term_win_id) == 1 then
-    --- 使用 termopen() 开打 terminal
-    local cmd = term_obj.cmd .. name_tag  .. term_obj.id
-    term_obj._job_id = vim.fn.termopen(cmd)
-
-    --- VVI: goto previous window 必须放在最后执行.
-    --- 如果需要 goto previous window 则不执行判 startinsert.
-    if prev_win_id and vim.fn.win_gotoid(prev_win_id) == 0 then
-      Notify("prev_win_id: `" .. prev_win_id .. "` is not exist", "WARN", {title="my_term"})
-    elseif not prev_win_id and term_obj.startinsert then
-      vim.cmd('startinsert')
-    end
-  else
+local function __exec_cmd(term_obj, term_win_id)
+  if not term_win_id or vim.fn.win_gotoid(term_win_id) == 0 then
     error("term_win_id: " .. term_win_id .. " is not exist")
+  end
+
+  --- callback
+  if term_obj.before_exec then
+    term_obj.before_exec(term_obj, term_win_id)
+  end
+
+  --- 使用 termopen() 开打 terminal
+  term_obj._job_id = vim.fn.termopen(term_obj.cmd .. name_tag  .. term_obj.id)
+
+  --- callback
+  if term_obj.after_exec then
+    term_obj.after_exec(term_obj, term_win_id)
   end
 end
 
@@ -199,28 +201,16 @@ M.new = function(opts)
     my_term.on_init(my_term)
   end
 
-  my_term.run = function(prev_win_id)
+  my_term.run = function()
     if my_term.status() == -1 then
       Notify("job_id is still running, please use `term.stop()` first.", "WARN", {title="my_term"})
       return
     end
 
     local win_id = __prepare_term_win(my_term)
-
-    --- VVI: autocmd 放在这里运行主要是为了保证获取到 bufnr.
-    __autocmd_jobdone(my_term)
-    __autocmd_open_close(my_term)
+    __autocmd_callback(my_term)  -- VVI: autocmd 放在后面运行主要是为了保证获取到 bufnr.
     __keymap_resize(my_term._bufnr)
-
-    if my_term.before_exec then
-      my_term.before_exec(my_term, win_id)
-    end
-
-    __exec_cmd(my_term, win_id, prev_win_id)
-
-    if my_term.after_exec then
-      my_term.after_exec(my_term, win_id)
-    end
+    __exec_cmd(my_term, win_id)
   end
 
   --- 终止 job, 会触发 jobdone.
