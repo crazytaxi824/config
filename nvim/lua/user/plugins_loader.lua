@@ -12,7 +12,7 @@ if not vim.loop.fs_stat(lazypath) then
     lazypath,
   })
   if vim.v.shell_error ~= 0 then
-    Notify(result, "ERROR")
+    Notify(vim.trim(result), "ERROR")
     return
   end
 end

@@ -252,7 +252,7 @@ set option
 ```lua
 local result = vim.fn.system(cmd)
 if vim.v.shell_error ~= 0 then
-  print(result)
+  print(vim.trim(result))
   return
 end
 

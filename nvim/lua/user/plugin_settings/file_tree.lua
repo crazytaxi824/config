@@ -170,7 +170,7 @@ local function git_discard_file_changes()
   if cmd then
     local result = vim.fn.system(cmd)
     if vim.v.shell_error ~= 0 then
-      vim.notify(result, vim.log.levels.ERROR)
+      vim.notify(vim.trim(result), vim.log.levels.ERROR)
     end
     vim.cmd('checktime')
   end
@@ -210,7 +210,7 @@ local function system_open()
   --- `open -R file` Reveals the file(s) in the Finder instead of opening them.
   local r3 = vim.fn.system('open -R "' .. node.absolute_path .. '"')
   if vim.v.shell_error ~= 0 then
-    Notify({r1, r2, r3}, "ERROR")
+    Notify({vim.trim(r1), vim.trim(r2), vim.trim(r3)}, "ERROR")
   end
 end
 -- -- }}}

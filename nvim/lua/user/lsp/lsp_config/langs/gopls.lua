@@ -16,7 +16,7 @@
 --
 --   local result = vim.fn.system('go env ' .. table.concat({...}, ' '))
 --   if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
---     Notify(result, "ERROR")
+--     Notify(vim.trim(result), "ERROR")
 --     return {}
 --   end
 --

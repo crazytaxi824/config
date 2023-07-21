@@ -133,7 +133,7 @@ end
 local function system_open(filepath)
   local result = vim.fn.system('open "' .. filepath .. '"')
   if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
-    Notify("system open error: " .. result, "ERROR")
+    Notify(vim.trim(result), "ERROR")
   end
 end
 

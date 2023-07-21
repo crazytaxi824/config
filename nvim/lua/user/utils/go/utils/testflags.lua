@@ -55,10 +55,7 @@ local pprof_dir = '/tmp/nvim/go_pprof/'
 --- mkdir when module required, NOTE: will run only once.
 local result = vim.fn.system('mkdir -p ' .. pprof_dir)
 if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
-  Notify(result, "ERROR")
-  return
--- else  -- DEBUG: 用
---   print('mkdir ppro_dir ok')
+  error(vim.trim(result))
 end
 
 local pprof_flags = ' -o ' .. pprof_dir .. 'pkg.test'  -- [pkg].test 可执行文件生成位置,

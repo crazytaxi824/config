@@ -29,7 +29,7 @@ M.go_impl = function(arglist)
   vim.notify(sh_cmd)
   local result = vim.fn.system(sh_cmd)
   if vim.v.shell_error ~= 0 then
-    Notify(result,"ERROR")
+    Notify(vim.trim(result),"ERROR")
     return
   end
 
