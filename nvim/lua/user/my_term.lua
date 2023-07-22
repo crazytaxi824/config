@@ -6,9 +6,6 @@
 
 --- 原理: nvim_create_buf() -> <cmd>botright sbuffer bufnr -> win_gotoid(win_id) -> termopen(cmd)
 
---- TODO:
---- setmetatable() 将 methods 和 private properties 放在 metatable 中, 如果被 tbl_deep_extend 则无法使用 methods.
---- tbl_deep_extend() 无法 extend metatable.
 
 local M = {}
 
@@ -189,7 +186,7 @@ end
 --- 创建一个 window 用于 terminal 运行 ------------------------------------------------------------- {{{
 --- creat: 创建一个 window, load scratch buffer 用于执行 termopen()
 --- load:  创建一个 window, load exist terminal buffer.
-local function __open_term_win(term_obj)
+local function __create_term_win(term_obj)
   local exist_win_id = __find_exist_term_win()
   if vim.fn.win_gotoid(exist_win_id) == 1 then
     --- at least 1 terminal window exist
@@ -207,10 +204,10 @@ end
 --- 进入指定的 terminal window. 用于 run() --------------------------------------------------------- {{{
 --- NOTE: buffer 一旦运行过 termopen() 就不能再次运行了, Can only call this function in an unmodified buffer.
 --- 所以需要删除旧的 bufnr 然后重新创建一个新的 scratch bufnr 给 termopen() 使用.
-local function __prepare_term_win(term_obj, old_term_bufnr)
+local function __open_term_win(term_obj, old_term_bufnr)
   --- 如果 old_term_bufnr 不存在: 创建一个新的 term window 用于加载 new term.bufnr
   if not __term_buf_exist(old_term_bufnr) then
-    return __open_term_win(term_obj)
+    return __create_term_win(term_obj)
   end
 
   --- 这里是为了 re-use term window
@@ -227,14 +224,15 @@ local function __prepare_term_win(term_obj, old_term_bufnr)
     --- 如果 old term buffer 存在, 但是 window 不存在:
     --- 先 wipeout old_term_bufnr, 再创建一个新的 term window 加载 new term.bufnr.
     vim.api.nvim_buf_delete(old_term_bufnr, {force=true})
-    win_id = __open_term_win(term_obj)
+    win_id = __create_term_win(term_obj)
   end
 
   return win_id
 end
 -- -- }}}
 
---- set all term:methods() to metatable for terminal object.
+--- NOTE: setmetatable() 将全部 term:methods() 放在 metatable 中, 如果 term 被 tbl_deep_extend() 则无法
+--- 使用 methods, 因为 tbl_deep_extend() 无法 extend metatable.
 local function metatable_funcs()
   local meta_funcs = {}
 
@@ -254,7 +252,7 @@ local function metatable_funcs()
     __autocmd_callback(self)
 
     --- 使用 term 之前的 window 或者创建一个新的 term window.
-    local term_win_id = __prepare_term_win(self, old_term_bufnr)
+    local term_win_id = __open_term_win(self, old_term_bufnr)
 
     --- 快捷键设置
     __keymaps(self.bufnr)
@@ -285,8 +283,8 @@ local function metatable_funcs()
 
         return wins[1]
       else
-        --- 如果没有任何 window 显示该 termimal 则打开新的 window, 然后加载该 buffer.
-        return __open_term_win(self)
+        --- 如果没有任何 window 显示该 termimal 则创建一个新的 window, 然后加载该 buffer.
+        return __create_term_win(self)
       end
     end
   end
@@ -386,7 +384,7 @@ M.open_all = function()
     if __term_buf_exist(term_obj.bufnr) then
       local term_wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
       if #term_wins < 1 then
-        __open_term_win(term_obj)
+        __create_term_win(term_obj)
       end
     end
   end
