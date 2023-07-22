@@ -47,6 +47,7 @@ end
 -- -- }}}
 
 --- 判断当前 windows 中是否有 my_term window, 返回 win_id ------------------------------------------ {{{
+--- 通过 buffer name regexp 查找.
 local function __find_exist_term_win()
   local win_id = -1
   for _, wi in ipairs(vim.fn.getwininfo()) do
@@ -72,11 +73,12 @@ local function __term_buf_exist(bufnr)
 end
 -- -- }}}
 
---- auto_scroll ------------------------------------------------------------------------------------ {{{
+--- auto_scroll: 自动滚动到 terminal 底部 ---------------------------------------------------------- {{{
 local function __auto_scroll(term_obj)
   if term_obj.auto_scroll then
     vim.api.nvim_buf_call(term_obj.bufnr, function()
       local info = vim.api.nvim_get_mode()
+      --- VVI: 只允许 Normal | terminal-Normal mode 下进行滚动, 否则报错.
       if info and (info.mode == "n" or info.mode == "nt") then vim.cmd("normal! G") end
     end)
   end
@@ -126,7 +128,7 @@ local function __autocmd_callback(term_obj)
 end
 -- -- }}}
 
---- 使用 termopen() 执行 cmd ----------------------------------------------------------------------- {{{
+--- termopen(): 执行 cmd --------------------------------------------------------------------------- {{{
 local function __termopen_cmd(term_obj)
   --- callback
   if term_obj.before_exec then
@@ -201,7 +203,7 @@ local function __create_term_win(term_obj)
 end
 -- -- }}}
 
---- 进入指定的 terminal window. 用于 run() --------------------------------------------------------- {{{
+--- 打开/创建 terminal window 用于 termopen() ------------------------------------------------------ {{{
 --- NOTE: buffer 一旦运行过 termopen() 就不能再次运行了, Can only call this function in an unmodified buffer.
 --- 所以需要删除旧的 bufnr 然后重新创建一个新的 scratch bufnr 给 termopen() 使用.
 local function __open_term_win(term_obj, old_term_bufnr)
@@ -212,20 +214,19 @@ local function __open_term_win(term_obj, old_term_bufnr)
 
   --- 这里是为了 re-use term window
   local win_id
+  --- 获取 old_term_bufnr 所在的 windows id.
   local term_wins = vim.fn.getbufinfo(old_term_bufnr)[1].windows
-  --- 这里使用 win_gotoid 是为了和下面行为保持一致.
   if #term_wins > 0 then
-    --- 如果 old term buffer 存在, 同时 window 存在:
-    --- 先加载 new term.bufnr, 再 wipeout old_term_bufnr, 否则会导致 window close.
+    --- 如果 old term buffer 存在, 同时 window 存在: 使用该 window 中加载 new term.bufnr
     win_id = term_wins[1]
-    vim.api.nvim_win_set_buf(win_id, term_obj.bufnr)  -- 将 bufnr 加载到指定 win_id, 不用进入该 window
-    vim.api.nvim_buf_delete(old_term_bufnr, {force=true})
+    vim.api.nvim_win_set_buf(win_id, term_obj.bufnr)  -- 将 bufnr 加载到指定 win_id, 不用进入该 window.
   else
-    --- 如果 old term buffer 存在, 但是 window 不存在:
-    --- 先 wipeout old_term_bufnr, 再创建一个新的 term window 加载 new term.bufnr.
-    vim.api.nvim_buf_delete(old_term_bufnr, {force=true})
+    --- 如果 old term buffer 存在, 但是 window 不存在: 创建一个新的 term window 加载 new term.bufnr.
     win_id = __create_term_win(term_obj)
   end
+
+  --- NOTE: wipeout old_term_bufnr 放在最后避免关闭 old_term_bufnr 所在 window.
+  vim.api.nvim_buf_delete(old_term_bufnr, {force=true})
 
   return win_id
 end
@@ -251,7 +252,7 @@ local function metatable_funcs()
     --- 2. 在 term window 打开并加载 term bufnr 之前运行, 为了触发 BufWinEnter event.
     __autocmd_callback(self)
 
-    --- 使用 term 之前的 window 或者创建一个新的 term window.
+    --- 使用 term 之前的 window 或者创建一个新的 term window. 同时 wipeout old_term_bufnr.
     local term_win_id = __open_term_win(self, old_term_bufnr)
 
     --- 快捷键设置
@@ -301,9 +302,9 @@ local function metatable_funcs()
 
   --- 将 terminal 重置为 default_opts
   function meta_funcs:clear()
-    --- VVI: 这里不能简单的使用 tbl_deep_extend() 因为:
-    --- 1. tbl_deep_extend() 会重新生成一个 table, 导致 global_my_term_cache 中的 term object 无效.
-    --- 2. tbl_deep_extend() 不会保留 metatable, 会导致所有的 methods 丢失.
+    --- VVI: 这里不能简单的使用 self = default_opts 因为:
+    --- 1. 导致 global_my_term_cache 中的 term object 无效.
+    --- 2. 不会保留 metatable, 会导致所有的 methods 丢失.
     for key, value in pairs(default_opts) do
       self[key] = value
     end
@@ -336,7 +337,7 @@ end
 M.new = function(opts)
   opts = vim.tbl_deep_extend('force', default_opts, opts or {})
 
-  --- 已经存在的 terminal
+  --- NOTE: terminal 已经存在, 无法使用相同 id 创建新的 terminal.
   if global_my_term_cache[opts.id] then
     vim.notify('terminal instance is already exist, please use function "get_term_by_id()"', vim.log.levels.WARN)
     return
@@ -356,7 +357,7 @@ M.new = function(opts)
   --- generate metatable - term:methods()
   local mt = metatable_funcs()
 
-  --- set all term:methods() to terminal object's metatable
+  --- VVI: set all term:methods() to terminal object's metatable
   setmetatable(my_term, { __index = mt })
 
   return my_term
