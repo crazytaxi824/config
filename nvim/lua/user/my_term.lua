@@ -30,8 +30,8 @@ local default_opts = {
   on_stdout = nil, -- func(term, jobid, data, event), 可用于 auto_scroll.
   on_stderr = nil, -- func(term, jobid, data, event), 可用于 auto_scroll.
   on_exit = nil,   -- func(term, job_id, exit_code, event), TermClose, jobstop(), 可用于 `:silent! bwipeout! term_bufnr` ...
-  before_exec = nil, -- func(term), run() before exec, 可以用检查/修改设置, `:stopinsert` ...
-  after_exec = nil,  -- func(term), run() after exec, 不等待 jobdone. NOTE: 可用于 win_gotoid(prev_win), `:startinsert` ...
+  before_exec = nil, -- func(term), run() before exec, 可以用检查/修改设置
+  after_exec = nil,  -- func(term), run() after exec, 不等待 jobdone. NOTE: 可用于 win_gotoid(prev_win)
 
   startinsert = nil, -- true | false, 在 before_exec() 之前触发.
   jobdone = nil,     -- 'exit' | 'stopinsert', on_exit() 时触发, 执行 `:silent! bwipeout! term_bufnr`
@@ -83,7 +83,6 @@ local function __autocmd_callback(term_obj)
     group = g_id,
     buffer = term_obj._bufnr,
     callback = function(params)
-      print(params.event)
       if term_obj.on_open then
         term_obj.on_open(term_obj)
       end
@@ -141,7 +140,6 @@ local function __exec_cmd(term_obj)
     end,
 
     on_stderr = function(job_id, data, event)  -- event 是 'stderr'
-      vim.print(job_id, data, event)
       vim.api.nvim_buf_call(term_obj._bufnr, function()
         if term_obj.auto_scroll then
           local info = vim.api.nvim_get_mode()

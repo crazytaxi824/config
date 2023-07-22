@@ -201,20 +201,27 @@ telescope.load_extension('fzf')
 vim.api.nvim_create_autocmd("User", {
   pattern = "TelescopePreviewerLoaded",
   callback = function(params)
+    --- NOTE: preview window 不会改变, 但是 preview bufnr 会改变,
+    --- 在 cursor 指向不同 result item 的时候, preview bufnr 会改变.
     local preview_winid = vim.api.nvim_get_current_win()
-    --- keymap.set
+
+    --- find prompt_bufnr
+    local prompt_bufnr
     for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
       if vim.bo[bufnr].filetype == 'TelescopePrompt' then
-        for _, mode in ipairs({'n', 'i'}) do
-          vim.api.nvim_buf_set_keymap(bufnr, mode, '<C-k>', '', {callback = function()
-            --- toggle `set wrap`
-            vim.wo[preview_winid].wrap = not vim.wo[preview_winid].wrap
-          end,
-          noremap = true,
-          silent = true,
-          desc = 'telescope: toggle preview wrap'})
-        end
+        prompt_bufnr = bufnr
       end
+    end
+
+    --- NOTE: 快捷键设置在 prompt bufnr 中, 因为其他 telescope window 通常不会 enter.
+    for _, mode in ipairs({'n', 'i'}) do
+      vim.api.nvim_buf_set_keymap(prompt_bufnr, mode, '<C-k>', '', {callback = function()
+        --- toggle `set wrap`
+        vim.wo[preview_winid].wrap = not vim.wo[preview_winid].wrap
+      end,
+      noremap = true,
+      silent = true,
+      desc = 'telescope: toggle preview wrap'})
     end
   end,
 })
