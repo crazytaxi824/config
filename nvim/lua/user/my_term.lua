@@ -41,12 +41,13 @@ local default_opts = {
   after_exec = nil,  -- func(term), run() after exec, 不等待 jobdone. NOTE: 可用于 win_gotoid(prev_win)
 }
 
---- 调大/调小 terminal window
+--- keymaps: terminal window 调大/调小 ------------------------------------------------------------- {{{
 local function __keymaps(bufnr)
   local opt = {buffer = bufnr, silent = true, noremap = true}
   vim.keymap.set('n', 't<Up>', '<cmd>resize +5<CR>', opt)
   vim.keymap.set('n', 't<Down>', '<cmd>resize -5<CR>', opt)
 end
+-- -- }}}
 
 --- 判断当前 windows 中是否有 my_term window, 返回 win_id ------------------------------------------ {{{
 local function __find_exist_term_win()
@@ -66,14 +67,15 @@ local function __find_exist_term_win()
 end
 -- -- }}}
 
---- 判断 terminal bufnr 是否存在, 是否有效.
+--- 判断 terminal bufnr 是否存在, 是否有效 --------------------------------------------------------- {{{
 local function __term_buf_exist(bufnr)
   if bufnr and vim.api.nvim_buf_is_valid(bufnr) then
     return true
   end
 end
+-- -- }}}
 
---- auto_scroll
+--- auto_scroll ------------------------------------------------------------------------------------ {{{
 local function __auto_scroll(term_obj)
   if term_obj.auto_scroll then
     vim.api.nvim_buf_call(term_obj.bufnr, function()
@@ -82,8 +84,9 @@ local function __auto_scroll(term_obj)
     end)
   end
 end
+-- -- }}}
 
---- autocmd 根据 terminal bufnr 触发 --------------------------------------------------------------- {{{
+--- autocmd: 根据 terminal bufnr 触发 -------------------------------------------------------------- {{{
 local function __autocmd_callback(term_obj)
   --- NOTE: 第一次运行 terminal 时触发 TermOpen, 但不会触发 BufWinEnter.
   --- 关闭 terminal window 之后再打开时触发 BufWinEnter, 但不会触发 TermOpen.
@@ -201,8 +204,8 @@ local function __open_term_win(term_obj)
 end
 -- -- }}}
 
---- 进入指定的 terminal window. 用于 run() 函数 ---------------------------------------------------- {{{
---- NOTE: job 一旦 finish, terminal 的 buffer 就不能再次运行 :run(), 因为不能使用 modified buffer 来运行 termopen()
+--- 进入指定的 terminal window. 用于 run() --------------------------------------------------------- {{{
+--- NOTE: buffer 一旦运行过 termopen() 就不能再次运行了, Can only call this function in an unmodified buffer.
 --- 所以需要删除旧的 bufnr 然后重新创建一个新的 scratch_bufnr 给 termopen() 使用.
 local function __prepare_term_win(term_obj)
   local cache_term_bufnr = term_obj.bufnr
