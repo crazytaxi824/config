@@ -83,7 +83,7 @@ local function __auto_scroll(term_obj)
   end
 end
 
---- 根据 terminal bufnr 来触发 autocmd ------------------------------------------------------------- {{{
+--- autocmd 根据 terminal bufnr 触发 --------------------------------------------------------------- {{{
 local function __autocmd_callback(term_obj)
   --- NOTE: 第一次运行 terminal 时触发 TermOpen, 但不会触发 BufWinEnter.
   --- 关闭 terminal window 之后再打开时触发 BufWinEnter, 但不会触发 TermOpen.
@@ -100,12 +100,13 @@ local function __autocmd_callback(term_obj)
     desc = "my_term: on_open() callback",
   })
 
-  vim.api.nvim_create_autocmd("BufWinLeave", {
+  vim.api.nvim_create_autocmd("WinClosed", {
     group = g_id,
     buffer = term_obj.bufnr,
     callback = function(params)
       --- persist window height
-      win_height = vim.api.nvim_win_get_height(vim.api.nvim_get_current_win())
+      --- NOTE: 在 WinClosed event 中, params.file & params.match 都是 win_id, 数据类型是 string.
+      win_height = vim.api.nvim_win_get_height(tonumber(params.match))
 
       --- callback
       if term_obj.on_close then
@@ -201,6 +202,8 @@ end
 -- -- }}}
 
 --- 进入指定的 terminal window. 用于 run() 函数 ---------------------------------------------------- {{{
+--- NOTE: job 一旦 finish, terminal 的 buffer 就不能再 :run() 了, 因为不能使用 modified buffer 来运行 termopen()
+--- 所以需要删除旧的 bufnr 然后重新创建一个新的 scratch_bufnr 给 termopen() 使用.
 local function __prepare_term_win(term_obj)
   --- 如果 term buffer 不存在: 创建一个新的 term window.
   if not __term_buf_exist(term_obj) then
