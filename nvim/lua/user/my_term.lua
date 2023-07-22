@@ -237,7 +237,7 @@ local function metatable_funcs()
   local meta_funcs = {}
 
   function meta_funcs:run()
-    if self:status() == -1 then
+    if self:job_status() == -1 then
       Notify("job_id is still running, please use `term.stop()` first.", "WARN", {title="my_term"})
       return
     end
@@ -261,22 +261,25 @@ local function metatable_funcs()
     end
   end
 
-  --- open terminal window or goto terminal window
+  --- open terminal window or goto terminal window, return win_id
   function meta_funcs:open_win()
     if __term_buf_exist(self) then
       local wins = vim.fn.getbufinfo(self.bufnr)[1].windows
       if #wins > 0 then
+        --- 如果有 window 正在显示该 term buffer, 则直接 focus 到该 window.
         if vim.fn.win_gotoid(wins[1]) == 0 then
           error('vim cannot win_gotoid(' .. wins[1] .. ')')
         end
-      else
-        __open_term_win(self)
-      end
 
-      return true  -- 打开成功返回 true.
+        return wins[1]
+      else
+        --- 如果没有任何 window 显示该 termimal 则打开新的 window, 然后加载该 buffer.
+        return __open_term_win(self)
+      end
     end
   end
 
+  --- close all windows which displays this term buffer.
   function meta_funcs:close_win()
     if __term_buf_exist(self) then
       local wins = vim.fn.getbufinfo(self.bufnr)[1].windows
@@ -286,12 +289,18 @@ local function metatable_funcs()
     end
   end
 
-  --- 清除 terminal opts
+  --- 将 terminal 重置为 default_opts
   function meta_funcs:clear()
-    self = default_opts
+    --- VVI: 这里不能简单的使用 tbl_deep_extend() 因为:
+    --- 1. tbl_deep_extend() 会重新生成一个 table, 导致 global_my_term_cache 中的 term object 无效.
+    --- 2. tbl_deep_extend() 不会保留 metatable, 会导致所有的 methods 丢失.
+    for key, value in pairs(default_opts) do
+      self[key] = value
+    end
   end
 
-  function meta_funcs:status()
+  --- 检查 terminal 运行情况.
+  function meta_funcs:job_status()
     --- `:help jobwait()`
     return vim.fn.jobwait({self.job_id}, 0)[1]
   end
