@@ -140,7 +140,7 @@ local function __exec_cmd(term_obj)
   --- 使用 termopen() 开打 terminal
   term_obj.job_id = vim.fn.termopen(term_obj.cmd .. name_tag  .. term_obj.id, {
     on_stdout = function(job_id, data, event)  -- event 是 'stdout'
-      --- auto_scroll
+      --- auto_scroll option
       __auto_scroll(term_obj)
 
       --- callback
@@ -150,7 +150,7 @@ local function __exec_cmd(term_obj)
     end,
 
     on_stderr = function(job_id, data, event)  -- event 是 'stderr'
-      --- auto_scroll
+      --- auto_scroll option
       __auto_scroll(term_obj)
 
       --- callback
@@ -165,6 +165,7 @@ local function __exec_cmd(term_obj)
         term_obj.on_exit(term_obj, job_id, exit_code, event)
       end
 
+      --- jobdone option
       if term_obj.jobdone == 'exit' then
         --- VVI: 必须使用 `:silent! bwipeout! bufnr` 否则手动删除 buffer 时会触发 TermClose, 导致重复 wipeout buffer 而报错.
         pcall(vim.api.nvim_buf_delete, term_obj.bufnr, {force=true})
@@ -244,7 +245,7 @@ local function metatable_funcs()
 
     local term_win_id = __prepare_term_win(self)
 
-    --- VVI: 以下函数放在后面运行主要是为了保证获取到 bufnr.
+    --- VVI: 以下函数放在 __prepare_term_win() 后面运行主要是为了保证 terminal 获取到 bufnr.
     __autocmd_callback(self)
     __keymap_resize(self.bufnr)
 
@@ -266,7 +267,7 @@ local function metatable_funcs()
     if __term_buf_exist(self) then
       local wins = vim.fn.getbufinfo(self.bufnr)[1].windows
       if #wins > 0 then
-        --- 如果有 window 正在显示该 term buffer, 则直接 focus 到该 window.
+        --- 如果有 window 正在显示该 term buffer, 则跳转到该 window.
         if vim.fn.win_gotoid(wins[1]) == 0 then
           error('vim cannot win_gotoid(' .. wins[1] .. ')')
         end
