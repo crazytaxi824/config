@@ -26,9 +26,6 @@ M.exec = function(cmd, on_exit_fn)
   --- 删除之前的 terminal, 同时终止 job.
   M.exec_bot_term:shutdown()
 
-  --- 缓存执行 _Exec() 的 window id
-  local exec_win_id = vim.api.nvim_get_current_win()
-
   --- toggleterm 中 startinsert 是全局设置, 无法为每一个 term 单独设置, 只能在这里 stopinsert.
   M.exec_bot_term.on_open = function()
     vim.cmd('stopinsert')
