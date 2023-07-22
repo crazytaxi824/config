@@ -46,7 +46,7 @@ dap.set_log_level('WARN')
 --   "${workspaceFolder}": The current working directory of Neovim
 --   "${workspaceFolderBasename}": The name of the folder opened in Neovim
 -- -- }}}
---- golang debug settings ----------------------------------
+--- golang debug settings --------------------------------------------------------------------------
 --- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#go-using-delve-directly
 dap.adapters.delve = {
   type = 'server',
@@ -76,7 +76,7 @@ dap.configurations.go = {
 
 --- NOTE: put Other Debug adapters & configurations settings here ---
 
---- highlight && sign setting --- {{{
+--- highlight && sign setting ---------------------------------------------------------------------- {{{
 -- `DapBreakpoint` for breakpoints (default: `B`)
 -- `DapBreakpointCondition` for conditional breakpoints (default: `C`)
 -- `DapLogPoint` for log points (default: `L`)
@@ -100,7 +100,7 @@ vim.fn.sign_define("DapStopped", { text = "→", texthl = "DapStoppedHL", numhl 
 --vim.api.nvim_set_hl(0, 'DapUINormal', { ctermfg = 191 })  -- dapui 中的文字颜色.
 -- -- }}}
 
---- nvim-dap-ui settings ---------------------------------------------------------------------------
+--- nvim-dap-ui settings --------------------------------------------------------------------------- {{{
 --- `:help dapui.setup()`
 dapui.setup({
   mappings = {
@@ -162,6 +162,7 @@ dapui.setup({
     },
   },
 })
+-- -- }}}
 
 --- dap && dap-ui debug functions ------------------------------------------------------------------ {{{
 --- NOTE: 通过 set/get tab var 来确定 debug_tab 是否存在.
@@ -170,19 +171,19 @@ local tabvar_debug = "my_debug_dap"
 --- open a new tab for debug
 local function open_new_tab_for_debug()
   --- if debug tab exists, jump to debug tab.
-  for _, tab_info in pairs(vim.fn.gettabinfo()) do
-    if vim.t[tab_info.tabnr][tabvar_debug] then
-      vim.cmd('normal! '.. tab_info.tabnr .. 'gt')  -- 1gt | 2gt jump to tab
+  for _, tab_id in pairs(vim.api.nvim_list_tabpages()) do
+    if vim.t[tab_id][tabvar_debug] then
+      vim.cmd('normal! '.. vim.api.nvim_tabpage_get_number(tab_id) .. 'gt')  -- 1gt | 2gt jump to tab, NOTE: tabnr NOT tab_id
       return
     end
   end
 
-  --- VVI: if debug tab NOT exist, open a new tab for debug.
+  --- if debug tab NOT exist, open a new tab for debug.
   vim.cmd('tabnew '..vim.fn.bufname())
 
   --- 标记该 tab.
-  local curr_tab = vim.api.nvim_get_current_tabpage()
-  vim.t[curr_tab][tabvar_debug] = true
+  local curr_tab_id = vim.api.nvim_get_current_tabpage()
+  vim.t[curr_tab_id][tabvar_debug] = true
 end
 
 --- terminate debug && close debug tab/buffers
@@ -197,14 +198,15 @@ local function close_debug_tab_and_buffers()
     dapui.close()  -- close all dap-ui windows
 
     --- 如果自己是 last tab 则不执行 tabclose
-    if vim.fn.tabpagenr('$') < 2 then
+    local tab_list = vim.api.nvim_list_tabpages()
+    if #tab_list < 2 then
       return
     end
 
-    --- VVI: close 'my_debug.dap_tab = true' tab
-    for _, tab_info in pairs(vim.fn.gettabinfo()) do
-      if vim.t[tab_info.tabnr][tabvar_debug] then
-        vim.cmd(tab_info.tabnr .. 'tabclose') -- eg :6tabclose
+    --- close debug tab
+    for _, tab_id in pairs(tab_list) do
+      if vim.t[tab_id][tabvar_debug] then
+        vim.cmd('tabclose ' .. vim.api.nvim_tabpage_get_number(tab_id)) -- NOTE: `:tabclose tabnr` NOT tab_id
       end
     end
   end)
