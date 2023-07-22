@@ -130,7 +130,7 @@ end
 -- -- }}}
 
 --- 使用 termopen() 执行 cmd ----------------------------------------------------------------------- {{{
-local function __exec_cmd(term_obj)
+local function __termopen_cmd(term_obj)
   --- callback
   if term_obj.before_exec then
     term_obj.before_exec(term_obj)
@@ -206,37 +206,27 @@ end
 
 --- 进入指定的 terminal window. 用于 run() --------------------------------------------------------- {{{
 --- NOTE: buffer 一旦运行过 termopen() 就不能再次运行了, Can only call this function in an unmodified buffer.
---- 所以需要删除旧的 bufnr 然后重新创建一个新的 scratch_bufnr 给 termopen() 使用.
-local function __prepare_term_win(term_obj)
-  local cache_term_bufnr = term_obj.bufnr
-  term_obj.bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
-
-  --- VVI: autocmd 放在这里运行主要是有两个限制条件:
-  --- 1. 在获取到 terminal bufnr 之后运行, 为了在 autocmd 中使用 bufnr 作为触发条件.
-  --- 2. 在 term window 打开并加载 term bufnr 之前运行, 为了触发 BufWinEnter event.
-  __autocmd_callback(term_obj)
-
-  --- 如果 term buffer 不存在: 创建一个新的 term window.
-  if not __term_buf_exist(cache_term_bufnr) then
+--- 所以需要删除旧的 bufnr 然后重新创建一个新的 scratch bufnr 给 termopen() 使用.
+local function __prepare_term_win(term_obj, old_term_bufnr)
+  --- 如果 old_term_bufnr 不存在: 创建一个新的 term window 用于加载 new term.bufnr
+  if not __term_buf_exist(old_term_bufnr) then
     return __open_term_win(term_obj)
   end
 
   --- 这里是为了 re-use term window
   local win_id
-  local term_wins = vim.fn.getbufinfo(cache_term_bufnr)[1].windows
+  local term_wins = vim.fn.getbufinfo(old_term_bufnr)[1].windows
   --- 这里使用 win_gotoid 是为了和下面行为保持一致.
   if #term_wins > 0 and vim.fn.win_gotoid(term_wins[1]) == 1 then
-    --- 如果 term buffer 存在, 同时 window 存在:
-    --- 创建一个 scratch buffer, 加载到当前 term window 中, 然后 wipeout term buffer.
-    win_id = term_wins[1]
-
-    --- 先 load scratch buffer, 再 wipeout 之前的 terminal buffer, 否则会导致 window close.
+    --- 如果 old term buffer 存在, 同时 window 存在:
+    --- 先加载 new term.bufnr, 再 wipeout old_term_bufnr, 否则会导致 window close.
     vim.api.nvim_set_current_buf(term_obj.bufnr)  -- ':buffer term_obj.bufnr'
-    vim.api.nvim_buf_delete(cache_term_bufnr, {force=true})
+    vim.api.nvim_buf_delete(old_term_bufnr, {force=true})
+    win_id = term_wins[1]
   else
-    --- 如果 term buffer 存在, 但是 window 不存在:
-    --- 先 wipeout term buffer, 然后创建一个新的 term window 加载 scratch buffer.
-    vim.api.nvim_buf_delete(cache_term_bufnr, {force=true})
+    --- 如果 old term buffer 存在, 但是 window 不存在:
+    --- 先 wipeout old_term_bufnr, 再创建一个新的 term window 加载 new term.bufnr.
+    vim.api.nvim_buf_delete(old_term_bufnr, {force=true})
     win_id = __open_term_win(term_obj)
   end
 
@@ -254,14 +244,26 @@ local function metatable_funcs()
       return
     end
 
-    local term_win_id = __prepare_term_win(self)
+    --- VVI: 每次运行 termopen() 之前, 先创建一个新的 scratch buffer 给 terminal.
+    local old_term_bufnr = self.bufnr
+    self.bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
 
+    --- VVI: autocmd 放在这里运行主要是有两个限制条件:
+    --- 1. 在获取到 terminal bufnr 之后运行, 为了在 autocmd 中使用 bufnr 作为触发条件.
+    --- 2. 在 term window 打开并加载 term bufnr 之前运行, 为了触发 BufWinEnter event.
+    __autocmd_callback(self)
+
+    --- 使用 term 之前的 window 或者创建一个新的 term window.
+    local term_win_id = __prepare_term_win(self, old_term_bufnr)
+
+    --- 快捷键设置
     __keymaps(self.bufnr)
 
+    --- termopen()
     if vim.fn.win_gotoid(term_win_id) == 0 then
       error("term_win_id: " .. term_win_id .. " is not exist")
     end
-    __exec_cmd(self)
+    __termopen_cmd(self)
   end
 
   --- 终止 job, 会触发 jobdone.
