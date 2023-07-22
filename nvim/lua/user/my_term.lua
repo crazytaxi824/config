@@ -7,9 +7,8 @@
 --- 原理: nvim_create_buf() -> <cmd>botright sbuffer bufnr -> win_gotoid(win_id) -> termopen(cmd)
 
 --- TODO:
---- jobstart() -> termopen()
---- auto_scroll
---- on_stdout, on_stderr
+--- setmetatable() 将 methods 和 private properties 放在 metatable 中, 如果被 tbl_deep_extend 则无法使用 methods.
+--- tbl_deep_extend() 无法 extend metatable.
 
 local M = {}
 
@@ -20,8 +19,15 @@ local name_tag=';#my_term#'
 local win_height = 16  -- persist window height
 
 local default_opts = {
-  id = 1,  -- v:count1, 保证每个 id 只和一个 bufnr 对应
+  --- VVI: 这三个属性不应该被外部手动修改.
+  id = 1,  -- v:count1, VVI: 保证每个 id 只和一个 bufnr 对应. id 一旦设置应该无法改变.
+  _bufnr = nil,
+  _job_id = nil,
+
   cmd = vim.go.shell,  -- 相当于 os.getenv('SHELL')
+  startinsert = nil, -- true | false, 在 before_exec() 之前触发.
+  jobdone = nil,     -- 'exit' | 'stopinsert', on_exit() 时触发, 执行 `:silent! bwipeout! term_bufnr`
+  auto_scroll = true,  -- goto bottom of the terminal. 会影响 :startinsert
 
   --- callback function
   on_init = nil,  -- func(term), new()
@@ -32,14 +38,6 @@ local default_opts = {
   on_exit = nil,   -- func(term, job_id, exit_code, event), TermClose, jobstop(), 可用于 `:silent! bwipeout! term_bufnr` ...
   before_exec = nil, -- func(term), run() before exec, 可以用检查/修改设置
   after_exec = nil,  -- func(term), run() after exec, 不等待 jobdone. NOTE: 可用于 win_gotoid(prev_win)
-
-  startinsert = nil, -- true | false, 在 before_exec() 之前触发.
-  jobdone = nil,     -- 'exit' | 'stopinsert', on_exit() 时触发, 执行 `:silent! bwipeout! term_bufnr`
-  auto_scroll = true,  -- goto bottom of the terminal. 会影响 :startinsert
-
-  --- private property, should not be readonly.
-  _bufnr = nil,
-  _job_id = nil,
 }
 
 --- 调大/调小 terminal window
