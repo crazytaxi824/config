@@ -12,7 +12,7 @@
 
 local M = {}
 
-local global_my_term_cache = {}
+local global_my_term_cache = {}  -- map-like table { id:term_obj }
 
 local name_tag=';#my_term#'
 
@@ -42,7 +42,7 @@ local default_opts = {
 }
 
 --- 调大/调小 terminal window
-local function __keymap_resize(bufnr)
+local function __keymaps(bufnr)
   local opt = {buffer = bufnr, silent = true, noremap = true}
   vim.keymap.set('n', 't<Up>', '<cmd>resize +5<CR>', opt)
   vim.keymap.set('n', 't<Down>', '<cmd>resize -5<CR>', opt)
@@ -67,8 +67,8 @@ end
 -- -- }}}
 
 --- 判断 terminal bufnr 是否存在, 是否有效.
-local function __term_buf_exist(term_obj)
-  if term_obj.bufnr and vim.api.nvim_buf_is_valid(term_obj.bufnr) then
+local function __term_buf_exist(bufnr)
+  if bufnr and vim.api.nvim_buf_is_valid(bufnr) then
     return true
   end
 end
@@ -88,16 +88,21 @@ local function __autocmd_callback(term_obj)
   --- NOTE: 第一次运行 terminal 时触发 TermOpen, 但不会触发 BufWinEnter.
   --- 关闭 terminal window 之后再打开时触发 BufWinEnter, 但不会触发 TermOpen.
   local g_id = vim.api.nvim_create_augroup('my_term_' .. term_obj.id, {clear=true})
-  vim.api.nvim_create_autocmd({"TermOpen", "BufWinEnter"}, {
+  vim.api.nvim_create_autocmd({"BufWinEnter", "BufWinLeave"}, {
     group = g_id,
     buffer = term_obj.bufnr,
     callback = function(params)
       --- callback
-      if term_obj.on_open then
+      if params.event == "BufWinEnter" and term_obj.on_open then
         term_obj.on_open(term_obj)
+        return
+      end
+      --- callback
+      if params.event == "BufWinLeave" and term_obj.on_close then
+        term_obj.on_close(term_obj)
       end
     end,
-    desc = "my_term: on_open() callback",
+    desc = "my_term: on_open() & on_close() callback",
   })
 
   vim.api.nvim_create_autocmd("WinClosed", {
@@ -107,17 +112,12 @@ local function __autocmd_callback(term_obj)
       --- persist window height
       --- NOTE: 在 WinClosed event 中, params.file & params.match 都是 win_id, 数据类型是 string.
       win_height = vim.api.nvim_win_get_height(tonumber(params.match))
-
-      --- callback
-      if term_obj.on_close then
-        term_obj.on_close(term_obj)
-      end
     end,
-    desc = "my_term: on_close() callback",
+    desc = "my_term: persist window height",
   })
 
   --- delete augroup
-  vim.api.nvim_create_autocmd("BufWinLeave", {
+  vim.api.nvim_create_autocmd("BufWipeout", {
     group = g_id,
     buffer = term_obj.bufnr,
     callback = function(params) vim.api.nvim_del_augroup_by_id(g_id) end,
@@ -202,33 +202,38 @@ end
 -- -- }}}
 
 --- 进入指定的 terminal window. 用于 run() 函数 ---------------------------------------------------- {{{
---- NOTE: job 一旦 finish, terminal 的 buffer 就不能再 :run() 了, 因为不能使用 modified buffer 来运行 termopen()
+--- NOTE: job 一旦 finish, terminal 的 buffer 就不能再次运行 :run(), 因为不能使用 modified buffer 来运行 termopen()
 --- 所以需要删除旧的 bufnr 然后重新创建一个新的 scratch_bufnr 给 termopen() 使用.
 local function __prepare_term_win(term_obj)
+  local cache_term_bufnr = term_obj.bufnr
+  term_obj.bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
+
+  --- VVI: autocmd 放在这里运行主要是有两个限制条件:
+  --- 1. 在获取到 terminal bufnr 之后运行, 为了在 autocmd 中使用 bufnr 作为触发条件.
+  --- 2. 在 term window 打开并加载 term bufnr 之前运行, 为了触发 BufWinEnter event.
+  __autocmd_callback(term_obj)
+
   --- 如果 term buffer 不存在: 创建一个新的 term window.
-  if not __term_buf_exist(term_obj) then
-    term_obj.bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
+  if not __term_buf_exist(cache_term_bufnr) then
     return __open_term_win(term_obj)
   end
 
   --- 这里是为了 re-use term window
   local win_id
-  local term_wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
+  local term_wins = vim.fn.getbufinfo(cache_term_bufnr)[1].windows
+  --- 这里使用 win_gotoid 是为了和下面行为保持一致.
   if #term_wins > 0 and vim.fn.win_gotoid(term_wins[1]) == 1 then
     --- 如果 term buffer 存在, 同时 window 存在:
     --- 创建一个 scratch buffer, 加载到当前 term window 中, 然后 wipeout term buffer.
     win_id = term_wins[1]
-    local term_bufnr = term_obj.bufnr
-    term_obj.bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
 
     --- 先 load scratch buffer, 再 wipeout 之前的 terminal buffer, 否则会导致 window close.
     vim.api.nvim_set_current_buf(term_obj.bufnr)  -- ':buffer term_obj.bufnr'
-    vim.api.nvim_buf_delete(term_bufnr, {force=true})
+    vim.api.nvim_buf_delete(cache_term_bufnr, {force=true})
   else
     --- 如果 term buffer 存在, 但是 window 不存在:
     --- 先 wipeout term buffer, 然后创建一个新的 term window 加载 scratch buffer.
-    vim.api.nvim_buf_delete(term_obj.bufnr, {force=true})
-    term_obj.bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
+    vim.api.nvim_buf_delete(cache_term_bufnr, {force=true})
     win_id = __open_term_win(term_obj)
   end
 
@@ -248,9 +253,7 @@ local function metatable_funcs()
 
     local term_win_id = __prepare_term_win(self)
 
-    --- VVI: 以下函数放在 __prepare_term_win() 后面运行主要是为了保证 terminal 获取到 bufnr.
-    __autocmd_callback(self)
-    __keymap_resize(self.bufnr)
+    __keymaps(self.bufnr)
 
     if vim.fn.win_gotoid(term_win_id) == 0 then
       error("term_win_id: " .. term_win_id .. " is not exist")
@@ -267,7 +270,7 @@ local function metatable_funcs()
 
   --- open terminal window or goto terminal window, return win_id
   function meta_funcs:open_win()
-    if __term_buf_exist(self) then
+    if __term_buf_exist(self.bufnr) then
       local wins = vim.fn.getbufinfo(self.bufnr)[1].windows
       if #wins > 0 then
         --- 如果有 window 正在显示该 term buffer, 则跳转到该 window.
@@ -285,7 +288,7 @@ local function metatable_funcs()
 
   --- close all windows which displays this term buffer.
   function meta_funcs:close_win()
-    if __term_buf_exist(self) then
+    if __term_buf_exist(self.bufnr) then
       local wins = vim.fn.getbufinfo(self.bufnr)[1].windows
       for _, w in ipairs(wins) do
         vim.api.nvim_win_close(w, 'force')
@@ -311,7 +314,7 @@ local function metatable_funcs()
 
   --- terminate 之后, 如果要使用相同 id 的 terminal 需要重新 New()
   function meta_funcs:__terminate()
-    if __term_buf_exist(self) then
+    if __term_buf_exist(self.bufnr) then
       vim.api.nvim_buf_delete(self.bufnr, {force=true})
     end
 
@@ -375,7 +378,7 @@ end
 --- open all terms which are cached in global_my_term_cache and bufnr is valid.
 M.open_all = function()
   for id, term_obj in pairs(global_my_term_cache) do
-    if __term_buf_exist(term_obj) then
+    if __term_buf_exist(term_obj.bufnr) then
       local term_wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
       if #term_wins < 1 then
         __open_term_win(term_obj)
