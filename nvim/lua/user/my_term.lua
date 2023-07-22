@@ -18,16 +18,17 @@ local name_tag=';#my_term#'
 
 local win_height = 16  -- persist window height
 
+--- default_opts 相当于 global setting.
 local default_opts = {
   --- VVI: 这三个属性不应该被外部手动修改.
   id = 1,  -- v:count1, VVI: 保证每个 id 只和一个 bufnr 对应. id 一旦设置应该无法改变.
   bufnr = nil,
   job_id = nil,
 
-  cmd = vim.go.shell,  -- 相当于 os.getenv('SHELL')
-  startinsert = nil, -- true | false, 在 before_exec() 之前触发.
-  jobdone = nil,     -- 'exit' | 'stopinsert', on_exit() 时触发, 执行 `:silent! bwipeout! term_bufnr`
-  auto_scroll = true,  -- goto bottom of the terminal. 会影响 :startinsert
+  cmd = vim.go.shell, -- 相当于 os.getenv('SHELL')
+  startinsert = nil,  -- true | false, 在 before_exec() 之前触发.
+  jobdone = nil,      -- 'exit' | 'stopinsert', on_exit() 时触发, 执行 `:silent! bwipeout! term_bufnr`
+  auto_scroll = nil,  -- goto bottom of the terminal. 会影响 `:startinsert`
 
   --- callback function
   on_init = nil,  -- func(term), new()
@@ -35,8 +36,8 @@ local default_opts = {
   on_close = nil, -- func(term), BufWinLeave
   on_stdout = nil, -- func(term, jobid, data, event), 可用于 auto_scroll.
   on_stderr = nil, -- func(term, jobid, data, event), 可用于 auto_scroll.
-  on_exit = nil,   -- func(term, job_id, exit_code, event), TermClose, jobstop(), 可用于 `:silent! bwipeout! term_bufnr` ...
-  before_exec = nil, -- func(term), run() before exec, 可以用检查/修改设置
+  on_exit = nil,   -- func(term, job_id, exit_code, event), TermClose, jobstop(), 可用于 `:silent! bwipeout! term_bufnr`
+  before_exec = nil, -- func(term), run() before exec, 可以用于检查/修改设置, keymap.set()
   after_exec = nil,  -- func(term), run() after exec, 不等待 jobdone. NOTE: 可用于 win_gotoid(prev_win)
 }
 
@@ -72,6 +73,16 @@ local function __term_buf_exist(term_obj)
   end
 end
 
+--- auto_scroll
+local function __auto_scroll(term_obj)
+  if term_obj.auto_scroll then
+    vim.api.nvim_buf_call(term_obj.bufnr, function()
+      local info = vim.api.nvim_get_mode()
+      if info and (info.mode == "n" or info.mode == "nt") then vim.cmd("normal! G") end
+    end)
+  end
+end
+
 --- 根据 terminal bufnr 来触发 autocmd ------------------------------------------------------------- {{{
 local function __autocmd_callback(term_obj)
   --- NOTE: 第一次运行 terminal 时触发 TermOpen, 但不会触发 BufWinEnter.
@@ -81,6 +92,7 @@ local function __autocmd_callback(term_obj)
     group = g_id,
     buffer = term_obj.bufnr,
     callback = function(params)
+      --- callback
       if term_obj.on_open then
         term_obj.on_open(term_obj)
       end
@@ -95,6 +107,7 @@ local function __autocmd_callback(term_obj)
       --- persist window height
       win_height = vim.api.nvim_win_get_height(vim.api.nvim_get_current_win())
 
+      --- callback
       if term_obj.on_close then
         term_obj.on_close(term_obj)
       end
@@ -119,6 +132,7 @@ local function __exec_cmd(term_obj)
     term_obj.before_exec(term_obj)
   end
 
+  --- startinsert option
   if term_obj.startinsert then
     vim.cmd('startinsert')
   end
@@ -126,30 +140,27 @@ local function __exec_cmd(term_obj)
   --- 使用 termopen() 开打 terminal
   term_obj.job_id = vim.fn.termopen(term_obj.cmd .. name_tag  .. term_obj.id, {
     on_stdout = function(job_id, data, event)  -- event 是 'stdout'
-      vim.api.nvim_buf_call(term_obj.bufnr, function()
-        if term_obj.auto_scroll then
-          local info = vim.api.nvim_get_mode()
-          if info and (info.mode == "n" or info.mode == "nt") then vim.cmd("normal! G") end
-        end
-      end)
+      --- auto_scroll
+      __auto_scroll(term_obj)
+
+      --- callback
       if term_obj.on_stdout then
         term_obj.on_stdout(term_obj, job_id, data, event)
       end
     end,
 
     on_stderr = function(job_id, data, event)  -- event 是 'stderr'
-      vim.api.nvim_buf_call(term_obj.bufnr, function()
-        if term_obj.auto_scroll then
-          local info = vim.api.nvim_get_mode()
-          if info and (info.mode == "n" or info.mode == "nt") then vim.cmd("normal! G") end
-        end
-      end)
+      --- auto_scroll
+      __auto_scroll(term_obj)
+
+      --- callback
       if term_obj.on_stderr then
         term_obj.on_stderr(term_obj, job_id, data, event)
       end
     end,
 
     on_exit = function(job_id, exit_code, event)  -- event 是 'exit'
+      --- callback
       if term_obj.on_exit then
         term_obj.on_exit(term_obj, job_id, exit_code, event)
       end
@@ -221,9 +232,86 @@ local function __prepare_term_win(term_obj)
 end
 -- -- }}}
 
---- return an term object
-M.get_term_by_id = function(id)
-  return global_my_term_cache[id]
+--- set all term:methods() to metatable for terminal object.
+local function metatable_funcs()
+  local meta_funcs = {}
+
+  function meta_funcs:run()
+    if self:status() == -1 then
+      Notify("job_id is still running, please use `term.stop()` first.", "WARN", {title="my_term"})
+      return
+    end
+
+    local term_win_id = __prepare_term_win(self)
+
+    --- VVI: 以下函数放在后面运行主要是为了保证获取到 bufnr.
+    __autocmd_callback(self)
+    __keymap_resize(self.bufnr)
+
+    if vim.fn.win_gotoid(term_win_id) == 0 then
+      error("term_win_id: " .. term_win_id .. " is not exist")
+    end
+    __exec_cmd(self)
+  end
+
+  --- 终止 job, 会触发 jobdone.
+  function meta_funcs:stop()
+    if self.job_id then
+      vim.fn.jobstop(self.job_id)
+    end
+  end
+
+  --- open terminal window or goto terminal window
+  function meta_funcs:open_win()
+    if __term_buf_exist(self) then
+      local wins = vim.fn.getbufinfo(self.bufnr)[1].windows
+      if #wins > 0 then
+        if vim.fn.win_gotoid(wins[1]) == 0 then
+          error('vim cannot win_gotoid(' .. wins[1] .. ')')
+        end
+      else
+        __open_term_win(self)
+      end
+
+      return true  -- 打开成功返回 true.
+    end
+  end
+
+  function meta_funcs:close_win()
+    if __term_buf_exist(self) then
+      local wins = vim.fn.getbufinfo(self.bufnr)[1].windows
+      for _, w in ipairs(wins) do
+        vim.api.nvim_win_close(w, 'force')
+      end
+    end
+  end
+
+  --- 清除 terminal opts
+  function meta_funcs:clear()
+    self = default_opts
+  end
+
+  function meta_funcs:status()
+    --- `:help jobwait()`
+    return vim.fn.jobwait({self.job_id}, 0)[1]
+  end
+
+  --- terminate 之后, 如果要使用相同 id 的 terminal 需要重新 New()
+  function meta_funcs:__terminate()
+    if __term_buf_exist(self) then
+      vim.api.nvim_buf_delete(self.bufnr, {force=true})
+    end
+
+    --- clear global cache and delete terminal
+    global_my_term_cache[self.id] = nil
+    self = nil
+  end
+
+  function meta_funcs:__debug()
+    vim.print(global_my_term_cache)
+  end
+
+  return meta_funcs
 end
 
 M.new = function(opts)
@@ -234,134 +322,30 @@ M.new = function(opts)
     vim.notify('terminal instance is already exist, please use function "get_term_by_id()"', vim.log.levels.WARN)
     return
   end
-  -- local my_term = vim.tbl_deep_extend('force', global_my_term_cache[opts.id] or {}, opts)
 
-  --- 新的 terminal
+  --- terminal object
   local my_term = opts
+
+  --- cache terminal object
   global_my_term_cache[my_term.id] = my_term
 
+  --- callback
   if my_term.on_init then
     my_term.on_init(my_term)
   end
 
-  my_term.run = function()
-    if my_term.status() == -1 then
-      Notify("job_id is still running, please use `term.stop()` first.", "WARN", {title="my_term"})
-      return
-    end
+  --- generate metatable - term:methods()
+  local mt = metatable_funcs()
 
-    local term_win_id = __prepare_term_win(my_term)
-
-    --- VVI: 以下函数放在后面运行主要是为了保证获取到 bufnr.
-    __autocmd_callback(my_term)
-    __keymap_resize(my_term.bufnr)
-
-    if vim.fn.win_gotoid(term_win_id) == 0 then
-      error("term_win_id: " .. term_win_id .. " is not exist")
-    end
-    __exec_cmd(my_term)
-  end
-
-  --- 终止 job, 会触发 jobdone.
-  my_term.stop = function()
-    if my_term.job_id then
-      vim.fn.jobstop(my_term.job_id)
-    end
-  end
-
-  --- open terminal window or goto terminal window
-  my_term.open_win = function()
-    if __term_buf_exist(my_term) then
-      local wins = vim.fn.getbufinfo(my_term.bufnr)[1].windows
-      if #wins > 0 then
-        if vim.fn.win_gotoid(wins[1]) == 0 then
-          error('vim cannot win_gotoid(' .. wins[1] .. ')')
-        end
-      else
-        __open_term_win(my_term)
-      end
-
-      return true  -- 打开成功返回 true.
-    end
-  end
-
-  my_term.close_win = function()
-    if __term_buf_exist(my_term) then
-      local wins = vim.fn.getbufinfo(my_term.bufnr)[1].windows
-      for _, w in ipairs(wins) do
-        vim.api.nvim_win_close(w, 'force')
-      end
-    end
-  end
-
-  --- 清除 terminal opts
-  my_term.clear = function()
-    my_term = default_opts
-  end
-
-  my_term.status = function()
-    --- `:help jobwait()`
-    return vim.fn.jobwait({my_term.job_id}, 0)[1]
-  end
-
-  --- terminate 之后, 如果要使用相同 id 的 terminal 需要重新 New()
-  my_term.__terminate = function()
-    if my_term.bufnr and vim.api.nvim_buf_is_valid(my_term.bufnr) then
-      vim.api.nvim_buf_delete(my_term.bufnr, {force=true})
-    end
-
-    --- clear global cache and delete terminal
-    global_my_term_cache[my_term.id] = nil
-    my_term = nil
-  end
-
-  my_term.__debug = function()
-    vim.print(global_my_term_cache)
-  end
+  --- set all term:methods() to terminal object's metatable
+  setmetatable(my_term, { __index = mt })
 
   return my_term
 end
 
-M.close_all = function()
-  for _, wi in ipairs(vim.fn.getwininfo()) do
-    if wi.terminal == 1
-      and string.match(vim.api.nvim_buf_get_name(wi.bufnr), 'term://.*' .. name_tag .. '%d+')  --- it is my_term
-    then
-      vim.api.nvim_win_close(wi.winid, 'force')
-    end
-  end
-end
-
-M.open_all = function()
-  for id, term_obj in pairs(global_my_term_cache) do
-    if __term_buf_exist(term_obj) then
-      local term_wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
-      if #term_wins < 1 then
-        __open_term_win(term_obj)
-      end
-    end
-  end
-end
-
-M.toggle_all = function()
-  local open_winid_list= {}
-
-  for _, wi in ipairs(vim.fn.getwininfo()) do
-    if wi.terminal == 1
-      and string.match(vim.api.nvim_buf_get_name(wi.bufnr), 'term://.*' .. name_tag .. '%d+')  --- it is my_term
-    then
-      table.insert(open_winid_list, wi.winid)
-    end
-  end
-
-  if #open_winid_list > 0 then
-    for _, win_id in ipairs(open_winid_list) do
-      vim.api.nvim_win_close(win_id, 'force')
-    end
-    return
-  end
-
-  M.open_all()
+--- return an term object by id
+M.get_term_by_id = function(id)
+  return global_my_term_cache[id]
 end
 
 return M
