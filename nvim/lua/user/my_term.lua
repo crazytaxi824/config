@@ -217,12 +217,12 @@ local function __prepare_term_win(term_obj, old_term_bufnr)
   local win_id
   local term_wins = vim.fn.getbufinfo(old_term_bufnr)[1].windows
   --- 这里使用 win_gotoid 是为了和下面行为保持一致.
-  if #term_wins > 0 and vim.fn.win_gotoid(term_wins[1]) == 1 then
+  if #term_wins > 0 then
     --- 如果 old term buffer 存在, 同时 window 存在:
     --- 先加载 new term.bufnr, 再 wipeout old_term_bufnr, 否则会导致 window close.
-    vim.api.nvim_set_current_buf(term_obj.bufnr)  -- ':buffer term_obj.bufnr'
-    vim.api.nvim_buf_delete(old_term_bufnr, {force=true})
     win_id = term_wins[1]
+    vim.api.nvim_win_set_buf(win_id, term_obj.bufnr)  -- 将 bufnr 加载到指定 win_id, 不用进入该 window
+    vim.api.nvim_buf_delete(old_term_bufnr, {force=true})
   else
     --- 如果 old term buffer 存在, 但是 window 不存在:
     --- 先 wipeout old_term_bufnr, 再创建一个新的 term window 加载 new term.bufnr.
