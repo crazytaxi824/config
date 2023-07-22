@@ -348,4 +348,51 @@ M.get_term_by_id = function(id)
   return global_my_term_cache[id]
 end
 
+--- close all my_term windows
+M.close_all = function()
+  for _, wi in ipairs(vim.fn.getwininfo()) do
+    if wi.terminal == 1
+      and string.match(vim.api.nvim_buf_get_name(wi.bufnr), 'term://.*' .. name_tag .. '%d+')  --- it is my_term
+    then
+      vim.api.nvim_win_close(wi.winid, 'force')
+    end
+  end
+end
+
+--- open all terms which are cached in global_my_term_cache and bufnr is valid.
+M.open_all = function()
+  for id, term_obj in pairs(global_my_term_cache) do
+    if __term_buf_exist(term_obj) then
+      local term_wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
+      if #term_wins < 1 then
+        __open_term_win(term_obj)
+      end
+    end
+  end
+end
+
+--- close all first, then open all
+M.toggle_all = function()
+  --- 获取所有的 my_term windows
+  local open_winid_list= {}
+  for _, wi in ipairs(vim.fn.getwininfo()) do
+    if wi.terminal == 1
+      and string.match(vim.api.nvim_buf_get_name(wi.bufnr), 'term://.*' .. name_tag .. '%d+')  --- it is my_term
+    then
+      table.insert(open_winid_list, wi.winid)
+    end
+  end
+
+  --- 如果有任何 my_term window 是打开的状态, 则全部关闭.
+  if #open_winid_list > 0 then
+    for _, win_id in ipairs(open_winid_list) do
+      vim.api.nvim_win_close(win_id, 'force')
+    end
+    return
+  end
+
+  --- 如果所有 my_term window 都是关闭状态, 则 open_all()
+  M.open_all()
+end
+
 return M
