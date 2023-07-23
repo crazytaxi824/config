@@ -13,7 +13,7 @@ local function ts_run(file)
     return
   end
 
-  require("user.utils.term").bottom.run("tsc -p ./tsconfig.json && node dist/" .. file .. '.js')
+  require("user.utils.toggle_term").bottom.run("tsc -p ./tsconfig.json && node dist/" .. file .. '.js')
 end
 
 --- jest js_file -----------------------------------------------------------------------------------
@@ -38,7 +38,7 @@ local function ts_jest(file, coverage)
     cmd = "tsc -p ./tsconfig.json && jest dist/" .. file ..'.js'
   end
 
-  require("user.utils.term").bottom.run(cmd)
+  require("user.utils.toggle_term").bottom.run(cmd)
 end
 
 --- keymap -----------------------------------------------------------------------------------------

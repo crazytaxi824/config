@@ -109,7 +109,7 @@ local function go_test_single(testfn_name, opt)
   end
 
   --- toggleterm 执行 command
-  require("user.utils.term").bottom.run(cmd, on_exit)
+  require("user.utils.toggle_term").bottom.run(cmd, on_exit)
 end
 
 M.go_test_single_func = function(prompt)

@@ -1,6 +1,6 @@
 --- python3 ----------------------------------------------------------------------------------------
 local function py_run(file)
-  require("user.utils.term").bottom.run("python3 -- " .. file)  -- cache cmd for re-run.
+  require("user.utils.toggle_term").bottom.run("python3 -- " .. file)  -- cache cmd for re-run.
 end
 
 --- key mapping ------------------------------------------------------------------------------------
