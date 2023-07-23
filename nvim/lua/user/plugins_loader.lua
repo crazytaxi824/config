@@ -297,13 +297,13 @@ local plugins = {
     lazy = true,  -- telescope 加载时自动加载.
   },
 
-  --- terminal
-  {"akinsho/toggleterm.nvim",
-    tag = "v2.7.1",  -- NOTE: 尽量少更新, 更新后需要检查 user/utils/term/... 运行情况.
-    config = function() require("user.plugin_settings.toggleterm_terminal") end,
-
-    event = "VeryLazy",
-  },
+  --- NOTE: terminal 实例在 user/utils/toggle_term/... 文件中
+  -- {"akinsho/toggleterm.nvim",
+  --   tag = "v2.7.1",  -- NOTE: 尽量少更新, 更新后需要检查 user/utils/term/... 运行情况.
+  --   config = function() require("user.plugin_settings.toggleterm_terminal") end,
+  --
+  --   event = "VeryLazy",
+  -- },
 
   --- Git
   --- NOTE: gitsigns 会检查 "trouble.nvim" 是否安装, 如果有安装则:

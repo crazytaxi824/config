@@ -272,6 +272,16 @@ local function metatable_funcs()
     end
   end
 
+  --- is_open(). true: window is opened; false: window is closed.
+  function meta_funcs:is_open()
+    if __term_buf_exist(self.bufnr) then
+      local wins = vim.fn.getbufinfo(self.bufnr)[1].windows
+      if #wins > 0 then
+        return true
+      end
+    end
+  end
+
   --- open terminal window or goto terminal window, return win_id
   function meta_funcs:open_win()
     if __term_buf_exist(self.bufnr) then
