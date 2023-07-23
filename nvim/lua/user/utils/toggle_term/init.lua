@@ -4,9 +4,9 @@ if not term_status_ok then
   return
 end
 
-local exec_bot_term = require("user.utils.term.exec_bot_term")
-local exec_float_term = require("user.utils.term.exec_float_term")
-local instances = require("user.utils.term.instances")
+local exec_bot_term = require("user.utils.toggle_term.exec_bot_term")
+local exec_float_term = require("user.utils.toggle_term.exec_float_term")
+local instances = require("user.utils.toggle_term.instances")
 
 local M = {
   bottom = {

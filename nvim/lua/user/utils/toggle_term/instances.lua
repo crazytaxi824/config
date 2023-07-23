@@ -1,7 +1,7 @@
 --- 实现 toggle (open/close) 单个或者所有 terminal windows.
 
-local exec_bot_term = require("user.utils.term.exec_bot_term")
-local cmd_term = require("user.utils.term.cmd_term")
+local exec_bot_term = require("user.utils.toggle_term.exec_bot_term")
+local cmd_term = require("user.utils.toggle_term.cmd_term")
 
 local M = {}
 

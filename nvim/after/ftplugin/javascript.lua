@@ -1,7 +1,11 @@
 --- javascript -------------------------------------------------------------------------------------
 --- node js_file -----------------------------------------------------------------------------------
 local function js_run(file)
-  require("user.utils.term").bottom.run("node " .. file)
+  -- require("user.utils.toggle_term").bottom.run("node " .. file)
+  local t = require('user.term_instances').exec_term
+  t.cmd = "node " .. file
+  t:stop()
+  t:run()
 end
 
 --- jest js_file -----------------------------------------------------------------------------------
@@ -19,7 +23,11 @@ local function js_jest(file, coverage)
     cmd = "jest " .. file
   end
 
-  require("user.utils.term").bottom.run(cmd)
+  -- require("user.utils.toggle_term").bottom.run(cmd)
+  local t = require('user.term_instances').exec_term
+  t.cmd = cmd
+  t:stop()
+  t:run()
 end
 
 --- keymap -----------------------------------------------------------------------------------------

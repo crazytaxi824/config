@@ -272,6 +272,16 @@ local function metatable_funcs()
     end
   end
 
+  --- is_open(). true: window is opened; false: window is closed.
+  function meta_funcs:is_open()
+    if __term_buf_exist(self.bufnr) then
+      local wins = vim.fn.getbufinfo(self.bufnr)[1].windows
+      if #wins > 0 then
+        return true
+      end
+    end
+  end
+
   --- open terminal window or goto terminal window, return win_id
   function meta_funcs:open_win()
     if __term_buf_exist(self.bufnr) then
@@ -339,8 +349,7 @@ M.new = function(opts)
 
   --- NOTE: terminal 已经存在, 无法使用相同 id 创建新的 terminal.
   if global_my_term_cache[opts.id] then
-    vim.notify('terminal instance is already exist, please use function "get_term_by_id()"', vim.log.levels.WARN)
-    return
+    error('terminal id='.. opts.id .. ' is already created')
   end
 
   --- terminal object

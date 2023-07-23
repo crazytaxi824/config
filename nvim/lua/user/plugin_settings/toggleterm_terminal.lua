@@ -83,7 +83,7 @@ vim.api.nvim_set_hl(0, 'WinBarInactive', {ctermfg=246})
 
 -- -- }}}
 
-local my_term = require("user.utils.term")
+local my_term = require("user.utils.toggle_term")
 
 local opt = {noremap = true, silent = true}
 local toggleterm_keymaps = {
