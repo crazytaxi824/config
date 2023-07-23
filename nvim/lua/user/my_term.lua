@@ -339,8 +339,7 @@ M.new = function(opts)
 
   --- NOTE: terminal 已经存在, 无法使用相同 id 创建新的 terminal.
   if global_my_term_cache[opts.id] then
-    vim.notify('terminal instance is already exist, please use function "get_term_by_id()"', vim.log.levels.WARN)
-    return
+    error('terminal id='.. opts.id .. ' is already created')
   end
 
   --- terminal object
