@@ -457,6 +457,8 @@ nvim_tree.setup {
 -- -- }}}
 
 --- `:help nvim-tree-highlight` -------------------------------------------------------------------- {{{
+vim.api.nvim_set_hl(0, 'NvimTreeNormalNC', {link="NormalNC"})  -- non-foucs nvim-tree window color
+
 vim.api.nvim_set_hl(0, 'NvimTreeFolderName', {ctermfg=Color.cyan, bold=true})
 vim.cmd('hi! default link NvimTreeFolderIcon NvimTreeFolderName')
 vim.cmd('hi! default link NvimTreeEmptyFolderName NvimTreeFolderName')

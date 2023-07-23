@@ -72,8 +72,9 @@ Color = {
 --- highlight api 设置: vim.api.nvim_set_hl(0, '@property', { ctermfg = 81 })
 local highlights = {
   --- editor ---------------------------------------------------------------------------------------
-  Normal = {ctermfg = Color.white},
-  Visual = {ctermbg = 24},
+  Normal = {ctermfg = Color.white},  -- window background color
+  NormalNC = {link="Normal"},  -- non-focus window background color
+  Visual = {ctermbg = 24},  -- Visual mode seleced text color
 
   --- VVI: Pmenu & FloatBorder 背景色需要设置为相同, 影响很多窗口的颜色.
   Pmenu       = {ctermfg = Color.white, ctermbg = Color.black}, -- Completion Menu & Floating Window 颜色
