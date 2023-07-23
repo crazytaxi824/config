@@ -490,7 +490,7 @@ bufferline.setup({
     --- as an escape hatch for people who cannot bear it for whatever reason
     indicator = {
       style = 'icon',  -- 'icon' | 'underline' | 'none',
-      icon = '▎',  --  █ ▎▌, style = 'icon' 时生效.
+      icon = '▌',  --  █ ▎▌, style = 'icon' 时生效.
     },
     buffer_close_icon = '✕',  -- 每个 buffer 后面显示 close icon.
     modified_icon = '●',
