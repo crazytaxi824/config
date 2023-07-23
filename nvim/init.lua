@@ -48,6 +48,7 @@ require "user.lsp"      -- 加载 vim.lsp/vim.diagnostic 相关设置. 这里不
                         -- user/lsp 是个文件夹, 这里是加载的 user/lsp/init.lua
 require "user.wrap"     -- autocmd 根据 filetype 设置 set wrap && cursor move.
 require "user.terminal" -- terminal settings
+require("user.term_instances")  -- my_term 实例
 require "user.misc"     -- 其他杂项 settings
 
 --- 加载 plugins 和 settings
@@ -56,5 +57,5 @@ require "user.plugins_loader"  -- packer 加载 plugin
 --- VVI: keymap 放在最后 overwirte 其他设置.
 require "user.keymaps"  -- keymap 设置
 
-require("user.my_term")
+
 

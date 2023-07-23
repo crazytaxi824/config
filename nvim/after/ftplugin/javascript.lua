@@ -2,7 +2,7 @@
 --- node js_file -----------------------------------------------------------------------------------
 local function js_run(file)
   -- require("user.utils.toggle_term").bottom.run("node " .. file)
-  local t = require('user.utils.m_terms').exec_term
+  local t = require('user.term_instances').exec_term
   t.cmd = "node " .. file
   t:stop()
   t:run()
@@ -24,7 +24,7 @@ local function js_jest(file, coverage)
   end
 
   -- require("user.utils.toggle_term").bottom.run(cmd)
-  local t = require('user.utils.m_terms').exec_term
+  local t = require('user.term_instances').exec_term
   t.cmd = cmd
   t:stop()
   t:run()

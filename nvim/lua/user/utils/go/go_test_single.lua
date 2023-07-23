@@ -110,7 +110,7 @@ local function go_test_single(testfn_name, opt)
 
   --- toggleterm 执行 command
   -- require("user.utils.toggle_term").bottom.run(cmd, on_exit)
-  local t = require('user.utils.m_terms').exec_term
+  local t = require('user.term_instances').exec_term
   t.cmd = cmd
   t.on_exit = on_exit
   t:stop()
