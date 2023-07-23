@@ -141,6 +141,8 @@ lua 中有一个 `_G` 全局变量. 自定义的所有全局变量和函数都�
 
 ### nvim 常用函数
 
+- `vim.api.nvim_buf_call()` 在指定 buffer 中运行指令, 类似于 win_gotoid() do something, and then go back to previous window. eg: `vim.api.nvim_buf_call(bufnr, function() vim.cmd("normal! G") end)`
+
 - `vim.inspect(table)` & `vim.print(table)` -- 打印 table 中的内容, 类似 fmt.Printf("%+v", struct)
 
 - `vim.list_extend({list1}, {list2})` -- 合并两个 list-like table
