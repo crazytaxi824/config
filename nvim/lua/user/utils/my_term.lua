@@ -6,7 +6,6 @@
 
 --- 原理: nvim_create_buf() -> <cmd>botright sbuffer bufnr -> win_gotoid(win_id) -> termopen(cmd)
 
-
 local M = {}
 
 local global_my_term_cache = {}  -- map-like table { id:term_obj }
