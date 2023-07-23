@@ -76,6 +76,18 @@ local function delete_all_other_buffers()
 end
 -- -- }}}
 
+--- toggle editor background color --------------------------------------------- {{{
+local function toggle_background_color()
+  local c = vim.api.nvim_get_hl(0, {name="Normal"})
+  if c.ctermbg == 234 then
+    c.ctermbg = nil
+    vim.api.nvim_set_hl(0, "Normal", c)
+  else
+    c.ctermbg = 234
+    vim.api.nvim_set_hl(0, "Normal", c)
+  end
+end
+-- -- }}}
 -- -- }}}
 
 --- vim.keymap.set() - option `:help :map-arguments`
@@ -264,6 +276,9 @@ local keymaps = {
   --- 切换 buffer, 目前使用 bufferline 进行 buffer 切换, 如果不使用 buffer line 则使用以下设置.
   --{'n', '<lt>', ':bprevious<CR>', opt, 'go to previous buffer'},
   --{'n', '>', ':bnext<CR>', opt, 'go to next buffer'},
+
+  ---TODO: hi Normal ctermbg=234 | hi Normal ctermbg=NONE 切换 bg 颜色
+  {'n', '<leader>b', function() toggle_background_color() end, opt, 'change editor background color'},
 
   --- alacritty settings window.option_as_alt 设置 Option 当做 ALT key 使用.
   {'n', '<M-a>', function() print("<M-a> Option/Alt-A") end, opt, 'Test Option/ALT key'},
