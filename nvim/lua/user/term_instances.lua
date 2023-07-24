@@ -46,4 +46,10 @@ require('user.utils.keymaps').set(toggleterm_keymaps, {
   opts = {mode='n'},
 })
 
+--- debug: get a terminal instance -----------------------------------------------------------------
+function Get_Term_by_ID(id)
+  local t = mt.get_term_by_id(id)
+  return t or mt.new({id=id})
+end
+
 return M
