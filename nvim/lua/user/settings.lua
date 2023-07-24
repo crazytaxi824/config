@@ -410,10 +410,10 @@ vim.opt.cursorlineopt = "number,screenline"  -- screenline 和 line 的区别在
 vim.api.nvim_create_autocmd("WinEnter", {
   pattern = {"*"},
   callback = function(params)
-    local curr_win_id = vim.api.nvim_get_current_win()  -- get current window id
-
     --- 延迟执行避免 bug.
     vim.schedule(function()
+      local curr_win_id = vim.api.nvim_get_current_win()  -- get current window id
+
       --- WinEnter 时如果自己是 popup window 则不显示 cursorline, eg: nvim-notify 是 popup window.
       local win_type = vim.fn.win_gettype(curr_win_id)
       if win_type ~= 'popup' and win_type ~= 'unknown' then
