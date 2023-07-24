@@ -349,19 +349,8 @@ vim.opt.fillchars = 'fold: ,diff: ,vert:│,eob:~'
 vim.opt.foldenable = true  -- 折叠代码.
 vim.opt.foldnestmax = 3    -- 最多折叠3层. NOTE: 'setlocal foldnestmax' 需要放在 'foldlevel' 之前设置, 否则不生效.
 
-vim.opt.foldtext = "v:lua.__Folded_line_text()"  -- VVI: 运行 lua Global function. `v:lua.xxx()` 只能运行 global function.
-function __Folded_line_text()
-  --- VVI: replace '\t' with 'N-spaces'. 否则 \t 会被认为是一个 char, 导致 line 开头的内容部分被隐藏.
-  --- N-spaces 根据 buffer 的 tabstop 决定.
-  local fs = string.gsub(vim.fn.getline(vim.v.foldstart), '\t', string.rep(' ', vim.bo.tabstop))
-  local fe = string.gsub(vim.fn.getline(vim.v.foldend), '^%s+', '')
-
-  --- 这里主要是使用 setlocal foldmethod=expr foldexpr=nvim_treesitter#foldexpr() 功能.
-  if vim.wo.foldmethod == 'expr' then
-    return fs .. ' … ' .. fe
-  end
-  return fs .. ' ' .. fe
-end
+--- `:help v:lua-call`, eg: `v:lua.require'mypack'.func(arg1, arg2)`
+vim.opt.foldtext = "v:lua.require('user.utils.fold_line_text').foldtext()"
 
 --- 放在最上面, 因为如果 stdpath('config') 路径下有 json ... 等文件, 可以通过下面的 autocmd 覆盖这里的设置.
 --- 这里不能使用 'BufEnter' 否则每次切换窗口或者文件的时候都会重新设置.
