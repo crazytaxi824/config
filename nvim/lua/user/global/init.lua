@@ -5,7 +5,6 @@ require("user.global.notification")  -- Notify() 函数
 --- NOTE: 以下没有在设置中用到, Debug 时手动调用.
 require("user.global.common_funcs")
 require("user.global.get_infos")
-require("user.global.win_close_and_goto")
 require("user.global.screen_size")
 
 
