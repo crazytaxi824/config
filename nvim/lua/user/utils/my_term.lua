@@ -325,6 +325,27 @@ local function metatable_funcs()
     return vim.fn.jobwait({self.job_id}, 0)[1]
   end
 
+  --- close all other terminals
+  function meta_funcs:close_others()
+    for _, term_obj in ipairs(global_my_term_cache) do
+      if __term_buf_exist(term_obj.bufnr) and term_obj.bufnr ~= self.bufnr then
+        local wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
+        for _, w in ipairs(wins) do
+          vim.api.nvim_win_close(w, 'force')
+        end
+      end
+    end
+  end
+
+  --- wipeout all other terminals
+  function meta_funcs:wipeout_others()
+    for _, term_obj in ipairs(global_my_term_cache) do
+      if __term_buf_exist(term_obj.bufnr) and term_obj.bufnr ~= self.bufnr then
+        vim.api.nvim_buf_delete(term_obj.bufnr, {force=true})
+      end
+    end
+  end
+
   --- terminate 之后, 如果要使用相同 id 的 terminal 需要重新 New()
   function meta_funcs:__terminate()
     if __term_buf_exist(self.bufnr) then
