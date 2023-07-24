@@ -26,7 +26,7 @@ local plugins = {
   { "folke/lazy.nvim",
     --- install the latest stable version of plugins that support Semver.
     -- version = "*",  -- 相当于 tag='stable'
-    tag = "v10.1.0",
+    tag = "v10.3.0",
   },
 
   --- Performence & Functions ----------------------------------------------------------------------
