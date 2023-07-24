@@ -43,57 +43,6 @@ local key_fn = require('user.utils.keymaps')
 ---   - v_CTRL-G  - 切换 visual/select mode, select mode 是 visual 的一个子模式, 多用于代码补全的默认值.
 -- -- }}}
 
---- functions for key mapping ---------------------------------------------------------------------- {{{
---- wipeout all terminals ------------------------------------------------------ {{{
---- NOTE: close all terminals' window; stop all terminals' job; wipeout all terminals' buffer.
-local function wipeout_all_terminals()
-  -- 获取所有 bufnr, 判断 bufname 是否匹配 term://*
-  for bufnr = vim.fn.bufnr('$'), 1, -1 do
-    if vim.bo[bufnr].buftype == 'terminal' then
-      vim.api.nvim_buf_delete(bufnr, {force=true})  -- wipeout buffe
-    end
-  end
-end
--- -- }}}
-
---- delete all other buffers --------------------------------------------------- {{{
---- NOTE: `:bdelete` 本质是 unlist buffer. 即: listed = 0
-local function delete_all_other_buffers()
-  local buf_list = {}
-
-  --- NOTE: nvimtree, tagbar, terminal 不会被关闭, 因为他们是 unlisted.
-  for _, bufinfo in ipairs(vim.fn.getbufinfo({buflisted = 1})) do  -- 获取 listed buffer
-    if bufinfo.changed == 0    -- 没有修改后未保存的内容.
-      and bufinfo.hidden == 1  -- 是隐藏状态的 buffer. 如果是 active 状态(即: 正在显示的 buffer, 例如当前 buffer), 不会被删除.
-    then
-      table.insert(buf_list, bufinfo.bufnr)
-    end
-  end
-
-  if #buf_list > 0 then
-    vim.cmd('bdelete ' .. table.concat(buf_list, ' '))
-  end
-end
--- -- }}}
-
---- toggle editor background color --------------------------------------------- {{{
-local function toggle_background_color()
-  local c = vim.api.nvim_get_hl(0, {name="Normal"})
-  if c.ctermbg == 234 then
-    c.ctermbg = nil
-    vim.api.nvim_set_hl(0, "Normal", c)
-    vim.api.nvim_set_hl(0, "NormalNC", {link="Normal"})
-    vim.api.nvim_set_hl(0, "VertSplit", {ctermfg=236})
-  else
-    c.ctermbg = 234
-    vim.api.nvim_set_hl(0, "Normal", c)
-    vim.api.nvim_set_hl(0, "NormalNC", {ctermbg=235})
-    vim.api.nvim_set_hl(0, "VertSplit", {ctermfg=237, ctermbg=235})
-  end
-end
--- -- }}}
--- -- }}}
-
 --- vim.keymap.set() - option `:help :map-arguments`
 --- { noremap = true },
 --- { nowait = true },
@@ -255,7 +204,7 @@ local keymaps = {
   {'v', '<leader><lt>', '<C-c>`>a><C-c>`<lt>i<lt><C-c>v`><right><right>', opt, 'which_key_ignore'},  -- '<' 使用 <lt> 代替.
 
   --- 关闭所有其他 buffers
-  {'n', '<leader>Da', function() delete_all_other_buffers() end, opt, 'buffer: Close All Other Buffers'},
+  {'n', '<leader>Da', function() key_fn.close_other_bufs() end, opt, 'buffer: Close All Other Buffers'},
   --{'n', '<leader>d', 'bdelete', opt, 'buf: Close Current Buffer'},
 
   --- Window 控制
@@ -263,7 +212,7 @@ local keymaps = {
   {'n', '<leader>W', '<cmd>only!<CR>', opt, 'win: Close All Other Windows'},  -- 关闭所有其他窗口, 快捷键 <C-w><C-o>
 
   --- NOTE: terminal key mapping 在 "toggleterm.lua" 中设置了.
-  {'n', '<leader>T', function() wipeout_all_terminals() end, opt, "terminal: Wipeout All Terminals"},
+  {'n', '<leader>T', function() key_fn.wipe_all_term_bufs() end, opt, "terminal: Wipeout All Terminals"},
 
   --- 其他 -----------------------------------------------------------------------------------------
   --- ZZ same as `:x`
@@ -282,7 +231,7 @@ local keymaps = {
   --{'n', '>', ':bnext<CR>', opt, 'go to next buffer'},
 
   ---TODO: hi Normal ctermbg=234 | hi Normal ctermbg=NONE 切换 bg 颜色
-  {'n', '<leader>b', function() toggle_background_color() end, opt, 'change editor background color'},
+  {'n', '<leader>b', function() key_fn.toggle_editor_bg_color() end, opt, 'change editor background color'},
 
   --- alacritty settings window.option_as_alt 设置 Option 当做 ALT key 使用.
   {'n', '<M-a>', function() print("<M-a> Option/Alt-A") end, opt, 'Test Option/ALT key'},
