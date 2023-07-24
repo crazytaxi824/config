@@ -440,6 +440,23 @@ vim.api.nvim_command('echo "ok"')
 
 <br />
 
+## 针对单个 window 有效的 highlight
+
+```lua
+--- 创建一个 highlight namespace
+local ns = vim.api.nvim_create_namespace('my_term_list')
+
+--- 给指定的 namespace 设置 highlight.
+vim.api.nvim_set_hl(ns, 'CursorLine', {ctermbg=24})
+vim.api.nvim_set_hl(ns, 'NormalFloat', {ctermbg=233, ctermfg=190})
+vim.api.nvim_set_hl(ns, 'FloatBorder', {ctermbg=233, ctermfg=251})
+
+--- 将 namespace 加载到指定 window 中. 只在该 window 中生效.
+vim.api.nvim_win_set_hl_ns(float_win_id, ns)
+```
+
+<br />
+
 ## :help watch-file
 
 ```lua
