@@ -18,6 +18,7 @@ M.job_exec = function (cmd, term_job)
   local scratch_bufnr = vim.api.nvim_create_buf(false, true)
 
   local j_id
+  --- VVI: 这里使用 nvim_buf_call() 来执行 termopen() 是为了避免创建一个 window 来执行 termopen()
   vim.api.nvim_buf_call(scratch_bufnr, function()
     j_id = vim.fn.termopen(cmd, {
       on_exit = function()
