@@ -43,7 +43,6 @@ __Debug_Neovim = {
 --- 读取设置: ~/.config/nvim/lua/user/xxx.lua
 require "user.core"     -- VVI: 必须放在最前面加载, 因为有全局函数需要被用到.
 require "user.colors"   -- VVI: 必须放在最前面加载, 因为有全局变量 "Color", 很多 plugins 需要用到.
-require "user.global"   -- 自定义函数, 很多设置用到的常用函数.
 require "user.settings" -- vimrc 设置
 require "user.lsp"      -- 加载 vim.lsp/vim.diagnostic 相关设置. 这里不是插件设置, 是内置参数设置.
                         -- user/lsp 是个文件夹, 这里是加载的 user/lsp/init.lua
@@ -53,13 +52,13 @@ require "user.terminal" -- terminal settings
 require "user.term_instances"  -- my_term 实例
 
 require "user.wrap" -- autocmd 根据 filetype 设置 set wrap && cursor move.
-require "user.misc" -- 其他杂项设置
+require "user.misc" -- 其他杂项设置. 例如 autocmd VimEnter, VimLeave ...
 
---- 加载 plugins 和 settings
-require "user.plugins_loader"  -- packer 加载 plugin
+--- 加载 plugins 和 plugins' settings
+require "user.plugins_loader"
 
 --- VVI: keymap 放在最后 overwirte 其他设置.
 require "user.keymaps"  -- keymap 设置
 
-
+require "user.global"   -- 自定义全局函数, 主要用于 debug. 可以不加载.
 
