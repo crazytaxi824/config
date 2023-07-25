@@ -262,7 +262,7 @@ local nt_buffer_keymaps = {
 
 --- global keymap --------------------------------------------------------------
 local function nvim_tree_toggle(cmd)
-  vim.cmd('silent! TagbarClose')
+  vim.cmd('silent! TagbarClose')  --- VVI: 必须使用 silent! 否则可能会报错.
   vim.cmd(cmd)
 end
 
