@@ -42,6 +42,9 @@ local function __keymaps(bufnr)
   local opt = {buffer = bufnr, silent = true, noremap = true}
   vim.keymap.set('n', 't<Up>', '<cmd>resize +5<CR>', opt)
   vim.keymap.set('n', 't<Down>', '<cmd>resize -5<CR>', opt)
+  --- TODO:
+  -- to - close_others
+  -- tw - wipeout_others
 end
 -- -- }}}
 
@@ -309,22 +312,6 @@ local function metatable_funcs()
     end
   end
 
-  --- 将 terminal 重置为 default_opts
-  function meta_funcs:clear()
-    --- VVI: 这里不能简单的使用 self = default_opts 因为:
-    --- 1. 导致 global_my_term_cache 中的 term object 无效.
-    --- 2. 不会保留 metatable, 会导致所有的 methods 丢失.
-    for key, value in pairs(default_opts) do
-      self[key] = value
-    end
-  end
-
-  --- 检查 terminal 运行情况.
-  function meta_funcs:job_status()
-    --- `:help jobwait()`
-    return vim.fn.jobwait({self.job_id}, 0)[1]
-  end
-
   --- close all other terminals
   function meta_funcs:close_others()
     for _, term_obj in ipairs(global_my_term_cache) do
@@ -344,6 +331,22 @@ local function metatable_funcs()
         vim.api.nvim_buf_delete(term_obj.bufnr, {force=true})
       end
     end
+  end
+
+  --- 将 terminal 重置为 default_opts
+  function meta_funcs:clear()
+    --- VVI: 这里不能简单的使用 self = default_opts 因为:
+    --- 1. 导致 global_my_term_cache 中的 term object 无效.
+    --- 2. 不会保留 metatable, 会导致所有的 methods 丢失.
+    for key, value in pairs(default_opts) do
+      self[key] = value
+    end
+  end
+
+  --- 检查 terminal 运行情况.
+  function meta_funcs:job_status()
+    --- `:help jobwait()`
+    return vim.fn.jobwait({self.job_id}, 0)[1]
   end
 
   --- terminate 之后, 如果要使用相同 id 的 terminal 需要重新 New()
@@ -395,6 +398,16 @@ end
 --- return an term object by id
 M.get_term_by_id = function(id)
   return global_my_term_cache[id]
+end
+
+--- get term_id by term_win_id
+M.get_term_id_by_win = function(term_win_id)
+  local bufnr = vim.api.nvim_win_get_buf(term_win_id)
+  local bufname = vim.api.nvim_buf_get_name(bufnr)
+  if string.match(bufname, 'term://.*' .. name_tag .. '%d+') then --- it is my_term
+    local s = vim.split(bufname, name_tag, {trimempty=true})
+    return tonumber(vim.trim(s[#s]))
+  end
 end
 
 --- close all my_term windows
