@@ -333,25 +333,6 @@ local function metatable_funcs()
   return meta_funcs
 end
 
---- terminate 之后, 如果要使用相同 id 的 terminal 需要重新 New()
-M.__terminate = function(term_id)
-  local t = global_my_term_cache[term_id]
-  if not t then
-    return
-  end
-
-  if __term_buf_exist(t.bufnr) then
-    vim.api.nvim_buf_delete(t.bufnr, {force=true})
-  end
-
-  --- clear global cache and delete terminal
-  global_my_term_cache[t.id] = nil
-end
-
-M.__debug = function()
-  vim.print(global_my_term_cache)
-end
-
 M.new = function(opts)
   opts = vim.tbl_deep_extend('force', default_opts, opts or {})
 
@@ -378,6 +359,30 @@ M.new = function(opts)
   setmetatable(my_term, { __index = mt })
 
   return my_term
+end
+
+M.open_shell_term = function()
+  if vim.v.count1 > 999 then
+    Notify("my_term id should be 1~999 in this method", "INFO")
+    return
+  end
+
+  local t = M.get_term_by_id(vim.v.count1)
+  --- terminal 没有被缓存则 :new()
+  if not t then
+    t = M.new({
+      id = vim.v.count1,
+      jobdone = 'exit',
+      startinsert = true,
+    })
+    t:run()
+    return
+  end
+
+  --- terminal 存在, 但是无法 open_win(), 则 run()
+  if not t:open_win() then
+    t:run()
+  end
 end
 
 --- return an term object by id
@@ -478,32 +483,27 @@ M.toggle_all = function()
   M.open_all()
 end
 
-M.open_shell_term = function()
-  if vim.v.count1 > 999 then
-    Notify("my_term id should be 1~999 in this method", "INFO")
-    return
-  end
-
-  local t = M.get_term_by_id(vim.v.count1)
-  --- terminal 没有被缓存则 :new()
+--- terminate 之后, 如果要使用相同 id 的 terminal 需要重新 new()
+M.__terminate = function(term_id)
+  local t = global_my_term_cache[term_id]
   if not t then
-    t = M.new({
-      id = vim.v.count1,
-      jobdone = 'exit',
-      startinsert = true,
-    })
-    t:run()
     return
   end
 
-  --- terminal 存在, 但是无法 open_win(), 则 run()
-  if not t:open_win() then
-    t:run()
+  if __term_buf_exist(t.bufnr) then
+    vim.api.nvim_buf_delete(t.bufnr, {force=true})
   end
+
+  --- clear global cache and delete terminal
+  global_my_term_cache[t.id] = nil
 end
 
 --- debug: get a terminal instance -----------------------------------------------------------------
-function Get_Term_by_ID(id)
+function Get_all_my_terms()
+  vim.print(global_my_term_cache)
+end
+
+function Get_my_term_by_id(id)
   return M.get_term_by_id(id) or M.new({id=id})
 end
 
