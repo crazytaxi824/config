@@ -142,13 +142,14 @@ M.doc_highlight = function(bufnr)
   vim.lsp.buf_request(bufnr, 'textDocument/documentHighlight', param, doc_hl_handler)
 end
 
---- VVI: 这里不要使用 vim.lsp.buf.clear_references() 方法, 这个方法只能清除当前 buffer 的 highlight.
---- vim.lsp.util.buf_clear_references(bufnr) 清除指定 bufnr 的 highlight.
+--- clear previous highlight
 M.doc_clear = function(bufnr)
   --- clear cached result
   prev_doc_hl = nil
 
   --- clear previous highlight
+  --- VVI: 这里不要使用 vim.lsp.buf.clear_references() 方法, 这个方法只能清除当前 buffer 的 highlight.
+  --- vim.lsp.util.buf_clear_references(bufnr) 清除指定 bufnr 的 highlight.
   vim.lsp.util.buf_clear_references(bufnr)
 end
 
