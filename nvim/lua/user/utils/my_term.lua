@@ -312,27 +312,6 @@ local function metatable_funcs()
     end
   end
 
-  --- close all other terminals
-  function meta_funcs:close_others()
-    for _, term_obj in ipairs(global_my_term_cache) do
-      if __term_buf_exist(term_obj.bufnr) and term_obj.bufnr ~= self.bufnr then
-        local wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
-        for _, w in ipairs(wins) do
-          vim.api.nvim_win_close(w, 'force')
-        end
-      end
-    end
-  end
-
-  --- wipeout all other terminals
-  function meta_funcs:wipeout_others()
-    for _, term_obj in ipairs(global_my_term_cache) do
-      if __term_buf_exist(term_obj.bufnr) and term_obj.bufnr ~= self.bufnr then
-        vim.api.nvim_buf_delete(term_obj.bufnr, {force=true})
-      end
-    end
-  end
-
   --- 将 terminal 重置为 default_opts
   function meta_funcs:clear()
     --- VVI: 这里不能简单的使用 self = default_opts 因为:
@@ -349,22 +328,26 @@ local function metatable_funcs()
     return vim.fn.jobwait({self.job_id}, 0)[1]
   end
 
-  --- terminate 之后, 如果要使用相同 id 的 terminal 需要重新 New()
-  function meta_funcs:__terminate()
-    if __term_buf_exist(self.bufnr) then
-      vim.api.nvim_buf_delete(self.bufnr, {force=true})
-    end
-
-    --- clear global cache and delete terminal
-    global_my_term_cache[self.id] = nil
-    self = nil
-  end
-
-  function meta_funcs:__debug()
-    vim.print(global_my_term_cache)
-  end
-
   return meta_funcs
+end
+
+--- terminate 之后, 如果要使用相同 id 的 terminal 需要重新 New()
+M.__terminate = function(term_id)
+  local t = global_my_term_cache[term_id]
+  if not t then
+    return
+  end
+
+  if __term_buf_exist(t.bufnr) then
+    vim.api.nvim_buf_delete(t.bufnr, {force=true})
+  end
+
+  --- clear global cache and delete terminal
+  global_my_term_cache[t.id] = nil
+end
+
+M.__debug = function()
+  vim.print(global_my_term_cache)
 end
 
 M.new = function(opts)
@@ -404,10 +387,14 @@ end
 M.get_term_id_by_win = function(term_win_id)
   local bufnr = vim.api.nvim_win_get_buf(term_win_id)
   local bufname = vim.api.nvim_buf_get_name(bufnr)
-  if string.match(bufname, 'term://.*' .. name_tag .. '%d+') then --- it is my_term
-    local s = vim.split(bufname, name_tag, {trimempty=true})
-    return tonumber(vim.trim(s[#s]))
+  if not string.match(bufname, 'term://.*' .. name_tag .. '%d+') then --- it is not my_term buffer
+    Notify("the current window is not a my_term window", "WARN")
+    return
   end
+
+  --- get term_id
+  local s = vim.split(bufname, name_tag, {trimempty=true})
+  return tonumber(vim.trim(s[#s]))
 end
 
 --- close all my_term windows
@@ -429,6 +416,38 @@ M.open_all = function()
       if #term_wins < 1 then
         __create_term_win(term_obj)
       end
+    end
+  end
+end
+
+--- close all other terms except term_id
+M.close_others = function(term_id)
+  local t = global_my_term_cache[term_id]
+  if not t then
+    Notify('term: "' .. term_id .. '" is not exist', "WARN")
+    return
+  end
+
+  for _, term_obj in ipairs(global_my_term_cache) do
+    if __term_buf_exist(term_obj.bufnr) and term_obj.bufnr ~= t.bufnr then
+      local wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
+      for _, w in ipairs(wins) do
+        vim.api.nvim_win_close(w, 'force')
+      end
+    end
+  end
+end
+
+M.wipeout_others = function(term_id)
+  local t = global_my_term_cache[term_id]
+  if not t then
+    Notify('term: "' .. term_id .. '" is not exist', "WARN")
+    return
+  end
+
+  for _, term_obj in ipairs(global_my_term_cache) do
+    if __term_buf_exist(term_obj.bufnr) and term_obj.bufnr ~= t.bufnr then
+      vim.api.nvim_buf_delete(term_obj.bufnr, {force=true})
     end
   end
 end
