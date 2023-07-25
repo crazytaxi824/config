@@ -37,11 +37,16 @@ local default_opts = {
   after_exec = nil,  -- func(term), run() after exec, 不等待 jobdone. NOTE: 可用于 win_gotoid(prev_win)
 }
 
---- keymaps: terminal window 调大/调小 ------------------------------------------------------------- {{{
-local function __keymaps(bufnr)
-  local opt = {buffer = bufnr, silent = true, noremap = true}
-  vim.keymap.set('n', 't<Up>', '<cmd>resize +5<CR>', opt)
-  vim.keymap.set('n', 't<Down>', '<cmd>resize -5<CR>', opt)
+--- keymaps: for terminal buffer only -------------------------------------------------------------- {{{
+local function __buf_keymaps(term_obj)
+  local opt = {buffer = term_obj.bufnr, silent = true, noremap = true}
+  local keys = {
+    {'n', 't<Up>', '<cmd>resize +5<CR>', opt, 'my_term: resize +5'},
+    {'n', 't<Down>', '<cmd>resize -5<CR>', opt, 'my_term: resize -5'},
+    {'n', 'tr', function() M.close_others(term_obj.id) end,   opt, 'my_term: close other my_terms'},
+    {'n', 'tW', function() M.wipeout_others(term_obj.id) end, opt, 'my_term: wipeout other my_terms'},
+  }
+  require('user.utils.keymaps').set(keys)
 end
 -- -- }}}
 
@@ -255,7 +260,7 @@ local function metatable_funcs()
     local term_win_id = __open_term_win(self, old_term_bufnr)
 
     --- 快捷键设置
-    __keymaps(self.bufnr)
+    __buf_keymaps(self)
 
     --- termopen()
     if vim.fn.win_gotoid(term_win_id) == 0 then
@@ -325,21 +330,6 @@ local function metatable_funcs()
     return vim.fn.jobwait({self.job_id}, 0)[1]
   end
 
-  --- terminate 之后, 如果要使用相同 id 的 terminal 需要重新 New()
-  function meta_funcs:__terminate()
-    if __term_buf_exist(self.bufnr) then
-      vim.api.nvim_buf_delete(self.bufnr, {force=true})
-    end
-
-    --- clear global cache and delete terminal
-    global_my_term_cache[self.id] = nil
-    self = nil
-  end
-
-  function meta_funcs:__debug()
-    vim.print(global_my_term_cache)
-  end
-
   return meta_funcs
 end
 
@@ -371,9 +361,47 @@ M.new = function(opts)
   return my_term
 end
 
+M.open_shell_term = function()
+  if vim.v.count1 > 999 then
+    Notify("my_term id should be 1~999 in this method", "INFO")
+    return
+  end
+
+  local t = M.get_term_by_id(vim.v.count1)
+  --- terminal 没有被缓存则 :new()
+  if not t then
+    t = M.new({
+      id = vim.v.count1,
+      jobdone = 'exit',
+      startinsert = true,
+    })
+    t:run()
+    return
+  end
+
+  --- terminal 存在, 但是无法 open_win(), 则 run()
+  if not t:open_win() then
+    t:run()
+  end
+end
+
 --- return an term object by id
 M.get_term_by_id = function(id)
   return global_my_term_cache[id]
+end
+
+--- get term_id by term_win_id
+M.get_term_id_by_win = function(term_win_id)
+  local bufnr = vim.api.nvim_win_get_buf(term_win_id)
+  local bufname = vim.api.nvim_buf_get_name(bufnr)
+  if not string.match(bufname, 'term://.*' .. name_tag .. '%d+') then --- it is not my_term buffer
+    Notify("the current window is not a my_term window", "WARN")
+    return
+  end
+
+  --- get term_id
+  local s = vim.split(bufname, name_tag, {trimempty=true})
+  return tonumber(vim.trim(s[#s]))
 end
 
 --- close all my_term windows
@@ -395,6 +423,38 @@ M.open_all = function()
       if #term_wins < 1 then
         __create_term_win(term_obj)
       end
+    end
+  end
+end
+
+--- close all other terms except term_id
+M.close_others = function(term_id)
+  local t = global_my_term_cache[term_id]
+  if not t then
+    Notify('term: "' .. term_id .. '" is not exist', "WARN")
+    return
+  end
+
+  for _, term_obj in pairs(global_my_term_cache) do
+    if __term_buf_exist(term_obj.bufnr) and term_obj.bufnr ~= t.bufnr then
+      local wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
+      for _, w in ipairs(wins) do
+        vim.api.nvim_win_close(w, 'force')
+      end
+    end
+  end
+end
+
+M.wipeout_others = function(term_id)
+  local t = global_my_term_cache[term_id]
+  if not t then
+    Notify('term: "' .. term_id .. '" is not exist', "WARN")
+    return
+  end
+
+  for _, term_obj in pairs(global_my_term_cache) do
+    if __term_buf_exist(term_obj.bufnr) and term_obj.bufnr ~= t.bufnr then
+      vim.api.nvim_buf_delete(term_obj.bufnr, {force=true})
     end
   end
 end
@@ -421,6 +481,30 @@ M.toggle_all = function()
 
   --- 如果所有 my_term window 都是关闭状态, 则 open_all()
   M.open_all()
+end
+
+--- terminate 之后, 如果要使用相同 id 的 terminal 需要重新 new()
+M.__terminate = function(term_id)
+  local t = global_my_term_cache[term_id]
+  if not t then
+    return
+  end
+
+  if __term_buf_exist(t.bufnr) then
+    vim.api.nvim_buf_delete(t.bufnr, {force=true})
+  end
+
+  --- clear global cache and delete terminal
+  global_my_term_cache[t.id] = nil
+end
+
+--- debug: get a terminal instance -----------------------------------------------------------------
+function Get_all_my_terms()
+  vim.print(global_my_term_cache)
+end
+
+function Get_my_term_by_id(id)
+  return M.get_term_by_id(id) or M.new({id=id})
 end
 
 return M

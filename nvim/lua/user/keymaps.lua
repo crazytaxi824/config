@@ -1,6 +1,7 @@
 --- 全局 keymap 设置
 
 local key_fn = require('user.utils.keymaps')
+local mt = require('user.utils.my_term')  -- my_term terminal
 
 --- README ----------------------------------------------------------------------------------------- {{{
 --- vim.keymap.set() & vim.keymap.del()
@@ -211,8 +212,12 @@ local keymaps = {
   {'n', '<leader>w', function() key_fn.win_choose() end, opt, 'win: Jump to Window'},  -- 跳转到指定 window
   {'n', '<leader>W', '<cmd>only!<CR>', opt, 'win: Close All Other Windows'},  -- 关闭所有其他窗口, 快捷键 <C-w><C-o>
 
-  --- NOTE: terminal key mapping 在 "toggleterm.lua" 中设置了.
-  {'n', '<leader>T', function() key_fn.wipe_all_term_bufs() end, opt, "terminal: Wipeout All Terminals"},
+  --- NOTE: terminal key mapping 在其他 plugin 中也有设置.
+  {'n', 'tA', function() key_fn.wipe_all_term_bufs() end, opt, "terminal: wipeout All Terminals"},
+  {'n', 'tt', function() mt.open_shell_term() end, opt, "my_term: open/new Terminal #(1~999)"},
+  {'n', 'tc', function() mt.close_all() end,  opt, "my_term: close All Terminals window"},
+  {'n', 'to', function() mt.open_all() end,   opt, "my_term: open All Terminals window"},
+  {'n', 'tT', function() mt.toggle_all() end, opt, "my_term: toggle All Terminals window"},
 
   --- 其他 -----------------------------------------------------------------------------------------
   --- ZZ same as `:x`
@@ -254,9 +259,10 @@ key_fn.set({}, {
     [']'] = {name="Section Jump Next"},
     g = {name="g"},
     z = {name="z"},
+    t = {name="Terminal"},
     ['<leader>'] = {name=vim.g.mapleader or "\\"},
 
-    --- 以下 key 默认显示为 'Nvim builtin'
+    --- 以下 key 在 which-key 中默认显示为 'Nvim builtin', 所以这里重新更名.
     Y = {'copy whole line without "\\n"'},
     ['<C-L>'] = {':nohlsearch | diffupdate'},
     ['&'] = {"repeat last ':s' replace command"},

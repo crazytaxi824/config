@@ -354,7 +354,7 @@ vim.opt.foldtext = "v:lua.require('user.utils.fold_line_text').foldtext()"
 
 --- 放在最上面, 因为如果 stdpath('config') 路径下有 json ... 等文件, 可以通过下面的 autocmd 覆盖这里的设置.
 --- 这里不能使用 'BufEnter' 否则每次切换窗口或者文件的时候都会重新设置.
-vim.api.nvim_create_autocmd("BufWinEnter", {
+vim.api.nvim_create_autocmd("BufReadPre", {
   --- "~/.config/nvim/*" 中的所有 file 都使用 marker {{{xxx}}} 折叠.
   pattern = {vim.fn.stdpath('config') .. "/*"},
   callback = function(params)
