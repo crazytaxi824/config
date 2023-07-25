@@ -297,7 +297,8 @@ local plugins = {
     lazy = true,  -- telescope 加载时自动加载.
   },
 
-  --- NOTE: terminal 实例在 user/utils/toggle_term/... 文件中
+  --- NOTE: 目前使用 my_term 代替 toggleterm.
+  --- NOTE: terminal 实例在 user/utils/toggle_term/... 文件中. 所有 toggleterm 设置都有效.
   -- {"akinsho/toggleterm.nvim",
   --   tag = "v2.7.1",  -- NOTE: 尽量少更新, 更新后需要检查 user/utils/term/... 运行情况.
   --   config = function() require("user.plugin_settings.toggleterm_terminal") end,
