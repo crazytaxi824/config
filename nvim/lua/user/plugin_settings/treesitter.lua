@@ -192,21 +192,15 @@ end, {bang=true, bar=true})
 vim.api.nvim_create_autocmd("FileType", {
   pattern = {"*"},
   callback = function(params)
-    --- get filetype from bufnr
-    local ft = vim.bo[params.buf].filetype
-
-    --- get lang from filetype
-    local lang = vim.treesitter.language.get_lang(ft)
-    if not lang then
-      --- treesitter doesn't have a lang for specified filetype.
-      return
-    end
+    -- local lang = vim.treesitter.language.get_lang(params.match) or ''  -- Don't assign nil to lang
+    local lang = nvim_ts_parsers.get_buf_lang(params.buf)
 
     --- Checks if treesitter parser for language is installed.
-    local ok, err_msg = pcall(vim.treesitter.language.add, lang)
-    if not ok then
+    if vim.tbl_contains(nvim_ts_parsers.available_parsers(), lang)  --- 如果 nvim-treesitter 中有该 parser
+      and not nvim_ts_parsers.has_parser(lang)  --- 但是该 parser 没有被安装
+    then
       --- treesitter lang is not installed.
-      Notify("run `:TSInstall " .. lang .. "` to install parser", "INFO", {title = "treesitter install", timeout = false})
+      Notify("run `:TSInstall " .. lang .. "` to install parser", "INFO", {title = "treesitter install"})
     end
   end,
   desc = "treesitter: Check treesitter parser for filetypes"
