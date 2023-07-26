@@ -639,19 +639,25 @@ local function bufferline_custom_sort_order()
 end
 
 --- BufDelete 触发条件: bdelete, bwipeout
-vim.api.nvim_create_autocmd("BufDelete", {
+vim.api.nvim_create_autocmd({"BufDelete", "BufWinEnter"}, {
   pattern = {"*"},
   callback = function(params)
     --- 获取 bufferline 中 custom_sort 排序
     local list = bufferline_custom_sort_order()
 
-    --- 从 list 中移除被删除的 bufnr
-    table.remove(list, table_index(list, params.buf))
+    --- 获取 bufnr 在 list 中的 index
+    local buf_index = table_index(list, params.buf)
 
-    --- VVI: 手动给 custom_sort 赋值, 下次 bufferline 刷新的时候会根据该顺序显示.
-    state.custom_sort = list
+    --- VVI: 手动给 custom_sort 赋值, 排序.
+    if params.event == "BufWinEnter" and not buf_index then
+      table.insert(list, params.buf)
+      state.custom_sort = list
+    elseif params.event == "BufDelete" and buf_index then
+      table.remove(list, buf_index)
+      state.custom_sort = list
+    end
   end,
-  desc = "bufferline: remove ':bdelete' buffer from custom sort order",
+  desc = "bufferline: sort bufnr manually",
 })
 -- -- }}}
 
