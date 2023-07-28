@@ -311,7 +311,7 @@ local plugins = {
   --- `:Gitsigns setqflist/seqloclist` will open Trouble instead of quickfix or location list windows.
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {"lewis6991/gitsigns.nvim",
-    commit = "adcf2c7",
+    commit = "5d73da7",
     config = function() require("user.plugin_settings.git_signs") end,
 
     --- VVI: 这里不能用 VeryLazy. `nvim dir` 启动时直接打开 dir 会造成 gitsigns 报错.
