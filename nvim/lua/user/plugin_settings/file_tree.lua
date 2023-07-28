@@ -397,13 +397,14 @@ nvim_tree.setup {
     dotfiles = false,  -- true:不显示隐藏文件, false:显示隐藏文件.
     custom = { '^\\.DS_Store$', '^\\.git$', '.*\\.swp$' },    -- 不显示指定文件
     exclude = {},  -- List of dir or files to exclude from filtering: always show them.
+    git_ignored = false,  -- 不显示 .gitignore files
   },
   git = {
     enable = true,  -- VVI: 开启 git filename 和 icon 颜色显示.
                     -- 需要开启 renderer.highlight_git 和 renderer.icons.show.git
-    ignore = false,  -- 不显示 .gitignore files
     show_on_dirs = true,  -- 在文件所属的 dir name 前也显示 sign.
     show_on_open_dirs = false,  -- 在打开的文件夹上不显示 sign.
+    disable_for_dirs = {},
     timeout = 400,
   },
   actions = {
