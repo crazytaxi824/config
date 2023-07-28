@@ -5,20 +5,16 @@ local fp = require('user.utils.filepath')
 
 --- TermClose 意思是 job done
 --- TermLeave 意思是 term 关闭
---- TermOpen 在第一次打开 terminal 的时候触发. VVI: 不会触发 "BufEnter".
+--- TermOpen 在 jobstart 的时候触发
 vim.api.nvim_create_autocmd('TermOpen', {
   pattern = {"term://*"},
   callback = function(params)
-    local wins = vim.fn.getbufinfo(params.buf)[1].windows
-    for _, win_id in ipairs(wins) do
-      --- highlight filepath in terminal
-      fp.highlight(params.buf, win_id)
+    local win_id = vim.api.nvim_get_current_win()
 
-      --- 设置 terminal 不显示行号
-      vim.wo[win_id].number = false
-      vim.wo[win_id].relativenumber = false
-      vim.wo[win_id].signcolumn = "no"
-    end
+    --- 设置 terminal 不显示行号
+    vim.wo[win_id].number = false
+    vim.wo[win_id].relativenumber = false
+    vim.wo[win_id].signcolumn = "no"
 
     --- 设置 keymaps
     local function opts(desc)
@@ -42,11 +38,7 @@ vim.api.nvim_create_autocmd('TermOpen', {
 vim.api.nvim_create_autocmd('BufWinEnter', {
   pattern = {"term://*"},
   callback = function(params)
-    local wins = vim.fn.getbufinfo(params.buf)[1].windows
-    for _, win_id in ipairs(wins) do
-      --- highlight filepath in terminal
-      fp.highlight(params.buf, win_id)
-    end
+    fp.highlight(params.buf, vim.api.nvim_get_current_win())
   end,
   desc = "terminal: filepath highlight",
 })
