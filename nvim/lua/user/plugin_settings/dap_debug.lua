@@ -302,10 +302,7 @@ local fp = require('user.utils.filepath')
 vim.api.nvim_create_autocmd('BufWinEnter', {
   pattern = {"\\[dap-repl\\]"},
   callback = function(params)
-    local wins = vim.fn.getbufinfo(params.buf)[1].windows
-    for _, win_id in ipairs(wins) do
-      fp.highlight(params.buf, win_id)
-    end
+    fp.highlight(params.buf, vim.api.nvim_get_current_win())
   end,
   desc = "dap: filepath highlight",
 })
