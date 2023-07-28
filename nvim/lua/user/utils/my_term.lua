@@ -239,8 +239,8 @@ local function metatable_funcs()
 
     --- VVI: 以下执行顺序很重要!
     --- 事件触发顺序和 `:edit term://cmd` 有所不同.
-    --- `:edit term://cmd` 中: 先触发 TermOpen -> BufEnter -> BufWinEnter.
-    --- my_term 中先触发 BufEnter -> BufWinEnter -> TermOpen.
+    --- `:edit term://cmd` 中: 触发顺序 TermOpen -> BufEnter -> BufWinEnter.
+    --- my_term 中触发顺序 BufEnter -> BufWinEnter -> TermOpen.
     --- NOTE: nvim_buf_call()
     --- 可以使用 nvim_buf_call(bufnr, function() termopen() end) 做到 TermOpen -> BufEnter -> BufWinEnter 顺序,
     --- 但在 nvim_buf_call() 的过程中 TermOpen event 获取到的 window id 是临时的 autocmd window 会导致很多问题.
