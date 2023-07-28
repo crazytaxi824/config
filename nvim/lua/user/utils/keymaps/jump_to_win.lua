@@ -3,15 +3,18 @@
 local M = {}
 
 --- statusline color
-vim.api.nvim_set_hl(0, 'MyWindowPicker',
-  {ctermfg=Color.black, ctermbg=Color.magenta, bold=true})
+local my_win_picker = 'my_window_picker'
+vim.api.nvim_set_hl(0, my_win_picker, {ctermfg=Color.black, ctermbg=Color.magenta, bold=true})
 
 --- 获取单个 char 的输入
 local function get_user_input_char()
+  --- Get a single character from the user or input stream.
+  --- 按下 'a', vim.fn.getchar() 返回 97.
   local c = vim.fn.getchar()
   while type(c) ~= "number" do
     c = vim.fn.getchar()
   end
+  --- vim.fn.nr2char(97) == 'a'
   return vim.fn.nr2char(c)
 end
 
@@ -35,7 +38,11 @@ M.choose = function()
     --- %=   Separation point between alignment sections.
     ---      Each section will be separated by an equal number of spaces.
     --- %#   use %#HLname# for highlight group HLname.
-    vim.wo[win_id].statusline = '%#MyWindowPicker#%=%#MyWindowPicker#' .. key .. '%='
+    vim.api.nvim_set_option_value(
+      'statusline',
+      '%#' .. my_win_picker .. '#%=%#' .. my_win_picker .. '#' .. key .. '%=',
+      {scope='local', win=win_id}
+    )
 
     --- cache win_map
     win_map[key] = win_id

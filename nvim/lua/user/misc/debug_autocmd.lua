@@ -42,7 +42,7 @@ if __Debug_Neovim.autocmd_events then
     pattern = {"*"},
     -- once = true,
     callback = function(params)
-      print(params.buf, params.event, params.file)
+      print(vim.api.nvim_get_current_win(), params.buf, params.event, params.file)
     end,
     desc = "autocmd debug",
   })
