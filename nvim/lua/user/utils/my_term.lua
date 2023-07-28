@@ -247,9 +247,19 @@ local function metatable_funcs()
     end
 
     --- VVI: 以下执行顺序很重要!
+    --- 事件触发顺序和 `:edit term://cmd` 有所不同.
+    --- `:edit term://cmd` 中: 先触发 TermOpen -> BufEnter -> BufWinEnter.
+    --- my_term 中先触发 BufEnter -> BufWinEnter -> TermOpen.
+    --- NOTE: nvim_buf_call()
+    --- 可以使用 nvim_buf_call(bufnr, function() termopen() end) 做到 TermOpen -> BufEnter -> BufWinEnter 顺序,
+    --- 但在 nvim_buf_call() 的过程中 TermOpen event 获取到的 window id 是临时的 autocmd window 会导致很多问题.
+
     --- 每次运行 termopen() 之前, 先创建一个新的 scratch buffer 给 terminal.
     local old_term_bufnr = self.bufnr
     self.bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
+
+    --- 在 window 加载 term buffer 之前更改 buffer name. 主要作用是为了触发 'BufEnter & BufWinEnter term://'.
+    vim.api.nvim_buf_set_name(self.bufnr, 'term://'..self.cmd .. name_tag .. self.id)
 
     --- autocmd 放在这里运行主要是有两个限制条件:
     --- 1. 在获取到 terminal bufnr 之后运行, 为了在 autocmd 中使用 bufnr 作为触发条件.
