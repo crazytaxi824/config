@@ -431,16 +431,20 @@ vim.api.nvim_create_autocmd("WinEnter", {
       --- WinEnter 时如果自己是 popup window 则不显示 cursorline, eg: nvim-notify 是 popup window.
       local win_type = vim.fn.win_gettype(curr_win_id)
       if win_type ~= 'popup' and win_type ~= 'unknown' then
+        --- NOTE: 这里不能用 ':setlocal cursorline' 否则会作用在当前 buffer 上, 这里需要作用在整个 window 上.
         --- 'cursorline' 是 `local to window`, 这里使用 vim.wo.cursorline 相当于 `:set cursorline`,
-        --- 不能用 ':setlocal cursorline' 否则会作用在当前 buffer 上, 这里需要作用在整个 window 上.
-        vim.wo[curr_win_id].cursorline = true
+        --vim.wo[curr_win_id].cursorline = true  -- OK
+        vim.api.nvim_set_option_value('cursorline', true, {win=curr_win_id})
       end
 
       --- 删除别的 window 中的 cursorline.
       --- diff 模式的 window 除外.
       for _, win_id in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
         if win_id ~= curr_win_id and not vim.wo[win_id].diff then
-          vim.wo[win_id].cursorline = false
+          --- NOTE: 这里不能用 ':setlocal cursorline' 否则会作用在当前 buffer 上, 这里需要作用在整个 window 上.
+          --- 'cursorline' 是 `local to window`, 这里使用 vim.wo.cursorline 相当于 `:set cursorline`,
+          --vim.wo[curr_win_id].cursorline = false  -- OK
+          vim.api.nvim_set_option_value('cursorline', false, {win=win_id})
         end
       end
     end)
