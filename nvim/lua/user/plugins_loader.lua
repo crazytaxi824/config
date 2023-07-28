@@ -110,7 +110,7 @@ local plugins = {
   },
 
   {"JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
-    commit = "7f62520",
+    commit = "e9062e2",
 
     lazy = true,  -- nvim-treesitter 加载时自动加载.
   },
