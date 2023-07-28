@@ -217,7 +217,7 @@ vim.api.nvim_create_autocmd("User", {
     for _, mode in ipairs({'n', 'i'}) do
       vim.api.nvim_buf_set_keymap(prompt_bufnr, mode, '<C-k>', '', {callback = function()
         --- toggle `set wrap`
-        vim.wo[preview_winid].wrap = not vim.wo[preview_winid].wrap
+        vim.api.nvim_set_option_value('wrap', not vim.wo[preview_winid].wrap, {scope='local', win=preview_winid})
       end,
       noremap = true,
       silent = true,

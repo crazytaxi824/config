@@ -9,12 +9,10 @@ local fp = require('user.utils.filepath')
 vim.api.nvim_create_autocmd('TermOpen', {
   pattern = {"term://*"},
   callback = function(params)
-    local win_id = vim.api.nvim_get_current_win()
-
     --- 设置 terminal 不显示行号
-    vim.wo[win_id].number = false
-    vim.wo[win_id].relativenumber = false
-    vim.wo[win_id].signcolumn = "no"
+    vim.opt_local.number = false
+    vim.opt_local.relativenumber = false
+    vim.opt_local.signcolumn = "no"
 
     --- 设置 keymaps
     local function opts(desc)
