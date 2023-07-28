@@ -449,11 +449,22 @@ vim.api.nvim_create_autocmd("FileType", {
       return
     end
 
+
     --- 如果 buffer 没有设置 textwidth, 即:textwidth=0, 则不 highlight virtual column.
     --- `:help pattern`, `\%23v` highlight virtual column 23.
     if vim.bo[params.buf].textwidth > 0 then
+      local win_id = vim.api.nvim_get_current_win()
+
+      --- 如果该 window 已经设置了 my_colorcolumn 则 return
+      local matches = vim.fn.getmatches(win_id)
+      for _, m in ipairs(matches) do
+        if m.group == my_colorcolumn then
+          return
+        end
+      end
+
       local pattern = '\\%' .. vim.bo[params.buf].textwidth+1 .. 'v'
-      vim.fn.matchadd(my_colorcolumn, pattern, 100, -1, {window=vim.api.nvim_get_current_win()})
+      vim.fn.matchadd(my_colorcolumn, pattern, 100, -1, {window=win_id})
     end
   end,
   desc = "using matchadd() set colorcolumn",
