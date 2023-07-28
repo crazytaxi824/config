@@ -24,7 +24,7 @@ local default_opts = {
   cmd = vim.go.shell, -- 相当于 os.getenv('SHELL')
   startinsert = nil,  -- true | false, 在 before_exec() 之前触发.
   jobdone = nil,      -- 'exit' | 'stopinsert', on_exit() 时触发, 执行 `:silent! bwipeout! term_bufnr`
-  auto_scroll = nil,  -- goto bottom of the terminal. 会影响 `:startinsert`
+  auto_scroll = nil,  -- goto bottom of the terminal.
 
   --- callback function
   on_init = nil,  -- func(term), new()
@@ -33,8 +33,6 @@ local default_opts = {
   on_stdout = nil, -- func(term, jobid, data, event), 可用于 auto_scroll.
   on_stderr = nil, -- func(term, jobid, data, event), 可用于 auto_scroll.
   on_exit = nil,   -- func(term, job_id, exit_code, event), TermClose, jobstop(), 可用于 `:silent! bwipeout! term_bufnr`
-  before_exec = nil, -- func(term), run() before exec, 可以用于检查/修改设置, keymap.set()
-  after_exec = nil,  -- func(term), run() after exec, 不等待 jobdone. NOTE: 可用于 win_gotoid(prev_win)
 }
 
 --- keymaps: for terminal buffer only -------------------------------------------------------------- {{{
@@ -134,11 +132,6 @@ end
 
 --- termopen(): 执行 cmd --------------------------------------------------------------------------- {{{
 local function __termopen_cmd(term_obj)
-  --- callback
-  if term_obj.before_exec then
-    term_obj.before_exec(term_obj)
-  end
-
   --- 使用 termopen() 开打 terminal
   term_obj.job_id = vim.fn.termopen(term_obj.cmd .. name_tag  .. term_obj.id, {
     on_stdout = function(job_id, data, event)  -- event 是 'stdout'
@@ -180,11 +173,6 @@ local function __termopen_cmd(term_obj)
       end
     end,
   })
-
-  --- callback
-  if term_obj.after_exec then
-    term_obj.after_exec(term_obj)
-  end
 end
 -- -- }}}
 
@@ -222,7 +210,11 @@ local function __open_term_win(curr_term_bufnr, old_term_bufnr)
   if #term_wins > 0 then
     --- 如果 old term buffer 存在, 同时 window 存在: 使用该 window 中加载 new term.bufnr
     win_id = term_wins[1]
-    vim.api.nvim_win_set_buf(win_id, curr_term_bufnr)  -- 将 bufnr 加载到指定 win_id, 不用进入该 window.
+    if vim.fn.win_gotoid(win_id) == 1 then
+      vim.api.nvim_win_set_buf(win_id, curr_term_bufnr)  -- 将 bufnr 加载到指定 win_id.
+    else
+      error("term_win_id: " .. win_id .. " is not exist")
+    end
   else
     --- 如果 old term buffer 存在, 但是 window 不存在: 创建一个新的 term window 加载 new term.bufnr.
     win_id = __create_term_win(curr_term_bufnr)
@@ -272,12 +264,8 @@ local function metatable_funcs()
     --- 使用 term 之前的 window 或者创建一个新的 term window. 同时 wipeout old_term_bufnr.
     local term_win_id = __open_term_win(self.bufnr, old_term_bufnr)
 
-    --- termopen(): 在进入 term window 之后执行.
-    if vim.fn.win_gotoid(term_win_id) == 1 then
-      __termopen_cmd(self)
-    else
-      error("term_win_id: " .. term_win_id .. " is not exist")
-    end
+    --- termopen(): 在进入 term window 之后立即执行, 避免 window change.
+    __termopen_cmd(self)
 
     --- startinsert option. 放在最后执行, 判断当前是否是 term window. 防止 before_exec & after_exec 跳转到别的 window.
     if self.startinsert and vim.api.nvim_get_current_win() == term_win_id then
