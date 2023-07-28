@@ -35,7 +35,7 @@ local default_opts = {
 }
 
 --- keymaps: for terminal buffer only -------------------------------------------------------------- {{{
-local function __buf_keymaps(term_obj)
+local function set_buf_keymaps(term_obj)
   local opt = {buffer = term_obj.bufnr, silent = true, noremap = true}
   local keys = {
     {'n', 't<Up>', '<cmd>resize +5<CR>', opt, 'my_term: resize +5'},
@@ -49,7 +49,7 @@ end
 
 --- 判断当前 windows 中是否有 my_term window, 返回 win_id ------------------------------------------ {{{
 --- 通过 buffer name regexp 查找.
-local function __find_exist_term_win()
+local function find_exist_term_win()
   local win_id = -1
   for _, wi in ipairs(vim.fn.getwininfo()) do
     if wi.terminal == 1  -- is a terminal window
@@ -67,7 +67,7 @@ end
 -- -- }}}
 
 --- 判断 terminal bufnr 是否存在, 是否有效 --------------------------------------------------------- {{{
-local function __term_buf_exist(bufnr)
+local function term_buf_exist(bufnr)
   if bufnr and vim.api.nvim_buf_is_valid(bufnr) then
     return true
   end
@@ -75,7 +75,7 @@ end
 -- -- }}}
 
 --- auto_scroll: 自动滚动到 terminal 底部 ---------------------------------------------------------- {{{
-local function __auto_scroll(term_obj)
+local function buf_scroll_bottom(term_obj)
   if term_obj.auto_scroll then
     vim.api.nvim_buf_call(term_obj.bufnr, function()
       local info = vim.api.nvim_get_mode()
@@ -87,7 +87,7 @@ end
 -- -- }}}
 
 --- autocmd: 根据 terminal bufnr 触发 -------------------------------------------------------------- {{{
-local function __autocmd_callback(term_obj)
+local function autocmd_callback(term_obj)
   --- NOTE: 第一次运行 terminal 时触发 TermOpen, 但不会触发 BufWinEnter.
   --- 关闭 terminal window 之后再打开时触发 BufWinEnter, 但不会触发 TermOpen.
   local g_id = vim.api.nvim_create_augroup('my_term_bufnr_' .. term_obj.bufnr, {clear=true})
@@ -130,12 +130,12 @@ end
 -- -- }}}
 
 --- termopen(): 执行 cmd --------------------------------------------------------------------------- {{{
-local function __termopen_cmd(term_obj)
+local function termopen_cmd(term_obj)
   --- 使用 termopen() 开打 terminal
   term_obj.job_id = vim.fn.termopen(term_obj.cmd .. name_tag  .. term_obj.id, {
     on_stdout = function(job_id, data, event)  -- event 是 'stdout'
       --- auto_scroll option
-      __auto_scroll(term_obj)
+      buf_scroll_bottom(term_obj)
 
       --- callback
       if term_obj.on_stdout then
@@ -145,7 +145,7 @@ local function __termopen_cmd(term_obj)
 
     on_stderr = function(job_id, data, event)  -- event 是 'stderr'
       --- auto_scroll option
-      __auto_scroll(term_obj)
+      buf_scroll_bottom(term_obj)
 
       --- callback
       if term_obj.on_stderr then
@@ -178,8 +178,8 @@ end
 --- 创建一个 window 用于 terminal 运行 ------------------------------------------------------------- {{{
 --- creat: 创建一个 window, load scratch buffer 用于执行 termopen()
 --- load:  创建一个 window, load exist terminal buffer.
-local function __create_term_win(bufnr)
-  local exist_win_id = __find_exist_term_win()
+local function create_term_win(bufnr)
+  local exist_win_id = find_exist_term_win()
   if vim.fn.win_gotoid(exist_win_id) == 1 then
     --- at least 1 terminal window exist
     vim.cmd('vertical rightbelow sbuffer ' .. bufnr)
@@ -196,10 +196,10 @@ end
 --- 打开/创建 terminal window 用于 termopen() ------------------------------------------------------ {{{
 --- NOTE: buffer 一旦运行过 termopen() 就不能再次运行了, Can only call this function in an unmodified buffer.
 --- 所以需要删除旧的 bufnr 然后重新创建一个新的 scratch bufnr 给 termopen() 使用.
-local function __enter_term_win(curr_term_bufnr, old_term_bufnr)
+local function enter_term_win(curr_term_bufnr, old_term_bufnr)
   --- 如果 old_term_bufnr 不存在: 创建一个新的 term window 用于加载 new term.bufnr
-  if not __term_buf_exist(old_term_bufnr) then
-    return __create_term_win(curr_term_bufnr)
+  if not term_buf_exist(old_term_bufnr) then
+    return create_term_win(curr_term_bufnr)
   end
 
   --- 这里是为了 re-use term window
@@ -216,7 +216,7 @@ local function __enter_term_win(curr_term_bufnr, old_term_bufnr)
     end
   else
     --- 如果 old term buffer 存在, 但是 window 不存在: 创建一个新的 term window 加载 new term.bufnr.
-    win_id = __create_term_win(curr_term_bufnr)
+    win_id = create_term_win(curr_term_bufnr)
   end
 
   --- NOTE: wipeout old_term_bufnr 放在最后避免关闭 old_term_bufnr 所在 window.
@@ -255,16 +255,16 @@ local function metatable_funcs()
     --- autocmd 放在这里运行主要是有两个限制条件:
     --- 1. 在获取到 terminal bufnr 之后运行, 为了在 autocmd 中使用 bufnr 作为触发条件.
     --- 2. 在 term window 打开并加载 term bufnr 之前运行, 为了触发 BufWinEnter event.
-    __autocmd_callback(self)
+    autocmd_callback(self)
 
     --- 快捷键设置: 在获取到 term.bufnr 和 term.id 之后运行.
-    __buf_keymaps(self)
+    set_buf_keymaps(self)
 
     --- 进入一个选定的 term window 加载现有 term buffer, 同时 wipeout old_term_bufnr.
-    local term_win_id = __enter_term_win(self.bufnr, old_term_bufnr)
+    local term_win_id = enter_term_win(self.bufnr, old_term_bufnr)
 
     --- VVI: termopen(): 在 enter term window 之后立即执行, 避免 window change.
-    __termopen_cmd(self)
+    termopen_cmd(self)
 
     --- jobstart option. 在 termopen() 后执行.
     if self.jobstart then
@@ -288,7 +288,7 @@ local function metatable_funcs()
 
   --- is_open(). true: window is opened; false: window is closed.
   function meta_funcs:is_open()
-    if __term_buf_exist(self.bufnr) then
+    if term_buf_exist(self.bufnr) then
       local wins = vim.fn.getbufinfo(self.bufnr)[1].windows
       if #wins > 0 then
         return true
@@ -298,7 +298,7 @@ local function metatable_funcs()
 
   --- open terminal window or goto terminal window, return win_id
   function meta_funcs:open_win()
-    if __term_buf_exist(self.bufnr) then
+    if term_buf_exist(self.bufnr) then
       local wins = vim.fn.getbufinfo(self.bufnr)[1].windows
       if #wins > 0 then
         --- 如果有 window 正在显示该 term buffer, 则跳转到该 window.
@@ -309,14 +309,14 @@ local function metatable_funcs()
         return wins[1]
       else
         --- 如果没有任何 window 显示该 termimal 则创建一个新的 window, 然后加载该 buffer.
-        return __create_term_win(self.bufnr)
+        return create_term_win(self.bufnr)
       end
     end
   end
 
   --- close all windows which displays this term buffer.
   function meta_funcs:close_win()
-    if __term_buf_exist(self.bufnr) then
+    if term_buf_exist(self.bufnr) then
       local wins = vim.fn.getbufinfo(self.bufnr)[1].windows
       for _, w in ipairs(wins) do
         vim.api.nvim_win_close(w, 'force')
@@ -428,10 +428,10 @@ end
 --- open all terms which are cached in global_my_term_cache and bufnr is valid.
 M.open_all = function()
   for id, term_obj in pairs(global_my_term_cache) do
-    if __term_buf_exist(term_obj.bufnr) then
+    if term_buf_exist(term_obj.bufnr) then
       local term_wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
       if #term_wins < 1 then
-        __create_term_win(term_obj.bufnr)
+        create_term_win(term_obj.bufnr)
       end
     end
   end
@@ -446,7 +446,7 @@ M.close_others = function(term_id)
   end
 
   for _, term_obj in pairs(global_my_term_cache) do
-    if __term_buf_exist(term_obj.bufnr) and term_obj.bufnr ~= t.bufnr then
+    if term_buf_exist(term_obj.bufnr) and term_obj.bufnr ~= t.bufnr then
       local wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
       for _, w in ipairs(wins) do
         vim.api.nvim_win_close(w, 'force')
@@ -463,7 +463,7 @@ M.wipeout_others = function(term_id)
   end
 
   for _, term_obj in pairs(global_my_term_cache) do
-    if __term_buf_exist(term_obj.bufnr) and term_obj.bufnr ~= t.bufnr then
+    if term_buf_exist(term_obj.bufnr) and term_obj.bufnr ~= t.bufnr then
       vim.api.nvim_buf_delete(term_obj.bufnr, {force=true})
     end
   end
@@ -500,7 +500,7 @@ M.__terminate = function(term_id)
     return
   end
 
-  if __term_buf_exist(t.bufnr) then
+  if term_buf_exist(t.bufnr) then
     vim.api.nvim_buf_delete(t.bufnr, {force=true})
   end
 
@@ -508,9 +508,13 @@ M.__terminate = function(term_id)
   global_my_term_cache[t.id] = nil
 end
 
---- debug: get a terminal instance -----------------------------------------------------------------
+--- debug ------------------------------------------------------------------------------------------
 function Get_all_my_terms()
   vim.print(global_my_term_cache)
+end
+
+function Remove_my_term_by_id(id)
+  M.__terminate(id)
 end
 
 function Get_my_term_by_id(id)
