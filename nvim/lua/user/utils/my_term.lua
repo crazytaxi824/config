@@ -196,7 +196,7 @@ end
 --- 打开/创建 terminal window 用于 termopen() ------------------------------------------------------ {{{
 --- NOTE: buffer 一旦运行过 termopen() 就不能再次运行了, Can only call this function in an unmodified buffer.
 --- 所以需要删除旧的 bufnr 然后重新创建一个新的 scratch bufnr 给 termopen() 使用.
-local function __open_term_win(curr_term_bufnr, old_term_bufnr)
+local function __enter_term_win(curr_term_bufnr, old_term_bufnr)
   --- 如果 old_term_bufnr 不存在: 创建一个新的 term window 用于加载 new term.bufnr
   if not __term_buf_exist(old_term_bufnr) then
     return __create_term_win(curr_term_bufnr)
@@ -260,10 +260,10 @@ local function metatable_funcs()
     --- 快捷键设置: 在获取到 term.bufnr 和 term.id 之后运行.
     __buf_keymaps(self)
 
-    --- 使用 term 之前的 window 或者创建一个新的 term window. 同时 wipeout old_term_bufnr.
-    local term_win_id = __open_term_win(self.bufnr, old_term_bufnr)
+    --- 进入一个选定的 term window 加载现有 term buffer, 同时 wipeout old_term_bufnr.
+    local term_win_id = __enter_term_win(self.bufnr, old_term_bufnr)
 
-    --- VVI: termopen(): 在进入 term window 之后立即执行, 避免 window change.
+    --- VVI: termopen(): 在 enter term window 之后立即执行, 避免 window change.
     __termopen_cmd(self)
 
     --- jobstart option. 在 termopen() 后执行.
