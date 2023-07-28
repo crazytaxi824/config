@@ -191,14 +191,14 @@ end
 --- 创建一个 window 用于 terminal 运行 ------------------------------------------------------------- {{{
 --- creat: 创建一个 window, load scratch buffer 用于执行 termopen()
 --- load:  创建一个 window, load exist terminal buffer.
-local function __create_term_win(term_obj)
+local function __create_term_win(bufnr)
   local exist_win_id = __find_exist_term_win()
   if vim.fn.win_gotoid(exist_win_id) == 1 then
     --- at least 1 terminal window exist
-    vim.cmd('vertical rightbelow sbuffer ' .. term_obj.bufnr)
+    vim.cmd('vertical rightbelow sbuffer ' .. bufnr)
   else
     --- no terminal window exist, create a botright window for terminals.
-    vim.cmd('horizontal botright sbuffer' .. term_obj.bufnr .. ' | resize ' .. win_height)
+    vim.cmd('horizontal botright sbuffer' .. bufnr .. ' | resize ' .. win_height)
   end
 
   --- return win_id
@@ -212,7 +212,7 @@ end
 local function __open_term_win(term_obj, old_term_bufnr)
   --- 如果 old_term_bufnr 不存在: 创建一个新的 term window 用于加载 new term.bufnr
   if not __term_buf_exist(old_term_bufnr) then
-    return __create_term_win(term_obj)
+    return __create_term_win(term_obj.bufnr)
   end
 
   --- 这里是为了 re-use term window
@@ -225,7 +225,7 @@ local function __open_term_win(term_obj, old_term_bufnr)
     vim.api.nvim_win_set_buf(win_id, term_obj.bufnr)  -- 将 bufnr 加载到指定 win_id, 不用进入该 window.
   else
     --- 如果 old term buffer 存在, 但是 window 不存在: 创建一个新的 term window 加载 new term.bufnr.
-    win_id = __create_term_win(term_obj)
+    win_id = __create_term_win(term_obj.bufnr)
   end
 
   --- NOTE: wipeout old_term_bufnr 放在最后避免关闭 old_term_bufnr 所在 window.
@@ -305,7 +305,7 @@ local function metatable_funcs()
         return wins[1]
       else
         --- 如果没有任何 window 显示该 termimal 则创建一个新的 window, 然后加载该 buffer.
-        return __create_term_win(self)
+        return __create_term_win(self.bufnr)
       end
     end
   end
@@ -427,7 +427,7 @@ M.open_all = function()
     if __term_buf_exist(term_obj.bufnr) then
       local term_wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
       if #term_wins < 1 then
-        __create_term_win(term_obj)
+        __create_term_win(term_obj.bufnr)
       end
     end
   end
