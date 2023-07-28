@@ -142,7 +142,9 @@ lua 中有一个 `_G` 全局变量. 自定义的所有全局变量和函数都�
 
 ### nvim 常用函数
 
-- `vim.api.nvim_buf_call()` 在指定 buffer 中运行指令, 类似于 win_gotoid() do something, and then go back to previous window. eg: `vim.api.nvim_buf_call(bufnr, function() vim.cmd("normal! G") end)`
+- VVI: `vim.api.nvim_buf_call()` 在指定 buffer 中运行指令. eg: `vim.api.nvim_buf_call(bufnr, function() vim.cmd("normal! G") end)`
+  如果 bufnr 被任意 window 显示, 则直接使用该 window 执行指令. 类似 win_gotoid() 执行完之后再跳回当前 window.
+  如果 bufnr 是 hidden buffer 则运行前会创建一个临时 autocmd window 用于执行任务, 这时在 `nvim_buf_call()` 中无法获取到真实 window id.
 
 - `vim.inspect(table)` & `vim.print(table)` -- 打印 table 中的内容, 类似 fmt.Printf("%+v", struct)
 

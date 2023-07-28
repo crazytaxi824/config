@@ -18,23 +18,20 @@ local win_height = 16  -- persist window height
 local default_opts = {
   --- VVI: 这三个属性不应该被外部手动修改.
   id = 1,  -- v:count1, VVI: 保证每个 id 只和一个 bufnr 对应. id 一旦设置应该无法改变.
+  cmd = vim.go.shell, -- 相当于 os.getenv('SHELL')
   bufnr = nil,
   job_id = nil,
 
-  cmd = vim.go.shell, -- 相当于 os.getenv('SHELL')
-  startinsert = nil,  -- true | false, 在 before_exec() 之前触发.
-  jobdone = nil,      -- 'exit' | 'stopinsert', on_exit() 时触发, 执行 `:silent! bwipeout! term_bufnr`
-  auto_scroll = nil,  -- goto bottom of the terminal. 会影响 `:startinsert`
+  jobstart = nil,     -- 'startinsert' | func(term), 在 termopen() 之后触发. eg: win_gotoid()
+  jobdone = nil,      -- 'stopinsert' | 'exit'. 在 on_exit 中触发. 如果要设置 func 可以在 on_exit 中设置.
+  auto_scroll = nil,  -- goto bottom of the terminal. 在 on_stdout & on_stderr 中触发.
 
-  --- callback function
   on_init = nil,  -- func(term), new()
   on_open = nil,  -- func(term), BufWinEnter
   on_close = nil, -- func(term), BufWinLeave
   on_stdout = nil, -- func(term, jobid, data, event), 可用于 auto_scroll.
   on_stderr = nil, -- func(term, jobid, data, event), 可用于 auto_scroll.
   on_exit = nil,   -- func(term, job_id, exit_code, event), TermClose, jobstop(), 可用于 `:silent! bwipeout! term_bufnr`
-  before_exec = nil, -- func(term), run() before exec, 可以用于检查/修改设置, keymap.set()
-  after_exec = nil,  -- func(term), run() after exec, 不等待 jobdone. NOTE: 可用于 win_gotoid(prev_win)
 }
 
 --- keymaps: for terminal buffer only -------------------------------------------------------------- {{{
@@ -134,16 +131,6 @@ end
 
 --- termopen(): 执行 cmd --------------------------------------------------------------------------- {{{
 local function __termopen_cmd(term_obj)
-  --- callback
-  if term_obj.before_exec then
-    term_obj.before_exec(term_obj)
-  end
-
-  --- startinsert option
-  if term_obj.startinsert then
-    vim.cmd('startinsert')
-  end
-
   --- 使用 termopen() 开打 terminal
   term_obj.job_id = vim.fn.termopen(term_obj.cmd .. name_tag  .. term_obj.id, {
     on_stdout = function(job_id, data, event)  -- event 是 'stdout'
@@ -177,29 +164,28 @@ local function __termopen_cmd(term_obj)
         --- VVI: 必须使用 `:silent! bwipeout! bufnr` 否则手动删除 buffer 时会触发 TermClose, 导致重复 wipeout buffer 而报错.
         pcall(vim.api.nvim_buf_delete, term_obj.bufnr, {force=true})
       elseif term_obj.jobdone == 'stopinsert' then
-        vim.cmd('stopinsert')
+        --- jobdone 的时候 cursor 在 terminal window 中则执行 stopinsert.
+        local wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
+        if vim.tbl_contains(wins, vim.api.nvim_get_current_win()) then
+          vim.cmd('stopinsert')
+        end
       end
     end,
   })
-
-  --- callback
-  if term_obj.after_exec then
-    term_obj.after_exec(term_obj)
-  end
 end
 -- -- }}}
 
 --- 创建一个 window 用于 terminal 运行 ------------------------------------------------------------- {{{
 --- creat: 创建一个 window, load scratch buffer 用于执行 termopen()
 --- load:  创建一个 window, load exist terminal buffer.
-local function __create_term_win(term_obj)
+local function __create_term_win(bufnr)
   local exist_win_id = __find_exist_term_win()
   if vim.fn.win_gotoid(exist_win_id) == 1 then
     --- at least 1 terminal window exist
-    vim.cmd('vertical rightbelow sbuffer ' .. term_obj.bufnr)
+    vim.cmd('vertical rightbelow sbuffer ' .. bufnr)
   else
     --- no terminal window exist, create a botright window for terminals.
-    vim.cmd('horizontal botright sbuffer' .. term_obj.bufnr .. ' | resize ' .. win_height)
+    vim.cmd('horizontal botright sbuffer' .. bufnr .. ' | resize ' .. win_height)
   end
 
   --- return win_id
@@ -210,10 +196,10 @@ end
 --- 打开/创建 terminal window 用于 termopen() ------------------------------------------------------ {{{
 --- NOTE: buffer 一旦运行过 termopen() 就不能再次运行了, Can only call this function in an unmodified buffer.
 --- 所以需要删除旧的 bufnr 然后重新创建一个新的 scratch bufnr 给 termopen() 使用.
-local function __open_term_win(term_obj, old_term_bufnr)
+local function __open_term_win(curr_term_bufnr, old_term_bufnr)
   --- 如果 old_term_bufnr 不存在: 创建一个新的 term window 用于加载 new term.bufnr
   if not __term_buf_exist(old_term_bufnr) then
-    return __create_term_win(term_obj)
+    return __create_term_win(curr_term_bufnr)
   end
 
   --- 这里是为了 re-use term window
@@ -223,10 +209,14 @@ local function __open_term_win(term_obj, old_term_bufnr)
   if #term_wins > 0 then
     --- 如果 old term buffer 存在, 同时 window 存在: 使用该 window 中加载 new term.bufnr
     win_id = term_wins[1]
-    vim.api.nvim_win_set_buf(win_id, term_obj.bufnr)  -- 将 bufnr 加载到指定 win_id, 不用进入该 window.
+    if vim.fn.win_gotoid(win_id) == 1 then
+      vim.api.nvim_win_set_buf(win_id, curr_term_bufnr)  -- 将 bufnr 加载到指定 win_id.
+    else
+      error("term_win_id: " .. win_id .. " is not exist")
+    end
   else
     --- 如果 old term buffer 存在, 但是 window 不存在: 创建一个新的 term window 加载 new term.bufnr.
-    win_id = __create_term_win(term_obj)
+    win_id = __create_term_win(curr_term_bufnr)
   end
 
   --- NOTE: wipeout old_term_bufnr 放在最后避免关闭 old_term_bufnr 所在 window.
@@ -247,26 +237,46 @@ local function metatable_funcs()
       return
     end
 
-    --- VVI: 每次运行 termopen() 之前, 先创建一个新的 scratch buffer 给 terminal.
+    --- VVI: 以下执行顺序很重要!
+    --- 事件触发顺序和 `:edit term://cmd` 有所不同.
+    --- `:edit term://cmd` 中: 触发顺序 TermOpen -> BufEnter -> BufWinEnter.
+    --- my_term 中触发顺序 BufEnter -> BufWinEnter -> TermOpen.
+    --- NOTE: nvim_buf_call()
+    --- 可以使用 nvim_buf_call(bufnr, function() termopen() end) 做到 TermOpen -> BufEnter -> BufWinEnter 顺序,
+    --- 但在 nvim_buf_call() 的过程中 TermOpen event 获取到的 window id 是临时的 autocmd window 会导致很多问题.
+
+    --- 每次运行 termopen() 之前, 先创建一个新的 scratch buffer 给 terminal.
     local old_term_bufnr = self.bufnr
     self.bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
 
-    --- VVI: autocmd 放在这里运行主要是有两个限制条件:
+    --- 在 window 加载 term buffer 之前更改 buffer name. 主要作用是为了触发 'BufEnter & BufWinEnter term://'.
+    vim.api.nvim_buf_set_name(self.bufnr, 'term://'..self.cmd .. name_tag .. self.id)
+
+    --- autocmd 放在这里运行主要是有两个限制条件:
     --- 1. 在获取到 terminal bufnr 之后运行, 为了在 autocmd 中使用 bufnr 作为触发条件.
     --- 2. 在 term window 打开并加载 term bufnr 之前运行, 为了触发 BufWinEnter event.
     __autocmd_callback(self)
 
-    --- 使用 term 之前的 window 或者创建一个新的 term window. 同时 wipeout old_term_bufnr.
-    local term_win_id = __open_term_win(self, old_term_bufnr)
-
-    --- 快捷键设置
+    --- 快捷键设置: 在获取到 term.bufnr 和 term.id 之后运行.
     __buf_keymaps(self)
 
-    --- termopen()
-    if vim.fn.win_gotoid(term_win_id) == 0 then
-      error("term_win_id: " .. term_win_id .. " is not exist")
-    end
+    --- 使用 term 之前的 window 或者创建一个新的 term window. 同时 wipeout old_term_bufnr.
+    local term_win_id = __open_term_win(self.bufnr, old_term_bufnr)
+
+    --- termopen(): 在进入 term window 之后立即执行, 避免 window change.
     __termopen_cmd(self)
+
+    --- jobstart option. 在 termopen() 后执行.
+    if self.jobstart then
+      if self.jobstart == 'startinsert' then
+        --- 判断当前是否是 term window. 防止 before_exec & after_exec 跳转到别的 window.
+        if vim.api.nvim_get_current_win() == term_win_id  then
+          vim.cmd('startinsert')
+        end
+      elseif type(self.jobstart) == "function" then
+        self.jobstart(self)
+      end
+    end
   end
 
   --- 终止 job, 会触发 jobdone.
@@ -299,7 +309,7 @@ local function metatable_funcs()
         return wins[1]
       else
         --- 如果没有任何 window 显示该 termimal 则创建一个新的 window, 然后加载该 buffer.
-        return __create_term_win(self)
+        return __create_term_win(self.bufnr)
       end
     end
   end
@@ -373,7 +383,7 @@ M.open_shell_term = function()
     t = M.new({
       id = vim.v.count1,
       jobdone = 'exit',
-      startinsert = true,
+      jobstart = 'startinsert',
     })
     t:run()
     return
@@ -421,7 +431,7 @@ M.open_all = function()
     if __term_buf_exist(term_obj.bufnr) then
       local term_wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
       if #term_wins < 1 then
-        __create_term_win(term_obj)
+        __create_term_win(term_obj.bufnr)
       end
     end
   end

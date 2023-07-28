@@ -42,7 +42,7 @@ if __Debug_Neovim.autocmd_events then
     pattern = {"*"},
     -- once = true,
     callback = function(params)
-      print(params.buf, params.event)
+      print(params.buf, params.event, params.file)
     end,
     desc = "autocmd debug",
   })
