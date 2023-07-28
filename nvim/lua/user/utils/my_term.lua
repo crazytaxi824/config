@@ -18,15 +18,14 @@ local win_height = 16  -- persist window height
 local default_opts = {
   --- VVI: 这三个属性不应该被外部手动修改.
   id = 1,  -- v:count1, VVI: 保证每个 id 只和一个 bufnr 对应. id 一旦设置应该无法改变.
+  cmd = vim.go.shell, -- 相当于 os.getenv('SHELL')
   bufnr = nil,
   job_id = nil,
 
-  cmd = vim.go.shell, -- 相当于 os.getenv('SHELL')
-  startinsert = nil,  -- true | false, 在 before_exec() 之前触发.
-  jobdone = nil,      -- 'exit' | 'stopinsert', on_exit() 时触发, 执行 `:silent! bwipeout! term_bufnr`
-  auto_scroll = nil,  -- goto bottom of the terminal.
+  jobstart = nil,     -- 'startinsert' | func(term), 在 termopen() 之后触发. eg: win_gotoid()
+  jobdone = nil,      -- 'stopinsert' | 'exit'. 在 on_exit 中触发. 如果要设置 func 可以在 on_exit 中设置.
+  auto_scroll = nil,  -- goto bottom of the terminal. 在 on_stdout & on_stderr 中触发.
 
-  --- callback function
   on_init = nil,  -- func(term), new()
   on_open = nil,  -- func(term), BufWinEnter
   on_close = nil, -- func(term), BufWinLeave
@@ -267,9 +266,16 @@ local function metatable_funcs()
     --- termopen(): 在进入 term window 之后立即执行, 避免 window change.
     __termopen_cmd(self)
 
-    --- startinsert option. 放在最后执行, 判断当前是否是 term window. 防止 before_exec & after_exec 跳转到别的 window.
-    if self.startinsert and vim.api.nvim_get_current_win() == term_win_id then
-      vim.cmd('startinsert')
+    --- jobstart option. 在 termopen() 后执行.
+    if self.jobstart then
+      if self.jobstart == 'startinsert' then
+        --- 判断当前是否是 term window. 防止 before_exec & after_exec 跳转到别的 window.
+        if vim.api.nvim_get_current_win() == term_win_id  then
+          vim.cmd('startinsert')
+        end
+      elseif type(self.jobstart) == "function" then
+        self.jobstart(self)
+      end
     end
   end
 
@@ -377,7 +383,7 @@ M.open_shell_term = function()
     t = M.new({
       id = vim.v.count1,
       jobdone = 'exit',
-      startinsert = true,
+      jobstart = 'startinsert',
     })
     t:run()
     return
