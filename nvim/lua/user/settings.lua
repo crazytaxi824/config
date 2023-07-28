@@ -16,64 +16,91 @@
 ---    :setglobal option?          display             -
 ---
 ----------------------------------------------------------------------------------------------------
---- Options 的 5 中不同的 scope:
+--- VVI: Options 的 5 中不同的 scope:
 ---
 ---  `local to buffer` 属性的情况: `modifiable`, `shiftwidth` ...
+---   设置 `set shiftwidth=4` 后, 在后续在任意一个 window 中打开的所有 buffer shiftwidth 都是 4.
+---   但在 `set` 之前打开的 buffer 不受影响.
 ---
----    影响的是 buffer 属性. `vim.bo` 效果和 `:setlocal` 一样.
+---   | set       | vim                     | 已加载的 buffer | 当前 buffer | 后续打开的 buffer |
+---   | --------- | ----------------------- | --------------- | ----------- | ----------------- |
+---   | setglobal | vim.go / vim.opt_global |                 |             | ✔                 |
+---   | setlocal  | vim.bo / vim.opt_local  |                 | ✔           |                   |
+---   | set       | vim.o / vim.opt         |                 | ✔           | ✔                 |
 ---
----    | set       | vim                     | 已加载的 hidden buffer | 当前 buffer | 后续打开的 buffer |
----    | --------- | ----------------------- | ---------------------- | ----------- | ----------------- |
----    | setglobal | vim.go / vim.opt_global |                        |             | ✔                 |
----    | setlocal  | vim.bo / vim.opt_local  |                        | ✔           |                   |
----    | set       | vim.o / vim.opt         |                        | ✔           | ✔                 |
----    特殊情况: `readonly` 是 `local to buffer`, 但是 `setglobal` 不起作用, 导致 `set` == `setlocal` 只能作用在当前 buffer.
----
----  NOTE: 搜索 vim.bo 的设置 `:Rg "vim\.bo(\[.*\]){0,1}\.\w+ ?=[^=]"`
+---   特殊情况: `readonly` 是 `local to buffer`, 但是 `setglobal` 不起作用, 导致 `set` == `setlocal` 只能作用在当前 buffer.
 ---
 ----------------------------------------------------------------------------------------------------
 ---  `local to window` 属性的情况: `number`, `wrap`, `spell`, `foldmethod` ...
 ---
----    VVI: 这里影响的还是 buffer 属性.
----         `vim.wo` 效果和 `:set` 一样, 如果要达到 `:setlocal` 的效果需要使用:
----            - `vim.opt_local.xxx`
----            - `nvim_set_option_value(OPTION, VALUE, { scope='local', win/buf=win_id/bufnr })`
+---   情况1: `setlocal number` 在同一个 win 中打开不同文件.
+---      在 win-1000, bufnr-1 (foo.md) 中 `:setlocal number`, 然后在 win-1000 中 `:edit bar.md` 时, number option 不存在.
+---      如果再次在 win-1000 中加载 bufnr-1 `:buffer 1` or `:edit foo.md`, number option 依然存在.
+---      但是如果 wipeout bufnr-1 之后再次打开相同文件 `:edit foo.md`, number option 不存在.
+---      NOTE: :setlocal 在 local to window 的 option 中是和 bufnr 绑定的.
+--
+---   情况2: `set number` 在不同的 win 中打开相同文件.
+--       win-1000 `set number` 和 win-1001 `set nonumber` 两个 window.
+---      win-1000 `:edit foo.md`; win-2000 `:edit bar.md`, 则 foo.md 绑定了 number 属性.
+---      在 win-2000 中 `:edit foo.md` 时, number option 依然存在.
+---      在 win-1000 中 `:edit bar.md` 时, number option 依然不存在.
+---      NOTE: 在不同的 win 中打开 file, 会导致 bufnr 和 local to window option 绑定.
 ---
----    | set       | vim                      | 已加载的 hidden buffer | 当前 buffer | 后续打开的 buffer |
----    | --------- | ------------------------ | ---------------------- | ----------- | ----------------- |
----    | setglobal | vim.go / vim.opt_global  |                        |             | ✔                 |
----    | setlocal  | vim.opt_local            |                        | ✔           |                   |
----    | set       | vim.wo / vim.o / vim.opt |                        | ✔           | ✔                 |
+---   VVI: `vim.wo[win_id]` 效果和 `:set` 一样. 只是不用跳转到指定的 win_id 内执行 `:set`
+---   如果要达到 `:setlocal` 的效果需要使用:
+---     - `vim.opt_local.xxx`
+---     - `nvim_set_option_value(OPTION, VALUE, { scope='local', win/buf=win_id/bufnr })`
 ---
----  NOTE: 搜索 vim.wo 的设置 `:Rg "vim\.wo(\[.*\]){0,1}\.\w+ ?=[^=]"`
+---   | set       | vim                      | 已加载的 buffer | 当前 buffer | 后续打开的 buffer |
+---   | --------- | ------------------------ | --------------- | ----------- | ----------------- |
+---   | setglobal | vim.go / vim.opt_global  |                 |             | ✔                 |
+---   | setlocal  | vim.opt_local            |                 | ✔           |                   |
+---   | set       | vim.wo / vim.o / vim.opt |                 | ✔           | ✔                 |
 ---
 ----------------------------------------------------------------------------------------------------
 ---  `global` 属性的情况: `undodir`, `cmdwinheight` ...
 ---
----    影响的是所有的 buffer/window.
+---   影响的是所有的 buffer/window.
 ---
 ----------------------------------------------------------------------------------------------------
 ---  `global or local to buffer` 的属性: `undolevels` ...
 ---
----    影响的是 buffer 属性.
+---   NOTE: local 的优先级高于 global, 如果既设置了 global 也设置了 local 则使用 local 的值.
 ---
----    | set       | vim                     | 已加载的 hidden buffer | 当前 buffer | 后续打开的 buffer |
----    | --------- | ----------------------- | ---------------------- | ----------- | ----------------- |
----    | setglobal | vim.go / vim.opt_global | ✔                      | ✔           | ✔                 |
----    | setlocal  | vim.bo / vim.opt_local  |                        | ✔           |                   |
----    | set       | vim.o / vim.opt         | ✔                      | ✔           | ✔                 |
+---   情况1:
+---     `set undolevels=2000`, 之前打开的和之后被打开的所有 file 的 undolevels 都是 2000.
+---     `setlocal undolevels=5000`, 只有 cursor 所在 buffer 的 undolevels 是 5000,
+---      其他的 buffer 和后续打开的 buffer 的 undolevels 不变.
+---
+---   | set       | vim                     | 已加载的 buffer | 当前 buffer | 后续打开的 buffer |
+---   | --------- | ----------------------- | --------------- | ----------- | ----------------- |
+---   | setglobal | vim.go / vim.opt_global | ✔               | ✔           | ✔                 |
+---   | setlocal  | vim.bo / vim.opt_local  |                 | ✔           |                   |
+---   | set       | vim.o / vim.opt         | ✔               | ✔           | ✔                 |
 ---
 ----------------------------------------------------------------------------------------------------
 ---  `global or local to window` 的属性: `scrolloff`, `statusline` ...
 ---
----    NOTE: 影响的是 window 属性, 和 buffer 无关.
+---   NOTE: 影响的是 window 属性, 和 buffer 无关.
+---   NOTE: local 的优先级高于 global, 如果既设置了 global 也设置了 local 则使用 local 的值.
 ---
----    | set       | vim                     | 已打开的 window | 当前 window | 后续打开的 window |
----    | --------- | ----------------------- | --------------- | ----------- | ----------------- |
----    | setglobal | vim.go / vim.opt_global | ✔               | ✔           | ✔                 |
----    | setlocal  | vim.wo / vim.opt_local  |                 | ✔           |                   |
----    | set       | vim.o / vim.opt         | ✔               | ✔           | ✔                 |
+---   情况1: 在不同 window 中打开同一个文件.
+---     win-1000 `:setlocal scrolloff=4`, win-2000 `:setlocal scrolloff=0`
+---     win-1000 中 `:edit foo.md`, scrolloff=4; win-2000 中打开相同文件 `:edit foo.md`, scrolloff=0
 ---
+---   | set       | vim                      | 已打开的 window | 当前 window | 后续打开的 window |
+---   | --------- | ------------------------ | --------------- | ----------- | ----------------- |
+---   | setglobal | vim.go / vim.opt_global  | ✔               | ✔           | ✔                 |
+---   | setlocal  | vim.wo / vim.opt_local   |                 | ✔           |                   |
+---   | set       | vim.o / vim.opt          | ✔               | ✔           | ✔                 |
+---
+----------------------------------------------------------------------------------------------------
+---   VVI: 在 local to window 和 global or local to window 的 option 中 vim.wo 所代表的含义是不同的:
+---      - 在 local to window 中 vim.wo[win_id] 相当于 `:set`, 而不是 `:setlocal`
+---      - 在 global or local to window 中 vim.wo[win_id] 相当于 `:setlocal`, 而不是 `:set`
+---
+---  NOTE: 搜索 vim.wo 的设置 `:Rg "vim\.wo(\[.*\]){0,1}\.\w+ ?=[^=]"`
+---  NOTE: 搜索 vim.bo 的设置 `:Rg "vim\.bo(\[.*\]){0,1}\.\w+ ?=[^=]"`
 ----------------------------------------------------------------------------------------------------
 --- lua 设置 options 的方法:
 ---
@@ -300,7 +327,6 @@ vim.api.nvim_create_autocmd('WinEnter', {
   callback = function(params)
     if vim.fn.win_gettype() == 'popup' then
       --- 'scrolloff' & 'sidescrolloff' 都是 `global or local to window`,
-      --- 这里使用 'vim.wo' 相当于 ':setlocal'
       vim.opt_local.scrolloff = 0
       vim.opt_local.sidescrolloff = 0
     end
