@@ -40,8 +40,8 @@ local function set_buf_keymaps(term_obj)
   local keys = {
     {'n', 't<Up>', '<cmd>resize +5<CR>', opt, 'my_term: resize +5'},
     {'n', 't<Down>', '<cmd>resize -5<CR>', opt, 'my_term: resize -5'},
-    {'n', 'tr', function() M.close_others(term_obj.id) end,   opt, 'my_term: close other my_terms'},
-    {'n', 'tW', function() M.wipeout_others(term_obj.id) end, opt, 'my_term: wipeout other my_terms'},
+    {'n', 'tc', function() M.close_others(term_obj.id) end,   opt, 'my_term: close other my_terms'},
+    {'n', 'tw', function() M.wipeout_others(term_obj.id) end, opt, 'my_term: wipeout other my_terms'},
   }
   require('user.utils.keymaps').set(keys)
 end
