@@ -298,12 +298,11 @@ vim.opt.sidescrolloff = 16  -- 和上面类似, 横向留空 n 列. NOTE: 配合
 vim.api.nvim_create_autocmd('WinEnter', {
   pattern = {"*"},
   callback = function(params)
-    local win_id = vim.api.nvim_get_current_win()  -- get current window id
-    if vim.fn.win_gettype(win_id) == 'popup' then
+    if vim.fn.win_gettype() == 'popup' then
       --- 'scrolloff' & 'sidescrolloff' 都是 `global or local to window`,
       --- 这里使用 'vim.wo' 相当于 ':setlocal'
-      vim.wo[win_id].scrolloff = 0
-      vim.wo[win_id].sidescrolloff = 0
+      vim.opt_local.scrolloff = 0
+      vim.opt_local.sidescrolloff = 0
     end
   end,
   desc = "setlocal scrolloff when enter floating window",
@@ -440,6 +439,8 @@ vim.opt.pumheight = 16  -- Maximum number of items to show in the popup menu. �
                               -- :set cc=+1,+2,+3  " highlight three columns after 'textwidth'
 --- NOTE: autocmd FileType 时, 如果文件的 filetype 无法识别, 则不会触发该 autocmd.
 --vim.cmd [[ au FileType * call matchadd('ColorColumn', '\%' .. (&textwidth+1) .. 'v', 100) ]]
+local my_colorcolumn = 'my_colorcolumn'
+vim.api.nvim_set_hl(0, my_colorcolumn, {link="ColorColumn"}) -- 自定义颜色, for matchadd()
 vim.api.nvim_create_autocmd("FileType", {
   pattern = {"*"},
   callback = function(params)
@@ -451,7 +452,8 @@ vim.api.nvim_create_autocmd("FileType", {
     --- 如果 buffer 没有设置 textwidth, 即:textwidth=0, 则不 highlight virtual column.
     --- `:help pattern`, `\%23v` highlight virtual column 23.
     if vim.bo[params.buf].textwidth > 0 then
-      vim.fn.matchadd('ColorColumn', '\\%' .. vim.bo[params.buf].textwidth+1 .. 'v', 100)
+      local pattern = '\\%' .. vim.bo[params.buf].textwidth+1 .. 'v'
+      vim.fn.matchadd(my_colorcolumn, pattern, 100, -1, {window=vim.api.nvim_get_current_win()})
     end
   end,
   desc = "using matchadd() set colorcolumn",
