@@ -83,14 +83,12 @@ vim.api.nvim_create_autocmd('OptionSet', {
 })
 
 --- :bdelete/:bwipeout 之后再次打开已经设置为 wrap 的文件时, 自动设置为 wrap.
-vim.api.nvim_create_autocmd('BufEnter', {
+vim.api.nvim_create_autocmd('BufWinEnter', {
   pattern = {"*"},
   callback = function(params)
     if wrap_list.exist(params.buf) then
-      vim.opt_local.wrap = true  -- setlocal wrap
-    end
-    if vim.wo.wrap then
       set_cursor_move_in_wrap(params.buf)  -- 设置 keymaps
+      vim.opt_local.wrap = true  -- setlocal wrap
     end
   end,
   desc = "wrap: set (no)wrap based on cached results",
