@@ -139,11 +139,6 @@ local function __termopen_cmd(term_obj)
     term_obj.before_exec(term_obj)
   end
 
-  --- startinsert option
-  if term_obj.startinsert then
-    vim.cmd('startinsert')
-  end
-
   --- 使用 termopen() 开打 terminal
   term_obj.job_id = vim.fn.termopen(term_obj.cmd .. name_tag  .. term_obj.id, {
     on_stdout = function(job_id, data, event)  -- event 是 'stdout'
@@ -177,7 +172,11 @@ local function __termopen_cmd(term_obj)
         --- VVI: 必须使用 `:silent! bwipeout! bufnr` 否则手动删除 buffer 时会触发 TermClose, 导致重复 wipeout buffer 而报错.
         pcall(vim.api.nvim_buf_delete, term_obj.bufnr, {force=true})
       elseif term_obj.jobdone == 'stopinsert' then
-        vim.cmd('stopinsert')
+        --- jobdone 的时候 cursor 在 terminal window 中则执行 stopinsert.
+        local wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
+        if vim.tbl_contains(wins, vim.api.nvim_get_current_win()) then
+          vim.cmd('stopinsert')
+        end
       end
     end,
   })
@@ -247,26 +246,33 @@ local function metatable_funcs()
       return
     end
 
-    --- VVI: 每次运行 termopen() 之前, 先创建一个新的 scratch buffer 给 terminal.
+    --- VVI: 以下执行顺序很重要!
+    --- 每次运行 termopen() 之前, 先创建一个新的 scratch buffer 给 terminal.
     local old_term_bufnr = self.bufnr
     self.bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
 
-    --- VVI: autocmd 放在这里运行主要是有两个限制条件:
+    --- autocmd 放在这里运行主要是有两个限制条件:
     --- 1. 在获取到 terminal bufnr 之后运行, 为了在 autocmd 中使用 bufnr 作为触发条件.
     --- 2. 在 term window 打开并加载 term bufnr 之前运行, 为了触发 BufWinEnter event.
     __autocmd_callback(self)
 
+    --- 快捷键设置: 在获取到 term.bufnr 和 term.id 之后运行.
+    __buf_keymaps(self)
+
     --- 使用 term 之前的 window 或者创建一个新的 term window. 同时 wipeout old_term_bufnr.
     local term_win_id = __open_term_win(self, old_term_bufnr)
 
-    --- 快捷键设置
-    __buf_keymaps(self)
-
-    --- termopen()
-    if vim.fn.win_gotoid(term_win_id) == 0 then
+    --- termopen(): 在进入 term window 之后执行.
+    if vim.fn.win_gotoid(term_win_id) == 1 then
+      __termopen_cmd(self)
+    else
       error("term_win_id: " .. term_win_id .. " is not exist")
     end
-    __termopen_cmd(self)
+
+    --- startinsert option. 放在最后执行, 判断当前是否是 term window. 防止 before_exec & after_exec 跳转到别的 window.
+    if self.startinsert and vim.api.nvim_get_current_win() == term_win_id then
+      vim.cmd('startinsert')
+    end
   end
 
   --- 终止 job, 会触发 jobdone.
