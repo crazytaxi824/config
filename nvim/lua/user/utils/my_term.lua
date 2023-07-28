@@ -18,10 +18,10 @@ local win_height = 16  -- persist window height
 local default_opts = {
   --- VVI: 这三个属性不应该被外部手动修改.
   id = 1,  -- v:count1, VVI: 保证每个 id 只和一个 bufnr 对应. id 一旦设置应该无法改变.
-  cmd = vim.go.shell, -- 相当于 os.getenv('SHELL')
   bufnr = nil,
   job_id = nil,
 
+  cmd = vim.go.shell, -- 相当于 os.getenv('SHELL')
   jobstart = nil,     -- 'startinsert' | func(term), 在 termopen() 之后触发. eg: win_gotoid()
   jobdone = nil,      -- 'stopinsert' | 'exit'. 在 on_exit 中触发. 如果要设置 func 可以在 on_exit 中设置.
   auto_scroll = nil,  -- goto bottom of the terminal. 在 on_stdout & on_stderr 中触发.
@@ -249,7 +249,7 @@ local function metatable_funcs()
     local old_term_bufnr = self.bufnr
     self.bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
 
-    --- 在 window 加载 term buffer 之前更改 buffer name. 主要作用是为了触发 'BufEnter & BufWinEnter term://'.
+    --- VVI: 在 window 加载 term buffer 之前更改 buffer name. 主要作用是为了触发 'BufEnter & BufWinEnter term://'.
     vim.api.nvim_buf_set_name(self.bufnr, 'term://'..self.cmd .. name_tag .. self.id)
 
     --- autocmd 放在这里运行主要是有两个限制条件:
@@ -263,7 +263,7 @@ local function metatable_funcs()
     --- 使用 term 之前的 window 或者创建一个新的 term window. 同时 wipeout old_term_bufnr.
     local term_win_id = __open_term_win(self.bufnr, old_term_bufnr)
 
-    --- termopen(): 在进入 term window 之后立即执行, 避免 window change.
+    --- VVI: termopen(): 在进入 term window 之后立即执行, 避免 window change.
     __termopen_cmd(self)
 
     --- jobstart option. 在 termopen() 后执行.
