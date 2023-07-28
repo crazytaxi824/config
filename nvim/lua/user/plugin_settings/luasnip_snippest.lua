@@ -13,22 +13,19 @@ end
 -- })
 
 --- VVI: 读取配置文件地址 --- {{{
---- 默认加载 `:set runtimepath?` 中的 package.json 文件. NOTE: package.json, go.json ... 不能有注释 否则无法解析.
+--- 默认加载 `:set runtimepath?` 中的 package.json 文件.
+--- NOTE: package.json, go.json ... 不能有注释 否则无法解析.
 --- 可以参照 https://github.com/rafamadriz/friendly-snippets 自己定义 snippets
 -- -- }}}
 --- NOTE: `:help luasnip-loaders`
 require("luasnip.loaders.from_vscode").lazy_load({
-  --- NOTE: 自定义 snippets. 路径是相对于 runtimepath, 读取 paths 内 "package.json" 文件.
   --- 这里读取的是 "~/.config/nvim/snip/package.json" 文件.
-  --- 这里是加载自定义 snippets, 地址是 runtimepath/snip/package.json
-  --- 这里的 runtimepath 是 ~/.config/nvim/
-  paths = {"./snip"},
+  paths = {"./snip"},  -- './xxx' 相对路径 is where `:echo $MYVIMRC` resides.
 })
 require("luasnip.loaders.from_vscode").lazy_load({
-  --- NOTE: paths 缺省时自动加载 runtimepath/package.json 这里是加载 friendly-snippets
-  --- 这里的 runtimepath 是 ~/.local/share/nvim/site/pack/*/start/*/,
-  --- 即: ~/.local/share/nvim/site/pack/packer/start/friendly-snippets/
-  --paths = {},
+  --- NOTE: paths 缺省时自动加载 "{runtimepath}/package.json". 用 `:set runtimepath?` 查看.
+  --- 这里是加载 friendly-snippets
+  paths = {vim.fn.stdpath('data') .. '/lazy/friendly-snippets'},
   exclude = {"go"},  -- 排除 go, 使用自定义的 snippets
 })
 
