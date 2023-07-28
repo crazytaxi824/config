@@ -209,10 +209,10 @@ end
 --- 打开/创建 terminal window 用于 termopen() ------------------------------------------------------ {{{
 --- NOTE: buffer 一旦运行过 termopen() 就不能再次运行了, Can only call this function in an unmodified buffer.
 --- 所以需要删除旧的 bufnr 然后重新创建一个新的 scratch bufnr 给 termopen() 使用.
-local function __open_term_win(term_obj, old_term_bufnr)
+local function __open_term_win(curr_term_bufnr, old_term_bufnr)
   --- 如果 old_term_bufnr 不存在: 创建一个新的 term window 用于加载 new term.bufnr
   if not __term_buf_exist(old_term_bufnr) then
-    return __create_term_win(term_obj.bufnr)
+    return __create_term_win(curr_term_bufnr)
   end
 
   --- 这里是为了 re-use term window
@@ -222,10 +222,10 @@ local function __open_term_win(term_obj, old_term_bufnr)
   if #term_wins > 0 then
     --- 如果 old term buffer 存在, 同时 window 存在: 使用该 window 中加载 new term.bufnr
     win_id = term_wins[1]
-    vim.api.nvim_win_set_buf(win_id, term_obj.bufnr)  -- 将 bufnr 加载到指定 win_id, 不用进入该 window.
+    vim.api.nvim_win_set_buf(win_id, curr_term_bufnr)  -- 将 bufnr 加载到指定 win_id, 不用进入该 window.
   else
     --- 如果 old term buffer 存在, 但是 window 不存在: 创建一个新的 term window 加载 new term.bufnr.
-    win_id = __create_term_win(term_obj.bufnr)
+    win_id = __create_term_win(curr_term_bufnr)
   end
 
   --- NOTE: wipeout old_term_bufnr 放在最后避免关闭 old_term_bufnr 所在 window.
@@ -260,7 +260,7 @@ local function metatable_funcs()
     __buf_keymaps(self)
 
     --- 使用 term 之前的 window 或者创建一个新的 term window. 同时 wipeout old_term_bufnr.
-    local term_win_id = __open_term_win(self, old_term_bufnr)
+    local term_win_id = __open_term_win(self.bufnr, old_term_bufnr)
 
     --- termopen(): 在进入 term window 之后执行.
     if vim.fn.win_gotoid(term_win_id) == 1 then
