@@ -34,14 +34,14 @@
 ---  `local to window` 属性的情况: `number`, `wrap`, `spell`, `foldmethod` ...
 ---
 ---   情况1: `setlocal number` 在同一个 win 中打开不同文件.
----      在 win-1000, bufnr-1 (foo.md) 中 `:setlocal number`, 然后在 win-1000 中 `:edit bar.md` 时, number option 不存在.
----      如果再次在 win-1000 中加载 bufnr-1 `:buffer 1` or `:edit foo.md`, number option 依然存在.
+---      在 win-1000, bufnr-1 (foo.md) 中 `:setlocal number`, 然后在 win-1000 中 `:edit bar.md`, number option 消失.
+---      如果再次在 win-1000 中加载 bufnr-1 `:buffer 1` or `:edit foo.md`, number option 出现.
 ---      但是如果 wipeout bufnr-1 之后再次打开相同文件 `:edit foo.md`, number option 不存在.
 ---      NOTE: :setlocal 在 local to window 的 option 中是和 bufnr 绑定的.
 --
 ---   情况2: `set number` 在不同的 win 中打开相同文件.
 --       win-1000 `set number` 和 win-1001 `set nonumber` 两个 window.
----      win-1000 `:edit foo.md`; win-2000 `:edit bar.md`, 则 foo.md 绑定了 number 属性.
+---      win-1000 `:edit foo.md`; win-2000 `:edit bar.md`, 则 foo.md 绑定了 number 属性, bar.md 绑定了 nonumber 属性.
 ---      在 win-2000 中 `:edit foo.md` 时, number option 依然存在.
 ---      在 win-1000 中 `:edit bar.md` 时, number option 依然不存在.
 ---      NOTE: 在不同的 win 中打开 file, 会导致 bufnr 和 local to window option 绑定.
@@ -94,10 +94,15 @@
 ---   | setlocal  | vim.wo / vim.opt_local   |                 | ✔           |                   |
 ---   | set       | vim.o / vim.opt          | ✔               | ✔           | ✔                 |
 ---
-----------------------------------------------------------------------------------------------------
+---   VVI: - local to window 属性是和 buffer 绑定的. `setlocal` 直接和 buffer 绑定; `set` 使得在该 window 中
+---          第一次被打开的 buffer 绑定该属性直到 wipeout.
+---        - global or local to window 属性是和 window 绑定的, 和 buffer 无关. 同一个 buffer 在属性不同的
+---          window 中打开属性也不同.
+---
 ---   VVI: 在 local to window 和 global or local to window 的 option 中 vim.wo 所代表的含义是不同的:
----      - 在 local to window 中 vim.wo[win_id] 相当于 `:set`, 而不是 `:setlocal`
----      - 在 global or local to window 中 vim.wo[win_id] 相当于 `:setlocal`, 而不是 `:set`
+---        - 在 local to window 中 vim.wo[win_id] 相当于 `:set`, 而不是 `:setlocal`
+---        - 在 global or local to window 中 vim.wo[win_id] 相当于 `:setlocal`, 而不是 `:set`
+---        - 避免使用 `set` & vim.wo[id] 在 local to window 的属性上, 容易混淆.
 ---
 ---  NOTE: 搜索 vim.wo 的设置 `:Rg "vim\.wo(\[.*\]){0,1}\.\w+ ?=[^=]"`
 ---  NOTE: 搜索 vim.bo 的设置 `:Rg "vim\.bo(\[.*\]){0,1}\.\w+ ?=[^=]"`
