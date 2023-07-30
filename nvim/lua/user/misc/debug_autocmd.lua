@@ -19,12 +19,19 @@
 ---   BufUnload
 ---   BufDelete
 ---   BufWipeout
+--
+---   TermOpen:  when job is starting
+---   TermClose: when job done/end
+---   TermEnter: after Terminal-Insert Mode
+---   TermLeave: after Terminal-Normal Mode
 
 --- VVI:
 ---   FileType 在 buffer 第一次加载到 window 中的时候触发; `:bdelete` 后再次加载 buffer 的情况下也会触发.
 ---   BufEnter 每次 buffer 切换的时候. FileType 触发的情况 & hidden -> display 的时候.
 
-if __Debug_Neovim.autocmd_events then
+local autocmd_id
+
+local function debug_autocmd_toggle()
   local common_events = {
     "VimEnter", "VimLeave",
     "BufAdd", "BufNew", "BufNewFile",
@@ -35,22 +42,31 @@ if __Debug_Neovim.autocmd_events then
     "WinNew", "WinEnter", "WinLeave", "WinClosed",
     "FileType",
 
-    --- TermOpen:  when job is starting
-    --- TermClose: when job done/end
-    --- TermEnter: after Terminal-Insert Mode
-    --- TermLeave: after Terminal-Normal Mode
     "TermOpen", "TermEnter", "TermLeave", "TermClose", "TermResponse",
   }
 
-  vim.api.nvim_create_autocmd(common_events, {
-    pattern = {"*"},
-    -- once = true,
-    callback = function(params)
-      print(vim.api.nvim_get_current_win(), params.buf, params.event, params.file)
-    end,
-    desc = "autocmd debug",
-  })
+  if autocmd_id then
+    vim.api.nvim_del_autocmd(autocmd_id)
+    autocmd_id = nil
+  else
+    autocmd_id = vim.api.nvim_create_autocmd(common_events, {
+      pattern = {"*"},
+      -- once = true,
+      callback = function(params)
+        print(vim.api.nvim_get_current_win(), params.buf, params.event, params.file)
+      end,
+      desc = "autocmd debug",
+    })
+  end
 end
 
-
+vim.api.nvim_create_user_command("AutocmdDebugToggle", function()
+    debug_autocmd_toggle()
+  end,
+  {
+    bang=true,
+    bar=true,
+    desc = 'toggle autocmd debug function, print all events.'
+  }
+)
 

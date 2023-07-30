@@ -36,8 +36,6 @@ __Debug_Neovim = {
   null_ls = false,  -- null-ls DEBUG, `:NullLsLog` & golangci-lint Notify msg.
   lspconfig = false,  -- lspconfig DEBUG, Notify msg.
   luasnip = false,  -- LuaSnip DEBUG, stdpath('log') .. '/luasnip.log' set_loglevel().
-
-  autocmd_events = false,  -- autocmd 中 `:help events` 运行情况.
 }
 
 --- 读取设置: ~/.config/nvim/lua/user/xxx.lua
