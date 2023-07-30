@@ -426,7 +426,7 @@ vim.opt.cursorlineopt = "number,screenline"  -- screenline 和 line 的区别在
 --vim.opt.cursorcolumn = true       -- 突出显示当前列. 包括: 背景色...
 
 --- NOTE: 只在 focus 的 window 中显示 cursorline.
-vim.api.nvim_create_autocmd("WinEnter", {
+vim.api.nvim_create_autocmd("BufEnter", {
   pattern = {"*"},
   callback = function(params)
     --- 延迟执行避免 bug.
