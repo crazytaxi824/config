@@ -35,6 +35,10 @@ if __Debug_Neovim.autocmd_events then
     "WinNew", "WinEnter", "WinLeave", "WinClosed",
     "FileType",
 
+    --- TermOpen:  when job is starting
+    --- TermClose: when job done/end
+    --- TermEnter: after Terminal-Insert Mode
+    --- TermLeave: after Terminal-Normal Mode
     "TermOpen", "TermEnter", "TermLeave", "TermClose", "TermResponse",
   }
 
