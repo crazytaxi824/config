@@ -3,9 +3,7 @@
 
 local fp = require('user.utils.filepath')
 
---- TermClose 意思是 job done
---- TermLeave 意思是 term 关闭
---- TermOpen 在 jobstart 的时候触发
+--- TermOpen, jobstart 时触发
 vim.api.nvim_create_autocmd('TermOpen', {
   pattern = {"term://*"},
   callback = function(params)
@@ -17,7 +15,7 @@ vim.api.nvim_create_autocmd('TermOpen', {
     --- 设置 keymaps
     local function opts(desc)
       return {
-        buffer = params.buf,  -- local to Terminal buffer
+        buffer = params.buf,  -- local to buffer
         noremap = true,
         silent = true,
         desc = desc,
@@ -30,15 +28,6 @@ vim.api.nvim_create_autocmd('TermOpen', {
     vim.keymap.set('t', '<ESC>', '<C-\\><C-n>', opts("Ternimal: Normal Mode"))
   end,
   desc = "terminal: highlight filepath in terminal window",
-})
-
---- NOTE: 这里是保证 terminal hidden 之后, 再次打开时显示 filepath
-vim.api.nvim_create_autocmd('BufWinEnter', {
-  pattern = {"term://*"},
-  callback = function(params)
-    fp.highlight(params.buf, vim.api.nvim_get_current_win())
-  end,
-  desc = "terminal: filepath highlight",
 })
 
 --- VISIAL 模式跳转文件 ----------------------------------------------------------------------------

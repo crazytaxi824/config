@@ -27,8 +27,8 @@ local default_opts = {
   auto_scroll = nil,  -- goto bottom of the terminal. 在 on_stdout & on_stderr 中触发.
 
   on_init = nil,  -- func(term), new()
-  on_open = nil,  -- func(term), BufWinEnter
-  on_close = nil, -- func(term), BufWinLeave
+  on_open = nil,  -- func(term), BufWinEnter. NOTE: 每次 term:// buffer 被 win 显示的时候都会触发, 多个窗口显示时也会触发.
+  on_close = nil, -- func(term), BufWinLeave. NOTE: BufWinLeave 只会在 buffer 离开最后一个 win 的时候触发.
   on_stdout = nil, -- func(term, jobid, data, event), 可用于 auto_scroll.
   on_stderr = nil, -- func(term, jobid, data, event), 可用于 auto_scroll.
   on_exit = nil,   -- func(term, job_id, exit_code, event), TermClose, jobstop(), 可用于 `:silent! bwipeout! term_bufnr`
