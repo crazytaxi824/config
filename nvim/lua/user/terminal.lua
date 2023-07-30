@@ -3,9 +3,7 @@
 
 local fp = require('user.utils.filepath')
 
---- TermClose 意思是 job done
---- TermLeave 意思是 term 关闭
---- TermOpen 在 jobstart 的时候触发
+--- TermOpen, jobstart 时触发
 vim.api.nvim_create_autocmd('TermOpen', {
   pattern = {"term://*"},
   callback = function(params)
