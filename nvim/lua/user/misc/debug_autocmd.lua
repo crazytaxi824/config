@@ -8,15 +8,24 @@
 ---
 --- 读取文件时按顺序触发:
 ---   BufReadPre   -- before reading the file into the buffer.
----   FileType
+---   FileType     -- VVI: 如果文件的 filetype 无法被识别, 则不会触发. eg: 'log'
 ---   BufReadPost  -- after reading the file into the buffer. before processing modelines.
 ---
+--- buffer
 ---   BufLeave     -- cursor 离开 buffer 所在 window.
 ---   BufEnter     -- cursor 进入 buffer 所在 window.
 ---   BufWinLeave  -- VVI: buffer 离开最后一个 window 时, 即: buffer 进入 hidden 状态时触发. 可以使用 BufHidden 代替.
 ---                -- 多个 window 显示同一个 buffer 的情况下, 该 buffer 离开最后一个显示它的 window 时才会触发.
 ---   BufWinEnter  -- 每次有 window 显示某个 buffer 时触发.
 ---                -- buffer 在已经被某个 window 显示的情况下, 即: active (hidden=0) 状态下, 被其他 window 显示时也触发.
+
+--- write / save file:
+---   BufWritePre   -- before write to file
+---   BufWritePost  -- after write to file
+
+--- change file name:
+---   BufFilePre   -- before change file name
+---   BufFilePost  -- after change file name
 
 --- NOTE: bdelete/bwipeout 的情况, 前两个是 bdelete 的情况.
 ---   BufUnload  -- bdelete 触发
@@ -40,11 +49,12 @@ local function debug_autocmd_toggle()
     "VimEnter", "VimLeave",
     "BufAdd", "BufNew", "BufNewFile",
     "BufEnter", "BufLeave",
-    "BufReadPre", "BufReadPost", "BufWritePre", "BufWritePost", "BufFilePre", "BufFilePost",
+    "BufReadPre", "FileType", "BufReadPost",
+    "BufWritePre", "BufWritePost",
+    "BufFilePre", "BufFilePost",
     "BufHidden", "BufDelete", "BufUnload", "BufWipeout",
     "BufWinEnter", "BufWinLeave",
     "WinNew", "WinEnter", "WinLeave", "WinClosed",
-    "FileType",
 
     "TermOpen", "TermEnter", "TermLeave", "TermClose", "TermResponse",
   }
