@@ -13,7 +13,7 @@
 ---
 ---   BufLeave     -- cursor 离开 buffer 所在 window.
 ---   BufEnter     -- cursor 进入 buffer 所在 window.
----   BufWinLeave  -- buffer 离开所有 window, 即: buffer 进入 hidden 状态时触发. 可以使用 BufHidden 代替.
+---   BufWinLeave  -- VVI: buffer 离开最后一个 window 时, 即: buffer 进入 hidden 状态时触发. 可以使用 BufHidden 代替.
 ---                -- 多个 window 显示同一个 buffer 的情况下, 该 buffer 离开最后一个显示它的 window 时才会触发.
 ---   BufWinEnter  -- 每次有 window 显示某个 buffer 时触发.
 ---                -- buffer 在已经被某个 window 显示的情况下, 即: active (hidden=0) 状态下, 被其他 window 显示时也触发.
