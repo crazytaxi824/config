@@ -12,6 +12,8 @@ local global_my_term_cache = {}  -- map-like table { id:term_obj }
 
 local name_tag=';#my_term#'
 
+local buf_var = "my_term"
+
 local win_height = 16  -- persist window height
 
 --- default_opts 相当于 global setting.
@@ -226,6 +228,55 @@ local function enter_term_win(curr_term_bufnr, old_term_bufnr)
 end
 -- -- }}}
 
+--- Create new terminal ---------------------------------------------------------------------------- {{{
+--- VVI: 以下执行顺序很重要!
+--- 事件触发顺序和 `:edit term://cmd` 有所不同.
+--- `:edit term://cmd` 中: 触发顺序 TermOpen -> BufEnter -> BufWinEnter.
+--- my_term 中触发顺序 BufEnter -> BufWinEnter -> TermOpen.
+--- NOTE: nvim_buf_call()
+--- 可以使用 nvim_buf_call(bufnr, function() termopen() end) 做到 TermOpen -> BufEnter -> BufWinEnter 顺序,
+--- 但在 nvim_buf_call() 的过程中 TermOpen event 获取到的 window id 是临时的 autocmd window 会导致很多问题.
+local function create_my_term(term_obj)
+  --- cache old term bufnr
+  local old_term_bufnr = term_obj.bufnr
+
+  --- 每次运行 termopen() 之前, 先创建一个新的 scratch buffer 给 terminal.
+  term_obj.bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
+
+  --- 给 buffer 设置 var
+  vim.b[term_obj.bufnr][buf_var] = term_obj.id
+
+  --- VVI: 在 window 加载 term buffer 之前更改 buffer name. 主要作用是为了触发 'BufEnter & BufWinEnter term://'.
+  vim.api.nvim_buf_set_name(term_obj.bufnr, 'term://'..term_obj.cmd .. name_tag .. term_obj.id)
+
+  --- autocmd 放在这里运行主要是有两个限制条件:
+  --- 1. 在获取到 terminal bufnr 之后运行, 为了在 autocmd 中使用 bufnr 作为触发条件.
+  --- 2. 在 term window 打开并加载 term bufnr 之前运行, 为了触发 BufWinEnter event.
+  autocmd_callback(term_obj)
+
+  --- 快捷键设置: 在获取到 term.bufnr 和 term.id 之后运行.
+  set_buf_keymaps(term_obj)
+
+  --- 进入一个选定的 term window 加载现有 term buffer, 同时 wipeout old_term_bufnr.
+  local term_win_id = enter_term_win(term_obj.bufnr, old_term_bufnr)
+
+  --- VVI: termopen(): 在 enter term window 之后立即执行, 避免 window change.
+  termopen_cmd(term_obj)
+
+  --- jobstart option. 在 termopen() 后执行.
+  if term_obj.jobstart then
+    if term_obj.jobstart == 'startinsert' then
+      --- 判断当前是否是 term window. 防止 before_exec & after_exec 跳转到别的 window.
+      if vim.api.nvim_get_current_win() == term_win_id  then
+        vim.cmd('startinsert')
+      end
+    elseif type(term_obj.jobstart) == "function" then
+      term_obj.jobstart(term_obj)
+    end
+  end
+end
+-- -- }}}
+
 --- NOTE: setmetatable() 将全部 term:methods() 放在 metatable 中, 如果 term 被 tbl_deep_extend() 则无法
 --- 使用 methods, 因为 tbl_deep_extend() 无法 extend metatable.
 local function metatable_funcs()
@@ -237,46 +288,7 @@ local function metatable_funcs()
       return
     end
 
-    --- VVI: 以下执行顺序很重要!
-    --- 事件触发顺序和 `:edit term://cmd` 有所不同.
-    --- `:edit term://cmd` 中: 触发顺序 TermOpen -> BufEnter -> BufWinEnter.
-    --- my_term 中触发顺序 BufEnter -> BufWinEnter -> TermOpen.
-    --- NOTE: nvim_buf_call()
-    --- 可以使用 nvim_buf_call(bufnr, function() termopen() end) 做到 TermOpen -> BufEnter -> BufWinEnter 顺序,
-    --- 但在 nvim_buf_call() 的过程中 TermOpen event 获取到的 window id 是临时的 autocmd window 会导致很多问题.
-
-    --- 每次运行 termopen() 之前, 先创建一个新的 scratch buffer 给 terminal.
-    local old_term_bufnr = self.bufnr
-    self.bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
-
-    --- VVI: 在 window 加载 term buffer 之前更改 buffer name. 主要作用是为了触发 'BufEnter & BufWinEnter term://'.
-    vim.api.nvim_buf_set_name(self.bufnr, 'term://'..self.cmd .. name_tag .. self.id)
-
-    --- autocmd 放在这里运行主要是有两个限制条件:
-    --- 1. 在获取到 terminal bufnr 之后运行, 为了在 autocmd 中使用 bufnr 作为触发条件.
-    --- 2. 在 term window 打开并加载 term bufnr 之前运行, 为了触发 BufWinEnter event.
-    autocmd_callback(self)
-
-    --- 快捷键设置: 在获取到 term.bufnr 和 term.id 之后运行.
-    set_buf_keymaps(self)
-
-    --- 进入一个选定的 term window 加载现有 term buffer, 同时 wipeout old_term_bufnr.
-    local term_win_id = enter_term_win(self.bufnr, old_term_bufnr)
-
-    --- VVI: termopen(): 在 enter term window 之后立即执行, 避免 window change.
-    termopen_cmd(self)
-
-    --- jobstart option. 在 termopen() 后执行.
-    if self.jobstart then
-      if self.jobstart == 'startinsert' then
-        --- 判断当前是否是 term window. 防止 before_exec & after_exec 跳转到别的 window.
-        if vim.api.nvim_get_current_win() == term_win_id  then
-          vim.cmd('startinsert')
-        end
-      elseif type(self.jobstart) == "function" then
-        self.jobstart(self)
-      end
-    end
+    create_my_term(self)
   end
 
   --- 终止 job, 会触发 jobdone.
@@ -401,17 +413,11 @@ M.get_term_by_id = function(id)
 end
 
 --- get term_id by term_win_id
-M.get_term_id_by_win = function(term_win_id)
-  local bufnr = vim.api.nvim_win_get_buf(term_win_id)
-  local bufname = vim.api.nvim_buf_get_name(bufnr)
-  if not string.match(bufname, 'term://.*' .. name_tag .. '%d+') then --- it is not my_term buffer
-    Notify("the current window is not a my_term window", "WARN")
-    return
+M.get_term_id_by_win = function(win_id)
+  if vim.fn.win_gettype(win_id) ~= "unknown" then
+    local bufnr = vim.api.nvim_win_get_buf(win_id)
+    return vim.b[bufnr][buf_var]
   end
-
-  --- get term_id
-  local s = vim.split(bufname, name_tag, {trimempty=true})
-  return tonumber(vim.trim(s[#s]))
 end
 
 --- close all my_term windows
