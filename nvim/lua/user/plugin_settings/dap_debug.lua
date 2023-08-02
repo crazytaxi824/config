@@ -102,7 +102,7 @@ vim.fn.sign_define("DapStopped", { text = "→", texthl = "DapStoppedHL", numhl 
 
 --- nvim-dap-ui settings --------------------------------------------------------------------------- {{{
 --- `:help dapui.setup()`
-dapui.setup({
+local config = {
   mappings = {
     expand = {"<CR>", "<2-LeftMouse>"}, -- Use a table to apply multiple mappings
     edit = "e",
@@ -161,7 +161,8 @@ dapui.setup({
       close = { "q", "<Esc>" },
     },
   },
-})
+}
+dapui.setup(config)
 -- -- }}}
 
 --- dap && dap-ui debug functions ------------------------------------------------------------------ {{{
@@ -193,9 +194,14 @@ local function close_debug_tab_and_buffers()
   --- disconnect opt: https://microsoft.github.io/debug-adapter-protocol/specification#Requests_Disconnect
   --- Callback function 在 session 结束后执行, 如果 session 不存在则立即执行.
   dap.terminate({},{terminateDebugee = true}, function()
-    --- NOTE: 如果在 dap.repl.close() 之后再执行 dap.terminal() 会重新打开 dap-repl buffer.
-    dap.repl.close()  -- close dap-repl console window && delete dap-repl buffer.
+    --- NOTE: 如果在 dap.repl.close() 之后再执行 dapui.close() 会重新打开 [dap-repl] buffer.
     dapui.close()  -- close all dap-ui windows
+
+    --- NOTE: dapui controls enable 之后无法删除 [dap-repl] buffer.
+    --- bwipeout [dap-repl] buffer 之后又会被重新加载. 所以在该状态下不需要执行 dap.repl.close()
+    if not config.controls.enabled then
+      dap.repl.close()  -- close dap-repl console window && wipeout [dap-repl] buffer.
+    end
 
     --- 如果自己是 last tab 则不执行 tabclose, 但是删除 tabvar.
     local tab_list = vim.api.nvim_list_tabpages()
