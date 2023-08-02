@@ -214,6 +214,7 @@ end
 -- -- }}}
 
 --- 开启 new tab 进行 debug ------------------------------------------------------------------------
+--- https://github.com/rcarriga/nvim-dap-ui#usage & `:help dap-extensions`
 --- 启动 debug 之前先打开 new tab
 dap.listeners.before.event_initialized["dapui_config"] = function()
   open_new_tab_for_debug()
@@ -289,14 +290,10 @@ local debug_keymaps = {
   {'n', '<F11>', function() dap.step_into() end, opt, "debug: Step Into"},
   {'n', '<F23>', function() dap.step_out() end,  opt, "debug: Step Out"},  -- <S-F11>
 }
-
---- 这里是 global keymaps 设置
 require('user.utils.keymaps').set(debug_keymaps)
 
---- Highlight filepath -----------------------------------------------------------------------------
+--- keymaps: jump_to_file in dap-repl window -------------------------------------------------------
 local fp = require('user.utils.filepath')
-
---- jump_to_file keymaps 设置
 vim.api.nvim_create_autocmd("FileType", {
   pattern = {"dap-repl"},
   callback = function(params)
