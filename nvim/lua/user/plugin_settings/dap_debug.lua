@@ -197,9 +197,12 @@ local function close_debug_tab_and_buffers()
     dap.repl.close()  -- close dap-repl console window && delete dap-repl buffer.
     dapui.close()  -- close all dap-ui windows
 
-    --- 如果自己是 last tab 则不执行 tabclose
+    --- 如果自己是 last tab 则不执行 tabclose, 但是删除 tabvar.
     local tab_list = vim.api.nvim_list_tabpages()
     if #tab_list < 2 then
+      --- 删除 tabvar
+      local curr_tab_id = vim.api.nvim_get_current_tabpage()
+      vim.t[curr_tab_id][tabvar_debug] = nil
       return
     end
 
