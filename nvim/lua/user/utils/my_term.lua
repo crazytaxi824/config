@@ -133,47 +133,50 @@ end
 
 --- termopen(): 执行 cmd --------------------------------------------------------------------------- {{{
 local function termopen_cmd(term_obj)
-  --- 使用 termopen() 开打 terminal
-  term_obj.job_id = vim.fn.termopen(term_obj.cmd .. name_tag  .. term_obj.id, {
-    on_stdout = function(job_id, data, event)  -- event 是 'stdout'
-      --- auto_scroll option
-      buf_scroll_bottom(term_obj)
+  --- VVI: 使用 nvim_buf_call() 时 bufnr 必须被某一个 window 显示, 否则 vim 会创建一个看不见的临时 autocmd window
+  --- 用于执行 function. 导致 TermOpen event 中获取的 win id 是这个临时 window, 会造成一些 bug.
+  vim.api.nvim_buf_call(term_obj.bufnr, function()
+    term_obj.job_id = vim.fn.termopen(term_obj.cmd .. name_tag  .. term_obj.id, {
+      on_stdout = function(job_id, data, event)  -- event 是 'stdout'
+        --- auto_scroll option
+        buf_scroll_bottom(term_obj)
 
-      --- callback
-      if term_obj.on_stdout then
-        term_obj.on_stdout(term_obj, job_id, data, event)
-      end
-    end,
-
-    on_stderr = function(job_id, data, event)  -- event 是 'stderr'
-      --- auto_scroll option
-      buf_scroll_bottom(term_obj)
-
-      --- callback
-      if term_obj.on_stderr then
-        term_obj.on_stderr(term_obj, job_id, data, event)
-      end
-    end,
-
-    on_exit = function(job_id, exit_code, event)  -- event 是 'exit'
-      --- callback
-      if term_obj.on_exit then
-        term_obj.on_exit(term_obj, job_id, exit_code, event)
-      end
-
-      --- jobdone option
-      if term_obj.jobdone == 'exit' then
-        --- VVI: 必须使用 `:silent! bwipeout! bufnr` 否则手动删除 buffer 时会触发 TermClose, 导致重复 wipeout buffer 而报错.
-        pcall(vim.api.nvim_buf_delete, term_obj.bufnr, {force=true})
-      elseif term_obj.jobdone == 'stopinsert' then
-        --- jobdone 的时候 cursor 在 terminal window 中则执行 stopinsert.
-        local wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
-        if vim.tbl_contains(wins, vim.api.nvim_get_current_win()) then
-          vim.cmd('stopinsert')
+        --- callback
+        if term_obj.on_stdout then
+          term_obj.on_stdout(term_obj, job_id, data, event)
         end
-      end
-    end,
-  })
+      end,
+
+      on_stderr = function(job_id, data, event)  -- event 是 'stderr'
+        --- auto_scroll option
+        buf_scroll_bottom(term_obj)
+
+        --- callback
+        if term_obj.on_stderr then
+          term_obj.on_stderr(term_obj, job_id, data, event)
+        end
+      end,
+
+      on_exit = function(job_id, exit_code, event)  -- event 是 'exit'
+        --- callback
+        if term_obj.on_exit then
+          term_obj.on_exit(term_obj, job_id, exit_code, event)
+        end
+
+        --- jobdone option
+        if term_obj.jobdone == 'exit' then
+          --- VVI: 必须使用 `:silent! bwipeout! bufnr` 否则手动删除 buffer 时会触发 TermClose, 导致重复 wipeout buffer 而报错.
+          pcall(vim.api.nvim_buf_delete, term_obj.bufnr, {force=true})
+        elseif term_obj.jobdone == 'stopinsert' then
+          --- jobdone 的时候 cursor 在 terminal window 中则执行 stopinsert.
+          local wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
+          if vim.tbl_contains(wins, vim.api.nvim_get_current_win()) then
+            vim.cmd('stopinsert')
+          end
+        end
+      end,
+    })
+  end)
 end
 -- -- }}}
 
@@ -260,7 +263,7 @@ local function create_my_term(term_obj)
   --- 进入一个选定的 term window 加载现有 term buffer, 同时 wipeout old_term_bufnr.
   local term_win_id = enter_term_win(term_obj.bufnr, old_term_bufnr)
 
-  --- VVI: termopen(): 在 enter term window 之后立即执行, 避免 window change.
+  --- termopen(): 必须在 bufnr 被 window 显示之后运行. 避免 nvim_buf_call() 生成一个临时 autocmd window.
   termopen_cmd(term_obj)
 
   --- jobstart option. 在 termopen() 后执行.
