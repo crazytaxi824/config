@@ -12,7 +12,7 @@ local global_my_term_cache = {}  -- map-like table { id:term_obj }
 
 local name_tag=';#my_term#'
 
-local buf_var = "my_term"
+local bufvar_myterm = "my_term"
 
 local win_height = 16  -- persist window height
 
@@ -247,7 +247,7 @@ local function create_my_term(term_obj)
   term_obj.bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
 
   --- 给 buffer 设置 var
-  vim.b[term_obj.bufnr][buf_var] = term_obj.id
+  vim.b[term_obj.bufnr][bufvar_myterm] = term_obj.id
 
   --- VVI: 在 window 加载 term buffer 之前更改 buffer name. 主要作用是为了触发 'BufEnter & BufWinEnter term://'.
   vim.api.nvim_buf_set_name(term_obj.bufnr, 'term://'..term_obj.cmd .. name_tag .. term_obj.id)
@@ -419,7 +419,7 @@ end
 M.get_term_id_by_win = function(win_id)
   if vim.fn.win_gettype(win_id) ~= "unknown" then
     local bufnr = vim.api.nvim_win_get_buf(win_id)
-    return vim.b[bufnr][buf_var]
+    return vim.b[bufnr][bufvar_myterm]
   end
 end
 
