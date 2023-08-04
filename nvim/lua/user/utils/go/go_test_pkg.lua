@@ -74,7 +74,7 @@ local function go_test_pkg(opt)
   t.cmd = cmd
   t.on_exit = on_exit
   t:stop()
-  t:run()
+  t:run('print')
 end
 
 --- go test run/bench multiple packages (Project) --------------------------------------------------
@@ -136,7 +136,7 @@ local function go_test_proj(opt)
   t.cmd = cmd
   t.on_exit = on_exit
   t:stop()
-  t:run()
+  t:run('print')
 end
 
 --- export functions -------------------------------------------------------------------------------
