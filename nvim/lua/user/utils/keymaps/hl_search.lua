@@ -36,9 +36,8 @@ end
 
 --- 删除 matchadd() and unplace sign
 local function delete_prev_hl()
-  --- VVI: 如果 win 已经关闭 (win_id 不存在), 则不能使用 matchdelete(win_id), 否则报错.
-  --- win_gettype(win_id) == "unknown", window not found. 避免 cache 中的 window 被关闭了.
-  if my_search.cache_last_hl and vim.fn.win_gettype(my_search.cache_last_hl.win_id) ~= "unknown" then
+  --- 如果 win 已经关闭 (win_id 不存在), 则不能使用 matchdelete(win_id), 否则报错.
+  if my_search.cache_last_hl and vim.api.nvim_win_is_valid(my_search.cache_last_hl.win_id) then
     vim.fn.matchdelete(my_search.cache_last_hl.hl_id, my_search.cache_last_hl.win_id)
   end
 

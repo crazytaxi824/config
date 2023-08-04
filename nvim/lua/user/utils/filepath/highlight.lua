@@ -14,7 +14,7 @@ vim.api.nvim_set_hl(0, hl_url, {ctermfg = Color.blue, underline = true}) -- 自�
 --- 而且状态持续, 当该 window 打开别的 buffer 时, highlight 一样会存在.
 M.highlight_filepath = function(win_id, priority)
   --- win_id 不存在
-  if vim.fn.win_gettype(win_id) == "unknown" then
+  if not vim.api.nvim_win_is_valid(win_id) then
     return
   end
 
@@ -37,7 +37,7 @@ end
 --- 删除自定义 filepath highlight.
 M.highlight_filepath_clear = function(win_id)
   --- win_id 不存在
-  if vim.fn.win_gettype(win_id) == "unknown" then
+  if not vim.api.nvim_win_is_valid(win_id) then
     return
   end
 
