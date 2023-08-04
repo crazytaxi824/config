@@ -5,7 +5,7 @@ local function js_run(file)
   local t = require('user.term_instances').exec_term
   t.cmd = "node " .. file
   t:stop()
-  t:run()
+  t:run('print')
 end
 
 --- jest js_file -----------------------------------------------------------------------------------
@@ -27,18 +27,18 @@ local function js_jest(file, coverage)
   local t = require('user.term_instances').exec_term
   t.cmd = cmd
   t:stop()
-  t:run()
+  t:run('print')
 end
 
 --- keymap -----------------------------------------------------------------------------------------
 local opt = {noremap = true, buffer = true}
 local js_keymaps = {
   --- run current_file ---
-  {'n', '<F5>', function() js_run(vim.fn.expand('%')) end, opt, "code: Run File"},
+  {'n', '<F5>', function() js_run(vim.fn.bufname()) end, opt, "code: Run File"},
 
   --- jest test ---
-  {'n', '<F6>', function() js_jest(vim.fn.expand('%'), false) end, opt, "code: Run Test"},
-  {'n', '<F18>', function() js_jest(vim.fn.expand('%'), true) end, opt, "code: Run Test --coverage"},  -- <S-F6>
+  {'n', '<F6>', function() js_jest(vim.fn.bufname(), false) end, opt, "code: Run Test"},
+  {'n', '<F18>', function() js_jest(vim.fn.bufname(), true) end, opt, "code: Run Test --coverage"},  -- <S-F6>
 }
 
 require('user.utils.keymaps').set(js_keymaps)

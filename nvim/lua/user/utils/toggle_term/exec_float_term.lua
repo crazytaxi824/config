@@ -13,7 +13,7 @@ M.exec_float_term = Terminal:new({
 })
 
 M.exec = function(cmd)
-  -- local fp = vim.fn.expand('%')
+  -- local fp = vim.fn.bufname()
   -- local func = vim.fn.expand('<cword>')
 
   --- `gotests -only Foo /xxx/src/foo.go`

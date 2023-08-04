@@ -25,7 +25,7 @@ function Notify(msg, lvl, opt)
   local notify_status_ok, notify = pcall(require, "notify")
   if notify_status_ok then
     --- NOTE: debug.getinfo() 获取 source filename & function name
-    --- debug.getinfo() 第一个参数是 stack level, 如果是 1 则会返回本文件名, 即: 'plugin_utils.lua'.
+    --- debug.getinfo() 第一个参数是 stack level, 如果是 1 则会返回本文件名, 即: 'notify.lua'.
     --- 如果是 2 则会返回调用 Notify() 的文件名.
     --- source 返回的内容中:
     ---   If source starts with a '@', it means that the function was defined in a file;
@@ -36,7 +36,9 @@ function Notify(msg, lvl, opt)
 
     local default_title = {}
     if string.sub(call_file, 1, 1) == '@' then
-      default_title = {title = vim.fn.fnamemodify(call_file, ':t')}
+      default_title = {title = vim.fs.basename(call_file)}
+    else
+      default_title = {title = call_file}
     end
 
     opt = opt or {}  -- 确保 opt 是 table, 而不是 nil. 否则无法用于 vim.tbl_deep_extend()

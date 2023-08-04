@@ -69,7 +69,7 @@ M.go_add_tags_and_opts = function(arglist, go_add_tags_cmd, offset)
     return
   end
 
-  local fp = vim.fn.expand("%:.")  -- current filepath
+  local fp = vim.fn.bufname()  -- current filepath
   if fp == "" then
     Notify("filepath/bufname is empty", "ERROR")
     return
@@ -173,7 +173,7 @@ M.go_remove_tags = function(arglist, go_remove_tags_cmd, offset)
     return
   end
 
-  local fp = vim.fn.expand("%:.")  -- current filepath
+  local fp = vim.fn.bufname()  -- current filepath
   if fp == "" then
     Notify("filepath/bufname is empty", "ERROR")
     return
@@ -231,7 +231,7 @@ M.go_remove_tags_opts = function(arglist, go_remove_tag_opts_cmd, offset)
     return
   end
 
-  local fp = vim.fn.expand("%:.")  -- current filepath
+  local fp = vim.fn.bufname()  -- current filepath
   if fp == "" then
     Notify("filepath/bufname is empty", "ERROR")
     return

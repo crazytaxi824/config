@@ -434,6 +434,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
       local curr_win_id = vim.api.nvim_get_current_win()  -- get current window id
 
       --- WinEnter 时如果自己是 popup window 则不显示 cursorline, eg: nvim-notify 是 popup window.
+      --- 'unknown' 表示 window 不存在.
       local win_type = vim.fn.win_gettype(curr_win_id)
       if win_type ~= 'popup' and win_type ~= 'unknown' then
         --- NOTE: 这里不能用 ':setlocal cursorline' 否则会作用在当前 buffer 上, 这里需要作用在整个 window 上.

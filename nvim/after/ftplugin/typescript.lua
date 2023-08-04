@@ -17,7 +17,7 @@ local function ts_run(file)
   local t = require('user.term_instances').exec_term
   t.cmd = "tsc -p ./tsconfig.json && node dist/" .. file .. '.js'
   t:stop()
-  t:run()
+  t:run('print')
 end
 
 --- jest js_file -----------------------------------------------------------------------------------
@@ -46,7 +46,7 @@ local function ts_jest(file, coverage)
   local t = require('user.term_instances').exec_term
   t.cmd = cmd
   t:stop()
-  t:run()
+  t:run('print')
 end
 
 --- keymap -----------------------------------------------------------------------------------------

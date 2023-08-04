@@ -9,24 +9,10 @@
 --- 全局变量
 local M = {}
 
---- 从 pwd 向上获取 dir 直到 root "/".
-local function local_settings_dir_filepaths_to_root()
-  local absolute_dir = vim.fn.fnamemodify(vim.fn.getcwd(), ':p')
-  local path_slice = vim.split(absolute_dir, '/', {trimempty=false})
-
-  local t = {}
-  for i = #path_slice-1, 1, -1 do
-    table.insert(t, table.concat(path_slice, '/'))
-    table.remove(path_slice, i)
-  end
-
-  return t
-end
-
 --- 从 pwd 向上寻找 .nvim/settings.lua 文件.
 local function available_local_settings_file()
-  local dirs = local_settings_dir_filepaths_to_root()
-  for _, dir in ipairs(dirs) do
+  --- 从 pwd 向上获取 dir 直到 root "/".
+  for dir in vim.fs.parents(vim.fn.getcwd()) do
     local local_settings_filepath = dir .. '.nvim/settings.lua'
     if vim.fn.filereadable(local_settings_filepath) == 1 then
       return local_settings_filepath
