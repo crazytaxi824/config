@@ -119,7 +119,7 @@ end
 
 M.go_test_single_func = function(prompt)
   --- 判断当前文件是否 _test.go
-  if not string.match(vim.fn.expand('%:t'), "_test%.go$") then
+  if not string.match(vim.fn.bufname(), "_test%.go$") then
     Notify('not "_test.go" file', "ERROR")
     return
   end

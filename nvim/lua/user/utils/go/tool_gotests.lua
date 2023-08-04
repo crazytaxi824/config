@@ -15,7 +15,7 @@
 local M = {}
 
 M.gotests_cmd_tool = function()
-  local fp = vim.fn.expand('%')
+  local fp = vim.fn.bufname()  -- current filepath
   local func = vim.fn.expand('<cword>')
 
   --- `gotests -only Foo /xxx/src/foo.go`

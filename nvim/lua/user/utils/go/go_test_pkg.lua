@@ -11,7 +11,7 @@ local M = {}
 --- NOTE: 不能同时运行多个 fuzz test. Error: will not fuzz, -fuzz matches more than one fuzz test.
 local function go_test_pkg(opt)
   --- 判断当前文件是否是 _test.go
-  if not string.match(vim.fn.expand('%:t'), "_test%.go$") then
+  if not string.match(vim.fn.bufname(), "_test%.go$") then
     Notify('not "_test.go" file',"ERROR")
     return
   end

@@ -40,7 +40,7 @@ M.go_impl = function(arglist)
   local msg = vim.list_extend({"", "type " .. arglist[1] .. " struct{}", ""}, content)
 
   --- 写入当前文件
-  vim.fn.writefile(msg, vim.fn.expand('%'), 'a')  -- 'a' append mode
+  vim.fn.writefile(msg, vim.fn.bufname(), 'a')  -- 'a' append mode
 
   --- checktime          刷新 buffer 显示
   --- cursor(lnum. col)  移动 cursor
