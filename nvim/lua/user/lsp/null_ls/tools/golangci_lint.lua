@@ -18,7 +18,7 @@ return {
   -- -- }}}
   cwd = function(params)
     --- current buffer's dir, 相当于下面的 $DIRNAME.
-    return vim.fn.fnamemodify(params.bufname, ":h")
+    return vim.fs.dirname(params.bufname)
   end,
 
   ---  可以通过设置 setup() 中的 debug = true, 打开 `:NullLsLog` 查看命令行默认参数.
