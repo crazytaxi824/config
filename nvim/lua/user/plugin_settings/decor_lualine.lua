@@ -21,7 +21,7 @@ local lualine_colors = {
   blue = Color.blue,  -- info background
   green = Color.comment_green,  -- Command mode
 
-  dark_orange = Color.dark_orange, -- trailing_whitespace && mixed_indent
+  dark_orange = Color.dark_orange, -- readonly file, trailing_whitespace && mixed_indent
 }
 
 --- airline 颜色设置 https://github.com/vim-airline/vim-airline/blob/master/autoload/airline/themes/dark.vim
@@ -105,7 +105,6 @@ end
 --- NOTE: 通过设置 set/get buffer var 来缓存 whitespace && mixed_indent 结果.
 local function my_check()
   local bufvar_lualine = 'my_lualine_checks'
-  local curr_bufnr = vim.api.nvim_get_current_buf()
 
   --- 在退出 insert mode 之后再进行计算并更新 lualine, 可以减少计算量.
   if vim.fn.mode() ~= 'i' then
@@ -113,17 +112,17 @@ local function my_check()
     local ts = check_trailing_whitespace()
 
     if mi ~= '' and ts ~= '' then
-      vim.b[curr_bufnr][bufvar_lualine] = ' '..mi..' '..ts
+      vim.b[bufvar_lualine] = ' '..mi..' '..ts
     elseif mi ~= '' and ts == '' then
-      vim.b[curr_bufnr][bufvar_lualine] = ' '..mi
+      vim.b[bufvar_lualine] = ' '..mi
     elseif mi == '' and ts ~= '' then
-      vim.b[curr_bufnr][bufvar_lualine] = ' '..ts
+      vim.b[bufvar_lualine] = ' '..ts
     else
-      vim.b[curr_bufnr][bufvar_lualine] = nil
+      vim.b[bufvar_lualine] = nil
     end
   end
 
-  local r = vim.b[curr_bufnr][bufvar_lualine]
+  local r = vim.b[bufvar_lualine]
   if not r then
     return ''
   end
@@ -202,6 +201,17 @@ lualine.setup {
       {'branch',
         icons_enabled = true, -- 单独设置 branch 使用 icon.
         icon = {'', color={ gui='bold' }},
+        color = function()
+          --- 如果是 edit 没有 .git 的文件, 这里的函数不会运行.
+          local bufvar_branch = 'my_current_branch'
+          if vim.b[bufvar_branch] and (vim.b[bufvar_branch] == 'main' or vim.b[bufvar_branch] == 'master') then
+            return { bg = 160, gui = 'bold' }
+          elseif vim.b[bufvar_branch] == nil then
+            local dir = vim.fs.dirname(vim.api.nvim_buf_get_name(0))
+            vim.b[bufvar_branch] = vim.trim(vim.fn.system('cd ' .. dir  .. ' && git branch --show-current'))
+          end
+          --- return nil 时使用 theme 的默认颜色.
+        end,
       },
     },
     lualine_c = {
@@ -237,7 +247,7 @@ lualine.setup {
     lualine_y = {my_progress},  -- 自定义 component, 修改自 builtin 'progress' component
     lualine_z = {
       {my_location},
-      {my_check, color = {bg=lualine_colors.black, fg=lualine_colors.light_grey, gui='bold'}},  -- 自定义 component
+      {my_check, color = {bg=lualine_colors.black, fg=lualine_colors.dark_orange, gui='bold'}},  -- 自定义 component
       { 'diagnostics',
         symbols = {error = 'E:', warn = 'W:', info = 'I:', hint = 'H:'},
         update_in_insert = false, -- Update diagnostics in insert mode.
@@ -272,7 +282,7 @@ lualine.setup {
       },
     },
     lualine_x = {
-      {my_check, color = {bg=lualine_colors.black, fg=lualine_colors.light_grey, gui='bold'}},  -- 自定义 component
+      {my_check, color = {bg=lualine_colors.black, fg=lualine_colors.dark_orange, gui='bold'}},  -- 自定义 component
       { 'diagnostics',
         symbols = {error = 'E:', warn = 'W:', info = 'I:', hint = 'H:'},
         diagnostics_color = {
