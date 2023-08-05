@@ -12,23 +12,26 @@ gui:
   commandLogSize: 8                  # 右下角 log 提示窗口所占行高
   showFileTree: true                 # 左侧边栏文件显示使用 tree 模式(可折叠)
   theme:
-    activeBorderColor:
+    activeBorderColor:  # cursor 所在 window 的 border 颜色.
       - yellow
       - bold
     inactiveBorderColor:  # 未选中窗口的文字和边框颜色, 241
       - '#626262'
-    optionsTextColor:     # 最下方跨键键提示文字颜色
+    searchingActiveBorderColor:  # 在使用 '/' 搜索后, search result window border 的颜色.
+      - cyan
+      - bold
+    optionsTextColor:     # 最下方跨键键提示文字颜色.
       - blue
-    cherryPickedCommitFgColor:  # Commits window 中使用 'c' 选择 cherry pick 的文字颜色
+    selectedLineBgColor:   # 左侧菜单中 cursor line bg 颜色.
+      - '#4E4E4E'
+    selectedRangeBgColor:  # stage / unstage line color
+      - reverse
+    cherryPickedCommitFgColor:  # Commits window 中使用 'c' 选择 cherry pick 的文字颜色.
       - magenta
       - bold
       - reverse
     cherryPickedCommitBgColor:  # 不使用任何 bg 颜色, 默认为 cyan.
       - ''
-    selectedLineBgColor:   # 左侧菜单中 cursor line bg 颜色.
-      - '#4E4E4E'
-    selectedRangeBgColor:  # stage / unstage line color
-      - reverse
 
 git:
   # merging:
