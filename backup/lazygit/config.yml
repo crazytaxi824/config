@@ -107,8 +107,8 @@ notARepository: 'skip' # one of: 'prompt' | 'create' | 'skip'
 keybinding:
   # 通用快捷键
   universal:
-    undo: null       # ctrl-z, 危险操作
-    redo: null       # shift-z
+    undo: null       # 危险操作
+    redo: null       # 危险操作
     pullFiles: null  # use 'fetch' instead of 'pull', 慎用.
     gotoTop: 'g'     # go to top of list
     gotoBottom: 'G'  # go to bottom of list
