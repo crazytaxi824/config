@@ -951,7 +951,7 @@ key_bindings:
   - { key: W,      mods: Command,       mode: ~Vi|~Search,      chars: "\x17"       }  # Command-W -> Ctrl-w, vim 中用于 switch vim window, alacritty 默认设置是 Quit.
   - { key: R,      mods: Command,       mode: ~Vi|~Search,      chars: "\x12"       }  # Command-R -> Ctrl-r, vim 中用于 redo|register 操作.
   - { key: Z,      mods: Command,       mode: ~Vi|~Search,      chars: "\x1a"       }  # Command-Z -> Ctrl-z, vim 中用于 u 上 undo.
-  - { key: Slash,  mods: Command,       mode: ~Vi|~Search,      chars: "\x1b[1;8P"  }  # Command-/ -> Alt-Ctrl-Shift-F1, vim 中用于 Toggle Comments. vim 中无法设置 Ctrl-/ keymap
+  - { key: Slash,  mods: Command,       mode: ~Vi|~Search,      chars: "\x1b/"      }  # Command-/ -> Option-/, vim 中用于 Toggle Comments.
 
 # `alacritty --print-events` 打印 events/debug 信息.
 debug:

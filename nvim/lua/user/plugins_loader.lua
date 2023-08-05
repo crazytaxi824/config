@@ -124,9 +124,9 @@ local plugins = {
 
     keys = {
       --- VVI: alacritty 中已将 <Command + /> 映射为以下组合键. 可以通过 `cat -v` 查看.
-      {'<M-C-S-F1>', '<Plug>(comment_toggle_linewise_current)',      mode = 'n', desc = 'Comment current line'},
-      {'<M-C-S-F1>', '<C-o><Plug>(comment_toggle_linewise_current)', mode = 'i', desc = 'Comment current line'},
-      {'<M-C-S-F1>', '<Plug>(comment_toggle_linewise_visual)',       mode = 'v', desc = 'Comment Visual selected'},
+      {'<M-/>', '<Plug>(comment_toggle_linewise_current)',      mode = 'n', desc = 'Comment current line'},
+      {'<M-/>', '<C-o><Plug>(comment_toggle_linewise_current)', mode = 'i', desc = 'Comment current line'},
+      {'<M-/>', '<Plug>(comment_toggle_linewise_visual)',       mode = 'v', desc = 'Comment Visual selected'},
     },
   },
 
