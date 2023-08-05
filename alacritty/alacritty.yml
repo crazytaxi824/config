@@ -115,7 +115,7 @@ window:
   #   - OnlyRight
   #   - Both
   #   - None (default)
-  option_as_alt: OnlyLeft
+  option_as_alt: OnlyLeft  # VVI
 
 #scrolling:
   # Maximum number of lines in the scrollback buffer.
@@ -906,7 +906,7 @@ key_bindings:
   #- { key: B,              mods: Command, mode: ~Search,     action: SearchBackward        }
 
   ### --- 自定义 key mapping, escape code - map key to Ctrl-? -----------------------------------------------
-  # https://github.com/prompt-toolkit/python-prompt-toolkit/blob/master/src/prompt_toolkit/input/ansi_escape_sequences.py
+  # VVI: `$ cat -v` 然后按组合键, 会显示 ASCII escape sequence.
 
   # NOTE: 中文输入法输入过程中, delete 键不会删除之前的字符.
   # 因为这个键默认是 delete 键 (Control-H, "\x08") 而不是 backspace 键.
@@ -951,7 +951,7 @@ key_bindings:
   - { key: W,      mods: Command,       mode: ~Vi|~Search,      chars: "\x17"       }  # Command-W -> Ctrl-w, vim 中用于 switch vim window, alacritty 默认设置是 Quit.
   - { key: R,      mods: Command,       mode: ~Vi|~Search,      chars: "\x12"       }  # Command-R -> Ctrl-r, vim 中用于 redo|register 操作.
   - { key: Z,      mods: Command,       mode: ~Vi|~Search,      chars: "\x1a"       }  # Command-Z -> Ctrl-z, vim 中用于 u 上 undo.
-  - { key: Slash,  mods: Command,       mode: ~Vi|~Search,      chars: "\x0a"       }  # Command-/ -> Ctrl-j, vim 中用于 Toggle Comments. vim 中无法设置 Ctrl-/ keymap
+  - { key: Slash,  mods: Command,       mode: ~Vi|~Search,      chars: "\x1b[1;8P"  }  # Command-/ -> Alt-Ctrl-Shift-F1, vim 中用于 Toggle Comments. vim 中无法设置 Ctrl-/ keymap
 
 # `alacritty --print-events` 打印 events/debug 信息.
 debug:
