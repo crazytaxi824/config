@@ -38,15 +38,15 @@ local my_theme = {
     b = { fg = lualine_colors.white, bg = 20 },
     c = { fg = lualine_colors.white, bg = 17 },
   },
-  visual = {
-    a = { fg = lualine_colors.black, bg = lualine_colors.orange, gui = 'bold' },
-    b = { fg = lualine_colors.black, bg = lualine_colors.dark_orange },
-    c = { fg = lualine_colors.white, bg = 52 },
-  },
   replace = {
     a = { fg = lualine_colors.white, bg = 124, gui = 'bold' },
     b = { fg = lualine_colors.white, bg = 20 },
     c = { fg = lualine_colors.white, bg = 17 },
+  },
+  visual = {
+    a = { fg = lualine_colors.black, bg = lualine_colors.orange, gui = 'bold' },
+    b = { fg = lualine_colors.black, bg = lualine_colors.dark_orange },
+    c = { fg = lualine_colors.white, bg = 52 },
   },
   command = {
     a = { fg = lualine_colors.black, bg = Color.comment_green, gui = 'bold' },
@@ -112,11 +112,11 @@ local function my_check()
     local ts = check_trailing_whitespace()
 
     if mi ~= '' and ts ~= '' then
-      vim.b[bufvar_lualine] = ' '..mi..' '..ts
+      vim.b[bufvar_lualine] = mi..' '..ts
     elseif mi ~= '' and ts == '' then
-      vim.b[bufvar_lualine] = ' '..mi
+      vim.b[bufvar_lualine] = mi
     elseif mi == '' and ts ~= '' then
-      vim.b[bufvar_lualine] = ' '..ts
+      vim.b[bufvar_lualine] = ts
     else
       vim.b[bufvar_lualine] = nil
     end
@@ -136,8 +136,11 @@ end
 --- NOTE: `:help 'statusline'` 中有对 l p v L... 占位符的解释. v - Virtual Column; c - Byte index.
 --- '%3l' && '%-2v' 中 3/-2 表示保留位数, 就算没有文字也将保留空位.
 --- '3' 表示在前面(左边)保留2个位置; '-2' 表示在后面(右边)保留1个位置.
-
 local function my_location()
+  return '%3l:𝌆 %L'
+end
+
+local function my_location2()
   return '%3l:%-2v'
 end
 
@@ -243,23 +246,22 @@ lualine.setup {
         --on_click = function(number, mouse, modifiers) end,
       },
     },
-    lualine_x = {'encoding', 'filetype'},
-    lualine_y = {my_progress},  -- 自定义 component, 修改自 builtin 'progress' component
-    lualine_z = {
-      {my_location},
-      {my_check, color = {bg=lualine_colors.black, fg=lualine_colors.dark_orange, gui='bold'}},  -- 自定义 component
+    lualine_x = {
       { 'diagnostics',
         symbols = {error = 'E:', warn = 'W:', info = 'I:', hint = 'H:'},
         update_in_insert = false, -- Update diagnostics in insert mode.
         diagnostics_color = {
           --error = 'ErrorMsg',  -- 也可以使用 highlight group.
-          error = {bg=lualine_colors.black, fg=lualine_colors.red, gui='bold'},        -- Changes diagnostics' error color.
-          warn  = {bg=lualine_colors.black, fg=lualine_colors.orange, gui='bold'},     -- Changes diagnostics' warn color.
-          info  = {bg=lualine_colors.black, fg=lualine_colors.blue, gui='bold'},       -- Changes diagnostics' info color.
-          hint  = {bg=lualine_colors.black, fg=lualine_colors.light_grey, gui='bold'}, -- Changes diagnostics' hint color.
+          error = {fg=lualine_colors.red, gui='bold'},        -- Changes diagnostics' error color.
+          warn  = {fg=lualine_colors.orange, gui='bold'},     -- Changes diagnostics' warn color.
+          info  = {fg=lualine_colors.blue, gui='bold'},       -- Changes diagnostics' info color.
+          hint  = {fg=lualine_colors.light_grey, gui='bold'}, -- Changes diagnostics' hint color.
         },
       },
+      {my_check, color = {fg=lualine_colors.dark_orange, gui='bold'}},  -- 自定义 component
     },
+    lualine_y = {'encoding',  'filetype'},
+    lualine_z = {my_location},
   },
 
   --- cursor 不在窗口时(失去焦点的窗口)所显示的信息, 以及颜色.
@@ -282,17 +284,17 @@ lualine.setup {
       },
     },
     lualine_x = {
-      {my_check, color = {bg=lualine_colors.black, fg=lualine_colors.dark_orange, gui='bold'}},  -- 自定义 component
       { 'diagnostics',
         symbols = {error = 'E:', warn = 'W:', info = 'I:', hint = 'H:'},
         diagnostics_color = {
           --error = 'ErrorMsg',  -- 也可以使用 highlight group.
-          error = {bg=lualine_colors.black, fg=lualine_colors.red, gui='bold'},        -- Changes diagnostics' error color.
-          warn  = {bg=lualine_colors.black, fg=lualine_colors.orange, gui='bold'},     -- Changes diagnostics' warn color.
-          info  = {bg=lualine_colors.black, fg=lualine_colors.blue, gui='bold'},       -- Changes diagnostics' info color.
-          hint  = {bg=lualine_colors.black, fg=lualine_colors.light_grey, gui='bold'}, -- Changes diagnostics' hint color.
+          error = {fg=lualine_colors.red, gui='bold'},        -- Changes diagnostics' error color.
+          warn  = {fg=lualine_colors.orange, gui='bold'},     -- Changes diagnostics' warn color.
+          info  = {fg=lualine_colors.blue, gui='bold'},       -- Changes diagnostics' info color.
+          hint  = {fg=lualine_colors.light_grey, gui='bold'}, -- Changes diagnostics' hint color.
         },
       },
+      {my_check, color = {fg=lualine_colors.dark_orange, gui='bold'}},  -- 自定义 component
     },
     lualine_y = {},
     lualine_z = {},
