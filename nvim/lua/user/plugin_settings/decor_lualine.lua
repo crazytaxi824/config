@@ -305,7 +305,6 @@ lualine.setup {
     },
     lualine_y = {
       {my_filetype_encoding_percentage,
-        -- cond = function() return vim.api.nvim_win_get_width(0) > 80 end,
         fmt = function(str)
           if str ~= '' and vim.api.nvim_win_get_width(0) <= 80 then
             return string.sub(str,1,1) .. '…'
