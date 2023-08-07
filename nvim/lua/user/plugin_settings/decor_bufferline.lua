@@ -492,9 +492,9 @@ bufferline.setup({
       style = 'icon',  -- 'icon' | 'underline' | 'none',
       icon = '▌',  --  █ ▎▌, style = 'icon' 时生效.
     },
-    buffer_close_icon = '✕',  -- 每个 buffer 后面显示 close icon.
+    buffer_close_icon = '✕',  -- 每个 buffer 后面显示 close icon. -- ✕✖︎✗✘⛌
     modified_icon = '●',
-    close_icon = '✕',  -- close tab
+    close_icon = '✕',  -- close tab -- ✕✖︎✗✘⛌
     left_trunc_marker = '',
     right_trunc_marker = '',
     separator_style = {' ', ' '},  -- 'thin', 'thick', {'',''} - [focused and unfocused]

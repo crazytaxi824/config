@@ -68,7 +68,7 @@ local my_theme = {
 --- check Trailing-Whitespace --------------------------------------------------
 local function check_trailing_whitespace()
   local space = vim.fn.search([[\s\+$]], 'nwc')
-  return space ~= 0 and "TS:"..space or ""
+  return space ~= 0 and "T:"..space or ""
 end
 
 --- check Mixed-indent ---------------------------------------------------------
@@ -88,22 +88,22 @@ local function check_mixed_indent()
 
   --- 如果 mixed_same_line 则先返回 mixed_same_line
   if mixed_same_line ~= nil and mixed_same_line > 0 then
-     return 'MI:'..mixed_same_line
+     return 'M:'..mixed_same_line
   end
 
   --- 如果 mixed_indent in file, 则返回数量少的 indent line.
   local space_indent_cnt = vim.fn.searchcount({pattern=space_pat, max_count=1e3}).total
   local tab_indent_cnt =  vim.fn.searchcount({pattern=tab_pat, max_count=1e3}).total
   if space_indent_cnt > tab_indent_cnt then
-    return 'MI:'..tab_indent
+    return 'M:'..tab_indent
   else
-    return 'MI:'..space_indent
+    return 'M:'..space_indent
   end
 end
 
 --- 合并两个 check, 同时检查 ---------------------------------------------------
 --- NOTE: 通过设置 set/get buffer var 来缓存 whitespace && mixed_indent 结果.
-local function my_check()
+local function my_trailing_whitespace()
   local bufvar_lualine = 'my_lualine_checks'
 
   --- 在退出 insert mode 之后再进行计算并更新 lualine, 可以减少计算量.
@@ -137,20 +137,19 @@ end
 --- '%3l' && '%-2v' 中 3/-2 表示保留位数, 就算没有文字也将保留空位.
 --- '3' 表示在前面(左边)保留2个位置; '-2' 表示在后面(右边)保留1个位置.
 local function my_location()
-  return '%3l:𝌆 %L'
-end
-
-local function my_location2()
   return '%3l:%-2v'
 end
 
 local function my_progress()
+  --- 以下可用于显示 Percentage of file.
+  --- ▁ ▂ ▃ ▄ ▅ ▆ ▇ █
+  --- ▏ ▎ ▍ ▌ ▋ ▊ ▉ █
   return '%3p%%:𝌆 %L'
 end
 -- -- }}}
 
 --- indicate 文件是否 modified / readonly -------------------------------------- {{{
---- NOTE: 这里主要是为了解决 inactive_sections 中的 filename 无法分别设置颜色.
+--- VVI: 这里分为3个 components 主要是为了解决 section 中无法按照情况分别设置颜色.
 local function modified_readonly()
   if vim.bo.modified and vim.bo.readonly then  -- 对 readonly 文件做出修改
     return "modified readonly"
@@ -170,6 +169,26 @@ local function modified()
     return "modified"
   end
   return ''
+end
+-- -- }}}
+
+--- filetype & fileencoding & Percentage of file ------------------------------- {{{
+local function my_filetype_encoding_percentage()
+  local str
+  if vim.bo.filetype ~= '' and vim.bo.fileencoding ~= '' then
+    str = vim.bo.filetype .. ' ' .. vim.bo.fileencoding
+  elseif vim.bo.filetype ~= '' and vim.bo.fileencoding == '' then
+    str = vim.bo.filetype
+  elseif vim.bo.filetype == '' and vim.bo.fileencoding ~= '' then
+    str = vim.bo.fileencoding
+  end
+
+  --- Percentage of file
+  if str then
+    return str .. ' %2p%%'
+  else
+    return '%2p%%'
+  end
 end
 -- -- }}}
 
@@ -199,11 +218,27 @@ lualine.setup {
 
   --- VVI: https://github.com/nvim-lualine/lualine.nvim#changing-components-in-lualine-sections
   sections = {
-    lualine_a = {'mode'},  -- NOTE: 如果要显示自定义文字需要使用 function() return "foo" end
+    lualine_a = {
+      {'mode',
+        fmt = function(str)
+          --- 如果 window 小于 n 则, 只显示 mode 第一个字母.
+          if str ~= '' and vim.api.nvim_win_get_width(0) <= 60 then
+            return string.sub(str,1,1) .. '…'
+          end
+          return str
+        end,
+      },
+    },
     lualine_b = {
       {'branch',
         icons_enabled = true, -- 单独设置 branch 使用 icon.
         icon = {'', color={ gui='bold' }},
+        fmt = function(str)
+          if str ~= '' and vim.api.nvim_win_get_width(0) <= 80 then
+            return '…'  -- branch has icon
+          end
+          return str
+        end,
         color = function()
           --- 如果是 edit 没有 .git 的文件, 这里的函数不会运行.
           local bufvar_branch = 'my_current_branch'
@@ -218,17 +253,39 @@ lualine.setup {
       },
     },
     lualine_c = {
+      {'diagnostics',
+        symbols = {error = 'E:', warn = 'W:', info = 'I:', hint = 'H:'},
+        update_in_insert = false, -- Update diagnostics in insert mode.
+        diagnostics_color = {
+          --error = 'ErrorMsg',  -- 也可以使用 highlight group.
+          error = {fg=lualine_colors.red, gui='bold'},        -- Changes diagnostics' error color.
+          warn  = {fg=lualine_colors.orange, gui='bold'},     -- Changes diagnostics' warn color.
+          info  = {fg=lualine_colors.blue, gui='bold'},       -- Changes diagnostics' info color.
+          hint  = {fg=lualine_colors.light_grey, gui='bold'}, -- Changes diagnostics' hint color.
+        },
+      },
+      {my_trailing_whitespace, color = {fg=lualine_colors.dark_orange, gui='bold'}},  -- 自定义 component
+    },
+    lualine_x = {
       {'filename',
-        path = 3, -- 路径显示模式.
+        path = 3, -- 路径显示模式:
                   -- 0: Just the filename
                   -- 1: Relative path
                   -- 2: Absolute path
                   -- 3: Absolute path, with tilde as the home directory '~'
+                  -- 4: Filename and parent dir, with tilde as the home directory
         symbols = {
           modified = '[+]',       -- Text to show when the file is modified.
           readonly = '[-]',       -- Text to show when the file is non-modifiable or readonly.
           unnamed  = '[No Name]', -- Text to show for unnamed buffers.
         },
+        cond = function() return vim.api.nvim_win_get_width(0) > 50 end,
+        fmt = function(str)
+          if str ~= '' and vim.api.nvim_win_get_width(0) <= 100 then
+            return vim.fs.basename(str)
+          end
+          return str
+        end,
         color = function()
           if vim.bo.modified and vim.bo.readonly then  -- 对 readonly 文件做出修改
             return {fg = lualine_colors.white, bg = lualine_colors.red, gui='bold'}
@@ -240,28 +297,33 @@ lualine.setup {
           return {fg = lualine_colors.gold} -- 其他情况
         end,
 
-        --- number of clicks incase of multiple clicks
+        --- number of clicks incase of multipl8 clicks
         --- mouse button used (l(left)/r(right)/m(middle)/...)
         --- modifiers pressed (s(shift)/c(ctrl)/a(alt)/m(meta)...)
         --on_click = function(number, mouse, modifiers) end,
       },
     },
-    lualine_x = {
-      { 'diagnostics',
-        symbols = {error = 'E:', warn = 'W:', info = 'I:', hint = 'H:'},
-        update_in_insert = false, -- Update diagnostics in insert mode.
-        diagnostics_color = {
-          --error = 'ErrorMsg',  -- 也可以使用 highlight group.
-          error = {fg=lualine_colors.red, gui='bold'},        -- Changes diagnostics' error color.
-          warn  = {fg=lualine_colors.orange, gui='bold'},     -- Changes diagnostics' warn color.
-          info  = {fg=lualine_colors.blue, gui='bold'},       -- Changes diagnostics' info color.
-          hint  = {fg=lualine_colors.light_grey, gui='bold'}, -- Changes diagnostics' hint color.
-        },
+    lualine_y = {
+      {my_filetype_encoding_percentage,
+        -- cond = function() return vim.api.nvim_win_get_width(0) > 80 end,
+        fmt = function(str)
+          if str ~= '' and vim.api.nvim_win_get_width(0) <= 80 then
+            return string.sub(str,1,1) .. '…'
+          end
+          return str
+        end
       },
-      {my_check, color = {fg=lualine_colors.dark_orange, gui='bold'}},  -- 自定义 component
     },
-    lualine_y = {'encoding',  'filetype'},
-    lualine_z = {my_location},
+    lualine_z = {
+      {my_location,
+        fmt = function(str)
+          if str ~= '' and vim.api.nvim_win_get_width(0) <= 80 then
+            return '%3l'
+          end
+          return str
+        end
+      },
+    },
   },
 
   --- cursor 不在窗口时(失去焦点的窗口)所显示的信息, 以及颜色.
@@ -269,22 +331,9 @@ lualine.setup {
     lualine_a = {},
     lualine_b = {},
     lualine_c = {
-      --- NOTE: 以下三个 components 主要是为了解决 inactive_sections 中的 filename 无法分别设置颜色.
-      {modified_readonly, color = {fg=lualine_colors.white, bg=lualine_colors.red, gui='bold'}},
-      {readonly, color = {fg=lualine_colors.dark_orange, gui='bold'}},
-      {modified, color = {fg=lualine_colors.cyan, gui='bold'}},
-      {'filename',
-        path = 3,  -- Absolute path, with ~ as the home directory
-        symbols = {
-          modified = '[+]',       -- Text to show when the file is modified.
-          readonly = '[-]',       -- Text to show when the file is non-modifiable or readonly.
-          unnamed  = '[No Name]', -- Text to show for unnamed buffers.
-          --- NOTE: 这里设置 color = function() 会导致所有 inactive buffer 的 filename 颜色一起改变.
-        },
-      },
-    },
-    lualine_x = {
-      { 'diagnostics',
+      {'diagnostics',
+        icons_enabled = true,
+        icon = {'⛌', color={fg = lualine_colors.orange, gui = 'bold'}},
         symbols = {error = 'E:', warn = 'W:', info = 'I:', hint = 'H:'},
         diagnostics_color = {
           --error = 'ErrorMsg',  -- 也可以使用 highlight group.
@@ -294,7 +343,30 @@ lualine.setup {
           hint  = {fg=lualine_colors.light_grey, gui='bold'}, -- Changes diagnostics' hint color.
         },
       },
-      {my_check, color = {fg=lualine_colors.dark_orange, gui='bold'}},  -- 自定义 component
+      {my_trailing_whitespace, color = {fg=lualine_colors.dark_orange, gui='bold'}},  -- 自定义 component
+    },
+    lualine_x = {
+      --- VVI: 分为3个 components 主要是为了解决 inactive_sections 中的 filename 无法分别设置颜色.
+      {modified_readonly, color = {fg = lualine_colors.white, bg = lualine_colors.red, gui='bold'}},
+      {modified,
+        color = {fg = lualine_colors.cyan, gui='bold'},
+        fmt = function(str)
+          if str ~= '' and vim.api.nvim_win_get_width(0) <= 60 then
+            return '●'  -- branch has icon
+          end
+          return str
+        end,
+      },
+      {readonly,
+        color = {fg = lualine_colors.dark_orange, gui='bold'},
+        fmt = function(str)
+          if str ~= '' and vim.api.nvim_win_get_width(0) <= 60 then
+            return '●'  -- branch has icon
+          end
+          return str
+        end,
+      },
+      {'filename', path = 0 },
     },
     lualine_y = {},
     lualine_z = {},
@@ -317,8 +389,7 @@ lualine.setup {
 
   --- lualine extensions change statusline appearance for a window/buffer with specified filetypes.
   --- https://github.com/nvim-lualine/lualine.nvim#extensions
-  --- NOTE: 'quickfix' includes loclist and quickfix
-  extensions = {'nvim-tree', 'nerdtree', 'quickfix'},
+  extensions = {'nvim-tree', 'nerdtree', 'quickfix'},  -- NOTE: 'quickfix' includes loclist and quickfix
 }
 
 

@@ -148,7 +148,7 @@ local config = {
       step_out = "[⊼ Out <S-F11>]",   -- ⇧↥⊼
       step_back = "[↩︎ Back]",  -- ↶↩︎
       run_last = "[⟳  Restart]",   -- ↻⟳
-      disconnect = "[✕ disconnect]",
+      disconnect = "[✕ disconnect]",  -- ✕✖︎✗✘⛌
       terminate = "[■ Stop]",
     },
   },
