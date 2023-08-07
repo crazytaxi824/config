@@ -137,7 +137,7 @@ end
 --- '%3l' && '%-2v' 中 3/-2 表示保留位数, 就算没有文字也将保留空位.
 --- '3' 表示在前面(左边)保留2个位置; '-2' 表示在后面(右边)保留1个位置.
 local function my_location()
-  return '%3l:%-2v'
+  return '%3p%%:%-2v'
 end
 
 local function my_progress()
@@ -172,9 +172,9 @@ local function modified()
 end
 -- -- }}}
 
---- filetype & fileencoding & Percentage of file ------------------------------- {{{
-local function my_filetype_encoding_percentage()
-  local str
+--- filetype & fileencoding & -------------------------------------------------- {{{
+local function my_filetype_encoding()
+  local str = ''
   if vim.bo.filetype ~= '' and vim.bo.fileencoding ~= '' then
     str = vim.bo.filetype .. ' ' .. vim.bo.fileencoding
   elseif vim.bo.filetype ~= '' and vim.bo.fileencoding == '' then
@@ -182,13 +182,7 @@ local function my_filetype_encoding_percentage()
   elseif vim.bo.filetype == '' and vim.bo.fileencoding ~= '' then
     str = vim.bo.fileencoding
   end
-
-  --- Percentage of file
-  if str then
-    return str .. ' %2p%%'
-  else
-    return '%2p%%'
-  end
+  return str
 end
 -- -- }}}
 
@@ -304,7 +298,7 @@ lualine.setup {
       },
     },
     lualine_y = {
-      {my_filetype_encoding_percentage,
+      {my_filetype_encoding,
         fmt = function(str)
           if str ~= '' and vim.api.nvim_win_get_width(0) <= 80 then
             return string.sub(str,1,1) .. '…'
@@ -317,7 +311,7 @@ lualine.setup {
       {my_location,
         fmt = function(str)
           if str ~= '' and vim.api.nvim_win_get_width(0) <= 80 then
-            return '%3l'
+            return '%2v'
           end
           return str
         end
@@ -332,7 +326,7 @@ lualine.setup {
     lualine_c = {
       {'diagnostics',
         icons_enabled = true,
-        icon = {'⛌', color={fg = lualine_colors.orange, gui = 'bold'}},
+        icon = {'⚠️', color={fg = lualine_colors.orange, gui = 'bold'}},
         symbols = {error = 'E:', warn = 'W:', info = 'I:', hint = 'H:'},
         diagnostics_color = {
           --error = 'ErrorMsg',  -- 也可以使用 highlight group.
