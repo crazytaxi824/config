@@ -39,9 +39,9 @@ mason.setup {
     check_outdated_packages_on_open = true,  -- 打开面板时检查 outdated lsp
     --border = {"▄","▄","▄","█","▀","▀","▀","█"},  -- 默认为: 'none'
     icons = {
-      package_installed = "✓",
+      package_installed = "✓", -- ✓✔︎
       package_pending = "➜",
-      package_uninstalled = "✗"
+      package_uninstalled = "⛌", -- ❌✕✖︎✗✘⛌
     },
 
     keymaps = {

@@ -34,7 +34,7 @@ local glyphs = {
     symlink_open = '▽',
   },
   git = {
-    unstaged  = "M",  -- ✗✘
+    unstaged  = "M",  -- ✕✖︎✗✘⛌
     staged    = "M",  -- ✓✔︎
     unmerged  = "U",
     renamed   = "R",
@@ -48,7 +48,7 @@ local diagnostics_icons = {
   hint    = "⚐ ",  -- ⚐⚑
   info    = "𝖎 ",
   warning = "⚠️ ",
-  error   = "✘ ",  -- ❌✕✖︎✗✘
+  error   = "⛌ ",  -- ❌✕✖︎✗✘⛌
 }
 
 -- -- }}}
