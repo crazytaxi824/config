@@ -79,45 +79,43 @@ local function trim_prefix_blankline(filepath, regexp)
   local content_list = vim.fn.readfile(filepath)
 
   --- filter content
-  local line_num
-  for i, content in ipairs(content_list) do
-    if not string.match(content, regexp) then
-      line_num = i
-      break
+  local trim = false  -- 记录是否有 remove line.
+  --- 反向遍历 remove 行, 避免 remove 后 index 有问题.
+  for i = #content_list, 1, -1 do
+    if string.match(content_list[i], regexp) then
+      table.remove(content_list, i)
+      trim = true
     end
   end
 
-  if not line_num then
-    line_num = #content_list+1
-  elseif line_num == 1 then
-    return
+  --- 判断是否需要 writefile()
+  if trim then
+    --- Write File
+    --- lua write file --- {{{
+    -- f, err = io.open(filepath, 'w+')  -- write mode, truncate content.
+    -- if err then
+    --   Notify(err, "ERROR")
+    --   return
+    -- end
+    --
+    -- if not f then
+    --   Notify("lsp.log file handler is nil", "ERROR")
+    --   return
+    -- end
+    --
+    -- --- 写入文件
+    -- _, err = f:write(table.concat(new_content, '\n'))
+    -- if err then
+    --   Notify(err, "ERROR")
+    --   return
+    -- end
+    --
+    -- --f:flush()  --- save to file
+    -- f:close()
+    -- -- }}}
+    vim.fn.writefile(content_list, filepath)  -- flag: omit - 直接覆盖写入, 'a' - append 写入.
+    --- ":checktime" 在下面统一执行.
   end
-
-  --- Write File
-  --- lua write file --- {{{
-  -- f, err = io.open(filepath, 'w+')  -- write mode, truncate content.
-  -- if err then
-  --   Notify(err, "ERROR")
-  --   return
-  -- end
-  --
-  -- if not f then
-  --   Notify("lsp.log file handler is nil", "ERROR")
-  --   return
-  -- end
-  --
-  -- --- 写入文件
-  -- _, err = f:write(table.concat(new_content, '\n'))
-  -- if err then
-  --   Notify(err, "ERROR")
-  --   return
-  -- end
-  --
-  -- --f:flush()  --- save to file
-  -- f:close()
-  -- -- }}}
-  vim.fn.writefile(vim.list_slice(content_list, line_num), filepath)  -- flag: omit - 直接覆盖写入, 'a' - append 写入.
-  --- ":checktime" 在下面统一执行.
 end
 
 --- 离开 vim 时, 清理 log 文件.
