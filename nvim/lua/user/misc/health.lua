@@ -20,8 +20,6 @@ local function check_module()
     "telescope.make_entry",
     "telescope.pickers",
     "telescope.config",
-    "telescope.actions.state",
-    "telescope.actions.mt",
 
     "null-ls.utils",
   }

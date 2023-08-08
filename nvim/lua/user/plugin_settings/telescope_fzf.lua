@@ -253,31 +253,18 @@ require('user.utils.keymaps').set(telescope_keymaps, {
 --- 根据 telescope.builtin.grep_string() 修改, 函数定义在:
 ---   https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/builtin/__files.lua
 ---   files.grep_string = function(opts), opts 参数为 `:help grep_string()`, cwd, search ...
---- make_entry 的内置函数定义在:
----   https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/make_entry.lua
+local pickers = require("telescope.pickers")
 local finders = require("telescope.finders")
 local make_entry = require("telescope.make_entry")
-local pickers = require("telescope.pickers")
 local conf = require("telescope.config").values
 
-local function my_rg_picker(opts)
-  opts = opts or {}
-  local result = vim.fn.system(table.concat(conf.vimgrep_arguments, " ") .. " " .. opts.extra_args)
-  if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
-    if result == "" then
-      vim.notify("Rg: no result found", vim.log.levels.WARN)
-    else
-      Notify(vim.trim(result), "ERROR")
-    end
-    return
-  end
+local function my_rg_picker(additional_args)
+  local opts = { entry_maker = make_entry.gen_from_vimgrep() }  -- VVI: 显示 preview 必要设置.
+  local args = vim.tbl_flatten({conf.vimgrep_arguments, additional_args})
 
   pickers.new(opts, {
     prompt_title = ":Rg",
-    finder = finders.new_table({
-      results = vim.split(result, '\n', {trimempty=true}),
-      entry_maker = make_entry.gen_from_vimgrep(),  -- VVI: gen_from_vimgrep() 设置作用: <CR> jump to <file:line:column>
-    }),
+    finder = finders.new_oneshot_job(args, opts),
     previewer = conf.grep_previewer(opts),
     sorter = conf.generic_sorter(opts),  -- VVI: 设置 sorter 后可以通过 fzf 输入框对 results 进行过滤.
   }):find()
@@ -305,7 +292,7 @@ end
 -- -- }}}
 vim.api.nvim_create_user_command("Rg",
   function(params)
-    my_rg_picker({extra_args = params.args})
+    my_rg_picker(params.fargs)
   end,
 {nargs="+"})
 
