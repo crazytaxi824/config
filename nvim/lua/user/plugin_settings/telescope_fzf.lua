@@ -250,18 +250,20 @@ require('user.utils.keymaps').set(telescope_keymaps, {
 })
 
 --- HACK: 自定义 Rg command ------------------------------------------------------------------------
---- 根据 telescope.builtin.grep_string() 修改, 函数定义在:
----   https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/builtin/__files.lua
----   files.grep_string = function(opts), opts 参数为 `:help grep_string()`, cwd, search ...
+--- 基于 telescope.builtin.grep_string() 修改
+--- https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/builtin/__files.lua
 local pickers = require("telescope.pickers")
 local finders = require("telescope.finders")
 local make_entry = require("telescope.make_entry")
 local conf = require("telescope.config").values
 
 local function my_rg_picker(additional_args)
-  local opts = { entry_maker = make_entry.gen_from_vimgrep() }  -- VVI: 显示 preview 必要设置.
+  --- args 是一个 cmd list, eg: {'rg', '-w', '-s', 'filepath'}
   local args = vim.tbl_flatten({conf.vimgrep_arguments, additional_args})
 
+  --- VVI: gen_from_vimgrep() 是 preview file 的必要设置.
+  --- opts 其他参数可以查看 `:help grep_string()`
+  local opts = { entry_maker = make_entry.gen_from_vimgrep() }
   pickers.new(opts, {
     prompt_title = ":Rg",
     finder = finders.new_oneshot_job(args, opts),
