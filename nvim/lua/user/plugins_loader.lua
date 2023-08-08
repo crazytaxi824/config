@@ -254,7 +254,7 @@ local plugins = {
 
   --- statusline decorator, `:help 'statusline'`
   {"nvim-lualine/lualine.nvim",   -- bottom status line
-    commit = "05d78e9",
+    commit = "45e27ca",
     config = function() require("user.plugin_settings.decor_lualine") end,
 
     event = "VeryLazy",
