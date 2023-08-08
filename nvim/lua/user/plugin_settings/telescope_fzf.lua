@@ -235,9 +235,10 @@ local telescope_keymaps = {
   {'n', '<leader>fd', function() builtin.find_files() end, opt, 'telescope: fd'},
   {'n', '<leader>fh', function() builtin.help_tags() end,  opt, 'telescope: Vim Help Doc'},
   {'n', '<leader>fk', function() builtin.keymaps() end,    opt, 'telescope: Keymap normal Mode'},
-  {'n', '<leader>f:', function() builtin.command_history() end, opt, 'telescope: Command History'},
-  {'n', '<leader>f/', function() builtin.search_history() end,  opt, 'telescope: Search History'},
-  {'n', '<leader>f?', function() builtin.search_history() end,  opt, 'telescope: Search History'},
+  {'n', '<leader>fc', function() builtin.commands() end,   opt, 'telescope: All Commands'},
+  {'n', '<leader>f:', function() builtin.command_history() end, opt, 'telescope: History Command'},
+  {'n', '<leader>f/', function() builtin.search_history() end,  opt, 'telescope: History Search'},
+  {'n', '<leader>f?', function() builtin.search_history() end,  opt, 'telescope: History Search'},
   {'n', '<leader>fl', function() builtin.highlights() end,  opt, 'telescope: Search Highlight'},
   {'n', 'z=', function() builtin.spell_suggest() end, opt, 'telescope: Spell Suggests'},  -- 也可以使用 which-key 显示.
   --{'n', '<leader>fg', function() builtin.live_grep() end,  opt, 'telescope: rg'},  -- NOTE: 使用自定义 :Rg 命令更灵活.

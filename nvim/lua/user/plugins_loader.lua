@@ -74,7 +74,7 @@ local plugins = {
   --- By convention, if you want to write a query, use the `queries/` directory,
   --- but if you want to extend a query use the `after/queries/` directory.
   {"nvim-treesitter/nvim-treesitter",
-    commit = "db0ccd9",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "2f5b4a6",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     --build = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
     config = function() require("user.plugin_settings.treesitter") end,
     dependencies = {
@@ -89,7 +89,7 @@ local plugins = {
 
   --- 第一方 module 插件 ---
   {"nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-    commit = "6f8f788",
+    commit = "3d4ab25",
     config = function() require("user.plugin_settings.treesitter_ctx") end,
 
     lazy = true,  -- nvim-treesitter 加载时自动加载.
@@ -118,7 +118,7 @@ local plugins = {
   --- 以下是使用了 treesitter 功能的插件. (这些插件也可以不使用 treesitter 的功能)
   --- 注释
   {"numToStr/Comment.nvim",
-    commit = "176e85e",
+    commit = "0236521",
     config = function() require("user.plugin_settings.comment") end,
     dependencies = {"JoosepAlviste/nvim-ts-context-commentstring"},  -- https://github.com/numToStr/Comment.nvim#-hooks
 
@@ -183,7 +183,7 @@ local plugins = {
 
   --- snippet engine, for "cmp_luasnip", 每次打开文件都会有一个 [Scratch] buffer.
   {"L3MON4D3/LuaSnip",
-    commit = "e81cbe6",
+    commit = "99a94cc",
     build = "make install_jsregexp",  -- https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#transformations
     config = function() require("user.plugin_settings.luasnip_snippest") end,
     dependencies = {"rafamadriz/friendly-snippets"},  -- snippets content
@@ -214,7 +214,7 @@ local plugins = {
   --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
   --- 官方 LSP 引擎.
   {"neovim/nvim-lspconfig",
-    commit = "b609127",
+    commit = "c0de180",
     config = function() require("user.lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     dependencies = {
       "williamboman/mason.nvim",  -- 安装 lsp 命令行工具.
@@ -236,7 +236,7 @@ local plugins = {
 
   --- File explorer --------------------------------------------------------------------------------
   {"kyazdani42/nvim-tree.lua",
-    commit = "c1466f9",
+    commit = "904f95c",
     config = function() require("user.plugin_settings.file_tree") end,
 
     -- VVI: 本文件最后设置: 在 `nvim dir` 直接打开文件夹的时直接加载 nvim-tree.lua.
@@ -254,7 +254,7 @@ local plugins = {
 
   --- statusline decorator, `:help 'statusline'`
   {"nvim-lualine/lualine.nvim",   -- bottom status line
-    commit = "05d78e9",
+    commit = "45e27ca",
     config = function() require("user.plugin_settings.decor_lualine") end,
 
     event = "VeryLazy",
@@ -263,7 +263,7 @@ local plugins = {
   --- Debug tools 安装 -----------------------------------------------------------------------------
   --- NOTE: dap-ui && dap 设置在同一文件中.
   {"mfussenegger/nvim-dap",  -- core debug tool
-    commit = "2f28ea8",  -- tag = "0.6.0",
+    commit = "1c63f37",  -- tag = "0.6.0",
     dependencies = {"williamboman/mason.nvim"},  -- install dap-debug tools. eg: 'delve'
 
     lazy = true,  -- nvim-dap-ui 加载时自动加载.
@@ -281,7 +281,7 @@ local plugins = {
   --- 依赖 rg fd, 但不依赖 fzf. 没有 fzf 命令行工具也可以运行.
   --- telescope 的 preview syntax 默认使用的是 treesitter, 如果没有 treesitter 则使用 vim syntax highlights.
   {"nvim-telescope/telescope.nvim",
-    commit = "597a3cc",  -- 半年更新一次 tag
+    commit = "dc192fa",  -- 半年更新一次 tag
     config = function() require("user.plugin_settings.telescope_fzf") end,
     dependencies = {
       "nvim-lua/plenary.nvim",
@@ -311,7 +311,7 @@ local plugins = {
   --- `:Gitsigns setqflist/seqloclist` will open Trouble instead of quickfix or location list windows.
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {"lewis6991/gitsigns.nvim",
-    commit = "5d73da7",
+    commit = "3117849",
     config = function() require("user.plugin_settings.git_signs") end,
 
     --- VVI: 这里不能用 VeryLazy. `nvim dir` 启动时直接打开 dir 会造成 gitsigns 报错.
@@ -342,7 +342,7 @@ local plugins = {
   --- https://docs.github.com/en/copilot
   --- https://docs.github.com/en/copilot/getting-started-with-github-copilot?tool=neovim#prerequisites-3
   {"github/copilot.vim",
-    tag = "v1.9.1",
+    tag = "v1.9.3",
     config = function()
       --- VVI: Neovim >= 0.6 and Node.js <= 17
       --- 指定 nodejs 版本. 这里使用的是 `brew install node@16`
