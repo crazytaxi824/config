@@ -309,7 +309,10 @@ nvim_tree.setup {
   open_on_tab = false,  -- 在 tree 打开的状态下 open new tab, 则在新 tab 中自动打开 tree.
   ignore_buf_on_tab_change = {},  -- List of filetypes or buffer names that will prevent `open_on_tab` to open.
 
-  sort_by = "name",  -- sort by file name.
+  sort = {
+    sorter = "name",
+    folders_first = true,
+  },
   sync_root_with_cwd = false,  -- Changes the tree root directory on `DirChanged` and refreshes the tree.
 
   view = {
@@ -383,10 +386,10 @@ nvim_tree.setup {
                           -- the file is not under current root directory.
     ignore_list = {},
   },
-  system_open = {
-    cmd = "",  -- Mac 中可以改为 "open", NOTE: 无法处理错误, 推荐使用 action_cb.
-    args = {},
-  },
+  -- system_open = {
+  --   cmd = "",  -- Mac 中可以改为 "open", NOTE: 无法处理错误, 推荐使用 action_cb.
+  --   args = {},
+  -- },
   diagnostics = {  --- VVI: 显示 vim diagnostics (Hint|Info|Warn|Error) 需要设置 vim.signcolumn='yes'
     enable = true,
     show_on_dirs = true,  -- 在文件所属的 dir name 前也显示 sign.
@@ -405,7 +408,7 @@ nvim_tree.setup {
     show_on_dirs = true,  -- 在文件所属的 dir name 前也显示 sign.
     show_on_open_dirs = false,  -- 在打开的文件夹上不显示 sign.
     disable_for_dirs = {},
-    timeout = 400,
+    timeout = 400,  -- Kills the git process after some time if it takes too long.
   },
   actions = {
     use_system_clipboard = true,
