@@ -118,7 +118,7 @@ local plugins = {
   --- 以下是使用了 treesitter 功能的插件. (这些插件也可以不使用 treesitter 的功能)
   --- 注释
   {"numToStr/Comment.nvim",
-    commit = "176e85e",
+    commit = "0236521",
     config = function() require("user.plugin_settings.comment") end,
     dependencies = {"JoosepAlviste/nvim-ts-context-commentstring"},  -- https://github.com/numToStr/Comment.nvim#-hooks
 
