@@ -114,7 +114,7 @@ local function go_test_single(testfn_name, opt)
   t.cmd = cmd
   t.on_exit = on_exit
   t:stop()
-  t:run('print')
+  t:run({print_cmd=true})
 end
 
 M.go_test_single_func = function(prompt)

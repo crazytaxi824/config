@@ -132,12 +132,12 @@ end
 -- -- }}}
 
 --- termopen(): 执行 cmd --------------------------------------------------------------------------- {{{
-local function termopen_cmd(term_obj, print_cmd)
+local function termopen_cmd(term_obj, opts)
   --- VVI: 使用 nvim_buf_call() 时 bufnr 必须被某一个 window 显示, 否则 vim 会创建一个看不见的临时 autocmd window
   --- 用于执行 function. 导致 TermOpen event 中获取的 win id 是这个临时 window, 会造成一些 bug.
   vim.api.nvim_buf_call(term_obj.bufnr, function()
     local cmd = term_obj.cmd .. name_tag  .. term_obj.id
-    if print_cmd then
+    if opts.print_cmd then
       cmd = 'echo -e "\\e[32m' .. vim.fn.escape(term_obj.cmd,'"') .. ' \\e[0m" && ' .. cmd
     end
 
@@ -244,14 +244,16 @@ end
 --- NOTE: nvim_buf_call()
 --- 可以使用 nvim_buf_call(bufnr, function() termopen() end) 做到 TermOpen -> BufEnter -> BufWinEnter 顺序,
 --- 但在 nvim_buf_call() 的过程中 TermOpen event 获取到的 window id 是临时的 autocmd window 会导致很多问题.
-local function create_my_term(term_obj, print_cmd)
+local function create_my_term(term_obj, opts)
+  opts = opts or {}
+
   --- cache old term bufnr
   local old_term_bufnr = term_obj.bufnr
 
   --- 每次运行 termopen() 之前, 先创建一个新的 scratch buffer 给 terminal.
   term_obj.bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
 
-  --- 给 buffer 设置 var
+  --- 给 buffer 设置 var: my_term_id
   vim.b[term_obj.bufnr][bufvar_myterm] = term_obj.id
 
   --- VVI: 在 window 加载 term buffer 之前更改 buffer name. 主要作用是为了触发 'BufEnter & BufWinEnter term://'.
@@ -269,7 +271,7 @@ local function create_my_term(term_obj, print_cmd)
   local term_win_id = enter_term_win(term_obj.bufnr, old_term_bufnr)
 
   --- termopen(): 必须在 bufnr 被 window 显示之后运行. 避免 nvim_buf_call() 生成一个临时 autocmd window.
-  termopen_cmd(term_obj, print_cmd)
+  termopen_cmd(term_obj, opts)
 
   --- jobstart option. 在 termopen() 后执行.
   if term_obj.jobstart then
@@ -290,13 +292,15 @@ end
 local function metatable_funcs()
   local meta_funcs = {}
 
-  function meta_funcs:run(print_cmd)
+  --- opts:
+  --- - print_cmd: print executed cmd in terminal.
+  function meta_funcs:run(opts)
     if self:job_status() == -1 then
       Notify("job_id is still running, please use `term.stop()` first.", "WARN", {title="my_term"})
       return
     end
 
-    create_my_term(self, print_cmd)
+    create_my_term(self, opts)
   end
 
   --- 终止 job, 会触发 jobdone.

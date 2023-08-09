@@ -5,7 +5,7 @@ local function js_run(file)
   local t = require('user.term_instances').exec_term
   t.cmd = "node " .. file
   t:stop()
-  t:run('print')
+  t:run({print_cmd=true})
 end
 
 --- jest js_file -----------------------------------------------------------------------------------
@@ -27,7 +27,7 @@ local function js_jest(file, coverage)
   local t = require('user.term_instances').exec_term
   t.cmd = cmd
   t:stop()
-  t:run('print')
+  t:run({print_cmd=true})
 end
 
 --- keymap -----------------------------------------------------------------------------------------
