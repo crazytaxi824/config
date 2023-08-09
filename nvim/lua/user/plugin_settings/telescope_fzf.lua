@@ -84,7 +84,7 @@ telescope.setup {
     --- `:help telescope.actions`  -- 查看可用 actions
     --- https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/mappings.lua
     --- https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/actions/init.lua
-    mappings = {
+    mappings = {  --- {{{
       i = {
         ["<CR>"] = my_action.edit_or_qf,
         ["<C-e>"] = my_action.edit_or_qf,
@@ -159,6 +159,7 @@ telescope.setup {
         ["?"] = actions.which_key, -- key help
       },
     },
+    -- -- }}}
   },
   --- https://github.com/nvim-telescope/telescope.nvim/wiki/Configuration-Recipes#remove--from-fd-results
   pickers = {
@@ -198,7 +199,8 @@ telescope.setup {
 telescope.load_extension('fzf')
 
 --- keymap: toggle `set wrap` for filetype = TelescopePrompt only.
---- 打开 telescope 时, 设置快捷键用于显示超出 preview window 的内容.
+--- 打开 telescope 时, 设置快捷键用于显示超出 preview window 的内容 --------------------------------
+--- `:set wrap` for preview window --------------------------------------------- {{{
 vim.api.nvim_create_autocmd("User", {
   pattern = "TelescopePreviewerLoaded",
   callback = function(params)
@@ -226,34 +228,13 @@ vim.api.nvim_create_autocmd("User", {
     end
   end,
 })
-
---- keymaps ----------------------------------------------------------------------------------------
-local builtin = require("telescope.builtin")
-local opt = { noremap = true, silent = true }
-local telescope_keymaps = {
-  --- Picker functions, https://github.com/nvim-telescope/telescope.nvim#pickers
-  --- 使用 `:Telescope` 列出所有 Picker
-  {'n', '<leader>fd', function() builtin.find_files() end, opt, 'telescope: fd'},
-  {'n', '<leader>fh', function() builtin.help_tags() end,  opt, 'telescope: Vim Help Doc'},
-  {'n', '<leader>fk', function() builtin.keymaps() end,    opt, 'telescope: Keymap normal Mode'},
-  {'n', '<leader>fc', function() builtin.commands() end,   opt, 'telescope: All Commands'},
-  {'n', '<leader>f:', function() builtin.command_history() end, opt, 'telescope: History Command'},
-  {'n', '<leader>f/', function() builtin.search_history() end,  opt, 'telescope: History Search'},
-  {'n', '<leader>f?', function() builtin.search_history() end,  opt, 'telescope: History Search'},
-  {'n', '<leader>fl', function() builtin.highlights() end,  opt, 'telescope: Search Highlight'},
-  {'n', 'z=', function() builtin.spell_suggest() end, opt, 'telescope: Spell Suggests'},  -- 也可以使用 which-key 显示.
-  --{'n', '<leader>fg', function() builtin.live_grep() end,  opt, 'telescope: rg'},  -- NOTE: 使用自定义 :Rg 命令更灵活.
-}
-
-require('user.utils.keymaps').set(telescope_keymaps, {
-  key_desc = {f = {name = "Telescope Find"}},
-  opts = {mode='n', prefix='<leader>'}
-})
+-- -- }}}
 
 --- highlights -------------------------------------------------------------------------------------
 vim.api.nvim_set_hl(0, "TelescopeMatching", {reverse = true})
 
---- HACK: 自定义 Rg command ------------------------------------------------------------------------
+--- VVI: 自定义 picker -----------------------------------------------------------------------------
+--- Rg command ----------------------------------------------------------------- {{{
 --- 基于 telescope.builtin.grep_string() 修改
 --- https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/builtin/__files.lua
 local pickers = require("telescope.pickers")
@@ -301,9 +282,11 @@ vim.api.nvim_create_user_command("Rg",
     my_rg_picker(params.fargs)
   end,
 {nargs="+"})
+-- -- }}}
 
---- find pickers -----------------------------------------------------------------------------------
+--- find pickers --------------------------------------------------------------- {{{
 --- 找出所有的 pickers: builtin & extension
+--- https://github.com/keyvchan/telescope-find-pickers.nvim/blob/main/lua/telescope/_extensions/find_pickers/main.lua
 local builtin_pickers = require("telescope.builtin")
 local extensions_pickers = require("telescope._extensions")
 local themes = require("telescope.themes")
@@ -330,11 +313,16 @@ local function my_find_pickers()
       results = result_table,
     }),
     attach_mappings = function(prompt_bufnr, map)
+      --- 修改 select_default 的默认方法
       actions.select_default:replace(function()
+        --- 获取选中的 item
         local selection = actions_state.get_selected_entry()
         local value = selection.value
 
+        --- 关闭现有 telescope
         actions.close(prompt_bufnr)
+
+        --- 执行新的 picker
         if builtin_pickers[value] ~= nil then
           builtin_pickers[value](opts_pickers)
         elseif extensions_pickers.manager[value] ~= nil then
@@ -346,6 +334,31 @@ local function my_find_pickers()
     sorter = conf.generic_sorter(opts),  -- VVI: 设置 sorter 后可以通过 fzf 输入框对 results 进行过滤.
   }):find()
 end
+-- -- }}}
+
+--- keymaps ----------------------------------------------------------------------------------------
+local builtin = require("telescope.builtin")
+local opt = { noremap = true, silent = true }
+local telescope_keymaps = {
+  --- Picker functions, https://github.com/nvim-telescope/telescope.nvim#pickers
+  --- 使用 `:Telescope` 列出所有 Picker
+  {'n', '<leader>ff', function() my_find_pickers() end, opt, 'telescope: find pickers'},
+  {'n', '<leader>fd', function() builtin.find_files() end, opt, 'telescope: fd'},
+  {'n', '<leader>fh', function() builtin.help_tags() end,  opt, 'telescope: Vim Help Doc'},
+  {'n', '<leader>fk', function() builtin.keymaps() end,    opt, 'telescope: Keymap normal Mode'},
+  {'n', '<leader>fc', function() builtin.commands() end,   opt, 'telescope: All Commands'},
+  {'n', '<leader>f:', function() builtin.command_history() end, opt, 'telescope: History Command'},
+  {'n', '<leader>f/', function() builtin.search_history() end,  opt, 'telescope: History Search'},
+  {'n', '<leader>f?', function() builtin.search_history() end,  opt, 'telescope: History Search'},
+  {'n', '<leader>fl', function() builtin.highlights() end,  opt, 'telescope: Search Highlight'},
+  {'n', 'z=', function() builtin.spell_suggest() end, opt, 'telescope: Spell Suggests'},  -- 也可以使用 which-key 显示.
+  --{'n', '<leader>fg', function() builtin.live_grep() end,  opt, 'telescope: rg'},  -- NOTE: 使用自定义 :Rg 命令更灵活.
+}
+
+require('user.utils.keymaps').set(telescope_keymaps, {
+  key_desc = {f = {name = "Telescope Find"}},
+  opts = {mode='n', prefix='<leader>'}
+})
 
 
 
