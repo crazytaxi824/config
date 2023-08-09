@@ -258,7 +258,10 @@ lualine.setup {
           hint  = {fg=lualine_colors.light_grey, gui='bold'}, -- Changes diagnostics' hint color.
         },
       },
-      {my_trailing_whitespace, color = {fg=lualine_colors.dark_orange, gui='bold'}},  -- 自定义 component
+      {my_trailing_whitespace,
+        color = {fg=lualine_colors.dark_orange, gui='bold'},
+        cond = function() return vim.bo.buftype~='terminal' end,  -- terminal 不检查.
+      },
     },
     lualine_x = {
       {'filename',
@@ -336,7 +339,10 @@ lualine.setup {
           hint  = {fg=lualine_colors.light_grey, gui='bold'}, -- Changes diagnostics' hint color.
         },
       },
-      {my_trailing_whitespace, color = {fg=lualine_colors.dark_orange, gui='bold'}},  -- 自定义 component
+      {my_trailing_whitespace,
+        color = {fg=lualine_colors.dark_orange, gui='bold'},
+        cond = function() return vim.bo.buftype~='terminal' end,  -- terminal 不检查.
+      },
     },
     lualine_x = {
       --- VVI: 分为3个 components 主要是为了解决 inactive_sections 中的 filename 无法分别设置颜色.
