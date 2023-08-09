@@ -363,9 +363,10 @@ local plugins = {
 
   --{"kyazdani42/nvim-web-devicons"}, -- Nerd Fonts 提供 icons 需要 patch 字体
   --{"nvim-neo-tree/neo-tree.nvim"},  -- File explorer. nvim-tree.lua 替代
-  --{"Tastyep/structlog.nvim"},   -- log 工具.
-  --{"folke/trouble.nvim"},       -- quickfix/loclist 替代.
-  --{"goolord/alpha-nvim"},       -- neovim 启动页面
+  --{"Tastyep/structlog.nvim"},   -- log 工具
+  --{"folke/trouble.nvim"},       -- quickfix/loclist 替代
+  --{"rebelot/heirline.nvim"},    -- lualine + bufferline 替代
+  --{"goolord/alpha-nvim"}, {"goolord/alpha-nvim"},  -- neovim 启动页面
   --{"ahmedkhalf/project.nvim"},  -- project manager
 
   --{"p00f/nvim-ts-rainbow"},  -- rainbow 括号颜色, treesitter 插件. NOTE: 严重拖慢文件打开速度.
