@@ -14,14 +14,14 @@ require('user.utils.check_tools').check({
 --- 多选的情况下 send_selected_to_qflist; 没有任何选择的情况下 edit 光标所在行的 file.
 local actions = require("telescope.actions")  -- 自定义 key mapping 用
 local actions_layout = require("telescope.actions.layout")  -- 自定义 key mapping 用
-local action_state = require("telescope.actions.state")
+local actions_state = require("telescope.actions.state")
 local transform_mod = require('telescope.actions.mt').transform_mod
 
 local my_action = transform_mod({
   edit_or_qf = function(prompt_bufnr)
     --- 参考 https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/actions/init.lua
     --- 中 send_selected_to_qf 函数设置.
-    local picker = action_state.get_current_picker(prompt_bufnr)
+    local picker = actions_state.get_current_picker(prompt_bufnr)
     local selected_items = picker:get_multi_selection()
     -- vim.print(selected_items, #selected_items)
 
@@ -45,6 +45,7 @@ telescope.setup {
     multi_icon = ' ✓ ', -- ✓✔︎
     path_display = { "absolute" },  -- table|func, `:help telescope.defaults.path_display`
     --wrap_results = true,  -- result window `set wrap`
+    --results_title = false,  -- result window 不显示 title.
 
     --- `:help telescope.defaults.layout_config`
     layout_config = {
@@ -249,6 +250,9 @@ require('user.utils.keymaps').set(telescope_keymaps, {
   opts = {mode='n', prefix='<leader>'}
 })
 
+--- highlights -------------------------------------------------------------------------------------
+vim.api.nvim_set_hl(0, "TelescopeMatching", {reverse = true})
+
 --- HACK: 自定义 Rg command ------------------------------------------------------------------------
 --- 基于 telescope.builtin.grep_string() 修改
 --- https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/builtin/__files.lua
@@ -298,8 +302,50 @@ vim.api.nvim_create_user_command("Rg",
   end,
 {nargs="+"})
 
---- highlights
-vim.api.nvim_set_hl(0, "TelescopeMatching", {reverse = true})
+--- find pickers -----------------------------------------------------------------------------------
+--- 找出所有的 pickers: builtin & extension
+local builtin_pickers = require("telescope.builtin")
+local extensions_pickers = require("telescope._extensions")
+local themes = require("telescope.themes")
+
+local function my_find_pickers()
+  local opts = themes.get_dropdown()
+
+  local opts_pickers = {
+    bufnr = vim.api.nvim_get_current_buf(),
+    winnr = vim.api.nvim_get_current_win(),
+  }
+
+  local result_table = {}
+  for key, _ in pairs(builtin_pickers) do
+    table.insert(result_table, key)
+  end
+  for key, _ in pairs(extensions_pickers.manager) do
+    table.insert(result_table, key)
+  end
+
+  pickers.new(opts, {
+    prompt_title = "Find Pickers",
+    finder = finders.new_table({
+      results = result_table,
+    }),
+    attach_mappings = function(prompt_bufnr, map)
+      actions.select_default:replace(function()
+        local selection = actions_state.get_selected_entry()
+        local value = selection.value
+
+        actions.close(prompt_bufnr)
+        if builtin_pickers[value] ~= nil then
+          builtin_pickers[value](opts_pickers)
+        elseif extensions_pickers.manager[value] ~= nil then
+          extensions_pickers.manager[value][value](opts_pickers)
+        end
+      end)
+      return true
+    end,
+    sorter = conf.generic_sorter(opts),  -- VVI: 设置 sorter 后可以通过 fzf 输入框对 results 进行过滤.
+  }):find()
+end
 
 
 
