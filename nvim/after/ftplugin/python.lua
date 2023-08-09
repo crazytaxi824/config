@@ -4,7 +4,7 @@ local function py_run(file)
   local t = require('user.term_instances').exec_term
   t.cmd = "python3 -- " .. file
   t:stop()
-  t:run('print')
+  t:run({print_cmd=true})
 end
 
 --- key mapping ------------------------------------------------------------------------------------

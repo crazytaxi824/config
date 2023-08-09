@@ -14,7 +14,7 @@
 --- buffer
 ---   BufLeave     -- cursor 离开 buffer 所在 window.
 ---   BufEnter     -- cursor 进入 buffer 所在 window.
----   BufWinLeave  -- VVI: buffer 离开最后一个 window 时, 即: buffer 进入 hidden 状态时触发. 可以使用 BufHidden 代替.
+---   BufWinLeave  -- VVI: buffer 离开最后一个 window 时, 即: buffer 进入 hidden 状态时触发.
 ---                -- 多个 window 显示同一个 buffer 的情况下, 该 buffer 离开最后一个显示它的 window 时才会触发.
 ---   BufWinEnter  -- 每次有 window 显示某个 buffer 时触发.
 ---                -- buffer 在已经被某个 window 显示的情况下, 即: active (hidden=0) 状态下, 被其他 window 显示时也触发.
@@ -62,15 +62,16 @@ local function debug_autocmd_toggle()
   if autocmd_id then
     vim.api.nvim_del_autocmd(autocmd_id)
     autocmd_id = nil
+    vim.notify("debug autocmd events: Disabled")
   else
     autocmd_id = vim.api.nvim_create_autocmd(common_events, {
       pattern = {"*"},
-      -- once = true,
       callback = function(params)
         print(vim.api.nvim_get_current_win(), params.buf, params.event, params.file)
       end,
       desc = "autocmd debug",
     })
+    vim.notify("debug autocmd events: Enabled")
   end
 end
 

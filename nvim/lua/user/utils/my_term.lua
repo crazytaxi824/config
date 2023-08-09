@@ -90,8 +90,8 @@ end
 
 --- autocmd: 根据 terminal bufnr 触发 -------------------------------------------------------------- {{{
 local function autocmd_callback(term_obj)
-  --- NOTE: 第一次运行 terminal 时触发 TermOpen, 但不会触发 BufWinEnter.
   --- 关闭 terminal window 之后再打开时触发 BufWinEnter, 但不会触发 TermOpen.
+  --- buffer 离开所有 window 才会触发 BufWinLeave.
   local g_id = vim.api.nvim_create_augroup('my_term_bufnr_' .. term_obj.bufnr, {clear=true})
   vim.api.nvim_create_autocmd({"BufWinEnter", "BufWinLeave"}, {
     group = g_id,
@@ -132,15 +132,15 @@ end
 -- -- }}}
 
 --- termopen(): 执行 cmd --------------------------------------------------------------------------- {{{
-local function termopen_cmd(term_obj, print_cmd)
+local function termopen_cmd(term_obj, opts)
+  local cmd = term_obj.cmd .. name_tag  .. term_obj.id
+  if opts.print_cmd then
+    cmd = 'echo -e "\\e[32m' .. vim.fn.escape(term_obj.cmd,'"') .. ' \\e[0m" && ' .. cmd
+  end
+
   --- VVI: 使用 nvim_buf_call() 时 bufnr 必须被某一个 window 显示, 否则 vim 会创建一个看不见的临时 autocmd window
   --- 用于执行 function. 导致 TermOpen event 中获取的 win id 是这个临时 window, 会造成一些 bug.
   vim.api.nvim_buf_call(term_obj.bufnr, function()
-    local cmd = term_obj.cmd .. name_tag  .. term_obj.id
-    if print_cmd then
-      cmd = 'echo -e "\\e[32m' .. vim.fn.escape(term_obj.cmd,'"') .. ' \\e[0m" && ' .. cmd
-    end
-
     term_obj.job_id = vim.fn.termopen(cmd, {
       on_stdout = function(job_id, data, event)  -- event 是 'stdout'
         --- auto_scroll option
@@ -181,6 +181,11 @@ local function termopen_cmd(term_obj, print_cmd)
         end
       end,
     })
+
+    --- VVI: doautocmd "BufEnter & BufWinEnter term://"
+    --- 触发时机在 after TermOpen & before TermClose
+    --- 触发 BufEnter before BufWinEnter
+    vim.api.nvim_exec_autocmds({"BufEnter", "BufWinEnter"}, { buffer = term_obj.bufnr })
   end)
 end
 -- -- }}}
@@ -244,18 +249,17 @@ end
 --- NOTE: nvim_buf_call()
 --- 可以使用 nvim_buf_call(bufnr, function() termopen() end) 做到 TermOpen -> BufEnter -> BufWinEnter 顺序,
 --- 但在 nvim_buf_call() 的过程中 TermOpen event 获取到的 window id 是临时的 autocmd window 会导致很多问题.
-local function create_my_term(term_obj, print_cmd)
+local function create_my_term(term_obj, opts)
+  opts = opts or {}
+
   --- cache old term bufnr
   local old_term_bufnr = term_obj.bufnr
 
   --- 每次运行 termopen() 之前, 先创建一个新的 scratch buffer 给 terminal.
   term_obj.bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
 
-  --- 给 buffer 设置 var
+  --- 给 buffer 设置 var: my_term_id
   vim.b[term_obj.bufnr][bufvar_myterm] = term_obj.id
-
-  --- VVI: 在 window 加载 term buffer 之前更改 buffer name. 主要作用是为了触发 'BufEnter & BufWinEnter term://'.
-  vim.api.nvim_buf_set_name(term_obj.bufnr, 'term://'..term_obj.cmd .. name_tag .. term_obj.id)
 
   --- autocmd 放在这里运行主要是有两个限制条件:
   --- 1. 在获取到 terminal bufnr 之后运行, 为了在 autocmd 中使用 bufnr 作为触发条件.
@@ -269,7 +273,7 @@ local function create_my_term(term_obj, print_cmd)
   local term_win_id = enter_term_win(term_obj.bufnr, old_term_bufnr)
 
   --- termopen(): 必须在 bufnr 被 window 显示之后运行. 避免 nvim_buf_call() 生成一个临时 autocmd window.
-  termopen_cmd(term_obj, print_cmd)
+  termopen_cmd(term_obj, opts)
 
   --- jobstart option. 在 termopen() 后执行.
   if term_obj.jobstart then
@@ -290,13 +294,15 @@ end
 local function metatable_funcs()
   local meta_funcs = {}
 
-  function meta_funcs:run(print_cmd)
+  --- opts:
+  --- - print_cmd: print executed cmd in terminal.
+  function meta_funcs:run(opts)
     if self:job_status() == -1 then
       Notify("job_id is still running, please use `term.stop()` first.", "WARN", {title="my_term"})
       return
     end
 
-    create_my_term(self, print_cmd)
+    create_my_term(self, opts)
   end
 
   --- 终止 job, 会触发 jobdone.
