@@ -62,15 +62,16 @@ local function debug_autocmd_toggle()
   if autocmd_id then
     vim.api.nvim_del_autocmd(autocmd_id)
     autocmd_id = nil
+    vim.notify("debug autocmd events: Disabled")
   else
     autocmd_id = vim.api.nvim_create_autocmd(common_events, {
       pattern = {"*"},
-      -- once = true,
       callback = function(params)
         print(vim.api.nvim_get_current_win(), params.buf, params.event, params.file)
       end,
       desc = "autocmd debug",
     })
+    vim.notify("debug autocmd events: Enabled")
   end
 end
 
