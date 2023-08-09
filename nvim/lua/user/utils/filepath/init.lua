@@ -17,15 +17,11 @@ vim.api.nvim_create_autocmd('BufWinEnter', {
     local curr_win_id = vim.api.nvim_get_current_win()
 
     --- terminal and dap
-    --- VVI: 这里需要使用 schedule() 延迟运行, 因为使用 my_term 的情况下, BufWinEnter 的时候还是 scratch buffer,
-    --- buftype 是 nofile 还不是 termimal. 在运行了 termopen() 之后 buftype 才会变成 terminal.
-    vim.schedule(function()
-      if vim.api.nvim_buf_is_valid(params.buf) and (vim.bo[params.buf].buftype == 'terminal' or vim.bo[params.buf].filetype == 'dap-repl') then
-        fp_hl.highlight_filepath(curr_win_id)
-      else
-        fp_hl.highlight_filepath_clear(curr_win_id)
-      end
-    end)
+    if vim.api.nvim_buf_is_valid(params.buf) and (vim.bo[params.buf].buftype == 'terminal' or vim.bo[params.buf].filetype == 'dap-repl') then
+      fp_hl.highlight_filepath(curr_win_id)
+    else
+      fp_hl.highlight_filepath_clear(curr_win_id)
+    end
   end,
   desc = "terminal: filepath highlight",
 })

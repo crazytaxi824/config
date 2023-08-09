@@ -133,14 +133,14 @@ end
 
 --- termopen(): 执行 cmd --------------------------------------------------------------------------- {{{
 local function termopen_cmd(term_obj, opts)
+  local cmd = term_obj.cmd .. name_tag  .. term_obj.id
+  if opts.print_cmd then
+    cmd = 'echo -e "\\e[32m' .. vim.fn.escape(term_obj.cmd,'"') .. ' \\e[0m" && ' .. cmd
+  end
+
   --- VVI: 使用 nvim_buf_call() 时 bufnr 必须被某一个 window 显示, 否则 vim 会创建一个看不见的临时 autocmd window
   --- 用于执行 function. 导致 TermOpen event 中获取的 win id 是这个临时 window, 会造成一些 bug.
   vim.api.nvim_buf_call(term_obj.bufnr, function()
-    local cmd = term_obj.cmd .. name_tag  .. term_obj.id
-    if opts.print_cmd then
-      cmd = 'echo -e "\\e[32m' .. vim.fn.escape(term_obj.cmd,'"') .. ' \\e[0m" && ' .. cmd
-    end
-
     term_obj.job_id = vim.fn.termopen(cmd, {
       on_stdout = function(job_id, data, event)  -- event 是 'stdout'
         --- auto_scroll option
@@ -181,6 +181,11 @@ local function termopen_cmd(term_obj, opts)
         end
       end,
     })
+
+    --- VVI: doautocmd "BufEnter & BufWinEnter term://"
+    --- 触发时机在 after TermOpen & before TermClose
+    --- 触发 BufEnter before BufWinEnter
+    vim.api.nvim_exec_autocmds({"BufEnter", "BufWinEnter"}, { buffer = term_obj.bufnr })
   end)
 end
 -- -- }}}
@@ -255,9 +260,6 @@ local function create_my_term(term_obj, opts)
 
   --- 给 buffer 设置 var: my_term_id
   vim.b[term_obj.bufnr][bufvar_myterm] = term_obj.id
-
-  --- VVI: 在 window 加载 term buffer 之前更改 buffer name. 主要作用是为了触发 'BufEnter & BufWinEnter term://'.
-  vim.api.nvim_buf_set_name(term_obj.bufnr, 'term://'..term_obj.cmd .. name_tag .. term_obj.id)
 
   --- autocmd 放在这里运行主要是有两个限制条件:
   --- 1. 在获取到 terminal bufnr 之后运行, 为了在 autocmd 中使用 bufnr 作为触发条件.
