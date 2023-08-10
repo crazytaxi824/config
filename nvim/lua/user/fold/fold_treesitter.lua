@@ -6,7 +6,7 @@ end
 local M = {}
 
 M.set_foldexpr = function(bufnr)
-  --- treesitter 是否有对应的 parser for current buffer.
+  --- treesitter 是否有对应的 parser.
   local has_parser = nvim_ts_parsers.has_parser(nvim_ts_parsers.get_buf_lang(bufnr))
   if not has_parser then
     return

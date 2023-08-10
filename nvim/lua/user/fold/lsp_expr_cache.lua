@@ -14,4 +14,10 @@ M.set = function(lnum, v)
   cache[lnum] = v
 end
 
+M.debug = function()
+  for lnum, expr in pairs(cache) do
+    print("lnum:", lnum, "expr:", expr)
+  end
+end
+
 return M
