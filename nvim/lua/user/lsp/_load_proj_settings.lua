@@ -12,8 +12,13 @@ local M = {}
 --- 从 pwd 向上寻找 .nvim/settings.lua 文件.
 local function available_local_settings_file()
   --- 从 pwd 向上获取 dir 直到 root "/".
-  for dir in vim.fs.parents(vim.fn.getcwd()) do
-    local local_settings_filepath = dir .. '.nvim/settings.lua'
+  for dir in vim.fs.parents(vim.api.nvim_buf_get_name(0)) do
+    local local_settings_filepath
+    if string.sub(dir, #dir)  == '/' then
+      local_settings_filepath = dir .. '.nvim/settings.lua'
+    else
+      local_settings_filepath = dir .. '/.nvim/settings.lua'
+    end
     if vim.fn.filereadable(local_settings_filepath) == 1 then
       return local_settings_filepath
     end
