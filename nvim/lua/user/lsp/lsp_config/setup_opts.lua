@@ -71,6 +71,7 @@ M.on_init = function(client)
   --- 如果需要更改 LSP semantic highlight 颜色, 使用 `:hi @lsp.type...`
   if client.server_capabilities then
     client.server_capabilities.semanticTokensProvider = nil
+    -- client.server_capabilities.foldingRangeProvider = nil  -- debug: 下面的 fold 设置
   end
 
   --- NOTE: notify lsp config is changed.
@@ -95,6 +96,13 @@ M.on_attach = function(client, bufnr)
   local lsp_keymaps = require("user.lsp.lsp_keymaps")
   lsp_keymaps.textDocument_keymaps(bufnr)
   lsp_keymaps.diagnostic_keymaps(bufnr)
+
+  --- 设置 fold, 优先 lsp > treesitter > indent
+  if client.server_capabilities and client.server_capabilities.foldingRangeProvider then
+    require("user.fold").lsp_fold(bufnr)
+  elseif not require("user.fold").treesitter_fold(bufnr) then
+    require("user.fold").indent_fold(bufnr)
+  end
 
   --- DEBUG: 用
   if __Debug_Neovim.lspconfig then

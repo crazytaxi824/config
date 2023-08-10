@@ -138,44 +138,6 @@ ts_configs.setup {
   -- },
 }
 
---- fold 设置 -------------------------------------------------------------------------------------- {{{
---- 设置 nvim-treesitter 提供的 foldexpr.
---- VVI: 不要设置 foldmethod=syntax, 会严重拖慢文件切换速度. eg: jump to definition.
-local function set_treesitter_fold_method_if_has_parser(foldlevel)
-  --- treesitter 是否有对应的 parser for current buffer.
-  local has_parser = nvim_ts_parsers.has_parser(nvim_ts_parsers.get_buf_lang())
-
-  --- 如果当前 foldmethod 不是默认值 manual 说明已经被设置过了, 这里就不再设置 foldmethod.
-  if vim.wo.foldmethod == 'manual' and has_parser then
-    vim.opt_local.foldmethod='expr'
-    vim.opt_local.foldexpr='nvim_treesitter#foldexpr()'
-    vim.opt_local.foldlevel=foldlevel
-  end
-end
-
---- VVI: Lazyload nvim-treesitter 时, 必须对已经打开的文件设置 foldmethod, foldexpr ...
-set_treesitter_fold_method_if_has_parser(999)
-
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = {"*"},
-  callback = function(params)
-    set_treesitter_fold_method_if_has_parser(999)
-  end,
-  desc = "treesitter: setlocal foldmethod = 'expr'",
-})
-
--- -- }}}
-
---- `nvim-ts-rainbow` color settings --------------------------------------------------------------- {{{
---vim.cmd [[hi rainbowcol1 ctermfg=220]]  -- yellow
---vim.cmd [[hi rainbowcol2 ctermfg=33]]   -- blue
---vim.cmd [[hi rainbowcol3 ctermfg=81]]   -- cyan
---vim.cmd [[hi rainbowcol4 ctermfg=206]]  -- magenta
---vim.cmd [[hi rainbowcol5 ctermfg=42]]   -- green
---vim.cmd [[hi rainbowcol6 ctermfg=167]]  -- red
---vim.cmd [[hi rainbowcol7 ctermfg=248]]  -- grey
--- -- }}}
-
 --- prompt before install missing parser for languages --------------------------------------------- {{{
 vim.api.nvim_create_autocmd("FileType", {
   pattern = {"*"},
@@ -193,6 +155,44 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
   desc = "treesitter: Check treesitter parser for filetypes"
 })
+-- -- }}}
+
+--- `nvim-ts-rainbow` color settings --------------------------------------------------------------- {{{
+--vim.cmd [[hi rainbowcol1 ctermfg=220]]  -- yellow
+--vim.cmd [[hi rainbowcol2 ctermfg=33]]   -- blue
+--vim.cmd [[hi rainbowcol3 ctermfg=81]]   -- cyan
+--vim.cmd [[hi rainbowcol4 ctermfg=206]]  -- magenta
+--vim.cmd [[hi rainbowcol5 ctermfg=42]]   -- green
+--vim.cmd [[hi rainbowcol6 ctermfg=167]]  -- red
+--vim.cmd [[hi rainbowcol7 ctermfg=248]]  -- grey
+-- -- }}}
+
+--- fold 设置 -------------------------------------------------------------------------------------- {{{
+--- 设置 nvim-treesitter 提供的 foldexpr.
+--- VVI: 不要设置 foldmethod=syntax, 会严重拖慢文件切换速度. eg: jump to definition.
+-- local function set_treesitter_fold_method_if_has_parser(foldlevel)
+--   --- treesitter 是否有对应的 parser for current buffer.
+--   local has_parser = nvim_ts_parsers.has_parser(nvim_ts_parsers.get_buf_lang())
+--
+--   --- 如果当前 foldmethod 不是默认值 manual 说明已经被设置过了, 这里就不再设置 foldmethod.
+--   if vim.wo.foldmethod == 'manual' and has_parser then
+--     vim.opt_local.foldmethod='expr'
+--     vim.opt_local.foldexpr='nvim_treesitter#foldexpr()'
+--     vim.opt_local.foldlevel=foldlevel
+--   end
+-- end
+--
+-- --- VVI: Lazyload nvim-treesitter 时, 必须对已经打开的文件设置 foldmethod, foldexpr ...
+-- set_treesitter_fold_method_if_has_parser(999)
+--
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = {"*"},
+--   callback = function(params)
+--     set_treesitter_fold_method_if_has_parser(999)
+--   end,
+--   desc = "treesitter: setlocal foldmethod = 'expr'",
+-- })
+
 -- -- }}}
 
 
