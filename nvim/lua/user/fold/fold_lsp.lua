@@ -104,8 +104,12 @@ local function set_fold(bufnr)
 end
 
 --- 设置 lsp foldexpr
-M.set_foldexpr = function(bufnr)
+M.set_foldexpr = function(client, bufnr)
   if get_win_local_option(bufnr, 'foldmethod') ~= "manual" then
+    return
+  end
+
+  if not client.server_capabilities or not client.server_capabilities.foldingRangeProvider then
     return
   end
 
@@ -131,6 +135,8 @@ M.set_foldexpr = function(bufnr)
     end,
     desc = "lsp delete foldexpr augroup"
   })
+
+  return true
 end
 
 return M

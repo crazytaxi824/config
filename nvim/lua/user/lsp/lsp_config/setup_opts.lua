@@ -98,10 +98,10 @@ M.on_attach = function(client, bufnr)
   lsp_keymaps.diagnostic_keymaps(bufnr)
 
   --- 设置 fold, 优先 lsp > treesitter > indent
-  if client.server_capabilities and client.server_capabilities.foldingRangeProvider then
-    require("user.fold").lsp_fold(bufnr)
-  elseif not require("user.fold").treesitter_fold(bufnr) then
-    require("user.fold").indent_fold(bufnr)
+  if not require("user.fold").lsp_fold(client, bufnr)  -- try lsp_fold
+    and not require("user.fold").treesitter_fold(bufnr) -- try treesitter_fold
+  then
+    require("user.fold").indent_fold(bufnr)  -- fallback to fold-indent
   end
 
   --- DEBUG: 用

@@ -3,12 +3,12 @@ local expr_ts = require("user.fold.fold_treesitter")
 
 local M = {}
 
---- 使用 lsp 来 fold
-M.lsp_fold = function(bufnr)
-  expr_lsp.set_foldexpr(bufnr)
+--- 使用 lsp 来 fold, 如果 lsp_fold 设置成功则返回 true.
+M.lsp_fold = function(client, bufnr)
+  return expr_lsp.set_foldexpr(client, bufnr)
 end
 
---- 使用 treesitter 来 fold
+--- 使用 treesitter 来 fold, 如果 treesitter_fold 设置成功则返回 true.
 M.treesitter_fold = function(bufnr)
   if expr_ts then
     return expr_ts.set_foldexpr(bufnr)
