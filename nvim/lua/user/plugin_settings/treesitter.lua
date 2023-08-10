@@ -164,18 +164,6 @@ vim.api.nvim_create_autocmd("FileType", {
   desc = "treesitter: setlocal foldmethod = 'expr'",
 })
 
---- Command 手动切换 foldmethod
-vim.api.nvim_create_user_command('FoldmethodToggle', function()
-  if vim.wo.foldmethod == 'expr' then
-    vim.opt_local.foldmethod='marker'
-    Notify(":setlocal foldmethod = marker", 'INFO')
-  else
-    vim.opt_local.foldmethod='expr'
-    vim.opt_local.foldexpr='nvim_treesitter#foldexpr()'
-    Notify(":setlocal foldmethod = expr", 'INFO')
-  end
-end, {bang=true, bar=true})
-
 -- -- }}}
 
 --- `nvim-ts-rainbow` color settings --------------------------------------------------------------- {{{
@@ -207,54 +195,5 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 -- -- }}}
 
---- HACK: autocmd lazy highlight, setup() 中的 highlight module 需要设为 false --------------------- {{{
---- NOTE: 使用 lazy 方式启动 highlight, 提前加载 treesitter 会严重拖慢文件打开速度.
---- 参考源代码: enable_module() 针对 buffer 设置 module; enable_all() 是针对全局.
---- https://github.com/nvim-treesitter/nvim-treesitter/ - > /lua/nvim-treesitter/configs.lua
--- local parsers = require("nvim-treesitter.parsers")
---
--- --- 针对 buffer 设置 module
--- local function enable_module(mod, bufnr, lang)
---   local module = ts_configs.get_module(mod)
---   if not module then
---     return
---   end
---
---   bufnr = bufnr or vim.api.nvim_get_current_buf()
---
---   --- VVI: 判断 bufnr 是否存在.
---   --- 遇到的问题: WhichKey window 打开后很快关闭, 造成 error.
---   --- 分析: 因为 defer_fn() 的原因, 指定的 buffer 有可能在打开后 N(ms) 内就被关闭了, 引起 error.
---   if not vim.api.nvim_buf_is_valid(bufnr) then
---     return
---   end
---
---   --- 通过 parser 获取指定 buffer 的 lang.
---   lang = lang or parsers.get_buf_lang(bufnr)
---
---   if not module.enable then
---     if module.enabled_buffers then
---       module.enabled_buffers[bufnr] = true
---     else
---       module.enabled_buffers = { [bufnr] = true }
---     end
---   end
---
---   ts_configs.attach_module(mod, bufnr, lang)
--- end
---
--- vim.api.nvim_create_autocmd('FileType', {
---   pattern = {"*"},
---   callback = function(params)
---     --- 文件打开之后再 highlight 文本.
---     vim.schedule(function()
---       enable_module('highlight', params.buf)
---     end)
---     --- NOTE: 如果使用 vim.schedule() 无法获得想要的效果, 可以使用 vim.defer_fn().
---     --vim.defer_fn(function()
---     --  enable_module('highlight', params.buf)
---     --end, 200)  -- delay (N)ms, then run callback()
---   end,
---   desc = "treesitter highlight after FileType event",
--- })
--- -- }}}
+
+
