@@ -43,13 +43,12 @@ require "user.terminal" -- terminal buffer 自动设置 nonumber signcolumn ...
 require "user.fold"     -- fold-lsp -> fold-treesitter -> fold-indent
 require "user.wrap"     -- 根据 set wrap 设置 cursor move.
 
-require "user.misc"  -- 其他杂项设置.
-
 --- 加载 plugins 和 plugins' settings
 require "user.plugins"
 
 --- VVI: keymap 放在最后 overwirte 其他设置.
 require "user.keymaps"  -- keymap 设置
 
-require "user.global"   -- 自定义全局函数, 主要用于 debug. 可以不加载.
+require "user.misc"    -- 其他杂项设置.
+require "user.global"  -- 自定义全局函数, 主要用于 debug. 可以不加载.
 
