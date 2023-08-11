@@ -1,6 +1,9 @@
+--- nvim-treesitter 提供的 fold 方法 'nvim_treesitter#foldexpr()', 不是很稳定.
+
 local M = {}
 
 M.set_foldexpr = function(bufnr)
+  --- 获取所有 parsers
   local nvim_ts_ok, nvim_ts_parsers = pcall(require, "nvim-treesitter.parsers")
   if not nvim_ts_ok then
     return

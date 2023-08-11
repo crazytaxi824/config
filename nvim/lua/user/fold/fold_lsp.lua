@@ -48,6 +48,7 @@ local function parse_fold_data(fold_range, d_cache, foldnestmax)
     local startLine = fold.startLine + 1
     local endLine = fold.endLine
 
+    --- 最多标记到 foldnestmax level.
     if d_cache[startLine] + 1 > foldnestmax then
       goto continue
     end
@@ -105,11 +106,13 @@ end
 
 --- 设置 lsp foldexpr
 M.set_foldexpr = function(client, bufnr)
-  if get_win_local_option(bufnr, 'foldmethod') ~= "manual" then
+  --- lsp 不支持 foldingRange
+  if not client.server_capabilities or not client.server_capabilities.foldingRangeProvider then
     return
   end
 
-  if not client.server_capabilities or not client.server_capabilities.foldingRangeProvider then
+  --- foldmethod 已经被设置过.
+  if get_win_local_option(bufnr, 'foldmethod') ~= "manual" then
     return
   end
 
