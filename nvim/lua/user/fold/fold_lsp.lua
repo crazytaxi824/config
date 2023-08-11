@@ -129,6 +129,7 @@ M.set_foldexpr = function(client, bufnr)
     group = g_id,
     buffer = bufnr,
     callback = function(params)
+      --- set_fold() 时会重新设置 `set foldexpr` 会触发 foldexpr 重新计算.
       set_fold(params.buf)
     end,
     desc = "lsp set foldexpr"
