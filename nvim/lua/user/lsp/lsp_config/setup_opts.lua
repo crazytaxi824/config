@@ -71,6 +71,7 @@ M.on_init = function(client)
   --- 如果需要更改 LSP semantic highlight 颜色, 使用 `:hi @lsp.type...`
   if client.server_capabilities then
     client.server_capabilities.semanticTokensProvider = nil
+    -- client.server_capabilities.foldingRangeProvider = nil  -- debug: 下面的 fold 设置
   end
 
   --- NOTE: notify lsp config is changed.
