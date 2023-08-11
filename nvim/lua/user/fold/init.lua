@@ -26,6 +26,10 @@ vim.api.nvim_create_autocmd("LspAttach", {
   pattern = {"*"},
   callback = function(params)
     local client = vim.lsp.get_client_by_id(params.data.client_id)
+    if client.name == 'null-ls' then
+      return
+    end
+
     if not lsp_fold(client, params.buf)  -- try lsp_fold
       and not treesitter_fold(params.buf) -- try treesitter_fold
     then

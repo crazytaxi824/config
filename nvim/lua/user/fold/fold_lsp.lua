@@ -4,13 +4,17 @@
 
 local M = {}
 
---- table, 记录 foldexpr 格式. { lnum: expr }
+--- table, 记录 foldexpr 格式. { bufnr = { lnum: expr }}
 --- VVI: foldexpr='v:lua.xxx' 设置时, vim 中的 table key 必须是连续的 int, 或者是 string.
 local str_cache = {}
 
 --- `set foldexpr` 用
 M.foldexpr = function(lnum)
-  return str_cache[lnum]
+  local bufnr = vim.api.nvim_get_current_buf()
+  if str_cache[bufnr] then
+    return str_cache[bufnr][lnum] or "0"
+  end
+  return "0"
 end
 
 --- 通过 nvim_buf_call 获取 local to window 的 opt
@@ -24,20 +28,20 @@ end
 
 --- 初始化两个 list 用于 cache expr 结果.
 local function init_expr_cache(bufnr)
-  local d_cache = {}
-  str_cache = {}
+  local tmp_cache = {}  -- tmp_cache 只在计算的时候临时使用.
+  str_cache[bufnr] = {}
 
   local line_count = vim.api.nvim_buf_line_count(bufnr)
   for i = 1, line_count, 1 do
-    d_cache[i] = 0
-    str_cache[i] = "0"
+    tmp_cache[i] = 0
+    str_cache[bufnr][i] = "0"
   end
 
-  return d_cache
+  return tmp_cache
 end
 
 --- 将 foldingRange 返回的数据按照 foldexpr 的格式记录到 list cache 中.
-local function parse_fold_data(fold_range, d_cache, foldnestmax)
+local function parse_fold_data(bufnr, fold_range, tmp_cache, foldnestmax, foldoneline)
   -- fold:
   --   kind = "comment",   -- (optional)
   --   startLine = 13      -- 0-index, 等于 vim 的 line_num - 1
@@ -50,12 +54,20 @@ local function parse_fold_data(fold_range, d_cache, foldnestmax)
       goto continue
     end
 
-    local startLine = fold.startLine + 1
-    local endLine = fold.endLine
-
     --- 最多标记到 foldnestmax level.
-    if d_cache[startLine] + 1 > foldnestmax then
+    if tmp_cache[fold.startLine + 1] + 1 > foldnestmax then
       goto continue
+    end
+
+    local startLine = fold.startLine + 1
+    local endLine = fold.endLine + 1
+
+    --- lsp 返回的 fold 是否在同一行内. eg:
+    ---  - gopls 返回的 endLine 是函数的最后一行, 返回的 comment 也是最后一行.
+    ---  - tsserver 返回的 endLine 是函数的倒数第二行, 但是返回的 comment 是最后一行.
+    --- 这里人为的将 fold 格式设为倒数第二行.
+    if foldoneline then
+      endLine = fold.endLine
     end
 
     --- "comment" 的情况下, fold 最后一行, 其他情况下 fold 至 range 的倒数第二行.
@@ -65,11 +77,11 @@ local function parse_fold_data(fold_range, d_cache, foldnestmax)
 
     --- 根据 fold range 计算 foldexpr 的值.
     for i = startLine, endLine, 1 do
-      d_cache[i] = d_cache[i] + 1
+      tmp_cache[i] = tmp_cache[i] + 1
       if i == startLine then
-        str_cache[i] = ">" .. d_cache[i]
+        str_cache[bufnr][i] = ">" .. tmp_cache[i]
       else
-        str_cache[i] = tostring(d_cache[i])
+        str_cache[bufnr][i] = tostring(tmp_cache[i])
       end
     end
 
@@ -77,10 +89,20 @@ local function parse_fold_data(fold_range, d_cache, foldnestmax)
   end
 end
 
+--- lsp 返回的 fold 是否在同一行内. eg:
+---  - gopls 返回的 endLine 是函数的最后一行, 返回的 comment 也是最后一行.
+---  - tsserver 返回的 endLine 是函数的倒数第二行, 但是返回的 comment 是最后一行.
+--- 这里人为的将 fold 格式设为倒数第二行.
+local function foldoneline(client_id)
+  local lsp_foldoneline = {"gopls"}
+  local client = vim.lsp.get_client_by_id(client_id)
+  return vim.tbl_contains(lsp_foldoneline, client.name)
+end
+
 --- 发送 'textDocument/foldingRange' 请求到 lsp, 分析 response, 然后按照 foldexpr 的格式记录.
 --- https://github.com/kevinhwang91/nvim-ufo/blob/main/lua/ufo/provider/lsp/nvim.lua
 local function set_fold(bufnr)
-  local d_cache = init_expr_cache(bufnr)
+  local tmp_cache = init_expr_cache(bufnr)
   local foldnestmax = get_win_local_option(bufnr, 'foldnestmax')
 
   local params = {textDocument = require('vim.lsp.util').make_text_document_params(bufnr)}
@@ -89,7 +111,8 @@ local function set_fold(bufnr)
     for client_id, data in pairs(resps) do
       if data.result then
         --- parse lsp response fold range
-        parse_fold_data(data.result, d_cache, foldnestmax)
+        --- gopls 返回的 endLine 是倒数第一行, 在 parse 的时候人为的改为倒数第二行.
+        parse_fold_data(bufnr, data.result, tmp_cache, foldnestmax, foldoneline(client_id))
 
         --- 只计算一次
         break
@@ -97,7 +120,7 @@ local function set_fold(bufnr)
     end
 
     --- DEBUG:
-    -- vim.print(str_cache)
+    -- vim.print(str_cache[bufnr])
 
     --- VVI: 确保 fold 设置都是 local to window, 所以使用 nvim_buf_call 保证 setlocal 设置.
     --- VVI: 想要更新 buffer 中的 foldexpr 位置, 需要重新 `setlocal foldexpr`, foldexpr 值不用变.
@@ -132,7 +155,7 @@ M.set_foldexpr = function(client, bufnr)
       --- set_fold() 时会重新设置 `set foldexpr` 会触发 foldexpr 重新计算.
       set_fold(params.buf)
     end,
-    desc = "lsp set foldexpr"
+    desc = "set foldexpr for lsp textDocument/foldingRange"
   })
 
   --- LspDetach: `:set filetype=xxx`, `:LspStop`
@@ -140,9 +163,10 @@ M.set_foldexpr = function(client, bufnr)
     group = g_id,
     buffer = bufnr,
     callback = function(params)
+      str_cache[params.buf] = nil
       vim.api.nvim_del_augroup_by_id(g_id)
     end,
-    desc = "lsp delete foldexpr augroup"
+    desc = "delete foldexpr textDocument/foldingRange augroup"
   })
 
   return true
