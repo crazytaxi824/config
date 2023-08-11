@@ -54,7 +54,7 @@ require "user.wrap" -- autocmd 根据 filetype 设置 set wrap && cursor move.
 require "user.misc" -- 其他杂项设置. 例如 autocmd VimEnter, VimLeave ...
 
 --- 加载 plugins 和 plugins' settings
-require "user.plugins_loader"
+require "user.plugins"
 
 --- VVI: keymap 放在最后 overwirte 其他设置.
 require "user.keymaps"  -- keymap 设置

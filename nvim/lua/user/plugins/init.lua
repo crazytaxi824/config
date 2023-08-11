@@ -39,7 +39,7 @@ local plugins = {
   --- 通知功能
   {"rcarriga/nvim-notify",
     tag = "v3.12.0",
-    config = function() require("user.plugin_settings.nvim_notify") end,
+    config = function() require("user.plugins.settings.nvim_notify") end,
 
     event = "VeryLazy",
   },
@@ -48,14 +48,14 @@ local plugins = {
   {"williamboman/mason.nvim",
     tag = "v1.6.1",
     build = ":MasonUpdate", -- :MasonUpdate updates All Registries, NOT packages.
-    config = function() require("user.plugin_settings.mason_tool_installer") end,
+    config = function() require("user.plugins.settings.mason_tool_installer") end,
     --- NOTE: 不能 lazyload mason, 否则其他插件无法找到 mason 安装的工具.
   },
 
   --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   {"folke/which-key.nvim",
     tag = "v1.5.1",
-    config = function() require("user.plugin_settings.which_key") end,
+    config = function() require("user.plugins.settings.which_key") end,
 
     event = "VeryLazy",
   },
@@ -76,7 +76,7 @@ local plugins = {
   {"nvim-treesitter/nvim-treesitter",
     commit = "2f5b4a6",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     --build = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
-    config = function() require("user.plugin_settings.treesitter") end,
+    config = function() require("user.plugins.settings.treesitter") end,
     dependencies = {
       --- 以下都是 treesitter modules 插件, 在 setup() 中启用的插件.
       "nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
@@ -90,7 +90,7 @@ local plugins = {
   --- 第一方 module 插件 ---
   {"nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
     commit = "3d4ab25",
-    config = function() require("user.plugin_settings.treesitter_ctx") end,
+    config = function() require("user.plugins.settings.treesitter_ctx") end,
 
     lazy = true,  -- nvim-treesitter 加载时自动加载.
   },
@@ -119,7 +119,7 @@ local plugins = {
   --- 注释
   {"numToStr/Comment.nvim",
     commit = "0236521",
-    config = function() require("user.plugin_settings.comment") end,
+    config = function() require("user.plugins.settings.comment") end,
     dependencies = {"JoosepAlviste/nvim-ts-context-commentstring"},  -- https://github.com/numToStr/Comment.nvim#-hooks
 
     keys = {
@@ -133,7 +133,7 @@ local plugins = {
   --- indent line
   {"lukas-reineke/indent-blankline.nvim",
     tag = "v2.20.7",
-    config = function() require("user.plugin_settings.indentline") end,  -- setup() 设置 use_treesitter = true
+    config = function() require("user.plugins.settings.indentline") end,  -- setup() 设置 use_treesitter = true
     dependencies = {"nvim-treesitter/nvim-treesitter"},
 
     event = "VeryLazy",
@@ -142,7 +142,7 @@ local plugins = {
   --- Auto Completion ------------------------------------------------------------------------------
   {"hrsh7th/nvim-cmp",
     commit = "c4e491a",
-    config = function() require("user.plugin_settings.cmp_completion") end,
+    config = function() require("user.plugins.settings.cmp_completion") end,
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全
       "hrsh7th/cmp-buffer",  -- 当前 buffer 中有的 word
@@ -185,7 +185,7 @@ local plugins = {
   {"L3MON4D3/LuaSnip",
     commit = "99a94cc",
     build = "make install_jsregexp",  -- https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#transformations
-    config = function() require("user.plugin_settings.luasnip_snippest") end,
+    config = function() require("user.plugins.settings.luasnip_snippest") end,
     dependencies = {"rafamadriz/friendly-snippets"},  -- snippets content
 
     lazy = true,  -- cmp_luasnip 加载时自动加载.
@@ -201,7 +201,7 @@ local plugins = {
   --- 自动括号, 同时依赖 treesitter && cmp
   {"windwp/nvim-autopairs",
     commit = "ae5b41c",
-    config = function() require("user.plugin_settings.autopairs") end,
+    config = function() require("user.plugins.settings.autopairs") end,
     dependencies = {
       "nvim-treesitter/nvim-treesitter",  -- setup() 中 `check_ts`, `ts_config` 需要 treesitter 支持.
       "hrsh7th/nvim-cmp",  -- cmp.event:on() 设置.
@@ -237,7 +237,7 @@ local plugins = {
   --- File explorer --------------------------------------------------------------------------------
   {"kyazdani42/nvim-tree.lua",
     commit = "904f95c",
-    config = function() require("user.plugin_settings.file_tree") end,
+    config = function() require("user.plugins.settings.file_tree") end,
 
     -- VVI: 本文件最后设置: 在 `nvim dir` 直接打开文件夹的时直接加载 nvim-tree.lua.
     event = "VeryLazy",
@@ -247,7 +247,7 @@ local plugins = {
   --- tabline decorator, `:help 'tabline'`
   {"akinsho/bufferline.nvim",
     tag = "v4.3.0",
-    config = function() require("user.plugin_settings.decor_bufferline") end,
+    config = function() require("user.plugins.settings.decor_bufferline") end,
 
     event = "VeryLazy",
   },
@@ -255,7 +255,7 @@ local plugins = {
   --- statusline decorator, `:help 'statusline'`
   {"nvim-lualine/lualine.nvim",   -- bottom status line
     commit = "45e27ca",
-    config = function() require("user.plugin_settings.decor_lualine") end,
+    config = function() require("user.plugins.settings.decor_lualine") end,
 
     event = "VeryLazy",
   },
@@ -271,7 +271,7 @@ local plugins = {
 
   {"rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
     tag = "v3.8.4",
-    config = function() require("user.plugin_settings.dap_debug") end,  -- dap-ui && dap 设置在同一文件中.
+    config = function() require("user.plugins.settings.dap_debug") end,  -- dap-ui && dap 设置在同一文件中.
     dependencies = {"mfussenegger/nvim-dap"},
 
     cmd = {'DapToggleBreakpoint', 'DapContinue', 'DapLoadLaunchJSON'},
@@ -282,7 +282,7 @@ local plugins = {
   --- telescope 的 preview syntax 默认使用的是 treesitter, 如果没有 treesitter 则使用 vim syntax highlights.
   {"nvim-telescope/telescope.nvim",
     commit = "dc192fa",  -- 半年更新一次 tag
-    config = function() require("user.plugin_settings.telescope_fzf") end,
+    config = function() require("user.plugins.settings.telescope_fzf") end,
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-telescope/telescope-fzf-native.nvim",  -- telescope extension
@@ -301,7 +301,7 @@ local plugins = {
   --- NOTE: terminal 实例在 user/utils/toggle_term/... 文件中. 所有 toggleterm 设置都有效.
   -- {"akinsho/toggleterm.nvim",
   --   tag = "v2.7.1",  -- NOTE: 尽量少更新, 更新后需要检查 user/utils/term/... 运行情况.
-  --   config = function() require("user.plugin_settings.toggleterm_terminal") end,
+  --   config = function() require("user.plugins.settings.toggleterm_terminal") end,
   --
   --   event = "VeryLazy",
   -- },
@@ -312,7 +312,7 @@ local plugins = {
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {"lewis6991/gitsigns.nvim",
     commit = "3117849",
-    config = function() require("user.plugin_settings.git_signs") end,
+    config = function() require("user.plugins.settings.git_signs") end,
 
     --- VVI: 这里不能用 VeryLazy. `nvim dir` 启动时直接打开 dir 会造成 gitsigns 报错.
     --- BufReadPre 在打开 file 时会触发, 打开 dir 时不会触发.
@@ -326,7 +326,7 @@ local plugins = {
   -- -- }}}
   {"preservim/tagbar",
     commit = "be56353",
-    config = function() require("user.plugin_settings.tagbar") end,
+    config = function() require("user.plugins.settings.tagbar") end,
 
     event = "VeryLazy",
   },
