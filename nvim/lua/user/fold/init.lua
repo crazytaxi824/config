@@ -22,4 +22,18 @@ M.indent_fold = function(bufnr)
   end)
 end
 
+--- TODO: 这里必须 lsp 才能触发 fold 设置.
+vim.api.nvim_create_autocmd("LspAttach", {
+  pattern = {"*"},
+  callback = function(params)
+    local client = vim.lsp.get_client_by_id(params.data.client_id)
+    if not M.lsp_fold(client, params.buf)  -- try lsp_fold
+      and not M.treesitter_fold(params.buf) -- try treesitter_fold
+    then
+      M.indent_fold(params.buf)  -- fallback to fold-indent
+    end
+  end,
+  desc = "set fold when LspAttach"
+})
+
 return M

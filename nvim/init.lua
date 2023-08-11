@@ -44,6 +44,7 @@ require "user.colors"   -- VVI: 必须放在最前面加载, 因为有全局变�
 require "user.settings" -- vimrc 设置
 require "user.lsp"      -- 加载 vim.lsp/vim.diagnostic 相关设置. 这里不是插件设置, 是内置参数设置.
                         -- user/lsp 是个文件夹, 这里是加载的 user/lsp/init.lua
+require "user.fold"
 
 --- terminal 相关设置
 require "user.terminal" -- terminal settings

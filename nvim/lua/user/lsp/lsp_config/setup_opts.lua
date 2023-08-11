@@ -97,13 +97,6 @@ M.on_attach = function(client, bufnr)
   lsp_keymaps.textDocument_keymaps(bufnr)
   lsp_keymaps.diagnostic_keymaps(bufnr)
 
-  --- 设置 fold, 优先 lsp > treesitter > indent
-  if not require("user.fold").lsp_fold(client, bufnr)  -- try lsp_fold
-    and not require("user.fold").treesitter_fold(bufnr) -- try treesitter_fold
-  then
-    require("user.fold").indent_fold(bufnr)  -- fallback to fold-indent
-  end
-
   --- DEBUG: 用
   if __Debug_Neovim.lspconfig then
     Notify("LSP Server attach: " .. client.name, "DEBUG", {title="LSP"})
