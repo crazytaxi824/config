@@ -98,7 +98,7 @@ local function set_fold(bufnr)
     --- VVI: 想要更新 buffer 中的 foldexpr 位置, 需要重新 `setlocal foldexpr`, foldexpr 值不用变.
     vim.api.nvim_buf_call(bufnr, function()
       vim.opt_local.foldexpr = 'v:lua.require("user.fold.lsp_expr_cache").get(v:lnum)'
-      vim.opt_local.foldtext = 'v:lua.require("user.fold.lsp_foldtext").foldtext()'
+      vim.opt_local.foldtext = 'v:lua.require("user.fold.foldtext").foldtext_lsp()'
       vim.opt_local.foldmethod = 'expr'
     end)
   end)
