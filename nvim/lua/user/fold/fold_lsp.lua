@@ -10,7 +10,11 @@ local str_cache = {}
 
 --- `set foldexpr` 用
 M.foldexpr = function(lnum)
-  return str_cache[vim.fn.bufnr()][lnum]
+  local bufnr = vim.api.nvim_get_current_buf()
+  if str_cache[bufnr] then
+    return str_cache[bufnr][lnum] or "0"
+  end
+  return "0"
 end
 
 --- 通过 nvim_buf_call 获取 local to window 的 opt
