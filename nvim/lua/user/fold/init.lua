@@ -21,6 +21,7 @@ local function indent_fold(bufnr)
 end
 
 --- TODO: 这里必须 lsp 才能触发 fold 设置.
+--- LspAttach 触发在 nvim-treesitter 加载之后.
 vim.api.nvim_create_autocmd("LspAttach", {
   pattern = {"*"},
   callback = function(params)

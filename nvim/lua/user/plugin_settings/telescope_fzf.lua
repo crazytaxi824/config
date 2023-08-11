@@ -227,6 +227,7 @@ vim.api.nvim_create_autocmd("User", {
       desc = 'telescope: toggle preview wrap'})
     end
   end,
+  desc = "set keymap of `:set wrap` for telescope preview window",
 })
 -- -- }}}
 
