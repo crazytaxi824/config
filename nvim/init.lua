@@ -48,7 +48,6 @@ require "user.lsp"      -- 加载 vim.lsp/vim.diagnostic 相关设置. 这里不
 
 --- terminal 相关设置
 require "user.terminal" -- terminal settings
-require "user.term_instances"  -- my_term 实例
 
 require "user.wrap" -- autocmd 根据 filetype 设置 set wrap && cursor move.
 require "user.misc" -- 其他杂项设置. 例如 autocmd VimEnter, VimLeave ...
