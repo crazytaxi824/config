@@ -2,9 +2,16 @@
 --- https://github.com/kevinhwang91/nvim-ufo
 --- https://github.com/kevinhwang91/nvim-ufo/blob/main/lua/ufo/provider/lsp/nvim.lua
 
-local str_cache = require("user.fold.lsp_expr_cache")
-
 local M = {}
+
+--- table, 记录 foldexpr 格式. { lnum: expr }
+--- VVI: foldexpr='v:lua.xxx' 设置时, vim 中的 table key 必须是连续的 int, 或者是 string.
+local str_cache = {}
+
+--- `set foldexpr` 用
+M.foldexpr = function(lnum)
+  return str_cache[lnum]
+end
 
 --- 通过 nvim_buf_call 获取 local to window 的 opt
 local function get_win_local_option(bufnr, opt)
@@ -18,14 +25,12 @@ end
 --- 初始化两个 list 用于 cache expr 结果.
 local function init_expr_cache(bufnr)
   local d_cache = {}
-  str_cache.init()
+  str_cache = {}
 
   local line_count = vim.api.nvim_buf_line_count(bufnr)
   for i = 1, line_count, 1 do
     d_cache[i] = 0
-    --- NOTE: foldexpr='v:lua.xxx' 设置时, vim 中的 table key 必须是连续的 int, 或者是 string.
-    --- 所以这里必须初始化成连续的 int.
-    str_cache.set(i, "0")
+    str_cache[i] = "0"
   end
 
   return d_cache
@@ -62,9 +67,9 @@ local function parse_fold_data(fold_range, d_cache, foldnestmax)
     for i = startLine, endLine, 1 do
       d_cache[i] = d_cache[i] + 1
       if i == startLine then
-        str_cache.set(i, ">" .. d_cache[i])
+        str_cache[i] = ">" .. d_cache[i]
       else
-        str_cache.set(i, tostring(d_cache[i]))
+        str_cache[i] = tostring(d_cache[i])
       end
     end
 
@@ -92,12 +97,12 @@ local function set_fold(bufnr)
     end
 
     --- DEBUG:
-    -- str_cache.debug()
+    -- vim.print(str_cache)
 
     --- VVI: 确保 fold 设置都是 local to window, 所以使用 nvim_buf_call 保证 setlocal 设置.
     --- VVI: 想要更新 buffer 中的 foldexpr 位置, 需要重新 `setlocal foldexpr`, foldexpr 值不用变.
     vim.api.nvim_buf_call(bufnr, function()
-      vim.opt_local.foldexpr = 'v:lua.require("user.fold.lsp_expr_cache").get(v:lnum)'
+      vim.opt_local.foldexpr = 'v:lua.require("user.fold.fold_lsp").foldexpr(v:lnum)'
       vim.opt_local.foldtext = 'v:lua.require("user.fold.foldtext").foldtext_lsp()'
       vim.opt_local.foldmethod = 'expr'
     end)
