@@ -17,6 +17,7 @@ export LC_ALL=en_US.UTF-8  # 设置 LC_ALL, 其他 LC_* 强制等于 LC_ALL, 单
 
 # --- [ homebrew ] --------------------------------------------------------------------------------- {{{
 # https://brew.sh/
+# `echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile`  # for apple silicon installation.
 # `man brew` 查看命令
 # brew 命令行工具安装路径 'echo $(brew --prefix)/bin'
 # put brew path in front of others, use brew cmd first, if there are different version of same cmd line tool.
@@ -869,9 +870,15 @@ alias checkBrewDependency="zsh ~/.config/.my_shell_functions/brew_dep_check.sh"
 
 # }}}
 
+# DOCS:
 # 各种命令行工具的 autocomplete 文件路径 `/usr/local/share/zsh/site-functions`
-
-# --- todo / test function  ------------------------------------------------------------------------
+# keybindings -------------------------------------------------------------------------------------- {{{
+# `bindkey -M main`   # 查看所有快捷键
+# `bindkey "^k" kill-line`       # 设置快捷键, CTRL-k
+# `bindkey "^[f" forward-word`   # ESC-f, 先按 ESC 再按 f 也可以触发.
+# `bindkey "^[b" backward-word`  # ESC-b, 先按 ESC 再按 b 也可以触发.
+#
+# }}}
 
 
 
