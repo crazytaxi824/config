@@ -29,17 +29,17 @@ local function get_test_func_name()
   --- [%w_]  - 单个 char [a-zA-Z0-9] && _
   --- [BFMT] - 单个 char B|F|M|T
 
-  local testfn = string.match(func_line, "func Test[%w_]*%([%w_]* %*testing%.T%)")
+  local testfn = string.match(func_line, "func Test[%w_]*%([%w_]* ?%*testing%.T%)")
   if testfn then
     return string.match(testfn, "Test[%w_]*"), 'run'
   end
 
-  testfn = string.match(func_line, "func Benchmark[%w_]*%([%w_]* %*testing%.B%)")
+  testfn = string.match(func_line, "func Benchmark[%w_]*%([%w_]* ?%*testing%.B%)")
   if testfn then
     return string.match(testfn, "Benchmark[%w_]*"), 'bench'
   end
 
-  testfn = string.match(func_line, "func Fuzz[%w_]*%([%w_]* %*testing%.F%)")
+  testfn = string.match(func_line, "func Fuzz[%w_]*%([%w_]* ?%*testing%.F%)")
   if testfn then
     return string.match(testfn, "Fuzz[%w_]*"), 'fuzz'
   end
