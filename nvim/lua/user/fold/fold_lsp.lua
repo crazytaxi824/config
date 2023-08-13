@@ -8,22 +8,21 @@ local M = {}
 --- VVI: foldexpr='v:lua.xxx' 设置时, vim 中的 table key 必须是连续的 int, 或者是 string.
 local str_cache = {}
 
---- `set foldexpr` 用
+M.clear_cache = function(bufnr)
+  str_cache[bufnr] = nil
+end
+
+M.debug = function()
+  vim.print(str_cache)
+end
+
+--- `set foldexpr=xxx` 用
 M.foldexpr = function(lnum)
   local bufnr = vim.api.nvim_get_current_buf()
   if str_cache[bufnr] then
     return str_cache[bufnr][lnum] or "0"
   end
   return "0"
-end
-
---- 通过 nvim_buf_call 获取 local to window 的 opt
-local function get_win_local_option(bufnr, opt)
-  local v
-  vim.api.nvim_buf_call(bufnr, function()
-    v = vim.wo[opt]
-  end)
-  return v
 end
 
 --- 初始化两个 list 用于 cache expr 结果.
@@ -101,75 +100,33 @@ end
 
 --- 发送 'textDocument/foldingRange' 请求到 lsp, 分析 response, 然后按照 foldexpr 的格式记录.
 --- https://github.com/kevinhwang91/nvim-ufo/blob/main/lua/ufo/provider/lsp/nvim.lua
-local function set_fold(bufnr)
-  local tmp_cache = init_expr_cache(bufnr)
-  local foldnestmax = get_win_local_option(bufnr, 'foldnestmax')
-
+M.set_fold = function(bufnr, win_id)
   local params = {textDocument = require('vim.lsp.util').make_text_document_params(bufnr)}
   vim.lsp.buf_request_all(bufnr, 'textDocument/foldingRange', params, function(resps)
+    --- VVI: 获取到 resps 之后再 init cache.
+    --- 否则可能出现 init cache 之后, buf_request_all() 失败导致 str_cache[bufnr] = {'0', ...} 被全部初始化为 "0".
+    local tmp_cache = init_expr_cache(bufnr)
+
     --- resps = { client_id: data }.
     for client_id, data in pairs(resps) do
       if data.result then
         --- parse lsp response fold range
         --- gopls 返回的 endLine 是倒数第一行, 在 parse 的时候人为的改为倒数第二行.
-        parse_fold_data(bufnr, data.result, tmp_cache, foldnestmax, foldoneline(client_id))
+        parse_fold_data(bufnr, data.result, tmp_cache, vim.wo[win_id].foldnestmax, foldoneline(client_id))
 
         --- 只计算一次
         break
       end
     end
 
-    --- DEBUG:
-    -- vim.print(str_cache[bufnr])
-
-    --- VVI: 确保 fold 设置都是 local to window, 所以使用 nvim_buf_call 保证 setlocal 设置.
+    --- VVI: 确保 fold 设置都是 local to window, 所以使用 nvim_win_call 保证 setlocal 设置.
     --- VVI: 想要更新 buffer 中的 foldexpr 位置, 需要重新 `setlocal foldexpr`, foldexpr 值不用变.
-    vim.api.nvim_buf_call(bufnr, function()
+    vim.api.nvim_win_call(win_id, function()
       vim.opt_local.foldexpr = 'v:lua.require("user.fold.fold_lsp").foldexpr(v:lnum)'
       vim.opt_local.foldtext = 'v:lua.require("user.fold.foldtext").foldtext_lsp()'
       vim.opt_local.foldmethod = 'expr'
     end)
   end)
-end
-
---- 设置 lsp foldexpr
-M.set_foldexpr = function(client, bufnr)
-  --- lsp 不支持 foldingRange
-  if not client.server_capabilities or not client.server_capabilities.foldingRangeProvider then
-    return
-  end
-
-  --- foldmethod 已经被设置过.
-  if get_win_local_option(bufnr, 'foldmethod') ~= "manual" then
-    return
-  end
-
-  set_fold(bufnr)
-
-  --- 文件 save 后重新计算 foldexpr.
-  local g_id = vim.api.nvim_create_augroup('my_lsp_fold_' .. bufnr, {clear=true})
-  vim.api.nvim_create_autocmd("BufWritePost", {
-    group = g_id,
-    buffer = bufnr,
-    callback = function(params)
-      --- set_fold() 时会重新设置 `set foldexpr` 会触发 foldexpr 重新计算.
-      set_fold(params.buf)
-    end,
-    desc = "set foldexpr for lsp textDocument/foldingRange"
-  })
-
-  --- LspDetach: `:set filetype=xxx`, `:LspStop`
-  vim.api.nvim_create_autocmd({"LspDetach", "BufWipeout"}, {
-    group = g_id,
-    buffer = bufnr,
-    callback = function(params)
-      str_cache[params.buf] = nil
-      vim.api.nvim_del_augroup_by_id(g_id)
-    end,
-    desc = "delete foldexpr textDocument/foldingRange augroup"
-  })
-
-  return true
 end
 
 return M
