@@ -224,7 +224,7 @@ local plugins = {
 
   --- null-ls 插件 formatters && linters, depends on "nvim-lua/plenary.nvim"
   {"jose-elias-alvarez/null-ls.nvim",
-    commit = "db09b6c",
+    commit = "db09b6c",  -- Archived!!!
     config = function() require("user.lsp.null_ls") end,
     dependencies = {
       "nvim-lua/plenary.nvim",
