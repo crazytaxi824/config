@@ -35,6 +35,7 @@ vim.api.nvim_create_autocmd("User", {
   pattern = {"LoadedWhichKey"},
   once = true,  -- VVI: 只用执行一次.
   callback = function(params)
+    --- which_key loaded 后 register 所有 cache 的 keymaps.
     for _, key_reg in ipairs(keymap_cache) do
       require("which-key").register(key_reg.key_desc, key_reg.opts)
     end
