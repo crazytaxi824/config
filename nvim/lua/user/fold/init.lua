@@ -67,9 +67,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
   desc = "Fold: fold-lsp when LspAttach",
 })
 
---- fallback to nvim-treesitter foldexpr 文件读取时触发 --------------------------------------------
+--- fallback to nvim-treesitter foldexpr 延迟触发 --------------------------------------------------
 --- 保证 lsp 不存在的情况下设置为 fold-treesitter.
-vim.api.nvim_create_autocmd("BufReadPost", {
+vim.api.nvim_create_autocmd("BufWinEnter", {
   pattern = {"*"},
   callback = function(params)
     local win_id = vim.api.nvim_get_current_win()
@@ -80,7 +80,7 @@ vim.api.nvim_create_autocmd("BufReadPost", {
       end
 
       --- window 中加载的 buffer 没有改变.
-      if not vim.api.nvim_win_get_buf(win_id) == params.buf then
+      if vim.api.nvim_win_get_buf(win_id) ~= params.buf then
         return
       end
 
