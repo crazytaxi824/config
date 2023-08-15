@@ -224,6 +224,9 @@ local keymaps = {
   {'n', 'ZZ', '<Nop>', opt},
   {'v', 'ZZ', '<Nop>', opt},
 
+  --- <F1> :help help, 避免误操作.
+  {'n', '<F1>', '<Nop>', opt},
+
   --- ` 和 ' 默认都是 `:help marks`, 这里禁止使用 ` 因为有时候 ` 需要作为 <leader>.
   {'n', '`', '<Nop>', opt},
 
