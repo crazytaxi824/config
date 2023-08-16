@@ -59,7 +59,7 @@ local keymaps = {
   --- common use -----------------------------------------------------------------------------------
   --- `:help registers`
   {'n', 'D', '"_dd', opt, "delete line No Copy"},
-  {'v', 'D', '"_x', opt, "delete line No Copy"},
+  {'v', 'D', '"_x',  opt, "delete line No Copy"},
   {'n', 'O', 'O<C-c><Down>', opt, "add new line above cursor"},
 
   --- move cursor ----------------------------------------------------------------------------------

@@ -130,9 +130,9 @@ cmp.setup {
                                      -- cmp.mapping.close() 也可以关闭代码提示窗口, 但是会保持代码现在的状态.
                                      -- 当使用 select_prev_item({behavior=cmp.SelectBehavior}) 的时候, abort() & close() 效果相同.
 
+    ["<PageUp>"]   = cmp.mapping(cmp.mapping.scroll_docs(-3), { "i", "c" }),
+    ["<PageDown>"] = cmp.mapping(cmp.mapping.scroll_docs(3),  { "i", "c" }),
     -- ["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),  -- 手动触发 completion window. NOTE: 不需要.
-    -- ["{"] = cmp.mapping(cmp.mapping.scroll_docs(-1), { "i", "c" }),
-    -- ["}"] = cmp.mapping(cmp.mapping.scroll_docs(1), { "i", "c" }),
     -- ["<C-e>"] = cmp.mapping {  -- 对 insert, command 模式分别设置不同的行为.
     --   i = cmp.mapping.abort(),
     --   c = cmp.mapping.close(),
