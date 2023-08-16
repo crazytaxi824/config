@@ -90,6 +90,7 @@ cask "keka"  # 压缩工具
 cask "the-unarchiver"  # 解压工具
 cask "keycastr"  # 按键输入显示工具
 cask "rectangle" # resize app
+cask "lulu"  # 防火墙
 #cask "openvpn-connect"
 
 # 其他个人 app
