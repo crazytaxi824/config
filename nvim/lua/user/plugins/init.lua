@@ -74,7 +74,7 @@ local plugins = {
   --- By convention, if you want to write a query, use the `queries/` directory,
   --- but if you want to extend a query use the `after/queries/` directory.
   {"nvim-treesitter/nvim-treesitter",
-    commit = "800b2f3",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "17d3398",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     --build = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
     config = function() require("user.plugins.settings.treesitter") end,
     dependencies = {
@@ -89,7 +89,7 @@ local plugins = {
 
   --- 第一方 module 插件 ---
   {"nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-    commit = "3d4ab25",
+    commit = "a17c312",
     config = function() require("user.plugins.settings.treesitter_ctx") end,
 
     lazy = true,  -- nvim-treesitter 加载时自动加载.
@@ -110,7 +110,7 @@ local plugins = {
   },
 
   {"JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
-    commit = "e9062e2",
+    commit = "9bff161",
 
     lazy = true,  -- nvim-treesitter 加载时自动加载.
   },
@@ -183,7 +183,7 @@ local plugins = {
 
   --- snippet engine, for "cmp_luasnip", 每次打开文件都会有一个 [Scratch] buffer.
   {"L3MON4D3/LuaSnip",
-    commit = "99a94cc",
+    commit = "409535b",
     build = "make install_jsregexp",  -- https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#transformations
     config = function() require("user.plugins.settings.luasnip_snippest") end,
     dependencies = {"rafamadriz/friendly-snippets"},  -- snippets content
@@ -193,7 +193,7 @@ local plugins = {
 
   --- snippets content, 自定义 snippets 可以借鉴这个结构.
   {"rafamadriz/friendly-snippets",
-    commit = "bc38057",
+    commit = "377d454",
 
     lazy = true,  -- LuaSnip 加载时自动加载.
   },
@@ -214,7 +214,7 @@ local plugins = {
   --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
   --- 官方 LSP 引擎.
   {"neovim/nvim-lspconfig",
-    commit = "a981d44",
+    commit = "0d29cad",
     config = function() require("user.lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     dependencies = {
       "williamboman/mason.nvim",  -- 安装 lsp 命令行工具.
@@ -311,7 +311,7 @@ local plugins = {
   --- `:Gitsigns setqflist/seqloclist` will open Trouble instead of quickfix or location list windows.
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {"lewis6991/gitsigns.nvim",
-    commit = "bae45ef",
+    commit = "5a2b120",
     config = function() require("user.plugins.settings.git_signs") end,
 
     --- VVI: 这里不能用 VeryLazy. `nvim dir` 启动时直接打开 dir 会造成 gitsigns 报错.
@@ -325,7 +325,7 @@ local plugins = {
   --- `ctags --list-languages` 查看支持的语言. 不支持 jsx/tsx, 支持 typescript, 勉强支持 javascript
   -- -- }}}
   {"preservim/tagbar",
-    commit = "be56353",
+    commit = "402e3e1",
     config = function() require("user.plugins.settings.tagbar") end,
 
     event = "VeryLazy",
@@ -342,7 +342,7 @@ local plugins = {
   --- https://docs.github.com/en/copilot
   --- https://docs.github.com/en/copilot/getting-started-with-github-copilot?tool=neovim#prerequisites-3
   {"github/copilot.vim",
-    tag = "v1.9.3",
+    tag = "v1.10.0",
     config = function()
       --- VVI: Neovim >= 0.6 and Node.js <= 17
       --- 指定 nodejs 版本. 这里使用的是 `brew install node@16`
