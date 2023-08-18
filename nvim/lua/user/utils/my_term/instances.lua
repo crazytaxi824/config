@@ -5,8 +5,9 @@ local M = {}
 --- execute terminals: run cmd ---------------------------------------------------------------------
 M.exec_term = mt.new({
   id = 1001,
-  jobdone = 'stopinsert',
   auto_scroll = true,
+  print_cmd = true,
+  buf_output = true,  -- 这里使用 buf_job_output, ignore "jobdone" 设置.
 })
 
 --- keymaps ----------------------------------------------------------------------------------------

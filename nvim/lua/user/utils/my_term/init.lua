@@ -69,23 +69,33 @@ end
 
 --- close all my_term windows
 M.close_all = function()
-  for _, wi in ipairs(vim.fn.getwininfo()) do
-    if wi.terminal == 1
-      and string.match(vim.api.nvim_buf_get_name(wi.bufnr), 'term://.*' .. meta_method.name_tag .. '%d+')  --- it is my_term
-    then
-      vim.api.nvim_win_close(wi.winid, 'force')
+  for _, term_obj in pairs(meta_method.global_my_term_cache) do
+    if meta_method.term_buf_exist(term_obj.bufnr) then
+      local term_wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
+      for _, w in ipairs(term_wins) do
+        vim.api.nvim_win_close(w, 'force')
+      end
     end
   end
 end
 
 --- open all terms which are cached in global_my_term_cache and bufnr is valid.
 M.open_all = function()
-  for id, term_obj in pairs(meta_method.global_my_term_cache) do
+  for _, term_obj in pairs(meta_method.global_my_term_cache) do
     if meta_method.term_buf_exist(term_obj.bufnr) then
       local term_wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
       if #term_wins < 1 then
         meta_method.create_term_win(term_obj.bufnr)
       end
+    end
+  end
+end
+
+M.wipeout_all = function()
+  for _, term_obj in pairs(meta_method.global_my_term_cache) do
+    if meta_method.term_buf_exist(term_obj.bufnr) then
+      vim.api.nvim_buf_delete(term_obj.bufnr, {force=true})
+      term_obj.bufnr = nil
     end
   end
 end
@@ -103,11 +113,12 @@ end
 M.toggle_all = function()
   --- 获取所有的 my_term windows
   local open_winid_list= {}
-  for _, wi in ipairs(vim.fn.getwininfo()) do
-    if wi.terminal == 1
-      and string.match(vim.api.nvim_buf_get_name(wi.bufnr), 'term://.*' .. meta_method.name_tag .. '%d+')  --- it is my_term
-    then
-      table.insert(open_winid_list, wi.winid)
+  for _, term_obj in pairs(meta_method.global_my_term_cache) do
+    if meta_method.term_buf_exist(term_obj.bufnr) then
+      local term_wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
+      for _, w in ipairs(term_wins) do
+        table.insert(open_winid_list, w)
+      end
     end
   end
 
