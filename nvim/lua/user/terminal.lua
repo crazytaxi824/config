@@ -3,9 +3,9 @@
 
 local fp = require('user.utils.filepath')
 
---- TermOpen, jobstart 时触发
+--- termopen(), jobstart() 时触发
 vim.api.nvim_create_autocmd('TermOpen', {
-  pattern = {"term://*"},
+  pattern = {"*"},
   callback = function(params)
     --- 设置 terminal 不显示行号
     vim.opt_local.number = false
