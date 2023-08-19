@@ -92,7 +92,7 @@ M.on_attach = function(client, bufnr)
   --- textDocument/documentHighlight, 显示 references
   require("user.lsp.lsp_config.doc_hl").fn(client, bufnr)
 
-  --- 设置 lsp 专用 keymaps
+  --- keymaps ---
   local lsp_keymaps = require("user.lsp.lsp_keymaps")
   lsp_keymaps.textDocument_keymaps(bufnr)
   lsp_keymaps.diagnostic_keymaps(bufnr)

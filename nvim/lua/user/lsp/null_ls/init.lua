@@ -98,7 +98,7 @@ null_ls.setup({
   diagnostics_format = "#{m} [null-ls]",
 
   --- 以下callback 都是 DEBUG: 用
-  --- 设置 key_mapping vim.diagnostic.goto_next() ...
+  --- keymaps ---
   on_attach = function(client, bufnr)
     require("user.lsp.lsp_keymaps").diagnostic_keymaps(bufnr)
 
