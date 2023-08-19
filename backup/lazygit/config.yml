@@ -75,6 +75,7 @@ git:
   # DOC: git log format 配置: https://www.git-scm.com/docs/git-log#Documentation/git-log.txt-emnem
   # 最后的换行是为了让每一个 commit 都占2行位置. 如果不换行则有些占一行，有些占两行.
   # 显示 current branch git log
+  # %C(auto) - 继承 .gitconfig color 设置.
   #branchLogCmd: "git log --graph {{branchName}} --format=format:'%C(42)%h%C(reset) -%C(207)%d%C(reset) %C(251)%s%C(reset) %C(243)(%ar)%C(reset)%n'' '"
   branchLogCmd: "git log --graph {{branchName}} --format=format:'%C(auto)%h -%d %s %C(243)(%ar)%C(reset)%n'' '"
 
@@ -82,6 +83,7 @@ git:
   # 显示 all branches git log
   # DOC: strftime format, --date, https://stackoverflow.com/questions/7853332/how-to-change-git-log-date-formats#34778736
   # 第2行之前的空格是为了对齐.
+  # %C(auto) - 继承 .gitconfig color 设置.
   #allBranchesLogCmd: "git log --date=format:'%d-%b-%Y %H:%M:%S' --graph --all --format=format:'%C(42)%h%C(reset) -%C(207)%d%C(reset) %C(74)%ad%C(reset) %C(243)(%ar) - %C(173)%an%C(reset)%n''          %C(251)%s%C(reset)%n'' '"
   allBranchesLogCmd: "git log --date=format:'%d-%b-%Y %H:%M:%S' --graph --all --format=format:'%C(auto)%h -%d %C(74)%ad %C(243)(%ar) - %C(173)%an%C(reset)%n''          %C(auto)%s%n'' '"
 

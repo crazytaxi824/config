@@ -34,7 +34,7 @@
 	newMoved = bold 81  # line moved to a new place
 [color "decorate"]
 	HEAD = bold 207    # HEAD
-	branch = bold 42  # local branch
+	branch = bold 42   # local branch
 	remoteBranch = bold 167
 	tag = bold 191
 	#stash = bold 75
