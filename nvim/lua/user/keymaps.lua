@@ -213,11 +213,12 @@ local keymaps = {
   {'n', '<leader>W', '<cmd>only!<CR>', opt, 'win: Close All Other Windows'},  -- 关闭所有其他窗口, 快捷键 <C-w><C-o>
 
   --- NOTE: terminal key mapping 在其他 plugin 中也有设置.
-  {'n', 'tW', function() key_fn.wipe_all_term_bufs() end, opt, "terminal: wipeout All Terminals"},
   {'n', 'tt', function() mt.open_shell_term() end, opt, "my_term: open/new Terminal #(1~999)"},
-  {'n', 'tC', function() mt.close_all() end,  opt, "my_term: close All Terminals window"},
-  {'n', 'tO', function() mt.open_all() end,   opt, "my_term: open All Terminals window"},
-  {'n', 'tT', function() mt.toggle_all() end, opt, "my_term: toggle All Terminals window"},
+  {'n', 'tC', function() mt.close_all() end,   opt, "my_term: close All Terminals window"},
+  {'n', 'tO', function() mt.open_all() end,    opt, "my_term: open All Terminals window"},
+  {'n', 'tT', function() mt.toggle_all() end,  opt, "my_term: toggle All Terminals window"},
+  {'n', 'tW', function() mt.wipeout_all() end, opt, "my_term: wipeout All Terminals"},
+  -- {'n', 'tW', function() key_fn.wipe_all_term_bufs() end, opt, "terminal: wipeout All Terminals"},
 
   --- 其他 -----------------------------------------------------------------------------------------
   --- ZZ same as `:x`

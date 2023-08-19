@@ -23,7 +23,7 @@ M.go_run = function()
   local t = require('user.utils.my_term.instances').exec_term
   t.cmd = cmd
   t:stop()
-  t:run({print_cmd=true})
+  t:run()
 end
 
 return M
