@@ -26,9 +26,9 @@ M.default_opts = {
   print_cmd = nil,    -- bool, 是否打印 cmd. 默认不打印.
   buf_output = nil,   -- bool, 是否用 buf_job_output 执行, 默认使用 termopen().
 
-  on_init = nil,  -- func(term), new()
-  on_open = nil,  -- func(term), BufWinEnter. NOTE: 每次 term:// buffer 被 win 显示的时候都会触发, 多个窗口显示时也会触发.
-  on_close = nil, -- func(term), BufWinLeave. NOTE: BufWinLeave 只会在 buffer 离开最后一个 win 的时候触发.
+  on_init = nil,   -- func(term), new()
+  on_open = nil,   -- func(term), BufWinEnter. NOTE: 每次 term:// buffer 被 win 显示的时候都会触发, 多个窗口显示时也会触发.
+  on_close = nil,  -- func(term), BufWinLeave. NOTE: BufWinLeave 只会在 buffer 离开最后一个 win 的时候触发.
   on_stdout = nil, -- func(term, jobid, data, event), 可用于 auto_scroll.
   on_stderr = nil, -- func(term, jobid, data, event), 可用于 auto_scroll.
   on_exit = nil,   -- func(term, job_id, exit_code, event), TermClose, jobstop(), 可用于 `:silent! bwipeout! term_bufnr`
@@ -56,7 +56,7 @@ end
 local function stop_job(term_obj)
   if term_obj.job_id and vim.fn.jobstop(term_obj.job_id) == 1 then
     vim.bo[term_obj.bufnr].modifiable = true
-    vim.api.nvim_buf_set_lines(term_obj.bufnr, -2, -2, true, {"signal: interrupt"})
+    vim.api.nvim_buf_set_lines(term_obj.bufnr, -1, -1, true, {"signal: interrupt"})
     vim.bo[term_obj.bufnr].modifiable = false
   end
 end
@@ -214,34 +214,36 @@ local function set_buf_line_output(bufnr, data, hl)
   local last_line_before_write = vim.api.nvim_buf_line_count(bufnr)
 
   vim.bo[bufnr].modifiable = true
-  --- write output to buffer
   --- NOTE: 这里的处理主要是因为目前 data 最后会多一行 empty line, 不知道以后会不会删除 empty line, 这里先做预防处理.
-  if vim.api.nvim_buf_get_lines(bufnr, -2, -1, true)[1] == '' then
-    vim.api.nvim_buf_set_lines(bufnr, -2, -1, true, data)
-  else
-    vim.api.nvim_buf_set_lines(bufnr, -1, -1, true, data)
-    last_line_before_write = last_line_before_write+1
+  if data[#data] == '' then
+    table.remove(data, #data)
   end
+
+  --- write output to buffer
+  vim.api.nvim_buf_set_lines(bufnr, -1, -1, true, data)
   vim.bo[bufnr].modifiable = false
 
   --- highlight lines
   for i = last_line_before_write, vim.api.nvim_buf_line_count(bufnr), 1 do
-    vim.api.nvim_buf_add_highlight(bufnr, -1, hl, i-1, 0, -1)
+    vim.api.nvim_buf_add_highlight(bufnr, -1, hl, i, 0, -1)
   end
 end
 
 local function set_buf_line_exit(bufnr, exit_code)
   local last_line_before_write = vim.api.nvim_buf_line_count(bufnr)
   vim.bo[bufnr].modifiable = true
-  vim.api.nvim_buf_set_lines(bufnr, -1, -1, true, {"[Process exited " .. exit_code .. "]"})
+  vim.api.nvim_buf_set_lines(bufnr, -1, -1, true, {"", "[Process exited " .. exit_code .. "]"})
+
+  --- highlight
   if exit_code == 0 then
-    vim.api.nvim_buf_add_highlight(bufnr, -1, "my_output_sys", last_line_before_write, 0, -1)  -- highlight exit
+    vim.api.nvim_buf_add_highlight(bufnr, -1, "my_output_sys", last_line_before_write+1, 0, -1)
   else
-    vim.api.nvim_buf_add_highlight(bufnr, -1, "my_output_sys_error", last_line_before_write, 0, -1)  -- highlight exit
+    vim.api.nvim_buf_add_highlight(bufnr, -1, "my_output_sys_error", last_line_before_write+1, 0, -1)
   end
   vim.bo[bufnr].modifiable = false
 end
 
+--- NOTE: neovim 是单线程, jobstart() 是异步函数.
 local function buf_job_output(term_obj)
   vim.api.nvim_buf_call(term_obj.bufnr, function()
     vim.opt_local.wrap = true
