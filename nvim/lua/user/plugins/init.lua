@@ -310,18 +310,6 @@ local plugins = {
     event = { "BufReadPre", "BufNewFile" },
   },
 
-  --- tagbar --- {{{
-  --- NOTE: 函数/类型列表，需要安装 `brew info universal-ctags`, 注意不要安装错了.
-  --- https://github.com/universal-ctags/ctags/blob/master/docs/news.rst#new-parsers
-  --- `ctags --list-languages` 查看支持的语言. 不支持 jsx/tsx, 支持 typescript, 勉强支持 javascript
-  -- -- }}}
-  {"preservim/tagbar",
-    commit = "402e3e1",
-    config = function() require("user.plugins.settings.tagbar") end,
-
-    event = "VeryLazy",
-  },
-
   --- markdown, VVI: 安装 preview 插件后需要一段时间来执行 vim.fn["mkdp#util#install"]() 如果无法运行可以重装该插件.
   {"iamcco/markdown-preview.nvim",
     build = function() vim.fn["mkdp#util#install"]() end,  -- VVI: 每次 Update 后需要重新执行 vim.fn["mkdp#util#install"](), 否则可能出现无法运行的情况.
@@ -359,6 +347,7 @@ local plugins = {
   --{"folke/trouble.nvim"},       -- quickfix/loclist 替代
   --{"rebelot/heirline.nvim"},    -- lualine + bufferline 替代
   --{"akinsho/toggleterm.nvim"},  -- terminal
+  --{"preservim/tagbar"},  -- universal-ctags, 用的少. https://github.com/universal-ctags/ctags/blob/master/docs/news.rst#new-parsers
 
   --{"goolord/alpha-nvim"}, {"goolord/alpha-nvim"},  -- neovim 启动页面
   --{"ahmedkhalf/project.nvim"},  -- project manager

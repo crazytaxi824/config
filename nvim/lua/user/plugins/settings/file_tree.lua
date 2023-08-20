@@ -261,15 +261,10 @@ local nt_buffer_keymaps = {
 }
 
 --- global keymap --------------------------------------------------------------
-local function nvim_tree_toggle(cmd)
-  vim.cmd('silent! TagbarClose')  --- VVI: 必须使用 silent! 否则可能会报错.
-  vim.cmd(cmd)
-end
-
 local opts = {noremap=true, silent=true}
 local tree_keymaps = {
-  {'n', '<leader>;', function() nvim_tree_toggle('NvimTreeToggle') end, opts, 'filetree: toggle'},
-  {'n', '<leader><CR>', function() nvim_tree_toggle('NvimTreeFindFile!') end, opts, 'filetree: jump to file'},
+  {'n', '<leader>;',    '<cmd>NvimTreeToggle<CR>',    opts, 'filetree: toggle'},
+  {'n', '<leader><CR>', '<cmd>NvimTreeFindFile!<CR>', opts, 'filetree: jump to file'},
 }
 
 require('user.utils.keymaps').set(tree_keymaps)
@@ -328,8 +323,8 @@ nvim_tree.setup {
     --   },
     -- },
     -- -- }}}
-    side = "left",  -- left / right
-    width = 36,  -- same as tagbar, OR "25%"
+    side = "left", -- left / right
+    width = 36,    -- OR "25%"
     preserve_window_proportions = false,
     number = false,          -- 显示 line number
     relativenumber = false,  -- 显示 relative number
