@@ -297,15 +297,6 @@ local plugins = {
     lazy = true,  -- telescope 加载时自动加载.
   },
 
-  --- NOTE: 目前使用 my_term 代替 toggleterm.
-  --- NOTE: terminal 实例在 user/utils/toggle_term/... 文件中. 所有 toggleterm 设置都有效.
-  -- {"akinsho/toggleterm.nvim",
-  --   tag = "v2.7.1",  -- NOTE: 尽量少更新, 更新后需要检查 user/utils/term/... 运行情况.
-  --   config = function() require("user.plugins.settings.toggleterm_terminal") end,
-  --
-  --   event = "VeryLazy",
-  -- },
-
   --- Git
   --- NOTE: gitsigns 会检查 "trouble.nvim" 是否安装, 如果有安装则:
   --- `:Gitsigns setqflist/seqloclist` will open Trouble instead of quickfix or location list windows.
@@ -361,16 +352,20 @@ local plugins = {
     cmd = {"Copilot"},  -- `:Copilot setup`, `:Copilot enable`, `:help copilot` 查看可用命令.
   },
 
+  --- recommanded plugins ------------------------------------------------------ {{{
   --{"kyazdani42/nvim-web-devicons"}, -- Nerd Fonts 提供 icons 需要 patch 字体
   --{"nvim-neo-tree/neo-tree.nvim"},  -- File explorer. nvim-tree.lua 替代
   --{"Tastyep/structlog.nvim"},   -- log 工具
   --{"folke/trouble.nvim"},       -- quickfix/loclist 替代
   --{"rebelot/heirline.nvim"},    -- lualine + bufferline 替代
+  --{"akinsho/toggleterm.nvim"},  -- terminal
+
   --{"goolord/alpha-nvim"}, {"goolord/alpha-nvim"},  -- neovim 启动页面
   --{"ahmedkhalf/project.nvim"},  -- project manager
 
-  --{"p00f/nvim-ts-rainbow"},  -- rainbow 括号颜色, treesitter 插件. NOTE: 严重拖慢文件打开速度.
+  --{"p00f/nvim-ts-rainbow"}, -- rainbow 括号颜色, treesitter 插件. NOTE: 严重拖慢文件打开速度.
   --{"hrsh7th/cmp-cmdline"},  -- 自动补全 cmd. nvim-cmp 插件. NOTE: 不好用.
+  -- -- }}}
 }
 
 --- lazy.nvim settings
