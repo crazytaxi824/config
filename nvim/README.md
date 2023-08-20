@@ -80,21 +80,20 @@
 
 `:help vim-modes` & `:help mode()`
 
-| Name                                  | tigger                                   |
-| ------------------------------------- | ---------------------------------------- |
-| Normal                                | <ESC>, <i_CTRL-C>                        |
-| Normal using i_CTRL-O in Insert-mode  | Insert 下 <i_CTRL-O>                     |
-| Normal using i_CTRL-O in Replace-mode | Replace 下 <i_CTRL-O>                    |
-| Insert                                | a,i,s,o,c ...                            |
-| Replace                               | R                                        |
-| Command                               | :, !! ...                                |
-| Visual by character                   | v                                        |
-| Visual by line                        | V                                        |
-| Visual by block                       | <CTRL-V>                                 |
-| Select by character                   | vC-g>, gh, SELECT 和 Visual 是一一对应的 |
-| Select by line                        | V<C-g>, gH                               |
-| Select by block                       | <C-v><C-g>, g<C-h>                       |
-| Terminal mode                         |                                          |
+| Name                                  | keymap                                      |
+| ------------------------------------- | ------------------------------------------- |
+| Normal                                | `{i,v,c}_CTRL-C`, `{i,v,c,t}_CTRL-\_CTRL-N` |
+| Normal using i_CTRL-O in Insert-mode  | `i_CTRL-O`, `i_CTRL-\_CTRL-O`               |
+| Insert                                | `a`, `i`, `s`, `o`, `c` ...                 |
+| Replace                               | `R`                                         |
+| Command                               | `:`, `!!` ...                               |
+| Visual by character                   | `v` (lower)                                 |
+| Visual by line                        | `V` (upper)                                 |
+| Visual by block                       | `CTRL-V`                                    |
+| Select by character                   | `v(lower)_CTRL-G`, `gh`                     |
+| Select by line                        | `V(upper)_CTRL-G`, `gH`                     |
+| Select by block                       | `CTRL-V_CTRL-G`, `g<CTRL-H>`                |
+| Terminal mode                         | `t_CTRL-\_CTRL-N`, `t_CTRL-\_CTRL-O`        |
 
 <br />
 
