@@ -40,7 +40,7 @@ require "user.lsp"      -- 加载 vim.lsp/vim.diagnostic 相关设置. 这里不
 
 --- autcmd 相关设置
 require "user.terminal" -- terminal buffer 自动设置 nonumber signcolumn ...
-require "user.fold"     -- fold-lsp -> fold-treesitter -> fold-indent
+require "user.fold"     -- fold-lsp -> fold-treesitter
 require "user.wrap"     -- 根据 set wrap 设置 cursor move.
 
 --- 加载 plugins 和 plugins' settings
