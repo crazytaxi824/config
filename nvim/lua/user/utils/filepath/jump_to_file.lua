@@ -14,7 +14,7 @@ local function jump_to_file(absolute_path, lnum, col)
   --- 则选择合适的 window 显示文件.
   local display_win_id
 
-  --- 在本 tab 中寻找第一个显示 listed-buffer 的 window, 用于显示 filepath.
+  --- 在当前 tab 中寻找第一个显示 listed-buffer 的 window, 用于显示 filepath.
   local tab_wins = vim.api.nvim_tabpage_list_wins(0)
   for _, win_id in ipairs(tab_wins) do
     local bufnr = vim.api.nvim_win_get_buf(win_id)
@@ -26,7 +26,7 @@ local function jump_to_file(absolute_path, lnum, col)
       break
     end
 
-    --- 记录本 tab 中第一个显示 listed-buffer 的 window, 用于显示 filepath.
+    --- 记录当前 tab 中第一个显示 listed-buffer 的 window, 用于显示 filepath.
     if not display_win_id and vim.fn.buflisted(bufnr) == 1 then
       display_win_id = win_id
     end
