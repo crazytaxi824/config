@@ -1,6 +1,6 @@
 --- 跳转到 cursor 所在 filepath
 
-local pat = require('user.utils.filepath.pattern')
+local parse = require('user.utils.filepath.parse')
 
 local M = {}
 
@@ -11,6 +11,9 @@ local M = {}
 --- 单独执行 :call cursor('a',3)   的时候, cursor 跳转到本行第三列;
 --- 单独执行 :call cursor('3','3') 的时候, cursor 跳转到第三行第三列; NOTE: 这里 lnum & col 是 string, 可以跳转.
 local function jump_to_file(absolute_path, lnum, col)
+  lnum = lnum or '1'
+  col = col or '1'
+
   --- 则选择合适的 window 显示文件.
   local display_win_id
 
@@ -56,42 +59,6 @@ local function jump_to_dir(dir)
   vim.cmd('new ' .. dir)
 end
 
---- VVI: 利用了内置的 vimL function `matchadd()` 和 `matchstr()` 的统一性进行 filepath highlight 和分析.
---- 所以只要是能被 `matchadd()` 正确 highlight 的 filepath 就能被 `matchstr()` 一字不差的分析出来.
-local function matchstr_filepath(content)
-  local m = vim.fn.matchstr(content, pat.file_schema_pattern)
-  if m ~= "" then
-    local _, e = string.find(m, 'file://')
-    return string.sub(m, e+1)
-  end
-
-  m = vim.fn.matchstr(content, pat.filepath_pattern)
-  if m ~= "" then
-    return m
-  end
-
-  return content
-end
-
---- split filepath:lnum:col
-local function parse_filepath(content, ignore_matchstr)
-  local filepath
-  if ignore_matchstr then  -- 不需要 matchstr
-    filepath = content
-  else
-    filepath = matchstr_filepath(content)
-  end
-
-  local fp = vim.split(vim.trim(filepath), ":", {trimempty=false})
-
-  --- file, lnum, col 都不能为 nil
-  local file = fp[1] or ''
-  local lnum = fp[2] or ''
-  local col  = fp[3] or ''
-
-  return file, lnum, col
-end
-
 --- 获取 visual selected word.
 local function visual_selected()
   --- NOTE: getpos("'<") 和 getpos("'>") 必须在 normal 模式执行,
@@ -109,24 +76,17 @@ local function visual_selected()
 end
 
 --- jump controller
-local function jump(content, ignore_matchstr)
-  local filepath, lnum, col = parse_filepath(content, ignore_matchstr)
-
-  if not filepath or filepath == '' then  -- empty line
+local function jump(content)
+  local r = parse.parse(content)
+  if r.type == 'file' then
+    jump_to_file(r.absolute_fp, r.lnum, r.col)
+    return
+  elseif r.type == 'dir' then
+    jump_to_dir(r.absolute_fp)
     return
   end
 
-  local absolute_path = vim.fn.fnamemodify(filepath, ":p")
-
-  if vim.fn.filereadable(absolute_path) == 1 then  -- 是 file
-    jump_to_file(absolute_path, lnum, col)
-    return
-  elseif vim.fn.isdirectory(absolute_path) == 1 then  -- 是 dir
-    jump_to_dir(absolute_path)
-    return
-  end
-
-  Notify('cannot open file: "' .. filepath .. '"', "INFO", {timeout = 1500})
+  Notify('cannot open: "' .. content .. '"', "INFO", {timeout = 1500})
 end
 
 --- NOTE: 为保险起见, 不在 Normal 模式下使用 system_open 打开 <cWORD>
@@ -138,7 +98,7 @@ local function system_open(filepath)
 end
 
 M.n_jump_cWORD = function() jump(vim.fn.expand('<cWORD>')) end
-M.v_jump_selected = function() jump(visual_selected(), true) end
+M.v_jump_selected = function() jump(visual_selected()) end
 M.v_system_open_selected = function() system_open(visual_selected()) end
 
 return M

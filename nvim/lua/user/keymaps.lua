@@ -229,6 +229,12 @@ local keymaps = {
   {'n', '<F1>', '<Nop>', opt},
   {'i', '<F1>', '<Nop>', opt},
 
+  --- filepath jump to file
+  --- VISUAL 选中的 filepath, 不管在什么 filetype 中都跳转.
+  --- VVI: 这里需要使用 <CTRL-C> 先退出 VISUAL mode.
+  {'v', '<S-CR>', '<C-c><cmd>lua require("user.utils.filepath").v_jump()<CR>', opt, 'filepath: Jump to file'},
+  {'v', '<C-S-CR>', '<C-c><cmd>lua require("user.utils.filepath").v_system_open()<CR>', opt, 'filepath: System Open file'},
+
   --- ` 和 ' 默认都是 `:help marks`, 这里禁止使用 ` 因为有时候 ` 需要作为 <leader>.
   {'n', '`', '<Nop>', opt},
 
