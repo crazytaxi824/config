@@ -116,7 +116,7 @@ local function jump(content, ignore_matchstr)
     return
   end
 
-  local absolute_path = vim.fs.normalize(filepath)
+  local absolute_path = vim.fn.fnamemodify(filepath, ":p")
 
   if vim.fn.filereadable(absolute_path) == 1 then  -- 是 file
     jump_to_file(absolute_path, lnum, col)
