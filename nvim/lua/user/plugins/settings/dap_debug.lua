@@ -306,15 +306,7 @@ local fp = require('user.utils.filepath')
 vim.api.nvim_create_autocmd("FileType", {
   pattern = {"dap-repl"},
   callback = function(params)
-    vim.keymap.set('n', '<S-CR>',
-      function() fp.n_jump(vim.fn.expand('<cWORD>')) end,
-      {
-        noremap = true,
-        silent = true,
-        buffer = params.buf,  -- local to buffer
-        desc = "Jump to file",
-      }
-    )
+    fp.setup(params.buf)
   end,
   desc = "dap: keymap for jump_to_file",
 })
