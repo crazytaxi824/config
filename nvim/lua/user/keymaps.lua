@@ -139,7 +139,7 @@ local keymaps = {
   {'n', '/', "<cmd>lua require('user.utils.keymaps').hl_search.delete()<CR>/", {noremap=true}, 'which_key_ignore'},
 
   --- CTRL -----------------------------------------------------------------------------------------
-  --- 可以使用的 Ctrl keymap --- {{{
+  --- 可以使用的 Ctrl keymap ----------------------------------------------------------------------- {{{
   --- <C-q> 容易退出程序, 不要使用. 默认 Visual-Block mode
   --- <C-s> = remap save file.
   --- <C-z> = remap undo, 默认 ":stop" 中止 job.

@@ -50,30 +50,30 @@ end
 
 --- 根据 regexp 删除文件行内容.
 local function trim_prefix_blankline(filepath, regexp)
-  --- lua read file --- {{{
-  -- local f, err = io.open(filepath, 'r')  -- read mode
-  -- if err then
-  --   Notify(err, "ERROR")
-  --   return
-  -- end
-  --
-  -- if not f then
-  --   Notify("lsp.log file handler is nil", "ERROR")
-  --   return
-  -- end
-  --
-  -- --- 过滤 [START]xxx 内容.
-  -- local new_content = {}
-  -- local content = f:read("l")
-  -- while content do
-  --   -- print(content)
-  --   if not string.match(content, regexp) then
-  --     table.insert(new_content, content)
-  --   end
-  --   content = f:read("l") -- 重新赋值, 否则无限循环
-  -- end
-  -- f:close()
-  -- --vim.print(new_content)
+  --- lua read file ------------------------------------------------------------ {{{
+  --- local f, err = io.open(filepath, 'r')  -- read mode
+  --- if err then
+  ---   Notify(err, "ERROR")
+  ---   return
+  --- end
+  ---
+  --- if not f then
+  ---   Notify("lsp.log file handler is nil", "ERROR")
+  ---   return
+  --- end
+  ---
+  --- --- 过滤 [START]xxx 内容.
+  --- local new_content = {}
+  --- local content = f:read("l")
+  --- while content do
+  ---   -- print(content)
+  ---   if not string.match(content, regexp) then
+  ---     table.insert(new_content, content)
+  ---   end
+  ---   content = f:read("l") -- 重新赋值, 否则无限循环
+  --- end
+  --- f:close()
+  --- --vim.print(new_content)
   -- -- }}}
   --- Read File
   local content_list = vim.fn.readfile(filepath)
@@ -91,27 +91,27 @@ local function trim_prefix_blankline(filepath, regexp)
   --- 判断是否需要 writefile()
   if trim then
     --- Write File
-    --- lua write file --- {{{
-    -- f, err = io.open(filepath, 'w+')  -- write mode, truncate content.
-    -- if err then
-    --   Notify(err, "ERROR")
-    --   return
-    -- end
-    --
-    -- if not f then
-    --   Notify("lsp.log file handler is nil", "ERROR")
-    --   return
-    -- end
-    --
-    -- --- 写入文件
-    -- _, err = f:write(table.concat(new_content, '\n'))
-    -- if err then
-    --   Notify(err, "ERROR")
-    --   return
-    -- end
-    --
-    -- --f:flush()  --- save to file
-    -- f:close()
+    --- lua write file --------------------------------------------------------- {{{
+    --- f, err = io.open(filepath, 'w+')  -- write mode, truncate content.
+    --- if err then
+    ---   Notify(err, "ERROR")
+    ---   return
+    --- end
+    ---
+    --- if not f then
+    ---   Notify("lsp.log file handler is nil", "ERROR")
+    ---   return
+    --- end
+    ---
+    --- --- 写入文件
+    --- _, err = f:write(table.concat(new_content, '\n'))
+    --- if err then
+    ---   Notify(err, "ERROR")
+    ---   return
+    --- end
+    ---
+    --- --f:flush()  --- save to file
+    --- f:close()
     -- -- }}}
     vim.fn.writefile(content_list, filepath)  -- flag: omit - 直接覆盖写入, 'a' - append 写入.
     --- ":checktime" 在下面统一执行.

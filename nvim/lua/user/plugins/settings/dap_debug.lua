@@ -1,22 +1,22 @@
 --- https://github.com/mfussenegger/nvim-dap
---- README: repl / debug console command --- {{{
---    .exit               Closes the REPL
---    .clear              clear dap-repl buffer 内容
---    .c or .continue     Same as |dap.continue|
---    .n or .next         Same as |dap.step_over|
---    .into               Same as |dap.step_into|
---    .into_target        Same as |dap.step_into{askForTargets=true}|
---    .out                Same as |dap.step_out|
---    .up                 Same as |dap.up|
---    .down               Same as |dap.down|
---    .goto               Same as |dap.goto_|
---    .scopes             Prints the variables in the current scopes
---    .threads            Prints all threads
---    .frames             Print the stack frames
---    .capabilities       Print the capabilities of the debug adapter
---    .b or .back         Same as |dap.step_back|
---    .rc or
---    .reverse-continue   Same as |dap.reverse_continue|
+--- README: repl / debug console command --------------------------------------- {{{
+---    .exit               Closes the REPL
+---    .clear              clear dap-repl buffer 内容
+---    .c or .continue     Same as |dap.continue|
+---    .n or .next         Same as |dap.step_over|
+---    .into               Same as |dap.step_into|
+---    .into_target        Same as |dap.step_into{askForTargets=true}|
+---    .out                Same as |dap.step_out|
+---    .up                 Same as |dap.up|
+---    .down               Same as |dap.down|
+---    .goto               Same as |dap.goto_|
+---    .scopes             Prints the variables in the current scopes
+---    .threads            Prints all threads
+---    .frames             Print the stack frames
+---    .capabilities       Print the capabilities of the debug adapter
+---    .b or .back         Same as |dap.step_back|
+---    .rc or
+---    .reverse-continue   Same as |dap.reverse_continue|
 -- -- }}}
 
 --- `:help dap.txt`
@@ -34,17 +34,17 @@ end
 --- Defaults to `INFO`, 打印到 'stdpath('cache') .. dap.log'
 dap.set_log_level('WARN')
 
---- Some variables are supported --- {{{
---   "${port}": nvim-dap resolves a free port.
---   "${file}": Active filename
---   "${fileBasename}": The current file's basename
---   "${fileBasenameNoExtension}": The current file's basename without extension
---   "${fileDirname}": The current file's dirname
---   "${fileExtname}": The current file's extension
---   "${relativeFile}": The current file relative to |getcwd()|
---   "${relativeFileDirname}": The current file's dirname relative to |getcwd()|
---   "${workspaceFolder}": The current working directory of Neovim
---   "${workspaceFolderBasename}": The name of the folder opened in Neovim
+--- Some variables are supported ----------------------------------------------- {{{
+---   "${port}": nvim-dap resolves a free port.
+---   "${file}": Active filename
+---   "${fileBasename}": The current file's basename
+---   "${fileBasenameNoExtension}": The current file's basename without extension
+---   "${fileDirname}": The current file's dirname
+---   "${fileExtname}": The current file's extension
+---   "${relativeFile}": The current file relative to |getcwd()|
+---   "${relativeFileDirname}": The current file's dirname relative to |getcwd()|
+---   "${workspaceFolder}": The current working directory of Neovim
+---   "${workspaceFolderBasename}": The name of the folder opened in Neovim
 -- -- }}}
 --- golang debug settings --------------------------------------------------------------------------
 --- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#go-using-delve-directly
@@ -77,16 +77,16 @@ dap.configurations.go = {
 --- NOTE: put Other Debug adapters & configurations settings here ---
 
 --- highlight && sign setting ---------------------------------------------------------------------- {{{
--- `DapBreakpoint` for breakpoints (default: `B`)
--- `DapBreakpointCondition` for conditional breakpoints (default: `C`)
--- `DapLogPoint` for log points (default: `L`)
--- `DapStopped` to indicate where the debugee is stopped (default: `→`)
--- `DapBreakpointRejected` to indicate breakpoints rejected by the debug adapter (default: `R`)
--- vim.cmd([[
---   hi DapBreakpointHL ctermfg=191
---   hi DapBreakpointRejectedHL ctermfg=191
---   hi DapStoppedHL ctermfg=75
---   hi DapStoppedLineHL ctermbg=238
+--- `DapBreakpoint` for breakpoints (default: `B`)
+--- `DapBreakpointCondition` for conditional breakpoints (default: `C`)
+--- `DapLogPoint` for log points (default: `L`)
+--- `DapStopped` to indicate where the debugee is stopped (default: `→`)
+--- `DapBreakpointRejected` to indicate breakpoints rejected by the debug adapter (default: `R`)
+--- vim.cmd([[
+---   hi DapBreakpointHL ctermfg=191
+---   hi DapBreakpointRejectedHL ctermfg=191
+---   hi DapStoppedHL ctermfg=75
+---   hi DapStoppedLineHL ctermbg=238
 -- ]])
 vim.api.nvim_set_hl(0, 'DapBreakpointHL', { ctermfg = Color.yellow })
 vim.api.nvim_set_hl(0, 'DapBreakpointRejectedHL', { ctermfg = Color.yellow })
@@ -234,7 +234,7 @@ dap.listeners.after.event_initialized["dapui_config"] = function()
   dapui.open()  -- will open dap-ui layouts in new tab.
 end
 
---- other hook events --- {{{
+--- other hook events ---------------------------------------------------------- {{{
 --- debug job done 之前 close debug tab, dap-repl, dap-ui windows
 --- NOTE: 不要自动关闭, 使用自定义函数手动关闭.
 -- dap.listeners.before.event_terminated["dapui_config"] = function()
@@ -252,36 +252,34 @@ end
 -- --}}}
 
 --- keymaps ----------------------------------------------------------------------------------------
---- dap 可用方法, `:help dap-api` --- {{{
---   dap.run({config})
---   dap.run_last()  -- NOTE: run_last() 时, 当前 ('%') buffer 必须是之前运行 debug 时的 buffer.
---   dap.launch({adapter}, {config})
---   dap.terminate(terminate_opts, disconnect_opts, callback)
---
---   dap.set_breakpoint({condition}, {hit_condition}, {log_message})
---   dap.toggle_breakpoint({condition}, {hit_condition}, {log_message})
---   dap.clear_breakpoints()
---
---   dap.step_over([{opts}])
---   dap.step_into([{opts}])
---   dap.step_out([{opts}])
---   dap.pause({thread_id})
---   dap.run_to_cursor()
---
---   dap.session()
---   dap.status()
+--- dap 可用方法, `:help dap-api` ---------------------------------------------- {{{
+---   dap.run({config})
+---   dap.run_last()  -- NOTE: run_last() 时, 当前 ('%') buffer 必须是之前运行 debug 时的 buffer.
+---   dap.launch({adapter}, {config})
+---   dap.terminate(terminate_opts, disconnect_opts, callback)
+---
+---   dap.set_breakpoint({condition}, {hit_condition}, {log_message})
+---   dap.toggle_breakpoint({condition}, {hit_condition}, {log_message})
+---   dap.clear_breakpoints()
+---
+---   dap.step_over([{opts}])
+---   dap.step_into([{opts}])
+---   dap.step_out([{opts}])
+---   dap.pause({thread_id})
+---   dap.run_to_cursor()
+---
+---   dap.session()
+---   dap.status()
 -- -- }}}
---- dap-ui 可用方法, `:help nvim-dap-ui` --- {{{
+--- dap-ui 可用方法, `:help nvim-dap-ui` --------------------------------------- {{{
 --- debug window 控制.
---   dapui.open()
---   dapui.close()
---   dapui.toggle()
---
+---   dapui.open()
+---   dapui.close()
+---   dapui.toggle()
 --- 在 float window 中显示 element. eg: scopes, watches, breakpoints, stacks, repl
---   dapui.float_element({elem_name}, {settings})
---
+---   dapui.float_element({elem_name}, {settings})
 --- 获取 var value under cursor. {expr} = nil 时, 使用 <cword>.
---   dapui.eval({expr}, {settings})
+---   dapui.eval({expr}, {settings})
 -- -- }}}
 local opt = { noremap = true, silent = true }
 local debug_keymaps = {

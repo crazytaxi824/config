@@ -51,15 +51,15 @@ indent_blankline.setup({
   --show_current_context_start = true,  -- 在 indentLine 起始行添加 Underline.
   --show_current_context_start_on_current_line = true,  -- even when the cursor is on the same line.
 
-  --- NOTE: 加载下面定义的颜色设置, too colorful --- {{{
-  --char_highlight_list = {
-  -- "IndentBlanklineIndent1",
-  -- "IndentBlanklineIndent2",
-  -- "IndentBlanklineIndent3",
-  -- "IndentBlanklineIndent4",
-  -- "IndentBlanklineIndent5",
-  -- "IndentBlanklineIndent6",
-  --},
+  --- NOTE: 加载下面定义的颜色设置, too colorful ------------------------------- {{{
+  ---char_highlight_list = {
+  --- "IndentBlanklineIndent1",
+  --- "IndentBlanklineIndent2",
+  --- "IndentBlanklineIndent3",
+  --- "IndentBlanklineIndent4",
+  --- "IndentBlanklineIndent5",
+  --- "IndentBlanklineIndent6",
+  ---},
   -- -- }}}
 })
 

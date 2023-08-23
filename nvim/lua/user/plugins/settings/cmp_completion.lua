@@ -11,7 +11,7 @@ end
 
 --- "hrsh7th/nvim-cmp" 主要设置 --------------------------------------------------------------------
 --- NOTE: find more here: https://www.nerdfonts.com/cheat-sheet
-local kind_icon_txt = {  --- {{{
+local kind_icon_txt = {  --------------------------------------------------------------------------- {{{
   Text = "txt",
   Module = "module",     -- import
   Method = "fn",
@@ -67,7 +67,7 @@ cmp.setup {
     { name = "nvim_lsp", group_index = 1 },  -- "hrsh7th/cmp-nvim-lsp"
     { name = "buffer",   group_index = 1, max_item_count = 6 }, -- "hrsh7th/cmp-buffer", 最多显示 n 条.
     { name = "path",     group_index = 1 },  -- "hrsh7th/cmp-path"
-    --- NOTE: other snippets engine --- {{{
+    --- NOTE: other snippets engine -------------------------------------------- {{{
     --{ name = 'vsnip' },      -- For vsnip users      -- "hrsh7th/vim-vsnip" vim-script
     --{ name = 'luasnip' },    -- For luasnip users    -- "L3MON4D3/LuaSnip" lua
     --{ name = 'snippy' },     -- For snippy users     -- "dcampos/nvim-snippy" lua
@@ -169,7 +169,7 @@ cmp.setup {
 
 --- NOTE: command line completion, 分开设置. 因为不能使用自定义 key mapping.
 ---       不要设置 command line completion, keymap 不好用.
---- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore). --- {{{
+--- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore). ----- {{{
 -- cmp.setup.cmdline(':', {
 --   mapping = cmp.mapping.preset.cmdline(),
 --   sources = cmp.config.sources({
@@ -181,7 +181,7 @@ cmp.setup {
 -- -- }}}
 
 --- Cmp completion menu color ---------------------------------------------------------------------- {{{
--- https://github.com/hrsh7th/nvim-cmp/wiki/Menu-Appearance
+--- https://github.com/hrsh7th/nvim-cmp/wiki/Menu-Appearance
 
 --- 匹配文字的颜色
 vim.api.nvim_set_hl(0, 'CmpItemAbbrMatch', {ctermfg = Color.magenta})

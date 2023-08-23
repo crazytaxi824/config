@@ -19,7 +19,7 @@ local code_actions = null_ls.builtins.code_actions
 --- diagnostics_opts 用于下面的 sources diagnostics 设置
 local diagnostics_opts = {
   --- 只在 save 的时候执行 diagnostics.
-  --- 其他 methods --- {{{
+  --- 其他 methods ------------------------------------------------------------- {{{
   --- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/master/lua/null-ls/methods.lua
   -- local internal_methods = {
   --     --- for code_actions
@@ -102,7 +102,7 @@ M.local_code_actions_key = "code_actions"
 --- 而调用函数返回 table 的好处是: 每次执行函数时 table 中的内容都会重新生成.
 M.sources =  {
   [M.local_linter_key] = {
-    --- golangci-lint 配置文件位置自动查找 --- {{{
+    --- golangci-lint 配置文件位置自动查找 ------------------------------------- {{{
     --- DOC: https://golangci-lint.run/usage/configuration/#linters-configuration
     --- golangci-lint 会自动寻找 '.golangci.yml', '.golangci.yaml', '.golangci.toml', '.golangci.json'.
     --- GolangCI-Lint also searches for config files in all directories from the directory of
@@ -114,7 +114,7 @@ M.sources =  {
         diagnostics_opts))
     end,
 
-    --- eslint 分别对不同的 filetype 做不同的设置. --- {{{
+    --- eslint 分别对不同的 filetype 做不同的设置. ----------------------------- {{{
     --- eslint 运行必须有配置文件, 如果没有配置文件则 eslint 运行错误.
     --- VVI: eslint 运行所需的插件下载时会生成 package.json 文件, package.json 文件必须和 .eslintrc.* 文件在同一个文件夹中.
     --- 否则 eslint 无法找到运行所需的插件.

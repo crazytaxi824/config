@@ -18,13 +18,13 @@ ts_configs.setup {
   --- 白名单, ts 启动时自动安装, "all" OR a list of languages.
   --- NOTE: 推荐使用黑名单 (ignore_install), 因为某些语言有多个 parsers, 使用白名单时可能导致遗漏.
   ensure_installed = "all",
-  -- ensure_installed = {  --- {{{
-  --   "vim", "vimdoc", "query", "lua",  -- for neovim itself
-  --   "javascript", "typescript", "tsx", "html", "css", "scss",
-  --   "python", "go",
-  --   "markdown", "markdown_inline", "latex",
-  --   "toml", "yaml", "json", "jsonc",
-  -- },
+  --- ensure_installed = {  ---------------------------------------------------- {{{
+  ---   "vim", "vimdoc", "query", "lua",  -- for neovim itself
+  ---   "javascript", "typescript", "tsx", "html", "css", "scss",
+  ---   "python", "go",
+  ---   "markdown", "markdown_inline", "latex",
+  ---   "toml", "yaml", "json", "jsonc",
+  --- },
   -- -- }}}
 
   --- 黑名单, ts 启动时不安装. list 中的 lang 在 :TSUpdate & :TSInstall 时安装速度太慢.
@@ -73,21 +73,21 @@ ts_configs.setup {
   },
 
   --- 作用不大.
-  -- incremental_selection = {
-  --   enable = true,
-  --   keymaps = {
-  --     init_selection = "gnn",
-  --     node_incremental = "grn",
-  --     scope_incremental = "grc",
-  --     node_decremental = "grm",
-  --   },
-  -- },
+  --- incremental_selection = {
+  ---   enable = true,
+  ---   keymaps = {
+  ---     init_selection = "gnn",
+  ---     node_incremental = "grn",
+  ---     scope_incremental = "grc",
+  ---     node_decremental = "grm",
+  ---   },
+  --- },
 
   --- NOTE: This is an experimental feature. 使用 'indent_blankline' 代替.
-  -- indent = {
-  --   enable = true,
-  --   disable = { "yaml" },  -- 不要自动给 yaml 进行 indent.
-  -- },
+  --- indent = {
+  ---   enable = true,
+  ---   disable = { "yaml" },  -- 不要自动给 yaml 进行 indent.
+  --- },
 
   --- 启用第三方插件 modules 设置 ------------------------------------------------------------------
   --- "JoosepAlviste/nvim-ts-context-commentstring"
@@ -113,39 +113,39 @@ ts_configs.setup {
     disable = {},
     updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
     persist_queries = false, -- Whether the query persists across vim sessions
-    --keybindings = {  -- {{{
-    --  toggle_query_editor = 'o',
-    --  toggle_hl_groups = 'i',
-    --  toggle_injected_languages = 't',
-    --  toggle_anonymous_nodes = 'a',
-    --  toggle_language_display = 'I',
-    --  focus_language = 'f',
-    --  unfocus_language = 'F',
-    --  update = 'R',
-    --  goto_node = '<cr>',
-    --  show_help = '?',
-    --},
+    ---keybindings = {  -------------------------------------------------------- {{{
+    ---  toggle_query_editor = 'o',
+    ---  toggle_hl_groups = 'i',
+    ---  toggle_injected_languages = 't',
+    ---  toggle_anonymous_nodes = 'a',
+    ---  toggle_language_display = 'I',
+    ---  focus_language = 'f',
+    ---  unfocus_language = 'F',
+    ---  update = 'R',
+    ---  goto_node = '<cr>',
+    ---  show_help = '?',
+    ---},
     -- -- }}}
   },
 
   --- "p00f/nvim-ts-rainbow"
-  -- rainbow = {
-  --   enable = false,  -- VVI: 严重拖慢文件打开速度, 不建议开启.
-  --   disable = { "cpp", "go" },  -- list of languages you want to disable the plugin for
-  --   extended_mode = false,  -- Also highlight non-bracket delimiters like html tags,
-  --                           -- boolean or table: {lang = boolean}
-  --   max_file_lines = 999, -- Do not enable for files with more than n lines, int
-  -- },
+  --- rainbow = {
+  ---   enable = false,  -- VVI: 严重拖慢文件打开速度, 不建议开启.
+  ---   disable = { "cpp", "go" },  -- list of languages you want to disable the plugin for
+  ---   extended_mode = false,  -- Also highlight non-bracket delimiters like html tags,
+  ---                           -- boolean or table: {lang = boolean}
+  ---   max_file_lines = 999, -- Do not enable for files with more than n lines, int
+  --- },
 }
 
 --- `nvim-ts-rainbow` color settings --------------------------------------------------------------- {{{
---vim.cmd [[hi rainbowcol1 ctermfg=220]]  -- yellow
---vim.cmd [[hi rainbowcol2 ctermfg=33]]   -- blue
---vim.cmd [[hi rainbowcol3 ctermfg=81]]   -- cyan
---vim.cmd [[hi rainbowcol4 ctermfg=206]]  -- magenta
---vim.cmd [[hi rainbowcol5 ctermfg=42]]   -- green
---vim.cmd [[hi rainbowcol6 ctermfg=167]]  -- red
---vim.cmd [[hi rainbowcol7 ctermfg=248]]  -- grey
+---vim.cmd [[hi rainbowcol1 ctermfg=220]]  -- yellow
+---vim.cmd [[hi rainbowcol2 ctermfg=33]]   -- blue
+---vim.cmd [[hi rainbowcol3 ctermfg=81]]   -- cyan
+---vim.cmd [[hi rainbowcol4 ctermfg=206]]  -- magenta
+---vim.cmd [[hi rainbowcol5 ctermfg=42]]   -- green
+---vim.cmd [[hi rainbowcol6 ctermfg=167]]  -- red
+---vim.cmd [[hi rainbowcol7 ctermfg=248]]  -- grey
 -- -- }}}
 
 --- prompt before install missing parser for languages --------------------------------------------- {{{

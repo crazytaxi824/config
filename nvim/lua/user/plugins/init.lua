@@ -61,7 +61,7 @@ local plugins = {
   },
 
   --- Treesitter -----------------------------------------------------------------------------------
-  --- Commands for "nvim-treesitter/nvim-treesitter" --- {{{
+  --- Commands for "nvim-treesitter/nvim-treesitter" ----------------------------------------------- {{{
   --- `:help nvim-treesitter-commands`
   --- `:TSInstallInfo`        -- List all installed languages
   --- `:TSInstall {lang}`     -- Install languages
@@ -365,7 +365,7 @@ local opts = {
   defaults = {
     lazy = false, -- should plugins be lazy-loaded?
   },
-  ui = {  --- {{{
+  ui = {  ---------------------------------------------------------------------- {{{
     size = { width = 0.7, height = 0.9 },
     border = {"▄","▄","▄","█","▀","▀","▀","█"},
     icons = {

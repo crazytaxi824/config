@@ -373,7 +373,7 @@ lualine.setup {
 
   --- You can use lualine to display components in tabline. The configuration for
   --- tabline sections is exactly the same as that of the statusline(sections).
-  --- tabline, winbar --- {{{
+  --- tabline, winbar ------------------------------------------------------------------------------ {{{
   -- tabline = {
   --   lualine_a = {'buffers'},
   --   lualine_b = {'branch'},

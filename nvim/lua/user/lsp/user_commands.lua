@@ -3,7 +3,7 @@
 --- `:GetLspClientsInfo 0` 表示当前 buffer 的 attached lsp
 vim.api.nvim_create_user_command("GetLspClientsInfo",
   function(params)
-    --- opt 是 command 传入的 nargs 参数 --- {{{
+    --- opt 是 command 传入的 nargs 参数 --------------------------------------- {{{
     -- {
     --   args = "0 1 2",
     --   bang = false,

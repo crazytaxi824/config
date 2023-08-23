@@ -84,7 +84,7 @@ telescope.setup {
     --- `:help telescope.actions`  -- 查看可用 actions
     --- https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/mappings.lua
     --- https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/actions/init.lua
-    mappings = {  --- {{{
+    mappings = {  -------------------------------------------------------------- {{{
       i = {
         ["<CR>"] = my_action.edit_or_qf,
         ["<C-e>"] = my_action.edit_or_qf,
@@ -165,7 +165,7 @@ telescope.setup {
   pickers = {
     --- `:help telescope.builtin`, 这里可以修改默认 picker 的属性
     find_files = {
-      --- fd 使用说明 --- {{{
+      --- fd 使用说明 ---------------------------------------------------------- {{{
       -- NOTE: 这里没有使用 --type=f/d/l/..., 这里是参照 ~/.zshrc 中的 FZF_DEFAULT_COMMAND
       -- -E=.git                  不显示名为 .git 的文件(夹)
       -- -E=**/.*/**              显示隐藏文件夹, 但不列出其中的文件.
@@ -258,7 +258,7 @@ local function my_rg_picker(additional_args)
   }):find()
 end
 
---- Rg command 使用方法 --- {{{
+--- Rg command 使用方法 -------------------------------------------------------- {{{
 --- 例子: 如果要使用正则表达式, 则需要使用 '' OR "" OR \(escape), 否则报错 zsh: no matches found.
 ---   Rg foo\ bar == Rg 'foo bar' == Rg "foo bar" == Rg foo\ bar ./         # 在当前文件夹搜索
 ---   Rg 'foo.*bar' == Rg "foo.*bar" == Rg foo.\*bar == Rg 'foo.*bar' ./    # 同上

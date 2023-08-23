@@ -539,7 +539,7 @@ bufferline.setup({
     --   reveal = {'close'}
     -- },
 
-    --- NOTE: this will be called a lot so don't do any heavy processing here --- {{{
+    --- NOTE: this will be called a lot so don't do any heavy processing here -- {{{
     -- custom_filter = function(buf_number, buf_numbers)
     --   --- NOTE: filter out filetypes you don't want to see
     --   if vim.bo[buf_number].filetype ~= "<i-dont-want-to-see-this>" then

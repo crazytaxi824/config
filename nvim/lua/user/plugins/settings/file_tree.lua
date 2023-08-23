@@ -54,12 +54,12 @@ local diagnostics_icons = {
 -- -- }}}
 
 --- nvim-tree keymaps ------------------------------------------------------------------------------ {{{
---- git: Discard file changes --- {{{
+--- git: Discard file changes -------------------------------------------------- {{{
 local function git_discard_file_changes()
   local node = nt_api.tree.get_node_under_cursor()
   --vim.print(node.name, node.absolute_path, node.git_status, node.type)
 
-  --- READMD: node.name: filename, not prefix path --- {{{
+  --- READMD: node.name: filename, not prefix path --------- {{{
   --- node.absolute_path
   --- node.type = 'file' | 'directory'
   ---
@@ -177,7 +177,7 @@ local function git_discard_file_changes()
 end
 -- -- }}}
 
---- compare two marked files, using `:vert diffsplit <filename>` --- {{{
+--- compare two marked files, using `:vert diffsplit <filename>` --------------- {{{
 local function compare_two_marked_files()
   local marks_list = nt_api.marks.list()  -- 获取 mark 的 nodes
   if #marks_list ~= 2 then
@@ -190,7 +190,7 @@ local function compare_two_marked_files()
 end
 -- -- }}}
 
---- system open file --- {{{
+--- system open file ----------------------------------------------------------- {{{
 local function system_open()
   local node = nt_api.tree.get_node_under_cursor()
 
@@ -215,7 +215,7 @@ local function system_open()
 end
 -- -- }}}
 
---- go back to pwd --- {{{
+--- go back to pwd ------------------------------------------------------------- {{{
 local pwd = vim.fn.getcwd()  -- cache pwd
 local function back_to_pwd()
   nt_api.tree.change_root(pwd)
@@ -311,17 +311,17 @@ nvim_tree.setup {
   sync_root_with_cwd = false,  -- Changes the tree root directory on `DirChanged` and refreshes the tree.
 
   view = {
-    -- float = {  -- 在 floating window 中打开 nvim-tree.  --- {{{
-    --   enable = true,
-    --   open_win_config = {
-    --     relative = "editor",
-    --     border = "rounded",
-    --     width = 30,
-    --     height = 30,
-    --     row = 1,
-    --     col = 1,
-    --   },
-    -- },
+    --- float = {  -- 在 floating window 中打开 nvim-tree ---------------------- {{{
+    ---   enable = true,
+    ---   open_win_config = {
+    ---     relative = "editor",
+    ---     border = "rounded",
+    ---     width = 30,
+    ---     height = 30,
+    ---     row = 1,
+    ---     col = 1,
+    ---   },
+    --- },
     -- -- }}}
     side = "left", -- left / right
     width = 36,    -- OR "25%"
@@ -487,17 +487,17 @@ vim.api.nvim_set_hl(0, 'NvimTreeGitIgnored', {ctermfg=244})
 --- git filename color, 默认是 link 上面 git icon color.
 vim.cmd('hi! default link NvimTreeFileDirty  NvimTreeGitStaged')  -- hi! default link 在 hi clear 时回到该设置.
 vim.cmd('hi! default link NvimTreeFileNew    NvimTreeGitStaged')
--- vim.cmd('hi! default link NvimTreeFileStaged NvimTreeGitStaged')
--- vim.cmd('hi! default link NvimTreeFileMerge   NvimTreeGitMerge')
--- vim.cmd('hi! default link NvimTreeFileRenamed NvimTreeGitRenamed')
--- vim.cmd('hi! default link NvimTreeFileDeleted NvimTreeGitDeleted')
--- vim.cmd('hi! default link NvimTreeFileIgnored NvimTreeGitIgnored')
+--- vim.cmd('hi! default link NvimTreeFileStaged NvimTreeGitStaged')
+--- vim.cmd('hi! default link NvimTreeFileMerge   NvimTreeGitMerge')
+--- vim.cmd('hi! default link NvimTreeFileRenamed NvimTreeGitRenamed')
+--- vim.cmd('hi! default link NvimTreeFileDeleted NvimTreeGitDeleted')
+--- vim.cmd('hi! default link NvimTreeFileIgnored NvimTreeGitIgnored')
 
 --- diagnostic icons highlight.
--- NvimTreeLspDiagnosticsError         -- 默认 DiagnosticError
--- NvimTreeLspDiagnosticsWarning       -- 默认 DiagnosticWarn
--- NvimTreeLspDiagnosticsInformation   -- 默认 DiagnosticInfo
--- NvimTreeLspDiagnosticsHint          -- 默认 DiagnosticHint
+--- NvimTreeLspDiagnosticsError         -- 默认 DiagnosticError
+--- NvimTreeLspDiagnosticsWarning       -- 默认 DiagnosticWarn
+--- NvimTreeLspDiagnosticsInformation   -- 默认 DiagnosticInfo
+--- NvimTreeLspDiagnosticsHint          -- 默认 DiagnosticHint
 
 -- -- }}}
 
@@ -533,7 +533,7 @@ local function git_file_icons_and_highlight_remove()
   vim.api.nvim_set_hl(0, 'NvimTreeFileDeleted', {link = 'NONE'})
   vim.api.nvim_set_hl(0, 'NvimTreeFileIgnored', {link = 'NONE'})
 
-  --- 启用 special_file & exe_file & symlink_file color --- {{{
+  --- 启用 special_file & exe_file & symlink_file color ------------------------ {{{
   -- vim.cmd('hi NvimTreeSymlink ctermfg=207')      -- 链接文件, magenta
   -- vim.cmd('hi NvimTreeExecFile ctermfg=167')     -- 可执行文件, red
   -- vim.cmd('hi NvimTreeSpecialFile ctermfg=179')  -- 自定义 Sepcial 文件, orange
@@ -563,10 +563,10 @@ local function git_file_icons_and_highlight_enable()
   vim.cmd('hi clear NvimTreeFileDeleted')
   vim.cmd('hi clear NvimTreeFileIgnored')
 
-  --- 清除 special_file & exe_file & symlink_file color --- {{{
-  -- vim.cmd('hi! link NvimTreeSymlink Normal')
-  -- vim.cmd('hi! link NvimTreeExecFile Normal')
-  -- vim.cmd('hi! link NvimTreeSpecialFile Normal')
+  --- 清除 special_file & exe_file & symlink_file color ------------------------ {{{
+  --- vim.cmd('hi! link NvimTreeSymlink Normal')
+  --- vim.cmd('hi! link NvimTreeExecFile Normal')
+  --- vim.cmd('hi! link NvimTreeSpecialFile Normal')
   -- -- }}}
 
   nt_api.tree.reload()  -- refresh tree
@@ -612,23 +612,22 @@ require('user.utils.keymaps').set(gitsigns_keymaps, {
 --- Event Hooks, `:help nvim-tree-events` ---------------------------------------------------------- {{{
 --- FolderCreated 在创建 folder 和 file 时都会触发.
 --- FileCreated 只在创建 file 时会触发.
--- local Event = nt_api.events.Event
--- nt_api.events.subscribe(Event.FolderCreated, function(data)
---   vim.print('folder add:', data)
--- end)
---
--- nt_api.events.subscribe(Event.FolderRemoved, function(data)
---   vim.print('folder remove:', data)
--- end)
---
--- nt_api.events.subscribe(Event.FileCreated, function(data)
---   vim.print('file add:', data)
--- end)
---
--- nt_api.events.subscribe(Event.FileRemoved, function(data)
---   vim.print('file remove:', data)
--- end)
-
+--- local Event = nt_api.events.Event
+--- nt_api.events.subscribe(Event.FolderCreated, function(data)
+---   vim.print('folder add:', data)
+--- end)
+---
+--- nt_api.events.subscribe(Event.FolderRemoved, function(data)
+---   vim.print('folder remove:', data)
+--- end)
+---
+--- nt_api.events.subscribe(Event.FileCreated, function(data)
+---   vim.print('file add:', data)
+--- end)
+---
+--- nt_api.events.subscribe(Event.FileRemoved, function(data)
+---   vim.print('file remove:', data)
+--- end)
 -- -- }}}
 
 

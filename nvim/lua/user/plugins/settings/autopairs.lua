@@ -5,7 +5,7 @@ if not autopairs_status_ok then
 end
 
 autopairs.setup {
-  --- treesitter 功能 --- {{{
+  --- treesitter 功能 ---------------------------------------------------------- {{{
   check_ts = false,  -- check treesitter, NOTE: 没有太大作用.
   -- ts_config = {     -- treesitter 排除规则
   --   -- NOTE: treesitter node 可以通过 `:TSPlaygroundToggle` 查看.
@@ -34,7 +34,7 @@ autopairs.setup {
 }
 
 --- NOTE: 设置 rules 规则, https://github.com/windwp/nvim-autopairs#rule
---- examples --- {{{
+--- examples ------------------------------------------------------------------- {{{
 --autopairs.get_rule('('):with_pair(...)  -- 获取 rule, 用于修改默认值.
 --autopairs.add_rule(Rule('<','>'))  -- 添加 rules 给所有 filetype.
 --autopairs.add_rule(Rule('<','>',"javascript"))   -- 添加 rules 给指定 filetype.

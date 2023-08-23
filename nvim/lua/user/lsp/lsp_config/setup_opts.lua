@@ -45,7 +45,7 @@ end
 --- 这里是为了能单独给 project 设置 LSP setting.
 --- init() runs Before attach().
 
---- .nvim/settings.lua 中的 local 设置. --- {{{
+--- .nvim/settings.lua 中的 local 设置. ------------------------------------------------------------ {{{
 -- return {
 --   lsp = {
 --     gopls = {

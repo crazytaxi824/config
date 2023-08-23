@@ -1,5 +1,5 @@
 --- 获取 cursor treesitter node --------------------------------------------------------------------
---- treesitter api 使用方法 --- {{{
+--- treesitter api 使用方法 ------------------------------------------------------------------------ {{{
 -- `:help nvim-treesitter`
 --    node = ts_utils.get_node_at_cursor()  -- 获取 node at cursor.
 --

@@ -3,7 +3,7 @@ if not status_ok then
   return
 end
 
---- Shift + Ctrl + fn key Rename --- {{{
+--- Shift + Ctrl + fn key Rename ------------------------------------------------------------------- {{{
 local function fn_key_rename()
   local fn_keys = {}
 
@@ -18,7 +18,7 @@ local function fn_key_rename()
 end
 -- -- }}}
 
---- setup ---
+--- setup ------------------------------------------------------------------------------------------
 which_key.setup({
   plugins = {
     marks = false,     -- shows a list of your marks on ' and `

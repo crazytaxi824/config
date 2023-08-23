@@ -4,7 +4,7 @@ return {
   --command = "path/to/golangci-lint",
 
   --- VVI: 执行 golangci-lint 的 pwd. 默认是 params.root 即: null_ls.setup() 中的 root_dir / $ROOT
-  --- params 回调参数 --- {{{
+  --- params 回调参数 ---------------------------------------------------------- {{{
   --- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/MAIN.md#generators
   --    content,    -- current buffer content (table, split at newline)
   --    lsp_method, -- lsp method that triggered request (string)
@@ -49,7 +49,7 @@ return {
     return golangci_args
   end,
 
-  --- README: golangci-lint 配置文件位置自动查找 --- {{{
+  --- README: golangci-lint 配置文件位置自动查找 ------------------------------- {{{
   --- DOC: https://golangci-lint.run/usage/configuration/#linters-configuration
   --- golangci-lint 会自动寻找 '.golangci.yml', '.golangci.yaml', '.golangci.toml', '.golangci.json'.
   --- GolangCI-Lint also searches for config files in all directories from the directory of
