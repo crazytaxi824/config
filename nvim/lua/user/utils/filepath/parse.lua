@@ -48,7 +48,7 @@ local function file_schema(str)
   return str
 end
 
---- parse filepath or dir, eg: /a/b/c:12:3
+--- 从 str 中获取 filepath or dir, eg: /a/b/c:12:3
 local function filepath_with_lnum_col(str)
   local r = {}
 
@@ -80,7 +80,7 @@ local function filepath_with_lnum_col(str)
 end
 
 --- 分析 filepath
-local function parse_filepath(str, hl)
+local function filepath_from_str(str, hl)
   local tmp = clear_brackets(str)
   tmp = file_schema(tmp)  -- file_schema
 
@@ -105,9 +105,10 @@ local function parse_filepath(str, hl)
   return r
 end
 
---- hl 存在则使用 string.find() and nvim_buf_add_highlight() 进行 highlight
-M.parse = function(content, hl)
-  local r = parse_filepath(content, hl)
+--- hl 不存在则只需要分析 absolute filepath 可用于 jump to path, 不需要分析 highlight start_col & end_col.
+--- hl 存在则使用 string.find() & nvim_buf_add_highlight() 可用于 highlight.
+M.parse_content = function(content, hl)
+  local r = filepath_from_str(content, hl)
   if r and not hl then
     return r  -- 不需要 highlight 的情况下直接返回
   end
@@ -136,6 +137,40 @@ M.parse = function(content, hl)
         absolute_fp = r.absolute_fp,
       }
     end
+  end
+end
+
+M.parse_hl_line = function()
+  local rs = {}
+  local lcontent = vim.api.nvim_get_current_line()
+  local lnum = vim.fn.line('.')
+  local lsplits = vim.split(lcontent, ' ', {trimempty=false})
+
+  local pos = 0
+  for _, value in ipairs(lsplits) do
+    if #value ~= 0 then
+      local r = filepath_from_str(value, 'hl')
+      if r then
+        local start_col = pos + r.i -1
+        local end_col   = pos + r.j
+
+        table.insert(rs, {
+          bufnr = vim.api.nvim_get_current_buf(),
+          type = r.type,
+          hl_lnum = lnum -1,
+          hl_start_col = start_col,
+          hl_end_col = end_col,
+          original_fp = r.original_fp,
+          absolute_fp = r.absolute_fp,
+        })
+      end
+    end
+
+    pos = #value+pos+1 -- NOTE: move pos
+  end
+
+  if #rs > 0 then
+    return rs
   end
 end
 
