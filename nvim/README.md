@@ -16,6 +16,8 @@
 
 1. neovim 几个常用路径: `:help stdpath()`
 
+- `vim.env.PATH` - vim 中的 `$PATH` 设置, 可以使用 `lua print(vim.env.PATH)` 查看. 默认和 shell 的 `echo $PATH` 相同. 也可以自行设置, eg: `mason.nvim` 插件就将自己的 tools_path 添加到 `vim.env.PATH` 的最前面.
+
 - `stdpath("config")` = `~/.config/nvim/`, 配置文件主要路径.
 
 - `stdpath("data")` = `~/.local/share/nvim/`, 插件安装路径.

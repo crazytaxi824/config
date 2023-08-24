@@ -53,9 +53,9 @@ local function jump_to_file(absolute_path, lnum, col)
 end
 
 local function jump_to_dir(dir)
-  --- NOTE: 新窗口中打开 dir, 因为 nvim-tree 设置 hijack netrw & directories = true,
+  --- NOTE: 新窗口中打开 dir, 因为 nvim-tree 设置 hijack_netrw=true & hijack_directories=true,
   --- 如果直接使用 `:edit dir` 会导致打开 dir 的窗口被关闭 (hijack).
-  --- 如果 hijack netrw & directories = false, 则这里可以使用 `:tabnew dir`
+  --- 如果 hijack_netrw=false & hijack_directories=false, 则这里可以使用 `:tabnew dir`
   vim.cmd('new ' .. dir)
 end
 
