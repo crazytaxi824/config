@@ -50,5 +50,6 @@ require "user.plugins"
 require "user.keymaps"  -- keymap 设置
 
 require "user.misc"    -- 其他杂项设置.
-require "user.global"  -- 自定义全局函数, 主要用于 debug. 可以不加载.
+
+
 
