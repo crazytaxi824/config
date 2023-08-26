@@ -180,12 +180,6 @@ M.sources =  {
   },
 
   [M.local_code_actions_key] = {
-    --- "lewis6991/gitsigns.nvim" 插件
-    --- NOTE: gitsigns 不加载 local settings
-    gitsigns = function()
-      return code_actions.gitsigns.with({ disabled_filetypes = {"NvimTree", "tagbar"} })
-    end,
-
     --- NOTE: null-ls 不是 autostart 的, 需要触发操作后才会加载.
     --- eslint 等工具启动速度慢, 会拖慢第一次使用 code action 的时间.
     eslint = function()

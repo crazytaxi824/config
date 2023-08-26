@@ -139,7 +139,7 @@ vim.api.nvim_create_autocmd("FileType", {
     local lsp_clients = vim.lsp.get_active_clients({ bufnr = params.buf })
     for _, c in ipairs(lsp_clients) do
       --- `set filetype` 后, detach 所有不匹配该 buffer 新 filetype 的 lsp client.
-      --- NOTE: 排除 null-ls 是因为 gitsigns 等工具是不分 filetype 的.
+      --- NOTE: 排除 null-ls
       if c.name ~= 'null-ls'
         and not vim.tbl_contains(c.config.filetypes, vim.bo[params.buf].filetype)
       then
