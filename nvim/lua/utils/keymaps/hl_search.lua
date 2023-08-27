@@ -2,20 +2,9 @@
 
 local M = {}
 
---- 在当前 search result 前放置 search_sign.
---- {group} as a namespace for {id}, thus two groups can use the same IDs.
-local my_search = {
-  sign = {
-    id = 10010,
-    group = "MySearchSignGroup",
-    name = "MySearchSign",
-    text = "⚲",  -- 类似 icon, ⌕☌⚲⚯
-  },
-  hl_group = "IncSearch",
-  cache_last_hl = nil  -- 缓存 { win_id=win_id, hl_id=matchadd() }, for vim.fn.matchdelete()
-}
---- define my_search_sign
-vim.fn.sign_define(my_search.sign.name, {text=my_search.sign.text, texthl=my_search.hl_group})
+local hl_group = "IncSearch"
+local priority = 101  -- highlight & sign priority
+local cache_last_hl = nil  -- 缓存 { win_id=win_id, hl_id=matchadd() }, for vim.fn.matchdelete()
 
 local function hl_search_at_cursor_pos()
   --- NOTE: `:help /ordinary-atom`
@@ -23,26 +12,20 @@ local function hl_search_at_cursor_pos()
   --- `\c`  意思是 ignore-case. 可以被 overwrite 例如 `/foo\C`
   --- getreg() 是获取 register 值.
   local search_pattern = '\\c\\%#' .. vim.fn.getreg('/')
-  local hl_id = vim.fn.matchadd(my_search.hl_group, search_pattern, 101)
-
-  --- NOTE: 通过 cursor position 来 place my_search_sign.
-  local cur_pos = vim.fn.getpos('.')  -- [bufnum, lnum, col, off]
-  vim.fn.sign_place(my_search.sign.id, my_search.sign.group, my_search.sign.name, vim.fn.bufnr(),
-    {lnum=cur_pos[2], priority=101})
+  local hl_id = vim.fn.matchadd(hl_group, search_pattern, priority)
 
   --- 缓存 matchadd() 数据, 为了后面 matchdelete()
-  my_search.cache_last_hl = {hl_id = hl_id, win_id = vim.api.nvim_get_current_win()}
+  cache_last_hl = {hl_id = hl_id, win_id = vim.api.nvim_get_current_win()}
 end
 
 --- 删除 matchadd() and unplace sign
 local function delete_prev_hl()
   --- 如果 win 已经关闭 (win_id 不存在), 则不能使用 matchdelete(win_id), 否则报错.
-  if my_search.cache_last_hl and vim.api.nvim_win_is_valid(my_search.cache_last_hl.win_id) then
-    vim.fn.matchdelete(my_search.cache_last_hl.hl_id, my_search.cache_last_hl.win_id)
+  if cache_last_hl and vim.api.nvim_win_is_valid(cache_last_hl.win_id) then
+    vim.fn.matchdelete(cache_last_hl.hl_id, cache_last_hl.win_id)
   end
 
-  vim.fn.sign_unplace(my_search.sign.group)  -- clear search_sign
-  my_search.cache_last_hl = nil  -- clear cache
+  cache_last_hl = nil  -- clear cache
 end
 
 M.hl_search = function(key)
@@ -80,5 +63,20 @@ M.delete = function()
   delete_prev_hl()
   vim.cmd('nohlsearch')
 end
+
+--- search 命令 / ? 按下 <CR> 后 highlight
+vim.api.nvim_create_autocmd({"CmdlineLeave"}, {
+  pattern = {"/", "\\?"},
+  callback = function(params)
+    if vim.v.event.abort then  -- search abort
+      return
+    end
+
+    --- 必须使用 schedule() 否则 vim.fn.getreg('/') 获取的是 old search 的 word.
+    vim.schedule(function()
+      hl_search_at_cursor_pos()
+    end)
+  end,
+})
 
 return M
