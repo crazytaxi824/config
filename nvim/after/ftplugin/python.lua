@@ -1,7 +1,7 @@
 --- python3 ----------------------------------------------------------------------------------------
 local function py_run(file)
-  -- require("user.utils.toggle_term").bottom.run("python3 -- " .. file)
-  local t = require('user.utils.my_term.instances').exec_term
+  -- require("utils.toggle_term").bottom.run("python3 -- " .. file)
+  local t = require('utils.my_term.instances').exec_term
   t.cmd = "python3 -- " .. file
   t:stop()
   t:run()

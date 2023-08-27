@@ -1,8 +1,8 @@
 --- javascript -------------------------------------------------------------------------------------
 --- node js_file -----------------------------------------------------------------------------------
 local function js_run(file)
-  -- require("user.utils.toggle_term").bottom.run("node " .. file)
-  local t = require('user.utils.my_term.instances').exec_term
+  -- require("utils.toggle_term").bottom.run("node " .. file)
+  local t = require('utils.my_term.instances').exec_term
   t.cmd = "node " .. file
   t:stop()
   t:run()
@@ -23,8 +23,8 @@ local function js_jest(file, coverage)
     cmd = "jest " .. file
   end
 
-  -- require("user.utils.toggle_term").bottom.run(cmd)
-  local t = require('user.utils.my_term.instances').exec_term
+  -- require("utils.toggle_term").bottom.run(cmd)
+  local t = require('utils.my_term.instances').exec_term
   t.cmd = cmd
   t:stop()
   t:run()
@@ -41,7 +41,7 @@ local js_keymaps = {
   {'n', '<F18>', function() js_jest(vim.fn.bufname(), true) end, opt, "code: Run Test --coverage"},  -- <S-F6>
 }
 
-require('user.utils.keymaps').set(js_keymaps)
+require('utils.keymaps').set(js_keymaps)
 
 
 
