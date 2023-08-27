@@ -3,13 +3,6 @@ if not status_ok then
   return
 end
 
---- 检查依赖的命令行工具 --------------------------------------------------------------------------- {{{
-require('user.utils.check_tools').check({
-  {cmd="fd",  install="brew info fd"},
-  {cmd="rg",  install="brew info ripgrep"},
-}, {title = "check telescope tools"})
--- -- }}}
-
 --- custom actions --------------------------------------------------------------------------------- {{{
 --- 多选的情况下 send_selected_to_qflist; 没有任何选择的情况下 edit 光标所在行的 file.
 local actions = require("telescope.actions")  -- 自定义 key mapping 用

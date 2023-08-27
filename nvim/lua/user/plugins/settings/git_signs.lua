@@ -3,6 +3,19 @@ if not git_signs_ok then
   return
 end
 
+--- functions for keymaps -------------------------------------------------------------------------- {{{
+local function gitsigns_hunk_actions()
+  local actions = git_signs.get_actions()
+  vim.ui.select(vim.tbl_keys(actions), {
+    prompt = 'gitsigns actions:',
+  }, function(choice)
+    if choice then
+      actions[choice]()
+    end
+  end)
+end
+-- -- }}}
+
 --- `:help gitsigns`
 git_signs.setup({
   --- sign text font: 'BOX DRAWINGS HEAVY VERTICAL', 'UPPER/LOWER ONE EIGHTH BLOCK', 'Left One Quarter Block'
@@ -53,11 +66,12 @@ git_signs.setup({
   on_attach = function(bufnr)
     local opt = { noremap = true, silent = true, buffer=bufnr}
     local gitsigns_keymaps = {
-      {'n', '<leader>gP', function() git_signs.preview_hunk() end, opt, "git: Preview Hunk"},
       {'n', '<leader>gn', function() git_signs.next_hunk() end, opt, "git: Jump to Next Hunk"},
       {'n', '<leader>gp', function() git_signs.prev_hunk() end, opt, "git: Jump to Prev Hunk"},
       {'n', '<leader>gb', function() git_signs.blame_line{full=true} end, opt, "git: Blame"},
       {'n', '<leader>gl', function() git_signs.toggle_current_line_blame() end, opt, "git: Toggle Blame line"},
+      {'n', '<leader>gu', function() git_signs.reset_buffer_index() end, opt, "git: Unstage current buffer"},
+      {'n', '<leader>gg', function() gitsigns_hunk_actions() end, opt, "git: Actions for Hunk"},
       {'n', '<leader>gf', function()
         vim.cmd('tabnew '..vim.fn.bufname())  --- open current file in new Tab.
         git_signs.diffthis('~')  -- diff this file with old comment.

@@ -5,44 +5,6 @@ end
 
 local s = require("user.lsp.null_ls.sources")
 
---- 检查 null-ls 所需 tools ------------------------------------------------------------------------ {{{
---- 在 null_ls.setup() 的时候, 如果命令行工具不存在不会报错;
---- 在使用的时候 (eg:Format) 如果命令行工具不存在才会报错.
-local null_tools = {
-  {
-    cmd="goimports",
-    install="go install golang.org/x/tools/cmd/goimports@latest",
-    mason="goimports",
-  },
-  {
-    cmd="goimports-reviser",
-    mason="goimports-reviser",
-  },
-  {
-    cmd="golangci-lint",
-    install="go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest",
-    mason="golangci-lint",
-  },
-  {
-    cmd="buf",  -- protobuf formatter & linter
-    install="go install github.com/bufbuild/buf/cmd/buf@latest",
-    mason = "buf",
-  },
-
-  {cmd="prettier", install=" brew info prettier", mason="prettier"},
-  {cmd="shfmt", install="brew info shfmt", mason="shfmt"},
-  --{cmd="stylua", install="brew info stylua", mason="stylua"},
-
-  {cmd="flake8", install="pip3 install flake8", mason="flake8"},
-  {cmd="autopep8", install="pip3 install autopep8", mason="autopep8"},
-  {cmd="mypy", install="pip3 install mypy", mason="mypy"}, -- 还有个 mypy-extensions 是 mypy 插件
-
-  {cmd="eslint", install="npm install -g eslint"}, -- NOTE: mason 暂时不能安装 "eslint"
-}
-
-require('user.utils.check_tools').check(null_tools, {title= "check null-ls tools"})
--- -- }}}
-
 --- 合并 sources 到一个 list
 local function combine_sources()
   local list = {}
