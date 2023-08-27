@@ -122,8 +122,8 @@ M.set_fold = function(bufnr, win_id)
     --- VVI: 确保 fold 设置都是 local to window, 所以使用 nvim_win_call 保证 setlocal 设置.
     --- VVI: 想要更新 buffer 中的 foldexpr 位置, 需要重新 `setlocal foldexpr`, foldexpr 值不用变.
     vim.api.nvim_win_call(win_id, function()
-      vim.opt_local.foldexpr = 'v:lua.require("user.fold.fold_lsp").foldexpr(v:lnum)'
-      vim.opt_local.foldtext = 'v:lua.require("user.fold.foldtext").foldtext_lsp()'
+      vim.opt_local.foldexpr = 'v:lua.require("user.core.fold.fold_lsp").foldexpr(v:lnum)'
+      vim.opt_local.foldtext = 'v:lua.require("user.core.fold.foldtext").foldtext_lsp()'
       vim.opt_local.foldmethod = 'expr'
     end)
   end)

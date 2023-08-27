@@ -17,7 +17,7 @@ M.set_foldexpr = function(bufnr, win_id)
 
   vim.api.nvim_win_call(win_id, function ()
     vim.opt_local.foldexpr = 'nvim_treesitter#foldexpr()'
-    vim.opt_local.foldtext = 'v:lua.require("user.fold.foldtext").foldtext()'
+    vim.opt_local.foldtext = 'v:lua.require("user.core.fold.foldtext").foldtext()'
     vim.opt_local.foldmethod = 'expr'
   end)
 

@@ -382,7 +382,7 @@ vim.opt.foldlevel = 99  -- Using ufo provider need a large value, feel free to d
 vim.opt.foldnestmax = 3    -- 最多折叠3层. NOTE: 'setlocal foldnestmax' 需要放在 'foldlevel' 之前设置, 否则不生效.
 
 --- `:help v:lua-call`, eg: `v:lua.require'mypack'.func(arg1, arg2)`
-vim.opt.foldtext = "v:lua.require('user.fold.foldtext').foldtext()"
+vim.opt.foldtext = "v:lua.require('user.core.fold.foldtext').foldtext()"
 
 --- 放在最上面, 因为如果 stdpath('config') 路径下有 json ... 等文件, 可以通过下面的 autocmd 覆盖这里的设置.
 --- 这里不能使用 'BufEnter' 否则每次切换窗口或者文件的时候都会重新设置.
