@@ -6,12 +6,12 @@
 --     lspconfig 会用到 textDocument_keymaps() & diagnostic_keymaps()
 --     null-ls   只用到 diagnostic_keymaps()
 
+local hs = require("user.lsp.custom_lsp_request.hover_short")
+
 local M = {}  -- module, 仅提供两个 keymaps 方法.
 
 --- for lspconfig only -----------------------------------------------------------------------------
 M.textDocument_keymaps = function(bufnr)
-  local custom_lsp_req = require("user.lsp.custom_lsp_request")
-
   local opts = { noremap=true, silent=true, buffer=bufnr }
   local textdoc_keymaps = {
     {"n", "<F2>", "<cmd>lua vim.lsp.buf.rename()<CR>", opts, "LSP: Rename"},
@@ -24,8 +24,8 @@ M.textDocument_keymaps = function(bufnr)
 
     --- NOTE: 自定义的 hover_short() request, 在 hover() 基础上只显示 function signature, 不显示 comments.
     --- 只有在 cursor inside 括号 Add(|) 中时才能使用, 主要是为了方便在使用函数的过程中查看函数的入参.
-    {"n", "<S-CR>", function() custom_lsp_req.hover_short() end, opts, "LSP: Hover_Short"},
-    {"i", "<S-CR>", function() custom_lsp_req.hover_short() end, opts, "LSP: Hover_Short"},
+    {"n", "<S-CR>", function() hs.hover_short() end, opts, "LSP: Hover_Short"},
+    {"i", "<S-CR>", function() hs.hover_short() end, opts, "LSP: Hover_Short"},
 
     {"n", "<F12>", "<cmd>lua vim.lsp.buf.definition()<CR>", opts, "LSP: Definition"},
     {"n", "<F24>", "<cmd>lua vim.lsp.buf.references()<CR>", opts, "LSP: References"},  -- <S-F12>

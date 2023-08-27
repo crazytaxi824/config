@@ -1,7 +1,7 @@
 --- 使用 autocmd "CursorHold", "CursorHoldI" 使用自定义的 doc_highlight.lua 设置.
 --- autocmd "BufLeave" (cursor 离开该 buffer 的时候) 清除 clear documentHighlight.
 
-local custom_lsp_req = require("user.lsp.custom_lsp_request")
+local doc_hl = require("user.lsp.custom_lsp_request.doc_highlight")
 
 --- 返回自定义 documentHighlight 处理方法 ----------------------------------------------------------
 local M = {}
@@ -42,7 +42,7 @@ M.fn = function(client, bufnr)
         --   vim.api.nvim_del_augroup_by_id(group_id)
         -- end
         -- -- }}}
-        custom_lsp_req.doc.highlight(params.buf)
+        doc_hl.doc_highlight(params.buf)
       end,
       desc = "LSP: documentHighlight",
     })
@@ -55,7 +55,7 @@ M.fn = function(client, bufnr)
       group = group_id,
       buffer = bufnr,  -- 对指定 buffer 有效
       callback = function(params)
-        custom_lsp_req.doc.clear(params.buf)
+        doc_hl.doc_clear(params.buf)
       end,
       desc = "LSP: clear documentHighlight",
     })
