@@ -24,12 +24,12 @@
 -- -- }}}
 local opt = {noremap = true, buffer = true}
 local go_keymaps = {
-  {'n', '<F5>',  function() require("user.utils.go").run() end, opt, "code: Go Run"},  -- go run
-  {'n', '<F6>',  function() require("user.utils.go").test.single_func() end, opt, "code: Go Test Single"}, -- go test
-  {'n', '<F18>', function() require("user.utils.go").test.single_func('pprof') end, opt, "code: Go Test Single Pprof"},  -- <S-F6>
+  {'n', '<F5>',  function() require("utils.go").run() end, opt, "code: Go Run"},  -- go run
+  {'n', '<F6>',  function() require("utils.go").test.single_func() end, opt, "code: Go Test Single"}, -- go test
+  {'n', '<F18>', function() require("utils.go").test.single_func('pprof') end, opt, "code: Go Test Single Pprof"},  -- <S-F6>
 }
 
-require('user.utils.keymaps').set(go_keymaps)
+require('utils.keymaps').set(go_keymaps)
 
 --- commands --------------------------------------------------------------------------------------- {{{
 -- - go test Run current Package
@@ -47,10 +47,10 @@ require('user.utils.keymaps').set(go_keymaps)
 -- -- }}}
 --- NOTE: 不能同时运行多个 fuzz test. Error: will not fuzz, -fuzz matches more than one fuzz test.
 --- 所以这里没有设置 GoTestFuzzPackage / GoTestFuzzPorject, 使用 go_test_single_func() 来运行 Fuzz test.
-vim.api.nvim_buf_create_user_command(0, "GoTestRunPkg",       function() require("user.utils.go").test.run_pkg() end, {bang=true})
-vim.api.nvim_buf_create_user_command(0, "GoTestRunProject",   function() require("user.utils.go").test.run_proj() end, {bang=true})
-vim.api.nvim_buf_create_user_command(0, "GoTestBenchPkg",     function() require("user.utils.go").test.bench_pkg() end, {bang=true})
-vim.api.nvim_buf_create_user_command(0, "GoTestBenchProject", function() require("user.utils.go").test.bench_proj() end, {bang=true})
+vim.api.nvim_buf_create_user_command(0, "GoTestRunPkg",       function() require("utils.go").test.run_pkg() end, {bang=true})
+vim.api.nvim_buf_create_user_command(0, "GoTestRunProject",   function() require("utils.go").test.run_proj() end, {bang=true})
+vim.api.nvim_buf_create_user_command(0, "GoTestBenchPkg",     function() require("utils.go").test.bench_pkg() end, {bang=true})
+vim.api.nvim_buf_create_user_command(0, "GoTestBenchProject", function() require("utils.go").test.bench_proj() end, {bang=true})
 
 
 

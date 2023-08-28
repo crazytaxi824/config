@@ -13,8 +13,8 @@ local function ts_run(file)
     return
   end
 
-  -- require("user.utils.toggle_term").bottom.run("tsc -p ./tsconfig.json && node dist/" .. file .. '.js')
-  local t = require('user.utils.my_term.instances').exec_term
+  -- require("utils.toggle_term").bottom.run("tsc -p ./tsconfig.json && node dist/" .. file .. '.js')
+  local t = require('utils.my_term.instances').exec_term
   t.cmd = "tsc -p ./tsconfig.json && node dist/" .. file .. '.js'
   t:stop()
   t:run()
@@ -42,8 +42,8 @@ local function ts_jest(file, coverage)
     cmd = "tsc -p ./tsconfig.json && jest dist/" .. file ..'.js'
   end
 
-  -- require("user.utils.toggle_term").bottom.run(cmd)
-  local t = require('user.utils.my_term.instances').exec_term
+  -- require("utils.toggle_term").bottom.run(cmd)
+  local t = require('utils.my_term.instances').exec_term
   t.cmd = cmd
   t:stop()
   t:run()
@@ -60,7 +60,7 @@ local ts_keymaps = {
   {'n', '<F18>', function() ts_jest(vim.fn.expand('%:.:r'), true) end, opt, "code: Run Test --coverage"},  -- <S-F6>
 }
 
-require('user.utils.keymaps').set(ts_keymaps)
+require('utils.keymaps').set(ts_keymaps)
 
 
 

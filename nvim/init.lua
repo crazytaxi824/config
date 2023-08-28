@@ -30,19 +30,12 @@ __Debug_Neovim = {
   luasnip = false,  -- LuaSnip DEBUG, stdpath('log') .. '/luasnip.log' set_loglevel().
 }
 
---- 读取设置: ~/.config/nvim/lua/user/xxx.lua
-require "user.core"     -- VVI: 必须放在最前面加载, 因为有全局函数需要被用到.
-require "user.colors"   -- VVI: 必须放在最前面加载, 因为有全局变量 "Color", 很多 plugins 需要用到.
-require "user.options"  -- vimrc 设置
-require "user.lsp"      -- 加载 vim.lsp/vim.diagnostic 相关设置. 这里不是 lspconfig 插件设置, 是内置参数设置.
-require "user.terminal" -- terminal buffer 自动设置 nonumber signcolumn ...
-require "user.fold"     -- fold-lsp -> fold-treesitter
-require "user.wrap"     -- 根据 set wrap 设置 cursor move.
-require "user.keymaps"  -- keymap 设置
-require "user.health"  -- 在 :checkhealth 时执行.
-require "user.misc"    -- 其他设置.
-
-require "user.plugins"  --- 加载 plugins 和 plugins' settings
+--- 读取设置: ~/.config/nvim/lua/xxx.lua
+require "core"     -- VVI: 必须放在最前面加载, 因为有全局函数需要被用到.
+require "lsp"      -- 加载 vim.lsp/vim.diagnostic 相关设置. 这里不是 lspconfig 插件设置, 是内置参数设置.
+require "plugins"  -- 加载 plugins 和 plugins' settings
+require "health"   -- 在 :checkhealth 时执行.
+require "misc"     -- 其他设置.
 
 
 
