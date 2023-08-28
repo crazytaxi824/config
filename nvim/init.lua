@@ -33,6 +33,7 @@ __Debug_Neovim = {
 --- 读取设置: ~/.config/nvim/lua/xxx.lua
 require "core"     -- VVI: 必须放在最前面加载, 因为有全局函数需要被用到.
 require "lsp"      -- 加载 vim.lsp/vim.diagnostic 相关设置. 这里不是 lspconfig 插件设置, 是内置参数设置.
+
 require "plugins"  -- 加载 plugins 和 plugins' settings
 require "health"   -- 在 :checkhealth 时执行.
 require "misc"     -- 其他设置.
