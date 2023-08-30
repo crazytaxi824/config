@@ -69,7 +69,7 @@ git_signs.setup({
       {'n', '<leader>gn', function() git_signs.next_hunk() end, opt, "git: Jump to Next Hunk"},
       {'n', '<leader>gp', function() git_signs.prev_hunk() end, opt, "git: Jump to Prev Hunk"},
       {'n', '<leader>gb', function() git_signs.blame_line{full=true} end, opt, "git: Blame"},
-      {'n', '<leader>gl', function() git_signs.toggle_current_line_blame() end, opt, "git: Toggle Blame line"},
+      {'n', '<leader>gB', function() git_signs.toggle_current_line_blame() end, opt, "git: Toggle Blame line"},
       {'n', '<leader>gu', function() git_signs.reset_buffer_index() end, opt, "git: Unstage current buffer"},
       {'n', '<leader>gg', function() gitsigns_hunk_actions() end, opt, "git: Actions for Hunk"},
       {'n', '<leader>gf', function()
