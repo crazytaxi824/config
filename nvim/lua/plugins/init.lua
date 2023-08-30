@@ -95,13 +95,6 @@ local plugins = {
     lazy = true,  -- nvim-treesitter 加载时自动加载.
   },
 
-  {"nvim-treesitter/playground",  -- 用于获取 treesitter 信息, 调整颜色很有用.
-    commit = "2b81a01",
-    dependencies = {"nvim-treesitter/nvim-treesitter"},
-
-    cmd = {"TSPlaygroundToggle", "TSHighlightCapturesUnderCursor"},
-  },
-
   --- 第三方 module 插件 ---
   {"windwp/nvim-ts-autotag",  -- auto close tag <div></div>
     commit = "6be1192",

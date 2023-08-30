@@ -8,7 +8,7 @@ autopairs.setup {
   --- treesitter 功能 ---------------------------------------------------------- {{{
   check_ts = false,  -- check treesitter, NOTE: 没有太大作用.
   -- ts_config = {     -- treesitter 排除规则
-  --   -- NOTE: treesitter node 可以通过 `:TSPlaygroundToggle` 查看.
+  --   -- NOTE: treesitter node 可以通过 `:InspectTree` 查看.
   --   lua = { "string" },  -- it will not add a pair on that treesitter node,
   --   javascript = { "string", "template_string" },
   --   java = false,  -- don't check treesitter on java, 使用 autopairs 默认设置.
