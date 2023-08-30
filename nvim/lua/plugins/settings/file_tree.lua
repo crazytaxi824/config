@@ -23,6 +23,7 @@ local glyphs = {
   default = '',
   symlink = '',  -- 这里的 symlink 和 symlink_arrow 设置不一样, 这里是文件名前面的 icon.
   bookmark = '➜',
+  modified = "●",
   folder = {
     arrow_closed = "▶︎",  -- folder_arrow
     arrow_open = "▽",    -- folder_arrow
@@ -182,7 +183,8 @@ nvim_tree.setup {
 
   sort = {
     sorter = "name",
-    folders_first = true,
+    folders_first = true, -- Sort folders before files.
+    files_first = false,  -- Sort files before folders. If set to `true` it overrides |folders_first|.
   },
   sync_root_with_cwd = false,  -- Changes the tree root directory on `DirChanged` and refreshes the tree.
 
@@ -232,13 +234,11 @@ nvim_tree.setup {
       icons = nt_indent_line,
     },
     icons = {
-      webdev_colors = false,  -- 使用 `nvim-web-devicons`, otherwise `NvimTreeFileIcon`.
       git_placement = "before",  -- 'before' (filename) | 'after' | 'signcolumn' (vim.signcolumn='yes')
       symlink_arrow = " ➜ ",  -- old_name ➜ new_name, 这个不是显示在 filename/dir 之前的 icon.
       show = {
         folder = true, -- 显示 folder icon
-        folder_arrow = false,  -- NOTE: 使用 folder icon 代替, folder_arrow icon 无法改变颜色,
-                               -- 也无法设置 empty icon.
+        folder_arrow = false,  -- NOTE: 使用 folder icon 代替, folder_arrow icon 无法改变颜色, 也无法设置 empty icon.
         file = false,  -- 显示 file icon, `nvim-web-devicons` will be used if available.
         git = true,    -- 显示 git icon. 需要设置 git.enable = true
       },
