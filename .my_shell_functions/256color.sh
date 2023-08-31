@@ -1,7 +1,10 @@
 #!/bin/sh
 
-# printf 模板可以多次替换.
-# printf "\e[48;5;%dm  \e[0m" 0 1 2 3 4 5 6 7
+# printf(fg bg text), 模板可以多次替换.
+# printf "\e[38;5;%dm\e[48;5;%dm   %d   "   255 0 0 232 1 1 232 2 2 232 3 3 232 4 4 232 5 5 232 6 6 232 7 7
+# \e38;5;%dm - fg color
+# \e48;5;%dm - bg color
+# 最后一个 %d 是需要显示的 text.
 
 # 0 ~ 15 foreground (text) color
 function fgSystem() {
