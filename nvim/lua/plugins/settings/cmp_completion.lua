@@ -10,17 +10,18 @@ if not snip_status_ok then
 end
 
 --- "hrsh7th/nvim-cmp" 主要设置 --------------------------------------------------------------------
---- NOTE: find more here: https://www.nerdfonts.com/cheat-sheet
+--- https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#completionItemKind
+--- https://github.com/hrsh7th/nvim-cmp/blob/main/lua/cmp/types/lsp.lua#L177
 local kind_icon_txt = {  --------------------------------------------------------------------------- {{{
   Text = "txt",
   Module = "module",     -- import
-  Method = "fn",
-  Function = "fn",
-  Constructor = "fn",
+  Method = "method",
+  Function = "func",
+  Constructor = "constructor",
   Field = "fld",
-  Property = "fld",
+  Property = "prop",
   Struct = "struct",
-  Class = "struct",
+  Class = "class",  -- golang 中 map 的 kind 是 Class
   Interface = "iface",
   TypeParameter = "param",
   Unit = "unit",
@@ -30,9 +31,9 @@ local kind_icon_txt = {  -------------------------------------------------------
   Keyword = "keywd",
   Snippet = "snip",
   Color = "color",
-  File = "file~",
   Reference = "ref",
   Folder = "dir/",
+  File = "file~",
   Variable = "var",
   Constant = "const",
   Event = "event",
@@ -98,8 +99,13 @@ cmp.setup {
     fields = { "abbr", "kind", "menu" },
 
     format = function(entry, vim_item)
-      vim_item.kind = string.format("   %s", kind_icon_txt[vim_item.kind])  --  kind icon 前多个空格
-      --vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind)  -- 使用图标和 kind_name
+      vim.print(vim_item)
+      if vim.bo.filetype == 'go' and vim_item.kind == 'Class' then
+        vim_item.kind = string.format("   %s", 'map')
+      else
+        vim_item.kind = string.format("   %s", kind_icon_txt[vim_item.kind])  --  kind icon 前多个空格
+        --vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind)  -- 使用图标和 kind_name
+      end
 
       --- 不显示 menu
       vim_item.menu = " "
