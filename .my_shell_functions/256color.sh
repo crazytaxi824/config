@@ -9,10 +9,11 @@
 # 0 ~ 15 foreground (text) color
 function fgSystem() {
 	printf "normal "
-	printf "\e[38;5;%dm%s" 0 " black " 1 "  red  " 2 " green " 3 "yellow " 4 " blue  " 5 "magenta" 6 "  cyan " 7 " white "
+	printf "\e[38;5;7m%s\e[38;5;%dm%s" "0" 0 " black " "1" 1 " red " " 2" 2 " green " " 3"  3 " yellow " " 4"  4 " blue " " 5"  5 " magenta " " 6"  6 " cyan " " 7"  7 " white "
 	printf "\e[0m\n"
-	printf "\e[1m\e[38;5;15mbright "
-	printf "\e[1m\e[38;5;%dm%s" 8 " black " 9 "  red  " 10 " green " 11 "yellow " 12 " blue  " 13 "magenta" 14 "  cyan " 15 " white "
+	printf "\e[1m"  # bold
+	printf "\e[38;5;15mbright "
+	printf "\e[38;5;7m%s\e[38;5;%dm%s" "8" 8 " black " "9" 9 " red " "10" 10 " green " "11" 11 " yellow " "12" 12 " blue " "13" 13 " magenta " "14" 14 " cyan " "15" 15 " white "
 	printf "\e[0m\n\n"
 }
 
