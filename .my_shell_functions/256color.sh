@@ -9,10 +9,11 @@
 # 0 ~ 15 foreground (text) color
 function fgSystem() {
 	printf "normal "
-	printf "\e[38;5;%dm%s" 0 " black " 1 "  red  " 2 " green " 3 "yellow " 4 " blue  " 5 "magenta" 6 "  cyan " 7 " white "
+	printf "\e[38;5;7m%s\e[38;5;%dm%s" "0" 0 " black " "1" 1 " red " " 2" 2 " green " " 3"  3 " yellow " " 4"  4 " blue " " 5"  5 " magenta " " 6"  6 " cyan " " 7"  7 " white "
 	printf "\e[0m\n"
-	printf "\e[1m\e[38;5;15mbright "
-	printf "\e[1m\e[38;5;%dm%s" 8 " black " 9 "  red  " 10 " green " 11 "yellow " 12 " blue  " 13 "magenta" 14 "  cyan " 15 " white "
+	printf "\e[1m"  # bold
+	printf "\e[38;5;15mbright "
+	printf "\e[38;5;7m%s\e[38;5;%dm%s" "8" 8 " black " "9" 9 " red " "10" 10 " green " "11" 11 " yellow " "12" 12 " blue " "13" 13 " magenta " "14" 14 " cyan " "15" 15 " white "
 	printf "\e[0m\n\n"
 }
 
@@ -71,14 +72,18 @@ function fgCube() {
 }
 
 function bgSystem() {
+	# title
 	printf "       "
 	printf "%s" " black " "  red  " " green " "yellow " " blue  " "magenta" "  cyan " " white "
 	printf "\e[0m\n"
 
+	# "normal"
+	# text: color code & bg color.
 	printf "       "
 	printf "\e[38;5;%dm\e[48;5;%dm   %d   "   255 0 0 232 1 1 232 2 2 232 3 3 232 4 4 232 5 5 232 6 6 232 7 7
 	printf "\e[0m\n"
 
+	# whitespace blank bg color, 2 rows.
 	printf "normal "
 	printf "\e[48;5;%dm       " 0 1 2 3 4 5 6 7
 	printf "\e[0m\n"
@@ -86,11 +91,14 @@ function bgSystem() {
 	printf "\e[48;5;%dm       " 0 1 2 3 4 5 6 7
 	printf "\e[0m\n"
 
+	# "bright(bold)"
+	# text: color code & bg color.
 	printf "       "
 	printf "\e[38;5;%dm\e[48;5;%dm   %d   " 255 8 8 232 9 9
 	printf "\e[38;5;%dm\e[48;5;%dm  %d   "  232 10 10 232 11 11 232 12 12 232 13 13 232 14 14 232 15 15
 	printf "\e[0m\n"
 
+	# whitespace blank bg color, 2 rows.
 	printf "\e[1m\e[38;5;15mbright \e[0m"  # bold white
 	printf "\e[48;5;%dm       " 8 9 10 11 12 13 14 15
 	printf "\e[0m\n"

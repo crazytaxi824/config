@@ -1,13 +1,13 @@
-#!/bin/zsh
+#!/bin/bash
 
 # 检查有哪些包 deps on 指定的 Formulae
 function checkBrewDep() {
-	if (( ${#*[@]} < 1 )); then
+	if (($# < 1)); then
 		echo "one dependency is needed"
 		return 2
 	fi
 
-	if (( ${#*[@]} > 1 )); then
+	if (($# > 1)); then
 		echo "only one dependency is allowed"
 		return 2
 	fi

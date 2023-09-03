@@ -863,7 +863,7 @@ alias packages="zsh ~/.config/.my_shell_functions/packages.sh"
 # 检查 brew 中所有不属于任何别的包依赖的包.
 #alias checkBrewRootFormula="zsh ~/.config/.my_shell_functions/brew_root_formula.sh"
 # 检查 brew dependency 属于哪个包.
-alias checkBrewDependency="zsh ~/.config/.my_shell_functions/brew_dep_check.sh"
+alias checkBrewDependency="bash ~/.config/.my_shell_functions/brew_dep_check.sh"
 
 # NOTE: DEBUG 用, my test functions
 #source ~/.config/.my_shell_functions/zshrc_custom_functions
