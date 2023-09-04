@@ -20,8 +20,6 @@ local function check_module()
     "telescope.make_entry",
     "telescope.pickers",
     "telescope.config",
-
-    "null-ls.utils",
   }
 
   local err_list = {}
@@ -40,65 +38,32 @@ local function check_module()
   end
 end
 
+local funcs_list = {
+  'vim.lsp.buf_request',
+  'vim.lsp.util.make_floating_popup_options',
+  'require("nvim-treesitter.parsers").get_buf_lang',
+  'require("nvim-treesitter.parsers").has_parser',
+  'require("nvim-treesitter.parsers").available_parsers',
+  'require("luasnip").unlink_current',
+  'require("telescope.finders").new_table',
+  'require("telescope.pickers").new',
+  'require("telescope.make_entry").gen_from_vimgrep',
+  'require("telescope.config").values.grep_previewer',
+  'require("telescope.config").values.generic_sorter',
+}
+
 local function check_plugin_funcs()
-  if vim.lsp.buf_request ~= nil then
-    health.report_ok('vim.lsp.buf_request() Exists')
-  else
-    health.report_error('vim.lsp.buf_request() is not Exist.\ncheck user/lsp "textDocument/documentHighlight" custom handlers')
-  end
+  for _, fn_str in ipairs(funcs_list) do
+    local fn, err = load("return " .. fn_str)
+    if err then
+      health.report_error(fn_str .. ' is not Exist. Error: ' .. err)
+    end
 
-  if vim.lsp.util.make_floating_popup_options ~= nil then
-    health.report_ok('vim.lsp.util.make_floating_popup_options() Exists')
-  else
-    health.report_error('vim.lsp.util.make_floating_popup_options() is not Exist.\ncheck user/lsp/_user_handlers.lua')
-  end
-
-  if require("nvim-treesitter.parsers").get_buf_lang ~= nil then
-    health.report_ok('require("nvim-treesitter.parsers").get_buf_lang() Exists')
-  else
-    health.report_error('require("nvim-treesitter.parsers").get_buf_lang() is not Exist.\ncheck user/plugins/settings/treesitter.lua')
-  end
-  if require("nvim-treesitter.parsers").has_parser ~= nil then
-    health.report_ok('require("nvim-treesitter.parsers").has_parser() Exists')
-  else
-    health.report_error('require("nvim-treesitter.parsers").has_parser() is not Exist.\ncheck user/plugins/settings/treesitter.lua')
-  end
-  if require("nvim-treesitter.parsers").available_parsers ~= nil then
-    health.report_ok('require("nvim-treesitter.parsers").available_parsers() Exists')
-  else
-    health.report_error('require("nvim-treesitter.parsers").available_parsers() is not Exist.\ncheck user/plugins/settings/treesitter.lua')
-  end
-
-  if require("luasnip").unlink_current ~= nil then
-    health.report_ok('require("luasnip").unlink_current() Exists')
-  else
-    health.report_error('require("luasnip").unlink_current() is not Exist.\ncheck user/plugins/settings/luasnip_snippets.lua')
-  end
-
-  if require("telescope.finders").new_table ~= nil then
-    health.report_ok('require("telescope.finders").new_table() Exists')
-  else
-    health.report_error('require("telescope.finders").new_table() is not Exist.\ncheck user/plugins/settings/telescope_fzf.lua')
-  end
-  if require("telescope.pickers").new ~= nil then
-    health.report_ok('require("telescope.pickers").new() Exists')
-  else
-    health.report_error('require("telescope.pickers").new() is not Exist.\ncheck user/plugins/settings/telescope_fzf.lua')
-  end
-  if require("telescope.make_entry").gen_from_vimgrep ~= nil then
-    health.report_ok('require("telescope.make_entry").gen_from_vimgrep() Exists')
-  else
-    health.report_error('require("telescope.make_entry").gen_from_vimgrep() is not Exist.\ncheck user/plugins/settings/telescope_fzf.lua')
-  end
-  if require("telescope.config").values.grep_previewer ~= nil then
-    health.report_ok('require("telescope.config").values.grep_previewer() Exists')
-  else
-    health.report_error('require("telescope.config").values.grep_previewer() is not Exist.\ncheck user/plugins/settings/telescope_fzf.lua')
-  end
-  if require("telescope.config").values.generic_sorter ~= nil then
-    health.report_ok('require("telescope.config").values.generic_sorter() Exists')
-  else
-    health.report_error('require("telescope.config").values.generic_sorter() is not Exist.\ncheck user/plugins/settings/telescope_fzf.lua')
+    if fn and fn() ~= nil then
+      health.report_ok(fn_str .. ' Exists')
+    else
+      health.report_error(fn_str .. ' is not Exist.')
+    end
   end
 end
 
