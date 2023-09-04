@@ -54,6 +54,7 @@ local funcs_list = {
 
 local function check_plugin_funcs()
   for _, fn_str in ipairs(funcs_list) do
+    --- 使用loadstring (Lua 5.1) 或 load (Lua 5.2及更高版本) 函数将表达式编译成函数
     local fn, err = load("return " .. fn_str)
     if err then
       health.report_error(fn_str .. ' is not Exist. Error: ' .. err)
