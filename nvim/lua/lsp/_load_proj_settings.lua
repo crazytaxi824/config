@@ -165,7 +165,10 @@ vim.api.nvim_create_user_command("LocalSettingsExample", function()
 
   local example = {
     [lsp_typ] = { gopls = { "..." }, tsserver = { "..." } },
-    [s.local_linter_key] = { golangci_lint = { "..." }, eslint = { "..." } },
+    [s.local_linter_key] = {
+      golangci_lint = { extra_args = {'-c', '/path/to/.golangci.yml'} },
+      eslint = { extra_args = {'-c', '/path/to/.eslintrc.json'} }
+    },
     [s.local_formatter_key] = { prettier = { "..." }, goimports = { "..." } },
     [s.local_code_actions_key] = { eslint = { "..." } },
   }

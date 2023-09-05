@@ -1,4 +1,5 @@
 --- 在 null-ls 中设置 prettier
+--- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/HELPERS.md
 
 return {
   --command = "/path/to/prettier",

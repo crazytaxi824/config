@@ -1,4 +1,5 @@
 --- 在 null-ls 中设置 golangci-lint
+--- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/HELPERS.md
 
 return {
   --command = "path/to/golangci-lint",
@@ -16,10 +17,10 @@ return {
   --    ft,   -- current buffer's filetype (string)
   --    root, -- current buffer's root directory (string)
   -- -- }}}
-  cwd = function(params)
-    --- current buffer's dir, 相当于下面的 $DIRNAME.
-    return vim.fs.dirname(params.bufname)
-  end,
+  -- cwd = function(params)
+  --   --- current buffer's dir, 相当于下面的 $DIRNAME.
+  --   return vim.fs.dirname(params.bufname)
+  -- end,
 
   ---  可以通过设置 setup() 中的 debug = true, 打开 `:NullLsLog` 查看命令行默认参数.
   args = function(params)
