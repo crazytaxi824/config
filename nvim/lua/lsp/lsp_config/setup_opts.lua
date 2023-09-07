@@ -33,19 +33,27 @@ if not status_ok then
 
   --- NOTE: lspconfig default_config 中 capabilities 有默认设置.
   --- https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig/util.lua
-  --M.capabilities = vim.lsp.protocol.make_client_capabilities()
+  M.capabilities = vim.lsp.protocol.make_client_capabilities()
 else
   --- "cmp_nvim_lsp" 存在的情况, 可以使用 lsp 功能, 也可以提供 lsp 代码补全.
   --- https://github.com/hrsh7th/cmp-nvim-lsp#setup
   M.capabilities = cmp_nvim_lsp.default_capabilities()
 end
 
+--- lsp_fold 设置
+--- https://github.com/kevinhwang91/nvim-ufo
+--- https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/
+M.capabilities.textDocument.foldingRange = {
+  dynamicRegistration = false,
+  lineFoldingOnly = true
+}
+
 --- https://github.com/neovim/nvim-lspconfig/wiki/Project-local-settings
 --- NOTE: LSP settings Hook ------------------------------------------------------------------------
 --- 这里是为了能单独给 project 设置 LSP setting.
 --- init() runs Before attach().
 
---- .nvim/settings.lua 中的 local 设置. ------------------------------------------------------------ {{{
+--- .nvim/settings.lua 中的 local 设置. ---------------------------------------- {{{
 -- return {
 --   lsp = {
 --     gopls = {

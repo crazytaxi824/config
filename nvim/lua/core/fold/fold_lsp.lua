@@ -40,9 +40,9 @@ local function init_expr_cache(bufnr)
 end
 
 --- 将 foldingRange 返回的数据按照 foldexpr 的格式记录到 list cache 中.
-local function parse_fold_data(bufnr, fold_range, tmp_cache, foldnestmax, foldoneline)
+local function parse_fold_data(bufnr, fold_range, tmp_cache, foldnestmax)
   -- fold:
-  --   kind = "comment",   -- (optional)
+  --   kind = "comment",   -- (optional), "comment", "imports" ...
   --   startLine = 13      -- 0-index, 等于 vim 的 line_num - 1
   --   startCharacter = 29,
   --   endLine = 17,       -- 0-index, 等于 vim 的 line_num - 1
@@ -61,19 +61,6 @@ local function parse_fold_data(bufnr, fold_range, tmp_cache, foldnestmax, foldon
     local startLine = fold.startLine + 1
     local endLine = fold.endLine + 1
 
-    --- lsp 返回的 fold 是否在同一行内. eg:
-    ---  - gopls 返回的 endLine 是函数的最后一行, 返回的 comment 也是最后一行.
-    ---  - tsserver 返回的 endLine 是函数的倒数第二行, 但是返回的 comment 是最后一行.
-    --- 这里人为的将 fold 格式设为倒数第二行.
-    if foldoneline then
-      endLine = fold.endLine
-    end
-
-    --- "comment" 的情况下, fold 最后一行, 其他情况下 fold 至 range 的倒数第二行.
-    if fold.kind == "comment" then
-      endLine = fold.endLine + 1
-    end
-
     --- 根据 fold range 计算 foldexpr 的值.
     for i = startLine, endLine, 1 do
       tmp_cache[i] = tmp_cache[i] + 1
@@ -88,16 +75,6 @@ local function parse_fold_data(bufnr, fold_range, tmp_cache, foldnestmax, foldon
   end
 end
 
---- lsp 返回的 fold 是否在同一行内. eg:
----  - gopls 返回的 endLine 是函数的最后一行, 返回的 comment 也是最后一行.
----  - tsserver 返回的 endLine 是函数的倒数第二行, 但是返回的 comment 是最后一行.
---- 这里人为的将 fold 格式设为倒数第二行.
-local function foldoneline(client_id)
-  local lsp_foldoneline = {"gopls"}
-  local client = vim.lsp.get_client_by_id(client_id)
-  return vim.tbl_contains(lsp_foldoneline, client.name)
-end
-
 --- 发送 'textDocument/foldingRange' 请求到 lsp, 分析 response, 然后按照 foldexpr 的格式记录.
 --- https://github.com/kevinhwang91/nvim-ufo/blob/main/lua/ufo/provider/lsp/nvim.lua
 M.set_fold = function(bufnr, win_id)
@@ -108,13 +85,11 @@ M.set_fold = function(bufnr, win_id)
     local tmp_cache = init_expr_cache(bufnr)
 
     --- resps = { client_id: data }.
-    for client_id, data in pairs(resps) do
+    for lsp_client_id, data in pairs(resps) do
       if data.result then
         --- parse lsp response fold range
-        --- gopls 返回的 endLine 是倒数第一行, 在 parse 的时候人为的改为倒数第二行.
-        parse_fold_data(bufnr, data.result, tmp_cache, vim.wo[win_id].foldnestmax, foldoneline(client_id))
-
-        --- 只计算一次
+        parse_fold_data(bufnr, data.result, tmp_cache, vim.wo[win_id].foldnestmax)
+        --- 只计算一次 foldexpr
         break
       end
     end
