@@ -339,6 +339,7 @@ local plugins = {
   --{"Tastyep/structlog.nvim"},   -- log 工具
   --{"folke/trouble.nvim"},       -- quickfix/loclist 替代
   --{"rebelot/heirline.nvim"},    -- lualine + bufferline 替代
+  --{"willothy/nvim-cokeline"},   -- bufferline 替代
   --{"akinsho/toggleterm.nvim"},  -- terminal
   --{"preservim/tagbar"},  -- universal-ctags, 用的少. https://github.com/universal-ctags/ctags/blob/master/docs/news.rst#new-parsers
 
