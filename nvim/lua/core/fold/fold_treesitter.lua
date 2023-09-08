@@ -2,7 +2,7 @@
 
 local M = {}
 
-M.set_foldexpr = function(bufnr, win_id)
+M.set_fold = function(bufnr, win_id)
   --- 获取所有 parsers
   local nvim_ts_ok, nvim_ts_parsers = pcall(require, "nvim-treesitter.parsers")
   if not nvim_ts_ok then

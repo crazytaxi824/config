@@ -8,7 +8,7 @@ local M = {}
 --- VVI: foldexpr='v:lua.xxx' 设置时, vim 中的 table key 必须是连续的 int, 或者是 string.
 local str_cache = {}
 
-M.clear_cache = function(bufnr)
+local function clear_cache(bufnr)
   str_cache[bufnr] = nil
 end
 
@@ -17,6 +17,7 @@ M.debug = function()
 end
 
 --- `set foldexpr=xxx` 用
+--- NOTE: 每次 `set foldmethod=expr` 都会重新执行 foldexpr
 M.foldexpr = function(lnum)
   local bufnr = vim.api.nvim_get_current_buf()
   if str_cache[bufnr] then
@@ -77,7 +78,8 @@ end
 
 --- 发送 'textDocument/foldingRange' 请求到 lsp, 分析 response, 然后按照 foldexpr 的格式记录.
 --- https://github.com/kevinhwang91/nvim-ufo/blob/main/lua/ufo/provider/lsp/nvim.lua
-M.set_fold = function(bufnr, win_id)
+--- 必须保证 lsp 的 client.server_capabilities.foldingRangeProvider == true
+local function lsp_fold_request(bufnr, win_id)
   local params = {textDocument = require('vim.lsp.util').make_text_document_params(bufnr)}
   vim.lsp.buf_request_all(bufnr, 'textDocument/foldingRange', params, function(resps)
     --- VVI: 获取到 resps 之后再 init cache.
@@ -86,24 +88,77 @@ M.set_fold = function(bufnr, win_id)
 
     --- resps = { client_id: data }.
     for lsp_client_id, data in pairs(resps) do
-      --- VVI: 这里必须检查 win_id 是否存在,  因为 buf_request_all() 是一个异步函数.
-      if data.result and vim.api.nvim_win_is_valid(win_id) then
-        --- parse lsp response fold range
-        parse_fold_data(bufnr, data.result, tmp_cache, vim.wo[win_id].foldnestmax)
+      if data.result then
+        --- VVI: 这里必须检查 win_id 是否存在,  因为 buf_request_all() 是一个异步函数.
+        local win_is_valid = vim.api.nvim_win_is_valid(win_id)
 
-        --- 确保 fold 设置都是 local to window, 所以使用 nvim_win_call 保证 setlocal 设置.
-        --- 想要更新 buffer 中的 foldexpr 位置, 需要重新 `setlocal foldexpr`, foldexpr 值不用变.
-        vim.api.nvim_win_call(win_id, function()
-          vim.opt_local.foldexpr = 'v:lua.require("core.fold.fold_lsp").foldexpr(v:lnum)'
-          vim.opt_local.foldtext = 'v:lua.require("core.fold.foldtext").foldtext_lsp()'
-          vim.opt_local.foldmethod = 'expr'
-        end)
+        local foldnestmax
+        if win_is_valid then
+          foldnestmax = vim.wo[win_id].foldnestmax
+        else
+          foldnestmax = vim.wo.foldnestmax
+        end
+
+        --- parse lsp response fold range
+        parse_fold_data(bufnr, data.result, tmp_cache, foldnestmax)
+
+        --- NOTE: 在计算完 lsp_fold 之后再设置 foldmethod=expr, 因为每次 `set foldmethod=expr` 都会重新执行 foldexpr
+        if win_is_valid then
+          vim.api.nvim_win_call(win_id, function()
+            vim.opt_local.foldmethod = 'expr'
+          end)
+        end
 
         --- 只计算一次 foldexpr
-        break
+        return
       end
     end
   end)
+end
+
+M.set_fold = function(client, bufnr, win_id)
+  --- lsp 不支持 foldingRange
+  if not client.server_capabilities or not client.server_capabilities.foldingRangeProvider then
+    return
+  end
+
+  --- VVI: buf_request_all() 是一个异步函数, 所以 set foldexpr foldnestmax foldmethod 写在
+  --- buf_request_all() 的前面或者后面效果都一样, 都会在 buf_request_all() 的前面运行.
+  vim.api.nvim_win_call(win_id, function()
+    vim.opt_local.foldexpr = 'v:lua.require("core.fold.fold_lsp").foldexpr(v:lnum)'
+    vim.opt_local.foldtext = 'v:lua.require("core.fold.foldtext").foldtext_lsp()'
+    --- NOTE: 在计算完 lsp_fold 之后再设置 foldmethod=expr, 因为每次 `set foldmethod=expr` 都会重新执行 foldexpr
+    --vim.opt_local.foldmethod = 'expr'
+  end)
+
+  --- vim.lsp.buf_request_all()
+  lsp_fold_request(bufnr, win_id)
+
+  --- update foldexpr
+  --- 文件 save 后重新计算 foldexpr.
+  local g_id = vim.api.nvim_create_augroup('my_lsp_fold_' .. bufnr, {clear=true})
+  vim.api.nvim_create_autocmd("BufWritePost", {
+    group = g_id,
+    buffer = bufnr,
+    callback = function(params)
+      --- set_fold() 时会重新设置 `set foldexpr` 会触发 foldexpr 重新计算.
+      lsp_fold_request(params.buf, vim.api.nvim_get_current_win())
+    end,
+    desc = "set foldexpr for lsp textDocument/foldingRange"
+  })
+
+  --- delete foldexpr cache & augroup
+  vim.api.nvim_create_autocmd("BufWipeout", {
+    group = g_id,
+    buffer = bufnr,
+    callback = function(params)
+      clear_cache(params.buf)
+      vim.api.nvim_del_augroup_by_id(g_id)
+    end,
+    desc = "delete foldexpr textDocument/foldingRange augroup"
+  })
+
+  return true  -- 设置成功
 end
 
 return M
