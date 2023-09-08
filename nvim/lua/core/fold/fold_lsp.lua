@@ -25,7 +25,7 @@ M.foldexpr = function(lnum)
   return "0"
 end
 
---- 初始化两个 list 用于 cache expr 结果.
+--- 初始化两个 list 用于计算和缓存 foldmethod=expr 结果.
 local function init_expr_cache(bufnr)
   local tmp_cache = {}  -- tmp_cache 只在计算的时候临时使用.
   str_cache[bufnr] = {}
@@ -86,21 +86,23 @@ M.set_fold = function(bufnr, win_id)
 
     --- resps = { client_id: data }.
     for lsp_client_id, data in pairs(resps) do
-      if data.result then
+      --- VVI: 这里必须检查 win_id 是否存在,  因为 buf_request_all() 是一个异步函数.
+      if data.result and vim.api.nvim_win_is_valid(win_id) then
         --- parse lsp response fold range
         parse_fold_data(bufnr, data.result, tmp_cache, vim.wo[win_id].foldnestmax)
+
+        --- 确保 fold 设置都是 local to window, 所以使用 nvim_win_call 保证 setlocal 设置.
+        --- 想要更新 buffer 中的 foldexpr 位置, 需要重新 `setlocal foldexpr`, foldexpr 值不用变.
+        vim.api.nvim_win_call(win_id, function()
+          vim.opt_local.foldexpr = 'v:lua.require("core.fold.fold_lsp").foldexpr(v:lnum)'
+          vim.opt_local.foldtext = 'v:lua.require("core.fold.foldtext").foldtext_lsp()'
+          vim.opt_local.foldmethod = 'expr'
+        end)
+
         --- 只计算一次 foldexpr
         break
       end
     end
-
-    --- VVI: 确保 fold 设置都是 local to window, 所以使用 nvim_win_call 保证 setlocal 设置.
-    --- VVI: 想要更新 buffer 中的 foldexpr 位置, 需要重新 `setlocal foldexpr`, foldexpr 值不用变.
-    vim.api.nvim_win_call(win_id, function()
-      vim.opt_local.foldexpr = 'v:lua.require("core.fold.fold_lsp").foldexpr(v:lnum)'
-      vim.opt_local.foldtext = 'v:lua.require("core.fold.foldtext").foldtext_lsp()'
-      vim.opt_local.foldmethod = 'expr'
-    end)
   end)
 end
 
