@@ -99,7 +99,6 @@ cmp.setup {
     fields = { "abbr", "kind", "menu" },
 
     format = function(entry, vim_item)
-      vim.print(vim_item)
       if vim.bo.filetype == 'go' and vim_item.kind == 'Class' then
         vim_item.kind = string.format("   %s", 'map')
       else
