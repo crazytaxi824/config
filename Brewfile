@@ -65,6 +65,7 @@ brew "wimlib"  # 解决 FAT32 不能保存大于 4GB ios 文件的问题. 解决
 # 开发工具
 cask "alacritty"
 cask "iterm2"
+cask "raycast"  # alfred 替代
 cask "visual-studio-code" # vscode
 cask "postman"   # http(s) 测试工具
 cask "wireshark" # http 请求分析工具
@@ -78,8 +79,9 @@ cask "tableplus"         # Postgre, Mysql, MariaDB, SQLite, CockroachDB, AWS Red
 #cask "pgadmin4"   # Postgre GUI client
 
 # 笔记工具
-cask "typora"  # markdown 编辑软件
-cask "joplin"  # 加密的 markdown 笔记管理工具
+cask "obsidian" # markdown 编辑软件
+cask "typora"   # markdown 编辑软件
+cask "joplin"   # 加密的 markdown 笔记管理工具
 
 # 个人工具
 cask "squirrel"   # RIME 输入法客户端
@@ -89,8 +91,8 @@ cask "keepassxc"  # keepass 客户端, 密码管理工具, eg: "macpass", "authp
 cask "keka"  # 压缩工具
 cask "the-unarchiver"  # 解压工具
 cask "keycastr"  # 按键输入显示工具
-cask "rectangle" # resize app
 cask "lulu"  # 防火墙
+#cask "rectangle" # window resize app, 可以用 raycast 代替
 #cask "openvpn-connect"
 
 # 其他个人 app
