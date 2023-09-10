@@ -150,16 +150,16 @@ M.__terminate = function(term_id)
 end
 
 --- debug ------------------------------------------------------------------------------------------
-function Get_all_my_terms()
-  vim.print(meta_method.global_my_term_cache)
-end
-
-function Remove_my_term_by_id(id)
-  M.__terminate(id)
-end
-
-function Get_my_term_by_id(id)
-  return M.get_term_by_id(id) or M.new({id=id})
-end
+-- function Get_all_my_terms()
+--   vim.print(meta_method.global_my_term_cache)
+-- end
+--
+-- function Remove_my_term_by_id(id)
+--   M.__terminate(id)
+-- end
+--
+-- function Get_my_term_by_id(id)
+--   return M.get_term_by_id(id) or M.new({id=id})
+-- end
 
 return M

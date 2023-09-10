@@ -61,7 +61,7 @@ local plugins = {
   },
 
   --- Treesitter -----------------------------------------------------------------------------------
-  --- Commands for "nvim-treesitter/nvim-treesitter" ----------------------------------------------- {{{
+  --- Commands for "nvim-treesitter/nvim-treesitter" --------------------------- {{{
   --- `:help nvim-treesitter-commands`
   --- `:TSInstallInfo`        -- List all installed languages
   --- `:TSInstall {lang}`     -- Install languages
