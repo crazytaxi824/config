@@ -213,10 +213,19 @@ end
 local function set_buf_line_output(bufnr, data, hl)
   local last_line_before_write = vim.api.nvim_buf_line_count(bufnr)
 
+  --- 开启 modifiable 准备写入数据.
   vim.bo[bufnr].modifiable = true
-  --- NOTE: 这里的处理主要是因为目前 data 最后会多一行 empty line, 不知道以后会不会删除 empty line, 这里先做预防处理.
+
+  --- NOTE: 处理 EOF, data 最后会多一行 empty line.
+  --- `:help channel-callback`, `:help channel-lines`, 中说明: EOF is a single-item list: `['']`.
   if data[#data] == '' then
     table.remove(data, #data)
+  end
+
+  --- replace 所有的 '\n', 因为 '\n' 会造成 nvim_buf_set_lines() Error.
+  --- 这里的 '\n' 其实是 byte(0) 本应该是 '\null' 但是只显示了第一个字符.
+  for i, d in ipairs(data) do
+    data[i] = string.gsub(d, '\n', '<0>')
   end
 
   --- write output to buffer
