@@ -78,6 +78,10 @@ end
 --- jump controller
 local function jump(content)
   local r = parse.parse_content(content)
+  if not r then
+    return
+  end
+
   if r.type == 'file' then
     jump_to_file(r.absolute_fp, r.lnum, r.col)
     return
