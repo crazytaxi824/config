@@ -225,7 +225,7 @@ local function set_buf_line_output(bufnr, data, hl)
   --- replace 所有的 '\n', 因为 '\n' 会造成 nvim_buf_set_lines() Error.
   --- 这里的 '\n' 其实是 byte(0) 本应该是 '\null' 但是只显示了第一个字符.
   for i, d in ipairs(data) do
-    data[i] = string.gsub(d, '\n', '<0>')
+    data[i] = string.gsub(d, '\n', '�')
   end
 
   --- write output to buffer
