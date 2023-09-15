@@ -40,7 +40,7 @@ local function clear_brackets(str)
 end
 
 --- clear file:// schema
-local function file_schema(str)
+local function clear_file_schema(str)
   local t = string.match(str, 'file://(.*)')
   if t then
     return t
@@ -50,10 +50,17 @@ end
 
 --- 从 str 中获取 filepath or dir, eg: /a/b/c:12:3
 local function filepath_with_lnum_col(str)
-  local r = {}
-
   local splits = vim.split(str, ':', {trimempty=true})
+
+  --- 判断所有字符是否都是 file name character. `:help \f`
+  local fname = vim.fn.matchstr(splits[1], '\\f\\+')
+  if #splits[1] ~= #fname then
+    return
+  end
+
   local absolute_fp = vim.fn.fnamemodify(splits[1], ':p')
+
+  local r = {}
 
   --- dir
   if vim.fn.isdirectory(absolute_fp) == 1 then
@@ -81,8 +88,8 @@ end
 
 --- 分析 filepath
 local function filepath_from_str(str, hl)
-  local tmp = clear_brackets(str)
-  tmp = file_schema(tmp)  -- file_schema
+  local tmp = clear_brackets(str)  -- <>, (), [], ...
+  tmp = clear_file_schema(tmp)  -- file://
 
   local r = filepath_with_lnum_col(tmp)
   if not r then
