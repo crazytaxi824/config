@@ -64,6 +64,8 @@ local my_theme = {
 
 --- 自定义 components ------------------------------------------------------------------------------ {{{
 --- NOTE: https://github.com/nvim-lualine/lualine.nvim/wiki/Component-snippets
+
+--- VVI: whitespace & mix-indent 非常消耗资源, 可能严重中拖慢 neovim 运行速度. 不推荐在大型文件中使用.
 --- check Trailing-Whitespace && Mixed-indent ---------------------------------- {{{
 --- check Trailing-Whitespace --------------------------------------------------
 local function check_trailing_whitespace()
@@ -103,11 +105,16 @@ end
 
 --- 合并两个 check, 同时检查 ---------------------------------------------------
 --- NOTE: 通过设置 set/get buffer var 来缓存 whitespace && mixed_indent 结果.
+local bufvar_lualine = 'my_lualine_checks'
+local cache_changetick = 0
 local function my_trailing_whitespace()
-  local bufvar_lualine = 'my_lualine_checks'
+  --- `:help b:changedtick` 判断 text 是否已经改变.
+  if cache_changetick == vim.b.changedtick then
+    return vim.b[bufvar_lualine] or ''
+  end
 
-  --- 在退出 insert mode 之后再进行计算并更新 lualine, 可以减少计算量.
-  if vim.fn.mode() ~= 'i' then
+  --- 只在 Normal mode 下 update lualine, 可以减少计算量.
+  if vim.fn.mode() == 'n' then
     local mi = check_mixed_indent()
     local ts = check_trailing_whitespace()
 
@@ -120,14 +127,12 @@ local function my_trailing_whitespace()
     else
       vim.b[bufvar_lualine] = nil
     end
+
+    --- update changedtick
+    cache_changetick = vim.b.changedtick
   end
 
-  local r = vim.b[bufvar_lualine]
-  if not r then
-    return ''
-  end
-
-  return r
+  return vim.b[bufvar_lualine] or ''
 end
 -- -- }}}
 
@@ -260,7 +265,7 @@ lualine.setup {
       },
       {my_trailing_whitespace,
         color = {fg=lualine_colors.dark_orange, gui='bold'},
-        cond = function() return vim.bo.buftype~='terminal' end,  -- terminal 不检查.
+        cond = function() return vim.bo.filetype~='' and vim.bo.buftype=='' end,  -- normal buffer with a filetype
       },
     },
     lualine_x = {
@@ -341,7 +346,7 @@ lualine.setup {
       },
       {my_trailing_whitespace,
         color = {fg=lualine_colors.dark_orange, gui='bold'},
-        cond = function() return vim.bo.buftype~='terminal' end,  -- terminal 不检查.
+        cond = function() return vim.bo.filetype~='' and vim.bo.buftype=='' end,  -- normal buffer with a filetype
       },
     },
     lualine_x = {

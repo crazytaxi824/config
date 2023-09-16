@@ -1,39 +1,37 @@
 # https://editorconfig.org/
-# 影响 prettier 格式化, 和 github 显示.
-# "prettier.useEditorConfig": true
-# "end_of_line" -> "prettier.endOfLine"
-# "indent_style" -> "prettier.useTabs"
-# "indent_size"/"tab_width" -> "prettier.tabWidth"
-# NOTE: "max_line_length" has Deprecated by editorconfig.org
+# These settings will affect 'prettier' format, 'github.com' display, neovim, vscode...
+#
+# neovim:   `:help editorconfig-properties`
+# prettier: `prettier --no-editorconfig`, Don't take '.editorconfig' into account when parsing configuration.
+#           "end_of_line" -> `prettier --end-of-line <lf|cr|crlf>`
+#           "indent_style" -> `prettier --use-tabs <true|false>`
+#           "indent_size/tab_width" -> `prettier --tab-width <int>`
 
-# top-most EditorConfig file. 表示该文件是最顶层文件, 不用再向上查找 .editorconfig 文件了.
+# top-most EditorConfig file. Do not need to search for '.editorconfig' file in upper directories.
 root = true
 
-# all files, `:help editorconfig` in nvim-0.9+
+# every file
 [*]
 charset = utf-8
-# \t 会被转成 space. nvim 中设置 `:help expandtab`.
+# <tab|space>. space: '\t' will be converted to spaces.
 indent_style = tab
-# 格式化 tab 的宽度. nvim 中同时设置 `:help shiftwidth` & `:help softtabstop`.
+# width of indent level.
 indent_size = 4
-# \t 的宽度. NOTE: 默认值为 indent_size, 不需要特别设置. nvim 中设置 `:help tabstop`.
+# width of '\t', default is 'indent_size'.
 #tab_width = 4
-# lf = \n | cr = \r | crlf = \r\n. nvim 中设置 `:help fileformat`.
+# 'lf' = '\n' | 'cr' = '\r' | 'crlf' = '\r\n'.
 end_of_line = lf
-# 删除行最后的空白
+# remove any whitespace characters preceding newline characters.
 trim_trailing_whitespace = true
-# 所有文件最后都添加一个空行. nvim 中设置 `:help fixendofline` & `:help endofline`.
+# ensure file ends with a newline.
 #insert_final_newline = true
 
-# prettier supported files
 [*.{htm,html,js,jsx,ts,tsx,cjs,cts,ctsx,mjs,mts,mtsx,css,sass,scss,less,pcss,svg,vue,json,jsonc,yaml,yml,graphql,md,lua}]
 indent_style = space
 indent_size = 2
 
-# js ts css 等相关语言使用单引号.
 [*.{htm,html,js,jsx,ts,tsx,cjs,cts,ctsx,mjs,mts,mtsx,css,sass,scss,less,pcss,vue}]
 quote_type = single
 
-# python indent 4 个空格.
 [*.py]
 indent_style = space

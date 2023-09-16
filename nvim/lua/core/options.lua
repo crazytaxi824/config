@@ -343,9 +343,10 @@ vim.api.nvim_create_autocmd('WinEnter', {
 ---   eol:↴ - 换行
 ---   lead/trail - 行首(尾)的空格
 ---   precedes/extends - 不换行(:set nowrap)的情况下, 内容长度超出屏幕的行会有该标记
+---   nbsp - non-breakable space (0xA0, byte(160)), normal space (0x20, byte(32))
 -- -- }}}
 vim.opt.list = true
-vim.opt.listchars = 'tab:│ ,lead: ,trail:·,extends:→,precedes:←,nbsp:⎵'
+vim.opt.listchars = 'tab:│ ,lead: ,trail:·,extends:→,precedes:←,nbsp:␣'
 
 --- 填充符, `:help fillchars` ---------------------------------------------------------------------- {{{
 ---   diff  - vimdiff 中被删除的行的填充字符.
