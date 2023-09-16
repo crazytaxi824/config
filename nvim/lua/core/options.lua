@@ -216,39 +216,41 @@ vim.g.loaded_perl_provider = 0  -- Disable Perl |remote-plugin| support
 local tab_width = 4
 
 vim.opt.expandtab = false  -- 类似 editorconfig 中 indent_style 设置 <Tab> 键使用 "tab" or "space";
-                           -- true : `set expandtab` 所有的 \t 都会被转成 space;
-                           -- false: `set noexpandtab` 当1个或者多个 softtabstop 长度等于 tabstop 的时候会被转成 \t;
-                           --   当 softtabstop=4, tabstop=4, 则 <Tab> 键是 \t. backspace 删除 \t;
-                           --   当 softtabstop=2, tabstop=4, 则第一个 <Tab> 是两个空格, 连续两个 <Tab> 会变成 \t;
-                           --   每个 <Backspace> 删除1个 softtabstop, 即2个空格.
+                      -- true : `set expandtab` 所有的 \t 都会被转成 space;
+                      -- false: `set noexpandtab` 当1个或者多个 softtabstop 长度等于 tabstop 的时候会被转成 \t;
+                      --   当 softtabstop=4, tabstop=4, 则 <Tab> 键是 \t. backspace 删除 \t;
+                      --   当 softtabstop=2, tabstop=4, 则第一个 <Tab> 是两个空格, 连续两个 <Tab> 会变成 \t;
+                      --   每个 <Backspace> 删除1个 softtabstop, 即2个空格.
 
 vim.opt.smarttab = true  -- 默认开启.
-                         -- true: 在每行开头的地方 <Tab> 使用 shiftwidth 宽度, 在其他地方 <Tab> 使用 tabstop / softtabstop 宽度.
-                         -- false: 在任何地方 <Tab> 都使用 tabstop/softtabstop 宽度, shiftwidth 只在 >> 时使用.
+                      -- true: 在每行开头的地方 <Tab> 使用 shiftwidth 宽度, 在其他地方 <Tab> 使用 tabstop / softtabstop 宽度.
+                      -- false: 在任何地方 <Tab> 都使用 tabstop/softtabstop 宽度, shiftwidth 只在 >> 时使用.
 
-vim.opt.tabstop = tab_width  -- \t 缩进宽度. vscode 中的 editor.tabSize 设置, .editorconfig 中 tab_width 设置.
-                         -- 只作为编辑器显示 \t 宽度用.
+vim.opt.tabstop = tab_width -- '\t' 字符显示宽度, 同时也是 softtabstop 中凑成一个 '\t' 所需的 space 数量.
+                      -- vscode 中的 editor.tabSize 设置, .editorconfig 中 tab_width 设置.
+                      -- eg: tabstop=8, softtabstop=4, 则按下 <Tab> 键时, 如果能凑够 8 个 space 则变成一个 '\t' 字符.
 
-vim.opt.softtabstop = -1 -- =0, 不使用 softtabstop.
-                         -- <0, eg:-1, 和 shiftwidth 保持一致.
-                         -- >0, eg:6, 在 insert <Tab> 的情况下取代 tabstop 的作用.
-                         -- tabstop=4, softtabstop=6, noexpandtab 情况下按下 <Tab> 时, 插入1个 \t 和2个空格.
-                         -- tabstop=4, softtabstop=0, noexpandtab 情况下按下 <Tab> 时, 插入1个 \t.
-                         -- tabstop=4, softtabstop=6, expandtab 情况下按下 <Tab> 时, 插入6个空格.
-                         -- tabstop=4, softtabstop=0, expandtab 情况下按下 <Tab> 时, 插入4个空格.
-                         -- tabstop=4, softtabstop=-1, shiftwidth=2 情况下按下 <Tab> 时, 插入2个空格.
+vim.opt.softtabstop = -1 -- <Tab> & <BackSpace> 按键的缩进宽度, 同时也受到 'smarttab' 影响.
+                      -- =0, 不使用 softtabstop.
+                      -- <0, eg:-1, 和 shiftwidth 保持一致.
+                      -- >0, eg:6, 在 insert <Tab> 的情况下取代 tabstop 的作用.
+                      -- nosmarttab, tabstop=4, softtabstop=6, noexpandtab 情况下按下 <Tab> 时, 插入1个 \t 和2个空格.
+                      -- nosmarttab, tabstop=4, softtabstop=0, noexpandtab 情况下按下 <Tab> 时, 插入1个 \t.
+                      -- nosmarttab, tabstop=4, softtabstop=6, expandtab 情况下按下 <Tab> 时, 插入6个空格.
+                      -- nosmarttab, tabstop=4, softtabstop=0, expandtab 情况下按下 <Tab> 时, 插入4个空格.
+                      -- nosmarttab, tabstop=4, softtabstop=-1, shiftwidth=2 情况下按下 <Tab> 时, 插入2个空格.
 
-vim.opt.shiftwidth = tab_width  -- <Tab> & <BackSpace> & <Shift> 键宽度.
-                         -- 在 let g:prettier#config#tab_width='auto' 时影响 prettier indent 的宽度.
-                         -- 在 let g:prettier#config#tab_width=2 时不影响 prettier.
-                         -- 同时影响 indentLine 画线的宽度.
+vim.opt.shiftwidth = tab_width -- <Shift-right/left> 按键的缩进宽度, 同时也受到 'smarttab' 影响.
+                      -- 在 let g:prettier#config#tab_width='auto' 时影响 prettier indent 的宽度.
+                      -- 在 let g:prettier#config#tab_width=2 时不影响 prettier.
+                      -- 同时影响 indentLine 画线的宽度.
 
 vim.opt.textwidth = 120  -- 文字自动(硬)换行长度. 即文字写在下一行(增加行号).
-                         -- 这里的设置和 golangci-lint lll 长度一样.
-                         -- 默认值为 0 即不换行, 文字可以超出屏幕.
+                      -- 这里的设置和 golangci-lint lll 长度一样.
+                      -- 默认值为 0 即不换行, 文字可以超出屏幕.
 
-vim.opt.wrap = false     -- wrap(默认) - 超出屏幕则(软)换行. 即行号不变, 文字在下一行显示.
-                         -- nowrap - 单行可以超出屏幕, 不换行;
+vim.opt.wrap = false  -- wrap(默认) - 超出屏幕则(软)换行. 即行号不变, 文字在下一行显示.
+                      -- nowrap - 单行可以超出屏幕, 不换行;
 
 --vim.opt.formatoptions='tcq'   -- `:help fo-table` 自动(硬)换行 breakline 的 options. 一般情况下只会 break Comments.
                                 -- 常用 options: `tcq`(默认), `cq`(go,json...), `croql`(vim,ts,js...)
