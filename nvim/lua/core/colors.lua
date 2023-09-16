@@ -94,7 +94,7 @@ local highlights = {
   CursorLine   = {ctermbg = 236}, -- 光标所在行颜色
   CursorLineNr = {ctermfg = Color.yellow, cterm = {'bold'}}, -- 光标所在行号的颜色
   SignColumn   = {ctermbg = Color.none}, -- line_number 左边用来标记错误, 打断点的位置. 术语 gutter
-  ColorColumn  = {ctermbg = 238}, -- textwidth column 颜色
+  ColorColumn  = {ctermbg = 235}, -- textwidth column 颜色
   QuickFixLine = {ctermfg = Color.boolean_blue, cterm = {'bold'}}, -- Quick Fix 选中行颜色
 
   IncSearch = {ctermfg = Color.black, ctermbg = Color.magenta, cterm = {'bold'}}, -- / ? 搜索颜色

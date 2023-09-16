@@ -428,6 +428,8 @@ vim.opt.cursorline = true    -- 显示当前行. hi CursorLine, CursorLineNr
 vim.opt.cursorlineopt = "number,screenline"  -- screenline 和 line 的区别在于 `set wrap` 情况下 cursorline 显示.
 --vim.opt.cursorcolumn = true       -- 突出显示当前列. 包括: 背景色...
 
+vim.opt.colorcolumn = '+1'  -- highlight column after 'textwidth'
+
 --- NOTE: 只在 focus 的 window 中显示 cursorline.
 vim.api.nvim_create_autocmd("BufEnter", {
   pattern = {"*"},
@@ -473,10 +475,6 @@ vim.opt.completeopt = { "menu", "menuone", "noselect" } -- 代码补全, nvim-cm
 vim.opt.pumheight = 16  -- Maximum number of items to show in the popup menu. 默认 0
 --vim.opt.pumwidth = 15   -- Minimum width for the popup menu (ins-completion-menu). 默认 15
 
---- 只在超出 textwidth 的行中显示 ColorColumn. 可以替代 `set colorcolumn`
---vim.opt.colorcolumn = '+1'  -- :set cc=+1  " highlight column after 'textwidth'
-                              -- :set cc=+1,+2,+3  " highlight three columns after 'textwidth'
-
 --- backup swapfile undofile ----------------------------------------------------------------------- {{{
 --- `:help backup-table`, 四种设置情况.
 --- 禁用 backup 功能.
@@ -508,55 +506,6 @@ vim.api.nvim_create_autocmd("VimEnter", {
     end)
   end,
   desc = "mkdir -p undodir",
-})
--- -- }}}
-
---- colorcolumn ------------------------------------------------------------------------------------ {{{
-local my_colorcolumn = 'my_colorcolumn'
-local function add_colorcolumn(win_id, textwidth)
-  --- 如果该 window 已经设置了 my_colorcolumn 则 return
-  local matches = vim.fn.getmatches(win_id)
-  for _, m in ipairs(matches) do
-    if m.group == my_colorcolumn then
-      return
-    end
-  end
-
-  local pattern = '\\%' .. textwidth+1 .. 'v'
-  vim.fn.matchadd(my_colorcolumn, pattern, 100, -1, {window=win_id})
-end
-
-local function delete_colorcolumn(win_id)
-  --- win_id 不存在
-  if not vim.api.nvim_win_is_valid(win_id) then
-    return
-  end
-
-  local matches = vim.fn.getmatches(win_id)
-  for _, m in ipairs(matches) do
-    if m.group == my_colorcolumn then
-      vim.fn.matchdelete(m.id, win_id)
-    end
-  end
-end
-
---- NOTE: autocmd FileType 时, 如果文件的 filetype 无法识别, 则不会触发该 autocmd.
-vim.api.nvim_set_hl(0, my_colorcolumn, {link="ColorColumn"}) -- 自定义颜色, for matchadd()
-vim.api.nvim_create_autocmd("BufWinEnter", {
-  pattern = {"*"},
-  callback = function(params)
-    local win_id = vim.api.nvim_get_current_win()
-
-    --- `:help 'buftype'`, exclude buftype: nofile, terminal, quickfix, prompt, help ...
-    --- 如果 buffer 没有设置 textwidth, 即:textwidth=0, 则不 highlight virtual column.
-    --- `:help pattern`, `\%23v` highlight virtual column 23.
-    if vim.bo[params.buf].buftype == '' and vim.bo[params.buf].textwidth > 0 then
-      add_colorcolumn(win_id, vim.bo[params.buf].textwidth)
-    else
-      delete_colorcolumn(win_id)
-    end
-  end,
-  desc = "using matchadd() set colorcolumn",
 })
 -- -- }}}
 
