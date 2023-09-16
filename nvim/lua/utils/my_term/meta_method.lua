@@ -259,6 +259,10 @@ local function buf_job_output(term_obj)
     -- vim.opt_local.number = false
     vim.opt_local.relativenumber = false
     vim.opt_local.signcolumn = "no"
+
+    --- space 默认设置为和 trail 一样的 char.
+    local listchars = vim.opt_local.listchars:get()
+    vim.opt_local.listchars:append({space = listchars.trail or '·'})
   end)
 
   --- set bufname
