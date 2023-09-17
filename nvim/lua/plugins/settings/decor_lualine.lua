@@ -128,7 +128,7 @@ local function my_trailing_whitespace()
       vim.b[bufvar_lualine] = nil
     end
 
-    --- update changedtick
+    --- NOTE: 在计算结果之后 update changedtick.
     cache_changetick = vim.b.changedtick
   end
 
