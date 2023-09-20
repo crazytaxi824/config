@@ -38,10 +38,13 @@ brew "node"
 brew "node@16"  # LTS version for Github Copilot 和某些其他应用
 #brew "go"      # 推荐使用 https://go.dev 中下载安装.
 #brew "rust"
-#brew "lua"     # "luajit", "luarocks", "stylua" ...
+#brew "lua"
+#brew "luajit"
+
+# format tools
 brew "prettier" # 格式化工具
 #brew "shfmt"   # shell 格式化工具
-brew "clang-format" # c,c++,object-c 格式化工具
+#brew "clang-format" # c,c++,object-c 格式化工具
 
 # dev tools
 brew "graphviz" # 图表绘制工具, go 性能分析需要用到
