@@ -252,8 +252,12 @@ vim.opt.textwidth = 120  -- 文字自动(硬)换行长度. 即文字写在下一
 vim.opt.wrap = false  -- wrap(默认) - 超出屏幕则(软)换行. 即行号不变, 文字在下一行显示.
                       -- nowrap - 单行可以超出屏幕, 不换行;
 
---vim.opt.formatoptions='tcq'   -- `:help fo-table` 自动(硬)换行 breakline 的 options. 一般情况下只会 break Comments.
-                                -- 常用 options: `tcq`(默认), `cq`(go,json...), `croql`(vim,ts,js...)
+--vim.opt.formatoptions='tcqj'  -- `:help fo-table` 自动(硬)换行 breakline 的 options.
+                                -- 不同 filetype formatoptions 不相同.
+                                -- `tcqj`(default), `cqj`(go,json...), `jcroql`(vim,ts,js...)
+                                -- t: wrap text using 'textwidth'.
+                                -- c: wrap comments using 'textwidth'.
+                                -- j: join lines.
 
 --- prettier 支持的文件, 默认都是使用 2 个 space 来 indent.
 --- 同时 shiftwidth 会影响 indent line 画线的宽度.
