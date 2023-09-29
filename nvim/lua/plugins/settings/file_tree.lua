@@ -226,6 +226,7 @@ nvim_tree.setup {
 
   renderer = {
     highlight_git = true,  -- 开启 git filename 颜色. 需要设置 git.enable = true
+    highlight_bookmarks = "all",
     highlight_opened_files = "name", -- highlight icon or filename or both.
                                      -- "none"(*) | "icon" | "name" | "all"
     indent_width = 2, -- 默认 2.
@@ -349,6 +350,10 @@ vim.api.nvim_set_hl(0, 'NvimTreeSpecialFile', {ctermfg=179})  -- 自定义 Sepci
 --- window_picker color
 vim.api.nvim_set_hl(0, 'NvimTreeWindowPicker',
   {ctermfg=Color.black, ctermbg=Color.magenta, bold=true})
+
+--- bookmark color
+vim.api.nvim_set_hl(0, 'NvimTreeBookmark', {ctermfg=Color.magenta})  -- icon color
+vim.api.nvim_set_hl(0, 'NvimTreeBookmarkHL', {ctermfg=Color.black, ctermbg=Color.magenta})  -- filename color
 
 --- nvim-tree Git color, 需要开启 highlight_git=true, render={git={enable=true}}
 --- 这里设置了 git icon color
