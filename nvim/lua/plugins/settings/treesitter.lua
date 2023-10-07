@@ -106,28 +106,9 @@ ts_configs.setup {
       'rescript', 'xml', 'markdown',
     },
   },
-
-  --- "p00f/nvim-ts-rainbow"
-  --- rainbow = {
-  ---   enable = false,  -- VVI: 严重拖慢文件打开速度, 不建议开启.
-  ---   disable = { "cpp", "go" },  -- list of languages you want to disable the plugin for
-  ---   extended_mode = false,  -- Also highlight non-bracket delimiters like html tags,
-  ---                           -- boolean or table: {lang = boolean}
-  ---   max_file_lines = 999, -- Do not enable for files with more than n lines, int
-  --- },
 }
 
---- `nvim-ts-rainbow` color settings --------------------------------------------------------------- {{{
----vim.cmd [[hi rainbowcol1 ctermfg=220]]  -- yellow
----vim.cmd [[hi rainbowcol2 ctermfg=33]]   -- blue
----vim.cmd [[hi rainbowcol3 ctermfg=81]]   -- cyan
----vim.cmd [[hi rainbowcol4 ctermfg=206]]  -- magenta
----vim.cmd [[hi rainbowcol5 ctermfg=42]]   -- green
----vim.cmd [[hi rainbowcol6 ctermfg=167]]  -- red
----vim.cmd [[hi rainbowcol7 ctermfg=248]]  -- grey
--- -- }}}
-
---- prompt before install missing parser for languages --------------------------------------------- {{{
+--- prompt before install missing parser for languages ---------------------------------------------
 vim.api.nvim_create_autocmd("FileType", {
   pattern = {"*"},
   callback = function(params)
@@ -144,7 +125,6 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
   desc = "treesitter: Check treesitter parser for filetypes"
 })
--- -- }}}
 
 
 

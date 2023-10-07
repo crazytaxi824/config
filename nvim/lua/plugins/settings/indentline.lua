@@ -8,23 +8,26 @@ if not status_ok then
   return
 end
 
---- 设置颜色 `:help indent-blankline-highlights` --------------------------------------------------- {{{
---- char_highlight_list 颜色
-vim.api.nvim_set_hl(0, 'IndentBlanklineIndent1', {ctermfg=172})
-vim.api.nvim_set_hl(0, 'IndentBlanklineIndent2', {ctermfg=25})
-vim.api.nvim_set_hl(0, 'IndentBlanklineIndent3', {ctermfg=29})
-vim.api.nvim_set_hl(0, 'IndentBlanklineIndent4', {ctermfg=128})
-vim.api.nvim_set_hl(0, 'IndentBlanklineIndent5', {ctermfg=198})
-vim.api.nvim_set_hl(0, 'IndentBlanklineIndent6', {ctermfg=105})
-
-local indent_highlights = {
-  'IndentBlanklineIndent1',
-  'IndentBlanklineIndent2',
-  'IndentBlanklineIndent3',
-  'IndentBlanklineIndent4',
-  'IndentBlanklineIndent5',
-  'IndentBlanklineIndent6',
-}
+--- 设置 indent.char 颜色 -------------------------------------------------------------------------- {{{
+-- vim.api.nvim_set_hl(0, 'RainbowGrey',   {ctermfg=240})
+-- vim.api.nvim_set_hl(0, 'RainbowRed',    {ctermfg=167})
+-- vim.api.nvim_set_hl(0, 'RainbowYellow', {ctermfg=180})
+-- vim.api.nvim_set_hl(0, 'RainbowBlue',   {ctermfg=75})
+-- vim.api.nvim_set_hl(0, 'RainbowOrange', {ctermfg=173})
+-- vim.api.nvim_set_hl(0, 'RainbowGreen',  {ctermfg=107})
+-- vim.api.nvim_set_hl(0, 'RainbowViolet', {ctermfg=176})
+-- vim.api.nvim_set_hl(0, 'RainbowCyan',   {ctermfg=73})
+--
+-- local indent_highlights = {
+--   'RainbowGrey',
+--   'RainbowRed',
+--   'RainbowYellow',
+--   'RainbowBlue',
+--   'RainbowOrange',
+--   'RainbowGreen',
+--   'RainbowViolet',
+--   'RainbowCyan',
+-- }
 -- -- }}}
 
 --- set list & set listchars, NOTE: 在 settings.lua 中设置.
