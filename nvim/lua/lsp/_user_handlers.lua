@@ -17,6 +17,7 @@
 --   }
 -- )
 
+--- `:help vim.lsp.diagnostic.on_publish_diagnostics()`
 --- publishDiagnostics 是用来 diagnostic 的.
 -- vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 --   vim.lsp.handlers["textDocument/publishDiagnostics"], {
