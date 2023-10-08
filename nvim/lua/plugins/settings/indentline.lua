@@ -56,10 +56,8 @@ indent_blankline.setup({
     show_start = false,  -- Underline first line of the scope. eg: "func Foo()"
     show_end = false,    -- Underline last line of the scope. eg: "return"
     highlight = {
-      'RainbowBlue',
       'RainbowGreen',
-      'RainbowViolet',
-      'RainbowCyan',
+      'RainbowBlue',
     },
   },
 
