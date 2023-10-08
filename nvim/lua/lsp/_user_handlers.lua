@@ -1,48 +1,28 @@
 --- Overwrite handler 设置
---- 使用 with() 方法. `:help lsp-handler-configuration`
---- `:help lsp-api` lsp-method 显示 textDocument/... 列表
+--- DOC: 使用 with() 方法. `:help lsp-handler-configuration`
+--- DOC: `:help lsp-api` lsp-method 显示 textDocument/... 列表
 
---- handler config examples ------------------------------------------------------------------------ {{{
---- signatureHelp 是用来显示函数入参出参的.
--- vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
---   vim.lsp.handlers["textDocument/signatureHelp"],
---   { focusable = false, border = {"▄","▄","▄","█","▀","▀","▀","█"},  }
--- )
-
---- NOTE: 这里是修改输出到 location-list. 默认是 quickfix
--- vim.lsp.handlers["textDocument/references"] = vim.lsp.with(
---   vim.lsp.handlers["textDocument/references"], {
---     -- Use location list instead of quickfix list
---     loclist = true,  -- qflist | loclist
---   }
--- )
-
+--- 'textDocument/publishDiagnostics' settings ------------------------------------------------------
 --- `:help vim.lsp.diagnostic.on_publish_diagnostics()`
---- publishDiagnostics 是用来 diagnostic 的.
--- vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
---   vim.lsp.handlers["textDocument/publishDiagnostics"], {
---     -- Enable underline, use default values
---     underline = true,
---
---     -- Enable virtual text, override spacing to 4
---     virtual_text = {
---       spacing = 4,
---       source = true,
---     },
---
---     -- Use a function to dynamically turn signs off
---     -- and on, using buffer local variables
---     signs = function(namespace, bufnr)
---       return vim.b[bufnr].show_signs == true
---     end,
---
---     -- Disable a feature
---     update_in_insert = false,
---   }
--- )
--- -- }}}
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+  vim.lsp.handlers["textDocument/publishDiagnostics"], {
+    underline = true,  -- Enable underline, use default values
 
---- 这里是修改 'textDocument/hover' handler 的 border 样式 -----------------------------------------
+    --virtual_text = { spacing = 4 },  -- Enable virtual text, override spacing to 4
+    virtual_text = false,
+
+    -- Use a function to dynamically turn signs off
+    -- and on, using buffer local variables
+    --signs = function(namespace, bufnr)
+    --  return vim.b[bufnr].show_signs == true
+    --end,
+    signs = true,
+
+    update_in_insert = false,
+  }
+)
+
+--- 'textDocument/hover' handler 的 border 样式 ----------------------------------------------------
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
   vim.lsp.handlers["textDocument/hover"],
   {
