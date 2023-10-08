@@ -26,7 +26,7 @@ local plugins = {
   { "folke/lazy.nvim",
     --- install the latest stable version of plugins that support Semver.
     -- version = "*",  -- 相当于 tag='stable'
-    tag = "v10.7.1",
+    tag = "v10.8.2",
   },
 
   --- Performence & Functions ----------------------------------------------------------------------
@@ -193,7 +193,7 @@ local plugins = {
 
   --- 自动括号, 同时依赖 treesitter && cmp
   {"windwp/nvim-autopairs",
-    commit = "de4f713",
+    commit = "748e72c",
     config = function() require("plugins.settings.autopairs") end,
     dependencies = {
       "nvim-treesitter/nvim-treesitter",  -- setup() 中 `check_ts`, `ts_config` 需要 treesitter 支持.
@@ -256,7 +256,7 @@ local plugins = {
   --- Debug tools 安装 -----------------------------------------------------------------------------
   --- NOTE: dap-ui && dap 设置在同一文件中.
   {"mfussenegger/nvim-dap",  -- core debug tool
-    commit = "b3d4408",  -- tag = "0.6.0",
+    commit = "e79007c",  -- tag = "0.6.0",
     dependencies = {"williamboman/mason.nvim"},  -- install dap-debug tools. eg: 'delve'
 
     lazy = true,  -- nvim-dap-ui 加载时自动加载.
@@ -274,6 +274,7 @@ local plugins = {
   --- 依赖 rg fd, 但不依赖 fzf. 没有 fzf 命令行工具也可以运行.
   --- telescope 的 preview syntax 默认使用的是 treesitter, 如果没有 treesitter 则使用 vim syntax highlights.
   {"nvim-telescope/telescope.nvim",
+    branch = "0.1.x",  -- master branch is nightly version.
     tag = "0.1.3",
     config = function() require("plugins.settings.telescope_fzf") end,
     dependencies = {
