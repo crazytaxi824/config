@@ -147,6 +147,7 @@ local highlights = {
   DiagnosticWarn  = {ctermfg = Color.orange},
   DiagnosticError = {ctermfg = Color.red},
   DiagnosticUnnecessary = {link = "DiagnosticHint"},
+  DiagnosticDeprecated = {link = "DiagnosticHint"},
 
   DiagnosticUnderlineHint = {ctermfg = Color.hint_grey, cterm = {'underline'}},
   DiagnosticUnderlineInfo = { cterm = {'underline'} },

@@ -8,42 +8,40 @@ if not status_ok then
   return
 end
 
---- 设置 indent.char 颜色 -------------------------------------------------------------------------- {{{
--- vim.api.nvim_set_hl(0, 'RainbowGrey',   {ctermfg=240})
--- vim.api.nvim_set_hl(0, 'RainbowRed',    {ctermfg=167})
--- vim.api.nvim_set_hl(0, 'RainbowYellow', {ctermfg=180})
--- vim.api.nvim_set_hl(0, 'RainbowBlue',   {ctermfg=75})
--- vim.api.nvim_set_hl(0, 'RainbowOrange', {ctermfg=173})
--- vim.api.nvim_set_hl(0, 'RainbowGreen',  {ctermfg=107})
--- vim.api.nvim_set_hl(0, 'RainbowViolet', {ctermfg=176})
--- vim.api.nvim_set_hl(0, 'RainbowCyan',   {ctermfg=73})
---
--- local indent_highlights = {
---   'RainbowGrey',
---   'RainbowRed',
---   'RainbowYellow',
---   'RainbowBlue',
---   'RainbowOrange',
---   'RainbowGreen',
---   'RainbowViolet',
---   'RainbowCyan',
--- }
--- -- }}}
+--- 设置 indent.char 颜色 --------------------------------------------------------------------------
+vim.api.nvim_set_hl(0, 'RainbowGrey',   {ctermfg=240})
+vim.api.nvim_set_hl(0, 'RainbowRed',    {ctermfg=167})
+vim.api.nvim_set_hl(0, 'RainbowYellow', {ctermfg=180})
+vim.api.nvim_set_hl(0, 'RainbowBlue',   {ctermfg=75})
+vim.api.nvim_set_hl(0, 'RainbowOrange', {ctermfg=173})
+vim.api.nvim_set_hl(0, 'RainbowGreen',  {ctermfg=107})
+vim.api.nvim_set_hl(0, 'RainbowViolet', {ctermfg=176})
+vim.api.nvim_set_hl(0, 'RainbowCyan',   {ctermfg=73})
 
 --- set list & set listchars, NOTE: 在 settings.lua 中设置.
 --vim.opt.list = true
 --vim.opt.listchars:append("space:⋅")
 --vim.opt.listchars:append("eol:↴")
 
---- `:help indent-blankline`
+--- `:help indent-blankline` -----------------------------------------------------------------------
 indent_blankline.setup({
   enabled = true,  -- Enables or disables indent-blankline
 
   --- `:help ibl.config.indent`
   indent = {
-    char = "│",     -- space indent char
+    char = "│",      -- space indent char
     tab_char = "│",  -- tab indent char
-    -- highlight = indent_highlights,  --- colorful indent line.
+    -- highlight = {  -- colorful indent line.  --- {{{
+    --   'RainbowGrey',
+    --   'RainbowRed',
+    --   'RainbowYellow',
+    --   'RainbowBlue',
+    --   'RainbowOrange',
+    --   'RainbowGreen',
+    --   'RainbowViolet',
+    --   'RainbowCyan',
+    -- },
+    -- -- }}}
   },
 
   --- `:help ibl.config.whitespace`
@@ -52,25 +50,24 @@ indent_blankline.setup({
     -- highlight = "NonText",  --- `listchars.trail` ·· 点的颜色
   },
 
-  --- `:help ibl.config.scope`, cursor 所在位置的 treesitter node 的相关颜色, 需要 treesitter.
+  --- `:help ibl.config.scope`, cursor 所在位置的 treesitter node 显示 underline, 需要 treesitter.
   scope = {
-    enabled = false,  --- NOTE: Scope requires treesitter to be set up.
-    -- show_start = false,  -- Underline first line of the scope.
-    -- show_end = false,    -- Underline last line of the scope.
+    enabled = true,  -- NOTE: Scope requires treesitter to be set up.
+    show_start = false,  -- Underline first line of the scope. eg: "func Foo()"
+    show_end = false,    -- Underline last line of the scope. eg: "return"
+    highlight = {
+      'RainbowGreen',
+      'RainbowBlue',
+    },
   },
 
   exclude = {
     filetypes = {
-      "qf",  -- quickfix & location list
-      "help",
-      "packer",
       "NvimTree",
-      "tagbar",
       "startify",
       "dashboard",
       "neogitstatus",
       "Trouble",
-      --"python",  -- python 不适合 indent line.
     },
     buftypes = { "nofile", "quickfix", "help", "terminal", "prompt" },
   },
