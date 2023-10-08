@@ -4,20 +4,25 @@
 
 --- 'textDocument/publishDiagnostics' settings ------------------------------------------------------
 --- `:help vim.lsp.diagnostic.on_publish_diagnostics()`
+--- NOTE: 会影响 vim.diagnostic.config() 设置.
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   vim.lsp.handlers["textDocument/publishDiagnostics"], {
-    underline = true,  -- Enable underline, use default values
+    --- VVI: 必须为 true, 否则 diagnostic 无法正确显示颜色.
+    underline = true,  -- Enable underline, use default values.
 
-    --virtual_text = { spacing = 4 },  -- Enable virtual text, override spacing to 4
+    --- 使用 virtual_text 显示 diagnostic message.
     virtual_text = false,
+    --virtual_text = { spacing = 4 },  -- Enable virtual text, override spacing to 4
 
+    --- 是否显示 diagnostic signs.
+    signs = true,
     -- Use a function to dynamically turn signs off
     -- and on, using buffer local variables
     --signs = function(namespace, bufnr)
     --  return vim.b[bufnr].show_signs == true
     --end,
-    signs = true,
 
+    --- 输入时实时更新 diagnostic, 比较耗资源.
     update_in_insert = false,
   }
 )
