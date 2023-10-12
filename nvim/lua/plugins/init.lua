@@ -26,7 +26,7 @@ local plugins = {
   { "folke/lazy.nvim",
     --- install the latest stable version of plugins that support Semver.
     -- version = "*",  -- 相当于 tag='stable'
-    tag = "v10.7.1",
+    tag = "v10.9.1",
   },
 
   --- Performence & Functions ----------------------------------------------------------------------
@@ -74,7 +74,7 @@ local plugins = {
   --- By convention, if you want to write a query, use the `queries/` directory,
   --- but if you want to extend a query use the `after/queries/` directory.
   {"nvim-treesitter/nvim-treesitter",
-    commit = "10bfa48",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "1d1c32b",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     --build = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
     config = function() require("plugins.settings.treesitter") end,
     dependencies = {
@@ -89,7 +89,7 @@ local plugins = {
 
   --- 第一方 module 插件 ---
   {"nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-    commit = "2095f23",
+    commit = "97b9f0b",
     config = function() require("plugins.settings.treesitter_ctx") end,
 
     lazy = true,  -- nvim-treesitter 加载时自动加载.
@@ -168,7 +168,7 @@ local plugins = {
   },
 
   {"saadparwaiz1/cmp_luasnip",  -- Snippets source for nvim-cmp
-    commit = "1809552",
+    commit = "05a9ab2",
     dependencies = {"L3MON4D3/LuaSnip"},  -- snippets content
 
     lazy = true,  -- nvim-cmp 加载时自动加载.
@@ -193,7 +193,7 @@ local plugins = {
 
   --- 自动括号, 同时依赖 treesitter && cmp
   {"windwp/nvim-autopairs",
-    commit = "de4f713",
+    commit = "748e72c",
     config = function() require("plugins.settings.autopairs") end,
     dependencies = {
       "nvim-treesitter/nvim-treesitter",  -- setup() 中 `check_ts`, `ts_config` 需要 treesitter 支持.
@@ -229,7 +229,7 @@ local plugins = {
 
   --- File explorer --------------------------------------------------------------------------------
   {"kyazdani42/nvim-tree.lua",
-    commit = "d8e495b",
+    commit = "53b0bca",
     config = function() require("plugins.settings.file_tree") end,
 
     -- VVI: 本文件最后设置: 在 `nvim dir` 直接打开文件夹的时直接加载 nvim-tree.lua.
@@ -256,7 +256,7 @@ local plugins = {
   --- Debug tools 安装 -----------------------------------------------------------------------------
   --- NOTE: dap-ui && dap 设置在同一文件中.
   {"mfussenegger/nvim-dap",  -- core debug tool
-    commit = "b3d4408",  -- tag = "0.6.0",
+    commit = "e79007c",  -- tag = "0.6.0",
     dependencies = {"williamboman/mason.nvim"},  -- install dap-debug tools. eg: 'delve'
 
     lazy = true,  -- nvim-dap-ui 加载时自动加载.
@@ -274,6 +274,7 @@ local plugins = {
   --- 依赖 rg fd, 但不依赖 fzf. 没有 fzf 命令行工具也可以运行.
   --- telescope 的 preview syntax 默认使用的是 treesitter, 如果没有 treesitter 则使用 vim syntax highlights.
   {"nvim-telescope/telescope.nvim",
+    branch = "0.1.x",  -- master branch is nightly version.
     tag = "0.1.3",
     config = function() require("plugins.settings.telescope_fzf") end,
     dependencies = {
