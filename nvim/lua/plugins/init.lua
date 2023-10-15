@@ -26,7 +26,7 @@ local plugins = {
   { "folke/lazy.nvim",
     --- install the latest stable version of plugins that support Semver.
     -- version = "*",  -- 相当于 tag='stable'
-    tag = "v10.9.1",
+    tag = "v10.13.4",
   },
 
   --- Performence & Functions ----------------------------------------------------------------------
@@ -74,7 +74,7 @@ local plugins = {
   --- By convention, if you want to write a query, use the `queries/` directory,
   --- but if you want to extend a query use the `after/queries/` directory.
   {"nvim-treesitter/nvim-treesitter",
-    commit = "783e5fc",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "43694a2",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     --build = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
     config = function() require("plugins.settings.treesitter") end,
     dependencies = {
@@ -89,7 +89,7 @@ local plugins = {
 
   --- 第一方 module 插件 ---
   {"nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-    commit = "4cf6426",
+    commit = "82c6959",
     config = function() require("plugins.settings.treesitter_ctx") end,
 
     lazy = true,  -- nvim-treesitter 加载时自动加载.
@@ -193,7 +193,7 @@ local plugins = {
 
   --- 自动括号, 同时依赖 treesitter && cmp
   {"windwp/nvim-autopairs",
-    commit = "748e72c",
+    commit = "f6c7164",
     config = function() require("plugins.settings.autopairs") end,
     dependencies = {
       "nvim-treesitter/nvim-treesitter",  -- setup() 中 `check_ts`, `ts_config` 需要 treesitter 支持.
@@ -207,7 +207,7 @@ local plugins = {
   --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
   --- 官方 LSP 引擎.
   {"neovim/nvim-lspconfig",
-    commit = "cab7233",
+    commit = "2a101fb",
     config = function() require("lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     dependencies = {
       "williamboman/mason.nvim",  -- 安装 lsp 命令行工具.
@@ -307,7 +307,9 @@ local plugins = {
 
   --- markdown, VVI: 安装 preview 插件后需要一段时间来执行 vim.fn["mkdp#util#install"]() 如果无法运行可以重装该插件.
   {"iamcco/markdown-preview.nvim",
-    build = function() vim.fn["mkdp#util#install"]() end,  -- VVI: 每次 Update 后需要重新执行 vim.fn["mkdp#util#install"](), 否则可能出现无法运行的情况.
+    commit = "de6c417",
+    --- VVI: 每次 Update 后需要重新执行 vim.fn["mkdp#util#install"](), 否则可能出现无法运行的情况.
+    build = function() vim.fn["mkdp#util#install"]() end,
 
     --- NOTE: 无法使用 cmd = { "MarkdownPreview", "MarkdownPreviewStop", "MarkdownPreviewToggle" }, 作为加载条件.
     ft = {"markdown"},  -- markdown-preview 加载时间 < 1ms
