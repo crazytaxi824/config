@@ -75,7 +75,7 @@ local plugins = {
   --- By convention, if you want to write a query, use the `queries/` directory,
   --- but if you want to extend a query use the `after/queries/` directory.
   {"nvim-treesitter/nvim-treesitter",
-    commit = "9c4fc86",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "afa1033",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     --build = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
     config = function() require("plugins.settings.treesitter") end,
     dependencies = {
@@ -90,7 +90,7 @@ local plugins = {
 
   --- 第一方 module 插件 ---
   {"nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-    commit = "82c6959",
+    commit = "7227dca",
     config = function() require("plugins.settings.treesitter_ctx") end,
 
     lazy = true,  -- nvim-treesitter 加载时自动加载.
@@ -135,7 +135,7 @@ local plugins = {
 
   --- Auto Completion ------------------------------------------------------------------------------
   {"hrsh7th/nvim-cmp",
-    commit = "5dce1b7",
+    commit = "d3a3056",
     config = function() require("plugins.settings.cmp_completion") end,
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全
@@ -177,7 +177,7 @@ local plugins = {
 
   --- snippet engine, for "cmp_luasnip", 每次打开文件都会有一个 [Scratch] buffer.
   {"L3MON4D3/LuaSnip",
-    commit = "0df29db",
+    commit = "80a8528",
     build = "make install_jsregexp",  -- https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#transformations
     config = function() require("plugins.settings.luasnip_snippest") end,
     dependencies = {"rafamadriz/friendly-snippets"},  -- snippets content
@@ -319,7 +319,7 @@ local plugins = {
   --- https://docs.github.com/en/copilot
   --- https://docs.github.com/en/copilot/getting-started-with-github-copilot?tool=neovim#prerequisites-3
   {"github/copilot.vim",
-    commit = "998cf5a",
+    commit = "59c0239",
     config = function()
       --- VVI: Neovim >= 0.6 and Node.js <= 17
       --- 指定 nodejs 版本. 这里使用的是 `brew install node@16`
