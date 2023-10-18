@@ -123,7 +123,7 @@ local nt_buffer_keymaps = {
 
   { "a",           nt_api.fs.create,   "Create File" },
   { "d",           nt_api.fs.remove,   "Remove File" },
-  { "R",           nt_api.fs.rename_sub,   "Full Rename" },  -- 类似 `$ mv foo bar`
+  { "R",           nt_api.fs.rename_full,   "Full Rename" },  -- 类似 `$ mv foo bar`
   { "y",           nt_api.fs.copy.absolute_path,   "Copy Absolute Path" },
   { "C",           nt_api.fs.copy.node,   "Copy File" },
   { "P",           nt_api.fs.paste,       "Paste File" },

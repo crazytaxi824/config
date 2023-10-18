@@ -26,19 +26,20 @@ local plugins = {
   { "folke/lazy.nvim",
     --- install the latest stable version of plugins that support Semver.
     -- version = "*",  -- 相当于 tag='stable'
-    tag = "v10.9.1",
+    tag = "v10.14.6",
   },
 
   --- Performence & Functions ----------------------------------------------------------------------
   --- Useful lua functions used by lots of plugins
   {"nvim-lua/plenary.nvim",
     priority = 1000,  -- 影响加载顺序, 默认值为 50.
-    commit = "9ce85b0",
+    commit = "5001291",
   },
 
   --- 通知功能
   {"rcarriga/nvim-notify",
-    tag = "v3.12.0",
+    commit = "e4a2022",
+    -- tag = "v3.12.0",
     config = function() require("plugins.settings.nvim_notify") end,
 
     event = "VeryLazy",
@@ -46,7 +47,7 @@ local plugins = {
 
   --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件
   {"williamboman/mason.nvim",
-    tag = "v1.8.0",
+    tag = "v1.8.1",
     build = ":MasonUpdate", -- :MasonUpdate updates All Registries, NOT packages.
     config = function() require("plugins.settings.mason_tool_installer") end,
     --- NOTE: 不能 lazyload mason, 否则其他插件无法找到 mason 安装的工具.
@@ -54,7 +55,7 @@ local plugins = {
 
   --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   {"folke/which-key.nvim",
-    tag = "v1.5.1",
+    tag = "v1.6.0",
     config = function() require("plugins.settings.which_key") end,
 
     event = "VeryLazy",
@@ -74,7 +75,7 @@ local plugins = {
   --- By convention, if you want to write a query, use the `queries/` directory,
   --- but if you want to extend a query use the `after/queries/` directory.
   {"nvim-treesitter/nvim-treesitter",
-    commit = "1d1c32b",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "afa1033",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     --build = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
     config = function() require("plugins.settings.treesitter") end,
     dependencies = {
@@ -89,7 +90,7 @@ local plugins = {
 
   --- 第一方 module 插件 ---
   {"nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-    commit = "97b9f0b",
+    commit = "7227dca",
     config = function() require("plugins.settings.treesitter_ctx") end,
 
     lazy = true,  -- nvim-treesitter 加载时自动加载.
@@ -103,7 +104,7 @@ local plugins = {
   },
 
   {"JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
-    commit = "7241635",
+    commit = "92e688f",
 
     lazy = true,  -- nvim-treesitter 加载时自动加载.
   },
@@ -125,7 +126,7 @@ local plugins = {
 
   --- indent line
   {"lukas-reineke/indent-blankline.nvim",
-    tag = "v3.2.7",
+    tag = "v3.3.2",
     config = function() require("plugins.settings.indentline") end,  -- setup() 设置 use_treesitter = true
     dependencies = {"nvim-treesitter/nvim-treesitter"},  -- for setup({scope})
 
@@ -134,7 +135,7 @@ local plugins = {
 
   --- Auto Completion ------------------------------------------------------------------------------
   {"hrsh7th/nvim-cmp",
-    commit = "5dce1b7",
+    commit = "d3a3056",
     config = function() require("plugins.settings.cmp_completion") end,
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全
@@ -176,7 +177,7 @@ local plugins = {
 
   --- snippet engine, for "cmp_luasnip", 每次打开文件都会有一个 [Scratch] buffer.
   {"L3MON4D3/LuaSnip",
-    commit = "cdbf6f4",
+    commit = "80a8528",
     build = "make install_jsregexp",  -- https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#transformations
     config = function() require("plugins.settings.luasnip_snippest") end,
     dependencies = {"rafamadriz/friendly-snippets"},  -- snippets content
@@ -193,7 +194,7 @@ local plugins = {
 
   --- 自动括号, 同时依赖 treesitter && cmp
   {"windwp/nvim-autopairs",
-    commit = "748e72c",
+    commit = "f6c7164",
     config = function() require("plugins.settings.autopairs") end,
     dependencies = {
       "nvim-treesitter/nvim-treesitter",  -- setup() 中 `check_ts`, `ts_config` 需要 treesitter 支持.
@@ -207,7 +208,7 @@ local plugins = {
   --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
   --- 官方 LSP 引擎.
   {"neovim/nvim-lspconfig",
-    commit = "2b361e0",
+    commit = "e49b1e9",
     config = function() require("lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     dependencies = {
       "williamboman/mason.nvim",  -- 安装 lsp 命令行工具.
@@ -229,7 +230,7 @@ local plugins = {
 
   --- File explorer --------------------------------------------------------------------------------
   {"kyazdani42/nvim-tree.lua",
-    commit = "53b0bca",
+    commit = "40b9b88",
     config = function() require("plugins.settings.file_tree") end,
 
     -- VVI: 本文件最后设置: 在 `nvim dir` 直接打开文件夹的时直接加载 nvim-tree.lua.
@@ -256,7 +257,7 @@ local plugins = {
   --- Debug tools 安装 -----------------------------------------------------------------------------
   --- NOTE: dap-ui && dap 设置在同一文件中.
   {"mfussenegger/nvim-dap",  -- core debug tool
-    commit = "e79007c",  -- tag = "0.6.0",
+    commit = "92dc531",  -- tag = "0.6.0",
     dependencies = {"williamboman/mason.nvim"},  -- install dap-debug tools. eg: 'delve'
 
     lazy = true,  -- nvim-dap-ui 加载时自动加载.
@@ -275,7 +276,7 @@ local plugins = {
   --- telescope 的 preview syntax 默认使用的是 treesitter, 如果没有 treesitter 则使用 vim syntax highlights.
   {"nvim-telescope/telescope.nvim",
     branch = "0.1.x",  -- master branch is nightly version.
-    tag = "0.1.3",
+    tag = "0.1.4",
     config = function() require("plugins.settings.telescope_fzf") end,
     dependencies = {
       "nvim-lua/plenary.nvim",
@@ -297,7 +298,7 @@ local plugins = {
   --- `:Gitsigns setqflist/seqloclist` will open Trouble instead of quickfix or location list windows.
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {"lewis6991/gitsigns.nvim",
-    commit = "ff01d34",
+    commit = "5a9a6ac",
     config = function() require("plugins.settings.git_signs") end,
 
     --- NOTE: `nvim dir` 启动时直接打开 dir 时可能会造成 gitsigns 报错. 根据测试情况选择 VeryLazy 或者 BufReadPre ...
@@ -307,7 +308,9 @@ local plugins = {
 
   --- markdown, VVI: 安装 preview 插件后需要一段时间来执行 vim.fn["mkdp#util#install"]() 如果无法运行可以重装该插件.
   {"iamcco/markdown-preview.nvim",
-    build = function() vim.fn["mkdp#util#install"]() end,  -- VVI: 每次 Update 后需要重新执行 vim.fn["mkdp#util#install"](), 否则可能出现无法运行的情况.
+    commit = "a923f5f",
+    --- VVI: 每次 Update 后需要重新执行 vim.fn["mkdp#util#install"](), 否则可能出现无法运行的情况.
+    build = function() vim.fn["mkdp#util#install"]() end,
 
     --- NOTE: 无法使用 cmd = { "MarkdownPreview", "MarkdownPreviewStop", "MarkdownPreviewToggle" }, 作为加载条件.
     ft = {"markdown"},  -- markdown-preview 加载时间 < 1ms
@@ -316,7 +319,7 @@ local plugins = {
   --- https://docs.github.com/en/copilot
   --- https://docs.github.com/en/copilot/getting-started-with-github-copilot?tool=neovim#prerequisites-3
   {"github/copilot.vim",
-    commit = "998cf5a",
+    commit = "59c0239",
     config = function()
       --- VVI: Neovim >= 0.6 and Node.js <= 17
       --- 指定 nodejs 版本. 这里使用的是 `brew install node@16`
