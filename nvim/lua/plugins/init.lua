@@ -126,7 +126,7 @@ local plugins = {
 
   --- indent line
   {"lukas-reineke/indent-blankline.nvim",
-    tag = "v3.3.2",
+    tag = "v3.3.3",
     config = function() require("plugins.settings.indentline") end,  -- setup() 设置 use_treesitter = true
     dependencies = {"nvim-treesitter/nvim-treesitter"},  -- for setup({scope})
 
@@ -248,7 +248,7 @@ local plugins = {
 
   --- statusline decorator, `:help 'statusline'`
   {"nvim-lualine/lualine.nvim",   -- bottom status line
-    commit = "45e27ca",
+    commit = "7533b0e",
     config = function() require("plugins.settings.decor_lualine") end,
 
     event = "VeryLazy",
