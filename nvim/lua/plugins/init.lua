@@ -47,7 +47,7 @@ local plugins = {
 
   --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件
   {"williamboman/mason.nvim",
-    tag = "v1.8.1",
+    tag = "v1.8.2",
     build = ":MasonUpdate", -- :MasonUpdate updates All Registries, NOT packages.
     config = function() require("plugins.settings.mason_tool_installer") end,
     --- NOTE: 不能 lazyload mason, 否则其他插件无法找到 mason 安装的工具.
