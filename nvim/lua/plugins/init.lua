@@ -321,18 +321,17 @@ local plugins = {
   {"github/copilot.vim",
     tag = "v1.11.4",
     config = function()
-      --- VVI: Neovim >= 0.6 and Node.js <= 17
-      --- 指定 nodejs 版本. 这里使用的是 `brew install node@16`
-      local node_path = "/usr/local/opt/node@16/bin/node"
+      --- VVI: `:help g:copilot_node_command`, using node@18
+      --- 安装指定的 nodejs 版本. `brew install node@18`
+      local node_path = "/usr/local/opt/node@18/bin/node"
 
-      --- check node existence
+      --- check node cmd existence
       if vim.fn.filereadable(node_path) == 0 then
         Notify({"'" .. node_path .. "' is NOT Exist."}, "WARN", {title = "github/copilot", timeout = false})
         return
       end
 
-      --- node version 17 or below
-      vim.g.copilot_node_command = "/usr/local/opt/node@16/bin/node"
+      vim.g.copilot_node_command = node_path
     end,
 
     cmd = {"Copilot"},  -- `:Copilot setup`, `:Copilot enable`, `:help copilot` 查看可用命令.
