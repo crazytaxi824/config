@@ -75,13 +75,12 @@ local plugins = {
   --- By convention, if you want to write a query, use the `queries/` directory,
   --- but if you want to extend a query use the `after/queries/` directory.
   {"nvim-treesitter/nvim-treesitter",
-    commit = "557561f",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "f2de95e",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     --build = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
     config = function() require("plugins.settings.treesitter") end,
     dependencies = {
       --- 以下都是 treesitter modules 插件, 在 setup() 中启用的插件.
       "nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-      "JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
       "windwp/nvim-ts-autotag",  -- auto close tag <div></div>
     },
 
@@ -90,7 +89,7 @@ local plugins = {
 
   --- 第一方 module 插件 ---
   {"nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-    commit = "c03f8aa",
+    commit = "f3ec0d8",
     config = function() require("plugins.settings.treesitter_ctx") end,
 
     lazy = true,  -- nvim-treesitter 加载时自动加载.
@@ -103,14 +102,19 @@ local plugins = {
     lazy = true,  -- nvim-treesitter 加载时自动加载.
   },
 
+  --- 以下是使用了 treesitter 功能的插件. (这些插件也可以不使用 treesitter 的功能)
+  --- 注释
   {"JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
-    commit = "6c30f3c",
+    commit = "ead792c",
+    config = function()
+      require("ts_context_commentstring").setup({
+        enable_autocmd = false,
+      })
+    end,
 
     lazy = true,  -- nvim-treesitter 加载时自动加载.
   },
 
-  --- 以下是使用了 treesitter 功能的插件. (这些插件也可以不使用 treesitter 的功能)
-  --- 注释
   {"numToStr/Comment.nvim",
     commit = "0236521",
     config = function() require("plugins.settings.comment") end,
@@ -208,7 +212,7 @@ local plugins = {
   --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
   --- 官方 LSP 引擎.
   {"neovim/nvim-lspconfig",
-    commit = "4834708",
+    commit = "7384e71",
     config = function() require("lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     dependencies = {
       "williamboman/mason.nvim",  -- 安装 lsp 命令行工具.
@@ -230,7 +234,7 @@ local plugins = {
 
   --- File explorer --------------------------------------------------------------------------------
   {"kyazdani42/nvim-tree.lua",
-    commit = "80cfead",
+    commit = "46e1f77",
     config = function() require("plugins.settings.file_tree") end,
 
     -- VVI: 本文件最后设置: 在 `nvim dir` 直接打开文件夹的时直接加载 nvim-tree.lua.
@@ -257,7 +261,7 @@ local plugins = {
   --- Debug tools 安装 -----------------------------------------------------------------------------
   --- NOTE: dap-ui && dap 设置在同一文件中.
   {"mfussenegger/nvim-dap",  -- core debug tool
-    commit = "9d81c11",  -- tag = "0.6.0",
+    commit = "e154fdb",  -- tag = "0.6.0",
     dependencies = {"williamboman/mason.nvim"},  -- install dap-debug tools. eg: 'delve'
 
     lazy = true,  -- nvim-dap-ui 加载时自动加载.
@@ -298,7 +302,7 @@ local plugins = {
   --- `:Gitsigns setqflist/seqloclist` will open Trouble instead of quickfix or location list windows.
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {"lewis6991/gitsigns.nvim",
-    commit = "af0f583",
+    commit = "0ccd5fb",
     config = function() require("plugins.settings.git_signs") end,
 
     --- NOTE: `nvim dir` 启动时直接打开 dir 时可能会造成 gitsigns 报错. 根据测试情况选择 VeryLazy 或者 BufReadPre ...

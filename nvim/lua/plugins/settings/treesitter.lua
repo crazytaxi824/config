@@ -90,12 +90,6 @@ ts_configs.setup {
   --- },
 
   --- 启用第三方插件 modules 设置 ------------------------------------------------------------------
-  --- "JoosepAlviste/nvim-ts-context-commentstring"
-  context_commentstring = {
-    enable = true,
-    enable_autocmd = false,  -- VVI: trigger commentstring updating on CursorHold
-  },
-
   --- "windwp/nvim-ts-autotag", auto close tag <div></div>
   autotag = {
     enable = true,
