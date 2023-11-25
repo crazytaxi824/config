@@ -55,8 +55,8 @@ brew "siege"    # http request 压力测试工具
 brew "wget"     # http(s) 下载工具
 #brew "curl"    # http(s) 请求工具, mac 自带.
 
-# deps 不同版本
-brew "ca-certificates"
+# Dependencies
+#brew "ca-certificates"
 
 # 其他工具
 brew "ffmpeg"
@@ -106,5 +106,5 @@ cask "telegram" # 加密聊天工具
 # 浏览器
 cask "firefox"
 cask "google-chrome"
-#cask "microsoft-edge"
+cask "microsoft-edge"
 #cask "tor-browser"
