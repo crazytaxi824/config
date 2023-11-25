@@ -137,5 +137,3 @@ keybinding:
   stash:
     popStash: 'p'  # 默认为 'g', 这里是为了避免按键冲突
 
-
-
