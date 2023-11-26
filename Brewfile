@@ -83,7 +83,6 @@ cask "tableplus"         # Postgre, Mysql, MariaDB, SQLite, CockroachDB, AWS Red
 # 笔记工具
 cask "obsidian" # markdown 编辑软件
 cask "typora"   # markdown 编辑软件
-cask "joplin"   # 加密的 markdown 笔记管理工具
 
 # 个人工具
 #cask "squirrel"   # RIME 输入法客户端
