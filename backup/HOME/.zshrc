@@ -17,7 +17,7 @@ export LC_ALL=en_US.UTF-8  # 设置 LC_ALL, 其他 LC_* 强制等于 LC_ALL, 单
 
 # --- [ homebrew ] --------------------------------------------------------------------------------- {{{
 # https://brew.sh/
-# `echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile`  # for apple silicon installation.
+# NOTE 必须要: `echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile`  # for apple silicon installation.
 # `man brew` 查看命令
 
 # 不要每次安装/更新软件时自动清理, 手动清理 `brew cleanup`
@@ -257,6 +257,10 @@ plugins=(
 	zsh-autosuggestions      # https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md
 )
 
+# NOTE: zsh-autosuggestions plugin 设置
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=242"  # inline 代码提示的颜色. 默认是 8, bold black 颜色.
+
+# oh my zsh 最后一行
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -649,7 +653,7 @@ function Rg() {
 # }}}
 
 # }}}
- 
+
 # the followings are core shell script functions, to make sure this `zshrc` working properly.
 # do not move these functions to other places!!!
 # NOTE: 本文件和 source 文件函数中的 for loop 变量必须先使用 local 定义,
