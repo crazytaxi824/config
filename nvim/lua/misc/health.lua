@@ -70,7 +70,7 @@ end
 
 local tools = {
   go = {cmd="go", install="https://go.dev/"},
-  ddlve = {cmd="dlv", install="go install github.com/go-delve/delve/cmd/dlv@latest", mason="delve"},
+  delve = {cmd="dlv", install="go install github.com/go-delve/delve/cmd/dlv@latest", mason="delve"},
   impl = {cmd="impl", install="go install github.com/josharian/impl@latest", mason="impl"},
   gotests = {cmd="gotests", install="go install github.com/cweill/gotests/gotests@latest", mason="gotests"},
   gomodifytags = {cmd="gomodifytags", install="go install github.com/fatih/gomodifytags@latest", mason="gomodifytags"},
@@ -84,7 +84,8 @@ local tools = {
   flake8 = {cmd="flake8", install="python3 -m pip install flake8", mason="flake8"},
   autopep8 = {cmd="autopep8", install="python3 -m pip install autopep8", mason="autopep8"},
   mypy = {cmd="mypy", install="python3 -m pip install mypy", mason="mypy"}, -- 还有个 mypy-extensions 是 mypy 插件
-  eslint = {cmd="eslint", install="npm install -g eslint"}, -- NOTE: mason 暂时不能安装 "eslint"
+  eslint = {cmd="eslint", install="npm install -g eslint"}, -- NOTE: mason 目前不能安装 "eslint"
+  tsc = {cmd="tsc", install="npm install -g typescript"}, -- NOTE: mason 目前不能安装 "tsc" typescript
 
   --- telescope deps
   fd = {cmd="fd",  install="brew info fd"},
@@ -96,7 +97,7 @@ local function check_cmd_tools()
   for name, tool in pairs(vim.tbl_deep_extend('error', tools, lsp_servers_map)) do
     local result = vim.fn.system('which ' .. tool.cmd)
     if vim.v.shell_error == 0 then
-      health.report_ok(name .. ': installed')
+      health.report_ok(name)
     else
       local errmsg = {name .. ':'}
       if tool.install then
