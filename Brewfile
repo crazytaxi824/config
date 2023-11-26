@@ -55,8 +55,8 @@ brew "siege"    # http request 压力测试工具
 brew "wget"     # http(s) 下载工具
 #brew "curl"    # http(s) 请求工具, mac 自带.
 
-# deps 不同版本
-brew "ca-certificates"
+# Dependencies
+#brew "ca-certificates"
 
 # 其他工具
 brew "ffmpeg"
@@ -82,11 +82,10 @@ cask "tableplus"         # Postgre, Mysql, MariaDB, SQLite, CockroachDB, AWS Red
 
 # 笔记工具
 cask "obsidian" # markdown 编辑软件
-cask "typora"   # markdown 编辑软件
-cask "joplin"   # 加密的 markdown 笔记管理工具
+#cask "typora"   # markdown 编辑软件
 
 # 个人工具
-cask "squirrel"   # RIME 输入法客户端
+#cask "squirrel"   # RIME 输入法客户端
 cask "appcleaner" # app 卸载工具
 cask "app-cleaner"  # mac 系统清理工具, 类似 CleanMyMac
 cask "keepassxc"  # keepass 客户端, 密码管理工具, eg: "macpass", "authpass" ...
@@ -106,5 +105,5 @@ cask "telegram" # 加密聊天工具
 # 浏览器
 cask "firefox"
 cask "google-chrome"
-#cask "microsoft-edge"
+cask "microsoft-edge"
 #cask "tor-browser"

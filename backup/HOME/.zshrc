@@ -17,18 +17,11 @@ export LC_ALL=en_US.UTF-8  # 设置 LC_ALL, 其他 LC_* 强制等于 LC_ALL, 单
 
 # --- [ homebrew ] --------------------------------------------------------------------------------- {{{
 # https://brew.sh/
-# `echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile`  # for apple silicon installation.
+# NOTE 必须要: `echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile`  # for apple silicon installation.
 # `man brew` 查看命令
-# brew 命令行工具安装路径 'echo $(brew --prefix)/bin'
-# put brew path in front of others, use brew cmd first, if there are different version of same cmd line tool.
-export PATH=/usr/local/sbin:$PATH
 
 # 不要每次安装/更新软件时自动清理, 手动清理 `brew cleanup`
 export HOMEBREW_NO_INSTALL_CLEANUP=true
-# 使用 `brew shellenv` 查看 brew 环境变量
-#export HOMEBREW_PREFIX
-#export HOMEBREW_CELLAR
-#export HOMEBREW_REPOSITORY
 
 # brew bundle, 可以使用
 # `brew bundle`  - Install and upgrade (by default) all dependencies from the Brewfile.
@@ -37,7 +30,7 @@ export HOMEBREW_BUNDLE_FILE=~/.config/Brewfile
 
 # }}}
 
-# --- [ editor ] ----------------------------------------------------------------------------------- {{{
+# --- [ editor neovim ] ---------------------------------------------------------------------------- {{{
 ### NOTE: testing newer neovim version. 手动安装 https://github.com/neovim/neovim/releases/
 #alias nvim9=~/.nvim_0.9/nvim-macos/bin/nvim  # 试用 neovim 新版本
 
@@ -50,6 +43,68 @@ export VISUAL=$EDITOR
 ### open/edit file
 alias o="openFileOrUrl"     # open file/url, openFileOrUrl() 函数定义在下面.
 alias e="vimExistFile --"   # edit file, vimExistFile() 函数定义在下面.
+
+# 设置 'vimExistFile -- [filepath]' 命令, 不打开不存在的文件 ------------------- {{{
+# 'vim --'   Arguments after this will be handled as a file name.
+#            This can be used to edit a filename that starts with a '-'.
+#            默认 '--' 后的所有 args 都会被认为是 file. eg: vim -- foo.sh -n, 'foo.sh' & '-n' 会被当成两个文件.
+# 使用方法:
+#	`vimExistFile file`                # 一般用法不检查文件是否存在.
+#   `vimExistFile -- file`             # 检查 file 是否存在.
+#   `vimExistFile +[num] -- file`      # 检查 file 是否存在. 同时传入 flags.
+#   `vimExistFile +{command} -- file`  # 同上
+function vimExistFile() {
+	local dashdash=0         # 1 = using '--'
+	local notexistfiles=''   # 不存在的文件, 报错用.
+	local notexistmark=0     # 1 = 有不存在的文件; 0 = 文件都存在
+
+	# 遍历所有 args 查看是否有 '--', 如果有则将 '--' 后面不存在的文件存入 notexistfiles.
+	local arg  # 防止 for 循环中的变量变成 global variable.
+	for arg in $@
+	do
+		if (( $dashdash )) && [[ ! -f $arg ]] && [[ ! -d $arg ]]; then
+			# '--' 后的所有 args 都会被认为是 file.
+			notexistfiles+="'$arg' "   # concat string
+			notexistmark=1
+		fi
+
+		if [[ $arg == '--' ]]; then
+			dashdash=1
+		fi
+	done
+
+	# 如果 notexistmark 是 true, 则中止操作.
+	if  (( notexistmark )); then
+		echo "no such file or directory: \e[33m$notexistfiles\e[0m"
+		return 2  # return error code
+	fi
+
+	# 执行, 这里不能使用 eval 因为文件名里面的空格都被 escape 了.
+	nvim $@
+}
+
+# }}}
+
+# 设置 'open' 命令, 在打开的文件不存在时, 打开当作 URL 打开 -------------------- {{{
+function openFileOrUrl() {
+	# `2>/dev/null` 不打印 error msg
+	# `echo $?` 返回上一个命令的 exitcode
+
+	local file
+	for file in $@
+	do
+		# echo $file
+		local exitcode=$(open $file 2>/dev/null; echo $?)
+
+		if (( $exitcode != 0 )); then
+			open -u "https://$file"  # TODO: "http://"
+		fi
+	done
+
+	return 0   # 手动返回 0, 否则会返回 1.
+}
+
+# }}}
 
 # }}}
 
@@ -76,9 +131,7 @@ export GO111MODULE=on  # on | off | auto
 # eg: `python3.11 -m pip --version`. brew 安装 python 默认设置了多个 version.
 #export PATH=/usr/local/opt/python@3.9/bin:$PATH  # brew 安装的 python 默认在 PATH 中.
 # 指定 python3 命令的版本.
-alias python3=/usr/local/bin/python3.11  
-#alias python3=/usr/local/opt/python@3.11/bin/python3
-#alias python3=/usr/local/opt/python@3.11/bin/python3.11
+alias python3=$(brew --prefix)/bin/python3.12
 
 # }}}
 
@@ -120,27 +173,77 @@ export LESS_TERMCAP_ue=$(printf "\e[0m")       # ue      rmul      stop underlin
 
 # }}}
 
-# '~/.oh-my-zsh/lib/directories.zsh' 中定义了 `function d ()`, 相当于 dirs 的作用.
 # --- [ oh my zsh ] -------------------------------------------------------------------------------- {{{
+# If you come from bash you might have to change your $PATH.
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
+
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
+# Set name of the theme to load --- if set to "random", it will
+# load a random theme each time oh-my-zsh is loaded, in which case,
+# to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-# custom theme dir: '~/.oh-my-zsh/custom/themes/'
-ZSH_THEME="my-final"  # my-gnzh | my-simple | gnzh | af-magic
+ZSH_THEME="my-final"
+
+# Set list of themes to pick from when loading at random
+# Setting this variable when ZSH_THEME=random will cause zsh to load
+# a theme from this variable instead of looking in $ZSH/themes/
+# If set to an empty array, this variable will have no effect.
+# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
+
+# Uncomment the following line to use case-sensitive completion.
+# CASE_SENSITIVE="true"
+
+# Uncomment the following line to use hyphen-insensitive completion.
+# Case-sensitive completion must be off. _ and - will be interchangeable.
+# HYPHEN_INSENSITIVE="true"
+
+# Uncomment one of the following lines to change the auto-update behavior
+# zstyle ':omz:update' mode disabled  # disable automatic updates
+# zstyle ':omz:update' mode auto      # update automatically without asking
+# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
+
+# Uncomment the following line to change how often to auto-update (in days).
+# zstyle ':omz:update' frequency 13
 
 # Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS=true
+# DISABLE_MAGIC_FUNCTIONS="true"
 
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
 
+# Uncomment the following line to disable auto-setting terminal title.
+# DISABLE_AUTO_TITLE="true"
+
+# Uncomment the following line to enable command auto-correction.
+# ENABLE_CORRECTION="true"
+
+# Uncomment the following line to display red dots whilst waiting for completion.
+# You can also set it to another string to have that shown instead of the default red dots.
+# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
+# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
+# COMPLETION_WAITING_DOTS="true"
+
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# Uncomment the following line if you want to change the command execution time
+# stamp shown in the history command output.
+# You can set one of the optional three formats:
+# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# or set a custom format using the strftime function format specifications,
+# see 'man strftime' for details.
+# HIST_STAMPS="mm/dd/yyyy"
+
+# Would you like to use another custom folder than $ZSH/custom?
+# ZSH_CUSTOM=/path/to/new-custom-folder
+
 # Which plugins would you like to load?
-# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Standard plugins can be found in $ZSH/plugins/
+# Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
@@ -160,6 +263,32 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=242"  # inline 代码提示的颜色. 默认
 # oh my zsh 最后一行
 source $ZSH/oh-my-zsh.sh
 
+# User configuration
+
+# export MANPATH="/usr/local/man:$MANPATH"
+
+# You may need to manually set your language environment
+# export LANG=en_US.UTF-8
+
+# Preferred editor for local and remote sessions
+# if [[ -n $SSH_CONNECTION ]]; then
+#   export EDITOR='vim'
+# else
+#   export EDITOR='mvim'
+# fi
+
+# Compilation flags
+# export ARCHFLAGS="-arch x86_64"
+
+# Set personal aliases, overriding those provided by oh-my-zsh libs,
+# plugins, and themes. Aliases can be placed here, though oh-my-zsh
+# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# For a full list of active aliases, run `alias`.
+#
+# Example aliases
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
+#
 # }}}
 
 # 自定义 LS 颜色显示, 覆盖 ohmyzsh 默认设置. 需要放到 ohmyzsh 后面.
@@ -531,68 +660,6 @@ function Rg() {
 # 否则在函数执行后变量会变成 global variable.
 # --- [ core shell script functions ] -------------------------------------------------------------- {{{
 
-# 设置 'vimExistFile -- [filepath]' 命令, 不打开不存在的文件 ------------------- {{{
-# 'vim --'   Arguments after this will be handled as a file name.
-#            This can be used to edit a filename that starts with a '-'.
-#            默认 '--' 后的所有 args 都会被认为是 file. eg: vim -- foo.sh -n, 'foo.sh' & '-n' 会被当成两个文件.
-# 使用方法:
-#	`vimExistFile file`                # 一般用法不检查文件是否存在.
-#   `vimExistFile -- file`             # 检查 file 是否存在.
-#   `vimExistFile +[num] -- file`      # 检查 file 是否存在. 同时传入 flags.
-#   `vimExistFile +{command} -- file`  # 同上
-function vimExistFile() {
-	local dashdash=0         # 1 = using '--'
-	local notexistfiles=''   # 不存在的文件, 报错用.
-	local notexistmark=0     # 1 = 有不存在的文件; 0 = 文件都存在
-
-	# 遍历所有 args 查看是否有 '--', 如果有则将 '--' 后面不存在的文件存入 notexistfiles.
-	local arg  # 防止 for 循环中的变量变成 global variable.
-	for arg in $@
-	do
-		if (( $dashdash )) && [[ ! -f $arg ]] && [[ ! -d $arg ]]; then
-			# '--' 后的所有 args 都会被认为是 file.
-			notexistfiles+="'$arg' "   # concat string
-			notexistmark=1
-		fi
-
-		if [[ $arg == '--' ]]; then
-			dashdash=1
-		fi
-	done
-
-	# 如果 notexistmark 是 true, 则中止操作.
-	if  (( notexistmark )); then
-		echo "no such file or directory: \e[33m$notexistfiles\e[0m"
-		return 2  # return error code
-	fi
-
-	# 执行, 这里不能使用 eval 因为文件名里面的空格都被 escape 了.
-	nvim $@
-}
-
-# }}}
-
-# 设置 'open' 命令, 在打开的文件不存在时, 打开当作 URL 打开 -------------------- {{{
-function openFileOrUrl() {
-	# `2>/dev/null` 不打印 error msg
-	# `echo $?` 返回上一个命令的 exitcode
-
-	local file
-	for file in $@
-	do
-		# echo $file
-		local exitcode=$(open $file 2>/dev/null; echo $?)
-
-		if (( $exitcode != 0 )); then
-			open -u "https://$file"  # TODO: "http://"
-		fi
-	done
-
-	return 0   # 手动返回 0, 否则会返回 1.
-}
-
-# }}}
-
 # trash file/dir to ~/.Trash/ -------------------------------------------------- {{{
 # NOTE: stop using 'rm'
 #alias rm="rm -i"  # prompt every time when 'rm file/dir'
@@ -879,6 +946,4 @@ alias checkBrewDependency="bash ~/.config/.my_shell_functions/brew_dep_check.sh"
 # `bindkey "^[b" backward-word`  # ESC-b, 先按 ESC 再按 b 也可以触发.
 #
 # }}}
-
-
 
