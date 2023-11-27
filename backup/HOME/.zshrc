@@ -744,11 +744,13 @@ function backupConfigFiles() {
 		mkdir -p $backup_folder/lazygit        # ~/Library/Application\ Support/lazygit/
 		mkdir -p $backup_folder/vscode         # ~/Library/Application\ Support/Code/User/
 
-		# zshrc
+		# zprofile & zshrc
+		cp ~/.zprofile $backup_folder/HOME/
 		cp ~/.zshrc $backup_folder/HOME/
 
 		# oh-my-zsh custom themes
 		cp -r ~/.oh-my-zsh/custom/themes $backup_folder/HOME/.oh-my-zsh/custom/
+		cp ~/.warprc $backup_folder/HOME/   # oh-my-zsh plugin `wd` config file
 
 		# ~/.ssh/config
 		cp ~/.ssh/config $backup_folder/HOME/.ssh/

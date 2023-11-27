@@ -1,0 +1,12 @@
+d:~/Desktop
+des:~/Desktop
+note:~/notes
+notes:~/notes
+nvim-cache:~/.cache/nvim
+nvim-config:~/.config/nvim
+nvim-data:~/.local/share/nvim
+nvim-log:~/.local/state/nvim
+nvim-state:~/.local/state/nvim
+nvim-swap:~/.local/state/nvim/swap
+nvim-swp:~/.local/state/nvim/swap
+projects:~/projects
