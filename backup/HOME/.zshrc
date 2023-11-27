@@ -18,15 +18,14 @@ export LC_ALL=en_US.UTF-8  # 设置 LC_ALL, 其他 LC_* 强制等于 LC_ALL, 单
 # --- [ homebrew ] --------------------------------------------------------------------------------- {{{
 # https://brew.sh/
 # NOTE 必须要: `echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile`  # for apple silicon installation.
-# `man brew` 查看命令
 
-# 不要每次安装/更新软件时自动清理, 手动清理 `brew cleanup`
+# 不要每次安装/更新软件时自动清理, 可以使用 `brew cleanup` 手动清理.
 export HOMEBREW_NO_INSTALL_CLEANUP=true
 
-# brew bundle, 可以使用
-# `brew bundle`  - Install and upgrade (by default) all dependencies from the Brewfile.
+# `brew bundle --help` Install and upgrade (by default) all dependencies from the Brewfile.
 # `brew bundle check`, `brew bundle cleanup`, `brew bundle list` ...
-export HOMEBREW_BUNDLE_FILE=~/.config/Brewfile
+export HOMEBREW_BUNDLE_FILE=~/.config/Brewfile  # 默认在 ~/.Brewfile
+#export HOMEBREW_BUNDLE_NO_LOCK=1  # disable Brewfile.lock.json
 
 # }}}
 
