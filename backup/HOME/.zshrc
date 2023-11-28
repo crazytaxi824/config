@@ -2,19 +2,6 @@
 export LC_ALL=en_US.UTF-8  # 设置 LC_ALL, 其他 LC_* 强制等于 LC_ALL, 单独设置 LC_* 无效.
 #export LANG=en_US.UTF-8   # 设置 LANG, 其他 LC_* 默认值等于 LANG, 但可以单独设置 LC_*.
 
-# --- [ PATH 设置 ] -------------------------------------------------------------------------------- {{{
-# ${PATH+:$PATH}    - 如果 ${PATH} 的值存在并非空, 则输出 ${PATH} 的值; 否则, 输出空字符串.
-# ${PATH:+${PATH}:} - 如果 ${PATH} 的值存在并非空, 则在 ${PATH} 的值的前后分别添加一个冒号, 然后输出结果; 否则, 输出空字符串.
-# 如果 ${PATH} 的值是 /usr/bin:/usr/local/bin, 那么:
-#     ${PATH+:$PATH} 输出 /usr/bin:/usr/local/bin
-#     ${PATH:+${PATH}:} 输出 :/usr/bin:/usr/local/bin:
-#
-# 如果 ${PATH} 没有被设置, 那么:
-#     ${PATH+:$PATH} 不输出任何内容
-#     ${PATH:+${PATH}:} 不输出任何内容
-
-# }}}
-
 # --- [ homebrew ] --------------------------------------------------------------------------------- {{{
 # https://brew.sh/
 # NOTE 必须要: `echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile`  # for apple silicon installation.

@@ -95,6 +95,7 @@ cask "keycastr"  # 按键输入显示工具
 cask "lulu"  # 防火墙
 #cask "rectangle" # window resize app, 可以用 raycast 代替
 #cask "openvpn-connect"
+#cask "mx-power-gadget"  # apple silicon P-core/E-core/GPU 实时监控
 
 # 其他个人 app
 cask "iina"     # 视频播放器
