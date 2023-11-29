@@ -50,11 +50,12 @@ end
 
 --- 从 str 中获取 filepath or dir, eg: /a/b/c:12:3
 local function filepath_with_lnum_col(str)
+  --- split filename:lnum:col
   local splits = vim.split(str, ':', {trimempty=true})
 
   --- 判断所有字符是否都是 file name character. `:help \f`
   local fname = vim.fn.matchstr(splits[1], '\\f\\+')
-  if #splits[1] ~= #fname then
+  if splits[1] ~= fname then
     return
   end
 
