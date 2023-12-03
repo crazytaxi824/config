@@ -28,7 +28,7 @@ brew "viu"    # terminal 图片显示工具
 
 # editor
 brew "neovim"
-brew "vim"
+#brew "vim"
 brew "tmux"
 brew "pandoc"  # 文档格式转换工具, 支持 word, pdf, markdown ... 各种格式
 brew "universal-ctags"  # 各种语言的 object 分析工具. vim/neovim tagbar 插件使用
@@ -39,7 +39,9 @@ brew "node@18"  # LTS version for Github Copilot 和某些其他应用
 #brew "go"      # 推荐使用 https://go.dev 中下载安装.
 #brew "rust"
 #brew "lua"
-#brew "luajit"
+brew "luajit"
+brew "perl"
+brew "ruby"
 
 # format tools
 brew "prettier" # 格式化工具
@@ -55,18 +57,24 @@ brew "siege"    # http request 压力测试工具
 brew "wget"     # http(s) 下载工具
 #brew "curl"    # http(s) 请求工具, mac 自带.
 
+# 虚拟机
+brew "qemu"  # apple silicon emulator and virtualizer
+brew "lima"  # golang Linux virtual machine, deps on "qemu | vz", https://github.com/Code-Hex/vz
+#cask "virtualbuddy"  # Apple Virtualization.framework
+#cask "utm"  # Apple Virtualization.framework for ARM64 operating systems & QEMU for others
+
 # Dependencies
 #brew "ca-certificates"
 
 # 其他工具
 brew "ffmpeg"
 brew "yt-dlp"  # fork youtube-dl
-brew "wimlib"  # 解决 FAT32 不能保存大于 4GB ios 文件的问题. 解决 FAT32 启动盘的制作问题.
+#brew "wimlib"  # 解决 FAT32 不能保存大于 4GB ios 文件的问题. 解决 FAT32 启动盘的制作问题.
 
 ### `brew install --cask` --------------------------------------------------------------------------
 # 开发工具
 cask "alacritty"
-cask "iterm2"
+#cask "iterm2"
 cask "raycast"  # alfred 替代
 cask "visual-studio-code" # vscode
 cask "postman"   # http(s) 测试工具
@@ -92,10 +100,10 @@ cask "keepassxc"  # keepass 客户端, 密码管理工具, eg: "macpass", "authp
 cask "keka"  # 压缩工具
 cask "the-unarchiver"  # 解压工具
 cask "keycastr"  # 按键输入显示工具
-cask "lulu"  # 防火墙
+#cask "lulu"  # 防火墙
 #cask "rectangle" # window resize app, 可以用 raycast 代替
 #cask "openvpn-connect"
-cask stats  # apple silicon CPU/GPU/TEMP 实时监控
+cask "stats"  # apple silicon CPU/GPU/TEMP 实时监控
 #cask "mx-power-gadget"  # apple silicon P-core/E-core/GPU 实时监控
 
 # 其他个人 app
