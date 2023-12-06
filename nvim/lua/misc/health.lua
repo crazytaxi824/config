@@ -85,7 +85,7 @@ local tools = {
   autopep8 = {cmd="autopep8", install="python3 -m pip install autopep8", mason="autopep8"},
   mypy = {cmd="mypy", install="python3 -m pip install mypy", mason="mypy"}, -- 还有个 mypy-extensions 是 mypy 插件
   eslint = {cmd="eslint", install="npm install -g eslint"}, -- NOTE: mason 目前不能安装 "eslint"
-  tsc = {cmd="tsc", install="npm install -g typescript"}, -- NOTE: mason 目前不能安装 "tsc" typescript
+  --tsc = {cmd="tsc", install="npm install -g typescript"}, -- NOTE: 弃用 typescript.
 
   --- telescope deps
   fd = {cmd="fd",  install="brew info fd"},
