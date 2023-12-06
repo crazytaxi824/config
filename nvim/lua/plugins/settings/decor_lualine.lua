@@ -66,7 +66,7 @@ local my_theme = {
 --- NOTE: https://github.com/nvim-lualine/lualine.nvim/wiki/Component-snippets
 
 --- VVI: whitespace & mix-indent 非常消耗资源, 可能严重中拖慢 neovim 运行速度. 不推荐在大型文件中使用.
---- 目前是在 buftype=='' and filetype~='' 情况下使用.
+--- 目前只在 buftype=='' and filetype~='' 情况下使用.
 --- check Trailing-Whitespace && Mixed-indent ---------------------------------- {{{
 --- check Trailing-Whitespace --------------------------------------------------
 local function check_trailing_whitespace()
