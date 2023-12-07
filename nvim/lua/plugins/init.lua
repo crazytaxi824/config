@@ -320,14 +320,13 @@ local plugins = {
     ft = {"markdown"},  -- markdown-preview 加载时间 < 1ms
   },
 
-  --- https://docs.github.com/en/copilot
-  --- https://docs.github.com/en/copilot/getting-started-with-github-copilot?tool=neovim#prerequisites-3
+  --- https://docs.github.com/en/copilot/getting-started-with-github-copilot
   {"github/copilot.vim",
     tag = "v1.12.1",
     config = function()
       --- VVI: `:help g:copilot_node_command`, using node@18
       --- 安装指定的 nodejs 版本. `brew install node@18`
-      local node_path = "/usr/local/opt/node@18/bin/node"
+      local node_path = "/opt/homebrew/opt/node@18/bin/node"
 
       --- check node cmd existence
       if vim.fn.filereadable(node_path) == 0 then
