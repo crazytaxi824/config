@@ -66,7 +66,7 @@ local my_theme = {
 --- NOTE: https://github.com/nvim-lualine/lualine.nvim/wiki/Component-snippets
 
 --- VVI: whitespace & mix-indent 非常消耗资源, 可能严重中拖慢 neovim 运行速度. 不推荐在大型文件中使用.
---- 目前是在 buftype=='' and filetype~='' 情况下使用.
+--- 目前只在 buftype=='' and filetype~='' 情况下使用.
 --- check Trailing-Whitespace && Mixed-indent ---------------------------------- {{{
 --- check Trailing-Whitespace --------------------------------------------------
 local function check_trailing_whitespace()
@@ -278,8 +278,8 @@ lualine.setup {
                   -- 3: Absolute path, with tilde as the home directory '~'
                   -- 4: Filename and parent dir, with tilde as the home directory
         symbols = {
-          modified = '[+]',       -- Text to show when the file is modified.
-          readonly = '[-]',       -- Text to show when the file is non-modifiable or readonly.
+          modified = '<M>',       -- Text to show when the file is modified.
+          readonly = '<R>',       -- Text to show when the file is non-modifiable or readonly.
           unnamed  = '[No Name]', -- Text to show for unnamed buffers.
         },
         cond = function() return vim.api.nvim_win_get_width(0) > 50 end,
