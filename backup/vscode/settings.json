@@ -155,27 +155,9 @@
   // "eslint.format.enable": true,
 
   // 自动修复
-  "[typescript]": {
+  "[javascript][javascriptreact][typescript][typescriptreact]": {
     "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": true // Auto Fix for ESLint only.
-      // "source.fixAll": false  // Auto Fix for all providers including ESLint.
-    }
-  },
-  "[typescriptreact]": {
-    "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": true
-    }
-    // 使用 eslint 作为 formatter, 不起作用
-    // "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-  },
-  "[javascript]": {
-    "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": true
-    }
-  },
-  "[javascriptreact]": {
-    "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": true
+      "source.fixAll.eslint": "explicit"
     }
   },
   // ****************************
@@ -186,18 +168,9 @@
   "go.useLanguageServer": true,
   "[go]": {
     // "editor.formatOnSave": true, // 默认值
-    "editor.defaultFormatter": "golang.go", // go 不使用 prettier 格式化代码
-    "editor.codeActionsOnSave": {
-      "source.organizeImports": true
-    }
+    "editor.defaultFormatter": "golang.go" // go 不使用 prettier 格式化代码
     // Optional: Disable snippets, as they conflict with completion ranking.
     // "editor.snippetSuggestions": "none"
-  },
-  "[go.mod]": {
-    // "editor.formatOnSave": true,
-    "editor.codeActionsOnSave": {
-      "source.organizeImports": true
-    }
   },
 
   // golangci-lint 设置
