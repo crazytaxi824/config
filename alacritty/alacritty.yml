@@ -24,8 +24,7 @@ env:
   # each instance of Alacritty. If it is not present, alacritty will
   # check the local terminfo database and use `alacritty` if it is
   # available, otherwise `xterm-256color` is used.
-  #TERM: alacritty
-  TERM: xterm-256color
+  TERM: alacritty
 
 window:
   # Window dimensions (changes require restart)
@@ -947,6 +946,7 @@ key_bindings:
   - { key: Return,  mods: Control|Shift,                    chars: "\x1b[13;6u"     }  # CTRL-Shift-CR
   - { key: Return,  mods: Command|Shift,                    chars: "\x1b[13;6u"     }  # Command-Shift-CR -> CTRL-Shift-CR
 
+  - { key: B,      mods: Command,       mode: ~Vi|~Search,      chars: "\x02"       }  # Command-B -> Ctrl-b, 用于 tmux 中的 prefix key.
   - { key: S,      mods: Command,       mode: ~Vi|~Search,      chars: "\x13"       }  # Command-S -> Ctrl-s, vim 中用于 save file.
   - { key: W,      mods: Command,       mode: ~Vi|~Search,      chars: "\x17"       }  # Command-W -> Ctrl-w, vim 中用于 switch vim window, alacritty 默认设置是 Quit.
   - { key: R,      mods: Command,       mode: ~Vi|~Search,      chars: "\x12"       }  # Command-R -> Ctrl-r, vim 中用于 redo|register 操作.
