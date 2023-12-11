@@ -2,21 +2,7 @@
 export LC_ALL=en_US.UTF-8  # 设置 LC_ALL, 其他 LC_* 强制等于 LC_ALL, 单独设置 LC_* 无效.
 #export LANG=en_US.UTF-8   # 设置 LANG, 其他 LC_* 默认值等于 LANG, 但可以单独设置 LC_*.
 
-# homebrew & oh-my-zsh 放在最前面
-# --- [ homebrew ] --------------------------------------------------------------------------------- {{{
-# https://brew.sh/
-# NOTE 必须要: `echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile`  # for apple silicon installation.
-
-# 不要每次安装/更新软件时自动清理, 可以使用 `brew cleanup` 手动清理.
-export HOMEBREW_NO_INSTALL_CLEANUP=true
-
-# `brew bundle --help` Install and upgrade (by default) all dependencies from the Brewfile.
-# `brew bundle check`, `brew bundle cleanup`, `brew bundle list` ...
-export HOMEBREW_BUNDLE_FILE=~/.config/Brewfile  # 默认在 ~/.Brewfile
-#export HOMEBREW_BUNDLE_NO_LOCK=1  # disable Brewfile.lock.json
-#
-# }}}
-
+# NOTE: oh-my-zsh 不依赖 homebrew
 # --- [ oh my zsh ] -------------------------------------------------------------------------------- {{{
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
@@ -135,8 +121,169 @@ source $ZSH/oh-my-zsh.sh
 #
 # }}}
 
-# `$(brew --prefix)/opt/fzf/install` - 安装 key bindings 和 fuzzy completion.
-# fuzzy completion 使用默认 **<tab>, 可以使用 export FZF_COMPLETION_TRIGGER 修改.
+# 自定义颜色显示, 覆盖 ohmyzsh 默认设置. 需要放到 ohmyzsh 后面.
+# --- [ COLOR 设置 ] ------------------------------------------------------------------------------- {{{
+# *** 注意: macos 使用 LSCOLORS, linux 使用 LS_COLORS
+
+# --- LSCOLORS 设置 --------------------------------------------------------------------------------
+# https://www.cyberciti.biz/faq/apple-mac-osx-terminal-color-ls-output-option/
+#export LSCOLORS=Gxfxcxdxbxegedabagacad  # 默认值是 'Gxfxcxdxbxegedabagacad'
+
+# --- LS_COLORS 设置 -------------------------------------------------------------------------------
+# 注意: 这里设置 LS_COLORS 主要是给 `ohmyzsh`, `fd` 和 `tree` 显示颜色用. Macos 系统不会用到这个设置.
+#
+# 使用 16 color 设置 LS_COLORS, 但是因为有些颜色 vim 无法识别可能导致有很大偏差.
+#export LS_COLORS='rs=0:di=01;36:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43:'  # 主要设置
+
+# 使用 256 color 设置 LS_COLORS, 和上面的 16 color 使用最相近的颜色.
+# 这里主要是为了 vim 中的 fzf.vim 能够使用指定颜色.
+#LS_COLORS='rs=0:di=01;38;5;81:ln=38;5;207:so=38;5;42:pi=38;5;191:ex=38;5;167:bd=38;5;75;48;5;81:cd=38;5;75;48;5;191:su=30;48;5;167:sg=30;48;5;81:tw=30;48;5;42:ow=30;48;5;191'  # 主要设置
+#LS_COLORS="$LS_COLORS:*.go=38;5;72:*.ts=38;5;72:*.tsx=38;5;72:*.py=38;5;72:*.js=38;5;72:*.jsx=38;5;72"   # 根据文件类型设置.
+#export LS_COLORS="$LS_COLORS:*.bak=38;5;242:*.gitignore=38;5;242:*.editorconfig=38;5;242"   # 根据文件类型设置.
+
+# 以下设置是给 oh-my-zsh 代码提示颜色用
+#zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}"
+#autoload -Uz compinit
+#compinit
+
+# --- man 命令颜色设置 -----------------------------------------------------------------------------
+export LESS_TERMCAP_md=$(printf "\e[1;32m")    # md      bold      start bold
+export LESS_TERMCAP_me=$(printf "\e[0m")       # me      sgr0      turn off bold, blink and underline
+export LESS_TERMCAP_so=$(printf "\e[30;43m")   # so      smso      start standout (eg: search result)
+export LESS_TERMCAP_se=$(printf "\e[0m")       # se      rmso      stop standout
+export LESS_TERMCAP_us=$(printf "\e[4;34m")    # us      smul      start underline
+export LESS_TERMCAP_ue=$(printf "\e[0m")       # ue      rmul      stop underline
+#export LESS_TERMCAP_mb=$(printf "\e[1;31m")   # mb      blink     start blink
+
+# }}}
+
+# NOTE: 安装所有的 brew 工具后, 以下设置才生效
+# --- [ homebrew ] --------------------------------------------------------------------------------- {{{
+# https://brew.sh/
+# NOTE 必须要: `echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile`  # for apple silicon installation.
+
+# 不要每次安装/更新软件时自动清理, 可以使用 `brew cleanup` 手动清理.
+export HOMEBREW_NO_INSTALL_CLEANUP=true
+
+# `brew bundle --help` Install and upgrade (by default) all dependencies from the Brewfile.
+# `brew bundle check`, `brew bundle cleanup`, `brew bundle list` ...
+export HOMEBREW_BUNDLE_FILE=~/.config/Brewfile  # 默认在 ~/.Brewfile
+#export HOMEBREW_BUNDLE_NO_LOCK=1  # disable Brewfile.lock.json
+#
+# }}}
+
+# NOTE: $EDITOR 设置必须放在 fzf 前面
+# --- [ $EDITOR neovim ] --------------------------------------------------------------------------- {{{
+### NOTE: testing newer neovim version. 手动安装 https://github.com/neovim/neovim/releases/
+#alias nvim9=~/.nvim_0.9/nvim-macos/bin/nvim  # 试用 neovim 新版本
+
+# $VISUAL is a more capable and interactive preference over $EDITOR.
+#  - EDITOR editor should be able to work without use of "advanced" terminal functionality.
+#  - VISUAL editor could be a full screen editor as vi or emacs.
+export EDITOR=nvim
+export VISUAL=$EDITOR
+
+### open/edit file
+alias o="openFileOrUrl"     # open file/url, openFileOrUrl() 函数定义在下面.
+alias e="vimExistFile --"   # edit file, vimExistFile() 函数定义在下面.
+
+# 设置 'vimExistFile -- [filepath]' 命令, 不打开不存在的文件 ------------------- {{{
+# 'vim --'   Arguments after this will be handled as a file name.
+#            This can be used to edit a filename that starts with a '-'.
+#            默认 '--' 后的所有 args 都会被认为是 file. eg: vim -- foo.sh -n, 'foo.sh' & '-n' 会被当成两个文件.
+# 使用方法:
+#	`vimExistFile file`                # 一般用法不检查文件是否存在.
+#   `vimExistFile -- file`             # 检查 file 是否存在.
+#   `vimExistFile +[num] -- file`      # 检查 file 是否存在. 同时传入 flags.
+#   `vimExistFile +{command} -- file`  # 同上
+function vimExistFile() {
+	local dashdash=0         # 1 = using '--'
+	local notexistfiles=''   # 不存在的文件, 报错用.
+	local notexistmark=0     # 1 = 有不存在的文件; 0 = 文件都存在
+
+	# 遍历所有 args 查看是否有 '--', 如果有则将 '--' 后面不存在的文件存入 notexistfiles.
+	local arg  # 防止 for 循环中的变量变成 global variable.
+	for arg in $@
+	do
+		if (( $dashdash )) && [[ ! -f $arg ]] && [[ ! -d $arg ]]; then
+			# '--' 后的所有 args 都会被认为是 file.
+			notexistfiles+="'$arg' "   # concat string
+			notexistmark=1
+		fi
+
+		if [[ $arg == '--' ]]; then
+			dashdash=1
+		fi
+	done
+
+	# 如果 notexistmark 是 true, 则中止操作.
+	if  (( notexistmark )); then
+		echo "no such file or directory: \e[33m$notexistfiles\e[0m"
+		return 2  # return error code
+	fi
+
+	# 执行, 这里不能使用 eval 因为文件名里面的空格都被 escape 了.
+	nvim $@
+}
+
+# }}}
+
+# 设置 'open' 命令, 在打开的文件不存在时, 打开当作 URL 打开 -------------------- {{{
+function openFileOrUrl() {
+	# `2>/dev/null` 不打印 error msg
+	# `echo $?` 返回上一个命令的 exitcode
+
+	local file
+	for file in $@
+	do
+		# echo $file
+		local exitcode=$(open $file 2>/dev/null; echo $?)
+
+		if (( $exitcode != 0 )); then
+			open -u "https://$file"  # TODO: "http://"
+		fi
+	done
+
+	return 0   # 手动返回 0, 否则会返回 1.
+}
+
+# }}}
+
+# }}}
+
+# go / python / node ...
+# --- [ languages ] -------------------------------------------------------------------------------- {{{
+
+# --- [ golang ] --------------------------------------------------------------- {{{
+### `go env` 查看
+#export GOROOT=/usr/local/go
+export GOPATH=$HOME/gopath
+export GOBIN=$GOPATH/bin
+export PATH=$PATH:$GOBIN
+export GO111MODULE=on  # on | off | auto
+#export GOPROXY=off  # 默认值 "https://proxy.golang.org,direct"
+#export GOSUMDB=off  # Disable the Go checksum database
+
+### DEBUG use only
+#export PATH=/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin
+#export PATH=/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:$GOBIN
+
+# }}}
+
+# --- [ python ] --------------------------------------------------------------- {{{
+### python3 设置多个 version, 可以用 python3, python3.9, python3.10, python3.11 等命令.
+# eg: `python3.11 -m pip --version`. brew 安装 python 默认设置了多个 version.
+#export PATH=/usr/local/opt/python@3.9/bin:$PATH  # brew 安装的 python 默认在 PATH 中.
+# 指定 python3 命令的版本.
+alias python3=$(brew --prefix)/bin/python3.12
+
+# }}}
+
+# }}}
+
+# NOTE: 必须放在 $EDITOR 设置后.
+# NOTE: 运行 `$(brew --prefix)/opt/fzf/install` - 安装 key bindings 和 fuzzy completion.
+# fuzzy completion 使用默认 **<Tab> 触发, 可以使用 export FZF_COMPLETION_TRIGGER 修改为 \\<Tab>.
 # --- [ fzf ] -------------------------------------------------------------------------------------- {{{
 # --- [ fzf fd bat 使用说明 ] ---------------------------------------------------------------------- {{{
 #
@@ -272,7 +419,7 @@ FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --marker='✔' --pointer='▸' --info='inlin
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --color='dark,hl:191:reverse,hl+:191:reverse,fg+:underline,bg+:238:bold,border:240'"
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --color='scrollbar:240,pointer:191,marker:191,gutter:-1,header:71:italic:underline'"
 # fzf preview 设置: 如果是 dir 则使用 tree; 如果是 file 使用 bat 进行 preview.
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --preview='([[ -d {} ]] && (tree -NC -L 3 {})) || ([[ -f {} ]] && (bat --color=always --style=numbers {}))'"
+FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --preview='([[ -d {} ]] && (tree -NC -L 1 {})) || ([[ -f {} ]] && (bat --color=always --style=numbers {}))'"
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --preview-window='right,60%,border-left'"
 # 以下是定义 fzf 快捷键作用
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='btab:change-preview-window(top,70%,border-bottom|hidden|)'" # change layout, btab=<Shift-Tab>
@@ -471,181 +618,6 @@ function Rg() {
 
 # }}}
 
-# 自定义颜色显示, 覆盖 ohmyzsh 默认设置. 需要放到 ohmyzsh 后面.
-# --- [ COLOR 设置 ] ------------------------------------------------------------------------------- {{{
-# *** 注意: macos 使用 LSCOLORS, linux 使用 LS_COLORS
-
-# --- LSCOLORS 设置 --------------------------------------------------------------------------------
-# https://www.cyberciti.biz/faq/apple-mac-osx-terminal-color-ls-output-option/
-#export LSCOLORS=Gxfxcxdxbxegedabagacad  # 默认值是 'Gxfxcxdxbxegedabagacad'
-
-# --- LS_COLORS 设置 -------------------------------------------------------------------------------
-# 注意: 这里设置 LS_COLORS 主要是给 `ohmyzsh`, `fd` 和 `tree` 显示颜色用. Macos 系统不会用到这个设置.
-#
-# 使用 16 color 设置 LS_COLORS, 但是因为有些颜色 vim 无法识别可能导致有很大偏差.
-#export LS_COLORS='rs=0:di=01;36:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43:'  # 主要设置
-
-# 使用 256 color 设置 LS_COLORS, 和上面的 16 color 使用最相近的颜色.
-# 这里主要是为了 vim 中的 fzf.vim 能够使用指定颜色.
-#LS_COLORS='rs=0:di=01;38;5;81:ln=38;5;207:so=38;5;42:pi=38;5;191:ex=38;5;167:bd=38;5;75;48;5;81:cd=38;5;75;48;5;191:su=30;48;5;167:sg=30;48;5;81:tw=30;48;5;42:ow=30;48;5;191'  # 主要设置
-#LS_COLORS="$LS_COLORS:*.go=38;5;72:*.ts=38;5;72:*.tsx=38;5;72:*.py=38;5;72:*.js=38;5;72:*.jsx=38;5;72"   # 根据文件类型设置.
-#export LS_COLORS="$LS_COLORS:*.bak=38;5;242:*.gitignore=38;5;242:*.editorconfig=38;5;242"   # 根据文件类型设置.
-
-# 以下设置是给 oh-my-zsh 代码提示颜色用
-#zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}"
-#autoload -Uz compinit
-#compinit
-
-# --- man 命令颜色设置 -----------------------------------------------------------------------------
-export LESS_TERMCAP_md=$(printf "\e[1;32m")    # md      bold      start bold
-export LESS_TERMCAP_me=$(printf "\e[0m")       # me      sgr0      turn off bold, blink and underline
-export LESS_TERMCAP_so=$(printf "\e[30;43m")   # so      smso      start standout (eg: search result)
-export LESS_TERMCAP_se=$(printf "\e[0m")       # se      rmso      stop standout
-export LESS_TERMCAP_us=$(printf "\e[4;34m")    # us      smul      start underline
-export LESS_TERMCAP_ue=$(printf "\e[0m")       # ue      rmul      stop underline
-#export LESS_TERMCAP_mb=$(printf "\e[1;31m")   # mb      blink     start blink
-
-# }}}
-
-# --- [ $EDITOR neovim ] --------------------------------------------------------------------------- {{{
-### NOTE: testing newer neovim version. 手动安装 https://github.com/neovim/neovim/releases/
-#alias nvim9=~/.nvim_0.9/nvim-macos/bin/nvim  # 试用 neovim 新版本
-
-# $VISUAL is a more capable and interactive preference over $EDITOR.
-#  - EDITOR editor should be able to work without use of "advanced" terminal functionality.
-#  - VISUAL editor could be a full screen editor as vi or emacs.
-export EDITOR=nvim
-export VISUAL=$EDITOR
-
-### open/edit file
-alias o="openFileOrUrl"     # open file/url, openFileOrUrl() 函数定义在下面.
-alias e="vimExistFile --"   # edit file, vimExistFile() 函数定义在下面.
-
-# 设置 'vimExistFile -- [filepath]' 命令, 不打开不存在的文件 ------------------- {{{
-# 'vim --'   Arguments after this will be handled as a file name.
-#            This can be used to edit a filename that starts with a '-'.
-#            默认 '--' 后的所有 args 都会被认为是 file. eg: vim -- foo.sh -n, 'foo.sh' & '-n' 会被当成两个文件.
-# 使用方法:
-#	`vimExistFile file`                # 一般用法不检查文件是否存在.
-#   `vimExistFile -- file`             # 检查 file 是否存在.
-#   `vimExistFile +[num] -- file`      # 检查 file 是否存在. 同时传入 flags.
-#   `vimExistFile +{command} -- file`  # 同上
-function vimExistFile() {
-	local dashdash=0         # 1 = using '--'
-	local notexistfiles=''   # 不存在的文件, 报错用.
-	local notexistmark=0     # 1 = 有不存在的文件; 0 = 文件都存在
-
-	# 遍历所有 args 查看是否有 '--', 如果有则将 '--' 后面不存在的文件存入 notexistfiles.
-	local arg  # 防止 for 循环中的变量变成 global variable.
-	for arg in $@
-	do
-		if (( $dashdash )) && [[ ! -f $arg ]] && [[ ! -d $arg ]]; then
-			# '--' 后的所有 args 都会被认为是 file.
-			notexistfiles+="'$arg' "   # concat string
-			notexistmark=1
-		fi
-
-		if [[ $arg == '--' ]]; then
-			dashdash=1
-		fi
-	done
-
-	# 如果 notexistmark 是 true, 则中止操作.
-	if  (( notexistmark )); then
-		echo "no such file or directory: \e[33m$notexistfiles\e[0m"
-		return 2  # return error code
-	fi
-
-	# 执行, 这里不能使用 eval 因为文件名里面的空格都被 escape 了.
-	nvim $@
-}
-
-# }}}
-
-# 设置 'open' 命令, 在打开的文件不存在时, 打开当作 URL 打开 -------------------- {{{
-function openFileOrUrl() {
-	# `2>/dev/null` 不打印 error msg
-	# `echo $?` 返回上一个命令的 exitcode
-
-	local file
-	for file in $@
-	do
-		# echo $file
-		local exitcode=$(open $file 2>/dev/null; echo $?)
-
-		if (( $exitcode != 0 )); then
-			open -u "https://$file"  # TODO: "http://"
-		fi
-	done
-
-	return 0   # 手动返回 0, 否则会返回 1.
-}
-
-# }}}
-
-# }}}
-
-# go / python / node
-# --- [ languages ] -------------------------------------------------------------------------------- {{{
-
-# --- [ golang ] --------------------------------------------------------------- {{{
-### `go env` 查看
-#export GOROOT=/usr/local/go
-export GOPATH=$HOME/gopath
-export GOBIN=$GOPATH/bin
-export PATH=$PATH:$GOBIN
-export GO111MODULE=on  # on | off | auto
-#export GOPROXY=off  # 默认值 "https://proxy.golang.org,direct"
-#export GOSUMDB=off  # Disable the Go checksum database
-
-### DEBUG use only
-#export PATH=/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin
-#export PATH=/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:$GOBIN
-
-# }}}
-
-# --- [ python ] --------------------------------------------------------------- {{{
-### python3 设置多个 version, 可以用 python3, python3.9, python3.10, python3.11 等命令.
-# eg: `python3.11 -m pip --version`. brew 安装 python 默认设置了多个 version.
-#export PATH=/usr/local/opt/python@3.9/bin:$PATH  # brew 安装的 python 默认在 PATH 中.
-# 指定 python3 命令的版本.
-alias python3=$(brew --prefix)/bin/python3.12
-
-# }}}
-
-# }}}
-
-# --- [ others ] ----------------------------------------------------------------------------------- {{{
-### bat 主题颜色, 'bat --list-themes' 查看 theme 样式.
-# "base16" 使用 0-15 color 兼容性好.
-# "ansi" 只使用 0-7 color, 兼容性最好.
-export BAT_THEME="Visual Studio Dark+"
-
-### firefox chrome ssl key 文件保存位置, 用于 wireshark 解密 https tls 数据.
-# wireshark `设置 -> Protocols -> TLS -> (Pre)-Master-Secret log filename` 中
-# 输入 SSLKEYLOGFILE 相同文件路径. 这样 wireshark 就能使用 ssl-key 解密 https 消息.
-# NOTE: 需要使用 terminal 打开 firefox / chrome 才能使 SSLKEYLOGFILE 环境变量生效.
-export SSLKEYLOGFILE=/tmp/sslkey.log  # /tmp 文件夹会被系统自动清理.
-alias firefox='open -n /Applications/Firefox.app'  # 使用终端打开 firefox
-
-### alias 快速设置本地 time zone
-alias setny='sudo systemsetup -settimezone America/New_York'
-alias setsy='sudo systemsetup -settimezone Australia/Sydney'
-
-### lazygit
-# brew info lazygit; https://github.com/jesseduffield/lazygit
-# brew info git-delta; https://github.com/dandavison/delta
-alias lg=$(brew --prefix)/bin/lazygit
-
-### delta, 需要安装 'brew info git-delta'
-### 放在 oh-my-zsh 后面是为了覆盖已提供的 diff() 函数.
-### NOTE: 这里不适用 alias 主要是因为 auto-completion.
-function diff() {
-	$(brew --prefix)/bin/delta --dark --line-numbers --side-by-side \
-		--syntax-theme=none --line-numbers-minus-style=196 "$@"
-}
-# }}}
-
 # the followings are core shell script functions, to make sure this `zshrc` working properly.
 # do not move these functions to other places!!!
 # NOTE: 本文件和 source 文件函数中的 for loop 变量必须先使用 local 定义,
@@ -801,11 +773,50 @@ alias checkBrewDependency="bash ~/.config/.my_shell_functions/brew_dep_check.sh"
 
 # DOCS:
 # 各种命令行工具的 autocomplete 文件路径 `/usr/local/share/zsh/site-functions`
-# keybindings -------------------------------------------------------------------------------------- {{{
+# --- [ keybindings ] ------------------------------------------------------------------------------ {{{
 # `bindkey -M main`   # 查看所有快捷键
 # `bindkey "^k" kill-line`       # 设置快捷键, CTRL-k
 # `bindkey "^[f" forward-word`   # ESC-f, 先按 ESC 再按 f 也可以触发.
 # `bindkey "^[b" backward-word`  # ESC-b, 先按 ESC 再按 b 也可以触发.
 #
 # }}}
+
+# --- [ others ] ----------------------------------------------------------------------------------- {{{
+### bat 主题颜色, 'bat --list-themes' 查看 theme 样式.
+# "base16" 使用 0-15 color 兼容性好.
+# "ansi" 只使用 0-7 color, 兼容性最好.
+export BAT_THEME="Visual Studio Dark+"
+
+### firefox chrome ssl key 文件保存位置, 用于 wireshark 解密 https tls 数据.
+# wireshark `设置 -> Protocols -> TLS -> (Pre)-Master-Secret log filename` 中
+# 输入 SSLKEYLOGFILE 相同文件路径. 这样 wireshark 就能使用 ssl-key 解密 https 消息.
+# NOTE: 需要使用 terminal 打开 firefox / chrome 才能使 SSLKEYLOGFILE 环境变量生效.
+export SSLKEYLOGFILE=/tmp/sslkey.log  # /tmp 文件夹会被系统自动清理.
+alias firefox='open -n /Applications/Firefox.app'  # 使用终端打开 firefox
+
+### du file size
+alias lldu="du -shc ./*"
+
+### alias 快速设置本地 time zone
+alias setny='sudo systemsetup -settimezone America/New_York'
+alias setsy='sudo systemsetup -settimezone Australia/Sydney'
+
+### lazygit
+# brew info lazygit; https://github.com/jesseduffield/lazygit
+# brew info git-delta; https://github.com/dandavison/delta
+alias lg=$(brew --prefix)/bin/lazygit
+
+### delta, 需要安装 'brew info git-delta'
+### 放在 oh-my-zsh 后面是为了覆盖已提供的 diff() 函数.
+### NOTE: 这里不适用 alias 主要是因为 auto-completion.
+function diff() {
+	$(brew --prefix)/bin/delta --dark --line-numbers --side-by-side \
+		--syntax-theme=none --line-numbers-minus-style=196 "$@"
+}
+# }}}
+
+# --- [ test ] -------------------------------------------------------------------------------------
+alias update='softwareupdate --list'
+
+
 
