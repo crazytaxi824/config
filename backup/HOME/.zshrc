@@ -2,6 +2,13 @@
 export LC_ALL=en_US.UTF-8  # 设置 LC_ALL, 其他 LC_* 强制等于 LC_ALL, 单独设置 LC_* 无效.
 #export LANG=en_US.UTF-8   # 设置 LANG, 其他 LC_* 默认值等于 LANG, 但可以单独设置 LC_*.
 
+### NOTE: 手动安装 https://github.com/neovim/neovim/releases/
+# $VISUAL is a more capable and interactive preference over $EDITOR.
+#  - EDITOR editor should be able to work without use of "advanced" terminal functionality.
+#  - VISUAL editor could be a full screen editor as vi or emacs.
+export EDITOR=nvim
+export VISUAL=$EDITOR
+
 # NOTE: oh-my-zsh 不依赖 homebrew
 # --- [ oh my zsh ] -------------------------------------------------------------------------------- {{{
 # If you come from bash you might have to change your $PATH.
@@ -170,85 +177,6 @@ export HOMEBREW_NO_INSTALL_CLEANUP=true
 export HOMEBREW_BUNDLE_FILE=~/.config/Brewfile  # 默认在 ~/.Brewfile
 #export HOMEBREW_BUNDLE_NO_LOCK=1  # disable Brewfile.lock.json
 #
-# }}}
-
-# NOTE: $EDITOR 设置必须放在 fzf 前面
-# --- [ $EDITOR neovim ] --------------------------------------------------------------------------- {{{
-### NOTE: testing newer neovim version. 手动安装 https://github.com/neovim/neovim/releases/
-#alias nvim9=~/.nvim_0.9/nvim-macos/bin/nvim  # 试用 neovim 新版本
-
-# $VISUAL is a more capable and interactive preference over $EDITOR.
-#  - EDITOR editor should be able to work without use of "advanced" terminal functionality.
-#  - VISUAL editor could be a full screen editor as vi or emacs.
-export EDITOR=nvim
-export VISUAL=$EDITOR
-
-### open/edit file
-alias o="openFileOrUrl"     # open file/url, openFileOrUrl() 函数定义在下面.
-alias e="vimExistFile --"   # edit file, vimExistFile() 函数定义在下面.
-
-# 设置 'vimExistFile -- [filepath]' 命令, 不打开不存在的文件 ------------------- {{{
-# 'vim --'   Arguments after this will be handled as a file name.
-#            This can be used to edit a filename that starts with a '-'.
-#            默认 '--' 后的所有 args 都会被认为是 file. eg: vim -- foo.sh -n, 'foo.sh' & '-n' 会被当成两个文件.
-# 使用方法:
-#	`vimExistFile file`                # 一般用法不检查文件是否存在.
-#   `vimExistFile -- file`             # 检查 file 是否存在.
-#   `vimExistFile +[num] -- file`      # 检查 file 是否存在. 同时传入 flags.
-#   `vimExistFile +{command} -- file`  # 同上
-function vimExistFile() {
-	local dashdash=0         # 1 = using '--'
-	local notexistfiles=''   # 不存在的文件, 报错用.
-	local notexistmark=0     # 1 = 有不存在的文件; 0 = 文件都存在
-
-	# 遍历所有 args 查看是否有 '--', 如果有则将 '--' 后面不存在的文件存入 notexistfiles.
-	local arg  # 防止 for 循环中的变量变成 global variable.
-	for arg in $@
-	do
-		if (( $dashdash )) && [[ ! -f $arg ]] && [[ ! -d $arg ]]; then
-			# '--' 后的所有 args 都会被认为是 file.
-			notexistfiles+="'$arg' "   # concat string
-			notexistmark=1
-		fi
-
-		if [[ $arg == '--' ]]; then
-			dashdash=1
-		fi
-	done
-
-	# 如果 notexistmark 是 true, 则中止操作.
-	if  (( notexistmark )); then
-		echo "no such file or directory: \e[33m$notexistfiles\e[0m"
-		return 2  # return error code
-	fi
-
-	# 执行, 这里不能使用 eval 因为文件名里面的空格都被 escape 了.
-	nvim $@
-}
-
-# }}}
-
-# 设置 'open' 命令, 在打开的文件不存在时, 打开当作 URL 打开 -------------------- {{{
-function openFileOrUrl() {
-	# `2>/dev/null` 不打印 error msg
-	# `echo $?` 返回上一个命令的 exitcode
-
-	local file
-	for file in $@
-	do
-		# echo $file
-		local exitcode=$(open $file 2>/dev/null; echo $?)
-
-		if (( $exitcode != 0 )); then
-			open -u "https://$file"  # TODO: "http://"
-		fi
-	done
-
-	return 0   # 手动返回 0, 否则会返回 1.
-}
-
-# }}}
-
 # }}}
 
 # go / python / node ...
@@ -642,7 +570,7 @@ function trash() {
 	local now_unix=$(date +%s)
 
 	local filepath  # 防止 for 循环中的变量变成 global variable.
-	for filepath in $@
+	for filepath in "$@"
 	do
 		# filepath_tail only, without path. could be filename.ext OR dir name.
 		local filepath_tail=$(basename $filepath)
@@ -742,6 +670,72 @@ function backupConfigFiles() {
 
 # }}}
 
+# 设置 'vimExistFile -- [filepath]' 命令, 不打开不存在的文件 ------------------- {{{
+# 'vim --'   Arguments after this will be handled as a file name.
+#            This can be used to edit a filename that starts with a '-'.
+#            默认 '--' 后的所有 args 都会被认为是 file. eg: vim -- foo.sh -n, 'foo.sh' & '-n' 会被当成两个文件.
+# 使用方法:
+#	`vimExistFile file`                # 一般用法不检查文件是否存在.
+#   `vimExistFile -- file`             # 检查 file 是否存在.
+#   `vimExistFile +[num] -- file`      # 检查 file 是否存在. 同时传入 flags.
+#   `vimExistFile +{command} -- file`  # 同上
+function vimExistFile() {
+	local dashdash=0         # 1 = using '--'
+	local notexistfiles=''   # 不存在的文件, 报错用.
+	local notexistmark=0     # 1 = 有不存在的文件; 0 = 文件都存在
+
+	# 遍历所有 args 查看是否有 '--', 如果有则将 '--' 后面不存在的文件存入 notexistfiles.
+	local arg  # 防止 for 循环中的变量变成 global variable.
+	for arg in "$@"
+	do
+		if (( $dashdash )) && [[ ! -f $arg ]] && [[ ! -d $arg ]]; then
+			# '--' 后的所有 args 都会被认为是 file.
+			notexistfiles+="'$arg' "   # concat string
+			notexistmark=1
+		fi
+
+		if [[ $arg == '--' ]]; then
+			dashdash=1
+		fi
+	done
+
+	# 如果 notexistmark 是 true, 则中止操作.
+	if  (( notexistmark )); then
+		echo "no such file or directory: \e[33m$notexistfiles\e[0m"
+		return 2  # return error code
+	fi
+
+	# 执行, 这里不能使用 eval 因为文件名里面的空格都被 escape 了.
+	nvim "$@"
+}
+
+# }}}
+
+# 设置 'open' 命令, 在打开的文件不存在时, 打开当作 URL 打开 -------------------- {{{
+function openFileOrUrl() {
+	# `2>/dev/null` 不打印 error msg
+	# `echo $?` 返回上一个命令的 exitcode
+
+	local file
+	for file in "$@"
+	do
+		# echo $file
+		local exitcode=$(open $file 2>/dev/null; echo $?)
+
+		if (( $exitcode != 0 )); then
+			open -u "https://$file"  # TODO: "http://"
+		fi
+	done
+
+	return 0   # 手动返回 0, 否则会返回 1.
+}
+
+# }}}
+
+### open/edit file
+alias o="openFileOrUrl"     # open file/url, openFileOrUrl() 函数定义在下面.
+alias e="vimExistFile --"   # edit file, vimExistFile() 函数定义在下面.
+
 # 检查 command tools 是否安装
 alias checkZshTools="zsh ~/.config/.my_shell_functions/check_zsh_tools.sh"
 
@@ -771,8 +765,6 @@ alias checkBrewDependency="bash ~/.config/.my_shell_functions/brew_dep_check.sh"
 
 # }}}
 
-# DOCS:
-# 各种命令行工具的 autocomplete 文件路径 `/usr/local/share/zsh/site-functions`
 # --- [ keybindings ] ------------------------------------------------------------------------------ {{{
 # `bindkey -M main`   # 查看所有快捷键
 # `bindkey "^k" kill-line`       # 设置快捷键, CTRL-k
