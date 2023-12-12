@@ -813,6 +813,11 @@ function diff() {
 	$(brew --prefix)/bin/delta --dark --line-numbers --side-by-side \
 		--syntax-theme=none --line-numbers-minus-style=196 "$@"
 }
+
+function Fd() {
+	fd -E="/System/Volumes/Data/" "$@" | xargs -I {} du -sh "{}"
+}
+
 # }}}
 
 # --- [ test ] -------------------------------------------------------------------------------------
