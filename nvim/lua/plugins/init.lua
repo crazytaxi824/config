@@ -75,7 +75,7 @@ local plugins = {
   --- By convention, if you want to write a query, use the `queries/` directory,
   --- but if you want to extend a query use the `after/queries/` directory.
   {"nvim-treesitter/nvim-treesitter",
-    commit = "180e1ca",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "7958ff9",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     --build = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
     config = function() require("plugins.settings.treesitter") end,
     dependencies = {
@@ -97,7 +97,7 @@ local plugins = {
 
   --- 第三方 module 插件 ---
   {"windwp/nvim-ts-autotag",  -- auto close tag <div></div>
-    commit = "6be1192",
+    commit = "8515e48",
 
     lazy = true,  -- nvim-treesitter 加载时自动加载.
   },
@@ -234,7 +234,7 @@ local plugins = {
 
   --- File explorer --------------------------------------------------------------------------------
   {"kyazdani42/nvim-tree.lua",
-    commit = "7d1760f",
+    commit = "141c0f9",
     config = function() require("plugins.settings.file_tree") end,
 
     -- VVI: 本文件最后设置: 在 `nvim dir` 直接打开文件夹的时直接加载 nvim-tree.lua.
@@ -302,7 +302,7 @@ local plugins = {
   --- `:Gitsigns setqflist/seqloclist` will open Trouble instead of quickfix or location list windows.
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {"lewis6991/gitsigns.nvim",
-    commit = "87640f5",
+    commit = "d195f0c",
     config = function() require("plugins.settings.git_signs") end,
 
     --- NOTE: `nvim dir` 启动时直接打开 dir 时可能会造成 gitsigns 报错. 根据测试情况选择 VeryLazy 或者 BufReadPre ...
@@ -322,7 +322,7 @@ local plugins = {
 
   --- https://docs.github.com/en/copilot/getting-started-with-github-copilot
   {"github/copilot.vim",
-    tag = "v1.12.1",
+    tag = "v1.13.0",
     config = function()
       --- VVI: `:help g:copilot_node_command`, using node@18
       --- 安装指定的 nodejs 版本. `brew install node@18`
