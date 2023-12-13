@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-# packages brew, npm, pip3
+# packages brew, npm, pip
 # brew update && brew outdated
 function brewOutdated() {
 	local update="brew update"
@@ -26,22 +26,22 @@ function npmOutdated() {
 	fi
 }
 
-# pip3 list --outdated
+# python3 -m pip list --outdated
 function pipOutdated() {
-	local outdated="pip3 list --outdated"
+	local outdated="python3 -m pip list --outdated"
 	echo -e "\e[32mrunning: $outdated\e[0m"
 	local pip_output=$(eval $outdated)
 	if [[ $pip_output != "" ]]; then
 		echo "$pip_output"
-		echo -e "\e[33mpip3 install --upgrade <package>\e[0m  # 必须指定 package_name\n"
+		echo -e "\e[33mpython3 -m pip install --upgrade <package>\e[0m  # 必须指定 package_name\n"
 	fi
 }
 
-# cleanup brew, npm, pip3
+# cleanup brew, npm, pip
 function cleanupPackages() {
 	local brew_clean="brew cleanup"
-	local npm_clean="npm cache verify --location=global"
-	local pip_clean="pip3 cache purge"
+	local npm_clean="npm cache verify -g"
+	local pip_clean="python3 -m pip cache purge"
 
 	echo -e "\e[32mrunning: $brew_clean\e[0m" && (eval $brew_clean) &&
 		echo -e "\e[32mrunning: $npm_clean\e[0m" && (eval $npm_clean) &&
