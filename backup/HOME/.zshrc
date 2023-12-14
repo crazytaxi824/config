@@ -749,11 +749,6 @@ alias 256color="sh ~/.config/.my_shell_functions/256color.sh"
 # 只能使用 zsh 执行, 语法不兼容 sh & bash.
 alias checkDevEnv="zsh ~/.config/.my_shell_functions/check_dev_env.sh"
 
-# 检查 brew / npm / pip3 包.
-# packages [outdated | clean]
-# 只能使用 zsh 执行, 语法不兼容 sh & bash.
-alias packages="zsh ~/.config/.my_shell_functions/packages.sh"
-
 # NOTE: 现在可以使用 `brew bundle check`, `brew bundle cleanup` 来检查不属于 Brewfile 的包.
 # 检查 brew 中所有不属于任何别的包依赖的包.
 #alias checkBrewRootFormula="zsh ~/.config/.my_shell_functions/brew_root_formula.sh"
