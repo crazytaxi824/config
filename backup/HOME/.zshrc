@@ -802,7 +802,7 @@ function diff() {
 }
 
 function Fd() {
-	fd -E="/System/Volumes/Data/" "$@" | xargs -I {} du -sh "{}"
+	fd -H -I -E="/System/" -E=".git/" "$@" | xargs -I {} du -sh "{}"
 }
 
 # }}}
