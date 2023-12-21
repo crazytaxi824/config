@@ -44,8 +44,14 @@ M.open_shell_term = function()
       jobdone = 'exit',
       jobstart = 'startinsert',
     })
+
     t:run()
-    return
+
+    --- source Python Virtual Environment
+    local local_venv = '.venv/bin/activate'
+    if vim.fn.filereadable(local_venv) == 1 then
+      vim.fn.chansend(t.job_id, 'source ' .. local_venv .. '\n')
+    end
   end
 
   --- terminal 存在, 但是无法 open_win(), 则 run()
