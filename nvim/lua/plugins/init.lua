@@ -323,19 +323,20 @@ local plugins = {
   --- https://docs.github.com/en/copilot/getting-started-with-github-copilot
   {"github/copilot.vim",
     tag = "v1.13.0",
-    config = function()
-      --- VVI: `:help g:copilot_node_command`, using node@18
-      --- 安装指定的 nodejs 版本. `brew install node@18`
-      local node_path = "/opt/homebrew/opt/node@18/bin/node"
-
-      --- check node cmd existence
-      if vim.fn.filereadable(node_path) == 0 then
-        Notify({"'" .. node_path .. "' is NOT Exist."}, "WARN", {title = "github/copilot", timeout = false})
-        return
-      end
-
-      vim.g.copilot_node_command = node_path
-    end,
+    -- config = function()  --- {{{
+    --   --- VVI: `:help g:copilot_node_command`, using node@18 or above.
+    --   --- 安装指定的 nodejs 版本. `brew install node@20`
+    --   local node_path = "/opt/homebrew/opt/node@20/bin/node"
+    --
+    --   --- check node cmd existence
+    --   if vim.fn.filereadable(node_path) == 0 then
+    --     Notify({"'" .. node_path .. "' is NOT Exist."}, "WARN", {title = "github/copilot", timeout = false})
+    --     return
+    --   end
+    --
+    --   vim.g.copilot_node_command = node_path
+    -- end,
+    -- -- }}}
 
     cmd = {"Copilot"},  -- `:Copilot setup`, `:Copilot enable`, `:help copilot` 查看可用命令.
   },
