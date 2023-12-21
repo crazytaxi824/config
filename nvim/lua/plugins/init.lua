@@ -75,7 +75,7 @@ local plugins = {
   --- By convention, if you want to write a query, use the `queries/` directory,
   --- but if you want to extend a query use the `after/queries/` directory.
   {"nvim-treesitter/nvim-treesitter",
-    commit = "ab818bf",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "0dfbf5e",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     --build = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
     config = function() require("plugins.settings.treesitter") end,
     dependencies = {
@@ -89,7 +89,7 @@ local plugins = {
 
   --- 第一方 module 插件 ---
   {"nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-    commit = "cfa8ee1",
+    commit = "c9f2b42",
     config = function() require("plugins.settings.treesitter_ctx") end,
 
     lazy = true,  -- nvim-treesitter 加载时自动加载.
@@ -130,7 +130,7 @@ local plugins = {
 
   --- indent line
   {"lukas-reineke/indent-blankline.nvim",
-    tag = "v3.3.10",
+    tag = "v3.3.11",
     config = function() require("plugins.settings.indentline") end,  -- setup() 设置 use_treesitter = true
     dependencies = {"nvim-treesitter/nvim-treesitter"},  -- for setup({scope})
 
@@ -212,7 +212,7 @@ local plugins = {
   --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
   --- 官方 LSP 引擎.
   {"neovim/nvim-lspconfig",
-    commit = "84f2dd4",
+    commit = "e85816c",
     config = function() require("lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     dependencies = {
       "williamboman/mason.nvim",  -- 安装 lsp 命令行工具.
@@ -323,19 +323,20 @@ local plugins = {
   --- https://docs.github.com/en/copilot/getting-started-with-github-copilot
   {"github/copilot.vim",
     tag = "v1.13.0",
-    config = function()
-      --- VVI: `:help g:copilot_node_command`, using node@18
-      --- 安装指定的 nodejs 版本. `brew install node@18`
-      local node_path = "/opt/homebrew/opt/node@18/bin/node"
-
-      --- check node cmd existence
-      if vim.fn.filereadable(node_path) == 0 then
-        Notify({"'" .. node_path .. "' is NOT Exist."}, "WARN", {title = "github/copilot", timeout = false})
-        return
-      end
-
-      vim.g.copilot_node_command = node_path
-    end,
+    -- config = function()  --- {{{
+    --   --- VVI: `:help g:copilot_node_command`, using node@18 or above.
+    --   --- 安装指定的 nodejs 版本. `brew install node@20`
+    --   local node_path = "/opt/homebrew/opt/node@20/bin/node"
+    --
+    --   --- check node cmd existence
+    --   if vim.fn.filereadable(node_path) == 0 then
+    --     Notify({"'" .. node_path .. "' is NOT Exist."}, "WARN", {title = "github/copilot", timeout = false})
+    --     return
+    --   end
+    --
+    --   vim.g.copilot_node_command = node_path
+    -- end,
+    -- -- }}}
 
     cmd = {"Copilot"},  -- `:Copilot setup`, `:Copilot enable`, `:help copilot` 查看可用命令.
   },
