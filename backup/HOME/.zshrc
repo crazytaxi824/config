@@ -207,6 +207,13 @@ alias python3=$(brew --prefix)/bin/python3.12
 
 # }}}
 
+# --- [ node@20 ] -------------------------------------------------------------- {{{
+# 使用 node@20 LTS, 以下两种写法都可以
+#alias node=$(brew --prefix)/opt/node@20/bin/node
+#export PATH="/opt/homebrew/opt/node@20/bin:$PATH"
+
+# }}}
+
 # }}}
 
 # NOTE: 必须放在 $EDITOR 设置后.
