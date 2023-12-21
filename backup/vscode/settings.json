@@ -254,19 +254,14 @@
   // pip3 install --upgrade autopep8  // 安装 autopep8
   // pip3 install flake8
   // pip3 install mypy
-  //
-  // python linter
-  "python.linting.flake8Enabled": true, // 语法错误 + 代码风格检查(style), 轻量级, 速度快
-  "python.linting.flake8Args": ["--max-line-length=120"], // python 默认单行不超过 79 字符.
-  "python.linting.pylintEnabled": false, // 代码风格检查(style), 要求苛刻, 速度慢
-  "python.linting.mypyEnabled": true, // 静态类型检查
   "python.languageServer": "Pylance",
   // "python.formatting.provider": "black", // autopep8 (默认) | black | yapf
   "[python]": {
     // "editor.formatOnSave": true,
-    "editor.defaultFormatter": "ms-python.python",
+    "editor.defaultFormatter": "ms-python.vscode-pylance",
     "editor.formatOnType": true // python 不能用 prettier 格式化
   },
+  "vsintellicode.features.python.deepLearning": "enabled",
 
   // jupyter
   // 读取 .ipynb 文件, jupyter.notebook 设置
