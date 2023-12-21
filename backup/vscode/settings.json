@@ -255,13 +255,9 @@
   // pip3 install flake8
   // pip3 install mypy
   "python.languageServer": "Pylance",
-  // "python.formatting.provider": "black", // autopep8 (默认) | black | yapf
   "[python]": {
-    // "editor.formatOnSave": true,
-    "editor.defaultFormatter": "ms-python.vscode-pylance",
-    "editor.formatOnType": true // python 不能用 prettier 格式化
+    "editor.defaultFormatter": "ms-python.autopep8"
   },
-  "vsintellicode.features.python.deepLearning": "enabled",
 
   // jupyter
   // 读取 .ipynb 文件, jupyter.notebook 设置
