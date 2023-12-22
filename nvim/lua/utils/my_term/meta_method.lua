@@ -411,7 +411,7 @@ local function create_my_term(term_obj)
   if term_obj.jobstart then
     if term_obj.jobstart == 'startinsert' then
       --- 判断当前是否是 term window. 防止 before_exec & after_exec 跳转到别的 window.
-      if vim.api.nvim_get_current_win() == term_win_id  then
+      if vim.api.nvim_get_current_win() == term_win_id then
         vim.cmd('startinsert')
       end
     elseif type(term_obj.jobstart) == "function" then
