@@ -199,11 +199,14 @@ export GO111MODULE=on  # on | off | auto
 # }}}
 
 # --- [ python ] --------------------------------------------------------------- {{{
-### python3 设置多个 version, 可以用 python3, python3.9, python3.10, python3.11 等命令.
-# eg: `python3.11 -m pip --version`. brew 安装 python 默认设置了多个 version.
-#export PATH=/usr/local/opt/python@3.9/bin:$PATH  # brew 安装的 python 默认在 PATH 中.
-# 指定 python3 命令的版本.
-alias python3=$(brew --prefix)/bin/python3.12
+# 安装 `$ brew install python@3.12`
+# 从 python3.12 开始必须使用 "venv": virtual environments
+# 创建虚拟环境: `$ python3.12 -m venv /path/to/new/virtual/environment`
+# 进入虚拟环境: `$ source /path/to/new/virtual/environment/bin/activate`
+# 在虚拟环境中安装包: `$ pip install --upgrade pip`, `$ pip install numpy` ...
+
+# NOTE: 以下 env 会被用在 neovim 中用于执行 python 文件.
+#export PYTHON_DEFAULT_ENV=~/.python3_env
 
 # }}}
 
@@ -569,7 +572,7 @@ function trash() {
 	local trash_dir=~/.Trash/
 	# NOTE: linux DO NOT have "~/.Trash/" dir
 	if [[ ! -d $trash_dir ]]; then
-		echo -e "\e[1;31m$trash_dir is NOT exist.\e[0m"
+		echo -e "\e[31m$trash_dir is NOT exist.\e[0m"
 		return
 	fi
 

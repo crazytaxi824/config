@@ -19,7 +19,7 @@ M.default_opts = {
   bufnr = nil,
   job_id = nil,
 
-  cmd = vim.go.shell, -- 相当于 os.getenv('SHELL')
+  cmd = vim.go.shell, -- `:help 'shell'`, get global option 'shell', 相当于 os.getenv('SHELL')
   jobstart = nil,     -- 'startinsert' | func(term), 在 termopen() 之后触发. eg: win_gotoid()
   jobdone = nil,      -- 'stopinsert' | 'exit'. 在 on_exit 中触发. 如果要设置 func 可以在 on_exit 中设置.
   auto_scroll = nil,  -- goto bottom of the terminal. 在 on_stdout & on_stderr 中触发.
@@ -411,7 +411,7 @@ local function create_my_term(term_obj)
   if term_obj.jobstart then
     if term_obj.jobstart == 'startinsert' then
       --- 判断当前是否是 term window. 防止 before_exec & after_exec 跳转到别的 window.
-      if vim.api.nvim_get_current_win() == term_win_id  then
+      if vim.api.nvim_get_current_win() == term_win_id then
         vim.cmd('startinsert')
       end
     elseif type(term_obj.jobstart) == "function" then
