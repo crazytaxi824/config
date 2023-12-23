@@ -38,8 +38,7 @@ local plugins = {
 
   --- 通知功能
   {"rcarriga/nvim-notify",
-    commit = "ba1f59d",
-    -- tag = "v3.12.0",
+    tag = "v3.13.0",
     config = function() require("plugins.settings.nvim_notify") end,
 
     event = "VeryLazy",
@@ -75,7 +74,7 @@ local plugins = {
   --- By convention, if you want to write a query, use the `queries/` directory,
   --- but if you want to extend a query use the `after/queries/` directory.
   {"nvim-treesitter/nvim-treesitter",
-    commit = "d496c5e",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "454c3a9",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     --build = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
     config = function() require("plugins.settings.treesitter") end,
     dependencies = {

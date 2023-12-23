@@ -181,7 +181,7 @@ font:
   # spacing.
   offset:
     x: 1  # letter spacing. NOTE: vscode 英文字间距为'1'; 中文字间距为'0'.
-    y: 8  # line spacing. 通过对比 vscode 得到行间距为'8'.
+    y: 4  # line spacing. 通过对比 vscode 得到行间距为'8'.
           # vscode 的设置为 "editor.lineHeight". 默认根据 fontsize 自动计算行间距, value between 0~8.
 
   # Glyph offset determines the locations of the glyphs within their cells with
@@ -189,7 +189,7 @@ font:
   # right, increasing `y` moves the glyph upward.
   glyph_offset:
     x: 0  # glyph move right `N` px. █
-    y: 5  # glyph move up `N` px, 根据实际测试调整得到的值.
+    y: 2  # glyph move up `N` px, 根据实际测试调整得到的值.
 
   # Use built-in font for box drawing characters.
   #
