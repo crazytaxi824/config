@@ -47,7 +47,7 @@ local function set_buf_keymaps(term_obj)
   local keys = {
     {'n', 't<Up>', '<cmd>resize +5<CR>',   opt, 'my_term: resize +5'},
     {'n', 't<Down>', '<cmd>resize -5<CR>', opt, 'my_term: resize -5'},
-    {'n', 'tc', function() M.close_others(term_obj.id) end,   opt, 'my_term: close other my_terms'},
+    {'n', 'tc', function() M.close_others(term_obj.id) end,   opt, 'my_term: close other my_terms windows'},
     {'n', 'tw', function() M.wipeout_others(term_obj.id) end, opt, 'my_term: wipeout other my_terms'},
   }
   require('utils.keymaps').set(keys)
@@ -141,12 +141,18 @@ local function autocmd_callback(term_obj)
   vim.api.nvim_create_autocmd("BufWipeout", {
     group = g_id,
     buffer = term_obj.bufnr,
-    callback = function(params) vim.api.nvim_del_augroup_by_id(g_id) end,
+    callback = function(params)
+      --- remove from global_my_term_cache
+      M.global_my_term_cache[term_obj.id] = nil
+
+      vim.api.nvim_del_augroup_by_id(g_id)
+    end,
     desc = "my_term: delete augroup by id",
   })
 end
 -- -- }}}
 
+--- 默认使用 termopen() 方法打开 terminal. eg: shell terminal
 --- termopen(): 执行 cmd --------------------------------------------------------------------------- {{{
 local function termopen_cmd(term_obj)
   local cmd = term_obj.cmd .. M.name_tag  .. term_obj.id
@@ -203,6 +209,7 @@ local function termopen_cmd(term_obj)
 end
 -- -- }}}
 
+--- 使用 jobstart() 方法将 output 写入指定 buffer 中. eg: exec_term
 --- buf_job_output(): 执行 cmd --------------------------------------------------------------------- {{{
 --- nvim_buf_set_lines(0, 0) 在第一行前面写入.
 --- nvim_buf_set_lines(0, 1) 在第一行写入.
@@ -334,7 +341,7 @@ M.create_term_win = function(bufnr)
 end
 
 --- 打开/创建 terminal window 用于 termopen() ------------------------------------------------------ {{{
---- NOTE: buffer 一旦运行过 termopen() 就不能再次运行了, Can only call this function in an unmodified buffer.
+--- NOTE: buffer 一旦运行过 termopen() 就不能再次运行 termopen() 了, Can only call this function in an unmodified buffer.
 --- 所以需要删除旧的 bufnr 然后重新创建一个新的 scratch bufnr 给 termopen() 使用.
 local function enter_term_win(curr_term_bufnr, old_term_bufnr)
   --- 如果 old_term_bufnr 不存在: 创建一个新的 term window 用于加载 new term.bufnr
