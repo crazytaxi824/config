@@ -49,6 +49,7 @@ local function set_buf_keymaps(term_obj)
     {'n', 't<Down>', '<cmd>resize -5<CR>', opt, 'my_term: resize -5'},
     {'n', 'tc', function() M.close_others(term_obj.id) end,   opt, 'my_term: close other my_terms windows'},
     {'n', 'tw', function() M.wipeout_others(term_obj.id) end, opt, 'my_term: wipeout other my_terms'},
+    {'n', 'q',  function() M.wipeout(term_obj.id) end, opt, 'my_term: wipeout my_term'},
   }
   require('utils.keymaps').set(keys)
 end
@@ -438,7 +439,7 @@ M.metatable_funcs = function()
   --- - buf_output: print stdout & stderr to scratch buffer.
   function meta_funcs:run()
     if self:job_status() == -1 then
-      Notify("job_id is still running, please use `term.stop()` first.", "WARN", {title="my_term"})
+      Notify("job_id is still running, please use `term:stop()` or `CTRL-C` first.", "WARN", {title="my_term"})
       return
     end
 
@@ -517,6 +518,24 @@ M.close_others = function(term_id)
         vim.api.nvim_win_close(w, 'force')
       end
     end
+  end
+end
+
+M.wipeout = function(term_id)
+  local t = M.global_my_term_cache[term_id]
+  if not t then
+    Notify('term: "' .. term_id .. '" is not exist', "WARN")
+    return
+  end
+
+  if t:job_status() == -1 then
+    Notify("job_id is still running, please use `term:stop()` or `CTRL-C` first.", "WARN", {title="my_term"})
+    return
+  end
+
+  if M.term_buf_exist(t.bufnr) then
+    vim.api.nvim_buf_delete(t.bufnr, {force=true})
+    t.bufnr = nil
   end
 end
 
