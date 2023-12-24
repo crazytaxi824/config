@@ -443,6 +443,9 @@ M.metatable_funcs = function()
     end
 
     create_my_term(self)
+
+    --- cache terminal object
+    M.global_my_term_cache[self.id] = self
   end
 
   --- 终止 job, 会触发 jobdone.

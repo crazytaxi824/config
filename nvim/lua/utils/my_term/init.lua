@@ -13,9 +13,6 @@ M.new = function(opts)
   --- terminal object
   local my_term = opts
 
-  --- cache terminal object
-  meta_method.global_my_term_cache[my_term.id] = my_term
-
   --- callback
   if my_term.on_init then
     my_term.on_init(my_term)
@@ -44,7 +41,6 @@ M.open_shell_term = function()
       jobdone = 'exit',
       jobstart = 'startinsert',
     })
-
     t:run()
 
     --- source Python Virtual Environment
@@ -52,11 +48,12 @@ M.open_shell_term = function()
     if vim.fn.filereadable(local_venv) == 1 then
       vim.fn.chansend(t.job_id, 'source ' .. local_venv .. '\n')
     end
+
+    return
   end
 
-  --- terminal 存在, 但是无法 open_win(), 则 run()
   if not t:open_win() then
-    t:run()
+    Notify('cached my_term with No bufnr', "ERROR")
   end
 end
 
@@ -156,10 +153,10 @@ M.__terminate = function(term_id)
 end
 
 --- debug ------------------------------------------------------------------------------------------
--- function Get_all_my_terms()
---   vim.print(meta_method.global_my_term_cache)
--- end
---
+function Get_all_my_terms()
+  vim.print(meta_method.global_my_term_cache)
+end
+
 -- function Remove_my_term_by_id(id)
 --   M.__terminate(id)
 -- end
