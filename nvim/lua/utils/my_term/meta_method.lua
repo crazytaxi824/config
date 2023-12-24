@@ -47,7 +47,7 @@ local function set_buf_keymaps(term_obj)
   local keys = {
     {'n', 't<Up>', '<cmd>resize +5<CR>',   opt, 'my_term: resize +5'},
     {'n', 't<Down>', '<cmd>resize -5<CR>', opt, 'my_term: resize -5'},
-    {'n', 'tc', function() M.close_others(term_obj.id) end,   opt, 'my_term: close other my_terms'},
+    {'n', 'tc', function() M.close_others(term_obj.id) end,   opt, 'my_term: close other my_terms windows'},
     {'n', 'tw', function() M.wipeout_others(term_obj.id) end, opt, 'my_term: wipeout other my_terms'},
   }
   require('utils.keymaps').set(keys)
@@ -147,6 +147,7 @@ local function autocmd_callback(term_obj)
 end
 -- -- }}}
 
+--- 默认使用 termopen() 方法打开 terminal. eg: shell terminal
 --- termopen(): 执行 cmd --------------------------------------------------------------------------- {{{
 local function termopen_cmd(term_obj)
   local cmd = term_obj.cmd .. M.name_tag  .. term_obj.id
@@ -203,6 +204,7 @@ local function termopen_cmd(term_obj)
 end
 -- -- }}}
 
+--- 使用 jobstart() 方法将 output 写入指定 buffer 中. eg: exec_term
 --- buf_job_output(): 执行 cmd --------------------------------------------------------------------- {{{
 --- nvim_buf_set_lines(0, 0) 在第一行前面写入.
 --- nvim_buf_set_lines(0, 1) 在第一行写入.
