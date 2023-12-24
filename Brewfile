@@ -49,7 +49,7 @@ brew "prettier" # 格式化工具
 #brew "clang-format" # c,c++,object-c 格式化工具
 
 # dev tools
-brew "graphviz" # 图表绘制工具, go 性能分析需要用到
+brew "graphviz" # 图表绘制工具, 必要: go pprof 性能分析 https://github.com/google/pprof
 brew "protobuf" # `protoc` 命令行工具
 brew "grpcurl"  # gprc 请求工具, 类似 "curl".
 brew "rclone"   # ftp / sftp / webstorage ... 工具
