@@ -73,12 +73,7 @@ end
 --- close all my_term windows
 M.close_all = function()
   for _, term_obj in pairs(meta_method.global_my_term_cache) do
-    if meta_method.term_buf_exist(term_obj.bufnr) then
-      local term_wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
-      for _, w in ipairs(term_wins) do
-        vim.api.nvim_win_close(w, 'force')
-      end
-    end
+    term_obj:close_win()
   end
 end
 
@@ -97,19 +92,9 @@ end
 M.wipeout_all = function()
   for _, term_obj in pairs(meta_method.global_my_term_cache) do
     if meta_method.term_buf_exist(term_obj.bufnr) then
-      vim.api.nvim_buf_delete(term_obj.bufnr, {force=true})
-      term_obj.bufnr = nil
+      term_obj:wipeout()
     end
   end
-end
-
---- close all other terms except term_id
-M.close_others = function(term_id)
-  meta_method.close_others(term_id)
-end
-
-M.wipeout_others = function(term_id)
-  meta_method.wipeout_others(term_id)
 end
 
 --- close all first, then open all
@@ -135,21 +120,6 @@ M.toggle_all = function()
 
   --- 如果所有 my_term window 都是关闭状态, 则 open_all()
   M.open_all()
-end
-
---- terminate 之后, 如果要使用相同 id 的 terminal 需要重新 new()
-M.__terminate = function(term_id)
-  local t = meta_method.global_my_term_cache[term_id]
-  if not t then
-    return
-  end
-
-  if meta_method.term_buf_exist(t.bufnr) then
-    vim.api.nvim_buf_delete(t.bufnr, {force=true})
-  end
-
-  --- clear global cache and delete terminal
-  meta_method.global_my_term_cache[t.id] = nil
 end
 
 --- debug ------------------------------------------------------------------------------------------

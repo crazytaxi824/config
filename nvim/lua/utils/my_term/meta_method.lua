@@ -26,12 +26,13 @@ M.default_opts = {
   print_cmd = nil,    -- bool, 是否打印 cmd. 默认不打印.
   buf_output = nil,   -- bool, 是否用 buf_job_output 执行, 默认使用 termopen().
 
+  --- callback functions
   on_init = nil,   -- func(term), new()
   on_open = nil,   -- func(term), BufWinEnter. NOTE: 每次 term:// buffer 被 win 显示的时候都会触发, 多个窗口显示时也会触发.
   on_close = nil,  -- func(term), BufWinLeave. NOTE: BufWinLeave 只会在 buffer 离开最后一个 win 的时候触发.
-  on_stdout = nil, -- func(term, jobid, data, event), 可用于 auto_scroll.
-  on_stderr = nil, -- func(term, jobid, data, event), 可用于 auto_scroll.
-  on_exit = nil,   -- func(term, job_id, exit_code, event), TermClose, jobstop(), 可用于 `:silent! bwipeout! term_bufnr`
+  on_stdout = nil, -- func(term, jobid, data, event), 可用于 auto_scroll to bottom
+  on_stderr = nil, -- func(term, jobid, data, event), 可用于 auto_scroll to bottom
+  on_exit = nil,   -- func(term, job_id, exit_code, event), TermClose, jobstop() 时触发, 可用于 `:silent! bwipeout! term_bufnr`
 }
 
 --- 判断 terminal bufnr 是否存在, 是否有效
@@ -166,6 +167,12 @@ local function termopen_cmd(term_obj)
   vim.api.nvim_buf_call(term_obj.bufnr, function()
     term_obj.job_id = vim.fn.termopen(cmd, {
       on_stdout = function(job_id, data, event)  -- event 是 'stdout'
+        --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
+        if not M.term_buf_exist(term_obj.bufnr) then
+          vim.fn.jobstop(term_obj.job_id)
+          return
+        end
+
         --- auto_scroll option
         buf_scroll_bottom(term_obj)
 
@@ -176,6 +183,12 @@ local function termopen_cmd(term_obj)
       end,
 
       on_stderr = function(job_id, data, event)  -- event 是 'stderr'
+        --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
+        if not M.term_buf_exist(term_obj.bufnr) then
+          vim.fn.jobstop(term_obj.job_id)
+          return
+        end
+
         --- auto_scroll option
         buf_scroll_bottom(term_obj)
 
@@ -194,7 +207,7 @@ local function termopen_cmd(term_obj)
         --- jobdone option
         if term_obj.jobdone == 'exit' then
           --- VVI: 手动 :bw 删除 buffer 时会触发 TermClose, 导致重复 wipeout buffer 而报错.
-          if vim.api.nvim_buf_is_valid(term_obj.bufnr) then
+          if M.term_buf_exist(term_obj.bufnr) then
             vim.api.nvim_buf_delete(term_obj.bufnr, {force=true})
           end
         elseif term_obj.jobdone == 'stopinsert' then
@@ -287,6 +300,12 @@ local function buf_job_output(term_obj)
 
   term_obj.job_id = vim.fn.jobstart(term_obj.cmd, {
     on_stdout = function (job_id, data, event)  -- NOTE: fmt.Print()
+      --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
+      if not M.term_buf_exist(term_obj.bufnr) then
+        vim.fn.jobstop(term_obj.job_id)
+        return
+      end
+
       --- write output to buffer
       set_buf_line_output(term_obj.bufnr, data, "my_output_stdout")
 
@@ -298,7 +317,14 @@ local function buf_job_output(term_obj)
         term_obj.on_stdout(term_obj, job_id, data, event)
       end
     end,
+
     on_stderr = function (job_id, data, event)  -- NOTE: log.Print()
+      --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
+      if not M.term_buf_exist(term_obj.bufnr) then
+        vim.fn.jobstop(term_obj.job_id)
+        return
+      end
+
       --- write output to buffer
       set_buf_line_output(term_obj.bufnr, data, "my_output_stderr")
 
@@ -310,17 +336,23 @@ local function buf_job_output(term_obj)
         term_obj.on_stderr(term_obj, job_id, data, event)
       end
     end,
+
     on_exit = function(job_id, exit_code, event)
+      --- callback
+      if term_obj.on_exit then
+        term_obj.on_exit(term_obj, job_id, exit_code, event)
+      end
+
+      --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
+      if not M.term_buf_exist(term_obj.bufnr) then
+        return
+      end
+
       --- write exit to buffer
       set_buf_line_exit(term_obj.bufnr, exit_code)
 
       --- auto_scroll option
       buf_scroll_bottom(term_obj)
-
-      --- callback
-      if term_obj.on_exit then
-        term_obj.on_exit(term_obj, job_id, exit_code, event)
-      end
     end,
   })
 end
@@ -500,8 +532,28 @@ M.metatable_funcs = function()
     return vim.fn.jobwait({self.job_id}, 0)[1]
   end
 
+  --- wipeout term buffer.
+  function meta_funcs:wipeout()
+    if not M.term_buf_exist(self.bufnr) then
+      return
+    end
+
+    --- VVI: 保险起见先 jobstop() 再 wipeout buffer, 否则 job 可能还在继续执行.
+    vim.fn.jobstop(self.job_id)
+
+    --- wipeout term buffer
+    vim.api.nvim_buf_delete(self.bufnr, {force=true})
+
+    --- clear term bufnr
+    self.bufnr = nil
+  end
+
   return meta_funcs
 end
+
+--- 以下函数用于 term buffer keymaps ---------------------------------------------------------------
+
+--- NOTE: M.close() 没有实现, 可以使用 `:q` 代替.
 
 --- close all other terms except term_id
 M.close_others = function(term_id)
@@ -512,11 +564,8 @@ M.close_others = function(term_id)
   end
 
   for _, term_obj in pairs(M.global_my_term_cache) do
-    if M.term_buf_exist(term_obj.bufnr) and term_obj.bufnr ~= t.bufnr then
-      local term_wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
-      for _, w in ipairs(term_wins) do
-        vim.api.nvim_win_close(w, 'force')
-      end
+    if term_obj.bufnr ~= t.bufnr then
+      term_obj:close_win()
     end
   end
 end
@@ -533,10 +582,7 @@ M.wipeout = function(term_id)
     return
   end
 
-  if M.term_buf_exist(t.bufnr) then
-    vim.api.nvim_buf_delete(t.bufnr, {force=true})
-    t.bufnr = nil
-  end
+  t:wipeout()
 end
 
 --- wipeout all other terms except term_id
@@ -548,9 +594,8 @@ M.wipeout_others = function(term_id)
   end
 
   for _, term_obj in pairs(M.global_my_term_cache) do
-    if M.term_buf_exist(term_obj.bufnr) and term_obj.bufnr ~= t.bufnr then
-      vim.api.nvim_buf_delete(term_obj.bufnr, {force=true})
-      term_obj.bufnr = nil
+    if term_obj.bufnr ~= t.bufnr then
+      term_obj:wipeout()
     end
   end
 end
