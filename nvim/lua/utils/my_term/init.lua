@@ -97,7 +97,13 @@ end
 M.wipeout_all = function()
   for _, term_obj in pairs(meta_method.global_my_term_cache) do
     if meta_method.term_buf_exist(term_obj.bufnr) then
+      --- VVI: 保险起见先 jobstop() 再 wipeout buffer, 否则 job 可能还在继续执行.
+      vim.fn.jobstop(term_obj.job_id)
+
+      --- wipeout term buffer
       vim.api.nvim_buf_delete(term_obj.bufnr, {force=true})
+
+      --- clear term bufnr
       term_obj.bufnr = nil
     end
   end
@@ -145,7 +151,14 @@ M.__terminate = function(term_id)
   end
 
   if meta_method.term_buf_exist(t.bufnr) then
+    --- VVI: 保险起见先 jobstop() 再 wipeout buffer, 否则 job 可能还在继续执行.
+    vim.fn.jobstop(t.job_id)
+
+    --- wipeout term buffer
     vim.api.nvim_buf_delete(t.bufnr, {force=true})
+
+    --- clear term bufnr
+    t.bufnr = nil
   end
 
   --- clear global cache and delete terminal
