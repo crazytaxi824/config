@@ -97,15 +97,6 @@ M.wipeout_all = function()
   end
 end
 
---- close all other terms except term_id
-M.close_others = function(term_id)
-  meta_method.close_others(term_id)
-end
-
-M.wipeout_others = function(term_id)
-  meta_method.wipeout_others(term_id)
-end
-
 --- close all first, then open all
 M.toggle_all = function()
   --- 获取所有的 my_term windows

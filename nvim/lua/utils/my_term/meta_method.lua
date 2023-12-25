@@ -550,6 +550,10 @@ M.metatable_funcs = function()
   return meta_funcs
 end
 
+--- 以下函数用于 term buffer keymaps ---------------------------------------------------------------
+
+--- NOTE: M.close() 没有实现, 可以使用 `:q` 代替.
+
 --- close all other terms except term_id
 M.close_others = function(term_id)
   local t = M.global_my_term_cache[term_id]
