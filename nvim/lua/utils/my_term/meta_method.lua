@@ -26,12 +26,13 @@ M.default_opts = {
   print_cmd = nil,    -- bool, 是否打印 cmd. 默认不打印.
   buf_output = nil,   -- bool, 是否用 buf_job_output 执行, 默认使用 termopen().
 
+  --- callback functions
   on_init = nil,   -- func(term), new()
   on_open = nil,   -- func(term), BufWinEnter. NOTE: 每次 term:// buffer 被 win 显示的时候都会触发, 多个窗口显示时也会触发.
   on_close = nil,  -- func(term), BufWinLeave. NOTE: BufWinLeave 只会在 buffer 离开最后一个 win 的时候触发.
-  on_stdout = nil, -- func(term, jobid, data, event), 可用于 auto_scroll.
-  on_stderr = nil, -- func(term, jobid, data, event), 可用于 auto_scroll.
-  on_exit = nil,   -- func(term, job_id, exit_code, event), TermClose, jobstop(), 可用于 `:silent! bwipeout! term_bufnr`
+  on_stdout = nil, -- func(term, jobid, data, event), 可用于 auto_scroll to bottom
+  on_stderr = nil, -- func(term, jobid, data, event), 可用于 auto_scroll to bottom
+  on_exit = nil,   -- func(term, job_id, exit_code, event), TermClose, jobstop() 时触发, 可用于 `:silent! bwipeout! term_bufnr`
 }
 
 --- 判断 terminal bufnr 是否存在, 是否有效
