@@ -168,6 +168,7 @@ local function termopen_cmd(term_obj)
       on_stdout = function(job_id, data, event)  -- event 是 'stdout'
         --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
         if not M.term_buf_exist(term_obj.bufnr) then
+          vim.fn.jobstop(term_obj.job_id)
           return
         end
 
@@ -183,6 +184,7 @@ local function termopen_cmd(term_obj)
       on_stderr = function(job_id, data, event)  -- event 是 'stderr'
         --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
         if not M.term_buf_exist(term_obj.bufnr) then
+          vim.fn.jobstop(term_obj.job_id)
           return
         end
 
@@ -196,11 +198,6 @@ local function termopen_cmd(term_obj)
       end,
 
       on_exit = function(job_id, exit_code, event)  -- event 是 'exit'
-        --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
-        if not M.term_buf_exist(term_obj.bufnr) then
-          return
-        end
-
         --- callback
         if term_obj.on_exit then
           term_obj.on_exit(term_obj, job_id, exit_code, event)
@@ -209,7 +206,7 @@ local function termopen_cmd(term_obj)
         --- jobdone option
         if term_obj.jobdone == 'exit' then
           --- VVI: 手动 :bw 删除 buffer 时会触发 TermClose, 导致重复 wipeout buffer 而报错.
-          if vim.api.nvim_buf_is_valid(term_obj.bufnr) then
+          if M.term_buf_exist(term_obj.bufnr) then
             vim.api.nvim_buf_delete(term_obj.bufnr, {force=true})
           end
         elseif term_obj.jobdone == 'stopinsert' then
@@ -304,6 +301,7 @@ local function buf_job_output(term_obj)
     on_stdout = function (job_id, data, event)  -- NOTE: fmt.Print()
       --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
       if not M.term_buf_exist(term_obj.bufnr) then
+        vim.fn.jobstop(term_obj.job_id)
         return
       end
 
@@ -322,6 +320,7 @@ local function buf_job_output(term_obj)
     on_stderr = function (job_id, data, event)  -- NOTE: log.Print()
       --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
       if not M.term_buf_exist(term_obj.bufnr) then
+        vim.fn.jobstop(term_obj.job_id)
         return
       end
 
@@ -338,6 +337,11 @@ local function buf_job_output(term_obj)
     end,
 
     on_exit = function(job_id, exit_code, event)
+      --- callback
+      if term_obj.on_exit then
+        term_obj.on_exit(term_obj, job_id, exit_code, event)
+      end
+
       --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
       if not M.term_buf_exist(term_obj.bufnr) then
         return
@@ -348,11 +352,6 @@ local function buf_job_output(term_obj)
 
       --- auto_scroll option
       buf_scroll_bottom(term_obj)
-
-      --- callback
-      if term_obj.on_exit then
-        term_obj.on_exit(term_obj, job_id, exit_code, event)
-      end
     end,
   })
 end
@@ -532,6 +531,22 @@ M.metatable_funcs = function()
     return vim.fn.jobwait({self.job_id}, 0)[1]
   end
 
+  --- wipeout term buffer.
+  function meta_funcs:wipeout()
+    if not M.term_buf_exist(self.bufnr) then
+      return
+    end
+
+    --- VVI: 保险起见先 jobstop() 再 wipeout buffer, 否则 job 可能还在继续执行.
+    vim.fn.jobstop(self.job_id)
+
+    --- wipeout term buffer
+    vim.api.nvim_buf_delete(self.bufnr, {force=true})
+
+    --- clear term bufnr
+    self.bufnr = nil
+  end
+
   return meta_funcs
 end
 
@@ -565,16 +580,7 @@ M.wipeout = function(term_id)
     return
   end
 
-  if M.term_buf_exist(t.bufnr) then
-    --- VVI: 保险起见先 jobstop() 再 wipeout buffer, 否则 job 可能还在继续执行.
-    vim.fn.jobstop(t.job_id)
-
-    --- wipeout term buffer
-    vim.api.nvim_buf_delete(t.bufnr, {force=true})
-
-    --- clear term bufnr
-    t.bufnr = nil
-  end
+  t:wipeout()
 end
 
 --- wipeout all other terms except term_id
@@ -586,15 +592,8 @@ M.wipeout_others = function(term_id)
   end
 
   for _, term_obj in pairs(M.global_my_term_cache) do
-    if M.term_buf_exist(term_obj.bufnr) and term_obj.bufnr ~= t.bufnr then
-      --- VVI: 保险起见先 jobstop() 再 wipeout buffer, 否则 job 可能还在继续执行.
-      vim.fn.jobstop(term_obj.job_id)
-
-      --- wipeout term buffer
-      vim.api.nvim_buf_delete(term_obj.bufnr, {force=true})
-
-      --- clear term bufnr
-      term_obj.bufnr = nil
+    if term_obj.bufnr ~= t.bufnr then
+      term_obj:wipeout()
     end
   end
 end

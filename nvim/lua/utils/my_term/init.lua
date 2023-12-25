@@ -97,14 +97,7 @@ end
 M.wipeout_all = function()
   for _, term_obj in pairs(meta_method.global_my_term_cache) do
     if meta_method.term_buf_exist(term_obj.bufnr) then
-      --- VVI: 保险起见先 jobstop() 再 wipeout buffer, 否则 job 可能还在继续执行.
-      vim.fn.jobstop(term_obj.job_id)
-
-      --- wipeout term buffer
-      vim.api.nvim_buf_delete(term_obj.bufnr, {force=true})
-
-      --- clear term bufnr
-      term_obj.bufnr = nil
+      term_obj:wipeout()
     end
   end
 end
@@ -141,28 +134,6 @@ M.toggle_all = function()
 
   --- 如果所有 my_term window 都是关闭状态, 则 open_all()
   M.open_all()
-end
-
---- terminate 之后, 如果要使用相同 id 的 terminal 需要重新 new()
-M.__terminate = function(term_id)
-  local t = meta_method.global_my_term_cache[term_id]
-  if not t then
-    return
-  end
-
-  if meta_method.term_buf_exist(t.bufnr) then
-    --- VVI: 保险起见先 jobstop() 再 wipeout buffer, 否则 job 可能还在继续执行.
-    vim.fn.jobstop(t.job_id)
-
-    --- wipeout term buffer
-    vim.api.nvim_buf_delete(t.bufnr, {force=true})
-
-    --- clear term bufnr
-    t.bufnr = nil
-  end
-
-  --- clear global cache and delete terminal
-  meta_method.global_my_term_cache[t.id] = nil
 end
 
 --- debug ------------------------------------------------------------------------------------------
