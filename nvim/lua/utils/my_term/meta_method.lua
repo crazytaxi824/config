@@ -559,11 +559,8 @@ M.close_others = function(term_id)
   end
 
   for _, term_obj in pairs(M.global_my_term_cache) do
-    if M.term_buf_exist(term_obj.bufnr) and term_obj.bufnr ~= t.bufnr then
-      local term_wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
-      for _, w in ipairs(term_wins) do
-        vim.api.nvim_win_close(w, 'force')
-      end
+    if term_obj.bufnr ~= t.bufnr then
+      term_obj:close_win()
     end
   end
 end

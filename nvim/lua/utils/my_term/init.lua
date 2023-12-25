@@ -73,12 +73,7 @@ end
 --- close all my_term windows
 M.close_all = function()
   for _, term_obj in pairs(meta_method.global_my_term_cache) do
-    if meta_method.term_buf_exist(term_obj.bufnr) then
-      local term_wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
-      for _, w in ipairs(term_wins) do
-        vim.api.nvim_win_close(w, 'force')
-      end
-    end
+    term_obj:close_win()
   end
 end
 
