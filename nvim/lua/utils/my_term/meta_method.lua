@@ -96,13 +96,15 @@ end
 
 --- auto_scroll: 自动滚动到 terminal 底部 ---------------------------------------------------------- {{{
 local function buf_scroll_bottom(term_obj)
-  if term_obj.auto_scroll then
-    vim.api.nvim_buf_call(term_obj.bufnr, function()
-      local info = vim.api.nvim_get_mode()
-      --- VVI: 只允许 Normal | terminal-Normal mode 下进行滚动, 否则报错.
-      if info and (info.mode == "n" or info.mode == "nt") then vim.cmd("normal! G") end
-    end)
+  if not term_obj.auto_scroll then
+    return
   end
+
+  vim.api.nvim_buf_call(term_obj.bufnr, function()
+    --- VVI: 只允许 Normal | terminal-Normal mode 下进行滚动, 因为 terminal insert mode 下无法使用 `normal! G`.
+    local info = vim.api.nvim_get_mode()
+    if info and (info.mode == "n" or info.mode == "nt") then vim.cmd("normal! G") end
+  end)
 end
 -- -- }}}
 
