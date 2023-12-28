@@ -74,7 +74,7 @@ local plugins = {
   --- By convention, if you want to write a query, use the `queries/` directory,
   --- but if you want to extend a query use the `after/queries/` directory.
   {"nvim-treesitter/nvim-treesitter",
-    commit = "454c3a9",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "7d0b475",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     --build = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
     config = function() require("plugins.settings.treesitter") end,
     dependencies = {
@@ -88,7 +88,7 @@ local plugins = {
 
   --- 第一方 module 插件 ---
   {"nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-    commit = "c9f2b42",
+    commit = "652ec51",
     config = function() require("plugins.settings.treesitter_ctx") end,
 
     lazy = true,  -- nvim-treesitter 加载时自动加载.
@@ -251,7 +251,7 @@ local plugins = {
 
   --- statusline decorator, `:help 'statusline'`
   {"nvim-lualine/lualine.nvim",   -- bottom status line
-    commit = "2248ef2",
+    commit = "566b703",
     config = function() require("plugins.settings.decor_lualine") end,
 
     event = "VeryLazy",
