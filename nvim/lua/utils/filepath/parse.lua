@@ -150,7 +150,7 @@ end
 
 M.parse_hl_line = function()
   local rs = {}
-  local lcontent = vim.api.nvim_get_current_line()
+  local lcontent = string.gsub(vim.api.nvim_get_current_line(), '\t', ' ')  --- VVI: replace '\t' with ' '
   local lnum = vim.fn.line('.')
   local lsplits = vim.split(lcontent, ' ', {trimempty=false})
 
