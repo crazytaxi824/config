@@ -787,9 +787,10 @@ export BAT_THEME="Visual Studio Dark+"
 ### firefox chrome ssl key 文件保存位置, 用于 wireshark 解密 https tls 数据.
 # wireshark `设置 -> Protocols -> TLS -> (Pre)-Master-Secret log filename` 中
 # 输入 SSLKEYLOGFILE 相同文件路径. 这样 wireshark 就能使用 ssl-key 解密 https 消息.
-# NOTE: 需要使用 terminal 打开 firefox / chrome 才能使 SSLKEYLOGFILE 环境变量生效.
+# NOTE: 必须完全退出 chrome/firefox 后, 再使用 terminal 打开 firefox/chrome 才会生成 sslkey.log 文件.
 export SSLKEYLOGFILE=/tmp/sslkey.log  # /tmp 文件夹会被系统自动清理.
-alias firefox='open -n /Applications/Firefox.app'  # 使用终端打开 firefox
+alias firefox='open -n /Applications/Firefox.app'
+alias chrome='open -n /Applications/Google\ Chrome.app'
 
 ### du file size
 alias lldu="du -shc ./*"
