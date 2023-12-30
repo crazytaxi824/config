@@ -1,6 +1,8 @@
-### UTF-8, `locale` 查看 LC_* 设置
-export LC_ALL=en_US.UTF-8  # 设置 LC_ALL, 其他 LC_* 强制等于 LC_ALL, 单独设置 LC_* 无效.
-#export LANG=en_US.UTF-8   # 设置 LANG, 其他 LC_* 默认值等于 LANG, 但可以单独设置 LC_*.
+### UTF-8, `locale` 查看 LC_* 设置.
+# NOTE: MacOS 中最好不要设置 LC_ALL. It breaks on some version of MacOS.
+# 设置了 LC_ALL 后, 其他 LC_* 强制等于 LC_ALL, 单独设置其他 LC_* 无效.
+unset LC_ALL  # 清除 LC_ALL 设置
+export LANG=en_US.UTF-8 # 设置了 LANG, 但是没有设置 LC_ALL 的情况下, 其他 LC_* 默认等于 LANG, 但可以单独设置其他 LC_*.
 
 ### NOTE: 手动安装 https://github.com/neovim/neovim/releases/
 # $VISUAL is a more capable and interactive preference over $EDITOR.
