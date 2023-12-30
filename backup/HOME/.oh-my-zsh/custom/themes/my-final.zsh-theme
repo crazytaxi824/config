@@ -58,10 +58,12 @@ local current_dir="%B%K{25} %~ %k%b"  # blue
 ZSH_THEME_GIT_PROMPT_DIRTY=" ✗ "
 ZSH_THEME_GIT_PROMPT_CLEAN=" ✔ "
 ZSH_THEME_GIT_PROMPT_SUFFIX="%b%f%k" # 清空所有颜色
-local git_branch='$(my_git_info)'  # my_git_info() 自定义函数
 
 # 命令返回的 exit code - 0 | 1 | 2
 local return_code="%(?..%F{red}%? ↵%f)"
+
+# NOTE: 这里必须使用函数字符串, 因为需要每次执行. my_git_info() 是自定义函数.
+local git_branch='$(my_git_info)'
 
 # NOTE: 本文件的主要变量 "PROMPT" "RPROMPT", 所有设置都是为了给这两个环境变量赋值.
 # 左边 PROMPT 显示 user, host, dir, git
@@ -77,11 +79,15 @@ RPROMPT="${return_code}"
 # $(git_prompt_info), $(parse_git_dirty), $(git_current_branch) 都是 oh-my-zsh 中 git 插件的函数.
 # oh-my-zsh 中 git 插件函数, https://github.com/ohmyzsh/ohmyzsh/blob/master/lib/git.zsh
 function my_git_info() {
+  local current_branch=$(git_current_branch)
+  local dirty=$(parse_git_dirty)
   # 当前 branch 如果是 master 或者 main, 显示高亮黄色警告.
-  if [[ $(git_current_branch) == master || $(git_current_branch) == main ]]; then
+  if [[ ( $current_branch == master || $current_branch == main ) && $dirty == $ZSH_THEME_GIT_PROMPT_DIRTY ]]; then
     ZSH_THEME_GIT_PROMPT_PREFIX="%K{196}%F{15} %B\uE0A2 " # 红底白字, 粗体
+  elif [[ ( $current_branch == master || $current_branch == main ) && $dirty != $ZSH_THEME_GIT_PROMPT_DIRTY ]]; then
+    ZSH_THEME_GIT_PROMPT_PREFIX="%K{214}%F{234} %B\uE0A2%b " # 橙底黑字
   # 判断 git 当前是 dirty 还是 clean.
-  elif [[ $(parse_git_dirty) == $ZSH_THEME_GIT_PROMPT_DIRTY ]]; then
+  elif [[ $dirty == $ZSH_THEME_GIT_PROMPT_DIRTY ]]; then
     ZSH_THEME_GIT_PROMPT_PREFIX="%K{221}%F{234} %B\uE0A0%b " # 黄底黑字
   else
     ZSH_THEME_GIT_PROMPT_PREFIX="%K{35}%F{234} %B\uE0A0%b " # 绿底黑字
