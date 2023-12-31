@@ -1,0 +1,280 @@
+live_config_reload = true
+
+[env]
+TERM = "alacritty"  # `xterm-256color` | `alacritty`, `$ echo $TERM` 环境变量.
+
+[window]
+decorations = "none"  # 不显示 titlebar 和 buttons (window 左上角关闭/缩小按钮)
+dynamic_padding = true  # 自动调整 padding, 避免右侧空白大于左侧.
+option_as_alt = "OnlyLeft"  # VVI: MAC 上左 opt 键可以作为 ALT 键使用.
+startup_mode = "Maximized"
+opacity = 0.8
+
+# 窗口四周添加 padding
+[window.padding]
+x = 0
+y = 0
+
+# --- font -----------------------------------------------------------------------------------------
+[font]
+size = 14.5
+
+[font.offset]
+x = 1
+y = 4
+
+[font.glyph_offset]
+x = 0  # glyph move right `N` px. █
+y = 2  # glyph move up `N` px, 根据实际测试调整得到的值.
+
+[font.normal]
+family = "Fira Code"
+style = "Regular"
+
+[font.bold]
+family = "Fira Code"
+style = "Bold"
+
+[font.italic]
+family = "Menlo"
+style = "Italic"
+
+[font.bold_italic]
+family = "Menlo"
+style = "Bold Italic"
+
+# --- color ----------------------------------------------------------------------------------------
+# alacritty 使用的颜色和 256 color 的对应, 主要是为了 vim 使用类似颜色.
+#                 original settings                   custom settings
+#            dim      normal   bright          dim          normal       bright
+# 0 black    #131415  #1d1f21  #666666     233 #121212  234 #1c1c1c  236 #303030
+# 1 red      #864343  #cc6666  #d54e53     167 #D75F5F  167 #D75F5F  167 #D75F5F
+# 2 green    #777c44  #b5bd68  #b9ca4a     42  #00D787  42  #00D787  42  #00D787
+# 3 yellow   #9e824c  #f0c674  #e7c547     191 #D7FF5F  191 #D7FF5F  191 #D7FF5F
+# 4 blue     #556a7d  #81a2be  #7aa6da     75  #5FAFFF  75  #5FAFFF  75  #5FAFFF
+# 5 magenta  #75617b  #b294bb  #c397d8     213 #FF87FF  213 #FF87FF  213 #FF87FF
+# 6 cyan     #5b7d78  #8abeb7  #70c0b1     81  #5FD7FF  81  #5FD7FF  81  #5FD7FF
+# 7 white    #828482  #c5c8c6  #eaeaea     245 #8A8A8A  251 #c6c6c6  255 #eeeeee
+[colors]
+draw_bold_text_with_bright_colors = true
+
+[colors.normal]
+black   = "#1c1c1c"  # 234
+red     = "#d75f5f"  # 167
+green   = "#00d787"  # 42
+yellow  = "#d7ff5f"  # 191
+blue    = "#5fAfff"  # 75
+magenta = "#ff87ff"  # 213
+cyan    = "#5fd7ff"  # 81
+white   = "#c6c6c6"  # 251
+
+[colors.bright]
+black   = "#303030"  # 236
+red     = "#d75f5f"  # 167
+green   = "#00d787"  # 42
+yellow  = "#d7ff5f"  # 191
+blue    = "#5fAfff"  # 75
+magenta = "#ff87ff"  # 213
+cyan    = "#5fd7ff"  # 81
+white   = "#eeeeee"  # 255
+
+# If the dim colors are not set, they will be calculated automatically based
+# on the `normal` colors.
+[colors.dim]
+black   = "#121212"  # 233
+red     = "#d75f5f"  # 167
+green   = "#00d787"  # 42
+yellow  = "#d7ff5f"  # 191
+blue    = "#5fAfff"  # 75
+magenta = "#ff87ff"  # 213
+cyan    = "#5fd7ff"  # 81
+white   = "#8A8A8A"  # 245
+
+[colors.primary]
+background = "#1d1f21"
+foreground = "#c5c8c6"
+
+[colors.search.focused_match]
+background = "#ff87ff"
+foreground = "#1d1f21"
+
+[colors.search.matches]
+background = "#e9ff5e"
+foreground = "#1d1f21"
+
+# --- other settings -------------------------------------------------------------------------------
+[selection]
+save_to_clipboard = true
+semantic_escape_chars = ",│`|:\"' ()[]{}<>\t"
+
+[cursor]
+blink_timeout = 0
+unfocused_hollow = true
+
+[cursor.style]
+blinking = "Always"
+shape = "Block"
+
+[mouse]
+hide_when_typing = false
+
+# [mouse.double_click]
+# threshold = 300
+#
+# [mouse.triple_click]
+# threshold = 300
+
+# --- keymaps --------------------------------------------------------------------------------------
+# NOTE: 中文输入法输入过程中, delete 键不会删除之前的字符.
+# 因为这个键默认是 delete 键 (Control-H, "\x08") 而不是 backspace 键.
+# unset a default binding set to `ReceiveChar`
+# 以下设置覆盖 alacritty 默认设置.
+# [[keyboard.bindings]]
+# action = "ReceiveChar"
+# key = "Back"
+
+# 创建新窗口. 切换窗口(win)使用 Command-` 这个快捷键是 macos 系统中的设置. 设置->键盘->快捷键->键盘(左侧目录)
+[[keyboard.bindings]]
+action = "CreateNewWindow"
+key = "N"
+mods = "Command"
+
+# 创建新实例. 切换实例(App)使用 Command-Tab, 系统级应用切换.
+[[keyboard.bindings]]
+action = "SpawnNewInstance"
+key = "N"
+mods = "Command|Shift"
+
+# NOTE: <Ctrl-Left/Right/Up/Down> 被 MacOS 系统占用了, 所以这里使用 Option 代替. 这些设置不止是用在 vim/nvim 中.
+# VVI: `window.option_as_alt` 不会覆盖这里的 Option key 设置.
+# 如果要取消/修改系统默认 ctrl 快捷键, 可以修改 MacOS "设置/键盘/键盘快捷键/调度中心/..." 中的设置.
+# 默认 <Option-Backspace> 按照单词删除.
+# Option-Up -> Ctrl-Up
+[[keyboard.bindings]]
+chars = "\u001B[1;5A"
+key = "Up"
+mods = "Option"
+
+# Option-Down -> Ctrl-Down
+[[keyboard.bindings]]
+chars = "\u001B[1;5B"
+key = "Down"
+mods = "Option"
+
+# Option-Left -> Ctrl-Left  (backward-word)
+[[keyboard.bindings]]
+chars = "\u001B[1;5D"
+key = "Left"
+mods = "Option"
+
+# Option-Right -> Ctrl-Right (forward-word)
+[[keyboard.bindings]]
+chars = "\u001B[1;5C"
+key = "Right"
+mods = "Option"
+
+# Command-Up -> PageUp - 替代 <fn - up>
+[[keyboard.bindings]]
+chars = "\u001B[5~"
+key = "Up"
+mode = "~Vi|~Search"
+mods = "Command"
+
+# Command-Down -> PageDown - 替代 <fn - down>
+[[keyboard.bindings]]
+chars = "\u001B[6~"
+key = "Down"
+mode = "~Vi|~Search"
+mods = "Command"
+
+# Command-Left -> Home - 替代 <fn - left>
+[[keyboard.bindings]]
+chars = "\u001BOH"
+key = "Left"
+mode = "~Vi|~Search"
+mods = "Command"
+
+# Command-Right -> End - 替代 <fn - right>
+[[keyboard.bindings]]
+chars = "\u001BOF"
+key = "Right"
+mode = "~Vi|~Search"
+mods = "Command"
+
+# Shift-CR
+[[keyboard.bindings]]
+chars = "\u001B[13;2u"
+key = "Return"
+mods = "Shift"
+
+# CTRL-CR
+[[keyboard.bindings]]
+chars = "\u001B[13;5u"
+key = "Return"
+mods = "Control"
+
+# Command-CR -> CTRL-CR
+[[keyboard.bindings]]
+chars = "\u001B[13;5u"
+key = "Return"
+mods = "Command"
+
+# CTRL-Shift-CR
+[[keyboard.bindings]]
+chars = "\u001B[13;6u"
+key = "Return"
+mods = "Control|Shift"
+
+# Command-Shift-CR -> CTRL-Shift-CR
+[[keyboard.bindings]]
+chars = "\u001B[13;6u"
+key = "Return"
+mods = "Command|Shift"
+
+# Command-B -> Ctrl-b, 用于 tmux 中的 prefix key.
+[[keyboard.bindings]]
+chars = "\u0002"
+key = "B"
+mode = "~Vi|~Search"
+mods = "Command"
+
+# Command-S -> Ctrl-s, vim 中用于 save file.
+[[keyboard.bindings]]
+chars = "\u0013"
+key = "S"
+mode = "~Vi|~Search"
+mods = "Command"
+
+# Command-W -> Ctrl-w, vim 中用于 switch vim window, alacritty 默认设置是 Quit.
+[[keyboard.bindings]]
+chars = "\u0017"
+key = "W"
+mode = "~Vi|~Search"
+mods = "Command"
+
+# Command-R -> Ctrl-r, vim 中用于 redo|register 操作.
+[[keyboard.bindings]]
+chars = "\u0012"
+key = "R"
+mode = "~Vi|~Search"
+mods = "Command"
+
+# Command-Z -> Ctrl-z, vim 中用于 u 上 undo.
+[[keyboard.bindings]]
+chars = "\u001A"
+key = "Z"
+mode = "~Vi|~Search"
+mods = "Command"
+
+# Command-/ -> Option-/, vim 中用于 Toggle Comments.
+[[keyboard.bindings]]
+chars = "\u001B/"
+key = "Slash"
+mode = "~Vi|~Search"
+mods = "Command"
+
+# --- debug ----------------------------------------------------------------------------------------
+[debug]
+persistent_logging = false
+print_events = false
+render_timer = false
