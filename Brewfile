@@ -31,12 +31,12 @@ brew "neovim"
 #brew "vim"
 brew "tmux"
 brew "pandoc"  # 文档格式转换工具, 支持 word, pdf, markdown ... 各种格式
-brew "universal-ctags"  # 各种语言的 object 分析工具. vim/neovim tagbar 插件使用
+#brew "universal-ctags"  # 各种语言的 object 分析工具. vim/neovim tagbar 插件使用
 
 # language & tools
 brew "node"
-brew "node@18"  # LTS version for Github Copilot 和某些其他应用
-#brew "go"      # 推荐使用 https://go.dev 中下载安装.
+#brew "node@18"  # LTS version
+#brew "go"   # 推荐使用 https://go.dev 中下载安装.
 #brew "rust"
 #brew "lua"
 brew "luajit"
@@ -115,5 +115,5 @@ cask "telegram" # 加密聊天工具
 # 浏览器
 cask "firefox"
 cask "google-chrome"
-cask "microsoft-edge"
+#cask "microsoft-edge"
 #cask "tor-browser"
