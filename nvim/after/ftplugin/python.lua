@@ -18,7 +18,7 @@ end
 local function py_run(file)
   local py_env = venv()
   if not py_env then
-    Notify({"need to create python Virtual Environment first:", "`$ python3.12 -m venv .venv`"})
+    Notify({"need to create python Virtual Environment first:", "`$ python3.xx -m venv .venv`"})
     return
   end
 
