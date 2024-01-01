@@ -46,6 +46,7 @@ family = "Menlo"
 style = "Bold Italic"
 
 # --- color ----------------------------------------------------------------------------------------
+# NOTE: 颜色以 sRGB 测量.
 # alacritty 使用的颜色和 256 color 的对应, 主要是为了 vim 使用类似颜色.
 #                 original settings                   custom settings
 #            dim      normal   bright          dim          normal       bright
