@@ -19,9 +19,9 @@ M.exec_term = mt.new({
 
 --- keymaps ----------------------------------------------------------------------------------------
 local opt = {noremap = true, silent = true}
-local toggleterm_keymaps = {
+local my_term_keymaps = {
   {'n', '<F17>', function() M.exec_term:run() end, opt, "code: Re-Run Last cmd"}, -- <S-F5> re-run last cmd.
 }
-require('utils.keymaps').set(toggleterm_keymaps)
+require('utils.keymaps').set(my_term_keymaps)
 
 return M

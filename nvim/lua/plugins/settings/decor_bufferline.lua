@@ -226,7 +226,6 @@ local function check_buftype_buflisted_filetype(bufnr)
   local exclude_filetypes = {
     'help', 'qf',  --- 'quickfix' && 'location-list' 的 filetype 都是 'qf'.
     'vimfiler', 'nerdtree', 'tagbar', 'NvimTree',
-    'toggleterm',
   }
 
   bufnr = bufnr or vim.api.nvim_get_current_buf()

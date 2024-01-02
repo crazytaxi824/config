@@ -22,7 +22,6 @@ local function py_run(file)
     return
   end
 
-  -- require("utils.toggle_term").bottom.run("python3 -- " .. file)
   local t = require('utils.my_term.instances').exec_term
   t.cmd = "source " .. py_env .. " && python3 -- " .. file
   t:stop()

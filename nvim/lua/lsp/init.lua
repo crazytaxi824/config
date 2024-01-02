@@ -1,6 +1,5 @@
 --- 加载 LSP 相关自定义设置.
 require("lsp._user_handlers")  -- overwrite 默认 handlers 设置
-require("lsp.user_commands")   -- 自定义 lsp 相关 command
 require("lsp.diagnostic")   -- 加载 diagnostic 设置
 require("lsp.auto_format")  -- save(:w) 时 format
 
