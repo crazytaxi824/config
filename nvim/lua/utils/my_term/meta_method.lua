@@ -411,6 +411,7 @@ local function create_my_term(term_obj)
 
   --- 每次运行 termopen() 之前, 先创建一个新的 scratch buffer 给 terminal.
   term_obj.bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
+  vim.bo[term_obj.bufnr].filetype = "my_term"
 
   --- 给 buffer 设置 var: my_term_id
   vim.b[term_obj.bufnr][M.bufvar_myterm] = term_obj.id
