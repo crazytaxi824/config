@@ -10,38 +10,42 @@ local go_testflags = require("utils.go.utils.testflags")
 
 local M ={}
 
-local cache_jobs = {}  -- 缓存 job_id, map-table: [term_bufnr] = {job_id, ... }
+local cache_bg_jobs = {}  -- 缓存 bg_job_id, map-table: [term_bufnr] = {job_id, ... }
 
 M.job_exec = function (cmd, term_bufnr)
   --- 执行 cmd
-  --- `:help channel-callback` for on_stdout() & on_stderr()
+  --- NOTE: 这里选择使用 termopen() 而不是 jobstart() 来执行 background job 是:
+  --- 1. 为了方便使用 `:ls` 来查看未关闭的 job.
+  --- 2. 同时也可以通过 `:[N]buf` 来查看 bg job 的输出内容.
+
+  --- 创建一个 scratch buffer 用于执行 background job.
   local scratch_bufnr = vim.api.nvim_create_buf(false, true)
 
-  local j_id
+  local bg_job_id
   --- VVI: 这里使用 nvim_buf_call() 来执行 termopen() 是为了避免创建一个 window 来执行 termopen()
   vim.api.nvim_buf_call(scratch_bufnr, function()
-    j_id = vim.fn.termopen(cmd, {
+    bg_job_id = vim.fn.termopen(cmd, {
       on_exit = function()
         vim.api.nvim_buf_delete(scratch_bufnr, {force=true})
       end
     })
   end)
 
-  --- 缓存当前 job_id 到 term_job_id
-  if cache_jobs[term_bufnr] then
-    table.insert(cache_jobs[term_bufnr], j_id)
+  --- 缓存当前 bg_job_id
+  if cache_bg_jobs[term_bufnr] then
+    table.insert(cache_bg_jobs[term_bufnr], bg_job_id)
   else
-    cache_jobs[term_bufnr] = {j_id}
+    cache_bg_jobs[term_bufnr] = {bg_job_id}
   end
 end
 
 local function shutdown_all_jobs(term_bufnr)
-  for _, j_id in ipairs(cache_jobs[term_bufnr]) do
+  for _, j_id in ipairs(cache_bg_jobs[term_bufnr]) do
     vim.fn.jobstop(j_id)
   end
 
   --- 清空 cache
-  cache_jobs[term_bufnr] = nil
+  cache_bg_jobs[term_bufnr] = nil
 end
 
 M.autocmd_shutdown_all_jobs = function(term_bufnr)
