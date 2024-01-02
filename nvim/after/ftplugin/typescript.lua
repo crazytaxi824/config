@@ -13,7 +13,6 @@ local function ts_run(file)
     return
   end
 
-  -- require("utils.toggle_term").bottom.run("tsc -p ./tsconfig.json && node dist/" .. file .. '.js')
   local t = require('utils.my_term.instances').exec_term
   t.cmd = "tsc -p ./tsconfig.json && node dist/" .. file .. '.js'
   t:stop()
@@ -42,7 +41,6 @@ local function ts_jest(file, coverage)
     cmd = "tsc -p ./tsconfig.json && jest dist/" .. file ..'.js'
   end
 
-  -- require("utils.toggle_term").bottom.run(cmd)
   local t = require('utils.my_term.instances').exec_term
   t.cmd = cmd
   t:stop()

@@ -1,8 +1,3 @@
---- VVI: 这里不能直接使用 `require(xxx).gorun` 否则会报错.
---- 因为 require 的时候会需要 load tool_gotests. 而 gotests 中需要加载 require toggleterm.
---- 但是 toggleterm 是 lazyload, 所以加载 tool_gotests 的时候 toggleterm 还没加载, 造成报错.
---- NOTE: 可以使用 string `<cmd>lua require() ... <CR>` 或者 `function() require() ... end`.
-
 --- key mapping ------------------------------------------------------------------------------------ {{{
 --- <F6> go test Run/Benchmark/Fuzz single function, No Prompt.
 --- <S-F6> run test single function with options/flags

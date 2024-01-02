@@ -55,7 +55,7 @@ local function go_test_pkg(opt)
     end
   end
 
-  --- toggleterm on_exit callback function
+  --- my_term on_exit callback function
   local on_exit = function(term, job)
     --- :GoPprof command
     if vim.tbl_contains({'cpu', 'mem', 'mutex', 'block', 'trace'}, opt.flag) then
@@ -68,8 +68,7 @@ local function go_test_pkg(opt)
     end
   end
 
-  --- toggleterm 执行 command
-  -- require("utils.toggle_term").bottom.run(cmd, on_exit)
+  --- my_term 执行 command
   local t = require('utils.my_term.instances').exec_term
   t.cmd = cmd
   t.on_exit = on_exit
@@ -122,7 +121,7 @@ local function go_test_proj(opt)
     end
   end
 
-  --- toggleterm on_exit callback function
+  --- my_term on_exit callback function
   local on_exit = function(term, job)
     if flag_cmd.suffix and flag_cmd.suffix ~= '' then
       go_utils.go_pprof.autocmd_shutdown_all_jobs(job, term.bufnr)  -- autocmd BufWipeout jobstop()
@@ -130,8 +129,7 @@ local function go_test_proj(opt)
     end
   end
 
-  --- toggleterm 执行 command
-  -- require("utils.toggle_term").bottom.run(cmd, on_exit)
+  --- my_term 执行 command
   local t = require('utils.my_term.instances').exec_term
   t.cmd = cmd
   t.on_exit = on_exit
