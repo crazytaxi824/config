@@ -21,18 +21,22 @@ M.default_opts = {
 
   cmd = vim.go.shell, -- `:help 'shell'`, get global option 'shell', 相当于 os.getenv('SHELL')
   jobstart = nil,     -- 'startinsert' | func(term), 在 termopen() 之后触发. eg: win_gotoid()
-  jobdone = nil,      -- 'stopinsert' | 'exit'. 在 on_exit 中触发. 如果要设置 func 可以在 on_exit 中设置.
+  jobdone = nil,      -- 'stopinsert' | 'exit'. 在 on_exit 中触发.
+                      -- NOTE: 如果要设置 func 可以在 on_exit 中设置.
+                      -- NOTE: jobdone 对 buf_output 无效.
   auto_scroll = nil,  -- goto bottom of the terminal. 在 on_stdout & on_stderr 中触发.
   print_cmd = nil,    -- bool, 是否打印 cmd. 默认不打印.
   buf_output = nil,   -- bool, 是否用 buf_job_output 执行, 默认使用 termopen().
 
   --- callback functions
-  on_init = nil,   -- func(term), new()
-  on_open = nil,   -- func(term), BufWinEnter. NOTE: 每次 term:// buffer 被 win 显示的时候都会触发, 多个窗口显示时也会触发.
+  on_init = nil,   -- func(term), require('utils.my_term').new() 的时候触发.
+  on_open = nil,   -- func(term), BufWinEnter. NOTE: 每次 term:// buffer 被 win 显示的时候都会触发,
+                   -- 同一个 buffer 被多个窗口显示时也会触发.
   on_close = nil,  -- func(term), BufWinLeave. NOTE: BufWinLeave 只会在 buffer 离开最后一个 win 的时候触发.
-  on_stdout = nil, -- func(term, jobid, data, event), 可用于 auto_scroll to bottom
-  on_stderr = nil, -- func(term, jobid, data, event), 可用于 auto_scroll to bottom
-  on_exit = nil,   -- func(term, job_id, exit_code, event), TermClose, jobstop() 时触发, 可用于 `:silent! bwipeout! term_bufnr`
+  on_stdout = nil, -- func(term, job_id, data, event), 可用于 auto_scroll to bottom
+  on_stderr = nil, -- func(term, job_id, data, event), 可用于 auto_scroll to bottom
+  on_exit = nil,   -- func(term, job_id, exit_code, event), TermClose, jobstop() 时触发.
+                   -- 可用于 `:silent! bwipeout! term_bufnr`
 }
 
 --- 判断 terminal bufnr 是否存在, 是否有效
