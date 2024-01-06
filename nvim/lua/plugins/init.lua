@@ -38,7 +38,7 @@ local plugins = {
 
   --- 通知功能
   {"rcarriga/nvim-notify",
-    tag = "v3.13.1",
+    tag = "v3.13.2",
     config = function() require("plugins.settings.nvim_notify") end,
 
     event = "VeryLazy",
@@ -243,7 +243,7 @@ local plugins = {
   --- Buffer & Status Line -------------------------------------------------------------------------
   --- tabline decorator, `:help 'tabline'`
   {"akinsho/bufferline.nvim",
-    tag = "v4.4.1",
+    commit = "e48ce18",  -- tag = "v4.4.1",
     config = function() require("plugins.settings.decor_bufferline") end,
 
     event = "VeryLazy",
@@ -267,7 +267,7 @@ local plugins = {
   },
 
   {"rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
-    tag = "v3.9.1",
+    commit = "7e5e164",  -- tag = "v3.9.1",
     config = function() require("plugins.settings.dap_debug") end,  -- dap-ui && dap 设置在同一文件中.
     dependencies = {"mfussenegger/nvim-dap"},
 
