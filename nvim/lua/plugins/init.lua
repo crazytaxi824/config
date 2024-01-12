@@ -88,7 +88,7 @@ local plugins = {
 
   --- 第一方 module 插件 ---
   {"nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-    commit = "652ec51",
+    commit = "400a99a",
     config = function() require("plugins.settings.treesitter_ctx") end,
 
     lazy = true,  -- nvim-treesitter 加载时自动加载.
@@ -129,7 +129,7 @@ local plugins = {
 
   --- indent line
   {"lukas-reineke/indent-blankline.nvim",
-    tag = "v3.5.1",
+    tag = "v3.5.2",
     config = function() require("plugins.settings.indentline") end,  -- setup() 设置 use_treesitter = true
     dependencies = {"nvim-treesitter/nvim-treesitter"},  -- for setup({scope})
 
@@ -190,7 +190,7 @@ local plugins = {
 
   --- snippets content, 自定义 snippets 可以借鉴这个结构.
   {"rafamadriz/friendly-snippets",
-    commit = "53d3df2",
+    commit = "69a2c16",
 
     lazy = true,  -- LuaSnip 加载时自动加载.
   },
@@ -260,7 +260,7 @@ local plugins = {
   --- Debug tools 安装 -----------------------------------------------------------------------------
   --- NOTE: dap-ui && dap 设置在同一文件中.
   {"mfussenegger/nvim-dap",  -- core debug tool
-    commit = "f0dca67",  -- tag = "0.6.0",
+    commit = "aad4627",  -- tag = "0.6.0",
     dependencies = {"williamboman/mason.nvim"},  -- install dap-debug tools. eg: 'delve'
 
     lazy = true,  -- nvim-dap-ui 加载时自动加载.
@@ -321,7 +321,7 @@ local plugins = {
 
   --- https://docs.github.com/en/copilot/getting-started-with-github-copilot
   {"github/copilot.vim",
-    tag = "v1.13.0",
+    tag = "v1.14.0",
     -- config = function()  --- {{{
     --   --- VVI: `:help g:copilot_node_command`, using node@18 or above.
     --   --- 安装指定的 nodejs 版本. `brew install node@20`
