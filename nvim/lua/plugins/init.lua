@@ -54,7 +54,8 @@ local plugins = {
 
   --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   {"folke/which-key.nvim",
-    commit = "4433e5e",  -- tag = "v1.6.0",
+    -- tag = "v1.6.0",
+    commit = "4433e5e",
     config = function() require("plugins.settings.which_key") end,
 
     event = "VeryLazy",
@@ -88,7 +89,7 @@ local plugins = {
 
   --- 第一方 module 插件 ---
   {"nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-    commit = "400a99a",
+    commit = "85cf977",
     config = function() require("plugins.settings.treesitter_ctx") end,
 
     lazy = true,  -- nvim-treesitter 加载时自动加载.
@@ -197,7 +198,7 @@ local plugins = {
 
   --- 自动括号, 同时依赖 treesitter && cmp
   {"windwp/nvim-autopairs",
-    commit = "9fd4118",
+    commit = "eac31b4",
     config = function() require("plugins.settings.autopairs") end,
     dependencies = {
       "nvim-treesitter/nvim-treesitter",  -- setup() 中 `check_ts`, `ts_config` 需要 treesitter 支持.
@@ -211,7 +212,7 @@ local plugins = {
   --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
   --- 官方 LSP 引擎.
   {"neovim/nvim-lspconfig",
-    commit = "e47ccfa",
+    commit = "8917d2c",
     config = function() require("lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     dependencies = {
       "williamboman/mason.nvim",  -- 安装 lsp 命令行工具.
@@ -243,7 +244,8 @@ local plugins = {
   --- Buffer & Status Line -------------------------------------------------------------------------
   --- tabline decorator, `:help 'tabline'`
   {"akinsho/bufferline.nvim",
-    commit = "e48ce18",  -- tag = "v4.4.1",
+    -- tag = "v4.4.1",
+    commit = "e48ce18",
     config = function() require("plugins.settings.decor_bufferline") end,
 
     event = "VeryLazy",
@@ -260,14 +262,16 @@ local plugins = {
   --- Debug tools 安装 -----------------------------------------------------------------------------
   --- NOTE: dap-ui && dap 设置在同一文件中.
   {"mfussenegger/nvim-dap",  -- core debug tool
-    commit = "9adbfdc",  -- tag = "0.6.0",
+    -- tag = "0.7.0",
+    commit = "9adbfdc",
     dependencies = {"williamboman/mason.nvim"},  -- install dap-debug tools. eg: 'delve'
 
     lazy = true,  -- nvim-dap-ui 加载时自动加载.
   },
 
   {"rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
-    tag = "v3.9.2",
+    -- tag = "v3.9.3",
+    commit = "a62e86b",
     config = function() require("plugins.settings.dap_debug") end,  -- dap-ui && dap 设置在同一文件中.
     dependencies = {"mfussenegger/nvim-dap"},
 
@@ -301,7 +305,7 @@ local plugins = {
   --- `:Gitsigns setqflist/seqloclist` will open Trouble instead of quickfix or location list windows.
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {"lewis6991/gitsigns.nvim",
-    commit = "d195f0c",
+    commit = "c5ff762",
     config = function() require("plugins.settings.git_signs") end,
 
     --- NOTE: `nvim dir` 启动时直接打开 dir 时可能会造成 gitsigns 报错. 根据测试情况选择 VeryLazy 或者 BufReadPre ...
