@@ -198,7 +198,7 @@ local plugins = {
 
   --- 自动括号, 同时依赖 treesitter && cmp
   {"windwp/nvim-autopairs",
-    commit = "eac31b4",
+    commit = "096d0ba",
     config = function() require("plugins.settings.autopairs") end,
     dependencies = {
       "nvim-treesitter/nvim-treesitter",  -- setup() 中 `check_ts`, `ts_config` 需要 treesitter 支持.
@@ -271,7 +271,7 @@ local plugins = {
 
   {"rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
     -- tag = "v3.9.3",
-    commit = "a62e86b",
+    commit = "d845ebd",
     config = function() require("plugins.settings.dap_debug") end,  -- dap-ui && dap 设置在同一文件中.
     dependencies = {"mfussenegger/nvim-dap"},
 
