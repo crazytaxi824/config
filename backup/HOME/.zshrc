@@ -11,6 +11,9 @@ export LANG=en_US.UTF-8 # 设置了 LANG, 但是没有设置 LC_ALL 的情况下
 export EDITOR=nvim
 export VISUAL=$EDITOR
 
+# --- neovim Mason tool ---
+export PATH=$HOME/.local/share/nvim/mason_tools/bin:$PATH
+
 # NOTE: oh-my-zsh 不依赖 homebrew
 # --- [ oh my zsh ] -------------------------------------------------------------------------------- {{{
 # If you come from bash you might have to change your $PATH.
@@ -215,7 +218,7 @@ export GO111MODULE=on  # on | off | auto
 # --- [ node@20 ] -------------------------------------------------------------- {{{
 # 使用 node@20 LTS, 以下两种写法都可以
 #alias node=$(brew --prefix)/opt/node@20/bin/node
-#export PATH="/opt/homebrew/opt/node@20/bin:$PATH"
+export PATH="/opt/homebrew/opt/node@20/bin:$PATH"
 
 # }}}
 
