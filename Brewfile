@@ -44,8 +44,8 @@ brew "perl"
 brew "ruby"
 
 # format tools
-brew "prettier" # 格式化工具
-#brew "shfmt"   # shell 格式化工具
+#brew "prettier" # js 格式化工具, 使用 Mason 安装, vscode prettier 插件自带命令行工具.
+#brew "shfmt"    # shell 格式化工具
 #brew "clang-format" # c,c++,object-c 格式化工具
 
 # dev tools
