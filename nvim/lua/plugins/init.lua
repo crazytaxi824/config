@@ -305,7 +305,7 @@ local plugins = {
   --- `:Gitsigns setqflist/seqloclist` will open Trouble instead of quickfix or location list windows.
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {"lewis6991/gitsigns.nvim",
-    commit = "c5ff762",
+    commit = "300a306",
     config = function() require("plugins.settings.git_signs") end,
 
     --- NOTE: `nvim dir` 启动时直接打开 dir 时可能会造成 gitsigns 报错. 根据测试情况选择 VeryLazy 或者 BufReadPre ...
@@ -325,7 +325,7 @@ local plugins = {
 
   --- https://docs.github.com/en/copilot/getting-started-with-github-copilot
   {"github/copilot.vim",
-    tag = "v1.15.0",
+    tag = "v1.16.0",
     -- config = function()  --- {{{
     --   --- VVI: `:help g:copilot_node_command`, using node@18 or above.
     --   --- 安装指定的 nodejs 版本. `brew install node@20`
