@@ -5,7 +5,7 @@ local health = vim.health
 
 local M = {}
 
---- HACK 中用到的 modules, 大多 overwrite 源代码.
+--- HACK 中用到的 modules, 大多 overwrite 源代码 --------------------------------------------------- {{{
 local function check_module()
   local require_list = {
     "bufferline.state",
@@ -65,23 +65,21 @@ local function check_plugin_funcs()
   end
 end
 
-local tools = {
+-- }}}
+
+--- check command line tools ----------------------------------------------------------------------- {{{
+local cmd_tools = {
   go = {cmd="go", install="https://go.dev/"},
   delve = {cmd="dlv", install="go install github.com/go-delve/delve/cmd/dlv@latest", mason="delve"},
   impl = {cmd="impl", install="go install github.com/josharian/impl@latest", mason="impl"},
   gotests = {cmd="gotests", install="go install github.com/cweill/gotests/gotests@latest", mason="gotests"},
   gomodifytags = {cmd="gomodifytags", install="go install github.com/fatih/gomodifytags@latest", mason="gomodifytags"},
-  goimports = {cmd="goimports", install="go install golang.org/x/tools/cmd/goimports@latest", mason="goimports"},
-  ["goimports-reviser"] = {cmd="goimports-reviser", install="go install -v github.com/incu6us/goimports-reviser/v3@latest", mason="goimports-reviser"},
   ["golangci-lint"] = {cmd="golangci-lint", install="go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest", mason="golangci-lint"},
   graphviz = {cmd="dot", install="brew info graphviz"},
-  buf = {cmd="buf", install="go install github.com/bufbuild/buf/cmd/buf@latest", mason = "buf"},  -- protobuf formatter & linter
-  prettier = {cmd="prettier", install=" brew info prettier", mason="prettier"},
-  shfmt = {cmd="shfmt", install="brew info shfmt", mason="shfmt"},  -- shell format tools
-  flake8 = {cmd="flake8", install="python3 -m pip install flake8", mason="flake8"},
-  autopep8 = {cmd="autopep8", install="python3 -m pip install autopep8", mason="autopep8"},
-  mypy = {cmd="mypy", install="python3 -m pip install mypy", mason="mypy"}, -- 还有个 mypy-extensions 是 mypy 插件
+
+  --- javascript / typescript
   eslint = {cmd="eslint", install="npm install -g eslint"}, -- NOTE: mason 目前不能安装 "eslint"
+  jest = {cmd="jest", install="npm install -g jest"},
   --tsc = {cmd="tsc", install="npm install -g typescript"}, -- NOTE: 弃用 typescript.
 
   --- telescope deps
@@ -89,9 +87,8 @@ local tools = {
   ripgrep = {cmd="rg",  install="brew info ripgrep"},
 }
 
-local function check_cmd_tools()
-  local lsp_servers_map = require('lsp.lsp_config.lsp_list')
-  for name, tool in pairs(vim.tbl_deep_extend('error', tools, lsp_servers_map)) do
+local function check_cmd_tools(tools)
+  for name, tool in pairs(tools) do
     local result = vim.fn.system('which ' .. tool.cmd)
     if vim.v.shell_error == 0 then
       health.report_ok(name)
@@ -108,14 +105,60 @@ local function check_cmd_tools()
   end
 end
 
+local mason_tools = {
+  "json-lsp",
+  "goimports-reviser",
+  "goimports",
+  "autopep8",
+  "bash-language-server",
+  "flake8",
+  "buf",
+  "shfmt",
+  "mypy",
+  "css-lsp",
+  "buf-language-server",
+  "prettier",
+  "html-lsp",
+  "pyright",
+  "lua-language-server",
+  --"typescript-language-server",
+}
+
+local function check_mason_tools()
+  local pkgs = require("mason-registry").get_installed_packages()
+  local t = vim.tbl_filter(function(elem)
+    for _, pkg in ipairs(pkgs) do
+      if elem == pkg.name then
+        health.report_ok(elem)
+        return false
+      end
+    end
+    return true
+  end, mason_tools)
+
+  for _, tool in ipairs(t) do
+    health.report_error(tool)
+  end
+end
+
+-- }}}
+
 M.check = function()
   --- command line tools
   health.report_start("check command line tools")
-  check_cmd_tools()
+  check_cmd_tools(cmd_tools)
+
+  --- lsp tools
+  local lsp_servers_map = require('lsp.lsp_config.lsp_list')
+  health.report_start("check LSP tools")
+  check_cmd_tools(lsp_servers_map)
+
+  --- mason tools
+  health.report_start("check mason tools")
+  check_mason_tools()
 
   --- module availability check
   health.report_start("check HACK modules availability")
-  health.report_info("mostly rewrite plugins' internal functions.")
   local errs = check_module()
   if errs then
     health.report_warn('function check aborts due to error in module check.')
