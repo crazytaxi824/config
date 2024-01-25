@@ -12,7 +12,8 @@ export EDITOR=nvim
 export VISUAL=$EDITOR
 
 # --- neovim Mason tool ---
-export PATH=$HOME/.local/share/nvim/mason_tools/bin:$PATH
+# mason tool path = `vim.fn.stdpath("data") .. "/mason_tools"`
+export PATH=$PATH:$HOME/.local/share/nvim/mason_tools/bin
 
 # NOTE: oh-my-zsh 不依赖 homebrew
 # --- [ oh my zsh ] -------------------------------------------------------------------------------- {{{
