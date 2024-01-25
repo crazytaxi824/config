@@ -221,9 +221,10 @@ nvim_tree.setup {
   },
 
   renderer = {
-    highlight_git = true,  -- 开启 git filename 颜色. 需要设置 nvim-tree.git.enable = true
+    highlight_git = "all",  -- 开启 git filename 颜色. 需要设置 nvim-tree.git.enable = true
     highlight_bookmarks = "all",
-    highlight_opened_files = "name", -- highlight icon or filename or both.
+    highlight_diagnostics = "none",
+    highlight_opened_files = "all", -- highlight icon or filename or both.
                                      -- "none"(*) | "icon" | "name" | "all"
     indent_width = 2, -- 默认 2.
     indent_markers = {
@@ -338,13 +339,13 @@ nvim_tree.setup {
 --- `:help nvim-tree-highlight` -------------------------------------------------------------------- {{{
 vim.api.nvim_set_hl(0, 'NvimTreeNormalNC', {link="NormalNC"})  -- non-foucs nvim-tree window color
 vim.api.nvim_set_hl(0, 'NvimTreeRootFolder', {ctermfg=Color.cyan})  -- non-foucs nvim-tree window color
--- vim.cmd('hi! default link NvimTreeWinSeparator VertSplit')
+vim.cmd('hi! default link NvimTreeWinSeparator VertSplit') -- BUG
 
 vim.api.nvim_set_hl(0, 'NvimTreeFolderName', {ctermfg=Color.cyan, bold=true})
 vim.cmd('hi! default link NvimTreeFolderIcon NvimTreeFolderName')
 vim.cmd('hi! default link NvimTreeEmptyFolderName NvimTreeFolderName')
 vim.cmd('hi! default link NvimTreeOpenedFolderName NvimTreeFolderName')  -- 已打开文件夹的颜色
-vim.api.nvim_set_hl(0, 'NvimTreeOpenedFile', {ctermbg=240})   -- 已经打开文件的颜色, 只设置 bg.
+vim.api.nvim_set_hl(0, 'NvimTreeOpenedHL', {underline=true})   -- 已经打开文件的颜色.
 vim.api.nvim_set_hl(0, 'NvimTreeIndentMarker', {ctermfg=242}) -- └ │ 颜色
 
 vim.api.nvim_set_hl(0, 'NvimTreeSymlink', {ctermfg=Color.magenta}) -- 链接文件, magenta
@@ -356,33 +357,33 @@ vim.api.nvim_set_hl(0, 'NvimTreeWindowPicker',
   {ctermfg=Color.black, ctermbg=Color.magenta, bold=true})
 
 --- bookmark color
-vim.api.nvim_set_hl(0, 'NvimTreeBookmark', {ctermfg=Color.magenta})  -- icon color
+vim.api.nvim_set_hl(0, 'NvimTreeBookmarkIcon', {ctermfg=Color.magenta})  -- icon color
 vim.api.nvim_set_hl(0, 'NvimTreeBookmarkHL', {ctermfg=Color.black, ctermbg=Color.magenta})  -- filename color
 
 --- nvim-tree Git color, 需要开启 highlight_git=true, render={git={enable=true}}
 --- 这里设置了 git icon color
-vim.api.nvim_set_hl(0, 'NvimTreeGitDirty',   {ctermfg=Color.red})
-vim.api.nvim_set_hl(0, 'NvimTreeGitStaged',  {ctermfg=Color.green})
-vim.api.nvim_set_hl(0, 'NvimTreeGitMerge',   {ctermfg=Color.purple})
-vim.api.nvim_set_hl(0, 'NvimTreeGitRenamed', {ctermfg=Color.purple})
-vim.api.nvim_set_hl(0, 'NvimTreeGitNew',     {ctermfg=Color.red})
-vim.api.nvim_set_hl(0, 'NvimTreeGitDeleted', {ctermfg=Color.red})
-vim.api.nvim_set_hl(0, 'NvimTreeGitIgnored', {ctermfg=244})
+vim.api.nvim_set_hl(0, 'NvimTreeGitDirtyIcon',   {ctermfg=Color.red})
+vim.api.nvim_set_hl(0, 'NvimTreeGitStagedIcon',  {ctermfg=Color.green})
+vim.api.nvim_set_hl(0, 'NvimTreeGitMergeIcon',   {ctermfg=Color.purple})
+vim.api.nvim_set_hl(0, 'NvimTreeGitRenamedIcon', {ctermfg=Color.purple})
+vim.api.nvim_set_hl(0, 'NvimTreeGitNewIcon',     {ctermfg=Color.red})
+vim.api.nvim_set_hl(0, 'NvimTreeGitDeletedIcon', {ctermfg=Color.red})
+vim.api.nvim_set_hl(0, 'NvimTreeGitIgnoredIcon', {ctermfg=244})
 
 --- git filename color, 默认是 link 上面 git icon color.
-vim.cmd('hi! default link NvimTreeFileDirty  NvimTreeGitStaged')  -- hi! default link 在 hi clear 时回到该设置.
-vim.cmd('hi! default link NvimTreeFileNew    NvimTreeGitStaged')
---- vim.cmd('hi! default link NvimTreeFileStaged NvimTreeGitStaged')
---- vim.cmd('hi! default link NvimTreeFileMerge   NvimTreeGitMerge')
---- vim.cmd('hi! default link NvimTreeFileRenamed NvimTreeGitRenamed')
---- vim.cmd('hi! default link NvimTreeFileDeleted NvimTreeGitDeleted')
---- vim.cmd('hi! default link NvimTreeFileIgnored NvimTreeGitIgnored')
+-- vim.cmd('hi! default link NvimTreeGitFileDirtyHL   NvimTreeGitStagedIcon')  -- hi! default link 在 hi clear 时回到该设置.
+-- vim.cmd('hi! default link NvimTreeGitFileNewHL     NvimTreeGitStagedIcon')
+--- vim.cmd('hi! default link NvimTreeGitFileStagedHL NvimTreeGitStagedIcon')
+--- vim.cmd('hi! default link NvimTreeGitFileMergeHL   NvimTreeGitMergeIcon')
+--- vim.cmd('hi! default link NvimTreeGitFileRenamedHL NvimTreeGitRenamedIcon')
+--- vim.cmd('hi! default link NvimTreeGitFileDeletedHL NvimTreeGitDeletedIcon')
+--- vim.cmd('hi! default link NvimTreeGitFileIgnoredHL NvimTreeGitIgnoredIcon')
 
 --- diagnostic icons highlight.
---- NvimTreeLspDiagnosticsError         -- 默认 DiagnosticError
---- NvimTreeLspDiagnosticsWarning       -- 默认 DiagnosticWarn
---- NvimTreeLspDiagnosticsInformation   -- 默认 DiagnosticInfo
---- NvimTreeLspDiagnosticsHint          -- 默认 DiagnosticHint
+--- NvimTreeLspDiagnosticsError
+--- NvimTreeLspDiagnosticsWarning
+--- NvimTreeLspDiagnosticsInformation
+--- NvimTreeLspDiagnosticsHint
 
 -- -- }}}
 
