@@ -150,7 +150,23 @@ require('utils.keymaps').set(tree_keymaps)
 
 --- `:help nvim-tree-setup` ------------------------------------------------------------------------ {{{
 nvim_tree.setup {
+  --- NOTE: on_attach 主要是设置 keymaps 的.
+  --- ":help nvim-tree.on_attach" & ":help nvim-tree-mappings"
+  on_attach = function(bufnr)
+    local function opt(desc)
+      if not desc then
+        return {  buffer = bufnr, noremap = true, silent = true, nowait = true }
+      end
+      return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+    end
+
+    for _, keymap in ipairs(nt_buffer_keymaps) do
+      vim.keymap.set('n', keymap[1], keymap[2], opt(keymap[3]))
+    end
+  end,
+
   auto_reload_on_write = true,  -- NOTE: `:w` 时刷新 nvim-tree.
+  sync_root_with_cwd = false,  -- Changes the tree root directory on `DirChanged` and refreshes the tree.
 
   --- VVI: Don't change disable_netrw, hijack_netrw, hijack_directories settings. --- {{{
   --- `:help nvim-tree-netrw`, netrw: vim's builtin file explorer.
@@ -177,16 +193,11 @@ nvim_tree.setup {
   hijack_cursor = false,  -- keeps the cursor on the first letter of the filename
   hijack_unnamed_buffer_when_opening = false,  -- Opens in place of the unnamed buffer if it's empty. 默认 false.
 
-  --- 启动 nvim 时, 打开 tree.
-  open_on_tab = false,  -- 在 tree 打开的状态下 open new tab, 则在新 tab 中自动打开 tree.
-  ignore_buf_on_tab_change = {},  -- List of filetypes or buffer names that will prevent `open_on_tab` to open.
-
   sort = {
     sorter = "name",
     folders_first = true, -- Sort folders before files.
     files_first = false,  -- Sort files before folders. If set to `true` it overrides |folders_first|.
   },
-  sync_root_with_cwd = false,  -- Changes the tree root directory on `DirChanged` and refreshes the tree.
 
   view = {
     --- float = {  -- 在 floating window 中打开 nvim-tree ---------------------- {{{
@@ -209,38 +220,23 @@ nvim_tree.setup {
     signcolumn = "yes",      -- VVI: 显示 signcolumn, "yes" | "auto" | "no"
   },
 
-  --- NOTE: on_attach 主要是设置 keymaps 的.
-  --- ":help nvim-tree.on_attach" & ":help nvim-tree-mappings"
-  on_attach = function(bufnr)
-    local function opt(desc)
-      if not desc then
-        return {  buffer = bufnr, noremap = true, silent = true, nowait = true }
-      end
-      return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
-    end
-
-    for _, keymap in ipairs(nt_buffer_keymaps) do
-      vim.keymap.set('n', keymap[1], keymap[2], opt(keymap[3]))
-    end
-  end,
-
   renderer = {
-    highlight_git = true,  -- 开启 git filename 颜色. 需要设置 git.enable = true
+    highlight_git = true,  -- 开启 git filename 颜色. 需要设置 nvim-tree.git.enable = true
     highlight_bookmarks = "all",
     highlight_opened_files = "name", -- highlight icon or filename or both.
                                      -- "none"(*) | "icon" | "name" | "all"
     indent_width = 2, -- 默认 2.
     indent_markers = {
-      enable = true,
+      enable = true,  -- 显示 indent line
       icons = nt_indent_line,
     },
     icons = {
       git_placement = "before",  -- 'before' (filename) | 'after' | 'signcolumn' (vim.signcolumn='yes')
       symlink_arrow = " ➜ ",  -- old_name ➜ new_name, 这个不是显示在 filename/dir 之前的 icon.
       show = {
+        file = false,  -- 显示 file icon, `nvim-web-devicons` will be used if available.
         folder = true, -- 显示 folder icon
         folder_arrow = false,  -- NOTE: 使用 folder icon 代替, folder_arrow icon 无法改变颜色, 也无法设置 empty icon.
-        file = false,  -- 显示 file icon, `nvim-web-devicons` will be used if available.
         git = true,    -- 显示 git icon. 需要设置 git.enable = true
       },
       glyphs = glyphs,
@@ -251,6 +247,7 @@ nvim_tree.setup {
     },
     symlink_destination = true,  -- Whether to show the destination of the symlink.
   },
+
   update_focused_file = {
     --- 可以使用 `:NvimTreeFindFile!`
     enable = false,  -- `:e file` 时, 更新 tree, 展开文件夹直到找到该文件.
@@ -262,18 +259,6 @@ nvim_tree.setup {
   --   cmd = "",  -- Mac 中可以改为 "open", NOTE: 无法处理错误, 推荐使用 action_cb.
   --   args = {},
   -- },
-  diagnostics = {  --- VVI: 显示 vim diagnostics (Hint|Info|Warn|Error) 需要设置 vim.signcolumn='yes'
-    enable = true,
-    show_on_dirs = true,  -- 在文件所属的 dir name 前也显示 sign.
-    show_on_open_dirs = false,  -- 打开的文件夹上不显示 sign.
-    icons = diagnostics_icons,
-  },
-  filters = {
-    dotfiles = false,  -- true:不显示隐藏文件, false:显示隐藏文件.
-    custom = { '^\\.DS_Store$', '^\\.git$', '.*\\.swp$' },    -- 不显示指定文件
-    exclude = {},  -- List of dir or files to exclude from filtering: always show them.
-    git_ignored = false,  -- 不显示 .gitignore files
-  },
   git = {
     enable = true,  -- VVI: 开启 git filename 和 icon 颜色显示.
                     -- 需要开启 renderer.highlight_git 和 renderer.icons.show.git
@@ -281,6 +266,18 @@ nvim_tree.setup {
     show_on_open_dirs = false,  -- 在打开的文件夹上不显示 sign.
     disable_for_dirs = {},
     timeout = 400,  -- Kills the git process after some time if it takes too long.
+  },
+  diagnostics = {  --- VVI: 显示 vim diagnostics (Hint|Info|Warn|Error) 需要设置 vim.signcolumn='yes'
+    enable = true,
+    show_on_dirs = true,  -- 在文件所属的 dir name 前也显示 sign.
+    show_on_open_dirs = false,  -- 打开的文件夹上不显示 sign.
+    icons = diagnostics_icons,
+  },
+  filters = {
+    git_ignored = false,  -- 不显示 .gitignore files
+    dotfiles = false,  -- true:不显示隐藏文件, false:显示隐藏文件.
+    custom = { '^\\.DS_Store$', '^\\.git$', '.*\\.swp$' },  -- NOTE: 不显示指定文件
+    exclude = {},  -- List of dir or files to exclude from filtering: always show them.
   },
   actions = {
     use_system_clipboard = true,
@@ -312,7 +309,13 @@ nvim_tree.setup {
   },
   trash = {
     cmd = "trash",  -- Mac 没有 trash cmd
-    require_confirm = true,
+  },
+  ui = {
+    confirm = {
+      remove = true,
+      trash = true,
+      default_yes = false,
+    },
   },
 
   --- 日志 ---
@@ -335,6 +338,7 @@ nvim_tree.setup {
 --- `:help nvim-tree-highlight` -------------------------------------------------------------------- {{{
 vim.api.nvim_set_hl(0, 'NvimTreeNormalNC', {link="NormalNC"})  -- non-foucs nvim-tree window color
 vim.api.nvim_set_hl(0, 'NvimTreeRootFolder', {ctermfg=Color.cyan})  -- non-foucs nvim-tree window color
+-- vim.cmd('hi! default link NvimTreeWinSeparator VertSplit')
 
 vim.api.nvim_set_hl(0, 'NvimTreeFolderName', {ctermfg=Color.cyan, bold=true})
 vim.cmd('hi! default link NvimTreeFolderIcon NvimTreeFolderName')
