@@ -121,7 +121,7 @@ local mason_tools = {
   "html-lsp",
   "pyright",
   "lua-language-server",
-  --"typescript-language-server",
+  "typescript-language-server",
 }
 
 local function check_mason_tools()
