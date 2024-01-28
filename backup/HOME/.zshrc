@@ -818,8 +818,10 @@ function diff() {
 		--syntax-theme=none --line-numbers-minus-style=196 "$@"
 }
 
+### 使用方法 `Fd foo /path`, eg: `Fd minecraft /`
+### 查找文件同时显示大小.
 function Fd() {
-	fd -H -I -E="/System/" -E=".git/" "$@" | xargs -I {} du -sh "{}"
+	fd --hidden --no-ignore --color="never" -E="/System/" -E=".git/" "$@" | xargs -I {} du -sh "{}"
 }
 
 # }}}
