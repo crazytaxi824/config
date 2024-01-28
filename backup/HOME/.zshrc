@@ -799,7 +799,7 @@ alias firefox='open -n /Applications/Firefox.app'
 alias chrome='open -n /Applications/Google\ Chrome.app'
 
 ### du file size
-alias lldu="du -shc ./*"
+alias lldu="du -shc ./.* ./*"
 
 ### alias 快速设置本地 time zone
 alias setny='sudo systemsetup -settimezone America/New_York'
