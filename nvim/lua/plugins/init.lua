@@ -33,7 +33,7 @@ local plugins = {
   --- Useful lua functions used by lots of plugins
   {"nvim-lua/plenary.nvim",
     priority = 1000,  -- 影响加载顺序, 默认值为 50.
-    commit = "6632469",
+    commit = "4f71c0c",
   },
 
   --- 通知功能
@@ -75,7 +75,7 @@ local plugins = {
   --- By convention, if you want to write a query, use the `queries/` directory,
   --- but if you want to extend a query use the `after/queries/` directory.
   {"nvim-treesitter/nvim-treesitter",
-    commit = "e24dab6",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "569d5df",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     --build = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
     config = function() require("plugins.settings.treesitter") end,
     dependencies = {
@@ -191,7 +191,7 @@ local plugins = {
 
   --- snippets content, 自定义 snippets 可以借鉴这个结构.
   {"rafamadriz/friendly-snippets",
-    commit = "aced40b",
+    commit = "b8fae73",
 
     lazy = true,  -- LuaSnip 加载时自动加载.
   },
