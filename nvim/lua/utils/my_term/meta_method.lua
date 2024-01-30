@@ -54,7 +54,7 @@ local function set_buf_keymaps(term_obj)
     {'n', 't<Down>', '<cmd>resize -5<CR>', opt, 'my_term: resize -5'},
     {'n', 'tc', function() M.close_others(term_obj.id) end,   opt, 'my_term: close other my_terms windows'},
     {'n', 'tw', function() M.wipeout_others(term_obj.id) end, opt, 'my_term: wipeout other my_terms'},
-    {'n', 'q',  function() M.wipeout(term_obj.id) end, opt, 'my_term: wipeout my_term'},
+    {'n', 'q',  function() M.wipeout(term_obj.id) end, opt, 'my_term: wipeout current my_term'},
   }
   require('utils.keymaps').set(keys)
 end
