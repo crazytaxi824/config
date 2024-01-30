@@ -34,12 +34,11 @@ brew "pandoc"  # 文档格式转换工具, 支持 word, pdf, markdown ... 各种
 #brew "universal-ctags"  # 各种语言的 object 分析工具. vim/neovim tagbar 插件使用
 
 # language & tools
-brew "node"
-#brew "node@18"  # LTS version
 #brew "go"   # 推荐使用 https://go.dev 中下载安装.
 #brew "rust"
 #brew "lua"
 brew "luajit"
+brew "node@20"
 brew "perl"
 brew "ruby"
 
