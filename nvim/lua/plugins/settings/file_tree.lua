@@ -3,7 +3,7 @@ if not status_ok then
   return
 end
 
---- for "nvim-tree.lua", `:help nvim-tree-netrw`
+--- VVI: for "nvim-tree.lua", `:help nvim-tree-netrw`
 --- keep using |netrw| without its file browser features.
 --- 将以下设置放入 init.lua 会导致 BUG: `:echo v:errmsg`, E216: No such group or event: FileExplorer *
 --vim.g.loaded_netrw = 1
@@ -169,7 +169,7 @@ nvim_tree.setup {
   sync_root_with_cwd = false,  -- Changes the tree root directory on `DirChanged` and refreshes the tree.
 
   --- VVI: Don't change disable_netrw, hijack_netrw, hijack_directories settings. --- {{{
-  --- `:help nvim-tree-netrw`, netrw: vim's builtin file explorer.
+  --- DOC: `:help nvim-tree-netrw`, netrw: vim's builtin file explorer.
   --disable_netrw = false,  -- completely disable netrw. VVI: 不要设为 true, 否则 netrw 的所有功能都无法使用.
 
   --- NOTE: 是否显示 netrw file-explorer 内容. `:e dir` 时, 默认会显示 netrw file-explorer 内容.
