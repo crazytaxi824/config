@@ -1,6 +1,6 @@
 --- Overwrite handler 设置
---- DOC: 使用 with() 方法. `:help lsp-handler-configuration`
---- DOC: `:help lsp-api` lsp-method 显示 textDocument/... 列表
+--- DOCS: 使用 with() 方法. `:help lsp-handler-configuration`
+--- DOCS: `:help lsp-api` lsp-method 显示 textDocument/... 列表
 
 --- 'textDocument/publishDiagnostics' settings ------------------------------------------------------
 --- `:help vim.lsp.diagnostic.on_publish_diagnostics()`

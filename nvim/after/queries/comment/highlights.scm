@@ -1,25 +1,25 @@
 ; extends
 ;;; `:help treesitter-predicates`
 
-; 将 VVI 加入到 @text.warning
+; 将 VVI 加入到 warning
 ((tag
-  (name) @text.warning @nospell
+  (name) @comment.warning @nospell
   ("(" @punctuation.bracket (user) @constant ")" @punctuation.bracket)?
   ":" @punctuation.delimiter)
-  (#any-of? @text.warning "VVI"))
+  (#any-of? @comment.warning "VVI"))
 
-("text" @text.warning @nospell
- (#any-of? @text.warning "VVI"))
+("text" @comment.warning @nospell
+ (#any-of? @comment.warning "VVI"))
 
-; 将 README DOC 加入到 @text.warning
+; 将 README 加入到 note
 ((tag
-  (name) @text.note @nospell
+  (name) @comment.note @nospell
   ("(" @punctuation.bracket (user) @constant ")" @punctuation.bracket)?
   ":" @punctuation.delimiter)
-  (#any-of? @text.note "README" "DOC"))
+  (#any-of? @comment.note "README"))
 
-("text" @text.note @nospell
- (#any-of? @text.note "README" "DOC"))
+("text" @comment.note @nospell
+ (#any-of? @comment.note "README"))
 
 
 

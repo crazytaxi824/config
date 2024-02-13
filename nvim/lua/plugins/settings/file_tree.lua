@@ -169,7 +169,7 @@ nvim_tree.setup {
   sync_root_with_cwd = false,  -- Changes the tree root directory on `DirChanged` and refreshes the tree.
 
   --- VVI: Don't change disable_netrw, hijack_netrw, hijack_directories settings. --- {{{
-  --- DOC: `:help nvim-tree-netrw`, netrw: vim's builtin file explorer.
+  --- DOCS: `:help nvim-tree-netrw`, netrw: vim's builtin file explorer.
   --disable_netrw = false,  -- completely disable netrw. VVI: 不要设为 true, 否则 netrw 的所有功能都无法使用.
 
   --- NOTE: 是否显示 netrw file-explorer 内容. `:e dir` 时, 默认会显示 netrw file-explorer 内容.

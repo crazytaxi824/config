@@ -186,20 +186,28 @@ local highlights = {
   SpellLocal = {},  -- clear highlight
 
   --- NOTE: treesitter 颜色设置 --------------------------------------------------------------------
-  ['@text.danger'] = { ctermfg = Color.white, ctermbg = 196 }, -- FIXME, BUG
-  ['@text.warning'] = { link = "WarningMsg" },  -- HACK, WARNING, VVI
-  ['@text.note'] = { link = "SpecialComment" }, -- XXX, NOTE, README
-  ['@text.todo'] = { link = "Todo" },           -- TODO
+  ['@comment.error'] = { ctermfg = Color.white, ctermbg = 196 }, -- FIXME, BUG, ERROR
+  ['@comment.warning'] = { link = "WarningMsg" },  -- HACK, WARN, WARNING, VVI, FIX
+  ['@comment.note'] = { link = "SpecialComment" }, -- XXX, NOTE, README, DOCS, TEST, INFO
+  ['@comment.todo'] = { link = "Todo" },           -- TODO
 
-  ['@text.uri'] = { link = "Underlined" },  -- url
-  ['@text.title'] = { link = "Title" }, -- markdown, # title
-  ['@text.literal'] = { ctermfg = Color.string_orange, ctermbg = 237 },  -- markdown, `code`
-  ['@text.strong'] = { cterm = {"bold"} }, -- markdown, **bold**
-  ['@text.emphasis'] = { cterm = {"italic"} },  -- markdown, *italic*, _italic_
-  ['@text.underline'] = { cterm = {"underline"} },  -- markdown, *italic*, _italic_
-  ['@text.reference'] = { ctermfg = Color.cyan },  -- markdown, [@text.reference](http://...)
+  ['@string.special.url'] = { link = "Underlined" },  -- url
+  --- NOTE: 单独为 html/js/ts 设置颜色.
+  ['@string.special.url.html'] = { link = "String" },  -- html, <href="@text.uri">
+  ['@string.special.url.jsx']  = { link = "String" },  -- html, <href="@text.uri">
+  ['@string.special.url.tsx']  = { link = "String" },  -- html, <href="@text.uri">
 
-  --- programs ---------------------------------------------
+  --- markdown / markdown_inline
+  ['@markup.heading'] = { link = "Title" }, -- markdown, # title
+  ['@markup.strong'] = { cterm = {"bold"} }, -- markdown, **bold**
+  ['@markup.italic'] = { cterm = {"italic"} },  -- markdown, *italic*, _italic_
+  ['@markup.underline'] = { cterm = {"underline"} },  -- markdown, <u>underline</u>
+  ['@markup.strikethrough'] = { cterm = {'strikethrough'} },  -- markdown, ~~strike~~
+  ['@markup.link.label'] = { ctermfg = Color.cyan }, -- markdown, [@markup.link.label](@markup.link.label)
+  ['@markup.link.url'] = { ctermfg = Color.cyan },   -- markdown, [@markup.link.label](@markup.link.label)
+  ['@markup.raw.markdown_inline'] = { ctermfg = Color.string_orange, ctermbg = 237 },  -- markdown, inline `code`
+
+  --- program language
   ['@variable'] = { link = "Normal" },
   ['@constant'] = { link = "Constant" },
   ['@string.escape'] = { ctermfg = 180 },  -- \n \t ...
@@ -240,11 +248,6 @@ local highlights = {
                                                                      -- "*italic*", "_italic_"
                                                                      -- "**Bold**"
                                                                      -- "***Bold italic***"
-
-  --- NOTE: 单独为 html/react 设置颜色.
-  ['@text.uri.html'] = { link = "String" },  -- html, <href="@text.uri">
-  ['@text.uri.jsx']  = { link = "String" },  -- html, <href="@text.uri">
-  ['@text.uri.tsx']  = { link = "String" },  -- html, <href="@text.uri">
 
   --- NOTE: 以下设置是为了配合 lazy load plugins ---------------------------------------------------
   --- 以下颜色为了 lazy load lualine
