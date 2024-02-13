@@ -3,7 +3,7 @@
 local key_fn = require('utils.keymaps')
 local mt = require('utils.my_term')  -- my_term terminal
 
---- README ----------------------------------------------------------------------------------------- {{{
+--- DOCS ------------------------------------------------------------------------------------------- {{{
 --- vim.keymap.set() & vim.keymap.del()
 --- vim.api.nvim_set_keymap() & vim.api.nvim_del_keymap()
 --- vim.api.nvim_buf_set_keymap() & vim.api.nvim_buf_del_keymap()

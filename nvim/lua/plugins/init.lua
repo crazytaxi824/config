@@ -70,7 +70,7 @@ local plugins = {
   --- `:TSUpdate`             -- Update the installed languages
   --- `:TSUpdateSync`         -- Update the installed languages synchronously
   -- -- }}}
-  --- README: https://github.com/nvim-treesitter/nvim-treesitter#adding-queries
+  --- DOCS: https://github.com/nvim-treesitter/nvim-treesitter#adding-queries
   --- All queries found in the runtime directories will be combined.
   --- By convention, if you want to write a query, use the `queries/` directory,
   --- but if you want to extend a query use the `after/queries/` directory.

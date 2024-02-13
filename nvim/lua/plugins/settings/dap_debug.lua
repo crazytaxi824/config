@@ -1,5 +1,5 @@
 --- https://github.com/mfussenegger/nvim-dap
---- README: repl / debug console command --------------------------------------- {{{
+--- DOCS: repl / debug console command ----------------------------------------- {{{
 ---    .exit               Closes the REPL
 ---    .clear              clear dap-repl buffer 内容
 ---    .c or .continue     Same as |dap.continue|

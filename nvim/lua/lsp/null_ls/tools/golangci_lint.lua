@@ -50,7 +50,7 @@ return {
     return golangci_args
   end,
 
-  --- README: golangci-lint 配置文件位置自动查找 ------------------------------- {{{
+  --- golangci-lint 配置文件位置自动查找 --------------------------------------- {{{
   --- DOCS: https://golangci-lint.run/usage/configuration/#linters-configuration
   --- golangci-lint 会自动寻找 '.golangci.yml', '.golangci.yaml', '.golangci.toml', '.golangci.json'.
   --- GolangCI-Lint also searches for config files in all directories from the directory of

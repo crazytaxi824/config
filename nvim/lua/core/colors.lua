@@ -188,7 +188,7 @@ local highlights = {
   --- NOTE: treesitter 颜色设置 --------------------------------------------------------------------
   ['@comment.error'] = { ctermfg = Color.white, ctermbg = 196 }, -- FIXME, BUG, ERROR
   ['@comment.warning'] = { link = "WarningMsg" },  -- HACK, WARN, WARNING, VVI, FIX
-  ['@comment.note'] = { link = "SpecialComment" }, -- XXX, NOTE, README, DOCS, TEST, INFO
+  ['@comment.note'] = { link = "SpecialComment" }, -- XXX, NOTE, DOCS, TEST, INFO
   ['@comment.todo'] = { link = "Todo" },           -- TODO
 
   ['@string.special.url'] = { link = "Underlined" },  -- url

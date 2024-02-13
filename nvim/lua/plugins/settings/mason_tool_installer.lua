@@ -1,4 +1,4 @@
---- README:
+--- DOCS:
 --- mason.nvim 是一个 tools 安装 & 管理插件. 用于下载 lsp/formatter/linter/dap-debug 工具, eg: gopls, prettier, delve
 --- 这些工具可以不通过 mason 安装, 可以手动安装在 $PATH 中. eg: `brew install xxx`
 --- 可以使用 require("mason-registry").is_installed("json-lsp") 来判断工具是否被 mason 安装.
