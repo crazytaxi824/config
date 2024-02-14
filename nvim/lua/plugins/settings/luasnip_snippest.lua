@@ -8,7 +8,6 @@ end
 --- https://github.com/L3MON4D3/LuaSnip/blob/master/Examples/snippets.lua
 --- `:help luasnip-config-options`
 -- luasnip.setup({
---   history = false,
 --   update_events = 'TextChanged,TextChangedI',
 -- })
 

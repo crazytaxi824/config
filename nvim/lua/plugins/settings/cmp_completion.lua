@@ -9,6 +9,14 @@ if not snip_status_ok then
   return
 end
 
+--- 判断 cursor 前是否有 words.
+--- DOCS: https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings#luasnip
+local function has_words_before()
+  unpack = unpack or table.unpack
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+end
+
 --- "hrsh7th/nvim-cmp" 主要设置 --------------------------------------------------------------------
 --- https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#completionItemKind
 --- https://github.com/hrsh7th/nvim-cmp/blob/main/lua/cmp/types/lsp.lua#L177
@@ -64,10 +72,10 @@ cmp.setup {
   sources = {
     --- `:help cmp-config.sources`. 其他设置: group_index, max_item_count, priority ...
     --- 显示 group 1 的时候不会显示 group 2 的内容; 显示 group2 的时候不会显示 group 1 的内容.
-    { name = "luasnip",  group_index = 1, priority = 999 }, -- "saadparwaiz1/cmp_luasnip" -> "L3MON4D3/LuaSnip"
-    { name = "nvim_lsp", group_index = 1 },  -- "hrsh7th/cmp-nvim-lsp"
-    { name = "buffer",   group_index = 1, max_item_count = 6 }, -- "hrsh7th/cmp-buffer", 最多显示 n 条.
-    { name = "path",     group_index = 1 },  -- "hrsh7th/cmp-path"
+    { name = "luasnip", priority = 999 }, -- "saadparwaiz1/cmp_luasnip" -> "L3MON4D3/LuaSnip"
+    { name = "nvim_lsp" },  -- "hrsh7th/cmp-nvim-lsp"
+    { name = "buffer", max_item_count = 6 }, -- "hrsh7th/cmp-buffer", 最多显示 n 条.
+    { name = "path" },  -- "hrsh7th/cmp-path"
     --- NOTE: other snippets engine -------------------------------------------- {{{
     --{ name = 'vsnip' },      -- For vsnip users      -- "hrsh7th/vim-vsnip" vim-script
     --{ name = 'luasnip' },    -- For luasnip users    -- "L3MON4D3/LuaSnip" lua
@@ -107,14 +115,14 @@ cmp.setup {
       end
 
       --- 不显示 menu
-      vim_item.menu = " "
+      -- vim_item.menu = " "
       --- 如果需要显示 menu 使用以下设置.
-      -- vim_item.menu = ({
-      --   luasnip  = "[Snip]",
-      --   nvim_lsp = "[LSP]",
-      --   buffer   = "[Buff]",
-      --   path     = "[Path]",
-      -- })[entry.source.name]
+      vim_item.menu = ({
+        luasnip  = " [Snip]",
+        nvim_lsp = " [LSP]",
+        buffer   = " [Buff]",
+        path     = " [Path]",
+      })[entry.source.name]
 
       return vim_item
     end,
@@ -125,7 +133,7 @@ cmp.setup {
     native_menu = false,   -- VVI: disable it.
   },
 
-  --- key mapping, `:help cmp-mapping`
+  --- DOCS: key mapping, `:help cmp-mapping`
   mapping = {
     --["<Up>"] = cmp.mapping.select_prev_item(),  -- 选择 item 的时候会将内容填到行内.
     --["<Down>"] = cmp.mapping.select_next_item(),
@@ -192,8 +200,8 @@ cmp.setup {
 vim.api.nvim_set_hl(0, 'CmpItemAbbrMatch', {ctermfg = Color.magenta})
 vim.api.nvim_set_hl(0, 'CmpItemAbbrMatchFuzzy', {ctermfg = Color.magenta})
 
---- [lsp], [buffer], [path], [snippet] 颜色
-vim.api.nvim_set_hl(0, 'CmpItemMenu', {ctermfg = Color.type_green})
+--- [lsp], [buff], [path], [snip] 颜色
+vim.api.nvim_set_hl(0, 'CmpItemMenu', {ctermfg = 240})
 
 --- VVI: CmpItemKindXXX 默认颜色, 如果没有单独设置 CmpItemKindXXX 颜色则会使用该颜色.
 vim.api.nvim_set_hl(0, 'CmpItemKindDefault', {ctermfg = 246})
