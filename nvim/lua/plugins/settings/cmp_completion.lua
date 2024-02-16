@@ -145,7 +145,10 @@ cmp.setup {
 
     ["<PageUp>"]   = cmp.mapping(cmp.mapping.scroll_docs(-3), { "i", "c" }),
     ["<PageDown>"] = cmp.mapping(cmp.mapping.scroll_docs(3),  { "i", "c" }),
-    -- ["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),  -- 手动触发 completion window. NOTE: 不需要.
+    ["<C-Space>"] = cmp.mapping(function (fallback)
+      cmp.core:reset()  -- HACK: reset cmp cache. fix: [snip] and [buff] missing when delete dot(.) char.
+      cmp.complete()
+    end, { "i", "c" }),  -- 手动触发 completion window.
     -- ["<C-e>"] = cmp.mapping {  -- 对 insert, command 模式分别设置不同的行为.
     --   i = cmp.mapping.abort(),
     --   c = cmp.mapping.close(),
