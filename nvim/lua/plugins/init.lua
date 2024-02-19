@@ -38,7 +38,7 @@ local plugins = {
 
   --- 通知功能
   {"rcarriga/nvim-notify",
-    tag = "v3.13.2",
+    tag = "v3.13.4",
     config = function() require("plugins.settings.nvim_notify") end,
 
     event = "VeryLazy",
@@ -75,7 +75,7 @@ local plugins = {
   --- By convention, if you want to write a query, use the `queries/` directory,
   --- but if you want to extend a query use the `after/queries/` directory.
   {"nvim-treesitter/nvim-treesitter",
-    commit = "504fe10",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "d10e856",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     --build = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
     config = function() require("plugins.settings.treesitter") end,
     dependencies = {
@@ -234,7 +234,7 @@ local plugins = {
 
   --- File explorer --------------------------------------------------------------------------------
   {"kyazdani42/nvim-tree.lua",
-    tag = "v0.100",
+    tag = "v1.0",
     config = function() require("plugins.settings.file_tree") end,
 
     -- VVI: 本文件最后设置: 在 `nvim dir` 直接打开文件夹的时直接加载 nvim-tree.lua.
@@ -324,7 +324,7 @@ local plugins = {
 
   --- https://docs.github.com/en/copilot/getting-started-with-github-copilot
   {"github/copilot.vim",
-    tag = "v1.18.0",
+    tag = "v1.19.1",
     -- config = function()  --- {{{
     --   --- VVI: `:help g:copilot_node_command`, using node@18 or above.
     --   --- 安装指定的 nodejs 版本. `brew install node@20`
