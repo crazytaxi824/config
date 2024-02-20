@@ -55,8 +55,8 @@ cmp.setup {
   preselect = cmp.PreselectMode.None,  -- cmp.PreselectMode.None | cmp.PreselectMode.Item
 
   performance = {
-    debounce = 120,  --- 停止输入文字的时间超过该数值, 则向 sources 请求更新 completion Item. 默认 60.
-    throttle = 60,   --- 停止输入文字的时间超过该数值, 则匹配和过滤本地已获取的 completion Item. 默认 30.
+    -- debounce = 120,  --- 停止输入文字的时间超过该数值, 则向 sources 请求更新 completion Item. 默认 60.
+    -- throttle = 60,   --- 停止输入文字的时间超过该数值, 则匹配和过滤本地已获取的 completion Item. 默认 30.
     -- fetching_timeout = 200,  --- 默认 200.
   },
 
