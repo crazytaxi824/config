@@ -75,7 +75,7 @@ local plugins = {
   --- By convention, if you want to write a query, use the `queries/` directory,
   --- but if you want to extend a query use the `after/queries/` directory.
   {"nvim-treesitter/nvim-treesitter",
-    commit = "ebf0532",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "adf7236",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     --build = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
     config = function() require("plugins.settings.treesitter") end,
     dependencies = {
@@ -198,7 +198,7 @@ local plugins = {
 
   --- 自动括号, 同时依赖 treesitter && cmp
   {"windwp/nvim-autopairs",
-    commit = "90f824d",
+    commit = "1efb4f2",
     config = function() require("plugins.settings.autopairs") end,
     dependencies = {
       "nvim-treesitter/nvim-treesitter",  -- setup() 中 `check_ts`, `ts_config` 需要 treesitter 支持.
@@ -212,7 +212,7 @@ local plugins = {
   --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
   --- 官方 LSP 引擎.
   {"neovim/nvim-lspconfig",
-    commit = "6b9f4bb",
+    commit = "d5b6d43",
     config = function() require("lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     dependencies = {
       "williamboman/mason.nvim",  -- 安装 lsp 命令行工具.
@@ -324,7 +324,7 @@ local plugins = {
 
   --- https://docs.github.com/en/copilot/getting-started-with-github-copilot
   {"github/copilot.vim",
-    tag = "v1.19.2",
+    tag = "v1.20.1",
     -- config = function()  --- {{{
     --   --- VVI: `:help g:copilot_node_command`, using node@18 or above.
     --   --- 安装指定的 nodejs 版本. `brew install node@20`
