@@ -220,6 +220,8 @@ export GO111MODULE=on  # on | off | auto
 # 使用 node@20 LTS, 以下两种写法都可以
 #alias node=$(brew --prefix)/opt/node@20/bin/node
 export PATH="/opt/homebrew/opt/node@20/bin:$PATH"
+export LDFLAGS="-L/opt/homebrew/opt/node@20/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/node@20/include"
 
 # }}}
 
