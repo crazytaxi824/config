@@ -308,8 +308,8 @@ local plugins = {
     config = function() require("plugins.settings.git_signs") end,
 
     --- NOTE: `nvim dir` 启动时直接打开 dir 时可能会造成 gitsigns 报错. 根据测试情况选择 VeryLazy 或者 BufReadPre ...
-    event = "VeryLazy",
     --event = { "BufReadPre", "BufNewFile" },
+    event = "VeryLazy",
   },
 
   --- markdown, VVI: 安装 preview 插件后需要一段时间来执行 vim.fn["mkdp#util#install"]() 如果无法运行可以重装该插件.

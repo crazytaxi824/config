@@ -139,6 +139,7 @@ end
 --- -- }}}
 M.doc_highlight = function(bufnr)
   local param = vim.lsp.util.make_position_params()  -- lsp request's cursor position.
+  --- VVI: vim.lsp.buf_request() 没有文档, 可以查看源代码.
   vim.lsp.buf_request(bufnr, 'textDocument/documentHighlight', param, doc_hl_handler)
 end
 
