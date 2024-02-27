@@ -212,7 +212,7 @@ local plugins = {
   --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
   --- 官方 LSP 引擎.
   {"neovim/nvim-lspconfig",
-    commit = "ec7d51a",
+    commit = "b1a11b0",
     config = function() require("lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     dependencies = {
       "williamboman/mason.nvim",  -- 安装 lsp 命令行工具.
@@ -323,25 +323,25 @@ local plugins = {
   },
 
   --- https://docs.github.com/en/copilot/getting-started-with-github-copilot
-  {"github/copilot.vim",
-    tag = "v1.21.0",
-    -- config = function()  --- {{{
-    --   --- VVI: `:help g:copilot_node_command`, using node@18 or above.
-    --   --- 安装指定的 nodejs 版本. `brew install node@20`
-    --   local node_path = "/opt/homebrew/opt/node@20/bin/node"
-    --
-    --   --- check node cmd existence
-    --   if vim.fn.filereadable(node_path) == 0 then
-    --     Notify({"'" .. node_path .. "' is NOT Exist."}, "WARN", {title = "github/copilot", timeout = false})
-    --     return
-    --   end
-    --
-    --   vim.g.copilot_node_command = node_path
-    -- end,
-    -- -- }}}
-
-    cmd = {"Copilot"},  -- `:Copilot setup`, `:Copilot enable`, `:help copilot` 查看可用命令.
-  },
+  -- {"github/copilot.vim",
+  --   tag = "v1.22.0",
+  --   -- config = function()  --- {{{
+  --   --   --- VVI: `:help g:copilot_node_command`, using node@18 or above.
+  --   --   --- 安装指定的 nodejs 版本. `brew install node@20`
+  --   --   local node_path = "/opt/homebrew/opt/node@20/bin/node"
+  --   --
+  --   --   --- check node cmd existence
+  --   --   if vim.fn.filereadable(node_path) == 0 then
+  --   --     Notify({"'" .. node_path .. "' is NOT Exist."}, "WARN", {title = "github/copilot", timeout = false})
+  --   --     return
+  --   --   end
+  --   --
+  --   --   vim.g.copilot_node_command = node_path
+  --   -- end,
+  --   -- -- }}}
+  --
+  --   cmd = {"Copilot"},  -- `:Copilot setup`, `:Copilot enable`, `:help copilot` 查看可用命令.
+  -- },
 
   --- recommanded plugins ------------------------------------------------------ {{{
   --{"kyazdani42/nvim-web-devicons"}, -- Nerd Fonts 提供 icons 需要 patch 字体
