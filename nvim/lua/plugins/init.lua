@@ -33,7 +33,7 @@ local plugins = {
   --- Useful lua functions used by lots of plugins
   {"nvim-lua/plenary.nvim",
     priority = 1000,  -- 影响加载顺序, 默认值为 50.
-    commit = "4f71c0c",
+    commit = "f7adfc4",
   },
 
   --- 通知功能
@@ -89,7 +89,7 @@ local plugins = {
 
   --- 第一方 module 插件 ---
   {"nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-    commit = "53cdd58",
+    commit = "b8b7e52",
     config = function() require("plugins.settings.treesitter_ctx") end,
 
     lazy = true,  -- nvim-treesitter 加载时自动加载.
@@ -212,7 +212,7 @@ local plugins = {
   --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
   --- 官方 LSP 引擎.
   {"neovim/nvim-lspconfig",
-    commit = "7f5cf11",
+    commit = "e5e6002",
     config = function() require("lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     dependencies = {
       "williamboman/mason.nvim",  -- 安装 lsp 命令行工具.
@@ -244,7 +244,7 @@ local plugins = {
   --- Buffer & Status Line -------------------------------------------------------------------------
   --- tabline decorator, `:help 'tabline'`
   {"akinsho/bufferline.nvim",
-    tag = "v4.5.0",
+    tag = "v4.5.1",
     config = function() require("plugins.settings.decor_bufferline") end,
 
     event = "VeryLazy",
