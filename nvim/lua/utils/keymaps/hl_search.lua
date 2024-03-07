@@ -46,15 +46,20 @@ end
 --- search VISUAL selected word | \<word\>
 --- whole_word: bool, 是否使用 \<word\>
 M.hl_visual_search = function(key, whole_word)
-  --- 利用 register "f
-  vim.cmd[[normal! "fy]]  -- copy VISUAL select to register 'f'
-  local tmp_search = vim.fn.getreg("f")
+  --- NOTE: 利用 register "f, 缓存 VISUAL selected 内容.
+  --- 使用 "fy 拷贝时, register '"' 也会储存拷贝的内容, 所以需要先缓存之前的 '"' register 内容.
+  local cache_reg = vim.fn.getreg('"')  -- cache register '"' 的内容.
+
+  vim.cmd[[normal! "fy]]  -- 将 VISUAL selected 内容拷贝到 register 'f' 中.
+  local search_reg = vim.fn.getreg("f")  -- 获取 register 'f' 的内容, 用于搜索.
+
   if whole_word then
-    vim.fn.setreg('/', '\\<' .. tmp_search .. '\\>')
+    vim.fn.setreg('/', '\\<' .. search_reg .. '\\>')  -- 将 search register '/' 设置为搜索内容.
   else
-    vim.fn.setreg('/', tmp_search)
+    vim.fn.setreg('/', search_reg)
   end
 
+  vim.fn.setreg('"', cache_reg)  -- 恢复 register '"' 的内容.
   M.hl_search(key)
 end
 
