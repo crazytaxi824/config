@@ -77,6 +77,10 @@ end
 
 --- jump controller
 local function jump(content)
+  if not content then
+    return
+  end
+
   local r = parse.parse_content(content)
   if not r then
     return
@@ -95,6 +99,10 @@ end
 
 --- NOTE: 为保险起见, 不在 Normal 模式下使用 system_open 打开 <cWORD>
 local function system_open(filepath)
+  if not filepath then
+    return
+  end
+
   local result = vim.fn.system('open "' .. filepath .. '"')
   if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
     Notify(vim.trim(result), "ERROR")
