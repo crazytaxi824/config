@@ -107,9 +107,10 @@ cask "stats"  # apple silicon CPU/GPU/TEMP 实时监控
 
 # 其他个人 app
 cask "iina"     # 视频播放器
-cask "calibre"  # 电子书工具, epub, mobi ...
 cask "telegram" # 加密聊天工具
 #cask "signal"  # 加密聊天工具
+#cask "calibre"  # 电子书工具, epub, mobi ..., 网页下载更快.
+#cask "cloudflare-warp"  # VPN 类工具
 
 # 浏览器
 cask "firefox"
