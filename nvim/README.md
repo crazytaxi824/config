@@ -157,7 +157,19 @@ lua 中有一个 `_G` 全局变量. 自定义的所有全局变量和函数都�
 
 ### vim 自带函数
 
-- `vim.fn.feedkeys("\<CR>")` -- VVI: 模拟输入 <CR>. 注意单/双引号: `feedkeys("\<CR>")` simulates pressing of the <Enter> key. But `feedkeys('\<CR>')` pushes 5 characters.
+- `vim.fn.feedkeys("\<CR>", 'nx')` -- VVI: 模拟输入 <CR>. 注意单/双引号: `feedkeys("\<CR>", 'nx')` simulates pressing of the <Enter> key. But `feedkeys('\<CR>')` pushes 5 characters.
+
+```lua
+vim.keymap.set('i', '<M-b>', function()
+  -- like: 'normal! G'
+  vim.cmd('normal! G')
+  vim.fn.feedkeys('G', 'nx')
+
+  -- feedkeys() 更灵活.
+  vim.fn.feedkeys('G', 'n')  -- not execute immediately
+  vim.fn.feedkeys('', 'x')   -- execute when typeahead is empty.
+end, { noremap = true, silent = true }, 'Test Options-B')
+```
 
 - `vim.fn.json_encode(table)` / `vim.fn.json_decode(string)` -- json 处理.
 
