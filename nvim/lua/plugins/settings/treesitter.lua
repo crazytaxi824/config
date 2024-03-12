@@ -29,7 +29,10 @@ ts_configs.setup {
 
   --- 黑名单, ts 启动时不安装. list 中的 lang 在 :TSUpdate & :TSInstall 时安装速度太慢.
   --- ignore 的 lang 可以手动更新 `:TSUpdate rust`, 但是不能使用 `:TSUpdate` 自动更新.
-  ignore_install = {"d", "scala", "rust"},  -- compile too slow.
+  ignore_install = {
+    "d", "scala", "rust",  -- compile too slow.
+    "wing",  -- BUG: Error processing rule _escape_sequence
+  },
 
   --- install languages synchronously (only applied to `ensure_installed`)
   sync_install = false,
