@@ -252,7 +252,7 @@ local plugins = {
 
   --- statusline decorator, `:help 'statusline'`
   {"nvim-lualine/lualine.nvim",   -- bottom status line
-    commit = "3c55675",
+    commit = "26dac2f",
     config = function() require("plugins.settings.decor_lualine") end,
 
     event = "VeryLazy",
@@ -282,7 +282,7 @@ local plugins = {
   --- telescope 的 preview syntax 默认使用的是 treesitter, 如果没有 treesitter 则使用 vim syntax highlights.
   {"nvim-telescope/telescope.nvim",
     branch = "0.1.x",  -- master branch is nightly version.
-    tag = "0.1.5",
+    tag = "0.1.6",
     config = function() require("plugins.settings.telescope_fzf") end,
     dependencies = {
       "nvim-lua/plenary.nvim",
@@ -304,7 +304,7 @@ local plugins = {
   --- `:Gitsigns setqflist/seqloclist` will open Trouble instead of quickfix or location list windows.
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {"lewis6991/gitsigns.nvim",
-    commit = "41dc075",
+    commit = "4e34864",
     config = function() require("plugins.settings.git_signs") end,
 
     --- NOTE: `nvim dir` 启动时直接打开 dir 时可能会造成 gitsigns 报错. 根据测试情况选择 VeryLazy 或者 BufReadPre ...
