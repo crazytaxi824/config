@@ -29,7 +29,7 @@ ts_configs.setup {
     "javascript", "typescript", "html", "css", "scss", -- "svelte", "vue", "tsx",
     "go", "gomod", "gosum", "gowork", "gotmpl",
     "python", "bash", "ruby", "perl",
-    "markdown", "markdown_inline", "latex",
+    "markdown", "markdown_inline", "latex", "mermaid",
     "json", "jsonc", "toml", "yaml",
     "csv", "xml", "regex", "proto", "dockerfile",
   },
