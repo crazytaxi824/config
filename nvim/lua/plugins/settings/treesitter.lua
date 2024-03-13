@@ -17,21 +17,28 @@ ts_configs.setup {
   --- supported langs, https://github.com/nvim-treesitter/nvim-treesitter#supported-languages
   --- 白名单, ts 启动时自动安装, "all" OR a list of languages.
   --- NOTE: 推荐使用黑名单 (ignore_install), 因为某些语言有多个 parsers, 使用白名单时可能导致遗漏.
-  ensure_installed = "all",
-  --- ensure_installed = {  ---------------------------------------------------- {{{
-  ---   "vim", "vimdoc", "query", "lua",  -- for neovim itself
-  ---   "javascript", "typescript", "tsx", "html", "css", "scss",
-  ---   "python", "go",
-  ---   "markdown", "markdown_inline", "latex",
-  ---   "toml", "yaml", "json", "jsonc",
-  --- },
+  -- ensure_installed = "all",
+  ensure_installed = {  ---------------------------------------------------- {{{
+    "vim", "vimdoc", "query", "lua", "c", "comment",  -- VVI: necessary for neovim itself
+
+    --- git
+    "gitignore", "gitattributes",
+    -- "git_config", "diff", "git_rebase", "gitcommit",  -- testing
+
+    --- comment languages & filetypes
+    "javascript", "typescript", "html", "css", "scss", -- "svelte", "vue", "tsx",
+    "go", "gomod", "gosum", "gowork", "gotmpl",
+    "python", "bash", "ruby", "perl",
+    "markdown", "markdown_inline", "latex",
+    "json", "jsonc", "toml", "yaml",
+    "csv", "xml", "regex", "proto", "dockerfile",
+  },
   -- -- }}}
 
   --- 黑名单, ts 启动时不安装. list 中的 lang 在 :TSUpdate & :TSInstall 时安装速度太慢.
   --- ignore 的 lang 可以手动更新 `:TSUpdate rust`, 但是不能使用 `:TSUpdate` 自动更新.
   ignore_install = {
-    "d", "scala", "rust",  -- compile too slow.
-    "wing",  -- BUG: Error processing rule _escape_sequence
+    -- "d", "scala", "rust",  -- compile too slow.
   },
 
   --- install languages synchronously (only applied to `ensure_installed`)
@@ -94,14 +101,10 @@ ts_configs.setup {
 
   --- 启用第三方插件 modules 设置 ------------------------------------------------------------------
   --- "windwp/nvim-ts-autotag", auto close tag <div></div>
+  --- `:help nvim-ts-autotag-default-values`
   autotag = {
     enable = true,
-    filetypes = {
-      'html', 'javascript', 'typescript',
-      'javascriptreact', 'typescriptreact',
-      'svelte', 'vue', 'tsx', 'jsx',
-      'rescript', 'xml', 'markdown',
-    },
+    -- filetypes = {},
   },
 }
 
