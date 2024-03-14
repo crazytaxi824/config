@@ -227,9 +227,7 @@ export CPPFLAGS="-I/opt/homebrew/opt/node@20/include"
 
 # }}}
 
-# NOTE: 必须放在 $EDITOR 设置后.
-# NOTE: 运行 `$(brew --prefix)/opt/fzf/install` - 安装 key bindings 和 fuzzy completion.
-# fuzzy completion 使用默认 **<Tab> 触发, 可以使用 export FZF_COMPLETION_TRIGGER 修改为 \\<Tab>.
+# NOTE: 必须放在 $EDITOR 设置后. `man fzf`
 # --- [ fzf ] -------------------------------------------------------------------------------------- {{{
 # --- [ fzf fd bat 使用说明 ] ---------------------------------------------------------------------- {{{
 #
@@ -346,105 +344,93 @@ export CPPFLAGS="-I/opt/homebrew/opt/node@20/include"
 #    --preview-window 'right,70%,border-left,+50/2'   preview-window 在右侧占 70%, 左边框, 将第 50 行放到屏幕中间.
 # }}}
 
+# NOTE: Set up fzf key bindings and fuzzy completion.
+eval "$(fzf --zsh)"
+
+# FZF_DEFAULT_COMMAND & FZF_DEFAULT_OPTS ---------------------------------------
+# -E='**/.*/**' 显示所有隐藏文件夹, 但 exclude 隐藏文件夹中的文件.
+fzf_def_cmd="fd --color=always --follow --hidden --no-ignore \
+	-E='.DS_Store' -E='.git' -E='*.swp' -E='**/.*/**' -E='**/node_modules/**' -E='**/coverage/**' \
+	-E='**/vendor/**' -E='**/dist/**' -E='**/out/**'"
+
 # 'fzf' 文件搜索设置
-#export FZF_DEFAULT_COMMAND='find * -type f'  # 默认: 查找所有文件, 不包括隐藏文件.
-FZF_DEFAULT_COMMAND="fd --color=always --follow --hidden --no-ignore"  # fd 命令
-FZF_DEFAULT_COMMAND="$FZF_DEFAULT_COMMAND --type=file --type=symlink"  # filetype: file | symlink | directory | executable
-FZF_DEFAULT_COMMAND="$FZF_DEFAULT_COMMAND -E='.DS_Store' -E='.git' -E='*.swp'"  # skip 指定文件(夹)
-FZF_DEFAULT_COMMAND="$FZF_DEFAULT_COMMAND -E='**/.*/**'"  # 显示所有隐藏文件夹, 但 skip 隐藏文件夹中的文件
-FZF_DEFAULT_COMMAND="$FZF_DEFAULT_COMMAND -E='**/node_modules/**' -E='**/coverage/**'"  # 指定显示某些文件夹, 但 skip 文件夹中的文件
-FZF_DEFAULT_COMMAND="$FZF_DEFAULT_COMMAND -E='**/vendor/**' -E='**/dist/**' -E='**/out/**'"  # 同上
-export FZF_DEFAULT_COMMAND
+export FZF_DEFAULT_COMMAND="$fzf_def_cmd"
 
-# fzf 样式设置
-FZF_DEFAULT_OPTS="--height=80% --ansi --multi --layout=reverse --border --scrollbar='▌▐'"   # 可以添加 --no-mouse 禁用鼠标操作.
-# fzf 多选时, <TAB> 选中的项会出现 mark.
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --marker='✔' --pointer='▸' --info='inline-right'"
-# fzf 颜色主题 - dark; hl,hl+ 搜索匹配字符颜色; border 边框颜色; marker 颜色; pointer > 颜色; gutter 使用默认颜色.
-#FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --color='preview-scrollbar:240,preview-border:240'"  # 可以单独设置 preview
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --color='dark,hl:191:reverse,hl+:191:reverse,fg+:underline,bg+:238:bold,border:240'"
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --color='scrollbar:240,pointer:191,marker:191,gutter:-1,header:71:italic:underline'"
-# fzf preview 设置: 如果是 dir 则使用 tree; 如果是 file 使用 bat 进行 preview.
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --preview='([[ -d {} ]] && (tree -NC -L 1 {})) || ([[ -f {} ]] && (bat --color=always --style=numbers {}))'"
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --preview-window='right,60%,border-left'"
-# 以下是定义 fzf 快捷键作用
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='btab:change-preview-window(top,70%,border-bottom|hidden|)'" # change layout, btab=<Shift-Tab>
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-k:toggle-preview-wrap,ctrl-j:unbind(ctrl-j)'" # toggle wrap preview text. NOTE: ctr-k,ctrl-j 默认是 up/down
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='shift-up:half-page-up,shift-down:half-page-down'"  # result scroll
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='pgup:preview-half-page-up,pgdn:preview-half-page-down'"  # preview scroll
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-a:toggle-all'"  # multi-select
-# NOTE: Vim: Warning: Output not to a terminal. 解决方法: `vim/nvim file > /dev/tty`
-# NOTE: 将储存多选列表的临时文件路径 {+f} 传入 nvim 函数 FZF_selected() 中. 在 nvim 中处理文件名, 包括 rg 传入的 lnum, col ...
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-e:become($EDITOR \"+lua FZF_selected([[{+f}]])\" > /dev/tty)'"
-#FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-e:become($EDITOR -- {} > /dev/tty)'"  # nvim edit 光标所在行 file.
-# system open 光标所在行 file.
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-o:execute(open {})'"
-# header 中加入快捷键说明.
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --header='# <C-e>:Edit; <C-o>:Open; <S-Tab>:P-win; <C-k>:P-wrap, <Tab>:Select; <C-a>:Toggle-All-Selected'"
-export FZF_DEFAULT_OPTS
+# btab=<Shift-Tab>
+# Vim: Warning: Output not to a terminal. 解决方法: `vim/nvim "filepath" > /dev/tty`
+export FZF_DEFAULT_OPTS="--height=80% --ansi --multi --layout=reverse --border --scrollbar='▌▐' \
+	--marker='✔' --pointer='▸' --info='inline-right' \
+	--color='dark,hl:191:reverse,hl+:191:reverse,fg+:underline,bg+:238:bold,border:240' \
+	--color='scrollbar:240,pointer:191,marker:191,gutter:-1,header:71:italic:underline' \
+	--preview='([[ -d {} ]] && (tree -NC -L 1 {})) || ([[ -f {} ]] && (bat --color=always --style=numbers {}))' \
+	--preview-window='right,60%,border-left' \
+	--bind='btab:change-preview-window(top,70%,border-bottom|hidden|)' \
+	--bind='ctrl-k:toggle-preview-wrap' \
+	--bind='shift-up:half-page-up,shift-down:half-page-down' \
+	--bind='pgup:preview-half-page-up,pgdn:preview-half-page-down' \
+	--bind='ctrl-a:toggle-all' \
+	--bind='ctrl-e:become($EDITOR \"+lua FZF_selected([[{+f}]])\" > /dev/tty)' \
+	--bind='ctrl-o:execute(open {})' \
+	--header='# <C-e>:Edit; <C-o>:Open; <S-Tab>:P-win; <C-k>:P-wrap, <Tab>:Select; <C-a>:Toggle-All-Selected'"
 
-# --------------------------------------------------------------------------------------------------
-# NOTE: 需要先使用 '$(brew --prefix)/opt/fzf/install' 安装 key bindings 和 fuzzy completion.
-# --------------------------------------------------------------------------------------------------
-# Ctrl+T 快捷键 command 设置, 这里通过 --type 指定只显示 dir
-#export FZF_CTRL_T_COMMAND='find . -type f'  # 默认: 只查找隐藏文件.
-FZF_CTRL_T_COMMAND="fd --type=directory --follow --no-ignore --hidden --color=always"  # fd 命令
-FZF_CTRL_T_COMMAND="$FZF_CTRL_T_COMMAND -E='.git'"  # skip 指定文件夹
-FZF_CTRL_T_COMMAND="$FZF_CTRL_T_COMMAND -E='**/.*/**'"  # 显示所有隐藏文件夹, 但 skip 隐藏文件夹中的文件
-FZF_CTRL_T_COMMAND="$FZF_CTRL_T_COMMAND -E='**/node_modules/**' -E='**/coverage/**'"  # 指定显示某些文件夹, 但 skip 文件夹中的文件
-FZF_CTRL_T_COMMAND="$FZF_CTRL_T_COMMAND -E='**/vendor/**' -E='**/dist/**' -E='**/out/**'"  # 同上
-export FZF_CTRL_T_COMMAND
+# FZF_CTRL_T_COMMAND & FZF_CTRL_T_OPTS -----------------------------------------
+# NOTE: 需要先设置 key bindings 和 fuzzy completion.
+export FZF_CTRL_T_COMMAND="$fzf_def_cmd --type=directory"
 
 # Ctrl+T 快捷键 options 设置. 这里会继承 default 设置, 只需要覆盖设置.
-# NOTE: Ctrl+T 强制使用多选. 无论 FZF_CTRL_T_OPTS 有没有设置 --no-multi, 这里都强制多选.
-# unbind ctrl-e & ctrl-o 快捷键设置.
-FZF_CTRL_T_OPTS="--bind='ctrl-e:unbind(ctrl-e),ctrl-o:unbind(ctrl-o)'"
-# header 中加入快捷键说明.
-FZF_CTRL_T_OPTS="$FZF_CTRL_T_OPTS --header='# Dirs only, <Enter>:accept; <S-Tab>:Preview-win; <Tab>:Select; <C-a>:Toggle-All-Selected'"
-export FZF_CTRL_T_OPTS
+export FZF_CTRL_T_OPTS="--bind='start:unbind(ctrl-e)+unbind(ctrl-o)' \
+	 --header='# Dirs only, <Enter>:accept; <S-Tab>:Preview-win; <Tab>:Select; <C-a>:Toggle-All-Selected'"
 
-# Ctrl+R 快捷键 options 设置, Ctrl+R 不能设置 Command.
-# 这里会继承 default 设置, 只需要覆盖设置. default 中 --bind ctrl-e, ctrl-o 会导致编辑报错.
+# FZF_CTRL_R_OPTS, Ctrl+R 不能设置 Command. ------------------------------------
+# NOTE: Ctrl+R 不能设置 Command.
 # NOTE: CTRL+R 强制 --no-multi 禁止 <tab> multi select.
-FZF_CTRL_R_OPTS="--height=24 --preview-window=hidden"
-FZF_CTRL_R_OPTS="$FZF_CTRL_R_OPTS --bind='ctrl-e:unbind(ctrl-e),ctrl-o:unbind(ctrl-o)'"
-FZF_CTRL_R_OPTS="$FZF_CTRL_R_OPTS --header='# Command history, <Enter>:accept; <Esc>:cancel'"
-export FZF_CTRL_R_OPTS
+export FZF_CTRL_R_OPTS="--bind='start:unbind(ctrl-e)+unbind(ctrl-o)' \
+	--height=24 --preview-window=hidden \
+	--header='# Command history, <Enter>:accept; <Esc>:cancel'"
 
-# fzf auto completion 的设置 -----------------------------------------------------------------------
+# fzf auto completion 的设置 --------------------------------------------------
 # NOTE: fzf 的 auto completion 是智能触发的. 使用不同的前置命令会得到不同的结果.
 #   - '$ vim **<tab>' 这里会触发文件(filepath)查找命令;
 #   - '$ cd **<tab>' 会触发文件夹(dir)查找命令.
-# --------------------------------------------------------------------------------------------------
 # 使用 '\\<tab>' 触发 fzf. 默认值是 '**<tab>'.
 export FZF_COMPLETION_TRIGGER='\\'
 
 # 这里会继承 default 设置, 需要 unbind.
-export FZF_COMPLETION_OPTS="--bind='ctrl-e:unbind(ctrl-e),ctrl-o:unbind(ctrl-o)'"
+export FZF_COMPLETION_OPTS="--bind='start:unbind(ctrl-e)+unbind(ctrl-o)'"
 
+# fzf advance settings ---------------------------------------------------------
 # 定义 fzf autocomplete 文件路径(filepath)的 command.
 # eg: 'vim **<tab>'; '$ vim src/**<tab>'; '$ cat ~/**<tab>'
 _fzf_compgen_path() {
 	# find "$1" -type f
 	# "$1" 代表输入的前置路径, eg: "cat src/**<tab>" 从 src/ 开始搜索.
 	# "." 表示名字匹配
-	# 使用 FZF_DEFAULT_COMMAND 命令.
-	eval "$FZF_DEFAULT_COMMAND . $1"
+	eval "$fzf_def_cmd --type=file . $1"
 }
 
 # 定义 fzf autocomplete 文件夹路径(dir)的时候的 command. "$1" 代表输入的前置路径.
 # eg: '$ cd **<tab>'; 'cd ~/**<tab>'
 _fzf_compgen_dir() {
 	# find "$1" -type d
-	# 使用 FZF_CTRL_T_COMMAND 命令.
-	eval "$FZF_CTRL_T_COMMAND . $1"
+	eval "$fzf_def_cmd --type=directory . $1"
 }
 
-# *** NOTE: 该行必须放在整个 fzf 设置的最后 ***
-# 下面 shell script 的意思是, 如果 ~/.fzf.zsh 文件存在, source it.
-# -f 指定是 file, -d 指定是 dir
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# Advanced customization of fzf options via _fzf_comprun function
+# - The first argument to the function is the name of the command.
+# - You should make sure to pass the rest of the arguments to fzf.
+# _fzf_comprun() {
+#   local command=$1
+#   shift
+#
+#   case "$command" in
+#     cd)           fzf --preview 'tree -C {} | head -200'   "$@" ;;
+#     export|unset) fzf --preview "eval 'echo \$'{}"         "$@" ;;
+#     ssh)          fzf --preview 'dig {}'                   "$@" ;;
+#     *)            fzf --preview 'bat -n --color=always {}' "$@" ;;
+#   esac
+# }
 
+# NOTE: 必须安装 ripgrep
 # Ripgrep 文件内容查找 ----------------------------------------------------------------------------- {{{
 # --- [ rg bat vim/nvim 使用说明 ] ----------------------------------------------------------------- {{{
 # 需要安装 ripgrep, fzf, bat, nvim - 'brew install rg fzf bat nvim' 命令行工具
