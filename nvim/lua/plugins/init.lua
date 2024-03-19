@@ -75,7 +75,7 @@ local plugins = {
   --- By convention, if you want to write a query, use the `queries/` directory,
   --- but if you want to extend a query use the `after/queries/` directory.
   {"nvim-treesitter/nvim-treesitter",
-    commit = "6a2572c",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "03f6507",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     --build = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
     config = function() require("plugins.settings.treesitter") end,
     dependencies = {
@@ -198,7 +198,7 @@ local plugins = {
 
   --- 自动括号, 同时依赖 treesitter && cmp
   {"windwp/nvim-autopairs",
-    commit = "c6139ca",
+    commit = "797260f",
     config = function() require("plugins.settings.autopairs") end,
     dependencies = {
       "nvim-treesitter/nvim-treesitter",  -- setup() 中 `check_ts`, `ts_config` 需要 treesitter 支持.
@@ -212,7 +212,7 @@ local plugins = {
   --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
   --- 官方 LSP 引擎.
   {"neovim/nvim-lspconfig",
-    commit = "8c18318",
+    commit = "eb012f0",
     config = function() require("lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     dependencies = {
       "williamboman/mason.nvim",  -- 安装 lsp 命令行工具.
@@ -269,7 +269,8 @@ local plugins = {
   },
 
   {"rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
-    tag = "v4.0.0",
+    -- tag = "v4.0.0",
+    commit = "edfa93f",
     config = function() require("plugins.settings.dap_debug") end,  -- dap-ui && dap 设置在同一文件中.
     dependencies = {"mfussenegger/nvim-dap"},
 
