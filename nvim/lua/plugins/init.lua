@@ -89,7 +89,7 @@ local plugins = {
 
   --- 第一方 module 插件 ---
   {"nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-    commit = "b8b7e52",
+    commit = "2484f58",
     config = function() require("plugins.settings.treesitter_ctx") end,
 
     lazy = true,  -- nvim-treesitter 加载时自动加载.
@@ -212,7 +212,7 @@ local plugins = {
   --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
   --- 官方 LSP 引擎.
   {"neovim/nvim-lspconfig",
-    commit = "1f3ef31",
+    commit = "8c18318",
     config = function() require("lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     dependencies = {
       "williamboman/mason.nvim",  -- 安装 lsp 命令行工具.
@@ -269,8 +269,7 @@ local plugins = {
   },
 
   {"rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
-    -- tag = "v3.9.3",
-    commit = "9720eb5",
+    tag = "v4.0.0",
     config = function() require("plugins.settings.dap_debug") end,  -- dap-ui && dap 设置在同一文件中.
     dependencies = {"mfussenegger/nvim-dap"},
 
