@@ -5,7 +5,7 @@
 	# If true, then CJK chars will be displayed as Unicode. eg: cn, jp, kr ...
 	quotepath = off
 
-# NOTE: Only needs to setup [user] settings. check Password-Manager APP.
+# NOTE: Only needs to setup [user] settings.
 [user]
 	# name = foo
 	# email = foo@bar.com
@@ -16,6 +16,10 @@
 # extend gitconfig file
 # No error will occur if any or all of these files do not exist.
 [include]
+	# other git settings
 	path = ~/.gitconfig_ext
+	# neovim: difftool & mergetool
+	path = ~/.gitconfig_tools
+	# delta: git diff
 	path = ~/.gitconfig_delta
 

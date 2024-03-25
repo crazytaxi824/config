@@ -42,35 +42,3 @@
 	current = bold 42
 	local = 251
 	remote = 167
-
-# diff tool neovim
-[diff]
-	# 可以使用 git difftool --tool-help 查看可以使用的 tools. 有 vimdiff opendiff nvimdiff ...
-	# 如果 [diff] 缺省设置, 则在执行 `git difftool` 命令时默认会询问是否使用 `vimdiff`.
-	# 也可以使用 `git difftool --tool=nvimdiff master..feature/dev` 来指定 difftool.
-	# NOTE: 使用自定义 tool 时需要和自定义名字 [difftool "foo"] 相同.
-	tool = nvimdiff
-	# no | default(=zebra) | plain | blocks | zebra | dimmed-zebra
-	colorMoved = default
-[difftool]
-	# prompt 主要是询问需要 diff 的文件, 而不是询问 difftool.
-	# eg: git difftool master..develop 时多个文件有不同, 则 prompt 会询问每个文件是否需要打开.
-	prompt = true
-# [difftool "foo"]
-# 	cmd = nvim -d \"$LOCAL\" \"$REMOTE\"
-
-# merge tool neovim
-[merge]
-	# NOTE: merge tool 必须设置否则无法使用 git mergetool <...> 命令.
-	# 可以使用 git mergetool --tool-help 查看可以使用的 tools.
-	# 也可以使用 `git mergetool --tool=nvimdiff` 来指定 mergetool.
-	# NOTE: 使用自定义 tool 时需要和自定义名字 [mergetool "foo"] 相同.
-	# git merge 使用方法: `git checkout main`, `git merge dev`, Conflict: `git mergetool`
-	tool = nvimdiff
-	# "diff3", adds a ||||||| marker and the original text before the ======= marker.
-	conflictstyle = diff3
-[mergetool]
-	# prompt 主要是询问需要 merge 的文件, 而不是询问 mergetool.
-	prompt = true
-# [mergetool "foo"]
-# 	cmd = nvim -d \"$LOCAL\" \"$MERGED\" \"$BASE\" \"$REMOTE\" -c \"wincmd w\" -c \"wincmd J\"

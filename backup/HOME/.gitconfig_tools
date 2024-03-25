@@ -1,0 +1,43 @@
+# difftool neovim
+# git difftool 命令:
+# `git difftool master develop`  比较 master 分支和 develop 分支当前状态下的文件差异.
+# `git difftool master..develop` 比较自从 develop 分支从 master 分支分离出去之后，develop 分支上新增的改动. 即: 比较的是
+# 同一个分支 'develop' 在两个不同时间点上的改动.
+# `git difftool master develop -- path/to/file`
+[difftool]
+	# prompt 主要是询问需要 diff 的文件, 而不是询问 difftool.
+	prompt = true
+
+# `$ git difftool --tool-help` 查看可以使用的 tools. 有 vimdiff opendiff nvimdiff ...
+[diff]
+	# 如果 [diff] 缺省设置, 则在执行 `git difftool` 命令时默认会询问是否使用 `vimdiff`.
+	# 也可以使用 `git difftool --tool=nvimdiff master..feature/dev` 来指定 difftool.
+	tool = nvimdiff
+	# no | default(=zebra) | plain | blocks | zebra | dimmed-zebra
+	colorMoved = default
+
+# NOTE: 使用自定义 diff.tool=foo 时, 这里需要和自定义名字 [difftool "foo"] 相同.
+# 自定义使用 foo 作为 `git difftool ...` 时使用的命令.
+# `$ git config --get difftool.foo.cmd` 查看该设置.
+# [difftool "foo"]
+# 	cmd = nvim -d \"$LOCAL\" \"$REMOTE\"
+
+# mergetool neovim
+# git mergetool 命令: `git checkout main`, `git merge dev`, Conflict: `git mergetool`
+[mergetool]
+	# prompt 主要是询问需要 merge 的文件, 而不是询问 mergetool.
+	prompt = true
+
+# `$ git mergetool --tool-help` 查看可以使用的 tools. 有 vimdiff1,2,3 opendiff nvimdiff1,2,3 ...
+[merge]
+	# NOTE: merge.tool 必须设置否则无法使用 git mergetool <...> 命令.
+	# 也可以使用 `git mergetool --tool=nvimdiff` 来指定 mergetool.
+	tool = nvimdiff
+	# "diff3", adds a ||||||| marker and the original text before the ======= marker.
+	conflictstyle = diff3
+
+# NOTE: 使用自定义 merge.tool=foo 时, 这里需要和自定义名字 [mergetool "foo"] 相同.
+# 自定义使用 foo 作为 `git mergetool ...` 时使用的命令.
+# `$ git config --get mergetool.foo.cmd` 查看该设置.
+# [mergetool "foo"]
+# 	cmd = nvim -d \"$LOCAL\" \"$MERGED\" \"$BASE\" \"$REMOTE\" -c \"wincmd w\" -c \"wincmd J\"
