@@ -26,8 +26,8 @@ x = 1
 y = 4
 
 [font.glyph_offset]
-x = 0  # glyph move right `N` px. █
-y = 2  # glyph move up `N` px, 根据实际测试调整得到的值.
+x = 0  # glyph move right `N` px.
+y = 3  # glyph move up `N` px. NOTE: █
 
 [font.normal]
 family = "Fira Code"
