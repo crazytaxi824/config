@@ -4,13 +4,13 @@
 # DOC: lazygit 配置: https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md
 gui:
   # stuff relating to the UI
-  scrollHeight: 5                    # main pannel (右侧主窗口) pageup/pagedown 滚动 n 行, 不要超过 commandLogSize.
+  #scrollHeight: 5                   # main pannel (右侧主窗口) pageup/pagedown 滚动 n 行, 不要超过 commandLogSize.
   sidePanelWidth: 0.25               # 左侧边栏屏幕占比 (0~1)
   expandFocusedSidePanel: true       # 选中的 pannel 会变高
-  #mainPanelSplitMode: "horizontal"  # main pannel 分屏方式 'horizontal' | 'flexible'(*) | 'vertical'
   language: "en"                     # one of 'auto' | 'en' | 'zh' | 'pl' | 'nl'
-  commandLogSize: 8                  # 右下角 log 提示窗口所占行高
-  showFileTree: true                 # 左侧边栏文件显示使用 tree 模式(可折叠)
+  #mainPanelSplitMode: "horizontal"  # main pannel 分屏方式 'horizontal' | 'flexible'(*) | 'vertical'
+  #commandLogSize: 8                 # 右下角 log 提示窗口所占行高
+  #showFileTree: true                # 左侧边栏文件显示使用 tree 模式(可折叠)
   theme:
     activeBorderColor:  # cursor 所在 window 的 border 颜色.
       - yellow
@@ -24,8 +24,6 @@ gui:
       - blue
     selectedLineBgColor:   # 左侧菜单中 cursor line bg 颜色.
       - '#4E4E4E'
-    selectedRangeBgColor:  # stage / unstage line color
-      - reverse
     cherryPickedCommitFgColor:  # Commits window 中使用 'c' 选择 cherry pick 的文字颜色.
       - magenta
       - bold
@@ -88,8 +86,8 @@ git:
   allBranchesLogCmd: "git log --date=format:'%d-%b-%Y %H:%M:%S' --graph --all --format=format:'%C(auto)%h -%d %C(74)%ad %C(243)(%ar) - %C(173)%an%C(reset)%n''          %C(auto)%s%n'' '"
 
   # git 状态刷新
-  autoFetch: true    # 自动执行 git fetch, 可以检查 remote 和 local git 的状态不同.
-  autoRefresh: true  # 自动刷新本地 git 文件状态
+  #autoFetch: true    # 自动执行 git fetch, 可以检查 remote 和 local git 的状态不同.
+  #autoRefresh: true  # 自动刷新本地 git 文件状态
 
 # open & edit file
 # os:
@@ -105,28 +103,25 @@ git:
 # 打开 lazygit 的文件夹不是 git repository 文件夹时的 action
 # prompt - 选择是否创建 repository
 # create - 创建 git repository
-notARepository: 'skip' # one of: 'prompt' | 'create' | 'skip'
+notARepository: 'quit' # one of: 'prompt' | 'create' | 'skip' | 'quit'
 
 # 这里 keybinding 设置主要是为了避免误操作, 将 key 绑定到不常用键上.
 # keybinding 的键是可以重复的.
 keybinding:
   # 通用快捷键
   universal:
-    undo: null       # 危险操作
-    redo: null       # 危险操作
     pullFiles: null  # use 'fetch' instead of 'pull', 慎用.
     gotoTop: 'g'     # go to top of list
     gotoBottom: 'G'  # go to bottom of list
-  # file (window No.1)
+  # file (window No.2)
   files:
-    fetch: null
-    commitChangesWithoutHook: null
+    commitChangesWithoutHook: null  # commit changes without pre-commit hook
   submodules:
     init: null  # [Submodules] 项目子仓库, 使用 'b' 打开 menu 操作
   # branch (window No.3)
   branches:
     rebaseBranch: null # use 'rebase-checkout' carefully.
-    fastForward: null  # fast-forward this branch from its upstream
+    fastForward: null  # fast-forward this branch from its upstream. 最好使用 merge.
     forceCheckoutBranch: null
     #fetchRemote: 'f'   # 切换至 [Remotes] 才能 fetch, 默认为 'f'
   # commit (window No.4)
