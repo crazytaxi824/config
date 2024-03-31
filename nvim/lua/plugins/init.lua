@@ -268,11 +268,20 @@ local plugins = {
     lazy = true,  -- nvim-dap-ui 加载时自动加载.
   },
 
+  {"nvim-neotest/nvim-nio",
+    commit = "33c62b3",
+
+    lazy = true,  -- nvim-dap-ui 加载时自动加载.
+  },
+
   {"rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
     -- tag = "v4.0.0",
     commit = "edfa93f",
     config = function() require("plugins.settings.dap_debug") end,  -- dap-ui && dap 设置在同一文件中.
-    dependencies = {"mfussenegger/nvim-dap"},
+    dependencies = {
+      "mfussenegger/nvim-dap",
+      "nvim-neotest/nvim-nio",  -- NOTE: 依赖, 必须安装.
+    },
 
     cmd = {'DapToggleBreakpoint', 'DapContinue', 'DapLoadLaunchJSON'},
   },
