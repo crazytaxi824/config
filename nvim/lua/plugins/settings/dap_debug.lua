@@ -27,6 +27,7 @@ end
 
 local dapui_status_ok, dapui = pcall(require, "dapui")
 if not dapui_status_ok then
+  Notify("dap-ui NOT loaded", "ERROR")
   return
 end
 
@@ -96,8 +97,6 @@ vim.api.nvim_set_hl(0, 'DapStoppedLineHL', { ctermbg = 24 })
 vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "DapBreakpointHL", numhl = "", linehl="" })
 vim.fn.sign_define("DapBreakpointRejected", { text = "◌", texthl = "DapBreakpointRejectedHL", numhl = "", linehl="" })
 vim.fn.sign_define("DapStopped", { text = "→", texthl = "DapStoppedHL", numhl = "", linehl="DapStoppedLineHL" })
-
---vim.api.nvim_set_hl(0, 'DapUINormal', { ctermfg = 191 })  -- dapui 中的文字颜色.
 -- -- }}}
 
 --- nvim-dap-ui settings --------------------------------------------------------------------------- {{{
@@ -133,6 +132,11 @@ local config = {
       position = "bottom",
       size = 0.25, -- 25% of total lines (height)
     },
+  },
+  icons = {
+    collapsed = "▶︎",
+    current_frame = "⨠",
+    expanded = "▽"
   },
 
   --- winbar
