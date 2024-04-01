@@ -117,11 +117,12 @@ local function close_debug_tab_and_buffers()
   dap.terminate({},{terminateDebugee = true}, function()
     local dapui_status_ok, dapui = pcall(require, "dapui")
     if dapui_status_ok then
-      --- VVI: 如果在 dap.repl.close() 之后再执行 dapui.close() 会重新打开 [dap-repl] buffer.
+      --- NOTE: 如果在 dap.repl.close() 之后再执行 dapui.close() 会重新打开 [dap-repl] buffer.
       dapui.close()  -- close all dap-ui windows
     end
 
-    dap.repl.close()  -- close dap-repl console window && wipeout [dap-repl] buffer.
+    --- NOTE: 不太需要 wipeout repl buffer.
+    --dap.repl.close()  -- close dap-repl console window && wipeout [dap-repl] buffer.
 
     --- 如果自己是 last tab 则不执行 tabclose, 但是删除 tabvar.
     local tab_list = vim.api.nvim_list_tabpages()
