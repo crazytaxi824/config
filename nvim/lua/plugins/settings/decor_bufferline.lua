@@ -298,7 +298,7 @@ local function close_current_tab()
   --- `:tabclose` 关闭整个 tab
   --- `:bdelete 1 2 3` 删除 tab 中的所有 buffer
   if #del_nochanged_buf_list > 0 then
-    --- TODO tabclose 之后, 判断 buffer 是否存在.
+    --- tabclose 之后, 判断 buffer 是否存在.
     for _, bufnr in ipairs(del_nochanged_buf_list) do
       if vim.api.nvim_buf_is_valid(bufnr) and vim.fn.buflisted(bufnr) == 1 then
         vim.cmd('bdelete ' .. bufnr)
