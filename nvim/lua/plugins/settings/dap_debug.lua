@@ -83,7 +83,7 @@ vim.api.nvim_set_hl(0, 'DapStoppedLineHL', { ctermbg = 24 })
 
 vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "DapBreakpointHL", numhl = "", linehl="" })
 vim.fn.sign_define("DapBreakpointRejected", { text = "◌", texthl = "DapBreakpointRejectedHL", numhl = "", linehl="" })
-vim.fn.sign_define("DapStopped", { text = "→", texthl = "DapStoppedHL", numhl = "", linehl="DapStoppedLineHL" })
+vim.fn.sign_define("DapStopped", { text = "", texthl = "DapStoppedHL", numhl = "", linehl="DapStoppedLineHL" })
 -- -- }}}
 
 --- functions -------------------------------------------------------------------------------------- {{{
@@ -106,6 +106,9 @@ local function open_new_tab_for_debug()
   --- 标记该 tab.
   local curr_tab_id = vim.api.nvim_get_current_tabpage()
   vim.t[curr_tab_id][tabvar_debug] = true
+
+  --- 返回 win id
+  return vim.api.nvim_get_current_win()
 end
 
 --- terminate debug && close debug tab/buffers
@@ -146,29 +149,29 @@ end
 --- 开启 new tab 进行 debug ------------------------------------------------------------------------
 --- https://github.com/rcarriga/nvim-dap-ui#usage & `:help dap-extensions`
 --- 启动 debug 之前先打开 new tab
-dap.listeners.before.event_initialized["dapui_config"] = function()
+dap.listeners.before.event_initialized["foo"] = function()
   open_new_tab_for_debug()
 end
 
 --- 启动 debug 之后, 打开 dap-ui windows
-dap.listeners.after.event_initialized["dapui_config"] = function()
-    local dapui_status_ok, dapui = pcall(require, "dapui")
-    if dapui_status_ok then
-      dapui.open()  -- will open dap-ui layouts in new tab.
-    end
+dap.listeners.after.event_initialized["foo"] = function()
+  local dapui_status_ok, dapui = pcall(require, "dapui")
+  if dapui_status_ok then
+    dapui.open()  -- will open dap-ui layouts in new tab.
+  end
 end
 
 --- other hook events ---------------------------------------------------------- {{{
 --- debug job done 之前 close debug tab, dap-repl, dap-ui windows
 --- NOTE: 不要自动关闭, 使用自定义函数手动关闭.
--- dap.listeners.before.event_terminated["dapui_config"] = function()
+-- dap.listeners.before.event_terminated["foo"] = function()
 --   print('event terminated')
 --   vim.cmd('stopinsert')
 --   close_debug_tab_and_buffers()
 -- end
 
 --- NOTE: Not working right now.
--- dap.listeners.before.event_exited["dapui_config"] = function()
+-- dap.listeners.before.event_exited["foo"] = function()
 --   print('event exited')
 --   vim.cmd('stopinsert')
 --   close_debug_tab_and_buffers()
