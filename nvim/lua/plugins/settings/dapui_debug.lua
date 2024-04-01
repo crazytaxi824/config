@@ -49,15 +49,20 @@ dapui.setup({
     --- Display controls in this element
     element = "repl",
     icons = {
-      pause = "[Pause]",
-      play = "[▶️ Play]",
+      play = "[▶️ Continue]",
       step_into = "[⊻ Into <F11>]",  -- ⇩↧⊻
       step_over = "[⨠ Over <F10>]",  -- ↷⨠
       step_out = "[⊼ Out <S-F11>]",   -- ⇧↥⊼
-      step_back = "[↩︎ Back]",  -- ↶↩︎
       run_last = "[⟳  Restart]",   -- ↻⟳
-      disconnect = "[✕ disconnect]",  -- ✕✖︎✗✘⛌
       terminate = "[■ Stop]",
+
+      --- 不常用
+      disconnect = "",
+      pause = "",
+      step_back = "",
+      -- disconnect = "[✕ disconnect]",  -- ✕✖︎✗✘⛌
+      -- pause = "[Pause]",
+      -- step_back = "[↩︎ Back]",  -- ↶↩︎
     },
   },
 
