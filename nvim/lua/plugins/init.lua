@@ -263,9 +263,10 @@ local plugins = {
   {"mfussenegger/nvim-dap",  -- core debug tool
     -- tag = "0.7.0",
     commit = "405df1d",
+    config = function() require("plugins.settings.dap_debug") end,
     dependencies = {"williamboman/mason.nvim"},  -- install dap-debug tools. eg: 'delve'
 
-    lazy = true,  -- nvim-dap-ui 加载时自动加载.
+    cmd = {'DapToggleBreakpoint', 'DapContinue', 'DapLoadLaunchJSON'},
   },
 
   {"nvim-neotest/nvim-nio",
@@ -277,13 +278,13 @@ local plugins = {
   {"rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
     -- tag = "v4.0.0",
     commit = "edfa93f",
-    config = function() require("plugins.settings.dap_debug") end,  -- dap-ui && dap 设置在同一文件中.
+    config = function() require("plugins.settings.dapui_debug") end,
     dependencies = {
       "mfussenegger/nvim-dap",
       "nvim-neotest/nvim-nio",  -- NOTE: 依赖, 必须安装.
     },
 
-    cmd = {'DapToggleBreakpoint', 'DapContinue', 'DapLoadLaunchJSON'},
+    lazy = true,  -- nvim-dap config 文件中 require dapui.
   },
 
   --- Useful Tools ---------------------------------------------------------------------------------
