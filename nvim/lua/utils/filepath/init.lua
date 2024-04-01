@@ -8,20 +8,26 @@ local M = {
 }
 
 M.setup = function(bufnr)
+  local g_id = vim.api.nvim_create_augroup('my_filepath_highlight_' .. bufnr, {clear=true})
+
   --- autocmd highlight filepath under cursor
   vim.api.nvim_create_autocmd({"CursorHold"}, {
+    group = g_id,
     buffer = bufnr,
     callback = function(params)
       fp_hl.highlight_filepath()
-    end
+    end,
+    desc = "highlight filepath under cursor",
   })
 
   --- clear highlight when cursor leave buffer.
   vim.api.nvim_create_autocmd({"BufLeave"}, {
+    group = g_id,
     buffer = bufnr,
     callback = function(params)
       fp_hl.highlight_clear_cache()
-    end
+    end,
+    desc = "clear highlight when cursor leave buffer",
   })
 
   --- set keymap jump to file/dir
