@@ -283,9 +283,10 @@ vim.api.nvim_create_autocmd('FileType', {
   desc = "set expandtab, tabstop, shiftwidth for python",
 })
 
---- `:help ft-markdown-plugin`. markdown 中 'expandtab' will be set by default.
---- 如果需要使用到 \t 则使用设置:
+--- `:help ft-markdown-plugin`.
+--- markdown 中 'expandtab' will be set by default. 如果需要使用到 \t 则使用设置:
 vim.g.markdown_recommended_style = 0
+vim.g.markdown_folding = 1
 
 -- -- }}}
 
