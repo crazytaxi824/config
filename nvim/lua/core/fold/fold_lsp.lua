@@ -17,7 +17,7 @@ M.debug = function()
 end
 
 --- `set foldexpr=xxx` 用
---- NOTE: 每次 `set foldmethod=expr` 都会重新执行 foldexpr
+--- NOTE: 每次 `set foldmethod=expr` 都会重新执行 foldexpr()
 M.foldexpr = function(lnum)
   local bufnr = vim.api.nvim_get_current_buf()
   if str_cache[bufnr] then
@@ -102,7 +102,8 @@ local function lsp_fold_request(bufnr, win_id)
         --- parse lsp response fold range
         parse_fold_data(bufnr, data.result, tmp_cache, foldnestmax)
 
-        --- NOTE: 在计算完 lsp_fold 之后再设置 foldmethod=expr, 因为每次 `set foldmethod=expr` 都会重新执行 foldexpr
+        --- NOTE: 在计算完 lsp_fold 之后再设置 foldmethod=expr 否则无法 Fold.
+        --- VVI: buf_request_all() 是一个异步函数, 这里在异步函数的回调函数里所以可以保证执行顺序.
         if win_is_valid then
           vim.api.nvim_win_call(win_id, function()
             vim.opt_local.foldmethod = 'expr'
@@ -127,8 +128,8 @@ M.set_fold = function(client, bufnr, win_id)
   vim.api.nvim_win_call(win_id, function()
     vim.opt_local.foldexpr = 'v:lua.require("core.fold.fold_lsp").foldexpr(v:lnum)'
     vim.opt_local.foldtext = 'v:lua.require("core.fold.foldtext").foldtext_lsp()'
-    --- NOTE: 在计算完 lsp_fold 之后再设置 foldmethod=expr, 因为每次 `set foldmethod=expr` 都会重新执行 foldexpr
-    --vim.opt_local.foldmethod = 'expr'
+    --- VVI: 在 lsp_fold 计算完成之后再设置 foldmethod=expr 否则无法 Fold.
+    --- 这里是在 buf_request_all() 的回调函数里设置 foldmethod 以保证执行顺序.
   end)
 
   --- vim.lsp.buf_request_all()
@@ -141,7 +142,7 @@ M.set_fold = function(client, bufnr, win_id)
     group = g_id,
     buffer = bufnr,
     callback = function(params)
-      --- set_fold() 时会重新设置 `set foldexpr` 会触发 foldexpr 重新计算.
+      --- 重新设置 `set foldmethod` 会触发 foldexpr 重新计算.
       lsp_fold_request(params.buf, vim.api.nvim_get_current_win())
     end,
     desc = "set foldexpr for lsp textDocument/foldingRange"
