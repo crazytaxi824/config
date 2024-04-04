@@ -79,7 +79,7 @@ end
 --- 发送 'textDocument/foldingRange' 请求到 lsp, 分析 response, 然后按照 foldexpr 的格式记录.
 --- https://github.com/kevinhwang91/nvim-ufo/blob/main/lua/ufo/provider/lsp/nvim.lua
 --- 必须保证 lsp 的 client.server_capabilities.foldingRangeProvider == true
-local function lsp_fold_request(bufnr, win_id)
+M.lsp_fold_request = function(bufnr, win_id)
   local params = {textDocument = require('vim.lsp.util').make_text_document_params(bufnr)}
   vim.lsp.buf_request_all(bufnr, 'textDocument/foldingRange', params, function(resps)
     --- VVI: 获取到 resps 之后再 init cache.
@@ -133,17 +133,17 @@ M.set_fold = function(client, bufnr, win_id)
   end)
 
   --- vim.lsp.buf_request_all()
-  lsp_fold_request(bufnr, win_id)
+  M.lsp_fold_request(bufnr, win_id)
 
   --- update foldexpr
   --- 文件 save 后重新计算 foldexpr.
   local g_id = vim.api.nvim_create_augroup('my_lsp_fold_' .. bufnr, {clear=true})
-  vim.api.nvim_create_autocmd("BufWritePost", {
+  vim.api.nvim_create_autocmd({"BufWritePost", "FileChangedShellPost"}, {
     group = g_id,
     buffer = bufnr,
     callback = function(params)
       --- 重新设置 `set foldmethod` 会触发 foldexpr 重新计算.
-      lsp_fold_request(params.buf, vim.api.nvim_get_current_win())
+      M.lsp_fold_request(params.buf, vim.api.nvim_get_current_win())
     end,
     desc = "set foldexpr for lsp textDocument/foldingRange"
   })
