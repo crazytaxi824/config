@@ -6,42 +6,38 @@ local M = {}
 
 --- table, 记录 foldexpr 格式. { bufnr = { lnum: expr }}
 --- VVI: foldexpr='v:lua.xxx' 设置时, vim 中的 table key 必须是连续的 int, 或者是 string.
-local str_cache = {}
+local foldlevel_cache = {}
 
 local function clear_cache(bufnr)
-  str_cache[bufnr] = nil
+  foldlevel_cache[bufnr] = nil
 end
 
 M.debug = function()
-  vim.print(str_cache)
+  vim.print(foldlevel_cache)
 end
 
 --- `set foldexpr=xxx` 用
 --- NOTE: 每次 `set foldmethod=expr` 都会重新执行 foldexpr()
 M.foldexpr = function(lnum)
   local bufnr = vim.api.nvim_get_current_buf()
-  if str_cache[bufnr] then
-    return str_cache[bufnr][lnum] or "0"
+  if foldlevel_cache[bufnr] then
+    return foldlevel_cache[bufnr][lnum] or 0
   end
-  return "0"
+  return 0
 end
 
 --- 初始化两个 list 用于计算和缓存 foldmethod=expr 结果.
 local function init_expr_cache(bufnr)
-  local tmp_cache = {}  -- tmp_cache 只在计算的时候临时使用.
-  str_cache[bufnr] = {}
+  foldlevel_cache[bufnr] = {}
 
   local line_count = vim.api.nvim_buf_line_count(bufnr)
   for i = 1, line_count, 1 do
-    tmp_cache[i] = 0
-    str_cache[bufnr][i] = "0"
+    foldlevel_cache[bufnr][i] = 0
   end
-
-  return tmp_cache
 end
 
 --- 将 foldingRange 返回的数据按照 foldexpr 的格式记录到 list cache 中.
-local function parse_fold_data(bufnr, fold_range, tmp_cache, foldnestmax)
+local function parse_fold_data(bufnr, fold_range, foldnestmax)
   -- fold:
   --   kind = "comment",   -- (optional), "comment", "imports" ...
   --   startLine = 13      -- 0-index, 等于 vim 的 line_num - 1
@@ -54,22 +50,17 @@ local function parse_fold_data(bufnr, fold_range, tmp_cache, foldnestmax)
       goto continue
     end
 
-    --- 最多标记到 foldnestmax level.
-    if tmp_cache[fold.startLine + 1] + 1 > foldnestmax then
-      goto continue
-    end
-
     local startLine = fold.startLine + 1
     local endLine = fold.endLine + 1
 
+    --- 最多标记到 foldnestmax level.
+    if foldlevel_cache[bufnr][startLine] + 1 > foldnestmax then
+      goto continue
+    end
+
     --- 根据 fold range 计算 foldexpr 的值.
     for i = startLine, endLine, 1 do
-      tmp_cache[i] = tmp_cache[i] + 1
-      if i == startLine then
-        str_cache[bufnr][i] = ">" .. tmp_cache[i]
-      else
-        str_cache[bufnr][i] = tostring(tmp_cache[i])
-      end
+      foldlevel_cache[bufnr][i] = foldlevel_cache[bufnr][i] + 1  --- VVI: increase foldlevel
     end
 
     ::continue::
@@ -84,7 +75,7 @@ M.lsp_fold_request = function(bufnr, win_id)
   vim.lsp.buf_request_all(bufnr, 'textDocument/foldingRange', params, function(resps)
     --- VVI: 获取到 resps 之后再 init cache.
     --- 否则可能出现 init cache 之后, buf_request_all() 失败导致 str_cache[bufnr] = {'0', ...} 被全部初始化为 "0".
-    local tmp_cache = init_expr_cache(bufnr)
+    init_expr_cache(bufnr)
 
     --- resps = { client_id: data }.
     for lsp_client_id, data in pairs(resps) do
@@ -100,7 +91,7 @@ M.lsp_fold_request = function(bufnr, win_id)
         end
 
         --- parse lsp response fold range
-        parse_fold_data(bufnr, data.result, tmp_cache, foldnestmax)
+        parse_fold_data(bufnr, data.result, foldnestmax)
 
         --- NOTE: 在计算完 lsp_fold 之后再设置 foldmethod=expr 否则无法 Fold.
         --- VVI: buf_request_all() 是一个异步函数, 这里在异步函数的回调函数里所以可以保证执行顺序.
