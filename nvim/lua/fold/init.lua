@@ -1,7 +1,15 @@
 local expr_lsp = require("fold.fold_lsp")
 local expr_ts = require("fold.fold_treesitter")
 
-local bufvar_fold = "my_fold"  -- 记录 fold 是否设置成功
+local lsp_list = require("lsp.lsp_config.lsp_list")
+
+--- map[filetype] = lsp, 用于判断使用 lsp fold OR treesitter fold.
+local filetype_lsp = {}
+for lsp_svr, v in pairs(lsp_list) do
+  for _, ft in ipairs(v.filetypes) do
+    filetype_lsp[ft] = lsp_svr
+  end
+end
 
 --- 使用 lsp 来 fold, 如果 lsp_fold 设置成功则返回 true.
 local function fold_lsp(client, bufnr, win_id)
@@ -21,32 +29,10 @@ vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(params)
     local win_id = vim.api.nvim_get_current_win()
 
-    --- foldmethod 可能是 marker, indent, expr...
-    --- foldmethod ~= manual 说明其他插件已经设置过 foldmethod.
-    if vim.wo[win_id].foldmethod ~= 'manual' then
+    --- 确保当前 focused window 没有加载其他 buffer.
+    if vim.api.nvim_win_get_buf(win_id) ~= params.buf then
       return
     end
-
-    local client = vim.lsp.get_client_by_id(params.data.client_id)
-
-    --- 两种情况:
-    --- - foldmethod 未被设置. LspAttach 在 defer_fn 之前触发.
-    --- - foldexpr 是 nvim-treesitter 设置. LspAttach 在 fold-treesitter 设置之后触发, 覆盖 treesitter 设置. 这种情况下会造成2次 fold 计算.
-    if vim.b[params.buf][bufvar_fold] == 'treesitter' then
-      if fold_lsp(client, params.buf, win_id) then
-        vim.b[params.buf][bufvar_fold] = "lsp"
-        return
-      end
-    end
-  end,
-  desc = "Fold: fold-lsp when LspAttach",
-})
-
---- fallback to nvim-treesitter foldexpr 延迟触发 --------------------------------------------------
-vim.api.nvim_create_autocmd("BufWinEnter", {
-  pattern = {"*"},
-  callback = function(params)
-    local win_id = vim.api.nvim_get_current_win()
 
     --- foldmethod 可能是 marker, indent, expr...
     --- foldmethod ~= manual 说明其他插件已经设置过 foldmethod.
@@ -55,61 +41,82 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
     end
 
     --- fold 已经设置成功了.
-    if vim.b[params.buf][bufvar_fold] then
+    if vim.wo[win_id].foldexpr ~= "0" then
+      return
+    end
+
+    local client = vim.lsp.get_client_by_id(params.data.client_id)
+
+    --- 如果 lsp 和 filetype 不对应则返回, 防止 null-ls 等 lsp 工具参与设置 fold.
+    if filetype_lsp[vim.bo[params.buf].filetype] ~= client.name then
+      return
+    end
+
+    --- try fold-lsp
+    if not fold_lsp(client, params.buf, win_id) then
+      --- try fold-treesitter
+      fold_treesitter(params.buf, win_id)
+    end
+  end,
+  desc = "Fold: fold-lsp when LspAttach",
+})
+
+--- 如果 vim.b.lsp 不存在, 则直接使用 treesitter fold.
+--- 如果 vim.b.lsp 存在, 则等 LspAttach 时候看 lsp client 是否支持 'textDocument/foldingRange',
+--- 如果 lsp 支持则使用 lsp fold, 如果不支持则使用 treesitter fold.
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = {"*"},
+  callback = function(params)
+    --- 如果是有 lsp 的 filetype 则等 LspAttach 时设置 fold.
+    if vim.tbl_contains(vim.tbl_keys(filetype_lsp), vim.bo[params.buf].filetype) then
+      return
+    end
+
+    local win_id = vim.api.nvim_get_current_win()
+
+    --- 确保当前 focused window 没有加载其他 buffer.
+    if vim.api.nvim_win_get_buf(win_id) ~= params.buf then
+      return
+    end
+
+    --- foldmethod 可能是 marker, indent, expr...
+    --- foldmethod ~= manual 说明其他插件已经设置过 foldmethod.
+    if vim.wo[win_id].foldmethod ~= 'manual' then
+      return
+    end
+
+    --- fold 已经设置成功了.
+    if vim.wo[win_id].foldexpr ~= "0" then
       return
     end
 
     --- try fold-treesitter
-    if fold_treesitter(params.buf, win_id) then
-      vim.b[params.buf][bufvar_fold] = 'treesitter'
-    end
-
-    --- NOTE: 确保这里的 defer_fn() 的延迟在 LspAttach 之后执行, 否则会重复设置 `set foldmethod`, 导致重复计算.
-    vim.defer_fn(function()
-      --- 执行 `set foldxxx` 时判断 win_id 是否存在.
-      if not vim.api.nvim_win_is_valid(win_id) then
-        return
-      end
-
-      --- window 中加载的 buffer 没有改变.
-      if vim.api.nvim_win_get_buf(win_id) ~= params.buf then
-        return
-      end
-
-      --- foldmethod ~= manual 说明其他插件已经设置过 foldmethod.
-      if vim.wo[win_id].foldmethod ~= 'manual' then
-        return
-      end
-
-      vim.api.nvim_win_call(win_id, function()
-        vim.opt_local.foldmethod = 'expr'
-      end)
-    end, 800)
+    fold_treesitter(params.buf, win_id)
   end,
-  desc = "Fold: fallback to fold-treesitter",
+  desc = "Fold: fold-treesitter when FileType",
 })
 
 --- 手动强制重新设置 fold --------------------------------------------------------------------------
 --- 先尝试 fold-lsp, 如果不存在则尝试 fold-treesitter
-local function fold(win_id)
-  local bufnr = vim.api.nvim_win_get_buf(win_id)
-  local clients = vim.lsp.get_active_clients({bufnr=bufnr})
-  for _, client in ipairs(clients) do
-    if fold_lsp(client, bufnr, win_id) then
-      vim.b[bufnr][bufvar_fold] = "lsp"
-      return
-    end
-  end
-
-  if fold_treesitter(bufnr, win_id) then
-    vim.b[bufnr][bufvar_fold] = 'treesitter'
-  end
-end
-
---- user command
-vim.api.nvim_create_user_command("Fold", function()
-  fold(vim.api.nvim_get_current_win())
-end, {bang=true, bar=true})
+-- local function fold(win_id)
+--   local bufnr = vim.api.nvim_win_get_buf(win_id)
+--   local clients = vim.lsp.get_active_clients({bufnr=bufnr})
+--   for _, client in ipairs(clients) do
+--     if fold_lsp(client, bufnr, win_id) then
+--       buf_lsp[bufnr].fold = "lsp"
+--       return
+--     end
+--   end
+--
+--   if fold_treesitter(bufnr, win_id) then
+--     buf_lsp[bufnr].fold = "treesitter"
+--   end
+-- end
+--
+-- --- user command
+-- vim.api.nvim_create_user_command("Fold", function()
+--   fold(vim.api.nvim_get_current_win())
+-- end, {bang=true, bar=true})
 
 
 
