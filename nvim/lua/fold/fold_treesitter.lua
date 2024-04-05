@@ -15,10 +15,15 @@ M.set_fold = function(bufnr, win_id)
     return
   end
 
-  vim.api.nvim_win_call(win_id, function ()
-    vim.opt_local.foldexpr = 'nvim_treesitter#foldexpr()'
-    vim.opt_local.foldtext = 'v:lua.require("fold.foldtext").foldtext()'
-  end)
+  -- vim.api.nvim_win_call(win_id, function ()
+  --   vim.opt_local.foldexpr = 'nvim_treesitter#foldexpr()'
+  --   vim.opt_local.foldtext = 'v:lua.require("fold.foldtext").foldtext()'
+  --   vim.opt_local.foldmethod = 'expr'
+  -- end)
+  local opts = { scope = 'local', win = win_id }
+  vim.api.nvim_set_option_value('foldexpr', 'nvim_treesitter#foldexpr()', opts)
+  vim.api.nvim_set_option_value('foldtext', 'v:lua.require("fold.foldtext").foldtext()', opts)
+  vim.api.nvim_set_option_value('foldmethod', 'expr', opts)
 
   return true  -- 设置成功
 end

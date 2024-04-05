@@ -95,10 +95,8 @@ M.lsp_fold_request = function(bufnr, win_id)
 
         --- NOTE: 在计算完 lsp_fold 之后再设置 foldmethod=expr 否则无法 Fold.
         --- VVI: buf_request_all() 是一个异步函数, 这里在异步函数的回调函数里所以可以保证执行顺序.
-        if win_is_valid then
-          vim.api.nvim_win_call(win_id, function()
-            vim.opt_local.foldmethod = 'expr'
-          end)
+        if win_is_valid and vim.api.nvim_win_get_buf(win_id) == bufnr then
+          vim.api.nvim_set_option_value('foldmethod', 'expr', { scope = 'local', win = win_id })
         end
 
         --- 只计算一次 foldexpr
@@ -116,12 +114,11 @@ M.set_fold = function(client, bufnr, win_id)
 
   --- VVI: buf_request_all() 是一个异步函数, 所以 set foldexpr foldnestmax foldmethod 写在
   --- buf_request_all() 的前面或者后面效果都一样, 都会在 buf_request_all() 的前面运行.
-  vim.api.nvim_win_call(win_id, function()
-    vim.opt_local.foldexpr = 'v:lua.require("fold.fold_lsp").foldexpr(v:lnum)'
-    vim.opt_local.foldtext = 'v:lua.require("fold.foldtext").foldtext_lsp()'
-    --- VVI: 在 lsp_fold 计算完成之后再设置 foldmethod=expr 否则无法 Fold.
-    --- 这里是在 buf_request_all() 的回调函数里设置 foldmethod 以保证执行顺序.
-  end)
+  local opts = { scope = 'local', win = win_id }
+  vim.api.nvim_set_option_value('foldexpr', 'v:lua.require("fold.fold_lsp").foldexpr(v:lnum)', opts)
+  vim.api.nvim_set_option_value('foldtext', 'v:lua.require("fold.foldtext").foldtext_lsp()', opts)
+  --- VVI: 在 lsp_fold 计算完成之后再设置 foldmethod=expr 否则无法 Fold.
+  --- 这里是在 buf_request_all() 的回调函数里设置 foldmethod 以保证执行顺序.
 
   --- vim.lsp.buf_request_all()
   M.lsp_fold_request(bufnr, win_id)
