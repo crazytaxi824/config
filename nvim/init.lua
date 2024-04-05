@@ -35,6 +35,7 @@ require "core"     -- VVI: 必须放在最前面加载, 因为有全局函数需
 require "lsp"      -- 加载 vim.lsp/vim.diagnostic 相关设置. 这里不是 lspconfig 插件设置, 是内置参数设置.
 
 require "plugins"  -- 加载 plugins 和 plugins' settings
+require "fold"     -- VVI: fold 放在 lspconfig 之后加载.
 require "misc"     -- 其他设置.
 
 

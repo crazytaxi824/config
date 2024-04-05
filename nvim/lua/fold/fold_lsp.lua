@@ -117,8 +117,8 @@ M.set_fold = function(client, bufnr, win_id)
   --- VVI: buf_request_all() 是一个异步函数, 所以 set foldexpr foldnestmax foldmethod 写在
   --- buf_request_all() 的前面或者后面效果都一样, 都会在 buf_request_all() 的前面运行.
   vim.api.nvim_win_call(win_id, function()
-    vim.opt_local.foldexpr = 'v:lua.require("core.fold.fold_lsp").foldexpr(v:lnum)'
-    vim.opt_local.foldtext = 'v:lua.require("core.fold.foldtext").foldtext_lsp()'
+    vim.opt_local.foldexpr = 'v:lua.require("fold.fold_lsp").foldexpr(v:lnum)'
+    vim.opt_local.foldtext = 'v:lua.require("fold.foldtext").foldtext_lsp()'
     --- VVI: 在 lsp_fold 计算完成之后再设置 foldmethod=expr 否则无法 Fold.
     --- 这里是在 buf_request_all() 的回调函数里设置 foldmethod 以保证执行顺序.
   end)

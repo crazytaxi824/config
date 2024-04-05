@@ -1,5 +1,5 @@
-local expr_lsp = require("core.fold.fold_lsp")
-local expr_ts = require("core.fold.fold_treesitter")
+local expr_lsp = require("fold.fold_lsp")
+local expr_ts = require("fold.fold_treesitter")
 
 local bufvar_fold = "my_fold"  -- 记录 fold 是否设置成功
 
