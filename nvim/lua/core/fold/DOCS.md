@@ -6,5 +6,5 @@
 
 - 重新设置 `:set foldmethod=expr` 和 `:set foldexpr` 都会导致 foldexpr() 重新计算.
 
-
+- `foldexpr` 是一个 local to window 的 option, 但是 window 加载不同 buffer 的时候, foldexpr 是随着 buffer 不同而不同的.
 

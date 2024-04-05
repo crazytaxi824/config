@@ -63,8 +63,8 @@ for lsp_svr, v in pairs(lsp_servers_map) do
         --- lspconfig[lsp_svr].setup(opt), 根据 filetype 设置 lsp
         lspconfig_setup(lsp_svr)
 
-        --- VVI: 第一次必须要手动启动 lsp, 因为 vim.schedule() 会导致新 filetype 的 buffer 加载完成之后
-        --- 才执行 lspconfig[xxx].setup(), 所以该 buffer 没有 attach lsp. 需要手动 `:LspStart` 进行 attach.
+        --- VVI: 第一次必须要手动 LspStart, 因为 lsp 是在 buffer 加载完成之后才执行 lspconfig[xxx].setup(),
+        --- 所以触发 autocmd FileType 的 buffer 没有办法 attach lsp. 需要手动 `:LspStart` 进行 attach.
         vim.cmd('LspStart ' .. lsp_svr)
 
         --- DEBUG: 用. 每个 lsp 应该只打印一次.
