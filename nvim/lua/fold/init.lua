@@ -3,7 +3,10 @@ local expr_ts = require("fold.fold_treesitter")
 
 local lsp_list = require("lsp.lsp_config.lsp_list")
 
---- map[filetype] = lsp, 用于判断使用 lsp fold OR treesitter fold.
+--- cache map[bufnr] = defer_fn timer object
+local buf_timer = {}
+
+--- TODO: map[filetype] = lsp, 用于判断使用 lsp fold OR treesitter fold.
 local filetype_lsp = {}
 for lsp_svr, v in pairs(lsp_list) do
   for _, ft in ipairs(v.filetypes) do
@@ -115,19 +118,33 @@ vim.api.nvim_create_autocmd({"BufWritePost", "FileChangedShellPost"}, {
 
     --- 判断是 lsp fold 还是 treesitter fold
     if vim.wo[win_id].foldexpr == expr_lsp.foldexpr_str then
+      --- DOCS: `:help uv.new_timer()`
+      --- VVI: 使用 clearInterval(timer) 利用延迟执行避免重复执行 foldexpr() 函数.
+      if buf_timer[params.buf] then
+        buf_timer[params.buf]:stop()
+        buf_timer[params.buf]:close()
+      end
+
       --- update lsp foldexpr
-      vim.schedule(function()
+      buf_timer[params.buf] = vim.defer_fn(function()
         expr_lsp.lsp_fold_request(params.buf, win_id)
-      end)
+      end, 200)
       return
     end
 
     --- 其他 foldexpr 情况下, 重新设置 foldmethod 用于重新 update (treesitter) foldexpr
     if vim.wo[win_id].foldmethod == 'expr' then
+      --- DOCS: `:help uv.new_timer()`
+      --- VVI: 使用 clearInterval(timer) 利用延迟执行避免重复执行 foldexpr() 函数.
+      if buf_timer[params.buf] then
+        buf_timer[params.buf]:stop()
+        buf_timer[params.buf]:close()
+      end
+
       --- VVI: 必须使用 vim.schedule() 才能 update treesitter foldexpr
-      vim.schedule(function()
+      buf_timer[params.buf] = vim.defer_fn(function()
         vim.api.nvim_set_option_value('foldmethod', 'expr', { scope = 'local', win = win_id })
-      end)
+      end, 200)
     end
   end,
   desc = "Fold: update foldexpr()"
@@ -139,8 +156,9 @@ vim.api.nvim_create_autocmd("BufWipeout", {
   pattern = {"*"},
   callback = function(params)
     expr_lsp.clear_cache(params.buf)
+    --buf_timer[params.buf] = nil  --- 清除 timer
   end,
-  desc = "Fold: clear lsp-foldexpr cache"
+  desc = "Fold: clear lsp-foldexpr cache & buf-timer"
 })
 
 --- 手动强制重新设置 fold --------------------------------------------------------------------------
