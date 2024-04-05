@@ -1,18 +1,9 @@
 local expr_lsp = require("fold.fold_lsp")
 local expr_ts = require("fold.fold_treesitter")
-
-local lsp_list = require("lsp.lsp_config.lsp_list")
+local filetype_lsp = require("lsp.lsp_config.lsp_list").filetype_lsp
 
 --- cache map[bufnr] = defer_fn timer object
 local buf_timer = {}
-
---- TODO: map[filetype] = lsp, 用于判断使用 lsp fold OR treesitter fold.
-local filetype_lsp = {}
-for lsp_svr, v in pairs(lsp_list) do
-  for _, ft in ipairs(v.filetypes) do
-    filetype_lsp[ft] = lsp_svr
-  end
-end
 
 --- 使用 lsp 来 fold, 如果 lsp_fold 设置成功则返回 true.
 local function fold_lsp(client, bufnr, win_id)

@@ -2,7 +2,9 @@
 --- filetypes: 可以通过 `:LspInfo` 查看. 用于 autocmd.
 --- lspconfig_name: filetype
 
-return {
+local M = {}
+
+M.list = {
   lua_ls = {
     cmd = "lua-language-server",
     mason = "lua-language-server",
@@ -53,3 +55,12 @@ return {
     filetypes = {'proto'},
   }
 }
+
+M.filetype_lsp = {}
+for lsp_svr, v in pairs(M.list) do
+  for _, ft in ipairs(v.filetypes) do
+    M.filetype_lsp[ft] = lsp_svr
+  end
+end
+
+return M

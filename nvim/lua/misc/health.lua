@@ -149,7 +149,7 @@ M.check = function()
   check_cmd_tools(cmd_tools)
 
   --- lsp tools
-  local lsp_servers_map = require('lsp.lsp_config.lsp_list')
+  local lsp_servers_map = require('lsp.lsp_config.lsp_list').list
   health.report_start("check LSP tools")
   check_cmd_tools(lsp_servers_map)
 
