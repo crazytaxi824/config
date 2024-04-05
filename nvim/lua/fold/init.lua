@@ -5,6 +5,15 @@ local filetype_lsp = require("lsp.lsp_config.lsp_list").filetype_lsp
 --- cache map[bufnr] = defer_fn timer object
 local buf_timer = {}
 
+--- DOCS: `:help vim.defer_fn` & `:help uv.new_timer()`
+local function clearInterval(bufnr)
+  local timer = buf_timer[bufnr]
+  if timer then
+    timer:stop()
+    timer:close()
+  end
+end
+
 --- 使用 lsp 来 fold, 如果 lsp_fold 设置成功则返回 true.
 local function fold_lsp(client, bufnr, win_id)
   return expr_lsp.set_fold(client, bufnr, win_id)
@@ -111,15 +120,13 @@ vim.api.nvim_create_autocmd({"BufWritePost", "FileChangedShellPost"}, {
     if vim.wo[win_id].foldexpr == expr_lsp.foldexpr_str then
       --- DOCS: `:help uv.new_timer()`
       --- VVI: 使用 clearInterval(timer) 利用延迟执行避免重复执行 foldexpr() 函数.
-      if buf_timer[params.buf] then
-        buf_timer[params.buf]:stop()
-        buf_timer[params.buf]:close()
-      end
+      clearInterval(params.buf)
 
       --- update lsp foldexpr
       buf_timer[params.buf] = vim.defer_fn(function()
         expr_lsp.lsp_fold_request(params.buf, win_id)
-      end, 200)
+        buf_timer[params.buf] = nil  --- VVI: clear timer cache
+      end, 300)
       return
     end
 
@@ -127,15 +134,13 @@ vim.api.nvim_create_autocmd({"BufWritePost", "FileChangedShellPost"}, {
     if vim.wo[win_id].foldmethod == 'expr' then
       --- DOCS: `:help uv.new_timer()`
       --- VVI: 使用 clearInterval(timer) 利用延迟执行避免重复执行 foldexpr() 函数.
-      if buf_timer[params.buf] then
-        buf_timer[params.buf]:stop()
-        buf_timer[params.buf]:close()
-      end
+      clearInterval(params.buf)
 
       --- VVI: 必须使用 vim.schedule() 才能 update treesitter foldexpr
       buf_timer[params.buf] = vim.defer_fn(function()
         vim.api.nvim_set_option_value('foldmethod', 'expr', { scope = 'local', win = win_id })
-      end, 200)
+        buf_timer[params.buf] = nil  --- VVI: clear timer cache
+      end, 300)
     end
   end,
   desc = "Fold: update foldexpr()"
@@ -147,9 +152,8 @@ vim.api.nvim_create_autocmd("BufWipeout", {
   pattern = {"*"},
   callback = function(params)
     expr_lsp.clear_cache(params.buf)
-    --buf_timer[params.buf] = nil  --- 清除 timer
   end,
-  desc = "Fold: clear lsp-foldexpr cache & buf-timer"
+  desc = "Fold: clear lsp-foldexpr cache"
 })
 
 --- 手动强制重新设置 fold --------------------------------------------------------------------------
