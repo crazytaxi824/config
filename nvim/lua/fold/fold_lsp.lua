@@ -4,11 +4,14 @@
 
 local M = {}
 
+M.foldexpr_str = 'v:lua.require("fold.fold_lsp").foldexpr(v:lnum)'
+M.foldtext_str = 'v:lua.require("fold.foldtext").foldtext_lsp()'
+
 --- table, 记录 foldexpr 格式. { bufnr = { lnum: expr }}
 --- VVI: foldexpr='v:lua.xxx' 设置时, vim 中的 table key 必须是连续的 int, 或者是 string.
 local foldlevel_cache = {}
 
-local function clear_cache(bufnr)
+M.clear_cache =function(bufnr)
   foldlevel_cache[bufnr] = nil
 end
 
@@ -115,37 +118,13 @@ M.set_fold = function(client, bufnr, win_id)
   --- VVI: buf_request_all() 是一个异步函数, 所以 set foldexpr foldnestmax foldmethod 写在
   --- buf_request_all() 的前面或者后面效果都一样, 都会在 buf_request_all() 的前面运行.
   local opts = { scope = 'local', win = win_id }
-  vim.api.nvim_set_option_value('foldexpr', 'v:lua.require("fold.fold_lsp").foldexpr(v:lnum)', opts)
-  vim.api.nvim_set_option_value('foldtext', 'v:lua.require("fold.foldtext").foldtext_lsp()', opts)
+  vim.api.nvim_set_option_value('foldexpr', M.foldexpr_str, opts)
+  vim.api.nvim_set_option_value('foldtext', M.foldtext_str, opts)
   --- VVI: 在 lsp_fold 计算完成之后再设置 foldmethod=expr 否则无法 Fold.
   --- 这里是在 buf_request_all() 的回调函数里设置 foldmethod 以保证执行顺序.
 
   --- vim.lsp.buf_request_all()
   M.lsp_fold_request(bufnr, win_id)
-
-  --- update foldexpr
-  --- 文件 save 后重新计算 foldexpr.
-  local g_id = vim.api.nvim_create_augroup('my_lsp_fold_' .. bufnr, {clear=true})
-  vim.api.nvim_create_autocmd({"BufWritePost", "FileChangedShellPost"}, {
-    group = g_id,
-    buffer = bufnr,
-    callback = function(params)
-      --- 重新设置 `set foldmethod` 会触发 foldexpr 重新计算.
-      M.lsp_fold_request(params.buf, vim.api.nvim_get_current_win())
-    end,
-    desc = "set foldexpr for lsp textDocument/foldingRange"
-  })
-
-  --- delete foldexpr cache & augroup
-  vim.api.nvim_create_autocmd("BufWipeout", {
-    group = g_id,
-    buffer = bufnr,
-    callback = function(params)
-      clear_cache(params.buf)
-      vim.api.nvim_del_augroup_by_id(g_id)
-    end,
-    desc = "delete foldexpr textDocument/foldingRange augroup"
-  })
 
   return true  -- 设置成功
 end
