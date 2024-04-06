@@ -243,7 +243,7 @@ nvim_tree.setup {
       glyphs = glyphs,
     },
     special_files = {
-      "Makefile", "MAKEFILE", "README.md", "readme.md", "Readme.md",
+      "Makefile", "MAKEFILE", "README.md", "readme.md", "Readme.md", "DOCS.md",
       ".editorconfig", ".gitignore",
     },
     symlink_destination = true,  -- Whether to show the destination of the symlink.
