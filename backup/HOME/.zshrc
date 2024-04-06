@@ -15,7 +15,8 @@ export VISUAL=$EDITOR
 # mason tool path = `vim.fn.stdpath("data") .. "/mason_tools"`
 export PATH=$PATH:$HOME/.local/share/nvim/mason_tools/bin
 
-# NOTE: oh-my-zsh 不依赖 homebrew
+# FIXME: ohmyzsh #12257 #12328 async problem.
+zstyle ':omz:alpha:lib:git' async-prompt no
 # --- [ oh my zsh ] -------------------------------------------------------------------------------- {{{
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
