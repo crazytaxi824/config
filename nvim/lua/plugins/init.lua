@@ -75,7 +75,7 @@ local plugins = {
   --- By convention, if you want to write a query, use the `queries/` directory,
   --- but if you want to extend a query use the `after/queries/` directory.
   {"nvim-treesitter/nvim-treesitter",
-    commit = "d31eb54",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "e6cd337",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     --build = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
     config = function() require("plugins.settings.treesitter") end,
     dependencies = {
@@ -139,7 +139,7 @@ local plugins = {
 
   --- Auto Completion ------------------------------------------------------------------------------
   {"hrsh7th/nvim-cmp",
-    commit = "2fb2a3c",
+    commit = "ce16de5",
     config = function() require("plugins.settings.cmp_completion") end,
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全
@@ -181,7 +181,7 @@ local plugins = {
 
   --- snippet engine, for "cmp_luasnip", 每次打开文件都会有一个 [Scratch] buffer.
   {"L3MON4D3/LuaSnip",
-    commit = "79cc25c",
+    commit = "be7be2c",
     build = "make install_jsregexp",  -- https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#transformations
     config = function() require("plugins.settings.luasnip_snippest") end,
     dependencies = {"rafamadriz/friendly-snippets"},  -- snippets content
@@ -212,7 +212,7 @@ local plugins = {
   --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
   --- 官方 LSP 引擎.
   {"neovim/nvim-lspconfig",
-    commit = "f4619ab",
+    commit = "e13ef0c",
     config = function() require("lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     dependencies = {
       "williamboman/mason.nvim",  -- 安装 lsp 命令行工具.
@@ -270,7 +270,7 @@ local plugins = {
   },
 
   {"nvim-neotest/nvim-nio",
-    commit = "33c62b3",
+    commit = "5800f58",
 
     lazy = true,  -- nvim-dap-ui 加载时自动加载.
   },
@@ -314,7 +314,7 @@ local plugins = {
   --- `:Gitsigns setqflist/seqloclist` will open Trouble instead of quickfix or location list windows.
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {"lewis6991/gitsigns.nvim",
-    commit = "070875f",
+    commit = "81369ed",
     config = function() require("plugins.settings.git_signs") end,
 
     --- NOTE: `nvim dir` 启动时直接打开 dir 时可能会造成 gitsigns 报错. 根据测试情况选择 VeryLazy 或者 BufReadPre ...
