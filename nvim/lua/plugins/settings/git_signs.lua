@@ -41,7 +41,7 @@ git_signs.setup({
   sign_priority = 6,  -- 默认是 6, vim.diagnostic DiagnosticSignHint priority 默认是 10.
                       -- 这里设置为 10 会覆盖 DiagnosticSignHint(10), 但是不会覆盖 DiagnosticSignInfo(11).
   update_debounce = 300,  -- 更新频率, 默认 100
-  attach_to_untracked = true,  -- 新建文件是否 attach gitsigns
+  --attach_to_untracked = false,  -- 新建文件是否 attach gitsigns
 
   --- `:help current_line_blame_formatter`, check placeholder
   current_line_blame_formatter = '  ● [<abbrev_sha>], git blame: [<author>], <author_time:%d-%m-%Y> - <summary>',
@@ -62,7 +62,7 @@ git_signs.setup({
     col = 1
   },
 
-  --- keymaps
+  --- keymaps, `:help gitsigns-functions`
   on_attach = function(bufnr)
     local opt = { noremap = true, silent = true, buffer=bufnr}
     local gitsigns_keymaps = {
