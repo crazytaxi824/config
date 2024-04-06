@@ -75,7 +75,7 @@ end
 --- 必须保证 lsp 的 client.server_capabilities.foldingRangeProvider == true
 M.lsp_fold_request = function(bufnr, win_id)
   local params = {textDocument = require('vim.lsp.util').make_text_document_params(bufnr)}
-  vim.lsp.buf_request_all(bufnr, 'textDocument/foldingRange', params, function(resps)
+  return vim.lsp.buf_request_all(bufnr, 'textDocument/foldingRange', params, function(resps)
     --- VVI: 获取到 resps 之后再 init cache.
     --- 否则可能出现 init cache 之后, buf_request_all() 失败导致 str_cache[bufnr] = {'0', ...} 被全部初始化为 "0".
     init_expr_cache(bufnr)

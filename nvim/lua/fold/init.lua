@@ -2,12 +2,21 @@ local expr_lsp = require("fold.fold_lsp")
 local expr_ts = require("fold.fold_treesitter")
 local filetype_lsp = require("lsp.lsp_config.lsp_list").filetype_lsp
 
---- cache map[bufnr] = defer_fn timer object
+--- cache map[bufnr] = { timer = defer_fn(), cancel = vim.lsp.buf_request_all() }
 local buf_timer = {}
 
 --- DOCS: `:help vim.defer_fn` & `:help uv.new_timer()`
 local function clearInterval(bufnr)
-  local timer = buf_timer[bufnr]
+  if not buf_timer[bufnr] then
+    return
+  end
+
+  --- cancel vim.lsp.buf_request_all() if it's already started.
+  local cancel = buf_timer[bufnr].cancel
+  if cancel then cancel() end
+
+  --- stop & abort timer
+  local timer = buf_timer[bufnr].timer
   if timer then
     timer:stop()
     timer:close()
@@ -24,11 +33,12 @@ local function fold_treesitter(bufnr, win_id)
   return expr_ts.set_fold(bufnr, win_id)
 end
 
+--- create fold augroup
 local g_id = vim.api.nvim_create_augroup('my_fold', {clear=true})
 
---- lsp 加载速度太慢的情况下, 在 LspAttach 时覆盖 treesitter 的设置 --------------------------------
---- NOTE: 重复设置 foldexpr 会造成多次 foldexpr 的计算.
---- 所以尽量避免设置 foldexpr = treesitter 之后再设置 foldexpr = lsp
+--- NOTE: 根据 "lsp.lsp_config.lsp_list".filetype_lsp 判断使用 lsp fold OR treesitter fold.
+--- 如果 lsp 不支持 'textDocument/foldingRange' 则尝试 treesitter fold.
+--- LspAttach 和 FileType 执行顺序不确定.
 vim.api.nvim_create_autocmd("LspAttach", {
   group = g_id,
   pattern = {"*"},
@@ -67,9 +77,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
   desc = "Fold: fold-lsp when LspAttach",
 })
 
---- 如果 vim.b.lsp 不存在, 则直接使用 treesitter fold.
---- 如果 vim.b.lsp 存在, 则等 LspAttach 时候看 lsp client 是否支持 'textDocument/foldingRange',
---- 如果 lsp 支持则使用 lsp fold, 如果不支持则使用 treesitter fold.
 vim.api.nvim_create_autocmd("FileType", {
   group = g_id,
   pattern = {"*"},
@@ -103,8 +110,8 @@ vim.api.nvim_create_autocmd("FileType", {
   desc = "Fold: fold-treesitter when FileType",
 })
 
---- update foldexpr
---- 文件 save 后重新计算 foldexpr.
+--- 重新设置 foldmethod=expr 来 update foldexpr().
+--- FileChangedShellPost 用于 formatter 或 linter 使用 shell cmd 修改文件内容后执行.
 vim.api.nvim_create_autocmd({"BufWritePost", "FileChangedShellPost"}, {
   group = g_id,
   pattern = {"*"},
@@ -118,13 +125,13 @@ vim.api.nvim_create_autocmd({"BufWritePost", "FileChangedShellPost"}, {
 
     --- 判断是 lsp fold 还是 treesitter fold
     if vim.wo[win_id].foldexpr == expr_lsp.foldexpr_str then
-      --- DOCS: `:help uv.new_timer()`
-      --- VVI: 使用 clearInterval(timer) 利用延迟执行避免重复执行 foldexpr() 函数.
+      --- VVI: `:help uv.new_timer()` 使用 clearInterval(timer) 利用延迟执行避免重复执行 foldexpr() 函数.
       clearInterval(params.buf)
 
-      --- update lsp foldexpr
-      buf_timer[params.buf] = vim.defer_fn(function()
-        expr_lsp.lsp_fold_request(params.buf, win_id)
+      --- VVI: 重新向 lsp 请求 'textDocument/foldingRange', 请求结束后设置 foldmethod=exprgg
+      buf_timer[params.buf] = {}
+      buf_timer[params.buf].timer = vim.defer_fn(function()
+        buf_timer[params.buf].cancel = expr_lsp.lsp_fold_request(params.buf, win_id)
         buf_timer[params.buf] = nil  --- VVI: clear timer cache
       end, 300)
       return
@@ -132,12 +139,12 @@ vim.api.nvim_create_autocmd({"BufWritePost", "FileChangedShellPost"}, {
 
     --- 其他 foldexpr 情况下, 重新设置 foldmethod 用于重新 update (treesitter) foldexpr
     if vim.wo[win_id].foldmethod == 'expr' then
-      --- DOCS: `:help uv.new_timer()`
-      --- VVI: 使用 clearInterval(timer) 利用延迟执行避免重复执行 foldexpr() 函数.
+      --- VVI: `:help uv.new_timer()` 使用 clearInterval(timer) 利用延迟执行避免重复执行 foldexpr() 函数.
       clearInterval(params.buf)
 
-      --- VVI: 必须使用 vim.schedule() 才能 update treesitter foldexpr
-      buf_timer[params.buf] = vim.defer_fn(function()
+      --- 重新设置 foldmethod=expr 来 update foldexpr() 结果.
+      buf_timer[params.buf] = {}
+      buf_timer[params.buf].timer = vim.defer_fn(function()
         vim.api.nvim_set_option_value('foldmethod', 'expr', { scope = 'local', win = win_id })
         buf_timer[params.buf] = nil  --- VVI: clear timer cache
       end, 300)
@@ -146,7 +153,7 @@ vim.api.nvim_create_autocmd({"BufWritePost", "FileChangedShellPost"}, {
   desc = "Fold: update foldexpr()"
 })
 
---- delete foldexpr cache & augroup
+--- delete foldexpr cache, 避免内存使用无限扩大.
 vim.api.nvim_create_autocmd("BufWipeout", {
   group = g_id,
   pattern = {"*"},
@@ -156,7 +163,7 @@ vim.api.nvim_create_autocmd("BufWipeout", {
   desc = "Fold: clear lsp-foldexpr cache"
 })
 
---- 手动强制重新设置 fold --------------------------------------------------------------------------
+--- User Command 手动强制重新设置 fold -------------------------------------------------------------
 --- 先尝试 fold-lsp, 如果不存在则尝试 fold-treesitter
 local function fold(win_id)
   local bufnr = vim.api.nvim_win_get_buf(win_id)
