@@ -29,11 +29,22 @@ M.list = {
     install = "go install golang.org/x/tools/gopls@latest",
     filetypes = {'go', 'gomod', 'gowork', 'gotmpl'}
   },
-  pyright = {
+  pyright = {  --- for textDocument/hover ...
     cmd = "pyright",
     mason = "pyright",
     filetypes = {'python'}
   },
+  --- DOCS: ruff_lsp work with pyright. https://github.com/astral-sh/ruff-lsp/issues/384
+  ruff_lsp = {  --- for lint, code action, format ...
+    cmd = "ruff-lsp",
+    mason = "ruff-lsp",
+    filetypes = {'python'}
+  },
+  -- ruff = {  --- NOTE: in alpha version, will replace "ruff-lsp" in the future.
+  --   cmd = "ruff",
+  --   mason = "ruff",
+  --   filetypes = {'python'}
+  -- },
   html = {
     cmd = "vscode-html-language-server",
     mason = "html-lsp",
@@ -49,11 +60,6 @@ M.list = {
     mason = "json-lsp",
     filetypes = {'json', 'jsonc'}
   },
-  bufls = {  -- protobuf lsp
-    cmd = "bufls",
-    mason = "buf-language-server",
-    filetypes = {'proto'},
-  }
 }
 
 M.filetype_lsp = {}
