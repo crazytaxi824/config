@@ -41,12 +41,21 @@ end
 
 --- 将 foldingRange 返回的数据按照 foldexpr 的格式记录到 list cache 中.
 local function parse_fold_data(bufnr, fold_range, foldnestmax)
-  -- fold:
-  --   kind = "comment",   -- (optional), "comment", "imports" ...
-  --   startLine = 13      -- 0-index, 等于 vim 的 line_num - 1
-  --   startCharacter = 29,
-  --   endLine = 17,       -- 0-index, 等于 vim 的 line_num - 1
-  --   endCharacter = 31,  -- (optional)
+  -- vim.lsp.buf_request_all() response data:
+  -- {
+  --   lsp_id = {
+  --     result = {
+  --       {
+  --         kind = "comment",   -- (optional), "comment", "imports" ...
+  --         startLine = 13      -- 0-index, 等于 vim 的 line_num - 1
+  --         startCharacter = 29,
+  --         endLine = 17,       -- 0-index, 等于 vim 的 line_num - 1
+  --         endCharacter = 31,  -- (optional)
+  --       },
+  --       { ... },
+  --     }
+  --   }
+  -- }
   for _, fold in ipairs(fold_range) do
     --- fold range 是同一行时跳过.
     if fold.startLine == fold.endLine then
