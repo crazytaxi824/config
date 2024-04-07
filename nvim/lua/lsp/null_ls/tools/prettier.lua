@@ -11,11 +11,11 @@ return {
   --  --config <path>   Path to a Prettier configuration file (.prettierrc, package.json, prettier.config.js).
   --  --no-config       Do not look for a configuration file.
   extra_args = {
+    "--print-width=" .. vim.bo.textwidth,  -- The line length where Prettier will try wrap. 默认 80.
     "--single-quote",      -- Use single quotes instead of double quotes. 默认 false.
     "--jsx-single-quote",  -- Use single quotes in JSX. 默认 false.
-    "--print-width=" .. vim.bo.textwidth,  -- The line length where Prettier will try wrap. 默认 80.
     "--end-of-line=lf",  -- Which end of line characters to apply. 默认 'lf'.
-    "--tab-width=2",     -- Number of spaces per indentation level. 默认 2.
+    -- "--tab-width=2",     -- Number of spaces per indentation level. 默认 2.
   },
 
   disabled_filetypes = { "yaml" },  -- 不需要使用 prettier 格式化.
