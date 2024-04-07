@@ -25,8 +25,9 @@ vim.opt.rtp:prepend(lazypath)
 local plugins = {
   { "folke/lazy.nvim",
     --- install the latest stable version of plugins that support Semver.
+    commit = "31ddbea",
+    -- tag = "v10.20.3",
     -- version = "*",  -- 相当于 tag='stable'
-    tag = "v10.20.3",
   },
 
   --- Performence & Functions ----------------------------------------------------------------------
@@ -46,8 +47,9 @@ local plugins = {
 
   --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件
   {"williamboman/mason.nvim",
-    tag = "v1.10.0",
-    build = ":MasonUpdate", -- :MasonUpdate updates All Registries, NOT packages.
+    commit = "751b1fc",
+    -- tag = "v1.10.0",
+    -- build = ":MasonUpdate", -- :MasonUpdate updates All Registries, NOT packages.
     config = function() require("plugins.settings.mason_tool_installer") end,
 
     --- VVI: 需要在 $PATH 中加入 mason.setup({ "install_root_dir" }) 路径, 才能使用 mason 下载的 cmd tools.
@@ -79,7 +81,7 @@ local plugins = {
   --- By convention, if you want to write a query, use the `queries/` directory,
   --- but if you want to extend a query use the `after/queries/` directory.
   {"nvim-treesitter/nvim-treesitter",
-    commit = "a2d6678",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "11a3584",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     --build = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
     config = function() require("plugins.settings.treesitter") end,
     dependencies = {
@@ -226,7 +228,7 @@ local plugins = {
   --- null-ls 插件 formatters && linters, depends on "nvim-lua/plenary.nvim"
   --- VVI: "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {"nvimtools/none-ls.nvim",
-    commit = "0d42ba8",
+    commit = "dca7dde",
     config = function() require("lsp.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -235,7 +237,8 @@ local plugins = {
 
   --- File explorer --------------------------------------------------------------------------------
   {"kyazdani42/nvim-tree.lua",
-    tag = "nvim-tree-v1.3.0",
+    commit = "81eb8d5",
+    -- tag = "nvim-tree-v1.3.0",
     config = function() require("plugins.settings.file_tree") end,
 
     -- VVI: 本文件最后设置: 在 `nvim dir` 直接打开文件夹的时直接加载 nvim-tree.lua.
@@ -314,7 +317,7 @@ local plugins = {
   --- `:Gitsigns setqflist/seqloclist` will open Trouble instead of quickfix or location list windows.
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {"lewis6991/gitsigns.nvim",
-    commit = "81369ed",
+    commit = "1a50b94",
     config = function() require("plugins.settings.git_signs") end,
 
     --- NOTE: `nvim dir` 启动时直接打开 dir 时可能会造成 gitsigns 报错. 根据测试情况选择 VeryLazy 或者 BufReadPre ...
