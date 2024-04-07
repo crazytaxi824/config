@@ -106,21 +106,18 @@ local function check_cmd_tools(tools)
 end
 
 local mason_tools = {
-  "json-lsp",
-  "goimports-reviser",
-  "goimports",
-  "autopep8",
   "bash-language-server",
-  "flake8",
   "buf",
-  "shfmt",
-  "mypy",
   "css-lsp",
-  "buf-language-server",
-  "prettier",
+  "goimports",
+  "goimports-reviser",
   "html-lsp",
-  "pyright",
+  "json-lsp",
   "lua-language-server",
+  "prettier",
+  "pyright",
+  "ruff-lsp",
+  "shfmt",
   "typescript-language-server",
 }
 

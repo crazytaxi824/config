@@ -1,15 +1,17 @@
 --- 以下命令行工具可以通过 mason.nvim 安装, 也可以通过 brew 安装到 $PATH 中.
 --- filetypes: 可以通过 `:LspInfo` 查看. 用于 autocmd.
---- lspconfig_name: filetype
-
 local M = {}
 
+--- DOCS: https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
+--- map[lspconfig_name]: { cmd, mason_name, filetyps }
 M.list = {
+  --- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#lua_ls
   lua_ls = {
     cmd = "lua-language-server",
     mason = "lua-language-server",
     filetypes = {'lua'}
   },
+  --- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#tsserver
   tsserver = {
     cmd = "typescript-language-server",
     mason = "typescript-language-server",
@@ -18,42 +20,63 @@ M.list = {
       'typescript', 'typescriptreact', 'typescript.tsx',
     }
   },
+  --- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#bashls
   bashls = {
     cmd = "bash-language-server",
     mason = "bash-language-server",
     filetypes = {'sh'}
   },
+  --- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#gopls
   gopls = {
     cmd = "gopls",
     mason = "gopls",
     install = "go install golang.org/x/tools/gopls@latest",
     filetypes = {'go', 'gomod', 'gowork', 'gotmpl'}
   },
-  pyright = {
+  --- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#pyright
+  pyright = {  --- for textDocument/hover ...
     cmd = "pyright",
     mason = "pyright",
     filetypes = {'python'}
   },
+  --- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#ruff_lsp
+  --- DOCS: ruff_lsp work with pyright. https://github.com/astral-sh/ruff-lsp/issues/384
+  --- NOTE: lspconfig_name = ruff_lsp, cmd & mason_name = ruff-lsp
+  ruff_lsp = {  --- for lint, code action, format ...
+    cmd = "ruff-lsp",
+    mason = "ruff-lsp",
+    filetypes = {'python'}
+  },
+  --- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#ruff
+  -- ruff = {  --- NOTE: in alpha version, will replace "ruff-lsp" in the future.
+  --   cmd = "ruff",
+  --   mason = "ruff",
+  --   filetypes = {'python'}
+  -- },
+  --- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#html
   html = {
     cmd = "vscode-html-language-server",
     mason = "html-lsp",
     filetypes = {'html'}
   },
+  --- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#cssls
   cssls = {
     cmd = "vscode-css-language-server",
     mason = "css-lsp",
     filetypes = {'css', 'scss', 'less'}
   },
+  --- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#jsonls
   jsonls = {
     cmd = "vscode-json-language-server",
     mason = "json-lsp",
     filetypes = {'json', 'jsonc'}
   },
-  bufls = {  -- protobuf lsp
-    cmd = "bufls",
-    mason = "buf-language-server",
-    filetypes = {'proto'},
-  }
+  --- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#eslint
+  eslint = {
+    cmd = "vscode-json-language-server",
+    mason = "eslint-lsp",
+    filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx", "vue", "svelte", "astro" },
+  },
 }
 
 M.filetype_lsp = {}

@@ -11,7 +11,7 @@ local function combine_sources()
 
   for _, tool_types in pairs(s.sources) do
     for _, tool_setup in pairs(tool_types) do
-      table.insert(list, tool_setup())
+      table.insert(list, tool_setup)
     end
   end
 
