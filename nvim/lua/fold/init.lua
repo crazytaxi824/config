@@ -64,7 +64,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     local client = vim.lsp.get_client_by_id(params.data.client_id)
 
     --- 如果 lsp 和 filetype 不对应则返回, 防止 null-ls 等 lsp 工具参与设置 fold.
-    if filetype_lsp[vim.bo[params.buf].filetype] ~= client.name then
+    if not vim.tbl_contains(filetype_lsp[vim.bo[params.buf].filetype], client.name) then
       return
     end
 

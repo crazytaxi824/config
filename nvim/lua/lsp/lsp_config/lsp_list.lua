@@ -79,10 +79,12 @@ M.list = {
   },
 }
 
+--- { javascript = { eslint, tsserver }, ... }
 M.filetype_lsp = {}
 for lsp_svr, v in pairs(M.list) do
   for _, ft in ipairs(v.filetypes) do
-    M.filetype_lsp[ft] = lsp_svr
+    M.filetype_lsp[ft] = M.filetype_lsp[ft] or {}
+    table.insert(M.filetype_lsp[ft], lsp_svr)
   end
 end
 

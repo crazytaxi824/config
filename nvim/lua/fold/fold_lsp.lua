@@ -29,10 +29,9 @@ M.foldexpr = function(lnum)
   return 0
 end
 
---- 初始化两个 list 用于计算和缓存 foldmethod=expr 结果.
+--- 初始化 list cache 用于计算和缓存 foldmethod=expr 结果.
 local function init_expr_cache(bufnr)
   foldlevel_cache[bufnr] = {}
-
   local line_count = vim.api.nvim_buf_line_count(bufnr)
   for i = 1, line_count, 1 do
     foldlevel_cache[bufnr][i] = 0
@@ -62,6 +61,7 @@ local function parse_fold_data(bufnr, fold_range, foldnestmax)
       goto continue
     end
 
+    --- lsp using 0-index for line_num, neovim using 1-index for line_num.
     local startLine = fold.startLine + 1
     local endLine = fold.endLine + 1
 
