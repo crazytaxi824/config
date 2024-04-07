@@ -44,12 +44,6 @@ end
 -- for lsp_svr, _ in pairs(lsp_servers_map) do
 --   lspconfig_setup(lsp_svr)
 -- end
---
--- --- VVI: 如果使用 lazyload vim.schedule() 方式加载 lspconfig[xxx].setup() 的情况下,
--- --- 启动 nvim 后需要手动 ":LspStart" 所有 lsp. 因为 lspconfig[xxx].setup() 在第一个加载的 buffer
--- --- 后面启动, 所以第一个 buffer 无法 attach lsp. ":LspStart" 可以让 lsp attach 该 buffer.
--- --- 如果 lsp 还没有被 setup 则不会启动. 所以这里可以放心 LspStart 所有 lsp.
--- vim.cmd('LspStart ' .. table.concat(vim.tbl_keys(lsp_servers_map), " "))
 -- -- }}}
 
 --- 以下设置是为了 autocmd 根据 FileType 手动加载/启动不同的 lsp -----------------------------------
@@ -65,7 +59,11 @@ for lsp_svr, v in pairs(lsp_servers_map) do
 
         --- VVI: 第一次必须要手动 LspStart, 因为 lsp 是在 buffer 加载完成之后才执行 lspconfig[xxx].setup(),
         --- 所以触发 autocmd FileType 的 buffer 没有办法 attach lsp. 需要手动 `:LspStart` 进行 attach.
-        vim.cmd('LspStart ' .. lsp_svr)
+        --- 以下使用了 `:LspStart xxx` 的源代码. 也可以直接使用 vim.cmd('LspStart ' .. lsp_svr)
+        local config = require('lspconfig.configs')[lsp_svr]
+        if config then
+          config.launch()  --- VVI: start & attach to buffer
+        end
 
         --- DEBUG: 用. 每个 lsp 应该只打印一次.
         if __Debug_Neovim.lspconfig then
