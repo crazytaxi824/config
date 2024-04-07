@@ -32,7 +32,7 @@ local plugins = {
   --- Performence & Functions ----------------------------------------------------------------------
   --- Useful lua functions used by lots of plugins
   {"nvim-lua/plenary.nvim",
-    priority = 1000,  -- 影响加载顺序, 默认值为 50.
+    priority = 1000,  -- NOTE: 只在 lazy=false 的情况下有效. 影响加载顺序, 默认值为 50.
     commit = "8aad439",
   },
 
@@ -49,7 +49,11 @@ local plugins = {
     tag = "v1.10.0",
     build = ":MasonUpdate", -- :MasonUpdate updates All Registries, NOT packages.
     config = function() require("plugins.settings.mason_tool_installer") end,
-    --- NOTE: 不能 lazyload mason, 否则其他插件无法找到 mason 安装的工具.
+
+    --- VVI: 需要在 $PATH 中加入 mason.setup({ "install_root_dir" }) 路径, 才能使用 mason 下载的 cmd tools.
+    --- 否则不能延迟加载 mason, 需要设置下面的 priority.
+    --priority = 999,
+    cmd = {'Mason'},
   },
 
   --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
@@ -215,7 +219,6 @@ local plugins = {
     commit = "9619e53",
     config = function() require("lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     dependencies = {
-      "williamboman/mason.nvim",  -- 安装 lsp 命令行工具.
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全. NOTE: lspconfig 必须在 cmp_nvim_lsp 之后加载, 否则可能无法提供代码补全.
     },
   },
@@ -225,10 +228,7 @@ local plugins = {
   {"nvimtools/none-ls.nvim",
     commit = "0d42ba8",
     config = function() require("lsp.null_ls") end,
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "williamboman/mason.nvim",  -- 安装 linter/formatter 命令行工具. eg: shfmt, stylua ...
-    },
+    dependencies = { "nvim-lua/plenary.nvim" },
 
     event = "VeryLazy",
   },
@@ -265,7 +265,6 @@ local plugins = {
     -- tag = "0.7.0",
     commit = "405df1d",
     config = function() require("plugins.settings.dap_debug") end,
-    dependencies = {"williamboman/mason.nvim"},  -- install dap-debug tools. eg: 'delve'
 
     cmd = {'DapToggleBreakpoint', 'DapContinue', 'DapLoadLaunchJSON'},
   },
