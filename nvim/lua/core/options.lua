@@ -386,8 +386,8 @@ vim.opt.fillchars = 'fold: ,diff: ,vert:│,eob:~'
 -- -- }}}
 vim.opt.foldenable = true  -- 折叠代码.
 -- vim.opt.foldcolumn = "1"   -- 类似 signcolumn
-vim.opt.foldlevel = 99  -- Using ufo provider need a large value, feel free to decrease the value
-vim.opt.foldnestmax = 3    -- 最多折叠3层. NOTE: 'setlocal foldnestmax' 需要放在 'foldlevel' 之前设置, 否则不生效.
+vim.opt.foldlevel = 99  -- `:help fold-foldlevel`, 在可 fold 的情况下 fold 第几层
+vim.opt.foldnestmax = 3 -- 最多折叠3层.
 
 --- `:help v:lua-call`, eg: `v:lua.require'mypack'.func(arg1, arg2)`
 vim.opt.foldtext = "v:lua.require('fold.foldtext').foldtext()"
