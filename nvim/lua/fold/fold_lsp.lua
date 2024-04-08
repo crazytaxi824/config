@@ -39,22 +39,22 @@ local function init_expr_cache(bufnr)
 end
 
 --- 将 foldingRange 返回的数据按照 foldexpr 的格式记录到 list cache 中.
+--- vim.lsp.buf_request_all() response data:
+--- {
+---   lsp_id = {
+---     result = {
+---       {
+---         kind = "comment",   -- (optional), "comment", "imports" ...
+---         startLine = 13      -- 0-index, 等于 vim 的 line_num - 1
+---         startCharacter = 29,
+---         endLine = 17,       -- 0-index, 等于 vim 的 line_num - 1
+---         endCharacter = 31,  -- (optional)
+---       },
+---       { ... },
+---     }
+---   }
+--- }
 local function parse_fold_data(bufnr, fold_range, foldnestmax)
-  -- vim.lsp.buf_request_all() response data:
-  -- {
-  --   lsp_id = {
-  --     result = {
-  --       {
-  --         kind = "comment",   -- (optional), "comment", "imports" ...
-  --         startLine = 13      -- 0-index, 等于 vim 的 line_num - 1
-  --         startCharacter = 29,
-  --         endLine = 17,       -- 0-index, 等于 vim 的 line_num - 1
-  --         endCharacter = 31,  -- (optional)
-  --       },
-  --       { ... },
-  --     }
-  --   }
-  -- }
   for _, fold in ipairs(fold_range) do
     --- fold range 是同一行时跳过.
     if fold.startLine == fold.endLine then
@@ -71,8 +71,16 @@ local function parse_fold_data(bufnr, fold_range, foldnestmax)
     end
 
     --- 根据 fold range 计算 foldexpr 的值.
+    --- VVI: mark startLine & endLine 解决两个同级别的折叠块在一起的时候会被折叠到一起的问题.
+    --- eg: comments & code_blocks
     for i = startLine, endLine, 1 do
-      foldlevel_cache[bufnr][i] = foldlevel_cache[bufnr][i] + 1  --- VVI: increase foldlevel
+      if i == startLine then
+        foldlevel_cache[bufnr][i] = ">" .. (foldlevel_cache[bufnr][i] +1)  --- mark startline of a fold
+      elseif i == endLine then
+        foldlevel_cache[bufnr][i] = "<" .. (foldlevel_cache[bufnr][i] +1)  --- mark endline of a fold
+      else
+        foldlevel_cache[bufnr][i] = foldlevel_cache[bufnr][i] +1  --- increase foldlevel
+      end
     end
 
     ::continue::
@@ -84,13 +92,13 @@ end
 --- 必须保证 lsp 的 client.server_capabilities.foldingRangeProvider == true
 M.lsp_fold_request = function(bufnr, win_id)
   local params = {textDocument = require('vim.lsp.util').make_text_document_params(bufnr)}
-  return vim.lsp.buf_request_all(bufnr, 'textDocument/foldingRange', params, function(resps)
+  return vim.lsp.buf_request_all(bufnr, 'textDocument/foldingRange', params, function(resp)
     --- VVI: 获取到 resps 之后再 init cache.
     --- 否则可能出现 init cache 之后, buf_request_all() 失败导致 str_cache[bufnr] = {'0', ...} 被全部初始化为 "0".
     init_expr_cache(bufnr)
 
     --- resps = { client_id: data }.
-    for lsp_client_id, data in pairs(resps) do
+    for lsp_client_id, data in pairs(resp) do
       if data.result then
         --- VVI: 这里必须检查 win_id 是否存在,  因为 buf_request_all() 是一个异步函数.
         local win_is_valid = vim.api.nvim_win_is_valid(win_id)
