@@ -79,8 +79,6 @@ local diagnostics_opts = {
 
 --- linters 设置 -----------------------------------------------------------------------------------
 M.local_linter_key = "linter"
-M.local_formatter_key = "formatter"
-M.local_code_actions_key = "code_actions"
 
 --- VVI: 这里使用函数来返回 table, 而不是直接定义一个 table 的原因是:
 --- 直接定义一个 table 的问题是: module 在第一次 require() 之后 table 中的内容就缓存了.

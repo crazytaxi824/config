@@ -114,26 +114,21 @@ local function reload_local_settings(old_content, new_content)
   end)
 
   --- linter = { golangci_lint = { ... }, eslint = { ... } }
-  --- formatter = { prettier = { ... }, goimports = { ... } }
-  --- code_actions = { eslint = { ... } }
   local s = require("lsp.null_ls.sources")
-  local null_ls_tool_types = {s.local_linter_key, s.local_formatter_key, s.local_code_actions_key}
-  for _, typ in ipairs(null_ls_tool_types) do
-    compare_content_settings(old_content, new_content, typ, function(tool_name)
-      local null_ls_status_ok, null_ls = pcall(require, "null-ls")
-      if not null_ls_status_ok then
-        Notify("`null-ls` is not loaded.", "INFO")
-        return
-      end
+  compare_content_settings(old_content, new_content, s.local_linter_key, function(tool_name)
+    local null_ls_status_ok, null_ls = pcall(require, "null-ls")
+    if not null_ls_status_ok then
+      Notify("`null-ls` is not loaded.", "INFO")
+      return
+    end
 
-      --- 注销原设置, 注册新设置, 相当于关闭之前的服务, 然后开了一个新的服务.
-      null_ls.disable(tool_name)  -- 清除 diagnostic messages & signs
-      null_ls.deregister(tool_name)  -- 注销, 删除原服务.
-      null_ls.register(s.sources[typ][tool_name]())  -- 重新注册. register 后, 自动 enable.
+    --- 注销原设置, 注册新设置, 相当于关闭之前的服务, 然后开了一个新的服务.
+    null_ls.disable(tool_name)  -- 清除 diagnostic messages & signs
+    null_ls.deregister(tool_name)  -- 注销, 删除原服务.
+    null_ls.register(s.sources[s.local_linter_key][tool_name]())  -- 重新注册. register 后, 自动 enable.
 
-      table.insert(update_settings, tool_name)
-    end)
-  end
+    table.insert(update_settings, tool_name)
+  end)
 
   if #update_settings > 0 then
     vim.notify('local settings changed: ' .. table.concat(update_settings, ' | '), vim.log.levels.INFO)
@@ -167,10 +162,7 @@ vim.api.nvim_create_user_command("LocalSettingsExample", function()
     [lsp_typ] = { gopls = { "..." }, tsserver = { "..." } },
     [s.local_linter_key] = {
       golangci_lint = { extra_args = {'-c', '/path/to/.golangci.yml'} },
-      eslint = { extra_args = {'-c', '/path/to/.eslintrc.json'} }
     },
-    [s.local_formatter_key] = { prettier = { "..." }, goimports = { "..." } },
-    [s.local_code_actions_key] = { eslint = { "..." } },
   }
 
   vim.notify('".nvim/settings.lua" example:\n```lua\nreturn ' .. vim.inspect(example) .. '\n```', vim.log.levels.INFO)
