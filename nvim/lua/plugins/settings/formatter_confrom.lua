@@ -17,6 +17,7 @@ local function format_ft()
     go = { "goimports", "goimports-reviser" },
     sh = { "shfmt" },
     proto = { "buf" },
+    lua = { "stylua" },
 
     --["*"] = { "codespell" },  -- all filetypes.
     --["_"] = { "trim_whitespace" },  -- filetypes that don't have other formatters configured.
