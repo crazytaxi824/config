@@ -1,7 +1,7 @@
 --- 加载 LSP 相关自定义设置.
 require("lsp._user_handlers")  -- overwrite 默认 handlers 设置
 require("lsp.diagnostic")   -- 加载 diagnostic 设置
-require("lsp.auto_format")  -- save(:w) 时 format
+--require("lsp.auto_format")  -- save(:w) 时 format, TODO: 目前使用 Conform.nvim
 
 --- `:help vim.lsp.set_log_level()`, 影响 `:LspLog`.
 --- BUG: 默认为 "WARN", 但 vim.lsp 还未实现 sumneko_lua 中的 workspace/diagnostic/refresh handler,

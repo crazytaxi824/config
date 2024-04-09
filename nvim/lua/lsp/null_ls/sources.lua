@@ -14,9 +14,9 @@ local proj_local_settings = require("lsp._load_proj_settings")
 
 local M = {}
 
-local formatting = null_ls.builtins.formatting
 local diagnostics = null_ls.builtins.diagnostics
-local code_actions = null_ls.builtins.code_actions
+-- local formatting = null_ls.builtins.formatting
+-- local code_actions = null_ls.builtins.code_actions
 
 --- diagnostics_opts 用于下面的 sources diagnostics 设置
 local diagnostics_opts = {
@@ -105,36 +105,39 @@ M.sources =  {
     end,
   },
 
-  [M.local_formatter_key] = {
-    prettier = function()
-      return formatting.prettier.with(proj_local_settings.keep_extend(M.local_formatter_key, 'prettier',
-        require("lsp.null_ls.tools.prettier")))  -- NOTE: 加载单独设置 null_ls/tools/prettier.lua
-    end,
-
-    --- go: goimports, goimports_reviser, gofmt, gofumpt
-    --- go 需要在这里使用 'goimports', 因为 gopls 默认不会处理 "source.organizeImports",
-    --- 但是需要 gopls 格式化 go.mod 文件.
-    goimports = function()
-      return formatting.goimports.with(proj_local_settings.keep_extend(M.local_formatter_key, 'goimports', {}))
-    end,
-
-    --- goimports_reviser 只是对 import (...) 排序, 无法进行 format 操作.
-    --- BUG: 目前 goimports_reviser 和 goimports 执行顺序上有问题. 导致 goimports_reviser 无法排序.
-    --- 目前在 'auto_format.lua' 的 autocmd BufWritePost 中执行.
-    --goimports_reviser = null_ls.builtins.formatting.goimports_reviser,
-
-    --- sh shell: shfmt
-    shfmt = function()
-      return formatting.shfmt.with(proj_local_settings.keep_extend(M.local_formatter_key, 'shfmt', {}))
-    end,
-
-    --- protobuf: buf
-    buf = function()
-      return formatting.buf.with(proj_local_settings.keep_extend(M.local_formatter_key, 'buf', {}))
-    end,
-  },
+  --- TODO: 目前使用 Conform, Deprecated formatter & code_actions -------------- {{{
+  -- [M.local_formatter_key] = {
+  --   prettier = function()
+  --     return formatting.prettier.with(proj_local_settings.keep_extend(M.local_formatter_key, 'prettier',
+  --       require("lsp.null_ls.tools.prettier")))  -- NOTE: 加载单独设置 null_ls/tools/prettier.lua
+  --   end,
+  --
+  --   --- go: goimports, goimports_reviser, gofmt, gofumpt
+  --   --- go 需要在这里使用 'goimports', 因为 gopls 默认不会处理 "source.organizeImports",
+  --   --- 但是需要 gopls 格式化 go.mod 文件.
+  --   goimports = function()
+  --     return formatting.goimports.with(proj_local_settings.keep_extend(M.local_formatter_key, 'goimports', {}))
+  --   end,
+  --
+  --   --- goimports_reviser 只是对 import (...) 排序, 无法进行 format 操作.
+  --   --- BUG: 目前 goimports_reviser 和 goimports 执行顺序上有问题. 导致 goimports_reviser 无法排序.
+  --   --- 目前在 'auto_format.lua' 的 autocmd BufWritePost 中执行.
+  --   --goimports_reviser = null_ls.builtins.formatting.goimports_reviser,
+  --
+  --   --- sh shell: shfmt
+  --   shfmt = function()
+  --     return formatting.shfmt.with(proj_local_settings.keep_extend(M.local_formatter_key, 'shfmt', {}))
+  --   end,
+  --
+  --   --- protobuf: buf
+  --   buf = function()
+  --     return formatting.buf.with(proj_local_settings.keep_extend(M.local_formatter_key, 'buf', {}))
+  --   end,
+  -- },
 
   -- [M.local_code_actions_key] = {},
+
+  -- -- }}}
 }
 
 return M

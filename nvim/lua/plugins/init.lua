@@ -235,6 +235,13 @@ local plugins = {
     event = "VeryLazy",
   },
 
+  {"stevearc/conform.nvim",
+    commit = "9d5ba06",
+    config = function() require("plugins.settings.formatter_confrom") end,
+
+    event = "VeryLazy",
+  },
+
   --- File explorer --------------------------------------------------------------------------------
   {"kyazdani42/nvim-tree.lua",
     commit = "81eb8d5",
