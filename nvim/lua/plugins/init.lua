@@ -358,8 +358,8 @@ local plugins = {
 
   --- recommanded plugins ------------------------------------------------------ {{{
   --- null-ls 替代:
-  --{"mfussenegger/nvim-lint"},     -- linter
-  --{"mhartington/formatter.nvim"}  -- formatter
+  --{"mfussenegger/nvim-lint"}, -- linter
+  --{"stevearc/conform.nvim"},  -- formatter
 
   --{"kyazdani42/nvim-web-devicons"}, -- Nerd Fonts 提供 icons 需要 patch 字体
   --{"nvim-neo-tree/neo-tree.nvim"},  -- File explorer. nvim-tree.lua 替代
