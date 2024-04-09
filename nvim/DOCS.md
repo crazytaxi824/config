@@ -556,6 +556,7 @@ vim.lsp.buf.format({
     return client.name ~= 'tsserver'
   end
   name = '',  -- Restrict formatting to the client with client.name
+  id = client.id,
 })
 ```
 

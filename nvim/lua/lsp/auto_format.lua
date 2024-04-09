@@ -26,7 +26,7 @@ local function lsp_format(bufnr)
 
   --- format 文件.
   if format_client then
-    vim.lsp.buf.format({ timeout_ms = 3000, bufnr = bufnr, name = format_client.name })
+    vim.lsp.buf.format({ timeout_ms = 3000, bufnr = bufnr, id = format_client.id })
     return
   end
 
