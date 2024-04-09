@@ -3,7 +3,7 @@
 local M = {}
 
 M.foldexpr_str = 'nvim_treesitter#foldexpr()'
-M.foldtext_str = 'v:lua.require("fold.foldtext").foldtext()'
+M.foldtext_str = 'v:lua.require("core.fold.foldtext").foldtext()'
 
 M.set_fold = function(bufnr, win_id)
   --- 获取所有 parsers
@@ -19,8 +19,8 @@ M.set_fold = function(bufnr, win_id)
   end
 
   -- vim.api.nvim_win_call(win_id, function ()
-  --   vim.opt_local.foldexpr = 'nvim_treesitter#foldexpr()'
-  --   vim.opt_local.foldtext = 'v:lua.require("fold.foldtext").foldtext()'
+  --   vim.opt_local.foldexpr = M.foldexpr_str
+  --   vim.opt_local.foldtext = M.foldtext_str
   --   vim.opt_local.foldmethod = 'expr'
   -- end)
   local opts = { scope = 'local', win = win_id }

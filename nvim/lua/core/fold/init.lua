@@ -1,5 +1,5 @@
-local expr_lsp = require("fold.fold_lsp")
-local expr_ts = require("fold.fold_treesitter")
+local expr_lsp = require("core.fold.fold_lsp")
+local expr_ts = require("core.fold.fold_treesitter")
 local filetype_lsp = require("lsp.lsp_config.lsp_list").filetype_lsp
 
 --- cache map[bufnr] = { timer = defer_fn(), cancel = vim.lsp.buf_request_all() }

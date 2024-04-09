@@ -4,8 +4,8 @@
 
 local M = {}
 
-M.foldexpr_str = 'v:lua.require("fold.fold_lsp").foldexpr(v:lnum)'
-M.foldtext_str = 'v:lua.require("fold.foldtext").foldtext_lsp()'
+M.foldexpr_str = 'v:lua.require("core.fold.fold_lsp").foldexpr(v:lnum)'
+M.foldtext_str = 'v:lua.require("core.fold.foldtext").foldtext_lsp()'
 
 --- table, 记录 foldexpr 格式. { bufnr = { lnum: expr }}
 --- VVI: foldexpr='v:lua.xxx' 设置时, vim 中的 table key 必须是连续的 int, 或者是 string.
