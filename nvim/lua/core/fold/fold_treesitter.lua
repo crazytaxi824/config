@@ -18,17 +18,12 @@ M.set_fold = function(bufnr, win_id)
     return
   end
 
-  -- vim.api.nvim_win_call(win_id, function ()
-  --   vim.opt_local.foldexpr = M.foldexpr_str
-  --   vim.opt_local.foldtext = M.foldtext_str
-  --   vim.opt_local.foldmethod = 'expr'
-  -- end)
-  local opts = { scope = 'local', win = win_id }
-  vim.api.nvim_set_option_value('foldexpr', M.foldexpr_str, opts)
-  vim.api.nvim_set_option_value('foldtext', M.foldtext_str, opts)
-  vim.api.nvim_set_option_value('foldmethod', 'expr', opts)
-
-  return true  -- 设置成功
+  --- VVI: 可能在异步函数中执行, 必须检查 window 中的 buffer 是否已经被改变.
+  if vim.api.nvim_win_is_valid(win_id) and vim.api.nvim_win_get_buf(win_id) == bufnr then
+    vim.api.nvim_set_option_value('foldexpr', M.foldexpr_str, { scope = 'local', win = win_id })
+    vim.api.nvim_set_option_value('foldtext', M.foldtext_str, { scope = 'local', win = win_id })
+    vim.api.nvim_set_option_value('foldmethod', 'expr', { scope = 'local', win = win_id })
+  end
 end
 
 return M
