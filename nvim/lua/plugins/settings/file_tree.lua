@@ -244,7 +244,7 @@ nvim_tree.setup {
     },
     special_files = {
       "Makefile", "MAKEFILE", "README.md", "readme.md", "Readme.md", "DOCS.md",
-      ".editorconfig", ".gitignore",
+      ".editorconfig", ".gitignore", "eslint.config.mjs", "eslint.config.js"
     },
     symlink_destination = true,  -- Whether to show the destination of the symlink.
   },
