@@ -81,7 +81,16 @@ auto_format()
 
 --- user command -----------------------------------------------------------------------------------
 vim.api.nvim_create_user_command("Format", function()
-  conform.format()
+  conform.format(nil, function(err, did_edit)
+    if err then
+      Notify(err, "ERROR")
+      return
+    end
+
+    if did_edit then
+      vim.cmd('w')  --- save file after format
+    end
+  end)
 end, { bang = true, bar = true })
 
 vim.api.nvim_create_user_command("FormatEnable", function()
