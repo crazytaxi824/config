@@ -80,11 +80,6 @@ local cmd_tools = {
   ["golangci-lint"] = {cmd="golangci-lint", install="go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest", mason="golangci-lint"},
   graphviz = {cmd="dot", install="brew info graphviz"},
 
-  --- javascript / typescript
-  eslint = {cmd="eslint", install="npm install -g eslint"}, -- NOTE: mason 目前不能安装 "eslint"
-  jest = {cmd="jest", install="npm install -g jest"},
-  --tsc = {cmd="tsc", install="npm install -g typescript"}, -- NOTE: 弃用 typescript.
-
   --- telescope deps
   fd = {cmd="fd",  install="brew info fd"},
   ripgrep = {cmd="rg",  install="brew info ripgrep"},
