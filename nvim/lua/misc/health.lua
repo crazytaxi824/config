@@ -112,6 +112,7 @@ local mason_tools = {
   "bash-language-server",
   "buf",
   "css-lsp",
+  "eslint-lsp",
   "goimports",
   "goimports-reviser",
   "html-lsp",
@@ -121,8 +122,8 @@ local mason_tools = {
   "pyright",
   "ruff-lsp",
   "shfmt",
-  "typescript-language-server",
   "stylua",
+  "typescript-language-server",
 }
 
 local function check_mason_tools()
