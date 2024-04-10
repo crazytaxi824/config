@@ -57,7 +57,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   pattern = {"*"},
   callback = function(params)
     --- NOTE: exclude some of the filetypes to auto format
-    local exclude_auto_format_filtypes = { "markdown", "yaml", "lua" }
+    local exclude_auto_format_filtypes = { "markdown", "yaml", "lua", "jsonc" }
     if vim.tbl_contains(exclude_auto_format_filtypes, vim.bo[params.buf].filetype) then
       return
     end
