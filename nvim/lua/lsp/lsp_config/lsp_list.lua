@@ -75,6 +75,7 @@ M.list = {
     filetypes = {'json', 'jsonc'}
   },
   --- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#eslint
+  --- NOTE: need ".eslintrc.json" as root, otherwise not working.
   eslint = {
     cmd = "vscode-json-language-server",
     mason = "eslint-lsp",
