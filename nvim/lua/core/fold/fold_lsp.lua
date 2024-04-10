@@ -140,6 +140,7 @@ M.lsp_fold_request = function(bufnr, win_id, opts)
       --- buf_request_all() 失败导致 str_cache[bufnr] = {'0', ...} 被全部初始化为 "0".
       init_expr_cache(bufnr)
 
+      --- lsp fold 是否设置成功.
       local set_fold_success = false
 
       --- resps = { client_id: data }.
@@ -158,13 +159,17 @@ M.lsp_fold_request = function(bufnr, win_id, opts)
           --- parse lsp response fold range
           parse_fold_data(bufnr, data.result, foldnestmax)
 
-          --- VVI: 因为 buf_request_all() 是一个异步函数, 必须检查 window 中的 buffer 是否已经被改变.
-          if win_is_valid and vim.api.nvim_win_get_buf(win_id) == bufnr then
-            vim.api.nvim_set_option_value('foldexpr', M.foldexpr_str, { scope = 'local', win = win_id })
-            vim.api.nvim_set_option_value('foldtext', M.foldtext_str, { scope = 'local', win = win_id })
-            vim.api.nvim_set_option_value('foldmethod', 'expr', { scope = 'local', win = win_id })
-            set_fold_success = true
+          --- VVI: 可能在异步函数中执行, 必须检查 window 中的 buffer 是否已经被改变.
+          if not win_is_valid or vim.api.nvim_win_get_buf(win_id) ~= bufnr then
+            return
           end
+
+          vim.api.nvim_set_option_value('foldexpr', M.foldexpr_str, { scope = 'local', win = win_id })
+          vim.api.nvim_set_option_value('foldtext', M.foldtext_str, { scope = 'local', win = win_id })
+          vim.api.nvim_set_option_value('foldmethod', 'expr', { scope = 'local', win = win_id })
+
+          --- fallback to treesitter fold or not.
+          set_fold_success = true
 
           --- NOTE: 只计算一次 foldlevel
           break
