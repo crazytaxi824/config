@@ -13,7 +13,7 @@ local function format_ft()
   }
 
   local fts = {
-    --- VVI: Conform will run multiple formatters sequentially
+    --- VVI: conform will run multiple formatters sequentially
     go = { "goimports", "goimports-reviser" },
     sh = { "shfmt" },
     proto = { "buf" },
@@ -35,9 +35,23 @@ end
 conform.setup({
   --- DOCS: list of https://github.com/stevearc/conform.nvim#formatters
   formatters_by_ft = format_ft(),
-  log_level = vim.log.levels.DEBUG,
+  log_level = vim.log.levels.WARN,
+
   --- format_on_save = {}, VVI: 不要设置, 否则会覆盖以下 autocmd conform.format({...})
 })
+
+--- 修改 default formatter, 也可以用于定义自定义 formatter.
+conform.formatters.prettier = {
+  prepend_args = function ()
+    return {
+      "--print-width="..vim.bo.textwidth,  -- The line length where Prettier will try wrap. 默认 80.
+      "--single-quote",  -- Use single quotes instead of double quotes. 默认 false.
+      "--jsx-single-quote",  -- Use single quotes in JSX. 默认 false.
+      "--end-of-line=lf",  -- Which end of line characters to apply. 默认 'lf'.
+      -- "--tab-width=2",  -- Number of spaces per indentation level. 默认 2.
+    }
+  end
+}
 
 vim.api.nvim_create_autocmd("BufWritePre", {
   pattern = {"*"},
@@ -54,7 +68,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
       lsp_fallback = true --- VVI: try fallback to lsp format if no formatter.
     })
   end,
-  desc = "Conform: format file while saving",
+  desc = "conform: format file while saving",
 })
 
 --- user command: Format
