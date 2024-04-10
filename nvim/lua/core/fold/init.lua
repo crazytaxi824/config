@@ -49,7 +49,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
     fold_lsp(params.buf, win_id, { treesitter_fallback = true })
   end,
-  desc = "Fold: fold-lsp when LspAttach",
+  desc = "Fold: fold-lsp when LspAttach with treesitter_fallback",
 })
 
 vim.api.nvim_create_autocmd("FileType", {
@@ -106,7 +106,7 @@ vim.api.nvim_create_autocmd({"BufWritePost", "FileChangedShellPost"}, {
 
     --- 其他 foldexpr 情况下, 重新设置 foldmethod 用于重新 update (treesitter) foldexpr
     if vim.wo[win_id].foldmethod == 'expr' then
-      --- 使用 schedule() 保证最后执行 `set foldmethod=expr`
+      --- VVI: 使用 schedule() 保证最后执行 `set foldmethod=expr`
       vim.schedule(function()
         vim.api.nvim_set_option_value('foldmethod', 'expr', { scope = 'local', win = win_id })
       end)
@@ -122,7 +122,7 @@ vim.api.nvim_create_autocmd("BufWipeout", {
   callback = function(params)
     expr_lsp.clear_cache(params.buf)
   end,
-  desc = "Fold: clear lsp-foldexpr cache"
+  desc = "Fold: clear lsp-fold cache"
 })
 
 --- User Command 手动强制重新设置 fold -------------------------------------------------------------
