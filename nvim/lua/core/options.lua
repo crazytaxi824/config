@@ -389,7 +389,7 @@ vim.opt.foldenable = true  -- 折叠代码.
 vim.opt.foldlevel = 99  -- `:help fold-foldlevel`, 在可 fold 的情况下 fold 第几层
 vim.opt.foldnestmax = 3 -- 最多折叠3层.
 
---- `:help v:lua-call`, eg: `v:lua.require'mypack'.func(arg1, arg2)`
+--- NOTE: `:help v:lua-call`, eg: `v:lua.require'mypack'.func(arg1, arg2)`
 vim.opt.foldtext = "v:lua.require('core.fold.foldtext').foldtext()"
 
 --- 放在最上面, 因为如果 stdpath('config') 路径下有 json ... 等文件, 可以通过下面的 autocmd 覆盖这里的设置.
@@ -409,9 +409,6 @@ vim.cmd([[au Filetype vim,zsh,yaml setlocal foldmethod=marker foldlevel=0]])
 --- `:help *ft-markdown-plugin`, 设置 markdown folding
 vim.g.markdown_folding = 1
 vim.cmd([[au Filetype markdown setlocal foldlevel=999]])
-
---- VVI: 放在 foldmethod=marker 后面加载.
-require('core.fold')
 
 --- search 设置，命令 `/` `?` ----------------------------------------------------------------------
 vim.opt.incsearch = true   -- 开始实时搜索

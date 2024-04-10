@@ -55,6 +55,10 @@ end
 ---   }
 --- }
 local function parse_fold_data(bufnr, fold_range, foldnestmax)
+  --- VVI: mark startLine & endLine 解决两个同级别的折叠块在一起的时候会被折叠到一起的问题.
+  --- eg: comments & code_blocks
+  local startLine_marks, endLine_marks = {}, {}
+
   for _, fold in ipairs(fold_range) do
     --- fold range 是同一行时跳过.
     if fold.startLine == fold.endLine then
@@ -71,19 +75,27 @@ local function parse_fold_data(bufnr, fold_range, foldnestmax)
     end
 
     --- 根据 fold range 计算 foldexpr 的值.
-    --- VVI: mark startLine & endLine 解决两个同级别的折叠块在一起的时候会被折叠到一起的问题.
-    --- eg: comments & code_blocks
     for i = startLine, endLine, 1 do
       if i == startLine then
-        foldlevel_cache[bufnr][i] = ">" .. (foldlevel_cache[bufnr][i] +1)  --- mark startline of a fold
-      elseif i == endLine then
-        foldlevel_cache[bufnr][i] = "<" .. (foldlevel_cache[bufnr][i] +1)  --- mark endline of a fold
-      else
-        foldlevel_cache[bufnr][i] = foldlevel_cache[bufnr][i] +1  --- increase foldlevel
+        table.insert(startLine_marks, startLine)
       end
+      if i == endLine then
+        table.insert(endLine_marks, endLine)
+      end
+
+      foldlevel_cache[bufnr][i] = foldlevel_cache[bufnr][i] +1  --- increase foldlevel
     end
 
     ::continue::
+  end
+
+  --- mark foldpexr
+  for _, sl in ipairs(startLine_marks) do
+    foldlevel_cache[bufnr][sl] = ">" .. foldlevel_cache[bufnr][sl]
+  end
+
+  for _, el in ipairs(endLine_marks) do
+    foldlevel_cache[bufnr][el] = "<" .. foldlevel_cache[bufnr][el]
   end
 end
 

@@ -42,16 +42,14 @@ vim.api.nvim_create_user_command("Format", function() lsp_format() end, {bang=tr
 
 --- BufWritePre 在写入文件之前执行 Format.
 vim.api.nvim_create_autocmd('BufWritePre', {
-  pattern = {
-    '*.go','go.mod','go.work',
-    '*.css','*.less','*.scss','*.html','*.htm',
-    '*.js','*.jsx','*.cjs','*.mjs',
-    '*.ts','*.tsx','*.cts','*.ctsx','*.mts','*.mtsx',
-    '*.vue','*.svelte','*.graphql',
-    '*.json','*.jsonc',
-    '*.py','*.sh','*.proto',
-  },
+  pattern = {"*"},
   callback = function(params)
+    --- NOTE: exclude some of the filetypes to auto format
+    local exclude_auto_format_filtypes = { "markdown", "yaml", "lua" }
+    if vim.tbl_contains(exclude_auto_format_filtypes, vim.bo[params.buf].filetype) then
+      return
+    end
+
     lsp_format(params.buf)
   end,
   desc = "LSP: format file while saving",

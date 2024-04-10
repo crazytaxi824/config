@@ -122,6 +122,7 @@ local mason_tools = {
   "ruff-lsp",
   "shfmt",
   "typescript-language-server",
+  "stylua",
 }
 
 local function check_mason_tools()
