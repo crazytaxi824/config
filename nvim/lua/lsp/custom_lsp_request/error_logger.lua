@@ -2,7 +2,7 @@
 
 local M = {}
 
-local log_filepath = vim.fn.stdpath('cache') .. '/custom_lsp_handler.log'
+local log_filepath = vim.fn.stdpath('log') .. '/custom_lsp_handler.log'
 
 --- lsp.buf_request() 中 handler(err, result, req, config)
 --- name: custome handler name
