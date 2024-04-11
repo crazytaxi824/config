@@ -588,11 +588,11 @@ vim.lsp.buf.format({
 
 - ERROR Failed to run healthcheck for "which-key" plugin. Exception:
   function health#check, line 25
-  Vim(eval):E5108: Error executing lua .../pack/packer/start/which-key.nvim/lua/which-key/keys.lua:400: Invalid buffer id: 5
+  Vim(eval):E5108: Error executing lua ...al/share/nvim/lazy/which-key.nvim/lua/which-key/keys.lua:405: Invalid buffer id: 2
   stack traceback:
   [C]: in function 'nvim_buf_get_keymap'
-  .../pack/packer/start/which-key.nvim/lua/which-key/keys.lua:400: in function 'update_keymaps'
-  ...ack/packer/start/which-key.nvim/lua/which-key/health.lua:14: in function 'check'
+  ...al/share/nvim/lazy/which-key.nvim/lua/which-key/keys.lua:405: in function 'update_keymaps'
+  .../share/nvim/lazy/which-key.nvim/lua/which-key/health.lua:15: in function 'check'
   [string "luaeval()"]:1: in main chunk
 
 E5108: Error executing lua ...al/share/nvim/lazy/which-key.nvim/lua/which-key/view.lua:137: Expected Lua number
