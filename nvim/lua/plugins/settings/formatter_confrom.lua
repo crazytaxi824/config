@@ -15,18 +15,22 @@ local function format_ft()
   local fts = {
     --- VVI: conform will run multiple formatters sequentially
     go = { "goimports", "goimports-reviser" },
+    --- VVI: Use a sub-list to run only the first available formatter
+    --javascript = { { "prettier", "prettierd" } },
+
     sh = { "shfmt" },
     proto = { "buf" },
     lua = { "stylua" },
 
-    --["*"] = { "codespell" },  -- all filetypes.
-    --["_"] = { "trim_whitespace" },  -- filetypes that don't have other formatters configured.
+    --- all filetypes.
+    --["*"] = { "codespell" },
+    --- filetypes that don't have other formatters configured.
+    --["_"] = { "trim_whitespace" },
   }
 
   --- all prettier filetypes
   for _, ft in ipairs(prettier_ft) do
-    --- VVI: Use a sub-list to run only the first available formatter
-    fts[ft] = { { "prettierd", "prettier" } }
+    fts[ft] = { "prettier" }
   end
 
   return fts
