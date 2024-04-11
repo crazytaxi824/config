@@ -82,7 +82,10 @@ auto_format()
 
 --- user command -----------------------------------------------------------------------------------
 vim.api.nvim_create_user_command("Format", function()
-  conform.format(nil, function(err, did_edit)
+  conform.format({
+    timeout_ms = 3000,
+    lsp_fallback = true --- VVI: try fallback to lsp format if no formatter.
+  }, function(err, did_edit)
     if err then
       Notify(err, "ERROR")
       return
