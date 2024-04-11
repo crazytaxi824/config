@@ -39,10 +39,15 @@ end
 conform.setup({
   --- DOCS: list of https://github.com/stevearc/conform.nvim#formatters
   formatters_by_ft = format_ft(),
-  log_level = vim.log.levels.WARN,
-  notify_on_error = true,
 
-  --- format_on_save = {}, VVI: 不要设置, 否则会覆盖以下 autocmd conform.format({...})
+  --- code 语法错误会被 log, 而不是 log conform 内部错误.
+  log_level = vim.log.levels.OFF,
+
+  --- code 语法错误时在 command area 打印错误内容.
+  notify_on_error = false,
+
+  --- VVI: 不要设置, 否则会覆盖以下 autocmd conform.format({...})
+  --format_on_save = { ... },
 })
 
 --- 修改 default formatter, 也可以用于定义自定义 formatter.
