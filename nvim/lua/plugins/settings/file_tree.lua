@@ -224,8 +224,9 @@ nvim_tree.setup {
     highlight_git = "all",  -- 开启 git filename 颜色. 需要设置 nvim-tree.git.enable = true
     highlight_bookmarks = "all",
     highlight_diagnostics = "none",
-    highlight_opened_files = "all", -- highlight icon or filename or both.
-                                     -- "none"(*) | "icon" | "name" | "all"
+    --highlight_opened_files = "all",  -- VVI: 严重影响 :qa 退出 vim 时的性能.
+                                       -- highlight icon or filename or both.
+                                       -- "none"(*) | "icon" | "name" | "all"
     indent_width = 2, -- 默认 2.
     indent_markers = {
       enable = true,  -- 显示 indent line
