@@ -1,30 +1,28 @@
 --- 离开 vim 时, 清理 log 文件
+local function get_log_cache_files()
+  local log_files = {}
 
-local file_list = {
-  vim.fn.stdpath('log') .. '/log',
-  vim.fn.stdpath('log') .. '/lsp.log',
-  vim.fn.stdpath('log') .. '/mason.log',
-  vim.fn.stdpath('log') .. '/luasnip.log',
-  vim.fn.stdpath('log') .. '/dapui.log',
+  --- read files from directory
+  local logs = vim.split(vim.fn.glob(vim.fn.stdpath('log').."/*"), '\n', {trimempty=true})
+  local caches = vim.split(vim.fn.glob(vim.fn.stdpath('cache').."/*"), '\n', {trimempty=true})
 
-  vim.fn.stdpath('cache') .. '/dap.log',
-  vim.fn.stdpath('cache') .. '/null-ls.log',
-  vim.fn.stdpath('cache') .. '/null-tree.log',
-  vim.fn.stdpath('cache') .. '/packer.nvim.log',
-  vim.fn.stdpath('cache') .. '/telescope.log',
+  for _, fp in ipairs(logs) do
+    if vim.fn.isdirectory(fp) == 0 and vim.fn.filereadable(fp) == 1 then
+      table.insert(log_files, fp)
+    end
+  end
 
-  --- 以下是自定义 log 文件位置.
-  vim.fn.stdpath('cache') .. '/custom_lsp_handler.log',
-  vim.fn.stdpath('cache') .. '/packer.myupdate.log',
-}
+  for _, fp in ipairs(caches) do
+    if vim.fn.isdirectory(fp) == 0 and vim.fn.filereadable(fp) == 1 then
+      table.insert(log_files, fp)
+    end
+  end
+
+  return log_files
+end
 
 --- 判断文件大小是否超过 n(MB)
 local function file_size_over_MB(fpath, size)
-  --- 判断文件是否存在
-  if vim.fn.filereadable(fpath) == 0 then
-    return false
-  end
-
   --- size 大小 fallback 为 10MB
   size = size or 10
 
@@ -45,11 +43,10 @@ local function reduce_filesize(fpath)
 
   --- 写入数据
   vim.fn.writefile(remain_content, fpath)  -- flag: omit - 直接覆盖写入, 'a' - append 写入.
-  --- ":checktime" 在下面统一执行.
 end
 
 --- 根据 regexp 删除文件行内容.
-local function trim_prefix_blankline(filepath, regexp)
+local function trim_prefix_regexp(filepath, regexp)
   --- lua read file ------------------------------------------------------------ {{{
   --- local f, err = io.open(filepath, 'r')  -- read mode
   --- if err then
@@ -114,32 +111,23 @@ local function trim_prefix_blankline(filepath, regexp)
     --- f:close()
     -- -- }}}
     vim.fn.writefile(content_list, filepath)  -- flag: omit - 直接覆盖写入, 'a' - append 写入.
-    --- ":checktime" 在下面统一执行.
   end
 end
 
 --- 离开 vim 时, 清理 log 文件.
-vim.api.nvim_create_autocmd("VimLeave", {
+vim.api.nvim_create_autocmd("VimLeavePre", {
   pattern = {"*"},
-  once = true,  -- VimLeave execute only once
   callback = function(params)
-    --- 特殊处理 dap.log 文件中大量的空白行.
-    local daplog = vim.fn.stdpath('cache') .. '/dap.log'
-    if vim.fn.filereadable(daplog) == 1 then
-      trim_prefix_blankline(daplog, "^$")
-    end
+    local log_files = get_log_cache_files()
 
     --- 如果 log 文件超过指定大小, 则删除文件前半部分的数据.
-    for _, fpath in ipairs(file_list) do
+    for _, fpath in ipairs(log_files) do
       if file_size_over_MB(fpath, 6) then
         reduce_filesize(fpath)
       end
     end
-
-    --- VVI: Check if any buffers were changed outside of Vim.
-    vim.cmd('checktime')
   end,
-  desc = "clean log files",
+  desc = "clean log files when VimLeavePre",
 })
 
 
