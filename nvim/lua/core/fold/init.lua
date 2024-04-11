@@ -112,7 +112,7 @@ vim.api.nvim_create_autocmd({"BufWritePost", "FileChangedShellPost"}, {
       end)
     end
   end,
-  desc = "Fold: update foldexpr()"
+  desc = "Fold: update foldexpr() when file content changes"
 })
 
 --- delete foldexpr cache, 避免内存使用无限扩大.
