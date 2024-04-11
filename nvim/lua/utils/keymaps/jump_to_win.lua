@@ -51,7 +51,7 @@ M.choose = function()
   vim.cmd('redraw')  -- VVI: 刷新 statusline 显示.
 
   --- prompt choose window
-  print("Choose window: ")
+  vim.notify("Choose window:")
   local char = string.upper(get_user_input_char())  -- 这里返回的是 string 类型
 
   --- jump to window
