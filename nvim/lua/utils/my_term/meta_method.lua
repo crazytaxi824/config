@@ -234,7 +234,7 @@ local function set_buf_line_output(bufnr, data, hl)
   --- 开启 modifiable 准备写入数据.
   vim.bo[bufnr].modifiable = true
 
-  --- NOTE: 处理 EOF, data 最后会多一行 empty line.
+  --- VVI: 处理 EOF, data 最后会多一行 empty line.
   --- `:help channel-callback`, `:help channel-lines`, 中说明: EOF is a single-item list: `['']`.
   if data[#data] == '' then
     table.remove(data, #data)
