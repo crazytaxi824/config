@@ -37,6 +37,22 @@ local function get_oversized_log(size)
   return log_files
 end
 
+local function trim_empty_lines(lines)
+  local index
+  for i, line in ipairs(lines) do
+    if line ~= '' then
+      index = i
+      break
+    end
+  end
+
+  if index then
+    return { unpack(lines, index) }
+  end
+
+  return lines
+end
+
 --- 删除文件中的旧内容以达到 reduce file size 的目的.
 local function reduce_filesize(log, size)
   --- file line count
@@ -65,6 +81,9 @@ local function reduce_filesize(log, size)
   --- 只读取倒数 n 行数据.
   local max = trim_lnum * -1
   local remain_content = vim.fn.readfile(log.filepath, '', max)
+
+  --- trim empty lines
+  remain_content = trim_empty_lines(remain_content)
 
   --- 覆盖写入数据. flag: omit - 直接覆盖写入, 'a' - append 写入.
   vim.fn.writefile(remain_content, log.filepath)
