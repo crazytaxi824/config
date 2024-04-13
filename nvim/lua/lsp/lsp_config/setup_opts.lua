@@ -82,8 +82,8 @@ M.on_init = function(client)
     -- client.server_capabilities.foldingRangeProvider = nil  -- debug: 下面的 fold 设置
   end
 
-  --- NOTE: notify lsp config is changed.
-  client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
+  --- NOTE: 这里不需要 notify change. on_init() 是在 start 之前执行的.
+  --client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
 
   --- DEBUG: 用
   if __Debug_Neovim.lspconfig then
