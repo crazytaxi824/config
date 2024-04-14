@@ -82,6 +82,11 @@ M.list = {
     mason = "eslint-lsp",
     filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx", "vue", "svelte", "astro" },
   },
+  gdscript = {
+    cmd = "nc", -- system builtin: TCP and UDP connections and listens
+    install = "system builtin",
+    filetypes = { 'gd', 'gdscript', 'gdscript3' },
+  },
 }
 
 --- { javascript = { eslint, tsserver }, ... }

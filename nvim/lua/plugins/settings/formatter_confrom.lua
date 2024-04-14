@@ -12,6 +12,8 @@ local function format_ft()
     "yaml", "markdown", "markdown.mdx", -- NOTE: 这些最好不要自动 format.
   }
 
+  local gd_ft = { 'gd', 'gdscript', 'gdscript3' }
+
   local fts = {
     --- VVI: conform will run multiple formatters sequentially
     go = { "goimports", "goimports-reviser" },
@@ -33,6 +35,11 @@ local function format_ft()
     fts[ft] = { "prettier" }
   end
 
+  --- gdscript filetypes
+  for _, ft in ipairs(gd_ft) do
+    fts[ft] = { "gdformat" }
+  end
+
   return fts
 end
 
@@ -50,18 +57,33 @@ conform.setup({
   --format_on_save = { ... },
 })
 
+--- Custome formatter ------------------------------------------------------------------------------
 --- 修改 default formatter, 也可以用于定义自定义 formatter.
-conform.formatters.prettier = {
-  prepend_args = function ()
-    return {
+conform.formatters.prettier = function(bufnr)
+  return {
+    prepend_args = {
       "--print-width="..vim.bo.textwidth,  -- The line length where Prettier will try wrap. 默认 80.
       "--single-quote",  -- Use single quotes instead of double quotes. 默认 false.
       "--jsx-single-quote",  -- Use single quotes in JSX. 默认 false.
       "--end-of-line=lf",  -- Which end of line characters to apply. 默认 'lf'.
       -- "--tab-width=2",  -- Number of spaces per indentation level. 默认 2.
     }
-  end
-}
+  }
+end
+
+conform.formatters.gdformat = function(bufnr)
+  --- DOCS: `gdformat` formatter 安装使用方法
+  --- `/path/to/python3 -m venv .venv` 创建虚拟环境.
+  --- 安装最新 gdformat `pip3 install git+https://github.com/Scony/godot-gdscript-toolkit.git`
+  --- 或者 `let $PATH='.venv/bin:'..$PATH` 加入虚拟环境.
+  --- NOTE: `gdformat` 依赖 `python3` 所以必须使用 venv.
+  return {
+    --- using custom path, fallback to $PATH
+    command = require("conform.util").find_executable({
+      ".venv/bin/gdformat",
+    }, "gdformat"),
+  }
+end
 
 --- auto format ------------------------------------------------------------------------------------
 local g_id
