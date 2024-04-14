@@ -9,42 +9,34 @@
 --- 全局变量
 local M = {}
 
---- 从 pwd 向上寻找 .nvim/settings.lua 文件.
-local function available_local_settings_file()
-  --- 从 pwd 向上获取 dir 直到 root "/".
-  for dir in vim.fs.parents(vim.api.nvim_buf_get_name(0)) do
-    local local_settings_filepath
-    if string.sub(dir, #dir)  == '/' then
-      local_settings_filepath = dir .. '.nvim/settings.lua'
-    else
-      local_settings_filepath = dir .. '/.nvim/settings.lua'
-    end
-    if vim.fn.filereadable(local_settings_filepath) == 1 then
-      return local_settings_filepath
-    end
-  end
-end
-
+--- 返回2种情况:
+---  1 - return {}    没有 local_settings, 或 local_settings 被删除 需要更新配置;
+---  2 - return nil   local_settings 语法错误, 保持之前的配置;
 local function get_local_settings_content()
-  local local_settings_filepath = available_local_settings_file()
-  if local_settings_filepath then
-    --- 使用 pcall 确保 lua file 执行没有错误.
-    local ok, result = pcall(dofile, local_settings_filepath)
-    --- ok 文件执行 (dofile) 成功.
-    --- result 是执行结果. 可能为 nil, 可能是执行失败的 error message.
-    if not ok then
-      Notify(vim.trim(result), "ERROR")
-      return nil, "dofile_error"
-    elseif result then
-      --- '.nvim/settings.lua' 读取成功, 同时返回值不是 nil 的情况下缓存 settings 数据.
-      return result
-    end
+  local local_settings_filepaths = vim.fs.find({'.nvim/settings.lua'}, {
+    upward = true, -- 从 pwd 向上寻找 .nvim/settings.lua 文件.
+    stop = vim.loop.os_homedir(),  -- 直到 $HOME 为止.
+    path = vim.fs.dirname(vim.api.nvim_buf_get_name(0)),  -- 从当前文件所在目录开始查找.
+    limit = 1, -- NOTE: 只找最近的一个文件.
+  })
+
+  if #local_settings_filepaths <1 then
+    return {}  -- 没有 local_settings, 或 local_settings 被删除, 需要更新配置
   end
+
+  --- VVI: 直接获取 content, 该段代码只会在第一次 require() 的时候运行一次, 以后再次 require() 的时候不会多次运行.
+  local ok, result = pcall(dofile, local_settings_filepaths[1])
+  --- ok 文件执行 (dofile) 成功.
+  --- result 是执行结果. 可能为 nil, 可能是执行失败的 error message.
+  if not ok then
+    Notify(vim.trim(result), "ERROR")
+    return nil  -- local_settings 语法错误, 保持之前的配置;
+  end
+
+  return result or {}  -- local_settings 读取成功, result 可能为 nil. 这里需要更新配置.
 end
 
---- 缓存 file 内容.
---- VVI: 直接获取 content, 该段代码只会在第一次 require() 的时候运行一次, 以后再次 require() 的时候不会多次运行.
---- VVI: 这里不要使用 nil, 因为 nil 无法 index [lsp] / [null-ls].
+--- 第一次获取 local_settings, 忽略 dofile 错误.
 local content = get_local_settings_content() or {}
 
 --- extend project local settings if '.nvim/settings.lua' exists -----------------------------------
@@ -140,13 +132,13 @@ vim.api.nvim_create_user_command("LocalSettingsReload", function()
   --- lua 中 table 是 deep copy
   local old_content = content
 
-  --- VVI: 给 content 重新赋值
-  local new_content, err = get_local_settings_content()
-  if err then  -- dofile error
-    return
+  local new_content = get_local_settings_content()
+  if not new_content then
+    return  -- dofile error
   end
 
-  content = new_content or {}
+  --- 更新 local_settings
+  content = new_content
 
   --- 重新加载 local settings.
   reload_local_settings(old_content, content)
