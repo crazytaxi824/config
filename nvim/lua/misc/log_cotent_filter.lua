@@ -56,14 +56,14 @@ end
 --- 删除文件中的旧内容以达到 reduce file size 的目的.
 local function reduce_filesize(log, size)
   --- file line count
-  local result = vim.fn.system('wc -l ' .. log.escape)
+  local result = vim.fn.system('wc -l < ' .. log.escape)
   if vim.v.shell_error ~= 0 then
     vim.notify(vim.trim(result), vim.log.levels.WARN)
     vim.cmd('sleep 3')
     return
   end
 
-  local lnum = tonumber(string.match(result, "[^ ]+"))
+  local lnum = tonumber(vim.trim(result))
   if not lnum then
     vim.notify("error: lnum can not be parsed", vim.log.levels.WARN)
     vim.cmd('sleep 3')
