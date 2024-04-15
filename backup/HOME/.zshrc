@@ -357,9 +357,12 @@ fzf_def_cmd="fd --color=always --follow --hidden --no-ignore \
 # 'fzf' 文件搜索设置
 export FZF_DEFAULT_COMMAND="$fzf_def_cmd"
 
+# NOTE: The $'…' quoting syntax, which expands ANSI-C backslash-escaped characters in the text between the single quotes, is supported (see ANSI-C Quoting).
+FZF_DEFAULT_OPTS=$'--header="<C-e>:Edit; <C-o>:Open; <Tab>:Select; <S-Tab>:Prev-win; <C-k>:Prev-wrap; <C-a>:Select-ALL; <C-d>:Deselect-All"'
+
 # btab=<Shift-Tab>
 # Vim: Warning: Output not to a terminal. 解决方法: `vim/nvim "filepath" > /dev/tty`
-export FZF_DEFAULT_OPTS="--height=80% --ansi --multi --layout=reverse --border --scrollbar='▌▐' \
+export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS" --height=80% --ansi --multi --layout=reverse --border --scrollbar='▌▐' \
 	--marker='✔' --pointer='▸' --info='inline-right' \
 	--color='dark,hl:191:reverse,hl+:191:reverse,fg+:underline,bg+:238:bold,border:240' \
 	--color='scrollbar:240,pointer:191,marker:191,gutter:-1,header:71:italic:underline' \
@@ -369,10 +372,9 @@ export FZF_DEFAULT_OPTS="--height=80% --ansi --multi --layout=reverse --border -
 	--bind='ctrl-k:toggle-preview-wrap' \
 	--bind='shift-up:half-page-up,shift-down:half-page-down' \
 	--bind='pgup:preview-half-page-up,pgdn:preview-half-page-down' \
-	--bind='ctrl-a:toggle-all' \
+	--bind='ctrl-a:select-all,ctrl-d:deselect-all' \
 	--bind='ctrl-e:become($EDITOR \"+lua FZF_selected([[{+f}]])\" > /dev/tty)' \
-	--bind='ctrl-o:execute(open {})' \
-	--header='# <C-e>:Edit; <C-o>:Open; <S-Tab>:P-win; <C-k>:P-wrap, <Tab>:Select; <C-a>:Toggle-All-Selected'"
+	--bind='ctrl-o:execute(open {})'"
 
 # FZF_CTRL_T_COMMAND & FZF_CTRL_T_OPTS -----------------------------------------
 # NOTE: 需要先设置 key bindings 和 fuzzy completion.
