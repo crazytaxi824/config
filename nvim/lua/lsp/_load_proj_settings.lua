@@ -20,7 +20,7 @@ local function get_local_settings_content()
     limit = 1, -- NOTE: 只找最近的一个文件.
   })
 
-  if #local_settings_filepaths <1 then
+  if #local_settings_filepaths < 1 then
     return {}  -- 没有 local_settings, 或 local_settings 被删除, 需要更新配置
   end
 
