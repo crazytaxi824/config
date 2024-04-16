@@ -135,20 +135,24 @@ cmp.setup {
 
   --- DOCS: key mapping, `:help cmp-mapping`
   mapping = {
-    --["<Up>"] = cmp.mapping.select_prev_item(),  -- 选择 item 的时候会将内容填到行内.
-    --["<Down>"] = cmp.mapping.select_next_item(),
-    ["<Up>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior, count = 1 }),  -- 选择 item 的时候不会将内容填到行内.
-    ["<Down>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior, count = 1 }),
     ["<Esc>"] = cmp.mapping.abort(), -- 当使用 select_prev/next_item() 的时候. abort() 关闭代码提示窗, 同时回到代码之前的状态;
                                      -- cmp.mapping.close() 也可以关闭代码提示窗口, 但是会保持代码现在的状态.
                                      -- 当使用 select_prev_item({behavior=cmp.SelectBehavior}) 的时候, abort() & close() 效果相同.
 
+    --["<Up>"] = cmp.mapping.select_prev_item(),  -- 选择 item 的时候会将内容填到行内.
+    --["<Down>"] = cmp.mapping.select_next_item(),
+    ["<Up>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior, count = 1 }),  -- 选择 item 的时候不会将内容填到行内.
+    ["<Down>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior, count = 1 }),
+
     ["<PageUp>"]   = cmp.mapping(cmp.mapping.scroll_docs(-3), { "i", "c" }),
     ["<PageDown>"] = cmp.mapping(cmp.mapping.scroll_docs(3),  { "i", "c" }),
-    ["<C-Space>"] = cmp.mapping(function (fallback)
-      cmp.core:reset()  -- HACK: reset cmp cache. fix: [snip] and [buff] missing when delete dot(.) char.
+
+    ["<C-Space>"] = cmp.mapping(function(fallback)
+      --- HACK: :reset() cmp cache. fix: [snip] and [buff] missing when delete dot(.) char.
+      cmp.core:reset()
       cmp.complete()
     end, { "i", "c" }),  -- 手动触发 completion window.
+
     -- ["<C-e>"] = cmp.mapping {  -- 对 insert, command 模式分别设置不同的行为.
     --   i = cmp.mapping.abort(),
     --   c = cmp.mapping.close(),
