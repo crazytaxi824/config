@@ -195,9 +195,12 @@ export HOMEBREW_BUNDLE_FILE=~/.config/Brewfile  # 默认在 ~/.Brewfile
 export GOPATH=$HOME/gopath
 export GOBIN=$GOPATH/bin
 export PATH=$PATH:$GOBIN
+
+export GOFLAGS="-buildvcs=false"
 export GO111MODULE=on  # on | off | auto
 #export GOPROXY=off  # 默认值 "https://proxy.golang.org,direct"
 #export GOSUMDB=off  # Disable the Go checksum database
+
 
 ### DEBUG use only
 #export PATH=/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin
