@@ -37,6 +37,7 @@ M.list = {
     filetypes = {'go', 'gomod', 'gowork', 'gotmpl'}
   },
   --- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#pyright
+  --- `pyrightconfig.json` 配置 https://github.com/microsoft/pyright/blob/main/docs/configuration.md
   pyright = {  --- for textDocument/hover ...
     cmd = "pyright",
     mason = "pyright",
