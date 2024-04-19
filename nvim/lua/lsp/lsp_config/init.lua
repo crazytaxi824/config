@@ -13,7 +13,7 @@ require('lspconfig.ui.windows').default_options.border = {"▄","▄","▄","█
 vim.cmd('hi! link LspInfoBorder FloatBorder')
 
 --- 需要设置的 lsp 列表.
-local lsp_servers_map = require('lsp.lsp_config.lsp_list').list
+local lsp_servers_map = require('lsp.svr_list').list
 
 local function lspconfig_setup(lsp_svr)
   --- opts 必须包含 on_attach, capabilities 两个属性.

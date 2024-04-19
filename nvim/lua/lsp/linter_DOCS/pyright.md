@@ -6,13 +6,19 @@
 
 ```json
 // pyrightconfig.json
+// https://github.com/microsoft/pyright/blob/main/docs/configuration.md#sample-config-file
 {
-  "executionEnvironments": [
-    {
-      "extraPaths": ["src"] // Additional search paths that will be used when searching for modules imported by files.
-    }
+  "include": [
+    "src"
   ],
-  "verboseOutput": true, // This is useful when diagnosing certain problems like import resolution issues.
+
+  "exclude": [
+    "**/node_modules",
+    "**/__pycache__",
+  ],
+
+  // This is useful when diagnosing certain problems like import resolution issues.
+  "verboseOutput": true,
 
   // 以下两个设置都必须要
   "venvPath": ".", // virtual env path

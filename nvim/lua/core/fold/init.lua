@@ -1,6 +1,6 @@
 local expr_lsp = require("core.fold.fold_lsp")
 local expr_ts = require("core.fold.fold_treesitter")
-local filetype_lsp = require("lsp.lsp_config.lsp_list").filetype_lsp
+local filetype_lsp = require("lsp.svr_list").filetype_lsp
 
 --- 使用 lsp 来 fold, 如果 lsp_fold 设置成功则返回 true.
 local function fold_lsp(bufnr, win_id, opts)
