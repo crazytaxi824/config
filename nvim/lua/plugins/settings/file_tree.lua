@@ -245,8 +245,9 @@ nvim_tree.setup {
     },
     special_files = {
       "Makefile", "MAKEFILE", "README.md", "readme.md", "Readme.md", "DOCS.md",
-      "eslint.config.mjs", "eslint.config.js", "eslint.config.cjs", "package.json", "package-lock.json",
       ".editorconfig", ".gitignore",
+      "eslint.config.mjs", "eslint.config.js", "eslint.config.cjs", "package.json", "package-lock.json",
+      "pyrightconfig.json", "pyproject.toml",
     },
     symlink_destination = true,  -- Whether to show the destination of the symlink.
   },
