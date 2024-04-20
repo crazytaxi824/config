@@ -559,7 +559,7 @@ vim.api.nvim_create_user_command('SpellCheckToggle', function()
   end
 end, {bang=true, bar=true})
 
---- 其他设置 --------------------------------------------------------------------------------------- {{{
+--- 其他设置
 vim.api.nvim_create_autocmd("FileType", {
   pattern = {"help"},
   callback = function(params)
