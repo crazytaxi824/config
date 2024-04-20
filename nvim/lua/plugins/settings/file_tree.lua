@@ -220,7 +220,7 @@ nvim_tree.setup {
     },
     icons = {
       git_placement = "before",  -- 'before' (filename) | 'after' | 'signcolumn' (vim.signcolumn='yes')
-      symlink_arrow = " ⟶ ",  -- old_name ⟶ new_name, 这个不是显示在 filename/dir 之前的 icon.
+      symlink_arrow = ' ' .. Nerd_icons.arrows.right .. ' ',  -- old_name ⟶ new_name, 这个不是显示在 filename/dir 之前的 icon.
       show = {
         file = true,  -- 显示 file icon, `nvim-web-devicons` will be used if available.
         folder = true, -- 显示 folder icon
