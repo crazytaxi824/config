@@ -10,10 +10,10 @@
 
 --- 自定义 diagnostic sign 样式
 local signs = {
-  { name = "DiagnosticSignError", text = "⛌ " },  -- ❌✕✖︎✗✘⛌
-  { name = "DiagnosticSignWarn", text = "⚠️ " },
-  { name = "DiagnosticSignInfo", text = "𝖎 " },
-  { name = "DiagnosticSignHint", text = "⚐ " },  -- ⚐⚑
+  { name = "DiagnosticSignError", text = Nerd_icons.diag.error },
+  { name = "DiagnosticSignWarn",  text = Nerd_icons.diag.warn },
+  { name = "DiagnosticSignInfo",  text = Nerd_icons.diag.info },
+  { name = "DiagnosticSignHint",  text = Nerd_icons.diag.hint },
 }
 for _, sign in ipairs(signs) do
   vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = "" })

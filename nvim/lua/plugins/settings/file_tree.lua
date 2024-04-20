@@ -13,9 +13,9 @@ local nt_api = require("nvim-tree.api")
 
 --- file/dir icons --------------------------------------------------------------------------------- {{{
 local nt_indent_line = {
-  corner = "└ ",
-  edge = "│ ",
-  item = "│ ",
+  edge   = Nerd_icons.indent.edge .. " ",
+  item   = Nerd_icons.indent.item .. " ",
+  corner = Nerd_icons.indent.corner .. " ",
   none = "  ",
 }
 
@@ -41,15 +41,15 @@ local glyphs = {
     renamed   = "R",
     untracked = "?",  -- ★ untracked = new file.
     deleted   = "D",
-    ignored   = "◌",  -- 
+    ignored   = "◌",  --  ◌
   },
 }
 
 local diagnostics_icons = {
-  hint    = "󱩎 ",  -- ⚐ ⚑ 󰛨
-  info    = " ",  -- 𝖎    
-  warning = " ",  -- ⚠️ 
-  error   = " ",  -- ❌✕✖︎✗✘⛌
+  hint    = Nerd_icons.diag.hint,  -- ⚐ ⚑ 󰛨 󱩎
+  info    = Nerd_icons.diag.info,  -- 𝖎    
+  warning = Nerd_icons.diag.warn,  -- ⚠️  
+  error   = Nerd_icons.diag.error,  -- ❌✕✖︎✗✘⛌ 
 }
 
 -- -- }}}
