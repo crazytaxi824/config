@@ -243,10 +243,11 @@ local plugins = {
   },
 
   --- File explorer --------------------------------------------------------------------------------
-  {"kyazdani42/nvim-tree.lua",
+  {"nvim-tree/nvim-tree.lua",
     commit = "81eb8d5",
     -- tag = "nvim-tree-v1.3.0",
     config = function() require("plugins.settings.file_tree") end,
+    dependencies = { "nvim-tree/nvim-web-devicons" },
 
     -- VVI: 本文件最后设置: 在 `nvim dir` 直接打开文件夹的时直接加载 nvim-tree.lua.
     event = "VeryLazy",
@@ -257,6 +258,7 @@ local plugins = {
   {"akinsho/bufferline.nvim",
     tag = "v4.5.2",
     config = function() require("plugins.settings.decor_bufferline") end,
+    dependencies = { "nvim-tree/nvim-web-devicons" },
 
     event = "VeryLazy",
   },
@@ -414,7 +416,7 @@ local opts = {
       task = "✔ ",
       list = {
         "●",
-        "➜",
+        "⟶",
         "★",
         "‒",
       },
