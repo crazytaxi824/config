@@ -41,7 +41,7 @@ mason.setup {
     --border = {"▄","▄","▄","█","▀","▀","▀","█"},  -- 默认为: 'none'
     icons = {
       package_installed = "✓", -- ✓✔︎
-      package_pending = "➜",
+      package_pending = "⟶",
       package_uninstalled = "⛌", -- ❌✕✖︎✗✘⛌
     },
 
