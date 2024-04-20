@@ -194,6 +194,8 @@ end
 
 -- -- }}}
 
+local bufvar_branch = 'my_current_branch'
+
 --- `:help lualine-Global-options`
 lualine.setup {
   options = {
@@ -219,7 +221,8 @@ lualine.setup {
   --- VVI: https://github.com/nvim-lualine/lualine.nvim#changing-components-in-lualine-sections
   sections = {
     lualine_a = {
-      {'mode',
+      {
+        'mode',
         fmt = function(str)
           --- 如果 window 小于 n 则, 只显示 mode 第一个字母.
           if str ~= '' and vim.api.nvim_win_get_width(0) <= 60 then
@@ -230,30 +233,29 @@ lualine.setup {
       },
     },
     lualine_b = {
-      {'branch',
+      {
+        'branch',
         icons_enabled = true, -- 单独设置 branch 使用 icon.
         icon = {'', color={ gui='bold' }},
-        fmt = function(str)
-          if str ~= '' and vim.api.nvim_win_get_width(0) <= 80 then
+        fmt = function(git_branch)
+          vim.b[bufvar_branch] = git_branch
+          if git_branch ~= '' and vim.api.nvim_win_get_width(0) <= 80 then
             return Nerd_icons.ellipsis  -- branch has icon
           end
-          return str
+          return git_branch
         end,
         color = function()
           --- 如果是 edit 没有 .git 的文件, 这里的函数不会运行.
-          local bufvar_branch = 'my_current_branch'
           if vim.b[bufvar_branch] and (vim.b[bufvar_branch] == 'main' or vim.b[bufvar_branch] == 'master') then
             return { bg = 160, gui = 'bold' }
-          elseif vim.b[bufvar_branch] == nil then
-            local dir = vim.fs.dirname(vim.api.nvim_buf_get_name(0))
-            vim.b[bufvar_branch] = vim.trim(vim.fn.system('cd ' .. dir  .. ' && git branch --show-current'))
           end
-          --- return nil 时使用 theme 的默认颜色.
+          --- NOTE: return nil 时使用 theme 的默认颜色.
         end,
       },
     },
     lualine_c = {
-      {'diagnostics',
+      {
+        'diagnostics',
         symbols = {error = 'E:', warn = 'W:', info = 'I:', hint = 'H:'},
         update_in_insert = false, -- Update diagnostics in insert mode.
         diagnostics_color = {
@@ -264,13 +266,15 @@ lualine.setup {
           hint  = {fg=lualine_colors.light_grey, gui='bold'}, -- Changes diagnostics' hint color.
         },
       },
-      {my_trailing_whitespace,
+      {
+        my_trailing_whitespace,
         color = {fg=lualine_colors.dark_orange, gui='bold'},
         cond = function() return vim.bo.filetype~='' and vim.bo.buftype=='' end,  -- normal buffer with a filetype
       },
     },
     lualine_x = {
-      {'filename',
+      {
+        'filename',
         path = 3, -- 路径显示模式:
                   -- 0: Just the filename
                   -- 1: Relative path
@@ -307,7 +311,8 @@ lualine.setup {
       },
     },
     lualine_y = {
-      {my_filetype_encoding,
+      {
+        my_filetype_encoding,
         fmt = function(str)
           if str ~= '' and vim.api.nvim_win_get_width(0) <= 80 then
             return string.sub(str,1,1) .. ' ' .. Nerd_icons.ellipsis
@@ -317,7 +322,8 @@ lualine.setup {
       },
     },
     lualine_z = {
-      {my_location,
+      {
+        my_location,
         fmt = function(str)
           if str ~= '' and vim.api.nvim_win_get_width(0) <= 80 then
             return '%2v'
@@ -333,7 +339,8 @@ lualine.setup {
     lualine_a = {},
     lualine_b = {},
     lualine_c = {
-      {'diagnostics',
+      {
+        'diagnostics',
         icons_enabled = true,
         icon = {Nerd_icons.diag.warn, color={fg = lualine_colors.orange, gui = 'bold'}},
         symbols = {error = 'E:', warn = 'W:', info = 'I:', hint = 'H:'},
@@ -345,7 +352,8 @@ lualine.setup {
           hint  = {fg=lualine_colors.light_grey, gui='bold'}, -- Changes diagnostics' hint color.
         },
       },
-      {my_trailing_whitespace,
+      {
+        my_trailing_whitespace,
         color = {fg=lualine_colors.dark_orange, gui='bold'},
         cond = function() return vim.bo.filetype~='' and vim.bo.buftype=='' end,  -- normal buffer with a filetype
       },
@@ -353,7 +361,8 @@ lualine.setup {
     lualine_x = {
       --- VVI: 分为3个 components 主要是为了解决 inactive_sections 中的 filename 无法分别设置颜色.
       {modified_readonly, color = {fg = lualine_colors.white, bg = lualine_colors.red, gui='bold'}},
-      {modified,
+      {
+        modified,
         color = {fg = lualine_colors.cyan, gui='bold'},
         fmt = function(str)
           if str ~= '' and vim.api.nvim_win_get_width(0) <= 60 then
@@ -362,7 +371,8 @@ lualine.setup {
           return str
         end,
       },
-      {readonly,
+      {
+        readonly,
         color = {fg = lualine_colors.dark_orange, gui='bold'},
         fmt = function(str)
           if str ~= '' and vim.api.nvim_win_get_width(0) <= 60 then
