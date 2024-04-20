@@ -205,7 +205,7 @@ local keymaps = {
   {'v', '<leader><lt>', '<C-c>`>a><C-c>`<lt>i<lt><C-c>v`><right><right>', opt, 'which_key_ignore'},  -- '<' 使用 <lt> 代替.
 
   --- 关闭所有其他 buffers
-  {'n', '<leader>Da', function() key_fn.close_other_bufs() end, opt, 'buffer: Close All Other Buffers'},
+  --{'n', '<leader>Da', function() key_fn.close_other_bufs() end, opt, 'buffer: Close All Other Buffers'},
   --{'n', '<leader>d', 'bdelete', opt, 'buf: Close Current Buffer'},
 
   --- Window 控制

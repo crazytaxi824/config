@@ -595,6 +595,7 @@ local bufferline_keymaps = {
   {'n', '<leader>d', function() bufferline_del_current_buffer() end, opt, 'buffer: Close Current Buffer/Tab'},
 
   --- NOTE: ":BufferLineCloseRight" and ":BufferLineCloseRight" skip unwritten buffers without a bang [!].
+  {'n', '<leader>Da', '<cmd>BufferLineCloseOthers<CR>', opt, 'buffer: Close all other buffers'},
   {'n', '<leader>D<Right>', '<cmd>BufferLineCloseRight<CR>', opt, 'buffer: Close Right Side Buffers'},
   {'n', '<leader>D<Left>', '<cmd>BufferLineCloseLeft<CR>', opt, 'buffer: Close Left Side Buffers'},
 }
