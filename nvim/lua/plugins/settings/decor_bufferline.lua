@@ -470,7 +470,7 @@ bufferline.setup({
     show_duplicate_prefix = true, -- VVI: whether to show duplicate buffer prefix
 
     --- icon 显示
-    color_icons = false, -- whether or not to add the filetype icon highlights
+    color_icons = true, -- whether or not to add the filetype icon highlights
     --- NOTE: file icon 显示, 推荐使用 web-devicons.
     -- get_element_icon = function(element)
     --   -- element consists of {filetype: string, path: string, extension: string, directory: string}
@@ -480,7 +480,7 @@ bufferline.setup({
     --   local icon, hl = require('nvim-web-devicons').get_icon_by_filetype(element.filetype, { default = false })
     --   return icon, hl
     -- end,
-    show_buffer_icons = false, -- disable filetype icons for buffers
+    show_buffer_icons = true, -- disable filetype icons for buffers
     show_close_icon = false,  -- tab close icon. 无法自定义 tab close command, 所以不使用.
     show_buffer_close_icons = true, -- buffer close icon
 
