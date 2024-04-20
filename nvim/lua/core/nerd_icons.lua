@@ -28,6 +28,6 @@ Nerd_icons = {
   star  = '★',
   modified = '●',
   h_dot    = '○',
-  ellipsis = '…',
+  ellipsis = '', -- … 
   h_circle = "◌", --  
 }

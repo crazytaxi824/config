@@ -378,11 +378,11 @@ vim.opt.fillchars = 'fold: ,diff: ,vert:│,eob:~'
 ---                999 表示从 1000 层开始 fold, 即不进行 fold.
 ---
 --- `:help foldtext` 改变折叠代码的样式. NOTE: 配合 fillchars 使用.
---- vim.opt.foldtext = 'printf("%s … %s -- lvl %d", getline(v:foldstart), getline(v:foldend), v:foldlevel)'
+--- vim.opt.foldtext = 'printf("%s  %s -- lvl %d", getline(v:foldstart), getline(v:foldend), v:foldlevel)'
 ---
 --- vim `:h pattern-overview` 中使用双引号和单引号是不一样的. 单引号 '\(\)\+' 在双引号中需要写成 "\\(\\)\\+"
 --- \@<= 用法: \(an\_s\+\)\@<=file, 返回 "file" after "an" and white space or an
---- vim.opt.foldtext = "printf('%s … %s', getline(v:foldstart), matchstr(getline(v:foldend), '\\(.*\\)\\@<=[})]\\+'))"
+--- vim.opt.foldtext = "printf('%s  %s', getline(v:foldstart), matchstr(getline(v:foldend), '\\(.*\\)\\@<=[})]\\+'))"
 -- -- }}}
 vim.opt.foldenable = true  -- 折叠代码.
 -- vim.opt.foldcolumn = "1"   -- 类似 signcolumn
