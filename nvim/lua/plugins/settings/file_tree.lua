@@ -20,20 +20,20 @@ local nt_indent_line = {
 }
 
 local glyphs = {
-  default = '',
-  symlink = '',  -- 这里的 symlink 和 symlink_arrow 设置不一样, 这里是文件名前面的 icon.
-  bookmark = '➜',
-  modified = "●",
-  folder = {
-    arrow_closed = "▶︎",  -- folder_arrow
-    arrow_open = "▽",    -- folder_arrow
-    default = '▶︎',  -- folder
-    open = '▽',     -- folder
-    empty = '-',    -- folder
-    empty_open = '-',  -- folder
-    symlink = '▶︎',
-    symlink_open = '▽',
-  },
+  -- default = '',
+  -- symlink = '',  -- 这里的 symlink 和 symlink_arrow 设置不一样, 这里是文件名前面的 icon.
+  -- bookmark = '⟶',
+  -- modified = "●",
+  -- folder = {
+  --   arrow_closed = "▶︎",  -- folder_arrow
+  --   arrow_open = "▽",    -- folder_arrow
+  --   default = '▶︎',  -- folder
+  --   open = '▽',     -- folder
+  --   empty = '-',    -- folder
+  --   empty_open = '-',  -- folder
+  --   symlink = '▶︎',
+  --   symlink_open = '▽',
+  -- },
   git = {
     unstaged  = "M",  -- ✕✖︎✗✘⛌
     staged    = "M",  -- ✓✔︎
@@ -41,15 +41,15 @@ local glyphs = {
     renamed   = "R",
     untracked = "?",  -- ★ untracked = new file.
     deleted   = "D",
-    ignored   = "◌",
+    ignored   = "◌",  -- 
   },
 }
 
 local diagnostics_icons = {
-  hint    = "⚐ ",  -- ⚐⚑
-  info    = "𝖎 ",
-  warning = "⚠️ ",
-  error   = "⛌ ",  -- ❌✕✖︎✗✘⛌
+  hint    = "󱩎 ",  -- ⚐ ⚑ 󰛨
+  info    = " ",  -- 𝖎    
+  warning = " ",  -- ⚠️ 
+  error   = " ",  -- ❌✕✖︎✗✘⛌
 }
 
 -- -- }}}
@@ -230,13 +230,13 @@ nvim_tree.setup {
     indent_width = 2, -- 默认 2.
     indent_markers = {
       enable = true,  -- 显示 indent line
-      icons = nt_indent_line,
+      --icons = nt_indent_line,  -- 和自定义 indent 一样, 如果以后出现变化可以调整.
     },
     icons = {
       git_placement = "before",  -- 'before' (filename) | 'after' | 'signcolumn' (vim.signcolumn='yes')
-      symlink_arrow = " ➜ ",  -- old_name ➜ new_name, 这个不是显示在 filename/dir 之前的 icon.
+      symlink_arrow = " ⟶ ",  -- old_name ⟶ new_name, 这个不是显示在 filename/dir 之前的 icon.
       show = {
-        file = false,  -- 显示 file icon, `nvim-web-devicons` will be used if available.
+        file = true,  -- 显示 file icon, `nvim-web-devicons` will be used if available.
         folder = true, -- 显示 folder icon
         folder_arrow = false,  -- NOTE: 使用 folder icon 代替, folder_arrow icon 无法改变颜色, 也无法设置 empty icon.
         git = true,    -- 显示 git icon. 需要设置 git.enable = true
