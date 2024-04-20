@@ -563,6 +563,8 @@ end, {bang=true, bar=true})
 vim.api.nvim_create_autocmd("FileType", {
   pattern = {"help"},
   callback = function(params)
+    --- 设置 bdelete 时 unload 之后, 再次打开 help 时会触发 FileType.
+    vim.bo[params.buf].bufhidden = 'unload'
     --- move help window to the right side.
     vim.cmd('wincmd L')
   end,
