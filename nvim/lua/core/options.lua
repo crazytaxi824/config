@@ -560,22 +560,14 @@ vim.api.nvim_create_user_command('SpellCheckToggle', function()
 end, {bang=true, bar=true})
 
 --- 其他设置 --------------------------------------------------------------------------------------- {{{
---- NOTE: keymap 'gO' 被 g:no_plugin_maps disable. 没什么作用.
---- <cmd>call man#show_toc()<CR> 是 neovim 源代码中的设置.
--- vim.api.nvim_create_autocmd("FileType", {
---   pattern = {"help"},
---   callback = function(params)
---     local cmd = '<cmd>lua require("man").show_toc()<CR>'
---     vim.keymap.set('n', 'gO', cmd, {
---       noremap=true,
---       silent=true,
---       buffer=params.buf,
---       desc='table of contents',
---     })
---   end,
---   desc = "set keymap for `gO` when g:no_plugin_maps disabled.",
--- })
--- -- }}}
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = {"help"},
+  callback = function(params)
+    --- move help window to the right side.
+    vim.cmd('wincmd L')
+  end,
+  desc = "help window vertically splitright",
+})
 
 
 
