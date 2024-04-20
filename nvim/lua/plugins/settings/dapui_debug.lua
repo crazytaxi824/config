@@ -36,11 +36,6 @@ dapui.setup({
       size = 0.25, -- 25% of total lines (height)
     },
   },
-  icons = {
-    collapsed = "▶︎",
-    current_frame = "⨠",
-    expanded = "▽"
-  },
 
   --- winbar
   controls = {
@@ -49,20 +44,20 @@ dapui.setup({
     --- Display controls in this element
     element = "repl",
     icons = {
-      play = "[▶️ Continue]",
-      step_into = "[⊻ Into <F11>]",  -- ⇩↧⊻
-      step_over = "[⨠ Over <F10>]",  -- ↷⨠
-      step_out = "[⊼ Out <S-F11>]",   -- ⇧↥⊼
-      run_last = "[⟳  Restart]",   -- ↻⟳
-      terminate = "[■ Stop]",
+      play = "[ Continue]",  -- ▶️ 
+      step_over = "[ Over <F10>]",  -- ↷ ⨠
+      step_into = "[󰆹 Into <F11>]",  -- ⇩↧⊻
+      step_out  = "[󰆸 Out <S-F11>]",   -- ⇧↥⊼
+      run_last  = "[ Restart]",   -- ↻⟳
+      terminate = "[ Stop]",  -- ■
 
       --- 不常用
       disconnect = "",
       pause = "",
       step_back = "",
-      -- disconnect = "[✕ disconnect]",  -- ✕✖︎✗✘⛌
-      -- pause = "[Pause]",
-      -- step_back = "[↩︎ Back]",  -- ↶↩︎
+      -- disconnect = "[ disconnect]",  -- ✕✖︎✗✘⛌
+      -- pause     = "[ Pause]",
+      -- step_back = "[ Back]",  -- ↶ ↩︎
     },
   },
 
