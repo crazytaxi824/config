@@ -335,7 +335,7 @@ lualine.setup {
     lualine_c = {
       {'diagnostics',
         icons_enabled = true,
-        icon = {'⚠️', color={fg = lualine_colors.orange, gui = 'bold'}},
+        icon = {Nerd_icons.diag.warn, color={fg = lualine_colors.orange, gui = 'bold'}},
         symbols = {error = 'E:', warn = 'W:', info = 'I:', hint = 'H:'},
         diagnostics_color = {
           --error = 'ErrorMsg',  -- 也可以使用 highlight group.

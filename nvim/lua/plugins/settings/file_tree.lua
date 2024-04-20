@@ -46,10 +46,10 @@ local glyphs = {
 }
 
 local diagnostics_icons = {
-  hint    = Nerd_icons.diag.hint,  -- ⚐ ⚑ 󰛨 󱩎
-  info    = Nerd_icons.diag.info,  -- 𝖎    
-  warning = Nerd_icons.diag.warn,  -- ⚠️  
-  error   = Nerd_icons.diag.error,  -- ❌✕✖︎✗✘⛌ 
+  hint    = Nerd_icons.diag.hint,
+  info    = Nerd_icons.diag.info,
+  warning = Nerd_icons.diag.warn,
+  error   = Nerd_icons.diag.error,
 }
 
 -- -- }}}
