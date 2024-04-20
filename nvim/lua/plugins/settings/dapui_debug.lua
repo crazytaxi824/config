@@ -55,7 +55,7 @@ dapui.setup({
       disconnect = "",
       pause = "",
       step_back = "",
-      -- disconnect = "[ disconnect]",  -- ✕✖︎✗✘⛌
+      -- disconnect = "[ disconnect]"
       -- pause     = "[ Pause]",
       -- step_back = "[ Back]",  -- ↶ ↩︎
     },

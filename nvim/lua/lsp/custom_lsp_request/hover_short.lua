@@ -110,7 +110,7 @@ local function hover_short_handler(err, result, req, config)
 
   -- NOTE: open_floating_preview() 自定义设置
   config.focusable = false
-  config.border = {"▄","▄","▄","█","▀","▀","▀","█"}
+  config.border = Nerd_icons.border
   config.close_events = {"WinScrolled"}  -- 默认 {"CursorMoved", "CursorMovedI", "InsertCharPre"}
 
   if not (result and result.contents) then

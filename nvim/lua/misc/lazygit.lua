@@ -9,7 +9,7 @@ local function lazygit()
     height = vim.o.lines - vim.o.cmdheight - 3,  -- minus border_width=2 & row=1
     width = math.floor(vim.o.columns / 20 * 18),
     style = "minimal", -- Window border style
-    border = {"▄","▄","▄","█","▀","▀","▀","█"},
+    border = Nerd_icons.border,
     -- noautocmd = true,
   })
 

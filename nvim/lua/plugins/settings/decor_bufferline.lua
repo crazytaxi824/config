@@ -484,7 +484,7 @@ bufferline.setup({
     close_icon = Nerd_icons.cross,
 
     --- modified but not saved buffer icon
-    modified_icon = Nerd_icons.dot,
+    modified_icon = Nerd_icons.modified,
 
     --- 打开的 buffer 太多, 'tabline' 放不下的情况.
     -- left_trunc_marker = '',

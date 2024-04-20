@@ -72,7 +72,7 @@ vim.api.nvim_buf_create_user_command(
 --- vim.cmd([[ syntax match Entity "\(^\s*\)\@<=-\(\s\S\+\)\@=" conceal cchar=● ]])
 --- NOTE: 使用 matchadd('Conceal', pat, {conceal}) 的时候只能使用 'Conceal' highlight group; {conceal=''} 只能是一个字符.
 --- list: `-` | `+` 的前面必须是 0~n 个 \s, 后面必须有一个空格, 空格后面必须有内容.
---vim.fn.matchadd('Conceal', "\\(^\\s*\\)\\@<=[-+]\\( \\S\\+\\)\\@=", 100, -1, {conceal = "•"})  -- list, •◦●○
+--vim.fn.matchadd('Conceal', "\\(^\\s*\\)\\@<=[-+]\\( \\S\\+\\)\\@=", 100, -1, {conceal = "•"})  -- list,
 
 --- code block, ```go, ``` go, ...
 --vim.fn.matchadd('Conceal', "^```\\s*\\(\\w*\\)\\@=", 100, -1, {conceal = "λ"})  -- lamda code block

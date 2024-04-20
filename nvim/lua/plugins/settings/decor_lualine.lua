@@ -278,8 +278,8 @@ lualine.setup {
                   -- 3: Absolute path, with tilde as the home directory '~'
                   -- 4: Filename and parent dir, with tilde as the home directory
         symbols = {
-          modified = '●',       -- Text to show when the file is modified.
-          readonly = '*',       -- Text to show when the file is non-modifiable or readonly.
+          modified = Nerd_icons.modified, -- Text to show when the file is modified.
+          readonly = '',       -- Text to show when the file is non-modifiable or readonly.
           unnamed  = '[No Name]', -- Text to show for unnamed buffers.
         },
         cond = function() return vim.api.nvim_win_get_width(0) > 50 end,
@@ -357,7 +357,7 @@ lualine.setup {
         color = {fg = lualine_colors.cyan, gui='bold'},
         fmt = function(str)
           if str ~= '' and vim.api.nvim_win_get_width(0) <= 60 then
-            return '●'  -- branch has icon
+            return Nerd_icons.modified  -- branch has icon
           end
           return str
         end,
@@ -366,7 +366,7 @@ lualine.setup {
         color = {fg = lualine_colors.dark_orange, gui='bold'},
         fmt = function(str)
           if str ~= '' and vim.api.nvim_win_get_width(0) <= 60 then
-            return '●'  -- branch has icon
+            return Nerd_icons.modified  -- branch has icon
           end
           return str
         end,

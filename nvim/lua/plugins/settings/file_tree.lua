@@ -20,23 +20,9 @@ local nt_indent_line = {
 }
 
 local glyphs = {
-  -- default = '',
-  -- symlink = '',  -- 这里的 symlink 和 symlink_arrow 设置不一样, 这里是文件名前面的 icon.
-  -- bookmark = '⟶',
-  -- modified = "●",
-  -- folder = {
-  --   arrow_closed = "▶︎",  -- folder_arrow
-  --   arrow_open = "▽",    -- folder_arrow
-  --   default = '▶︎',  -- folder
-  --   open = '▽',     -- folder
-  --   empty = '-',    -- folder
-  --   empty_open = '-',  -- folder
-  --   symlink = '▶︎',
-  --   symlink_open = '▽',
-  -- },
   git = {
-    unstaged  = "M",  -- ✕✖︎✗✘⛌
-    staged    = "M",  -- ✓✔︎
+    unstaged  = "M",
+    staged    = "M",
     unmerged  = "U",
     renamed   = "R",
     untracked = "?",  -- ★ untracked = new file.

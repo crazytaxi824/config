@@ -82,7 +82,7 @@ vim.api.nvim_set_hl(0, 'DapStoppedHL', { ctermfg = Color.blue })
 vim.api.nvim_set_hl(0, 'DapStoppedLineHL', { ctermbg = 24 })
 
 vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "DapBreakpointHL", numhl = "", linehl="" })
-vim.fn.sign_define("DapBreakpointRejected", { text = "◌", texthl = "DapBreakpointRejectedHL", numhl = "", linehl="" })
+vim.fn.sign_define("DapBreakpointRejected", { text = "○", texthl = "DapBreakpointRejectedHL", numhl = "", linehl="" })
 vim.fn.sign_define("DapStopped", { text = "", texthl = "DapStoppedHL", numhl = "", linehl="DapStoppedLineHL" })
 -- -- }}}
 

@@ -34,8 +34,8 @@ telescope.setup {
   defaults = {
     --- VVI: 这里必须使用占 2 格的 icon, 否则渲染会出 bug.
     prompt_prefix = "> ",
-    selection_caret = "⟶ ",
-    multi_icon = ' ✓ ', -- ✓✔︎
+    --selection_caret = Nerd_icons.arrows.right .. ' ',
+    multi_icon = Nerd_icons.tick,
     path_display = { "absolute" },  -- table|func, `:help telescope.defaults.path_display`
     --wrap_results = true,  -- result window `set wrap`
     --results_title = false,  -- result window 不显示 title.

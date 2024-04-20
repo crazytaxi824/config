@@ -9,7 +9,7 @@ if not lspconfig_ok then
 end
 
 --- change `:LspInfo` border, `:help lspconfig-highlight`
-require('lspconfig.ui.windows').default_options.border = {"▄","▄","▄","█","▀","▀","▀","█"}
+require('lspconfig.ui.windows').default_options.border = Nerd_icons.border
 vim.cmd('hi! link LspInfoBorder FloatBorder')
 
 --- 需要设置的 lsp 列表.

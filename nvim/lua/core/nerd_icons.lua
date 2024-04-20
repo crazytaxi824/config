@@ -1,3 +1,4 @@
+--- NOTE: 这里主要是为了统一 icon 风格.
 Nerd_icons = {
   diag = {
     hint  = "󱩎",  -- ⚐ ⚑ 󰛨
@@ -22,11 +23,11 @@ Nerd_icons = {
     corner = "└",
   },
   border = {"▄","▄","▄","█","▀","▀","▀","█"},
-  tick = '✔︎',  -- ✓✔︎  
+  tick = '✓',  -- ✓✔︎  
   cross = '⛌', -- ❌✕✖︎✗✘⛌ 
   star = '★',
-  dot = '●',
-  h_dot = "○",
+  modified = '●',
+  h_dot = '○',
   ellipsis = '…',
   h_circle = "◌", --  
 }
