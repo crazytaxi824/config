@@ -395,34 +395,18 @@ local opts = {
   defaults = {
     lazy = false, -- should plugins be lazy-loaded?
   },
-  ui = {  ---------------------------------------------------------------------- {{{
+  ui = {
     size = { width = 0.6, height = 0.9 },
     border = {"▄","▄","▄","█","▀","▀","▀","█"},
     icons = {
-      cmd = " cmd:",
-      config = " conf:",
-      event = " event:",
-      ft = " ft:",
-      init = " init:",
-      import = " import:",
-      keys = " key:",
-      lazy = " ● ",
-      loaded = "●",
-      not_loaded = "○",
-      plugin = " plugin:",
-      runtime = " runtime:",
-      source = " source:",
-      start = " ",
-      task = "✔ ",
       list = {
-        "●",
-        "⟶",
-        "★",
+        Nerd_icons.dot,
+        Nerd_icons.arrows.right,
+        Nerd_icons.star,
         "‒",
       },
     },
   },
-  -- -- }}}
 }
 
 --- NOTE: 用于批量检查 plugins 升级
