@@ -232,7 +232,7 @@ lualine.setup {
     lualine_b = {
       {'branch',
         icons_enabled = true, -- 单独设置 branch 使用 icon.
-        icon = {'', color={ gui='bold' }},
+        icon = {'', color={ gui='bold' }},
         fmt = function(str)
           if str ~= '' and vim.api.nvim_win_get_width(0) <= 80 then
             return '…'  -- branch has icon
