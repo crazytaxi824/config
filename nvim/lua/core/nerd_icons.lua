@@ -8,14 +8,14 @@ Nerd_icons = {
   },
   arrows = {
     right = '→',
-    left = '←',
-    up = '↑',
-    down = '↓',
+    left  = '←',
+    up    = '↑',
+    down  = '↓',
 
     tri_right = '',
-    tri_left = '',
-    tri_up = '',
-    tri_down = '',
+    tri_left  = '',
+    tri_up    = '',
+    tri_down  = '',
   },
   indent = {
     edge   = "│",
@@ -23,11 +23,11 @@ Nerd_icons = {
     corner = "└",
   },
   border = {"▄","▄","▄","█","▀","▀","▀","█"},
-  tick = '✓',  -- ✓✔︎  
+  tick  = '✓',  -- ✓✔︎  
   cross = '⛌', -- ❌✕✖︎✗✘⛌ 
-  star = '★',
+  star  = '★',
   modified = '●',
-  h_dot = '○',
+  h_dot    = '○',
   ellipsis = '…',
   h_circle = "◌", --  
 }
