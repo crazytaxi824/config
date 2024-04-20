@@ -44,6 +44,10 @@ which_key.setup({
     --},
   },
 
+  icons = {
+    separator = Nerd_icons.arrows.right, -- symbol used between a key and it's label
+  },
+
   --- NOTE: override the label used to display some keys.
   --- 这里是将 <F24> rename 到 <S-F12> ...
   key_labels = fn_key_rename(),

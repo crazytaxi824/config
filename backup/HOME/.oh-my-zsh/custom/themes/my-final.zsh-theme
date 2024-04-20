@@ -1,5 +1,5 @@
 #!/bin/zsh
-# https://www.csse.uwa.edu.au/programming/linux/zsh-doc/zsh_13.html
+# NOTE: 必须安装 firacode nerd font
 # 占位符
 #   %d, %/  - pwd 绝对位置
 #   %~      - pwd 相对 HOME 的位置
@@ -51,12 +51,12 @@ fi
 
 local user_and_host="${PR_USER}${PR_HOST}"
 
-#local current_dir="%B%K{25} %~ %k%F{25}%f%b"  # NOTE: 使用 powerline fonts 
+#local current_dir="%B%K{25} %~ %k%F{25}%f%b"  # NOTE: 使用 powerline fonts █
 local current_dir="%B%K{25} %~ %k%b"  # blue
 
 # 以下环境变量是为了显示 git 状态.
-ZSH_THEME_GIT_PROMPT_DIRTY=" ✗ "
-ZSH_THEME_GIT_PROMPT_CLEAN=" ✔ "
+ZSH_THEME_GIT_PROMPT_DIRTY=" ⛌ "
+ZSH_THEME_GIT_PROMPT_CLEAN=" ✓ "
 ZSH_THEME_GIT_PROMPT_SUFFIX="%b%f%k" # 清空所有颜色
 
 # 命令返回的 exit code - 0 | 1 | 2
@@ -83,14 +83,14 @@ function my_git_info() {
   local dirty=$(parse_git_dirty)
   # 当前 branch 如果是 master 或者 main, 显示高亮黄色警告.
   if [[ ( $current_branch == master || $current_branch == main ) && $dirty == $ZSH_THEME_GIT_PROMPT_DIRTY ]]; then
-    ZSH_THEME_GIT_PROMPT_PREFIX="%K{196}%F{15} %B\uE0A2 " # 红底白字, 粗体
+    ZSH_THEME_GIT_PROMPT_PREFIX="%K{196}%F{15} %B " # 红底白字, 粗体
   elif [[ ( $current_branch == master || $current_branch == main ) && $dirty != $ZSH_THEME_GIT_PROMPT_DIRTY ]]; then
-    ZSH_THEME_GIT_PROMPT_PREFIX="%K{214}%F{234} %B\uE0A2%b " # 橙底黑字
+    ZSH_THEME_GIT_PROMPT_PREFIX="%K{214}%F{234} %B%b " # 橙底黑字
   # 判断 git 当前是 dirty 还是 clean.
   elif [[ $dirty == $ZSH_THEME_GIT_PROMPT_DIRTY ]]; then
-    ZSH_THEME_GIT_PROMPT_PREFIX="%K{221}%F{234} %B\uE0A0%b " # 黄底黑字
+    ZSH_THEME_GIT_PROMPT_PREFIX="%K{221}%F{234} %B%b " # 黄底黑字
   else
-    ZSH_THEME_GIT_PROMPT_PREFIX="%K{35}%F{234} %B\uE0A0%b " # 绿底黑字
+    ZSH_THEME_GIT_PROMPT_PREFIX="%K{35}%F{234} %B%b " # 绿底黑字
   fi
 
   # 最后调用 git_prompt_info() 打印整个 git info 的字符串.

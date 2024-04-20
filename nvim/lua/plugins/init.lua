@@ -23,7 +23,8 @@ vim.opt.rtp:prepend(lazypath)
 --- https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/editor.lua
 --- NOTE: 如果插件被 require(xxx) or pcall(require, xxx) 会马上加载.
 local plugins = {
-  { "folke/lazy.nvim",
+  {
+    "folke/lazy.nvim",
     --- install the latest stable version of plugins that support Semver.
     commit = "31ddbea",
     -- tag = "v10.20.3",
@@ -32,13 +33,15 @@ local plugins = {
 
   --- Performence & Functions ----------------------------------------------------------------------
   --- Useful lua functions used by lots of plugins
-  {"nvim-lua/plenary.nvim",
+  {
+    "nvim-lua/plenary.nvim",
     priority = 1000,  -- NOTE: 只在 lazy=false 的情况下有效. 影响加载顺序, 默认值为 50.
     commit = "8aad439",
   },
 
   --- 通知功能
-  {"rcarriga/nvim-notify",
+  {
+    "rcarriga/nvim-notify",
     tag = "v3.13.4",
     config = function() require("plugins.settings.nvim_notify") end,
 
@@ -46,7 +49,8 @@ local plugins = {
   },
 
   --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件
-  {"williamboman/mason.nvim",
+  {
+    "williamboman/mason.nvim",
     commit = "751b1fc",
     -- tag = "v1.10.0",
     -- build = ":MasonUpdate", -- :MasonUpdate updates All Registries, NOT packages.
@@ -59,7 +63,8 @@ local plugins = {
   },
 
   --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
-  {"folke/which-key.nvim",
+  {
+    "folke/which-key.nvim",
     -- tag = "v1.6.0",
     commit = "4433e5e",
     config = function() require("plugins.settings.which_key") end,
@@ -80,7 +85,8 @@ local plugins = {
   --- All queries found in the runtime directories will be combined.
   --- By convention, if you want to write a query, use the `queries/` directory,
   --- but if you want to extend a query use the `after/queries/` directory.
-  {"nvim-treesitter/nvim-treesitter",
+  {
+    "nvim-treesitter/nvim-treesitter",
     commit = "208d504",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     --build = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
     config = function() require("plugins.settings.treesitter") end,
@@ -94,7 +100,8 @@ local plugins = {
   },
 
   --- 第一方 module 插件 ---
-  {"nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
+  {
+    "nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
     commit = "e6e7104",
     config = function() require("plugins.settings.treesitter_ctx") end,
 
@@ -102,7 +109,8 @@ local plugins = {
   },
 
   --- 第三方 module 插件 ---
-  {"windwp/nvim-ts-autotag",  -- auto close tag <div></div>
+  {
+    "windwp/nvim-ts-autotag",  -- auto close tag <div></div>
     commit = "531f483",
 
     lazy = true,  -- nvim-treesitter 加载时自动加载.
@@ -110,7 +118,8 @@ local plugins = {
 
   --- 以下是使用了 treesitter 功能的插件. (这些插件也可以不使用 treesitter 的功能)
   --- 注释
-  {"JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
+  {
+    "JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
     commit = "a6382f7",
     config = function()
       require("ts_context_commentstring").setup({
@@ -121,7 +130,8 @@ local plugins = {
     lazy = true,  -- nvim-treesitter 加载时自动加载.
   },
 
-  {"numToStr/Comment.nvim",
+  {
+    "numToStr/Comment.nvim",
     commit = "0236521",
     config = function() require("plugins.settings.comment") end,
     dependencies = {"JoosepAlviste/nvim-ts-context-commentstring"},  -- https://github.com/numToStr/Comment.nvim#-hooks
@@ -135,7 +145,8 @@ local plugins = {
   },
 
   --- indent line
-  {"lukas-reineke/indent-blankline.nvim",
+  {
+    "lukas-reineke/indent-blankline.nvim",
     tag = "v3.5.4",
     config = function() require("plugins.settings.indentline") end,  -- setup() 设置 use_treesitter = true
     dependencies = {"nvim-treesitter/nvim-treesitter"},  -- for setup({scope})
@@ -144,7 +155,8 @@ local plugins = {
   },
 
   --- Auto Completion ------------------------------------------------------------------------------
-  {"hrsh7th/nvim-cmp",
+  {
+    "hrsh7th/nvim-cmp",
     commit = "ce16de5",
     config = function() require("plugins.settings.cmp_completion") end,
     dependencies = {
@@ -160,25 +172,29 @@ local plugins = {
 
   --- NOTE: 以下是 "nvim-cmp" 的 module 插件, 在 nvim-cmp.setup() 中启用的插件.
   --- VVI: 只有 "cmp-nvim-lsp" 不需要在 "nvim-cmp" 之后加载, 其他 module 插件都需要在 "nvim-cmp" 加载之后再加载, 否则报错.
-  {"hrsh7th/cmp-nvim-lsp",  -- LSP source for nvim-cmp
+  {
+    "hrsh7th/cmp-nvim-lsp",  -- LSP source for nvim-cmp
     commit = "5af77f5",
 
     lazy = true,  -- nvim-cmp 加载时自动加载.
   },
 
-  {"hrsh7th/cmp-buffer",  -- 当前 buffer 中有的 word
+  {
+    "hrsh7th/cmp-buffer",  -- 当前 buffer 中有的 word
     commit = "3022dbc",
 
     lazy = true,  -- nvim-cmp 加载时自动加载.
   },
 
-  {"hrsh7th/cmp-path",  -- filepath 补全
+  {
+    "hrsh7th/cmp-path",  -- filepath 补全
     commit = "91ff86c",
 
     lazy = true,  -- nvim-cmp 加载时自动加载.
   },
 
-  {"saadparwaiz1/cmp_luasnip",  -- Snippets source for nvim-cmp
+  {
+    "saadparwaiz1/cmp_luasnip",  -- Snippets source for nvim-cmp
     commit = "05a9ab2",
     dependencies = {"L3MON4D3/LuaSnip"},  -- snippets content
 
@@ -186,7 +202,8 @@ local plugins = {
   },
 
   --- snippet engine, for "cmp_luasnip", 每次打开文件都会有一个 [Scratch] buffer.
-  {"L3MON4D3/LuaSnip",
+  {
+    "L3MON4D3/LuaSnip",
     tag = "v2.3.0",
     -- build = "make install_jsregexp", -- optional
     config = function() require("plugins.settings.luasnip_snippest") end,
@@ -196,14 +213,16 @@ local plugins = {
   },
 
   --- snippets content, 自定义 snippets 可以借鉴这个结构.
-  {"rafamadriz/friendly-snippets",
+  {
+    "rafamadriz/friendly-snippets",
     commit = "ea068f1",
 
     lazy = true,  -- LuaSnip 加载时自动加载.
   },
 
   --- 自动括号, 同时依赖 treesitter && cmp
-  {"windwp/nvim-autopairs",
+  {
+    "windwp/nvim-autopairs",
     commit = "4f41e59",
     config = function() require("plugins.settings.autopairs") end,
     dependencies = {
@@ -217,7 +236,8 @@ local plugins = {
   --- LSP ------------------------------------------------------------------------------------------
   --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
   --- 官方 LSP 引擎.
-  {"neovim/nvim-lspconfig",
+  {
+    "neovim/nvim-lspconfig",
     commit = "9eb6d86",
     config = function() require("lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     dependencies = {
@@ -227,7 +247,8 @@ local plugins = {
 
   --- null-ls 插件 formatters && linters, depends on "nvim-lua/plenary.nvim"
   --- VVI: "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
-  {"nvimtools/none-ls.nvim",
+  {
+    "nvimtools/none-ls.nvim",
     commit = "6345754",
     config = function() require("lsp.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
@@ -235,7 +256,8 @@ local plugins = {
     event = "VeryLazy",
   },
 
-  {"stevearc/conform.nvim",
+  {
+    "stevearc/conform.nvim",
     commit = "a6965ac",
     config = function() require("plugins.settings.formatter_confrom") end,
 
@@ -243,10 +265,12 @@ local plugins = {
   },
 
   --- File explorer --------------------------------------------------------------------------------
-  {"kyazdani42/nvim-tree.lua",
+  {
+    "nvim-tree/nvim-tree.lua",
     commit = "81eb8d5",
     -- tag = "nvim-tree-v1.3.0",
     config = function() require("plugins.settings.file_tree") end,
+    dependencies = { "nvim-tree/nvim-web-devicons" },
 
     -- VVI: 本文件最后设置: 在 `nvim dir` 直接打开文件夹的时直接加载 nvim-tree.lua.
     event = "VeryLazy",
@@ -254,15 +278,18 @@ local plugins = {
 
   --- Buffer & Status Line -------------------------------------------------------------------------
   --- tabline decorator, `:help 'tabline'`
-  {"akinsho/bufferline.nvim",
+  {
+    "akinsho/bufferline.nvim",
     tag = "v4.5.2",
     config = function() require("plugins.settings.decor_bufferline") end,
+    dependencies = { "nvim-tree/nvim-web-devicons" },
 
     event = "VeryLazy",
   },
 
   --- statusline decorator, `:help 'statusline'`
-  {"nvim-lualine/lualine.nvim",   -- bottom status line
+  {
+    "nvim-lualine/lualine.nvim",   -- bottom status line
     commit = "0a5a668",
     config = function() require("plugins.settings.decor_lualine") end,
 
@@ -271,7 +298,8 @@ local plugins = {
 
   --- Debug tools 安装 -----------------------------------------------------------------------------
   --- NOTE: dap-ui && dap 设置在同一文件中.
-  {"mfussenegger/nvim-dap",  -- core debug tool
+  {
+    "mfussenegger/nvim-dap",  -- core debug tool
     -- tag = "0.7.0",
     commit = "6ae8a14",
     config = function() require("plugins.settings.dap_debug") end,
@@ -279,13 +307,15 @@ local plugins = {
     cmd = {'DapToggleBreakpoint', 'DapContinue', 'DapLoadLaunchJSON'},
   },
 
-  {"nvim-neotest/nvim-nio",
+  {
+    "nvim-neotest/nvim-nio",
     commit = "5800f58",
 
     lazy = true,  -- nvim-dap-ui 加载时自动加载.
   },
 
-  {"rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
+  {
+    "rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
     -- tag = "v4.0.0",
     commit = "edfa93f",
     config = function() require("plugins.settings.dapui_debug") end,
@@ -300,7 +330,8 @@ local plugins = {
   --- Useful Tools ---------------------------------------------------------------------------------
   --- 依赖 rg fd, 但不依赖 fzf. 没有 fzf 命令行工具也可以运行.
   --- telescope 的 preview syntax 默认使用的是 treesitter, 如果没有 treesitter 则使用 vim syntax highlights.
-  {"nvim-telescope/telescope.nvim",
+  {
+    "nvim-telescope/telescope.nvim",
     branch = "0.1.x",  -- master branch is nightly version.
     tag = "0.1.6",
     config = function() require("plugins.settings.telescope_fzf") end,
@@ -312,7 +343,8 @@ local plugins = {
     event = "VeryLazy",
   },
 
-  { "nvim-telescope/telescope-fzf-native.nvim",
+  {
+    "nvim-telescope/telescope-fzf-native.nvim",
     commit = "9ef21b2",
     build = "make",
 
@@ -323,7 +355,8 @@ local plugins = {
   --- NOTE: gitsigns 会检查 "trouble.nvim" 是否安装, 如果有安装则:
   --- `:Gitsigns setqflist/seqloclist` will open Trouble instead of quickfix or location list windows.
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
-  {"lewis6991/gitsigns.nvim",
+  {
+    "lewis6991/gitsigns.nvim",
     commit = "7e38f07",
     config = function() require("plugins.settings.git_signs") end,
 
@@ -333,7 +366,8 @@ local plugins = {
   },
 
   --- markdown, VVI: 安装 preview 插件后需要一段时间来执行 vim.fn["mkdp#util#install"]() 如果无法运行可以重装该插件.
-  {"iamcco/markdown-preview.nvim",
+  {
+    "iamcco/markdown-preview.nvim",
     commit = "a923f5f",
     --- VVI: 每次 Update 后需要重新执行 vim.fn["mkdp#util#install"](), 否则可能出现无法运行的情况.
     build = function() vim.fn["mkdp#util#install"]() end,
@@ -343,7 +377,8 @@ local plugins = {
   },
 
   --- https://docs.github.com/en/copilot/getting-started-with-github-copilot
-  -- {"github/copilot.vim",
+  -- {
+  --   "github/copilot.vim",
   --   tag = "v1.22.0",
   --   -- config = function()  --- {{{
   --   --   --- VVI: `:help g:copilot_node_command`, using node@18 or above.
@@ -393,34 +428,13 @@ local opts = {
   defaults = {
     lazy = false, -- should plugins be lazy-loaded?
   },
-  ui = {  ---------------------------------------------------------------------- {{{
+  ui = {
     size = { width = 0.6, height = 0.9 },
-    border = {"▄","▄","▄","█","▀","▀","▀","█"},
+    border = Nerd_icons.border,
     icons = {
-      cmd = " cmd:",
-      config = " conf:",
-      event = " event:",
-      ft = " ft:",
-      init = " init:",
-      import = " import:",
-      keys = " key:",
-      lazy = " ● ",
-      loaded = "●",
-      not_loaded = "○",
-      plugin = " plugin:",
-      runtime = " runtime:",
-      source = " source:",
-      start = " ",
-      task = "✔ ",
-      list = {
-        "●",
-        "➜",
-        "★",
-        "‒",
-      },
+      list = { "●", "→", "★", "‒" }
     },
   },
-  -- -- }}}
 }
 
 --- NOTE: 用于批量检查 plugins 升级

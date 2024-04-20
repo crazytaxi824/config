@@ -45,10 +45,10 @@ notify.setup({
 
   -- Icons for the different levels
   icons = {
-    ERROR = "◍",
-    WARN  = "◍",
-    INFO  = "◍",
-    DEBUG = "◍",
+    ERROR = Nerd_icons.diag.error,
+    WARN  = Nerd_icons.diag.warn,
+    INFO  = Nerd_icons.diag.hint,
+    DEBUG = "",
     TRACE = "◍",
   },
 })

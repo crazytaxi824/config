@@ -7,6 +7,7 @@ local set       = require('utils.keymaps.set_register')
 local wipe_term = require('utils.keymaps.wipeout_all_term_buf')
 local close_buf = require('utils.keymaps.close_other_buf')
 local toggle_bg = require('utils.keymaps.toggle_editor_bg_color')
+local toggle_comment = require('utils.keymaps.toggle_comments_color')
 
 local M = {
   hl_search = {
@@ -29,6 +30,7 @@ local M = {
   wipe_all_term_bufs = wipe_term.wipeout_all_terminals,
   close_other_bufs = close_buf.delete_all_other_buffers,
   toggle_editor_bg_color = toggle_bg.toggle_background_color,
+  toggle_comments_color = toggle_comment.toggle_comment_color,
 
   --- set & register keymap
   set = set.keymap_set_and_register,

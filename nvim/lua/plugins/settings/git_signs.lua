@@ -44,7 +44,7 @@ git_signs.setup({
   --attach_to_untracked = false,  -- 新建文件是否 attach gitsigns
 
   --- `:help current_line_blame_formatter`, check placeholder
-  current_line_blame_formatter = '  ● [<abbrev_sha>], git blame: [<author>], <author_time:%d-%m-%Y> - <summary>',
+  current_line_blame_formatter = '   [<abbrev_sha>], git blame: [<author>], <author_time:%d-%m-%Y> - <summary>',
 
   --- NOTE: 除了 signcolumn 外, 其他不推荐开启. 可以使用 `:Gitsigns preview_hunk` 查看修改记录,
   signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
@@ -55,7 +55,7 @@ git_signs.setup({
 
   preview_config = {
     --- Options passed to nvim_open_win
-    border = {"▄","▄","▄","█","▀","▀","▀","█"},
+    border = Nerd_icons.border,
     style = 'minimal',
     relative = 'cursor',
     row = 0,

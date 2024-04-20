@@ -87,7 +87,8 @@ local highlights = {
   FloatBorder = {ctermfg = Color.black}, -- Floating Window border 颜色需要和 Pmenu 的背景色相同
                                          -- border = {"▄","▄","▄","█","▀","▀","▀","█"}
 
-  Comment    = {ctermfg = Color.comment_green}, -- 注释颜色
+  -- Comment    = {ctermfg = Color.comment_green}, -- 注释颜色
+  Comment    = {ctermfg = 240}, -- 注释颜色
   NonText    = {ctermfg = 238}, -- 影响 listchars indentLine 颜色
   VertSplit  = {ctermfg = 236}, -- window 之间的分隔线颜色
   MatchParen = {ctermfg = Color.bracket_yellow, cterm = {'bold', 'underline'}}, -- 括号匹配颜色

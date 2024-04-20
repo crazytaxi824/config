@@ -378,11 +378,11 @@ vim.opt.fillchars = 'fold: ,diff: ,vert:│,eob:~'
 ---                999 表示从 1000 层开始 fold, 即不进行 fold.
 ---
 --- `:help foldtext` 改变折叠代码的样式. NOTE: 配合 fillchars 使用.
---- vim.opt.foldtext = 'printf("%s … %s -- lvl %d", getline(v:foldstart), getline(v:foldend), v:foldlevel)'
+--- vim.opt.foldtext = 'printf("%s  %s -- lvl %d", getline(v:foldstart), getline(v:foldend), v:foldlevel)'
 ---
 --- vim `:h pattern-overview` 中使用双引号和单引号是不一样的. 单引号 '\(\)\+' 在双引号中需要写成 "\\(\\)\\+"
 --- \@<= 用法: \(an\_s\+\)\@<=file, 返回 "file" after "an" and white space or an
---- vim.opt.foldtext = "printf('%s … %s', getline(v:foldstart), matchstr(getline(v:foldend), '\\(.*\\)\\@<=[})]\\+'))"
+--- vim.opt.foldtext = "printf('%s  %s', getline(v:foldstart), matchstr(getline(v:foldend), '\\(.*\\)\\@<=[})]\\+'))"
 -- -- }}}
 vim.opt.foldenable = true  -- 折叠代码.
 -- vim.opt.foldcolumn = "1"   -- 类似 signcolumn
@@ -559,23 +559,17 @@ vim.api.nvim_create_user_command('SpellCheckToggle', function()
   end
 end, {bang=true, bar=true})
 
---- 其他设置 --------------------------------------------------------------------------------------- {{{
---- NOTE: keymap 'gO' 被 g:no_plugin_maps disable. 没什么作用.
---- <cmd>call man#show_toc()<CR> 是 neovim 源代码中的设置.
--- vim.api.nvim_create_autocmd("FileType", {
---   pattern = {"help"},
---   callback = function(params)
---     local cmd = '<cmd>lua require("man").show_toc()<CR>'
---     vim.keymap.set('n', 'gO', cmd, {
---       noremap=true,
---       silent=true,
---       buffer=params.buf,
---       desc='table of contents',
---     })
---   end,
---   desc = "set keymap for `gO` when g:no_plugin_maps disabled.",
--- })
--- -- }}}
+--- 其他设置
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = {"help"},
+  callback = function(params)
+    --- 设置 bdelete 时 unload 之后, 再次打开 help 时会触发 FileType.
+    vim.bo[params.buf].bufhidden = 'unload'
+    --- move help window to the right side.
+    vim.cmd('wincmd L')
+  end,
+  desc = "help window vertically splitright",
+})
 
 
 

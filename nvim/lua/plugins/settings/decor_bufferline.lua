@@ -470,19 +470,25 @@ bufferline.setup({
     show_duplicate_prefix = true, -- VVI: whether to show duplicate buffer prefix
 
     --- icon 显示
-    color_icons = false, -- whether or not to add the filetype icon highlights
-    --- NOTE: file icon 显示, 推荐使用 web-devicons.
-    -- get_element_icon = function(element)
-    --   -- element consists of {filetype: string, path: string, extension: string, directory: string}
-    --   -- This can be used to change how bufferline fetches the icon
-    --   -- for an element e.g. a buffer or a tab.
-    --   -- e.g.
-    --   local icon, hl = require('nvim-web-devicons').get_icon_by_filetype(element.filetype, { default = false })
-    --   return icon, hl
-    -- end,
-    show_buffer_icons = false, -- disable filetype icons for buffers
-    show_close_icon = false,  -- tab close icon. 无法自定义 tab close command, 所以不使用.
-    show_buffer_close_icons = true, -- buffer close icon
+    color_icons = true, -- whether or not to add the filetype icon highlights
+
+    --- enable/disable filetype icons for buffers, using devicons.
+    show_buffer_icons = true,
+
+    --- buffer close icon
+    show_buffer_close_icons = true,
+    buffer_close_icon = Nerd_icons.cross,
+
+    --- tab close icon. 无法自定义 tab close command, 所以不使用.
+    show_close_icon = false,
+    close_icon = Nerd_icons.cross,
+
+    --- modified but not saved buffer icon
+    modified_icon = Nerd_icons.modified,
+
+    --- 打开的 buffer 太多, 'tabline' 放不下的情况.
+    -- left_trunc_marker = '',
+    -- right_trunc_marker = '',
 
     --- NOTE: this plugin is designed with this icon in mind,
     --- and so changing this is NOT recommended, this is intended
@@ -491,12 +497,9 @@ bufferline.setup({
       style = 'icon',  -- 'icon' | 'underline' | 'none',
       icon = '▌',  --  █ ▎▌, style = 'icon' 时生效.
     },
-    buffer_close_icon = '✕',  -- 每个 buffer 后面显示 close icon. -- ✕✖︎✗✘⛌
-    modified_icon = '●',
-    close_icon = '✕',  -- close tab -- ✕✖︎✗✘⛌
-    left_trunc_marker = '',
-    right_trunc_marker = '',
-    separator_style = {' ', ' '},  -- 'thin', 'thick', {'',''} - [focused and unfocused]
+
+    --- buffer name 之间的 separator icon. [focused and unfocused]. eg: { '|', '|' }
+    separator_style = {' ', ' '},
 
     --- mouse actions, can be a string | function, see "Mouse actions"
     --- NOTE: 这里 %d 是 bufnr() 的 placeholder. 可以使用 function(bufnr) 来设置.
@@ -592,6 +595,7 @@ local bufferline_keymaps = {
   {'n', '<leader>d', function() bufferline_del_current_buffer() end, opt, 'buffer: Close Current Buffer/Tab'},
 
   --- NOTE: ":BufferLineCloseRight" and ":BufferLineCloseRight" skip unwritten buffers without a bang [!].
+  {'n', '<leader>Da', '<cmd>BufferLineCloseOthers<CR>', opt, 'buffer: Close all other buffers'},
   {'n', '<leader>D<Right>', '<cmd>BufferLineCloseRight<CR>', opt, 'buffer: Close Right Side Buffers'},
   {'n', '<leader>D<Left>', '<cmd>BufferLineCloseLeft<CR>', opt, 'buffer: Close Left Side Buffers'},
 }
