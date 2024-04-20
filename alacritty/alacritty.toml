@@ -10,7 +10,7 @@ decorations = "none"  # 不显示 titlebar 和 buttons (window 左上角关闭/�
 dynamic_padding = true  # 自动调整 padding, 避免右侧空白大于左侧.
 option_as_alt = "OnlyLeft"  # VVI: MAC 上左 opt 键可以作为 ALT 键使用.
 startup_mode = "Maximized"
-opacity = 0.8
+opacity = 0.96
 
 # 窗口四周添加 padding
 [window.padding]
@@ -23,18 +23,20 @@ size = 14.5
 
 [font.offset]
 x = 1
-y = 4
+y = 16  # NOTE: 使用 Nerd font 时, y 不能超过 5 否则 █ 会变形.
 
 [font.glyph_offset]
 x = 0  # glyph move right `N` px.
-y = 3  # glyph move up `N` px. NOTE: █
+y = 8  # glyph move up `N` px. NOTE: █
 
 [font.normal]
-family = "Fira Code"
+# family = "Fira Code"
+family = "FiraCode Nerd Font"
 style = "Regular"
 
 [font.bold]
-family = "Fira Code"
+# family = "Fira Code"
+family = "FiraCode Nerd Font"
 style = "Bold"
 
 [font.italic]
@@ -94,7 +96,8 @@ cyan    = "#5fd7ff"  # 81
 white   = "#8A8A8A"  # 245
 
 [colors.primary]
-background = "#1d1f21"
+# background = "#1d1f21"  # original
+background = "#0f151e"
 foreground = "#c5c8c6"
 
 [colors.search.focused_match]
