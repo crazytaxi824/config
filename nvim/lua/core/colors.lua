@@ -72,7 +72,7 @@ Color = {
 }
 
 --- highlight api 设置: vim.api.nvim_set_hl(0, '@property', { ctermfg = 81 })
-local highlights = {
+Highlights = {
   --- editor ---------------------------------------------------------------------------------------
   Normal = {ctermfg = Color.white},  -- window background color
   NormalNC = {link="Normal"},  -- non-focus window background color
@@ -87,8 +87,7 @@ local highlights = {
   FloatBorder = {ctermfg = Color.black}, -- Floating Window border 颜色需要和 Pmenu 的背景色相同
                                          -- border = {"▄","▄","▄","█","▀","▀","▀","█"}
 
-  -- Comment    = {ctermfg = Color.comment_green}, -- 注释颜色
-  Comment    = {ctermfg = 240}, -- 注释颜色
+  Comment    = {ctermfg = Color.comment_green}, -- 注释颜色
   NonText    = {ctermfg = 238}, -- 影响 listchars indentLine 颜色
   VertSplit  = {ctermfg = 236}, -- window 之间的分隔线颜色
   MatchParen = {ctermfg = Color.bracket_yellow, cterm = {'bold', 'underline'}}, -- 括号匹配颜色
@@ -270,7 +269,7 @@ local highlights = {
 }
 
 --- nvim_set_hl()
-for hl_group, hl_val in pairs(highlights) do
+for hl_group, hl_val in pairs(Highlights) do
   local vals = {}
   for key, value in pairs(hl_val) do
     if key == 'cterm' and type(value) == 'table' then
