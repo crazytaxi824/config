@@ -16,7 +16,7 @@ local signs = {
   { name = "DiagnosticSignHint",  text = Nerd_icons.diag.hint },
 }
 for _, sign in ipairs(signs) do
-  vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = "" })
+  vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = "", linehl="" })
 end
 
 --- `:help vim.diagnostic.config()`

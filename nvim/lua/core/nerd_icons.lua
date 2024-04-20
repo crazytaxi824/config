@@ -7,15 +7,15 @@ Nerd_icons = {
     error = "",  -- ❌✕✖︎✗✘⛌
   },
   arrows = {
-    right = '→',
-    left  = '←',
     up    = '↑',
+    right = '→',
     down  = '↓',
+    left  = '←',
 
-    tri_right = '',
-    tri_left  = '',
     tri_up    = '',
-    tri_down  = '',
+    tri_right = '',  -- fold
+    tri_down  = '',  -- expand
+    tri_left  = '',
   },
   indent = {
     edge   = "│",
