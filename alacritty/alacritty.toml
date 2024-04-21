@@ -23,11 +23,11 @@ size = 14.5
 
 [font.offset]
 x = 1
-y = 16  # NOTE: 使用 Nerd font 时, y 不能超过 5 否则 █ 会变形.
+y = 10  # NOTE: 使用 Nerd font 时, y 不能超过 5 否则 █ 会变形.
 
 [font.glyph_offset]
 x = 0  # glyph move right `N` px.
-y = 8  # glyph move up `N` px. NOTE: █
+y = 5  # glyph move up `N` px. NOTE: █
 
 [font.normal]
 # family = "Fira Code"
