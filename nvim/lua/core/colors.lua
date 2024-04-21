@@ -53,9 +53,9 @@ Color = {
   cyan  = 81,   -- VVI: one of vim's main color. SpecialChar, Underlined, Label ...
   white = 251,  -- foreground, text
 
-  --- 常用颜色
+  --- 常用颜色, VVI: vscode keyword = 68
   purple = 170,  -- keyword, eg: func, type, struct, var, const ...
-  func_gold     = 85,   -- func, function_call, method, method_call ... | bufferline, lualine
+  func_gold     = 78,   -- func, function_call, method, method_call ... | bufferline, lualine
   string_orange = 173,  -- string
   boolean_blue  = 74,   -- Special, boolean
   comment_green = 71,   -- comments
@@ -116,7 +116,7 @@ Highlights = {
   Function = {ctermfg = Color.func_gold}, -- func <Function> {}, 定义 & call func 都使用该颜色
   Type     = {ctermfg = Color.type_green, cterm = {'italic'}}, -- type <Type> struct
   Identifier = {link = "Normal"}, -- property & parameter
-  Constant   = {link = "Normal"}, -- 常量颜色. eg: const <Constant> = 100
+  Constant   = {ctermfg = Color.blue}, -- 常量颜色. eg: const <Constant> = 100
   --Structure = {link = "Type"},  -- 默认 link to Type
 
   Conditional = {ctermfg = Color.magenta}, -- if, switch, case ...
@@ -211,36 +211,33 @@ Highlights = {
   ['@markup.raw.markdown_inline'] = { ctermfg = Color.string_orange, ctermbg = 237 },  -- markdown, inline `code`
 
   --- program language
-  ['@variable'] = { link = "Normal" },
-  ['@constant'] = { link = "Constant" },
   ['@string.escape'] = { ctermfg = 180 },  -- \n \t ...
 
-  ['@field'] = { link = "Normal" },
-  ['@field.private'] = { ctermfg = Color.hint_grey }, -- after/queries/go 中自定义的颜色.
+  --['@constant'] = { link = "Constant" },
+  ['@variable'] = { link = "Normal" },
+  ['@constant.builtin'] = { ctermfg = Color.boolean_blue },  -- typescript 关键字 'null' ...
+  ['@variable.builtin'] = { ctermfg = Color.boolean_blue },  -- typescript 关键字 'undefined', 'this', 'console' ...
+
   ['@property'] = { ctermfg = Color.cyan },
-  ['@parameter'] = { link = "Normal" },
+  ['@property.private'] = { ctermfg = 247 },
+  ['@variable.member'] = { link = "@property" },
+  ['@field'] = { link = "@property" },
+  ['@parameter'] = { link = "@property" },
 
   --['@function'] = { link = "Function" },
   --['@function.call'] = { link = "Function" },
   --['@method'] = { link = "Function" },
   --['@method.call'] = { link = "Function" },
   ['@function.builtin'] = { link = "Function" },
+  ['@function.type'] = { link = "Type" },
 
-  ['@keyword.return'] = { link = "Conditional" },
+  ['@keyword.return'] = { link = "Conditional" }, -- [return] nil
   ['@namespace'] = { link = "Normal" },  -- package [@namespace]
 
   ['@tag'] = { ctermfg = 68 },  -- html, <@tag></@tag>
   ['@tag.delimiter'] = { ctermfg = 243 },  -- html, <div></div>, <> 括号颜色
   ['@tag.attribute'] = { link = "@property" },  -- html, <... width=..., @tag.attribute=... >
-
   ['@punctuation.special'] = { link = 'Special' },  -- js, ts, console.log(`${ ... }`)
-  ['@constructor'] = { link = "Normal" },  -- typescript, import <@constructor> from 'react'
-  ['@keyword.operator'] = { link = "Keyword" },  -- typescript 关键字 'new'
-  ['@variable.builtin'] = { ctermfg = Color.boolean_blue },  -- typescript 关键字 'undefined', 'this', 'console' ...
-  ['@constant.builtin'] = { ctermfg = Color.boolean_blue },  -- typescript 关键字 'null' ...
-
-  --- go
-  ['@property.go'] = { link = "Normal" }, -- struct 私有属性颜色 type A struct{ foo, Bar string }
 
   --- NOTE: 以下设置是为了配合 lazy load plugins ---------------------------------------------------
   --- 以下颜色为了 lazy load lualine
