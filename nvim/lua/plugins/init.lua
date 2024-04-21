@@ -87,7 +87,7 @@ local plugins = {
   --- but if you want to extend a query use the `after/queries/` directory.
   {
     "nvim-treesitter/nvim-treesitter",
-    commit = "208d504",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "1e20226",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     --build = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
     config = function() require("plugins.settings.treesitter") end,
     dependencies = {
@@ -102,7 +102,7 @@ local plugins = {
   --- 第一方 module 插件 ---
   {
     "nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-    commit = "e6e7104",
+    commit = "ba4289a",
     config = function() require("plugins.settings.treesitter_ctx") end,
 
     lazy = true,  -- nvim-treesitter 加载时自动加载.
@@ -238,7 +238,7 @@ local plugins = {
   --- 官方 LSP 引擎.
   {
     "neovim/nvim-lspconfig",
-    commit = "9eb6d86",
+    commit = "ed8b8a1",
     config = function() require("lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全. NOTE: lspconfig 必须在 cmp_nvim_lsp 之后加载, 否则可能无法提供代码补全.
@@ -249,7 +249,7 @@ local plugins = {
   --- VVI: "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
-    commit = "6345754",
+    commit = "88821b6",
     config = function() require("lsp.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -267,7 +267,7 @@ local plugins = {
   --- File explorer --------------------------------------------------------------------------------
   {
     "nvim-tree/nvim-tree.lua",
-    commit = "81eb8d5",
+    commit = "ae8e46e",
     -- tag = "nvim-tree-v1.3.0",
     config = function() require("plugins.settings.file_tree") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -276,11 +276,18 @@ local plugins = {
     event = "VeryLazy",
   },
 
+  {
+    "nvim-tree/nvim-web-devicons",
+    commit = "beb6367",
+
+    lazy = true, -- dep of nvim-tree & bufferline
+  },
+
   --- Buffer & Status Line -------------------------------------------------------------------------
   --- tabline decorator, `:help 'tabline'`
   {
     "akinsho/bufferline.nvim",
-    tag = "v4.5.2",
+    tag = "v4.5.3",
     config = function() require("plugins.settings.decor_bufferline") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
 
@@ -357,7 +364,7 @@ local plugins = {
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {
     "lewis6991/gitsigns.nvim",
-    commit = "7e38f07",
+    commit = "035da03",
     config = function() require("plugins.settings.git_signs") end,
 
     --- NOTE: `nvim dir` 启动时直接打开 dir 时可能会造成 gitsigns 报错. 根据测试情况选择 VeryLazy 或者 BufReadPre ...
