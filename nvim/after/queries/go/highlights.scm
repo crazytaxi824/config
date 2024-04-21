@@ -16,5 +16,12 @@
 (selector_expression field: ((field_identifier) @property.private
   (#lua-match? @property.private "^[^A-Z]")))
 
+;;; string() byte() ... 等类型转换
+(call_expression function: ((identifier) @type
+	(#any-of? @type "any" "string" "byte" "rune"
+	   "uint" "uint8" "uint16" "uint32" "uint64" "uintptr"
+	   "int" "int" "int8" "int16" "int32" "int64"
+	   "float32" "float64" "complex64" "complex128")))
+
 ;;; TODO: fmt format verbs, eg: %s %d ... https://github.com/tree-sitter/tree-sitter-go/pull/88
 
