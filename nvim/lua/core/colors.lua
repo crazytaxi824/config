@@ -186,13 +186,16 @@ Highlights = {
   SpellLocal = {},  -- clear highlight
 
   --- NOTE: treesitter 颜色设置 --------------------------------------------------------------------
+  --- comment
   ['@comment.error'] = { ctermfg = Color.white, ctermbg = 196 }, -- FIXME, BUG, ERROR
   ['@comment.warning'] = { link = "WarningMsg" },  -- HACK, WARN, WARNING, VVI, FIX
   ['@comment.note'] = { link = "SpecialComment" }, -- XXX, NOTE, DOCS, TEST, INFO
   ['@comment.todo'] = { link = "Todo" },           -- TODO
+  ['@punctuation.delimiter.comment'] = { link = "Comment" },
+  ['@string.special.url.comment'] = { link = "Underlined" }, -- VVI: 这里的 comment 设置是 utils/keymaps function 中需要用到的, 不要删除.
 
+  --- url
   ['@string.special.url'] = { link = "Underlined" },  -- url
-  --- NOTE: 单独为 html/js/ts 设置颜色.
   ['@string.special.url.html'] = { link = "String" },  -- html, <href="@text.uri">
   ['@string.special.url.jsx']  = { link = "String" },  -- html, <href="@text.uri">
   ['@string.special.url.tsx']  = { link = "String" },  -- html, <href="@text.uri">
@@ -219,9 +222,9 @@ Highlights = {
 
   --['@function'] = { link = "Function" },
   --['@function.call'] = { link = "Function" },
-  ['@function.builtin'] = { link = "Function" },
   --['@method'] = { link = "Function" },
   --['@method.call'] = { link = "Function" },
+  ['@function.builtin'] = { link = "Function" },
 
   ['@keyword.return'] = { link = "Conditional" },
   ['@namespace'] = { link = "Normal" },  -- package [@namespace]
@@ -236,18 +239,8 @@ Highlights = {
   ['@variable.builtin'] = { ctermfg = Color.boolean_blue },  -- typescript 关键字 'undefined', 'this', 'console' ...
   ['@constant.builtin'] = { ctermfg = Color.boolean_blue },  -- typescript 关键字 'null' ...
 
-  --- NOTE: 单独为 golang 设置 Property 颜色.
-  ['@property.go'] = { link = "Normal" },
-
-  --- NOTE: 单独为 markdown / markdown_inline 设置颜色.
-  ['@punctuation.special.markdown'] = { link = "Conceal" }, -- "#" - title; "*" - list
-  ['@punctuation.delimiter.markdown'] = { cterm={ "bold" } }, -- "```" code block.
-                                                              -- treesitter 的 queries/markdown_inline 中强制将 delimiter
-                                                              -- 设置为 @conceal, 所以 fg/bg 颜色无法被改变.
-  ['@punctuation.delimiter.markdown_inline'] = { link = "Conceal" }, -- "`" - code; "*" - bold ...
-                                                                     -- "*italic*", "_italic_"
-                                                                     -- "**Bold**"
-                                                                     -- "***Bold italic***"
+  --- go
+  ['@property.go'] = { link = "Normal" }, -- struct 私有属性颜色 type A struct{ foo, Bar string }
 
   --- NOTE: 以下设置是为了配合 lazy load plugins ---------------------------------------------------
   --- 以下颜色为了 lazy load lualine

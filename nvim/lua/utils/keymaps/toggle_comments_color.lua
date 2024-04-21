@@ -1,12 +1,18 @@
 local M = {}
 
-local comment_hl_groups = {"@comment.todo", "@comment.note", "@comment.warning", "@comment.error"}
+local comment_hl_groups = {
+  "@comment.todo",
+  "@comment.note",
+  "@comment.warning",
+  "@comment.error",
+  "@string.special.url.comment"
+}
 
 M.toggle_comment_color = function()
   local c = vim.api.nvim_get_hl(0, {name="Comment"})
 
   if c.ctermfg == Color.comment_green then
-    vim.api.nvim_set_hl(0, "Comment", {ctermfg = 240})
+    vim.api.nvim_set_hl(0, "Comment", {ctermfg = 236})
     for _, hl in ipairs(comment_hl_groups) do
       vim.api.nvim_set_hl(0, hl, {}) -- {} 意思是 clear highlight
     end
