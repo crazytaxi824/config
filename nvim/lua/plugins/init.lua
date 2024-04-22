@@ -19,23 +19,22 @@ end
 vim.opt.rtp:prepend(lazypath)
 -- -- }}}
 
---- 插件设置
+--- `:help lazy.nvim-lazy.nvim-plugin-spec`
 --- https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/editor.lua
---- NOTE: 如果插件被 require(xxx) or pcall(require, xxx) 会马上加载.
+--- 如果插件被 require(xxx) or pcall(require, xxx) 会马上加载.
 local plugins = {
   {
     "folke/lazy.nvim",
-    --- install the latest stable version of plugins that support Semver.
-    commit = "31ddbea",
     -- tag = "v10.20.3",
     -- version = "*",  -- 相当于 tag='stable'
+    commit = "31ddbea",
   },
 
   --- Performence & Functions ----------------------------------------------------------------------
   --- Useful lua functions used by lots of plugins
   {
     "nvim-lua/plenary.nvim",
-    priority = 1000,  -- NOTE: 只在 lazy=false 的情况下有效. 影响加载顺序, 默认值为 50.
+    priority = 1000,  -- 只在 lazy=false 的情况下有效. 影响加载顺序, 默认值为 50.
     commit = "8aad439",
   },
 

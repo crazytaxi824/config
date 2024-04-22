@@ -19,7 +19,7 @@ M.toggle_comment_color = function()
   else
     vim.api.nvim_set_hl(0, "Comment", Highlights["Comment"])
     for _, hl in ipairs(comment_hl_groups) do
-      vim.api.nvim_set_hl(0, hl, Highlights[hl]) -- {} 意思是 clear highlight
+      vim.api.nvim_set_hl(0, hl, Highlights[hl])
     end
   end
 end
