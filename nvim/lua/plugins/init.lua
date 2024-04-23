@@ -27,7 +27,7 @@ local plugins = {
     "folke/lazy.nvim",
     -- tag = "v10.20.3",
     -- version = "*",  -- 相当于 tag='stable'
-    commit = "31ddbea",
+    commit = "3f13f08",
   },
 
   --- Performence & Functions ----------------------------------------------------------------------
@@ -35,7 +35,7 @@ local plugins = {
   {
     "nvim-lua/plenary.nvim",
     priority = 1000,  -- 只在 lazy=false 的情况下有效. 影响加载顺序, 默认值为 50.
-    commit = "8aad439",
+    commit = "5129a36",
   },
 
   --- 通知功能
@@ -86,7 +86,7 @@ local plugins = {
   --- but if you want to extend a query use the `after/queries/` directory.
   {
     "nvim-treesitter/nvim-treesitter",
-    commit = "1e20226",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "c1d1b40",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     --build = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
     config = function() require("plugins.settings.treesitter") end,
     dependencies = {
@@ -156,7 +156,7 @@ local plugins = {
   --- Auto Completion ------------------------------------------------------------------------------
   {
     "hrsh7th/nvim-cmp",
-    commit = "ce16de5",
+    commit = "8f3c541",
     config = function() require("plugins.settings.cmp_completion") end,
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全
