@@ -38,15 +38,6 @@ local plugins = {
     commit = "5129a36",
   },
 
-  --- 通知功能
-  {
-    "rcarriga/nvim-notify",
-    tag = "v3.13.4",
-    config = function() require("plugins.settings.nvim_notify") end,
-
-    event = "VeryLazy",
-  },
-
   --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件
   {
     "williamboman/mason.nvim",
@@ -55,10 +46,19 @@ local plugins = {
     -- build = ":MasonUpdate", -- :MasonUpdate updates All Registries, NOT packages.
     config = function() require("plugins.settings.mason_tool_installer") end,
 
-    --- VVI: 需要在 $PATH 中加入 mason.setup({ "install_root_dir" }) 路径, 才能使用 mason 下载的 cmd tools.
+    --- VVI: 需要在 $PATH 或者 vim.env.PATH 中加入 mason.setup({ "install_root_dir" }) 路径,
     --- 否则不能延迟加载 mason, 需要设置下面的 priority.
-    --priority = 999,
-    cmd = {'Mason'},
+    --cmd = {'Mason'},
+    priority = 999,
+  },
+
+  --- 通知功能
+  {
+    "rcarriga/nvim-notify",
+    tag = "v3.13.4",
+    config = function() require("plugins.settings.nvim_notify") end,
+
+    event = "VeryLazy",
   },
 
   --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
