@@ -86,7 +86,7 @@ local plugins = {
   --- but if you want to extend a query use the `after/queries/` directory.
   {
     "nvim-treesitter/nvim-treesitter",
-    commit = "dc71d94",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "b04ccbd",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     --build = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
     config = function() require("plugins.settings.treesitter") end,
     dependencies = {
@@ -101,7 +101,7 @@ local plugins = {
   --- 第一方 module 插件 ---
   {
     "nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-    commit = "ba4289a",
+    commit = "4fe0a54",
     config = function() require("plugins.settings.treesitter_ctx") end,
 
     lazy = true,  -- nvim-treesitter 加载时自动加载.
@@ -257,7 +257,7 @@ local plugins = {
 
   {
     "stevearc/conform.nvim",
-    commit = "7a205c9",
+    commit = "4660e53",
     config = function() require("plugins.settings.formatter_confrom") end,
 
     event = "VeryLazy",
