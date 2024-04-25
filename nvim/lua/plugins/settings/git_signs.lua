@@ -35,9 +35,6 @@ git_signs.setup({
     untracked    = {hl = 'GitSignsAdd', text = '┆', numhl='GitSignsAddNr', linehl='GitSignsAddLn'},
   },
 
-  --- TODO: new hidden feature.
-  -- _signs_staged_enable = true,
-
   sign_priority = 6,  -- 默认是 6, vim.diagnostic DiagnosticSignHint priority 默认是 10.
                       -- 这里设置为 10 会覆盖 DiagnosticSignHint(10), 但是不会覆盖 DiagnosticSignInfo(11).
   update_debounce = 300,  -- 更新频率, 默认 100
