@@ -58,7 +58,7 @@ Color = {
   func_gold     = 78,   -- func, function_call, method, method_call ... | bufferline, lualine
   string_orange = 173,  -- string
   boolean_blue  = 74,   -- Special, boolean
-  comment_green = 71,   -- comments
+  comment_green = 65,   -- comments
   type_green    = 79,   -- type, 数据类型
 
   --- message 颜色
