@@ -219,7 +219,7 @@ Highlights = {
   ['@variable.builtin'] = { ctermfg = Color.boolean_blue },  -- typescript 关键字 'undefined', 'this', 'console' ...
 
   ['@property'] = { ctermfg = Color.cyan },
-  ['@property.private'] = { ctermfg = 247 },
+  ['@property.private'] = { ctermfg = 246 },
   ['@variable.member'] = { link = "@property" },
   ['@field'] = { link = "@property" },
   ['@parameter'] = { link = "@property" },

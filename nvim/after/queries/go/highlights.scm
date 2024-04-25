@@ -9,12 +9,13 @@
 (field_declaration name: ((field_identifier) @property.private
   (#lua-match? @property.private "^[^A-Z]")))
 
-(keyed_element (literal_element (identifier) @property.private
-  (#lua-match? @property.private "^[^A-Z]")))
+;;; 初始化 struct 时 private field 的颜色. p := P{a:1, b:2}
+; (keyed_element (literal_element (identifier) @property.private
+;   (#lua-match? @property.private "^[^A-Z]")))
 
 ;;; 调用 private field 时的颜色, foo.bar 中的 bar.
-(selector_expression field: ((field_identifier) @property.private
-  (#lua-match? @property.private "^[^A-Z]")))
+; (selector_expression field: ((field_identifier) @property.private
+;   (#lua-match? @property.private "^[^A-Z]")))
 
 ;;; string() byte() ... 等类型转换
 (call_expression function: ((identifier) @type
