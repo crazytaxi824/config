@@ -53,12 +53,12 @@ Color = {
   cyan  = 81,   -- VVI: one of vim's main color. SpecialChar, Underlined, Label ...
   white = 251,  -- foreground, text
 
-  --- 常用颜色, VVI: vscode keyword = 68
-  purple = 170,  -- keyword, eg: func, type, struct, var, const ...
-  func_gold     = 78,   -- func, function_call, method, method_call ... | bufferline, lualine
+  --- 常用颜色,
+  purple = 170,  -- 170|68, keyword, eg: func, type, struct, var, const ... vscode keyword = 68
+  func_gold     = 78,   -- 78|85, func, function_call, method, method_call ... | bufferline, lualine
   string_orange = 173,  -- string
   boolean_blue  = 74,   -- Special, boolean
-  comment_green = 65,   -- comments
+  comment_green = 65,   -- 65|71, comments
   type_green    = 79,   -- type, 数据类型
 
   --- message 颜色
