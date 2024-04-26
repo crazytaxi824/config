@@ -80,7 +80,7 @@ Highlights = {
 
   --- VVI: Pmenu & FloatBorder 背景色需要设置为相同, 影响很多窗口的颜色.
   Pmenu       = {ctermfg = Color.white, ctermbg = Color.black}, -- Completion Menu & Floating Window 颜色
-  PmenuSel    = {ctermbg = 238, cterm = {'bold', 'underline'}}, -- Completion Menu 选中项颜色
+  PmenuSel    = {ctermbg = 238, bold=true, underline=true}, -- Completion Menu 选中项颜色
   PmenuSbar   = {ctermbg = 236}, -- Completion Menu scroll bar 背景色
   PmenuThumb  = {ctermbg = 240}, -- Completion Menu scroll bar 滚动条颜色
   NormalFloat = {link = "Pmenu"}, -- NormalFloat 默认 link to Pmenu
@@ -90,31 +90,31 @@ Highlights = {
   Comment    = {ctermfg = Color.comment_green}, -- 注释颜色
   NonText    = {ctermfg = 238}, -- 影响 listchars indentLine 颜色
   VertSplit  = {ctermfg = 236}, -- window 之间的分隔线颜色
-  MatchParen = {ctermfg = Color.bracket_yellow, cterm = {'bold', 'underline'}}, -- 括号匹配颜色
+  MatchParen = {ctermfg = Color.bracket_yellow, bold=true, underline=true}, -- 括号匹配颜色
 
   LineNr       = {ctermfg = 240}, -- 行号颜色
   CursorLine   = {ctermbg = 236}, -- 光标所在行颜色
-  CursorLineNr = {ctermfg = Color.yellow, cterm = {'bold'}}, -- 光标所在行号的颜色
+  CursorLineNr = {ctermfg = Color.yellow, bold=true}, -- 光标所在行号的颜色
   SignColumn   = {ctermbg = Color.none}, -- line_number 左边用来标记错误, 打断点的位置. 术语 gutter
   ColorColumn  = {ctermbg = 235}, -- textwidth column 颜色
-  QuickFixLine = {ctermfg = Color.boolean_blue, cterm = {'bold'}}, -- Quick Fix 选中行颜色
+  QuickFixLine = {ctermfg = Color.boolean_blue, bold=true}, -- Quick Fix 选中行颜色
 
-  IncSearch = {ctermfg = Color.black, ctermbg = Color.magenta, cterm = {'bold'}}, -- / ? 搜索颜色
+  IncSearch = {ctermfg = Color.black, ctermbg = Color.magenta, bold=true}, -- / ? 搜索颜色
   Search    = {ctermfg = Color.black, ctermbg = Color.yellow}, -- / ? * # g* g# 搜索颜色
 
   ErrorMsg   = {ctermfg = Color.white, ctermbg = Color.red}, -- echoerr 颜色
   WarningMsg = {ctermfg = Color.black, ctermbg = Color.orange}, -- echohl 颜色
 
-  Todo = {ctermfg = Color.white, ctermbg = 22, cterm = {'bold'}}, -- TODO 颜色
-  SpecialComment = {ctermfg = Color.white, ctermbg = 63, cterm = {'bold'}}, -- NOTE 颜色
+  Todo = {ctermfg = Color.white, ctermbg = 22}, -- TODO 颜色
+  SpecialComment = {ctermfg = Color.white, ctermbg = 63}, -- NOTE 颜色
 
-  WildMenu = {ctermfg = Color.black, ctermbg = 39, cterm = {'bold'}}, -- command 模式自动补全
-  Directory = {ctermfg = 246, ctermbg = 234, cterm = {'bold', 'underline'}}, -- for bufferline 在 nvim-tree 显示 "File Explorer"
+  WildMenu = {ctermfg = Color.black, ctermbg = 39, bold=true}, -- command 模式自动补全
+  Directory = {ctermfg = 246, ctermbg = 234, bold=true, underline=true}, -- for bufferline 在 nvim-tree 显示 "File Explorer"
 
   --- 基础颜色 -------------------------------------------------------------------------------------
   Keyword  = {ctermfg = Color.purple}, -- 最主要的颜色
   Function = {ctermfg = Color.func_gold}, -- func <Function> {}, 定义 & call func 都使用该颜色
-  Type     = {ctermfg = Color.type_green, cterm = {'italic'}}, -- type <Type> struct
+  Type     = {ctermfg = Color.type_green, italic=true}, -- type <Type> struct
   Identifier = {link = "Normal"}, -- property & parameter
   Constant   = {ctermfg = Color.blue}, -- 常量颜色. eg: const <Constant> = 100
   --Structure = {link = "Type"},  -- 默认 link to Type
@@ -151,10 +151,10 @@ Highlights = {
   DiagnosticUnnecessary = {link = "DiagnosticHint"},
   DiagnosticDeprecated = {link = "DiagnosticHint"},
 
-  DiagnosticUnderlineHint = {ctermfg = Color.hint_grey, cterm = {'underline'}},
-  DiagnosticUnderlineInfo = { cterm = {'underline'} },
-  DiagnosticUnderlineWarn = { cterm = {'underline'} },
-  DiagnosticUnderlineError = {ctermfg = Color.red, cterm = {'bold', 'underline'}},
+  DiagnosticUnderlineHint = {ctermfg = Color.hint_grey, underline=true},
+  DiagnosticUnderlineInfo = { underline = true },
+  DiagnosticUnderlineWarn = { underline = true },
+  DiagnosticUnderlineError = {ctermfg = Color.red, bold=true, underline=true},
 
   --- LSP 相关颜色 ---------------------------------------------------------------------------------
   --- vim.lsp.buf.document_highlight() 颜色, 类似 Same_ID
@@ -177,7 +177,7 @@ Highlights = {
   CursorLineFold = {link = "FoldColumn"},  -- cursor 所在行 foldcolumn 中 + - | 号颜色
 
   --- 其他常用颜色 ---------------------------------------------------------------------------------
-  Title = {ctermfg = Color.green, cterm = {'bold'}}, -- markdown title
+  Title = {ctermfg = Color.green, bold=true}, -- markdown title
   Conceal = {ctermfg = 246}, -- `set conceallevel?`, markdown list, code block ...
   Label = {ctermfg = Color.cyan}, -- json: key color; markdown: code block language(```go)
 
@@ -202,10 +202,10 @@ Highlights = {
 
   --- markdown / markdown_inline
   ['@markup.heading'] = { link = "Title" }, -- markdown, # title
-  ['@markup.strong'] = { cterm = {"bold"} }, -- markdown, **bold**
-  ['@markup.italic'] = { cterm = {"italic"} },  -- markdown, *italic*, _italic_
-  ['@markup.underline'] = { cterm = {"underline"} },  -- markdown, <u>underline</u>
-  ['@markup.strikethrough'] = { cterm = {'strikethrough'} },  -- markdown, ~~strike~~
+  ['@markup.strong'] = { bold = true }, -- markdown, **bold**
+  ['@markup.italic'] = { italic = true },  -- markdown, *italic*, _italic_
+  ['@markup.underline'] = { underline = true },  -- markdown, <u>underline</u>
+  ['@markup.strikethrough'] = { strikethrough = true },  -- markdown, ~~strike~~
   ['@markup.link.label'] = { ctermfg = Color.cyan }, -- markdown, [@markup.link.label](@markup.link.label)
   ['@markup.link.url'] = { ctermfg = Color.cyan },   -- markdown, [@markup.link.label](@markup.link.label)
   ['@markup.raw.markdown_inline'] = { ctermfg = Color.string_orange, ctermbg = 237 },  -- markdown, inline `code`
@@ -247,7 +247,7 @@ Highlights = {
 
   --- 以下颜色为了 lazy load bufferline
   TabLineFill = {}, -- NOTE: clear TabLineFill
-  TabLineSel = {ctermfg = Color.func_gold, ctermbg = Color.black, cterm = {'bold'}},
+  TabLineSel = {ctermfg = Color.func_gold, ctermbg = Color.black, bold=true},
   --TabLine = {ctermfg = 234},
 
   --- 设置 syntax 颜色是为了让 treesitter lazy render 的时候不至于颜色差距太大.
@@ -260,20 +260,7 @@ Highlights = {
 
 --- nvim_set_hl()
 for hl_group, hl_val in pairs(Highlights) do
-  local vals = {}
-  for key, value in pairs(hl_val) do
-    if key == 'cterm' and type(value) == 'table' then
-      --- {bold=true, underline=true, italic=true, ...}
-      for _, k in ipairs(value) do
-        vals[k] = true
-      end
-    else
-      --- {ctermfg=, ctermbg=, link=, ...}
-      vals[key] = value
-    end
-  end
-
-  vim.api.nvim_set_hl(0, hl_group, vals)
+  vim.api.nvim_set_hl(0, hl_group, hl_val)
 end
 
 
