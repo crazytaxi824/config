@@ -35,7 +35,7 @@ local plugins = {
   {
     "nvim-lua/plenary.nvim",
     priority = 1000,  -- 只在 lazy=false 的情况下有效. 影响加载顺序, 默认值为 50.
-    commit = "5129a36",
+    commit = "08e3019",
   },
 
   --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件
@@ -266,7 +266,7 @@ local plugins = {
   --- File explorer --------------------------------------------------------------------------------
   {
     "nvim-tree/nvim-tree.lua",
-    commit = "ae8e46e",
+    commit = "5a18b98",
     -- tag = "nvim-tree-v1.3.0",
     config = function() require("plugins.settings.file_tree") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
