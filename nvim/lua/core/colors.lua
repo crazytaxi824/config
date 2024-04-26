@@ -212,6 +212,7 @@ Highlights = {
 
   --- program language
   ['@string.escape'] = { ctermfg = 180 },  -- \n \t ...
+  ['@module'] = { ctermfg = Color.type_green },  -- package <module>
 
   --['@constant'] = { link = "Constant" },
   ['@variable'] = { link = "Normal" },
