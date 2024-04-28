@@ -774,8 +774,8 @@ alias checkBrewDependency="bash ~/.config/.my_shell_functions/brew_dep_check.sh"
 # --- [ keybindings ] ------------------------------------------------------------------------------ {{{
 # `bindkey -M main`   # 查看所有快捷键
 # `bindkey "^k" kill-line`       # 设置快捷键, CTRL-k
-# `bindkey "^[f" forward-word`   # ESC-f, 先按 ESC 再按 f 也可以触发.
-# `bindkey "^[b" backward-word`  # ESC-b, 先按 ESC 再按 b 也可以触发.
+# `bindkey "^[f" forward-word`   # ESC-f, 先按 ESC 再按 f.
+# `bindkey "^[b" backward-word`  # ESC-b, 先按 ESC 再按 b.
 #
 # }}}
 
