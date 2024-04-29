@@ -1,4 +1,4 @@
---- HACK: PROBLEM: CursorMove 触发 clear_references() & CursorHold 触发 document_highlight(),
+--- VVI: PROBLEM: CursorMove 触发 clear_references() & CursorHold 触发 document_highlight(),
 --- cursor 在同一个 document_highlight 的内部移动时造成闪烁.
 ---
 --- SOLUTION: 重写 lsp.buf.document_highlight() 方法, 在其 handler 中对 lsp 返回的 result 进行

@@ -44,6 +44,7 @@ local funcs_list = {
   'require("nvim-treesitter.parsers").has_parser',
   'require("nvim-treesitter.parsers").available_parsers',
 
+  'require("cmp").core',
   'require("luasnip").unlink_current',
   'require("telescope.finders").new_table',
   'require("telescope.pickers").new',
