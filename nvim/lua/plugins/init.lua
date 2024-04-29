@@ -86,7 +86,7 @@ local plugins = {
   --- but if you want to extend a query use the `after/queries/` directory.
   {
     "nvim-treesitter/nvim-treesitter",
-    commit = "0883ff0",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "19f69a5",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     --build = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
     config = function() require("plugins.settings.treesitter") end,
     dependencies = {
@@ -214,7 +214,7 @@ local plugins = {
   --- snippets content, 自定义 snippets 可以借鉴这个结构.
   {
     "rafamadriz/friendly-snippets",
-    commit = "ea068f1",
+    commit = "d5f74ce",
 
     lazy = true,  -- LuaSnip 加载时自动加载.
   },
@@ -237,7 +237,7 @@ local plugins = {
   --- 官方 LSP 引擎.
   {
     "neovim/nvim-lspconfig",
-    commit = "7133e85",
+    commit = "3224b09",
     config = function() require("lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全. NOTE: lspconfig 必须在 cmp_nvim_lsp 之后加载, 否则可能无法提供代码补全.
@@ -257,7 +257,7 @@ local plugins = {
 
   {
     "stevearc/conform.nvim",
-    commit = "4660e53",
+    commit = "12b3995",
     config = function() require("plugins.settings.formatter_confrom") end,
 
     event = "VeryLazy",
@@ -277,7 +277,7 @@ local plugins = {
 
   {
     "nvim-tree/nvim-web-devicons",
-    commit = "27eac98",
+    commit = "4f499a0",
 
     lazy = true, -- dep of nvim-tree & bufferline
   },
@@ -315,7 +315,7 @@ local plugins = {
 
   {
     "nvim-neotest/nvim-nio",
-    commit = "5800f58",
+    commit = "7fa5545",
 
     lazy = true,  -- nvim-dap-ui 加载时自动加载.
   },
@@ -323,7 +323,7 @@ local plugins = {
   {
     "rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
     -- tag = "v4.0.0",
-    commit = "edfa93f",
+    commit = "5934302",
     config = function() require("plugins.settings.dapui_debug") end,
     dependencies = {
       "mfussenegger/nvim-dap",
