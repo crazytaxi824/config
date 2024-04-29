@@ -34,8 +34,8 @@ local plugins = {
   --- Useful lua functions used by lots of plugins
   {
     "nvim-lua/plenary.nvim",
-    priority = 1000,  -- 只在 lazy=false 的情况下有效. 影响加载顺序, 默认值为 50.
     commit = "08e3019",
+    priority = 1000,  -- 只在 lazy=false 的情况下有效. 影响加载顺序, 默认值为 50.
   },
 
   --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件
