@@ -233,7 +233,7 @@ nvim_tree.setup {
       "Makefile", "MAKEFILE", "README.md", "readme.md", "Readme.md", "DOCS.md",
       ".editorconfig", ".gitignore",
       "eslint.config.mjs", "eslint.config.js", "eslint.config.cjs", "package.json", "package-lock.json",
-      "pyrightconfig.json", "pyproject.toml",
+      "pyproject.toml", "pyrightconfig.json", "ruff.toml",
     },
     symlink_destination = true,  -- Whether to show the destination of the symlink.
   },

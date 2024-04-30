@@ -36,7 +36,8 @@ M.list = {
     filetypes = {'go', 'gomod', 'gowork', 'gotmpl'}
   },
   --- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#pyright
-  --- `pyrightconfig.json` 配置 https://github.com/microsoft/pyright/blob/main/docs/configuration.md
+  --- pyrightconfig.json: https://github.com/microsoft/pyright/blob/main/docs/configuration.md
+  --- pyproject.toml: https://github.com/microsoft/pyright/blob/main/docs/configuration.md#sample-pyprojecttoml-file
   pyright = {  --- for textDocument/hover ...
     cmd = "pyright",
     mason = "pyright",
@@ -45,6 +46,7 @@ M.list = {
   --- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#ruff_lsp
   --- DOCS: ruff_lsp work with pyright. https://github.com/astral-sh/ruff-lsp/issues/384
   --- NOTE: lspconfig_name = ruff_lsp, cmd & mason_name = ruff-lsp
+  --- pyproject.toml & ruff.toml: https://docs.astral.sh/ruff/tutorial/#configuration
   ruff_lsp = {  --- for lint, code action, format ...
     cmd = "ruff-lsp",
     mason = "ruff-lsp",
