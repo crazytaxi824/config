@@ -316,7 +316,7 @@ local plugins = {
   {
     "nvim-neotest/nvim-nio",
     -- commit = "79e8968",
-    tag = "v1.9.1",
+    tag = "v1.9.2",
 
     lazy = true,  -- nvim-dap-ui 加载时自动加载.
   },
@@ -364,7 +364,7 @@ local plugins = {
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {
     "lewis6991/gitsigns.nvim",
-    commit = "790355f",
+    commit = "9cafac3",
     config = function() require("plugins.settings.git_signs") end,
 
     --- NOTE: `nvim dir` 启动时直接打开 dir 时可能会造成 gitsigns 报错. 根据测试情况选择 VeryLazy 或者 BufReadPre ...
