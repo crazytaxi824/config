@@ -27,7 +27,7 @@ local plugins = {
     "folke/lazy.nvim",
     -- tag = "v10.20.3",
     -- version = "*",  -- 相当于 tag='stable'
-    commit = "3f13f08",
+    commit = "d397434",
   },
 
   --- Performence & Functions ----------------------------------------------------------------------
@@ -86,7 +86,7 @@ local plugins = {
   --- but if you want to extend a query use the `after/queries/` directory.
   {
     "nvim-treesitter/nvim-treesitter",
-    commit = "4ae2b45",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "4e21361",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     --build = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
     config = function() require("plugins.settings.treesitter") end,
     dependencies = {
@@ -214,7 +214,7 @@ local plugins = {
   --- snippets content, 自定义 snippets 可以借鉴这个结构.
   {
     "rafamadriz/friendly-snippets",
-    commit = "d5f74ce",
+    commit = "fa36367",
 
     lazy = true,  -- LuaSnip 加载时自动加载.
   },
@@ -266,7 +266,7 @@ local plugins = {
   --- File explorer --------------------------------------------------------------------------------
   {
     "nvim-tree/nvim-tree.lua",
-    commit = "347e1eb",
+    commit = "64f61e4",
     -- tag = "nvim-tree-v1.3.1",
     config = function() require("plugins.settings.file_tree") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -277,7 +277,7 @@ local plugins = {
 
   {
     "nvim-tree/nvim-web-devicons",
-    commit = "794bba7",
+    commit = "475fbcf",
 
     lazy = true, -- dep of nvim-tree & bufferline
   },
@@ -364,7 +364,7 @@ local plugins = {
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {
     "lewis6991/gitsigns.nvim",
-    commit = "9cafac3",
+    commit = "bc933d2",
     config = function() require("plugins.settings.git_signs") end,
 
     --- NOTE: `nvim dir` 启动时直接打开 dir 时可能会造成 gitsigns 报错. 根据测试情况选择 VeryLazy 或者 BufReadPre ...
