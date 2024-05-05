@@ -4,7 +4,7 @@ M.global_my_term_cache = {}  -- map-like table { id:term_obj }
 M.name_tag=';#my_term#'
 M.bufvar_myterm = "my_term"
 
-local win_height = 16  -- persist window height
+local win_height = 10  -- persist window height
 
 --- highlight
 vim.api.nvim_set_hl(0, "my_output_sys", {ctermfg = Color.orange})
