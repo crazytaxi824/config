@@ -102,11 +102,11 @@ Highlights = {
   --- editor ---------------------------------------------------------------------------------------
   Normal = {ctermfg = Color.white},  -- window background color
   NormalNC = {link="Normal"},  -- non-focus window background color
-  Visual = {ctermbg = 24},  -- Visual mode seleced text color
+  Visual = {ctermbg = 24, bg='#264f78'},  -- Visual mode seleced text color
 
   --- VVI: Pmenu & FloatBorder 背景色需要设置为相同, 影响很多窗口的颜色.
   Pmenu       = {ctermfg = Color.white, ctermbg = Color.black}, -- Completion Menu & Floating Window 颜色
-  PmenuSel    = {ctermbg = 238, bold=true, underline=true}, -- Completion Menu 选中项颜色
+  PmenuSel    = {ctermbg = 238, bg='#03395e', bold=true, underline=true}, -- Completion Menu 选中项颜色
   PmenuSbar   = {ctermbg = 236}, -- Completion Menu scroll bar 背景色
   PmenuThumb  = {ctermbg = 240}, -- Completion Menu scroll bar 滚动条颜色
   NormalFloat = {link = "Pmenu"}, -- NormalFloat 默认 link to Pmenu
@@ -174,13 +174,15 @@ Highlights = {
   DiagnosticInfo  = {ctermfg = Color.blue},
   DiagnosticWarn  = {ctermfg = Color.orange},
   DiagnosticError = {ctermfg = Color.red},
-  DiagnosticUnnecessary = {link = "DiagnosticHint"},
-  DiagnosticDeprecated = {link = "DiagnosticHint"},
 
-  DiagnosticUnderlineHint = {ctermfg = Color.hint_grey, underline=true},
-  DiagnosticUnderlineInfo = { underline = true },
-  DiagnosticUnderlineWarn = { underline = true },
-  DiagnosticUnderlineError = {ctermfg = Color.red, bold=true, underline=true},
+  --- NOTE: `:help undercurl` sp(guisp) color 改变 undercurl, underline, underdashed ... 颜色.
+  DiagnosticUnderlineHint = {ctermfg = Color.hint_grey, sp=Color_gui.hint_grey, undercurl=true},
+  DiagnosticUnderlineInfo = {ctermfg = Color.blue, sp=Color_gui.blue, undercurl=true },
+  DiagnosticUnderlineWarn = {ctermfg = Color.orange, sp=Color_gui.orange, undercurl=true },
+  DiagnosticUnderlineError = {ctermfg = Color.red, sp=Color_gui.red, undercurl=true, bold=true},
+
+  DiagnosticUnnecessary = {link = "DiagnosticUnderlineHint"},
+  DiagnosticDeprecated = {link = "DiagnosticUnderlineHint"},
 
   --- LSP 相关颜色 ---------------------------------------------------------------------------------
   --- vim.lsp.buf.document_highlight() 颜色, 类似 Same_ID
