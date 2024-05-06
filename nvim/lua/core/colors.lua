@@ -41,8 +41,6 @@
 -- -- }}}
 
 Color = {
-  none = 'NONE',
-
   --- NOTE: alacritty 颜色对应, 表示 0-15 系统颜色.
   black = 233,  -- black background
   red   = 167,  -- error message
@@ -95,7 +93,7 @@ Highlights = {
   LineNr       = {ctermfg = 240}, -- 行号颜色
   CursorLine   = {ctermbg = 236}, -- 光标所在行颜色
   CursorLineNr = {ctermfg = Color.yellow, bold=true}, -- 光标所在行号的颜色
-  SignColumn   = {ctermbg = Color.none}, -- line_number 左边用来标记错误, 打断点的位置. 术语 gutter
+  SignColumn   = {}, -- 相当于 hi clear SignColumn, 默认有 bg 颜色.
   ColorColumn  = {ctermbg = 235}, -- textwidth column 颜色
   QuickFixLine = {ctermfg = Color.boolean_blue, bold=true}, -- Quick Fix 选中行颜色
 
