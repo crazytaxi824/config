@@ -6,7 +6,7 @@ local function lazygit()
     relative = 'editor',
     row = 1,
     col = math.ceil(vim.o.columns / 20),
-    height = vim.o.lines - vim.o.cmdheight - 3,  -- minus border_width=2 & row=1
+    height = vim.o.lines - vim.o.cmdheight - 3,  -- minus lazygit_border_width=2(上下 border) & buffer_line=1
     width = math.floor(vim.o.columns / 20 * 18),
     style = "minimal", -- Window border style
     border = Nerd_icons.border,
