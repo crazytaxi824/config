@@ -69,6 +69,35 @@ Color = {
   bracket_yellow = 220,  -- 匹配括号 () 颜色.
 }
 
+-- Color = {
+--   --- NOTE: alacritty 颜色对应, 表示 0-15 系统颜色.
+--   black = {c=233, g='#121212'},  -- black background
+--   red   = {c=167, g='#f04c4c'},  -- error message
+--   green = {c=42,  g='#00d787'},   -- markdown title
+--   yellow = {c=191, g='#d7ff5f'},  -- Search, lualine: Insert Mode background && tabline: tab seleced background
+--   blue  = {c=75, g='#75beff'},    -- info message
+--   magenta = {c=213, g='#ff87ff'}, -- IncSearch, return, if, else, break, package, import
+--   cyan  = {c=81, g='#9cdcfe'},   -- VVI: one of vim's main color. SpecialChar, Underlined, Label ...
+--   white = {c=251, g='#c6c6c6'},  -- foreground, text
+--
+--   --- 常用颜色,
+--   purple        = {c=170, g='#d75fd7'},  -- 170|68, keyword, eg: func, type, struct, var, const ... vscode keyword = 68
+--   func_gold     = {c=78, g='#dcdcaa'},   -- 78|85, func, function_call, method, method_call ... | bufferline, lualine
+--   string_orange = {c=173, g='#ce9178'},  -- string
+--   boolean_blue  = {c=74, g='#569cd6'},   -- Special, boolean
+--   comment_green = {c=65, g='#6a9956'},   -- 65|71, comments
+--   type_green    = {c=79, g='#4e9cb0'},   -- type, 数据类型
+--
+--   --- message 颜色
+--   hint_grey = {c=244, g='#808080'},  -- hint message
+--   orange = {c=214, g='#ff6f00'},  -- warning message
+--
+--   --- 其他颜色
+--   dark_orange = {c=202, g='#ff6f00'},  -- trailing_whitespace & mixed_indent, nvim-notify warn message border
+--   dark_red    = {c=52, g='#890000'},   -- 256 color 中最深的红色, 接近黑色. 通常用于 bg.
+--   bracket_yellow = {c=220, g='#ffd800'},  -- 匹配括号 () 颜色.
+-- }
+
 Color_gui = {
   black = '#121212',
   red   = '#f04c4c',   -- error message
@@ -100,30 +129,31 @@ Color_gui = {
 --- highlight api 设置: vim.api.nvim_set_hl(0, '@property', { ctermfg = 81 })
 Highlights = {
   --- editor ---------------------------------------------------------------------------------------
-  Normal = {ctermfg = Color.white},  -- window background color
+  Normal = {ctermfg=Color.white, fg=Color_gui.white},  -- window background color
   NormalNC = {link="Normal"},  -- non-focus window background color
-  Visual = {ctermbg = 24, bg='#264f78'},  -- Visual mode seleced text color
+  Visual = {ctermbg=24, bg='#264f78'},  -- Visual mode seleced text color
 
   --- VVI: Pmenu & FloatBorder 背景色需要设置为相同, 影响很多窗口的颜色.
-  Pmenu       = {ctermfg = Color.white, ctermbg = Color.black}, -- Completion Menu & Floating Window 颜色
-  PmenuSel    = {ctermbg = 238, bg='#03395e', bold=true, underline=true}, -- Completion Menu 选中项颜色
-  PmenuSbar   = {ctermbg = 236}, -- Completion Menu scroll bar 背景色
-  PmenuThumb  = {ctermbg = 240}, -- Completion Menu scroll bar 滚动条颜色
-  NormalFloat = {link = "Pmenu"}, -- NormalFloat 默认 link to Pmenu
-  FloatBorder = {ctermfg = Color.black}, -- Floating Window border 颜色需要和 Pmenu 的背景色相同
-                                         -- border = {"▄","▄","▄","█","▀","▀","▀","█"}
+  Pmenu       = {ctermfg=Color.white, ctermbg=Color.black, fg=Color_gui.white, bg=Color_gui.black}, -- Completion Menu & Floating Window 颜色
+  PmenuSel    = {ctermbg=238, bg='#03395e', bold=true, underline=true}, -- Completion Menu 选中项颜色
+  PmenuSbar   = {ctermbg=Color.black, bg=Color_gui.black}, -- Completion Menu scroll bar 背景色
+  PmenuThumb  = {ctermbg=240, bg='#585858'}, -- Completion Menu scroll bar 滚动条颜色
+  NormalFloat = {link="Pmenu"}, -- NormalFloat 默认 link to Pmenu
+  FloatBorder = {ctermfg=Color.black, fg=Color_gui.black}, -- Floating Window border 颜色需要和 Pmenu 的背景色相同
+                                                           -- border = {"▄","▄","▄","█","▀","▀","▀","█"}
 
-  Comment    = {ctermfg = Color.comment_green}, -- 注释颜色
-  NonText    = {ctermfg = 238}, -- 影响 listchars indentLine 颜色
-  VertSplit  = {ctermfg = 236}, -- window 之间的分隔线颜色
-  MatchParen = {ctermfg = Color.bracket_yellow, bold=true, underline=true}, -- 括号匹配颜色
+  Comment    = {ctermfg=Color.comment_green, fg=Color_gui.comment_green}, -- 注释颜色
+  NonText    = {ctermfg=238, fg='#444444'}, -- 影响 listchars indentLine 颜色
+  VertSplit  = {ctermfg=236, fg='#303030'}, -- window 之间的分隔线颜色
+  MatchParen = {ctermfg=Color.bracket_yellow, fg=Color_gui.bracket_yellow, bold=true, underline=true}, -- 括号匹配颜色
+  Underlined = {underline=true},
 
-  LineNr       = {ctermfg = 240}, -- 行号颜色
-  CursorLine   = {ctermbg = 236}, -- 光标所在行颜色
-  CursorLineNr = {ctermfg = Color.yellow, bold=true}, -- 光标所在行号的颜色
+  LineNr       = {ctermfg=240, fg='#585858'}, -- 行号颜色
+  CursorLine   = {ctermbg=236, bg='#333333'}, -- 光标所在行颜色
+  CursorLineNr = {ctermfg=Color.yellow, fg=Color_gui.yellow, bold=true}, -- 光标所在行号的颜色
   SignColumn   = {}, -- 相当于 hi clear SignColumn, 默认有 bg 颜色.
-  ColorColumn  = {ctermbg = 235}, -- textwidth column 颜色
-  QuickFixLine = {ctermfg = Color.boolean_blue, bold=true}, -- Quick Fix 选中行颜色
+  ColorColumn  = {ctermbg=235, bg='#252525'}, -- textwidth column 颜色
+  QuickFixLine = {ctermfg=Color.boolean_blue, fg=Color_gui.boolean_blue, bold=true}, -- Quick Fix 选中行颜色
 
   IncSearch = {ctermfg = Color.black, ctermbg = Color.magenta, bold=true}, -- / ? 搜索颜色
   Search    = {ctermfg = Color.black, ctermbg = Color.yellow}, -- / ? * # g* g# 搜索颜色
@@ -132,7 +162,7 @@ Highlights = {
   WarningMsg = {ctermfg = Color.black, ctermbg = Color.orange}, -- echohl 颜色
 
   Todo = {ctermfg = Color.white, ctermbg = 22}, -- TODO 颜色
-  SpecialComment = {ctermfg = Color.white, ctermbg = 63}, -- NOTE 颜色
+  SpecialComment = {ctermfg = 255, ctermbg = 63}, -- NOTE 颜色
 
   WildMenu = {ctermfg = Color.black, ctermbg = 39, bold=true}, -- command 模式自动补全
   Directory = {ctermfg = 246, ctermbg = 234, bold=true, underline=true}, -- for bufferline 在 nvim-tree 显示 "File Explorer"
@@ -170,16 +200,16 @@ Highlights = {
   --- DiagnosticVirtualText - virtual_text 显示的颜色.
   --- DiagnosticUnderlineXXX - code 中显示错误的位置.
   --- 以上 highlight 默认 link to DiagnosticXXX.
-  DiagnosticHint  = {ctermfg = Color.hint_grey},
-  DiagnosticInfo  = {ctermfg = Color.blue},
-  DiagnosticWarn  = {ctermfg = Color.orange},
-  DiagnosticError = {ctermfg = Color.red},
+  DiagnosticHint  = {ctermfg=Color.hint_grey, fg=Color_gui.hint_grey},
+  DiagnosticInfo  = {ctermfg=Color.blue, fg=Color_gui.blue},
+  DiagnosticWarn  = {ctermfg=Color.orange, fg=Color_gui.orange},
+  DiagnosticError = {ctermfg=Color.red, fg=Color_gui.red},
 
   --- NOTE: `:help undercurl` sp(guisp) color 改变 undercurl, underline, underdashed ... 颜色.
-  DiagnosticUnderlineHint = {ctermfg = Color.hint_grey, sp=Color_gui.hint_grey, undercurl=true},
-  DiagnosticUnderlineInfo = {ctermfg = Color.blue, sp=Color_gui.blue, undercurl=true },
-  DiagnosticUnderlineWarn = {ctermfg = Color.orange, sp=Color_gui.orange, undercurl=true },
-  DiagnosticUnderlineError = {ctermfg = Color.red, sp=Color_gui.red, undercurl=true, bold=true},
+  DiagnosticUnderlineHint = {ctermfg=Color.hint_grey, fg=Color_gui.hint_grey, sp=Color_gui.hint_grey, undercurl=true},
+  DiagnosticUnderlineInfo = {ctermfg=Color.blue, fg=Color_gui.blue, sp=Color_gui.blue, undercurl=true },
+  DiagnosticUnderlineWarn = {ctermfg=Color.orange, fg=Color_gui.orange, sp=Color_gui.orange, undercurl=true },
+  DiagnosticUnderlineError = {ctermfg=Color.red, fg=Color_gui.red, sp=Color_gui.red, undercurl=true, bold=true},
 
   DiagnosticUnnecessary = {link = "DiagnosticUnderlineHint"},
   DiagnosticDeprecated = {link = "DiagnosticUnderlineHint"},

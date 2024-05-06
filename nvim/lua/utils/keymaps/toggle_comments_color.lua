@@ -10,8 +10,6 @@ local comment_hl_groups = {
   "@comment.note",
   "@comment.warning",
   "@comment.error",
-
-  "@string.special.url.comment"
 }
 
 M.toggle_comment_color = function()
