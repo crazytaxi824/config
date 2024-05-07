@@ -66,7 +66,6 @@ Color = {
   --- 其他颜色
   dark_orange = 202,  -- trailing_whitespace & mixed_indent, nvim-notify warn message border
   dark_red    = 52,   -- 256 color 中最深的红色, 接近黑色. 通常用于 bg.
-  bracket_yellow = 220,  -- 匹配括号 () 颜色.
 }
 
 Colors = {
@@ -74,7 +73,7 @@ Colors = {
   black = {c=233, g='#121212'},  -- black background
   red   = {c=167, g='#f04c4c'},  -- error message
   green = {c=42,  g='#00d787'},   -- markdown title
-  yellow = {c=191, g='#d7ff5f'},  -- Search, lualine: Insert Mode background && tabline: tab seleced background
+  yellow = {c=220, g='#ffd800'},  -- Search, lualine: Insert Mode background && tabline: tab seleced background
   blue  = {c=75, g='#75beff'},    -- info message
   magenta = {c=213, g='#ff87ff'}, -- IncSearch, return, if, else, break, package, import
   cyan  = {c=81, g='#9cdcfe'},   -- VVI: one of vim's main color. SpecialChar, Underlined, Label ...
@@ -95,7 +94,6 @@ Colors = {
   --- 其他颜色
   dark_orange = {c=202, g='#ff6f00'},  -- trailing_whitespace & mixed_indent, nvim-notify warn message border
   dark_red    = {c=52, g='#890000'},   -- 256 color 中最深的红色, 接近黑色. 通常用于 bg.
-  bracket_yellow = {c=220, g='#ffd800'},  -- 匹配括号 () 颜色.
 }
 
 Color_gui = {
@@ -124,7 +122,6 @@ Color_gui = {
   --- TODO: merge orange and dark_orange
   dark_orange = '#ff6f00',  -- trailing_whitespace & mixed_indent, nvim-notify warn message border
   dark_red    = '#890000',  -- 256 color 中最深的红色, 接近黑色. 通常用于 bg.
-  bracket_yellow = '#ffd800',  -- 匹配括号 () 颜色.
 }
 
 --- highlight api 设置: vim.api.nvim_set_hl(0, '@property', { ctermfg = 81 })
@@ -165,7 +162,7 @@ Highlights = {
   VertSplit = {ctermfg=236, fg='#303030'},
   --- 括号匹配颜色
   MatchParen = {
-    ctermfg=Color.bracket_yellow, fg=Color_gui.bracket_yellow,
+    ctermfg=Colors.yellow.c, fg=Colors.yellow.g,
     bold=true, underline=true,
   },
   --- url, filepath 样式
