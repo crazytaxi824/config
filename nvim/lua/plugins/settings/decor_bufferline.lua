@@ -39,17 +39,17 @@ local buf_highlights = {
   --- duplicate 默认是 italic.
   --- 这里是指相同文件名的 prefix 部分. eg: prefix1/abc.txt && prefix2/abc.txt
   duplicate = {
-    ctermfg = 244, fg='#808080',
+    ctermfg=Colors.g244.c, fg=Colors.g244.g,
     ctermbg=Colors.g236.c, bg=Colors.g236.g,
     italic = true,
   },
   duplicate_visible = {
-    ctermfg = 244, fg='#808080',
+    ctermfg=Colors.g244.c, fg=Colors.g244.g,
     ctermbg=Colors.black.c, bg=Colors.black.g,
     italic = true,
   },
   duplicate_selected = {
-    ctermfg = 244, fg='#808080',
+    ctermfg=Colors.g244.c, fg=Colors.g244.g,
     ctermbg=Colors.black.c, bg=Colors.black.g,
     italic = true,
   },

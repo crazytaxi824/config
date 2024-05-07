@@ -366,7 +366,7 @@ Highlights = {
   ['@namespace'] = { link = "Normal" },  -- package [@namespace]
 
   ['@tag'] = { ctermfg=68, fg='#5396cc' },  -- html, <@tag></@tag>
-  ['@tag.delimiter'] = { ctermfg=244, fg='#808080' },  -- html, <div></div>, <> 括号颜色
+  ['@tag.delimiter'] = { ctermfg=Colors.g244.c, fg=Colors.g244.g },  -- html, <div></div>, <> 括号颜色
   ['@tag.attribute'] = { link = "@property" },  -- html, <... width=..., @tag.attribute=... >
   ['@punctuation.special'] = { link = 'Special' },  -- js, ts, console.log(`${ ... }`)
 

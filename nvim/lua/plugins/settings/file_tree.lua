@@ -363,7 +363,7 @@ vim.api.nvim_set_hl(0, 'NvimTreeGitMergeIcon',   {ctermfg=Colors.purple.c, fg=Co
 vim.api.nvim_set_hl(0, 'NvimTreeGitRenamedIcon', {ctermfg=Colors.purple.c, fg=Colors.purple.g})
 vim.api.nvim_set_hl(0, 'NvimTreeGitNewIcon',     {ctermfg=Colors.red.c, fg=Colors.red.g})
 vim.api.nvim_set_hl(0, 'NvimTreeGitDeletedIcon', {ctermfg=Colors.red.c, fg=Colors.red.g})
-vim.api.nvim_set_hl(0, 'NvimTreeGitIgnoredIcon', {ctermfg=244, fg='#808080'})
+vim.api.nvim_set_hl(0, 'NvimTreeGitIgnoredIcon', {ctermfg=Colors.g244.c, fg=Colors.g244.g})
 
 --- git filename color, 默认是 link 上面 git icon color.
 -- vim.cmd('hi! default link NvimTreeGitFileDirtyHL   NvimTreeGitStagedIcon')  -- hi! default link 在 hi clear 时回到该设置.
