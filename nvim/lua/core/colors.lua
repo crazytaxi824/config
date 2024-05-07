@@ -92,7 +92,7 @@ Highlights = {
   },
   --- Completion Menu 选中项颜色
   PmenuSel = {
-    ctermbg=238, bg='#03395e',
+    ctermbg=Colors.g238.c, bg='#03395e',
     bold=true, underline=true,
   },
   --- Completion Menu scroll bar 背景色
@@ -107,7 +107,7 @@ Highlights = {
   --- 注释颜色
   Comment = {ctermfg=65, fg='#6a9956'},
   --- 影响 listchars indentLine 颜色
-  NonText = {ctermfg=238, fg='#444444'},
+  NonText = {ctermfg=Colors.g238.c, fg=Colors.g238.g},
   --- window 之间的分隔线颜色
   VertSplit = {ctermfg=Colors.g236.c, fg=Colors.g236.g},
   --- 括号匹配颜色
@@ -260,7 +260,7 @@ Highlights = {
 
   --- LSP 相关颜色 ---------------------------------------------------------------------------------
   --- vim.lsp.buf.document_highlight() 颜色, 类似 Same_ID
-  LspReferenceText  = {ctermbg=238, bg='#444444'},
+  LspReferenceText  = {ctermbg=Colors.g238.c, bg=Colors.g238.g},
   LspReferenceRead  = {link = 'LspReferenceText'},
   LspReferenceWrite = {link = 'LspReferenceText'},
 
