@@ -54,7 +54,7 @@ Colors = {
 
   --- 常用颜色,
   purple        = {c=170, g='#d75fd7'},  -- 170|68, keyword, eg: func, type, struct, var, const ... vscode keyword = 68
-  func_gold     = {c=78, g='#dcdcaa'},   -- 78|85, func, function_call, method, method_call ... | bufferline, lualine
+  func_gold     = {c=78, g='#dce6aa'},   -- 78|85, func, function_call, method, method_call ... | bufferline, lualine
   boolean_blue  = {c=74, g='#569cd6'},   -- Special, boolean
   type_green    = {c=79, g='#00b691'},   -- type, 数据类型
 
