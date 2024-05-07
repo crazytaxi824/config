@@ -259,7 +259,7 @@ Highlights = {
   Statement = {link = "Conditional"}, -- syntax 中 'package' & 'import' 关键字
   Include   = {link = "Conditional"}, -- treesitter 中 'package', 'import', 'from' ... 关键字
 
-  String = {ctermfg=Color.string_orange, fg=Color_gui.string_orange},
+  String = {ctermfg=Colors.string_orange.c, fg=Colors.string_orange.g},
   Character = {link = "String"},
 
   Number = {ctermfg=151, fg='#b5cea8'}, -- 100, int, uint ...
@@ -389,7 +389,7 @@ Highlights = {
   ['@markup.link.url'] = { ctermfg=Colors.cyan.c, fg=Colors.cyan.g },   -- markdown, [@markup.link.label](@markup.link.url)
   --- markdown, inline `code`
   ['@markup.raw.markdown_inline'] = {
-    ctermfg=Color.string_orange, fg=Color_gui.string_orange,
+    ctermfg=Colors.string_orange.c, fg=Colors.string_orange.g,
     ctermbg = 236, bg='#303030',
   },
 
