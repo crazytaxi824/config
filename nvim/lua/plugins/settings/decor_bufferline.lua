@@ -4,108 +4,84 @@ if not bufferline_status_ok then
 end
 
 --- highlight 设置 --------------------------------------------------------------------------------- {{{
-local bufferline_colors = {
-  --normal_fg = Color.text_white,  -- NOTE: colors.lua 设置中 highlight Normal ctermfg=251, 所有默认 fg 都是 251.
-  fill_bg = 234,  -- fill 整个 bufferline banner 的背景色
-
-  buf_fg = 246, -- light_grey
-  buf_bg = 236, -- grey
-  buf_sel_fg = Color.func_gold,
-  buf_sel_bg = Color.black,
-  buf_vis_bg = Color.black,
-
-  tab_sel_fg = Color.black,
-  tab_sel_bg = Color.yellow,
-  duplicate_fg = 243,  -- grey
-
-  modified_fg  = Color.cyan,
-  indicator_fg = Color.cyan,
-  separator_fg = 238,  -- grey
-
-  error_fg   = Color.red,
-  warning_fg = Color.orange,
-  info_fg    = Color.blue,
-  hint_fg    = Color.hint_grey,
-}
-
 --- 默认设置 `:help bufferline-highlights`
 local buf_highlights = {
   --- fill 整个 bufferline banner 的背景色, NOTE: 如果需要透明, 则不要设置.
   --fill = { ctermbg = colors.fill_bg },  -- hi TabLineFill
 
   background = {  -- 默认设置, 其他设置缺省的时候使用该设置.
-    ctermfg = bufferline_colors.buf_fg,
-    ctermbg = bufferline_colors.buf_bg,
+    ctermfg=246, fg='#949494',
+    ctermbg=236, bg='#303030',
   },
   buffer_visible = {  -- cursor 在别的 window 时, buffer filename 颜色.
-    ctermbg = bufferline_colors.buf_vis_bg,
+    ctermbg=Color.black, bg=Color_gui.black
   },
   buffer_selected = {
-    ctermfg = bufferline_colors.buf_sel_fg,
-    ctermbg = bufferline_colors.buf_sel_bg,
+    ctermfg=Color.func_gold, fg=Color_gui.func_gold,
+    ctermbg=Color.black, bg=Color_gui.black,
     bold = true,
     italic = false,  -- 默认设置中是 buffer_selected.italic = true.
   },
 
   close_button = {
-    ctermfg = bufferline_colors.buf_fg,
-    ctermbg = bufferline_colors.buf_bg,
+    ctermfg=246, fg='#949494',
+    ctermbg=236, bg='#303030',
   },
   close_button_visible = {
-    ctermfg = bufferline_colors.buf_fg,
-    ctermbg = bufferline_colors.buf_vis_bg,
+    ctermfg=246, fg='#949494',
+    ctermbg=Color.black, bg=Color_gui.black,
   },
   close_button_selected = {
-    ctermfg = bufferline_colors.buf_fg,
-    ctermbg = bufferline_colors.buf_sel_bg,
+    ctermfg=246, fg='#949494',
+    ctermbg=Color.black, bg=Color_gui.black,
   },
 
   --- duplicate 默认是 italic.
   --- 这里是指相同文件名的 prefix 部分. eg: prefix1/abc.txt && prefix2/abc.txt
   duplicate = {
-    ctermfg = bufferline_colors.duplicate_fg,
-    ctermbg = bufferline_colors.buf_bg,
+    ctermfg = 244, fg='#808080',
+    ctermbg=236, bg='#303030',
     italic = true,
   },
   duplicate_visible = {
-    ctermfg = bufferline_colors.duplicate_fg,
-    ctermbg = bufferline_colors.buf_vis_bg,
+    ctermfg = 244, fg='#808080',
+    ctermbg=Color.black, bg=Color_gui.black,
     italic = true,
   },
   duplicate_selected = {
-    ctermfg = bufferline_colors.duplicate_fg,
-    ctermbg = bufferline_colors.buf_sel_bg,
+    ctermfg = 244, fg='#808080',
+    ctermbg=Color.black, bg=Color_gui.black,
     italic = true,
   },
 
   --- NOTE: indicator - 当前正在显示的 buffer. ▎
   indicator_visible = {  -- background 颜色需要和 buffer_visible bg 相同
-    ctermfg = bufferline_colors.indicator_fg,
-    ctermbg = bufferline_colors.buf_vis_bg,
+    ctermfg=Color.cyan, fg=Color_gui.cyan,
+    ctermbg=Color.black, bg=Color_gui.black,
   },
   indicator_selected = {  -- background 颜色需要和 buffer_selected bg 相同
-    ctermfg = bufferline_colors.indicator_fg,
-    ctermbg = bufferline_colors.buf_sel_bg,
+    ctermfg=Color.cyan, fg=Color_gui.cyan,
+    ctermbg=Color.black, bg=Color_gui.black,
   },
 
   --- 右上角 tab 颜色, 1 | 2 | 3 |
   tab_selected = {
-    ctermfg = bufferline_colors.tab_sel_fg,
-    ctermbg = bufferline_colors.tab_sel_bg,
+    ctermfg=Color.black, fg=Color_gui.black,
+    ctermbg=Color.yellow, bg=Color_gui.yellow,
   },
 
   --- ONLY the modified_icon color. ●
   modified = {
-    ctermfg = bufferline_colors.modified_fg,
-    ctermbg = bufferline_colors.buf_bg,
+    ctermfg=Color.cyan, fg=Color_gui.cyan,
+    ctermbg=236, bg='#303030',
   },
   modified_visible = {
-    ctermfg = bufferline_colors.modified_fg,
-    ctermbg = bufferline_colors.buf_vis_bg,
+    ctermfg=Color.cyan, fg=Color_gui.cyan,
+    ctermbg=Color.black, bg=Color_gui.black,
   },
   modified_selected = {
-    ctermfg = bufferline_colors.modified_fg,
-    ctermbg = bufferline_colors.buf_sel_bg,
+    ctermfg=Color.cyan, fg=Color_gui.cyan,
+    ctermbg=Color.black, bg=Color_gui.black,
   },
 
   --- NOTE: separator 颜色 -------------------------------------------------------------------------
@@ -118,11 +94,11 @@ local buf_highlights = {
 
   --- tab_separator 为 tab 之间分隔线颜色, 样式不能自定义
   tab_separator = {  -- tab 之间分隔线的颜色.
-    ctermfg = bufferline_colors.fill_bg,
+    ctermfg=234, fg='#1c1c1c',
   },
   tab_separator_selected = {  -- selected tab 后面一个分隔线'▕'的颜色. 最好和 tab_sel_bg 颜色相同.
-    ctermfg = bufferline_colors.tab_sel_bg,
-    ctermbg = bufferline_colors.tab_sel_bg,
+    ctermfg=Color.yellow, fg=Color_gui.yellow,
+    ctermbg=Color.yellow, bg=Color_gui.yellow,
   },
 
   --- "offset_separator" 为 File Explorer 和 bufferline 之间的 separator, 样式不能自定义
@@ -131,66 +107,66 @@ local buf_highlights = {
   --- error, warning, info, hint 颜色 --------------------------------------------------------------
   --- NOTE: 这里只是 diagnostic 部分的颜色显示, 不包括 buffer_num && buffer_name 颜色. eg: (1)
   error_diagnostic = {           -- hi BufferLineErrorDiagnostic
-    ctermfg = bufferline_colors.error_fg,
-    ctermbg = bufferline_colors.buf_bg,
+    ctermfg=Color.red, fg=Color_gui.red,
+    ctermbg=236, bg='#303030',
     bold = true,
   },
   error_diagnostic_visible = {   -- hi BufferLineErrorDiagnosticVisible
-    ctermfg = bufferline_colors.error_fg,
-    ctermbg = bufferline_colors.buf_vis_bg,
+    ctermfg=Color.red, fg=Color_gui.red,
+    ctermbg=Color.black, bg=Color_gui.black,
     bold = true,
   },
   error_diagnostic_selected = {  -- hi BufferLineErrorDiagnosticSelected
-    ctermfg = bufferline_colors.error_fg,
-    ctermbg = bufferline_colors.buf_sel_bg,
+    ctermfg=Color.red, fg=Color_gui.red,
+    ctermbg=Color.black, bg=Color_gui.black,
     bold = true,
     italic = false,
   },
   warning_diagnostic = {
-    ctermfg = bufferline_colors.warning_fg,
-    ctermbg = bufferline_colors.buf_bg,
+    ctermfg=Color.orange, fg=Color_gui.orange,
+    ctermbg=236, bg='#303030',
     bold = true,
   },
   warning_diagnostic_visible = {
-    ctermfg = bufferline_colors.warning_fg,
-    ctermbg = bufferline_colors.buf_vis_bg,
+    ctermfg=Color.orange, fg=Color_gui.orange,
+    ctermbg=Color.black, bg=Color_gui.black,
     bold = true,
   },
   warning_diagnostic_selected = {
-    ctermfg = bufferline_colors.warning_fg,
-    ctermbg = bufferline_colors.buf_sel_bg,
+    ctermfg=Color.orange, fg=Color_gui.orange,
+    ctermbg=Color.black, bg=Color_gui.black,
     bold = true,
     italic = false,
   },
   info_diagnostic = {
-    ctermfg = bufferline_colors.info_fg,
-    ctermbg = bufferline_colors.buf_bg,
+    ctermfg=Color.blue, fg=Color_gui.blue,
+    ctermbg=236, bg='#303030',
     bold = true,
   },
   info_diagnostic_visible = {
-    ctermfg = bufferline_colors.info_fg,
-    ctermbg = bufferline_colors.buf_vis_bg,
+    ctermfg=Color.blue, fg=Color_gui.blue,
+    ctermbg=Color.black, bg=Color_gui.black,
     bold = true,
   },
   info_diagnostic_selected = {
-    ctermfg = bufferline_colors.info_fg,
-    ctermbg = bufferline_colors.buf_sel_bg,
+    ctermfg=Color.blue, fg=Color_gui.blue,
+    ctermbg=Color.black, bg=Color_gui.black,
     bold = true,
     italic = false,
   },
   hint_diagnostic = {
-    ctermfg = bufferline_colors.hint_fg,
-    ctermbg = bufferline_colors.buf_bg,
+    ctermfg=Color.hint_grey, fg=Color_gui.hint_grey,
+    ctermbg=236, bg='#303030',
     bold = true,
   },
   hint_diagnostic_visible = {
-    ctermfg = bufferline_colors.hint_fg,
-    ctermbg = bufferline_colors.buf_vis_bg,
+    ctermfg=Color.hint_grey, fg=Color_gui.hint_grey,
+    ctermbg=Color.black, bg=Color_gui.black,
     bold = true,
   },
   hint_diagnostic_selected = {
-    ctermfg = bufferline_colors.hint_fg,
-    ctermbg = bufferline_colors.buf_sel_bg,
+    ctermfg=Color.hint_grey, fg=Color_gui.hint_grey,
+    ctermbg=Color.black, bg=Color_gui.black,
     bold = true,
     italic = false,
   },
