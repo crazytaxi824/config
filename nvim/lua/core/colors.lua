@@ -239,7 +239,7 @@ Highlights = {
 
   --- 基础颜色 -------------------------------------------------------------------------------------
   --- VVI: 最主要的颜色
-  Keyword = {ctermfg=Color.purple, fg=Color_gui.purple},
+  Keyword = {ctermfg=Colors.purple.c, fg=Colors.purple.g},
   --- func <Function> {}, 定义 & call func 都使用该颜色
   Function = {ctermfg=Color.func_gold, fg=Color_gui.func_gold},
   --- type <Type> struct
