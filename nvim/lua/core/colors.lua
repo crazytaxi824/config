@@ -193,7 +193,7 @@ Highlights = {
   --- / ? 搜索颜色
   IncSearch = {
     ctermfg=Colors.black.c,   fg=Colors.black.g,
-    ctermbg=Color.magenta, bg=Color_gui.magenta,
+    ctermbg=Colors.magenta.c, bg=Colors.magenta.g,
     bold=true,
   },
   --- / ? * # g* g# 搜索颜色
@@ -254,7 +254,7 @@ Highlights = {
   --Structure = {link = "Type"},  -- 默认 link to Type
 
   --- if, switch, case ...
-  Conditional = {ctermfg=Color.magenta, fg=Color_gui.magenta},
+  Conditional = {ctermfg=Colors.magenta.c, fg=Colors.magenta.g},
   Repeat    = {link = "Conditional"}, -- for range
   Statement = {link = "Conditional"}, -- syntax 中 'package' & 'import' 关键字
   Include   = {link = "Conditional"}, -- treesitter 中 'package', 'import', 'from' ... 关键字
@@ -330,7 +330,7 @@ Highlights = {
   --- changed text
   DiffText = {
     ctermfg=Colors.black.c, fg=Colors.black.g,
-    ctermbg=Color.magenta, bg=Color_gui.magenta,
+    ctermbg=Colors.magenta.c, bg=Colors.magenta.g,
   },
 
   --- fold 颜色 ------------------------------------------------------------------------------------

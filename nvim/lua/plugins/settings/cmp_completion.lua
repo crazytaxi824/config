@@ -204,8 +204,8 @@ cmp.setup {
 --- https://github.com/hrsh7th/nvim-cmp/wiki/Menu-Appearance
 
 --- 匹配文字的颜色
-vim.api.nvim_set_hl(0, 'CmpItemAbbrMatch', {ctermfg=Color.magenta, fg=Color_gui.magenta})
-vim.api.nvim_set_hl(0, 'CmpItemAbbrMatchFuzzy', {ctermfg=Color.magenta, fg=Color_gui.magenta})
+vim.api.nvim_set_hl(0, 'CmpItemAbbrMatch', {ctermfg=Colors.magenta.c, fg=Colors.magenta.g})
+vim.api.nvim_set_hl(0, 'CmpItemAbbrMatchFuzzy', {ctermfg=Colors.magenta.c, fg=Colors.magenta.g})
 
 --- [lsp], [buff], [path], [snip] 颜色
 vim.api.nvim_set_hl(0, 'CmpItemMenu', {ctermfg=240, fg='#585858'})

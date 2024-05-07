@@ -337,22 +337,22 @@ vim.cmd('hi! default link NvimTreeOpenedFolderName NvimTreeFolderName')  -- 已�
 vim.api.nvim_set_hl(0, 'NvimTreeOpenedHL', {underline=true})   -- 已经打开文件的颜色.
 vim.api.nvim_set_hl(0, 'NvimTreeIndentMarker', {ctermfg=242, fg='#6c6c6c'}) -- └ │ 颜色
 
-vim.api.nvim_set_hl(0, 'NvimTreeSymlink', {ctermfg=Color.magenta, fg=Color_gui.magenta}) -- 链接文件, magenta
+vim.api.nvim_set_hl(0, 'NvimTreeSymlink', {ctermfg=Colors.magenta.c, fg=Colors.magenta.g}) -- 链接文件, magenta
 vim.api.nvim_set_hl(0, 'NvimTreeExecFile', {ctermfg=Colors.red.c, fg=Colors.red.g}) -- 可执行文件, red
 vim.api.nvim_set_hl(0, 'NvimTreeSpecialFile', {ctermfg=Color.dark_orange, fg=Color_gui.dark_orange})  -- 自定义 Sepcial 文件, orange
 
 --- window_picker color
 vim.api.nvim_set_hl(0, 'NvimTreeWindowPicker', {
   ctermfg=Colors.black.c, fg=Colors.black.g,
-  ctermbg=Color.magenta, bg=Color_gui.magenta,
+  ctermbg=Colors.magenta.c, bg=Colors.magenta.g,
   bold=true,
 })
 
 --- bookmark color
-vim.api.nvim_set_hl(0, 'NvimTreeBookmarkIcon', {ctermfg=Color.magenta, fg=Color_gui.magenta})  -- icon color
+vim.api.nvim_set_hl(0, 'NvimTreeBookmarkIcon', {ctermfg=Colors.magenta.c, fg=Colors.magenta.g})  -- icon color
 vim.api.nvim_set_hl(0, 'NvimTreeBookmarkHL', {  -- filename color
   ctermfg=Colors.black.c, fg=Colors.black.g,
-  ctermbg=Color.magenta, bg=Color_gui.magenta,
+  ctermbg=Colors.magenta.c, bg=Colors.magenta.g,
 })
 
 --- nvim-tree Git color, 需要开启 highlight_git=true, render={git={enable=true}}
