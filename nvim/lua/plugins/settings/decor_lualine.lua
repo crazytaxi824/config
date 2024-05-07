@@ -7,7 +7,7 @@ end
 --- https://github.com/nvim-lualine/lualine.nvim/blob/master/lua/lualine/themes/gruvbox_light.lua
 local lualine_colors = {
   black = Color_gui.black,
-  white = Color_gui.white,
+  white = Colors.white.g,
 
   yellow = Color_gui.yellow,
   gold = Color_gui.func_gold,  -- filename saved

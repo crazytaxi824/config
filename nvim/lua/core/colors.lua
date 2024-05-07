@@ -131,7 +131,7 @@ Color_gui = {
 Highlights = {
   --- editor ---------------------------------------------------------------------------------------
   --- window background color
-  Normal = {ctermfg=Color.white, fg=Color_gui.white},
+  Normal = {ctermfg=Colors.white.c, fg=Colors.white.g},
   --- non-focus window background color
   NormalNC = {link="Normal"},
   --- Visual mode seleced text color
@@ -140,7 +140,7 @@ Highlights = {
   --- VVI: Pmenu & FloatBorder 背景色需要设置为相同, 影响很多窗口的颜色.
   --- Completion Menu & Floating Window 颜色
   Pmenu = {
-    ctermfg=Color.white, fg=Color_gui.white,
+    ctermfg=Colors.white.c, fg=Colors.white.g,
     ctermbg=Color.black, bg=Color_gui.black,
   },
   --- Completion Menu 选中项颜色
@@ -323,7 +323,7 @@ Highlights = {
     ctermbg=Color.green, bg='#4c5b2d',
   },
   DiffDelete = {
-    ctermfg=Color.white,
+    ctermfg=Colors.white.c,
     ctermbg=Color.dark_red, bg='#4e201e'
   },
   DiffChange = {},  -- 有修改的一整行的文字的颜色

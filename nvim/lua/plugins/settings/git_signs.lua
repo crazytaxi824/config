@@ -104,7 +104,7 @@ vim.api.nvim_set_hl(0, 'GitSignsChangeInline', {
   ctermbg=Color.magenta, bg=Color_gui.magenta,
 })
 vim.api.nvim_set_hl(0, 'GitSignsDeleteInline', {
-  ctermfg=Color.white, fg=Color_gui.white,
+  ctermfg=Colors.white.c, fg=Colors.white.g,
   ctermbg=Color.red, bg=Color_gui.red,
 })
 
