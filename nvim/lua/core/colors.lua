@@ -60,10 +60,7 @@ Colors = {
   comment_green = {c=65, g='#6a9956'},   -- 65|71, comments -- TODO
   type_green    = {c=79, g='#00b691'},   -- type, 数据类型
 
-  --- 其他颜色
-  dark_red    = {c=52, g='#890000'},   -- 256 color 中最深的红色, 接近黑色. 通常用于 bg. TODO
-
-  --- TODO:
+  --- TODO: 其他颜色
   -- g234, g235, g236 ... g246
 }
 
@@ -264,7 +261,7 @@ Highlights = {
   },
   DiffDelete = {
     ctermfg=Colors.white.c,
-    ctermbg=Colors.dark_red.c, bg='#4e201e'
+    ctermbg=52, bg='#4e201e'
   },
   DiffChange = {},  -- 有修改的一整行的文字的颜色
   --- changed text
@@ -294,12 +291,12 @@ Highlights = {
 
   SpellBad = {
     ctermfg=Colors.red.c, fg=Colors.red.g,
-    ctermbg=Colors.dark_red.c, bg=Colors.dark_red.g,
+    ctermbg=52, bg='#890000',
     bold=true, underline=true,
   },
   SpellCap = {
     ctermfg=Colors.orange.c, fg=Colors.orange.g,
-    ctermbg=Colors.dark_red.c, bg=Colors.dark_red.g,
+    ctermbg=52, bg='#890000',
     bold=true, underline=true,
   },
   SpellLocal = {},  -- clear highlight
