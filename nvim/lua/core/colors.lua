@@ -129,35 +129,79 @@ Color_gui = {
 --- highlight api 设置: vim.api.nvim_set_hl(0, '@property', { ctermfg = 81 })
 Highlights = {
   --- editor ---------------------------------------------------------------------------------------
-  Normal = {ctermfg=Color.white, fg=Color_gui.white},  -- window background color
-  NormalNC = {link="Normal"},  -- non-focus window background color
-  Visual = {ctermbg=24, bg='#264f78'},  -- Visual mode seleced text color
+  --- window background color
+  Normal = {ctermfg=Color.white, fg=Color_gui.white},
+  --- non-focus window background color
+  NormalNC = {link="Normal"},
+  --- Visual mode seleced text color
+  Visual = {ctermbg=24, bg='#264f78'},
 
   --- VVI: Pmenu & FloatBorder 背景色需要设置为相同, 影响很多窗口的颜色.
-  Pmenu       = {ctermfg=Color.white, ctermbg=Color.black, fg=Color_gui.white, bg=Color_gui.black}, -- Completion Menu & Floating Window 颜色
-  PmenuSel    = {ctermbg=238, bg='#03395e', bold=true, underline=true}, -- Completion Menu 选中项颜色
-  PmenuSbar   = {ctermbg=Color.black, bg=Color_gui.black}, -- Completion Menu scroll bar 背景色
-  PmenuThumb  = {ctermbg=240, bg='#585858'}, -- Completion Menu scroll bar 滚动条颜色
-  NormalFloat = {link="Pmenu"}, -- NormalFloat 默认 link to Pmenu
-  FloatBorder = {ctermfg=Color.black, fg=Color_gui.black}, -- Floating Window border 颜色需要和 Pmenu 的背景色相同
-                                                           -- border = {"▄","▄","▄","█","▀","▀","▀","█"}
+  --- Completion Menu & Floating Window 颜色
+  Pmenu = {
+    ctermfg=Color.white, fg=Color_gui.white,
+    ctermbg=Color.black, bg=Color_gui.black,
+  },
+  --- Completion Menu 选中项颜色
+  PmenuSel = {
+    ctermbg=238, bg='#03395e',
+    bold=true, underline=true,
+  },
+  --- Completion Menu scroll bar 背景色
+  PmenuSbar = {ctermbg=Color.black, bg=Color_gui.black},
+  --- Completion Menu scroll bar 滚动条颜色
+  PmenuThumb = {ctermbg=240, bg='#585858'},
+  --- NormalFloat 默认 link to Pmenu
+  NormalFloat = {link="Pmenu"},
+  --- Floating Window border 颜色需要和 Pmenu 的背景色相同. border = {"▄","▄","▄","█","▀","▀","▀","█"}
+  FloatBorder = {ctermfg=Color.black, fg=Color_gui.black},
 
-  Comment    = {ctermfg=Color.comment_green, fg=Color_gui.comment_green}, -- 注释颜色
-  NonText    = {ctermfg=238, fg='#444444'}, -- 影响 listchars indentLine 颜色
-  VertSplit  = {ctermfg=236, fg='#303030'}, -- window 之间的分隔线颜色
-  MatchParen = {ctermfg=Color.bracket_yellow, fg=Color_gui.bracket_yellow, bold=true, underline=true}, -- 括号匹配颜色
+  --- 注释颜色
+  Comment = {ctermfg=Color.comment_green, fg=Color_gui.comment_green},
+  --- 影响 listchars indentLine 颜色
+  NonText = {ctermfg=238, fg='#444444'},
+  --- window 之间的分隔线颜色
+  VertSplit = {ctermfg=236, fg='#303030'},
+  --- 括号匹配颜色
+  MatchParen = {
+    ctermfg=Color.bracket_yellow, fg=Color_gui.bracket_yellow,
+    bold=true, underline=true,
+  },
+  --- url, filepath 样式
   Underlined = {underline=true},
 
-  LineNr       = {ctermfg=240, fg='#585858'}, -- 行号颜色
-  CursorLine   = {ctermbg=236, bg='#333333'}, -- 光标所在行颜色
-  CursorLineNr = {ctermfg=Color.yellow, fg=Color_gui.yellow, bold=true}, -- 光标所在行号的颜色
-  SignColumn   = {}, -- 相当于 hi clear SignColumn, 默认有 bg 颜色.
-  ColorColumn  = {ctermbg=235, bg='#252525'}, -- textwidth column 颜色
-  QuickFixLine = {ctermfg=Color.boolean_blue, fg=Color_gui.boolean_blue, bold=true}, -- Quick Fix 选中行颜色
+  --- 行号颜色
+  LineNr = {ctermfg=240, fg='#585858'},
+  --- 光标所在行颜色
+  CursorLine = {ctermbg=236, bg='#333333'},
+  --- 光标所在行号的颜色
+  CursorLineNr = {
+    ctermfg=Color.yellow, fg=Color_gui.yellow,
+    bold=true,
+  },
+  --- 相当于 hi clear SignColumn, 默认有 bg 颜色.
+  SignColumn = {},
+  --- textwidth column 颜色
+  ColorColumn = {ctermbg=235, bg='#252525'},
+  --- Quick Fix 选中行颜色
+  QuickFixLine = {
+    ctermfg=Color.boolean_blue, fg=Color_gui.boolean_blue,
+    bold=true,
+  },
 
-  IncSearch = {ctermfg = Color.black, ctermbg = Color.magenta, bold=true}, -- / ? 搜索颜色
-  Search    = {ctermfg = Color.black, ctermbg = Color.yellow}, -- / ? * # g* g# 搜索颜色
+  --- / ? 搜索颜色
+  IncSearch = {
+    ctermfg=Color.black,   fg=Color_gui.black,
+    ctermbg=Color.magenta, bg=Color_gui.magenta,
+    bold=true,
+  },
+  --- / ? * # g* g# 搜索颜色
+  Search = {
+    ctermfg=Color.black,  fg=Color_gui.black,
+    ctermbg=Color.yellow, bg=Color_gui.yellow,
+  },
 
+  ---TODO:
   ErrorMsg   = {ctermfg = Color.white, ctermbg = Color.red}, -- echoerr 颜色
   WarningMsg = {ctermfg = Color.black, ctermbg = Color.orange}, -- echohl 颜色
 
