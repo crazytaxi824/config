@@ -67,7 +67,7 @@ local buf_highlights = {
   --- 右上角 tab 颜色, 1 | 2 | 3 |
   tab_selected = {
     ctermfg=Colors.black.c, fg=Colors.black.g,
-    ctermbg=Color.yellow, bg=Color_gui.yellow,
+    ctermbg=Colors.yellow.c, bg=Colors.yellow.g,
   },
 
   --- ONLY the modified_icon color. ●
@@ -97,8 +97,8 @@ local buf_highlights = {
     ctermfg=234, fg='#1c1c1c',
   },
   tab_separator_selected = {  -- selected tab 后面一个分隔线'▕'的颜色. 最好和 tab_sel_bg 颜色相同.
-    ctermfg=Color.yellow, fg=Color_gui.yellow,
-    ctermbg=Color.yellow, bg=Color_gui.yellow,
+    ctermfg=Colors.yellow.c, fg=Colors.yellow.g,
+    ctermbg=Colors.yellow.c, bg=Colors.yellow.g,
   },
 
   --- "offset_separator" 为 File Explorer 和 bufferline 之间的 separator, 样式不能自定义

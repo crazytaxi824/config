@@ -177,7 +177,7 @@ Highlights = {
   CursorLine = {ctermbg=236, bg='#303030'},
   --- 光标所在行号的颜色
   CursorLineNr = {
-    ctermfg=Color.yellow, fg=Color_gui.yellow,
+    ctermfg=Colors.yellow.c, fg=Colors.yellow.g,
     bold=true,
   },
   --- 相当于 hi clear SignColumn, 默认有 bg 颜色.
@@ -199,7 +199,7 @@ Highlights = {
   --- / ? * # g* g# 搜索颜色
   Search = {
     ctermfg=Colors.black.c,  fg=Colors.black.g,
-    ctermbg=Color.yellow, bg=Color_gui.yellow,
+    ctermbg=Colors.yellow.c, bg=Colors.yellow.g,
   },
 
   --- echoerr 颜色
