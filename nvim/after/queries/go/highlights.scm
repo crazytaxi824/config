@@ -24,5 +24,7 @@
 	   "int" "int" "int8" "int16" "int32" "int64"
 	   "float32" "float64" "complex64" "complex128")))
 
-;;; TODO: fmt format verbs, eg: %s %d ... https://github.com/tree-sitter/tree-sitter-go/pull/88
+;;; import ("fmt") underline
+(import_spec_list (import_spec path: ((interpreted_string_literal) @text.underline)))
 
+;;; TODO: fmt format verbs, eg: %s %d ... https://github.com/tree-sitter/tree-sitter-go/pull/88
