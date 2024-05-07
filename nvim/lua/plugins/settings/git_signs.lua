@@ -90,24 +90,33 @@ git_signs.setup({
 
 --- highlights -------------------------------------------------------------------------------------
 --- signcolumn 中显示的颜色
-vim.api.nvim_set_hl(0, 'GitSignsAdd',    {ctermfg = Color.green})
-vim.api.nvim_set_hl(0, 'GitSignsChange', {ctermfg = Color.magenta})
-vim.api.nvim_set_hl(0, 'GitSignsDelete', {ctermfg = Color.red})
+vim.api.nvim_set_hl(0, 'GitSignsAdd',    {ctermfg=Color.green, fg=Color_gui.green})
+vim.api.nvim_set_hl(0, 'GitSignsChange', {ctermfg=Color.magenta, fg=Color_gui.magenta})
+vim.api.nvim_set_hl(0, 'GitSignsDelete', {ctermfg=Color.red, fg=Color_gui.red})
 
 --- inline/virtual_text 中 highlight 添加/修改/删除的字符
-vim.api.nvim_set_hl(0, 'GitSignsAddInline',    {ctermfg = Color.black, ctermbg = Color.green})
-vim.api.nvim_set_hl(0, 'GitSignsChangeInline', {ctermfg = Color.black, ctermbg = Color.magenta})
-vim.api.nvim_set_hl(0, 'GitSignsDeleteInline', {ctermfg = Color.white, ctermbg = Color.red})
+vim.api.nvim_set_hl(0, 'GitSignsAddInline',    {
+  ctermfg=Color.black, fg=Color_gui.black,
+  ctermbg=Color.green, bg=Color_gui.green,
+})
+vim.api.nvim_set_hl(0, 'GitSignsChangeInline', {
+  ctermfg=Color.black, fg=Color_gui.black,
+  ctermbg=Color.magenta, bg=Color_gui.magenta,
+})
+vim.api.nvim_set_hl(0, 'GitSignsDeleteInline', {
+  ctermfg=Color.white, fg=Color_gui.white,
+  ctermbg=Color.red, bg=Color_gui.red,
+})
 
 --- prev_hunk() 时, 文字颜色. preview hunk 没有 'GitSignsChangePreview' 设置.
-vim.api.nvim_set_hl(0, 'GitSignsAddPreview',    {ctermfg = Color.green})
-vim.api.nvim_set_hl(0, 'GitSignsDeletePreview', {ctermfg = 240})
+vim.api.nvim_set_hl(0, 'GitSignsAddPreview',    {ctermfg=Color.green, fg=Color_gui.green})
+vim.api.nvim_set_hl(0, 'GitSignsDeletePreview', {ctermfg=240, fg='#585858'})
 
 --- word_diff() 时, 通过 virtual_text 显示 deleted/changed 行的文字颜色
-vim.api.nvim_set_hl(0, 'GitSignsDeleteVirtLn', {ctermfg = 240})
+vim.api.nvim_set_hl(0, 'GitSignsDeleteVirtLn', {ctermfg=240, fg='#585858'})
 
 --- current_line_blame 默认不开启.
-vim.api.nvim_set_hl(0, 'GitSignsCurrentLineBlame', {ctermfg = 246})
+vim.api.nvim_set_hl(0, 'GitSignsCurrentLineBlame', {ctermfg=246, fg='#949494'})
 
 
 
