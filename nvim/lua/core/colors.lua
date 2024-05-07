@@ -320,7 +320,7 @@ Highlights = {
   --- diff 颜色 ------------------------------------------------------------------------------------
   DiffAdd = {
     ctermfg=Colors.black.c,
-    ctermbg=Color.green, bg='#4c5b2d',
+    ctermbg=Colors.green.c, bg='#4c5b2d',
   },
   DiffDelete = {
     ctermfg=Colors.white.c,
@@ -338,13 +338,13 @@ Highlights = {
   --- `set foldcolumn=2`, 在 foldcolumn 显示在 SignColumn 前面.
   --- `set foldmethod=diff`
   Folded = {ctermfg=67, fg='#5f87af'}, -- 折叠行文字颜色
-  FoldColumn = {ctermfg=Color.green, fg=Color_gui.green}, -- foldcolumn 中 + - | 的颜色
+  FoldColumn = {ctermfg=Colors.green.c, fg=Colors.green.g}, -- foldcolumn 中 + - | 的颜色
   CursorLineFold = {link = "FoldColumn"},  -- cursor 所在行 foldcolumn 中 + - | 号颜色
 
   --- 其他常用颜色 ---------------------------------------------------------------------------------
   --- markdown title
   Title = {
-    ctermfg=Color.green, fg=Color_gui.green,
+    ctermfg=Colors.green.c, fg=Colors.green.g,
     bold=true,
   },
   --- `set conceallevel?`, markdown list, code block ...

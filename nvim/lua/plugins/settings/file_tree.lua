@@ -358,7 +358,7 @@ vim.api.nvim_set_hl(0, 'NvimTreeBookmarkHL', {  -- filename color
 --- nvim-tree Git color, 需要开启 highlight_git=true, render={git={enable=true}}
 --- 这里设置了 git icon color
 vim.api.nvim_set_hl(0, 'NvimTreeGitDirtyIcon',   {ctermfg=Colors.red.c, fg=Colors.red.g})
-vim.api.nvim_set_hl(0, 'NvimTreeGitStagedIcon',  {ctermfg=Color.green, fg=Color_gui.green})
+vim.api.nvim_set_hl(0, 'NvimTreeGitStagedIcon',  {ctermfg=Colors.green.c, fg=Colors.green.g})
 vim.api.nvim_set_hl(0, 'NvimTreeGitMergeIcon',   {ctermfg=Color.purple, fg=Color_gui.purple})
 vim.api.nvim_set_hl(0, 'NvimTreeGitRenamedIcon', {ctermfg=Color.purple, fg=Color_gui.purple})
 vim.api.nvim_set_hl(0, 'NvimTreeGitNewIcon',     {ctermfg=Colors.red.c, fg=Colors.red.g})
