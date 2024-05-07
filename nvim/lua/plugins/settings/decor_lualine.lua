@@ -19,7 +19,7 @@ local lualine_colors = {
   red = Colors.red.g,  -- error, readonly
   orange = Colors.orange.g, -- warn, readonly file, trailing_whitespace && mixed_indent
   blue = Colors.blue.g,  -- info background
-  green = Colors.comment_green.g,  -- Command mode
+  green = '#6a9956',  -- 65, Command mode
 }
 
 --- airline 颜色设置 https://github.com/vim-airline/vim-airline/blob/master/autoload/airline/themes/dark.vim

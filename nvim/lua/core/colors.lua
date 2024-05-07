@@ -57,7 +57,6 @@ Colors = {
   func_gold     = {c=78, g='#dcdcaa'},   -- 78|85, func, function_call, method, method_call ... | bufferline, lualine
   string_orange = {c=173, g='#ce9178'},  -- string  -- TODO
   boolean_blue  = {c=74, g='#569cd6'},   -- Special, boolean
-  comment_green = {c=65, g='#6a9956'},   -- 65|71, comments -- TODO
   type_green    = {c=79, g='#00b691'},   -- type, 数据类型
 
   --- TODO: 其他颜色
@@ -95,7 +94,7 @@ Highlights = {
   FloatBorder = {ctermfg=Colors.black.c, fg=Colors.black.g},
 
   --- 注释颜色
-  Comment = {ctermfg=Colors.comment_green.c, fg=Colors.comment_green.g},
+  Comment = {ctermfg=65, fg='#6a9956'},
   --- 影响 listchars indentLine 颜色
   NonText = {ctermfg=238, fg='#444444'},
   --- window 之间的分隔线颜色
