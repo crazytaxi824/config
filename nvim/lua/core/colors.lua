@@ -201,37 +201,77 @@ Highlights = {
     ctermbg=Color.yellow, bg=Color_gui.yellow,
   },
 
-  ---TODO:
-  ErrorMsg   = {ctermfg = Color.white, ctermbg = Color.red}, -- echoerr 颜色
-  WarningMsg = {ctermfg = Color.black, ctermbg = Color.orange}, -- echohl 颜色
+  --- echoerr 颜色
+  ErrorMsg = {
+    ctermfg=255, fg='#ffffff',
+    ctermbg=Color.red, bg=Color_gui.red,
+  },
+  --- echohl WarningMsg | echo "Don't panic!" | echohl None 颜色
+  WarningMsg = {
+    ctermfg=Color.black,  fg=Color_gui.black,
+    ctermbg=Color.orange, bg=Color_gui.orange,
+  },
 
-  Todo = {ctermfg = Color.white, ctermbg = 22}, -- TODO 颜色
-  SpecialComment = {ctermfg = 255, ctermbg = 63}, -- NOTE 颜色
+  --- TODO 颜色
+  Todo = {
+    ctermfg=Color.white, fg=Color_gui.white,
+    ctermbg=22, bg='#008F00',
+  },
+  --- NOTE 颜色
+  SpecialComment = {
+    ctermfg=255, fg='#ffffff',
+    ctermbg=63,  bg='#5f5fff',
+  },
 
-  WildMenu = {ctermfg = Color.black, ctermbg = 39, bold=true}, -- command 模式自动补全
-  Directory = {ctermfg = 246, ctermbg = 234, bold=true, underline=true}, -- for bufferline 在 nvim-tree 显示 "File Explorer"
+  --- command 模式自动补全
+  WildMenu = {
+    ctermfg=Color.black, fg=Color_gui.black,
+    ctermbg=Color.blue,  bg=Color_gui.blue,
+    bold=true,
+  },
+  --- for bufferline 在 nvim-tree 显示 "File Explorer"
+  Directory = {
+    ctermfg=Color.cyan, fg=Color_gui.cyan,
+    ctermbg=235, bg='#252525',
+    bold=true, underline=true,
+  },
 
   --- 基础颜色 -------------------------------------------------------------------------------------
-  Keyword  = {ctermfg = Color.purple}, -- 最主要的颜色
-  Function = {ctermfg = Color.func_gold}, -- func <Function> {}, 定义 & call func 都使用该颜色
-  Type     = {ctermfg = Color.type_green, italic=true}, -- type <Type> struct
-  Identifier = {link = "Normal"}, -- property & parameter
-  Constant   = {ctermfg = Color.blue}, -- 常量颜色. eg: const <Constant> = 100
+  --- VVI: 最主要的颜色
+  Keyword = {ctermfg=Color.purple, fg=Color_gui.purple},
+  --- func <Function> {}, 定义 & call func 都使用该颜色
+  Function = {ctermfg=Color.func_gold, fg=Color_gui.func_gold},
+  --- type <Type> struct
+  Type = {
+    ctermfg=Color.type_green, fg=Color_gui.type_green,
+    italic=true,
+  },
+  --- property & parameter
+  Identifier = {link = "Normal"},
+  --- 常量颜色. eg: const <Constant> = 100
+  Constant= {ctermfg=Color.blue, fg=Color_gui.blue},
   --Structure = {link = "Type"},  -- 默认 link to Type
 
-  Conditional = {ctermfg = Color.magenta}, -- if, switch, case ...
+  --- if, switch, case ...
+  Conditional = {ctermfg=Color.magenta, fg=Color_gui.magenta},
   Repeat    = {link = "Conditional"}, -- for range
   Statement = {link = "Conditional"}, -- syntax 中 'package' & 'import' 关键字
   Include   = {link = "Conditional"}, -- treesitter 中 'package', 'import', 'from' ... 关键字
 
-  String    = {ctermfg = Color.string_orange},
+  String = {ctermfg=Color.string_orange, fg=Color_gui.string_orange},
   Character = {link = "String"},
-  Number = {ctermfg = 151}, -- 100, int, uint ...
+
+  Number = {ctermfg=151, fg='#b5cea8'}, -- 100, int, uint ...
   Float  = {link = "Number"}, -- 10.02 float64, float32
+
+  --- true / false
   Boolean = {ctermfg = Color.boolean_blue},
   Special = {link = "Boolean"},  -- console.log(`${ ... }`)
-  SpecialChar = {ctermfg = Color.cyan}, -- format verbs %v %d ...
-  PreProc = {ctermfg = Color.boolean_blue}, -- tsxTSVariableBuiltin, tsxTSConstBuiltin ...
+
+  --- format verbs %v %d ...
+  SpecialChar = {ctermfg=Color.cyan, fg=Color_gui.cyan},
+  --- tsxTSVariableBuiltin, tsxTSConstBuiltin ...
+  PreProc = {ctermfg=Color.boolean_blue, fg=Color_gui.boolean_blue},
 
   Delimiter = {link = "Normal"},  -- 符号颜色, [] () {} ; : ...
   Operator  = {link = "Normal"},  -- = != == > < ...
