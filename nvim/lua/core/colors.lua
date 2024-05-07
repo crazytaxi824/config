@@ -290,32 +290,54 @@ Highlights = {
   DiagnosticError = {ctermfg=Color.red, fg=Color_gui.red},
 
   --- NOTE: `:help undercurl` sp(guisp) color 改变 undercurl, underline, underdashed ... 颜色.
-  DiagnosticUnderlineHint = {ctermfg=Color.hint_grey, fg=Color_gui.hint_grey, sp=Color_gui.hint_grey, undercurl=true},
-  DiagnosticUnderlineInfo = {ctermfg=Color.blue, fg=Color_gui.blue, sp=Color_gui.blue, undercurl=true },
-  DiagnosticUnderlineWarn = {ctermfg=Color.orange, fg=Color_gui.orange, sp=Color_gui.orange, undercurl=true },
-  DiagnosticUnderlineError = {ctermfg=Color.red, fg=Color_gui.red, sp=Color_gui.red, undercurl=true, bold=true},
+  DiagnosticUnderlineHint = {
+    ctermfg=Color.hint_grey, fg=Color_gui.hint_grey,
+    sp=Color_gui.hint_grey, undercurl=true,
+  },
+  DiagnosticUnderlineInfo = {
+    ctermfg=Color.blue, fg=Color_gui.blue,
+    sp=Color_gui.blue, undercurl=true,
+  },
+  DiagnosticUnderlineWarn = {
+    ctermfg=Color.orange, fg=Color_gui.orange,
+    sp=Color_gui.orange, undercurl=true,
+  },
+  DiagnosticUnderlineError = {
+    ctermfg=Color.red, fg=Color_gui.red,
+    sp=Color_gui.red, undercurl=true, bold=true,
+  },
 
   DiagnosticUnnecessary = {link = "DiagnosticUnderlineHint"},
   DiagnosticDeprecated = {link = "DiagnosticUnderlineHint"},
 
   --- LSP 相关颜色 ---------------------------------------------------------------------------------
   --- vim.lsp.buf.document_highlight() 颜色, 类似 Same_ID
-  LspReferenceText  = {ctermbg=238},
-  LspReferenceRead  = {ctermbg=238},
-  LspReferenceWrite = {ctermbg=238},
+  LspReferenceText  = {ctermbg=238, bg='#444444'},
+  LspReferenceRead  = {link = 'LspReferenceText'},
+  LspReferenceWrite = {link = 'LspReferenceText'},
 
   --- diff 颜色 ------------------------------------------------------------------------------------
-  DiffAdd    = {ctermfg = Color.black, ctermbg = Color.green},
-  DiffDelete = {ctermfg = Color.white, ctermbg = Color.dark_red},
+  DiffAdd = {
+    ctermfg=Color.black,
+    ctermbg=Color.green, bg='#4c5b2d',
+  },
+  DiffDelete = {
+    ctermfg=Color.white,
+    ctermbg=Color.dark_red, bg='#4e201e'
+  },
   DiffChange = {},  -- 有修改的一整行的文字的颜色
-  DiffText   = {ctermfg = Color.black, ctermbg = Color.magenta}, -- changed text
+  --- changed text
+  DiffText = {
+    ctermfg=Color.black, fg=Color_gui.black,
+    ctermbg=Color.magenta, bg=Color_gui.magenta,
+  },
 
   --- fold 颜色 ------------------------------------------------------------------------------------
   --- diff mode 下, 会自动设置:
   --- `set foldcolumn=2`, 在 foldcolumn 显示在 SignColumn 前面.
   --- `set foldmethod=diff`
-  Folded     = {ctermfg = 67},  -- 折叠行文字颜色
-  FoldColumn = {ctermfg = Color.green},    -- foldcolumn 中 + - | 的颜色
+  Folded = {ctermfg=67, fg='#5f87af'}, -- 折叠行文字颜色
+  FoldColumn = {ctermfg=Color.green, fg=Color_gui.green}, -- foldcolumn 中 + - | 的颜色
   CursorLineFold = {link = "FoldColumn"},  -- cursor 所在行 foldcolumn 中 + - | 号颜色
 
   --- 其他常用颜色 ---------------------------------------------------------------------------------
