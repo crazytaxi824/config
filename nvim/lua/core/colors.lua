@@ -227,7 +227,7 @@ Highlights = {
   --- command 模式自动补全
   WildMenu = {
     ctermfg=Colors.black.c, fg=Colors.black.g,
-    ctermbg=Color.blue,  bg=Color_gui.blue,
+    ctermbg=Colors.blue.c,  bg=Colors.blue.g,
     bold=true,
   },
   --- for bufferline 在 nvim-tree 显示 "File Explorer"
@@ -250,7 +250,7 @@ Highlights = {
   --- property & parameter
   Identifier = {link = "Normal"},
   --- 常量颜色. eg: const <Constant> = 100
-  Constant= {ctermfg=Color.blue, fg=Color_gui.blue},
+  Constant= {ctermfg=Colors.blue.c, fg=Colors.blue.g},
   --Structure = {link = "Type"},  -- 默认 link to Type
 
   --- if, switch, case ...
@@ -286,7 +286,7 @@ Highlights = {
   --- DiagnosticUnderlineXXX - code 中显示错误的位置.
   --- 以上 highlight 默认 link to DiagnosticXXX.
   DiagnosticHint  = {ctermfg=Color.hint_grey, fg=Color_gui.hint_grey},
-  DiagnosticInfo  = {ctermfg=Color.blue, fg=Color_gui.blue},
+  DiagnosticInfo  = {ctermfg=Colors.blue.c, fg=Colors.blue.g},
   DiagnosticWarn  = {ctermfg=Color.orange, fg=Color_gui.orange},
   DiagnosticError = {ctermfg=Colors.red.c, fg=Colors.red.g},
 
@@ -296,8 +296,8 @@ Highlights = {
     sp=Color_gui.hint_grey, undercurl=true,
   },
   DiagnosticUnderlineInfo = {
-    ctermfg=Color.blue, fg=Color_gui.blue,
-    sp=Color_gui.blue, undercurl=true,
+    ctermfg=Colors.blue.c, fg=Colors.blue.g,
+    sp=Colors.blue.g, undercurl=true,
   },
   DiagnosticUnderlineWarn = {
     ctermfg=Color.orange, fg=Color_gui.orange,

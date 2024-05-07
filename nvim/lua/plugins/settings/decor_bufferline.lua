@@ -139,17 +139,17 @@ local buf_highlights = {
     italic = false,
   },
   info_diagnostic = {
-    ctermfg=Color.blue, fg=Color_gui.blue,
+    ctermfg=Colors.blue.c, fg=Colors.blue.g,
     ctermbg=236, bg='#303030',
     bold = true,
   },
   info_diagnostic_visible = {
-    ctermfg=Color.blue, fg=Color_gui.blue,
+    ctermfg=Colors.blue.c, fg=Colors.blue.g,
     ctermbg=Colors.black.c, bg=Colors.black.g,
     bold = true,
   },
   info_diagnostic_selected = {
-    ctermfg=Color.blue, fg=Color_gui.blue,
+    ctermfg=Colors.blue.c, fg=Colors.blue.g,
     ctermbg=Colors.black.c, bg=Colors.black.g,
     bold = true,
     italic = false,

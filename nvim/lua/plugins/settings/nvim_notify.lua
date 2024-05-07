@@ -63,21 +63,21 @@ notify.setup({
 --- border 颜色
 vim.api.nvim_set_hl(0, 'NotifyERRORBorder', {ctermfg=Colors.red.c, fg=Colors.red.g})
 vim.api.nvim_set_hl(0, 'NotifyWARNBorder',  {ctermfg=Color.orange, fg=Color_gui.orange}) -- orange
-vim.api.nvim_set_hl(0, 'NotifyINFOBorder',  {ctermfg=Color.blue, fg=Color_gui.blue})  -- blue
+vim.api.nvim_set_hl(0, 'NotifyINFOBorder',  {ctermfg=Colors.blue.c, fg=Colors.blue.g})  -- blue
 vim.api.nvim_set_hl(0, 'NotifyDEBUGBorder', {ctermfg=246, fg='#949494'}) -- grey
 vim.api.nvim_set_hl(0, 'NotifyTRACEBorder', {ctermfg=240, fg='#585858'}) -- grey
 
 --- Title 颜色
 vim.api.nvim_set_hl(0, 'NotifyERRORTitle', {ctermfg=Colors.red.c, fg=Colors.red.g})
 vim.api.nvim_set_hl(0, 'NotifyWARNTitle',  {ctermfg=Color.orange, fg=Color_gui.orange}) -- orange
-vim.api.nvim_set_hl(0, 'NotifyINFOTitle',  {ctermfg=Color.blue, fg=Color_gui.blue})  -- blue
+vim.api.nvim_set_hl(0, 'NotifyINFOTitle',  {ctermfg=Colors.blue.c, fg=Colors.blue.g})  -- blue
 vim.api.nvim_set_hl(0, 'NotifyDEBUGTitle', {ctermfg=246, fg='#949494'}) -- grey
 vim.api.nvim_set_hl(0, 'NotifyTRACETitle', {ctermfg=240, fg='#585858'}) -- grey
 
 --- icon 颜色, NOTE: 没用到
 vim.api.nvim_set_hl(0, 'NotifyERRORIcon', {ctermfg=Colors.red.c, fg=Colors.red.g})
 vim.api.nvim_set_hl(0, 'NotifyWARNIcon',  {ctermfg=Color.orange, fg=Color_gui.orange}) -- orange
-vim.api.nvim_set_hl(0, 'NotifyINFOIcon',  {ctermfg=Color.blue, fg=Color_gui.blue})  -- blue
+vim.api.nvim_set_hl(0, 'NotifyINFOIcon',  {ctermfg=Colors.blue.c, fg=Colors.blue.g})  -- blue
 vim.api.nvim_set_hl(0, 'NotifyDEBUGIcon', {ctermfg=246, fg='#949494'}) -- grey
 vim.api.nvim_set_hl(0, 'NotifyTRACEIcon', {ctermfg=240, fg='#585858'}) -- grey
 

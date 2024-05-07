@@ -18,7 +18,7 @@ local lualine_colors = {
 
   red = Colors.red.g,  -- error, readonly
   orange = Color_gui.orange, -- warn
-  blue = Color_gui.blue,  -- info background
+  blue = Colors.blue.g,  -- info background
   green = Color_gui.comment_green,  -- Command mode
 
   dark_orange = Color_gui.dark_orange, -- readonly file, trailing_whitespace && mixed_indent

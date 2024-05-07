@@ -78,7 +78,7 @@ dap.configurations.go = {
 --- `DapBreakpointRejected` to indicate breakpoints rejected by the debug adapter (default: `R`)
 vim.api.nvim_set_hl(0, 'DapBreakpointHL', { ctermfg=Colors.yellow.c, fg=Colors.yellow.g })
 vim.api.nvim_set_hl(0, 'DapBreakpointRejectedHL', { ctermfg=Colors.yellow.c, fg=Colors.yellow.g })
-vim.api.nvim_set_hl(0, 'DapStoppedHL', { ctermfg=Color.blue, fg=Color_gui.blue })
+vim.api.nvim_set_hl(0, 'DapStoppedHL', { ctermfg=Colors.blue.c, fg=Colors.blue.g })
 vim.api.nvim_set_hl(0, 'DapStoppedLineHL', { ctermbg=24, bg='#264f78' })
 
 vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "DapBreakpointHL", numhl = "", linehl="" })
