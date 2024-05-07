@@ -204,14 +204,14 @@ cmp.setup {
 --- https://github.com/hrsh7th/nvim-cmp/wiki/Menu-Appearance
 
 --- 匹配文字的颜色
-vim.api.nvim_set_hl(0, 'CmpItemAbbrMatch', {ctermfg = Color.magenta})
-vim.api.nvim_set_hl(0, 'CmpItemAbbrMatchFuzzy', {ctermfg = Color.magenta})
+vim.api.nvim_set_hl(0, 'CmpItemAbbrMatch', {ctermfg=Color.magenta, fg=Color_gui.magenta})
+vim.api.nvim_set_hl(0, 'CmpItemAbbrMatchFuzzy', {ctermfg=Color.magenta, fg=Color_gui.magenta})
 
 --- [lsp], [buff], [path], [snip] 颜色
-vim.api.nvim_set_hl(0, 'CmpItemMenu', {ctermfg = 240})
+vim.api.nvim_set_hl(0, 'CmpItemMenu', {ctermfg=240, fg='#585858'})
 
 --- VVI: CmpItemKindXXX 默认颜色, 如果没有单独设置 CmpItemKindXXX 颜色则会使用该颜色.
-vim.api.nvim_set_hl(0, 'CmpItemKindDefault', {ctermfg = 246})
+vim.api.nvim_set_hl(0, 'CmpItemKindDefault', {ctermfg=246, fg='#949494'})
 
 vim.api.nvim_set_hl(0, 'CmpItemKindInterface', {link = 'Type'})
 vim.api.nvim_set_hl(0, 'CmpItemKindClass',     {link = 'Type'})
@@ -227,12 +227,12 @@ vim.api.nvim_set_hl(0, 'CmpItemKindEnum',     {link = 'Keyword'})
 vim.api.nvim_set_hl(0, 'CmpItemKindModule',   {link = 'String'})
 
 -- blue
-vim.api.nvim_set_hl(0, 'CmpItemKindSnippet', {ctermfg = Color.boolean_blue})
-vim.api.nvim_set_hl(0, 'CmpItemKindFile',    {ctermfg = Color.boolean_blue})
-vim.api.nvim_set_hl(0, 'CmpItemKindFolder',  {ctermfg = Color.boolean_blue, bold = true})
+vim.api.nvim_set_hl(0, 'CmpItemKindSnippet', {ctermfg=Color.boolean_blue, fg=Color_gui.boolean_blue})
+vim.api.nvim_set_hl(0, 'CmpItemKindFile',    {ctermfg=Color.boolean_blue, fg=Color_gui.boolean_blue})
+vim.api.nvim_set_hl(0, 'CmpItemKindFolder',  {ctermfg=Color.boolean_blue, fg=Color_gui.boolean_blue, bold = true})
 
 --- grey, 弃用的 suggestion.
-vim.api.nvim_set_hl(0, 'CmpItemAbbrDeprecated',  {ctermfg = 242, underline = true})
+vim.api.nvim_set_hl(0, 'CmpItemAbbrDeprecated',  {ctermfg=242, fg='#6c6c6c', underline = true})
 
 -- -- }}}
 
