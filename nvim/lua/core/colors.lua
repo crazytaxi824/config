@@ -244,7 +244,7 @@ Highlights = {
   Function = {ctermfg=Colors.func_gold.c, fg=Colors.func_gold.g},
   --- type <Type> struct
   Type = {
-    ctermfg=Color.type_green, fg=Color_gui.type_green,
+    ctermfg=Colors.type_green.c, fg=Colors.type_green.g,
     italic=true,
   },
   --- property & parameter
@@ -395,7 +395,7 @@ Highlights = {
 
   --- program language
   ['@string.escape'] = {ctermfg=180, fg='#ceb279'},  -- \n \t ...
-  ['@module'] = { ctermfg=Color.type_green, fg=Color_gui.type_green },  -- package <module>
+  ['@module'] = { ctermfg=Colors.type_green.c, fg=Colors.type_green.g },  -- package <module>
 
   --['@constant'] = { link = "Constant" },
   ['@variable'] = { link = "Normal" },
