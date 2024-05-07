@@ -298,6 +298,7 @@ vim.g.markdown_folding = 1
 --vim.g.mapleader = '\\'  -- 设置 <leader>, 默认值是 \
 vim.opt.mouse = 'a'  -- allow the mouse to be used in neovim, `:help mouse`
 
+--- VVI: 使用 term gui
 vim.opt.termguicolors = true
 
 --- 快捷键延迟时间设置 -----------------------------------------------------------------------------
