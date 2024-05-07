@@ -16,7 +16,7 @@ local lualine_colors = {
   grey = '#303030',  -- 236, section_b
   light_grey = '#949494', -- 245, inactive, hint
 
-  red = Color_gui.red,  -- error, readonly
+  red = Colors.red.g,  -- error, readonly
   orange = Color_gui.orange, -- warn
   blue = Color_gui.blue,  -- info background
   green = Color_gui.comment_green,  -- Command mode

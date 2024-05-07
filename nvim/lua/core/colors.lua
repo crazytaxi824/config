@@ -205,7 +205,7 @@ Highlights = {
   --- echoerr 颜色
   ErrorMsg = {
     ctermfg=255, fg='#ffffff',
-    ctermbg=Color.red, bg=Color_gui.red,
+    ctermbg=Colors.red.c, bg=Colors.red.g,
   },
   --- echohl WarningMsg | echo "Don't panic!" | echohl None 颜色
   WarningMsg = {
@@ -288,7 +288,7 @@ Highlights = {
   DiagnosticHint  = {ctermfg=Color.hint_grey, fg=Color_gui.hint_grey},
   DiagnosticInfo  = {ctermfg=Color.blue, fg=Color_gui.blue},
   DiagnosticWarn  = {ctermfg=Color.orange, fg=Color_gui.orange},
-  DiagnosticError = {ctermfg=Color.red, fg=Color_gui.red},
+  DiagnosticError = {ctermfg=Colors.red.c, fg=Colors.red.g},
 
   --- NOTE: `:help undercurl` sp(guisp) color 改变 undercurl, underline, underdashed ... 颜色.
   DiagnosticUnderlineHint = {
@@ -304,8 +304,8 @@ Highlights = {
     sp=Color_gui.orange, undercurl=true,
   },
   DiagnosticUnderlineError = {
-    ctermfg=Color.red, fg=Color_gui.red,
-    sp=Color_gui.red, undercurl=true, bold=true,
+    ctermfg=Colors.red.c, fg=Colors.red.g,
+    sp=Colors.red.g, undercurl=true, bold=true,
   },
 
   DiagnosticUnnecessary = {link = "DiagnosticUnderlineHint"},
@@ -353,7 +353,7 @@ Highlights = {
   Label = {ctermfg=Color.cyan, fg=Color_gui.cyan},
 
   SpellBad = {
-    ctermfg=Color.red, fg=Color_gui.red,
+    ctermfg=Colors.red.c, fg=Colors.red.g,
     ctermbg=Color.dark_red, bg=Color_gui.dark_red,
     bold=true, underline=true,
   },

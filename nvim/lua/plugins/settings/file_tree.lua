@@ -338,7 +338,7 @@ vim.api.nvim_set_hl(0, 'NvimTreeOpenedHL', {underline=true})   -- 已经打开�
 vim.api.nvim_set_hl(0, 'NvimTreeIndentMarker', {ctermfg=242, fg='#6c6c6c'}) -- └ │ 颜色
 
 vim.api.nvim_set_hl(0, 'NvimTreeSymlink', {ctermfg=Color.magenta, fg=Color_gui.magenta}) -- 链接文件, magenta
-vim.api.nvim_set_hl(0, 'NvimTreeExecFile', {ctermfg=Color.red, fg=Color_gui.red}) -- 可执行文件, red
+vim.api.nvim_set_hl(0, 'NvimTreeExecFile', {ctermfg=Colors.red.c, fg=Colors.red.g}) -- 可执行文件, red
 vim.api.nvim_set_hl(0, 'NvimTreeSpecialFile', {ctermfg=Color.dark_orange, fg=Color_gui.dark_orange})  -- 自定义 Sepcial 文件, orange
 
 --- window_picker color
@@ -357,12 +357,12 @@ vim.api.nvim_set_hl(0, 'NvimTreeBookmarkHL', {  -- filename color
 
 --- nvim-tree Git color, 需要开启 highlight_git=true, render={git={enable=true}}
 --- 这里设置了 git icon color
-vim.api.nvim_set_hl(0, 'NvimTreeGitDirtyIcon',   {ctermfg=Color.red, fg=Color_gui.red})
+vim.api.nvim_set_hl(0, 'NvimTreeGitDirtyIcon',   {ctermfg=Colors.red.c, fg=Colors.red.g})
 vim.api.nvim_set_hl(0, 'NvimTreeGitStagedIcon',  {ctermfg=Color.green, fg=Color_gui.green})
 vim.api.nvim_set_hl(0, 'NvimTreeGitMergeIcon',   {ctermfg=Color.purple, fg=Color_gui.purple})
 vim.api.nvim_set_hl(0, 'NvimTreeGitRenamedIcon', {ctermfg=Color.purple, fg=Color_gui.purple})
-vim.api.nvim_set_hl(0, 'NvimTreeGitNewIcon',     {ctermfg=Color.red, fg=Color_gui.red})
-vim.api.nvim_set_hl(0, 'NvimTreeGitDeletedIcon', {ctermfg=Color.red, fg=Color_gui.red})
+vim.api.nvim_set_hl(0, 'NvimTreeGitNewIcon',     {ctermfg=Colors.red.c, fg=Colors.red.g})
+vim.api.nvim_set_hl(0, 'NvimTreeGitDeletedIcon', {ctermfg=Colors.red.c, fg=Colors.red.g})
 vim.api.nvim_set_hl(0, 'NvimTreeGitIgnoredIcon', {ctermfg=244, fg='#808080'})
 
 --- git filename color, 默认是 link 上面 git icon color.

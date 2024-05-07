@@ -107,17 +107,17 @@ local buf_highlights = {
   --- error, warning, info, hint 颜色 --------------------------------------------------------------
   --- NOTE: 这里只是 diagnostic 部分的颜色显示, 不包括 buffer_num && buffer_name 颜色. eg: (1)
   error_diagnostic = {           -- hi BufferLineErrorDiagnostic
-    ctermfg=Color.red, fg=Color_gui.red,
+    ctermfg=Colors.red.c, fg=Colors.red.g,
     ctermbg=236, bg='#303030',
     bold = true,
   },
   error_diagnostic_visible = {   -- hi BufferLineErrorDiagnosticVisible
-    ctermfg=Color.red, fg=Color_gui.red,
+    ctermfg=Colors.red.c, fg=Colors.red.g,
     ctermbg=Colors.black.c, bg=Colors.black.g,
     bold = true,
   },
   error_diagnostic_selected = {  -- hi BufferLineErrorDiagnosticSelected
-    ctermfg=Color.red, fg=Color_gui.red,
+    ctermfg=Colors.red.c, fg=Colors.red.g,
     ctermbg=Colors.black.c, bg=Colors.black.g,
     bold = true,
     italic = false,

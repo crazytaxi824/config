@@ -10,7 +10,7 @@ end
 
 --- 设置 indent.char 颜色 --------------------------------------------------------------------------
 vim.api.nvim_set_hl(0, 'RainbowGrey',   {ctermfg=Color.hint_grey, fg=Color_gui.hint_grey})
-vim.api.nvim_set_hl(0, 'RainbowRed',    {ctermfg=Color.red, fg=Color_gui.red})
+vim.api.nvim_set_hl(0, 'RainbowRed',    {ctermfg=Colors.red.c, fg=Colors.red.g})
 vim.api.nvim_set_hl(0, 'RainbowYellow', {ctermfg=Color.yellow, fg=Color_gui.yellow})
 vim.api.nvim_set_hl(0, 'RainbowBlue',   {ctermfg=Color.blue, fg=Color_gui.blue})
 vim.api.nvim_set_hl(0, 'RainbowOrange', {ctermfg=Color.dark_orange, fg=Color_gui.dark_orange})

@@ -92,7 +92,7 @@ git_signs.setup({
 --- signcolumn 中显示的颜色
 vim.api.nvim_set_hl(0, 'GitSignsAdd',    {ctermfg=Color.green, fg=Color_gui.green})
 vim.api.nvim_set_hl(0, 'GitSignsChange', {ctermfg=Color.magenta, fg=Color_gui.magenta})
-vim.api.nvim_set_hl(0, 'GitSignsDelete', {ctermfg=Color.red, fg=Color_gui.red})
+vim.api.nvim_set_hl(0, 'GitSignsDelete', {ctermfg=Colors.red.c, fg=Colors.red.g})
 
 --- inline/virtual_text 中 highlight 添加/修改/删除的字符
 vim.api.nvim_set_hl(0, 'GitSignsAddInline',    {
@@ -105,7 +105,7 @@ vim.api.nvim_set_hl(0, 'GitSignsChangeInline', {
 })
 vim.api.nvim_set_hl(0, 'GitSignsDeleteInline', {
   ctermfg=Colors.white.c, fg=Colors.white.g,
-  ctermbg=Color.red, bg=Color_gui.red,
+  ctermbg=Colors.red.c, bg=Colors.red.g,
 })
 
 --- prev_hunk() 时, 文字颜色. preview hunk 没有 'GitSignsChangePreview' 设置.

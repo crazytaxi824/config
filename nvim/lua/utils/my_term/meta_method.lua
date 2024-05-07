@@ -15,7 +15,7 @@ vim.api.nvim_set_hl(0, "my_output_sys_error", {
   ctermbg=Color.orange, bg=Color_gui.orange,
 })
 vim.api.nvim_set_hl(0, "my_output_stdout", {ctermfg=Color.blue, fg=Color_gui.blue})
-vim.api.nvim_set_hl(0, "my_output_stderr", {ctermfg=Color.red, fg=Color_gui.red})
+vim.api.nvim_set_hl(0, "my_output_stderr", {ctermfg=Colors.red.c, fg=Colors.red.g})
 
 --- default_opts 相当于 global setting.
 M.default_opts = {
