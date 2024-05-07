@@ -121,6 +121,7 @@ Color_gui = {
   orange = '#ff6f00',  -- warning message
 
   --- 其他颜色
+  --- TODO: merge orange and dark_orange
   dark_orange = '#ff6f00',  -- trailing_whitespace & mixed_indent, nvim-notify warn message border
   dark_red    = '#890000',  -- 256 color 中最深的红色, 接近黑色. 通常用于 bg.
   bracket_yellow = '#ffd800',  -- 匹配括号 () 颜色.
