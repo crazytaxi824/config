@@ -174,7 +174,7 @@ Highlights = {
   --- 行号颜色
   LineNr = {ctermfg=240, fg='#585858'},
   --- 光标所在行颜色
-  CursorLine = {ctermbg=236, bg='#333333'},
+  CursorLine = {ctermbg=236, bg='#303030'},
   --- 光标所在行号的颜色
   CursorLineNr = {
     ctermfg=Color.yellow, fg=Color_gui.yellow,
@@ -390,7 +390,7 @@ Highlights = {
   --- markdown, inline `code`
   ['@markup.raw.markdown_inline'] = {
     ctermfg=Color.string_orange, fg=Color_gui.string_orange,
-    ctermbg = 236, bg='#333333',
+    ctermbg = 236, bg='#303030',
   },
 
   --- program language
