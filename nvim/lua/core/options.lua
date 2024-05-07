@@ -298,6 +298,8 @@ vim.g.markdown_folding = 1
 --vim.g.mapleader = '\\'  -- 设置 <leader>, 默认值是 \
 vim.opt.mouse = 'a'  -- allow the mouse to be used in neovim, `:help mouse`
 
+vim.opt.termguicolors = true
+
 --- 快捷键延迟时间设置 -----------------------------------------------------------------------------
 vim.opt.timeout = true    -- 组合键延迟开启.
 vim.opt.timeoutlen = 600  -- 组合键延迟时间, 默认1000ms. eg: <leader>w, <C-W><C-O>...
