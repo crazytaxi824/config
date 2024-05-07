@@ -1,6 +1,6 @@
 local M = {}
 
-local dim_color = { ctermfg=238 }
+local dim_color = { ctermfg=238, fg='#444444' }
 
 local comment_hl_groups = {
   "Comment",
