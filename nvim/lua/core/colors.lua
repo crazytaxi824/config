@@ -295,7 +295,7 @@ Highlights = {
     bold=true,
   },
   --- `set conceallevel?`, markdown list, code block ...
-  Conceal = {ctermfg=246, fg='#949494'},
+  Conceal = {ctermfg=Colors.g246.c, fg=Colors.g246.g},
   --- json: key color; markdown: code block language(```go)
   Label = {ctermfg=Colors.cyan.c, fg=Colors.cyan.g},
 
@@ -350,7 +350,7 @@ Highlights = {
   ['@variable.builtin'] = { ctermfg=Colors.boolean_blue.c, fg=Colors.boolean_blue.g },  -- typescript 关键字 'undefined', 'this', 'console' ...
 
   ['@property'] = { ctermfg = Colors.cyan.c, fg=Colors.cyan.g },
-  ['@property.private'] = { ctermfg=246, fg='#949494' },  -- struct{ a:1 }
+  ['@property.private'] = { ctermfg=Colors.g246.c, fg=Colors.g246.g },  -- struct{ a:1 }
   ['@variable.member'] = { link = "@property" },
   ['@field'] = { link = "@property" },
   ['@parameter'] = { link = "@property" },
@@ -380,7 +380,7 @@ Highlights = {
   },
   --- inactive, NC (not-current windows)
   StatusLineNC = {
-    ctermfg=246, fg='#949494',
+    ctermfg=Colors.g246.c, fg=Colors.g246.g,
     ctermbg=Colors.black.c, bg=Colors.black.g,
   },
 

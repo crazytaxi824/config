@@ -116,7 +116,7 @@ vim.api.nvim_set_hl(0, 'GitSignsDeletePreview', {ctermfg=Colors.g240.c, fg=Color
 vim.api.nvim_set_hl(0, 'GitSignsDeleteVirtLn', {ctermfg=Colors.g240.c, fg=Colors.g240.g})
 
 --- current_line_blame 默认不开启.
-vim.api.nvim_set_hl(0, 'GitSignsCurrentLineBlame', {ctermfg=246, fg='#949494'})
+vim.api.nvim_set_hl(0, 'GitSignsCurrentLineBlame', {ctermfg=Colors.g246.c, fg=Colors.g246.g})
 
 
 

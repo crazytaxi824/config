@@ -10,7 +10,7 @@ local buf_highlights = {
   --fill = { ctermbg = colors.fill_bg },  -- hi TabLineFill
 
   background = {  -- 默认设置, 其他设置缺省的时候使用该设置.
-    ctermfg=246, fg='#949494',
+    ctermfg=Colors.g246.c, fg=Colors.g246.g,
     ctermbg=Colors.g236.c, bg=Colors.g236.g,
   },
   buffer_visible = {  -- cursor 在别的 window 时, buffer filename 颜色.
@@ -24,15 +24,15 @@ local buf_highlights = {
   },
 
   close_button = {
-    ctermfg=246, fg='#949494',
+    ctermfg=Colors.g246.c, fg=Colors.g246.g,
     ctermbg=Colors.g236.c, bg=Colors.g236.g,
   },
   close_button_visible = {
-    ctermfg=246, fg='#949494',
+    ctermfg=Colors.g246.c, fg=Colors.g246.g,
     ctermbg=Colors.black.c, bg=Colors.black.g,
   },
   close_button_selected = {
-    ctermfg=246, fg='#949494',
+    ctermfg=Colors.g246.c, fg=Colors.g246.g,
     ctermbg=Colors.black.c, bg=Colors.black.g,
   },
 
