@@ -9,10 +9,13 @@ M.bufvar_myterm = "my_term"
 local win_height = math.ceil(vim.o.lines/4)
 
 --- highlight
-vim.api.nvim_set_hl(0, "my_output_sys", {ctermfg = Color.orange})
-vim.api.nvim_set_hl(0, "my_output_sys_error", {ctermfg = Color.black, ctermbg = Color.orange})
-vim.api.nvim_set_hl(0, "my_output_stdout", {ctermfg = Color.blue})
-vim.api.nvim_set_hl(0, "my_output_stderr", {ctermfg = Color.red})
+vim.api.nvim_set_hl(0, "my_output_sys", {ctermfg=Colors.orange.c, fg=Colors.orange.g})
+vim.api.nvim_set_hl(0, "my_output_sys_error", {
+  ctermfg=Colors.black.c, fg=Colors.black.g,
+  ctermbg=Colors.orange.c, bg=Colors.orange.g,
+})
+vim.api.nvim_set_hl(0, "my_output_stdout", {ctermfg=Colors.blue.c, fg=Colors.blue.g})
+vim.api.nvim_set_hl(0, "my_output_stderr", {ctermfg=Colors.red.c, fg=Colors.red.g})
 
 --- default_opts 相当于 global setting.
 M.default_opts = {

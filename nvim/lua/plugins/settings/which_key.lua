@@ -84,7 +84,7 @@ vim.api.nvim_exec_autocmds("User", { pattern = { "LoadedWhichKey" }})
 
 --- highlight --------------------------------------------------------------------------------------
 --- WhichKeyFloat && WhichKeyBorder 可以设置
-vim.api.nvim_set_hl(0, 'WhichKeyDesc', {ctermfg = Color.cyan})
+vim.api.nvim_set_hl(0, 'WhichKeyDesc', {ctermfg=Colors.cyan.c, fg=Colors.cyan.g})
 
 
 

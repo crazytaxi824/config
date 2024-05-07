@@ -6,22 +6,20 @@ end
 --- 自定义 theme ----------------------------------------------------------------------------------- {{{
 --- https://github.com/nvim-lualine/lualine.nvim/blob/master/lua/lualine/themes/gruvbox_light.lua
 local lualine_colors = {
-  black = Color.black,
-  white = Color.white,
+  black = Colors.black.g,
+  white = Colors.white.g,
 
-  yellow = Color.yellow,
-  gold = Color.func_gold,  -- filename saved
-  cyan = Color.cyan,   -- filename modified
+  yellow = Colors.yellow.g,
+  gold = Colors.func_gold.g,  -- filename saved
+  cyan = Colors.cyan.g,   -- filename modified
 
-  grey  = 236,       -- section_b
-  light_grey = 245,  -- inactive, hint
+  grey = Colors.g236.g,  -- section_b
+  light_grey = Colors.g245.g, -- inactive, hint
 
-  red = Color.red,  -- error, readonly
-  orange = Color.orange, -- warn
-  blue = Color.blue,  -- info background
-  green = Color.comment_green,  -- Command mode
-
-  dark_orange = Color.dark_orange, -- readonly file, trailing_whitespace && mixed_indent
+  red = Colors.red.g,  -- error, readonly
+  orange = Colors.orange.g, -- warn, readonly file, trailing_whitespace && mixed_indent
+  blue = Colors.blue.g,  -- info background
+  green = '#6a9956',  -- 65, Command mode
 }
 
 --- airline 颜色设置 https://github.com/vim-airline/vim-airline/blob/master/autoload/airline/themes/dark.vim
@@ -45,11 +43,11 @@ local my_theme = {
   },
   visual = {
     a = { fg = lualine_colors.black, bg = lualine_colors.orange, gui = 'bold' },
-    b = { fg = lualine_colors.black, bg = lualine_colors.dark_orange },
+    b = { fg = lualine_colors.black, bg = lualine_colors.orange },
     c = { fg = lualine_colors.white, bg = 52 },
   },
   command = {
-    a = { fg = lualine_colors.black, bg = Color.comment_green, gui = 'bold' },
+    a = { fg = lualine_colors.black, bg = lualine_colors.green, gui = 'bold' },
     b = { fg = lualine_colors.white, bg = lualine_colors.grey },
     c = { fg = lualine_colors.white, bg = lualine_colors.black },
   },
@@ -268,7 +266,7 @@ lualine.setup {
       },
       {
         my_trailing_whitespace,
-        color = {fg=lualine_colors.dark_orange, gui='bold'},
+        color = {fg=lualine_colors.orange, gui='bold'},
         cond = function() return vim.bo.filetype~='' and vim.bo.buftype=='' end,  -- normal buffer with a filetype
       },
     },
@@ -299,7 +297,7 @@ lualine.setup {
           elseif vim.bo.modified then  -- 修改后未保存的文件
             return {fg = lualine_colors.cyan, gui='bold'}
           elseif vim.bo.readonly then  -- readonly 文件
-            return {fg = lualine_colors.dark_orange, gui='bold'}
+            return {fg = lualine_colors.orange, gui='bold'}
           end
           return {fg = lualine_colors.gold} -- 其他情况
         end,
@@ -354,7 +352,7 @@ lualine.setup {
       },
       {
         my_trailing_whitespace,
-        color = {fg=lualine_colors.dark_orange, gui='bold'},
+        color = {fg=lualine_colors.orange, gui='bold'},
         cond = function() return vim.bo.filetype~='' and vim.bo.buftype=='' end,  -- normal buffer with a filetype
       },
     },
@@ -373,7 +371,7 @@ lualine.setup {
       },
       {
         readonly,
-        color = {fg = lualine_colors.dark_orange, gui='bold'},
+        color = {fg = lualine_colors.orange, gui='bold'},
         fmt = function(str)
           if str ~= '' and vim.api.nvim_win_get_width(0) <= 60 then
             return Nerd_icons.modified  -- branch has icon

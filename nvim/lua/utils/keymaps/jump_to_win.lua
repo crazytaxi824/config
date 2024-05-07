@@ -4,7 +4,11 @@ local M = {}
 
 --- statusline color
 local my_win_picker = 'my_window_picker'
-vim.api.nvim_set_hl(0, my_win_picker, {ctermfg=Color.black, ctermbg=Color.magenta, bold=true})
+vim.api.nvim_set_hl(0, my_win_picker, {
+  ctermfg=Colors.black.c, fg=Colors.black.g,
+  ctermbg=Colors.magenta.c, bg=Colors.magenta.g,
+  bold=true,
+})
 
 --- 获取单个 char 的输入
 local function get_user_input_char()

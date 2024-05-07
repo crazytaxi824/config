@@ -1,6 +1,6 @@
 local M = {}
 
-local dim_color = { ctermfg=238 }
+local dim_color = { ctermfg=Colors.g238.c, fg=Colors.g238.g }
 
 local comment_hl_groups = {
   "Comment",
@@ -10,8 +10,6 @@ local comment_hl_groups = {
   "@comment.note",
   "@comment.warning",
   "@comment.error",
-
-  "@string.special.url.comment"
 }
 
 M.toggle_comment_color = function()

@@ -4,16 +4,19 @@ local M = {}
 
 M.toggle_background_color = function()
   local c = vim.api.nvim_get_hl(0, {name="Normal"})
-  if c.ctermbg == 234 then
-    c.ctermbg = nil
+  if c.ctermbg == Colors.g234.c then
+    c.ctermbg, c.bg = nil, nil
     vim.api.nvim_set_hl(0, "Normal", c)
     vim.api.nvim_set_hl(0, "NormalNC", {link="Normal"})
-    vim.api.nvim_set_hl(0, "VertSplit", {ctermfg=236})
+    vim.api.nvim_set_hl(0, "VertSplit", {ctermfg=Colors.g236.c, fg=Colors.g236.g})
   else
-    c.ctermbg = 234
+    c.ctermbg, c.bg = Colors.g234.c, Colors.g234.g
     vim.api.nvim_set_hl(0, "Normal", c)
-    vim.api.nvim_set_hl(0, "NormalNC", {ctermbg=235})
-    vim.api.nvim_set_hl(0, "VertSplit", {ctermfg=237, ctermbg=235})
+    vim.api.nvim_set_hl(0, "NormalNC", {ctermbg=Colors.g235.c, bg=Colors.g235.g})
+    vim.api.nvim_set_hl(0, "VertSplit", {
+      ctermfg=Colors.g237.c, fg=Colors.g237.g,
+      ctermbg=Colors.g235.c, bg=Colors.g235.g,
+    })
   end
 end
 

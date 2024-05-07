@@ -327,37 +327,43 @@ nvim_tree.setup {
 
 --- `:help nvim-tree-highlight` -------------------------------------------------------------------- {{{
 vim.api.nvim_set_hl(0, 'NvimTreeNormalNC', {link="NormalNC"})  -- non-foucs nvim-tree window color
-vim.api.nvim_set_hl(0, 'NvimTreeRootFolder', {ctermfg=Color.cyan})  -- non-foucs nvim-tree window color
+vim.api.nvim_set_hl(0, 'NvimTreeRootFolder', {ctermfg=Colors.cyan.c, fg=Colors.cyan.g})  -- non-foucs nvim-tree window color
 -- vim.cmd('hi! default link NvimTreeWinSeparator VertSplit')  =- 分割线
 
-vim.api.nvim_set_hl(0, 'NvimTreeFolderName', {ctermfg=Color.cyan, bold=true})
+vim.api.nvim_set_hl(0, 'NvimTreeFolderName', {ctermfg=Colors.cyan.c, fg=Colors.cyan.g, bold=true})
 vim.cmd('hi! default link NvimTreeFolderIcon NvimTreeFolderName')
 vim.cmd('hi! default link NvimTreeEmptyFolderName NvimTreeFolderName')
 vim.cmd('hi! default link NvimTreeOpenedFolderName NvimTreeFolderName')  -- 已打开文件夹的颜色
 vim.api.nvim_set_hl(0, 'NvimTreeOpenedHL', {underline=true})   -- 已经打开文件的颜色.
-vim.api.nvim_set_hl(0, 'NvimTreeIndentMarker', {ctermfg=242}) -- └ │ 颜色
+vim.api.nvim_set_hl(0, 'NvimTreeIndentMarker', {ctermfg=Colors.g242.c, fg=Colors.g242.g}) -- └ │ 颜色
 
-vim.api.nvim_set_hl(0, 'NvimTreeSymlink', {ctermfg=Color.magenta}) -- 链接文件, magenta
-vim.api.nvim_set_hl(0, 'NvimTreeExecFile', {ctermfg=Color.red}) -- 可执行文件, red
-vim.api.nvim_set_hl(0, 'NvimTreeSpecialFile', {ctermfg=179})  -- 自定义 Sepcial 文件, orange
+vim.api.nvim_set_hl(0, 'NvimTreeSymlink', {ctermfg=Colors.magenta.c, fg=Colors.magenta.g}) -- 链接文件, magenta
+vim.api.nvim_set_hl(0, 'NvimTreeExecFile', {ctermfg=Colors.red.c, fg=Colors.red.g}) -- 可执行文件, red
+vim.api.nvim_set_hl(0, 'NvimTreeSpecialFile', {ctermfg=Colors.orange.c, fg=Colors.orange.g})  -- 自定义 Sepcial 文件, orange
 
 --- window_picker color
-vim.api.nvim_set_hl(0, 'NvimTreeWindowPicker',
-  {ctermfg=Color.black, ctermbg=Color.magenta, bold=true})
+vim.api.nvim_set_hl(0, 'NvimTreeWindowPicker', {
+  ctermfg=Colors.black.c, fg=Colors.black.g,
+  ctermbg=Colors.magenta.c, bg=Colors.magenta.g,
+  bold=true,
+})
 
 --- bookmark color
-vim.api.nvim_set_hl(0, 'NvimTreeBookmarkIcon', {ctermfg=Color.magenta})  -- icon color
-vim.api.nvim_set_hl(0, 'NvimTreeBookmarkHL', {ctermfg=Color.black, ctermbg=Color.magenta})  -- filename color
+vim.api.nvim_set_hl(0, 'NvimTreeBookmarkIcon', {ctermfg=Colors.magenta.c, fg=Colors.magenta.g})  -- icon color
+vim.api.nvim_set_hl(0, 'NvimTreeBookmarkHL', {  -- filename color
+  ctermfg=Colors.black.c, fg=Colors.black.g,
+  ctermbg=Colors.magenta.c, bg=Colors.magenta.g,
+})
 
 --- nvim-tree Git color, 需要开启 highlight_git=true, render={git={enable=true}}
 --- 这里设置了 git icon color
-vim.api.nvim_set_hl(0, 'NvimTreeGitDirtyIcon',   {ctermfg=Color.red})
-vim.api.nvim_set_hl(0, 'NvimTreeGitStagedIcon',  {ctermfg=Color.green})
-vim.api.nvim_set_hl(0, 'NvimTreeGitMergeIcon',   {ctermfg=Color.purple})
-vim.api.nvim_set_hl(0, 'NvimTreeGitRenamedIcon', {ctermfg=Color.purple})
-vim.api.nvim_set_hl(0, 'NvimTreeGitNewIcon',     {ctermfg=Color.red})
-vim.api.nvim_set_hl(0, 'NvimTreeGitDeletedIcon', {ctermfg=Color.red})
-vim.api.nvim_set_hl(0, 'NvimTreeGitIgnoredIcon', {ctermfg=244})
+vim.api.nvim_set_hl(0, 'NvimTreeGitDirtyIcon',   {ctermfg=Colors.red.c, fg=Colors.red.g})
+vim.api.nvim_set_hl(0, 'NvimTreeGitStagedIcon',  {ctermfg=Colors.green.c, fg=Colors.green.g})
+vim.api.nvim_set_hl(0, 'NvimTreeGitMergeIcon',   {ctermfg=Colors.purple.c, fg=Colors.purple.g})
+vim.api.nvim_set_hl(0, 'NvimTreeGitRenamedIcon', {ctermfg=Colors.purple.c, fg=Colors.purple.g})
+vim.api.nvim_set_hl(0, 'NvimTreeGitNewIcon',     {ctermfg=Colors.red.c, fg=Colors.red.g})
+vim.api.nvim_set_hl(0, 'NvimTreeGitDeletedIcon', {ctermfg=Colors.red.c, fg=Colors.red.g})
+vim.api.nvim_set_hl(0, 'NvimTreeGitIgnoredIcon', {ctermfg=Colors.g244.c, fg=Colors.g244.g})
 
 --- git filename color, 默认是 link 上面 git icon color.
 -- vim.cmd('hi! default link NvimTreeGitFileDirtyHL   NvimTreeGitStagedIcon')  -- hi! default link 在 hi clear 时回到该设置.
