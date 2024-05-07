@@ -10,7 +10,7 @@ local lualine_colors = {
   white = Colors.white.g,
 
   yellow = Colors.yellow.g,
-  gold = Color_gui.func_gold,  -- filename saved
+  gold = Colors.func_gold.g,  -- filename saved
   cyan = Colors.cyan.g,   -- filename modified
 
   grey = '#303030',  -- 236, section_b

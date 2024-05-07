@@ -241,7 +241,7 @@ Highlights = {
   --- VVI: 最主要的颜色
   Keyword = {ctermfg=Colors.purple.c, fg=Colors.purple.g},
   --- func <Function> {}, 定义 & call func 都使用该颜色
-  Function = {ctermfg=Color.func_gold, fg=Color_gui.func_gold},
+  Function = {ctermfg=Colors.func_gold.c, fg=Colors.func_gold.g},
   --- type <Type> struct
   Type = {
     ctermfg=Color.type_green, fg=Color_gui.type_green,
@@ -428,7 +428,7 @@ Highlights = {
   --- 无法使用 lualine 的情况下 StatusLine 颜色, eg: tagbar 有自己设置的 ':set statusline?' 颜色不受 lualine 控制.
   --- active
   StatusLine = {
-    ctermfg=Color.func_gold, fg=Color_gui.func_gold,
+    ctermfg=Colors.func_gold.c, fg=Colors.func_gold.g,
     ctermbg=Colors.black.c, bg=Colors.black.g,
   },
   --- inactive, NC (not-current windows)
@@ -440,7 +440,7 @@ Highlights = {
   --- 以下颜色为了 lazy load bufferline
   TabLineFill = {}, -- NOTE: clear TabLineFill
   TabLineSel = {
-    ctermfg=Color.func_gold, fg=Color_gui.func_gold,
+    ctermfg=Colors.func_gold.c, fg=Colors.func_gold.g,
     ctermbg=Colors.black.c, bg=Colors.black.g,
     bold=true,
   },
