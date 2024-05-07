@@ -17,11 +17,9 @@ local lualine_colors = {
   light_grey = '#949494', -- 245, inactive, hint
 
   red = Colors.red.g,  -- error, readonly
-  orange = Colors.orange.g, -- warn
+  orange = Colors.orange.g, -- warn, readonly file, trailing_whitespace && mixed_indent
   blue = Colors.blue.g,  -- info background
   green = Colors.comment_green.g,  -- Command mode
-
-  dark_orange = Color_gui.dark_orange, -- readonly file, trailing_whitespace && mixed_indent
 }
 
 --- airline 颜色设置 https://github.com/vim-airline/vim-airline/blob/master/autoload/airline/themes/dark.vim
@@ -45,7 +43,7 @@ local my_theme = {
   },
   visual = {
     a = { fg = lualine_colors.black, bg = lualine_colors.orange, gui = 'bold' },
-    b = { fg = lualine_colors.black, bg = lualine_colors.dark_orange },
+    b = { fg = lualine_colors.black, bg = lualine_colors.orange },
     c = { fg = lualine_colors.white, bg = 52 },
   },
   command = {
@@ -268,7 +266,7 @@ lualine.setup {
       },
       {
         my_trailing_whitespace,
-        color = {fg=lualine_colors.dark_orange, gui='bold'},
+        color = {fg=lualine_colors.orange, gui='bold'},
         cond = function() return vim.bo.filetype~='' and vim.bo.buftype=='' end,  -- normal buffer with a filetype
       },
     },
@@ -299,7 +297,7 @@ lualine.setup {
           elseif vim.bo.modified then  -- 修改后未保存的文件
             return {fg = lualine_colors.cyan, gui='bold'}
           elseif vim.bo.readonly then  -- readonly 文件
-            return {fg = lualine_colors.dark_orange, gui='bold'}
+            return {fg = lualine_colors.orange, gui='bold'}
           end
           return {fg = lualine_colors.gold} -- 其他情况
         end,
@@ -354,7 +352,7 @@ lualine.setup {
       },
       {
         my_trailing_whitespace,
-        color = {fg=lualine_colors.dark_orange, gui='bold'},
+        color = {fg=lualine_colors.orange, gui='bold'},
         cond = function() return vim.bo.filetype~='' and vim.bo.buftype=='' end,  -- normal buffer with a filetype
       },
     },
@@ -373,7 +371,7 @@ lualine.setup {
       },
       {
         readonly,
-        color = {fg = lualine_colors.dark_orange, gui='bold'},
+        color = {fg = lualine_colors.orange, gui='bold'},
         fmt = function(str)
           if str ~= '' and vim.api.nvim_win_get_width(0) <= 60 then
             return Nerd_icons.modified  -- branch has icon

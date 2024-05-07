@@ -339,7 +339,7 @@ vim.api.nvim_set_hl(0, 'NvimTreeIndentMarker', {ctermfg=242, fg='#6c6c6c'}) -- �
 
 vim.api.nvim_set_hl(0, 'NvimTreeSymlink', {ctermfg=Colors.magenta.c, fg=Colors.magenta.g}) -- 链接文件, magenta
 vim.api.nvim_set_hl(0, 'NvimTreeExecFile', {ctermfg=Colors.red.c, fg=Colors.red.g}) -- 可执行文件, red
-vim.api.nvim_set_hl(0, 'NvimTreeSpecialFile', {ctermfg=Color.dark_orange, fg=Color_gui.dark_orange})  -- 自定义 Sepcial 文件, orange
+vim.api.nvim_set_hl(0, 'NvimTreeSpecialFile', {ctermfg=Colors.orange.c, fg=Colors.orange.g})  -- 自定义 Sepcial 文件, orange
 
 --- window_picker color
 vim.api.nvim_set_hl(0, 'NvimTreeWindowPicker', {

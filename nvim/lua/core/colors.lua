@@ -64,7 +64,6 @@ Color = {
   orange = 214,  -- warning message
 
   --- 其他颜色
-  dark_orange = 202,  -- trailing_whitespace & mixed_indent, nvim-notify warn message border
   dark_red    = 52,   -- 256 color 中最深的红色, 接近黑色. 通常用于 bg.
 }
 
@@ -89,10 +88,9 @@ Colors = {
 
   --- message 颜色
   hint_grey = {c=244, g='#808080'},  -- hint message
-  orange = {c=214, g='#ff6f00'},  -- warning message
+  orange = {c=202, g='#ff6f00'},  -- warning message
 
   --- 其他颜色
-  dark_orange = {c=202, g='#ff6f00'},  -- trailing_whitespace & mixed_indent, nvim-notify warn message border
   dark_red    = {c=52, g='#890000'},   -- 256 color 中最深的红色, 接近黑色. 通常用于 bg.
 }
 
@@ -120,7 +118,6 @@ Color_gui = {
 
   --- 其他颜色
   --- TODO: merge orange and dark_orange
-  dark_orange = '#ff6f00',  -- trailing_whitespace & mixed_indent, nvim-notify warn message border
   dark_red    = '#890000',  -- 256 color 中最深的红色, 接近黑色. 通常用于 bg.
 }
 

@@ -13,7 +13,7 @@ vim.api.nvim_set_hl(0, 'RainbowGrey',   {ctermfg=Colors.hint_grey.c, fg=Colors.h
 vim.api.nvim_set_hl(0, 'RainbowRed',    {ctermfg=Colors.red.c, fg=Colors.red.g})
 vim.api.nvim_set_hl(0, 'RainbowYellow', {ctermfg=Colors.yellow.c, fg=Colors.yellow.g})
 vim.api.nvim_set_hl(0, 'RainbowBlue',   {ctermfg=Colors.blue.c, fg=Colors.blue.g})
-vim.api.nvim_set_hl(0, 'RainbowOrange', {ctermfg=Color.dark_orange, fg=Color_gui.dark_orange})
+vim.api.nvim_set_hl(0, 'RainbowOrange', {ctermfg=Colors.orange.c, fg=Colors.orange.g})
 vim.api.nvim_set_hl(0, 'RainbowGreen',  {ctermfg=Colors.green.c, fg=Colors.green.g})
 vim.api.nvim_set_hl(0, 'RainbowViolet', {ctermfg=Colors.magenta.c, fg=Colors.magenta.g})
 vim.api.nvim_set_hl(0, 'RainbowCyan',   {ctermfg=Colors.cyan.c, fg=Colors.cyan.g})
