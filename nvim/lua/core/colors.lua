@@ -324,7 +324,7 @@ Highlights = {
   },
   DiffDelete = {
     ctermfg=Colors.white.c,
-    ctermbg=Color.dark_red, bg='#4e201e'
+    ctermbg=Colors.dark_red.c, bg='#4e201e'
   },
   DiffChange = {},  -- 有修改的一整行的文字的颜色
   --- changed text
@@ -354,12 +354,12 @@ Highlights = {
 
   SpellBad = {
     ctermfg=Colors.red.c, fg=Colors.red.g,
-    ctermbg=Color.dark_red, bg=Color_gui.dark_red,
+    ctermbg=Colors.dark_red.c, bg=Colors.dark_red.g,
     bold=true, underline=true,
   },
   SpellCap = {
     ctermfg=Colors.orange.c, fg=Colors.orange.g,
-    ctermbg=Color.dark_red, bg=Color_gui.dark_red,
+    ctermbg=Colors.dark_red.c, bg=Colors.dark_red.g,
     bold=true, underline=true,
   },
   SpellLocal = {},  -- clear highlight
