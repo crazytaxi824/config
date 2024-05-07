@@ -5,7 +5,7 @@ local M = {}
 --- statusline color
 local my_win_picker = 'my_window_picker'
 vim.api.nvim_set_hl(0, my_win_picker, {
-  ctermfg=Color.black, fg=Color_gui.black,
+  ctermfg=Colors.black.c, fg=Colors.black.g,
   ctermbg=Color.magenta, bg=Color_gui.magenta,
   bold=true,
 })

@@ -14,11 +14,11 @@ local buf_highlights = {
     ctermbg=236, bg='#303030',
   },
   buffer_visible = {  -- cursor 在别的 window 时, buffer filename 颜色.
-    ctermbg=Color.black, bg=Color_gui.black
+    ctermbg=Colors.black.c, bg=Colors.black.g
   },
   buffer_selected = {
     ctermfg=Color.func_gold, fg=Color_gui.func_gold,
-    ctermbg=Color.black, bg=Color_gui.black,
+    ctermbg=Colors.black.c, bg=Colors.black.g,
     bold = true,
     italic = false,  -- 默认设置中是 buffer_selected.italic = true.
   },
@@ -29,11 +29,11 @@ local buf_highlights = {
   },
   close_button_visible = {
     ctermfg=246, fg='#949494',
-    ctermbg=Color.black, bg=Color_gui.black,
+    ctermbg=Colors.black.c, bg=Colors.black.g,
   },
   close_button_selected = {
     ctermfg=246, fg='#949494',
-    ctermbg=Color.black, bg=Color_gui.black,
+    ctermbg=Colors.black.c, bg=Colors.black.g,
   },
 
   --- duplicate 默认是 italic.
@@ -45,28 +45,28 @@ local buf_highlights = {
   },
   duplicate_visible = {
     ctermfg = 244, fg='#808080',
-    ctermbg=Color.black, bg=Color_gui.black,
+    ctermbg=Colors.black.c, bg=Colors.black.g,
     italic = true,
   },
   duplicate_selected = {
     ctermfg = 244, fg='#808080',
-    ctermbg=Color.black, bg=Color_gui.black,
+    ctermbg=Colors.black.c, bg=Colors.black.g,
     italic = true,
   },
 
   --- NOTE: indicator - 当前正在显示的 buffer. ▎
   indicator_visible = {  -- background 颜色需要和 buffer_visible bg 相同
     ctermfg=Color.cyan, fg=Color_gui.cyan,
-    ctermbg=Color.black, bg=Color_gui.black,
+    ctermbg=Colors.black.c, bg=Colors.black.g,
   },
   indicator_selected = {  -- background 颜色需要和 buffer_selected bg 相同
     ctermfg=Color.cyan, fg=Color_gui.cyan,
-    ctermbg=Color.black, bg=Color_gui.black,
+    ctermbg=Colors.black.c, bg=Colors.black.g,
   },
 
   --- 右上角 tab 颜色, 1 | 2 | 3 |
   tab_selected = {
-    ctermfg=Color.black, fg=Color_gui.black,
+    ctermfg=Colors.black.c, fg=Colors.black.g,
     ctermbg=Color.yellow, bg=Color_gui.yellow,
   },
 
@@ -77,11 +77,11 @@ local buf_highlights = {
   },
   modified_visible = {
     ctermfg=Color.cyan, fg=Color_gui.cyan,
-    ctermbg=Color.black, bg=Color_gui.black,
+    ctermbg=Colors.black.c, bg=Colors.black.g,
   },
   modified_selected = {
     ctermfg=Color.cyan, fg=Color_gui.cyan,
-    ctermbg=Color.black, bg=Color_gui.black,
+    ctermbg=Colors.black.c, bg=Colors.black.g,
   },
 
   --- NOTE: separator 颜色 -------------------------------------------------------------------------
@@ -113,12 +113,12 @@ local buf_highlights = {
   },
   error_diagnostic_visible = {   -- hi BufferLineErrorDiagnosticVisible
     ctermfg=Color.red, fg=Color_gui.red,
-    ctermbg=Color.black, bg=Color_gui.black,
+    ctermbg=Colors.black.c, bg=Colors.black.g,
     bold = true,
   },
   error_diagnostic_selected = {  -- hi BufferLineErrorDiagnosticSelected
     ctermfg=Color.red, fg=Color_gui.red,
-    ctermbg=Color.black, bg=Color_gui.black,
+    ctermbg=Colors.black.c, bg=Colors.black.g,
     bold = true,
     italic = false,
   },
@@ -129,12 +129,12 @@ local buf_highlights = {
   },
   warning_diagnostic_visible = {
     ctermfg=Color.orange, fg=Color_gui.orange,
-    ctermbg=Color.black, bg=Color_gui.black,
+    ctermbg=Colors.black.c, bg=Colors.black.g,
     bold = true,
   },
   warning_diagnostic_selected = {
     ctermfg=Color.orange, fg=Color_gui.orange,
-    ctermbg=Color.black, bg=Color_gui.black,
+    ctermbg=Colors.black.c, bg=Colors.black.g,
     bold = true,
     italic = false,
   },
@@ -145,12 +145,12 @@ local buf_highlights = {
   },
   info_diagnostic_visible = {
     ctermfg=Color.blue, fg=Color_gui.blue,
-    ctermbg=Color.black, bg=Color_gui.black,
+    ctermbg=Colors.black.c, bg=Colors.black.g,
     bold = true,
   },
   info_diagnostic_selected = {
     ctermfg=Color.blue, fg=Color_gui.blue,
-    ctermbg=Color.black, bg=Color_gui.black,
+    ctermbg=Colors.black.c, bg=Colors.black.g,
     bold = true,
     italic = false,
   },
@@ -161,12 +161,12 @@ local buf_highlights = {
   },
   hint_diagnostic_visible = {
     ctermfg=Color.hint_grey, fg=Color_gui.hint_grey,
-    ctermbg=Color.black, bg=Color_gui.black,
+    ctermbg=Colors.black.c, bg=Colors.black.g,
     bold = true,
   },
   hint_diagnostic_selected = {
     ctermfg=Color.hint_grey, fg=Color_gui.hint_grey,
-    ctermbg=Color.black, bg=Color_gui.black,
+    ctermbg=Colors.black.c, bg=Colors.black.g,
     bold = true,
     italic = false,
   },

@@ -96,11 +96,11 @@ vim.api.nvim_set_hl(0, 'GitSignsDelete', {ctermfg=Color.red, fg=Color_gui.red})
 
 --- inline/virtual_text 中 highlight 添加/修改/删除的字符
 vim.api.nvim_set_hl(0, 'GitSignsAddInline',    {
-  ctermfg=Color.black, fg=Color_gui.black,
+  ctermfg=Colors.black.c, fg=Colors.black.g,
   ctermbg=Color.green, bg=Color_gui.green,
 })
 vim.api.nvim_set_hl(0, 'GitSignsChangeInline', {
-  ctermfg=Color.black, fg=Color_gui.black,
+  ctermfg=Colors.black.c, fg=Colors.black.g,
   ctermbg=Color.magenta, bg=Color_gui.magenta,
 })
 vim.api.nvim_set_hl(0, 'GitSignsDeleteInline', {

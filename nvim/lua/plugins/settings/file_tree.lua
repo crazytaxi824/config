@@ -343,7 +343,7 @@ vim.api.nvim_set_hl(0, 'NvimTreeSpecialFile', {ctermfg=Color.dark_orange, fg=Col
 
 --- window_picker color
 vim.api.nvim_set_hl(0, 'NvimTreeWindowPicker', {
-  ctermfg=Color.black, fg=Color_gui.black,
+  ctermfg=Colors.black.c, fg=Colors.black.g,
   ctermbg=Color.magenta, bg=Color_gui.magenta,
   bold=true,
 })
@@ -351,7 +351,7 @@ vim.api.nvim_set_hl(0, 'NvimTreeWindowPicker', {
 --- bookmark color
 vim.api.nvim_set_hl(0, 'NvimTreeBookmarkIcon', {ctermfg=Color.magenta, fg=Color_gui.magenta})  -- icon color
 vim.api.nvim_set_hl(0, 'NvimTreeBookmarkHL', {  -- filename color
-  ctermfg=Color.black, fg=Color_gui.black,
+  ctermfg=Colors.black.c, fg=Colors.black.g,
   ctermbg=Color.magenta, bg=Color_gui.magenta,
 })
 

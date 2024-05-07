@@ -141,7 +141,7 @@ Highlights = {
   --- Completion Menu & Floating Window 颜色
   Pmenu = {
     ctermfg=Colors.white.c, fg=Colors.white.g,
-    ctermbg=Color.black, bg=Color_gui.black,
+    ctermbg=Colors.black.c, bg=Colors.black.g,
   },
   --- Completion Menu 选中项颜色
   PmenuSel = {
@@ -149,13 +149,13 @@ Highlights = {
     bold=true, underline=true,
   },
   --- Completion Menu scroll bar 背景色
-  PmenuSbar = {ctermbg=Color.black, bg=Color_gui.black},
+  PmenuSbar = {ctermbg=Colors.black.c, bg=Colors.black.g},
   --- Completion Menu scroll bar 滚动条颜色
   PmenuThumb = {ctermbg=240, bg='#585858'},
   --- NormalFloat 默认 link to Pmenu
   NormalFloat = {link="Pmenu"},
   --- Floating Window border 颜色需要和 Pmenu 的背景色相同. border = {"▄","▄","▄","█","▀","▀","▀","█"}
-  FloatBorder = {ctermfg=Color.black, fg=Color_gui.black},
+  FloatBorder = {ctermfg=Colors.black.c, fg=Colors.black.g},
 
   --- 注释颜色
   Comment = {ctermfg=Color.comment_green, fg=Color_gui.comment_green},
@@ -192,13 +192,13 @@ Highlights = {
 
   --- / ? 搜索颜色
   IncSearch = {
-    ctermfg=Color.black,   fg=Color_gui.black,
+    ctermfg=Colors.black.c,   fg=Colors.black.g,
     ctermbg=Color.magenta, bg=Color_gui.magenta,
     bold=true,
   },
   --- / ? * # g* g# 搜索颜色
   Search = {
-    ctermfg=Color.black,  fg=Color_gui.black,
+    ctermfg=Colors.black.c,  fg=Colors.black.g,
     ctermbg=Color.yellow, bg=Color_gui.yellow,
   },
 
@@ -209,7 +209,7 @@ Highlights = {
   },
   --- echohl WarningMsg | echo "Don't panic!" | echohl None 颜色
   WarningMsg = {
-    ctermfg=Color.black,  fg=Color_gui.black,
+    ctermfg=Colors.black.c,  fg=Colors.black.g,
     ctermbg=Color.orange, bg=Color_gui.orange,
   },
 
@@ -226,7 +226,7 @@ Highlights = {
 
   --- command 模式自动补全
   WildMenu = {
-    ctermfg=Color.black, fg=Color_gui.black,
+    ctermfg=Colors.black.c, fg=Colors.black.g,
     ctermbg=Color.blue,  bg=Color_gui.blue,
     bold=true,
   },
@@ -319,7 +319,7 @@ Highlights = {
 
   --- diff 颜色 ------------------------------------------------------------------------------------
   DiffAdd = {
-    ctermfg=Color.black,
+    ctermfg=Colors.black.c,
     ctermbg=Color.green, bg='#4c5b2d',
   },
   DiffDelete = {
@@ -329,7 +329,7 @@ Highlights = {
   DiffChange = {},  -- 有修改的一整行的文字的颜色
   --- changed text
   DiffText = {
-    ctermfg=Color.black, fg=Color_gui.black,
+    ctermfg=Colors.black.c, fg=Colors.black.g,
     ctermbg=Color.magenta, bg=Color_gui.magenta,
   },
 
@@ -429,19 +429,19 @@ Highlights = {
   --- active
   StatusLine = {
     ctermfg=Color.func_gold, fg=Color_gui.func_gold,
-    ctermbg=Color.black, bg=Color_gui.black,
+    ctermbg=Colors.black.c, bg=Colors.black.g,
   },
   --- inactive, NC (not-current windows)
   StatusLineNC = {
     ctermfg=246, fg='#949494',
-    ctermbg=Color.black, bg=Color_gui.black,
+    ctermbg=Colors.black.c, bg=Colors.black.g,
   },
 
   --- 以下颜色为了 lazy load bufferline
   TabLineFill = {}, -- NOTE: clear TabLineFill
   TabLineSel = {
     ctermfg=Color.func_gold, fg=Color_gui.func_gold,
-    ctermbg=Color.black, bg=Color_gui.black,
+    ctermbg=Colors.black.c, bg=Colors.black.g,
     bold=true,
   },
   --TabLine = {ctermfg = 234},

@@ -21,8 +21,8 @@ ts_ctx.setup{
 
 --- highlight --------------------------------------------------------------------------------------
 --- NOTE: 需要设置和 BufferLineBufferSelected 的 bg 颜色一致.
-vim.api.nvim_set_hl(0, 'TreesitterContext', {ctermbg=Color.black, bg=Color_gui.black})  -- 默认 link to NormalFloat
-vim.api.nvim_set_hl(0, 'TreesitterContextLineNumber', {ctermbg=Color.black, bg=Color_gui.black}) -- 默认 link to LineNr
+vim.api.nvim_set_hl(0, 'TreesitterContext', {ctermbg=Colors.black.c, bg=Colors.black.g})  -- 默认 link to NormalFloat
+vim.api.nvim_set_hl(0, 'TreesitterContextLineNumber', {ctermbg=Colors.black.c, bg=Colors.black.g}) -- 默认 link to LineNr
 
 
 

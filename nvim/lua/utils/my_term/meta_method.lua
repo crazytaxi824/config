@@ -11,7 +11,7 @@ local win_height = math.ceil(vim.o.lines/4)
 --- highlight
 vim.api.nvim_set_hl(0, "my_output_sys", {ctermfg=Color.orange, fg=Color_gui.orange})
 vim.api.nvim_set_hl(0, "my_output_sys_error", {
-  ctermfg=Color.black, fg=Color_gui.black,
+  ctermfg=Colors.black.c, fg=Colors.black.g,
   ctermbg=Color.orange, bg=Color_gui.orange,
 })
 vim.api.nvim_set_hl(0, "my_output_stdout", {ctermfg=Color.blue, fg=Color_gui.blue})

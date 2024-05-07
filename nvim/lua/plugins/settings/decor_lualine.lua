@@ -6,7 +6,7 @@ end
 --- 自定义 theme ----------------------------------------------------------------------------------- {{{
 --- https://github.com/nvim-lualine/lualine.nvim/blob/master/lua/lualine/themes/gruvbox_light.lua
 local lualine_colors = {
-  black = Color_gui.black,
+  black = Colors.black.g,
   white = Colors.white.g,
 
   yellow = Color_gui.yellow,
