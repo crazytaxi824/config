@@ -39,34 +39,6 @@
 --- VVI: nvim_set_hl() 没有实现 `hi! default link Foo Bar` 和 `hi clear Foo` 功能.
 ---
 -- -- }}}
-
-Color = {
-  --- NOTE: alacritty 颜色对应, 表示 0-15 系统颜色.
-  black = 233,  -- black background
-  red   = 167,  -- error message
-  green  = 42,   -- markdown title
-  yellow = 191,  -- Search, lualine: Insert Mode background && tabline: tab seleced background
-  blue  = 75,    -- info message
-  magenta = 213, -- IncSearch, return, if, else, break, package, import
-  cyan  = 81,   -- VVI: one of vim's main color. SpecialChar, Underlined, Label ...
-  white = 251,  -- foreground, text
-
-  --- 常用颜色,
-  purple        = 170,  -- 170|68, keyword, eg: func, type, struct, var, const ... vscode keyword = 68
-  func_gold     = 78,   -- 78|85, func, function_call, method, method_call ... | bufferline, lualine
-  string_orange = 173,  -- string
-  boolean_blue  = 74,   -- Special, boolean
-  comment_green = 65,   -- 65|71, comments
-  type_green    = 79,   -- type, 数据类型
-
-  --- message 颜色
-  hint_grey = 244,  -- hint message
-  orange = 214,  -- warning message
-
-  --- 其他颜色
-  dark_red    = 52,   -- 256 color 中最深的红色, 接近黑色. 通常用于 bg.
-}
-
 Colors = {
   --- NOTE: alacritty 颜色对应, 表示 0-15 系统颜色.
   black = {c=233, g='#121212'},  -- black background
@@ -88,37 +60,10 @@ Colors = {
 
   --- message 颜色
   hint_grey = {c=244, g='#808080'},  -- hint message
-  orange = {c=202, g='#ff6f00'},  -- warning message
+  orange = {c=208, g='#ff8700'},  -- warning message
 
   --- 其他颜色
   dark_red    = {c=52, g='#890000'},   -- 256 color 中最深的红色, 接近黑色. 通常用于 bg.
-}
-
-Color_gui = {
-  black = '#121212',
-  red   = '#f04c4c',   -- error message
-  green  = '#00d787',  -- markdown title
-  yellow = '#d7ff5f',  -- Search, lualine: Insert Mode background && tabline: tab seleced background
-  blue  = '#75beff',   -- info message
-  magenta = '#ff87ff', -- IncSearch, return, if, else, break, package, import
-  cyan  = '#9cdcfe',   -- VVI: one of vim's main color. SpecialChar, Underlined, Label ...
-  white = '#c6c6c6',   -- foreground, text
-
-  --- 常用颜色,
-  purple        = '#d75fd7', -- 170|68, keyword, eg: func, type, struct, var, const ... vscode keyword = 68
-  func_gold     = '#dcdcaa', -- 78|85, func, function_call, method, method_call ... | bufferline, lualine
-  string_orange = '#ce9178', -- string
-  boolean_blue  = '#569cd6', -- Special, boolean
-  comment_green = '#6a9956', -- 65|71, comments
-  type_green    = '#00b691', -- type, 数据类型
-
-  --- message 颜色
-  hint_grey = '#808080',  -- hint message
-  orange = '#ff6f00',  -- warning message
-
-  --- 其他颜色
-  --- TODO: merge orange and dark_orange
-  dark_red    = '#890000',  -- 256 color 中最深的红色, 接近黑色. 通常用于 bg.
 }
 
 --- highlight api 设置: vim.api.nvim_set_hl(0, '@property', { ctermfg = 81 })
