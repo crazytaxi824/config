@@ -158,7 +158,7 @@ Highlights = {
   FloatBorder = {ctermfg=Colors.black.c, fg=Colors.black.g},
 
   --- 注释颜色
-  Comment = {ctermfg=Color.comment_green, fg=Color_gui.comment_green},
+  Comment = {ctermfg=Colors.comment_green.c, fg=Colors.comment_green.g},
   --- 影响 listchars indentLine 颜色
   NonText = {ctermfg=238, fg='#444444'},
   --- window 之间的分隔线颜色

@@ -19,7 +19,7 @@ local lualine_colors = {
   red = Colors.red.g,  -- error, readonly
   orange = Color_gui.orange, -- warn
   blue = Colors.blue.g,  -- info background
-  green = Color_gui.comment_green,  -- Command mode
+  green = Colors.comment_green.g,  -- Command mode
 
   dark_orange = Color_gui.dark_orange, -- readonly file, trailing_whitespace && mixed_indent
 }
@@ -49,7 +49,7 @@ local my_theme = {
     c = { fg = lualine_colors.white, bg = 52 },
   },
   command = {
-    a = { fg = lualine_colors.black, bg = Color.comment_green, gui = 'bold' },
+    a = { fg = lualine_colors.black, bg = lualine_colors.green, gui = 'bold' },
     b = { fg = lualine_colors.white, bg = lualine_colors.grey },
     c = { fg = lualine_colors.white, bg = lualine_colors.black },
   },
