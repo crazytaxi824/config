@@ -110,10 +110,10 @@ vim.api.nvim_set_hl(0, 'GitSignsDeleteInline', {
 
 --- prev_hunk() 时, 文字颜色. preview hunk 没有 'GitSignsChangePreview' 设置.
 vim.api.nvim_set_hl(0, 'GitSignsAddPreview',    {ctermfg=Colors.green.c, fg=Colors.green.g})
-vim.api.nvim_set_hl(0, 'GitSignsDeletePreview', {ctermfg=240, fg='#585858'})
+vim.api.nvim_set_hl(0, 'GitSignsDeletePreview', {ctermfg=Colors.g240.c, fg=Colors.g240.g})
 
 --- word_diff() 时, 通过 virtual_text 显示 deleted/changed 行的文字颜色
-vim.api.nvim_set_hl(0, 'GitSignsDeleteVirtLn', {ctermfg=240, fg='#585858'})
+vim.api.nvim_set_hl(0, 'GitSignsDeleteVirtLn', {ctermfg=Colors.g240.c, fg=Colors.g240.g})
 
 --- current_line_blame 默认不开启.
 vim.api.nvim_set_hl(0, 'GitSignsCurrentLineBlame', {ctermfg=246, fg='#949494'})

@@ -208,7 +208,7 @@ vim.api.nvim_set_hl(0, 'CmpItemAbbrMatch', {ctermfg=Colors.magenta.c, fg=Colors.
 vim.api.nvim_set_hl(0, 'CmpItemAbbrMatchFuzzy', {ctermfg=Colors.magenta.c, fg=Colors.magenta.g})
 
 --- [lsp], [buff], [path], [snip] 颜色
-vim.api.nvim_set_hl(0, 'CmpItemMenu', {ctermfg=240, fg='#585858'})
+vim.api.nvim_set_hl(0, 'CmpItemMenu', {ctermfg=Colors.g240.c, fg=Colors.g240.g})
 
 --- VVI: CmpItemKindXXX 默认颜色, 如果没有单独设置 CmpItemKindXXX 颜色则会使用该颜色.
 vim.api.nvim_set_hl(0, 'CmpItemKindDefault', {ctermfg=246, fg='#949494'})
@@ -232,7 +232,7 @@ vim.api.nvim_set_hl(0, 'CmpItemKindFile',    {ctermfg=Colors.boolean_blue.c, fg=
 vim.api.nvim_set_hl(0, 'CmpItemKindFolder',  {ctermfg=Colors.boolean_blue.c, fg=Colors.boolean_blue.g, bold = true})
 
 --- grey, 弃用的 suggestion.
-vim.api.nvim_set_hl(0, 'CmpItemAbbrDeprecated',  {ctermfg=242, fg='#6c6c6c', underline = true})
+vim.api.nvim_set_hl(0, 'CmpItemAbbrDeprecated',  {ctermfg=Colors.g242.c, fg=Colors.g242.g, underline = true})
 
 -- -- }}}
 

@@ -335,7 +335,7 @@ vim.cmd('hi! default link NvimTreeFolderIcon NvimTreeFolderName')
 vim.cmd('hi! default link NvimTreeEmptyFolderName NvimTreeFolderName')
 vim.cmd('hi! default link NvimTreeOpenedFolderName NvimTreeFolderName')  -- 已打开文件夹的颜色
 vim.api.nvim_set_hl(0, 'NvimTreeOpenedHL', {underline=true})   -- 已经打开文件的颜色.
-vim.api.nvim_set_hl(0, 'NvimTreeIndentMarker', {ctermfg=242, fg='#6c6c6c'}) -- └ │ 颜色
+vim.api.nvim_set_hl(0, 'NvimTreeIndentMarker', {ctermfg=Colors.g242.c, fg=Colors.g242.g}) -- └ │ 颜色
 
 vim.api.nvim_set_hl(0, 'NvimTreeSymlink', {ctermfg=Colors.magenta.c, fg=Colors.magenta.g}) -- 链接文件, magenta
 vim.api.nvim_set_hl(0, 'NvimTreeExecFile', {ctermfg=Colors.red.c, fg=Colors.red.g}) -- 可执行文件, red

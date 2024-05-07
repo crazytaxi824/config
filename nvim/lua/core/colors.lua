@@ -98,7 +98,7 @@ Highlights = {
   --- Completion Menu scroll bar 背景色
   PmenuSbar = {ctermbg=Colors.black.c, bg=Colors.black.g},
   --- Completion Menu scroll bar 滚动条颜色
-  PmenuThumb = {ctermbg=240, bg='#585858'},
+  PmenuThumb = {ctermbg=Colors.g240.c, bg=Colors.g240.g},
   --- NormalFloat 默认 link to Pmenu
   NormalFloat = {link="Pmenu"},
   --- Floating Window border 颜色需要和 Pmenu 的背景色相同. border = {"▄","▄","▄","█","▀","▀","▀","█"}
@@ -119,7 +119,7 @@ Highlights = {
   Underlined = {underline=true},
 
   --- 行号颜色
-  LineNr = {ctermfg=240, fg='#585858'},
+  LineNr = {ctermfg=Colors.g240.c, fg=Colors.g240.g},
   --- 光标所在行颜色
   CursorLine = {ctermbg=Colors.g236.c, bg=Colors.g236.g},
   --- 光标所在行号的颜色
