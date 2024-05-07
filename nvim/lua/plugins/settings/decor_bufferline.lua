@@ -11,7 +11,7 @@ local buf_highlights = {
 
   background = {  -- 默认设置, 其他设置缺省的时候使用该设置.
     ctermfg=246, fg='#949494',
-    ctermbg=236, bg='#303030',
+    ctermbg=Colors.g236.c, bg=Colors.g236.g,
   },
   buffer_visible = {  -- cursor 在别的 window 时, buffer filename 颜色.
     ctermbg=Colors.black.c, bg=Colors.black.g
@@ -25,7 +25,7 @@ local buf_highlights = {
 
   close_button = {
     ctermfg=246, fg='#949494',
-    ctermbg=236, bg='#303030',
+    ctermbg=Colors.g236.c, bg=Colors.g236.g,
   },
   close_button_visible = {
     ctermfg=246, fg='#949494',
@@ -40,7 +40,7 @@ local buf_highlights = {
   --- 这里是指相同文件名的 prefix 部分. eg: prefix1/abc.txt && prefix2/abc.txt
   duplicate = {
     ctermfg = 244, fg='#808080',
-    ctermbg=236, bg='#303030',
+    ctermbg=Colors.g236.c, bg=Colors.g236.g,
     italic = true,
   },
   duplicate_visible = {
@@ -73,7 +73,7 @@ local buf_highlights = {
   --- ONLY the modified_icon color. ●
   modified = {
     ctermfg=Colors.cyan.c, fg=Colors.cyan.g,
-    ctermbg=236, bg='#303030',
+    ctermbg=Colors.g236.c, bg=Colors.g236.g,
   },
   modified_visible = {
     ctermfg=Colors.cyan.c, fg=Colors.cyan.g,
@@ -108,7 +108,7 @@ local buf_highlights = {
   --- NOTE: 这里只是 diagnostic 部分的颜色显示, 不包括 buffer_num && buffer_name 颜色. eg: (1)
   error_diagnostic = {           -- hi BufferLineErrorDiagnostic
     ctermfg=Colors.red.c, fg=Colors.red.g,
-    ctermbg=236, bg='#303030',
+    ctermbg=Colors.g236.c, bg=Colors.g236.g,
     bold = true,
   },
   error_diagnostic_visible = {   -- hi BufferLineErrorDiagnosticVisible
@@ -124,7 +124,7 @@ local buf_highlights = {
   },
   warning_diagnostic = {
     ctermfg=Colors.orange.c, fg=Colors.orange.g,
-    ctermbg=236, bg='#303030',
+    ctermbg=Colors.g236.c, bg=Colors.g236.g,
     bold = true,
   },
   warning_diagnostic_visible = {
@@ -140,7 +140,7 @@ local buf_highlights = {
   },
   info_diagnostic = {
     ctermfg=Colors.blue.c, fg=Colors.blue.g,
-    ctermbg=236, bg='#303030',
+    ctermbg=Colors.g236.c, bg=Colors.g236.g,
     bold = true,
   },
   info_diagnostic_visible = {
@@ -156,7 +156,7 @@ local buf_highlights = {
   },
   hint_diagnostic = {
     ctermfg=Colors.hint_grey.c, fg=Colors.hint_grey.g,
-    ctermbg=236, bg='#303030',
+    ctermbg=Colors.g236.c, bg=Colors.g236.g,
     bold = true,
   },
   hint_diagnostic_visible = {

@@ -8,7 +8,7 @@ M.toggle_background_color = function()
     c.ctermbg, c.bg = nil, nil
     vim.api.nvim_set_hl(0, "Normal", c)
     vim.api.nvim_set_hl(0, "NormalNC", {link="Normal"})
-    vim.api.nvim_set_hl(0, "VertSplit", {ctermfg=236, fg='#303030'})
+    vim.api.nvim_set_hl(0, "VertSplit", {ctermfg=Colors.g236.c, fg=Colors.g236.g})
   else
     c.ctermbg, c.bg = Colors.g234.c, Colors.g234.g
     vim.api.nvim_set_hl(0, "Normal", c)

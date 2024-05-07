@@ -13,8 +13,8 @@ local lualine_colors = {
   gold = Colors.func_gold.g,  -- filename saved
   cyan = Colors.cyan.g,   -- filename modified
 
-  grey = '#303030',  -- 236, section_b
-  light_grey = '#949494', -- 245, inactive, hint
+  grey = Colors.g236.g,  -- section_b
+  light_grey = Colors.g245.g, -- inactive, hint
 
   red = Colors.red.g,  -- error, readonly
   orange = Colors.orange.g, -- warn, readonly file, trailing_whitespace && mixed_indent

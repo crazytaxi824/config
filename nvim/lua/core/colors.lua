@@ -109,7 +109,7 @@ Highlights = {
   --- 影响 listchars indentLine 颜色
   NonText = {ctermfg=238, fg='#444444'},
   --- window 之间的分隔线颜色
-  VertSplit = {ctermfg=236, fg='#303030'},
+  VertSplit = {ctermfg=Colors.g236.c, fg=Colors.g236.g},
   --- 括号匹配颜色
   MatchParen = {
     ctermfg=Colors.yellow.c, fg=Colors.yellow.g,
@@ -121,7 +121,7 @@ Highlights = {
   --- 行号颜色
   LineNr = {ctermfg=240, fg='#585858'},
   --- 光标所在行颜色
-  CursorLine = {ctermbg=236, bg='#303030'},
+  CursorLine = {ctermbg=Colors.g236.c, bg=Colors.g236.g},
   --- 光标所在行号的颜色
   CursorLineNr = {
     ctermfg=Colors.yellow.c, fg=Colors.yellow.g,
@@ -337,7 +337,7 @@ Highlights = {
   --- markdown, inline `code`
   ['@markup.raw.markdown_inline'] = {
     ctermfg=173, fg='#ce9178',
-    ctermbg=236, bg='#303030',
+    ctermbg=Colors.g236.c, bg=Colors.g236.g,
   },
 
   --- program language
