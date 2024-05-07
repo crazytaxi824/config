@@ -227,9 +227,9 @@ vim.api.nvim_set_hl(0, 'CmpItemKindEnum',     {link = 'Keyword'})
 vim.api.nvim_set_hl(0, 'CmpItemKindModule',   {link = 'String'})
 
 -- blue
-vim.api.nvim_set_hl(0, 'CmpItemKindSnippet', {ctermfg=Color.boolean_blue, fg=Color_gui.boolean_blue})
-vim.api.nvim_set_hl(0, 'CmpItemKindFile',    {ctermfg=Color.boolean_blue, fg=Color_gui.boolean_blue})
-vim.api.nvim_set_hl(0, 'CmpItemKindFolder',  {ctermfg=Color.boolean_blue, fg=Color_gui.boolean_blue, bold = true})
+vim.api.nvim_set_hl(0, 'CmpItemKindSnippet', {ctermfg=Colors.boolean_blue.c, fg=Colors.boolean_blue.g})
+vim.api.nvim_set_hl(0, 'CmpItemKindFile',    {ctermfg=Colors.boolean_blue.c, fg=Colors.boolean_blue.g})
+vim.api.nvim_set_hl(0, 'CmpItemKindFolder',  {ctermfg=Colors.boolean_blue.c, fg=Colors.boolean_blue.g, bold = true})
 
 --- grey, 弃用的 suggestion.
 vim.api.nvim_set_hl(0, 'CmpItemAbbrDeprecated',  {ctermfg=242, fg='#6c6c6c', underline = true})

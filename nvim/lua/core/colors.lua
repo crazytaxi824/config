@@ -186,7 +186,7 @@ Highlights = {
   ColorColumn = {ctermbg=235, bg='#252525'},
   --- Quick Fix 选中行颜色
   QuickFixLine = {
-    ctermfg=Color.boolean_blue, fg=Color_gui.boolean_blue,
+    ctermfg=Colors.boolean_blue.c, fg=Colors.boolean_blue.g,
     bold=true,
   },
 
@@ -266,13 +266,13 @@ Highlights = {
   Float  = {link = "Number"}, -- 10.02 float64, float32
 
   --- true / false
-  Boolean = {ctermfg = Color.boolean_blue, fg = Color_gui.boolean_blue},
+  Boolean = {ctermfg = Colors.boolean_blue.c, fg = Colors.boolean_blue.g},
   Special = {link = "Boolean"},  -- console.log(`${ ... }`)
 
   --- format verbs %v %d ...
   SpecialChar = {ctermfg=Colors.cyan.c, fg=Colors.cyan.g},
   --- tsxTSVariableBuiltin, tsxTSConstBuiltin ...
-  PreProc = {ctermfg=Color.boolean_blue, fg=Color_gui.boolean_blue},
+  PreProc = {ctermfg=Colors.boolean_blue.c, fg=Colors.boolean_blue.g},
 
   Delimiter = {link = "Normal"},  -- 符号颜色, [] () {} ; : ...
   Operator  = {link = "Normal"},  -- = != == > < ...
@@ -399,8 +399,8 @@ Highlights = {
 
   --['@constant'] = { link = "Constant" },
   ['@variable'] = { link = "Normal" },
-  ['@constant.builtin'] = { ctermfg=Color.boolean_blue, fg=Color_gui.boolean_blue },  -- typescript 关键字 'null' ...
-  ['@variable.builtin'] = { ctermfg=Color.boolean_blue, fg=Color_gui.boolean_blue },  -- typescript 关键字 'undefined', 'this', 'console' ...
+  ['@constant.builtin'] = { ctermfg=Colors.boolean_blue.c, fg=Colors.boolean_blue.g },  -- typescript 关键字 'null' ...
+  ['@variable.builtin'] = { ctermfg=Colors.boolean_blue.c, fg=Colors.boolean_blue.g },  -- typescript 关键字 'undefined', 'this', 'console' ...
 
   ['@property'] = { ctermfg = Colors.cyan.c, fg=Colors.cyan.g },
   ['@property.private'] = { ctermfg=246, fg='#949494' },  -- struct{ a:1 }
