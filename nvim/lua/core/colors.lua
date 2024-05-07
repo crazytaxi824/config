@@ -114,7 +114,7 @@ Color_gui = {
   string_orange = '#ce9178', -- string
   boolean_blue  = '#569cd6', -- Special, boolean
   comment_green = '#6a9956', -- 65|71, comments
-  type_green    = '#4e9cb0', -- type, 数据类型
+  type_green    = '#5fd7af', -- type, 数据类型
 
   --- message 颜色
   hint_grey = '#808080',  -- hint message
@@ -214,7 +214,7 @@ Highlights = {
 
   --- TODO 颜色
   Todo = {
-    ctermfg=Color.white, fg=Color_gui.white,
+    ctermfg=255, fg='#ffffff',
     ctermbg=22, bg='#008F00',
   },
   --- NOTE 颜色
@@ -265,7 +265,7 @@ Highlights = {
   Float  = {link = "Number"}, -- 10.02 float64, float32
 
   --- true / false
-  Boolean = {ctermfg = Color.boolean_blue},
+  Boolean = {ctermfg = Color.boolean_blue, fg = Color_gui.boolean_blue},
   Special = {link = "Boolean"},  -- console.log(`${ ... }`)
 
   --- format verbs %v %d ...
@@ -341,17 +341,31 @@ Highlights = {
   CursorLineFold = {link = "FoldColumn"},  -- cursor 所在行 foldcolumn 中 + - | 号颜色
 
   --- 其他常用颜色 ---------------------------------------------------------------------------------
-  Title = {ctermfg = Color.green, bold=true}, -- markdown title
-  Conceal = {ctermfg = 246}, -- `set conceallevel?`, markdown list, code block ...
-  Label = {ctermfg = Color.cyan}, -- json: key color; markdown: code block language(```go)
+  --- markdown title
+  Title = {
+    ctermfg=Color.green, fg=Color_gui.green,
+    bold=true,
+  },
+  --- `set conceallevel?`, markdown list, code block ...
+  Conceal = {ctermfg=246, fg='#949494'},
+  --- json: key color; markdown: code block language(```go)
+  Label = {ctermfg=Color.cyan, fg=Color_gui.cyan},
 
-  SpellBad = {ctermfg = Color.red, ctermbg = Color.dark_red, bold = true, underline = true},
-  SpellCap = {ctermfg = Color.orange, ctermbg = Color.dark_red, bold = true, underline = true},
+  SpellBad = {
+    ctermfg=Color.red, fg=Color_gui.red,
+    ctermbg=Color.dark_red, bg=Color_gui.dark_red,
+    bold=true, underline=true,
+  },
+  SpellCap = {
+    ctermfg=Color.orange, fg=Color_gui.orange,
+    ctermbg=Color.dark_red, bg=Color_gui.dark_red,
+    bold=true, underline=true,
+  },
   SpellLocal = {},  -- clear highlight
 
   --- NOTE: treesitter 颜色设置 --------------------------------------------------------------------
   --- comment
-  ['@comment.error'] = { ctermfg = Color.white, ctermbg = 196 }, -- FIXME, BUG, ERROR
+  ['@comment.error'] = {link = 'ErrorMsg'},  -- FIXME, BUG, ERROR
   ['@comment.warning'] = { link = "WarningMsg" },  -- HACK, WARN, WARNING, VVI, FIX
   ['@comment.note'] = { link = "SpecialComment" }, -- XXX, NOTE, DOCS, TEST, INFO
   ['@comment.todo'] = { link = "Todo" },           -- TODO
@@ -370,21 +384,25 @@ Highlights = {
   ['@markup.italic'] = { italic = true },  -- markdown, *italic*, _italic_
   ['@markup.underline'] = { underline = true },  -- markdown, <u>underline</u>
   ['@markup.strikethrough'] = { strikethrough = true },  -- markdown, ~~strike~~
-  ['@markup.link.label'] = { ctermfg = Color.cyan }, -- markdown, [@markup.link.label](@markup.link.label)
-  ['@markup.link.url'] = { ctermfg = Color.cyan },   -- markdown, [@markup.link.label](@markup.link.label)
-  ['@markup.raw.markdown_inline'] = { ctermfg = Color.string_orange, ctermbg = 237 },  -- markdown, inline `code`
+  ['@markup.link.label'] = { ctermfg=Color.cyan, fg=Color_gui.cyan }, -- markdown, [@markup.link.label](@markup.link.url)
+  ['@markup.link.url'] = { ctermfg=Color.cyan, fg=Color_gui.cyan },   -- markdown, [@markup.link.label](@markup.link.url)
+  --- markdown, inline `code`
+  ['@markup.raw.markdown_inline'] = {
+    ctermfg=Color.string_orange, fg=Color_gui.string_orange,
+    ctermbg = 236, bg='#333333',
+  },
 
   --- program language
-  ['@string.escape'] = { ctermfg = 180 },  -- \n \t ...
-  ['@module'] = { ctermfg = Color.type_green },  -- package <module>
+  ['@string.escape'] = {ctermfg=180, fg='#ceb279'},  -- \n \t ...
+  ['@module'] = { ctermfg=Color.type_green, fg=Color_gui.type_green },  -- package <module>
 
   --['@constant'] = { link = "Constant" },
   ['@variable'] = { link = "Normal" },
-  ['@constant.builtin'] = { ctermfg = Color.boolean_blue },  -- typescript 关键字 'null' ...
-  ['@variable.builtin'] = { ctermfg = Color.boolean_blue },  -- typescript 关键字 'undefined', 'this', 'console' ...
+  ['@constant.builtin'] = { ctermfg=Color.boolean_blue, fg=Color_gui.boolean_blue },  -- typescript 关键字 'null' ...
+  ['@variable.builtin'] = { ctermfg=Color.boolean_blue, fg=Color_gui.boolean_blue },  -- typescript 关键字 'undefined', 'this', 'console' ...
 
-  ['@property'] = { ctermfg = Color.cyan },
-  ['@property.private'] = { ctermfg = 246 },
+  ['@property'] = { ctermfg = Color.cyan, fg=Color_gui.cyan },
+  ['@property.private'] = { ctermfg=246, fg='#949494' },  -- struct{ a:1 }
   ['@variable.member'] = { link = "@property" },
   ['@field'] = { link = "@property" },
   ['@parameter'] = { link = "@property" },
@@ -399,20 +417,32 @@ Highlights = {
   ['@keyword.return'] = { link = "Conditional" }, -- [return] nil
   ['@namespace'] = { link = "Normal" },  -- package [@namespace]
 
-  ['@tag'] = { ctermfg = 68 },  -- html, <@tag></@tag>
-  ['@tag.delimiter'] = { ctermfg = 243 },  -- html, <div></div>, <> 括号颜色
+  ['@tag'] = { ctermfg=68, fg='#5396cc' },  -- html, <@tag></@tag>
+  ['@tag.delimiter'] = { ctermfg=244, fg='#808080' },  -- html, <div></div>, <> 括号颜色
   ['@tag.attribute'] = { link = "@property" },  -- html, <... width=..., @tag.attribute=... >
   ['@punctuation.special'] = { link = 'Special' },  -- js, ts, console.log(`${ ... }`)
 
   --- NOTE: 以下设置是为了配合 lazy load plugins ---------------------------------------------------
   --- 以下颜色为了 lazy load lualine
   --- 无法使用 lualine 的情况下 StatusLine 颜色, eg: tagbar 有自己设置的 ':set statusline?' 颜色不受 lualine 控制.
-  StatusLine   = {ctermfg = Color.func_gold, ctermbg = Color.black}, -- active
-  StatusLineNC = {ctermfg = 246, ctermbg = Color.black}, -- inactive, NC (not-current windows)
+  --- active
+  StatusLine = {
+    ctermfg=Color.func_gold, fg=Color_gui.func_gold,
+    ctermbg=Color.black, bg=Color_gui.black,
+  },
+  --- inactive, NC (not-current windows)
+  StatusLineNC = {
+    ctermfg=246, fg='#949494',
+    ctermbg=Color.black, bg=Color_gui.black,
+  },
 
   --- 以下颜色为了 lazy load bufferline
   TabLineFill = {}, -- NOTE: clear TabLineFill
-  TabLineSel = {ctermfg = Color.func_gold, ctermbg = Color.black, bold=true},
+  TabLineSel = {
+    ctermfg=Color.func_gold, fg=Color_gui.func_gold,
+    ctermbg=Color.black, bg=Color_gui.black,
+    bold=true,
+  },
   --TabLine = {ctermfg = 234},
 
   --- 设置 syntax 颜色是为了让 treesitter lazy render 的时候不至于颜色差距太大.
