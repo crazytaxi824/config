@@ -56,11 +56,11 @@ local buf_highlights = {
 
   --- NOTE: indicator - 当前正在显示的 buffer. ▎
   indicator_visible = {  -- background 颜色需要和 buffer_visible bg 相同
-    ctermfg=Color.cyan, fg=Color_gui.cyan,
+    ctermfg=Colors.cyan.c, fg=Colors.cyan.g,
     ctermbg=Colors.black.c, bg=Colors.black.g,
   },
   indicator_selected = {  -- background 颜色需要和 buffer_selected bg 相同
-    ctermfg=Color.cyan, fg=Color_gui.cyan,
+    ctermfg=Colors.cyan.c, fg=Colors.cyan.g,
     ctermbg=Colors.black.c, bg=Colors.black.g,
   },
 
@@ -72,15 +72,15 @@ local buf_highlights = {
 
   --- ONLY the modified_icon color. ●
   modified = {
-    ctermfg=Color.cyan, fg=Color_gui.cyan,
+    ctermfg=Colors.cyan.c, fg=Colors.cyan.g,
     ctermbg=236, bg='#303030',
   },
   modified_visible = {
-    ctermfg=Color.cyan, fg=Color_gui.cyan,
+    ctermfg=Colors.cyan.c, fg=Colors.cyan.g,
     ctermbg=Colors.black.c, bg=Colors.black.g,
   },
   modified_selected = {
-    ctermfg=Color.cyan, fg=Color_gui.cyan,
+    ctermfg=Colors.cyan.c, fg=Colors.cyan.g,
     ctermbg=Colors.black.c, bg=Colors.black.g,
   },
 

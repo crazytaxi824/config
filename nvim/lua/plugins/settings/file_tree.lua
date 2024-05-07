@@ -327,10 +327,10 @@ nvim_tree.setup {
 
 --- `:help nvim-tree-highlight` -------------------------------------------------------------------- {{{
 vim.api.nvim_set_hl(0, 'NvimTreeNormalNC', {link="NormalNC"})  -- non-foucs nvim-tree window color
-vim.api.nvim_set_hl(0, 'NvimTreeRootFolder', {ctermfg=Color.cyan, fg=Color_gui.cyan})  -- non-foucs nvim-tree window color
+vim.api.nvim_set_hl(0, 'NvimTreeRootFolder', {ctermfg=Colors.cyan.c, fg=Colors.cyan.g})  -- non-foucs nvim-tree window color
 -- vim.cmd('hi! default link NvimTreeWinSeparator VertSplit')  =- 分割线
 
-vim.api.nvim_set_hl(0, 'NvimTreeFolderName', {ctermfg=Color.cyan, fg=Color_gui.cyan, bold=true})
+vim.api.nvim_set_hl(0, 'NvimTreeFolderName', {ctermfg=Colors.cyan.c, fg=Colors.cyan.g, bold=true})
 vim.cmd('hi! default link NvimTreeFolderIcon NvimTreeFolderName')
 vim.cmd('hi! default link NvimTreeEmptyFolderName NvimTreeFolderName')
 vim.cmd('hi! default link NvimTreeOpenedFolderName NvimTreeFolderName')  -- 已打开文件夹的颜色

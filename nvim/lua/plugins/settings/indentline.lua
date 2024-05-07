@@ -16,7 +16,7 @@ vim.api.nvim_set_hl(0, 'RainbowBlue',   {ctermfg=Colors.blue.c, fg=Colors.blue.g
 vim.api.nvim_set_hl(0, 'RainbowOrange', {ctermfg=Color.dark_orange, fg=Color_gui.dark_orange})
 vim.api.nvim_set_hl(0, 'RainbowGreen',  {ctermfg=Colors.green.c, fg=Colors.green.g})
 vim.api.nvim_set_hl(0, 'RainbowViolet', {ctermfg=Colors.magenta.c, fg=Colors.magenta.g})
-vim.api.nvim_set_hl(0, 'RainbowCyan',   {ctermfg=Color.cyan, fg=Color_gui.cyan})
+vim.api.nvim_set_hl(0, 'RainbowCyan',   {ctermfg=Colors.cyan.c, fg=Colors.cyan.g})
 
 --- set list & set listchars, NOTE: 在 settings.lua 中设置.
 --vim.opt.list = true

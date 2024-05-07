@@ -232,7 +232,7 @@ Highlights = {
   },
   --- for bufferline 在 nvim-tree 显示 "File Explorer"
   Directory = {
-    ctermfg=Color.cyan, fg=Color_gui.cyan,
+    ctermfg=Colors.cyan.c, fg=Colors.cyan.g,
     ctermbg=235, bg='#252525',
     bold=true, underline=true,
   },
@@ -270,7 +270,7 @@ Highlights = {
   Special = {link = "Boolean"},  -- console.log(`${ ... }`)
 
   --- format verbs %v %d ...
-  SpecialChar = {ctermfg=Color.cyan, fg=Color_gui.cyan},
+  SpecialChar = {ctermfg=Colors.cyan.c, fg=Colors.cyan.g},
   --- tsxTSVariableBuiltin, tsxTSConstBuiltin ...
   PreProc = {ctermfg=Color.boolean_blue, fg=Color_gui.boolean_blue},
 
@@ -350,7 +350,7 @@ Highlights = {
   --- `set conceallevel?`, markdown list, code block ...
   Conceal = {ctermfg=246, fg='#949494'},
   --- json: key color; markdown: code block language(```go)
-  Label = {ctermfg=Color.cyan, fg=Color_gui.cyan},
+  Label = {ctermfg=Colors.cyan.c, fg=Colors.cyan.g},
 
   SpellBad = {
     ctermfg=Colors.red.c, fg=Colors.red.g,
@@ -385,8 +385,8 @@ Highlights = {
   ['@markup.italic'] = { italic = true },  -- markdown, *italic*, _italic_
   ['@markup.underline'] = { underline = true },  -- markdown, <u>underline</u>
   ['@markup.strikethrough'] = { strikethrough = true },  -- markdown, ~~strike~~
-  ['@markup.link.label'] = { ctermfg=Color.cyan, fg=Color_gui.cyan }, -- markdown, [@markup.link.label](@markup.link.url)
-  ['@markup.link.url'] = { ctermfg=Color.cyan, fg=Color_gui.cyan },   -- markdown, [@markup.link.label](@markup.link.url)
+  ['@markup.link.label'] = { ctermfg=Colors.cyan.c, fg=Colors.cyan.g }, -- markdown, [@markup.link.label](@markup.link.url)
+  ['@markup.link.url'] = { ctermfg=Colors.cyan.c, fg=Colors.cyan.g },   -- markdown, [@markup.link.label](@markup.link.url)
   --- markdown, inline `code`
   ['@markup.raw.markdown_inline'] = {
     ctermfg=Color.string_orange, fg=Color_gui.string_orange,
@@ -402,7 +402,7 @@ Highlights = {
   ['@constant.builtin'] = { ctermfg=Color.boolean_blue, fg=Color_gui.boolean_blue },  -- typescript 关键字 'null' ...
   ['@variable.builtin'] = { ctermfg=Color.boolean_blue, fg=Color_gui.boolean_blue },  -- typescript 关键字 'undefined', 'this', 'console' ...
 
-  ['@property'] = { ctermfg = Color.cyan, fg=Color_gui.cyan },
+  ['@property'] = { ctermfg = Colors.cyan.c, fg=Colors.cyan.g },
   ['@property.private'] = { ctermfg=246, fg='#949494' },  -- struct{ a:1 }
   ['@variable.member'] = { link = "@property" },
   ['@field'] = { link = "@property" },
