@@ -123,17 +123,17 @@ local buf_highlights = {
     italic = false,
   },
   warning_diagnostic = {
-    ctermfg=Color.orange, fg=Color_gui.orange,
+    ctermfg=Colors.orange.c, fg=Colors.orange.g,
     ctermbg=236, bg='#303030',
     bold = true,
   },
   warning_diagnostic_visible = {
-    ctermfg=Color.orange, fg=Color_gui.orange,
+    ctermfg=Colors.orange.c, fg=Colors.orange.g,
     ctermbg=Colors.black.c, bg=Colors.black.g,
     bold = true,
   },
   warning_diagnostic_selected = {
-    ctermfg=Color.orange, fg=Color_gui.orange,
+    ctermfg=Colors.orange.c, fg=Colors.orange.g,
     ctermbg=Colors.black.c, bg=Colors.black.g,
     bold = true,
     italic = false,

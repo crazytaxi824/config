@@ -210,7 +210,7 @@ Highlights = {
   --- echohl WarningMsg | echo "Don't panic!" | echohl None 颜色
   WarningMsg = {
     ctermfg=Colors.black.c,  fg=Colors.black.g,
-    ctermbg=Color.orange, bg=Color_gui.orange,
+    ctermbg=Colors.orange.c, bg=Colors.orange.g,
   },
 
   --- TODO 颜色
@@ -287,7 +287,7 @@ Highlights = {
   --- 以上 highlight 默认 link to DiagnosticXXX.
   DiagnosticHint  = {ctermfg=Colors.hint_grey.c, fg=Colors.hint_grey.g},
   DiagnosticInfo  = {ctermfg=Colors.blue.c, fg=Colors.blue.g},
-  DiagnosticWarn  = {ctermfg=Color.orange, fg=Color_gui.orange},
+  DiagnosticWarn  = {ctermfg=Colors.orange.c, fg=Colors.orange.g},
   DiagnosticError = {ctermfg=Colors.red.c, fg=Colors.red.g},
 
   --- NOTE: `:help undercurl` sp(guisp) color 改变 undercurl, underline, underdashed ... 颜色.
@@ -300,8 +300,8 @@ Highlights = {
     sp=Colors.blue.g, undercurl=true,
   },
   DiagnosticUnderlineWarn = {
-    ctermfg=Color.orange, fg=Color_gui.orange,
-    sp=Color_gui.orange, undercurl=true,
+    ctermfg=Colors.orange.c, fg=Colors.orange.g,
+    sp=Colors.orange.g, undercurl=true,
   },
   DiagnosticUnderlineError = {
     ctermfg=Colors.red.c, fg=Colors.red.g,
@@ -358,7 +358,7 @@ Highlights = {
     bold=true, underline=true,
   },
   SpellCap = {
-    ctermfg=Color.orange, fg=Color_gui.orange,
+    ctermfg=Colors.orange.c, fg=Colors.orange.g,
     ctermbg=Color.dark_red, bg=Color_gui.dark_red,
     bold=true, underline=true,
   },
