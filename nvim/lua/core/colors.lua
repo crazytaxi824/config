@@ -55,7 +55,6 @@ Colors = {
   --- 常用颜色,
   purple        = {c=170, g='#d75fd7'},  -- 170|68, keyword, eg: func, type, struct, var, const ... vscode keyword = 68
   func_gold     = {c=78, g='#dcdcaa'},   -- 78|85, func, function_call, method, method_call ... | bufferline, lualine
-  string_orange = {c=173, g='#ce9178'},  -- string  -- TODO
   boolean_blue  = {c=74, g='#569cd6'},   -- Special, boolean
   type_green    = {c=79, g='#00b691'},   -- type, 数据类型
 
@@ -195,7 +194,7 @@ Highlights = {
   Statement = {link = "Conditional"}, -- syntax 中 'package' & 'import' 关键字
   Include   = {link = "Conditional"}, -- treesitter 中 'package', 'import', 'from' ... 关键字
 
-  String = {ctermfg=Colors.string_orange.c, fg=Colors.string_orange.g},
+  String = {ctermfg=173, fg='#ce9178'},
   Character = {link = "String"},
 
   Number = {ctermfg=151, fg='#b5cea8'}, -- 100, int, uint ...
@@ -325,8 +324,8 @@ Highlights = {
   ['@markup.link.url'] = { ctermfg=Colors.cyan.c, fg=Colors.cyan.g },   -- markdown, [@markup.link.label](@markup.link.url)
   --- markdown, inline `code`
   ['@markup.raw.markdown_inline'] = {
-    ctermfg=Colors.string_orange.c, fg=Colors.string_orange.g,
-    ctermbg = 236, bg='#303030',
+    ctermfg=173, fg='#ce9178',
+    ctermbg=236, bg='#303030',
   },
 
   --- program language
