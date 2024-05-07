@@ -6,22 +6,22 @@ end
 --- 自定义 theme ----------------------------------------------------------------------------------- {{{
 --- https://github.com/nvim-lualine/lualine.nvim/blob/master/lua/lualine/themes/gruvbox_light.lua
 local lualine_colors = {
-  black = Color.black,
-  white = Color.white,
+  black = Color_gui.black,
+  white = Color_gui.white,
 
-  yellow = Color.yellow,
-  gold = Color.func_gold,  -- filename saved
-  cyan = Color.cyan,   -- filename modified
+  yellow = Color_gui.yellow,
+  gold = Color_gui.func_gold,  -- filename saved
+  cyan = Color_gui.cyan,   -- filename modified
 
-  grey  = 236,       -- section_b
-  light_grey = 245,  -- inactive, hint
+  grey = '#303030',  -- 236, section_b
+  light_grey = '#949494', -- 245, inactive, hint
 
-  red = Color.red,  -- error, readonly
-  orange = Color.orange, -- warn
-  blue = Color.blue,  -- info background
-  green = Color.comment_green,  -- Command mode
+  red = Color_gui.red,  -- error, readonly
+  orange = Color_gui.orange, -- warn
+  blue = Color_gui.blue,  -- info background
+  green = Color_gui.comment_green,  -- Command mode
 
-  dark_orange = Color.dark_orange, -- readonly file, trailing_whitespace && mixed_indent
+  dark_orange = Color_gui.dark_orange, -- readonly file, trailing_whitespace && mixed_indent
 }
 
 --- airline 颜色设置 https://github.com/vim-airline/vim-airline/blob/master/autoload/airline/themes/dark.vim
