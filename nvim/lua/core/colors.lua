@@ -213,7 +213,7 @@ Highlights = {
   Float  = {link = "Number"}, -- 10.02 float64, float32
 
   --- true / false
-  Boolean = {ctermfg = Colors.boolean_blue.c, fg = Colors.boolean_blue.g},
+  Boolean = {ctermfg=Colors.boolean_blue.c, fg=Colors.boolean_blue.g},
   Special = {link = "Boolean"},  -- console.log(`${ ... }`)
 
   --- format verbs %v %d ...
@@ -349,7 +349,7 @@ Highlights = {
   ['@constant.builtin'] = { ctermfg=Colors.boolean_blue.c, fg=Colors.boolean_blue.g },  -- typescript 关键字 'null' ...
   ['@variable.builtin'] = { ctermfg=Colors.boolean_blue.c, fg=Colors.boolean_blue.g },  -- typescript 关键字 'undefined', 'this', 'console' ...
 
-  ['@property'] = { ctermfg = Colors.cyan.c, fg=Colors.cyan.g },
+  ['@property'] = { ctermfg=Colors.cyan.c, fg=Colors.cyan.g },
   ['@property.private'] = { ctermfg=Colors.g246.c, fg=Colors.g246.g },  -- struct{ a:1 }
   ['@variable.member'] = { link = "@property" },
   ['@field'] = { link = "@property" },
