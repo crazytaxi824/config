@@ -94,7 +94,7 @@ local buf_highlights = {
 
   --- tab_separator 为 tab 之间分隔线颜色, 样式不能自定义
   tab_separator = {  -- tab 之间分隔线的颜色.
-    ctermfg=234, fg='#1c1c1c',
+    ctermfg=Colors.g234.c, fg=Colors.g234.g,
   },
   tab_separator_selected = {  -- selected tab 后面一个分隔线'▕'的颜色. 最好和 tab_sel_bg 颜色相同.
     ctermfg=Colors.yellow.c, fg=Colors.yellow.g,
