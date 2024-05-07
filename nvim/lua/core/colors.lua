@@ -41,6 +41,7 @@
 -- -- }}}
 Colors = {
   --- NOTE: alacritty 颜色对应, 表示 0-15 系统颜色.
+  white = {c=251, g='#c6c6c6'},  -- foreground, text
   black = {c=233, g='#121212'},  -- black background
   red   = {c=167, g='#f04c4c'},  -- error message
   green = {c=42,  g='#00d787'},   -- markdown title
@@ -48,22 +49,22 @@ Colors = {
   blue  = {c=75, g='#75beff'},    -- info message
   magenta = {c=213, g='#ff87ff'}, -- IncSearch, return, if, else, break, package, import
   cyan  = {c=81, g='#9cdcfe'},   -- VVI: one of vim's main color. SpecialChar, Underlined, Label ...
-  white = {c=251, g='#c6c6c6'},  -- foreground, text
+  orange = {c=208, g='#ff8700'},  -- warning message
+  hint_grey = {c=244, g='#808080'},  -- hint message
 
   --- 常用颜色,
   purple        = {c=170, g='#d75fd7'},  -- 170|68, keyword, eg: func, type, struct, var, const ... vscode keyword = 68
   func_gold     = {c=78, g='#dcdcaa'},   -- 78|85, func, function_call, method, method_call ... | bufferline, lualine
-  string_orange = {c=173, g='#ce9178'},  -- string
+  string_orange = {c=173, g='#ce9178'},  -- string  -- TODO
   boolean_blue  = {c=74, g='#569cd6'},   -- Special, boolean
-  comment_green = {c=65, g='#6a9956'},   -- 65|71, comments
+  comment_green = {c=65, g='#6a9956'},   -- 65|71, comments -- TODO
   type_green    = {c=79, g='#00b691'},   -- type, 数据类型
 
-  --- message 颜色
-  hint_grey = {c=244, g='#808080'},  -- hint message
-  orange = {c=208, g='#ff8700'},  -- warning message
-
   --- 其他颜色
-  dark_red    = {c=52, g='#890000'},   -- 256 color 中最深的红色, 接近黑色. 通常用于 bg.
+  dark_red    = {c=52, g='#890000'},   -- 256 color 中最深的红色, 接近黑色. 通常用于 bg. TODO
+
+  --- TODO:
+  -- g234, g235, g236 ... g246
 }
 
 --- highlight api 设置: vim.api.nvim_set_hl(0, '@property', { ctermfg = 81 })
