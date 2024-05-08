@@ -27,7 +27,7 @@ ts_configs.setup {
 
     --- comment languages & filetypes
     "javascript", "typescript", "html", "css", "scss", -- "svelte", "vue", "tsx",
-    "go", "gomod", "gosum", "gowork", "gotmpl",
+    "go", "gomod", "gosum", "gowork", "gotmpl", "printf",
     "python", "bash", "ruby", "perl",
     "markdown", "markdown_inline", "latex", "mermaid",
     "json", "jsonc", "toml", "yaml",
