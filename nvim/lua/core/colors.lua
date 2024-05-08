@@ -213,11 +213,8 @@ Highlights = {
   --- true / false
   Boolean = {ctermfg=Colors.boolean_blue.c, fg=Colors.boolean_blue.g},
   Special = {link = "Boolean"},  -- console.log(`${ ... }`)
-
-  --- format verbs %v %d ...
-  SpecialChar = {ctermfg=Colors.cyan.c, fg=Colors.cyan.g},
-  --- tsxTSVariableBuiltin, tsxTSConstBuiltin ...
-  PreProc = {ctermfg=Colors.boolean_blue.c, fg=Colors.boolean_blue.g},
+  --SpecialChar = { link = "Special" },  -- format verbs %v %d ...
+  PreProc = { link = "Boolean" },  -- checkhealth
 
   Delimiter = {link = "Normal"},  -- 符号颜色, [] () {} ; : ...
   Operator  = {link = "Normal"},  -- = != == > < ...
@@ -344,8 +341,6 @@ Highlights = {
 
   --['@constant'] = { link = "Constant" },
   ['@variable'] = { link = "Normal" },
-  ['@constant.builtin'] = { ctermfg=Colors.boolean_blue.c, fg=Colors.boolean_blue.g },  -- typescript 关键字 'null' ...
-  ['@variable.builtin'] = { ctermfg=Colors.boolean_blue.c, fg=Colors.boolean_blue.g },  -- typescript 关键字 'undefined', 'this', 'console' ...
 
   ['@property'] = { ctermfg=Colors.cyan.c, fg=Colors.cyan.g },
   ['@property.private'] = { ctermfg=Colors.g246.c, fg=Colors.g246.g },  -- struct{ a:1 }
@@ -353,14 +348,15 @@ Highlights = {
   ['@field'] = { link = "@property" },
   ['@parameter'] = { link = "@property" },
 
+  --- 'printf' is a language.
+  ['@character.printf'] = { link = "SpecialChar" },
+
   --['@function'] = { link = "Function" },
   --['@function.call'] = { link = "Function" },
-  --['@method'] = { link = "Function" },
-  --['@method.call'] = { link = "Function" },
+  --['@function.method'] = { link = "Function" },
+  --['@function.method.call'] = { link = "Function" },
   ['@function.builtin'] = { link = "Function" },
-  ['@function.type'] = { link = "Type" },
 
-  ['@keyword.return'] = { link = "Conditional" }, -- [return] nil
   ['@namespace'] = { link = "Normal" },  -- package [@namespace]
 
   ['@tag'] = { ctermfg=68, fg='#5396cc' },  -- html, <@tag></@tag>
