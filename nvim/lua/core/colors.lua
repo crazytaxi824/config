@@ -42,7 +42,7 @@
 --- alacritty color based on sRGB
 Colors = {
   --- NOTE: alacritty 颜色对应, 表示 0-15 系统颜色.
-  white = {c=251, g='#c6c6c6'},  -- foreground, text
+  white = {c=251, g='#c0c0c0'},  -- foreground, text
   black = {c=233, g='#121212'},  -- black background
   red   = {c=167, g='#f04c4c'},  -- error message
   green = {c=42,  g='#00d787'},   -- markdown title
@@ -57,7 +57,7 @@ Colors = {
   purple        = {c=170, g='#d75fd7'},  -- 170|68, keyword, eg: func, type, struct, var, const ... vscode keyword = 68
   func_gold     = {c=78, g='#dce6aa'},   -- 78|85, func, function_call, method, method_call ... | bufferline, lualine
   boolean_blue  = {c=74, g='#569cd6'},   -- Special, boolean
-  type_green    = {c=79, g='#00b691'},   -- type, 数据类型
+  type_green    = {c=79, g='#20b691'},   -- type, 数据类型
 
   --- grayscale 颜色
   g234 = {c=234, g='#1c1c1c'},
@@ -191,10 +191,7 @@ Highlights = {
   --- func <Function> {}, 定义 & call func 都使用该颜色
   Function = {ctermfg=Colors.func_gold.c, fg=Colors.func_gold.g},
   --- type <Type> struct
-  Type = {
-    ctermfg=Colors.type_green.c, fg=Colors.type_green.g,
-    italic=true,
-  },
+  Type = {ctermfg=Colors.type_green.c, fg=Colors.type_green.g},
   --- property & parameter
   Identifier = {link = "Normal"},
   --- 常量颜色. eg: const <Constant> = 100
