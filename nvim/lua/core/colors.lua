@@ -49,7 +49,7 @@ Colors = {
   yellow = {c=220, g='#ffd800'},  -- Search, lualine: Insert Mode background && tabline: tab seleced background
   blue  = {c=75, g='#75beff'},    -- info message
   magenta = {c=213, g='#ff87ff'}, -- IncSearch, return, if, else, break, package, import
-  cyan  = {c=81, g='#9cdcfe'},   -- VVI: one of vim's main color. SpecialChar, Underlined, Label ...
+  cyan  = {c=81, g='#9adafc'},   -- VVI: one of vim's main color. SpecialChar, Underlined, Label ...
   orange = {c=208, g='#ff8700'},  -- warning message
   hint_grey = {c=244, g='#808080'},  -- hint message
 
@@ -327,8 +327,8 @@ Highlights = {
   ['@markup.italic'] = { italic = true },  -- markdown, *italic*, _italic_
   ['@markup.underline'] = { underline = true },  -- markdown, <u>underline</u>
   ['@markup.strikethrough'] = { strikethrough = true },  -- markdown, ~~strike~~
-  ['@markup.link.label'] = { ctermfg=Colors.cyan.c, fg=Colors.cyan.g }, -- markdown, [@markup.link.label](@markup.link.url)
-  ['@markup.link.url'] = { ctermfg=Colors.cyan.c, fg=Colors.cyan.g },   -- markdown, [@markup.link.label](@markup.link.url)
+  ['@markup.link.label'] = { link = "Label" }, -- markdown, [@markup.link.label](@markup.link.url)
+  ['@markup.link.url'] = { link = "Label" },   -- markdown, [@markup.link.label](@markup.link.url)
   --- markdown, inline `code`
   ['@markup.raw.markdown_inline'] = {
     ctermfg=173, fg='#ce9178',
@@ -336,13 +336,12 @@ Highlights = {
   },
 
   --- program language
-  ['@string.escape'] = {ctermfg=180, fg='#ceb279'},  -- \n \t ...
   ['@module'] = { ctermfg=Colors.type_green.c, fg=Colors.type_green.g },  -- package <module>
 
   --['@constant'] = { link = "Constant" },
-  ['@variable'] = { link = "Normal" },
+  ['@variable'] = { link = "Label" },
 
-  ['@property'] = { ctermfg=Colors.cyan.c, fg=Colors.cyan.g },
+  ['@property'] = { link = "Label" },
   ['@property.private'] = { ctermfg=Colors.g246.c, fg=Colors.g246.g },  -- struct{ a:1 }
   ['@variable.member'] = { link = "@property" },
   ['@field'] = { link = "@property" },
@@ -350,6 +349,8 @@ Highlights = {
 
   --- 'printf' is a language.
   ['@character.printf'] = { link = "SpecialChar" },
+  --- \n \t ...
+  ['@string.escape'] = {ctermfg=180, fg='#ceb279'},
 
   --['@function'] = { link = "Function" },
   --['@function.call'] = { link = "Function" },
