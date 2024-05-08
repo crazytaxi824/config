@@ -39,6 +39,7 @@
 --- VVI: nvim_set_hl() 没有实现 `hi! default link Foo Bar` 和 `hi clear Foo` 功能.
 ---
 -- -- }}}
+--- alacritty color based on sRGB
 Colors = {
   --- NOTE: alacritty 颜色对应, 表示 0-15 系统颜色.
   white = {c=251, g='#c6c6c6'},  -- foreground, text
