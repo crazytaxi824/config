@@ -6,7 +6,7 @@
 (type_alias_declaration value: (union_type (literal_type [(null) (undefined)] @type)))
 
 ;;; 定义 class Foo {...} 后, const foo = new Foo() 作为一个 type 而不是 constructor.
-(variable_declarator value: (new_expression constructor: ((identifier) @type )))
+;(variable_declarator value: (new_expression constructor: ((identifier) @type )))
 
 ;;; 'this' keyword
 (member_expression object: ((this) @keyword))
