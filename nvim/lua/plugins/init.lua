@@ -86,7 +86,7 @@ local plugins = {
   --- but if you want to extend a query use the `after/queries/` directory.
   {
     "nvim-treesitter/nvim-treesitter",
-    commit = "fc7657a",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "3607d9c",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     --build = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
     config = function() require("plugins.settings.treesitter") end,
     dependencies = {
@@ -119,7 +119,7 @@ local plugins = {
   --- 注释
   {
     "JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
-    commit = "a6382f7",
+    commit = "0bdccb9",
     config = function()
       require("ts_context_commentstring").setup({
         enable_autocmd = false,
@@ -156,7 +156,7 @@ local plugins = {
   --- Auto Completion ------------------------------------------------------------------------------
   {
     "hrsh7th/nvim-cmp",
-    commit = "8f3c541",
+    commit = "cd2cf0c",
     config = function() require("plugins.settings.cmp_completion") end,
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全
@@ -214,7 +214,7 @@ local plugins = {
   --- snippets content, 自定义 snippets 可以借鉴这个结构.
   {
     "rafamadriz/friendly-snippets",
-    commit = "fa36367",
+    commit = "3e9a3f5",
 
     lazy = true,  -- LuaSnip 加载时自动加载.
   },
@@ -237,7 +237,7 @@ local plugins = {
   --- 官方 LSP 引擎.
   {
     "neovim/nvim-lspconfig",
-    commit = "ee450e6",
+    commit = "a3d9395",
     config = function() require("lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全. NOTE: lspconfig 必须在 cmp_nvim_lsp 之后加载, 否则可能无法提供代码补全.
@@ -257,7 +257,7 @@ local plugins = {
 
   {
     "stevearc/conform.nvim",
-    commit = "12b3995",
+    commit = "6dc1603",
     config = function() require("plugins.settings.formatter_confrom") end,
 
     event = "VeryLazy",
@@ -277,7 +277,7 @@ local plugins = {
 
   {
     "nvim-tree/nvim-web-devicons",
-    commit = "475fbcf",
+    commit = "5b90678",
 
     lazy = true, -- dep of nvim-tree & bufferline
   },
