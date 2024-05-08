@@ -52,11 +52,11 @@ Colors = {
   cyan  = {c=81, g='#9adafc'},   -- VVI: one of vim's main color. SpecialChar, Underlined, Label ...
   orange = {c=208, g='#ff8700'},  -- warning message
   hint_grey = {c=244, g='#808080'},  -- hint message
+  purple = {c=170, g='#d75fd7'},
 
   --- 常用颜色,
-  purple        = {c=170, g='#d75fd7'},  -- 170|68, keyword, eg: func, type, struct, var, const ... vscode keyword = 68
+  boolean_blue  = {c=74, g='#569cd6'},   -- Boolean, Special
   func_gold     = {c=78, g='#dce6aa'},   -- 78|85, func, function_call, method, method_call ... | bufferline, lualine
-  boolean_blue  = {c=74, g='#569cd6'},   -- Special, boolean
   type_green    = {c=79, g='#20b691'},   -- type, 数据类型
 
   --- grayscale 颜色
@@ -187,7 +187,7 @@ Highlights = {
 
   --- 基础颜色 -------------------------------------------------------------------------------------
   --- VVI: 最主要的颜色
-  Keyword = {ctermfg=Colors.purple.c, fg=Colors.purple.g},
+  Keyword = {ctermfg=Colors.boolean_blue.c, fg=Colors.boolean_blue.g},
   --- func <Function> {}, 定义 & call func 都使用该颜色
   Function = {ctermfg=Colors.func_gold.c, fg=Colors.func_gold.g},
   --- type <Type> struct
@@ -336,6 +336,9 @@ Highlights = {
   },
 
   --- program language
+  ['@keyword.conditional'] = { link = "Conditional" },
+  ['@keyword.repeat'] = { link = "Conditional" },
+  ['@keyword.return'] = { link = "Conditional" },
   ['@module'] = { ctermfg=Colors.type_green.c, fg=Colors.type_green.g },  -- package <module>
 
   --['@constant'] = { link = "Constant" },
@@ -347,10 +350,10 @@ Highlights = {
   ['@field'] = { link = "@property" },
   ['@parameter'] = { link = "@property" },
 
-  --- 'printf' is a language.
-  ['@character.printf'] = { link = "SpecialChar" },
   --- \n \t ...
-  ['@string.escape'] = {ctermfg=180, fg='#ceb279'},
+  ['@string.escape'] = {ctermfg=180, fg='#d7ba7d'},
+  --- 'printf' is a language.
+  ['@character.printf'] = { link = "Label" },
 
   --['@function'] = { link = "Function" },
   --['@function.call'] = { link = "Function" },
@@ -364,6 +367,9 @@ Highlights = {
   ['@tag.delimiter'] = { ctermfg=Colors.g244.c, fg=Colors.g244.g },  -- html, <div></div>, <> 括号颜色
   ['@tag.attribute'] = { link = "@property" },  -- html, <... width=..., @tag.attribute=... >
   ['@punctuation.special'] = { link = 'Special' },  -- js, ts, console.log(`${ ... }`)
+
+  --- js / ts constructor. new Foo() 作为一个 type
+  ['@constructor'] = { link = "Type" },
 
   --- NOTE: 以下设置是为了配合 lazy load plugins ---------------------------------------------------
   --- 以下颜色为了 lazy load lualine
