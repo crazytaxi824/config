@@ -336,6 +336,7 @@ vim.opt.splitright = true  -- force all vertical splits to go to the right of cu
 vim.opt.scrolloff = 4  -- 在光标到达文件顶部/底部之前, 始终在光标上下留空 n 行. 同时会影响 H / L 键行为.
 vim.opt.sidescrolloff = 16  -- 和上面类似, 横向留空 n 列. NOTE: 配合 listchars 设置一起使用.
 
+--- popup widnow 不要设置 scrolloff & sidescrolloff.
 --- `:help win_gettype()`, 'popup' window setlocal scrolloff=0 | sidescrolloff=0
 vim.api.nvim_create_autocmd('WinEnter', {
   pattern = {"*"},
@@ -562,7 +563,7 @@ vim.api.nvim_create_user_command('SpellCheckToggle', function()
   end
 end, {bang=true, bar=true})
 
---- 其他设置
+--- help widnow 放到最右侧
 vim.api.nvim_create_autocmd("FileType", {
   pattern = {"help"},
   callback = function(params)
