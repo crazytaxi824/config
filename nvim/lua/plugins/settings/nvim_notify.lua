@@ -29,9 +29,9 @@ notify.setup({
     --vim.keymap.set('n', '<ESC>', '<cmd>q<CR>', {noremap=true, buffer=bufnr, desc="close window"})
   end,
 
-  timeout = 3000,     -- Default timeout for notifications
-
+  timeout = 5000,     -- Default timeout for notifications
   minimum_width = 50, -- Minimum width for notification windows
+
   --- Max number of columns for messages
   max_width = function()
     --- vim.go.columns 整个屏幕的宽度
@@ -48,7 +48,7 @@ notify.setup({
     ERROR = Nerd_icons.diag.error,
     WARN  = Nerd_icons.diag.warn,
     INFO  = Nerd_icons.diag.hint,
-    DEBUG = "",
+    DEBUG = "",  --  
     TRACE = "◍",
   },
 })
