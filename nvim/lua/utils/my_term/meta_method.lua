@@ -52,6 +52,7 @@ M.term_buf_exist = function (bufnr)
 end
 
 --- keymaps: for terminal buffer only -------------------------------------------------------------- {{{
+--- set keymaps for my_term terminal & output-buffer.
 local function set_buf_keymaps(term_obj)
   local opt = {buffer = term_obj.bufnr, silent = true, noremap = true}
   local keys = {
@@ -72,6 +73,7 @@ local function stop_job(term_obj)
   end
 end
 
+--- CTRL-C send interrupt signal to output-buffer ONLY. terminal already has this.
 local function set_output_buf_keymaps(term_obj)
   local opt = {buffer = term_obj.bufnr, silent = true, noremap = true}
   local keys = {
@@ -110,9 +112,9 @@ local function buf_scroll_bottom(term_obj)
   end
 
   vim.api.nvim_buf_call(term_obj.bufnr, function()
-    --- VVI: 只允许 Normal | terminal-Normal mode 下进行滚动, 因为 terminal insert mode 下无法使用 `normal! G`.
+    --- 在 terminal insert mode ( mode()=='t' ) 时无法使用 `normal! G`. 在 terminal 模式下默认会滚动到最底部.
     local info = vim.api.nvim_get_mode()
-    if info and (info.mode == "n" or info.mode == "nt") then vim.cmd("normal! G") end
+    if info and (info.mode ~= "t") then vim.cmd("normal! G") end
   end)
 end
 -- -- }}}
@@ -291,8 +293,7 @@ local function buf_job_output(term_obj)
     vim.api.nvim_set_option_value('signcolumn', 'no', { scope='local', win=win_id })
 
     --- listchars 添加空格标记
-    local listchars = vim.wo[win_id].listchars
-    listchars = listchars .. ',space:·'
+    local listchars = vim.wo[win_id].listchars .. ',space:·'
     vim.api.nvim_set_option_value('listchars', listchars, { scope='local', win=win_id })
   end)
 
@@ -519,7 +520,7 @@ M.metatable_funcs = function()
 
         return term_wins[1]
       else
-        --- 如果没有任何 window 显示该 termimal 则创建一个新的 window, 然后加载该 buffer.
+        --- 如果没有任何 window 显示该 terminal 则创建一个新的 window, 然后加载该 buffer.
         return M.create_term_win(self.bufnr)
       end
     end
