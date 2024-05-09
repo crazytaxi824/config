@@ -111,7 +111,7 @@ local keymaps = {
   {'v', '<Home>', function() key_fn.home_key.nowrap() end, opt, 'which_key_ignore'},
   {'i', '<Home>', '<C-o><cmd>lua require("utils.keymaps").home_key.nowrap()<CR>', opt, 'which_key_ignore'},
 
-  {'n', 'G', 'Gzz', opt, 'which_key_ignore'},  -- put last line in center
+  --{'n', 'G', 'Gzz', opt, 'which_key_ignore'},  -- put last line in center
 
   --- Tab ------------------------------------------------------------------------------------------
   {'n', '<Tab>', '<C-w><C-w>', opt, 'which_key_ignore'},  -- 切换到另一个窗口.
