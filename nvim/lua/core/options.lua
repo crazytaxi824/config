@@ -341,10 +341,12 @@ vim.opt.sidescrolloff = 16  -- 和上面类似, 横向留空 n 列. NOTE: 配合
 vim.api.nvim_create_autocmd('WinEnter', {
   pattern = {"*"},
   callback = function(params)
-    if vim.fn.win_gettype() == 'popup' then
+    local win_id = vim.api.nvim_get_current_win()
+    if vim.fn.win_gettype(win_id) == 'popup' then
       --- 'scrolloff' & 'sidescrolloff' 都是 `global or local to window`,
-      vim.opt_local.scrolloff = 0
-      vim.opt_local.sidescrolloff = 0
+      local scope={ scope='local', win=win_id }
+      vim.api.nvim_set_option_value('scrolloff', 0, scope)
+      vim.api.nvim_set_option_value('sidescrolloff', 0, scope)
     end
   end,
   desc = "setlocal scrolloff when enter floating window",
@@ -402,8 +404,10 @@ vim.api.nvim_create_autocmd("BufReadPre", {
   --- "~/.config/nvim/*" 中的所有 file 都使用 marker {{{xxx}}} 折叠.
   pattern = {vim.fn.stdpath('config') .. "/*"},
   callback = function(params)
-    vim.opt_local.foldmethod = "marker"
-    vim.opt_local.foldlevel = 0
+    local win_id = vim.api.nvim_get_current_win()
+    local scope={ scope='local', win=win_id }
+    vim.api.nvim_set_option_value('foldmethod', 'marker', scope)
+    vim.api.nvim_set_option_value('foldlevel', 0, scope)
   end,
   desc = "setlocal foldmethod = 'marker'",
 })
@@ -447,22 +451,22 @@ vim.opt.colorcolumn = '+1'  -- highlight column after 'textwidth'
 --   callback = function(params)
 --     --- 延迟执行避免 bug.
 --     vim.schedule(function()
---       local curr_win_id = vim.api.nvim_get_current_win()  -- get current window id
+--       local win_id = vim.api.nvim_get_current_win()  -- get current window id
 --
 --       --- WinEnter 时如果自己是 popup window 则不显示 cursorline, eg: nvim-notify 是 popup window.
 --       --- 'unknown' 表示 window 不存在.
---       local win_type = vim.fn.win_gettype(curr_win_id)
+--       local win_type = vim.fn.win_gettype(win_id)
 --       if win_type ~= 'popup' and win_type ~= 'unknown' then
 --         --- NOTE: 这里不能用 ':setlocal cursorline' 否则会作用在当前 buffer 上, 这里需要作用在整个 window 上.
 --         --- 'cursorline' 是 `local to window`, 这里使用 vim.wo.cursorline 相当于 `:set cursorline`,
 --         --vim.wo[curr_win_id].cursorline = true  -- OK
---         vim.api.nvim_set_option_value('cursorline', true, {win=curr_win_id})
+--         vim.api.nvim_set_option_value('cursorline', true, {win=win_id})
 --       end
 --
 --       --- 删除别的 window 中的 cursorline.
 --       --- diff 模式的 window 除外.
 --       for _, win_id in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
---         if win_id ~= curr_win_id and not vim.wo[win_id].diff then
+--         if win_id ~= win_id and not vim.wo[win_id].diff then
 --           --- NOTE: 这里不能用 ':setlocal cursorline' 否则会作用在当前 buffer 上, 这里需要作用在整个 window 上.
 --           --- 'cursorline' 是 `local to window`, 这里使用 vim.wo.cursorline 相当于 `:set cursorline`,
 --           --vim.wo[curr_win_id].cursorline = false  -- OK
@@ -556,10 +560,12 @@ vim.api.nvim_create_autocmd("CmdwinEnter", {
 --- spell check Command
 vim.opt.spelllang = "en_us,cjk"
 vim.api.nvim_create_user_command('SpellCheckToggle', function()
-  if vim.wo.spell then
-    vim.opt_local.spell = false
+  local win_id = vim.api.nvim_get_current_win()
+  local scope={ scope='local', win=win_id }
+  if vim.wo[win_id].spell then
+    vim.api.nvim_set_option_value('spell', false, scope)
   else
-    vim.opt_local.spell = true
+    vim.api.nvim_set_option_value('spell', true, scope)
   end
 end, {bang=true, bar=true})
 

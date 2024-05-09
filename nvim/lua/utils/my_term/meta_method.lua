@@ -278,14 +278,22 @@ end
 --- NOTE: neovim 是单线程, jobstart() 是异步函数.
 local function buf_job_output(term_obj)
   vim.api.nvim_buf_call(term_obj.bufnr, function()
-    vim.opt_local.wrap = true
-    -- vim.opt_local.number = false
-    vim.opt_local.relativenumber = false
-    vim.opt_local.signcolumn = "no"
+    local win_id = vim.api.nvim_get_current_win()
 
-    --- space 默认设置为和 trail 一样的 char.
-    local listchars = vim.opt_local.listchars:get()
-    vim.opt_local.listchars:append({space = listchars.trail or '·'})
+    --- 如果 window type 是 autocmd 表示 buffer 没有被任何 window 显示,
+    --- 被 nvim_buf_call() 临时打开了一个 window.
+    if vim.fn.win_gettype(win_id) == 'autocmd' then
+      return
+    end
+
+    vim.api.nvim_set_option_value('wrap', true, { scope='local', win=win_id })
+    vim.api.nvim_set_option_value('relativenumber', false, { scope='local', win=win_id })
+    vim.api.nvim_set_option_value('signcolumn', 'no', { scope='local', win=win_id })
+
+    --- listchars 添加空格标记
+    local listchars = vim.wo[win_id].listchars
+    listchars = listchars .. ',space:·'
+    vim.api.nvim_set_option_value('listchars', listchars, { scope='local', win=win_id })
   end)
 
   --- set bufname

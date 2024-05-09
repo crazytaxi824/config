@@ -82,13 +82,14 @@ vim.api.nvim_create_autocmd('OptionSet', {
   desc = "wrap: set (no)wrap triggers keymaps change, eg: <UP>, <HOME> ...",
 })
 
---- :bdelete/:bwipeout 之后再次打开已经设置为 wrap 的文件时, 自动设置为 wrap.
+--- :bwipeout 之后再次打开已经设置为 wrap 的文件时, 自动设置为 wrap.
 vim.api.nvim_create_autocmd('BufWinEnter', {
   pattern = {"*"},
   callback = function(params)
-    if wrap_list.exist(params.buf) then
+    local win_id = vim.api.nvim_get_current_win()
+    if wrap_list.exist(params.buf) and vim.api.nvim_win_get_buf(win_id) == params.buf then
       set_cursor_move_in_wrap(params.buf)  -- 设置 keymaps
-      vim.opt_local.wrap = true  -- setlocal wrap
+      vim.api.nvim_set_option_value('wrap', true, { scope='local', win=win_id })
     end
   end,
   desc = "wrap: set (no)wrap based on cached results",
@@ -104,11 +105,6 @@ vim.api.nvim_create_autocmd('BufWritePre', {
   end,
   desc = "wrap: [No Name] file cache to wrap_list",
 })
-
---- 使用 command 手动切换 wrap 设置.
-vim.api.nvim_create_user_command("WrapToggle", function()
-  vim.opt_local.wrap = not vim.wo.wrap
-end, {bang=true, bar=true})
 
 
 

@@ -5,10 +5,13 @@
 vim.api.nvim_create_autocmd('TermOpen', {
   pattern = {"*"},
   callback = function(params)
+    local win_id = vim.api.nvim_get_current_win()
+    local scope={ scope='local', win=win_id }
+
     --- 设置 terminal 不显示行号
-    vim.opt_local.number = false
-    vim.opt_local.relativenumber = false
-    vim.opt_local.signcolumn = "no"
+    vim.api.nvim_set_option_value('number', false, scope)
+    vim.api.nvim_set_option_value('relativenumber', false, scope)
+    vim.api.nvim_set_option_value('signcolumn', 'no', scope)
 
     --- VVI: <ESC> 进入 terminal Normal 模式.
     local opts = {buffer = params.buf, noremap = true, silent = true, desc = "Ternimal: Normal Mode"}
