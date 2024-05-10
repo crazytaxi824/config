@@ -342,7 +342,7 @@ Highlights = {
   ['@module'] = { ctermfg=Colors.type_green.c, fg=Colors.type_green.g },  -- package <module>
 
   --['@constant'] = { link = "Constant" },
-  ['@variable'] = { link = "Label" },
+  ['@variable'] = { link = "Normal" },
 
   ['@property'] = { link = "Label" },
   ['@property.private'] = { ctermfg=Colors.g246.c, fg=Colors.g246.g },  -- struct{ a:1 }
@@ -353,7 +353,7 @@ Highlights = {
   --- \n \t ...
   ['@string.escape'] = {ctermfg=180, fg='#d7ba7d'},
   --- 'printf' is a language.
-  ['@character.printf'] = { link = "Label" },
+  ['@character.printf'] = { link = "Special" },
 
   --['@function'] = { link = "Function" },
   --['@function.call'] = { link = "Function" },
