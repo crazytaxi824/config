@@ -25,9 +25,8 @@ vim.opt.rtp:prepend(lazypath)
 local plugins = {
   {
     "folke/lazy.nvim",
-    -- tag = "v10.20.3",
     -- version = "*",  -- 相当于 tag='stable'
-    commit = "d397434",
+    tag = "v10.20.4",
   },
 
   --- Performence & Functions ----------------------------------------------------------------------
@@ -86,7 +85,7 @@ local plugins = {
   --- but if you want to extend a query use the `after/queries/` directory.
   {
     "nvim-treesitter/nvim-treesitter",
-    commit = "fa1515b",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "0d2c80b",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     --build = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
     config = function() require("plugins.settings.treesitter") end,
     dependencies = {
@@ -156,7 +155,7 @@ local plugins = {
   --- Auto Completion ------------------------------------------------------------------------------
   {
     "hrsh7th/nvim-cmp",
-    commit = "cd2cf0c",
+    commit = "2412237",
     config = function() require("plugins.settings.cmp_completion") end,
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全
@@ -237,7 +236,7 @@ local plugins = {
   --- 官方 LSP 引擎.
   {
     "neovim/nvim-lspconfig",
-    commit = "a3d9395",
+    commit = "94513a5",
     config = function() require("lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全. NOTE: lspconfig 必须在 cmp_nvim_lsp 之后加载, 否则可能无法提供代码补全.
@@ -266,8 +265,7 @@ local plugins = {
   --- File explorer --------------------------------------------------------------------------------
   {
     "nvim-tree/nvim-tree.lua",
-    commit = "64f61e4",
-    -- tag = "nvim-tree-v1.3.1",
+    tag = "v1.3.2",
     config = function() require("plugins.settings.file_tree") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
 
