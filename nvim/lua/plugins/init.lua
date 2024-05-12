@@ -41,7 +41,7 @@ local plugins = {
   --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件
   {
     "williamboman/mason.nvim",
-    commit = "751b1fc",
+    commit = "e91ff44",
     -- tag = "v1.10.0",
     -- build = ":MasonUpdate", -- :MasonUpdate updates All Registries, NOT packages.
     config = function() require("plugins.settings.mason_tool_installer") end,
@@ -101,7 +101,7 @@ local plugins = {
   --- 第一方 module 插件 ---
   {
     "nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-    commit = "7f116ce",
+    commit = "1e52a2c",
     config = function() require("plugins.settings.treesitter_ctx") end,
 
     lazy = true,  -- nvim-treesitter 加载时自动加载.
