@@ -1,4 +1,4 @@
---- lazy 主要是一个 plugin 安装/管理插件. `:help lazy.nvim.txt`
+--- lazy 主要是一个 安装/管理插件. `:help lazy.nvim.txt`
 --- bootstrap -------------------------------------------------------------------------------------- {{{
 local lazydir = vim.fn.stdpath("data") .. "/lazy"
 local lazypath = lazydir .. "/lazy.nvim"
@@ -40,7 +40,7 @@ local plugins = {
   --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件
   {
     "williamboman/mason.nvim",
-    commit = "1b3d604",
+    commit = "49ff59a",
     -- tag = "v1.10.0",
     -- build = ":MasonUpdate", -- :MasonUpdate updates All Registries, NOT packages.
     config = function() require("plugins.settings.mason_tool_installer") end,
@@ -85,7 +85,7 @@ local plugins = {
   --- but if you want to extend a query use the `after/queries/` directory.
   {
     "nvim-treesitter/nvim-treesitter",
-    commit = "0d2c80b",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "f224fef",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     --build = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
     config = function() require("plugins.settings.treesitter") end,
     dependencies = {
@@ -100,7 +100,7 @@ local plugins = {
   --- 第一方 module 插件 ---
   {
     "nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-    commit = "1e52a2c",
+    commit = "df58c81",
     config = function() require("plugins.settings.treesitter_ctx") end,
 
     lazy = true,  -- nvim-treesitter 加载时自动加载.
@@ -236,7 +236,7 @@ local plugins = {
   --- 官方 LSP 引擎.
   {
     "neovim/nvim-lspconfig",
-    commit = "94513a5",
+    commit = "a27179f",
     config = function() require("lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全. NOTE: lspconfig 必须在 cmp_nvim_lsp 之后加载, 否则可能无法提供代码补全.
@@ -247,7 +247,7 @@ local plugins = {
   --- VVI: "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
-    commit = "f5632db",
+    commit = "10c976d",
     config = function() require("lsp.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -256,7 +256,7 @@ local plugins = {
 
   {
     "stevearc/conform.nvim",
-    commit = "dc950e5",
+    commit = "59d0dd2",
     config = function() require("plugins.settings.formatter_confrom") end,
 
     event = "VeryLazy",
@@ -275,7 +275,7 @@ local plugins = {
 
   {
     "nvim-tree/nvim-web-devicons",
-    commit = "5b90678",
+    commit = "e37bb1f",
 
     lazy = true, -- dep of nvim-tree & bufferline
   },
