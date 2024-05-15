@@ -45,7 +45,7 @@ which_key.setup({
   },
 
   icons = {
-    separator = Nerd_icons.arrows.right, -- symbol used between a key and it's label
+    separator = "»", -- symbol used between a key and it's label
   },
 
   --- NOTE: override the label used to display some keys.
