@@ -44,12 +44,12 @@ dapui.setup({
     --- VVI: Display controls in this element
     element = "repl",  -- repl | watches | stacks | scopes | console
     icons = {
-      play = "[ Continue 󰘶F5]",  -- ▶️ 
-      step_over = "[ Over F10]",  -- ↷ ⨠
-      step_into = "[󰆹 Into F11]",  -- ⇩↧⊻
-      step_out  = "[󰆸 Out 󰘶F11]",   -- ⇧↥⊼
-      run_last  = "[ Restart 󰘴F5]",   -- ↻⟳
-      terminate = "[ Stop 󰘴󰘶F5]",  -- ■
+      play      = " (󰘶F5)",  -- ▶️ 
+      step_over = " (F10)",  -- ↷ ⨠
+      step_into = "󰆹 (F11)",  -- ⇩↧⊻
+      step_out  = "󰆸 (󰘶F11)",   -- ⇧↥⊼
+      run_last  = " (󰘴F5)",   -- ↻⟳
+      terminate = " (󰘴󰘶F5)",  -- ■
 
       --- 不常用
       disconnect = "",
