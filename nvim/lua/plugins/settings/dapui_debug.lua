@@ -10,6 +10,7 @@ dapui.setup({
     edit = "e",
     remove = "d",
     repl = "r",
+
     open = "o",   -- eg: jump to breakpoints
     toggle = "T", -- eg: toggle breakpoints. 't' keymap 冲突.
   },
@@ -43,12 +44,12 @@ dapui.setup({
     --- VVI: Display controls in this element
     element = "repl",  -- repl | watches | stacks | scopes | console
     icons = {
-      play = "[ Continue]",  -- ▶️ 
+      play = "[ Continue 󰘶F5]",  -- ▶️ 
       step_over = "[ Over F10]",  -- ↷ ⨠
       step_into = "[󰆹 Into F11]",  -- ⇩↧⊻
       step_out  = "[󰆸 Out 󰘶F11]",   -- ⇧↥⊼
-      run_last  = "[ Restart]",   -- ↻⟳
-      terminate = "[ Stop]",  -- ■
+      run_last  = "[ Restart 󰘴F5]",   -- ↻⟳
+      terminate = "[ Stop 󰘴󰘶F5]",  -- ■
 
       --- 不常用
       disconnect = "",
