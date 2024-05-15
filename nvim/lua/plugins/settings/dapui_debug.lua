@@ -10,22 +10,22 @@ dapui.setup({
     edit = "e",
     remove = "d",
     repl = "r",
-    open = "o",
-    toggle = "T",  -- 't' keymap 冲突.
+
+    open = "o",   -- eg: jump to breakpoints
+    toggle = "T", -- eg: toggle breakpoints. 't' keymap 冲突.
   },
 
   layouts = {
     {
       elements = {
         --- NOTE: 顺序有影响.
-        --{ id = "scopes", size = 0.25 },  -- Elements can be strings or table with id and size keys.
         "scopes",
         "watches",
-        "breakpoints",
-        "stacks",
+        { id = "breakpoints", size = 0.3 },  -- Elements can be strings or table with id and size keys.
+        --{ id = "stacks", size = 0.25 },  -- Elements can be strings or table with id and size keys.
       },
       position = "left",
-      size = 0.32, -- columns (width)
+      size = 0.4, -- columns (width)
     },
     {
       elements = {
@@ -33,7 +33,7 @@ dapui.setup({
         --"console",  -- dapui console, 在 go 中没用.
       },
       position = "bottom",
-      size = 0.25, -- 25% of total lines (height)
+      size = 0.3, -- 25% of total lines (height)
     },
   },
 
@@ -41,15 +41,15 @@ dapui.setup({
   controls = {
     --- NOTE: dapui controls enable 之后无法删除 [dap-repl] buffer.
     enabled = true,
-    --- Display controls in this element
-    element = "repl",
+    --- VVI: Display controls in this element
+    element = "repl",  -- repl | watches | stacks | scopes | console
     icons = {
-      play = "[ Continue]",  -- ▶️ 
-      step_over = "[ Over <F10>]",  -- ↷ ⨠
-      step_into = "[󰆹 Into <F11>]",  -- ⇩↧⊻
-      step_out  = "[󰆸 Out <S-F11>]",   -- ⇧↥⊼
-      run_last  = "[ Restart]",   -- ↻⟳
-      terminate = "[ Stop]",  -- ■
+      play      = " (󰘶F5)",  -- ▶️ 
+      step_over = " (F10)",  -- ↷ ⨠
+      step_into = "󰆹 (F11)",  -- ⇩↧⊻
+      step_out  = "󰆸 (󰘶F11)",   -- ⇧↥⊼
+      run_last  = " (󰘴F5)",   -- ↻⟳
+      terminate = " (󰘴󰘶F5)",  -- ■
 
       --- 不常用
       disconnect = "",

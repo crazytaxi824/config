@@ -88,27 +88,24 @@ vim.fn.sign_define("DapStopped", { text = "", texthl = "DapStoppedHL", numhl 
 
 --- functions -------------------------------------------------------------------------------------- {{{
 --- NOTE: 通过 set/get tab var 来确定 debug_tab 是否存在.
-local tabvar_debug = "my_debug_dap"
+local tabvar_dap = "my_debug_tab_main_winid"
 
 --- open a new tab for debug
 local function open_new_tab_for_debug()
   --- if debug tab exists, jump to debug tab.
   for _, tab_id in pairs(vim.api.nvim_list_tabpages()) do
-    if vim.t[tab_id][tabvar_debug] then
+    if vim.t[tab_id][tabvar_dap] then
       vim.cmd('normal! '.. vim.api.nvim_tabpage_get_number(tab_id) .. 'gt')  -- 1gt | 2gt jump to tab, NOTE: tabnr NOT tab_id
       return
     end
   end
 
   --- if debug tab NOT exist, open a new tab for debug.
-  vim.cmd('tabnew '..vim.fn.bufname())
+  local bufnr = vim.api.nvim_get_current_buf()
+  vim.cmd('tabnew '..vim.api.nvim_buf_get_name(bufnr))
 
   --- 标记该 tab.
-  local curr_tab_id = vim.api.nvim_get_current_tabpage()
-  vim.t[curr_tab_id][tabvar_debug] = true
-
-  --- 返回 win id
-  return vim.api.nvim_get_current_win()
+  vim.t[tabvar_dap] = vim.api.nvim_get_current_win()
 end
 
 --- terminate debug && close debug tab/buffers
@@ -131,14 +128,13 @@ local function close_debug_tab_and_buffers()
     local tab_list = vim.api.nvim_list_tabpages()
     if #tab_list < 2 then
       --- 删除 tabvar
-      local curr_tab_id = vim.api.nvim_get_current_tabpage()
-      vim.t[curr_tab_id][tabvar_debug] = nil
+      vim.t[tabvar_dap] = nil
       return
     end
 
     --- close debug tab
     for _, tab_id in pairs(tab_list) do
-      if vim.t[tab_id][tabvar_debug] then
+      if vim.t[tab_id][tabvar_dap] then
         vim.cmd('tabclose ' .. vim.api.nvim_tabpage_get_number(tab_id)) -- NOTE: `:tabclose tabnr` NOT tab_id
       end
     end
@@ -201,16 +197,38 @@ end
 --- TODO: 在进入 debug 模式时设置 keymaps, 退出 debug 模式时删除 keymaps.
 local opt = { noremap = true, silent = true }
 local debug_keymaps = {
-  {'n', '<leader>cs', function() dap.continue() end,  opt, 'debug: Start(Continue)'},
-  {'n', '<leader>ce', function() dap.terminate() end, opt, 'debug: Stop(End)'},
-  {'n', '<leader>cr', function() dap.run_last() end,  opt, 'debug: Restart'},
-  {'n', '<leader>cq', function() close_debug_tab_and_buffers() end, opt, 'debug: Quit'},
+  --- <S-F5>
+  {'n', '<F17>', function() dap.continue() end,  opt, 'debug: Start(Continue)'},
+  --- <C-S-F5>
+  {'n', '<F41>', function() dap.terminate() end, opt, 'debug: Stop(End)'},
+  --- <C-F5>
+  {'n', '<F29>', function()
+    if vim.fn.win_gotoid(vim.t[tabvar_dap]) == 1 then
+      dap.run_last()
+    end
+  end,  opt, 'debug: Restart'},
 
   --{'n', '<F9>', function() dap.toggle_breakpoint() end, opt, "debug: Toggle Breakpoint"},  -- 在 after/ftplugin/go/debug_cmd.lua 中设置.
-  {'n', '<F21>', function() dap.clear_breakpoints() end, opt, "debug: Clear Breakpoints"},  -- <S-f9>
-  {'n', '<F10>', function() dap.step_over() end, opt, "debug: Step Over"},
-  {'n', '<F11>', function() dap.step_into() end, opt, "debug: Step Into"},
-  {'n', '<F23>', function() dap.step_out() end,  opt, "debug: Step Out"},  -- <S-F11>
+  {'n', '<F10>', function()
+    if vim.fn.win_gotoid(vim.t[tabvar_dap]) == 1 then
+      dap.step_over()
+    end
+  end, opt, "debug: Step Over"},
+
+  {'n', '<F11>', function()
+    if vim.fn.win_gotoid(vim.t[tabvar_dap]) == 1 then
+      dap.step_into()
+    end
+  end, opt, "debug: Step Into"},
+  --- <S-F11>
+  {'n', '<F23>', function()
+    if vim.fn.win_gotoid(vim.t[tabvar_dap]) == 1 then
+      dap.step_out()
+    end
+  end,  opt, "debug: Step Out"},
+
+  {'n', '<leader>cb', function() dap.clear_breakpoints() end, opt, "debug: Clear Breakpoints"},
+  {'n', '<leader>cq', function() close_debug_tab_and_buffers() end, opt, 'debug: Quit'},
 }
 
 require('utils.keymaps').set(debug_keymaps)
