@@ -23,10 +23,10 @@ local function check_module()
   for _, req in ipairs(require_list) do
     local status_ok, _ = pcall(require, req)
     if status_ok then
-      health.report_ok('require("' .. req .. '") Success')
+      health.ok('require("' .. req .. '") Success')
     else
       table.insert(err_list, req)
-      health.report_error('require("' .. req .. '") Failed')
+      health.error('require("' .. req .. '") Failed')
     end
   end
 
@@ -57,13 +57,13 @@ local function check_plugin_funcs()
     --- 使用loadstring (Lua 5.1) 或 load (Lua 5.2及更高版本) 函数将表达式编译成函数
     local fn, err = load("return " .. fn_str)
     if err then
-      health.report_error(fn_str .. ' is not Exist. Error: ' .. err)
+      health.error(fn_str .. ' is not Exist. Error: ' .. err)
     end
 
     if fn and fn() ~= nil then
-      health.report_ok(fn_str .. ' Exists')
+      health.ok(fn_str .. ' Exists')
     else
-      health.report_error(fn_str .. ' is not Exist.')
+      health.error(fn_str .. ' is not Exist.')
     end
   end
 end
@@ -90,7 +90,7 @@ local function check_cmd_tools(tools)
   for name, tool in pairs(tools) do
     local result = vim.fn.system('which ' .. tool.cmd)
     if vim.v.shell_error == 0 then
-      health.report_ok(name)
+      health.ok(name)
     else
       local errmsg = {name .. ':'}
       if tool.install then
@@ -99,7 +99,7 @@ local function check_cmd_tools(tools)
       if tool.mason then
         table.insert(errmsg, '  - `:MasonInstall ' .. tool.mason .. '`')
       end
-      health.report_error(table.concat(errmsg, '\n'))
+      health.error(table.concat(errmsg, '\n'))
     end
   end
 end
@@ -127,7 +127,7 @@ local function check_mason_tools()
   local t = vim.tbl_filter(function(elem)
     for _, pkg in ipairs(pkgs) do
       if elem == pkg.name then
-        health.report_ok(elem)
+        health.ok(elem)
         return false
       end
     end
@@ -135,7 +135,7 @@ local function check_mason_tools()
   end, mason_tools)
 
   for _, tool in ipairs(t) do
-    health.report_error(tool)
+    health.error(tool)
   end
 end
 
@@ -143,28 +143,28 @@ end
 
 M.check = function()
   --- command line tools
-  health.report_start("check command line tools")
+  health.start("check command line tools")
   check_cmd_tools(cmd_tools)
 
   --- lsp tools
   local lsp_servers_map = require('lsp.svr_list').list
-  health.report_start("check LSP tools")
+  health.start("check LSP tools")
   check_cmd_tools(lsp_servers_map)
 
   --- mason tools
-  health.report_start("check mason tools")
+  health.start("check mason tools")
   check_mason_tools()
 
   --- module availability check
-  health.report_start("check HACK modules availability")
+  health.start("check HACK modules availability")
   local errs = check_module()
   if errs then
-    health.report_warn('function check aborts due to error in module check.')
+    health.warn('function check aborts due to error in module check.')
     return
   end
 
   --- funciton availability check
-  health.report_start("check HACK functions availability")
+  health.start("check HACK functions availability")
   check_plugin_funcs()
 end
 
