@@ -227,12 +227,17 @@ Highlights = {
   --- DiagnosticVirtualText - virtual_text 显示的颜色.
   --- DiagnosticUnderlineXXX - code 中显示错误的位置.
   --- 以上 highlight 默认 link to DiagnosticXXX.
+  DiagnosticOk    = {ctermfg=Colors.green.c, fg=Colors.green.g},
   DiagnosticHint  = {ctermfg=Colors.hint_grey.c, fg=Colors.hint_grey.g},
   DiagnosticInfo  = {ctermfg=Colors.blue.c, fg=Colors.blue.g},
   DiagnosticWarn  = {ctermfg=Colors.orange.c, fg=Colors.orange.g},
   DiagnosticError = {ctermfg=Colors.red.c, fg=Colors.red.g},
 
   --- NOTE: `:help undercurl` sp(guisp) color 改变 undercurl, underline, underdashed ... 颜色.
+  DiagnosticUnderlineOk = {
+    ctermfg=Colors.green.c, fg=Colors.green.g,
+    sp=Colors.green.g, underline=true,
+  },
   DiagnosticUnderlineHint = {
     ctermfg=Colors.hint_grey.c, fg=Colors.hint_grey.g,
     sp=Colors.hint_grey.g, undercurl=true,
