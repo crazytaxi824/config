@@ -107,37 +107,46 @@ local function hover_short_handler(err, result, req, config)
 
   config = config or {}
   config.focus_id = req.method
-
-  -- NOTE: open_floating_preview() 自定义设置
-  config.focusable = false
-  config.border = Nerd_icons.border
-  config.close_events = {"WinScrolled"}  -- 默认 {"CursorMoved", "CursorMovedI", "InsertCharPre"}
+  if vim.api.nvim_get_current_buf() ~= req.bufnr then
+    -- Ignore result since buffer changed. This happens for slow language servers.
+    return
+  end
 
   if not (result and result.contents) then
-    vim.notify('No information available')
-    return
-  end
-
-  --- split string to text list
-  local mls = vim.lsp.util.convert_input_to_markdown_lines(result.contents)
-
-  -- NOTE: 寻找 "```" end line, 忽略后面的所有内容.
-  local markdown_lines = {}
-  for _, line in ipairs(mls) do
-    table.insert(markdown_lines, line)
-    if line == '```' then
-      break
+    if config.silent ~= true then
+      vim.notify('No information available')
     end
-  end
-
-  --vim.print(markdown_lines)  -- DEBUG
-
-  if vim.tbl_isempty(markdown_lines) then
-    vim.notify('No information available')
     return
   end
 
-  return vim.lsp.util.open_floating_preview(markdown_lines, "markdown", config)
+  local format = 'markdown'  -- defauit: markdown
+  local contents  ---@type string[]
+  if type(result.contents) == 'table' and result.contents.kind == 'plaintext' then
+    format = 'plaintext'
+    contents = vim.split(result.contents.value or '', '\n', { trimempty = true })
+  else
+    contents = vim.lsp.util.convert_input_to_markdown_lines(result.contents)
+
+    --- NOTE: 寻找 "```" end line, 忽略后面的所有内容.
+    local tmp = {}
+    for _, line in ipairs(contents) do
+      table.insert(tmp, line)
+      if line == '```' then
+        break
+      end
+    end
+
+    contents = tmp
+  end
+
+  if vim.tbl_isempty(contents) then
+    if config.silent ~= true then
+      vim.notify('No information available')
+    end
+    return
+  end
+
+  return vim.lsp.util.open_floating_preview(contents, format, config)
 end
 
 --- vim.lsp.buf_request() ------------------------------------------------------
@@ -166,7 +175,10 @@ M.hover_short = function()
       {
         offset_x = result.offset_x,
         offset_y = result.offset_y,
+        focusable = false,
+        border = Nerd_icons.border,
         anchor_bias = 'above',
+        close_events = {"WinScrolled"},  -- 默认 {"CursorMoved", "CursorMovedI", "InsertCharPre"}
       }
     )
   )
