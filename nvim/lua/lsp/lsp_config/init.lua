@@ -84,7 +84,7 @@ vim.api.nvim_create_autocmd("FileType", {
       --- `set filetype` 后, detach 所有不匹配该 buffer 新 filetype 的 lsp client.
       --- NOTE: 排除 null-ls
       if c.name ~= 'null-ls'
-        and not vim.tbl_contains(c.config.filetypes, vim.bo[params.buf].filetype)
+        and not vim.tbl_contains(c.config['filetypes'], vim.bo[params.buf].filetype)
       then
         vim.lsp.buf_detach_client(params.buf, c.id)
       end
