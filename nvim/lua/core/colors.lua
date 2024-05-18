@@ -408,6 +408,7 @@ Highlights = {
   typescriptImport = {link = 'Conditional'},
 
   --- NOTE: v0.10.0 --------------------------------------------------------------------------------
+  CurSearch = { link = "IncSearch" },
 }
 
 --- nvim_set_hl()
