@@ -20,19 +20,21 @@ ts_configs.setup {
   --- NOTE: 推荐使用黑名单 (ignore_install), 因为某些语言有多个 parsers, 使用白名单时可能导致遗漏.
   -- ensure_installed = "all",
   ensure_installed = {  ---------------------------------------------------- {{{
-    "vim", "vimdoc", "query", "lua", "c", "comment",  -- VVI: necessary for neovim itself
+    --- VVI: necessary for neovim itself
+    "vim", "vimdoc", "query", "lua", "c", "comment",
 
     --- git
     "gitignore", "gitattributes",
     -- "git_config", "diff", "git_rebase", "gitcommit",  -- testing
 
-    --- comment languages & filetypes
+    --- languages & filetypes
     "javascript", "typescript", "html", "css", "scss", -- "svelte", "vue", "tsx",
     "go", "gomod", "gosum", "gowork", "gotmpl", "printf",
     "python", "bash", "ruby", "perl",
     "markdown", "markdown_inline", "latex", "mermaid",
     "json", "jsonc", "toml", "yaml",
     "csv", "xml", "regex", "proto", "dockerfile",
+    "ssh_config",
   },
   -- -- }}}
 
