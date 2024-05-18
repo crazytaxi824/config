@@ -13,6 +13,7 @@ end
 --local treesitter_parsers_path = vim.fn.stdpath('data') .. '/treesitter_parser'
 --vim.opt.runtimepath:append(treesitter_parsers_path)
 
+--- `:help nvim-treesitter`
 ts_configs.setup {
   --- supported langs, https://github.com/nvim-treesitter/nvim-treesitter#supported-languages
   --- 白名单, ts 启动时自动安装, "all" OR a list of languages.
@@ -64,8 +65,8 @@ ts_configs.setup {
       end
 
       local max_filesize = 300 * 1024 -- 300 KB
-      local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))  -- 获取 filesize
-      if ok and stats and stats.size > max_filesize then
+      local stats = vim.uv.fs_stat(vim.api.nvim_buf_get_name(buf)) -- 获取 filesize
+      if stats and stats.size > max_filesize then
         return true
       end
     end,
