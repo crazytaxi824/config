@@ -1,17 +1,13 @@
 --- Overwrite handler 设置
 --- DOCS: 使用 with() 方法. `:help lsp-handler-configuration`
---- `:help vim.diagnostic.Opts`
---- `:help vim.lsp.util.open_floating_preview()`
---- `:help vim.lsp.util.make_floating_popup_options()`
---- `:help nvim_open_win()`
 --- DOCS: `:help lsp-api` lsp-method 显示 textDocument/... 列表
 
 --- 'textDocument/publishDiagnostics' settings ------------------------------------------------------
---- `:help vim.lsp.diagnostic.on_publish_diagnostics()`
---- NOTE: 会影响 vim.diagnostic.config() 设置.
+--- DOCS: `:help vim.lsp.diagnostic.on_publish_diagnostics()` & `:help vim.diagnostic.Opts`
+--- VVI: vim.lsp.with(publishDiagnostics) 可以 Overwrite 的配置只有 `:help vim.diagnostic.Opts`,
+--- 如果想要调整 'float' 的设置必须在 `vim.diagnostic.config()` 中设置, eg: 'anchor_bias', 'border', 'focusable' ...
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   vim.lsp.handlers["textDocument/publishDiagnostics"], {
-    --- `:help vim.diagnostic.Opts`
     --- 使用 virtual_text 显示 diagnostic message.
     virtual_text = false,
     -- virtual_text = {
