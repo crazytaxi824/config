@@ -25,7 +25,7 @@ local function find_ts_root_node()
   --- "lang", default filetype.
   local tsparser_status_ok, tsparser = pcall(vim.treesitter.get_parser, 0, lang)
   if not tsparser_status_ok then
-    vim.notify(tsparser, vim.log.levels.WARN)
+    vim.notify(vim.inspect(tsparser), vim.log.levels.WARN)
     return
   end
 
