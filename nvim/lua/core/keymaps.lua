@@ -255,7 +255,12 @@ local keymaps = {
 
   --- NOTE: v0.10.0 --------------------------------------------------------------------------------
   --- BUG: conflict to 'gcc', `:help commenting`
-  {'n', 'gc', '<Nop>'},
+  {'n', 'gc', '<Nop>', opt},
+
+  --- NOTE: `gc` & `gcc` is remap by default.
+  {'n', '<M-/>', 'gcc', {remap=true, noremap=false}, 'Comment current line'},
+  {'i', '<M-/>', '<C-o>gcc', {remap=true, noremap=false}, 'Comment current line'},
+  {'v', '<M-/>', 'gc', {remap=true, noremap=false}, 'Comment Visual selected'},
 }
 
 --- 这里是设置所有 key mapping 的地方 --------------------------------------------------------------
