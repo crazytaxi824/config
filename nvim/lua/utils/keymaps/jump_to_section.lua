@@ -58,7 +58,7 @@ local function ts_root_children()
   end
 end
 
-local function nodes_around_cursor()
+local function current_node()
   local root_children = ts_root_children()
   if not root_children then
     return
@@ -68,11 +68,10 @@ local function nodes_around_cursor()
 
   for index in ipairs(root_children) do
     local node_line = root_children[index]:start()  -- {line, col, bytes}, 从 0 开始计算.
-    if cursor_lnum < node_line+1 then
+    if cursor_lnum <= node_line then
       return {
-        prev = root_children[index-2],
-        current = root_children[index-1],
-        next = root_children[index],
+        index = index-1,
+        root_nodes = root_children,
         cursor_lnum = cursor_lnum,
       }
     end
@@ -80,60 +79,57 @@ local function nodes_around_cursor()
 
   -- cursor at last node
   return {
-    prev = root_children[#root_children-1],
-    current = root_children[#root_children],
-    next = nil,
+    index = #root_children,
+    root_nodes = root_children,
     cursor_lnum = cursor_lnum,
   }
 end
 
 --- jump_to_prev_section
 M.prev = function()
-  local result = nodes_around_cursor()
-  if not result then
+  local c_node = current_node()
+  if not c_node then
     return
   end
 
-  if result.current then
-    --- NOTE: cursor line < first non comment node 的情况下 result.current = nil.
-    local current_node_lnum = result.current:start()
+  --- NOTE: cursor line < first non comment node 的情况下 result.current = nil.
+  local current_node_first_lnum = c_node.root_nodes[c_node.index]:start() +1
 
-    if result.cursor_lnum == current_node_lnum+1 then
-      -- cursor 在 current_node 第一行.
-      if result.prev then
-        local prev_node_lnum = result.prev:start()
-        vim.fn.cursor(prev_node_lnum+1, 1)
-      else
-        --- 自己是 first node's first line 的情况
-        vim.notify("it's first node in this buffer", vim.log.levels.INFO)
-      end
+  --- cursor 在 current_node 第一行.
+  if c_node.cursor_lnum == current_node_first_lnum then
+    local prev_node = c_node.root_nodes[c_node.index-1]
+    if prev_node then
+      local prev_node_lnum = prev_node:start() +1
+      vim.fn.cursor(prev_node_lnum, 1)
     else
-      --- jump to cursor current node first line.
-      vim.fn.cursor(current_node_lnum+1, 1)
+      --- 自己是 first node's first line 的情况
+      vim.notify("it's first node in this buffer", vim.log.levels.INFO)
     end
   else
-    vim.notify("it's first node in this buffer", vim.log.levels.INFO)
+    --- jump to cursor current node first line.
+    vim.fn.cursor(current_node_first_lnum, 1)
   end
 end
 
 --- jump_to_next_section
 M.next = function()
-  local result = nodes_around_cursor()
-  if not result then
+  local c_node = current_node()
+  if not c_node then
     return
   end
 
-  if result.next then
-    local next_node_lnum = result.next:start()
-    vim.fn.cursor(next_node_lnum+1, 1)
+  local next_node = c_node.root_nodes[c_node.index+1]
+
+  if next_node then
+    local next_node_lnum = next_node:start() +1
+    vim.fn.cursor(next_node_lnum, 1)
   else
-    --- NOTE: cursor_line > last node's last line 的情况.
-    local current_node_last_line = result.current:end_()
-    if result.cursor_lnum < current_node_last_line+1 then
-      -- jump to last node's last line
-      vim.fn.cursor(current_node_last_line+1, 1)
+    local current_node_last_line = c_node.root_nodes[c_node.index]:end_() +1
+    if c_node.cursor_lnum < current_node_last_line then
+      --- jump to last node's last line
+      vim.fn.cursor(current_node_last_line, 1)
     else
-      --- 自己在 last node's last line 的情况
+      --- NOTE: cursor_line >= last node's last line 的情况.
       vim.notify("it's last node in this buffer", vim.log.levels.INFO)
     end
   end
