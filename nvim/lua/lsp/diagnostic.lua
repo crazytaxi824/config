@@ -50,7 +50,6 @@ local config = {
   float = {
     focusable = false,
     style = "minimal",
-    --border = "single",  -- `:help nvim_open_win()`
     border = Nerd_icons.border,
     source = true,   -- diagnostic message 中带 linter 名字
     header = "",

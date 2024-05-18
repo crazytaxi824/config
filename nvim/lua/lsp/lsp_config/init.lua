@@ -10,7 +10,7 @@ end
 
 --- change `:LspInfo` border, `:help lspconfig-highlight`
 require('lspconfig.ui.windows').default_options.border = Nerd_icons.border
-vim.cmd('hi! link LspInfoBorder FloatBorder')
+vim.api.nvim_set_hl(0, 'LspInfoBorder', {link = 'FloatBorder'})
 
 --- 需要设置的 lsp 列表.
 local lsp_servers_map = require('lsp.svr_list').list

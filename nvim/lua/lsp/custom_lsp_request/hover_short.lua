@@ -176,7 +176,7 @@ M.hover_short = function()
         offset_x = result.offset_x,
         offset_y = result.offset_y,
         focusable = false,
-        border = Nerd_icons.border,
+        border = {"","","","█","","","","█"},
         anchor_bias = 'above',
         close_events = {"WinScrolled"},  -- 默认 {"CursorMoved", "CursorMovedI", "InsertCharPre"}
       }

@@ -44,7 +44,7 @@ vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
     --- `:help vim.lsp.util.make_floating_popup_options()`
     --- `:help nvim_open_win()`
     focusable = false,  -- false: 重复执行 vim.lsp.buf.hover() 时不会进入 floating window.
-    border = Nerd_icons.border,
+    border = {"","","","█","▀","▀","▀","█"},
     anchor_bias = 'above',  -- popup window 优先向上弹出
 
     --- events, to trigger close floating window
