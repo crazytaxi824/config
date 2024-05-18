@@ -118,8 +118,8 @@ local function hover_short_handler(err, result, req, config)
     return
   end
 
-  local mls = vim.lsp.util.convert_input_to_markdown_lines(result.contents)  -- split string to text list
-  mls = vim.lsp.util.trim_empty_lines(mls)  -- Removes empty lines from the beginning and end
+  --- split string to text list
+  local mls = vim.lsp.util.convert_input_to_markdown_lines(result.contents)
 
   -- NOTE: 寻找 "```" end line, 忽略后面的所有内容.
   local markdown_lines = {}
@@ -166,6 +166,7 @@ M.hover_short = function()
       {
         offset_x = result.offset_x,
         offset_y = result.offset_y,
+        anchor_bias = 'above',
       }
     )
   )

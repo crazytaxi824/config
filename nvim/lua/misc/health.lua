@@ -38,7 +38,6 @@ end
 local funcs_list = {
   'require("lspconfig.configs")',
   'vim.lsp.buf_request',
-  'vim.lsp.util.make_floating_popup_options',
 
   'require("nvim-treesitter.parsers").get_buf_lang',
   'require("nvim-treesitter.parsers").has_parser',
