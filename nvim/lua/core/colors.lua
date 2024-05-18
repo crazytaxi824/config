@@ -110,7 +110,8 @@ Highlights = {
   --- 影响 listchars indentLine 颜色
   NonText = {ctermfg=Colors.g238.c, fg=Colors.g238.g},
   --- window 之间的分隔线颜色
-  VertSplit = {ctermfg=Colors.g236.c, fg=Colors.g236.g},
+  WinSeparator = {ctermfg=Colors.g236.c, fg=Colors.g236.g},
+  VertSplit = {link = 'WinSeparator'},
   --- 括号匹配颜色
   MatchParen = {
     ctermfg=Colors.yellow.c, fg=Colors.yellow.g,
@@ -405,6 +406,8 @@ Highlights = {
   typescriptInterfaceName = {link = 'Type'},
   typescriptExport = {link = 'Keyword'},
   typescriptImport = {link = 'Conditional'},
+
+  --- NOTE: v0.10.0 --------------------------------------------------------------------------------
 }
 
 --- nvim_set_hl()
