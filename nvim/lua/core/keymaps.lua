@@ -218,7 +218,7 @@ local keymaps = {
   {'n', 'tO', function() mt.open_all() end,    opt, "my_term: open All Terminals windows"},
   {'n', 'tT', function() mt.toggle_all() end,  opt, "my_term: toggle All Terminals windows"},
   {'n', 'tW', function() mt.wipeout_all() end, opt, "my_term: wipeout All Terminals"},
-  -- {'n', 'tW', function() key_fn.wipe_all_term_bufs() end, opt, "terminal: wipeout All Terminals"},
+  -- {'n', 'tW', function() key_fn.wipe_all_term_bufs() end, opt, "terminal: wipeout All Terminals"},  -- alternative
 
   --- 其他 -----------------------------------------------------------------------------------------
   --- ZZ same as `:x`

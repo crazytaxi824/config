@@ -375,10 +375,10 @@ M.create_term_win = function(bufnr)
   local exist_win_id = find_exist_term_win()
   if vim.fn.win_gotoid(exist_win_id) == 1 then
     --- at least 1 terminal window exist
-    vim.cmd('vertical rightbelow sbuffer ' .. bufnr)
+    vim.api.nvim_open_win(bufnr, true, {split='right'})
   else
     --- no terminal window exist, create a botright window for terminals.
-    vim.cmd('horizontal botright sbuffer' .. bufnr .. ' | resize ' .. win_height)
+    vim.api.nvim_open_win(bufnr, true, {height=win_height, split='below'})
   end
 
   --- return win_id
