@@ -247,7 +247,6 @@ local keymaps = {
   --{'n', '>', ':bnext<CR>', opt, 'go to next buffer'},
 
   --- hi Normal ctermbg=234 | hi Normal ctermbg=NONE 切换 bg 颜色
-  --{'n', '<leader>b', function() key_fn.toggle_editor_bg_color() end, opt, 'change editor background color'},
   {'n', '<leader>C', function() key_fn.toggle_comments_color() end, opt, 'change Comments color'},
 
   --- alacritty settings window.option_as_alt 设置 Option 当做 ALT key 使用.
