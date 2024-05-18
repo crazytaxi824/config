@@ -261,6 +261,22 @@ local keymaps = {
   {'n', '<M-/>', 'gcc', {remap=true, noremap=false}, 'Comment current line'},
   {'i', '<M-/>', '<C-o>gcc', {remap=true, noremap=false}, 'Comment current line'},
   {'v', '<M-/>', 'gc', {remap=true, noremap=false}, 'Comment Visual selected'},
+
+  --- 使用 gj / gk / g0 / g$ 在 wrap buffer 中移动 cursor.
+  {'n', '<Down>', 'gj', opt, 'which_key_ignore'},
+  {'n', '<Up>',   'gk', opt, 'which_key_ignore'},
+  {'n', '<Home>', function() key_fn.home_key.wrap() end, opt, 'which_key_ignore'},  -- g0 相当于 g<Home>
+  {'n', '<End>',  'g$', opt, 'which_key_ignore'},  -- g$ 相当于 g<End>
+
+  {'v', '<Down>', 'gj', opt, 'which_key_ignore'},
+  {'v', '<Up>',   'gk', opt, 'which_key_ignore'},
+  {'v', '<Home>', function() key_fn.home_key.wrap() end, opt, 'which_key_ignore'},
+  {'v', '<End>',  'g$', opt, 'which_key_ignore'},
+
+  {'i', '<Down>', '<C-o>gj', opt, 'which_key_ignore'},
+  {'i', '<Up>',   '<C-o>gk', opt, 'which_key_ignore'},
+  {'i', '<Home>', '<C-o><cmd>lua require("utils.keymaps").home_key.wrap()<CR>', opt, 'which_key_ignore'},
+  {'i', '<End>',  '<C-o>g$', opt, 'which_key_ignore'},
 }
 
 --- 这里是设置所有 key mapping 的地方 --------------------------------------------------------------

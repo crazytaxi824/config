@@ -37,7 +37,7 @@ local function del_cursor_move_in_wrap(bufnr)
     local buf_keymaps = vim.api.nvim_buf_get_keymap(bufnr, mode)
     for _, key in ipairs(keys) do
       for _, buf_keymap in ipairs(buf_keymaps) do
-        if buf_keymap.lhs == key then
+        if buf_keymap['lhs'] == key then
           vim.api.nvim_buf_del_keymap(bufnr, mode, key)
         end
       end
