@@ -49,8 +49,9 @@ vim.api.nvim_buf_create_user_command(
   function(params)
     --- 获取当前 cursor 的 offset, 即在整个文档中的 byte 位置.
     --- VVI: 这里的 cursor 位置不是准确的 cursor byte 位置. 因为:
-    --- line2byte('.') 返回当前行第一列的 byte 位置. 不管 cursor 在本行的任意 column, 返回值都相同.
-    local offset = vim.fn.line2byte('.')
+    --- line2byte(line('.')) 返回当前行第一列的 byte 位置. 不管 cursor 在本行的任意 column, 返回值都相同.
+    local offset = vim.fn.line2byte(vim.fn.line('.'))
+
     --- 'gomodifytags -add-tags [tags] -offset [n]'
     --- 'gomodifytags -add-tags [tags] -add-options [tag=option] -offset [n]'
     require("utils.go").tag.add(params.fargs, go_add_tags_cmd, offset)
@@ -79,8 +80,9 @@ vim.api.nvim_buf_create_user_command(
   function(params)
     --- 获取当前 cursor 的 offset, 即在整个文档中的 byte 位置.
     --- VVI: 这里的 cursor 位置不是准确的 cursor byte 位置. 因为:
-    --- line2byte('.') 返回当前行第一列的 byte 位置. 不管 cursor 在本行的任意 column, 返回值都相同.
-    local offset = vim.fn.line2byte('.')
+    --- line2byte(line('.')) 返回当前行第一列的 byte 位置. 不管 cursor 在本行的任意 column, 返回值都相同.
+    local offset = vim.fn.line2byte(vim.fn.line('.'))
+
     --- 'gomodifytags -clear-tags -offset n'
     --- 'gomodifytags -remove-tags [tags] -offset n'
     require("utils.go").tag.remove(params.fargs, go_remove_tags_cmd, offset)
@@ -109,8 +111,8 @@ vim.api.nvim_buf_create_user_command(
   function(params)
     --- 获取当前 cursor 的 offset, 即在整个文档中的 byte 位置.
     --- VVI: 这里的 cursor 位置不是准确的 cursor byte 位置. 因为:
-    --- line2byte('.') 返回当前行第一列的 byte 位置. 不管 cursor 在本行的任意 column, 返回值都相同.
-    local offset = vim.fn.line2byte('.')
+    --- line2byte(line('.')) 返回当前行第一列的 byte 位置. 不管 cursor 在本行的任意 column, 返回值都相同.
+    local offset = vim.fn.line2byte(vim.fn.line('.'))
 
     --- 'gomodifytags -clear-options -offset n'
     --- 'gomodifytags -remove-options [tag=option] -offset n'
