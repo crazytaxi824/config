@@ -147,7 +147,10 @@ local function autocmd_callback(term_obj)
     callback = function(params)
       --- persist window height
       --- NOTE: 在 WinClosed event 中, params.file & params.match 都是 win_id, 数据类型是 string.
-      win_height = vim.api.nvim_win_get_height(tonumber(params.match))
+      local win_id = tonumber(params.match)
+      if win_id then
+        win_height = vim.api.nvim_win_get_height(win_id)
+      end
     end,
     desc = "my_term: persist window height",
   })
@@ -531,7 +534,7 @@ M.metatable_funcs = function()
     if M.term_buf_exist(self.bufnr) then
       local term_wins = vim.fn.getbufinfo(self.bufnr)[1].windows
       for _, w in ipairs(term_wins) do
-        vim.api.nvim_win_close(w, 'force')
+        vim.api.nvim_win_close(w, true)
       end
     end
   end
