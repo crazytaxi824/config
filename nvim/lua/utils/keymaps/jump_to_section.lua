@@ -45,9 +45,10 @@ local function ts_root_children()
   local child_without_comment = {}  -- cache named child without comment.
 
   local child_count = root:named_child_count()
-  for i = 0, child_count-1 do
+  --- 0-index named_child()
+  for i = 0, child_count-1, 1 do
     local child = root:named_child(i)
-    if child:type() ~= "comment" then
+    if child and child:type() ~= "comment" then
       table.insert(child_without_comment, child)
     end
   end
