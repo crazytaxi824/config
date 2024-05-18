@@ -93,8 +93,6 @@ local plugins = {
       "nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
       "windwp/nvim-ts-autotag",  -- auto close tag <div></div>
     },
-
-    event = "VeryLazy",
   },
 
   --- 第一方 module 插件 ---
