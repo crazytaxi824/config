@@ -113,7 +113,7 @@ M.toggle_all = function()
   --- 如果有任何 my_term window 是打开的状态, 则全部关闭.
   if #open_winid_list > 0 then
     for _, win_id in ipairs(open_winid_list) do
-      vim.api.nvim_win_close(win_id, 'force')
+      vim.api.nvim_win_close(win_id, true)
     end
     return
   end
