@@ -91,7 +91,7 @@ local function reload_local_settings(old_content, new_content)
   --- lsp = { gopls = { ... }, tsserver = { ... } }
   local lsp_typ = require("lsp.lsp_config.setup_opts").local_lspconfig_key
   compare_content_settings(old_content, new_content, lsp_typ, function(lsp_name)
-    local clients = vim.lsp.get_active_clients({name = lsp_name})
+    local clients = vim.lsp.get_clients({name = lsp_name})
     for _, c in ipairs(clients) do
       if new_content.lsp and new_content.lsp[lsp_name] then
         c.config.settings[lsp_name] = new_content.lsp[lsp_name]  -- 直接替换设置

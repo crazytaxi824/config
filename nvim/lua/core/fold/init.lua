@@ -131,7 +131,7 @@ vim.api.nvim_create_user_command("Fold", function()
   local bufnr = vim.api.nvim_win_get_buf(win_id)
 
   --- 如果有 lsp 则尝试 lsp fold, fallback to treesitter fold.
-  local clients = vim.lsp.get_active_clients({bufnr = bufnr})
+  local clients = vim.lsp.get_clients({bufnr = bufnr})
   if #clients > 0 then
     fold_lsp(bufnr, win_id, { treesitter_fallback = true })
     return

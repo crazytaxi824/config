@@ -6,7 +6,7 @@ local function lsp_format(bufnr)
   bufnr = bufnr or vim.api.nvim_get_current_buf() or vim.fn.bufnr()
 
   --- get all attached/active lsp clients attached to bufnr
-  local lsp_clients = vim.lsp.get_active_clients({ bufnr = bufnr })
+  local lsp_clients = vim.lsp.get_clients({ bufnr = bufnr })
 
   local format_client
   for _, client in ipairs(lsp_clients) do

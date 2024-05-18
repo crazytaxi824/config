@@ -79,7 +79,7 @@ end
 vim.api.nvim_create_autocmd("FileType", {
   pattern = {"*"},
   callback = function(params)
-    local lsp_clients = vim.lsp.get_active_clients({ bufnr = params.buf })
+    local lsp_clients = vim.lsp.get_clients({ bufnr = params.buf })
     for _, c in ipairs(lsp_clients) do
       --- `set filetype` 后, detach 所有不匹配该 buffer 新 filetype 的 lsp client.
       --- NOTE: 排除 null-ls
