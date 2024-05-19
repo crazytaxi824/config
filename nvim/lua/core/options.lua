@@ -570,16 +570,16 @@ vim.api.nvim_create_user_command('SpellCheckToggle', function()
 end, {bang=true, bar=true})
 
 --- help widnow 放到最右侧
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = {"help"},
-  callback = function(params)
-    --- 设置 bdelete 时 unload 之后, 再次打开 help 时会触发 FileType.
-    vim.bo[params.buf].bufhidden = 'unload'
-    --- move help window to the right side.
-    vim.cmd('wincmd L')
-  end,
-  desc = "help window vertically splitright",
-})
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = {"help"},
+--   callback = function(params)
+--     --- 设置 bdelete 时 unload 之后, 再次打开 help 时会触发 FileType.
+--     vim.bo[params.buf].bufhidden = 'unload'
+--     --- move help window to the right side.
+--     vim.cmd('wincmd L')
+--   end,
+--   desc = "help window vertically splitright",
+-- })
 
 
 
