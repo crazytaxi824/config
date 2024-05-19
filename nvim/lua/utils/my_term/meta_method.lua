@@ -175,7 +175,11 @@ end
 
 --- 默认使用 termopen() 方法打开 terminal. eg: shell terminal
 --- termopen(): 执行 cmd --------------------------------------------------------------------------- {{{
-local function termopen_cmd(term_obj)
+local function termopen_cmd(term_obj, term_win_id)
+  if vim.api.nvim_win_get_buf(term_win_id) ~= term_obj.bufnr then
+    return
+  end
+
   local cmd = term_obj.cmd .. M.name_tag  .. term_obj.id
   if term_obj.print_cmd then
     cmd = 'echo -e "\\e[32m' .. vim.fn.escape(term_obj.cmd,'"') .. ' \\e[0m" && ' .. cmd
@@ -281,23 +285,19 @@ local function set_buf_line_exit(bufnr, exit_code)
 end
 
 --- NOTE: neovim 是单线程, jobstart() 是异步函数.
-local function buf_job_output(term_obj)
+local function buf_job_output(term_obj, term_win_id)
+  if vim.api.nvim_win_get_buf(term_win_id) ~= term_obj.bufnr then
+    return
+  end
+
   vim.api.nvim_buf_call(term_obj.bufnr, function()
-    local win_id = vim.api.nvim_get_current_win()
-
-    --- 如果 window type 是 autocmd 表示 buffer 没有被任何 window 显示,
-    --- 被 nvim_buf_call() 临时打开了一个 window.
-    if vim.fn.win_gettype(win_id) == 'autocmd' then
-      return
-    end
-
-    vim.api.nvim_set_option_value('wrap', true, { scope='local', win=win_id })
-    vim.api.nvim_set_option_value('relativenumber', false, { scope='local', win=win_id })
-    vim.api.nvim_set_option_value('signcolumn', 'no', { scope='local', win=win_id })
+    vim.api.nvim_set_option_value('wrap', true, { scope='local', win=term_win_id })
+    vim.api.nvim_set_option_value('relativenumber', false, { scope='local', win=term_win_id })
+    vim.api.nvim_set_option_value('signcolumn', 'no', { scope='local', win=term_win_id })
 
     --- listchars 添加空格标记
-    local listchars = vim.wo[win_id].listchars .. ',space:·'
-    vim.api.nvim_set_option_value('listchars', listchars, { scope='local', win=win_id })
+    local listchars = vim.wo[term_win_id].listchars .. ',space:·'
+    vim.api.nvim_set_option_value('listchars', listchars, { scope='local', win=term_win_id })
   end)
 
   --- set bufname
@@ -375,9 +375,11 @@ M.create_term_win = function(bufnr)
   local exist_win_id = find_exist_term_win()
   if vim.fn.win_gotoid(exist_win_id) == 1 then
     --- at least 1 terminal window exist
+    --- TODO relative='win', win=win_id
     vim.api.nvim_open_win(bufnr, true, {split='right'})
   else
     --- no terminal window exist, create a botright window for terminals.
+    --- TODO relative='editor'
     vim.api.nvim_open_win(bufnr, true, {height=win_height, split='below'})
   end
 
@@ -449,9 +451,9 @@ local function create_my_term(term_obj)
   local term_win_id = enter_term_win(term_obj.bufnr, old_term_bufnr)
   --- VVI: 必须在 bufnr 被 window 显示之后运行. 避免 nvim_buf_call() 生成一个临时 autocmd window.
   if term_obj.buf_output then
-    buf_job_output(term_obj)
+    buf_job_output(term_obj, term_win_id)
   else
-    termopen_cmd(term_obj)
+    termopen_cmd(term_obj, term_win_id)
   end
 
   --- VVI: doautocmd "BufEnter & BufWinEnter term://"
