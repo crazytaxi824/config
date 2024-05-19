@@ -3,8 +3,8 @@
 --- cursor 在 struct 的 {} 内, 使用以下 Command
 ---   :GoTagAdd json,xml            -- 默认: snakecase. use '-add-tags'
 ---   :GoTagAdd json,xml camelcase  -- camelcase. use '-add-tags' & '-transform'
----   :GoTagAdd json=foo,xml=bar    -- use '-add-tags' & '-add-options'
----   :GoTagAdd json=foo,json=bar   -- NOTE: add multi-options to a Single tag. use '-add-tags' & '-add-options'
+---   :GoTagAdd json=string,xml=bar    -- use '-add-tags' & '-add-options'
+---   :GoTagAdd json=string,json=bar   -- NOTE: add multi-options to a Single tag. use '-add-tags' & '-add-options'
 ---
 ---   :GoTagRemove           -- remove all tags and their options. use '-clear-tags'
 ---   :GoTagRemove json,xml  -- remove specified tags and it's options. use '-remove-tags''
@@ -77,14 +77,18 @@ M.go_add_tags_and_opts = function(arglist, go_add_tags_cmd, offset)
 
   --- parse tag name and tag options from arglist[1].
   local tag_list = {}
-  local tag_opt_list = {}
+  local opt_list = {}
   for _, tag_opt in ipairs(vim.split(vim.trim(arglist[1]), ',', {trimempty=false})) do
-    local to = vim.split(vim.trim(tag_opt), '=', {trimempty=false})
+    local to = vim.split(tag_opt, '=', {trimempty=false})
     if #to > 0 and to[1] ~= '' then  -- 'json'|'json=foo'
-      table.insert(tag_list, to[1])
+      if not vim.tbl_contains(tag_list, to[1]) then
+        table.insert(tag_list, to[1])
+      end
     end
     if #to == 2 then  -- 'json=foo'
-      table.insert(tag_opt_list, tag_opt)
+      if not vim.tbl_contains(opt_list, tag_opt) then
+        table.insert(opt_list, tag_opt)
+      end
     end
   end
 
@@ -122,32 +126,38 @@ M.go_add_tags_and_opts = function(arglist, go_add_tags_cmd, offset)
     return
   end
 
-  local sh_cmd = "gomodifytags -file " .. fp ..
-    " -add-tags " .. table.concat(tag_list,',') ..
-    " -transform " .. transform ..
-    " -skip-unexported -quiet -w -override"
+  local sh_cmd = {
+    "gomodifytags",
+    "-file", fp,
+    "-add-tags", table.concat(tag_list,','),
+    "-transform", transform,
+    "-skip-unexported",
+    "-quiet",
+    "-w",
+    "-override",
+  }
 
   --- -offset / -all
   if offset then
-    sh_cmd = sh_cmd .. " -offset " .. offset
+    table.insert(sh_cmd, "-offset="..offset)
   else
-    sh_cmd = sh_cmd .. " -all"
+    table.insert(sh_cmd, "-all")
   end
 
   --- -add-options
-  if #tag_opt_list > 0 then
-    sh_cmd = sh_cmd ..
-      " -add-options " .. table.concat(tag_opt_list,',')
+  if #opt_list > 0 then
+    table.insert(sh_cmd, "-add-options="..table.concat(opt_list,','))
   end
 
-  vim.notify(sh_cmd)
-  local result = vim.fn.system(sh_cmd)
-  if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
-    Notify(vim.trim(result), "ERROR")
+  --vim.notify(table.concat(sh_cmd, ' '))
+  local result = vim.system(sh_cmd, { text = true }):wait()
+  if result.code ~= 0 then
+    Notify(vim.trim(result.stderr), "WARN")
     return
   end
 
-  vim.cmd('checktime')  -- VVI: refresh & reload buffer
+  --- VVI: refresh & reload buffer
+  vim.cmd('checktime')
 end
 -- -- }}}
 
@@ -179,29 +189,31 @@ M.go_remove_tags = function(arglist, go_remove_tags_cmd, offset)
     return
   end
 
-  local sh_cmd = "gomodifytags -file " .. fp
+  local sh_cmd = {
+    "gomodifytags",
+    "-file", fp,
+    "-quiet",
+    "-w",
+  }
 
   --- -offset / -all
   if offset then
-    sh_cmd = sh_cmd .. " -offset " .. offset
+    table.insert(sh_cmd, "-offset=" .. offset)
   else
-    sh_cmd = sh_cmd .. " -all"
+    table.insert(sh_cmd, "-all")
   end
 
   --- -clear-tags / -remove-tags
   if #arglist == 0 then
-    sh_cmd = sh_cmd ..
-      " -clear-tags -quiet -w"
+    table.insert(sh_cmd, "-clear-tags")
   else
-    sh_cmd = sh_cmd ..
-      " -remove-tags " .. arglist[1] ..
-      " -quiet -w"
+    table.insert(sh_cmd, "-remove-tags=" .. arglist[1])
   end
 
-  vim.notify(sh_cmd)
-  local result = vim.fn.system(sh_cmd)
-  if vim.v.shell_error ~= 0 then
-    Notify(vim.trim(result), "ERROR")
+  -- vim.notify(table.concat(sh_cmd, ' '))
+  local result = vim.system(sh_cmd, { text = true }):wait()
+  if result.code ~= 0 then
+    Notify(vim.trim(result.stderr), "WARN")
     return
   end
 
@@ -237,29 +249,31 @@ M.go_remove_tags_opts = function(arglist, go_remove_tag_opts_cmd, offset)
     return
   end
 
-  local sh_cmd = "gomodifytags -file " .. fp
+  local sh_cmd = {
+    "gomodifytags",
+    "-file", fp,
+    "-quiet",
+    "-w",
+  }
 
   --- -offset / -all
   if offset then
-    sh_cmd = sh_cmd .. " -offset " .. offset
+    table.insert(sh_cmd, "-offset=" .. offset)
   else
-    sh_cmd = sh_cmd .. " -all"
+    table.insert(sh_cmd, "-all")
   end
 
   --- -clear-options / -remove-options
   if #arglist == 0 then
-    sh_cmd = sh_cmd ..
-      " -clear-options -quiet -w"
+    table.insert(sh_cmd, "-clear-options")
   else
-    sh_cmd = sh_cmd ..
-      " -remove-options " .. arglist[1] ..
-      " -quiet -w"
+    table.insert(sh_cmd, "-remove-options=" .. arglist[1])
   end
 
-  vim.notify(sh_cmd)
-  local result = vim.fn.system(sh_cmd)
-  if vim.v.shell_error ~= 0 then
-    Notify(vim.trim(result), "ERROR")
+  -- vim.notify(table.concat(sh_cmd, ' '))
+  local result = vim.system(sh_cmd, { text = true }):wait()
+  if result.code ~= 0 then
+    Notify(vim.trim(result.stderr), "WARN")
     return
   end
 
