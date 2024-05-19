@@ -18,24 +18,27 @@ M.gotests_cmd_tool = function()
   local fp = vim.fn.bufname()  -- current filepath
   local func = vim.fn.expand('<cword>')
 
-  --- `gotests -only Foo /xxx/src/foo.go`
-  local cmd = 'gotests -w -only ' .. func .. ' ' .. fp
-  local result = vim.fn.system(cmd)
-  if vim.v.shell_error ~= 0 then
-    Notify(vim.trim(result), "ERROR")
-    return
-  else
-    Notify(vim.trim(result), "INFO")
+  --- `gotests -w -only Foo /xxx/src/foo.go`
+  --- `-w` 会将写入 <filename>_test.go 文件. 如果该文件不存在则会自动创建; 如果该文件存在则将内容 append 到文件中.
+  local cmd = {'gotests', '-w', '-only', func, fp}
+  local result = vim.system(cmd, { text = true }):wait()
+  if result.code ~= 0 then
+    error(result.stderr ~= '' and result.stderr or result.code)
   end
 
-  --- HACK: 判断 result 是否 "Generated" 开头.
-  local s = vim.split(vim.trim(result), ' ', {trimempty=false})
-  if s[1] == "Generated" then
-    --- 执行完成后打开 _test.go file.
-    local test_fp = vim.fn.fnamemodify(fp, ':r') .. '_test.go'
-    if vim.fn.filereadable(test_fp) == 1 then
-      vim.cmd('edit ' .. vim.fn.fnameescape(test_fp))
-    end
+  --- 显示结果.
+  vim.notify(result.stdout)
+
+  --- NOTE: 成功后会在 stdout 中返回 "Generated Test_XXX".
+  --- 无法生成会在 stdout 中返回 "No tests generated for xxx".
+  if not string.match(result.stdout, "Generated Test_") then
+    return
+  end
+
+  --- 执行完成后打开 <filepath>_test.go file.
+  local test_fp = vim.fn.fnamemodify(fp, ':r') .. '_test.go'
+  if vim.fn.filereadable(test_fp) == 1 then
+    vim.cmd('edit ' .. vim.fn.fnameescape(test_fp))
   end
 end
 
