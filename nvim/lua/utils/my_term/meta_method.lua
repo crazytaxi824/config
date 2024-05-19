@@ -25,6 +25,7 @@ M.default_opts = {
   job_id = nil,
 
   cmd = vim.go.shell, -- `:help 'shell'`, get global option 'shell', 相当于 os.getenv('SHELL')
+  cwd = nil,          -- termopen() & jobstart() 中的 opts.
   jobstart = nil,     -- 'startinsert' | func(term), 在 termopen() 之后触发. eg: win_gotoid()
   jobdone = nil,      -- 'stopinsert' | 'exit'. 在 on_exit 中触发.
                       -- NOTE: 如果要设置 func 可以在 on_exit 中设置.
@@ -189,6 +190,8 @@ local function termopen_cmd(term_obj, term_win_id)
   --- 用于执行 function. 导致 TermOpen event 中获取的 win id 是这个临时 window, 会造成一些 bug.
   vim.api.nvim_buf_call(term_obj.bufnr, function()
     term_obj.job_id = vim.fn.termopen(cmd, {
+      cwd = term_obj.cwd,
+
       on_stdout = function(job_id, data, event)  -- event 是 'stdout'
         --- auto_scroll option
         buf_scroll_bottom(term_obj)
@@ -313,6 +316,8 @@ local function buf_job_output(term_obj, term_win_id)
   set_output_buf_keymaps(term_obj)
 
   term_obj.job_id = vim.fn.jobstart(term_obj.cmd, {
+    cwd = term_obj.cwd,
+
     on_stdout = function (job_id, data, event)  -- NOTE: fmt.Print()
       --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
       if not M.term_buf_exist(term_obj.bufnr) then
