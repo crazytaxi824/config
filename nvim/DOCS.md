@@ -277,6 +277,20 @@ end
 local handle = io.popen(cmd)
 local result = handle:read("a")  -- "a" - read all output
 handle:close()
+
+--- sync run
+local result = vim.system({cmd}, {text=true}):wait()
+if result.code ~= 0 then
+  error(result.stderr)
+end
+
+--- async run
+vim.system({cmd}, {text=true}, function(result)
+  vim.print(result)
+  print(result.code)
+  print(result.stdout)
+  print(result.stderr)
+end)
 ```
 
 ### lua 运行 shell cmd, 获取 exit code.
