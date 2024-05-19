@@ -12,16 +12,18 @@ notify.setup({
                     -- 可以使用 vim.log.levels (int); 也可以用 vim.log.levels,
                     -- 也可以使用 (string), 大小写都可以.
 
-  stages = "static",  -- VVI: Animation style, for `set termguicolors`
+  stages = "fade_in_slide_out",  -- VVI: Animation style, for `set termguicolors`
+  background_colour = "#000000",
 
   top_down = true,  -- true: top-down; false: bottom-up
 
   on_close = nil,
   on_open = function(win_id)
-    local bufnr = vim.api.nvim_win_get_buf(win_id)
+    --- Notify window not focusable.
+    vim.api.nvim_win_set_config(win_id, { focusable = false })
 
-    --- set filetype 主要是为了 highlight. 默认 filetype = notify
-    --vim.api.nvim_buf_set_option(bufnr, "filetype", "markdown")
+    --- set Notify content markdown syntax. 主要是为了 highlight.
+    local bufnr = vim.api.nvim_win_get_buf(win_id)
     vim.bo[bufnr].filetype = "markdown"
 
     --- set keymap to close window
@@ -29,7 +31,7 @@ notify.setup({
     --vim.keymap.set('n', '<ESC>', '<cmd>q<CR>', {noremap=true, buffer=bufnr, desc="close window"})
   end,
 
-  timeout = 5000,     -- Default timeout for notifications
+  timeout = 3600,     -- Default timeout for notifications
   minimum_width = 50, -- Minimum width for notification windows
 
   --- Max number of columns for messages
