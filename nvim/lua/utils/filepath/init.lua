@@ -4,7 +4,6 @@ local fp_jump = require('utils.filepath.jump_to_file')
 local M = {
   n_jump = fp_jump.n_jump_cWORD,
   v_jump = fp_jump.v_jump_selected,
-  v_system_open = fp_jump.v_system_open_selected,
 }
 
 M.setup = function(bufnr)

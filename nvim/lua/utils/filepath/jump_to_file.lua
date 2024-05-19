@@ -97,20 +97,7 @@ local function jump(content)
   Notify('cannot open: "' .. content .. '"', "INFO", {timeout = 1500})
 end
 
---- NOTE: 为保险起见, 不在 Normal 模式下使用 system_open 打开 <cWORD>
-local function system_open(filepath)
-  if not filepath then
-    return
-  end
-
-  local result = vim.fn.system('open "' .. filepath .. '"')
-  if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
-    Notify(vim.trim(result), "ERROR")
-  end
-end
-
 M.n_jump_cWORD = function() jump(vim.fn.expand('<cWORD>')) end
 M.v_jump_selected = function() jump(visual_selected()) end
-M.v_system_open_selected = function() system_open(visual_selected()) end
 
 return M
