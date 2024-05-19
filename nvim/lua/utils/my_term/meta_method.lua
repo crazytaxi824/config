@@ -447,8 +447,7 @@ local function create_my_term(term_obj)
 
   --- 进入一个选定的 term window 加载现有 term buffer, 同时 wipeout old_term_bufnr.
   local term_win_id = enter_term_win(term_obj.bufnr, old_term_bufnr)
-
-  --- termopen(): 必须在 bufnr 被 window 显示之后运行. 避免 nvim_buf_call() 生成一个临时 autocmd window.
+  --- VVI: 必须在 bufnr 被 window 显示之后运行. 避免 nvim_buf_call() 生成一个临时 autocmd window.
   if term_obj.buf_output then
     buf_job_output(term_obj)
   else
