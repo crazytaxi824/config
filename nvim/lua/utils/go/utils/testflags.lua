@@ -145,7 +145,7 @@ local flag_desc_cmd = {
 
       local coverage_dir = go_list.Root .. '/coverage/'
       return {
-        prefix = 'mkdir -p ' .. coverage_dir,
+        prefix = {'mkdir', '-p', coverage_dir},
 
         --- NOTE: 这里推荐使用绝对路径, 不受 pwd 影响.
         flag = ' -coverprofile ' .. coverage_dir .. cover_filename .. '_cover.out',

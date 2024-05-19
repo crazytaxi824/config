@@ -87,11 +87,10 @@ local function go_test_single(testfn_name, opt)
   end
 
   --- first run prefix shell command
-  if flag_cmd.prefix and flag_cmd.prefix ~= '' then
-    local result = vim.fn.system(flag_cmd.prefix)
-    if vim.v.shell_error ~= 0 then  --- 判断 system() 结果是否错误
-      Notify(vim.trim(result), "ERROR")
-      return
+  if flag_cmd.prefix then
+    local result = vim.system(flag_cmd.prefix, { text = true }):wait()
+    if result.code ~= 0 then
+      error(result.stderr ~= '' and result.stderr or result.code)
     end
   end
 
