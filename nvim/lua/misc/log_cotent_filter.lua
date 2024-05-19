@@ -7,7 +7,6 @@ local function get_oversized_log(size)
   ---   {
   ---     filepath = filepath,
   ---     fsize = vim.fn.getfsize(filepath),
-  ---     escape = vim.fn.fnameescape(filepath),
   ---   },
   ---   ...
   --- ]
@@ -23,14 +22,14 @@ local function get_oversized_log(size)
   for _, fp in ipairs(logs) do
     local fsize = vim.fn.getfsize(fp)
     if vim.fn.isdirectory(fp) == 0 and vim.fn.filereadable(fp) == 1 and fsize > size then
-      table.insert(log_files, { filepath = fp, fsize = fsize, escape = vim.fn.fnameescape(fp) })
+      table.insert(log_files, { filepath = fp, fsize = fsize })
     end
   end
 
   for _, fp in ipairs(caches) do
     local fsize = vim.fn.getfsize(fp)
     if vim.fn.isdirectory(fp) == 0 and vim.fn.filereadable(fp) == 1 and fsize > size then
-      table.insert(log_files, { filepath = fp, fsize = fsize, escape = vim.fn.fnameescape(fp) })
+      table.insert(log_files, { filepath = fp, fsize = fsize })
     end
   end
 
@@ -55,18 +54,20 @@ end
 
 --- 删除文件中的旧内容以达到 reduce file size 的目的.
 local function reduce_filesize(log, size)
-  --- file line count
-  local result = vim.fn.system('wc -l < ' .. log.escape)
-  if vim.v.shell_error ~= 0 then
-    vim.notify(vim.trim(result), vim.log.levels.WARN)
+  --- `wc -l filepath`: file line count.
+  local result = vim.system({'wc', '-l', log.filepath}, { text = true }):wait()
+  if result.code ~= 0 then
+    vim.notify(result.stderr, vim.log.levels.WARN)
     vim.cmd('sleep 3')
     return
   end
 
-  local lnum = tonumber(vim.trim(result))
+  local r_slice = vim.split(result.stdout, ' ', {trimempty=true})
+  local lnum = tonumber(r_slice[1])
   if not lnum then
     vim.notify("error: lnum can not be parsed", vim.log.levels.WARN)
     vim.cmd('sleep 3')
+    return
   end
 
   --- 根据当前文件大小和限制大小截取数据.

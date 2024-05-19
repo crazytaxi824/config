@@ -88,8 +88,8 @@ local cmd_tools = {
 
 local function check_cmd_tools(tools)
   for name, tool in pairs(tools) do
-    local result = vim.fn.system('which ' .. tool.cmd)
-    if vim.v.shell_error == 0 then
+    local result = vim.system({'which', tool.cmd}, { text = true }):wait()
+    if result.code == 0 then
       health.ok(name)
     else
       local errmsg = {name .. ':'}

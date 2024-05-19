@@ -64,10 +64,9 @@ vim.api.nvim_create_autocmd("BufWritePost", {
     --- 分类&排序 -imports-order (default "std,general,company,project")
     --- 即(默认): 标准包, github.com, local/src/...
     --- 将排序后的结果写入文件 -output file, 如果有错误则不写入.
-    local result = vim.fn.system('goimports-reviser -output file ' .. params.file)
-    if vim.v.shell_error ~= 0 then
-      Notify(vim.trim(result), "ERROR")
-      return
+    local result = vim.system({'goimports-reviser', '-output', 'file', params.file}, { text = true }):wait()
+    if result.code ~= 0 then
+      error(result.stderr ~= '' and result.stderr or result.code)
     end
 
     --- 文件写入后需要 checktime 刷新 buffer 内容.

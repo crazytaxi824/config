@@ -3,13 +3,15 @@
 local M = {}
 
 M.go_list = function(dir)
-  local result = vim.fn.system("cd " .. dir .. " && go list -json")
-  if vim.v.shell_error ~= 0 then
-    Notify(vim.trim(result),"ERROR")
-    return
+  local result = vim.system({'go', 'list', '-json'}, {
+    cwd = dir,  -- 可以是 relative path 或者是 absolute path.
+    text = true,
+  }):wait()
+  if result.code ~= 0 then
+    error(result.stderr ~= '' and result.stderr or result.code)
   end
 
-  return vim.fn.json_decode(result)
+  return vim.fn.json_decode(result.stdout)
 end
 
 return M

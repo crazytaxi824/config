@@ -3,17 +3,16 @@
 local lazydir = vim.fn.stdpath("data") .. "/lazy"
 local lazypath = lazydir .. "/lazy.nvim"
 if not vim.uv.fs_stat(lazypath) then
-  local result = vim.fn.system({
+  local result = vim.system({
     "git",
     "clone",
     "--filter=blob:none",
     "https://github.com/folke/lazy.nvim.git",
     "--branch=stable", -- latest stable release
     lazypath,
-  })
-  if vim.v.shell_error ~= 0 then
-    Notify(vim.trim(result), "ERROR")
-    return
+  }, { text = true }):wait()
+  if result.code ~= 0 then
+    error(result.stderr ~= '' and result.stderr or result.code)
   end
 end
 vim.opt.rtp:prepend(lazypath)
