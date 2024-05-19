@@ -58,8 +58,8 @@ if result.code ~= 0 then
   error(result.stderr ~= '' and result.stderr or result.code)
 end
 
-local pprof_flags = ' -o ' .. pprof_dir .. 'pkg.test'  -- [pkg].test 可执行文件生成位置,
-                                                       -- 这个是 `$ go help build` 的 flag.
+local pprof_flags = ' -o ' .. pprof_dir .. 'go_pprof.test'  -- VVI: 必须要. go test 生成的可执行文件.
+                                                            -- 这个是 `$ go help build` 的 flag.
   .. ' -outputdir ' .. pprof_dir  -- 以下所有 profile 文件生成的路径都在该路径下, 除非指定绝对路径.
                                   -- eg: '-cpuprofile a/b/c.out'  文件会生成在 pprof_dir/a/b/c.out
                                   -- eg: '-cpuprofile /a/b/c.out' 文件会生成在 /a/b/c.out
