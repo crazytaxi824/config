@@ -115,6 +115,13 @@ local function go_test_single(testfn_name, opt)
   t:run()
 end
 
+--- opts = {
+---   testfn_name = testfn_name,
+---   mode = mode,
+---   flag = 'none' | 'cpu' | 'mem' | ...,
+---   go_list = {},
+---   project = string|nil,
+--- }
 M.go_test_single_func = function(prompt)
   --- 判断当前文件是否 _test.go
   if not string.match(vim.fn.bufname(), "_test%.go$") then
