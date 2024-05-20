@@ -38,8 +38,23 @@ M.open_shell_term = function()
   if not t then
     t = M.new({
       id = vim.v.count1,
-      jobdone = 'exit',
-      jobstart = 'startinsert',
+      after_run = function(term_obj)
+        --- after_run 的时候 cursor 在 terminal window 中则执行 stopinsert.
+        if vim.api.nvim_win_get_buf(vim.api.nvim_get_current_win()) == term_obj.bufnr then
+          vim.cmd('startinsert')
+        end
+      end,
+      on_exit = function(term_obj)
+        --- VVI: 手动 :bw 删除 buffer 时会触发 TermClose, 导致重复 wipeout buffer 而报错.
+        if meta_method.term_buf_exist(term_obj.bufnr) then
+          vim.api.nvim_buf_delete(term_obj.bufnr, {force=true})
+        end
+
+        --- NOTE: jobdone 的时候 cursor 在 terminal window 中则执行 stopinsert.
+        -- if vim.api.nvim_win_get_buf(vim.api.nvim_get_current_win()) == term_obj.bufnr then
+        --   vim.cmd('stopinsert')
+        -- end
+      end,
     })
     t:run()
 

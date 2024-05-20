@@ -26,19 +26,19 @@ M.default_opts = {
 
   cmd = vim.go.shell, -- `:help 'shell'`, get global option 'shell', 相当于 os.getenv('SHELL')
   cwd = nil,          -- termopen() & jobstart() 中的 opts.
-  jobstart = nil,     -- 'startinsert' | func(term), 在 termopen() 之后触发. eg: win_gotoid()
-  jobdone = nil,      -- 'stopinsert' | 'exit'. 在 on_exit 中触发.
-                      -- NOTE: 如果要设置 func 可以在 on_exit 中设置.
-                      -- NOTE: jobdone 对 buf_output 无效.
   auto_scroll = nil,  -- goto bottom of the terminal. 在 on_stdout & on_stderr 中触发.
   print_cmd = nil,    -- bool, 是否打印 cmd. 默认不打印.
   buf_output = nil,   -- bool, 是否用 buf_job_output 执行, 默认使用 termopen().
 
   --- callback functions
   on_init = nil,   -- func(term), require('utils.my_term').new() 的时候触发.
+  before_run = nil, -- func(term), term:run() 时触发. before jobstart().
+  after_run = nil,  -- func(term), term:run() 时触发. 在 jobstart() 之后马上执行, 和 on_exit 的区别是不用等到 jobdone.
+
   on_open = nil,   -- func(term), BufWinEnter. NOTE: 每次 term:// buffer 被 win 显示的时候都会触发,
                    -- 同一个 buffer 被多个窗口显示时也会触发.
   on_close = nil,  -- func(term), BufWinLeave. NOTE: BufWinLeave 只会在 buffer 离开最后一个 win 的时候触发.
+
   on_stdout = nil, -- func(term, job_id, data, event), 可用于 auto_scroll to bottom
   on_stderr = nil, -- func(term, job_id, data, event), 可用于 auto_scroll to bottom
   on_exit = nil,   -- func(term, job_id, exit_code, event), TermClose, jobstop() 时触发.
@@ -216,20 +216,6 @@ local function termopen_cmd(term_obj, term_win_id)
         --- callback
         if term_obj.on_exit then
           term_obj.on_exit(term_obj, job_id, exit_code, event)
-        end
-
-        --- jobdone option
-        if term_obj.jobdone == 'exit' then
-          --- VVI: 手动 :bw 删除 buffer 时会触发 TermClose, 导致重复 wipeout buffer 而报错.
-          if M.term_buf_exist(term_obj.bufnr) then
-            vim.api.nvim_buf_delete(term_obj.bufnr, {force=true})
-          end
-        elseif term_obj.jobdone == 'stopinsert' then
-          --- jobdone 的时候 cursor 在 terminal window 中则执行 stopinsert.
-          local term_wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
-          if vim.tbl_contains(term_wins, vim.api.nvim_get_current_win()) then
-            vim.cmd('stopinsert')
-          end
         end
       end,
     })
@@ -465,18 +451,6 @@ local function create_my_term(term_obj)
   --- 触发时机在 after TermOpen & before TermClose
   --- 先触发 BufEnter, 再触发 BufWinEnter
   vim.api.nvim_exec_autocmds({"BufEnter", "BufWinEnter"}, { buffer = term_obj.bufnr })
-
-  --- jobstart option. 在 termopen() 后执行.
-  if term_obj.jobstart then
-    if term_obj.jobstart == 'startinsert' then
-      --- 判断当前是否是 term window. 防止 before_exec & after_exec 跳转到别的 window.
-      if vim.api.nvim_get_current_win() == term_win_id then
-        vim.cmd('startinsert')
-      end
-    elseif type(term_obj.jobstart) == "function" then
-      term_obj.jobstart(term_obj)
-    end
-  end
 end
 -- -- }}}
 
@@ -494,7 +468,18 @@ M.metatable_funcs = function()
       return
     end
 
+    --- executed before jobstart. DO NOT have term.bufnr and term.job_id ...
+    if self.before_run then
+      self.before_run(self)
+    end
+
     create_my_term(self)
+
+    --- executed after jobstart(). Have term.bufnr and term.job_id ...
+    --- 在 jobstart() 之后马上执行, 和 on_exit 的区别是不用等到 jobdone.
+    if self.after_run then
+      self.after_run(self)
+    end
 
     --- cache terminal object
     M.global_my_term_cache[self.id] = self
