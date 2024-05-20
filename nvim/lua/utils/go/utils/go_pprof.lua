@@ -4,7 +4,7 @@
 -- go tool pprof -http=localhost: mem.out
 -- go tool pprof -http=localhost: mutex.out
 -- go tool trace -http=localhost: trace.out
--- go tool cover -html=cover.out -o cover.html
+-- go tool cover -html=cover.out -o cover.html && open cover.html
 
 local go_testflags = require("utils.go.utils.testflags")
 
@@ -71,7 +71,7 @@ local function select_pprof(term_bufnr)
   --- 使用 jobstart() 在后台静默运行 `go tool pprof/trace ...`
   local select = {'cpu', 'mem', 'mutex', 'block', 'trace'}
   vim.ui.select(select, {
-    prompt = 'choose pprof profile to view: [coverage profile is an HTML, open to view]',
+    prompt = 'choose pprof profile to view: [coverage profile is an HTML file, open to view]',
     format_item = function(item)
       return go_testflags.get_testflag_desc(item)
     end
