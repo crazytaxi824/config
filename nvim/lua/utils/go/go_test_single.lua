@@ -49,70 +49,9 @@ end
 --- go test single function under the cursor -------------------------------------------------------
 --- opt.mode: 'run' | 'bench' | 'fuzz'
 --- return (cmd: string|nil), eg: cmd = "go test -v -run TestFoo ImportPath"
-local function go_test_single(testfn_name, opt)
-  --- add regexp pattern to test function name
-  local testfn_name_regexp = '"^' .. testfn_name .. '$" '
-
-  --- 获取当前文件所在文件夹路径.
-  local dir = vim.fn.expand('%:h')
-
-  --- 获取 go list info, `cd src/xxx && go list -json`
-  local go_list = go_utils.go_list(dir)
-  if not go_list then
-    return
-  end
-
+local function go_test_single(opts)
   --- 获取 flag_cmd {prefix, flag, suffix}
-  local flag_cmd = go_utils.parse_testflag_cmd(opt.flag, go_list)
-  if not flag_cmd then
-    return
-  end
-
-  local cmd = 'cd ' .. go_list.Root .. ' &&'
-  if opt.mode == 'run' then
-    --- go test -v -timeout 10m -run TestXxx ImportPath
-    cmd = cmd .. ' go test -v' .. flag_cmd.flag
-      .. ' -timeout 10m -run ' .. testfn_name_regexp .. go_list.ImportPath
-  elseif opt.mode == 'bench' then
-    --- go test -v -timeout 10m -run ^$ -benchmem -bench BenchmarkXxx ImportPath
-    cmd = cmd .. ' go test -v' .. flag_cmd.flag
-      .. ' -timeout 10m -run ^$ -benchmem -bench ' .. testfn_name_regexp .. go_list.ImportPath
-  elseif opt.mode == 'fuzz' then
-    --- go test -v -run ^$ -fuzztime 15s -fuzz FuzzXxx ImportPath
-    cmd = cmd .. ' go test -v -fuzztime 15s' .. flag_cmd.flag
-      .. ' -run ^$ -fuzz ' .. testfn_name_regexp .. go_list.ImportPath
-  else
-    Notify("go test single function {opt.mode} should be: 'run' | 'bench' | 'fuzz'", "DEBUG")
-    return
-  end
-
-  --- first run prefix shell command
-  if flag_cmd.prefix then
-    local result = vim.system(flag_cmd.prefix, { text = true }):wait()
-    if result.code ~= 0 then
-      error(result.stderr ~= '' and result.stderr or result.code)
-    end
-  end
-
-  --- my_term on_exit callback function
-  local on_exit = function(term, job)
-    --- :GoPprof command
-    if vim.tbl_contains({'cpu', 'mem', 'mutex', 'block', 'trace'}, opt.flag) then
-      go_utils.go_pprof.set_cmd_and_keymaps(term.bufnr)
-    end
-
-    if flag_cmd.suffix and flag_cmd.suffix ~= '' then
-      go_utils.go_pprof.autocmd_shutdown_all_jobs(term.bufnr)  -- autocmd BufWipeout jobstop()
-      go_utils.go_pprof.job_exec(flag_cmd.suffix, term.bufnr)  -- run `go tool pprof ...` in background
-    end
-  end
-
-  --- my_term 执行 command
-  local t = require('utils.my_term.instances').exec_term
-  t.cmd = cmd
-  t.on_exit = on_exit
-  t:stop()
-  t:run()
+  go_utils.parse_testflag_cmd(opts)
 end
 
 --- opts = {
@@ -136,9 +75,23 @@ M.go_test_single_func = function(prompt)
     return
   end
 
+  --- 获取 go list info, `cd src/xxx && go list -json`
+  local dir = vim.fn.expand('%:h')
+  local go_list = go_utils.go_list(dir)
+  if not go_list then
+    return
+  end
+
+  local opts = {
+    testfn_name = testfn_name,
+    mode = mode,
+    flag = 'none',
+    go_list = go_list,
+  }
+
   --- no prompt for testflags
   if not prompt then
-    go_test_single(testfn_name, {mode = mode, flag = 'none'})
+    go_test_single(opts)
     return
   end
 
@@ -152,7 +105,8 @@ M.go_test_single_func = function(prompt)
       end
     }, function(choice)
       if choice then
-        go_test_single(testfn_name, {mode = mode, flag = choice})
+        opts.flag = choice
+        go_test_single(opts)
       end
     end)
   elseif mode == 'fuzz' then
@@ -164,7 +118,8 @@ M.go_test_single_func = function(prompt)
       end
     }, function(choice)
       if choice then
-        go_test_single(testfn_name, {mode = mode, flag = choice})
+        opts.flag = choice
+        go_test_single(opts)
       end
     end)
   else

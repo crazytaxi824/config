@@ -1,4 +1,4 @@
-local go_utils = require("utils.go.utils.go_pprof")
+local go_pprof = require("utils.go.utils.go_pprof")
 
 local M = {}
 
@@ -17,20 +17,21 @@ local flag_desc_cmd = {
   none = { desc = '[No Extra Flag]', cmd = {} },  -- VVI: cmd 不能为 nil.
 
   --- pprof 的 4 个 testflag, '-cpuprofile', '-memprofile', '-blockprofile', '-mutexprofile'
-  cpu   = {desc = 'CPU profile'},
-  mem   = {desc = 'Memory profile'},
-  mutex = {desc = 'Mutex profile'},
-  block = {desc = 'Block profile'},
-  trace = {desc = 'Trace'},
+  cpu   = { desc = 'CPU profile' },
+  mem   = { desc = 'Memory profile' },
+  mutex = { desc = 'Mutex profile' },
+  block = { desc = 'Block profile' },
+  trace = { desc = 'Trace' },
 
-  cover = {desc = 'Coverage print on screen'},
-  coverprofile = {desc = 'Coverage profile (detail)'},
+  cover = { desc = 'Coverage print on screen' },
+  coverprofile = { desc = 'Coverage profile (detail)' },
 
   --- fuzztime flags
   fuzz30s = { desc = 'fuzztime 30s' },
   fuzz60s = { desc = 'fuzztime 60s' },
   fuzz5m  = { desc = 'fuzztime 5m'  },
   fuzz10m = { desc = 'fuzztime 10m' },
+  fuzz_input = { desc = 'Input fuzztime: 15s|20m|1h20m30s (duration) | 1000x (times)' }
 }
 
 local pprof_flags = {
@@ -92,13 +93,13 @@ M.my_term_opts = function(opts)
       on_exit = function(term)
         --- :GoPprof command
         if vim.tbl_contains({'cpu', 'mem', 'mutex', 'block', 'trace'}, opts.flag) then
-          go_utils.go_pprof.set_cmd_and_keymaps(term.bufnr)
+          go_pprof.set_cmd_and_keymaps(term.bufnr)
         end
 
         --- autocmd BufWipeout jobstop()
-        go_utils.go_pprof.autocmd_shutdown_all_jobs(term.bufnr)
+        go_pprof.autocmd_shutdown_all_jobs(term.bufnr)
         --- run `go tool pprof ...` in background
-        go_utils.go_pprof.job_exec({'go', 'tool', 'pprof', '-http=localhost:',pprof_dir..opts.flag..'.out'}, term.bufnr)
+        go_pprof.job_exec({'go', 'tool', 'pprof', '-http=localhost:',pprof_dir..opts.flag..'.out'}, term.bufnr)
       end,
     }
   elseif opts.flag == 'cover' then
@@ -160,6 +161,18 @@ M.my_term_opts = function(opts)
       cwd = opts.go_list.Root,
       cmd = vim.iter({go_test, '-fuzztime', '10m', mode_flags(opts)}):flatten():totable(),
     }
+  elseif opts.flag == 'fuzz_input' then
+    local fuzz_time
+    vim.ui.input({prompt = 'Input -fuzztime: '}, function(input)
+      if input then
+        fuzz_time = input
+      end
+    end)
+
+    return {
+      cwd = opts.go_list.Root,
+      cmd = vim.iter({go_test, '-fuzztime', fuzz_time, mode_flags(opts)}):flatten():totable(),
+    }
   else
     --- flag='none'
     return {
@@ -184,7 +197,19 @@ M.get_testflag_desc = function(flag)
 end
 
 M.parse_testflag_cmd = function(opts)
-  return M.my_term_opts(opts)
+  local term_opts = M.my_term_opts(opts)
+  if not term_opts then
+    return
+  end
+
+  --- my_term 执行 command
+  local t = require('utils.my_term.instances').exec_term
+  t.cmd = term_opts.cmd
+  t.cwd = term_opts.cwd
+  t.before_run = term_opts.before_run
+  t.on_exit = term_opts.on_exit
+  t:stop()
+  t:run()
 end
 
 return M
