@@ -18,11 +18,11 @@ local flag_desc = {
   none = { desc = '[No Extra Flag]', cmd = {} },  -- VVI: cmd 不能为 nil.
 
   --- pprof 的 4 个 testflag, '-cpuprofile', '-memprofile', '-blockprofile', '-mutexprofile'
-  cpu   = { desc = 'CPU profile' },
-  mem   = { desc = 'Memory profile' },
-  mutex = { desc = 'Mutex profile' },
-  block = { desc = 'Block profile' },
-  trace = { desc = 'Trace' },
+  cpu   = go_pprof.flag_desc.cpu,
+  mem   = go_pprof.flag_desc.mem,
+  mutex = go_pprof.flag_desc.mutex,
+  block = go_pprof.flag_desc.block,
+  trace = go_pprof.flag_desc.trace,
 
   cover = { desc = 'Coverage print on screen' },
   coverprofile = { desc = 'Coverage profile (detail)' },

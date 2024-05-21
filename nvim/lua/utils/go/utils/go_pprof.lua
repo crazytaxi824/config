@@ -8,7 +8,7 @@
 
 local M ={}
 
-local flag_desc = {
+M.flag_desc = {
   cpu   = { desc = 'CPU profile' },
   mem   = { desc = 'Memory profile' },
   mutex = { desc = 'Mutex profile' },
@@ -79,7 +79,7 @@ local function select_pprof(term_bufnr, pprof_dir)
   vim.ui.select(select, {
     prompt = 'choose pprof profile to view: [coverage profile is an HTML file, open to view]',
     format_item = function(item)
-      return flag_desc[item].desc
+      return M.flag_desc[item].desc
     end
   }, function(choice)
     if choice then
