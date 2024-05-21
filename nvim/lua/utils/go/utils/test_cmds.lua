@@ -64,12 +64,17 @@ local fuzz_choices  = {'fuzz30s', 'fuzz60s', 'fuzz5m', 'fuzz10m', 'fuzz_input'}
 --- }
 --- mode = 'run' | 'bench' | 'fuzz'
 local function mode_flags(opts)
+  local scope = opts.go_list.ImportPath
+  if opts.project then
+    scope = './...'
+  end
+
   if opts.mode == 'run' then
-    return {'-run', opts.testfn_name, opts.go_list.ImportPath}
+    return {'-run', opts.testfn_name, scope}
   elseif opts.mode == 'bench' then
-    return {'-run', '^$', '-bench', opts.testfn_name, opts.go_list.ImportPath}
+    return {'-run', '^$', '-bench', opts.testfn_name, scope}
   elseif opts.mode == 'fuzz' then
-    return {'-run', '^$', '-fuzz', opts.testfn_name, opts.go_list.ImportPath}
+    return {'-run', '^$', '-fuzz', opts.testfn_name, scope}
   else
     error("mode can only be 'run' | 'bench' | 'fuzz'")
   end
@@ -114,7 +119,7 @@ M.my_term_opts = function(opts)
 
     --- NOTE: 如果是 `go test -coverprofile ./...` , go_list 中需要传递 project 属性, 用于指定文件名.
     --- 后半部分是将 filepath 中的 / 替换成 %.
-    local cover_filename = opts.go_list.project or string.gsub(opts.go_list.ImportPath, '/', '%%')
+    local cover_filename = opts.project or string.gsub(opts.go_list.ImportPath, '/', '%%')
     local cover_out = coverage_dir .. cover_filename .. '_cover.out'
     local cover_html = coverage_dir .. cover_filename .. '_cover.html'
 

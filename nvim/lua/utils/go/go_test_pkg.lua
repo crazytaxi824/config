@@ -7,20 +7,13 @@ local go_utils = require("utils.go.utils")
 local M = {}
 
 --- go test run current Package --------------------------------------------------------------------
---- opt.mode: 'run' | 'bench'
 --- NOTE: 不能同时运行多个 fuzz test. Error: will not fuzz, -fuzz matches more than one fuzz test.
 local function go_test_pkg(opts)
-  --- 获取 flag_cmd {prefix, flag, suffix}
   go_utils.parse_testflag_cmd(opts)
 end
 
 --- go test run/bench multiple packages (Project) --------------------------------------------------
---- opt.mode = 'run' | 'bench'
 local function go_test_proj(opts)
-  --- VVI: 标记为 test 整个 project, 传递的 string 是 -coverprofile 的文件名.
-  opts.project = 'project'
-
-  --- 获取 flag_cmd {prefix, flag, suffix}
   go_utils.parse_testflag_cmd(opts)
 end
 
@@ -94,6 +87,20 @@ M.go_test_bench_pkg = function()
 end
 
 M.go_test_run_proj = function()
+  --- 获取 go list info, `cd src/xxx && go list -json`
+  local dir = vim.fn.expand('%:h')
+  local go_list = go_utils.go_list(dir)
+  if not go_list then
+    return
+  end
+
+  local opts = {
+    testfn_name = '^Test.*',
+    mode = 'run',
+    go_list = go_list,
+    project = 'project', --- VVI: 标记为 test 整个 project, 传递的 string 是 -coverprofile 的文件名.
+  }
+
   --- cannot use pprof flag with multiple packages
   local select = {'none', 'cover', 'coverprofile'}
   vim.ui.select(select, {
@@ -103,12 +110,27 @@ M.go_test_run_proj = function()
     end
   }, function(choice)
     if choice then
-      go_test_proj({mode = 'run', flag = choice })
+      opts.flag = choice
+      go_test_proj(opts)
     end
   end)
 end
 
 M.go_test_bench_proj = function()
+  --- 获取 go list info, `cd src/xxx && go list -json`
+  local dir = vim.fn.expand('%:h')
+  local go_list = go_utils.go_list(dir)
+  if not go_list then
+    return
+  end
+
+  local opts = {
+    testfn_name = '^Bench.*',
+    mode = 'bench',
+    go_list = go_list,
+    project = 'project', --- VVI: 标记为 test 整个 project, 传递的 string 是 -coverprofile 的文件名.
+  }
+
   --- cannot use pprof flag with multiple packages
   local select = {'none', 'cover', 'coverprofile'}
   vim.ui.select(select, {
@@ -118,7 +140,8 @@ M.go_test_bench_proj = function()
     end
   }, function(choice)
     if choice then
-      go_test_proj({mode = 'bench', flag = choice })
+      opts.flag = choice
+      go_test_proj(opts)
     end
   end)
 end
