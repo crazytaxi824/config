@@ -3,8 +3,7 @@
 -- go tool pprof -http=localhost: cpu.out
 -- go tool pprof -http=localhost: mem.out
 -- go tool pprof -http=localhost: mutex.out
--- go tool trace -http=localhost: trace.out
--- go tool cover -html=cover.out -o cover.html && open cover.html
+-- go tool trace -http=localhost: trace.out  -- VVI
 
 local M ={}
 
@@ -82,9 +81,15 @@ local function select_pprof(term_bufnr, pprof_dir)
       return M.flag_desc[item].desc
     end
   }, function(choice)
-    if choice then
-      job_exec({'go', 'tool', 'pprof', '-http=localhost:', pprof_dir..choice..'.out'}, term_bufnr)
+    if not choice then
+      return
     end
+
+    local cmd = {'go', 'tool', 'pprof', '-http=localhost:', pprof_dir..choice..'.out'}
+    if choice == 'trace' then
+      cmd = {'go', 'tool', 'trace', '-http=localhost:', pprof_dir..choice..'.out'}
+    end
+    job_exec(cmd, term_bufnr)
   end)
 end
 
@@ -108,17 +113,21 @@ local function set_cmd_and_keymaps(term_bufnr, pprof_dir)
 end
 
 M.on_exit = function(opts, pprof_dir)
+  local cmd = {'go', 'tool', 'pprof', '-http=localhost:', pprof_dir..opts.flag..'.out'}
+  if opts.flag == 'trace' then
+    cmd = {'go', 'tool', 'trace', '-http=localhost:', pprof_dir..opts.flag..'.out'}
+  end
+
   --- VVI: return a on_exit(term) callback function for termopen()
   return function(term)
-    --- :GoPprof command
-    if vim.tbl_contains({'cpu', 'mem', 'mutex', 'block', 'trace'}, opts.flag) then
-      set_cmd_and_keymaps(term.bufnr, pprof_dir)
-    end
+    --- :GoPprof && <F6>
+    set_cmd_and_keymaps(term.bufnr, pprof_dir)
 
     --- autocmd BufWipeout jobstop()
     autocmd_shutdown_all_jobs(term.bufnr)
-    --- run `go tool pprof ...` in background
-    job_exec({'go', 'tool', 'pprof', '-http=localhost:',pprof_dir..opts.flag..'.out'}, term.bufnr)
+
+    --- run `go tool pprof/trace ...` in background
+    job_exec(cmd, term.bufnr)
   end
 end
 
