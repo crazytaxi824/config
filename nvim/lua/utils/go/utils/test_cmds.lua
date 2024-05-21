@@ -65,11 +65,11 @@ local fuzz_choices  = {'fuzz30s', 'fuzz60s', 'fuzz5m', 'fuzz10m', 'fuzz_input'}
 --- mode = 'run' | 'bench' | 'fuzz'
 local function mode_flags(opts)
   if opts.mode == 'run' then
-    return {'-run', '^'..opts.testfn_name..'$', opts.go_list.ImportPath}
+    return {'-run', opts.testfn_name, opts.go_list.ImportPath}
   elseif opts.mode == 'bench' then
-    return {'-run', '^$', '-bench', '^'..opts.testfn_name..'$', opts.go_list.ImportPath}
+    return {'-run', '^$', '-bench', opts.testfn_name, opts.go_list.ImportPath}
   elseif opts.mode == 'fuzz' then
-    return {'-run', '^$', '-fuzz', '^'..opts.testfn_name..'$', opts.go_list.ImportPath}
+    return {'-run', '^$', '-fuzz', opts.testfn_name, opts.go_list.ImportPath}
   else
     error("mode can only be 'run' | 'bench' | 'fuzz'")
   end

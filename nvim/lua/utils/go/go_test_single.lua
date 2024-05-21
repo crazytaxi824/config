@@ -83,7 +83,7 @@ M.go_test_single_func = function(prompt)
   end
 
   local opts = {
-    testfn_name = testfn_name,
+    testfn_name = '^'..testfn_name..'$',
     mode = mode,
     flag = 'none',
     go_list = go_list,
