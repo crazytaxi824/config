@@ -13,9 +13,9 @@
 	# %C(auto) - 使用 git 的 [color] 设置.
 	# %C(reset) - 重置颜色为 white.
 	# `$ git tree` 自定义命令, 显示缩略信息. 显示的信息有两行，第二行给一个空格, 否则有的行间距会变成2行.
-	tree = log --graph --all --format=format:'%C(auto)%h -%d %s %C(243)(%ar)%C(reset)%n'' '
+	tree = log --graph --color=always --all --format=format:'%C(auto)%h -%d %s %C(243)(%ar)%C(reset)%n'' '
 	# `$ git vtree` - 显示详细信息. 一共有三行: 第二行开头的空格数量是固定的, 因为都是 commit hash 宽度固定; 第三行给一个空格.
-	vtree = log --date=format:'%d-%b-%Y %H:%M:%S' --graph --all --format=format:'%C(auto)%h -%d %C(74)%ad %C(243)(%ar) - %C(173)%an%C(reset)%n''          %C(auto)%s%n'' '
+	vtree = log --graph --color=always --all --date=format:'%d-%b-%Y %H:%M:%S' --format=format:'%C(auto)%h -%d %C(74)%ad %C(243)(%ar) - %C(173)%an%C(reset)%n''          %C(auto)%s%n'' '
 
 # https://git-scm.com/docs/git-config#Documentation/git-config.txt-coloradvice
 # color value 为 style ... fg bg, bold ul 234 191 意思是 bold, underline, fg=234, bg=191
