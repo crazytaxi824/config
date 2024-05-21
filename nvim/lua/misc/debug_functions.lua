@@ -2,9 +2,9 @@
 function Get_LSP_Client_info_By_bufnr(bufnr)
   local clients
   if bufnr then
-    clients = vim.tbl_values(vim.lsp.get_active_clients({bufnr = bufnr}))
+    clients = vim.tbl_values(vim.lsp.get_clients({bufnr = bufnr}))
   else
-    clients = vim.tbl_values(vim.lsp.get_active_clients())
+    clients = vim.tbl_values(vim.lsp.get_clients())
   end
 
   vim.print(clients)

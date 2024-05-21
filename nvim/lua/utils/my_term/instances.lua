@@ -9,7 +9,7 @@ M.exec_term = mt.new({
   auto_scroll = true,
   print_cmd = true,
   buf_output = true,  -- 这里使用 buf_job_output, ignore "jobdone" 设置.
-  jobstart = function(term_obj)
+  after_run = function(term_obj)
     --- highlight filepath & jump to filepath
     if term_obj.bufnr then
       fp.setup(term_obj.bufnr)

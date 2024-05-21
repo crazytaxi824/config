@@ -1,7 +1,7 @@
 --- javascript -------------------------------------------------------------------------------------
 local function js_run(file)
   local t = require('utils.my_term.instances').exec_term
-  t.cmd = "node " .. file
+  t.cmd = {"node", file}
   t:stop()
   t:run()
 end

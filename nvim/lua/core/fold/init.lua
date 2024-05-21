@@ -43,7 +43,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     local client = vim.lsp.get_client_by_id(params.data.client_id)
 
     --- 如果 lsp 和 filetype 不对应则返回, 防止 null-ls 等 lsp 工具参与设置 fold.
-    if not vim.tbl_contains(filetype_lsp[vim.bo[params.buf].filetype], client.name) then
+    if client and not vim.tbl_contains(filetype_lsp[vim.bo[params.buf].filetype], client.name) then
       return
     end
 
@@ -131,7 +131,7 @@ vim.api.nvim_create_user_command("Fold", function()
   local bufnr = vim.api.nvim_win_get_buf(win_id)
 
   --- 如果有 lsp 则尝试 lsp fold, fallback to treesitter fold.
-  local clients = vim.lsp.get_active_clients({bufnr = bufnr})
+  local clients = vim.lsp.get_clients({bufnr = bufnr})
   if #clients > 0 then
     fold_lsp(bufnr, win_id, { treesitter_fallback = true })
     return

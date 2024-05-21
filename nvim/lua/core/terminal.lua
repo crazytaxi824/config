@@ -1,7 +1,7 @@
 --- terminal 相关设置和 autocmd
 --- `:help terminal-start`
 
---- termopen(), jobstart() 时触发
+--- termopen() 时触发
 vim.api.nvim_create_autocmd('TermOpen', {
   pattern = {"*"},
   callback = function(params)
@@ -12,6 +12,8 @@ vim.api.nvim_create_autocmd('TermOpen', {
     vim.api.nvim_set_option_value('number', false, scope)
     vim.api.nvim_set_option_value('relativenumber', false, scope)
     vim.api.nvim_set_option_value('signcolumn', 'no', scope)
+    vim.api.nvim_set_option_value('sidescrolloff', 0, scope)
+    vim.api.nvim_set_option_value('scrolloff', 0, scope)
 
     --- VVI: <ESC> 进入 terminal Normal 模式.
     local opts = {buffer = params.buf, noremap = true, silent = true, desc = "Ternimal: Normal Mode"}

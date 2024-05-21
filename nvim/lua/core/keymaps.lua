@@ -218,7 +218,7 @@ local keymaps = {
   {'n', 'tO', function() mt.open_all() end,    opt, "my_term: open All Terminals windows"},
   {'n', 'tT', function() mt.toggle_all() end,  opt, "my_term: toggle All Terminals windows"},
   {'n', 'tW', function() mt.wipeout_all() end, opt, "my_term: wipeout All Terminals"},
-  -- {'n', 'tW', function() key_fn.wipe_all_term_bufs() end, opt, "terminal: wipeout All Terminals"},
+  -- {'n', 'tW', function() key_fn.wipe_all_term_bufs() end, opt, "terminal: wipeout All Terminals"},  -- alternative
 
   --- 其他 -----------------------------------------------------------------------------------------
   --- ZZ same as `:x`
@@ -233,7 +233,6 @@ local keymaps = {
   --- VISUAL 选中的 filepath, 不管在什么 filetype 中都跳转.
   --- VVI: 这里需要使用 <CTRL-C> 先退出 VISUAL mode.
   {'v', '<S-CR>', '<C-c><cmd>lua require("utils.filepath").v_jump()<CR>', opt, 'filepath: Jump to file'},
-  {'v', '<C-S-CR>', '<C-c><cmd>lua require("utils.filepath").v_system_open()<CR>', opt, 'filepath: System Open file'},
 
   --- ` 和 ' 默认都是 `:help marks`, 这里禁止使用 ` 因为有时候 ` 需要作为 <leader>.
   {'n', '`', '<Nop>', opt},
@@ -247,11 +246,35 @@ local keymaps = {
   --{'n', '>', ':bnext<CR>', opt, 'go to next buffer'},
 
   --- hi Normal ctermbg=234 | hi Normal ctermbg=NONE 切换 bg 颜色
-  --{'n', '<leader>b', function() key_fn.toggle_editor_bg_color() end, opt, 'change editor background color'},
   {'n', '<leader>C', function() key_fn.toggle_comments_color() end, opt, 'change Comments color'},
 
   --- alacritty settings window.option_as_alt 设置 Option 当做 ALT key 使用.
   {'n', '<M-a>', function() print("<M-a> Option/Alt-A") end, opt, 'Test Option/ALT key'},
+
+  --- NOTE: v0.10.0 --------------------------------------------------------------------------------
+  --- BUG: conflict to 'gcc', `:help commenting`
+  {'n', 'gc', '<Nop>', opt},
+
+  --- NOTE: `gc` & `gcc` is remap by default.
+  {'n', '<M-/>', 'gcc', {remap=true, noremap=false}, 'Comment current line'},
+  {'i', '<M-/>', '<C-o>gcc', {remap=true, noremap=false}, 'Comment current line'},
+  {'v', '<M-/>', 'gc', {remap=true, noremap=false}, 'Comment Visual selected'},
+
+  --- 使用 gj / gk / g0 / g$ 在 wrap buffer 中移动 cursor.
+  {'n', '<Down>', 'gj', opt, 'which_key_ignore'},
+  {'n', '<Up>',   'gk', opt, 'which_key_ignore'},
+  {'n', '<Home>', function() key_fn.home_key.wrap() end, opt, 'which_key_ignore'},  -- g0 相当于 g<Home>
+  {'n', '<End>',  'g$', opt, 'which_key_ignore'},  -- g$ 相当于 g<End>
+
+  {'v', '<Down>', 'gj', opt, 'which_key_ignore'},
+  {'v', '<Up>',   'gk', opt, 'which_key_ignore'},
+  {'v', '<Home>', function() key_fn.home_key.wrap() end, opt, 'which_key_ignore'},
+  {'v', '<End>',  'g$', opt, 'which_key_ignore'},
+
+  {'i', '<Down>', '<C-o>gj', opt, 'which_key_ignore'},
+  {'i', '<Up>',   '<C-o>gk', opt, 'which_key_ignore'},
+  {'i', '<Home>', '<C-o><cmd>lua require("utils.keymaps").home_key.wrap()<CR>', opt, 'which_key_ignore'},
+  {'i', '<End>',  '<C-o>g$', opt, 'which_key_ignore'},
 }
 
 --- 这里是设置所有 key mapping 的地方 --------------------------------------------------------------

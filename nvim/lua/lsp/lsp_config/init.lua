@@ -10,7 +10,7 @@ end
 
 --- change `:LspInfo` border, `:help lspconfig-highlight`
 require('lspconfig.ui.windows').default_options.border = Nerd_icons.border
-vim.cmd('hi! link LspInfoBorder FloatBorder')
+vim.api.nvim_set_hl(0, 'LspInfoBorder', {link = 'FloatBorder'})
 
 --- 需要设置的 lsp 列表.
 local lsp_servers_map = require('lsp.svr_list').list
@@ -79,12 +79,12 @@ end
 vim.api.nvim_create_autocmd("FileType", {
   pattern = {"*"},
   callback = function(params)
-    local lsp_clients = vim.lsp.get_active_clients({ bufnr = params.buf })
+    local lsp_clients = vim.lsp.get_clients({ bufnr = params.buf })
     for _, c in ipairs(lsp_clients) do
       --- `set filetype` 后, detach 所有不匹配该 buffer 新 filetype 的 lsp client.
       --- NOTE: 排除 null-ls
       if c.name ~= 'null-ls'
-        and not vim.tbl_contains(c.config.filetypes, vim.bo[params.buf].filetype)
+        and not vim.tbl_contains(c.config['filetypes'], vim.bo[params.buf].filetype)
       then
         vim.lsp.buf_detach_client(params.buf, c.id)
       end

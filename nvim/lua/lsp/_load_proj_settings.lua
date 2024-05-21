@@ -15,7 +15,7 @@ local M = {}
 local function get_local_settings_content()
   local local_settings_filepaths = vim.fs.find({'.nvim/settings.lua'}, {
     upward = true, -- 从 pwd 向上寻找 .nvim/settings.lua 文件.
-    stop = vim.loop.os_homedir(),  -- 直到 $HOME 为止.
+    stop = vim.uv.os_homedir(),  -- 直到 $HOME 为止.
     path = vim.fs.dirname(vim.api.nvim_buf_get_name(0)),  -- 从当前文件所在目录开始查找.
     limit = 1, -- NOTE: 只找最近的一个文件.
   })
@@ -91,7 +91,7 @@ local function reload_local_settings(old_content, new_content)
   --- lsp = { gopls = { ... }, tsserver = { ... } }
   local lsp_typ = require("lsp.lsp_config.setup_opts").local_lspconfig_key
   compare_content_settings(old_content, new_content, lsp_typ, function(lsp_name)
-    local clients = vim.lsp.get_active_clients({name = lsp_name})
+    local clients = vim.lsp.get_clients({name = lsp_name})
     for _, c in ipairs(clients) do
       if new_content.lsp and new_content.lsp[lsp_name] then
         c.config.settings[lsp_name] = new_content.lsp[lsp_name]  -- 直接替换设置

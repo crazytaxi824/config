@@ -2,7 +2,7 @@
 
 local M = {}
 
-M.foldexpr_str = 'nvim_treesitter#foldexpr()'
+M.foldexpr_str = 'v:lua.vim.treesitter.foldexpr()'
 M.foldtext_str = 'v:lua.require("core.fold.foldtext").foldtext()'
 
 M.set_fold = function(bufnr, win_id)

@@ -110,7 +110,8 @@ Highlights = {
   --- 影响 listchars indentLine 颜色
   NonText = {ctermfg=Colors.g238.c, fg=Colors.g238.g},
   --- window 之间的分隔线颜色
-  VertSplit = {ctermfg=Colors.g236.c, fg=Colors.g236.g},
+  WinSeparator = {ctermfg=Colors.g236.c, fg=Colors.g236.g},
+  VertSplit = {link = 'WinSeparator'},
   --- 括号匹配颜色
   MatchParen = {
     ctermfg=Colors.yellow.c, fg=Colors.yellow.g,
@@ -195,7 +196,7 @@ Highlights = {
   --- property & parameter
   Identifier = {link = "Normal"},
   --- 常量颜色. eg: const <Constant> = 100
-  Constant= {ctermfg=Colors.blue.c, fg=Colors.blue.g},
+  Constant= {link="Boolean"},
   --Structure = {link = "Type"},  -- 默认 link to Type
 
   --- if, switch, case ...
@@ -341,13 +342,18 @@ Highlights = {
   },
 
   --- program language
+  ['@type'] = { link = "Type" },
+  ['@type.builtin'] = { link = "@type" },
+
   ['@keyword.conditional'] = { link = "Conditional" },
   ['@keyword.repeat'] = { link = "Conditional" },
   ['@keyword.return'] = { link = "Conditional" },
   ['@module'] = { ctermfg=Colors.type_green.c, fg=Colors.type_green.g },  -- package <module>
 
-  --['@constant'] = { link = "Constant" },
+  ['@constant'] = { link = "Constant" },
+  ['@constant.builtin'] = { link = "@constant" },
   ['@variable'] = { link = "Normal" },
+  ['@@variable.builtin'] = { link = "variable" },
 
   ['@property'] = { link = "Label" },
   ['@property.private'] = { ctermfg=Colors.g246.c, fg=Colors.g246.g },  -- struct{ a:1 }
@@ -405,6 +411,9 @@ Highlights = {
   typescriptInterfaceName = {link = 'Type'},
   typescriptExport = {link = 'Keyword'},
   typescriptImport = {link = 'Conditional'},
+
+  --- NOTE: v0.10.0 --------------------------------------------------------------------------------
+  CurSearch = { link = "IncSearch" },
 }
 
 --- nvim_set_hl()

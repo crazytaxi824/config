@@ -25,16 +25,15 @@ M.go_impl = function(arglist)
   local iface_name = vim.fn.expand('<cword>')
 
   --- 执行 shell cmd
-  local sh_cmd = 'impl -dir ' .. dir .. ' ' .. arglist[1] .. ' ' .. iface_name
-  vim.notify(sh_cmd)
-  local result = vim.fn.system(sh_cmd)
-  if vim.v.shell_error ~= 0 then
-    Notify(vim.trim(result),"ERROR")
-    return
+  local sh_cmd = {'impl', '-dir', dir, arglist[1], iface_name}
+  vim.notify(table.concat(sh_cmd, ' '))
+  local result = vim.system(sh_cmd, { text = true }):wait()
+  if result.code ~= 0 then
+    error(result.stderr ~= '' and result.stderr or result.code)
   end
 
   --- 删除 result 最后的空行.
-  local content = vim.split(result, '\n', {trimempty=true})
+  local content = vim.split(result.stdout, '\n', {trimempty=true})
 
   --- add 'type Foo struct{}'
   local msg = vim.list_extend({"", "type " .. arglist[1] .. " struct{}", ""}, content)

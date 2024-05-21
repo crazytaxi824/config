@@ -3,16 +3,21 @@
 -- go tool pprof -http=localhost: cpu.out
 -- go tool pprof -http=localhost: mem.out
 -- go tool pprof -http=localhost: mutex.out
--- go tool trace -http=localhost: trace.out
--- go tool cover -html=cover.out -o cover.html
-
-local go_testflags = require("utils.go.utils.testflags")
+-- go tool trace -http=localhost: trace.out  -- VVI
 
 local M ={}
 
+M.flag_desc = {
+  cpu   = { desc = 'CPU profile' },
+  mem   = { desc = 'Memory profile' },
+  mutex = { desc = 'Mutex profile' },
+  block = { desc = 'Block profile' },
+  trace = { desc = 'Trace' },
+}
+
 local cache_bg_jobs = {}  -- 缓存 bg_job_id, map-table: [term_bufnr] = {job_id, ... }
 
-M.job_exec = function (cmd, term_bufnr)
+local function job_exec(cmd, term_bufnr)
   --- 执行 cmd
   --- NOTE: 这里选择使用 termopen() 而不是 jobstart() 来执行 background job 是:
   --- 1. 为了方便使用 `:ls` 来查看未关闭的 job.
@@ -48,7 +53,7 @@ local function shutdown_all_jobs(term_bufnr)
   cache_bg_jobs[term_bufnr] = nil
 end
 
-M.autocmd_shutdown_all_jobs = function(term_bufnr)
+local function autocmd_shutdown_all_jobs(term_bufnr)
   --- jobstop() all jobs after this buffer removed.
   --- NOTE: 这里使用 group_id 是为了避免多次重复设置同一个 autocmd.
   --- NOTE: 这里不能用 BufDelete, 因为 terminal 本来就不在 buflist 中, 所以不会触发 BufDelete.
@@ -67,39 +72,63 @@ M.autocmd_shutdown_all_jobs = function(term_bufnr)
   })
 end
 
-local function select_pprof(term_bufnr)
-  --- 使用 jobstart() 在后台静默运行 `go tool pprof/trace ...`
+local function select_pprof(term_bufnr, pprof_dir)
+  --- 在后台静默运行 `go tool pprof/trace ...`
   local select = {'cpu', 'mem', 'mutex', 'block', 'trace'}
   vim.ui.select(select, {
-    prompt = 'choose pprof profile to view: [coverage profile is an HTML, open to view]',
+    prompt = 'choose pprof profile to view: [coverage profile is an HTML file, open to view]',
     format_item = function(item)
-      return go_testflags.get_testflag_desc(item)
+      return M.flag_desc[item].desc
     end
   }, function(choice)
-    if choice then
-      local flag_cmd = go_testflags.parse_testflag_cmd(choice)
-      if flag_cmd and flag_cmd.suffix and flag_cmd.suffix ~= '' then
-        M.job_exec(flag_cmd.suffix, term_bufnr)
-      end
+    if not choice then
+      return
     end
+
+    local cmd = {'go', 'tool', 'pprof', '-http=localhost:', pprof_dir..choice..'.out'}
+    if choice == 'trace' then
+      cmd = {'go', 'tool', 'trace', '-http=localhost:', pprof_dir..choice..'.out'}
+    end
+    job_exec(cmd, term_bufnr)
   end)
 end
 
 --- create :GoPprof command & <F6> keymap
-M.set_cmd_and_keymaps = function(term_bufnr)
+local function set_cmd_and_keymaps(term_bufnr, pprof_dir)
   --- user command
-  vim.api.nvim_buf_create_user_command(term_bufnr, 'GoPprof', function() select_pprof(term_bufnr) end, {bang=true})
+  vim.api.nvim_buf_create_user_command(term_bufnr, 'GoPprof', function()
+    select_pprof(term_bufnr, pprof_dir)
+  end, {bang=true})
 
   --- keymap
   vim.api.nvim_buf_set_keymap(term_bufnr, 'n', '<F6>', '', {
     noremap = true,
     silent = true,
-    callback = function() select_pprof(term_bufnr) end,
+    callback = function() select_pprof(term_bufnr, pprof_dir) end,
     desc = 'go_pprof: Go tool pprof/trace',
   })
 
   --- info Keymap and Command setup
   Notify("terminal <buffer> can now use '<F6>' OR ':GoPprof' to display other profiles.", "INFO")
+end
+
+M.on_exit = function(opts, pprof_dir)
+  local cmd = {'go', 'tool', 'pprof', '-http=localhost:', pprof_dir..opts.flag..'.out'}
+  if opts.flag == 'trace' then
+    cmd = {'go', 'tool', 'trace', '-http=localhost:', pprof_dir..opts.flag..'.out'}
+  end
+
+  --- VVI: return a on_exit(term) callback function for termopen()
+  return function(term)
+    --- :GoPprof && <F6>
+    set_cmd_and_keymaps(term.bufnr, pprof_dir)
+
+    --- autocmd BufWipeout jobstop()
+    autocmd_shutdown_all_jobs(term.bufnr)
+
+    --- run `go tool pprof/trace ...` in background
+    job_exec(cmd, term.bufnr)
+  end
 end
 
 return M

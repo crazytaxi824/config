@@ -2,18 +2,17 @@
 --- bootstrap -------------------------------------------------------------------------------------- {{{
 local lazydir = vim.fn.stdpath("data") .. "/lazy"
 local lazypath = lazydir .. "/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
-  local result = vim.fn.system({
+if not vim.uv.fs_stat(lazypath) then
+  local result = vim.system({
     "git",
     "clone",
     "--filter=blob:none",
     "https://github.com/folke/lazy.nvim.git",
     "--branch=stable", -- latest stable release
     lazypath,
-  })
-  if vim.v.shell_error ~= 0 then
-    Notify(vim.trim(result), "ERROR")
-    return
+  }, { text = true }):wait()
+  if result.code ~= 0 then
+    error(result.stderr ~= '' and result.stderr or result.code)
   end
 end
 vim.opt.rtp:prepend(lazypath)
@@ -93,8 +92,6 @@ local plugins = {
       "nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
       "windwp/nvim-ts-autotag",  -- auto close tag <div></div>
     },
-
-    event = "VeryLazy",
   },
 
   --- 第一方 module 插件 ---
@@ -116,31 +113,31 @@ local plugins = {
 
   --- 以下是使用了 treesitter 功能的插件. (这些插件也可以不使用 treesitter 的功能)
   --- 注释
-  {
-    "JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
-    commit = "0bdccb9",
-    config = function()
-      require("ts_context_commentstring").setup({
-        enable_autocmd = false,
-      })
-    end,
-
-    lazy = true,  -- nvim-treesitter 加载时自动加载.
-  },
-
-  {
-    "numToStr/Comment.nvim",
-    commit = "0236521",
-    config = function() require("plugins.settings.comment") end,
-    dependencies = {"JoosepAlviste/nvim-ts-context-commentstring"},  -- https://github.com/numToStr/Comment.nvim#-hooks
-
-    keys = {
-      --- VVI: alacritty 中已将 <Command + /> 映射为以下组合键.
-      {'<M-/>', '<Plug>(comment_toggle_linewise_current)',      mode = 'n', desc = 'Comment current line'},
-      {'<M-/>', '<C-o><Plug>(comment_toggle_linewise_current)', mode = 'i', desc = 'Comment current line'},
-      {'<M-/>', '<Plug>(comment_toggle_linewise_visual)',       mode = 'v', desc = 'Comment Visual selected'},
-    },
-  },
+  -- {
+  --   "JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
+  --   commit = "0bdccb9",
+  --   config = function()
+  --     require("ts_context_commentstring").setup({
+  --       enable_autocmd = false,
+  --     })
+  --   end,
+  --
+  --   lazy = true,  -- nvim-treesitter 加载时自动加载.
+  -- },
+  --
+  -- {
+  --   "numToStr/Comment.nvim",
+  --   commit = "0236521",
+  --   config = function() require("plugins.settings.comment") end,
+  --   dependencies = {"JoosepAlviste/nvim-ts-context-commentstring"},  -- https://github.com/numToStr/Comment.nvim#-hooks
+  --
+  --   keys = {
+  --     --- VVI: alacritty 中已将 <Command + /> 映射为以下组合键.
+  --     {'<M-/>', '<Plug>(comment_toggle_linewise_current)',      mode = 'n', desc = 'Comment current line'},
+  --     {'<M-/>', '<C-o><Plug>(comment_toggle_linewise_current)', mode = 'i', desc = 'Comment current line'},
+  --     {'<M-/>', '<Plug>(comment_toggle_linewise_visual)',       mode = 'v', desc = 'Comment Visual selected'},
+  --   },
+  -- },
 
   --- indent line
   {

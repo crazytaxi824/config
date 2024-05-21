@@ -15,7 +15,7 @@ local comment_hl_groups = {
 M.toggle_comment_color = function()
   local comm = vim.api.nvim_get_hl(0, {name="Comment"})
 
-  if comm.ctermfg == Highlights["Comment"].ctermfg then
+  if comm['ctermfg'] == Highlights["Comment"].ctermfg then
     for _, hl in ipairs(comment_hl_groups) do
       vim.api.nvim_set_hl(0, hl, dim_color)
     end

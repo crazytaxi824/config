@@ -37,7 +37,7 @@ local function del_cursor_move_in_wrap(bufnr)
     local buf_keymaps = vim.api.nvim_buf_get_keymap(bufnr, mode)
     for _, key in ipairs(keys) do
       for _, buf_keymap in ipairs(buf_keymaps) do
-        if buf_keymap.lhs == key then
+        if buf_keymap['lhs'] == key then
           vim.api.nvim_buf_del_keymap(bufnr, mode, key)
         end
       end
@@ -71,6 +71,7 @@ end
 vim.api.nvim_create_autocmd('OptionSet', {
   pattern = {"wrap"},
   callback = function(params)
+    -- vim.print(vim.v.option_new, vim.v.option_old, vim.v.option_oldlocal, vim.v.option_oldglobal)
     if vim.wo.wrap then
       wrap_list.add(params.buf)  -- 加入到 list
       set_cursor_move_in_wrap(params.buf)  -- 设置 keymaps

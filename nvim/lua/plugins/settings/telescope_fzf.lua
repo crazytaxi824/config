@@ -238,7 +238,7 @@ local conf = require("telescope.config").values
 
 local function my_rg_picker(additional_args)
   --- args 是一个 cmd list, eg: {'rg', '-w', '-s', 'filepath'}
-  local args = vim.tbl_flatten({conf.vimgrep_arguments, additional_args})
+  local args = vim.iter({conf.vimgrep_arguments, additional_args}):flatten():totable()
 
   --- VVI: gen_from_vimgrep() 是 preview file 的必要设置.
   --- opts 其他参数可以查看 `:help grep_string()`

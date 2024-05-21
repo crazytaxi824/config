@@ -514,9 +514,10 @@ vim.api.nvim_create_autocmd("VimEnter", {
     vim.schedule(function()
       --- undodir 不存在的情况下, `mkdir -p` 创建该文件夹.
       if vim.fn.isdirectory(vim.go.undodir) == 0 then
-        local result = vim.fn.system('mkdir -p '.. vim.go.undodir)
-        if vim.v.shell_error ~= 0 then
-          error(vim.trim(result))
+        --- sync run
+        local result = vim.system({'mkdir', '-p', vim.go.undodir}, { text = true }):wait()
+        if result.code ~= 0 then
+          error(result.stderr ~= '' and result.stderr or result.code)
         end
       end
     end)
@@ -570,16 +571,16 @@ vim.api.nvim_create_user_command('SpellCheckToggle', function()
 end, {bang=true, bar=true})
 
 --- help widnow 放到最右侧
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = {"help"},
-  callback = function(params)
-    --- 设置 bdelete 时 unload 之后, 再次打开 help 时会触发 FileType.
-    vim.bo[params.buf].bufhidden = 'unload'
-    --- move help window to the right side.
-    vim.cmd('wincmd L')
-  end,
-  desc = "help window vertically splitright",
-})
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = {"help"},
+--   callback = function(params)
+--     --- 设置 bdelete 时 unload 之后, 再次打开 help 时会触发 FileType.
+--     vim.bo[params.buf].bufhidden = 'unload'
+--     --- move help window to the right side.
+--     vim.cmd('wincmd L')
+--   end,
+--   desc = "help window vertically splitright",
+-- })
 
 
 

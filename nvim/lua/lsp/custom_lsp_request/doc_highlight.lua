@@ -78,13 +78,7 @@ local prev_doc_hl
 
 --- `:help lsp-handler`
 --- custom lsp.buf_request() handler -------------------------------------------
-local function doc_hl_handler(err, result, req, config)
-  if err then
-    require("lsp.custom_lsp_request.error_logger").log("doc_highlight_handler", req, err)
-    Notify("doc_highlight_handler error", "ERROR")
-    return
-  end
-
+local function doc_hl_handler(_, result, req, config)
   --- VVI: 没有结果的情况下, 有些 lsp 会返回 nil, 有些会返回 empty table {}. eg: cursor 在空白行.
   if not result or #result == 0 then
     --- clear previous result

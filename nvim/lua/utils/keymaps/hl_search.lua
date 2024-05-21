@@ -32,7 +32,7 @@ M.hl_search = function(key)
   --- 相当于 pcall(vim.cmd, ...)
   local status, errmsg = pcall(vim.api.nvim_exec2, 'normal! ' .. key, {output = false})
   if not status then
-    vim.notify(errmsg, vim.log.levels.ERROR) -- 这里不要使用 notify 插件, 显示错误信息.
+    vim.notify(vim.inspect(errmsg), vim.log.levels.ERROR) -- 这里不要使用 notify 插件, 显示错误信息.
     return
   end
 
