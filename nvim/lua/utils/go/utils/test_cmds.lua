@@ -185,7 +185,6 @@ M.my_term_opts = function(opts)
       cmd = vim.iter({go_test, mode_flags(opts)}):flatten():totable(),
     }
   end
-
 end
 
 --- 返回 description

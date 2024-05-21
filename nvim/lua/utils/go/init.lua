@@ -11,10 +11,8 @@ local M = {
 
   test = {
     single_func = go_test_single.go_test_single_func,
-    run_pkg     = go_test_pkg.go_test_run_pkg,
-    run_proj    = go_test_pkg.go_test_run_proj,
-    bench_pkg   = go_test_pkg.go_test_bench_pkg,
-    bench_proj  = go_test_pkg.go_test_bench_proj,
+    pkg     = go_test_pkg.go_test_pkg,
+    proj    = go_test_pkg.go_test_proj,
   },
 
   tag = {
