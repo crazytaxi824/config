@@ -47,10 +47,7 @@ end
 -- -- }}}
 
 --- go test single function under the cursor -------------------------------------------------------
---- opt.mode: 'run' | 'bench' | 'fuzz'
---- return (cmd: string|nil), eg: cmd = "go test -v -run TestFoo ImportPath"
 local function go_test_single(opts)
-  --- 获取 flag_cmd {prefix, flag, suffix}
   go_utils.parse_testflag_cmd(opts)
 end
 
