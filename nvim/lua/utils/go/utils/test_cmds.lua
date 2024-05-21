@@ -98,7 +98,7 @@ M.my_term_opts = function(opts)
       on_exit = function(term)
         --- :GoPprof command
         if vim.tbl_contains({'cpu', 'mem', 'mutex', 'block', 'trace'}, opts.flag) then
-          go_pprof.set_cmd_and_keymaps(term.bufnr)
+          go_pprof.set_cmd_and_keymaps(term.bufnr, pprof_dir)
         end
 
         --- autocmd BufWipeout jobstop()

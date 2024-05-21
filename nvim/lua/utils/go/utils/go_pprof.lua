@@ -6,9 +6,15 @@
 -- go tool trace -http=localhost: trace.out
 -- go tool cover -html=cover.out -o cover.html && open cover.html
 
-local go_testflags = require("utils.go.utils.testflags")
-
 local M ={}
+
+local flag_desc = {
+  cpu   = { desc = 'CPU profile' },
+  mem   = { desc = 'Memory profile' },
+  mutex = { desc = 'Mutex profile' },
+  block = { desc = 'Block profile' },
+  trace = { desc = 'Trace' },
+}
 
 local cache_bg_jobs = {}  -- 缓存 bg_job_id, map-table: [term_bufnr] = {job_id, ... }
 
@@ -67,34 +73,33 @@ M.autocmd_shutdown_all_jobs = function(term_bufnr)
   })
 end
 
-local function select_pprof(term_bufnr)
+local function select_pprof(term_bufnr, pprof_dir)
   --- 使用 jobstart() 在后台静默运行 `go tool pprof/trace ...`
   local select = {'cpu', 'mem', 'mutex', 'block', 'trace'}
   vim.ui.select(select, {
     prompt = 'choose pprof profile to view: [coverage profile is an HTML file, open to view]',
     format_item = function(item)
-      return go_testflags.get_testflag_desc(item)
+      return flag_desc[item].desc
     end
   }, function(choice)
     if choice then
-      local flag_cmd = go_testflags.parse_testflag_cmd(choice)
-      if flag_cmd and flag_cmd.suffix and flag_cmd.suffix ~= '' then
-        M.job_exec(flag_cmd.suffix, term_bufnr)
-      end
+      M.job_exec({'go', 'tool', 'pprof', '-http=localhost:', pprof_dir..choice..'.out'}, term_bufnr)
     end
   end)
 end
 
 --- create :GoPprof command & <F6> keymap
-M.set_cmd_and_keymaps = function(term_bufnr)
+M.set_cmd_and_keymaps = function(term_bufnr, pprof_dir)
   --- user command
-  vim.api.nvim_buf_create_user_command(term_bufnr, 'GoPprof', function() select_pprof(term_bufnr) end, {bang=true})
+  vim.api.nvim_buf_create_user_command(term_bufnr, 'GoPprof', function()
+    select_pprof(term_bufnr, pprof_dir)
+  end, {bang=true})
 
   --- keymap
   vim.api.nvim_buf_set_keymap(term_bufnr, 'n', '<F6>', '', {
     noremap = true,
     silent = true,
-    callback = function() select_pprof(term_bufnr) end,
+    callback = function() select_pprof(term_bufnr, pprof_dir) end,
     desc = 'go_pprof: Go tool pprof/trace',
   })
 
