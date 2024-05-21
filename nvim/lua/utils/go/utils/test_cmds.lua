@@ -13,7 +13,7 @@ if vim.fn.isdirectory(pprof_dir) == 0 then
   end
 end
 
-local flag_desc_cmd = {
+local flag_desc = {
   none = { desc = '[No Extra Flag]', cmd = {} },  -- VVI: cmd 不能为 nil.
 
   --- pprof 的 4 个 testflag, '-cpuprofile', '-memprofile', '-blockprofile', '-mutexprofile'
@@ -189,7 +189,7 @@ end
 
 --- 返回 description
 M.get_testflag_desc = function(flag)
-  local f = flag_desc_cmd[flag]
+  local f = flag_desc[flag]
   if not f then
     return '[flag: "' .. flag .. '" is NOT in "testflags.lua" table]'
   end

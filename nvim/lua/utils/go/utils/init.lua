@@ -1,5 +1,4 @@
 local go_list_module = require("utils.go.utils.go_list")
-local go_testflags   = require("utils.go.utils.testflags")
 local go_pprof  = require("utils.go.utils.go_pprof")
 local test_cmds = require("utils.go.utils.test_cmds")
 
