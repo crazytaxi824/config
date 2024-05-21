@@ -239,6 +239,7 @@ local function set_buf_line_output(bufnr, data, hl)
     table.remove(data, #data)
   end
 
+  --- VVI: deal with NUL bytes. print('\0', '\x00'), byte(0) 都是 null bytes.
   --- replace 所有的 '\n', 因为 '\n' 会造成 nvim_buf_set_lines() Error.
   --- 这里的 '\n' 其实是 byte(0) 本应该是 '\null' 但是只显示了第一个字符.
   for i, d in ipairs(data) do
