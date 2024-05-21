@@ -78,7 +78,6 @@ local function mode_flags(opts)
   end
 end
 
---- VVI: TODO:
 --- my_term_opts = {
 ---   cwd = dir,
 ---   cmd = {cmd_list},
