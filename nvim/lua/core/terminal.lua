@@ -1,7 +1,7 @@
 --- terminal 相关设置和 autocmd
 --- `:help terminal-start`
 
---- termopen(), jobstart() 时触发
+--- termopen() 时触发
 vim.api.nvim_create_autocmd('TermOpen', {
   pattern = {"*"},
   callback = function(params)

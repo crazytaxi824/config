@@ -73,7 +73,7 @@ local function autocmd_shutdown_all_jobs(term_bufnr)
 end
 
 local function select_pprof(term_bufnr, pprof_dir)
-  --- 使用 jobstart() 在后台静默运行 `go tool pprof/trace ...`
+  --- 在后台静默运行 `go tool pprof/trace ...`
   local select = {'cpu', 'mem', 'mutex', 'block', 'trace'}
   vim.ui.select(select, {
     prompt = 'choose pprof profile to view: [coverage profile is an HTML file, open to view]',
