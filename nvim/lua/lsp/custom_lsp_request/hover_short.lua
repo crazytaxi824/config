@@ -169,6 +169,7 @@ M.hover_short = function()
     }
   )
 
+  local max_width = math.floor(vim.go.columns * 0.8)
   vim.lsp.buf_request(0, 'textDocument/hover', param,
     --- VVI: 添加 offsetX 设置到 handler, 用来偏移 open_floating_preview() window
     vim.lsp.with(hover_short_handler,  -- VVI: 调用自定义 handler
@@ -178,6 +179,7 @@ M.hover_short = function()
         focusable = false,
         border = {"","","","█","","","","█"},
         anchor_bias = 'above',
+        max_width = max_width,
         close_events = {"WinScrolled"},  -- 默认 {"CursorMoved", "CursorMovedI", "InsertCharPre"}
       }
     )

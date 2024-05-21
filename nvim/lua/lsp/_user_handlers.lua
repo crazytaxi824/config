@@ -37,6 +37,7 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 )
 
 --- 'textDocument/hover' handler 的 border 样式 ----------------------------------------------------
+local max_width = math.floor(vim.go.columns * 0.8)
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
   vim.lsp.handlers["textDocument/hover"],
   {
@@ -46,6 +47,7 @@ vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
     focusable = false,  -- false: 重复执行 vim.lsp.buf.hover() 时不会进入 floating window.
     border = {"","","","█","▀","▀","▀","█"},
     anchor_bias = 'above',  -- popup window 优先向上弹出
+    max_width = max_width,
 
     --- events, to trigger close floating window
     --- https://github.com/neovim/neovim/blob/master/runtime/lua/vim/lsp/util.lua
