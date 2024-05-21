@@ -47,17 +47,6 @@ end
 -- -- }}}
 
 --- go test single function under the cursor -------------------------------------------------------
-local function go_test_single(opts)
-  go_utils.parse_testflag_cmd(opts)
-end
-
---- opts = {
----   testfn_name = testfn_name,
----   mode = mode,
----   flag = 'none' | 'cpu' | 'mem' | ...,
----   go_list = {},
----   project = string|nil,
---- }
 M.go_test_single_func = function(prompt)
   --- 判断当前文件是否 _test.go
   if not string.match(vim.fn.bufname(), "_test%.go$") then
@@ -79,6 +68,13 @@ M.go_test_single_func = function(prompt)
     return
   end
 
+  --- opts = {
+  ---   testfn_name = testfn_name,
+  ---   mode = mode,
+  ---   flag = 'none' | 'cpu' | 'mem' | ...,
+  ---   go_list = {},
+  ---   project = string|nil,
+  --- }
   local opts = {
     testfn_name = '^'..testfn_name..'$',
     mode = mode,
@@ -88,7 +84,7 @@ M.go_test_single_func = function(prompt)
 
   --- no prompt for testflags
   if not prompt then
-    go_test_single(opts)
+    go_utils.go_test(opts)
     return
   end
 
@@ -103,7 +99,7 @@ M.go_test_single_func = function(prompt)
     }, function(choice)
       if choice then
         opts.flag = choice
-        go_test_single(opts)
+        go_utils.go_test(opts)
       end
     end)
   elseif mode == 'fuzz' then
@@ -116,7 +112,7 @@ M.go_test_single_func = function(prompt)
     }, function(choice)
       if choice then
         opts.flag = choice
-        go_test_single(opts)
+        go_utils.go_test(opts)
       end
     end)
   else

@@ -51,9 +51,6 @@ local pprof_flags = {
 }
 
 local pprof_choices = {'cpu', 'mem', 'mutex', 'block', 'trace'}
-local cover_choices = {'cover', 'coverprofile'}
-local fuzz_choices  = {'fuzz30s', 'fuzz60s', 'fuzz5m', 'fuzz10m', 'fuzz_input'}
-
 
 --- opts = {
 ---   testfn_name = testfn_name,
@@ -200,7 +197,7 @@ M.get_testflag_desc = function(flag)
   return f.desc
 end
 
-M.parse_testflag_cmd = function(opts)
+M.go_test = function(opts)
   local term_opts = M.my_term_opts(opts)
   if not term_opts then
     return

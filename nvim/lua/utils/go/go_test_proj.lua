@@ -7,7 +7,7 @@ local go_utils = require("utils.go.utils")
 local M = {}
 
 --- mode = 'run'|'bench'
-M.go_test_pkg = function(mode)
+M.go_test_proj = function(mode)
   --- 获取 go list info, `cd src/xxx && go list -json`
   local dir = vim.fn.expand('%:h')
   local go_list = go_utils.go_list(dir)
@@ -22,7 +22,10 @@ M.go_test_pkg = function(mode)
   ---   go_list = {},
   ---   project = string|nil,
   --- }
-  local opts = { go_list = go_list }
+  local opts = {
+      go_list = go_list,
+      project = 'project', --- VVI: 标记为 test 整个 project, 传递的 string 是 -coverprofile 的文件名.
+  }
   if mode == 'run' then
     opts.testfn_name = '^Test.*'
     opts.mode = 'run'
@@ -33,9 +36,10 @@ M.go_test_pkg = function(mode)
     error('go test mode error: "run" | "bench" only.')
   end
 
-  local select = {'none', 'cpu', 'mem', 'mutex', 'block', 'trace', 'cover', 'coverprofile'}
+  --- cannot use pprof flag with multiple packages
+  local select = {'none', 'cover', 'coverprofile'}
   vim.ui.select(select, {
-    prompt = 'choose go test flag:',
+    prompt = 'choose go test flag: [go test multiple packages cannot use pprof flags]',
     format_item = function(item)
       return go_utils.get_testflag_desc(item)
     end

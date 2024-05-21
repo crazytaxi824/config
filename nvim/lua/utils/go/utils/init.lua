@@ -6,9 +6,7 @@ local M = {
   go_list = go_list_module.go_list,
   go_pprof = go_pprof,
 
-  -- parse_testflag_cmd = go_testflags.parse_testflag_cmd,
-  -- get_testflag_desc = go_testflags.get_testflag_desc,
-  parse_testflag_cmd = test_cmds.parse_testflag_cmd,
+  go_test = test_cmds.go_test,
   get_testflag_desc = test_cmds.get_testflag_desc,
 }
 

@@ -1,6 +1,7 @@
 local go_run            = require("utils.go.go_run")
 local go_test_single    = require("utils.go.go_test_single")
 local go_test_pkg       = require("utils.go.go_test_pkg")
+local go_test_proj       = require("utils.go.go_test_proj")
 local tool_gomodifytags = require("utils.go.tool_gomodifytags")
 local tool_gotests      = require("utils.go.tool_gotests")
 local tool_impl         = require("utils.go.tool_impl")
@@ -12,7 +13,7 @@ local M = {
   test = {
     single_func = go_test_single.go_test_single_func,
     pkg     = go_test_pkg.go_test_pkg,
-    proj    = go_test_pkg.go_test_proj,
+    proj    = go_test_proj.go_test_proj,
   },
 
   tag = {
