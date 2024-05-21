@@ -98,13 +98,7 @@ local M = {}
 --- copy from `function M.hover(_, result, ctx, config)`
 --- https://github.com/neovim/neovim/blob/master/runtime/lua/vim/lsp/handlers.lua
 --- `:help lsp-handler`, lsp-request handler 的第一个参数为 err, 这里省略不处理.
-local function hover_short_handler(err, result, req, config)
-  if err then
-    require("lsp.custom_lsp_request.error_logger").log("hover_short_handler", req, err)
-    Notify("hover_short_handler error", "ERROR")
-    return
-  end
-
+local function hover_short_handler(_, result, req, config)
   config = config or {}
   config.focus_id = req.method
   if vim.api.nvim_get_current_buf() ~= req.bufnr then
