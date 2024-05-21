@@ -367,10 +367,10 @@ end
 --- 创建一个 window 用于 terminal 运行
 M.create_term_win = function(bufnr)
   local exist_win_id = find_exist_term_win()
-  if vim.fn.win_gotoid(exist_win_id) == 1 then
+  if exist_win_id then
     --- at least 1 terminal window exist
     --- TODO relative='win', win=win_id
-    vim.api.nvim_open_win(bufnr, true, {split='right'})
+    vim.api.nvim_open_win(bufnr, true, {win=exist_win_id, split='right'})
   else
     --- no terminal window exist, create a botright window for terminals.
     --- TODO relative='editor'
