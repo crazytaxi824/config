@@ -377,8 +377,12 @@ M.create_term_win = function(bufnr)
     vim.api.nvim_open_win(bufnr, true, {height=win_height, split='below'})
   end
 
-  --- return win_id
-  return vim.api.nvim_get_current_win()
+  local win_id = vim.api.nvim_get_current_win()
+  local scope={ scope='local', win=win_id }
+  vim.api.nvim_set_option_value('sidescrolloff', 0, scope)
+  vim.api.nvim_set_option_value('scrolloff', 0, scope)
+
+  return win_id
 end
 
 --- 打开/创建 terminal window 用于 termopen() ------------------------------------------------------ {{{
