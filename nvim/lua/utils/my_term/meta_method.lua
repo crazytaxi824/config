@@ -1,7 +1,6 @@
 local M = {}
 
 M.global_my_term_cache = {}  -- map-like table { id:term_obj }
-M.name_tag=';#my_term#'
 M.bufvar_myterm = "my_term"
 
 --- for persist my_term window height
@@ -27,7 +26,6 @@ M.default_opts = {
   cmd = vim.go.shell, -- `:help 'shell'`, get global option 'shell', 相当于 os.getenv('SHELL')
   cwd = nil,          -- termopen() & jobstart() 中的 opts.
   auto_scroll = nil,  -- goto bottom of the terminal. 在 on_stdout & on_stderr 中触发.
-  print_cmd = nil,    -- bool, 是否打印 cmd. 默认不打印.
   buf_output = nil,   -- bool, 是否用 buf_job_output 执行, 默认使用 termopen().
 
   --- callback functions
@@ -181,15 +179,10 @@ local function termopen_cmd(term_obj, term_win_id)
     return
   end
 
-  local cmd = term_obj.cmd .. M.name_tag  .. term_obj.id
-  if term_obj.print_cmd then
-    cmd = 'echo -e "\\e[32m' .. vim.fn.escape(term_obj.cmd,'"') .. ' \\e[0m" && ' .. cmd
-  end
-
   --- VVI: 使用 nvim_buf_call() 时 bufnr 必须被某一个 window 显示, 否则 vim 会创建一个看不见的临时 autocmd window
   --- 用于执行 function. 导致 TermOpen event 中获取的 win id 是这个临时 window, 会造成一些 bug.
   vim.api.nvim_buf_call(term_obj.bufnr, function()
-    term_obj.job_id = vim.fn.termopen(cmd, {
+    term_obj.job_id = vim.fn.termopen(term_obj.cmd, {
       cwd = term_obj.cwd,
 
       on_stdout = function(job_id, data, event)  -- event 是 'stdout'
@@ -220,6 +213,9 @@ local function termopen_cmd(term_obj, term_win_id)
       end,
     })
   end)
+
+  --- set bufname after termopen()
+  vim.api.nvim_buf_set_name(term_obj.bufnr, "term://#my_term#" .. term_obj.id)
 end
 -- -- }}}
 
@@ -289,14 +285,17 @@ local function buf_job_output(term_obj, term_win_id)
     vim.api.nvim_set_option_value('listchars', listchars, { scope='local', win=term_win_id })
   end)
 
-  --- set bufname
-  vim.api.nvim_buf_set_name(term_obj.bufnr, "term://" .. term_obj.cmd .. M.name_tag .. term_obj.id)
-
-  if term_obj.print_cmd then
-    vim.api.nvim_buf_set_lines(term_obj.bufnr, 0, -1, true, {term_obj.cmd})  -- clear buffer text & print cmd
-    vim.api.nvim_buf_add_highlight(term_obj.bufnr, -1, "my_output_sys", 0, 0, -1)  -- highlight 第一行
-    vim.bo[term_obj.bufnr].modifiable = false
+  --- print cmd
+  local print_cmd
+  local cmd_typ = type(term_obj.cmd)
+  if cmd_typ == "string" then
+    print_cmd = term_obj.cmd
+  elseif cmd_typ == "table" then
+    print_cmd = table.concat(term_obj.cmd, ' ')
   end
+  vim.api.nvim_buf_set_lines(term_obj.bufnr, 0, -1, true, {print_cmd})  -- clear buffer text & print cmd
+  vim.api.nvim_buf_add_highlight(term_obj.bufnr, -1, "my_output_sys", 0, 0, -1)  -- highlight 第一行
+  vim.bo[term_obj.bufnr].modifiable = false
 
   --- keymap
   set_output_buf_keymaps(term_obj)
@@ -358,6 +357,9 @@ local function buf_job_output(term_obj, term_win_id)
       buf_scroll_bottom(term_obj)
     end,
   })
+
+  --- set bufname
+  vim.api.nvim_buf_set_name(term_obj.bufnr, "term://#my_term#console#" .. term_obj.id)
 end
 -- -- }}}
 
