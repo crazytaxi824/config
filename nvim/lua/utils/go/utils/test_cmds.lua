@@ -92,17 +92,7 @@ M.my_term_opts = function(opts)
     return {
       cwd = opts.go_list.Root,
       cmd = vim.iter({go_test, pprof_flags, mode_flags(opts)}):flatten():totable(),
-      on_exit = function(term)
-        --- :GoPprof command
-        if vim.tbl_contains({'cpu', 'mem', 'mutex', 'block', 'trace'}, opts.flag) then
-          go_pprof.set_cmd_and_keymaps(term.bufnr, pprof_dir)
-        end
-
-        --- autocmd BufWipeout jobstop()
-        go_pprof.autocmd_shutdown_all_jobs(term.bufnr)
-        --- run `go tool pprof ...` in background
-        go_pprof.job_exec({'go', 'tool', 'pprof', '-http=localhost:',pprof_dir..opts.flag..'.out'}, term.bufnr)
-      end,
+      on_exit = go_pprof.on_exit(opts, pprof_dir),
     }
   elseif opts.flag == 'cover' then
     return {

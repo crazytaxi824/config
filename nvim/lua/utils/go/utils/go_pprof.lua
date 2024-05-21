@@ -18,7 +18,7 @@ local flag_desc = {
 
 local cache_bg_jobs = {}  -- 缓存 bg_job_id, map-table: [term_bufnr] = {job_id, ... }
 
-M.job_exec = function (cmd, term_bufnr)
+local function job_exec(cmd, term_bufnr)
   --- 执行 cmd
   --- NOTE: 这里选择使用 termopen() 而不是 jobstart() 来执行 background job 是:
   --- 1. 为了方便使用 `:ls` 来查看未关闭的 job.
@@ -54,7 +54,7 @@ local function shutdown_all_jobs(term_bufnr)
   cache_bg_jobs[term_bufnr] = nil
 end
 
-M.autocmd_shutdown_all_jobs = function(term_bufnr)
+local function autocmd_shutdown_all_jobs(term_bufnr)
   --- jobstop() all jobs after this buffer removed.
   --- NOTE: 这里使用 group_id 是为了避免多次重复设置同一个 autocmd.
   --- NOTE: 这里不能用 BufDelete, 因为 terminal 本来就不在 buflist 中, 所以不会触发 BufDelete.
@@ -83,13 +83,13 @@ local function select_pprof(term_bufnr, pprof_dir)
     end
   }, function(choice)
     if choice then
-      M.job_exec({'go', 'tool', 'pprof', '-http=localhost:', pprof_dir..choice..'.out'}, term_bufnr)
+      job_exec({'go', 'tool', 'pprof', '-http=localhost:', pprof_dir..choice..'.out'}, term_bufnr)
     end
   end)
 end
 
 --- create :GoPprof command & <F6> keymap
-M.set_cmd_and_keymaps = function(term_bufnr, pprof_dir)
+local function set_cmd_and_keymaps(term_bufnr, pprof_dir)
   --- user command
   vim.api.nvim_buf_create_user_command(term_bufnr, 'GoPprof', function()
     select_pprof(term_bufnr, pprof_dir)
@@ -105,6 +105,21 @@ M.set_cmd_and_keymaps = function(term_bufnr, pprof_dir)
 
   --- info Keymap and Command setup
   Notify("terminal <buffer> can now use '<F6>' OR ':GoPprof' to display other profiles.", "INFO")
+end
+
+M.on_exit = function(opts, pprof_dir)
+  --- VVI: return a on_exit(term) callback function for termopen()
+  return function(term)
+    --- :GoPprof command
+    if vim.tbl_contains({'cpu', 'mem', 'mutex', 'block', 'trace'}, opts.flag) then
+      set_cmd_and_keymaps(term.bufnr, pprof_dir)
+    end
+
+    --- autocmd BufWipeout jobstop()
+    autocmd_shutdown_all_jobs(term.bufnr)
+    --- run `go tool pprof ...` in background
+    job_exec({'go', 'tool', 'pprof', '-http=localhost:',pprof_dir..opts.flag..'.out'}, term.bufnr)
+  end
 end
 
 return M
