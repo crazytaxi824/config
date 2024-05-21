@@ -1,4 +1,5 @@
 local go_pprof = require("utils.go.utils.go_pprof")
+local go_cover = require("utils.go.utils.go_cover")
 
 local M = {}
 
@@ -113,25 +114,8 @@ M.my_term_opts = function(opts)
     return {
       cwd = opts.go_list.Root,
       cmd = vim.iter({go_test, '-coverprofile', cover_out, mode_flags(opts)}):flatten():totable(),
-      before_run = function()
-        --- mkdir for coverage files
-        if vim.fn.isdirectory(coverage_dir) == 0 then
-          local result = vim.system({'mkdir', '-p', coverage_dir}, { text = true }):wait()
-          if result.code ~= 0 then
-            error(result.stderr ~= '' and result.stderr or result.code)
-          end
-        end
-      end,
-      on_exit = function()
-        --- convert cover.out -> cover.html
-        local result = vim.system({'go', 'tool', 'cover', '-html', cover_out, '-o', cover_html,}, {text = true,}):wait()
-        if result.code ~= 0 then
-          error(result.stderr ~= '' and result.stderr or result.code)
-        end
-
-        --- system open cover.html file.
-        vim.ui.open(cover_html)
-      end,
+      before_run = go_cover.before_run(coverage_dir),
+      on_exit = go_cover.on_exit(cover_out, cover_html),
     }
   elseif opts.flag == 'fuzz30s' then
     return {
