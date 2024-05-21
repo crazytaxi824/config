@@ -134,7 +134,7 @@ M.lsp_fold_request = function(bufnr, win_id, opts)
 
   buf_timer[bufnr] = {}
   buf_timer[bufnr].timer = vim.defer_fn(function()
-    local params = {textDocument = require('vim.lsp.util').make_text_document_params(bufnr)}
+    local params = {textDocument = vim.lsp.util.make_text_document_params(bufnr)}
     buf_timer[bufnr].cancel = vim.lsp.buf_request_all(bufnr, 'textDocument/foldingRange', params, function(resp)
       --- VVI: 获取到 resps 之后再 init cache, 否则可能出现 init cache 之后
       --- buf_request_all() 失败导致 str_cache[bufnr] = {'0', ...} 被全部初始化为 "0".
