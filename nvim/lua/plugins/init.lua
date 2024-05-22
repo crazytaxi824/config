@@ -336,7 +336,7 @@ local plugins = {
   {
     "nvim-telescope/telescope.nvim",
     branch = "0.1.x",  -- master branch is nightly version.
-    tag = "0.1.6",
+    tag = "0.1.7",
     config = function() require("plugins.settings.telescope_fzf") end,
     dependencies = {
       "nvim-lua/plenary.nvim",
