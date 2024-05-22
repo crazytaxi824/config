@@ -367,7 +367,7 @@ end
 --- 创建一个 window 用于 terminal 运行
 M.create_term_win = function(bufnr)
   local exist_win_id = find_exist_term_win()
-  if exist_win_id then
+  if vim.fn.win_gotoid(exist_win_id)==1 then
     --- at least 1 terminal window exist
     --- TODO relative='win', win=win_id
     vim.api.nvim_open_win(bufnr, true, {win=exist_win_id, split='right'})
@@ -377,12 +377,7 @@ M.create_term_win = function(bufnr)
     vim.api.nvim_open_win(bufnr, true, {height=win_height, split='below'})
   end
 
-  local win_id = vim.api.nvim_get_current_win()
-  local scope={ scope='local', win=win_id }
-  vim.api.nvim_set_option_value('sidescrolloff', 0, scope)
-  vim.api.nvim_set_option_value('scrolloff', 0, scope)
-
-  return win_id
+  return vim.api.nvim_get_current_win()
 end
 
 --- 打开/创建 terminal window 用于 termopen() ------------------------------------------------------ {{{
@@ -453,6 +448,10 @@ local function create_my_term(term_obj)
   else
     termopen_cmd(term_obj, term_win_id)
   end
+
+  local scope={ scope='local', win=term_win_id }
+  vim.api.nvim_set_option_value('sidescrolloff', 0, scope)
+  vim.api.nvim_set_option_value('scrolloff', 0, scope)
 
   --- VVI: doautocmd "BufEnter & BufWinEnter term://"
   --- 触发时机在 after TermOpen & before TermClose
