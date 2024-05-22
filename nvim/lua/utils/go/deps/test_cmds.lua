@@ -28,8 +28,8 @@
 --- go test -v -fuzztime 15s -run ^$ -fuzz "^FuzzFoo$" local/src/color
 --- }}}
 
-local go_pprof = require("utils.go.utils.go_pprof")
-local go_cover = require("utils.go.utils.go_cover")
+local go_pprof = require("utils.go.deps.go_pprof")
+local go_cover = require("utils.go.deps.go_cover")
 
 local M = {}
 

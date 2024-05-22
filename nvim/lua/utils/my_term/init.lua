@@ -1,3 +1,5 @@
+local g = require('utils.my_term.deps.global')
+local t_win = require('utils.my_term.deps.term_win')
 local meta_method = require("utils.my_term.meta_method")
 
 local M = {}
@@ -6,7 +8,7 @@ M.new = function(opts)
   opts = vim.tbl_deep_extend('force', meta_method.default_opts, opts or {})
 
   --- NOTE: terminal 已经存在, 无法使用相同 id 创建新的 terminal.
-  if meta_method.global_my_term_cache[opts.id] then
+  if g.global_my_term_cache[opts.id] then
     error('terminal id='.. opts.id .. ' is already created')
   end
 
@@ -46,7 +48,7 @@ M.open_shell_term = function()
       end,
       on_exit = function(term_obj)
         --- VVI: 手动 :bw 删除 buffer 时会触发 TermClose, 导致重复 wipeout buffer 而报错.
-        if meta_method.term_buf_exist(term_obj.bufnr) then
+        if g.term_buf_exist(term_obj.bufnr) then
           vim.api.nvim_buf_delete(term_obj.bufnr, {force=true})
         end
 
@@ -74,7 +76,7 @@ end
 
 --- return an term object by id
 M.get_term_by_id = function(id)
-  return meta_method.global_my_term_cache[id]
+  return g.global_my_term_cache[id]
 end
 
 --- get term_id by term_win_id
@@ -87,26 +89,26 @@ end
 
 --- close all my_term windows
 M.close_all = function()
-  for _, term_obj in pairs(meta_method.global_my_term_cache) do
+  for _, term_obj in pairs(g.global_my_term_cache) do
     term_obj:close_win()
   end
 end
 
 --- open all terms which are cached in global_my_term_cache and bufnr is valid.
 M.open_all = function()
-  for _, term_obj in pairs(meta_method.global_my_term_cache) do
-    if meta_method.term_buf_exist(term_obj.bufnr) then
+  for _, term_obj in pairs(g.global_my_term_cache) do
+    if g.term_buf_exist(term_obj.bufnr) then
       local term_wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
       if #term_wins < 1 then
-        meta_method.create_term_win(term_obj.bufnr)
+        t_win.create_term_win(term_obj.bufnr)
       end
     end
   end
 end
 
 M.wipeout_all = function()
-  for _, term_obj in pairs(meta_method.global_my_term_cache) do
-    if meta_method.term_buf_exist(term_obj.bufnr) then
+  for _, term_obj in pairs(g.global_my_term_cache) do
+    if g.term_buf_exist(term_obj.bufnr) then
       term_obj:wipeout()
     end
   end
@@ -116,8 +118,8 @@ end
 M.toggle_all = function()
   --- 获取所有的 my_term windows
   local open_winid_list= {}
-  for _, term_obj in pairs(meta_method.global_my_term_cache) do
-    if meta_method.term_buf_exist(term_obj.bufnr) then
+  for _, term_obj in pairs(g.global_my_term_cache) do
+    if g.term_buf_exist(term_obj.bufnr) then
       local term_wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
       for _, w in ipairs(term_wins) do
         table.insert(open_winid_list, w)
@@ -139,15 +141,7 @@ end
 
 --- debug ------------------------------------------------------------------------------------------
 function Get_all_my_terms()
-  vim.print(meta_method.global_my_term_cache)
+  vim.print(g.global_my_term_cache)
 end
-
--- function Remove_my_term_by_id(id)
---   M.__terminate(id)
--- end
---
--- function Get_my_term_by_id(id)
---   return M.get_term_by_id(id) or M.new({id=id})
--- end
 
 return M

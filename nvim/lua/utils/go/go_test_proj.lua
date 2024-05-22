@@ -1,8 +1,8 @@
 --- `go test run/bench ./...` whole project
 --- 在 project root 下执行 'go test ./...', 即 test 整个 Project.
 
-local go_list_module = require("utils.go.utils.go_list")
-local test_cmds = require("utils.go.utils.test_cmds")
+local go_list_module = require("utils.go.deps.go_list")
+local test_cmds = require("utils.go.deps.test_cmds")
 
 local M = {}
 
