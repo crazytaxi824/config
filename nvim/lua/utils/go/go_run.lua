@@ -1,7 +1,7 @@
 --- `$ go help build`, go run & go build 使用相同的 flags.
 --- `go run` 相当于: 1. 生成一个临时的 go build file, 2. 然后 run.
 
-local go_utils = require("utils.go.utils")
+local go_utils_mod = require("utils.go.utils.go_list")
 
 local M = {}
 
@@ -10,7 +10,7 @@ M.go_run = function()
   local dir = vim.fn.expand('%:h')
 
   --- 获取 go list info, `cd src/xxx && go list -json`
-  local go_list = go_utils.go_list(dir)
+  local go_list = go_utils_mod.go_list(dir)
   if not go_list then
     return
   end
