@@ -25,14 +25,14 @@ local plugins = {
   {
     "folke/lazy.nvim",
     -- version = "*",  -- 相当于 tag='stable'
-    tag = "v10.20.4",
+    tag = "v10.20.5",
   },
 
   --- Performence & Functions ----------------------------------------------------------------------
   --- Useful lua functions used by lots of plugins
   {
     "nvim-lua/plenary.nvim",
-    commit = "08e3019",
+    commit = "a3e3bc8",
     priority = 1000,  -- 只在 lazy=false 的情况下有效. 影响加载顺序, 默认值为 50.
   },
 
@@ -53,7 +53,7 @@ local plugins = {
   --- 通知功能
   {
     "rcarriga/nvim-notify",
-    tag = "v3.13.4",
+    tag = "v3.13.5",
     config = function() require("plugins.settings.nvim_notify") end,
 
     event = "VeryLazy",
@@ -84,7 +84,7 @@ local plugins = {
   --- but if you want to extend a query use the `after/queries/` directory.
   {
     "nvim-treesitter/nvim-treesitter",
-    commit = "00a8cfd",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "7add411",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     --build = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
     config = function() require("plugins.settings.treesitter") end,
   },
@@ -109,38 +109,10 @@ local plugins = {
     event = "VeryLazy",
   },
 
-  --- 以下是使用了 treesitter 功能的插件. (这些插件也可以不使用 treesitter 的功能)
-  --- 注释
-  -- {
-  --   "JoosepAlviste/nvim-ts-context-commentstring", -- Comment 依赖 commentstring.
-  --   commit = "0bdccb9",
-  --   config = function()
-  --     require("ts_context_commentstring").setup({
-  --       enable_autocmd = false,
-  --     })
-  --   end,
-  --
-  --   lazy = true,  -- nvim-treesitter 加载时自动加载.
-  -- },
-  --
-  -- {
-  --   "numToStr/Comment.nvim",
-  --   commit = "0236521",
-  --   config = function() require("plugins.settings.comment") end,
-  --   dependencies = {"JoosepAlviste/nvim-ts-context-commentstring"},  -- https://github.com/numToStr/Comment.nvim#-hooks
-  --
-  --   keys = {
-  --     --- VVI: alacritty 中已将 <Command + /> 映射为以下组合键.
-  --     {'<M-/>', '<Plug>(comment_toggle_linewise_current)',      mode = 'n', desc = 'Comment current line'},
-  --     {'<M-/>', '<C-o><Plug>(comment_toggle_linewise_current)', mode = 'i', desc = 'Comment current line'},
-  --     {'<M-/>', '<Plug>(comment_toggle_linewise_visual)',       mode = 'v', desc = 'Comment Visual selected'},
-  --   },
-  -- },
-
   --- indent line
   {
     "lukas-reineke/indent-blankline.nvim",
-    tag = "v3.5.4",
+    tag = "v3.6.1",
     config = function() require("plugins.settings.indentline") end,  -- setup() 设置 use_treesitter = true
     dependencies = {"nvim-treesitter/nvim-treesitter"},  -- for setup({scope})
 
@@ -197,7 +169,8 @@ local plugins = {
   --- snippet engine, for "cmp_luasnip", 每次打开文件都会有一个 [Scratch] buffer.
   {
     "L3MON4D3/LuaSnip",
-    tag = "v2.3.0",
+    commit = "de1a287",
+    -- tag = "v2.3.0",
     -- build = "make install_jsregexp", -- optional
     config = function() require("plugins.settings.luasnip_snippest") end,
     dependencies = {"rafamadriz/friendly-snippets"},  -- snippets content
@@ -216,12 +189,9 @@ local plugins = {
   --- 自动括号, 同时依赖 treesitter && cmp
   {
     "windwp/nvim-autopairs",
-    commit = "b0b79e4",
+    commit = "c15de7e",
     config = function() require("plugins.settings.autopairs") end,
-    dependencies = {
-      "nvim-treesitter/nvim-treesitter",  -- setup() 中 `check_ts`, `ts_config` 需要 treesitter 支持.
-      "hrsh7th/nvim-cmp",  -- cmp.event:on() 设置.
-    },
+    dependencies = {"hrsh7th/nvim-cmp"},  -- cmp.event:on() 设置.
 
     event = "InsertEnter",
   },
@@ -231,7 +201,7 @@ local plugins = {
   --- 官方 LSP 引擎.
   {
     "neovim/nvim-lspconfig",
-    commit = "a284b14",
+    commit = "0b8165c",
     config = function() require("lsp.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全. NOTE: lspconfig 必须在 cmp_nvim_lsp 之后加载, 否则可能无法提供代码补全.
@@ -279,8 +249,8 @@ local plugins = {
   --- tabline decorator, `:help 'tabline'`
   {
     "akinsho/bufferline.nvim",
-    commit = "73540cb",
-    -- tag = "v4.5.3",
+    -- commit = "73540cb",
+    tag = "v4.6.0",
     config = function() require("plugins.settings.decor_bufferline") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
 
@@ -318,7 +288,7 @@ local plugins = {
   {
     "rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
     -- tag = "v4.0.0",
-    commit = "5934302",
+    commit = "334cf30",
     config = function() require("plugins.settings.dapui_debug") end,
     dependencies = {
       "mfussenegger/nvim-dap",
