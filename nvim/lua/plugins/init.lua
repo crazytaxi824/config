@@ -87,11 +87,6 @@ local plugins = {
     commit = "00a8cfd",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     --build = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
     config = function() require("plugins.settings.treesitter") end,
-    dependencies = {
-      --- 以下都是 treesitter modules 插件, 在 setup() 中启用的插件.
-      "nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-      "windwp/nvim-ts-autotag",  -- auto close tag <div></div>
-    },
   },
 
   --- 第一方 module 插件 ---
@@ -99,16 +94,19 @@ local plugins = {
     "nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
     commit = "55e2908",
     config = function() require("plugins.settings.treesitter_ctx") end,
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
 
-    lazy = true,  -- nvim-treesitter 加载时自动加载.
+    event = "VeryLazy",
   },
 
   --- 第三方 module 插件 ---
   {
     "windwp/nvim-ts-autotag",  -- auto close tag <div></div>
-    commit = "531f483",
+    commit = "62db4b3",
+    config = function() require("plugins.settings.treesitter_autotag") end,
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
 
-    lazy = true,  -- nvim-treesitter 加载时自动加载.
+    event = "VeryLazy",
   },
 
   --- 以下是使用了 treesitter 功能的插件. (这些插件也可以不使用 treesitter 的功能)

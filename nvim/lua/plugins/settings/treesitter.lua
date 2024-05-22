@@ -101,14 +101,6 @@ ts_configs.setup {
   ---   enable = true,
   ---   disable = { "yaml" },  -- 不要自动给 yaml 进行 indent.
   --- },
-
-  --- 启用第三方插件 modules 设置 ------------------------------------------------------------------
-  --- "windwp/nvim-ts-autotag", auto close tag <div></div>
-  --- `:help nvim-ts-autotag-default-values`
-  autotag = {
-    enable = true,
-    -- filetypes = {},
-  },
 }
 
 --- prompt before install missing parser for languages ---------------------------------------------
