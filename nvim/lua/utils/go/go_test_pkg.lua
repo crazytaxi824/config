@@ -1,7 +1,7 @@
 --- `go test run/bench ImportPath`, test 单独的 package.
 
-local go_list_module = require("utils.go.utils.go_list")
-local test_cmds = require("utils.go.utils.test_cmds")
+local go_list_module = require("utils.go.deps.go_list")
+local test_cmds = require("utils.go.deps.test_cmds")
 
 local M = {}
 

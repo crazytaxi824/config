@@ -1,7 +1,7 @@
 --- `$ go help build`, go run & go build 使用相同的 flags.
 --- `go run` 相当于: 1. 生成一个临时的 go build file, 2. 然后 run.
 
-local go_utils_mod = require("utils.go.utils.go_list")
+local go_utils_mod = require("utils.go.deps.go_list")
 
 local M = {}
 
