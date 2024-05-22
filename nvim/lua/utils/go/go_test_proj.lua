@@ -29,7 +29,7 @@ M.go_test_proj = function(mode)
     opts.testfn_name = '^Test.*'
     opts.mode = 'run'
   elseif mode == 'bench' then
-    opts.testfn_name = '^Bench.*'
+    opts.testfn_name = '^Benchmark.*'
     opts.mode = 'bench'
   else
     error('go test mode error: "run" | "bench" only.')
