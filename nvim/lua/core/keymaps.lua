@@ -251,6 +251,8 @@ local keymaps = {
   --- alacritty settings window.option_as_alt 设置 Option 当做 ALT key 使用.
   {'n', '<M-a>', function() print("<M-a> Option/Alt-A") end, opt, 'Test Option/ALT key'},
 
+  {'n', '<C-k>', '<cmd>mes clear<CR>', opt, 'message clear'},
+
   --- NOTE: v0.10.0 --------------------------------------------------------------------------------
   --- BUG: conflict to 'gcc', `:help commenting`
   {'n', 'gc', '<Nop>', opt},
