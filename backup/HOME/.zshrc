@@ -172,11 +172,9 @@ export LESS_TERMCAP_ue=$(printf "\e[0m")       # ue      rmul      stop underlin
 
 # }}}
 
-# NOTE: 安装所有的 brew 工具后, 以下设置才生效
+# NOTE 必须要: `echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile`  # for apple silicon installation.
 # --- [ homebrew ] --------------------------------------------------------------------------------- {{{
 # https://brew.sh/
-# NOTE 必须要: `echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile`  # for apple silicon installation.
-
 # 不要每次安装/更新软件时自动清理, 可以使用 `brew cleanup` 手动清理.
 export HOMEBREW_NO_INSTALL_CLEANUP=true
 
@@ -184,7 +182,6 @@ export HOMEBREW_NO_INSTALL_CLEANUP=true
 # `brew bundle check`, `brew bundle cleanup`, `brew bundle list` ...
 export HOMEBREW_BUNDLE_FILE=~/.config/Brewfile  # 默认在 ~/.Brewfile
 #export HOMEBREW_BUNDLE_NO_LOCK=1  # disable Brewfile.lock.json
-#
 # }}}
 
 # go / python / node ...
