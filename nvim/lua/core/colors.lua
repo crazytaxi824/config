@@ -145,6 +145,7 @@ Highlights = {
     ctermbg=Colors.magenta.c, bg=Colors.magenta.g,
     bold=true,
   },
+  CurSearch = { link = "IncSearch" },
   --- / ? * # g* g# 搜索颜色
   Search = {
     ctermfg=Colors.black.c,  fg=Colors.black.g,
@@ -411,9 +412,6 @@ Highlights = {
   typescriptInterfaceName = {link = 'Type'},
   typescriptExport = {link = 'Keyword'},
   typescriptImport = {link = 'Conditional'},
-
-  --- NOTE: v0.10.0 --------------------------------------------------------------------------------
-  CurSearch = { link = "IncSearch" },
 }
 
 --- nvim_set_hl()

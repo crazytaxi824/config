@@ -49,21 +49,21 @@ end
 --- 同一个 file 被 `:bwipeout` 之后再次打开, 会被分配一个新的 bufnr.
 --- 缓存文件绝对路径. buffer 被 `:bwipeout` 之后再次打开时继承之前的设置.
 --- `:bwipeout` / `:bdelete` 的 buffer 再次打开时 wrap & keymap 设置不变.
-local wrap_list = {}  -- cache fullpath
+local wrap_map = {}  -- cache fullpath, map-like
 
-function wrap_list.add(bufnr)
+wrap_map.add = function(bufnr)
   local bufname = vim.api.nvim_buf_get_name(bufnr)  -- full path
-  wrap_list[bufname] = true
+  wrap_map[bufname] = true
 end
 
-function wrap_list.remove(bufnr)
+wrap_map.remove = function(bufnr)
   local bufname = vim.api.nvim_buf_get_name(bufnr)  -- full path
-  wrap_list[bufname] = nil
+  wrap_map[bufname] = nil
 end
 
-function wrap_list.exist(bufnr)
+wrap_map.exist = function(bufnr)
   local bufname = vim.api.nvim_buf_get_name(bufnr)  -- full path
-  return wrap_list[bufname]
+  return wrap_map[bufname]
 end
 
 --- 手动设置 :setlocal wrap 时, 将文件 cache 到 list 中, 同时 set keymaps
@@ -73,10 +73,10 @@ vim.api.nvim_create_autocmd('OptionSet', {
   callback = function(params)
     -- vim.print(vim.v.option_new, vim.v.option_old, vim.v.option_oldlocal, vim.v.option_oldglobal)
     if vim.wo.wrap then
-      wrap_list.add(params.buf)  -- 加入到 list
+      wrap_map.add(params.buf)  -- 加入到 list
       set_cursor_move_in_wrap(params.buf)  -- 设置 keymaps
     else
-      wrap_list.remove(params.buf)  -- 从 list 中移除
+      wrap_map.remove(params.buf)  -- 从 list 中移除
       del_cursor_move_in_wrap(params.buf)  -- 删除 keymaps 设置
     end
   end,
@@ -88,7 +88,7 @@ vim.api.nvim_create_autocmd('BufWinEnter', {
   pattern = {"*"},
   callback = function(params)
     local win_id = vim.api.nvim_get_current_win()
-    if wrap_list.exist(params.buf) and vim.api.nvim_win_get_buf(win_id) == params.buf then
+    if wrap_map.exist(params.buf) and vim.api.nvim_win_get_buf(win_id) == params.buf then
       set_cursor_move_in_wrap(params.buf)  -- 设置 keymaps
       vim.api.nvim_set_option_value('wrap', true, { scope='local', win=win_id })
     end
@@ -101,7 +101,7 @@ vim.api.nvim_create_autocmd('BufWritePre', {
   pattern = {"*"},
   callback = function(params)
     if vim.wo.wrap then
-      wrap_list.add(params.buf)  -- 加入到 list
+      wrap_map.add(params.buf)  -- 加入到 map
     end
   end,
   desc = "wrap: [No Name] file cache to wrap_list",

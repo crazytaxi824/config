@@ -10,7 +10,7 @@ require("core.keymaps")  -- keymap 设置
 --- VVI: 以下使用 autocmd 设置相关 options, 需要放在 "core.options" 后加载.
 require("core.fold")     -- lsp-fold & treesitter-fold autocmd
 require("core.terminal") -- terminal buffer 自动设置 nonumber signcolumn ...
--- require("core.wrap")     -- 根据 set wrap 设置 cursor move.
+require("core.wrap")     -- 根据 set wrap 设置 cursor move.
 
 
 
