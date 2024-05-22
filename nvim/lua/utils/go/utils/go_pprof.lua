@@ -3,7 +3,7 @@
 -- go tool pprof -http=localhost: cpu.out
 -- go tool pprof -http=localhost: mem.out
 -- go tool pprof -http=localhost: mutex.out
--- go tool trace -http=localhost: trace.out  -- VVI
+-- go tool trace -http=localhost: trace.out  -- VVI: 注意这里是 'trace' 不是 'pprof'
 
 local M ={}
 

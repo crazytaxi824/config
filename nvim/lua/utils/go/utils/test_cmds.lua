@@ -1,3 +1,33 @@
+--- DOCS `$ go help testflag` ---------------------------------------------------------------------- {{{
+--- # go test run single-function
+--- go test -v -run "^TestFoo$" local/src/color
+
+--- # go test bench single-function
+--- go test -v -run ^$ -benchmem -benchtime 5s -bench "^BenchmarkFoo$" local/src/color
+
+--- # go test run pprof single-function
+--- go test -v -o /path/binary -outputdir /go_pprof/dir/ -cpuprofile cpu.out -memprofile mem.out -mutexprofile mutex.out -blockprofile block.out -trace trace.out -timeout 10m -run "^TestFoo$" local/src/color
+
+--- # go test bench pprof single-function
+--- go test -v -o /path/binary -outputdir /go_pprof/dir/ -cpuprofile cpu.out -memprofile mem.out -mutexprofile mutex.out -blockprofile block.out -trace trace.out -timeout 10m -run ^$ -benchmem -bench "^BenchmarkFoo$" local/src/color
+
+--- # go test run cover single-function
+--- go test -v -cover -run "^TestFoo$" local/src/color
+---
+--- # go test bench cover single-function
+--- go test -v -cover -run ^$ -benchmem -bench "^BenchmarkBar$" local/src/color
+---
+--- # go test run coverprofile single-function
+--- go test -v -coverprofile /path/cover.out -run "^TestFoo$" local/src/color
+---
+--- # go test bench coverprofile single-function
+--- go test -v -coverprofile /path/cover.out -run ^$ -benchmem -bench "^BenchmarkFoo$" local/src/color
+---
+--- # NOTE: fuzz 每次只能 test 一个 fuzz 函数. 一次 fuzz 多个函数会报错:
+--- # FAIL: testing: will not fuzz, -fuzz matches more than one fuzz test
+--- go test -v -fuzztime 15s -run ^$ -fuzz "^FuzzFoo$" local/src/color
+--- }}}
+
 local go_pprof = require("utils.go.utils.go_pprof")
 local go_cover = require("utils.go.utils.go_cover")
 
