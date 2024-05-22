@@ -82,13 +82,13 @@ git:
 
 # open & edit file
 os:
-    editPreset: '$EDITOR'
-    edit: '$EDITOR {{filename}}'
-    editAtLine: '$EDITOR --line={{line}} {{filename}}'
-    editAtLineAndWait: '$EDITOR --block --line={{line}} {{filename}}'
-    openDirInEditor: '$EDITOR {{dir}}'
+    editPreset: 'nvim'
+    # edit: '$EDITOR {{filename}}'
+    # editAtLine: '$EDITOR --line={{line}} {{filename}}'
+    # editAtLineAndWait: '$EDITOR --block --line={{line}} {{filename}}'
+    # openDirInEditor: '$EDITOR {{dir}}'
     # open: 'open {{filename}}'
-    # openLink: ""
+    # openLink: "open -a {{link}}"
 
 # 刷新状态
 # refresher:

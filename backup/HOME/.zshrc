@@ -4,10 +4,11 @@
 unset LC_ALL  # 清除 LC_ALL 设置
 export LANG=en_US.UTF-8 # 设置了 LANG, 但是没有设置 LC_ALL 的情况下, 其他 LC_* 默认等于 LANG, 但可以单独设置其他 LC_*.
 
-### NOTE: 手动安装 https://github.com/neovim/neovim/releases/
+### 手动安装 https://github.com/neovim/neovim/releases/
 # $VISUAL is a more capable and interactive preference over $EDITOR.
 #  - EDITOR editor should be able to work without use of "advanced" terminal functionality.
 #  - VISUAL editor could be a full screen editor as vi or emacs.
+#export PATH=~/nvim-macos/bin:$PATH  # NOTE: 如果需要测试 neovim 新版本则更改这里.
 export EDITOR=nvim
 export VISUAL=$EDITOR
 
@@ -717,7 +718,7 @@ function vimExistFile() {
 	fi
 
 	# 执行, 这里不能使用 eval 因为文件名里面的空格都被 escape 了.
-	nvim "$@"
+	$EDITOR "$@"
 }
 
 # }}}
