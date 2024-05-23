@@ -15,13 +15,13 @@ M.default_opts = {
   bufnr = nil,
   job_id = nil,
 
-  cmd = vim.go.shell, -- `:help 'shell'`, get global option 'shell', 相当于 os.getenv('SHELL')
+  cmd = vim.go.shell, -- `:help 'shell'`, 相当于 os.getenv('SHELL')
   cwd = nil,          -- termopen() & jobstart() 中的 opts.
   auto_scroll = nil,  -- goto bottom of the terminal. 在 on_stdout & on_stderr 中触发.
   buf_output = nil,   -- bool, 是否用 buf_job_output 执行, 默认使用 termopen().
 
   --- callback functions
-  on_init = nil,   -- func(term), require('utils.my_term').new() 的时候触发.
+  on_init = nil,    -- func(term), require('utils.my_term').new() 的时候触发.
   before_run = nil, -- func(term), term:run() 时触发. before jobstart().
   after_run = nil,  -- func(term), term:run() 时触发. 在 jobstart() 之后马上执行, 和 on_exit 的区别是不用等到 jobdone.
 

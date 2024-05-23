@@ -40,6 +40,7 @@ M.open_shell_term = function()
   if not t then
     t = M.new({
       id = vim.v.count1,
+      cmd = vim.go.shell,  -- `:help 'shell'`, 相当于 os.getenv('SHELL')
       after_run = function(term_obj)
         --- after_run 的时候 cursor 在 terminal window 中则执行 stopinsert.
         if vim.api.nvim_win_get_buf(vim.api.nvim_get_current_win()) == term_obj.bufnr then
