@@ -109,15 +109,15 @@ M.metatable_funcs = function()
       return
     end
 
-    --- executed before jobstart. DO NOT have term.bufnr and term.job_id ...
+    --- executed before jobstart(). DO NOT have 'term.bufnr' and 'term.job_id' ...
     if self.before_run then
       self.before_run(self)
     end
 
     create_my_term(self)
 
-    --- executed after jobstart(). Have term.bufnr and term.job_id ...
-    --- 在 jobstart() 之后马上执行, 和 on_exit 的区别是不用等到 jobdone.
+    --- executed after jobstart(). Have 'term.bufnr' and 'term.job_id' ...
+    --- 和 on_exit 的区别是不用等到 jobdone.
     if self.after_run then
       self.after_run(self)
     end
