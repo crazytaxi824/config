@@ -20,7 +20,7 @@ M.go_run = function()
   --- 例如: 可以在 projectA 路径下, ':e projectB/src/main.go', 然后使用 go_run() 运行 projectB 的代码.
   -- local cmd = "go run " .. go_list.ImportPath  -- go run local/src
   local cmd = {"go", "run", go_list.ImportPath}  -- go run local/src
-  local t = require('utils.my_term.instances').exec_term
+  local t = require('utils.my_term.instances').console
   t.cmd = cmd
   t.cwd = go_list.Root
   t:stop()

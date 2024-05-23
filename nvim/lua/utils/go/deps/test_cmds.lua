@@ -206,7 +206,7 @@ M.go_test = function(opts)
   end
 
   --- my_term 执行 command
-  local t = require('utils.my_term.instances').exec_term
+  local t = require('utils.my_term.instances').console
   t.cmd = term_opts.cmd
   t.cwd = term_opts.cwd
   t.before_run = term_opts.before_run

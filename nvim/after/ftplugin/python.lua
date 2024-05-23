@@ -22,7 +22,7 @@ local function py_run(file)
     return
   end
 
-  local t = require('utils.my_term.instances').exec_term
+  local t = require('utils.my_term.instances').console
   t.cmd = "source " .. py_env .. " && python3 -- " .. file
   t:stop()
   t:run()

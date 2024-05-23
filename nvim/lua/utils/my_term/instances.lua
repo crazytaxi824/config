@@ -4,7 +4,7 @@ local fp = require('utils.filepath')
 local M = {}
 
 --- execute terminals: run cmd ---------------------------------------------------------------------
-M.exec_term = mt.new({
+M.console = mt.new({
   id = 1001,
   auto_scroll = true,
   print_cmd = true,
@@ -20,7 +20,7 @@ M.exec_term = mt.new({
 --- keymaps ----------------------------------------------------------------------------------------
 local opt = {noremap = true, silent = true}
 local my_term_keymaps = {
-  {'n', '<F17>', function() M.exec_term:run() end, opt, "code: Re-Run Last cmd"}, -- <S-F5> re-run last cmd.
+  {'n', '<F17>', function() M.console:run() end, opt, "code: Re-Run Last cmd"}, -- <S-F5> re-run last cmd.
 }
 require('utils.keymaps').set(my_term_keymaps)
 
