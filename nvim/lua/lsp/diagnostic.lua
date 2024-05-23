@@ -8,30 +8,25 @@
 --   bar
 -- end
 
---- 自定义 diagnostic sign 样式
-local signs = {
-  { name = "DiagnosticSignError", text = Nerd_icons.diag.error },
-  { name = "DiagnosticSignWarn",  text = Nerd_icons.diag.warn },
-  { name = "DiagnosticSignInfo",  text = Nerd_icons.diag.info },
-  { name = "DiagnosticSignHint",  text = Nerd_icons.diag.hint },
-}
-for _, sign in ipairs(signs) do
-  vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = "", linehl="" })
-end
-
 --- `:help vim.diagnostic.config()`
 local config = {
-  --- NOTE: signs & underline & virtual_text 默认 true, 也可以使用 table.
-  signs = true,  -- 显示 sign DiagnosticSignError/Warn/Info/Hint.
-                 -- 可以为 table: { severity, priority }
-                 -- severity: Only show signs for diagnostics matching the given severity,
-                 -- priority: 默认值 10. NOTE: DiagnosticSignError/Warn/Info/Hint use the same priority, unless:
-                 -- 如果 severity_sort = false, 则所有 priority 都是 10;
-                 -- 如果 severity_sort = true, 则:
-                 --   - DiagnosticSignHint  priority=priority
-                 --   - DiagnosticSignInfo  priority=priority + 1
-                 --   - DiagnosticSignWarn  priority=priority + 2
-                 --   - DiagnosticSignError priority=priority + 3
+  --- `:help diagnostic-signs`
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = Nerd_icons.diag.error,
+      [vim.diagnostic.severity.WARN]  = Nerd_icons.diag.warn,
+      [vim.diagnostic.severity.INFO]  = Nerd_icons.diag.info,
+      [vim.diagnostic.severity.HINT]  = Nerd_icons.diag.hint,
+    },
+    linehl = {
+      [vim.diagnostic.severity.ERROR] = 'ErrorMsg',
+      -- [vim.diagnostic.severity.WARN]  = 'WarningMsg',
+    },
+    numhl = {
+      [vim.diagnostic.severity.ERROR] = 'ErrorMsg',
+      [vim.diagnostic.severity.WARN]  = 'WarningMsg',
+    },
+  },
 
   severity_sort = true,  -- DiagnosticSignError > Warn > Info > Hint 优先级 (priority) 设置.
 
