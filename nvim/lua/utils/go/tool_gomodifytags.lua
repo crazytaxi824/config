@@ -149,7 +149,6 @@ M.go_add_tags_and_opts = function(arglist, go_add_tags_cmd, offset)
     table.insert(sh_cmd, "-add-options="..table.concat(opt_list,','))
   end
 
-  --vim.notify(table.concat(sh_cmd, ' '))
   local result = vim.system(sh_cmd, { text = true }):wait()
   if result.code ~= 0 then
     Notify(vim.trim(result.stderr), "WARN")
@@ -210,7 +209,6 @@ M.go_remove_tags = function(arglist, go_remove_tags_cmd, offset)
     table.insert(sh_cmd, "-remove-tags=" .. arglist[1])
   end
 
-  -- vim.notify(table.concat(sh_cmd, ' '))
   local result = vim.system(sh_cmd, { text = true }):wait()
   if result.code ~= 0 then
     Notify(vim.trim(result.stderr), "WARN")
@@ -270,7 +268,6 @@ M.go_remove_tags_opts = function(arglist, go_remove_tag_opts_cmd, offset)
     table.insert(sh_cmd, "-remove-options=" .. arglist[1])
   end
 
-  -- vim.notify(table.concat(sh_cmd, ' '))
   local result = vim.system(sh_cmd, { text = true }):wait()
   if result.code ~= 0 then
     Notify(vim.trim(result.stderr), "WARN")

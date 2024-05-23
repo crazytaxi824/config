@@ -16,8 +16,7 @@ end
 local function find_ts_root_node()
   local lang = parse_buffer_lang()
   if not lang or lang == '' then
-    vim.notify('treesitter-parser for current buffer is not available', vim.log.levels.WARN)
-    return
+    error('treesitter-parser for current buffer is not available')
   end
 
   --- vim.treesitter.get_parser(bufnr, lang)
@@ -25,8 +24,7 @@ local function find_ts_root_node()
   --- "lang", default filetype.
   local tsparser_status_ok, tsparser = pcall(vim.treesitter.get_parser, 0, lang)
   if not tsparser_status_ok then
-    vim.notify(vim.inspect(tsparser), vim.log.levels.WARN)
-    return
+    error(vim.inspect(tsparser))
   end
 
   --- tsparser:parse() return a {table} of immutable trees

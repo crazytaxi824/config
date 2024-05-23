@@ -26,7 +26,7 @@ M.gotests_cmd_tool = function()
     error(result.stderr ~= '' and result.stderr or result.code)
   end
 
-  --- 显示结果.
+  --- 显示 `gotests` 返回的内容.
   vim.notify(result.stdout)
 
   --- NOTE: 成功后会在 stdout 中返回 "Generated Test_XXX".

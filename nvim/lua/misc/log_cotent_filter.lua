@@ -57,6 +57,7 @@ local function reduce_filesize(log, size)
   --- `wc -l filepath`: file line count.
   local result = vim.system({'wc', '-l', log.filepath}, { text = true }):wait()
   if result.code ~= 0 then
+    --- 这里不能使用 error() 否则无法 sleep
     vim.notify(result.stderr, vim.log.levels.WARN)
     vim.cmd('sleep 3')
     return
@@ -65,6 +66,7 @@ local function reduce_filesize(log, size)
   local r_slice = vim.split(result.stdout, ' ', {trimempty=true})
   local lnum = tonumber(r_slice[1])
   if not lnum then
+    --- 这里不能使用 error() 否则无法 sleep
     vim.notify("error: lnum can not be parsed", vim.log.levels.WARN)
     vim.cmd('sleep 3')
     return
