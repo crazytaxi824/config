@@ -92,7 +92,7 @@ local plugins = {
   --- 第一方 module 插件 ---
   {
     "nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-    commit = "55e2908",
+    commit = "f62bfe1",
     config = function() require("plugins.settings.treesitter_ctx") end,
     dependencies = { "nvim-treesitter/nvim-treesitter" },
 
@@ -102,7 +102,7 @@ local plugins = {
   --- 第三方 module 插件 ---
   {
     "windwp/nvim-ts-autotag",  -- auto close tag <div></div>
-    commit = "62db4b3",
+    commit = "8ae54b9",
     config = function() require("plugins.settings.treesitter_autotag") end,
     dependencies = { "nvim-treesitter/nvim-treesitter" },
 
@@ -221,7 +221,7 @@ local plugins = {
 
   {
     "stevearc/conform.nvim",
-    tag = "v5.7.0",
+    tag = "v5.8.0",
     config = function() require("plugins.settings.formatter_confrom") end,
 
     event = "VeryLazy",
@@ -279,8 +279,8 @@ local plugins = {
 
   {
     "nvim-neotest/nvim-nio",
-    -- commit = "79e8968",
-    tag = "v1.9.3",
+    commit = "6320241",
+    -- tag = "v1.9.3",
 
     lazy = true,  -- nvim-dap-ui 加载时自动加载.
   },
@@ -328,7 +328,7 @@ local plugins = {
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {
     "lewis6991/gitsigns.nvim",
-    commit = "805610a",
+    commit = "a28bb1d",
     -- tag = "v0.8.1",
     config = function() require("plugins.settings.git_signs") end,
 
