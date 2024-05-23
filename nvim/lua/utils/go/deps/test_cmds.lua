@@ -23,8 +23,7 @@
 --- # go test bench coverprofile single-function
 --- go test -v -coverprofile /path/cover.out -run ^$ -benchmem -bench "^BenchmarkFoo$" local/src/color
 ---
---- # NOTE: fuzz 每次只能 test 一个 fuzz 函数. 一次 fuzz 多个函数会报错:
---- # FAIL: testing: will not fuzz, -fuzz matches more than one fuzz test
+--- # NOTE: fuzz 每次只能 test 一个 fuzz 函数. 一次 fuzz 多个函数会报错: FAIL: testing: will not fuzz, -fuzz matches more than one fuzz test
 --- go test -v -fuzztime 15s -run ^$ -fuzz "^FuzzFoo$" local/src/color
 --- }}}
 

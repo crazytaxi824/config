@@ -160,18 +160,18 @@ nvim_tree.setup {
   },
 
   view = {
-    --- float = {  -- 在 floating window 中打开 nvim-tree ---------------------- {{{
-    ---   enable = true,
-    ---   open_win_config = {
-    ---     relative = "editor",
-    ---     border = "rounded",
-    ---     width = 30,
-    ---     height = 30,
-    ---     row = 1,
-    ---     col = 1,
-    ---   },
-    --- },
-    -- -- }}}
+    --- 在 floating window 中打开 nvim-tree
+    float = {
+      enable = true,
+      open_win_config = {
+        relative = "editor",
+        border = {"","","","█","▀","▀","▀","█"},
+        width = 45,
+        height = 30,
+        row = 1,
+        col = 1,
+      },
+    },
     side = "left", -- left / right
     width = 36,    -- OR "25%"
     preserve_window_proportions = false,

@@ -59,6 +59,9 @@ Colors = {
   func_gold     = {c=78, g='#dce6aa'},   -- 78|85, func, function_call, method, method_call ... | bufferline, lualine
   type_green    = {c=79, g='#20b691'},   -- type, 数据类型
 
+  --- dark color use for background
+  bg_red = {c=52, g='#66201D'},  --- #4E201E, #72201D
+
   --- grayscale 颜色
   g234 = {c=234, g='#1c1c1c'},
   g235 = {c=235, g='#262626'},
@@ -268,14 +271,14 @@ Highlights = {
 
   --- diff 颜色 ------------------------------------------------------------------------------------
   DiffAdd = {
-    ctermfg=Colors.black.c,
+    ctermfg=Colors.white.c, fg=Colors.white.g,
     ctermbg=Colors.green.c, bg='#4c5b2d',
   },
   DiffDelete = {
     ctermfg=Colors.white.c,
-    ctermbg=52, bg='#4e201e'
+    ctermbg=52, bg=Colors.bg_red.g,
   },
-  DiffChange = {},  -- 有修改的一整行的文字的颜色
+  DiffChange = {},  -- 有修改的一整行的文字的颜色, 设置 clear.
   --- changed text
   DiffText = {
     ctermfg=Colors.black.c, fg=Colors.black.g,

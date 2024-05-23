@@ -26,7 +26,6 @@ M.go_impl = function(arglist)
 
   --- 执行 shell cmd
   local sh_cmd = {'impl', '-dir', dir, arglist[1], iface_name}
-  vim.notify(table.concat(sh_cmd, ' '))
   local result = vim.system(sh_cmd, { text = true }):wait()
   if result.code ~= 0 then
     error(result.stderr ~= '' and result.stderr or result.code)
