@@ -3,18 +3,9 @@ if not status_ok then
   return
 end
 
-local function format_ft()
-  --- https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTINS.md#prettier
-  local prettier_ft = {
-    "javascript", "javascriptreact", "typescript", "typescriptreact",
-    "vue", "css", "scss", "less", "html",
-    "json", "jsonc", "graphql", "handlebars",
-    "yaml", "markdown", "markdown.mdx", -- NOTE: 这些最好不要自动 format.
-  }
-
-  local gd_ft = { 'gd', 'gdscript', 'gdscript3' }
-
-  local fts = {
+local function format_by_ft()
+  --- map { filetype = formatter }
+  local filetype_formatter = {
     --- VVI: conform will run multiple formatters sequentially
     go = { "goimports", "goimports-reviser" },
     --- VVI: Use a sub-list to run only the first available formatter
@@ -30,22 +21,30 @@ local function format_ft()
     --["_"] = { "trim_whitespace" },
   }
 
+  --- https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTINS.md#prettier
   --- all prettier filetypes
+  local prettier_ft = {
+    "javascript", "javascriptreact", "typescript", "typescriptreact",
+    "vue", "css", "scss", "less", "html",
+    "json", "jsonc", "graphql", "handlebars",
+    "yaml", "markdown", "markdown.mdx", -- NOTE: 这些最好不要自动 format.
+  }
   for _, ft in ipairs(prettier_ft) do
-    fts[ft] = { "prettier" }
+    filetype_formatter[ft] = { "prettier" }
   end
 
   --- gdscript filetypes
+  local gd_ft = { 'gd', 'gdscript', 'gdscript3' }
   for _, ft in ipairs(gd_ft) do
-    fts[ft] = { "gdformat" }
+    filetype_formatter[ft] = { "gdformat" }
   end
 
-  return fts
+  return filetype_formatter
 end
 
 conform.setup({
   --- DOCS: list of https://github.com/stevearc/conform.nvim#formatters
-  formatters_by_ft = format_ft(),
+  formatters_by_ft = format_by_ft(),
 
   --- code 语法错误会被 log, 而不是 log conform 内部错误.
   log_level = vim.log.levels.OFF,
