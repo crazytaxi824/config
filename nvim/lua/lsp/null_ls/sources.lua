@@ -103,7 +103,7 @@ M.sources =  {
     end,
   },
 
-  --- TODO: 目前使用 Conform, Deprecated formatter & code_actions -------------- {{{
+  --- NOTE: 目前使用 Conform, Deprecated formatter & code_actions -------------- {{{
   -- [M.local_formatter_key] = {
   --   prettier = function()
   --     return formatting.prettier.with(proj_local_settings.keep_extend(M.local_formatter_key, 'prettier',
