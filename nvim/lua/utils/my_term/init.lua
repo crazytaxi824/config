@@ -15,11 +15,6 @@ M.new = function(opts)
   --- terminal object
   local my_term = opts
 
-  --- callback
-  if my_term.on_init then
-    my_term.on_init(my_term)
-  end
-
   --- generate metatable - term:methods()
   local mt = meta_method.metatable_funcs()
 

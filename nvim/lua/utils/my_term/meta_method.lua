@@ -21,7 +21,6 @@ M.default_opts = {
   buf_output = nil,   -- bool, 是否用 buf_job_output 执行, 默认使用 termopen().
 
   --- callback functions
-  on_init = nil,    -- func(term), require('utils.my_term').new() 的时候触发.
   before_run = nil, -- func(term), term:run() 时触发. before jobstart().
   after_run = nil,  -- func(term), term:run() 时触发. 在 jobstart() 之后马上执行, 和 on_exit 的区别是不用等到 jobdone.
 
