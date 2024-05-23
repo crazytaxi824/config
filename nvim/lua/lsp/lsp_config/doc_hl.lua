@@ -21,28 +21,7 @@ M.fn = function(client, bufnr)
         --- VVI: 在 change filetype (`set filetype=xxx`) 的过程中,
         --- 如果先 LspAttach new_lsp, 然后再 LspDetach old_lsp, 或 async 执行 LspAttach 和 LspDetach, 则需要用到以下代码.
         --- 如果先 LspDetach old_lsp, 然后再 LspAttach new_lsp, 则不需要修改. 默认在 LspDetach 的时候 del_augroup.
-        --- 判断当前是否有 lsp 支持 documentHighlight -------------------------- {{{
-        -- local lsp_clients = vim.lsp.get_clients({ bufnr = params.buf })
-        --
-        -- local doc_hl_mark
-        -- for _, c in ipairs(lsp_clients) do
-        --   if c.supports_method('textDocument/documentHighlight') then
-        --     doc_hl_mark = true
-        --     break
-        --   end
-        -- end
-        --
-        -- if doc_hl_mark then
-        --   --- 如果有任何一个 attached lsp 能够 documentHighlight, 则发送请求.
-        --   custom_lsp_req.doc.highlight(params.buf)
-        -- else
-        --   --- 清除之前的 documentHighlight
-        --   custom_lsp_req.doc.clear(params.buf)
-        --   --- 如果没有任何一个 attached lsp 能够 documentHighlight, 则删除 augroup.
-        --   vim.api.nvim_del_augroup_by_id(group_id)
-        -- end
-        -- -- }}}
-        doc_hl.doc_highlight(params.buf)
+        vim.lsp.buf.document_highlight()
       end,
       desc = "LSP: documentHighlight",
     })
