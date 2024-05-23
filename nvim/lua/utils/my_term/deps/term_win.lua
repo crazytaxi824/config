@@ -25,13 +25,11 @@ M.create_term_win = function(bufnr)
   local exist_win_id = find_exist_term_win()
   if vim.fn.win_gotoid(exist_win_id)==1 then
     --- at least 1 terminal window exist
-    vim.api.nvim_open_win(bufnr, true, {win=exist_win_id, split='right'})
+    return vim.api.nvim_open_win(bufnr, true, {win=exist_win_id, split='right'})
   else
     --- no terminal window exist, create a botright window for terminals.
-    vim.api.nvim_open_win(bufnr, true, {height=g.win_height, split='below'})
+    return vim.api.nvim_open_win(bufnr, true, {height=g.win_height, split='below'})
   end
-
-  return vim.api.nvim_get_current_win()
 end
 
 --- 打开/创建 terminal window 用于 termopen() | jobstart()
