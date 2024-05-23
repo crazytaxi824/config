@@ -8,6 +8,12 @@
 --   bar
 -- end
 
+--- Highlights
+vim.api.nvim_set_hl(0, 'my_diagnostic_linehl', {
+  -- ctermfg=Colors.cyan.c, fg=Colors.cyan.g,
+  ctermbg=Colors.bg_red.c, bg=Colors.bg_red.g,
+})
+
 --- `:help vim.diagnostic.config()`
 local config = {
   --- `:help diagnostic-signs`
@@ -19,13 +25,13 @@ local config = {
       [vim.diagnostic.severity.HINT]  = Nerd_icons.diag.hint,
     },
     linehl = {
-      [vim.diagnostic.severity.ERROR] = 'ErrorMsg',
-      -- [vim.diagnostic.severity.WARN]  = 'WarningMsg',
+      [vim.diagnostic.severity.ERROR] = 'my_diagnostic_linehl',
+      [vim.diagnostic.severity.WARN]  = 'my_diagnostic_linehl',
     },
-    numhl = {
-      [vim.diagnostic.severity.ERROR] = 'ErrorMsg',
-      [vim.diagnostic.severity.WARN]  = 'WarningMsg',
-    },
+    -- numhl = {
+    --   [vim.diagnostic.severity.ERROR] = 'my_diagnostic_linehl',
+    --   [vim.diagnostic.severity.WARN]  = 'my_diagnostic_linehl',
+    -- },
   },
 
   severity_sort = true,  -- DiagnosticSignError > Warn > Info > Hint 优先级 (priority) 设置.
