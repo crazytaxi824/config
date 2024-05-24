@@ -32,7 +32,9 @@ M.hl_search = function(key)
   --- 相当于 pcall(vim.cmd, ...)
   local status, errmsg = pcall(vim.api.nvim_exec2, 'normal! ' .. key, {output = false})
   if not status then
-    error(vim.inspect(errmsg))
+    --- errmsg: Pattern not found: xxx
+    vim.notify(vim.inspect(errmsg), vim.log.levels.WARN)
+    return
   end
 
   --- 删除上一个 matchadd()
