@@ -65,7 +65,17 @@ local function doc_hl_handler(_, result, req, config)
       vim.lsp.util.buf_clear_references(req.bufnr)
       vim.api.nvim_del_augroup_by_id(group_id)
     end,
-    desc = "LSP: documentHighlight",
+    desc = "LSP: documentHighlight CursorMove clear_references",
+  })
+
+  vim.api.nvim_create_autocmd({"WinLeave"}, {
+    group = group_id,
+    buffer = req.bufnr,  -- 对指定 buffer 有效
+    callback = function(params)
+      vim.lsp.util.buf_clear_references(req.bufnr)
+      vim.api.nvim_del_augroup_by_id(group_id)
+    end,
+    desc = "LSP: documentHighlight WinLeave clear_references",
   })
 end
 
