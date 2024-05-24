@@ -126,9 +126,7 @@ M.buf_job_output = function(term_obj, term_win_id)
       auto_scroll.buf_scroll_bottom(term_obj)
 
       --- callback
-      if term_obj.on_stdout then
-        term_obj.on_stdout(term_obj, job_id, data, event)
-      end
+      g.exec_callbacks(term_obj.on_stdout, term_obj, job_id, data, event)
     end,
 
     on_stderr = function (job_id, data, event)  -- NOTE: log.Print()
@@ -144,16 +142,12 @@ M.buf_job_output = function(term_obj, term_win_id)
       auto_scroll.buf_scroll_bottom(term_obj)
 
       --- callback
-      if term_obj.on_stderr then
-        term_obj.on_stderr(term_obj, job_id, data, event)
-      end
+      g.exec_callbacks(term_obj.on_stderr, term_obj, job_id, data, event)
     end,
 
     on_exit = function(job_id, exit_code, event)
       --- callback
-      if term_obj.on_exit then
-        term_obj.on_exit(term_obj, job_id, exit_code, event)
-      end
+      g.exec_callbacks(term_obj.on_exit, term_obj, job_id, exit_code, event)
 
       --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
       if not g.term_buf_exist(term_obj.bufnr) then

@@ -99,9 +99,6 @@ end
 M.metatable_funcs = function()
   local meta_funcs = {}
 
-  --- opts:
-  --- - print_cmd: print executed cmd in terminal.
-  --- - buf_output: print stdout & stderr to scratch buffer.
   function meta_funcs:run()
     if self:job_status() == -1 then
       Notify("job_id is still running, please use `term:stop()` or `CTRL-C` first.", "WARN", {title="my_term"})
@@ -109,17 +106,13 @@ M.metatable_funcs = function()
     end
 
     --- executed before jobstart(). DO NOT have 'term.bufnr' and 'term.job_id' ...
-    if self.before_run then
-      self.before_run(self)
-    end
+    g.exec_callbacks(self.before_run, self)
 
     create_my_term(self)
 
     --- executed after jobstart(). Have 'term.bufnr' and 'term.job_id' ...
     --- 和 on_exit 的区别是不用等到 jobdone.
-    if self.after_run then
-      self.after_run(self)
-    end
+    g.exec_callbacks(self.after_run, self)
 
     --- cache terminal object
     g.global_my_term_cache[self.id] = self
@@ -190,6 +183,29 @@ M.metatable_funcs = function()
 
     --- clear term bufnr
     self.bufnr = nil
+  end
+
+  --- append callback funcitons: on_open, on_close, on_exit, on_stdout, on_stderr, before_run, after_run ...
+  --- 使用场景: 在多个不同地方需要添加多个 callbacks 的情况下使用.
+  function meta_funcs:append(cb_name, callback)
+    if type(callback) ~= 'function' then
+      vim.notify("my_term append() callback is not a function", vim.log.levels.WARN)
+      return
+    end
+
+    if not self[cb_name] then
+      self[cb_name] = callback
+      return
+    end
+
+    local typ = type(self[cb_name])
+    if typ == 'function' then
+      local tmp = { self[cb_name] }
+      table.insert(tmp, callback)
+      self[cb_name] = tmp
+    elseif typ == 'table' then
+      table.insert(self[cb_name], callback)
+    end
   end
 
   return meta_funcs
