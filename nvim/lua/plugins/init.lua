@@ -212,7 +212,7 @@ local plugins = {
   --- VVI: "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
-    commit = "aa4442a",
+    commit = "60f5f80",
     config = function() require("lsp.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -250,7 +250,7 @@ local plugins = {
   {
     "akinsho/bufferline.nvim",
     -- commit = "73540cb",
-    tag = "v4.6.0",
+    tag = "v4.6.1",
     config = function() require("plugins.settings.decor_bufferline") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
 
