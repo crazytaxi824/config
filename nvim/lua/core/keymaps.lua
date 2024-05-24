@@ -254,7 +254,7 @@ local keymaps = {
   {'n', '<C-k>', '<cmd>mes clear<CR>', opt, 'message clear'},
 
   --- NOTE: v0.10.0 --------------------------------------------------------------------------------
-  --- BUG: conflict to 'gcc', `:help commenting`
+  --- BUG: conflict to `gc`: 'Comment textobject', `:help commenting`
   {'n', 'gc', '<Nop>', opt},
 
   --- NOTE: `gc` & `gcc` is remap by default.
