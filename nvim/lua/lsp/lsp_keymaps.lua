@@ -6,8 +6,8 @@
 --     lspconfig 会用到 textDocument_keymaps() & diagnostic_keymaps()
 --     null-ls   只用到 diagnostic_keymaps()
 
-local hs = require("lsp.custom_lsp_request.hover_short")
-local h = require("lsp.custom_lsp_request.hover")
+local hs = require("lsp.custom_handlers.hover_short")
+local h = require("lsp.custom_handlers.hover")
 
 local M = {}  -- module, 仅提供两个 keymaps 方法.
 
