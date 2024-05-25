@@ -18,18 +18,14 @@ local lsp_servers_map = require('lsp.svr_list').list
 local function lspconfig_setup(lsp_svr)
   --- opts 必须包含 on_attach, capabilities 两个属性.
   --- 这里的 opts 获取到的是 require 文件中返回的 M.
-  local opts = require("lsp.lsp_config.setup_opts")
+  local opts = require("lsp.plugins.lsp_config.setup_opts")
 
-  --- 加载 lsp 配置文件, "~/.config/nvim/lua/lsp/lsp_config/langs/..."
+  --- 加载 lsp 配置文件, "~/.config/nvim/lua/lsp/plugins/lsp_config/langs/..."
   --- 如果文件存在, 则加载自定义设置, 如果没有自定义设置则加载默认设置.
   --- NOTE: 单独 lsp 设置: https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
-  local lsp_setting = vim.fn.stdpath('config') .. '/lua/lsp/lsp_config/langs/' .. lsp_svr .. '.lua'
-  if vim.fn.filereadable(lsp_setting) == 1 then
-    --- 使用 pcall() 是为了确保 xxx.lua 文件执行没有问题.
-    local lsp_custom_status_ok, lsp_custom_opts = pcall(require, "lsp.lsp_config.langs." .. lsp_svr)
-    if lsp_custom_status_ok then
-      opts = vim.tbl_deep_extend("force", opts, lsp_custom_opts)
-    end
+  local lsp_custom_status_ok, lsp_custom_opts = pcall(require, "lsp.plugins.lsp_config.langs." .. lsp_svr)
+  if lsp_custom_status_ok then
+    opts = vim.tbl_deep_extend("force", opts, lsp_custom_opts)
   end
 
   --- VVI: 这里就是 lspconfig.xxx.setup() 针对不同的 lsp 进行加载.

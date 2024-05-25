@@ -89,7 +89,7 @@ local function reload_local_settings(old_content, new_content)
   local update_settings = {} -- cache tool name, 用于 notify.
 
   --- lsp = { gopls = { ... }, tsserver = { ... } }
-  local lsp_typ = require("lsp.lsp_config.setup_opts").local_lspconfig_key
+  local lsp_typ = require("lsp.plugins.lsp_config.setup_opts").local_lspconfig_key
   compare_content_settings(old_content, new_content, lsp_typ, function(lsp_name)
     local clients = vim.lsp.get_clients({name = lsp_name})
     for _, c in ipairs(clients) do
@@ -147,7 +147,7 @@ end, { bang=true, bar=true, desc = 'reload "lsp" and "null-ls" after change ".nv
 --- command 显示 project local settings 示例.
 vim.api.nvim_create_user_command("LocalSettingsExample", function()
   --- NOTE: 主要保证 key 设置正确.
-  local lsp_typ = require("lsp.lsp_config.setup_opts").local_lspconfig_key
+  local lsp_typ = require("lsp.plugins.lsp_config.setup_opts").local_lspconfig_key
   local s = require("lsp.plugins.null_ls.sources")
 
   local example = {
