@@ -30,7 +30,7 @@ notify.setup({
     vim.keymap.set('n', 'q', '<cmd>q<CR>', { buffer=bufnr, desc="close window" })
   end,
 
-  timeout = 3600,     -- Default timeout for notifications
+  timeout = 5000,     -- Default timeout for notifications
   minimum_width = 50, -- Minimum width for notification windows
 
   --- Max number of columns for messages

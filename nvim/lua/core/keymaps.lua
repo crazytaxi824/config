@@ -55,10 +55,17 @@ local mt = require('utils.my_term')  -- my_term terminal
 --- { desc = "key_description" }  -- 会影响 which-key 显示.
 local opt = { silent = true }
 
---- NOTE: { mode, key, remap, opt, description }  - description for 'which-key'
+--- { mode, key, remap, opt, description }  - description for 'which-key'
 local keymaps = {
   --- VVI: <ESC> 进入 terminal Normal 模式.
   {'t', '<ESC>', '<C-\\><C-n>', opt, "Ternimal: Normal Mode"},
+  --- VVI: <ESC> close popup window & nohlsearch
+  {'n', '<ESC>', function()
+    key_fn.close_popup_wins()
+    vim.cmd('nohlsearch')
+    local esc = vim.api.nvim_replace_termcodes('<ESC>', true, false, true)
+    vim.api.nvim_feedkeys(esc, 'n', false)
+  end, opt, "which_key_ignore"},
 
   --- common use -----------------------------------------------------------------------------------
   --- `:help registers`
@@ -110,7 +117,7 @@ local keymaps = {
   {'v', '<M-S-Right>', '6zl', opt, 'win: scroll right'},
   {'i', '<M-S-Right>', '<C-o>6zl', opt, 'win: scroll right'},  -- 默认在 insert mode 下和 <S-Right> 相同.
 
-  --- NOTE: <Home> 模拟 vscode 行为; <End> 使用默认行为.
+  --- <Home> 模拟 vscode 行为; <End> 使用默认行为.
   {'n', '<Home>', function() key_fn.home_key.nowrap() end, opt, 'which_key_ignore'},
   {'v', '<Home>', function() key_fn.home_key.nowrap() end, opt, 'which_key_ignore'},
   {'i', '<Home>', '<C-o><cmd>lua require("utils.keymaps").home_key.nowrap()<CR>', opt, 'which_key_ignore'},
@@ -143,9 +150,9 @@ local keymaps = {
 
   --- <leader> -------------------------------------------------------------------------------------
   --- copy / paste
-  --- NOTE: 如果是 linux server 系统, 则没有系统级 clipboard, 则无法使用该 copy 方式.
-  ---       在没有 cilpboard 的情况下如果想要粘贴 register 中的内容到 command line,
-  ---       需要使用 |:<CTRL-R> {register}|. `:help c_CTRL-R`.
+  --- 如果是 linux server 系统, 则没有系统级 clipboard, 则无法使用该 copy 方式.
+  --- 在没有 cilpboard 的情况下如果想要粘贴 register 中的内容到 command line,
+  --- 需要使用 |:<CTRL-R> {register}|. `:help c_CTRL-R`.
   {'v', '<leader>y', '"*y', opt, 'Copy to system clipboard'},
 
   --- fold code, 这里是模拟 vscode keymaps.

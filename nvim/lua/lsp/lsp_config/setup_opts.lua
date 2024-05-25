@@ -99,7 +99,7 @@ M.on_attach = function(client, bufnr)
   --- 加载自定义设置 ---
   --- textDocument/documentHighlight, 显示 references
   if client.supports_method('textDocument/documentHighlight') then
-    require("lsp.custom_handlers.doc_highlight").setup(client, bufnr)
+    require("lsp.custom_requests.doc_highlight").setup(client, bufnr)
   end
 
   --- keymaps ---

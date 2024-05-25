@@ -1,8 +1,6 @@
 --- 自定义 hover_short handler 用于在写代码的过程中可以迅速查看方法中的参数类型, 而不用移动光标或退出 insert mode.
 --- 实现方法: 获取光标所在 method/func 的名字, 简化 "textDocument/hover" 返回内容.
 
-local h = require("lsp.custom_handlers.hover")
-
 --- NOTE: 这里 node_row 和 node_char 都是从 0 开始计算.
 --- node_char 是指行内第几个字符, \t 算一个字符.
 local function calculate_offset(lsp_req_pos_line, lsp_req_pos_char)
@@ -88,15 +86,8 @@ local function find_fn_call_before_cursor()
   end
 end
 
---- VVI: 自定义 lsp request ------------------------------------------------------------------------
---- 主要函数: vim.lsp.buf_request(0, method, params, handlerFn), 向 LSP server 发送请求,
---- 通过自定义 handler 处理结果.
-
-local M = {}
-
 --- lsp request handler --------------------------------------------------------
---- NOTE: 该自定义 handler 主要作用是根据 'textDocument/hover' handler 修改 open_floating_preview()
---        中的显示内容. 不显示 comments, 只显示 function 定义. 类似 textDocument/signatureHelp.
+--- NOTE: 该自定义 handler  'textDocument/hover' handler 不显示 comments, 只显示 function 定义.
 --- copy from `function M.hover(_, result, ctx, config)`
 --- https://github.com/neovim/neovim/blob/master/runtime/lua/vim/lsp/handlers.lua
 --- `:help lsp-handler`, lsp-request handler 的第一个参数为 err, 这里省略不处理.
@@ -145,38 +136,41 @@ local function hover_short_handler(_, result, req, config)
   return vim.lsp.util.open_floating_preview(contents, format, config)
 end
 
---- vim.lsp.buf_request() ------------------------------------------------------
+--- VVI: 自定义 lsp request ------------------------------------------------------------------------
+--- 主要函数: vim.lsp.buf_request(0, method, params, handlerFn), 向 LSP server 发送请求,
+--- 通过自定义 handlerFn 处理结果.
 --- https://github.com/neovim/neovim/blob/master/runtime/lua/vim/lsp/buf.lua
---- vim.lsp.buf_request(0, method, params, handlerFn)  -- 向 LSP server 发送请求, 通过 handler 处理结果.
+
+local M = {}
+
 M.hover_short = function()
-  local result = find_fn_call_before_cursor()
-  if not result then  -- 如果 cursor 不在 'arguments' 内, 则结束.
+  local fn_node = find_fn_call_before_cursor()
+  if not fn_node then  -- 如果 cursor 不在 'arguments' 内, 则结束.
     return
   end
 
-  --- VVI: overwrite make_position_params() 生成的请求位置.
+  --- overwrite make_position_params() 生成的请求位置.
   local param = vim.tbl_deep_extend('force',
     vim.lsp.util.make_position_params(),
     {
       position = {
-        line = result.lsp_req_pos_line,       -- line 从 0 开始计算.
-        character = result.lsp_req_pos_char,  -- char 从 0 开始计算.
+        line = fn_node.lsp_req_pos_line,       -- line 从 0 开始计算.
+        character = fn_node.lsp_req_pos_char,  -- char 从 0 开始计算.
       }
     }
   )
 
-  local max_width = math.floor(vim.go.columns * 0.8)
   vim.lsp.buf_request(0, 'textDocument/hover', param,
-    --- VVI: 添加 offsetX 设置到 handler, 用来偏移 open_floating_preview() window
-    h.hover_with(hover_short_handler,  -- VVI: 调用自定义 handler
+    --- 添加 offsetX 设置到 handler, 用来偏移 open_floating_preview() window
+    vim.lsp.with(hover_short_handler,
       {
-        offset_x = result.offset_x,
-        offset_y = result.offset_y,
+        offset_x = fn_node.offset_x,
+        offset_y = fn_node.offset_y,
         focusable = false,
         border = {"","","","█","","","","█"},
         anchor_bias = 'above',
-        max_width = max_width,
-        close_events = {"WinScrolled"},  -- 默认 {"CursorMoved", "CursorMovedI", "InsertCharPre"}
+        max_width = math.floor(vim.go.columns * 0.8),
+        close_events = {"WinScrolled"},
       }
     )
   )
