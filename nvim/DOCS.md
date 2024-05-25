@@ -159,15 +159,30 @@ lua 中有一个 `_G` 全局变量. 自定义的所有全局变量和函数都�
 
 - `vim.fn.feedkeys("\<CR>", 'nx')` -- VVI: 模拟输入 <CR>. 注意单/双引号: `feedkeys("\<CR>", 'nx')` simulates pressing of the <Enter> key. But `feedkeys('\<CR>')` pushes 5 characters.
 
-```lua
-vim.keymap.set('i', '<M-b>', function()
-  -- like: 'normal! G'
-  vim.cmd('normal! G')
-  vim.fn.feedkeys('G', 'nx')
+- `vim.api.nvim_feedkeys()`  -- neovim API
 
-  -- feedkeys() 更灵活.
-  vim.fn.feedkeys('G', 'n')  -- not execute immediately
-  vim.fn.feedkeys('', 'x')   -- execute when typeahead is empty.
+```lua
+-- vim.cmd('normal! G')
+vim.keymap.set('i', '<M-b>', function()
+  -- 使用 nvim_feedkeys(), NOTE: typehead 可以看作是一个 cache, 储存输入的内容. 等到输入全部完成之后再一起执行.
+  -- 'n' - append input
+  -- 'i' - insert (prepend) input
+  -- 'x' - Execute until typeahead is empty. similar to using ":normal!"
+
+  -- 向 cache 中 append 'hello' with 'noremap' opt.
+  vim.api.nvim_feedkeys('hello', 'n', true)
+
+  -- 向 cache 中 prepend 'a' (start INSERT mode) with 'noremap' opt.
+  vim.api.nvim_feedkeys('a', 'in', true)
+
+  -- lua way to enter <CR>
+  -- in vim: call feedkeys("\<CR>", 'n'), needs to use double-quote.
+  local cr = vim.api.nvim_replace_termcodes("<CR>", true, false, true)
+  vim.api.nvim_feedkeys(cr, 'n', false)
+
+  --- execute <ESC> after previous command is executed.
+  local esc = vim.api.nvim_replace_termcodes("<ESC>", true, false, true)
+  vim.api.nvim_feedkeys(esc, 'x', false)
 end,
 {
   silent = true,
@@ -449,6 +464,8 @@ Visual-Block 选择多行数字
 <br />
 
 ## nvim_cmd(), nvim_command(), nvim_exec2() 区别
+
+`vim.cmd()` it is an alias to `nvim_cmd()` where `opts` is empty.
 
 首选 nvim_exec2(), 然后是 nvim_cmd(), 不推荐 nvim_command().
 
