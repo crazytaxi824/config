@@ -57,6 +57,9 @@ local opt = { silent = true }
 
 --- NOTE: { mode, key, remap, opt, description }  - description for 'which-key'
 local keymaps = {
+  --- VVI: <ESC> 进入 terminal Normal 模式.
+  {'t', '<ESC>', '<C-\\><C-n>', opt, "Ternimal: Normal Mode"},
+
   --- common use -----------------------------------------------------------------------------------
   --- `:help registers`
   {'n', 'D', '"_dd', opt, "delete line No Copy"},
