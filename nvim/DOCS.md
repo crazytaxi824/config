@@ -1,5 +1,7 @@
 [toc]
 
+v0.10.0_beta for neovim v0.10.0
+
 # neovim 配置
 
 ## References
