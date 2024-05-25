@@ -538,7 +538,6 @@ vim.api.nvim_create_autocmd("FileType", {
 
     --- close window
     vim.keymap.set('n', 'q', '<cmd>q<CR>', {buffer=params.buf, desc="close window"})
-    --vim.keymap.set('n', '<ESC>', '<cmd>q<CR>', {buffer=params.buf, desc="close window"})
   end,
   desc = "<q> close quickfix window",
 })
@@ -552,7 +551,6 @@ vim.api.nvim_create_autocmd("CmdwinEnter", {
 
     --- close window
     vim.keymap.set('n', 'q', '<cmd>q<CR>', { buffer=params.buf, desc="close window" })
-    --vim.keymap.set('n', '<ESC>', '<cmd>q<CR>', { buffer=params.buf, desc="close window" })
   end,
   desc = "<q> close command window",
 })

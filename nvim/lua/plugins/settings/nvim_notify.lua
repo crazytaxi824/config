@@ -28,7 +28,6 @@ notify.setup({
 
     --- set keymap to close window
     vim.keymap.set('n', 'q', '<cmd>q<CR>', { buffer=bufnr, desc="close window" })
-    --vim.keymap.set('n', '<ESC>', '<cmd>q<CR>', { buffer=bufnr, desc="close window" })
   end,
 
   timeout = 3600,     -- Default timeout for notifications
