@@ -10,7 +10,7 @@ if not null_ls_status_ok then
   return
 end
 
-local proj_local_settings = require("lsp._load_proj_settings")
+local proj_local_settings = require("lsp.plugins._load_proj_settings")
 
 local M = {}
 
