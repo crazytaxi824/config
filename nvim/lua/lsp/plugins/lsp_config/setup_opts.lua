@@ -68,7 +68,7 @@ M.local_lspconfig_key = "lsp"
 --- NOTE: on_init() run before on_attach(), 可以通过打印看出先后顺序.
 M.on_init = function(client)
   --- NOTE: 加载项目本地设置, 覆盖 global settings -----------------------------
-  local proj_local_settings = require("lsp.plugins._load_proj_settings")
+  local proj_local_settings = require("lsp.plugins.load_proj_settings")
   client.config.settings[client.name] = proj_local_settings.keep_extend(M.local_lspconfig_key, client.name,
     client.config.settings[client.name])
 
