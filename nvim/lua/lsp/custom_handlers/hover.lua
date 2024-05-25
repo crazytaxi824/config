@@ -23,8 +23,11 @@ end
 M.hover_with = function(handler, override_config)
   return function(err, result, ctx, config)
     local bufnr, win_id = handler(err, result, ctx, vim.tbl_deep_extend('force', config or {}, override_config))
-      --- cache hover floating preview windows
-      floating_preview_windows[win_id] = true
+      --- VVI: 如果没有 result 则, bufnr 和 win_id 都是 nil
+      if win_id then
+        --- cache hover floating preview windows
+        floating_preview_windows[win_id] = true
+      end
     return bufnr, win_id
   end
 end
