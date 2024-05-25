@@ -1,6 +1,8 @@
 --- 自定义 hover_short handler 用于在写代码的过程中可以迅速查看方法中的参数类型, 而不用移动光标或退出 insert mode.
 --- 实现方法: 获取光标所在 method/func 的名字, 简化 "textDocument/hover" 返回内容.
 
+local h = require("lsp.custom_lsp_request.hover")
+
 --- NOTE: 这里 node_row 和 node_char 都是从 0 开始计算.
 --- node_char 是指行内第几个字符, \t 算一个字符.
 local function calculate_offset(lsp_req_pos_line, lsp_req_pos_char)
@@ -166,7 +168,7 @@ M.hover_short = function()
   local max_width = math.floor(vim.go.columns * 0.8)
   vim.lsp.buf_request(0, 'textDocument/hover', param,
     --- VVI: 添加 offsetX 设置到 handler, 用来偏移 open_floating_preview() window
-    vim.lsp.with(hover_short_handler,  -- VVI: 调用自定义 handler
+    h.hover_with(hover_short_handler,  -- VVI: 调用自定义 handler
       {
         offset_x = result.offset_x,
         offset_y = result.offset_y,
