@@ -62,7 +62,7 @@ null_ls.setup({
   --- 以下callback 都是 DEBUG: 用
   --- keymaps ---
   on_attach = function(client, bufnr)
-    require("lsp.lsp_keymaps").diagnostic_keymaps(bufnr)
+    require("lsp.plugins.lsp_keymaps").diagnostic_keymaps(bufnr)
 
     if __Debug_Neovim.null_ls then
       Notify("LSP Server attach: " .. client.name, "DEBUG", {title="Null-ls"})

@@ -103,7 +103,7 @@ M.on_attach = function(client, bufnr)
   end
 
   --- keymaps ---
-  local lsp_keymaps = require("lsp.lsp_keymaps")
+  local lsp_keymaps = require("lsp.plugins.lsp_keymaps")
   lsp_keymaps.textDocument_keymaps(bufnr)
   lsp_keymaps.diagnostic_keymaps(bufnr)
 
