@@ -101,10 +101,13 @@ local function set_cmd_and_keymaps(term_bufnr, pprof_dir)
   end, {bang=true})
 
   --- keymap
-  vim.api.nvim_buf_set_keymap(term_bufnr, 'n', '<F6>', '', {
+  vim.keymap.set('n', '<F6>', function()
+    select_pprof(term_bufnr, pprof_dir)
+  end,
+  {
+    buffer=term_bufnr,
     noremap = true,
     silent = true,
-    callback = function() select_pprof(term_bufnr, pprof_dir) end,
     desc = 'go_pprof: Go tool pprof/trace',
   })
 

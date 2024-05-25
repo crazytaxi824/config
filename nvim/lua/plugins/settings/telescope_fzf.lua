@@ -210,15 +210,16 @@ vim.api.nvim_create_autocmd("User", {
     end
 
     --- NOTE: 快捷键设置在 prompt bufnr 中, 因为其他 telescope window 通常不会 enter.
-    for _, mode in ipairs({'n', 'i'}) do
-      vim.api.nvim_buf_set_keymap(prompt_bufnr, mode, '<C-k>', '', {callback = function()
-        --- toggle `set wrap`
-        vim.api.nvim_set_option_value('wrap', not vim.wo[preview_winid].wrap, {scope='local', win=preview_winid})
-      end,
+    vim.keymap.set({'n', 'i'}, '<C-k>', function()
+      --- toggle `set wrap`
+      vim.api.nvim_set_option_value('wrap', not vim.wo[preview_winid].wrap, {scope='local', win=preview_winid})
+    end,
+    {
+      buffer=prompt_bufnr,
       noremap = true,
       silent = true,
-      desc = 'telescope: toggle preview wrap'})
-    end
+      desc = 'telescope: toggle preview wrap',
+    })
   end,
   desc = "set keymap of `:set wrap` for telescope preview window",
 })
