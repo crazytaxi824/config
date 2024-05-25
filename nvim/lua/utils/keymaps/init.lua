@@ -1,4 +1,3 @@
-local hl_search = require('utils.keymaps.hl_search')
 local home_key  = require('utils.keymaps.home_key')
 local section   = require('utils.keymaps.jump_to_section')
 local save_file = require('utils.keymaps.save_file')
@@ -9,11 +8,6 @@ local close_buf = require('utils.keymaps.close_other_buf')
 local toggle_comment = require('utils.keymaps.toggle_comments_color')
 
 local M = {
-  hl_search = {
-    normal = hl_search.hl_search,
-    visual = hl_search.hl_visual_search,
-    delete = hl_search.delete,
-  },
   home_key = {
     wrap = home_key.wrap,
     nowrap = home_key.nowrap,

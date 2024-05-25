@@ -117,28 +117,6 @@ local keymaps = {
   --- Tab ------------------------------------------------------------------------------------------
   {'n', '<Tab>', '<C-w><C-w>', opt, 'which_key_ignore'},  -- 切换到另一个窗口.
 
-  --- Search ---------------------------------------------------------------------------------------
-  {'n','*',  function() key_fn.hl_search.normal("*") end,  opt, 'search: \\<cword\\> Forward'},
-  {'n','#',  function() key_fn.hl_search.normal("#") end,  opt, 'search: \\<cword\\> Backward'},
-  {'n','g*', function() key_fn.hl_search.normal("g*") end, opt, 'search: <cword> Forward'},
-  {'n','g#', function() key_fn.hl_search.normal("g#") end, opt, 'search: <cword> Backward'},
-
-  --- NOTE: "fy - copy VISUAL selected text to register "f"
-  --    `let @/ = @f` - copy register "f" to register "/" (search register)
-  {'v', '*',  function() key_fn.hl_search.visual('n', true) end, opt, 'search: \\<cword\\> Forward'},
-  {'v', '#',  function() key_fn.hl_search.visual('N', true) end, opt, 'search: \\<cword\\> Backward'},
-  {'v', 'g*', function() key_fn.hl_search.visual('n') end, opt, 'search: <cword> Forward'},
-  {'v', 'g#', function() key_fn.hl_search.visual('N') end, opt, 'search: <cword> Backward'},
-
-  --- hl next/prev result
-  {'n','n', function() key_fn.hl_search.normal("n") end, opt, 'search: Forward'},
-  {'n','N', function() key_fn.hl_search.normal("N") end, opt, 'search: Backward'},
-
-  --- NOTE: 这里不能使用 silent, 否则 command line 中不显示 '?' 和 '/'
-  --- ':echo v:hlsearch' 显示目前 hlsearch 状态.
-  {'n', '?', "<cmd>lua require('utils.keymaps').hl_search.delete()<CR>?", nil, 'which_key_ignore'},
-  {'n', '/', "<cmd>lua require('utils.keymaps').hl_search.delete()<CR>/", nil, 'which_key_ignore'},
-
   --- CTRL -----------------------------------------------------------------------------------------
   --- 可以使用的 Ctrl keymap ----------------------------------------------------------------------- {{{
   --- <C-q> 容易退出程序, 不要使用. 默认 Visual-Block mode
