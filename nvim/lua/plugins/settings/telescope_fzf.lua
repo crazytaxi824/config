@@ -216,7 +216,6 @@ vim.api.nvim_create_autocmd("User", {
     end,
     {
       buffer=prompt_bufnr,
-      noremap = true,
       silent = true,
       desc = 'telescope: toggle preview wrap',
     })
@@ -333,7 +332,7 @@ end
 
 --- keymaps ----------------------------------------------------------------------------------------
 local builtin = require("telescope.builtin")
-local opt = { noremap = true, silent = true }
+local opt = { silent = true }
 local telescope_keymaps = {
   --- Picker functions, https://github.com/nvim-telescope/telescope.nvim#pickers
   --- 使用 `:Telescope` 列出所有 Picker

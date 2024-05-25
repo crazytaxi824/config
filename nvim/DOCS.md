@@ -168,7 +168,11 @@ vim.keymap.set('i', '<M-b>', function()
   -- feedkeys() 更灵活.
   vim.fn.feedkeys('G', 'n')  -- not execute immediately
   vim.fn.feedkeys('', 'x')   -- execute when typeahead is empty.
-end, { noremap = true, silent = true }, 'Test Options-B')
+end,
+{
+  silent = true,
+  desc = 'Test Options-B',
+})
 ```
 
 - `vim.fn.json_encode(table)` / `vim.fn.json_decode(string)` -- json 处理.

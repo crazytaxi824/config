@@ -17,7 +17,7 @@
 --      - FuzzTime 10m
 --      - FuzzTime ?
 -- -- }}}
-local opt = {noremap = true, buffer = true}
+local opt = { buffer = 0 }
 local go_keymaps = {
   {'n', '<F5>',  function() require("utils.go").run() end, opt, "code: Go Run"},  -- go run
   {'n', '<F6>',  function() require("utils.go").test.single_func() end, opt, "code: Go Test Single"}, -- go test

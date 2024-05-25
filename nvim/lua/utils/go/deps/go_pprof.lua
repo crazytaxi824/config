@@ -106,7 +106,6 @@ local function set_cmd_and_keymaps(term_bufnr, pprof_dir)
   end,
   {
     buffer=term_bufnr,
-    noremap = true,
     silent = true,
     desc = 'go_pprof: Go tool pprof/trace',
   })

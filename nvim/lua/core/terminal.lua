@@ -16,7 +16,7 @@ vim.api.nvim_create_autocmd('TermOpen', {
     vim.api.nvim_set_option_value('scrolloff', 0, scope)
 
     --- VVI: <ESC> 进入 terminal Normal 模式.
-    local opts = {buffer = params.buf, noremap = true, silent = true, desc = "Ternimal: Normal Mode"}
+    local opts = {buffer = params.buf, silent = true, desc = "Ternimal: Normal Mode"}
     vim.keymap.set('t', '<ESC>', '<C-\\><C-n>', opts)
   end,
   desc = "terminal: highlight filepath in terminal window",

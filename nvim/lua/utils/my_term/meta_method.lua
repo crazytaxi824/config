@@ -37,7 +37,7 @@ M.default_opts = {
 --- keymaps: for terminal buffer only --------------------------------------------------------------
 --- set keymaps for my_term terminal & output-buffer.
 local function set_buf_keymaps(term_obj)
-  local opt = {buffer = term_obj.bufnr, silent = true, noremap = true}
+  local opt = { buffer = term_obj.bufnr, silent = true }
   local keys = {
     {'n', 't<Up>', '<cmd>resize +5<CR>',   opt, 'my_term: resize +5'},
     {'n', 't<Down>', '<cmd>resize -5<CR>', opt, 'my_term: resize -5'},

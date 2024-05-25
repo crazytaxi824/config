@@ -92,7 +92,7 @@ M.console = mt.new({
 -- -- }}}
 
 --- keymaps ----------------------------------------------------------------------------------------
-local opt = {noremap = true, silent = true}
+local opt = { silent = true }
 local my_term_keymaps = {
   {'n', '<F17>', function() M.console:run() end, opt, "code: Re-Run Last cmd"}, -- <S-F5> re-run last cmd.
 }

@@ -61,7 +61,7 @@ git_signs.setup({
 
   --- keymaps, `:help gitsigns-functions`
   on_attach = function(bufnr)
-    local opt = { noremap = true, silent = true, buffer=bufnr}
+    local opt = { silent = true, buffer=bufnr }
     local gitsigns_keymaps = {
       {'n', '<leader>gn', function() git_signs.next_hunk() end, opt, "git: Jump to Next Hunk"},
       {'n', '<leader>gp', function() git_signs.prev_hunk() end, opt, "git: Jump to Prev Hunk"},

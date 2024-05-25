@@ -542,7 +542,7 @@ bufferline.setup({
 })
 
 --- keymaps ----------------------------------------------------------------------------------------
-local opt = { noremap = true, silent = true }
+local opt = { silent = true }
 local bufferline_keymaps = {
   --- NOTE: according to bufferline source code, `go_to_buffer()` is deprecate. it calls `go_to()`
   --- https://github.com/akinsho/bufferline.nvim/blob/master/lua/bufferline.lua

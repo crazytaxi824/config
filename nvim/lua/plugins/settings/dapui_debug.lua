@@ -82,7 +82,7 @@ dapui.setup({
 --- 获取 var value under cursor. {expr} = nil 时, 使用 <cword>.
 ---   dapui.eval({expr}, {settings})
 -- -- }}}
-local opt = { noremap = true, silent = true }
+local opt = { silent = true }
 local debug_keymaps = {
   --- NOTE: 这里是 dapui 的方法 eval(), {enter=true}进入 float window.
   {'n', '<leader>cc', function() dapui.eval(nil, {enter=true}) end, opt, 'debug: Popup Value under cursor'},

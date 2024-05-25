@@ -12,7 +12,7 @@ local M = {}  -- module, 仅提供两个 keymaps 方法.
 
 --- for lspconfig only -----------------------------------------------------------------------------
 M.textDocument_keymaps = function(bufnr)
-  local opts = { noremap=true, silent=true, buffer=bufnr }
+  local opts = { silent=true, buffer=bufnr }
   local textdoc_keymaps = {
     {"n", "<F2>", "<cmd>lua vim.lsp.buf.rename()<CR>", opts, "LSP: Rename"},
     {"i", "<F2>", "<C-o><cmd>lua vim.lsp.buf.rename()<CR>", opts, "LSP: Rename"},
@@ -43,7 +43,7 @@ end
 
 --- for lspconfig && null-ls, format && diagnostic -------------------------------------------------
 M.diagnostic_keymaps = function(bufnr)
-  local opts = { noremap=true, silent=true, buffer=bufnr }
+  local opts = { silent=true, buffer=bufnr }
   local diag_keymaps = {
     --- jump to diagnostics next error.
     {"n", "<F8>", '<cmd>lua vim.diagnostic.goto_next()<CR>', opts, "diagnostic: goto Next Error"},

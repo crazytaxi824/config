@@ -22,7 +22,7 @@ end
 
 --- CTRL-C send interrupt signal to output-buffer ONLY. terminal already has this.
 local function set_output_buf_keymaps(term_obj)
-  local opt = {buffer = term_obj.bufnr, silent = true, noremap = true}
+  local opt = { buffer = term_obj.bufnr, silent = true }
   local keys = {
     {'n', '<C-c>', function() stop_job(term_obj) end, opt, "my_term: jobstop()"},
     {'i', '<C-c>', function() stop_job(term_obj) end, opt, "my_term: jobstop()"},

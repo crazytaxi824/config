@@ -48,7 +48,7 @@ local function ts_jest(file, coverage)
 end
 
 --- keymap -----------------------------------------------------------------------------------------
-local opt = {noremap = true, buffer = true}
+local opt = { buffer = 0 }
 local ts_keymaps = {
   --- run dist/current_file ---
   {'n', '<F5>', function() ts_run(vim.fn.expand('%:.:r')) end, opt, "code: Run File"},

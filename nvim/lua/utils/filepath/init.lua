@@ -30,7 +30,7 @@ M.setup = function(bufnr)
   })
 
   --- set keymap jump to file/dir
-  local opts = { buffer = bufnr, noremap = true, silent = true, desc = "filepath: Jump to file" }
+  local opts = { buffer = bufnr, silent = true, desc = "filepath: Jump to file" }
   vim.keymap.set('n', '<S-CR>', function() fp_jump.n_jump_cWORD() end, opts)
 end
 

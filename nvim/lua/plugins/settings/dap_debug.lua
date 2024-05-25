@@ -195,7 +195,7 @@ end
 ---   dap.status()
 -- -- }}}
 --- TODO: 在进入 debug 模式时设置 keymaps, 退出 debug 模式时删除 keymaps.
-local opt = { noremap = true, silent = true }
+local opt = { silent = true }
 local debug_keymaps = {
   --- <S-F5>
   {'n', '<F17>', function() dap.continue() end,  opt, 'debug: Start(Continue)'},

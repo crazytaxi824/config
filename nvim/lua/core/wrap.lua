@@ -4,7 +4,7 @@ local key_fn = require('utils.keymaps')
 
 --- 使用 gj / gk / g0 / g$ 在 wrap buffer 中移动 cursor.
 local function set_cursor_move_in_wrap(bufnr)
-  local opts = {buffer=bufnr, silent=true, noremap=true}
+  local opts = { buffer = bufnr, silent = true }
   local cursor_move_keymaps = {
     {'n', '<Down>', 'gj', opts, 'which_key_ignore'},
     {'n', '<Up>',   'gk', opts, 'which_key_ignore'},

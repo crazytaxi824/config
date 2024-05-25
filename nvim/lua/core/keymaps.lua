@@ -45,14 +45,15 @@ local mt = require('utils.my_term')  -- my_term terminal
 -- -- }}}
 
 --- vim.keymap.set() - option `:help :map-arguments`
---- { noremap = true },
+--- { remap = false }, --- VVI: vim.keymap.set() 不接受 'noremap', 只接受 'remap' opt.
 --- { nowait = true },
 --- { silent = true },
 --- { buffer = number },  -- 针对 bufnr 有效, 0 - current buffer
 --- { script = true },
 --- { expr = true },
+--- { unique = true }, define a new mapping or abbreviation, the command will fail if the mapping or abbreviation already exists.
 --- { desc = "key_description" }  -- 会影响 which-key 显示.
-local opt = { noremap = true, silent = true }
+local opt = { silent = true }
 
 --- NOTE: { mode, key, remap, opt, description }  - description for 'which-key'
 local keymaps = {
@@ -135,8 +136,8 @@ local keymaps = {
 
   --- NOTE: 这里不能使用 silent, 否则 command line 中不显示 '?' 和 '/'
   --- ':echo v:hlsearch' 显示目前 hlsearch 状态.
-  {'n', '?', "<cmd>lua require('utils.keymaps').hl_search.delete()<CR>?", {noremap=true}, 'which_key_ignore'},
-  {'n', '/', "<cmd>lua require('utils.keymaps').hl_search.delete()<CR>/", {noremap=true}, 'which_key_ignore'},
+  {'n', '?', "<cmd>lua require('utils.keymaps').hl_search.delete()<CR>?", nil, 'which_key_ignore'},
+  {'n', '/', "<cmd>lua require('utils.keymaps').hl_search.delete()<CR>/", nil, 'which_key_ignore'},
 
   --- CTRL -----------------------------------------------------------------------------------------
   --- 可以使用的 Ctrl keymap ----------------------------------------------------------------------- {{{
@@ -258,9 +259,9 @@ local keymaps = {
   {'n', 'gc', '<Nop>', opt},
 
   --- NOTE: `gc` & `gcc` is remap by default.
-  {'n', '<M-/>', 'gcc', {remap=true, noremap=false}, 'Comment current line'},
-  {'i', '<M-/>', '<C-o>gcc', {remap=true, noremap=false}, 'Comment current line'},
-  {'v', '<M-/>', 'gc', {remap=true, noremap=false}, 'Comment Visual selected'},
+  {'n', '<M-/>', 'gcc', {remap=true}, 'Comment current line'},
+  {'i', '<M-/>', '<C-o>gcc', {remap=true}, 'Comment current line'},
+  {'v', '<M-/>', 'gc', {remap=true}, 'Comment Visual selected'},
 }
 
 --- 这里是设置所有 key mapping 的地方 --------------------------------------------------------------

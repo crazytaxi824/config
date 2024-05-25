@@ -537,14 +537,13 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.bo[params.buf].buflisted = false
 
     --- close window
-    vim.keymap.set('n', 'q', '<cmd>q<CR>', {noremap=true, buffer=params.buf, desc="close window"})
-    --vim.keymap.set('n', '<ESC>', '<cmd>q<CR>', {noremap=true, buffer=params.buf, desc="close window"})
+    vim.keymap.set('n', 'q', '<cmd>q<CR>', {buffer=params.buf, desc="close window"})
+    --vim.keymap.set('n', '<ESC>', '<cmd>q<CR>', {buffer=params.buf, desc="close window"})
   end,
   desc = "<q> close quickfix window",
 })
 
 --- `:help command-line-window`, 包括 q: q/ q? 打开的窗口.
---vim.cmd([[autocmd CmdwinEnter * nnoremap <buffer> q <cmd>q<CR>]])
 vim.api.nvim_create_autocmd("CmdwinEnter", {
   pattern = {"*"},  -- 包括: ":" "/" "?"
   callback = function(params)
@@ -552,8 +551,8 @@ vim.api.nvim_create_autocmd("CmdwinEnter", {
     vim.bo[params.buf].buflisted = false
 
     --- close window
-    vim.keymap.set('n', 'q', '<cmd>q<CR>', {noremap=true, buffer=params.buf, desc="close window"})
-    --vim.keymap.set('n', '<ESC>', '<cmd>q<CR>', {noremap=true, buffer=params.buf, desc="close window"})
+    vim.keymap.set('n', 'q', '<cmd>q<CR>', { buffer=params.buf, desc="close window" })
+    --vim.keymap.set('n', '<ESC>', '<cmd>q<CR>', { buffer=params.buf, desc="close window" })
   end,
   desc = "<q> close command window",
 })

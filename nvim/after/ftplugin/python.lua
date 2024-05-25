@@ -31,7 +31,8 @@ end
 --- key mapping ------------------------------------------------------------------------------------
 --- run current_file ---
 vim.keymap.set('n', '<F5>', function() py_run(vim.fn.bufname()) end, {
-  noremap = true, buffer = true, desc = "code: Run File",
+  buffer = 0,
+  desc = "code: Run File",
 })
 
 

@@ -98,7 +98,7 @@ local nt_buffer_keymaps = {
 }
 
 --- global keymap --------------------------------------------------------------
-local opts = {noremap=true, silent=true}
+local opts = { silent=true }
 local tree_keymaps = {
   {'n', '<leader>;',    '<cmd>NvimTreeToggle<CR>',    opts, 'filetree: toggle'},
   {'n', '<leader><CR>', '<cmd>NvimTreeFindFile!<CR>', opts, 'filetree: jump to file'},
@@ -115,9 +115,9 @@ nvim_tree.setup {
   on_attach = function(bufnr)
     local function opt(desc)
       if not desc then
-        return {  buffer = bufnr, noremap = true, silent = true, nowait = true }
+        return {  buffer = bufnr, silent = true, nowait = true }
       end
-      return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+      return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, silent = true, nowait = true }
     end
 
     for _, keymap in ipairs(nt_buffer_keymaps) do
