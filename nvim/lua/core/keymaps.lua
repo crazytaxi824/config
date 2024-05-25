@@ -221,8 +221,8 @@ local keymaps = {
   {'n', ']]', function() key_fn.section.goto_next() end, opt, 'Jump to Next Section'},
 
   --- 切换 buffer, 目前使用 bufferline 进行 buffer 切换, 如果不使用 buffer line 则使用以下设置.
-  --{'n', '<lt>', ':bprevious<CR>', opt, 'go to previous buffer'},
-  --{'n', '>', ':bnext<CR>', opt, 'go to next buffer'},
+  --{'n', '<lt>', '<cmd>bprevious<CR>', opt, 'go to previous buffer'},
+  --{'n', '>', '<cmd>bnext<CR>', opt, 'go to next buffer'},
 
   --- hi Normal ctermbg=234 | hi Normal ctermbg=NONE 切换 bg 颜色
   {'n', '<leader>C', function() key_fn.toggle_comments_color() end, opt, 'change Comments color'},
@@ -263,7 +263,7 @@ key_fn.set({}, {
 
     --- 以下 key 在 which-key 中默认显示为 'Nvim builtin', 所以这里重新更名.
     Y = {'copy whole line without "\\n"'},
-    ['<C-L>'] = {':nohlsearch | diffupdate'},
+    ['<C-L>'] = {'nohlsearch | diffupdate'},
     ['&'] = {"repeat last ':s' replace command"},
   },
   opts = {mode='n'},
