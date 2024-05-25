@@ -213,7 +213,7 @@ local plugins = {
   {
     "nvimtools/none-ls.nvim",
     commit = "60f5f80",
-    config = function() require("lsp.null_ls") end,
+    config = function() require("lsp.plugins.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
     event = "VeryLazy",

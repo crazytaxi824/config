@@ -3,7 +3,7 @@ if not null_ls_status_ok then
   return
 end
 
-local s = require("lsp.null_ls.sources")
+local s = require("lsp.plugins.null_ls.sources")
 
 --- 合并 sources 到一个 list
 local function combine_sources()

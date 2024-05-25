@@ -106,7 +106,7 @@ local function reload_local_settings(old_content, new_content)
   end)
 
   --- linter = { golangci_lint = { ... }, eslint = { ... } }
-  local s = require("lsp.null_ls.sources")
+  local s = require("lsp.plugins.null_ls.sources")
   compare_content_settings(old_content, new_content, s.local_linter_key, function(tool_name)
     local null_ls_status_ok, null_ls = pcall(require, "null-ls")
     if not null_ls_status_ok then
@@ -148,7 +148,7 @@ end, { bang=true, bar=true, desc = 'reload "lsp" and "null-ls" after change ".nv
 vim.api.nvim_create_user_command("LocalSettingsExample", function()
   --- NOTE: 主要保证 key 设置正确.
   local lsp_typ = require("lsp.lsp_config.setup_opts").local_lspconfig_key
-  local s = require("lsp.null_ls.sources")
+  local s = require("lsp.plugins.null_ls.sources")
 
   local example = {
     [lsp_typ] = { gopls = { "..." }, tsserver = { "..." } },

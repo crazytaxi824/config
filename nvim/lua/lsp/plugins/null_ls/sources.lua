@@ -93,7 +93,7 @@ M.sources =  {
     -- -- }}}
     golangci_lint = function()
       return diagnostics.golangci_lint.with(proj_local_settings.keep_extend(M.local_linter_key, 'golangci_lint',
-        require("lsp.null_ls.tools.golangci_lint"),  -- NOTE: 加载单独设置 null_ls/tools/golangci_lint.lua
+        require("lsp.plugins.null_ls.tools.golangci_lint"),  -- NOTE: 加载单独设置 null_ls/tools/golangci_lint.lua
         diagnostics_opts))
     end,
 
@@ -107,7 +107,7 @@ M.sources =  {
   -- [M.local_formatter_key] = {
   --   prettier = function()
   --     return formatting.prettier.with(proj_local_settings.keep_extend(M.local_formatter_key, 'prettier',
-  --       require("lsp.null_ls.tools.prettier")))  -- NOTE: 加载单独设置 null_ls/tools/prettier.lua
+  --       require("lsp.plugins.null_ls.tools.prettier")))  -- NOTE: 加载单独设置 null_ls/tools/prettier.lua
   --   end,
   --
   --   --- go: goimports, goimports_reviser, gofmt, gofumpt
