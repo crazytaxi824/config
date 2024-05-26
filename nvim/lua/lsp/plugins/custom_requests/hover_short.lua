@@ -171,6 +171,7 @@ M.hover_short = function()
         anchor_bias = 'above',
         max_width = math.floor(vim.go.columns * 0.8),
         close_events = {"WinScrolled"},
+        silent = true,  -- 有些 linter 类型的 lsp 不返回任何 result, 导致 handler 报错.
       }
     )
   )
