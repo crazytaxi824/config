@@ -52,14 +52,9 @@ end
 --        func call 名字 -- call_expression.function.field
 -- }}}
 local function find_fn_call_before_cursor()
-  local ts_status, ts_utils = pcall(require, "nvim-treesitter.ts_utils")
-  if not ts_status then
-    Notify("treesitter is not loaded.", "WARN")
-    return
-  end
-
   --- 获取 node at cursor.
-  local node = ts_utils.get_node_at_cursor()
+  local pos = vim.api.nvim_win_get_cursor(0)
+  local node = vim.treesitter.get_node({pos={pos[1]-1, pos[2]}})
 
   --- 向上(parent)寻找 'argument_list' / 'arguments' node.
   --- eg: fn("bar") 中 `("bar")` 属于 arguments, 包括括号.
@@ -70,6 +65,10 @@ local function find_fn_call_before_cursor()
     if vim.tbl_contains(args_type_name, node:type()) then
       --- 判断 arguments/argument_list 前一个 node 是否 type_arguments(generic type param)
       local prev_node = node:prev_named_sibling()
+      if not prev_node then
+        error('debug: arguments|argument_list missing previous named sibling node.')
+      end
+
       if prev_node:type() == 'type_arguments' then
         --- 如果是 type_arguments 则返回 type_arguments node 前一个字符位置.
         local p_row, p_col, _ = prev_node:start()
