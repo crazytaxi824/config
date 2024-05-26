@@ -84,7 +84,7 @@ local plugins = {
   --- but if you want to extend a query use the `after/queries/` directory.
   {
     "nvim-treesitter/nvim-treesitter",
-    commit = "6d56c5f",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "488e39a",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     --build = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
     config = function() require("plugins.settings.treesitter") end,
   },
@@ -240,7 +240,7 @@ local plugins = {
 
   {
     "nvim-tree/nvim-web-devicons",
-    commit = "e37bb1f",
+    commit = "b77921f",
 
     lazy = true, -- dep of nvim-tree & bufferline
   },
@@ -304,7 +304,7 @@ local plugins = {
   {
     "nvim-telescope/telescope.nvim",
     branch = "0.1.x",  -- master branch is nightly version.
-    tag = "0.1.7",
+    tag = "0.1.8",
     config = function() require("plugins.settings.telescope_fzf") end,
     dependencies = {
       "nvim-lua/plenary.nvim",
