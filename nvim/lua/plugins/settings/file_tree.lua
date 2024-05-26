@@ -302,12 +302,7 @@ nvim_tree.setup {
 --- `:help nvim-tree-highlight` -------------------------------------------------------------------- {{{
 vim.api.nvim_set_hl(0, 'NvimTreeNormalNC', {link="NormalNC"})  -- non-foucs nvim-tree window color
 vim.api.nvim_set_hl(0, 'NvimTreeRootFolder', {ctermfg=Colors.cyan.c, fg=Colors.cyan.g})  -- non-foucs nvim-tree window color
--- vim.cmd('hi! default link NvimTreeWinSeparator VertSplit')  =- 分割线
 
-vim.api.nvim_set_hl(0, 'NvimTreeFolderName', {ctermfg=Colors.cyan.c, fg=Colors.cyan.g, bold=true})
-vim.cmd('hi! default link NvimTreeFolderIcon NvimTreeFolderName')
-vim.cmd('hi! default link NvimTreeEmptyFolderName NvimTreeFolderName')
-vim.cmd('hi! default link NvimTreeOpenedFolderName NvimTreeFolderName')  -- 已打开文件夹的颜色
 vim.api.nvim_set_hl(0, 'NvimTreeOpenedHL', {underline=true})   -- 已经打开文件的颜色.
 vim.api.nvim_set_hl(0, 'NvimTreeIndentMarker', {ctermfg=Colors.g242.c, fg=Colors.g242.g}) -- └ │ 颜色
 
@@ -338,21 +333,6 @@ vim.api.nvim_set_hl(0, 'NvimTreeGitRenamedIcon', {ctermfg=Colors.purple.c, fg=Co
 vim.api.nvim_set_hl(0, 'NvimTreeGitNewIcon',     {ctermfg=Colors.red.c, fg=Colors.red.g})
 vim.api.nvim_set_hl(0, 'NvimTreeGitDeletedIcon', {ctermfg=Colors.red.c, fg=Colors.red.g})
 vim.api.nvim_set_hl(0, 'NvimTreeGitIgnoredIcon', {ctermfg=Colors.g244.c, fg=Colors.g244.g})
-
---- git filename color, 默认是 link 上面 git icon color.
--- vim.cmd('hi! default link NvimTreeGitFileDirtyHL   NvimTreeGitStagedIcon')  -- hi! default link 在 hi clear 时回到该设置.
--- vim.cmd('hi! default link NvimTreeGitFileNewHL     NvimTreeGitStagedIcon')
---- vim.cmd('hi! default link NvimTreeGitFileStagedHL NvimTreeGitStagedIcon')
---- vim.cmd('hi! default link NvimTreeGitFileMergeHL   NvimTreeGitMergeIcon')
---- vim.cmd('hi! default link NvimTreeGitFileRenamedHL NvimTreeGitRenamedIcon')
---- vim.cmd('hi! default link NvimTreeGitFileDeletedHL NvimTreeGitDeletedIcon')
---- vim.cmd('hi! default link NvimTreeGitFileIgnoredHL NvimTreeGitIgnoredIcon')
-
---- diagnostic icons highlight.
---- NvimTreeLspDiagnosticsError
---- NvimTreeLspDiagnosticsWarning
---- NvimTreeLspDiagnosticsInformation
---- NvimTreeLspDiagnosticsHint
 
 -- -- }}}
 

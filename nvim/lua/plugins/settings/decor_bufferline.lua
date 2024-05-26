@@ -193,6 +193,9 @@ buf_highlights.hint = buf_highlights.background
 buf_highlights.hint_visible = buf_highlights.buffer_visible
 buf_highlights.hint_selected = buf_highlights.buffer_selected
 
+--- for 'offsets' config.
+vim.api.nvim_set_hl(0, 'NvimTreeFileExplorer', vim.tbl_deep_extend('force', Highlights.Directory, {underline=true}))
+
 -- -- }}}
 
 --- functions for gotoable ------------------------------------------------------------------------- {{{
@@ -507,8 +510,8 @@ bufferline.setup({
 
     --- ':help bufferline-configuration', 在 nvim-tree 上显示 "File Explorer"
     offsets = {
-      {filetype="NvimTree", text="File Explorer", text_align="center", highlight="Directory", separator=true},
-      {filetype="tagbar", text="TagBar", text_align="center", highlight="Directory", separator=true},
+      {filetype="NvimTree", text="File Explorer", text_align="center", highlight="NvimTreeFileExplorer", separator=true},
+      {filetype="tagbar", text="TagBar", text_align="center", highlight="NvimTreeFileExplorer", separator=true},
     },
     --- 要使用 hover 必须 enable 'mousemoveevent'
     -- hover = {

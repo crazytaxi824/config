@@ -36,10 +36,9 @@
 ---   nvim_create_namespace({name}), namespace are used for buffer highlights.
 ---   nvim_buf_add_highlight(), 有点类似 matchaddpos() 但是不是完全一样.
 ---
---- VVI: nvim_set_hl() 没有实现 `hi! default link Foo Bar` 和 `hi clear Foo` 功能.
----
 -- -- }}}
---- alacritty color based on sRGB
+
+--- VVI: alacritty color based on sRGB
 Colors = {
   --- NOTE: alacritty 颜色对应, 表示 0-15 系统颜色.
   white = {c=251, g='#c0c0c0'},  -- foreground, text
@@ -187,7 +186,7 @@ Highlights = {
   Directory = {
     ctermfg=Colors.cyan.c, fg=Colors.cyan.g,
     ctermbg=Colors.g235.c, bg=Colors.g235.g,
-    bold=true, underline=true,
+    bold=true,
   },
 
   --- 基础颜色 -------------------------------------------------------------------------------------
