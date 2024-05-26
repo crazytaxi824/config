@@ -15,7 +15,7 @@ local M = {}
 local function get_local_settings_content()
   local local_settings_filepaths = vim.fs.find({'.nvim/settings.lua'}, {
     upward = true, -- 从 pwd 向上寻找 .nvim/settings.lua 文件.
-    stop = vim.uv.os_homedir(),  -- 直到 $HOME 为止.
+    stop = vim.fn.getenv('HOME'),  -- 直到 $HOME 为止.
     path = vim.fs.dirname(vim.api.nvim_buf_get_name(0)),  -- 从当前文件所在目录开始查找.
     limit = 1, -- NOTE: 只找最近的一个文件.
   })
