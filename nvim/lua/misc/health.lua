@@ -39,10 +39,6 @@ local funcs_list = {
   'require("lspconfig.configs")',
   'vim.lsp.buf_request',
 
-  'require("nvim-treesitter.parsers").get_buf_lang',
-  'require("nvim-treesitter.parsers").has_parser',
-  'require("nvim-treesitter.parsers").available_parsers',
-
   'require("cmp").core',
   'require("luasnip").unlink_current',
   'require("telescope.finders").new_table',

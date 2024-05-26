@@ -2,27 +2,11 @@
 
 local M = {}
 
---- NOTE: `:help treesitter-languagetree`, `lang` will default to 'filetype'.
---- 利用 nvim-treesitter 获取 buffer `lang`.
-local function parse_buffer_lang()
-  local nvim_ts_ok, nvim_ts_parsers = pcall(require, "nvim-treesitter.parsers")
-  if nvim_ts_ok then
-    return nvim_ts_parsers.get_buf_lang(0)  -- 如果 nvim-treesitter 存在, 则 parse
-  else
-    return vim.bo.filetype  -- 如果 nvim-treesitter 不存在, 则使用 filetype
-  end
-end
-
 local function find_ts_root_node()
-  local lang = parse_buffer_lang()
-  if not lang or lang == '' then
-    error('treesitter-parser for current buffer is not available')
-  end
-
   --- vim.treesitter.get_parser(bufnr, lang)
   --- "bufnr", 0 current buffer
   --- "lang", default filetype.
-  local tsparser_status_ok, tsparser = pcall(vim.treesitter.get_parser, 0, lang)
+  local tsparser_status_ok, tsparser = pcall(vim.treesitter.get_parser)
   if not tsparser_status_ok then
     error(vim.inspect(tsparser))
   end
