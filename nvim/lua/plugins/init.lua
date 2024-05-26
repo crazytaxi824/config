@@ -25,7 +25,7 @@ local plugins = {
   {
     "folke/lazy.nvim",
     -- version = "*",  -- 相当于 tag='stable'
-    tag = "v10.20.5",
+    tag = "v10.21.0",
   },
 
   --- Performence & Functions ----------------------------------------------------------------------
@@ -84,7 +84,7 @@ local plugins = {
   --- but if you want to extend a query use the `after/queries/` directory.
   {
     "nvim-treesitter/nvim-treesitter",
-    commit = "488e39a",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "245da4e",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     --build = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
     config = function() require("plugins.settings.treesitter") end,
   },
@@ -271,7 +271,7 @@ local plugins = {
   {
     "mfussenegger/nvim-dap",  -- core debug tool
     -- tag = "0.7.0",
-    commit = "c65c163",
+    commit = "922ebc7",
     config = function() require("plugins.settings.dap_debug") end,
 
     cmd = {'DapToggleBreakpoint', 'DapContinue', 'DapLoadLaunchJSON'},
