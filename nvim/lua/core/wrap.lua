@@ -22,7 +22,7 @@ local function set_cursor_move_in_wrap(bufnr)
 
     {'i', '<Down>', '<C-o>gj', opts, 'which_key_ignore'},
     {'i', '<Up>',   '<C-o>gk', opts, 'which_key_ignore'},
-    {'i', '<Home>', '<C-o><cmd>lua require("utils.keymaps").home_key.wrap()<CR>', opts, 'which_key_ignore'},
+    {'i', '<Home>', function() key_fn.home_key.wrap() end, opts, 'which_key_ignore'},
     {'i', '<End>',  '<C-o>g$', opts, 'which_key_ignore'},
     {'i', '<PageUp>', '<C-o>8gk', opts, 'which_key_ignore'},  -- g$ 相当于 g<End>
     {'i', '<PageDown>', '<C-o>8gj', opts, 'which_key_ignore'},  -- g$ 相当于 g<End>

@@ -130,7 +130,7 @@ local keymaps = {
   --- <Home> 模拟 vscode 行为; <End> 使用默认行为.
   {'n', '<Home>', function() key_fn.home_key.nowrap() end, opt, 'which_key_ignore'},
   {'v', '<Home>', function() key_fn.home_key.nowrap() end, opt, 'which_key_ignore'},
-  {'i', '<Home>', '<C-o><cmd>lua require("utils.keymaps").home_key.nowrap()<CR>', opt, 'which_key_ignore'},
+  {'i', '<Home>', function() key_fn.home_key.nowrap() end, opt, 'which_key_ignore'},
 
   --{'n', 'G', 'Gzz', opt, 'which_key_ignore'},  -- put last line in center
 
