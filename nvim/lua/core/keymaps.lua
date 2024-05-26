@@ -61,8 +61,18 @@ local keymaps = {
   {'t', '<ESC>', '<C-\\><C-n>', opt, "Ternimal: Normal Mode"},
   --- VVI: <ESC> close popup window & nohlsearch
   {'n', '<ESC>', function()
-    key_fn.close_popup_wins()
-    vim.cmd('nohlsearch')
+    --- nohlsearch
+    if vim.v.hlsearch == 1 then
+      vim.cmd('nohlsearch')
+      return
+    end
+
+    --- close all popup windows
+    if key_fn.close_popup_wins() then
+      return
+    end
+
+    --- default <ESC> function
     local esc = vim.api.nvim_replace_termcodes('<ESC>', true, false, true)
     vim.api.nvim_feedkeys(esc, 'n', false)
   end, opt, "which_key_ignore"},
