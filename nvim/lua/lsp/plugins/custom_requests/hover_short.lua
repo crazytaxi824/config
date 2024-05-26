@@ -34,6 +34,17 @@ local function calculate_offset(lsp_req_pos_line, lsp_req_pos_char)
   }
 end
 
+--- 计算 argument list 前面一个 node 的 start 位置.
+local function node_before_arguments(row, col)
+  local node_before_args = vim.treesitter.get_node({pos={row, col}})
+  if not node_before_args then
+    error('debug: no node before arguments|argument_list node')
+  end
+
+  row, col, _ = node_before_args:start()
+  return calculate_offset(row, col)
+end
+
 --- NOTE: 使用 nvim-treesitter 寻找 cursor 前最近的 function call() 的位置 ----- {{{
 -- `:help nvim-treesitter`
 --    node = ts_utils.get_node_at_cursor()  -- 获取 node at cursor.
@@ -71,14 +82,14 @@ local function find_fn_call_before_cursor()
 
       if prev_node:type() == 'type_arguments' then
         --- 如果是 type_arguments 则返回 type_arguments node 前一个字符位置.
-        local p_row, p_col, _ = prev_node:start()
-        return calculate_offset(p_row, p_col-1)
+        local row, col, _ = prev_node:start()
+        return node_before_arguments(row, col-1)
       end
 
       --- 如果前面不是 type_arguments 则返回本身 node 的前一个字符位置.
-      local row, col, _ = node:start()  -- argument_list start position,
-                                        -- 即 '(' 的位置. row, col 都是从 0 开始计算位置.
-      return calculate_offset(row, col-1)
+      --- argument_list start position 即 '(' 的位置. row, col 都是从 0 开始计算位置.
+      local row, col, _ = node:start()
+      return node_before_arguments(row, col-1)
     end
 
     node = node:parent()  -- 循环向上查找, 如果到了 root node 也没找到的话, node:parent() 返回 nil.
