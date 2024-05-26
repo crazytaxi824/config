@@ -194,7 +194,9 @@ buf_highlights.hint_visible = buf_highlights.buffer_visible
 buf_highlights.hint_selected = buf_highlights.buffer_selected
 
 --- for 'offsets' config.
-vim.api.nvim_set_hl(0, 'NvimTreeFileExplorer', vim.tbl_deep_extend('force', Highlights.Directory, {underline=true}))
+vim.api.nvim_set_hl(0, 'NvimTreeFileExplorer', vim.tbl_deep_extend('force', Highlights.Directory, {
+  ctermbg=Colors.g235.c, bg=Colors.g235.g, underline=true,
+}))
 
 -- -- }}}
 

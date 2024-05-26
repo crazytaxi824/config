@@ -185,7 +185,6 @@ Highlights = {
   --- for bufferline 在 nvim-tree 显示 "File Explorer"
   Directory = {
     ctermfg=Colors.cyan.c, fg=Colors.cyan.g,
-    ctermbg=Colors.g235.c, bg=Colors.g235.g,
     bold=true,
   },
 
