@@ -8,7 +8,7 @@ TERM = "alacritty"  # `xterm-256color` | `alacritty`, `$ echo $TERM` 环境变�
 [window]
 decorations = "none"  # 不显示 titlebar 和 buttons (window 左上角关闭/缩小按钮)
 dynamic_padding = true  # 自动调整 padding, 避免右侧空白大于左侧.
-option_as_alt = "OnlyLeft"  # VVI: MAC 上左 opt 键可以作为 ALT 键使用.
+option_as_alt = "OnlyLeft"  # VVI: MAC 上左 opt 键可以作为 ALT 键使用. "OnlyLeft" | "OnlyRight" | "Both" | "None" # (macos only)
 startup_mode = "Maximized"
 opacity = 0.96
 
@@ -259,7 +259,7 @@ key = "Z"
 mode = "~Vi|~Search"
 mods = "Command"
 
-# Command-/ -> Option-/, vim 中用于 Toggle Comments.
+# Command-/ -> Option-/, vim 中 <M-/> 用于 Toggle Comments.
 [[keyboard.bindings]]
 chars = "\u001B/"
 key = "Slash"
