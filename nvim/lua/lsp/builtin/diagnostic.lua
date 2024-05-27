@@ -15,6 +15,7 @@ vim.api.nvim_set_hl(0, 'my_diagnostic_linehl', {
 })
 
 --- `:help vim.diagnostic.config()`
+--- `:help vim.diagnostic.Opts`
 local config = {
   --- `:help diagnostic-signs`
   signs = {
@@ -55,9 +56,12 @@ local config = {
     source = true,   -- diagnostic message 中带 linter 名字
     header = "",
     prefix = "",
-    anchor_bias = 'above',  -- popup window 优先向上弹出
     -- noautocmd = true,  -- float window 不加载 Buf* 相关 autocmd. VVI: 不要设置为 true.
     close_events = {"WinScrolled", "CursorMoved", "CursorMovedI", "InsertCharPre"},
+
+    --- BUG: 在文件第三行显示 error message 时会报错: 'height' key must be a positive Integer.
+    --- 但是在 `:help vim.diagnostic.Opts.Float` 文档中并没有说可以设置 anchor_bias.
+    -- anchor_bias = 'above',
   },
 }
 
