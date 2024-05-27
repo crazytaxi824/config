@@ -99,6 +99,8 @@ local function reload_local_settings(old_content, new_content)
         c.config.settings[lsp_name] = nil
       end
 
+      --- NOTE: 暴力方案, `:LspRestart` 重启所有 lspconfig.setup() 的 lsp, null-ls 不是由 lspconfig.setup
+      -- vim.cmd('LspRestart')
       c.notify("workspace/didChangeConfiguration", { settings = c.config.settings })
     end
 
