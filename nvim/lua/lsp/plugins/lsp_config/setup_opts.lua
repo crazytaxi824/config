@@ -48,11 +48,6 @@ M.capabilities.textDocument.foldingRange = {
   lineFoldingOnly = true
 }
 
---- https://github.com/neovim/nvim-lspconfig/wiki/Project-local-settings
---- NOTE: LSP settings Hook ------------------------------------------------------------------------
---- 这里是为了能单独给 project 设置 LSP setting.
---- init() runs Before attach().
-
 --- .nvim/settings.lua 中的 local 设置. ---------------------------------------- {{{
 -- return {
 --   lsp = {
@@ -65,9 +60,10 @@ M.capabilities.textDocument.foldingRange = {
 -- -- }}}
 M.local_lspconfig_key = "lsp"
 
---- NOTE: on_init() run before on_attach(), 可以通过打印看出先后顺序.
+--- on_init() run before on_attach(), 可以通过打印看出先后顺序.
 M.on_init = function(client)
-  --- NOTE: 加载项目本地设置, 覆盖 global settings -----------------------------
+  --- 加载项目本地设置, 覆盖 global settings -----------------------------
+  --- DOCS: https://github.com/neovim/nvim-lspconfig/wiki/Project-local-settings
   local proj_local_settings = require("lsp.plugins.load_proj_settings")
   client.config.settings[client.name] = proj_local_settings.keep_extend(M.local_lspconfig_key, client.name,
     client.config.settings[client.name])
@@ -79,18 +75,19 @@ M.on_init = function(client)
   --- 如果需要更改 LSP semantic highlight 颜色, 使用 `:hi @lsp.type...`
   if client.server_capabilities then
     client.server_capabilities.semanticTokensProvider = nil
-    -- client.server_capabilities.foldingRangeProvider = nil  -- debug: 下面的 fold 设置
+    -- client.server_capabilities.foldingRangeProvider = nil  -- debug: lsp-fold 设置
   end
 
   --- NOTE: 这里不需要 notify change. on_init() 是在 start 之前执行的.
-  --client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
+  -- client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
 
   --- DEBUG: 用
   if __Debug_Neovim.lspconfig then
     Notify("LSP Server init: " .. client.name, "DEBUG", {title="LSP"})
   end
 
-  return true  -- VVI: 如果 return false 则 LSP 不启动.
+  --- VVI: 如果 return false 则 LSP 不启动.
+  return true
 end
 
 --- NOTE: on_attach - 加载 Key mapping & highlight 设置
