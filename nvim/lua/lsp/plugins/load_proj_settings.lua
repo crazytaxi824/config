@@ -45,6 +45,10 @@ local content = get_local_settings_content() or {}
 M.keep_extend = function(section, tool, tbl, ...)
   --- 如果项目本地设置存在.
   if content[section] and content[section][tool] then
+    if not tbl then
+      return content[section][tool]
+    end
+
     return vim.tbl_deep_extend('keep', content[section][tool], tbl, ...)
   end
 
