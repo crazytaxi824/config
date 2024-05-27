@@ -30,8 +30,6 @@ M.setup = function(client, bufnr)
     group = group_id,
     buffer = bufnr,  -- 对指定 buffer 有效
     callback = function(params)
-      --- TODO: 如果 doc_highlight 存在则不执行 vim.lsp.buf.document_highlight()
-
       --- send 'textDocument/documentHighlight' request.
       vim.lsp.buf.document_highlight()
     end,
