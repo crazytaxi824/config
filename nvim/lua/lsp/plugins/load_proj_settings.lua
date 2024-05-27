@@ -61,6 +61,27 @@ M.keep_extend = function(section, tool, tbl, ...)
   return tbl
 end
 
+--- deep compare 2 tables
+local function deep_compare(t1, t2)
+  if t1 == t2 then return end
+
+  if type(t1) ~= "table" or type(t2) ~= "table" then
+    return true
+  end
+
+  for k, v in pairs(t1) do
+    if deep_compare(v, t2[k]) then
+      return k
+    end
+  end
+
+  for k, v in pairs(t2) do
+    if deep_compare(t1[k], v) then
+      return k
+    end
+  end
+end
+
 --- set command for Reload local project settings --------------------------------------------------
 --- compare content, 如果内容不同则执行 callback.
 local function compare_content_settings(old_content, new_content, typ, callback)
@@ -73,17 +94,9 @@ local function compare_content_settings(old_content, new_content, typ, callback)
       callback(tool)
     end
   elseif old_content[typ] and new_content[typ] then
-    for tool, cfg in pairs(old_content[typ]) do
-      if not new_content[typ][tool] or vim.fn.json_encode(cfg) ~= vim.fn.json_encode(new_content[typ][tool]) then
-        callback(tool)
-      end
-    end
-
-    --- NOTE: 这里不用再对比 json_encode(), 避免重复对比.
-    for tool, _ in pairs(new_content[typ]) do
-      if not old_content[typ][tool] then
-        callback(tool)
-      end
+    local tool = deep_compare(old_content[typ], new_content[typ])
+    if tool then
+      callback(tool)
     end
   end
 end
@@ -98,9 +111,7 @@ local function reload_local_settings(old_content, new_content)
     local clients = vim.lsp.get_clients({name = lsp_name})
     for _, c in ipairs(clients) do
       if new_content.lsp and new_content.lsp[lsp_name] then
-        c.config.settings[lsp_name] = new_content.lsp[lsp_name]  -- 直接替换设置
-      else
-        c.config.settings[lsp_name] = nil
+        c.config.settings[lsp_name] = vim.tbl_deep_extend('force', c.config.settings[lsp_name], new_content.lsp[lsp_name])
       end
 
       --- NOTE: 暴力方案, `:LspRestart` 重启所有 lspconfig.setup() 的 lsp, null-ls 不是由 lspconfig.setup
