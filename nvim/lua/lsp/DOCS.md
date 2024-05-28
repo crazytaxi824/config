@@ -13,14 +13,9 @@ return {
       staticcheck = false,
       vulncheck = "Imports",  -- check Go Vulnerability Database check known Vulnerability in your dependencies.
     },
-    tsserver = {
-      ...
-    },
-    pyright = { ... },
-    sumneko_lua = { ... },
-    html = { ... },
-    cssls = { ... },
-    bashls = { ... },
+    --- lsp 名字和 lua_ls = settings{ Lua = { ... } } 设置名字不同的情况.
+    ["lua_ls:Lua"] = { ... },
+    ["pyright:python"] = { ... },
   },
 
   --- null-ls linter/diagnostics 设置

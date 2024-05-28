@@ -195,7 +195,7 @@ vim.api.nvim_create_user_command("LocalSettingsExample", function()
   local s = require("lsp.plugins.null_ls.sources")
 
   local example = {
-    [lsp_typ] = { gopls = { "..." }, tsserver = { "..." } },
+    [lsp_typ] = { gopls = { "..." }, ["lua_ls:Lua"] = { "..." }, ["pyright:python"] = { "..." } },
     [s.local_linter_key] = {
       golangci_lint = { extra_args = {'-c', '/path/to/.golangci.yml'} },
     },
