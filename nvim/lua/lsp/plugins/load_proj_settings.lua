@@ -60,7 +60,7 @@ M.content = get_local_settings_content()
 --- extend project local settings if '.nvim/settings.lua' exists -----------------------------------
 --- NOTE: 主要函数 keep_extend() 用 project local 设置覆盖 global 设置.
 --- 使用 tbl_deep_extend('keep', xx, xx, ...)
-M.keep_extend = function(section, tool, tbl, ...)
+M.tools_keep_extend = function(section, tool, tbl, ...)
   --- 如果项目本地设置存在.
   if M.content[section] and M.content[section][tool] then
     if not tbl then

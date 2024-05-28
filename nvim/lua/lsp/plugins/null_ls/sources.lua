@@ -75,6 +75,7 @@ local diagnostics_opts = {
 
 --- linters 设置 -----------------------------------------------------------------------------------
 M.local_linter_key = "linter"
+M.local_formatter_key = "format"
 
 --- NOTE: 同一个工具可能有好几种不同的用途, 需要分开设置, eg: `buf`
 --- - null_ls.builtins.diagnostics.buf  linter protobuf
@@ -95,14 +96,14 @@ M.sources =  {
     --- the first analyzed path up to the root.
     -- -- }}}
     golangci_lint = function()
-      return diagnostics.golangci_lint.with(proj_local_settings.keep_extend(M.local_linter_key, 'golangci_lint',
+      return diagnostics.golangci_lint.with(proj_local_settings.tools_keep_extend(M.local_linter_key, 'golangci_lint',
         require("lsp.plugins.null_ls.tools.golangci_lint"),  -- NOTE: 加载单独设置 null_ls/tools/golangci_lint.lua
         diagnostics_opts))
     end,
 
     --- protobuf: buf
     buf = function()
-      return diagnostics.buf.with(proj_local_settings.keep_extend(M.local_linter_key, 'buf', diagnostics_opts))
+      return diagnostics.buf.with(proj_local_settings.tools_keep_extend(M.local_linter_key, 'buf', diagnostics_opts))
     end,
   },
 
