@@ -29,6 +29,9 @@ local function lspconfig_setup(lsp_svr)
     opts = vim.tbl_deep_extend("force", opts, lsp_custom_opts)
   end
 
+  --- cache settings, local project 都是在 default settings 上面做修改, 不是和上一次作比较.
+  opts.default_config[lsp_svr] = opts.settings or {}
+
   --- VVI: 这里就是 lspconfig.xxx.setup() 针对不同的 lsp 进行加载.
   lspconfig[lsp_svr].setup(opts)
 end

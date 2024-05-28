@@ -7,6 +7,9 @@
 
 local M = {}
 
+--- cache default configs. map[lsp: settings]
+M.default_config = {}
+
 --- NOTE: 停止输入文字的时间超过该数值, 则向 lsp server 发送请求.
 --- 如果 "diagnostic.config({update_in_insert = false})", 则该设置应该不生效.
 M.flags = { debounce_text_changes = 500 }   --- 默认 150.
@@ -65,8 +68,12 @@ M.on_init = function(client)
   --- 加载项目本地设置, 覆盖 global settings -----------------------------
   --- DOCS: https://github.com/neovim/nvim-lspconfig/wiki/Project-local-settings
   local proj_local_settings = require("lsp.plugins.load_proj_settings")
-  client.config.settings[client.name] = proj_local_settings.keep_extend(M.local_lspconfig_key, client.name,
-    client.config.settings[client.name])
+  if proj_local_settings.content[M.local_lspconfig_key] and proj_local_settings.content[M.local_lspconfig_key][client.name] then
+    local local_settings = proj_local_settings.content[M.local_lspconfig_key][client.name]
+    for key, value in pairs(local_settings) do
+      client.config.settings[key] = vim.tbl_deep_extend('force', client.config.settings[key], value)
+    end
+  end
 
   --- semantic token: https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide
   --- nvim-0.9 中禁止 LSP semantic highlight (根据语义的 highlight) 否则 highlight 显示不正确.
