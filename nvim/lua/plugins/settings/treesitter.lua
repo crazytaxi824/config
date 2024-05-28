@@ -25,7 +25,7 @@ ts_configs.setup {
 
     --- git
     "gitignore", "gitattributes",
-    -- "git_config", "diff", "git_rebase", "gitcommit",  -- testing
+    "git_config", "diff", "git_rebase", "gitcommit",
 
     --- languages & filetypes
     "javascript", "typescript", "html", "css", "scss", -- "svelte", "vue", "tsx",
