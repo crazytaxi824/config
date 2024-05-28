@@ -51,5 +51,4 @@ return {
       vulncheck = "Imports",  -- check Go Vulnerability Database check known Vulnerability in your dependencies.
     },
   },
-  single_file_support = true,  -- 默认开启.
 }

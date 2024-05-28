@@ -208,6 +208,7 @@ nvim_tree.setup {
       ".editorconfig", ".gitignore",
       "eslint.config.mjs", "eslint.config.js", "eslint.config.cjs", "package.json", "package-lock.json",
       "pyproject.toml", "pyrightconfig.json", "ruff.toml",
+      ".luarc.json", ".luarc.jsonc",
     },
     symlink_destination = true,  -- Whether to show the destination of the symlink.
   },

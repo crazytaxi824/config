@@ -14,10 +14,6 @@ local proj_local_settings = require("lsp.plugins.load_proj_settings")
 
 local M = {}
 
-local diagnostics = null_ls.builtins.diagnostics
--- local formatting = null_ls.builtins.formatting
--- local code_actions = null_ls.builtins.code_actions
-
 --- diagnostics_opts 用于下面的 sources diagnostics 设置
 local diagnostics_opts = {
   --- 只在 save 的时候执行 diagnostics.
@@ -79,6 +75,14 @@ local diagnostics_opts = {
 
 --- linters 设置 -----------------------------------------------------------------------------------
 M.local_linter_key = "linter"
+M.local_formatter_key = "format"
+
+--- NOTE: 同一个工具可能有好几种不同的用途, 需要分开设置, eg: `buf`
+--- - null_ls.builtins.diagnostics.buf  linter protobuf
+--- - null_ls.builtins.formatting.buf   format protobuf
+local diagnostics = null_ls.builtins.diagnostics
+-- local formatting = null_ls.builtins.formatting
+-- local code_actions = null_ls.builtins.code_actions
 
 --- VVI: 这里使用函数来返回 table, 而不是直接定义一个 table 的原因是:
 --- 直接定义一个 table 的问题是: module 在第一次 require() 之后 table 中的内容就缓存了.
@@ -92,14 +96,14 @@ M.sources =  {
     --- the first analyzed path up to the root.
     -- -- }}}
     golangci_lint = function()
-      return diagnostics.golangci_lint.with(proj_local_settings.keep_extend(M.local_linter_key, 'golangci_lint',
+      return diagnostics.golangci_lint.with(proj_local_settings.tools_keep_extend(M.local_linter_key, 'golangci_lint',
         require("lsp.plugins.null_ls.tools.golangci_lint"),  -- NOTE: 加载单独设置 null_ls/tools/golangci_lint.lua
         diagnostics_opts))
     end,
 
     --- protobuf: buf
     buf = function()
-      return diagnostics.buf.with(proj_local_settings.keep_extend(M.local_linter_key, 'buf', diagnostics_opts))
+      return diagnostics.buf.with(proj_local_settings.tools_keep_extend(M.local_linter_key, 'buf', diagnostics_opts))
     end,
   },
 

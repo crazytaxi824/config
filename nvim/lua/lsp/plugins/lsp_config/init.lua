@@ -23,10 +23,14 @@ local function lspconfig_setup(lsp_svr)
   --- 加载 lsp 配置文件, "~/.config/nvim/lua/lsp/plugins/lsp_config/langs/..."
   --- 如果文件存在, 则加载自定义设置, 如果没有自定义设置则加载默认设置.
   --- NOTE: 单独 lsp 设置: https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
+  --- VVI: 必须 after require("lsp.plugins.lsp_config.setup_opts").
   local lsp_custom_status_ok, lsp_custom_opts = pcall(require, "lsp.plugins.lsp_config.langs." .. lsp_svr)
   if lsp_custom_status_ok then
     opts = vim.tbl_deep_extend("force", opts, lsp_custom_opts)
   end
+
+  --- cache settings, local project 都是在 default settings 上面做修改, 不是和上一次作比较.
+  opts.default_config[lsp_svr] = opts.settings or {}
 
   --- VVI: 这里就是 lspconfig.xxx.setup() 针对不同的 lsp 进行加载.
   lspconfig[lsp_svr].setup(opts)

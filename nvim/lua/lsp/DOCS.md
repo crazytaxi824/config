@@ -13,14 +13,9 @@ return {
       staticcheck = false,
       vulncheck = "Imports",  -- check Go Vulnerability Database check known Vulnerability in your dependencies.
     },
-    tsserver = {
-      ...
-    },
-    pyright = { ... },
-    sumneko_lua = { ... },
-    html = { ... },
-    cssls = { ... },
-    bashls = { ... },
+    --- lsp 名字和 lua_ls = settings{ Lua = { ... } } 设置名字不同的情况.
+    ["lua_ls:Lua"] = { ... },
+    ["pyright:python"] = { ... },
   },
 
   --- null-ls linter/diagnostics 设置
@@ -144,7 +139,7 @@ mason-lspconfig 对应文件 https://github.com/williamboman/mason-lspconfig.nvi
 
 ## null-ls
 
-`jose-elias-alvarez/null-ls.nvim`
+`nvimtools/none-ls.nvim` -> `jose-elias-alvarez/null-ls.nvim` (archived)
 
 `null-ls` 是将 vim.lsp 中的 diagnostic, format, code_action ... 等请求翻译成各种 linter, formatter 的命令并执行, 然后将
 执行结果翻译后返回给 vim.lsp 的一个工具.
