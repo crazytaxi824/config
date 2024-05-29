@@ -84,7 +84,7 @@ local plugins = {
   --- but if you want to extend a query use the `after/queries/` directory.
   {
     "nvim-treesitter/nvim-treesitter",
-    commit = "245da4e",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "ea2b137",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     --build = ":TSUpdate",  -- NOTE: 推荐手动执行, 批量自动安装 parser 容易卡死.
     config = function() require("plugins.settings.treesitter") end,
   },
@@ -201,7 +201,7 @@ local plugins = {
   --- 官方 LSP 引擎.
   {
     "neovim/nvim-lspconfig",
-    commit = "b972e71",
+    commit = "38de86f",
     config = function() require("lsp.plugins.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全. NOTE: lspconfig 必须在 cmp_nvim_lsp 之后加载, 否则可能无法提供代码补全.
@@ -271,7 +271,7 @@ local plugins = {
   {
     "mfussenegger/nvim-dap",  -- core debug tool
     -- tag = "0.7.0",
-    commit = "922ebc7",
+    commit = "abb238f",
     config = function() require("plugins.settings.dap_debug") end,
 
     cmd = {'DapToggleBreakpoint', 'DapContinue', 'DapLoadLaunchJSON'},
@@ -288,7 +288,7 @@ local plugins = {
   {
     "rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
     -- tag = "v4.0.0",
-    commit = "334cf30",
+    commit = "b726700",
     config = function() require("plugins.settings.dapui_debug") end,
     dependencies = {
       "mfussenegger/nvim-dap",
@@ -328,7 +328,7 @@ local plugins = {
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {
     "lewis6991/gitsigns.nvim",
-    commit = "cdfcd9d",
+    commit = "af3fdad",
     -- tag = "v0.8.1",
     config = function() require("plugins.settings.git_signs") end,
 
