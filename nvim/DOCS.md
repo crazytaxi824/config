@@ -645,5 +645,8 @@ stack traceback:
 
 - stderr: go: finding module for package github.com/my/foo\nbar/src imports\n\tgithub.com/my/foo: cannot find module providing package github.com/my/foo: module lookup disabled by GOPROXY=off\n\n"
 
-<br />
+### LspRestart -> :bdelete -> error
 
+- https://github.com/neovim/neovim/issues/28987
+
+<br />
