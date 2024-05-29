@@ -67,17 +67,6 @@ v0.10.0_beta for neovim v0.10.0
 `$ nvim --startuptime log src/main.go` 在 ./log 文件中打印 nvim 启动时间详情. 其中 `.../packer_compiled.lua` & `opening buffers`
 耗时是最长的.
 
-查看 `.../packer_compiled.lua` 耗时详情可以使用:
-
-- `:PackerCompile profile=true`
-- `:PackerProfile`
-
-造成 `opening buffers` 时间长的原因:
-
-- `set undofile`, 占大概 32 ms
-- `nvim-lspconfig` 加载 lsp (eg: gopls) 加载占大概 30ms, 有些 lsp 启动速度很快 (eg: tsserver) 大概只占 5ms. 可以使用
-  `autocmd Filetype ... vim.schedule()` 方式 lazy load lsp, 降低 lspconfig 在 nvim 启动时的耗时.
-
 <br />
 
 # VIM Mode
@@ -97,7 +86,7 @@ v0.10.0_beta for neovim v0.10.0
 | Select by character                   | `v(lower)_CTRL-G`, `gh`                     |
 | Select by line                        | `V(upper)_CTRL-G`, `gH`                     |
 | Select by block                       | `CTRL-V_CTRL-G`, `g<CTRL-H>`                |
-| Terminal mode                         | `t_CTRL-\_CTRL-N`, `t_CTRL-\_CTRL-O`        |
+| Terminal (insert) mode                | `t_CTRL-\_CTRL-N`, `t_CTRL-\_CTRL-O`        |
 
 <br />
 
@@ -194,11 +183,11 @@ end,
 
 - `vim.fn.json_encode(table)` / `vim.fn.json_decode(string)` -- json 处理.
 
-- `vim.fn.split({string}, {pattern}, {keepempty})` -- 默认 keepempty=0(false)
+- `vim.fn.split()` -> `vim.split()`
 
-- `vim.fn.join({list}, sep)`
+- `vim.fn.join({list}, sep)` -> `vim.Iter():join()`
 
-- `vim.fn.trim()`
+- `vim.fn.trim()`  -> `vim.trim()`
 
 ### vim - window / tab / buffer 函数
 
