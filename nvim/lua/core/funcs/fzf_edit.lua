@@ -14,7 +14,7 @@ function FZF_selected(fzf_tmp_file)
 
   local fp_qf_list = {}
   for _, fzf_item in ipairs(fzf_selected_items) do
-    fzf_item = vim.fn.trim(fzf_item)
+    fzf_item = vim.trim(fzf_item)
     if fzf_item ~= '' then
       --- 按照 "filepath:lnum:col:content" split.
       local fp_item_split = vim.split(fzf_item, ":", {trimempty=false})
