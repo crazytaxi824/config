@@ -267,14 +267,6 @@ set option
 
 - `vim.defer_fn(callback, delay)` -- 延迟执行 callback. delay 单位是 ms.
 
-### nvim 新线程函数
-
-- `:help vim.loop`
-
-- `vim.loop.new_thread(callback)` -- 新线程, VVI: 无法调用 main thread 中的任何数据, 相当于两个单独的程序.
-
-- `print(vim.is_thread())` -- false: main thread; true: other threads
-
 ### lua 运行 shell cmd, 获取 output.
 
 ```lua
@@ -287,6 +279,9 @@ end
 local handle = io.popen(cmd)
 local result = handle:read("a")  -- "a" - read all output
 handle:close()
+
+--- 运行多个 join cmd
+cmd = {'sh','-c', 'cd src; ls'}
 
 --- sync run
 local result = vim.system({cmd}, {text=true}):wait()
@@ -540,77 +535,9 @@ end
 
 <br />
 
-# test function
+# FIXME
 
-## 测试 autocmd FileType 传入的 params.buf 和 bufnr() 得出的结果是否一样.
-
-```lua
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = {"*"},
-  callback = function(params)
-    local bufinfo = vim.fn.getbufinfo(params.buf)[1]
-    print('bufnr():', vim.fn.bufnr(), '| params.buf:', params.buf, '| bufname():', vim.fn.bufname(), "| getbufinfo(params.buf):", bufinfo.bufnr, bufinfo.name)
-  end,
-  desc = "Description for this autocmd",
-})
-```
-
-<br />
-
-# neovim v0.8 release date: 30/9/2022
-
-- `:help deprecated.txt`
-
-- https://github.com/neovim/neovim/releases/tag/v0.8.0
-
-## Important changes
-
-- DO NOT use `vim.g.do_filetype_lua` and `vim.g.did_load_filetypes` settings in neovim v0.8
-
-- LSP: Add logging level "OFF", eg: `vim.lsp.set_log_level("OFF")`
-
-- LSP: Option to reuse_win for jump actions ([#18577](https://github.com/neovim/neovim/pull/18577))
-
-```lua
---- `:help vim.lsp.buf.format()`
-vim.lsp.buf.format({
-  async = false,
-  timeout_ms = 3000,
-  bufnr = bufnr,
-  filter = function(client)
-    -- format 时过滤 tsserver
-    return client.name ~= 'tsserver'
-  end
-  name = '',  -- Restrict formatting to the client with client.name
-  id = client.id,
-})
-```
-
-- LSP NEW api: `vim.lsp.start()` 可能可以用于 `au FileType *.go lua vim.lsp.start({cmd=,root=...})`
-
-- LSP: Add `:LspAttach` and `:LspDetach` lsp-events, `au LspAttach * ...`
-
-- `:help winbar`, `:hi WinBar`
-
-- ADD: `vim.fs.dirname(vim.fn.bufname('%'))` == `vim.fn.expand('%:h')`
-
-- [LSP] Accessing client.resolved_capabilities => client.server_capabilities instead.
-
-<br />
-
-# Note
-
-## Pull request
-
-### nvim-treesitter
-
-- golang (placeholder | format verbs %v %d), https://github.com/tree-sitter/tree-sitter-go/pull/88
-
-<br />
-
-## FIXME
-
-### which-key 有时候报错.
+## which-key 有时候报错.
 
 - ERROR Failed to run healthcheck for "which-key" plugin. Exception:
   function health#check, line 25
@@ -630,11 +557,11 @@ stack traceback:
         ...al/share/nvim/lazy/which-key.nvim/lua/which-key/init.lua:49: in function 'show'
         [string ":lua"]:1: in main chunk
 
-### https://github.com/golang/go/issues/50750, gopls, workspace `go.work` lsp.log 中报错:
+## https://github.com/golang/go/issues/50750, gopls, workspace `go.work` lsp.log 中报错:
 
 - stderr: go: finding module for package github.com/my/foo\nbar/src imports\n\tgithub.com/my/foo: cannot find module providing package github.com/my/foo: module lookup disabled by GOPROXY=off\n\n"
 
-### LspRestart -> :bdelete -> error
+## LspRestart -> :bdelete -> error
 
 - https://github.com/neovim/neovim/issues/28987
 
