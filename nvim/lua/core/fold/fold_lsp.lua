@@ -145,7 +145,7 @@ M.lsp_fold_request = function(bufnr, win_id, opts)
 
       --- resps = { client_id: data }.
       for lsp_client_id, data in pairs(resp) do
-        if data.result then
+        if not resp.error and data.result and #data.result > 0 then
           --- VVI: 因为 buf_request_all() 是一个异步函数, 这里必须检查 win_id 是否存在.
           local win_is_valid = vim.api.nvim_win_is_valid(win_id)
 
