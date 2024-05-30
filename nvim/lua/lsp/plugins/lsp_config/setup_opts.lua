@@ -14,12 +14,6 @@ M.default_config = {}
 --- 如果 "diagnostic.config({update_in_insert = false})", 则该设置应该不生效.
 M.flags = { debounce_text_changes = 500 }   --- 默认 150.
 
---- NOTE: before_init() can be used to debug lsp configs.
--- M.before_init = function(initialize_params, config)
---   vim.print(initialize_params)
---   vim.print(config)
--- end
-
 --- NOTE: on_error() invoked when the client operation throws an error.
 M.on_error = function (code)
   Notify(vim.inspect(vim.lsp.rpc.client_errors[code]), "ERROR", {title = "lspconfig/setup_opts.lua"})
@@ -51,6 +45,12 @@ M.capabilities.textDocument.foldingRange = {
   lineFoldingOnly = true
 }
 
+--- NOTE: before_init() can be used to debug lsp configs.
+-- M.before_init = function(initialize_params, config)
+--   vim.print(initialize_params)
+--   vim.print(config)
+-- end
+
 --- .nvim/settings.lua 中的 local 设置. ---------------------------------------- {{{
 -- return {
 --   lsp = {
@@ -64,7 +64,7 @@ M.capabilities.textDocument.foldingRange = {
 M.local_lspconfig_key = "lsp"
 
 --- on_init() run before on_attach(), 可以通过打印看出先后顺序.
-M.on_init = function(client)
+M.on_init = function(client, result)
   --- 加载项目本地设置, 覆盖 global settings -----------------------------
   --- DOCS: https://github.com/neovim/nvim-lspconfig/wiki/Project-local-settings
   local proj_local_settings = require("lsp.plugins.load_proj_settings")
@@ -80,6 +80,7 @@ M.on_init = function(client)
   --- VVI: https://github.com/neovim/nvim-lspconfig/issues/2542
   --- DONOT follow `:help vim.lsp.semantic_tokens.start()` place this in on_attach() function.
   --- 如果需要更改 LSP semantic highlight 颜色, 使用 `:hi @lsp.type...`
+  --- client.supports_method("textDocument/semanticTokens")
   if client.server_capabilities then
     client.server_capabilities.semanticTokensProvider = nil
     -- client.server_capabilities.foldingRangeProvider = nil  -- debug: lsp-fold 设置
