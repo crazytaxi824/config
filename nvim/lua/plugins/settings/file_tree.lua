@@ -169,7 +169,7 @@ nvim_tree.setup {
         width = 45,
         height = 30,
         row = 1,
-        col = 1,
+        col = 0,
       },
     },
     side = "left", -- left / right
@@ -305,7 +305,7 @@ vim.api.nvim_set_hl(0, 'NvimTreeNormalNC', {link="NormalNC"})  -- non-foucs nvim
 vim.api.nvim_set_hl(0, 'NvimTreeRootFolder', {ctermfg=Colors.cyan.c, fg=Colors.cyan.g})  -- non-foucs nvim-tree window color
 
 vim.api.nvim_set_hl(0, 'NvimTreeOpenedHL', {underline=true})   -- 已经打开文件的颜色.
-vim.api.nvim_set_hl(0, 'NvimTreeIndentMarker', {ctermfg=Colors.g242.c, fg=Colors.g242.g}) -- └ │ 颜色
+vim.api.nvim_set_hl(0, 'NvimTreeIndentMarker', {ctermfg=Colors.g238.c, fg=Colors.g238.g}) -- └ │ 颜色
 
 vim.api.nvim_set_hl(0, 'NvimTreeSymlink', {ctermfg=Colors.magenta.c, fg=Colors.magenta.g}) -- 链接文件, magenta
 vim.api.nvim_set_hl(0, 'NvimTreeExecFile', {ctermfg=Colors.red.c, fg=Colors.red.g}) -- 可执行文件, red
