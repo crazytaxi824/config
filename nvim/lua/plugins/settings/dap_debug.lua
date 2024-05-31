@@ -95,7 +95,7 @@ local function open_new_tab_for_debug()
   --- if debug tab exists, jump to debug tab.
   for _, tab_id in pairs(vim.api.nvim_list_tabpages()) do
     if vim.t[tab_id][tabvar_dap] then
-      vim.cmd('normal! '.. vim.api.nvim_tabpage_get_number(tab_id) .. 'gt')  -- 1gt | 2gt jump to tab, NOTE: tabnr NOT tab_id
+      vim.api.nvim_set_current_tabpage(tab_id)
       return
     end
   end
