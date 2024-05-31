@@ -206,6 +206,7 @@ nvim_tree.setup {
     special_files = {
       "Makefile", "MAKEFILE", "README.md", "readme.md", "Readme.md", "DOCS.md",
       ".editorconfig", ".gitignore",
+      ".golangci.yml", ".golangci.yaml",
       "eslint.config.mjs", "eslint.config.js", "eslint.config.cjs", "package.json", "package-lock.json",
       "pyproject.toml", "pyrightconfig.json", "ruff.toml",
       ".luarc.json", ".luarc.jsonc",

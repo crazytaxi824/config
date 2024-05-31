@@ -25,7 +25,7 @@ local plugins = {
   {
     "folke/lazy.nvim",
     -- version = "*",  -- 相当于 tag='stable'
-    tag = "v10.21.0",
+    tag = "v10.21.2",
   },
 
   --- Performence & Functions ----------------------------------------------------------------------
@@ -62,8 +62,8 @@ local plugins = {
   --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   {
     "folke/which-key.nvim",
-    -- tag = "v1.6.0",
-    commit = "4433e5e",
+    tag = "v1.6.1",
+    -- commit = "4433e5e",
     config = function() require("plugins.settings.which_key") end,
 
     event = "VeryLazy",
