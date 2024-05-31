@@ -17,6 +17,7 @@ export VISUAL=$EDITOR
 export PATH=$PATH:$HOME/.local/share/nvim/mason_tools/bin
 
 # FIXME: ohmyzsh #12257 #12328 async problem.
+# https://github.com/ohmyzsh/ohmyzsh/issues/12328
 zstyle ':omz:alpha:lib:git' async-prompt no
 # --- [ oh my zsh ] -------------------------------------------------------------------------------- {{{
 # If you come from bash you might have to change your $PATH.
