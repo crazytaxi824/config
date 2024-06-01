@@ -39,7 +39,7 @@ local plugins = {
   --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件
   {
     "williamboman/mason.nvim",
-    commit = "49ff59a",
+    commit = "0950b15",
     -- tag = "v1.10.0",
     -- build = ":MasonUpdate", -- :MasonUpdate updates All Registries, NOT packages.
     config = function() require("plugins.settings.mason_tool_installer") end,
@@ -84,7 +84,7 @@ local plugins = {
   --- but if you want to extend a query use the `after/queries/` directory.
   {
     "nvim-treesitter/nvim-treesitter",
-    commit = "5c92440",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "979beff",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     config = function() require("plugins.settings.treesitter") end,
   },
 
@@ -200,7 +200,7 @@ local plugins = {
   --- 官方 LSP 引擎.
   {
     "neovim/nvim-lspconfig",
-    commit = "7cb90cf",
+    commit = "710a8fa",
     config = function() require("lsp.plugins.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全. NOTE: lspconfig 必须在 cmp_nvim_lsp 之后加载, 否则可能无法提供代码补全.
