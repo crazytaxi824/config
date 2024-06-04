@@ -124,19 +124,19 @@ local function reload_local_settings(old_content, new_content)
   local update_settings = {} -- cache tool name, 用于 notify.
 
   --- lsp = { gopls = { ... }, tsserver = { ... } }
-  local lsp_typ = require("lsp.plugins.lsp_config.setup_opts").local_lspconfig_key
-  local default_opts = require("lsp.plugins.lsp_config.setup_opts").default_config
-  compare_content_settings(old_content, new_content, lsp_typ, function(lsp_name)
+  local lsp_key = require("lsp.plugins.lsp_config.setup_opts").local_lspconfig_key
+  local lsp_default_opts = require("lsp.plugins.lsp_config.setup_opts").default_config
+  compare_content_settings(old_content, new_content, lsp_key, function(lsp_name)
     local c = vim.lsp.get_clients({name = lsp_name})[1]
-    if new_content[lsp_typ] and new_content[lsp_typ][lsp_name] then
+    if new_content[lsp_key] and new_content[lsp_key][lsp_name] then
       --- local settings 新添加或者改动的情况
-      for key, value in pairs(new_content[lsp_typ][lsp_name]) do
-        c.config.settings[key] = vim.tbl_deep_extend('force', default_opts[lsp_name][key], value)
+      for key, value in pairs(new_content[lsp_key][lsp_name]) do
+        c.config.settings[key] = vim.tbl_deep_extend('force', lsp_default_opts[lsp_name][key], value)
       end
     else
       --- local settings 被删除的情况
-      if default_opts[lsp_name] then
-        for key, value in pairs(default_opts[lsp_name]) do
+      if lsp_default_opts[lsp_name] then
+        for key, value in pairs(lsp_default_opts[lsp_name]) do
           c.config.settings[key] = value
         end
       end
@@ -191,12 +191,28 @@ end, { bang=true, bar=true, desc = 'reload "lsp" and "null-ls" after change ".nv
 --- command 显示 project local settings 示例.
 vim.api.nvim_create_user_command("LocalSettingsExample", function()
   --- NOTE: 主要保证 key 设置正确.
-  local lsp_typ = require("lsp.plugins.lsp_config.setup_opts").local_lspconfig_key
-  local s = require("lsp.plugins.null_ls.sources")
+  local lsp_key = require("lsp.plugins.lsp_config.setup_opts").local_lspconfig_key
+  local linter_sources = require("lsp.plugins.null_ls.sources")
 
   local example = {
-    [lsp_typ] = { gopls = { "..." }, ["lua_ls:Lua"] = { "..." }, ["pyright:python"] = { "..." } },
-    [s.local_linter_key] = {
+    [lsp_key] = {
+      gopls = { "..." },
+      -- sqls = {
+      --   connections = {
+      --     {
+      --       driver = 'mysql',
+      --       dataSourceName = 'root:root@tcp(127.0.0.1:13306)/world',
+      --     },
+      --     {
+      --       driver = 'postgresql',
+      --       dataSourceName = 'host=127.0.0.1 port=15432 user=postgres password=mysecretpassword1234 dbname=dvdrental sslmode=disable',
+      --     },
+      --   },
+      -- },
+      ["lua_ls:Lua"] = { "..." },
+      ["pyright:python"] = { "..." },
+    },
+    [linter_sources.local_linter_key] = {
       golangci_lint = { extra_args = {'-c', '/path/to/.golangci.yml'} },
     },
   }
