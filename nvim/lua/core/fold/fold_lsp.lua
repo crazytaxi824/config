@@ -194,6 +194,8 @@ M.lsp_fold_request = function(bufnr, win_id, opts)
         expr_ts.set_fold(bufnr, win_id)
       end
     end)
+
+    buf_timer[bufnr].timer = nil
   end, 300)
 end
 
