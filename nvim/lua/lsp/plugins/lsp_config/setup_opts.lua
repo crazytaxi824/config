@@ -1,4 +1,4 @@
---- DOCS: `:help vim.lsp.start_client()`.
+--- DOCS: `:help vim.lsp.start_client()` & `:help vim.lsp.ClientConfig`
 --  - capabilities  给 cmp 自动补全提供内容.
 --  - on_attach     当 LSP 存在时加载设置 key_mapping, highlight ... 等设置.
 --  - on_init = function(lsp_client) -- https://github.com/neovim/nvim-lspconfig/wiki/Project-local-settings
@@ -71,7 +71,11 @@ M.on_init = function(client, result)
   if proj_local_settings.content[M.local_lspconfig_key] and proj_local_settings.content[M.local_lspconfig_key][client.name] then
     local local_settings = proj_local_settings.content[M.local_lspconfig_key][client.name]
     for key, value in pairs(local_settings) do
-      client.config.settings[key] = vim.tbl_deep_extend('force', client.config.settings[key], value)
+      if not client.config.settings[key] then
+        client.config.settings[key] = value
+      else
+        client.config.settings[key] = vim.tbl_deep_extend('force', client.config.settings[key], value)
+      end
     end
   end
 

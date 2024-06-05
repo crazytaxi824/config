@@ -35,6 +35,7 @@ ts_configs.setup {
     "json", "jsonc", "toml", "yaml",
     "csv", "xml", "regex", "proto", "dockerfile",
     "ssh_config",
+    "sql",
   },
   -- -- }}}
 
