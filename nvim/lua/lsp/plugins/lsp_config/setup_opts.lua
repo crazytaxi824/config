@@ -1,4 +1,4 @@
---- DOCS: `:help vim.lsp.start_client()`.
+--- DOCS: `:help vim.lsp.start_client()` & `:help vim.lsp.ClientConfig`
 --  - capabilities  给 cmp 自动补全提供内容.
 --  - on_attach     当 LSP 存在时加载设置 key_mapping, highlight ... 等设置.
 --  - on_init = function(lsp_client) -- https://github.com/neovim/nvim-lspconfig/wiki/Project-local-settings
