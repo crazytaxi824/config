@@ -53,11 +53,19 @@ end
 
 --- 初始化 list cache 用于计算和缓存 foldmethod=expr 结果.
 local function init_expr_cache(bufnr)
-  foldlevel_cache[bufnr] = {}
   local line_count = vim.api.nvim_buf_line_count(bufnr)
+  if line_count < 1 then
+    --- VVI: nvim_buf_line_count() 一个 bdelete bufnr 返回 0.
+    return
+  end
+
+  foldlevel_cache[bufnr] = {}
   for i = 1, line_count, 1 do
     foldlevel_cache[bufnr][i] = 0
   end
+
+  --- fold init success
+  return true
 end
 
 --- 将 foldingRange 返回的数据按照 foldexpr 的格式记录到 list cache 中.
@@ -138,14 +146,16 @@ M.lsp_fold_request = function(bufnr, win_id, opts)
     buf_timer[bufnr].cancel = vim.lsp.buf_request_all(bufnr, 'textDocument/foldingRange', params, function(resp)
       --- VVI: 获取到 resps 之后再 init cache, 否则可能出现 init cache 之后
       --- buf_request_all() 失败导致 str_cache[bufnr] = {'0', ...} 被全部初始化为 "0".
-      init_expr_cache(bufnr)
+      if not init_expr_cache(bufnr) then
+        return
+      end
 
       --- lsp fold 是否设置成功.
       local set_fold_success = false
 
       --- resps = { client_id: data }.
       for lsp_client_id, data in pairs(resp) do
-        if not resp.error and data.result and #data.result > 0 then
+        if data.result and #data.result > 0 then
           --- VVI: 因为 buf_request_all() 是一个异步函数, 这里必须检查 win_id 是否存在.
           local win_is_valid = vim.api.nvim_win_is_valid(win_id)
 
