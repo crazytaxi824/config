@@ -46,15 +46,15 @@ local function current_node()
     return
   end
 
-  local cursor_lnum = vim.fn.getpos('.')[2]  -- {bufnr, line, col, bytes}, table_list/array, 从 1 开始计算.
+  local cursor_line = vim.api.nvim_win_get_cursor(0)[1]  -- {line, col}, (1,0)-indexed
 
   for index in ipairs(root_children) do
-    local node_line = root_children[index]:start()  -- {line, col, bytes}, 从 0 开始计算.
-    if cursor_lnum <= node_line then
+    local node_line = root_children[index]:start()  -- {line, col, bytes}, 0-indexed
+    if cursor_line <= node_line then
       return {
         index = index-1,
         root_nodes = root_children,
-        cursor_lnum = cursor_lnum,
+        cursor_lnum = cursor_line,
       }
     end
   end
@@ -63,7 +63,7 @@ local function current_node()
   return {
     index = #root_children,
     root_nodes = root_children,
-    cursor_lnum = cursor_lnum,
+    cursor_lnum = cursor_line,
   }
 end
 

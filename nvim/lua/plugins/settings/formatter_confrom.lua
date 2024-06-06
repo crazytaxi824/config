@@ -10,6 +10,7 @@ local function format_by_ft()
     go = { "goimports", "goimports-reviser" },
     --- VVI: Use a sub-list to run only the first available formatter
     --javascript = { { "prettier", "prettierd" } },
+    sql = { {"sql_formatter", "sqlfluff"} },
 
     sh = { "shfmt" },
     proto = { "buf" },

@@ -34,24 +34,24 @@ local function markdown_create_table(arglist)  -- args: 创建一个 row * col �
   local _colspace = "|       "
   local _rowsplit = "| ----- "
 
-  local col_placeholder = ""   -- '|     |     |     |\<CR>'
-  local table_split = ""       -- '| --- | --- | --- |\<CR>'
+  local col_placeholder = ""   -- '|     |     |     |'
+  local table_split = ""       -- '| --- | --- | --- |'
   for _ = 1, col, 1 do
     col_placeholder = col_placeholder .. _colspace
     table_split = table_split .. _rowsplit
   end
-  col_placeholder = col_placeholder .. "|\\<CR>"
-  table_split = table_split .. "|\\<CR>"
+  col_placeholder = col_placeholder .. "|"
+  table_split = table_split .. "|"
 
-  local result = col_placeholder .. table_split
+  local result = {col_placeholder, table_split}
 
   for _ = 1, row, 1 do
-    result = result .. col_placeholder
+    table.insert(result, col_placeholder)
   end
 
-  -- 换一行输出整个 table
-  local cmd = "normal! A\\<CR>" .. result
-  vim.cmd(':execute "' .. cmd .. '"')
+  --- 输出整个 table
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  vim.api.nvim_buf_set_lines(0, line, line, true, result)
 end
 
 --- 设置 command
