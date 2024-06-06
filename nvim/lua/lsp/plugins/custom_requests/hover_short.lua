@@ -4,8 +4,7 @@
 --- NOTE: 这里 node_row 和 node_char 都是从 0 开始计算.
 --- node_char 是指行内第几个字符, \t 算一个字符.
 local function calculate_offset(lsp_req_pos_line, lsp_req_pos_char)
-  --- 光标位置, 返回 [bufnum, lnum, col, off]. lnum 和 col 都是从 1 开始计算.
-  local cursor_pos = vim.fn.getpos('.')
+  local cursor_line, cursor_col = unpack(vim.api.nvim_win_get_cursor(0))  -- (1,0)-indexed
 
   --- VVI: offset 中 \t 占4个字符位置, 而在 getpos() 和 node:start() 中只占1个字符.
   --- strdisplaywidth() 会计算实际显示宽度, \t 会被计算在显示宽度之内.
@@ -15,17 +14,13 @@ local function calculate_offset(lsp_req_pos_line, lsp_req_pos_char)
   )
   --- cursor 行 virtual column 位置.
   local cursor_display_width = vim.fn.strdisplaywidth(
-    string.sub(vim.fn.getline(cursor_pos[2]), 0, cursor_pos[3]-1)
+    string.sub(vim.fn.getline(cursor_line), 0, cursor_col)
   )
 
   --- 计算 open_floating_preview() 横向/纵向偏移量
   local offset_x = node_display_width - cursor_display_width
-  local offset_y = lsp_req_pos_line - cursor_pos[2] +1
+  local offset_y = lsp_req_pos_line - cursor_line +1
 
-  --- VVI:
-  --- offsetX - float_window 距离 cursor 的位置偏移.
-  --- offsetY - 同上, 由于 getpos() 返回的 lnum 是从 1 开始, 而 node:start() 返回的 row 是从 0 开始,
-  ---           所以 offsetY 的结果需要 +1.
   return {
     lsp_req_pos_line = lsp_req_pos_line,
     lsp_req_pos_char = lsp_req_pos_char,
