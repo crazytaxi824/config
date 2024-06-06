@@ -170,7 +170,9 @@ local plugins = {
     "L3MON4D3/LuaSnip",
     commit = "2b6860d",
     -- tag = "v2.3.0",
-    -- build = "make install_jsregexp", -- optional
+    --- for placeholder transformation
+    --- https://code.visualstudio.com/docs/editor/userdefinedsnippets#_variable-transforms
+    build = "make install_jsregexp",
     config = function() require("plugins.settings.luasnip_snippest") end,
     dependencies = {"rafamadriz/friendly-snippets"},  -- snippets content
 
