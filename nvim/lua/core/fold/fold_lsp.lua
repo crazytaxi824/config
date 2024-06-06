@@ -37,7 +37,9 @@ local function clearInterval(bufnr)
   local timer = buf_timer[bufnr].timer
   if timer then
     timer:stop()
-    timer:close()
+    if not timer:is_closing() then
+      timer:close()
+    end
   end
 end
 
@@ -147,6 +149,7 @@ M.lsp_fold_request = function(bufnr, win_id, opts)
       --- VVI: 获取到 resps 之后再 init cache, 否则可能出现 init cache 之后
       --- buf_request_all() 失败导致 str_cache[bufnr] = {'0', ...} 被全部初始化为 "0".
       if not init_expr_cache(bufnr) then
+        --- 如果返回 false 说明 bufnr 已经被关闭, 不需要计算 fold 了.
         return
       end
 
@@ -194,8 +197,6 @@ M.lsp_fold_request = function(bufnr, win_id, opts)
         expr_ts.set_fold(bufnr, win_id)
       end
     end)
-
-    buf_timer[bufnr].timer = nil
   end, 300)
 end
 
