@@ -64,8 +64,8 @@ end
 -- }}}
 local function find_fn_call_before_cursor()
   --- 获取 node at cursor.
-  local pos = vim.api.nvim_win_get_cursor(0)
-  local node = vim.treesitter.get_node({pos={pos[1]-1, pos[2]}})
+  local cur_line, cur_col = unpack(vim.api.nvim_win_get_cursor(0))
+  local node = vim.treesitter.get_node({pos={cur_line-1, cur_col}})
 
   --- 向上(parent)寻找 'argument_list' / 'arguments' node.
   --- eg: fn("bar") 中 `("bar")` 属于 arguments, 包括括号.
