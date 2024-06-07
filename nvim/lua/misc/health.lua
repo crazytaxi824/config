@@ -10,7 +10,6 @@ local function check_module()
   local require_list = {
     "bufferline.state",
 
-    "nvim-treesitter.ts_utils",
     "nvim-treesitter.parsers",
 
     "telescope.finders",

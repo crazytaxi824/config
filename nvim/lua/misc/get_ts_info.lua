@@ -1,8 +1,5 @@
 --- 获取 cursor treesitter node --------------------------------------------------------------------
 --- treesitter api 使用方法 ------------------------------------------------------------------------ {{{
--- `:help nvim-treesitter`
---    node = ts_utils.get_node_at_cursor()  -- 获取 node at cursor.
---
 -- `:help treesitter`
 --    node:start()  -- start pos, return [row, (col), totalbytes]
 --    node:end_()   -- end pos

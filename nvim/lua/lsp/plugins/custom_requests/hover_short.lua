@@ -41,9 +41,6 @@ local function node_before_arguments(row, col)
 end
 
 --- NOTE: 使用 nvim-treesitter 寻找 cursor 前最近的 function call() 的位置 ----- {{{
--- `:help nvim-treesitter`
---    node = ts_utils.get_node_at_cursor()  -- 获取 node at cursor.
---
 -- `:help treesitter`
 --    node:start()  -- start pos, return [row, (col), totalbytes]
 --    node:end_()   -- end pos
