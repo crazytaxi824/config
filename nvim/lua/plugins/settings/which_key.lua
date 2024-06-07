@@ -75,7 +75,7 @@ which_key.setup({
   disable = {
     buftypes = {},
     --- 这里 filetypes 主要是全屏的 floating window
-    filetypes = { "NvimTree", "TelescopePrompt", "mason", "packer", "null-ls-info", "lspinfo" },
+    filetypes = { "NvimTree", "TelescopePrompt", "mason", "packer", "lazy", "null-ls-info", "lspinfo" },
   },
 })
 
