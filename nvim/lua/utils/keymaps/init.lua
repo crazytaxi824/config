@@ -1,4 +1,3 @@
-local section   = require('utils.keymaps.jump_to_section')
 local save_file = require('utils.keymaps.save_file')
 local goto_win  = require('utils.keymaps.jump_to_win')
 local set       = require('utils.keymaps.set_register')
@@ -9,13 +8,8 @@ local close_wins = require('utils.keymaps.close_all_popup_win')
 
 local M = {
   home = require('utils.keymaps.home'),
-
-  section = {
-    goto_prev = section.prev,
-    goto_next = section.next,
-  },
-
   page = require('utils.keymaps.page'),
+  section = require('utils.keymaps.jump_to_section'),
 
   close_popup_wins = close_wins.close_pop_wins,
   win_choose = goto_win.choose,

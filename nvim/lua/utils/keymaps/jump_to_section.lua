@@ -68,7 +68,7 @@ local function current_node()
 end
 
 --- jump_to_prev_section
-M.prev = function()
+M.goto_prev = function()
   local c_node = current_node()
   if not c_node then
     return
@@ -94,7 +94,7 @@ M.prev = function()
 end
 
 --- jump_to_next_section
-M.next = function()
+M.goto_next = function()
   local c_node = current_node()
   if not c_node then
     return
