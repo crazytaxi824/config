@@ -129,9 +129,9 @@ local keymaps = {
   {'i', '<M-S-Right>', '<C-o>6zl', opt, 'win: scroll right'},  -- 默认在 insert mode 下和 <S-Right> 相同.
 
   --- <Home> 模拟 vscode 行为; <End> 使用默认行为.
-  {'n', '<Home>', function() key_fn.home_key.nowrap() end, opt, 'which_key_ignore'},
-  {'v', '<Home>', function() key_fn.home_key.nowrap() end, opt, 'which_key_ignore'},
-  {'i', '<Home>', function() key_fn.home_key.nowrap() end, opt, 'which_key_ignore'},
+  {'n', '<Home>', function() key_fn.home.nowrap() end, opt, 'which_key_ignore'},
+  {'v', '<Home>', function() key_fn.home.nowrap() end, opt, 'which_key_ignore'},
+  {'i', '<Home>', function() key_fn.home.nowrap() end, opt, 'which_key_ignore'},
 
   --{'n', 'G', 'Gzz', opt, 'which_key_ignore'},  -- put last line in center
 

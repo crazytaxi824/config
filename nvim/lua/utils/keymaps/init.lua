@@ -1,4 +1,3 @@
-local home_key  = require('utils.keymaps.home_key')
 local section   = require('utils.keymaps.jump_to_section')
 local save_file = require('utils.keymaps.save_file')
 local goto_win  = require('utils.keymaps.jump_to_win')
@@ -9,10 +8,8 @@ local toggle_comment = require('utils.keymaps.toggle_comments_color')
 local close_wins = require('utils.keymaps.close_all_popup_win')
 
 local M = {
-  home_key = {
-    wrap = home_key.wrap,
-    nowrap = home_key.nowrap,
-  },
+  home = require('utils.keymaps.home'),
+
   section = {
     goto_prev = section.prev,
     goto_next = section.next,

@@ -8,17 +8,17 @@ local function set_cursor_move_in_wrap(bufnr)
   local cursor_move_keymaps = {
     {'n', '<Down>', 'gj', opts, 'which_key_ignore'},
     {'n', '<Up>',   'gk', opts, 'which_key_ignore'},
-    {'n', '<Home>', function() key_fn.home_key.wrap() end, opts, 'which_key_ignore'},  -- g0 相当于 g<Home>
+    {'n', '<Home>', function() key_fn.home.wrap() end, opts, 'which_key_ignore'},  -- g0 相当于 g<Home>
     {'n', '<End>',  'g$', opts, 'which_key_ignore'},  -- g$ 相当于 g<End>
 
     {'v', '<Down>', 'gj', opts, 'which_key_ignore'},
     {'v', '<Up>',   'gk', opts, 'which_key_ignore'},
-    {'v', '<Home>', function() key_fn.home_key.wrap() end, opts, 'which_key_ignore'},
+    {'v', '<Home>', function() key_fn.home.wrap() end, opts, 'which_key_ignore'},
     {'v', '<End>',  'g$', opts, 'which_key_ignore'},
 
     {'i', '<Down>', '<C-o>gj', opts, 'which_key_ignore'},
     {'i', '<Up>',   '<C-o>gk', opts, 'which_key_ignore'},
-    {'i', '<Home>', function() key_fn.home_key.wrap() end, opts, 'which_key_ignore'},
+    {'i', '<Home>', function() key_fn.home.wrap() end, opts, 'which_key_ignore'},
     {'i', '<End>',  '<C-o>g$', opts, 'which_key_ignore'},
   }
 
