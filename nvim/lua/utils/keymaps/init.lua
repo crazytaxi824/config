@@ -18,6 +18,8 @@ local M = {
     goto_next = section.next,
   },
 
+  page = require('utils.keymaps.page'),
+
   close_popup_wins = close_wins.close_pop_wins,
   win_choose = goto_win.choose,
   save_file = save_file.save,

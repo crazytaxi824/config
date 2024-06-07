@@ -10,22 +10,16 @@ local function set_cursor_move_in_wrap(bufnr)
     {'n', '<Up>',   'gk', opts, 'which_key_ignore'},
     {'n', '<Home>', function() key_fn.home_key.wrap() end, opts, 'which_key_ignore'},  -- g0 相当于 g<Home>
     {'n', '<End>',  'g$', opts, 'which_key_ignore'},  -- g$ 相当于 g<End>
-    {'n', '<PageUp>', '8gk', opts, 'which_key_ignore'},  -- g$ 相当于 g<End>
-    {'n', '<PageDown>', '8gj', opts, 'which_key_ignore'},  -- g$ 相当于 g<End>
 
     {'v', '<Down>', 'gj', opts, 'which_key_ignore'},
     {'v', '<Up>',   'gk', opts, 'which_key_ignore'},
     {'v', '<Home>', function() key_fn.home_key.wrap() end, opts, 'which_key_ignore'},
     {'v', '<End>',  'g$', opts, 'which_key_ignore'},
-    {'v', '<PageUp>', '8gk', opts, 'which_key_ignore'},  -- g$ 相当于 g<End>
-    {'v', '<PageDown>', '8gj', opts, 'which_key_ignore'},  -- g$ 相当于 g<End>
 
     {'i', '<Down>', '<C-o>gj', opts, 'which_key_ignore'},
     {'i', '<Up>',   '<C-o>gk', opts, 'which_key_ignore'},
     {'i', '<Home>', function() key_fn.home_key.wrap() end, opts, 'which_key_ignore'},
     {'i', '<End>',  '<C-o>g$', opts, 'which_key_ignore'},
-    {'i', '<PageUp>', '<C-o>8gk', opts, 'which_key_ignore'},  -- g$ 相当于 g<End>
-    {'i', '<PageDown>', '<C-o>8gj', opts, 'which_key_ignore'},  -- g$ 相当于 g<End>
   }
 
   key_fn.set(cursor_move_keymaps)
@@ -35,7 +29,7 @@ end
 --- 而且无法通过 vim.keymap.del(... {silent=true}) 禁止显示 error message.
 --- 所以先通过 nvim_buf_get_keymap() 查看 {'<Up>','<Down>','<Home>','<End>'} 是否已经 set(), 如果有则删除.
 local function del_cursor_move_in_wrap(bufnr)
-  local keys = {'<Up>','<Down>','<Home>','<End>','<PageUp>','<PageDown>'}
+  local keys = {'<Up>','<Down>','<Home>','<End>'}
   local modes = {'n', 'v', 'i'}
 
   --- 也可以使用 :silent! nunmap <buffer> <UP> ... 但无法指定 bufnr.
