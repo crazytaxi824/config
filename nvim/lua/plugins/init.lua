@@ -25,7 +25,7 @@ local plugins = {
   {
     "folke/lazy.nvim",
     -- version = "*",  -- 相当于 tag='stable'
-    tag = "v10.21.2",
+    tag = "v10.22.2",
   },
 
   --- Performence & Functions ----------------------------------------------------------------------
@@ -62,8 +62,8 @@ local plugins = {
   --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   {
     "folke/which-key.nvim",
-    tag = "v1.6.1",
-    -- commit = "4433e5e",
+    -- tag = "v2.1.0",
+    commit = "0099511",
     config = function() require("plugins.settings.which_key") end,
 
     event = "VeryLazy",
@@ -84,7 +84,7 @@ local plugins = {
   --- but if you want to extend a query use the `after/queries/` directory.
   {
     "nvim-treesitter/nvim-treesitter",
-    commit = "c5cbd3e",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "c1e1e24",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     config = function() require("plugins.settings.treesitter") end,
   },
 
