@@ -87,12 +87,13 @@ local keymaps = {
   --- NOTE: <PageUp> / <PageDown> / <Home> / <End> 在 mac 中的默认快捷键是 <fn-Up/Down/Left/Right>,
   --- 需要在 alacritty 中将 <Command-...> 也设置为 <PageUp> / <PageDown> / <Home> / <End>.
   --- 这里是模拟 vscode 中 PageUp / PageDown 的行为.
-  {'n', '<PageUp>', 'zbH', opt, 'which_key_ignore'},
-  {'v', '<PageUp>', 'zbH', opt, 'which_key_ignore'},
-  {'i', '<PageUp>', '<C-o>zb<C-o>H', opt, 'which_key_ignore'},
-  {'n', '<PageDown>', 'ztL', opt, 'which_key_ignore'},
-  {'v', '<PageDown>', 'ztL', opt, 'which_key_ignore'},
-  {'i', '<PageDown>', '<C-o>zt<C-o>L', opt, 'which_key_ignore'},
+  -- {'n', '<PageUp>', 'zbH', opt, 'which_key_ignore'},
+  {'n', '<PageUp>', function() key_fn.page.up() end, opt, 'which_key_ignore'},
+  {'v', '<PageUp>', function() key_fn.page.up() end, opt, 'which_key_ignore'},
+  {'i', '<PageUp>', function() key_fn.page.up() end, opt, 'which_key_ignore'},
+  {'n', '<PageDown>', function() key_fn.page.down() end, opt, 'which_key_ignore'},
+  {'v', '<PageDown>', function() key_fn.page.down() end, opt, 'which_key_ignore'},
+  {'i', '<PageDown>', function() key_fn.page.down() end, opt, 'which_key_ignore'},
 
   --- NOTE: vim 中 <S-Up> / <S-Down> 默认和 <PageUp> / <PageDown> 作用相同.
   {'n', '<S-Up>', '3gk', opt, 'which_key_ignore'},
@@ -128,9 +129,9 @@ local keymaps = {
   {'i', '<M-S-Right>', '<C-o>6zl', opt, 'win: scroll right'},  -- 默认在 insert mode 下和 <S-Right> 相同.
 
   --- <Home> 模拟 vscode 行为; <End> 使用默认行为.
-  {'n', '<Home>', function() key_fn.home_key.nowrap() end, opt, 'which_key_ignore'},
-  {'v', '<Home>', function() key_fn.home_key.nowrap() end, opt, 'which_key_ignore'},
-  {'i', '<Home>', function() key_fn.home_key.nowrap() end, opt, 'which_key_ignore'},
+  {'n', '<Home>', function() key_fn.home.nowrap() end, opt, 'which_key_ignore'},
+  {'v', '<Home>', function() key_fn.home.nowrap() end, opt, 'which_key_ignore'},
+  {'i', '<Home>', function() key_fn.home.nowrap() end, opt, 'which_key_ignore'},
 
   --{'n', 'G', 'Gzz', opt, 'which_key_ignore'},  -- put last line in center
 
