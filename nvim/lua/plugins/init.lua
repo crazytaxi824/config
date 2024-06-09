@@ -182,7 +182,7 @@ local plugins = {
   --- snippets content, 自定义 snippets 可以借鉴这个结构.
   {
     "rafamadriz/friendly-snippets",
-    commit = "e11b09b",
+    commit = "7278f9d",
 
     lazy = true,  -- LuaSnip 加载时自动加载.
   },
@@ -279,8 +279,8 @@ local plugins = {
 
   {
     "nvim-neotest/nvim-nio",
-    commit = "6320241",
-    -- tag = "v1.9.3",
+    -- commit = "7969e0a",
+    tag = "v1.9.4",
 
     lazy = true,  -- nvim-dap-ui 加载时自动加载.
   },
