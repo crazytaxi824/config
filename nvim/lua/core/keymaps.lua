@@ -57,8 +57,9 @@ local opt = { silent = true }
 
 --- { mode, key, remap, opt, description }  - description for 'which-key'
 local keymaps = {
-  --- VVI: <ESC> 进入 terminal Normal 模式.
+  --- VVI: <ESC> 退出 Ternimal (Insert) Mode 进入 (Terminal) Normal 模式.
   {'t', '<ESC>', '<C-\\><C-n>', opt, "Ternimal: Normal Mode"},
+
   --- VVI: <ESC> close popup window & nohlsearch
   {'n', '<ESC>', function()
     --- nohlsearch
