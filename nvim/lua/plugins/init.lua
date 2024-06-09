@@ -84,7 +84,7 @@ local plugins = {
   --- but if you want to extend a query use the `after/queries/` directory.
   {
     "nvim-treesitter/nvim-treesitter",
-    commit = "c1e1e24",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "9ebc589",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     config = function() require("plugins.settings.treesitter") end,
   },
 
@@ -121,7 +121,7 @@ local plugins = {
   --- Auto Completion ------------------------------------------------------------------------------
   {
     "hrsh7th/nvim-cmp",
-    commit = "5260e5e",
+    commit = "a110e12",
     config = function() require("plugins.settings.cmp_completion") end,
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全
@@ -231,7 +231,7 @@ local plugins = {
   --- File explorer --------------------------------------------------------------------------------
   {
     "nvim-tree/nvim-tree.lua",
-    tag = "v1.3.3",
+    tag = "v1.4.0",
     config = function() require("plugins.settings.file_tree") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
 
@@ -241,7 +241,7 @@ local plugins = {
 
   {
     "nvim-tree/nvim-web-devicons",
-    commit = "b4b302d",
+    commit = "c0cfc17",
 
     lazy = true, -- dep of nvim-tree & bufferline
   },
