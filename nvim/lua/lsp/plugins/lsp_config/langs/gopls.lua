@@ -25,9 +25,8 @@ return {
     --   end
     -- end
 
-    local util = require("lspconfig.util")
     --- NOTE: 优先获取 go.work 文件夹位置, 如果不存在则获取 go.mod 文件夹位置.
-    local root = util.root_pattern('go.work')(fname) or util.root_pattern('go.mod')(fname)
+    local root = vim.fs.root(0, 'go.work') or vim.fs.root(0, 'go.mod')
 
     --- 如果没找到 root 则返回 pwd/cwd
     if not root then
