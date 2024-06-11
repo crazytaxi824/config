@@ -18,31 +18,31 @@ ts_configs.setup {
   --- supported langs, https://github.com/nvim-treesitter/nvim-treesitter#supported-languages
   --- 白名单, ts 启动时自动安装, "all" OR a list of languages.
   --- NOTE: 推荐使用黑名单 (ignore_install), 因为某些语言有多个 parsers, 使用白名单时可能导致遗漏.
-  -- ensure_installed = "all",
-  ensure_installed = {  ---------------------------------------------------- {{{
-    --- VVI: necessary for neovim itself
-    "vim", "vimdoc", "query", "lua", "c", "comment",
-
-    --- git
-    "gitignore", "gitattributes",
-    "git_config", "diff", "git_rebase", "gitcommit",
-
-    --- languages & filetypes
-    "javascript", "typescript", "html", "css", "scss", -- "svelte", "vue", "tsx",
-    "go", "gomod", "gosum", "gowork", "gotmpl", "printf",
-    "python", "bash", "ruby", "perl",
-    "markdown", "markdown_inline", "latex", "mermaid",
-    "json", "jsonc", "toml", "yaml",
-    "csv", "xml", "regex", "proto", "dockerfile",
-    "ssh_config",
-    "sql",
-  },
+  ensure_installed = "all",
+  -- ensure_installed = {  ---------------------------------------------------- {{{
+  --   --- VVI: necessary for neovim itself
+  --   "vim", "vimdoc", "query", "lua", "c", "comment",
+  --
+  --   --- git
+  --   "gitignore", "gitattributes",
+  --   "git_config", "diff", "git_rebase", "gitcommit",
+  --
+  --   --- languages & filetypes
+  --   "javascript", "typescript", "html", "css", "scss", -- "svelte", "vue", "tsx",
+  --   "go", "gomod", "gosum", "gowork", "gotmpl", "printf",
+  --   "python", "bash", "ruby", "perl",
+  --   "markdown", "markdown_inline", "latex", "mermaid",
+  --   "json", "jsonc", "toml", "yaml",
+  --   "csv", "xml", "regex", "proto", "dockerfile",
+  --   "ssh_config",
+  --   "sql",
+  -- },
   -- -- }}}
 
   --- 黑名单, ts 启动时不安装. list 中的 lang 在 :TSUpdate & :TSInstall 时安装速度太慢.
   --- ignore 的 lang 可以手动更新 `:TSUpdate rust`, 但是不能使用 `:TSUpdate` 自动更新.
   ignore_install = {
-    -- "d", "scala", "rust",  -- compile too slow.
+    "d", "scala", "rust",  -- compile too slow.
   },
 
   --- install languages synchronously (only applied to `ensure_installed`)
