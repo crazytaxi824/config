@@ -84,7 +84,7 @@ local plugins = {
   --- but if you want to extend a query use the `after/queries/` directory.
   {
     "nvim-treesitter/nvim-treesitter",
-    commit = "eb59a3d",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "26171d8",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     config = function() require("plugins.settings.treesitter") end,
   },
 
@@ -101,7 +101,7 @@ local plugins = {
   --- 第三方 module 插件 ---
   {
     "windwp/nvim-ts-autotag",  -- auto close tag <div></div>
-    commit = "2692808",
+    commit = "06fe07d",
     config = function() require("plugins.settings.treesitter_autotag") end,
     dependencies = { "nvim-treesitter/nvim-treesitter" },
 
@@ -222,7 +222,7 @@ local plugins = {
 
   {
     "stevearc/conform.nvim",
-    tag = "v5.8.0",
+    tag = "v5.9.0",
     config = function() require("plugins.settings.formatter_confrom") end,
 
     event = "VeryLazy",
@@ -328,7 +328,7 @@ local plugins = {
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {
     "lewis6991/gitsigns.nvim",
-    commit = "4a143f1",
+    commit = "de18f6b",
     -- tag = "v0.8.1",
     config = function() require("plugins.settings.git_signs") end,
 
