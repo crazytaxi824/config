@@ -43,10 +43,10 @@ local function jump_to_file(absolute_path, lnum, col)
   local cmd
   if vim.fn.win_gotoid(display_win_id) == 1 then
     --- 如果 win_id 可以跳转, 则直接在该 window 中打开文件.
-    cmd = 'edit +lua\\ vim.fn.cursor("' .. lnum .. '","' .. col .. '") ' .. absolute_path
+    cmd = 'edit +lua\\ vim.fn.cursor(' .. lnum .. ',' .. col .. ') ' .. absolute_path
   else
     --- 如果 win_id 不能跳转, 则在 terminal 正上方创建一个新的 window 用于显示 log filepath
-    cmd = 'leftabove split +lua\\ vim.fn.cursor("' .. lnum .. '","' .. col .. '") ' .. absolute_path
+    cmd = 'leftabove split +lua\\ vim.fn.cursor(' .. lnum .. ',' .. col .. ') ' .. absolute_path
   end
 
   vim.cmd(cmd)

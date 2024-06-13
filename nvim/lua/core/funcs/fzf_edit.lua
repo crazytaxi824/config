@@ -49,7 +49,7 @@ function FZF_selected(fzf_tmp_file)
     --- VVI: 必须有 `:edit` 命令, 否则会打开一个 [No Name] file.
     --- VVI: 使用 vim cmd `:edit` 必须 escape filename.
     --- edit/open first item(file) in the list.
-    local cmd = 'edit +lua\\ vim.fn.cursor("' .. fp_qf_list[1].lnum .. '","' .. fp_qf_list[1].col .. '") '
+    local cmd = 'edit +lua\\ vim.fn.cursor(' .. fp_qf_list[1].lnum .. ',' .. fp_qf_list[1].col .. ') '
      .. vim.fn.fnameescape(fp_qf_list[1].filename)
     vim.cmd(cmd)
     return
@@ -58,7 +58,7 @@ function FZF_selected(fzf_tmp_file)
   --- VVI: 必须有 `:edit` 命令, 否则会打开一个 [No Name] file.
   --- VVI: 使用 vim cmd `:edit` 必须 escape filename.
   --- edit/open first item(file) in the list.
-  local cmd = 'edit +lua\\ vim.fn.cursor("' .. fp_qf_list[1].lnum .. '","' .. fp_qf_list[1].col .. '") '
+  local cmd = 'edit +lua\\ vim.fn.cursor(' .. fp_qf_list[1].lnum .. ',' .. fp_qf_list[1].col .. ') '
    .. vim.fn.fnameescape(fp_qf_list[1].filename)
   vim.cmd(cmd)
 
