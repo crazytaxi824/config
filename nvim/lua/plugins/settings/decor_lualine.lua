@@ -281,7 +281,7 @@ lualine.setup {
                   -- 4: Filename and parent dir, with tilde as the home directory
         symbols = {
           modified = Nerd_icons.modified, -- Text to show when the file is modified.
-          readonly = '',       -- Text to show when the file is non-modifiable or readonly.
+          readonly = Nerd_icons.lock,     -- Text to show when the file is non-modifiable or readonly.
           unnamed  = '[No Name]', -- Text to show for unnamed buffers.
         },
         cond = function() return vim.api.nvim_win_get_width(0) > 50 end,

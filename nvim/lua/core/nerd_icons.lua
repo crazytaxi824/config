@@ -27,7 +27,8 @@ Nerd_icons = {
   cross = '⛌', -- ❌✕✖︎✗✘⛌ 
   star  = '★',
   modified = '●',
-  h_dot    = '○',
+  h_dot = '○',
+  lock  = '',
   ellipsis = '', -- … 
   h_circle = "◌", --  
 }
