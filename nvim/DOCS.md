@@ -451,7 +451,9 @@ Visual-Block 选择多行数字
 
 ## nvim_cmd(), nvim_command(), nvim_exec2() 区别
 
-`vim.cmd()` it is an alias to `nvim_cmd()` where `opts` is empty.
+`vim.cmd()` If a string, it is an alias to `nvim_exec2()` where `opts.output = false`.
+`vim.cmd()` If a table, it is an alias to `nvim_cmd()` where `opts` is empty.
+VVI: `nvim_parse_cmd('leftabove split foo',{}))` 可以将 cmd string 分析成 nvim_cmd({cmd=..., args=..., mods=...})
 
 首选 nvim_exec2(), 然后是 nvim_cmd(), 不推荐 nvim_command().
 
