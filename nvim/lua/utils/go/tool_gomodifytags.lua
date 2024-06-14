@@ -156,7 +156,7 @@ M.go_add_tags_and_opts = function(arglist, go_add_tags_cmd, offset)
   end
 
   --- VVI: refresh & reload buffer
-  vim.cmd('checktime')
+  vim.cmd.checktime()
 end
 -- -- }}}
 
@@ -215,7 +215,7 @@ M.go_remove_tags = function(arglist, go_remove_tags_cmd, offset)
     return
   end
 
-  vim.cmd('checktime')  -- VVI: refresh & reload buffer
+  vim.cmd.checktime()  -- VVI: refresh & reload buffer
 end
 -- -- }}}
 
@@ -274,7 +274,8 @@ M.go_remove_tags_opts = function(arglist, go_remove_tag_opts_cmd, offset)
     return
   end
 
-  vim.cmd('checktime')  -- VVI: refresh & reload buffer
+  --- VVI: refresh & reload buffer
+  vim.cmd.checktime()
 end
 -- -- }}}
 

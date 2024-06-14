@@ -52,7 +52,8 @@ M.choose = function()
     win_map[key] = win_id
   end
 
-  vim.cmd('redraw')  -- VVI: 刷新 statusline 显示.
+  --- VVI: 刷新 statusline 显示.
+  vim.cmd.redraw()
 
   --- prompt choose window
   vim.notify("Choose window:")
@@ -65,7 +66,7 @@ M.choose = function()
   end
 
   --- clear command line prompt message.
-  vim.cmd("normal! :")
+  vim.cmd.normal({ args = {':'}, bang=true })
 end
 
 return M

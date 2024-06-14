@@ -123,7 +123,7 @@ vim.api.nvim_create_user_command("Format", function()
     end
 
     if did_edit then
-      vim.cmd('w')  --- save file after format
+      vim.cmd.write()  --- save file after format
     end
   end)
 end, { bang = true, bar = true })

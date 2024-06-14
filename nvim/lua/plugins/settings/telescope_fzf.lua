@@ -22,7 +22,7 @@ local my_action = transform_mod({
       actions.select_default(prompt_bufnr)
     else
       actions.send_selected_to_qflist(prompt_bufnr)
-      vim.cmd('copen')
+      vim.cmd.copen()
     end
   end,
 })

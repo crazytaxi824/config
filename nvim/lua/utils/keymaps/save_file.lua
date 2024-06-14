@@ -12,10 +12,10 @@ M.save = function()
         return
       end
 
-      vim.cmd('write ' .. filename)  -- write file
+      vim.cmd.write(filename) -- write file
     end)
   else
-    vim.cmd('update')
+    vim.cmd.update()
   end
 end
 

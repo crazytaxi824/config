@@ -21,7 +21,6 @@ M.go_impl = function(arglist)
   end
 
   local dir = vim.fn.expand('%:h')
-  local lastline = vim.fn.line('$')
   local iface_name = vim.fn.expand('<cword>')
 
   --- 执行 shell cmd
@@ -40,10 +39,8 @@ M.go_impl = function(arglist)
   --- 写入当前文件
   vim.fn.writefile(msg, vim.fn.bufname(), 'a')  -- 'a' append mode
 
-  --- checktime          刷新 buffer 显示
-  --- cursor(lnum. col)  移动 cursor
-  --- zz                 移动 cursor 行到屏幕中间
-  vim.cmd('checktime | call cursor('.. lastline+2 ..', 1) | normal! zz')
+  vim.cmd.checktime()
+  vim.cmd.normal({ args = {'G'}, bang=true })  -- ':normal! G'
 end
 
 return M

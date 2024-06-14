@@ -39,7 +39,7 @@ M.open_shell_term = function()
       after_run = function(term_obj)
         --- after_run 的时候 cursor 在 terminal window 中则执行 stopinsert.
         if vim.api.nvim_win_get_buf(vim.api.nvim_get_current_win()) == term_obj.bufnr then
-          vim.cmd('startinsert')
+          vim.cmd.startinsert()
         end
       end,
       on_exit = function(term_obj)
@@ -50,7 +50,7 @@ M.open_shell_term = function()
 
         --- NOTE: jobdone 的时候 cursor 在 terminal window 中则执行 stopinsert.
         -- if vim.api.nvim_win_get_buf(vim.api.nvim_get_current_win()) == term_obj.bufnr then
-        --   vim.cmd('stopinsert')
+        --   vim.cmd.stopinsert()
         -- end
       end,
     })

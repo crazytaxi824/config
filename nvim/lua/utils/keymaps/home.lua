@@ -7,12 +7,12 @@ local M = {}
 M.nowrap = function()
   --- ^ 之前获取 cursor 位置.
   local before_line, before_col = unpack(vim.api.nvim_win_get_cursor(0))
-  vim.cmd('normal! ^')
+  vim.cmd.normal({ args = {'^'}, bang=true })
 
   --- ^ 之后获取 cursor 位置.
   local after_line, after_col = unpack(vim.api.nvim_win_get_cursor(0))
   if before_line == after_line and before_col == after_col then
-    vim.cmd('normal! 0')
+    vim.cmd.normal({ args = {'0'}, bang=true })
   end
 end
 
@@ -21,12 +21,12 @@ end
 M.wrap = function()
   --- g^ 之前获取 cursor 位置.
   local before_line, before_col = unpack(vim.api.nvim_win_get_cursor(0))
-  vim.cmd('normal! g^')
+  vim.cmd.normal({ args = {'g^'}, bang=true })
 
   --- g^ 之后获取 cursor 位置.
   local after_line, after_col = unpack(vim.api.nvim_win_get_cursor(0))
   if before_line == after_line and before_col == after_col then
-    vim.cmd('normal! g0')
+    vim.cmd.normal({ args = {'g0'}, bang=true })
   end
 end
 

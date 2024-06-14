@@ -102,7 +102,7 @@ local function open_new_tab_for_debug()
 
   --- if debug tab NOT exist, open a new tab for debug.
   local bufnr = vim.api.nvim_get_current_buf()
-  vim.cmd('tabnew '..vim.api.nvim_buf_get_name(bufnr))
+  vim.cmd.tabnew(vim.api.nvim_buf_get_name(bufnr))
 
   --- 标记该 tab.
   vim.t[tabvar_dap] = vim.api.nvim_get_current_win()
@@ -135,7 +135,7 @@ local function close_debug_tab_and_buffers()
     --- close debug tab
     for _, tab_id in pairs(tab_list) do
       if vim.t[tab_id][tabvar_dap] then
-        vim.cmd('tabclose ' .. vim.api.nvim_tabpage_get_number(tab_id)) -- NOTE: `:tabclose tabnr` NOT tab_id
+        vim.cmd.tabclose(vim.api.nvim_tabpage_get_number(tab_id)) -- NOTE: `:tabclose tabnr` NOT tab_id
       end
     end
   end)
@@ -162,14 +162,14 @@ end
 --- NOTE: 不要自动关闭, 使用自定义函数手动关闭.
 -- dap.listeners.before.event_terminated["foo"] = function()
 --   print('event terminated')
---   vim.cmd('stopinsert')
+--   vim.cmd.stopinsert()
 --   close_debug_tab_and_buffers()
 -- end
 
 --- NOTE: Not working right now.
 -- dap.listeners.before.event_exited["foo"] = function()
 --   print('event exited')
---   vim.cmd('stopinsert')
+--   vim.cmd.stopinsert()
 --   close_debug_tab_and_buffers()
 -- end
 -- -- }}}

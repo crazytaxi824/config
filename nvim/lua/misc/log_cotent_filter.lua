@@ -59,7 +59,7 @@ local function reduce_filesize(log, size)
   if result.code ~= 0 then
     --- 这里不能使用 error() 否则无法 sleep
     vim.notify(result.stderr, vim.log.levels.WARN)
-    vim.cmd('sleep 3')
+    vim.cmd.sleep(3)
     return
   end
 
@@ -68,7 +68,7 @@ local function reduce_filesize(log, size)
   if not lnum then
     --- 这里不能使用 error() 否则无法 sleep
     vim.notify("error: lnum can not be parsed", vim.log.levels.WARN)
-    vim.cmd('sleep 3')
+    vim.cmd.sleep(3)
     return
   end
 
