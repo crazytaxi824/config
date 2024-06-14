@@ -38,7 +38,7 @@ M.gotests_cmd_tool = function()
   --- 执行完成后打开 <filepath>_test.go file.
   local test_fp = vim.fn.fnamemodify(fp, ':r') .. '_test.go'
   if vim.fn.filereadable(test_fp) == 1 then
-    vim.cmd('edit ' .. vim.fn.fnameescape(test_fp))
+    vim.cmd.edit(test_fp)
   end
 end
 
