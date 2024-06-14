@@ -11,8 +11,8 @@ local M = {}
 --- 单独执行 :call cursor('a',3)   的时候, cursor 跳转到本行第三列;
 --- 单独执行 :call cursor('3','3') 的时候, cursor 跳转到第三行第三列; NOTE: 这里 lnum & col 是 string, 可以跳转.
 local function jump_to_file(absolute_path, lnum, col)
-  lnum = lnum or '1'
-  col = col or '1'
+  lnum = lnum or 1
+  col = col or 1
 
   --- 则选择合适的 window 显示文件.
   local display_win_id
