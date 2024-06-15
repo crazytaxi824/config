@@ -548,7 +548,6 @@ function Rg() {
 		--preview "bat --color=always --style=numbers --highlight-line={2} {1}" \
 		--preview-window '+{2}/2' \
 		--bind "ctrl-o:execute(open {1})"
-		#--bind "ctrl-e:become($EDITOR '+call cursor({2},{3})' -- {1} > /dev/tty)"  # 打开光标所在文件
 }
 
 # }}}
