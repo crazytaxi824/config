@@ -25,7 +25,7 @@ local plugins = {
   {
     "folke/lazy.nvim",
     -- version = "*",  -- 相当于 tag='stable'
-    tag = "v10.22.2",
+    tag = "v10.24.2",
   },
 
   --- Performence & Functions ----------------------------------------------------------------------
@@ -84,7 +84,7 @@ local plugins = {
   --- but if you want to extend a query use the `after/queries/` directory.
   {
     "nvim-treesitter/nvim-treesitter",
-    commit = "8dd40c7",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "71a8e8b",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     config = function() require("plugins.settings.treesitter") end,
   },
 
