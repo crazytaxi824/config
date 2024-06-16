@@ -274,7 +274,7 @@ local function close_current_tab()
     end
   end
 
-  vim.cmd('tabclose')
+  vim.cmd.tabclose()
 
   --- `:tabclose` 关闭整个 tab
   --- `:bdelete 1 2 3` 删除 tab 中的所有 buffer
@@ -282,7 +282,7 @@ local function close_current_tab()
     --- tabclose 之后, 判断 buffer 是否存在.
     for _, bufnr in ipairs(del_nochanged_buf_list) do
       if vim.api.nvim_buf_is_valid(bufnr) and vim.fn.buflisted(bufnr) == 1 then
-        vim.cmd('bdelete ' .. bufnr)
+        vim.cmd.bdelete(bufnr)
       end
     end
   end
@@ -352,7 +352,7 @@ local function bufferline_del_current_buffer(ignore_tab)
     --- 如果有其他任何 window 中显示的是 listed buffer 则直接 :bdelete current buffer.
     for _, wininfo in ipairs(vim.fn.getwininfo()) do
       if vim.fn.buflisted(wininfo.bufnr) == 1 then
-        vim.cmd('bdelete')
+        vim.cmd.bdelete()
         return
       end
     end
@@ -387,7 +387,7 @@ local function bufferline_del_current_buffer(ignore_tab)
     bufferline.cycle(1)   -- 跳转到 next buffer
   end
 
-  vim.cmd('bdelete #')
+  vim.cmd.bdelete('#')
 end
 
 --- 删除指定 buffer
@@ -404,7 +404,7 @@ local function bufferline_del_buffer_by_bufnr(bufnr)
     bufferline_del_current_buffer('ignore_tab')
   else
     --- 如果关闭的不是当前 buffer, 则直接删除.
-    vim.cmd('bdelete! ' .. bufnr)
+    vim.cmd.bdelete({ args = {bufnr}, bang=true})  -- `:bdelete! bufnr`
   end
 end
 

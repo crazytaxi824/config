@@ -16,21 +16,15 @@ function FZF_selected(fzf_tmp_file)
   for _, fzf_item in ipairs(fzf_selected_items) do
     fzf_item = vim.trim(fzf_item)
     if fzf_item ~= '' then
-      --- 按照 "filepath:lnum:col:content" split.
+      --- 按照 "filepath:lnum:col:text" split.
       local fp_item_split = vim.split(fzf_item, ":", {trimempty=false})
-
-      --- concat content 内容, 如果 content 中本身含有 ':'
-      --local text = {}
-      --for i = 4, #fp_item_split, 1 do
-      --  table.insert(text, fp_item_split[i])
-      --end
 
       --- insert quickfix_list item
       local fp_qf_item = {
         filename = fp_item_split[1],
-        lnum = fp_item_split[2] or '1',
-        col  = fp_item_split[3] or '1',
-        --text = table.concat(text, ":"),  -- 不在 quickfix_list 中显示 text.
+        lnum = tonumber(fp_item_split[2]) or 1,
+        col  = tonumber(fp_item_split[3]) or 1,
+        -- text = table.concat(vim.list_slice(fp_item_split, 4), ':'),  -- text 中本身含有 ':'
       }
       table.insert(fp_qf_list, fp_qf_item)
     end
@@ -44,30 +38,21 @@ function FZF_selected(fzf_tmp_file)
     return
   end
 
-  --- 只有 1 个 item 的情况下, 不显示 quickfix list.
-  if #fp_qf_list == 1 then
-    --- VVI: 必须有 `:edit` 命令, 否则会打开一个 [No Name] file.
-    --- VVI: 使用 vim cmd `:edit` 必须 escape filename.
-    --- edit/open first item(file) in the list.
-    local cmd = 'edit +lua\\ vim.fn.cursor("' .. fp_qf_list[1].lnum .. '","' .. fp_qf_list[1].col .. '") '
-     .. vim.fn.fnameescape(fp_qf_list[1].filename)
-    vim.cmd(cmd)
-    return
+  --- edit file
+  vim.cmd.edit(fp_qf_list[1].filename)
+  local win_id = vim.api.nvim_get_current_win()
+  vim.api.nvim_win_set_cursor(win_id, {fp_qf_list[1].lnum, fp_qf_list[1].col-1})  -- {1,0}-indexed
+
+  --- 如果有多个 item, 则放入 quickfix list.
+  if #fp_qf_list > 1 then
+    --- put all items in quickfix_list.
+    vim.fn.setqflist(fp_qf_list, 'r')  -- 'a' - append to quickfix_list; 'r' - replace quickfix_list with new items.
+    vim.fn.setqflist({}, 'a', {title = 'fzf_selected'})  -- set quickfix title
+    vim.cmd.copen()  -- open quickfix window.
+
+    --- 返回之前的 window.
+    vim.api.nvim_set_current_win(win_id)
   end
-
-  --- VVI: 必须有 `:edit` 命令, 否则会打开一个 [No Name] file.
-  --- VVI: 使用 vim cmd `:edit` 必须 escape filename.
-  --- edit/open first item(file) in the list.
-  local cmd = 'edit +lua\\ vim.fn.cursor("' .. fp_qf_list[1].lnum .. '","' .. fp_qf_list[1].col .. '") '
-   .. vim.fn.fnameescape(fp_qf_list[1].filename)
-  vim.cmd(cmd)
-
-  --- put all items in quickfix_list.
-  vim.fn.setqflist(fp_qf_list, 'r')  -- 'a' - append to quickfix_list; 'r' - replace quickfix_list with new items.
-  vim.fn.setqflist({}, 'a', {title = 'fzf_selected'})  -- set quickfix title
-
-  --- 这里使用 cfirst 主要是为了让 cursor 跳回到文件窗口, 而不是留在 quickfix window 中.
-  vim.cmd('copen | cfirst')
 end
 
 

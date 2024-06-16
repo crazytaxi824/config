@@ -76,13 +76,8 @@ local function filepath_with_lnum_col(str)
     r.type = 'file'
     r.original_fp = splits[1]
     r.absolute_fp = absolute_fp
-
-    if splits[2] and tonumber(splits[2]) then
-      r.lnum = splits[2]
-      if splits[3] and tonumber(splits[3]) then
-        r.col = splits[3]
-      end
-    end
+    r.lnum = tonumber(splits[2])
+    r.col = tonumber(splits[3])
     return r
   end
 end
@@ -115,37 +110,9 @@ end
 
 --- hl 不存在则只需要分析 absolute filepath 可用于 jump to path, 不需要分析 highlight start_col & end_col.
 --- hl 存在则使用 string.find() & nvim_buf_add_highlight() 可用于 highlight.
-M.parse_content = function(content, hl)
-  local r = filepath_from_str(content, hl)
-  if r and not hl then
-    return r  -- 不需要 highlight 的情况下直接返回
-  end
-
-  if r and hl then
-    local lcontent = vim.api.nvim_get_current_line()
-    local find = lua_escape(content)  -- escape '()[]+-*.?%^$'
-
-    local i, j = string.find(lcontent, '^' .. find)
-    if not i then
-      i, j = string.find(lcontent, '%s' .. find)
-      i = i+1 -- 去掉 %s 计算在内的 index
-    end
-
-    if i then
-      local start_col = i + r.i - 2
-      local end_col   = i + r.j - 1
-
-      return {
-        bufnr = vim.api.nvim_get_current_buf(),
-        type = r.type,
-        hl_lnum = vim.fn.line('.') -1,
-        hl_start_col = start_col,
-        hl_end_col = end_col,
-        original_fp = r.original_fp,
-        absolute_fp = r.absolute_fp,
-      }
-    end
-  end
+M.parse_content = function(content)
+  local r = filepath_from_str(content)
+  return r
 end
 
 M.parse_hl_line = function()

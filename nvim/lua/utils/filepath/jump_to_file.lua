@@ -4,15 +4,14 @@ local parse = require('utils.filepath.parse')
 
 local M = {}
 
---- NOTE: 在 `:edit +call\ cursor('a','b') foo.go` 命令中 lnum & col 都是 string 的情况下,
---- cursor 会跳转到文件的第一行第一列;
---- 单独执行 :call cursor('a','b') 的时候, cursor 不会动;
---- 单独执行 :call cursor(3,'b')   的时候, cursor 跳转到第三行第一列;
---- 单独执行 :call cursor('a',3)   的时候, cursor 跳转到本行第三列;
---- 单独执行 :call cursor('3','3') 的时候, cursor 跳转到第三行第三列; NOTE: 这里 lnum & col 是 string, 可以跳转.
+--- :call cursor('a','b') 的时候, cursor 不会动;
+--- :call cursor(3,'b')   的时候, cursor 跳转到第三行第一列;
+--- :call cursor('a',3)   的时候, cursor 跳转到本行第三列;
+--- :call cursor(3, 3)    的时候, cursor 跳转到第三行第三列;
+--- :call cursor('3','3') 的时候, cursor 跳转到第三行第三列;
 local function jump_to_file(absolute_path, lnum, col)
-  lnum = lnum or '1'
-  col = col or '1'
+  lnum = lnum or 1
+  col = col or 1
 
   --- 则选择合适的 window 显示文件.
   local display_win_id
@@ -35,28 +34,22 @@ local function jump_to_file(absolute_path, lnum, col)
     end
   end
 
-  --- VVI: escape filename for Vim Command.
-  --- unscaped filename 可以被 lua vim.fn.fnamemodify() 读取, 但是不能被 Vim Command (:edit ...) 读取.
-  absolute_path = vim.fn.fnameescape(absolute_path)
-
-  --- NOTE: cmd 利用 cursor('lnum','col') 可以传入 string args 的特点.
-  local cmd
   if vim.fn.win_gotoid(display_win_id) == 1 then
     --- 如果 win_id 可以跳转, 则直接在该 window 中打开文件.
-    cmd = 'edit +lua\\ vim.fn.cursor("' .. lnum .. '","' .. col .. '") ' .. absolute_path
+    vim.cmd.edit(absolute_path)
+    vim.api.nvim_win_set_cursor(display_win_id, {lnum, col-1})
   else
     --- 如果 win_id 不能跳转, 则在 terminal 正上方创建一个新的 window 用于显示 log filepath
-    cmd = 'leftabove split +lua\\ vim.fn.cursor("' .. lnum .. '","' .. col .. '") ' .. absolute_path
+    vim.cmd.split({mods={split='leftabove'}, args={absolute_path}})
+    vim.api.nvim_win_set_cursor(0, {lnum, col-1})
   end
-
-  vim.cmd(cmd)
 end
 
 local function jump_to_dir(dir)
   --- NOTE: 新窗口中打开 dir, 因为 nvim-tree 设置 hijack_netrw=true & hijack_directories=true,
   --- 如果直接使用 `:edit dir` 会导致打开 dir 的窗口被关闭 (hijack).
   --- 如果 hijack_netrw=false & hijack_directories=false, 则这里可以使用 `:tabnew dir`
-  vim.cmd('new ' .. dir)
+  vim.cmd.new(dir)
 end
 
 --- 获取 visual selected word.

@@ -64,7 +64,7 @@ local keymaps = {
   {'n', '<ESC>', function()
     --- nohlsearch
     if vim.v.hlsearch == 1 then
-      vim.cmd('nohlsearch')
+      vim.cmd.nohlsearch()
       return
     end
 

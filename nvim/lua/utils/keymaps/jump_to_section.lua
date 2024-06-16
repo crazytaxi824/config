@@ -82,14 +82,14 @@ M.goto_prev = function()
     local prev_node = c_node.root_nodes[c_node.index-1]
     if prev_node then
       local prev_node_lnum = prev_node:start() +1
-      vim.fn.cursor(prev_node_lnum, 1)
+      vim.api.nvim_win_set_cursor(0, {prev_node_lnum, 0})
     else
       --- 自己是 first node's first line 的情况
       vim.notify("it's first node in this buffer", vim.log.levels.INFO)
     end
   else
     --- jump to cursor current node first line.
-    vim.fn.cursor(current_node_first_lnum, 1)
+    vim.api.nvim_win_set_cursor(0, {current_node_first_lnum, 0})
   end
 end
 
@@ -104,12 +104,12 @@ M.goto_next = function()
 
   if next_node then
     local next_node_lnum = next_node:start() +1
-    vim.fn.cursor(next_node_lnum, 1)
+    vim.api.nvim_win_set_cursor(0, {next_node_lnum, 0})
   else
     local current_node_last_line = c_node.root_nodes[c_node.index]:end_() +1
     if c_node.cursor_lnum < current_node_last_line then
       --- jump to last node's last line
-      vim.fn.cursor(current_node_last_line, 1)
+      vim.api.nvim_win_set_cursor(0, {current_node_last_line, 0})
     else
       --- NOTE: cursor_line >= last node's last line 的情况.
       vim.notify("it's last node in this buffer", vim.log.levels.INFO)

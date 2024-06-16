@@ -15,7 +15,7 @@ M.delete_all_other_buffers = function()
   end
 
   if #buf_list > 0 then
-    vim.cmd('bdelete ' .. table.concat(buf_list, ' '))
+    vim.cmd.bdelete({args = buf_list})
   end
 end
 

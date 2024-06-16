@@ -70,7 +70,7 @@ git_signs.setup({
       {'n', '<leader>gu', function() git_signs.reset_buffer_index() end, opt, "git: Unstage current buffer"},
       {'n', '<leader>gg', function() gitsigns_hunk_actions() end, opt, "git: Actions for Hunk"},
       {'n', '<leader>gf', function()
-        vim.cmd('tabnew '..vim.fn.bufname())  --- open current file in new Tab.
+        vim.cmd.tabnew(vim.fn.bufname())  --- open current file in new Tab.
         git_signs.diffthis('~')  -- diff this file with old comment.
       end, opt, "git: Diff file"},
       {'n', '<leader>gd', function()

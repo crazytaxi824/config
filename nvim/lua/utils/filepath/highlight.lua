@@ -16,18 +16,6 @@ M.highlight_clear_cache = function()
   cache_hl = nil -- delete cache
 end
 
---- <cWORD> 如果是 filepath 则 highlight
-local function hl_cWORD()
-  local r = parse.parse_content(vim.fn.expand('<cWORD>'), 'hl')
-  if not r then
-    return
-  end
-
-  --- highlight current filepath
-  local ns_id = vim.api.nvim_buf_add_highlight(r.bufnr, 0, "Underlined", r.hl_lnum, r.hl_start_col, r.hl_end_col)
-  cache_hl = {bufnr = r.bufnr, ns_ids = {ns_id}}
-end
-
 --- 检查一整行内所有 valide filepath, 然后 highlight.
 local function hl_line()
   local rs = parse.parse_hl_line()
