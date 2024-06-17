@@ -59,7 +59,8 @@ M.open_shell_term = function()
     --- source Python Virtual Environment
     local local_venv = '.venv/bin/activate'
     if vim.uv.fs_stat(local_venv) then
-      vim.fn.chansend(t.job_id, 'source ' .. local_venv .. '&& clear\n')
+      -- vim.fn.chansend(t.job_id, 'source ' .. local_venv .. '&& clear\n')
+      vim.api.nvim_chan_send(t.job_id, 'source ' .. local_venv .. '&& clear\n')
     end
 
     return
