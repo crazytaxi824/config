@@ -534,7 +534,7 @@ bufferline.setup({
     --   end
     --   --- filter out based on arbitrary rules
     --   --- e.g. filter out vim wiki buffer from tabline in your work repo
-    --   if vim.fn.getcwd() == "<work-repo>" and vim.bo[buf_number].filetype ~= "wiki" then
+    --   if vim.uv.cwd() == "<work-repo>" and vim.bo[buf_number].filetype ~= "wiki" then
     --     return true
     --   end
     --   --- filter out by it's index number in list (don't show first buffer)

@@ -27,7 +27,7 @@ return {
       args = { "run", ... },  -- overwrite default settings.
       extra_args = {
 		--- 指定 config 文件.
-		"--config", vim.fn.getcwd() .. '/.golangci.yml',
+		"--config", vim.uv.cwd() .. '/.golangci.yml',
 		"--config", '~/.config/lints/.golangci.yml',
 
 		--- 生产模式下增加的 linter, '-E' = '--enable'.

@@ -28,13 +28,13 @@ null_ls.setup({
   --- 对 null-ls 中的所有 linter 有效. root_dir 需要传入一个回调函数 func(params):string.
   --- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/MAIN.md#generators
   --- 默认值: root_dir = require("null-ls.utils").root_pattern(".null-ls-root", "Makefile", ".git")
-  --- 如果 utils.root_pattern() 返回 nil, 则 root_dir 会被设置成当前路径 vim.fn.getcwd().
+  --- 如果 utils.root_pattern() 返回 nil, 则 root_dir 会被设置成当前路径 vim.uv.cwd().
   ---
   --- PROBLEM: null-ls 的 root_dir 只会运行一次. 而 lspconfig 的 root_dir 在每次打开 buffer 时都会执行.
   --- Q: 为什么要在每次执行 linter 时单独获取 pwd 路径?
   --- A: 因为 nvim 可能会在多个项目文件之间跳转, 每个项目有自己单独的 root.
   --- HOW: 单独为 linter 设置 cwd = func(params):string, 参考 tools/golangci.lua
-  --root_dir = function(params) return vim.fn.getcwd() end,
+  --root_dir = function(params) return vim.uv.cwd() end,
 
   --- 如果 error msg 没有特别指明 severity level, 则会使用下面的设置.
   fallback_severity = vim.diagnostic.severity.WARN,

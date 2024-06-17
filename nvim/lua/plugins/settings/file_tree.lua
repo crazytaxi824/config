@@ -55,7 +55,7 @@ end
 -- -- }}}
 
 --- go back to pwd ------------------------------------------------------------- {{{
-local pwd = vim.fn.getcwd()  -- cache pwd
+local pwd = vim.uv.cwd()  -- cache pwd
 local function back_to_pwd()
   nt_api.tree.change_root(pwd)
 end

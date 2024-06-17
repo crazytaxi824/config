@@ -12,7 +12,7 @@ return {
   --filetypes = { "go", "gomod", "gowork", "gotmpl" },
 
   --- NOTE: lspconfig.util.root_pattern() 只能在这里使用, 不能在 project_lsp_config 中使用.
-  --- project_lsp_config 中设置 root_dir 直接使用 string. eg: root_dir = "/a/b/c"; root_dir = vim.fn.getcwd().
+  --- project_lsp_config 中设置 root_dir 直接使用 string. eg: root_dir = "/a/b/c"; root_dir = vim.uv.cwd().
   --- 设置参考 https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig/server_configurations/gopls.lua
   root_dir = function(fname)  -- fname == :echo expand('%:p') 当前文件绝对路径.
     --- FIXED: https://github.com/neovim/nvim-lspconfig/issues/2285
@@ -21,7 +21,7 @@ return {
     --- VSCODE: 实现方式 https://code.visualstudio.com/docs/editor/multi-root-workspaces
     -- for _, ignored in ipairs(ignore_workspace_folders) do
     --   if string.match(fname, vim.fn.expand(ignored)) then
-    --     return vim.fn.getcwd()  -- 返回当前 current working directory = pwd
+    --     return vim.uv.cwd()  -- 返回当前 current working directory = pwd
     --   end
     -- end
 
@@ -36,7 +36,7 @@ return {
         "WARN",
         {title={"LSP", "gopls.lua"}, timeout = false}
       )
-      return vim.fn.getcwd()  -- 返回当前 current working directory = pwd
+      return vim.uv.cwd()
     end
 
     --- 如果找到 root 则返回 root

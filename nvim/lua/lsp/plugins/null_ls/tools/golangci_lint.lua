@@ -56,7 +56,7 @@ return {
   --- GolangCI-Lint also searches for config files in all directories from the directory of
   --- the first analyzed path up to the root.
   -- -- }}}
-  --extra_args = { '--config', vim.fn.getcwd() .. "/.golangci.yml"},  -- NOTE: 相对上面 cwd 的路径, 也可以使用绝对路径.
+  --extra_args = { '--config', vim.uv.cwd() .. "/.golangci.yml"},  -- NOTE: 相对上面 cwd 的路径, 也可以使用绝对路径.
 
   --filetypes = { "go" },  -- 只对 go 文件生效.
 }
