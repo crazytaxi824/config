@@ -82,7 +82,7 @@ local function jump(content)
   if r.type == 'file' then
     jump_to_file(r.absolute_fp, r.lnum, r.col)
     return
-  elseif r.type == 'dir' then
+  elseif r.type == 'directory' then
     jump_to_dir(r.absolute_fp)
     return
   end

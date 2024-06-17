@@ -4,7 +4,7 @@
 --- 如果是 rg 返回的结果, 则临时文件中记录的是 <filepath:line:col:content>
 --- 结论: {+f} 临时文件中记录的是 fzf 中显示的结果.
 function FZF_selected(fzf_tmp_file)
-  if vim.fn.filereadable(fzf_tmp_file) == 0 then
+  if not vim.uv.fs_stat(fzf_tmp_file) then
     Notify({"fzf `{+f}` tmp file is NOT readable.", "path: `" .. fzf_tmp_file .. "`"}, "ERROR")
     return
   end

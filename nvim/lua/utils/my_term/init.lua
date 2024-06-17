@@ -58,7 +58,7 @@ M.open_shell_term = function()
 
     --- source Python Virtual Environment
     local local_venv = '.venv/bin/activate'
-    if vim.fn.filereadable(local_venv) == 1 then
+    if vim.uv.fs_stat(local_venv) then
       vim.fn.chansend(t.job_id, 'source ' .. local_venv .. '&& clear\n')
     end
 

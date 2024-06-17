@@ -20,16 +20,16 @@ local function get_oversized_log(size)
   local caches = vim.split(vim.fn.glob(vim.fn.stdpath('cache').."/*"), '\n', {trimempty=true})
 
   for _, fp in ipairs(logs) do
-    local fsize = vim.fn.getfsize(fp)
-    if vim.fn.isdirectory(fp) == 0 and vim.fn.filereadable(fp) == 1 and fsize > size then
-      table.insert(log_files, { filepath = fp, fsize = fsize })
+    local finfo = vim.uv.fs_stat(fp)
+    if finfo and finfo.type == 'file' and finfo.size > size then
+      table.insert(log_files, { filepath = fp, fsize = finfo.size })
     end
   end
 
   for _, fp in ipairs(caches) do
-    local fsize = vim.fn.getfsize(fp)
-    if vim.fn.isdirectory(fp) == 0 and vim.fn.filereadable(fp) == 1 and fsize > size then
-      table.insert(log_files, { filepath = fp, fsize = fsize })
+    local finfo = vim.uv.fs_stat(fp)
+    if finfo and finfo.type == 'file' and finfo.size > size then
+      table.insert(log_files, { filepath = fp, fsize = finfo.size })
     end
   end
 

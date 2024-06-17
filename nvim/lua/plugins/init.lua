@@ -358,7 +358,7 @@ local plugins = {
   --   --   local node_path = "/opt/homebrew/opt/node@20/bin/node"
   --   --
   --   --   --- check node cmd existence
-  --   --   if vim.fn.filereadable(node_path) == 0 then
+  --   --   if not vim.uv.fs_stat(node_path) then
   --   --     Notify({"'" .. node_path .. "' is NOT Exist."}, "WARN", {title = "github/copilot", timeout = false})
   --   --     return
   --   --   end
