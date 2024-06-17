@@ -9,8 +9,7 @@ local M = {}
 --- mode = 'run'|'bench'
 M.go_test_proj = function(mode)
   --- 获取 go list info, `cd src/xxx && go list -json`
-  local dir = vim.fn.expand('%:h')
-  local go_list = go_list_module.go_list(dir)
+  local go_list = go_list_module.go_list()
   if not go_list then
     return
   end

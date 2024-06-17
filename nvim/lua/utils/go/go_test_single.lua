@@ -63,8 +63,7 @@ M.go_test_single_func = function(prompt)
   end
 
   --- 获取 go list info, `cd src/xxx && go list -json`
-  local dir = vim.fn.expand('%:h')
-  local go_list = go_list_module.go_list(dir)
+  local go_list = go_list_module.go_list()
   if not go_list then
     return
   end

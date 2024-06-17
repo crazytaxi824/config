@@ -4,7 +4,8 @@ local M = {}
 
 M.go_list = function(dir)
   local result = vim.system({'go', 'list', '-json'}, {
-    cwd = dir,  -- 可以是 relative path 或者是 absolute path.
+    --- cwd 可以是 relative path 或者是 absolute path.
+    cwd = dir or vim.fs.dirname(vim.api.nvim_buf_get_name(0)),
     text = true,
   }):wait()
   if result.code ~= 0 then
