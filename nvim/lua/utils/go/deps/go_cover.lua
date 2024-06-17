@@ -6,7 +6,7 @@ local M = {}
 M.before_run = function(coverage_dir)
   return function()
     --- mkdir for coverage files
-    if vim.fn.isdirectory(coverage_dir) == 0 then
+    if not vim.uv.fs_stat(coverage_dir) then
       local result = vim.system({'mkdir', '-p', coverage_dir}, { text = true }):wait()
       if result.code ~= 0 then
         error(result.stderr ~= '' and result.stderr or result.code)

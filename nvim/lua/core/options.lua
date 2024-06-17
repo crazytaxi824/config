@@ -513,7 +513,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
     --- 延迟执行
     vim.schedule(function()
       --- undodir 不存在的情况下, `mkdir -p` 创建该文件夹.
-      if vim.fn.isdirectory(vim.go.undodir) == 0 then
+      if not vim.uv.fs_stat(vim.go.undodir) then
         --- sync run
         local result = vim.system({'mkdir', '-p', vim.go.undodir}, { text = true }):wait()
         if result.code ~= 0 then

@@ -60,20 +60,25 @@ local function filepath_with_lnum_col(str)
   end
 
   local absolute_fp = vim.fn.fnamemodify(splits[1], ':p')
+  local finfo = vim.uv.fs_stat(absolute_fp)
+  if not finfo then
+    return
+  end
 
   local r = {}
 
   --- dir
-  if vim.fn.isdirectory(absolute_fp) == 1 then
-    r.type = 'dir'
+  if finfo.type == 'directory' then
+    r.type = finfo.type
     r.original_fp = splits[1]
     r.absolute_fp = absolute_fp
     return r
   end
 
   --- file
-  if vim.fn.filereadable(absolute_fp) == 1 then
-    r.type = 'file'
+  -- if vim.fn.filereadable(absolute_fp) == 1 then
+  if finfo.type == 'file' then
+    r.type = finfo.type
     r.original_fp = splits[1]
     r.absolute_fp = absolute_fp
     r.lnum = tonumber(splits[2])

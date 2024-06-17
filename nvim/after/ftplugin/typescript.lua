@@ -7,8 +7,8 @@
 ---       所以运行时 pwd 必须是在 tsconfig 所在文件夹, 即 project root 文件夹.
 local function ts_run(file)
   --- check tsconfig.json file
-  local pwd = vim.fn.getcwd()
-  if vim.fn.filereadable(pwd..'/tsconfig.json') == 0 then
+  local pwd = vim.uv.cwd()
+  if not vim.uv.fs_stat(pwd..'/tsconfig.json') then
     Notify("'tsconfig.json' is missing.", "ERROR")
     return
   end
@@ -28,8 +28,8 @@ local function ts_jest(file, coverage)
   end
 
   --- check tsconfig.json file
-  local pwd = vim.fn.getcwd()
-  if vim.fn.filereadable(pwd..'/tsconfig.json') == 0 then
+  local pwd = vim.uv.cwd()
+  if not vim.uv.fs_stat(pwd..'/tsconfig.json') then
     Notify("'tsconfig.json' is missing.", "ERROR")
     return
   end

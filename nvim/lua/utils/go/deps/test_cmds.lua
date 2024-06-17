@@ -36,7 +36,7 @@ local M = {}
 local pprof_dir = '/tmp/nvim/go_pprof/'
 
 --- mkdir when module required, NOTE: will run only once.
-if vim.fn.isdirectory(pprof_dir) == 0 then
+if not vim.uv.fs_stat(pprof_dir) then
   local result = vim.system({'mkdir', '-p', pprof_dir}, { text = true }):wait()
   if result.code ~= 0 then
     error(result.stderr ~= '' and result.stderr or result.code)

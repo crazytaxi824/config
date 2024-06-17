@@ -358,7 +358,7 @@ local plugins = {
   --   --   local node_path = "/opt/homebrew/opt/node@20/bin/node"
   --   --
   --   --   --- check node cmd existence
-  --   --   if vim.fn.filereadable(node_path) == 0 then
+  --   --   if not vim.uv.fs_stat(node_path) then
   --   --     Notify({"'" .. node_path .. "' is NOT Exist."}, "WARN", {title = "github/copilot", timeout = false})
   --   --     return
   --   --   end
@@ -423,7 +423,8 @@ vim.api.nvim_create_autocmd({"BufWinEnter"}, {
   pattern = {"*"},
   once = true,
   callback = function (params)
-    if vim.fn.isdirectory(vim.api.nvim_buf_get_name(params.buf)) == 1 then
+    local finfo = vim.uv.fs_stat(vim.api.nvim_buf_get_name(params.buf))
+    if finfo and finfo.type == 'directory' then
       lazy.load({plugins = {"nvim-tree.lua"}})
     end
   end,
