@@ -20,7 +20,7 @@ M.go_impl = function(arglist)
     return
   end
 
-  local dir = vim.fn.expand('%:h')
+  local dir = vim.fs.dirname(vim.api.nvim_buf_get_name(0))
   local iface_name = vim.fn.expand('<cword>')
 
   --- 执行 shell cmd
