@@ -552,7 +552,7 @@ vim.api.nvim_create_autocmd("CmdwinEnter", {
     --- close window
     vim.keymap.set('n', 'q', '<cmd>q<CR>', { buffer=params.buf, desc="close window" })
   end,
-  desc = "<q> close command window",
+  desc = "<q> close command-line window",
 })
 
 --- spell check Command
