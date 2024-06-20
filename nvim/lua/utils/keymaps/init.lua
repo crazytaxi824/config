@@ -9,6 +9,7 @@ local close_wins = require('utils.keymaps.close_all_popup_win')
 local M = {
   home = require('utils.keymaps.home'),
   page = require('utils.keymaps.page'),
+  shift = require('utils.keymaps.shift'),
   section = require('utils.keymaps.jump_to_section'),
 
   close_popup_wins = close_wins.close_pop_wins,

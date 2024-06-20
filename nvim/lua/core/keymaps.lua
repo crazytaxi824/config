@@ -97,12 +97,12 @@ local keymaps = {
   {'i', '<PageDown>', function() key_fn.page.down() end, opt, 'which_key_ignore'},
 
   --- NOTE: vim 中 <S-Up> / <S-Down> 默认和 <PageUp> / <PageDown> 作用相同.
-  {'n', '<S-Up>', '3gk', opt, 'which_key_ignore'},
-  {'v', '<S-Up>', '3gk', opt, 'which_key_ignore'},
-  {'i', '<S-Up>', '<C-o>3gk', opt, 'which_key_ignore'},
-  {'n', '<S-Down>', '3gj', opt, 'which_key_ignore'},
-  {'v', '<S-Down>', '3gj', opt, 'which_key_ignore'},
-  {'i', '<S-Down>', '<C-o>3gj', opt, 'which_key_ignore'},
+  {'n', '<S-Up>', function() key_fn.shift.up() end, opt, 'which_key_ignore'},
+  {'v', '<S-Up>', function() key_fn.shift.up() end, opt, 'which_key_ignore'},
+  {'i', '<S-Up>', function() key_fn.shift.up() end, opt, 'which_key_ignore'},
+  {'n', '<S-Down>', function() key_fn.shift.down() end, opt, 'which_key_ignore'},
+  {'v', '<S-Down>', function() key_fn.shift.down() end, opt, 'which_key_ignore'},
+  {'i', '<S-Down>', function() key_fn.shift.down() end, opt, 'which_key_ignore'},
 
   --- NOTE: <Ctrl-Up/Down/Left/Right> 被 mac 系统占用, 无法直接使用,
   --- 需要在 alacritty 中使用 <option-...> 代替.
