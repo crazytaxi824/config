@@ -102,7 +102,8 @@ local function auto_format()
       conform.format({
         bufnr = params.buf,
         timeout_ms = 3000,
-        lsp_fallback = true --- VVI: try fallback to lsp format if no formatter.
+        -- lsp_fallback = true, --- VVI: try fallback to lsp format if no formatter.
+        lsp_format = "fallback",
       })
     end,
     desc = "conform: format file while saving",
@@ -115,7 +116,8 @@ auto_format()
 vim.api.nvim_create_user_command("Format", function()
   conform.format({
     timeout_ms = 3000,
-    lsp_fallback = true --- VVI: try fallback to lsp format if no formatter.
+    -- lsp_fallback = true, --- VVI: try fallback to lsp format if no formatter.
+    lsp_format = "fallback",
   }, function(err, did_edit)
     if err then
       Notify(err, "ERROR")
