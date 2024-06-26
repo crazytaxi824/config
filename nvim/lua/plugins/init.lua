@@ -223,7 +223,7 @@ local plugins = {
   {
     "stevearc/conform.nvim",
     tag = "v6.0.0",
-    config = function() require("plugins.settings.formatter_confrom") end,
+    config = function() require("plugins.settings.formatter_conform") end,
 
     event = "VeryLazy",
   },
