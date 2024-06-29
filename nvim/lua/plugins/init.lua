@@ -2,18 +2,9 @@
 --- bootstrap -------------------------------------------------------------------------------------- {{{
 local lazydir = vim.fn.stdpath("data") .. "/lazy"
 local lazypath = lazydir .. "/lazy.nvim"
+local lazyrepo = "https://github.com/folke/lazy.nvim.git"
 if not vim.uv.fs_stat(lazypath) then
-  local result = vim.system({
-    "git",
-    "clone",
-    "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", -- latest stable release
-    lazypath,
-  }, { text = true }):wait()
-  if result.code ~= 0 then
-    error(result.stderr ~= '' and result.stderr or result.code)
-  end
+  vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
 end
 vim.opt.rtp:prepend(lazypath)
 -- -- }}}
@@ -25,7 +16,7 @@ local plugins = {
   {
     "folke/lazy.nvim",
     -- version = "*",  -- 相当于 tag='stable'
-    tag = "v10.24.3",
+    tag = "v11.8.1",
   },
 
   --- Performence & Functions ----------------------------------------------------------------------
@@ -399,6 +390,9 @@ local opts = {
   lockfile = vim.fn.stdpath("config") .. "/lazy-lock.json", -- lockfile generated after running update.
   defaults = {
     lazy = false, -- should plugins be lazy-loaded?
+  },
+  rocks = {
+    enabled = false, -- luarocks disabled.
   },
   ui = {
     size = { width = 0.6, height = 0.9 },
