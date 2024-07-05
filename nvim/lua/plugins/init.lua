@@ -54,7 +54,7 @@ local plugins = {
   {
     "folke/which-key.nvim",
     -- tag = "v2.1.0",
-    commit = "0099511",
+    commit = "ca2d995",
     config = function() require("plugins.settings.which_key") end,
 
     event = "VeryLazy",
@@ -75,14 +75,14 @@ local plugins = {
   --- but if you want to extend a query use the `after/queries/` directory.
   {
     "nvim-treesitter/nvim-treesitter",
-    commit = "caf2753",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "a8c082b",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     config = function() require("plugins.settings.treesitter") end,
   },
 
   --- 第一方 module 插件 ---
   {
     "nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-    commit = "a45e576",
+    commit = "7f69542",
     config = function() require("plugins.settings.treesitter_ctx") end,
     dependencies = { "nvim-treesitter/nvim-treesitter" },
 
@@ -307,7 +307,7 @@ local plugins = {
 
   {
     "nvim-telescope/telescope-fzf-native.nvim",
-    commit = "9ef21b2",
+    commit = "cf48d4d",
     build = "make",
 
     lazy = true,  -- telescope 加载时自动加载.
