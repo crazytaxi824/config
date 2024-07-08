@@ -16,7 +16,7 @@ local plugins = {
   {
     "folke/lazy.nvim",
     -- version = "*",  -- 相当于 tag='stable'
-    tag = "v11.9.2",
+    tag = "v11.10.3",
   },
 
   --- Performence & Functions ----------------------------------------------------------------------
@@ -30,7 +30,7 @@ local plugins = {
   --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件
   {
     "williamboman/mason.nvim",
-    commit = "0950b15",
+    commit = "2af3b57",
     -- tag = "v1.10.0",
     -- build = ":MasonUpdate", -- :MasonUpdate updates All Registries, NOT packages.
     config = function() require("plugins.settings.mason_tool_installer") end,
@@ -75,14 +75,14 @@ local plugins = {
   --- but if you want to extend a query use the `after/queries/` directory.
   {
     "nvim-treesitter/nvim-treesitter",
-    commit = "a8c082b",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "64f6f0a",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     config = function() require("plugins.settings.treesitter") end,
   },
 
   --- 第一方 module 插件 ---
   {
     "nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-    commit = "7f69542",
+    commit = "f56a143",
     config = function() require("plugins.settings.treesitter_ctx") end,
     dependencies = { "nvim-treesitter/nvim-treesitter" },
 
@@ -92,7 +92,7 @@ local plugins = {
   --- 第三方 module 插件 ---
   {
     "windwp/nvim-ts-autotag",  -- auto close tag <div></div>
-    commit = "ddfccbf",
+    commit = "323a3e1",
     config = function() require("plugins.settings.treesitter_autotag") end,
     dependencies = { "nvim-treesitter/nvim-treesitter" },
 
@@ -173,7 +173,7 @@ local plugins = {
   --- snippets content, 自定义 snippets 可以借鉴这个结构.
   {
     "rafamadriz/friendly-snippets",
-    commit = "6821579",
+    commit = "45a1b96",
 
     lazy = true,  -- LuaSnip 加载时自动加载.
   },
@@ -181,7 +181,7 @@ local plugins = {
   --- 自动括号, 同时依赖 treesitter && cmp
   {
     "windwp/nvim-autopairs",
-    commit = "c15de7e",
+    commit = "78a4507",
     config = function() require("plugins.settings.autopairs") end,
     dependencies = {"hrsh7th/nvim-cmp"},  -- cmp.event:on() 设置.
 
@@ -252,7 +252,7 @@ local plugins = {
   --- statusline decorator, `:help 'statusline'`
   {
     "nvim-lualine/lualine.nvim",   -- bottom status line
-    commit = "0a5a668",
+    commit = "e208967",
     config = function() require("plugins.settings.decor_lualine") end,
 
     event = "VeryLazy",
