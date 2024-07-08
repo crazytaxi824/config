@@ -16,7 +16,7 @@ local plugins = {
   {
     "folke/lazy.nvim",
     -- version = "*",  -- 相当于 tag='stable'
-    tag = "v11.10.3",
+    tag = "v11.10.4",
   },
 
   --- Performence & Functions ----------------------------------------------------------------------
@@ -54,7 +54,7 @@ local plugins = {
   {
     "folke/which-key.nvim",
     -- tag = "v2.1.0",
-    commit = "ca2d995",
+    commit = "af4ded8",
     config = function() require("plugins.settings.which_key") end,
 
     event = "VeryLazy",
@@ -75,7 +75,7 @@ local plugins = {
   --- but if you want to extend a query use the `after/queries/` directory.
   {
     "nvim-treesitter/nvim-treesitter",
-    commit = "64f6f0a",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "ebdffa7",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     config = function() require("plugins.settings.treesitter") end,
   },
 
@@ -252,7 +252,7 @@ local plugins = {
   --- statusline decorator, `:help 'statusline'`
   {
     "nvim-lualine/lualine.nvim",   -- bottom status line
-    commit = "e208967",
+    commit = "6a40b53",
     config = function() require("plugins.settings.decor_lualine") end,
 
     event = "VeryLazy",
