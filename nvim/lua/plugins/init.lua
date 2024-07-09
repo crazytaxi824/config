@@ -30,7 +30,7 @@ local plugins = {
   --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件
   {
     "williamboman/mason.nvim",
-    commit = "2af3b57",
+    commit = "f96a318",
     -- tag = "v1.10.0",
     -- build = ":MasonUpdate", -- :MasonUpdate updates All Registries, NOT packages.
     config = function() require("plugins.settings.mason_tool_installer") end,
@@ -75,7 +75,7 @@ local plugins = {
   --- but if you want to extend a query use the `after/queries/` directory.
   {
     "nvim-treesitter/nvim-treesitter",
-    commit = "ebdffa7",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "c1ad655",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     config = function() require("plugins.settings.treesitter") end,
   },
 
