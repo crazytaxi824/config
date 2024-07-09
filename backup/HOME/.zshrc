@@ -371,7 +371,7 @@ export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS" --height=80% --ansi --multi --layout=
 	--preview='([[ -d {} ]] && (tree -NC -L 1 {})) || ([[ -f {} ]] && (bat --color=always --style=numbers {}))' \
 	--preview-window='right,60%,border-left' \
 	--bind='btab:change-preview-window(top,70%,border-bottom|hidden|)' \
-	--bind='ctrl-k:toggle-preview-wrap' \
+	--bind='ctrl-k:toggle-preview-wrap+toggle-wrap' \
 	--bind='shift-up:half-page-up,shift-down:half-page-down' \
 	--bind='pgup:preview-half-page-up,pgdn:preview-half-page-down' \
 	--bind='ctrl-a:select-all,ctrl-d:deselect-all' \
