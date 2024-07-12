@@ -53,7 +53,7 @@ local plugins = {
   --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   {
     "folke/which-key.nvim",
-    -- tag = "v2.1.0",
+    -- tag = "v3.1.0",
     commit = "af4ded8",
     config = function() require("plugins.settings.which_key") end,
 
@@ -75,7 +75,7 @@ local plugins = {
   --- but if you want to extend a query use the `after/queries/` directory.
   {
     "nvim-treesitter/nvim-treesitter",
-    commit = "c1ad655",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "972aa54",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     config = function() require("plugins.settings.treesitter") end,
   },
 
@@ -193,7 +193,7 @@ local plugins = {
   --- 官方 LSP 引擎.
   {
     "neovim/nvim-lspconfig",
-    commit = "cf97d24",
+    commit = "216deb2",
     config = function() require("lsp.plugins.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全. NOTE: lspconfig 必须在 cmp_nvim_lsp 之后加载, 否则可能无法提供代码补全.
@@ -222,7 +222,7 @@ local plugins = {
   --- File explorer --------------------------------------------------------------------------------
   {
     "nvim-tree/nvim-tree.lua",
-    tag = "v1.4.0",
+    tag = "v1.5.0",
     config = function() require("plugins.settings.file_tree") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
 
@@ -270,8 +270,7 @@ local plugins = {
 
   {
     "nvim-neotest/nvim-nio",
-    -- commit = "7969e0a",
-    tag = "v1.9.4",
+    tag = "v1.10.0",
 
     lazy = true,  -- nvim-dap-ui 加载时自动加载.
   },
@@ -279,7 +278,7 @@ local plugins = {
   {
     "rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
     -- tag = "v4.0.0",
-    commit = "b726700",
+    commit = "754104d",
     config = function() require("plugins.settings.dapui_debug") end,
     dependencies = {
       "mfussenegger/nvim-dap",
