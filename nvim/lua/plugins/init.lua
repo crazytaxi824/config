@@ -16,7 +16,7 @@ local plugins = {
   {
     "folke/lazy.nvim",
     -- version = "*",  -- 相当于 tag='stable'
-    tag = "v11.11.1",
+    tag = "v11.13.0",
   },
 
   --- Performence & Functions ----------------------------------------------------------------------
@@ -30,7 +30,7 @@ local plugins = {
   --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件
   {
     "williamboman/mason.nvim",
-    commit = "f96a318",
+    commit = "e2f7f90",
     -- tag = "v1.10.0",
     -- build = ":MasonUpdate", -- :MasonUpdate updates All Registries, NOT packages.
     config = function() require("plugins.settings.mason_tool_installer") end,
@@ -75,7 +75,7 @@ local plugins = {
   --- but if you want to extend a query use the `after/queries/` directory.
   {
     "nvim-treesitter/nvim-treesitter",
-    commit = "3076b9a",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "de8d91d",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     config = function() require("plugins.settings.treesitter") end,
   },
 
@@ -193,7 +193,7 @@ local plugins = {
   --- 官方 LSP 引擎.
   {
     "neovim/nvim-lspconfig",
-    commit = "01e08d4",
+    commit = "df9c116",
     config = function() require("lsp.plugins.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全. NOTE: lspconfig 必须在 cmp_nvim_lsp 之后加载, 否则可能无法提供代码补全.
@@ -204,7 +204,7 @@ local plugins = {
   --- VVI: "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
-    commit = "2870f66",
+    commit = "8b5d417",
     config = function() require("lsp.plugins.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -241,8 +241,8 @@ local plugins = {
   --- tabline decorator, `:help 'tabline'`
   {
     "akinsho/bufferline.nvim",
-    commit = "aa16daf",
-    -- tag = "v4.6.1",
+    -- commit = "aa16daf",
+    tag = "v4.7.0",
     config = function() require("plugins.settings.decor_bufferline") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
 
