@@ -16,7 +16,7 @@ local plugins = {
   {
     "folke/lazy.nvim",
     -- version = "*",  -- 相当于 tag='stable'
-    tag = "v11.13.0",
+    tag = "v11.14.1",
   },
 
   --- Performence & Functions ----------------------------------------------------------------------
@@ -75,7 +75,7 @@ local plugins = {
   --- but if you want to extend a query use the `after/queries/` directory.
   {
     "nvim-treesitter/nvim-treesitter",
-    commit = "de8d91d",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "8e569bc",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     config = function() require("plugins.settings.treesitter") end,
   },
 
@@ -193,7 +193,7 @@ local plugins = {
   --- 官方 LSP 引擎.
   {
     "neovim/nvim-lspconfig",
-    commit = "df9c116",
+    commit = "fdc4476",
     config = function() require("lsp.plugins.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全. NOTE: lspconfig 必须在 cmp_nvim_lsp 之后加载, 否则可能无法提供代码补全.
@@ -204,7 +204,7 @@ local plugins = {
   --- VVI: "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
-    commit = "8b5d417",
+    commit = "cfa65d8",
     config = function() require("lsp.plugins.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -213,7 +213,7 @@ local plugins = {
 
   {
     "stevearc/conform.nvim",
-    tag = "v6.0.0",
+    tag = "v7.0.0",
     config = function() require("plugins.settings.formatter_conform") end,
 
     event = "VeryLazy",
@@ -232,7 +232,7 @@ local plugins = {
 
   {
     "nvim-tree/nvim-web-devicons",
-    commit = "c0cfc17",
+    commit = "5be6c4e",
 
     lazy = true, -- dep of nvim-tree & bufferline
   },
