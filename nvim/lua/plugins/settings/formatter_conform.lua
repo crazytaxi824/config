@@ -9,8 +9,8 @@ local function format_by_ft()
     --- VVI: conform will run multiple formatters sequentially
     go = { "goimports", "goimports-reviser" },
     --- VVI: Use a sub-list to run only the first available formatter
-    --javascript = { { "prettier", "prettierd" } },
-    sql = { {"sql_formatter", "sqlfluff"} },
+    --javascript = { "prettier", "prettierd", stop_after_first = true },
+    sql = { "sql_formatter", "sqlfluff", stop_after_first = true },
 
     sh = { "shfmt" },
     proto = { "buf" },
