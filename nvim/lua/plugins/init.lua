@@ -159,8 +159,7 @@ local plugins = {
   --- snippet engine, for "cmp_luasnip", 每次打开文件都会有一个 [Scratch] buffer.
   {
     "L3MON4D3/LuaSnip",
-    commit = "ce0a05a",
-    -- tag = "v2.3.0",
+    commit = "45db5ad",
     --- for placeholder transformation
     --- https://code.visualstudio.com/docs/editor/userdefinedsnippets#_variable-transforms
     build = "make install_jsregexp",
