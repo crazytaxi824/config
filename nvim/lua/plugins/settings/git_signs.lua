@@ -20,19 +20,35 @@ end
 git_signs.setup({
   --- sign text font: 'BOX DRAWINGS HEAVY VERTICAL', 'UPPER/LOWER ONE EIGHTH BLOCK', 'Left One Quarter Block'
   signs = {
-    add    = {hl = 'GitSignsAdd'   , text = '┃', numhl='GitSignsAddNr'   , linehl='GitSignsAddLn'},
-    change = {hl = 'GitSignsChange', text = '┃', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
+    add    = {text = '┃'},
+    change = {text = '┃'},
 
     --- NOTE: delete sign 应该显示在两行之间, 所以为了适应不同的情况需要设置两个 sign.
     --- delete 和 topdelete 的区别:
     --- 如果上一行被删除则在下一行的 signcolumn 中显示 ▔, 目前只有第一行被删除时用 topdelete.
     --- 如果下一行被删除则在上一行的 signcolumn 中显示 ▁, 通常情况下都是使用 delete, 将 delete sign 显示在上一行.
-    topdelete = {hl = 'GitSignsDelete', text = '▔▔', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
-    delete    = {hl = 'GitSignsDelete', text = '▁▁', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
+    topdelete = {text = '▔▔'},
+    delete    = {text = '▁▁'},
 
     --- NOTE: 在显示 change 的行同时需要显示 delete/topdelete 的情况下, 即需要在同一行的 signcolumn 中显示两个状态.
-    changedelete = {hl = 'GitSignsChange', text = '╋━', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
-    untracked    = {hl = 'GitSignsAdd', text = '┆', numhl='GitSignsAddNr', linehl='GitSignsAddLn'},
+    changedelete = {text = '╋━'},
+    untracked    = {text = '┆' },
+  },
+
+  signs_staged = {
+    add    = {text = '┃'},
+    change = {text = '┃'},
+
+    --- NOTE: delete sign 应该显示在两行之间, 所以为了适应不同的情况需要设置两个 sign.
+    --- delete 和 topdelete 的区别:
+    --- 如果上一行被删除则在下一行的 signcolumn 中显示 ▔, 目前只有第一行被删除时用 topdelete.
+    --- 如果下一行被删除则在上一行的 signcolumn 中显示 ▁, 通常情况下都是使用 delete, 将 delete sign 显示在上一行.
+    topdelete = {text = '▔▔'},
+    delete    = {text = '▁▁'},
+
+    --- NOTE: 在显示 change 的行同时需要显示 delete/topdelete 的情况下, 即需要在同一行的 signcolumn 中显示两个状态.
+    changedelete = {text = '╋━'},
+    untracked    = {text = '┆' },
   },
 
   sign_priority = 6,  -- 默认是 6, vim.diagnostic DiagnosticSignHint priority 默认是 10.
@@ -89,7 +105,7 @@ git_signs.setup({
 })
 
 --- highlights -------------------------------------------------------------------------------------
---- signcolumn 中显示的颜色
+--- `:help gitsigns-highlight-groups`
 vim.api.nvim_set_hl(0, 'GitSignsAdd',    {ctermfg=Colors.green.c, fg=Colors.green.g})
 vim.api.nvim_set_hl(0, 'GitSignsChange', {ctermfg=Colors.magenta.c, fg=Colors.magenta.g})
 vim.api.nvim_set_hl(0, 'GitSignsDelete', {ctermfg=Colors.red.c, fg=Colors.red.g})
