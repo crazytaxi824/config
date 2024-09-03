@@ -75,14 +75,14 @@ local plugins = {
   --- but if you want to extend a query use the `after/queries/` directory.
   {
     "nvim-treesitter/nvim-treesitter",
-    commit = "7a64148",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "5b8b126",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     config = function() require("plugins.settings.treesitter") end,
   },
 
   --- 第一方 module 插件 ---
   {
     "nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-    commit = "0f33327",
+    commit = "e6cc783",
     config = function() require("plugins.settings.treesitter_ctx") end,
     dependencies = { "nvim-treesitter/nvim-treesitter" },
 
@@ -180,7 +180,7 @@ local plugins = {
   --- 自动括号, 同时依赖 treesitter && cmp
   {
     "windwp/nvim-autopairs",
-    commit = "19606af",
+    commit = "fd2badc",
     config = function() require("plugins.settings.autopairs") end,
     dependencies = {"hrsh7th/nvim-cmp"},  -- cmp.event:on() 设置.
 
@@ -192,7 +192,7 @@ local plugins = {
   --- 官方 LSP 引擎.
   {
     "neovim/nvim-lspconfig",
-    commit = "2a6f00f",
+    commit = "0ef6459",
     config = function() require("lsp.plugins.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全. NOTE: lspconfig 必须在 cmp_nvim_lsp 之后加载, 否则可能无法提供代码补全.
@@ -203,7 +203,7 @@ local plugins = {
   --- VVI: "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
-    commit = "203f5eb",
+    commit = "9b98991",
     config = function() require("lsp.plugins.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -212,7 +212,7 @@ local plugins = {
 
   {
     "stevearc/conform.nvim",
-    tag = "v7.1.0",
+    tag = "v8.0.0",
     config = function() require("plugins.settings.formatter_conform") end,
 
     event = "VeryLazy",
