@@ -154,6 +154,42 @@ chars = "\u001B[1;5C"
 key = "Right"
 mods = "Option"
 
+# Option-Up -> Ctrl-Up
+# [[keyboard.bindings]]
+# chars = "\u001B[1;5A"
+# key = "Up"
+# mods = "Option"
+
+# Option-Down -> Ctrl-Down
+# [[keyboard.bindings]]
+# chars = "\u001B[1;5B"
+# key = "Down"
+# mods = "Option"
+
+# Command-Left -> Home
+[[keyboard.bindings]]
+chars = "\u001BOH"
+key = "Left"
+mods = "Command"
+
+# Command-Right -> End
+[[keyboard.bindings]]
+chars = "\u001BOF"
+key = "Right"
+mods = "Command"
+
+# Command-Up -> PageUp - 替代 <fn - up>
+[[keyboard.bindings]]
+chars = "\u001B[5~"
+key = "Up"
+mods = "Command"
+
+# Command-Down -> PageDown - 替代 <fn - down>
+[[keyboard.bindings]]
+chars = "\u001B[6~"
+key = "Down"
+mods = "Command"
+
 # Shift-CR
 [[keyboard.bindings]]
 chars = "\u001B[13;2u"
