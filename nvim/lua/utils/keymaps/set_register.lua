@@ -23,7 +23,7 @@ local function wk_reg(key_reg)
     ---   nowait = false, -- use `nowait` when creating keymaps
     --- }
     -- -- }}}
-    require("which-key").register(key_reg.key_desc, key_reg.opts)
+    require("which-key").add(key_reg)
   else
     --- cache key register for which-key lazy load.
     table.insert(keymap_cache, key_reg)
@@ -37,7 +37,7 @@ vim.api.nvim_create_autocmd("User", {
   callback = function(params)
     --- which_key loaded 后 register 所有 cache 的 keymaps.
     for _, key_reg in ipairs(keymap_cache) do
-      require("which-key").register(key_reg.key_desc, key_reg.opts)
+      require("which-key").add(key_reg)
     end
 
     loaded_whichkey = 1  -- 记录 which_key is already loaded.
@@ -47,8 +47,7 @@ vim.api.nvim_create_autocmd("User", {
 })
 
 --- keymap_list: { mode, key, rhs, opts, description }
---- key_reg: which_key.register({keymap},{opts}) 中的两个入参. 用于只注册到 which-key 中显示,
---- 而不用真的 set keymap.
+--- key_reg: which_key.add({keymap}) 中的两个入参. 用于只注册到 which-key 中显示, 而不用真的 set keymap.
 M.keymap_set_and_register = function(keymap_list, key_reg)
   --- NOTE: 通过 nvim api 设置 keymap. 即使 which-key 不存在也不会影响 keymap 设置.
   for _, keymap in ipairs(keymap_list) do
@@ -62,7 +61,7 @@ M.keymap_set_and_register = function(keymap_list, key_reg)
   end
 
   --- for which_key lazy load.
-  if key_reg and key_reg.key_desc then
+  if key_reg then
     wk_reg(key_reg)
   end
 end
