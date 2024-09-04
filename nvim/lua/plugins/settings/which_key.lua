@@ -5,12 +5,19 @@ end
 
 --- Shift + Ctrl + fn key Rename ------------------------------------------------------------------- {{{
 local function fn_key_rename()
-  local fn_keys = {}
+  local fn_keys = {
+    -- function(key)
+    --   return require("which-key.view").format(key)
+    -- end,
+  }
 
   for i=1,12,1 do
-    fn_keys['<F' .. i+12 .. '>'] = '<S-F' .. i .. '>'
-    fn_keys['<F' .. i+24 .. '>'] = '<C-F' .. i .. '>'
-    fn_keys['<F' .. i+36 .. '>'] = '<C-S-F' .. i .. '>'
+    table.insert(fn_keys, {'<F' .. i+12 .. '>', '<S-F' .. i .. '>'})
+    table.insert(fn_keys, {'<F' .. i+24 .. '>', '<C-F' .. i .. '>'})
+    table.insert(fn_keys, {'<F' .. i+36 .. '>', '<C-S-F' .. i .. '>'})
+    -- fn_keys['<F' .. i+12 .. '>'] = '<S-F' .. i .. '>'
+    -- fn_keys['<F' .. i+24 .. '>'] = '<C-F' .. i .. '>'
+    -- fn_keys['<F' .. i+36 .. '>'] = '<C-S-F' .. i .. '>'
   end
 
   -- vim.print(fn_keys)
@@ -44,38 +51,38 @@ which_key.setup({
     --},
   },
 
+  --- `:help which-key.nvim-which-key-triggers`
+  -- triggers = {
+  --   { "<auto>", mode = "nxso" },
+  --   { "<auto>", mode = "nixsotc" },
+  --   { "a", mode = { "n", "v" } },
+  --   { "<leader>", mode = { "n", "v" } },
+  -- },
+
   icons = {
+    mappings = false,  -- NOTE: not use mini.icons & nvim-web-devicons
     separator = "»", -- symbol used between a key and it's label
   },
 
   --- NOTE: override the label used to display some keys.
   --- 这里是将 <F24> rename 到 <S-F12> ...
-  key_labels = fn_key_rename(),
-
-  popup_mappings = {
-    scroll_down = '<down>', -- <C-d> binding to scroll down inside the popup
-    scroll_up = '<up>', -- <C-u> binding to scroll up inside the popup
+  -- key_labels = fn_key_rename(),
+  replace = {
+    key = fn_key_rename(),
   },
 
-  --- NOTE: hide mapping boilerplate, for-loop string.gsub(str, '<cmd>', '')
-  hidden = { "<silent>", "<cmd>", "<Cmd>", "<CR>", "^:", "^ ", "^call ", "^lua " },
-
-  --triggers = "auto", -- automatically setup triggers
-  --triggers = {"<leader>"} -- or specify a list manually
-  triggers_blacklist = {
-    --- list of mode / prefixes that should never be hooked by WhichKey
-    --- this is mostly relevant for key maps that start with a native binding
-    --- most people should not need to change this
-    i = { "j", "k" },
-    v = { "j", "k" },
+  keys = {
+    scroll_down = '<down>', -- <C-d> binding to scroll down inside the popup
+    scroll_up = '<up>', -- <C-u> binding to scroll up inside the popup
   },
 
   --- disable the WhichKey popup for certain buf types and file types.
   --- Disabled by deafult for Telescope
   disable = {
-    buftypes = {},
+    --- disable buftypes
+    bt = {},
     --- 这里 filetypes 主要是全屏的 floating window
-    filetypes = { "NvimTree", "TelescopePrompt", "mason", "packer", "lazy", "null-ls-info", "lspinfo" },
+    ft = { "NvimTree", "TelescopePrompt", "mason", "packer", "lazy", "null-ls-info", "lspinfo" },
   },
 })
 
