@@ -142,18 +142,6 @@ mods = "Command|Shift"
 # VVI: `window.option_as_alt` 不会覆盖这里的 Option key 设置.
 # 如果要取消/修改系统默认 ctrl 快捷键, 可以修改 MacOS "设置/键盘/键盘快捷键/调度中心/..." 中的设置.
 # 默认 <Option-Backspace> 按照单词删除.
-# Option-Up -> Ctrl-Up
-[[keyboard.bindings]]
-chars = "\u001B[1;5A"
-key = "Up"
-mods = "Option"
-
-# Option-Down -> Ctrl-Down
-[[keyboard.bindings]]
-chars = "\u001B[1;5B"
-key = "Down"
-mods = "Option"
-
 # Option-Left -> Ctrl-Left  (backward-word)
 [[keyboard.bindings]]
 chars = "\u001B[1;5D"
@@ -166,103 +154,17 @@ chars = "\u001B[1;5C"
 key = "Right"
 mods = "Option"
 
-# Command-Up -> PageUp - 替代 <fn - up>
-[[keyboard.bindings]]
-chars = "\u001B[5~"
-key = "Up"
-mode = "~Vi|~Search"
-mods = "Command"
-
-# Command-Down -> PageDown - 替代 <fn - down>
-[[keyboard.bindings]]
-chars = "\u001B[6~"
-key = "Down"
-mode = "~Vi|~Search"
-mods = "Command"
-
-# Command-Left -> Home - 替代 <fn - left>
-[[keyboard.bindings]]
-chars = "\u001BOH"
-key = "Left"
-mode = "~Vi|~Search"
-mods = "Command"
-
-# Command-Right -> End - 替代 <fn - right>
-[[keyboard.bindings]]
-chars = "\u001BOF"
-key = "Right"
-mode = "~Vi|~Search"
-mods = "Command"
-
 # Shift-CR
 [[keyboard.bindings]]
 chars = "\u001B[13;2u"
 key = "Return"
 mods = "Shift"
 
-# CTRL-CR
-[[keyboard.bindings]]
-chars = "\u001B[13;5u"
-key = "Return"
-mods = "Control"
-
-# Command-CR -> CTRL-CR
-[[keyboard.bindings]]
-chars = "\u001B[13;5u"
-key = "Return"
-mods = "Command"
-
-# CTRL-Shift-CR
-[[keyboard.bindings]]
-chars = "\u001B[13;6u"
-key = "Return"
-mods = "Control|Shift"
-
-# Command-Shift-CR -> CTRL-Shift-CR
-[[keyboard.bindings]]
-chars = "\u001B[13;6u"
-key = "Return"
-mods = "Command|Shift"
-
-# Command-B -> Ctrl-b, 用于 tmux 中的 prefix key.
-[[keyboard.bindings]]
-chars = "\u0002"
-key = "B"
-mode = "~Vi|~Search"
-mods = "Command"
-
-# Command-S -> Ctrl-s, vim 中用于 save file.
-[[keyboard.bindings]]
-chars = "\u0013"
-key = "S"
-mode = "~Vi|~Search"
-mods = "Command"
-
-# Command-W -> Ctrl-w, vim 中用于 switch vim window, alacritty 默认设置是 Quit.
+# Command-W -> Ctrl-w, NOTE: MacOS 中 Command-W 是 close front window.
+# vim 中用于 switch vim window, alacritty 默认设置是 Quit.
 [[keyboard.bindings]]
 chars = "\u0017"
 key = "W"
-mode = "~Vi|~Search"
-mods = "Command"
-
-# Command-R -> Ctrl-r, vim 中用于 redo|register 操作.
-[[keyboard.bindings]]
-chars = "\u0012"
-key = "R"
-mode = "~Vi|~Search"
-mods = "Command"
-
-# Command-Z -> Ctrl-z, vim 中用于 u 上 undo.
-[[keyboard.bindings]]
-chars = "\u001A"
-key = "Z"
-mode = "~Vi|~Search"
-mods = "Command"
-
-# Command-/ -> Option-/, vim 中 <M-/> 用于 Toggle Comments.
-[[keyboard.bindings]]
-chars = "\u001B/"
-key = "Slash"
 mode = "~Vi|~Search"
 mods = "Command"
 
