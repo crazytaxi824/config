@@ -197,32 +197,32 @@ end
 --- TODO: 在进入 debug 模式时设置 keymaps, 退出 debug 模式时删除 keymaps.
 local opt = { silent = true }
 local debug_keymaps = {
-  {'n', '<F29>', function() dap.continue() end, opt, 'debug: Start(Continue)'},  -- <C-F5>
-  {'n', '<F17>', function() dap.terminate() end, opt, 'debug: Stop(End)'},  -- <S-F5>
+  {'n', '<F29>', function() dap.continue() end, opt, 'Fn: debug: Start(Continue)'},  -- <C-F5>
+  {'n', '<F17>', function() dap.terminate() end, opt, 'Fn: debug: Stop(End)'},  -- <S-F5>
   {'n', '<S-D-F5>', function()
     if vim.fn.win_gotoid(vim.t[tabvar_dap]) == 1 then
       dap.run_last()
     end
-  end,  opt, 'debug: Restart'},
+  end,  opt, 'Fn: debug: Restart'},
 
-  --{'n', '<F9>', function() dap.toggle_breakpoint() end, opt, "debug: Toggle Breakpoint"},  -- 在 after/ftplugin/go/debug_cmd.lua 中设置.
+  --{'n', '<F9>', function() dap.toggle_breakpoint() end, opt, "Fn: debug: Toggle Breakpoint"},  -- 在 after/ftplugin/go/debug_cmd.lua 中设置.
   {'n', '<F10>', function()
     if vim.fn.win_gotoid(vim.t[tabvar_dap]) == 1 then
       dap.step_over()
     end
-  end, opt, "debug: Step Over"},
+  end, opt, "Fn: debug: Step Over"},
 
   {'n', '<F11>', function()
     if vim.fn.win_gotoid(vim.t[tabvar_dap]) == 1 then
       dap.step_into()
     end
-  end, opt, "debug: Step Into"},
+  end, opt, "Fn: debug: Step Into"},
   --- <S-F11>
   {'n', '<F23>', function()
     if vim.fn.win_gotoid(vim.t[tabvar_dap]) == 1 then
       dap.step_out()
     end
-  end,  opt, "debug: Step Out"},
+  end,  opt, "Fn: debug: Step Out"},
 
   {'n', '<leader>cb', function() dap.clear_breakpoints() end, opt, "debug: Clear Breakpoints"},
   {'n', '<leader>cq', function() close_debug_tab_and_buffers() end, opt, 'debug: Quit'},

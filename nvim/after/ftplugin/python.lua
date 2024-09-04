@@ -32,7 +32,7 @@ end
 --- run current_file ---
 vim.keymap.set('n', '<F5>', function() py_run(vim.fn.bufname()) end, {
   buffer = 0,
-  desc = "code: Run File",
+  desc = "Fn: code: Run File",
 })
 
 
