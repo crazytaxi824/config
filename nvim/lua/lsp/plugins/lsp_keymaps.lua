@@ -55,8 +55,7 @@ M.diagnostic_keymaps = function(bufnr)
   }
 
   require('utils.keymaps').set(diag_keymaps, {
-    key_desc = { c = {name = "Code"} },
-    opts = {mode='n',prefix='<leader>', buffer=bufnr},
+    { "<leader>c", buffer = bufnr, group = "Code" },
   })
 end
 
