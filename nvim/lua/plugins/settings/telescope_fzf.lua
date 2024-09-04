@@ -350,8 +350,7 @@ local telescope_keymaps = {
 }
 
 require('utils.keymaps').set(telescope_keymaps, {
-  key_desc = {f = {name = "Telescope Find"}},
-  opts = {mode='n', prefix='<leader>'}
+  { "<leader>f", group = "Telescope Find" },
 })
 
 
