@@ -266,29 +266,19 @@ local keymaps = {
 
 --- 这里是设置所有 key mapping 的地方 --------------------------------------------------------------
 key_fn.set(keymaps, {
-  key_desc = {
-    k = {name = "Fold Method"},
-    D = {name = "Close Buffers"},
-  },
-  opts = {mode='n', prefix='<leader>'}
-})
+  { "<leader>D", group = "Close Buffers" },
+  { "<leader>k", group = "Fold Method" },
 
---- for key desc only
-key_fn.set({}, {
-  key_desc = {
-    ['['] = {name="Section Jump Prev"},
-    [']'] = {name="Section Jump Next"},
-    g = {name="g"},
-    z = {name="z"},
-    t = {name="Terminal"},
-    ['<leader>'] = {name=vim.g.mapleader or "\\"},
-
-    --- 以下 key 在 which-key 中默认显示为 'Nvim builtin', 所以这里重新更名.
-    Y = {'copy whole line without "\\n"'},
-    ['<C-L>'] = {'nohlsearch | diffupdate'},
-    ['&'] = {"repeat last ':s' replace command"},
-  },
-  opts = {mode='n'},
+  --- for key desc only
+  { "&", desc = "repeat last ':s' replace command" },
+  { "<C-L>", desc = "nohlsearch | diffupdate" },
+  { "<leader>", group = "\\" },
+  { "Y", desc = 'copy whole line without "\\n"' },
+  { "[", group = "Section Jump Prev" },
+  { "]", group = "Section Jump Next" },
+  { "g", group = "g" },
+  { "t", group = "Terminal" },
+  { "z", group = "z" },
 })
 
 
