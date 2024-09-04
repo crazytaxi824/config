@@ -94,7 +94,7 @@ M.console = mt.new({
 --- keymaps ----------------------------------------------------------------------------------------
 local opt = { silent = true }
 local my_term_keymaps = {
-  {'n', '<F17>', function() M.console:run() end, opt, "code: Re-Run Last cmd"}, -- <S-F5> re-run last cmd.
+  {'n', '<D-F5>', function() M.console:run() end, opt, "Fn: code: Re-Run Last cmd"},
 }
 require('utils.keymaps').set(my_term_keymaps)
 

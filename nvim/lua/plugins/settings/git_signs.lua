@@ -96,10 +96,7 @@ git_signs.setup({
     }
 
     require('utils.keymaps').set(gitsigns_keymaps, {
-      key_desc = {
-        g = {name = "Git"}, --- NOTE: 需要和 nvim-tree 中的设置相同.
-      },
-      opts = {mode='n', prefix='<leader>', buffer=bufnr}
+      { "<leader>g", buffer = bufnr, group = "Git" }, --- 需要和 nvim-tree 中的设置相同.
     })
   end,
 })

@@ -70,7 +70,7 @@ local nt_buffer_keymaps = {
   { "<C-v>",       nt_api.node.open.vertical,     "Open vsplit" },  -- vsplit edit
   { "<C-x>",       nt_api.node.open.horizontal,   "Open split" },
   { "<F8>",        nt_api.node.navigate.diagnostics.next,   "Next Diagnostic Item" },  -- next diagnostics item
-  { "<F20>",       nt_api.node.navigate.diagnostics.prev,   "Prev Diagnostic Item" },  -- <S-F8> previous diagnostics item
+  { "<D-F8>",       nt_api.node.navigate.diagnostics.prev,  "Prev Diagnostic Item" },  -- previous diagnostics item
 
   { "E",           nt_api.tree.collapse_all,   "Collapse All" },  -- vscode 自定义按键为 cmd+E
   { "W",           nt_api.tree.expand_all,     "Expand All" },

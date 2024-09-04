@@ -3,19 +3,73 @@ if not status_ok then
   return
 end
 
---- Shift + Ctrl + fn key Rename ------------------------------------------------------------------- {{{
-local function fn_key_rename()
-  local fn_keys = {}
+--- fn key icons ----------------------------------------------------------------------------------- {{{
+local fn_key_icons = {
+  F1  = "F1",
+  F2  = "F2",
+  F3  = "F3",
+  F4  = "F4",
+  F5  = "F5",
+  F6  = "F6",
+  F7  = "F7",
+  F8  = "F8",
+  F9  = "F9",
+  F10 = "F10",
+  F11 = "F11",
+  F12 = "F12",
 
-  for i=1,12,1 do
-    fn_keys['<F' .. i+12 .. '>'] = '<S-F' .. i .. '>'
-    fn_keys['<F' .. i+24 .. '>'] = '<C-F' .. i .. '>'
-    fn_keys['<F' .. i+36 .. '>'] = '<C-S-F' .. i .. '>'
-  end
+  F13 = "󰘶 F1",
+  F14 = "󰘶 F2",
+  F15 = "󰘶 F3",
+  F16 = "󰘶 F4",
+  F17 = "󰘶 F5",
+  F18 = "󰘶 F6",
+  F19 = "󰘶 F7",
+  F20 = "󰘶 F8",
+  F21 = "󰘶 F9",
+  F22 = "󰘶 F10",
+  F23 = "󰘶 F11",
+  F24 = "󰘶 F12",
 
-  -- vim.print(fn_keys)
-  return fn_keys
-end
+  F25 = "󰘴 F1",
+  F26 = "󰘴 F2",
+  F27 = "󰘴 F3",
+  F28 = "󰘴 F4",
+  F29 = "󰘴 F5",
+  F30 = "󰘴 F6",
+  F31 = "󰘴 F7",
+  F32 = "󰘴 F8",
+  F33 = "󰘴 F9",
+  F34 = "󰘴 F10",
+  F35 = "󰘴 F11",
+  F36 = "󰘴 F12",
+
+  F37 = "󰘶 󰘴 F1",
+  F38 = "󰘶 󰘴 F2",
+  F39 = "󰘶 󰘴 F3",
+  F40 = "󰘶 󰘴 F4",
+  F41 = "󰘶 󰘴 F5",
+  F42 = "󰘶 󰘴 F6",
+  F43 = "󰘶 󰘴 F7",
+  F44 = "󰘶 󰘴 F8",
+  F45 = "󰘶 󰘴 F9",
+  F46 = "󰘶 󰘴 F10",
+  F47 = "󰘶 󰘴 F11",
+  F48 = "󰘶 󰘴 F12",
+
+  F49 = "󰘵 F1",
+  F50 = "󰘵 F2",
+  F51 = "󰘵 F3",
+  F52 = "󰘵 F4",
+  F53 = "󰘵 F5",
+  F54 = "󰘵 F6",
+  F55 = "󰘵 F7",
+  F56 = "󰘵 F8",
+  F57 = "󰘵 F9",
+  F58 = "󰘵 F10",
+  F59 = "󰘵 F11",
+  F60 = "󰘵 F12",
+}
 -- -- }}}
 
 --- setup ------------------------------------------------------------------------------------------
@@ -44,38 +98,39 @@ which_key.setup({
     --},
   },
 
+  --- `:help which-key.nvim-which-key-triggers`
+  -- triggers = {
+  --   { "<auto>", mode = "nxso" },
+  --   { "<auto>", mode = "nixsotc" },
+  --   { "a", mode = { "n", "v" } },
+  --   { "<leader>", mode = { "n", "v" } },
+  -- },
+
   icons = {
+    mappings = false,  -- NOTE: not use mini.icons & nvim-web-devicons
     separator = "»", -- symbol used between a key and it's label
+    keys = fn_key_icons,
   },
 
-  --- NOTE: override the label used to display some keys.
-  --- 这里是将 <F24> rename 到 <S-F12> ...
-  key_labels = fn_key_rename(),
-
-  popup_mappings = {
-    scroll_down = '<down>', -- <C-d> binding to scroll down inside the popup
-    scroll_up = '<up>', -- <C-u> binding to scroll up inside the popup
+  win = {
+    -- don't allow the popup to overlap with the cursor
+    no_overlap = false,
   },
 
-  --- NOTE: hide mapping boilerplate, for-loop string.gsub(str, '<cmd>', '')
-  hidden = { "<silent>", "<cmd>", "<Cmd>", "<CR>", "^:", "^ ", "^call ", "^lua " },
-
-  --triggers = "auto", -- automatically setup triggers
-  --triggers = {"<leader>"} -- or specify a list manually
-  triggers_blacklist = {
-    --- list of mode / prefixes that should never be hooked by WhichKey
-    --- this is mostly relevant for key maps that start with a native binding
-    --- most people should not need to change this
-    i = { "j", "k" },
-    v = { "j", "k" },
+  keys = {
+    scroll_down = '<D-down>', -- <C-d> binding to scroll down inside the popup
+    scroll_up = '<D-up>', -- <C-u> binding to scroll up inside the popup
   },
+
+  sort = { "group", "mod", "desc", "alphanum" },
 
   --- disable the WhichKey popup for certain buf types and file types.
   --- Disabled by deafult for Telescope
   disable = {
-    buftypes = {},
+    --- disable buftypes
+    bt = {},
     --- 这里 filetypes 主要是全屏的 floating window
-    filetypes = { "NvimTree", "TelescopePrompt", "mason", "packer", "lazy", "null-ls-info", "lspinfo" },
+    ft = { "NvimTree", "TelescopePrompt", "mason", "packer", "lazy", "null-ls-info", "lspinfo" },
   },
 })
 

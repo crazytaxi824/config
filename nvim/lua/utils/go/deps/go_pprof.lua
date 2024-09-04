@@ -107,7 +107,7 @@ local function set_cmd_and_keymaps(term_bufnr, pprof_dir)
   {
     buffer=term_bufnr,
     silent = true,
-    desc = 'go_pprof: Go tool pprof/trace',
+    desc = 'Fn: go_pprof: Go tool pprof/trace',
   })
 
   --- info Keymap and Command setup

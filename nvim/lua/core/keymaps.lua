@@ -86,79 +86,53 @@ local keymaps = {
 
   --- move cursor ----------------------------------------------------------------------------------
   --- NOTE: <PageUp> / <PageDown> / <Home> / <End> 在 mac 中的默认快捷键是 <fn-Up/Down/Left/Right>,
-  --- 需要在 alacritty 中将 <Command-...> 也设置为 <PageUp> / <PageDown> / <Home> / <End>.
-  --- 这里是模拟 vscode 中 PageUp / PageDown 的行为.
-  -- {'n', '<PageUp>', 'zbH', opt, 'which_key_ignore'},
-  {'n', '<PageUp>', function() key_fn.page.up() end, opt, 'which_key_ignore'},
-  {'v', '<PageUp>', function() key_fn.page.up() end, opt, 'which_key_ignore'},
-  {'i', '<PageUp>', function() key_fn.page.up() end, opt, 'which_key_ignore'},
-  {'n', '<PageDown>', function() key_fn.page.down() end, opt, 'which_key_ignore'},
-  {'v', '<PageDown>', function() key_fn.page.down() end, opt, 'which_key_ignore'},
-  {'i', '<PageDown>', function() key_fn.page.down() end, opt, 'which_key_ignore'},
+  {{'n','i','v'}, '<D-Up>', function() key_fn.page.up() end, opt, 'which_key_ignore'},
+  {{'n','i','v'}, '<D-Down>', function() key_fn.page.down() end, opt, 'which_key_ignore'},
 
   --- NOTE: vim 中 <S-Up> / <S-Down> 默认和 <PageUp> / <PageDown> 作用相同.
-  {'n', '<S-Up>', function() key_fn.shift.up() end, opt, 'which_key_ignore'},
-  {'v', '<S-Up>', function() key_fn.shift.up() end, opt, 'which_key_ignore'},
-  {'i', '<S-Up>', function() key_fn.shift.up() end, opt, 'which_key_ignore'},
-  {'n', '<S-Down>', function() key_fn.shift.down() end, opt, 'which_key_ignore'},
-  {'v', '<S-Down>', function() key_fn.shift.down() end, opt, 'which_key_ignore'},
-  {'i', '<S-Down>', function() key_fn.shift.down() end, opt, 'which_key_ignore'},
+  {{'n','i','v'}, '<S-Up>', function() key_fn.shift.up() end, opt, 'which_key_ignore'},
+  {{'n','i','v'}, '<S-Down>', function() key_fn.shift.down() end, opt, 'which_key_ignore'},
 
   --- NOTE: <Ctrl-Up/Down/Left/Right> 被 mac 系统占用, 无法直接使用,
-  --- 需要在 alacritty 中使用 <option-...> 代替.
-  {'n', '<C-Up>', '3<C-y>', opt, 'win: scroll Upwards'},
-  {'v', '<C-Up>', '3<C-y>', opt, 'win: scroll Upwards'},
-  {'i', '<C-Up>', '<C-o>3<C-y>', opt, 'win: scroll Upwards'},
-  {'n', '<C-Down>', '3<C-e>', opt, 'win: scroll Downwards'},
-  {'v', '<C-Down>', '3<C-e>', opt, 'win: scroll Downwards'},
-  {'i', '<C-Down>', '<C-o>3<C-e>', opt, 'win: scroll Downwards'},
+  {{'n','v'}, '<M-Up>', '3<C-y>', opt, 'win: scroll Upwards'},
+  {'i', '<M-Up>', '<C-o>3<C-y>', opt, 'win: scroll Upwards'},
+  {{'n','v'}, '<M-Down>', '3<C-e>', opt, 'win: scroll Downwards'},
+  {'i', '<M-Down>', '<C-o>3<C-e>', opt, 'win: scroll Downwards'},
 
   --- NOTE: zh | zl 在 wrap file 中无法使用.
   --- scroll left/right 用到的机会比较少, 因为大部分情况下不会让 line 超出屏幕宽度.
-  {'n', '<C-S-Left>', '6zh', opt, 'win: scroll left'},
-  {'v', '<C-S-Left>', '6zh', opt, 'win: scroll left'},
-  {'i', '<C-S-Left>', '<C-o>6zh', opt, 'win: scroll left'},  -- 默认在 insert mode 下和 <S-Left> 相同.
-  {'n', '<C-S-Right>', '6zl', opt, 'win: scroll right'},
-  {'v', '<C-S-Right>', '6zl', opt, 'win: scroll right'},
-  {'i', '<C-S-Right>', '<C-o>6zl', opt, 'win: scroll right'},  -- 默认在 insert mode 下和 <S-Right> 相同.
-  --- 需要在 alacritty 中使用 <option-...> 代替.
-  {'n', '<M-S-Left>', '6zh', opt, 'win: scroll left'},
-  {'v', '<M-S-Left>', '6zh', opt, 'win: scroll left'},
-  {'i', '<M-S-Left>', '<C-o>6zh', opt, 'win: scroll left'},  -- 默认在 insert mode 下和 <S-Left> 相同.
-  {'n', '<M-S-Right>', '6zl', opt, 'win: scroll right'},
-  {'v', '<M-S-Right>', '6zl', opt, 'win: scroll right'},
-  {'i', '<M-S-Right>', '<C-o>6zl', opt, 'win: scroll right'},  -- 默认在 insert mode 下和 <S-Right> 相同.
+  {{'n','v'}, '<S-D-Left>', '6zh', opt, 'win: scroll left'},
+  {'i', '<S-D-Left>', '<C-o>6zh', opt, 'win: scroll left'},  -- 默认在 insert mode 下和 <S-Left> 相同.
+  {{'n','v'}, '<S-D-Right>', '6zl', opt, 'win: scroll right'},
+  {'i', '<S-D-Right>', '<C-o>6zl', opt, 'win: scroll right'},  -- 默认在 insert mode 下和 <S-Right> 相同.
 
   --- <Home> 模拟 vscode 行为; <End> 使用默认行为.
-  {'n', '<Home>', function() key_fn.home.nowrap() end, opt, 'which_key_ignore'},
-  {'v', '<Home>', function() key_fn.home.nowrap() end, opt, 'which_key_ignore'},
-  {'i', '<Home>', function() key_fn.home.nowrap() end, opt, 'which_key_ignore'},
+  {{'n','i','v'}, '<Home>', function() key_fn.home.nowrap() end, opt, 'which_key_ignore'},
+  {{'n','i','v'}, '<D-Left>', function() key_fn.home.nowrap() end, opt, 'which_key_ignore'},
 
-  --{'n', 'G', 'Gzz', opt, 'which_key_ignore'},  -- put last line in center
+  --- <End>
+  {{'n','i','v'}, '<D-Right>', '<End>', opt, 'which_key_ignore'},
 
   --- Tab ------------------------------------------------------------------------------------------
   {'n', '<Tab>', '<C-w><C-w>', opt, 'which_key_ignore'},  -- 切换到另一个窗口.
 
-  --- CTRL -----------------------------------------------------------------------------------------
-  --- 可以使用的 Ctrl keymap ----------------------------------------------------------------------- {{{
-  --- <C-q> 容易退出程序, 不要使用. 默认 Visual-Block mode
-  --- <C-s> = remap save file.
-  --- <C-z> = remap undo, 默认 ":stop" 中止 job.
-  --- <C-j> = remap toggle Comments, 默认相当于 j (cursor down)
-  --- <C-t> 默认 tag stack. NOTE: 还未 remap.
-  --- <C-g> 默认 print current filename. NOTE: 还未 remap.
-  -- -- }}}
-  {'n', '<C-s>', function() key_fn.save_file() end, opt, 'which_key_ignore'},
-  {'v', '<C-s>', '<C-c><cmd>lua require("utils.keymaps").save_file()<CR>', opt, 'which_key_ignore'},
-  {'i', '<C-s>', '<C-c><cmd>lua require("utils.keymaps").save_file()<CR>', opt, 'which_key_ignore'},
+  --- CMD ------------------------------------------------------------------------------------------
+  --- save/write file
+  {'n', '<D-s>', function() key_fn.save_file() end, opt, 'which_key_ignore'},
+  {{'v', 'i'}, '<D-s>', '<C-c><cmd>lua require("utils.keymaps").save_file()<CR>', opt, 'which_key_ignore'},
 
-  --- VVI: <Ctrl-Z> 是危险操作. 意思是 :stop. Suspend vim, 退出到 terminal 界面, 但保留 job.
-  --- 需要使用 `jobs -l` 列出 Suspended 列表,
-  --- 使用 `fg %1` 恢复 job,
-  --- 或者 `kill %1` 终止 job (不推荐, 会留下 .swp 文件).
-  {'n', '<C-z>', 'u', opt, 'which_key_ignore'},
-  {'v', '<C-z>', '<Nop>', opt, 'which_key_ignore'},
-  {'i', '<C-z>', '<C-o>u', opt, 'which_key_ignore'},
+  --- undo / redo
+  {'n', '<D-z>', 'u', opt, 'which_key_ignore'},
+  {'i', '<D-z>', '<C-o>u', opt, 'which_key_ignore'},
+  {'n', '<S-D-z>', '<C-r>', opt, 'redo'},
+  {'i', '<S-D-z>', '<C-o><C-r>', opt, 'redo'},
+  {'n', '<D-r>', '<C-r>', opt, 'redo'},
+  {'i', '<D-r>', '<C-o><C-r>', opt, 'redo'},
+
+  --- `gc` & `gcc` is remap by default.
+  {'n', '<D-/>', 'gcc', {remap=true}, 'Comment current line'},
+  {'i', '<D-/>', '<C-o>gcc', {remap=true}, 'Comment current line'},
+  {'v', '<D-/>', 'gc', {remap=true}, 'Comment Visual selected'},
 
   --- <leader> -------------------------------------------------------------------------------------
   --- copy / paste
@@ -222,73 +196,75 @@ local keymaps = {
   -- {'n', 'tW', function() key_fn.wipe_all_term_bufs() end, opt, "terminal: wipeout All Terminals"},  -- alternative
 
   --- 其他 -----------------------------------------------------------------------------------------
-  --- ZZ same as `:x`
-  {'n', 'ZZ', '<Nop>', opt},
-  {'v', 'ZZ', '<Nop>', opt},
-
-  --- <F1> :help help, 避免误操作.
-  {'n', '<F1>', '<Nop>', opt},
-  {'i', '<F1>', '<Nop>', opt},
-
-  --- filepath jump to file
-  --- VISUAL 选中的 filepath, 不管在什么 filetype 中都跳转.
-  --- VVI: 这里需要使用 <CTRL-C> 先退出 VISUAL mode.
+  --- filepath jump to file, {'n', 'i'} 被 lspconfig keymaps 使用.
   {'v', '<S-CR>', '<C-c><cmd>lua require("utils.filepath").v_jump()<CR>', opt, 'filepath: Jump to file'},
-
-  --- ` 和 ' 默认都是 `:help marks`, 这里禁止使用 ` 因为有时候 ` 需要作为 <leader>.
-  {'n', '`', '<Nop>', opt},
 
   --- 利用 treesitter 跳转到 prev/next root node.
   {'n', '[[', function() key_fn.section.goto_prev() end, opt, 'Jump to Prev Section'},
   {'n', ']]', function() key_fn.section.goto_next() end, opt, 'Jump to Next Section'},
 
-  --- 切换 buffer, 目前使用 bufferline 进行 buffer 切换, 如果不使用 buffer line 则使用以下设置.
+  --- 切换 buffer, 目前使用 bufferline 进行 buffer 切换, 如果不使用 bufferline.nvim 则使用以下设置.
   --{'n', '<lt>', '<cmd>bprevious<CR>', opt, 'go to previous buffer'},
   --{'n', '>', '<cmd>bnext<CR>', opt, 'go to next buffer'},
 
   --- hi Normal ctermbg=234 | hi Normal ctermbg=NONE 切换 bg 颜色
   {'n', '<leader>C', function() key_fn.toggle_comments_color() end, opt, 'change Comments color'},
 
-  --- alacritty settings window.option_as_alt 设置 Option 当做 ALT key 使用.
-  {'n', '<M-a>', function() print("<M-a> Option/Alt-A") end, opt, 'Test Option/ALT key'},
-
+  --- NOTE: <D-k> 无法执行.
   {'n', '<C-k>', '<cmd>mes clear<CR>', opt, 'message clear'},
 
-  --- NOTE: v0.10.0 --------------------------------------------------------------------------------
-  --- BUG: conflict to `gc`: 'Comment textobject', `:help commenting`
-  {'n', 'gc', '<Nop>', opt},
+  --- TEST: alacritty settings window.option_as_alt 设置 Option 当做 ALT key 使用.
+  -- {'n', '<M-a>', function() print("<M-a>") end, opt, 'Test: Option/ALT key'},
+  -- {'n', '<D-a>', function() print("<D-a>") end, opt, 'Test: Command key'},
+  -- {'n', '<S-CR>', function() print("<S-CR>") end, opt, 'Test: Shift-Enter'},
+  -- {'n', '<C-CR>', function() print("<C-CR>") end, opt, 'Test: Control-Enter'},
+  -- {'n', '<M-CR>', function() print("<M-CR>") end, opt, 'Test: Option/Alt-Enter'},
+  -- {'n', '<D-CR>', function() print("<D-CR>") end, opt, 'Test: Command key'},
+  -- {'n', '<S-C-CR>', function() print("<S-C-CR>") end, opt, 'Test: Shift-Contrl-Enter'},
+  -- {'n', '<S-M-CR>', function() print("<S-M-CR>") end, opt, 'Test: Shift-Opt/Alt-Enter'},
+  -- {'n', '<S-D-CR>', function() print("<S-D-CR>") end, opt, 'Test: Shift-Cmd-Enter'},
+  -- {'n', '<C-D-CR>', function() print("<C-D-CR>") end, opt, 'Test: Ctrl-Cmd-Enter'},
+  -- {'n', '<C-M-CR>', function() print("<C-M-CR>") end, opt, 'Test: Ctrl-Cmd-Enter'},
+  -- {'n', '<D-M-CR>', function() print("<D-M-CR>") end, opt, 'Test: Ctrl-Cmd-Enter'},
 
-  --- NOTE: `gc` & `gcc` is remap by default.
-  {'n', '<M-/>', 'gcc', {remap=true}, 'Comment current line'},
-  {'i', '<M-/>', '<C-o>gcc', {remap=true}, 'Comment current line'},
-  {'v', '<M-/>', 'gc', {remap=true}, 'Comment Visual selected'},
+  --- VVI: <Nop> -----------------------------------------------------------------------------------
+  --- <Ctrl-Z> 是危险操作. 意思是 :stop. Suspend vim, 退出到 terminal 界面, 但保留 job.
+  --- 需要使用 `jobs -l` 列出 Suspended 列表,
+  --- 使用 `fg %1` 恢复 job,
+  --- 或者 `kill %1` 终止 job (不推荐, 会留下 .swp 文件).
+  {{'n','i','v'}, '<C-z>', '<Nop>', opt, '-'},
+
+  --- BUG: nvim v0.10.0, conflict to `gc`: 'Comment textobject', `:help commenting`
+  {'n', 'gc', '<Nop>', opt, '-'},
+
+  --- ` 和 ' 默认都是 `:help marks`, 这里禁止使用 ` 因为有时候 ` 需要作为 <leader>.
+  {'n', '`', '<Nop>', opt, '-'},
+
+  --- ZZ same as `:x`
+  -- {'n', 'ZZ', '<Nop>', opt},
+  -- {'v', 'ZZ', '<Nop>', opt},
+
+  --- <F1> :help help, 避免误操作.
+  -- {'n', '<F1>', '<Nop>', opt},
+  -- {'i', '<F1>', '<Nop>', opt},
 }
 
 --- 这里是设置所有 key mapping 的地方 --------------------------------------------------------------
 key_fn.set(keymaps, {
-  key_desc = {
-    k = {name = "Fold Method"},
-    D = {name = "Close Buffers"},
-  },
-  opts = {mode='n', prefix='<leader>'}
-})
+  { "<leader>D", group = "Close Buffers" },
+  { "<leader>k", group = "Fold Method" },
 
---- for key desc only
-key_fn.set({}, {
-  key_desc = {
-    ['['] = {name="Section Jump Prev"},
-    [']'] = {name="Section Jump Next"},
-    g = {name="g"},
-    z = {name="z"},
-    t = {name="Terminal"},
-    ['<leader>'] = {name=vim.g.mapleader or "\\"},
+  --- for key desc only
+  { "<leader>", group = "\\" },
+  { "[", group = "Section Jump Prev" },
+  { "]", group = "Section Jump Next" },
+  { "g", group = "g" },
+  { "t", group = "Terminal" },
+  { "z", group = "z" },
 
-    --- 以下 key 在 which-key 中默认显示为 'Nvim builtin', 所以这里重新更名.
-    Y = {'copy whole line without "\\n"'},
-    ['<C-L>'] = {'nohlsearch | diffupdate'},
-    ['&'] = {"repeat last ':s' replace command"},
-  },
-  opts = {mode='n'},
+  { "&", desc = "repeat last ':s' replace command" },  -- `:help &-default`
+  { "Y", desc = 'copy whole line without "\\n"' },  -- `:help Y-default`
+  { "<C-L>", desc = "nohlsearch | diffupdate" },  -- `:help CTRL-L-default`
 })
 
 
