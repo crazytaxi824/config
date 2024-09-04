@@ -77,7 +77,7 @@ local fn_key_icons = {
 --- `:help which-key.nvim-which-key-configuration`
 which_key.setup({
   plugins = {
-    marks = false,     -- shows a list of your marks on ' and `
+    marks = true,     -- shows a list of your marks on ' and `
     registers = true,  -- shows your registers on " in NORMAL or <C-r> in INSERT mode
     spelling = {
       enabled = false,  -- z= select spelling suggestions, NOTE: 目前使用的 telescope

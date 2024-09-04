@@ -86,8 +86,15 @@ local keymaps = {
 
   --- move cursor ----------------------------------------------------------------------------------
   --- NOTE: <PageUp> / <PageDown> / <Home> / <End> 在 mac 中的默认快捷键是 <fn-Up/Down/Left/Right>,
-  {{'n','i','v'}, '<D-Up>', function() key_fn.page.up() end, opt, 'which_key_ignore'},
-  {{'n','i','v'}, '<D-Down>', function() key_fn.page.down() end, opt, 'which_key_ignore'},
+  {{'n','i','v'}, '<PageUp>', function() key_fn.page.up() end, opt, 'which_key_ignore'},
+  {{'n','i','v'}, '<PageDown>', function() key_fn.page.down() end, opt, 'which_key_ignore'},
+  -- {{'n','i','v'}, '<D-Up>', function() key_fn.page.up() end, opt, 'which_key_ignore'},
+  -- {{'n','i','v'}, '<D-Down>', function() key_fn.page.down() end, opt, 'which_key_ignore'},
+
+  --- <Home> 模拟 vscode 行为; <End> 使用默认行为.
+  {{'n','i','v'}, '<Home>', function() key_fn.home.nowrap() end, opt, 'which_key_ignore'},
+  -- {{'n','i','v'}, '<D-Left>', function() key_fn.home.nowrap() end, opt, 'which_key_ignore'},
+  -- {{'n','i','v'}, '<D-Right>', '<End>', opt, 'which_key_ignore'},
 
   --- NOTE: vim 中 <S-Up> / <S-Down> 默认和 <PageUp> / <PageDown> 作用相同.
   {{'n','i','v'}, '<S-Up>', function() key_fn.shift.up() end, opt, 'which_key_ignore'},
@@ -105,13 +112,6 @@ local keymaps = {
   {'i', '<S-D-Left>', '<C-o>6zh', opt, 'win: scroll left'},  -- 默认在 insert mode 下和 <S-Left> 相同.
   {{'n','v'}, '<S-D-Right>', '6zl', opt, 'win: scroll right'},
   {'i', '<S-D-Right>', '<C-o>6zl', opt, 'win: scroll right'},  -- 默认在 insert mode 下和 <S-Right> 相同.
-
-  --- <Home> 模拟 vscode 行为; <End> 使用默认行为.
-  {{'n','i','v'}, '<Home>', function() key_fn.home.nowrap() end, opt, 'which_key_ignore'},
-  {{'n','i','v'}, '<D-Left>', function() key_fn.home.nowrap() end, opt, 'which_key_ignore'},
-
-  --- <End>
-  {{'n','i','v'}, '<D-Right>', '<End>', opt, 'which_key_ignore'},
 
   --- Tab ------------------------------------------------------------------------------------------
   {'n', '<Tab>', '<C-w><C-w>', opt, 'which_key_ignore'},  -- 切换到另一个窗口.
@@ -236,9 +236,6 @@ local keymaps = {
 
   --- BUG: nvim v0.10.0, conflict to `gc`: 'Comment textobject', `:help commenting`
   {'n', 'gc', '<Nop>', opt, '-'},
-
-  --- ` 和 ' 默认都是 `:help marks`, 这里禁止使用 ` 因为有时候 ` 需要作为 <leader>.
-  {'n', '`', '<Nop>', opt, '-'},
 
   --- ZZ same as `:x`
   -- {'n', 'ZZ', '<Nop>', opt},
