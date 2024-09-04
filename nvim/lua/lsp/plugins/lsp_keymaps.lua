@@ -28,8 +28,8 @@ M.textDocument_keymaps = function(bufnr)
     {"i", "<S-CR>", function() hs.hover_short() end, opts, "LSP: Hover_Short"},
 
     {"n", "<F12>", "<cmd>lua vim.lsp.buf.definition()<CR>", opts, "LSP: Definition"},
-    {"n", "<F24>", "<cmd>lua vim.lsp.buf.references()<CR>", opts, "LSP: References"},  -- <S-F12>
-    {"n", "<F36>", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts, "LSP: Implementation (Interface)"},  -- <C-F12>
+    {"n", "<D-F12>", "<cmd>lua vim.lsp.buf.references()<CR>", opts, "LSP: References"},
+    {"n", "<F24>", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts, "LSP: Implementation (Interface)"},  -- <S-F12>
 
     --- 使用 hover 代替 signature_help, 因为有些 LSP 还不支持 signature_help, eg: typescript, javascript ...
     -- {"n", "K", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts},
@@ -44,7 +44,7 @@ M.diagnostic_keymaps = function(bufnr)
   local diag_keymaps = {
     --- jump to diagnostics next error.
     {"n", "<F8>", '<cmd>lua vim.diagnostic.goto_next()<CR>', opts, "diagnostic: goto Next Error"},
-    {"n", "<F20>", '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts, "diagnostic: goto Prev Error"},  -- <S-F8>
+    {"n", "<D-F8>", '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts, "diagnostic: goto Prev Error"},
 
     --- 将 diagnostics error 放入 quickfix list.
     --- 也可以使用 vim.diagnostic.setqflist({open = false}) 禁止打开 quickfix window

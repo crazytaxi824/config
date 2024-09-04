@@ -197,12 +197,9 @@ end
 --- TODO: 在进入 debug 模式时设置 keymaps, 退出 debug 模式时删除 keymaps.
 local opt = { silent = true }
 local debug_keymaps = {
-  --- <S-F5>
-  {'n', '<F17>', function() dap.continue() end,  opt, 'debug: Start(Continue)'},
-  --- <C-S-F5>
-  {'n', '<F41>', function() dap.terminate() end, opt, 'debug: Stop(End)'},
-  --- <C-F5>
-  {'n', '<F29>', function()
+  {'n', '<F29>', function() dap.continue() end, opt, 'debug: Start(Continue)'},  -- <C-F5>
+  {'n', '<F17>', function() dap.terminate() end, opt, 'debug: Stop(End)'},  -- <S-F5>
+  {'n', '<S-D-F5>', function()
     if vim.fn.win_gotoid(vim.t[tabvar_dap]) == 1 then
       dap.run_last()
     end
