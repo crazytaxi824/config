@@ -39,7 +39,13 @@ M.textDocument_keymaps = function(bufnr)
 end
 
 --- for lspconfig && null-ls, format && diagnostic -------------------------------------------------
+local diagnostic_keymaps_loaded = {}
+
 M.diagnostic_keymaps = function(bufnr)
+  if diagnostic_keymaps_loaded[bufnr] then
+    return
+  end
+
   local opts = { silent=true, buffer=bufnr }
   local diag_keymaps = {
     --- jump to diagnostics next error.
@@ -57,6 +63,8 @@ M.diagnostic_keymaps = function(bufnr)
   require('utils.keymaps').set(diag_keymaps, {
     { "<leader>c", buffer = bufnr, group = "Code" },
   })
+
+  diagnostic_keymaps_loaded[bufnr] = true
 end
 
 return M
