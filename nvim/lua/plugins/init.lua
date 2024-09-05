@@ -54,7 +54,7 @@ local plugins = {
   {
     "folke/which-key.nvim",
     -- tag = "v3.1.0",
-    commit = "af4ded8",
+    commit = "bfec3d6",
     config = function() require("plugins.settings.which_key") end,
 
     event = "VeryLazy",
@@ -75,7 +75,7 @@ local plugins = {
   --- but if you want to extend a query use the `after/queries/` directory.
   {
     "nvim-treesitter/nvim-treesitter",
-    commit = "5b8b126",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    commit = "3826d0c",  -- NOTE: tag 更新太慢, 建议两周更新一次.
     config = function() require("plugins.settings.treesitter") end,
   },
 
