@@ -248,8 +248,9 @@ local keymaps = {
 
 --- 这里是设置所有 key mapping 的地方 --------------------------------------------------------------
 key_fn.set(keymaps, {
-  { "<leader>D", group = "Close Buffers" },
-  { "<leader>k", group = "Fold Method" },
+  { "<leader>D", group = "Buffers Close" },
+  { "<leader>k", group = "Fold" },
+  { "<leader>c", group = "Code" },
 
   --- for key desc only
   { "<leader>", group = "\\" },
