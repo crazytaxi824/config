@@ -231,7 +231,7 @@ local plugins = {
 
   {
     "nvim-tree/nvim-web-devicons",
-    commit = "3722e3d",
+    commit = "9793801",
 
     lazy = true, -- dep of nvim-tree & bufferline
   },
