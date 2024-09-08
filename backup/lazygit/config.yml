@@ -27,6 +27,8 @@ gui:
             - reverse
         cherryPickedCommitBgColor: # 不使用任何 bg 颜色, 默认为 cyan.
             - ''
+
+# Config relating to git
 git:
     # merging:
     #   args: '--no-ff'  # no-fast-forward
