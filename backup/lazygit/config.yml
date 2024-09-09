@@ -8,6 +8,7 @@ gui:
     #mainPanelSplitMode: "horizontal"  # main pannel 分屏方式 'horizontal' | 'flexible'(*) | 'vertical'
     #commandLogSize: 8                 # 右下角 log 提示窗口所占行高
     #showFileTree: true                # 左侧边栏文件显示使用 tree 模式(可折叠)
+    nerdFontsVersion: "3"
     theme:
         activeBorderColor: # cursor 所在 window 的 border 颜色.
             - yellow
