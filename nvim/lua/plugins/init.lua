@@ -159,7 +159,7 @@ local plugins = {
   --- snippet engine, for "cmp_luasnip", 每次打开文件都会有一个 [Scratch] buffer.
   {
     "L3MON4D3/LuaSnip",
-    commit = "45db5ad",
+    commit = "e808bee",
     --- for placeholder transformation
     --- https://code.visualstudio.com/docs/editor/userdefinedsnippets#_variable-transforms
     build = "make install_jsregexp",
@@ -231,7 +231,7 @@ local plugins = {
 
   {
     "nvim-tree/nvim-web-devicons",
-    commit = "9793801",
+    commit = "9154484",
 
     lazy = true, -- dep of nvim-tree & bufferline
   },
@@ -261,7 +261,7 @@ local plugins = {
   --- NOTE: dap-ui && dap 设置在同一文件中.
   {
     "mfussenegger/nvim-dap",  -- core debug tool
-    commit = "20a4859",
+    commit = "90616ae",
     config = function() require("plugins.settings.dap_debug") end,
 
     cmd = {'DapToggleBreakpoint', 'DapContinue', 'DapLoadLaunchJSON'},
