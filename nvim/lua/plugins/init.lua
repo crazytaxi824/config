@@ -82,7 +82,7 @@ local plugins = {
   --- 第一方 module 插件 ---
   {
     "nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-    commit = "e6cc783",
+    -- commit = "e6cc783",
     config = function() require("plugins.settings.treesitter_ctx") end,
     dependencies = { "nvim-treesitter/nvim-treesitter" },
 
@@ -180,7 +180,7 @@ local plugins = {
   --- 自动括号, 同时依赖 treesitter && cmp
   {
     "windwp/nvim-autopairs",
-    commit = "fd2badc",
+    commit = "ffc139f",
     config = function() require("plugins.settings.autopairs") end,
     dependencies = {"hrsh7th/nvim-cmp"},  -- cmp.event:on() 设置.
 
