@@ -23,7 +23,7 @@ local plugins = {
   --- Useful lua functions used by lots of plugins
   {
     "nvim-lua/plenary.nvim",
-    commit = "ec28942",
+    commit = "2d9b06177",
     priority = 1000,  -- 只在 lazy=false 的情况下有效. 影响加载顺序, 默认值为 50.
   },
 
@@ -53,8 +53,7 @@ local plugins = {
   --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   {
     "folke/which-key.nvim",
-    -- tag = "v3.1.0",
-    commit = "bfec3d6",
+    tag = "v3.13.3",
     config = function() require("plugins.settings.which_key") end,
 
     event = "VeryLazy",
@@ -180,7 +179,7 @@ local plugins = {
   --- 自动括号, 同时依赖 treesitter && cmp
   {
     "windwp/nvim-autopairs",
-    commit = "ffc139f",
+    commit = "f158dcb",
     config = function() require("plugins.settings.autopairs") end,
     dependencies = {"hrsh7th/nvim-cmp"},  -- cmp.event:on() 设置.
 
