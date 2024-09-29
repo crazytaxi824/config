@@ -171,7 +171,7 @@ local plugins = {
   --- snippets content, 自定义 snippets 可以借鉴这个结构.
   {
     "rafamadriz/friendly-snippets",
-    commit = "00ebcaa",
+    -- commit = "00ebcaa",
 
     lazy = true,  -- LuaSnip 加载时自动加载.
   },
@@ -202,7 +202,7 @@ local plugins = {
   --- VVI: "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
-    commit = "9b98991",
+    commit = "68a39ec",
     config = function() require("lsp.plugins.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -230,7 +230,7 @@ local plugins = {
 
   {
     "nvim-tree/nvim-web-devicons",
-    commit = "9154484",
+    commit = "1e5a2a7",
 
     lazy = true, -- dep of nvim-tree & bufferline
   },
