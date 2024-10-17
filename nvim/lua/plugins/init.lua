@@ -101,7 +101,7 @@ local plugins = {
   --- indent line
   {
     "lukas-reineke/indent-blankline.nvim",
-    tag = "v3.7.2",
+    tag = "v3.8.2",
     config = function() require("plugins.settings.indentline") end,  -- setup() 设置 use_treesitter = true
     dependencies = {"nvim-treesitter/nvim-treesitter"},  -- for setup({scope})
 
@@ -179,7 +179,7 @@ local plugins = {
   --- 自动括号, 同时依赖 treesitter && cmp
   {
     "windwp/nvim-autopairs",
-    commit = "f158dcb",
+    commit = "ee297f2",
     config = function() require("plugins.settings.autopairs") end,
     dependencies = {"hrsh7th/nvim-cmp"},  -- cmp.event:on() 设置.
 
@@ -202,7 +202,7 @@ local plugins = {
   --- VVI: "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
-    commit = "68a39ec",
+    commit = "dcc8cd4",
     config = function() require("lsp.plugins.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -230,7 +230,7 @@ local plugins = {
 
   {
     "nvim-tree/nvim-web-devicons",
-    commit = "1e5a2a7",
+    commit = "19d257c",
 
     lazy = true, -- dep of nvim-tree & bufferline
   },
@@ -276,7 +276,7 @@ local plugins = {
   {
     "rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
     -- tag = "v4.0.0",
-    commit = "1c351e4",
+    commit = "ffa8983",
     config = function() require("plugins.settings.dapui_debug") end,
     dependencies = {
       "mfussenegger/nvim-dap",
@@ -316,7 +316,7 @@ local plugins = {
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {
     "lewis6991/gitsigns.nvim",
-    commit = "1ef74b5",
+    commit = "8639036",
     -- tag = "v0.9.0",
     config = function() require("plugins.settings.git_signs") end,
 
