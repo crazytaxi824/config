@@ -260,7 +260,7 @@ local plugins = {
   --- NOTE: dap-ui && dap 设置在同一文件中.
   {
     "mfussenegger/nvim-dap",  -- core debug tool
-    commit = "90616ae",
+    commit = "7ff6936",
     config = function() require("plugins.settings.dap_debug") end,
 
     cmd = {'DapToggleBreakpoint', 'DapContinue', 'DapLoadLaunchJSON'},
