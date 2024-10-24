@@ -240,7 +240,7 @@ local plugins = {
   {
     "akinsho/bufferline.nvim",
     -- commit = "aa16daf",
-    tag = "v4.7.0",
+    tag = "v4.8.0",
     config = function() require("plugins.settings.decor_bufferline") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
 
