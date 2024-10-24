@@ -111,7 +111,7 @@ local plugins = {
   --- Auto Completion ------------------------------------------------------------------------------
   {
     "hrsh7th/nvim-cmp",
-    commit = "ae644fe",
+    commit = "88661b7",
     config = function() require("plugins.settings.cmp_completion") end,
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全
@@ -316,7 +316,7 @@ local plugins = {
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {
     "lewis6991/gitsigns.nvim",
-    commit = "8639036",
+    commit = "ee7634a",
     -- tag = "v0.9.0",
     config = function() require("plugins.settings.git_signs") end,
 
