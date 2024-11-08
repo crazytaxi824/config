@@ -99,10 +99,10 @@ cask "keepassxc"  # keepass 客户端, 密码管理工具, eg: "macpass", "authp
 cask "keka"  # 压缩工具
 cask "the-unarchiver"  # 解压工具
 cask "keycastr"  # 按键输入显示工具
-#cask "lulu"  # 防火墙
-#cask "rectangle" # window resize app, 可以用 raycast 代替
-#cask "openvpn-connect"
+cask "aldente"  # 电池充电 80% 工具
 cask "stats"  # apple silicon CPU/GPU/TEMP 实时监控
+#cask "lulu"  # 防火墙
+#cask "openvpn-connect"
 #cask "mx-power-gadget"  # apple silicon P-core/E-core/GPU 实时监控
 
 # 其他个人 app
@@ -111,9 +111,11 @@ cask "telegram" # 加密聊天工具
 #cask "signal"  # 加密聊天工具
 #cask "calibre"  # 电子书工具, epub, mobi ..., 网页下载更快.
 #cask "cloudflare-warp"  # VPN 类工具
+#cask "kindle-comic-converter"
+#cask "chatgpt"
 
 # 浏览器
-cask "firefox"
 cask "google-chrome"
 #cask "microsoft-edge"
+#cask "firefox"
 #cask "tor-browser"
