@@ -134,7 +134,7 @@ Highlights = {
   --- 相当于 hi clear SignColumn, 默认有 bg 颜色.
   SignColumn = {},
   --- textwidth column 颜色
-  ColorColumn = {ctermbg=Colors.g234.c, bg=Colors.g234.g},
+  ColorColumn = {ctermbg=Colors.g235.c, bg=Colors.g235.g},
   --- Quick Fix 选中行颜色
   QuickFixLine = {
     ctermfg=Colors.boolean_blue.c, fg=Colors.boolean_blue.g,
