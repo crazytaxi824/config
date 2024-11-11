@@ -358,6 +358,15 @@ local plugins = {
   --   cmd = {"Copilot"},  -- `:Copilot setup`, `:Copilot enable`, `:help copilot` 查看可用命令.
   -- },
 
+  {
+    "folke/trouble.nvim",
+    commit = "3dc00c0",
+    -- tag = "v3.6.0",
+    config = function() require("plugins.settings.trouble_list") end,
+
+    event = "VeryLazy",
+  }
+
   --- recommanded plugins ------------------------------------------------------ {{{
   --- null-ls 替代:
   --{"mfussenegger/nvim-lint"}, -- linter
@@ -370,7 +379,6 @@ local plugins = {
   --{"rebelot/heirline.nvim"},    -- lualine + bufferline 替代
   --{"willothy/nvim-cokeline"},   -- bufferline 替代
   --{"akinsho/toggleterm.nvim"},  -- terminal
-  --{"preservim/tagbar"},  -- universal-ctags, 用的少. https://github.com/universal-ctags/ctags/blob/master/docs/news.rst#new-parsers
 
   --{"goolord/alpha-nvim"}, {"goolord/alpha-nvim"},  -- neovim 启动页面
   --{"ahmedkhalf/project.nvim"},  -- project manager
