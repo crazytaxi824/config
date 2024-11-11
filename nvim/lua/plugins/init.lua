@@ -101,7 +101,7 @@ local plugins = {
   --- indent line
   {
     "lukas-reineke/indent-blankline.nvim",
-    tag = "v3.8.2",
+    tag = "v3.8.4",
     config = function() require("plugins.settings.indentline") end,  -- setup() 设置 use_treesitter = true
     dependencies = {"nvim-treesitter/nvim-treesitter"},  -- for setup({scope})
 
@@ -111,7 +111,7 @@ local plugins = {
   --- Auto Completion ------------------------------------------------------------------------------
   {
     "hrsh7th/nvim-cmp",
-    commit = "88661b7",
+    commit = "f17d9b4",
     config = function() require("plugins.settings.cmp_completion") end,
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全
@@ -149,7 +149,7 @@ local plugins = {
 
   {
     "saadparwaiz1/cmp_luasnip",  -- Snippets source for nvim-cmp
-    commit = "05a9ab2",
+    commit = "98d9cb5",
     dependencies = {"L3MON4D3/LuaSnip"},  -- snippets content
 
     lazy = true,  -- nvim-cmp 加载时自动加载.
@@ -158,7 +158,7 @@ local plugins = {
   --- snippet engine, for "cmp_luasnip", 每次打开文件都会有一个 [Scratch] buffer.
   {
     "L3MON4D3/LuaSnip",
-    commit = "787dee5",
+    commit = "2737edc",
     --- for placeholder transformation
     --- https://code.visualstudio.com/docs/editor/userdefinedsnippets#_variable-transforms
     build = "make install_jsregexp",
@@ -260,7 +260,7 @@ local plugins = {
   --- NOTE: dap-ui && dap 设置在同一文件中.
   {
     "mfussenegger/nvim-dap",  -- core debug tool
-    commit = "7ff6936",
+    commit = "8517126",
     config = function() require("plugins.settings.dap_debug") end,
 
     cmd = {'DapToggleBreakpoint', 'DapContinue', 'DapLoadLaunchJSON'},
@@ -316,7 +316,7 @@ local plugins = {
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {
     "lewis6991/gitsigns.nvim",
-    commit = "ee7634a",
+    commit = "4daf702",
     -- tag = "v0.9.0",
     config = function() require("plugins.settings.git_signs") end,
 
