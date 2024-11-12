@@ -130,7 +130,7 @@ which_key.setup({
     --- disable buftypes
     bt = {},
     --- 这里 filetypes 主要是全屏的 floating window
-    ft = { "NvimTree", "TelescopePrompt", "mason", "packer", "lazy", "null-ls-info", "lspinfo" },
+    -- ft = { "NvimTree", "TelescopePrompt", "mason", "packer", "lazy", "null-ls-info", "lspinfo" },
   },
 })
 

@@ -16,7 +16,7 @@ local plugins = {
   {
     "folke/lazy.nvim",
     -- version = "*",  -- 相当于 tag='stable'
-    tag = "v11.14.1",
+    tag = "v11.14.2",
   },
 
   --- Performence & Functions ----------------------------------------------------------------------
@@ -53,7 +53,8 @@ local plugins = {
   --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   {
     "folke/which-key.nvim",
-    tag = "v3.13.3",
+    commit = "68e37e1",
+    -- tag = "v3.13.3",
     config = function() require("plugins.settings.which_key") end,
 
     event = "VeryLazy",
@@ -101,7 +102,7 @@ local plugins = {
   --- indent line
   {
     "lukas-reineke/indent-blankline.nvim",
-    tag = "v3.8.4",
+    tag = "v3.8.5",
     config = function() require("plugins.settings.indentline") end,  -- setup() 设置 use_treesitter = true
     dependencies = {"nvim-treesitter/nvim-treesitter"},  -- for setup({scope})
 
@@ -158,7 +159,7 @@ local plugins = {
   --- snippet engine, for "cmp_luasnip", 每次打开文件都会有一个 [Scratch] buffer.
   {
     "L3MON4D3/LuaSnip",
-    commit = "2737edc",
+    commit = "48a0225",
     --- for placeholder transformation
     --- https://code.visualstudio.com/docs/editor/userdefinedsnippets#_variable-transforms
     build = "make install_jsregexp",
@@ -211,7 +212,7 @@ local plugins = {
 
   {
     "stevearc/conform.nvim",
-    tag = "v8.1.0",
+    tag = "v8.2.0",
     config = function() require("plugins.settings.formatter_conform") end,
 
     event = "VeryLazy",
@@ -358,6 +359,15 @@ local plugins = {
   --   cmd = {"Copilot"},  -- `:Copilot setup`, `:Copilot enable`, `:help copilot` 查看可用命令.
   -- },
 
+  {
+    "folke/trouble.nvim",
+    commit = "3dc00c0",
+    -- tag = "v3.6.0",
+    config = function() require("plugins.settings.trouble_list") end,
+
+    event = "VeryLazy",
+  }
+
   --- recommanded plugins ------------------------------------------------------ {{{
   --- null-ls 替代:
   --{"mfussenegger/nvim-lint"}, -- linter
@@ -370,7 +380,6 @@ local plugins = {
   --{"rebelot/heirline.nvim"},    -- lualine + bufferline 替代
   --{"willothy/nvim-cokeline"},   -- bufferline 替代
   --{"akinsho/toggleterm.nvim"},  -- terminal
-  --{"preservim/tagbar"},  -- universal-ctags, 用的少. https://github.com/universal-ctags/ctags/blob/master/docs/news.rst#new-parsers
 
   --{"goolord/alpha-nvim"}, {"goolord/alpha-nvim"},  -- neovim 启动页面
   --{"ahmedkhalf/project.nvim"},  -- project manager
