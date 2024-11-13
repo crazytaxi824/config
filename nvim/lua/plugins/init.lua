@@ -159,7 +159,7 @@ local plugins = {
   --- snippet engine, for "cmp_luasnip", 每次打开文件都会有一个 [Scratch] buffer.
   {
     "L3MON4D3/LuaSnip",
-    commit = "48a0225",
+    commit = "659c447",
     --- for placeholder transformation
     --- https://code.visualstudio.com/docs/editor/userdefinedsnippets#_variable-transforms
     build = "make install_jsregexp",
@@ -203,7 +203,7 @@ local plugins = {
   --- VVI: "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
-    commit = "dcc8cd4",
+    commit = "fb7acad",
     config = function() require("lsp.plugins.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -212,7 +212,8 @@ local plugins = {
 
   {
     "stevearc/conform.nvim",
-    tag = "v8.2.0",
+    commit = "1a7ff54",
+    -- tag = "v8.2.0",
     config = function() require("plugins.settings.formatter_conform") end,
 
     event = "VeryLazy",
