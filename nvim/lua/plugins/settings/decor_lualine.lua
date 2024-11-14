@@ -209,11 +209,12 @@ lualine.setup {
     always_divide_middle = true,
     globalstatus = false,  -- true - 则全局所有 window 使用同一个 status line;
                            -- false - 每个window 单独自己的 status line.
-    refresh = {
-      statusline = 1000, -- (ms)
-      tabline = 1000,
-      winbar = 1000,
-    }
+
+    -- refresh = {
+    --   statusline = 100, -- (ms)
+    --   tabline = 100,
+    --   winbar = 100,
+    -- },
   },
 
   --- VVI: https://github.com/nvim-lualine/lualine.nvim#changing-components-in-lualine-sections
