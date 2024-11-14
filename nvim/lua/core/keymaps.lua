@@ -219,13 +219,14 @@ local keymaps = {
   -- {'n', '<S-CR>', function() print("<S-CR>") end, opt, 'Test: Shift-Enter'},
   -- {'n', '<C-CR>', function() print("<C-CR>") end, opt, 'Test: Control-Enter'},
   -- {'n', '<M-CR>', function() print("<M-CR>") end, opt, 'Test: Option/Alt-Enter'},
-  -- {'n', '<D-CR>', function() print("<D-CR>") end, opt, 'Test: Command key'},
+  -- {'n', '<D-CR>', function() print("<D-CR>") end, opt, 'Test: Command/Super key'},
+
   -- {'n', '<S-C-CR>', function() print("<S-C-CR>") end, opt, 'Test: Shift-Contrl-Enter'},
   -- {'n', '<S-M-CR>', function() print("<S-M-CR>") end, opt, 'Test: Shift-Opt/Alt-Enter'},
-  -- {'n', '<S-D-CR>', function() print("<S-D-CR>") end, opt, 'Test: Shift-Cmd-Enter'},
-  -- {'n', '<C-D-CR>', function() print("<C-D-CR>") end, opt, 'Test: Ctrl-Cmd-Enter'},
-  -- {'n', '<C-M-CR>', function() print("<C-M-CR>") end, opt, 'Test: Ctrl-Cmd-Enter'},
-  -- {'n', '<D-M-CR>', function() print("<D-M-CR>") end, opt, 'Test: Ctrl-Cmd-Enter'},
+  -- {'n', '<S-D-CR>', function() print("<S-D-CR>") end, opt, 'Test: Shift-Cmd/Super-Enter'},
+  -- {'n', '<C-D-CR>', function() print("<C-D-CR>") end, opt, 'Test: Ctrl-Cmd/Super-Enter'},
+  -- {'n', '<C-M-CR>', function() print("<C-M-CR>") end, opt, 'Test: Ctrl-Cmd/Super-Enter'},
+  -- {'n', '<D-M-CR>', function() print("<D-M-CR>") end, opt, 'Test: Ctrl-Cmd/Super-Enter'},
 
   --- VVI: <Nop> -----------------------------------------------------------------------------------
   --- <Ctrl-Z> 是危险操作. 意思是 :stop. Suspend vim, 退出到 terminal 界面, 但保留 job.
