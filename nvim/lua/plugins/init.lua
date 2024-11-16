@@ -212,7 +212,7 @@ local plugins = {
 
   {
     "stevearc/conform.nvim",
-    commit = "1a7ff54",
+    commit = "023f795",
     -- tag = "v8.2.0",
     config = function() require("plugins.settings.formatter_conform") end,
 
@@ -262,7 +262,7 @@ local plugins = {
   --- NOTE: dap-ui && dap 设置在同一文件中.
   {
     "mfussenegger/nvim-dap",  -- core debug tool
-    commit = "8517126",
+    commit = "29d1f88",
     config = function() require("plugins.settings.dap_debug") end,
 
     cmd = {'DapToggleBreakpoint', 'DapContinue', 'DapLoadLaunchJSON'},
