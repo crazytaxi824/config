@@ -159,7 +159,7 @@ local plugins = {
   --- snippet engine, for "cmp_luasnip", 每次打开文件都会有一个 [Scratch] buffer.
   {
     "L3MON4D3/LuaSnip",
-    commit = "659c447",
+    commit = "0f7bbce",
     --- for placeholder transformation
     --- https://code.visualstudio.com/docs/editor/userdefinedsnippets#_variable-transforms
     build = "make install_jsregexp",
@@ -180,7 +180,7 @@ local plugins = {
   --- 自动括号, 同时依赖 treesitter && cmp
   {
     "windwp/nvim-autopairs",
-    commit = "ee297f2",
+    commit = "b464658",
     config = function() require("plugins.settings.autopairs") end,
     dependencies = {"hrsh7th/nvim-cmp"},  -- cmp.event:on() 设置.
 
@@ -203,7 +203,7 @@ local plugins = {
   --- VVI: "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
-    commit = "fb7acad",
+    commit = "b7cf202",
     config = function() require("lsp.plugins.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -232,7 +232,7 @@ local plugins = {
 
   {
     "nvim-tree/nvim-web-devicons",
-    commit = "19d257c",
+    commit = "e875542",
 
     lazy = true, -- dep of nvim-tree & bufferline
   },
