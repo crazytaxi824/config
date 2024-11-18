@@ -75,14 +75,15 @@ local diagnostics_opts = {
 
 --- linters 设置 -----------------------------------------------------------------------------------
 M.local_linter_key = "linter"
-M.local_formatter_key = "format"
+M.local_code_actions_key = "code_actions"
+-- M.local_formatter_key = "format"
 
 --- NOTE: 同一个工具可能有好几种不同的用途, 需要分开设置, eg: `buf`
 --- - null_ls.builtins.diagnostics.buf  linter protobuf
 --- - null_ls.builtins.formatting.buf   format protobuf
 local diagnostics = null_ls.builtins.diagnostics
+local code_actions = null_ls.builtins.code_actions
 -- local formatting = null_ls.builtins.formatting
--- local code_actions = null_ls.builtins.code_actions
 
 --- VVI: 这里使用函数来返回 table, 而不是直接定义一个 table 的原因是:
 --- 直接定义一个 table 的问题是: module 在第一次 require() 之后 table 中的内容就缓存了.
@@ -137,7 +138,13 @@ M.sources =  {
   --   end,
   -- },
 
-  -- [M.local_code_actions_key] = {},
+  [M.local_code_actions_key] = {
+    gomodifytags = function()
+      return code_actions.gomodifytags.with(proj_local_settings.tools_keep_extend(M.local_code_actions_key,
+        'gomodifytags', {})
+      )
+    end
+  },
 
   -- -- }}}
 }
