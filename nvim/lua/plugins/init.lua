@@ -112,7 +112,7 @@ local plugins = {
   --- Auto Completion ------------------------------------------------------------------------------
   {
     "hrsh7th/nvim-cmp",
-    commit = "be7bd4c",
+    commit = "ed31156",
     config = function() require("plugins.settings.cmp_completion") end,
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全
@@ -212,7 +212,7 @@ local plugins = {
 
   {
     "stevearc/conform.nvim",
-    commit = "62d5acc",
+    commit = "a203480",
     -- tag = "v8.2.0",
     config = function() require("plugins.settings.formatter_conform") end,
 
@@ -232,7 +232,7 @@ local plugins = {
 
   {
     "nvim-tree/nvim-web-devicons",
-    commit = "f09be61",
+    commit = "edbe0a6",
 
     lazy = true, -- dep of nvim-tree & bufferline
   },
