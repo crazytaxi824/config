@@ -53,8 +53,8 @@ local plugins = {
   --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   {
     "folke/which-key.nvim",
-    commit = "68e37e1",
-    -- tag = "v3.13.3",
+    -- commit = "68e37e1",
+    tag = "v3.14.1",
     config = function() require("plugins.settings.which_key") end,
 
     event = "VeryLazy",
@@ -112,7 +112,7 @@ local plugins = {
   --- Auto Completion ------------------------------------------------------------------------------
   {
     "hrsh7th/nvim-cmp",
-    commit = "ed31156",
+    commit = "ca4d333",
     config = function() require("plugins.settings.cmp_completion") end,
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全
@@ -159,7 +159,7 @@ local plugins = {
   --- snippet engine, for "cmp_luasnip", 每次打开文件都会有一个 [Scratch] buffer.
   {
     "L3MON4D3/LuaSnip",
-    commit = "0f7bbce",
+    commit = "2592b91",
     --- for placeholder transformation
     --- https://code.visualstudio.com/docs/editor/userdefinedsnippets#_variable-transforms
     build = "make install_jsregexp",
@@ -222,7 +222,8 @@ local plugins = {
   --- File explorer --------------------------------------------------------------------------------
   {
     "nvim-tree/nvim-tree.lua",
-    tag = "v1.7.1",
+    commit = "ca7c4c3",
+    -- tag = "v1.7.1",
     config = function() require("plugins.settings.file_tree") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
 
@@ -232,7 +233,6 @@ local plugins = {
 
   {
     "nvim-tree/nvim-web-devicons",
-    commit = "edbe0a6",
 
     lazy = true, -- dep of nvim-tree & bufferline
   },
@@ -241,8 +241,7 @@ local plugins = {
   --- tabline decorator, `:help 'tabline'`
   {
     "akinsho/bufferline.nvim",
-    -- commit = "aa16daf",
-    tag = "v4.8.0",
+    tag = "v4.9.0",
     config = function() require("plugins.settings.decor_bufferline") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
 
@@ -362,7 +361,7 @@ local plugins = {
 
   {
     "folke/trouble.nvim",
-    commit = "3dc00c0",
+    commit = "46cf952",
     -- tag = "v3.6.0",
     config = function() require("plugins.settings.trouble_list") end,
 
