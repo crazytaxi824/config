@@ -92,7 +92,7 @@ local plugins = {
   --- 第三方 module 插件 ---
   {
     "windwp/nvim-ts-autotag",  -- auto close tag <div></div>
-    commit = "e239a56",
+    commit = "f2d24ac",
     config = function() require("plugins.settings.treesitter_autotag") end,
     dependencies = { "nvim-treesitter/nvim-treesitter" },
 
@@ -172,7 +172,6 @@ local plugins = {
   --- snippets content, 自定义 snippets 可以借鉴这个结构.
   {
     "rafamadriz/friendly-snippets",
-    -- commit = "00ebcaa",
 
     lazy = true,  -- LuaSnip 加载时自动加载.
   },
@@ -317,7 +316,7 @@ local plugins = {
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {
     "lewis6991/gitsigns.nvim",
-    commit = "4daf702",
+    commit = "5f808b5",
     -- tag = "v0.9.0",
     config = function() require("plugins.settings.git_signs") end,
 
