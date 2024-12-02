@@ -16,11 +16,13 @@ export VISUAL=$EDITOR
 # mason tool path = `vim.fn.stdpath("data") .. "/mason_tools"`
 export PATH=$PATH:$HOME/.local/share/nvim/mason_tools/bin
 
-# FIXME: ohmyzsh #12257 #12328 async problem.
+# --- [ oh my zsh ] -------------------------------------------------------------------------------- {{{
+# ohmyzsh #12257 #12328 async problem.
 # https://github.com/ohmyzsh/ohmyzsh/issues/12328
+# set before `source oh-my-zsh.sh`
 zstyle ':omz:alpha:lib:git' async-prompt no
 # zstyle ':omz:alpha:lib:git' async-prompt force
-# --- [ oh my zsh ] -------------------------------------------------------------------------------- {{{
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
