@@ -127,6 +127,27 @@ shape = "Block"  # "Block"(*) | "Underline" | "Beam"
 # action = "ReceiveChar"
 # key = "Back"
 
+# 翻页
+[[keyboard.bindings]]
+action = "ScrollPageUp"
+key = "PageUp"
+mode = "~Alt"
+
+[[keyboard.bindings]]
+action = "ScrollPageDown"
+key = "PageDown"
+mode = "~Alt"
+
+[[keyboard.bindings]]
+action = "ScrollToTop"
+key = "Home"
+mode = "~Alt"
+
+[[keyboard.bindings]]
+action = "ScrollToBottom"
+key = "End"
+mode = "~Alt"
+
 # 创建新窗口. 切换窗口(win)使用 Command-` 这个快捷键是 macos 系统中的设置. 设置->键盘->快捷键->键盘(左侧目录)
 [[keyboard.bindings]]
 action = "CreateNewWindow"
@@ -197,12 +218,12 @@ chars = "\u001B[13;2u"
 key = "Return"
 mods = "Shift"
 
-# Command-W -> Ctrl-w, NOTE: MacOS 中 Command-W 是 close front window.
+# NOTE: Command-W 默认设置是 Quit.
+# Command-W -> Ctrl-w
 # vim 中用于 switch vim window, alacritty 默认设置是 Quit.
 [[keyboard.bindings]]
 chars = "\u0017"
 key = "W"
-mode = "~Vi|~Search"
 mods = "Command"
 
 # --- debug ----------------------------------------------------------------------------------------
