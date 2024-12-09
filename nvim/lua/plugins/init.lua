@@ -102,7 +102,7 @@ local plugins = {
   --- indent line
   {
     "lukas-reineke/indent-blankline.nvim",
-    tag = "v3.8.5",
+    tag = "v3.8.6",
     config = function() require("plugins.settings.indentline") end,  -- setup() 设置 use_treesitter = true
     dependencies = {"nvim-treesitter/nvim-treesitter"},  -- for setup({scope})
 
@@ -211,7 +211,7 @@ local plugins = {
 
   {
     "stevearc/conform.nvim",
-    commit = "02fd64f",
+    commit = "e76afe8",
     -- tag = "v8.2.0",
     config = function() require("plugins.settings.formatter_conform") end,
 
@@ -221,7 +221,8 @@ local plugins = {
   --- File explorer --------------------------------------------------------------------------------
   {
     "nvim-tree/nvim-tree.lua",
-    tag = "v1.9.0",
+    commit = "db8d7ac",
+    -- tag = "v1.9.0",
     config = function() require("plugins.settings.file_tree") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
 
