@@ -16,7 +16,7 @@ local plugins = {
   {
     "folke/lazy.nvim",
     -- version = "*",  -- 相当于 tag='stable'
-    tag = "v11.16.1",
+    tag = "v11.16.2",
   },
 
   --- Performence & Functions ----------------------------------------------------------------------
@@ -202,7 +202,7 @@ local plugins = {
   --- VVI: "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
-    commit = "58866c6",
+    commit = "c279e54",
     config = function() require("lsp.plugins.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -211,7 +211,7 @@ local plugins = {
 
   {
     "stevearc/conform.nvim",
-    commit = "e76afe8",
+    commit = "f4e8837",
     -- tag = "v8.2.0",
     config = function() require("plugins.settings.formatter_conform") end,
 
@@ -221,7 +221,7 @@ local plugins = {
   --- File explorer --------------------------------------------------------------------------------
   {
     "nvim-tree/nvim-tree.lua",
-    commit = "db8d7ac",
+    commit = "f7b76cd",
     -- tag = "v1.9.0",
     config = function() require("plugins.settings.file_tree") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -260,7 +260,7 @@ local plugins = {
   --- NOTE: dap-ui && dap 设置在同一文件中.
   {
     "mfussenegger/nvim-dap",  -- core debug tool
-    commit = "cc92b05",
+    commit = "b08e05d",
     config = function() require("plugins.settings.dap_debug") end,
 
     cmd = {'DapToggleBreakpoint', 'DapContinue', 'DapLoadLaunchJSON'},
