@@ -108,36 +108,48 @@ local function open_new_tab_for_debug()
   vim.t[tabvar_dap] = vim.api.nvim_get_current_win()
 end
 
+local function close_debug_tab()
+  --- NOTE: 不太需要 wipeout repl buffer.
+  --dap.repl.close()  -- close dap-repl console window && wipeout [dap-repl] buffer.
+
+  local dapui_status_ok, dapui = pcall(require, "dapui")
+  if dapui_status_ok then
+    --- NOTE: 如果在 dap.repl.close() 之后再执行 dapui.close() 会重新打开 [dap-repl] buffer.
+    dapui.close()  -- close all dap-ui windows
+  end
+
+  --- 如果自己是 last tab 则不删除 main window, 但是删除 tabvar.
+  local tab_list = vim.api.nvim_list_tabpages()
+  if #tab_list < 2 then
+    --- 删除 tabvar
+    vim.t[tabvar_dap] = nil
+    return
+  end
+
+  --- close debug tab
+  for _, tab_id in pairs(tab_list) do
+    if vim.t[tab_id][tabvar_dap] then
+      --- NOTE: `:tabclose tabnr` NOT tab_id
+      vim.cmd.tabclose(vim.api.nvim_tabpage_get_number(tab_id))
+    end
+  end
+end
+
 --- terminate debug && close debug tab/buffers
-local function close_debug_tab_and_buffers()
+local function quit_debug()
+  --- 判断 session 是否已经结束
+  --- session 结束后无法触发 dap.terminate() 函数
+  if not dap.session() then
+    close_debug_tab()
+    return
+  end
+
   --- dap.terminate({terminate_opt}, {disconnect_opts}, Callback), terminates the debug adapter and disconnect debug session.
   --- terminate opt:  https://microsoft.github.io/debug-adapter-protocol/specification#Requests_Terminate
   --- disconnect opt: https://microsoft.github.io/debug-adapter-protocol/specification#Requests_Disconnect
-  --- Callback function 在 session 结束后执行, 如果 session 不存在则立即执行.
   dap.terminate({},{terminateDebugee = true}, function()
-    local dapui_status_ok, dapui = pcall(require, "dapui")
-    if dapui_status_ok then
-      --- NOTE: 如果在 dap.repl.close() 之后再执行 dapui.close() 会重新打开 [dap-repl] buffer.
-      dapui.close()  -- close all dap-ui windows
-    end
-
-    --- NOTE: 不太需要 wipeout repl buffer.
-    --dap.repl.close()  -- close dap-repl console window && wipeout [dap-repl] buffer.
-
-    --- 如果自己是 last tab 则不执行 tabclose, 但是删除 tabvar.
-    local tab_list = vim.api.nvim_list_tabpages()
-    if #tab_list < 2 then
-      --- 删除 tabvar
-      vim.t[tabvar_dap] = nil
-      return
-    end
-
-    --- close debug tab
-    for _, tab_id in pairs(tab_list) do
-      if vim.t[tab_id][tabvar_dap] then
-        vim.cmd.tabclose(vim.api.nvim_tabpage_get_number(tab_id)) -- NOTE: `:tabclose tabnr` NOT tab_id
-      end
-    end
+    --- NOTE: Callback 异步函数中执行
+    close_debug_tab()
   end)
 end
 -- -- }}}
@@ -225,7 +237,7 @@ local debug_keymaps = {
   end,  opt, "Fn: debug: Step Out"},
 
   {'n', '<leader>cb', function() dap.clear_breakpoints() end, opt, "debug: Clear Breakpoints"},
-  {'n', '<leader>cq', function() close_debug_tab_and_buffers() end, opt, 'debug: Quit'},
+  {'n', '<leader>cq', function() quit_debug() end, opt, 'debug: Quit'},
 }
 
 require('utils.keymaps').set(debug_keymaps)
