@@ -188,7 +188,7 @@ export HOMEBREW_BUNDLE_FILE=~/.config/Brewfile  # 默认在 ~/.Brewfile
 #export HOMEBREW_BUNDLE_NO_LOCK=1  # disable Brewfile.lock.json
 # }}}
 
-# go / python / node ...
+# go / py / ruby / node ...
 # --- [ languages ] -------------------------------------------------------------------------------- {{{
 
 # --- [ golang ] --------------------------------------------------------------- {{{
@@ -223,11 +223,16 @@ export GO111MODULE=on  # on | off | auto
 # }}}
 
 # --- [ node@20 ] -------------------------------------------------------------- {{{
-# 使用 node@20 LTS, 以下两种写法都可以
-#alias node=$(brew --prefix)/opt/node@20/bin/node
 export PATH="/opt/homebrew/opt/node@20/bin:$PATH"
 export LDFLAGS="-L/opt/homebrew/opt/node@20/lib"
 export CPPFLAGS="-I/opt/homebrew/opt/node@20/include"
+
+# }}}
+
+# --- [ ruby ] ----------------------------------------------------------------- {{{
+export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+export LDFLAGS="-L/opt/homebrew/opt/ruby/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/ruby/include"
 
 # }}}
 
