@@ -40,34 +40,23 @@ dap.set_log_level('WARN')
 ---   "${workspaceFolder}": The current working directory of Neovim
 ---   "${workspaceFolderBasename}": The name of the folder opened in Neovim
 -- -- }}}
---- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#go-using-delve-directly
+--- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#go
 --- golang debug settings ------------------------------------------------------ {{{
-dap.adapters.delve = {
-  type = 'server',
-  port = '${port}',
-  executable = {
-    command = 'dlv',
-    args = {'dap', '-l', '127.0.0.1:${port}'},
-  }
+dap.adapters.go = {
+  type = 'executable';
+  command = 'node';
+  args = {os.getenv('HOME') .. '/.vscode/extensions/golang.go-0.44.0/dist/debugAdapter.js'};
 }
-
 dap.configurations.go = {
   {
-    type = "delve",  -- VVI: 这里的名字和需要上面 dap.adapters.xxx 的名字一样.
-    name = "Debug go",
-    request = "launch",
-    program = "${file}"
+    type = 'go';
+    name = 'Debug';
+    request = 'launch';
+    showLog = false;
+    program = "${file}";
+    dlvToolPath = vim.fn.exepath('dlv')  -- Adjust to where delve is installed
   },
-  --- go test package
-  {
-    type = "delve",  -- VVI: 这里的名字和需要上面 dap.adapters.xxx 的名字一样.
-    name = "Debug go test (package/dir)",
-    request = "launch",
-    mode = "test",
-    program = "./${relativeFileDirname}"
-  }
-}
--- -- }}}
+}-- -- }}}
 
 --- highlight && sign setting ---------------------------------------------------------------------- {{{
 --- `:help dap.txt`, search:

@@ -113,7 +113,7 @@ local plugins = {
   --- Auto Completion ------------------------------------------------------------------------------
   {
     "hrsh7th/nvim-cmp",
-    commit = "b555203",
+    commit = "8c82d0b",
     config = function() require("plugins.settings.cmp_completion") end,
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全
@@ -160,7 +160,7 @@ local plugins = {
   --- snippet engine, for "cmp_luasnip", 每次打开文件都会有一个 [Scratch] buffer.
   {
     "L3MON4D3/LuaSnip",
-    commit = "33b06d7",
+    commit = "c9b9a22",
     --- for placeholder transformation
     --- https://code.visualstudio.com/docs/editor/userdefinedsnippets#_variable-transforms
     build = "make install_jsregexp",
@@ -260,7 +260,7 @@ local plugins = {
   --- NOTE: dap-ui && dap 设置在同一文件中.
   {
     "mfussenegger/nvim-dap",  -- core debug tool
-    commit = "665d356",
+    commit = "b768c8d",
     config = function() require("plugins.settings.dap_debug") end,
 
     cmd = {'DapToggleBreakpoint', 'DapContinue', 'DapLoadLaunchJSON'},
@@ -316,7 +316,7 @@ local plugins = {
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {
     "lewis6991/gitsigns.nvim",
-    commit = "5f808b5",
+    commit = "b544bd6",
     -- tag = "v0.9.0",
     config = function() require("plugins.settings.git_signs") end,
 
