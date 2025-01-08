@@ -47,16 +47,49 @@ dap.adapters.go = {
   command = 'node';
   args = {os.getenv('HOME') .. '/.vscode/extensions/golang.go-0.44.0/dist/debugAdapter.js'};
 }
+
+dap.adapters.delve = function(callback, config)
+    if config.mode == 'remote' and config.request == 'attach' then
+        callback({
+            type = 'server',
+            host = config.host or '127.0.0.1',
+            port = config.port or '38697'
+        })
+    else
+        callback({
+            type = 'server',
+            port = '${port}',
+            executable = {
+                command = 'dlv',
+                args = { 'dap', '-l', '127.0.0.1:${port}', '--log', '--log-output=dap' },
+                detached = vim.fn.has("win32") == 0,
+            }
+        })
+    end
+end
+
+-- https://github.com/go-delve/delve/blob/master/Documentation/usage/dlv_dap.md
 dap.configurations.go = {
+  -- vscode-go test project
   {
-    type = 'go';
+    type = 'go';  -- VVI: dap.adapters.go 名字要对应
     name = 'Debug';
     request = 'launch';
     showLog = false;
     program = "${file}";
     dlvToolPath = vim.fn.exepath('dlv')  -- Adjust to where delve is installed
   },
-}-- -- }}}
+
+  -- dlv test packages
+  {
+    type = "delve",  -- VVI: dap.adapters.delve 名字要对应
+    name = "Debug test (pkg)",
+    request = "launch",
+    mode = "test",
+    program = "./${relativeFileDirname}"
+  }
+}
+-- -- }}}
 
 --- highlight && sign setting ---------------------------------------------------------------------- {{{
 --- `:help dap.txt`, search:
