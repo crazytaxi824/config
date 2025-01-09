@@ -44,8 +44,7 @@ local plugins = {
   --- 通知功能
   {
     "rcarriga/nvim-notify",
-    commit = "bd9cd51",
-    -- tag = "v3.14.1",
+    tag = "v3.15.0",
     config = function() require("plugins.settings.nvim_notify") end,
 
     event = "VeryLazy",
@@ -180,7 +179,7 @@ local plugins = {
   --- 自动括号, 同时依赖 treesitter && cmp
   {
     "windwp/nvim-autopairs",
-    commit = "b464658",
+    commit = "d2f791c",
     config = function() require("plugins.settings.autopairs") end,
     dependencies = {"hrsh7th/nvim-cmp"},  -- cmp.event:on() 设置.
 
@@ -203,7 +202,7 @@ local plugins = {
   --- VVI: "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
-    commit = "6f5473a",
+    commit = "7bebb35",
     config = function() require("lsp.plugins.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -212,7 +211,8 @@ local plugins = {
 
   {
     "stevearc/conform.nvim",
-    tag = "v8.3.0",
+    commit = "7001912",
+    -- tag = "v8.3.0",
     config = function() require("plugins.settings.formatter_conform") end,
 
     event = "VeryLazy",
@@ -260,7 +260,7 @@ local plugins = {
   --- NOTE: dap-ui && dap 设置在同一文件中.
   {
     "mfussenegger/nvim-dap",  -- core debug tool
-    commit = "b768c8d",
+    commit = "9980707",
     config = function() require("plugins.settings.dap_debug") end,
 
     cmd = {'DapToggleBreakpoint', 'DapContinue', 'DapLoadLaunchJSON'},
@@ -276,7 +276,7 @@ local plugins = {
   {
     "rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
     -- tag = "v4.0.0",
-    commit = "e94d986",
+    commit = "727c032",
     config = function() require("plugins.settings.dapui_debug") end,
     dependencies = {
       "mfussenegger/nvim-dap",
@@ -316,7 +316,7 @@ local plugins = {
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {
     "lewis6991/gitsigns.nvim",
-    commit = "b544bd6",
+    commit = "6811483",
     -- tag = "v0.9.0",
     config = function() require("plugins.settings.git_signs") end,
 
