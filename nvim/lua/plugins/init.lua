@@ -23,7 +23,7 @@ local plugins = {
   --- Useful lua functions used by lots of plugins
   {
     "nvim-lua/plenary.nvim",
-    commit = "2d9b06177",
+    commit = "3707cdb",
     priority = 1000,  -- 只在 lazy=false 的情况下有效. 影响加载顺序, 默认值为 50.
   },
 
@@ -202,7 +202,7 @@ local plugins = {
   --- VVI: "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
-    commit = "7bebb35",
+    commit = "eec6019",
     config = function() require("lsp.plugins.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
