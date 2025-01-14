@@ -102,7 +102,7 @@ local plugins = {
   --- indent line
   {
     "lukas-reineke/indent-blankline.nvim",
-    tag = "v3.8.6",
+    tag = "v3.8.7",
     config = function() require("plugins.settings.indentline") end,  -- setup() 设置 use_treesitter = true
     dependencies = {"nvim-treesitter/nvim-treesitter"},  -- for setup({scope})
 
@@ -202,7 +202,7 @@ local plugins = {
   --- VVI: "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
-    commit = "eec6019",
+    commit = "3291afd",
     config = function() require("lsp.plugins.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -240,7 +240,7 @@ local plugins = {
   --- tabline decorator, `:help 'tabline'`
   {
     "akinsho/bufferline.nvim",
-    tag = "v4.9.0",
+    tag = "v4.9.1",
     config = function() require("plugins.settings.decor_bufferline") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
 
@@ -316,7 +316,7 @@ local plugins = {
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {
     "lewis6991/gitsigns.nvim",
-    commit = "abcd00a",
+    commit = "76d88f3",
     -- tag = "v0.9.0",
     config = function() require("plugins.settings.git_signs") end,
 
