@@ -211,7 +211,7 @@ local plugins = {
 
   {
     "stevearc/conform.nvim",
-    commit = "7001912",
+    commit = "6dc21d4",
     -- tag = "v8.3.0",
     config = function() require("plugins.settings.formatter_conform") end,
 
@@ -316,7 +316,7 @@ local plugins = {
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {
     "lewis6991/gitsigns.nvim",
-    commit = "9541f5e",
+    commit = "817bd84",
     -- tag = "v0.9.0",
     config = function() require("plugins.settings.git_signs") end,
 
