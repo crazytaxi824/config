@@ -112,7 +112,7 @@ local plugins = {
   --- Auto Completion ------------------------------------------------------------------------------
   {
     "hrsh7th/nvim-cmp",
-    commit = "8c82d0b",
+    commit = "1250990",
     config = function() require("plugins.settings.cmp_completion") end,
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全
@@ -202,7 +202,7 @@ local plugins = {
   --- VVI: "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
-    commit = "3291afd",
+    commit = "ed8f808",
     config = function() require("lsp.plugins.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -221,8 +221,7 @@ local plugins = {
   --- File explorer --------------------------------------------------------------------------------
   {
     "nvim-tree/nvim-tree.lua",
-    commit = "f7b76cd",
-    -- tag = "v1.9.0",
+    tag = "v1.10.0",
     config = function() require("plugins.settings.file_tree") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
 
@@ -268,7 +267,7 @@ local plugins = {
 
   {
     "nvim-neotest/nvim-nio",
-    tag = "v1.10.0",
+    tag = "v1.10.1",
 
     lazy = true,  -- nvim-dap-ui 加载时自动加载.
   },
@@ -360,7 +359,7 @@ local plugins = {
 
   {
     "folke/trouble.nvim",
-    commit = "46cf952",
+    commit = "50481f4",
     -- tag = "v3.6.0",
     config = function() require("plugins.settings.trouble_list") end,
 
