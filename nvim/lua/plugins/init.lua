@@ -211,8 +211,8 @@ local plugins = {
 
   {
     "stevearc/conform.nvim",
-    commit = "6dc21d4",
-    -- tag = "v8.3.0",
+    commit = "363243c",
+    -- tag = "v8.4.0",
     config = function() require("plugins.settings.formatter_conform") end,
 
     event = "VeryLazy",
