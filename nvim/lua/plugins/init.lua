@@ -315,7 +315,7 @@ local plugins = {
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {
     "lewis6991/gitsigns.nvim",
-    commit = "817bd84",
+    commit = "9b36d49",
     -- tag = "v0.9.0",
     config = function() require("plugins.settings.git_signs") end,
 
