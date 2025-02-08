@@ -249,7 +249,7 @@ local plugins = {
   --- statusline decorator, `:help 'statusline'`
   {
     "nvim-lualine/lualine.nvim",   -- bottom status line
-    commit = "2a5bae9",
+    commit = "f4f791f",
     config = function() require("plugins.settings.decor_lualine") end,
 
     event = "VeryLazy",
@@ -259,7 +259,7 @@ local plugins = {
   --- NOTE: dap-ui && dap 设置在同一文件中.
   {
     "mfussenegger/nvim-dap",  -- core debug tool
-    commit = "9980707",
+    commit = "52302f0",
     config = function() require("plugins.settings.dap_debug") end,
 
     cmd = {'DapToggleBreakpoint', 'DapContinue', 'DapLoadLaunchJSON'},
@@ -275,7 +275,7 @@ local plugins = {
   {
     "rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
     -- tag = "v4.0.0",
-    commit = "727c032",
+    commit = "bc81f8d",
     config = function() require("plugins.settings.dapui_debug") end,
     dependencies = {
       "mfussenegger/nvim-dap",
@@ -315,8 +315,7 @@ local plugins = {
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {
     "lewis6991/gitsigns.nvim",
-    commit = "9b36d49",
-    -- tag = "v0.9.0",
+    tag = "v1.0.0",
     config = function() require("plugins.settings.git_signs") end,
 
     --- NOTE: `nvim dir` 启动时直接打开 dir 时可能会造成 gitsigns 报错. 根据测试情况选择 VeryLazy 或者 BufReadPre ...
