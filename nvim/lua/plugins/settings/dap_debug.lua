@@ -45,9 +45,11 @@ dap.set_log_level('WARN')
 dap.adapters.go = {
   type = 'executable';
   command = 'node';
+  --- VVI: 这里是使用 vscode 的 golang 插件进行 debug.
   args = {os.getenv('HOME') .. '/.vscode/extensions/golang.go-0.44.0/dist/debugAdapter.js'};
 }
 
+--- VVI: 这里直接使用 delve 工具对 go test 进行 debug.
 dap.adapters.delve = function(callback, config)
     if config.mode == 'remote' and config.request == 'attach' then
         callback({
@@ -231,15 +233,29 @@ end
 --- TODO: 在进入 debug 模式时设置 keymaps, 退出 debug 模式时删除 keymaps.
 local opt = { silent = true }
 local debug_keymaps = {
-  {'n', '<F29>', function() dap.continue() end, opt, 'Fn: debug: Start(Continue)'},  -- <C-F5>
-  {'n', '<F17>', function() dap.terminate() end, opt, 'Fn: debug: Stop(End)'},  -- <S-F5>
+  --- <C-F5>
+  {'n', '<F29>', function()
+    if dap.session() then
+      dap.continue()  -- continue to finish the program
+    else
+      if vim.fn.win_gotoid(vim.t[tabvar_dap]) == 1 then
+        dap.continue()  -- start new debug
+      end
+    end
+  end, opt, 'Fn: debug: Start(Continue)'},
+
+  --- <S-F5>
+  {'n', '<F17>', function() dap.terminate() end, opt, 'Fn: debug: Stop(End)'},
+
   {'n', '<S-D-F5>', function()
     if vim.fn.win_gotoid(vim.t[tabvar_dap]) == 1 then
       dap.run_last()
     end
   end,  opt, 'Fn: debug: Restart'},
 
-  --{'n', '<F9>', function() dap.toggle_breakpoint() end, opt, "Fn: debug: Toggle Breakpoint"},  -- 在 after/ftplugin/go/debug_cmd.lua 中设置.
+  --- 已在 after/ftplugin/go/debug_cmd.lua 中设置.
+  --{'n', '<F9>', function() dap.toggle_breakpoint() end, opt, "Fn: debug: Toggle Breakpoint"},
+
   {'n', '<F10>', function()
     if vim.fn.win_gotoid(vim.t[tabvar_dap]) == 1 then
       dap.step_over()
@@ -251,6 +267,7 @@ local debug_keymaps = {
       dap.step_into()
     end
   end, opt, "Fn: debug: Step Into"},
+
   --- <S-F11>
   {'n', '<F23>', function()
     if vim.fn.win_gotoid(vim.t[tabvar_dap]) == 1 then
