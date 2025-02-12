@@ -75,7 +75,7 @@
   },
   "Bench Test": {
     "prefix": "test-benchmark",
-    "body": "func Benchmark${1:Foo}(b *testing.B) {\n\tfor ${2:i} := 0; ${2:i} < b.N; ${2:i}++ {\n\t\t${3:// code}\n\t}\n\t// b.ReportAllocs() // go test -benchmem\n}",
+    "body": "func Benchmark${1:Foo}(b *testing.B) {\n\tfor b.Loop() {\n\t\t${2:// code}\n\t}\n\t// b.ReportAllocs() // go test -benchmem\n}",
     "description": "Snippets for Benchmark-Test"
   },
   "Bench Parallel Test": {
