@@ -23,7 +23,7 @@ local plugins = {
   --- Useful lua functions used by lots of plugins
   {
     "nvim-lua/plenary.nvim",
-    commit = "3707cdb",
+    commit = "857c5ac",
     priority = 1000,  -- 只在 lazy=false 的情况下有效. 影响加载顺序, 默认值为 50.
   },
 
@@ -359,8 +359,8 @@ local plugins = {
 
   {
     "folke/trouble.nvim",
-    commit = "6f380b8",
-    -- tag = "v3.7.0",
+    -- commit = "6f380b8",
+    tag = "v3.7.1",
     config = function() require("plugins.settings.trouble_list") end,
 
     event = "VeryLazy",
