@@ -30,8 +30,7 @@ local plugins = {
   --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件
   {
     "williamboman/mason.nvim",
-    commit = "e2f7f90",
-    -- tag = "v1.10.0",
+    tag = "v1.11.0",
     -- build = ":MasonUpdate", -- :MasonUpdate updates All Registries, NOT packages.
     config = function() require("plugins.settings.mason_tool_installer") end,
 
@@ -212,8 +211,7 @@ local plugins = {
 
   {
     "stevearc/conform.nvim",
-    commit = "363243c",
-    -- tag = "v8.4.0",
+    tag = "v9.0.0",
     config = function() require("plugins.settings.formatter_conform") end,
 
     event = "VeryLazy",
@@ -316,7 +314,8 @@ local plugins = {
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {
     "lewis6991/gitsigns.nvim",
-    tag = "v1.0.0",
+    commit = "8b00147",
+    -- tag = "v1.0.0",
     config = function() require("plugins.settings.git_signs") end,
 
     --- NOTE: `nvim dir` 启动时直接打开 dir 时可能会造成 gitsigns 报错. 根据测试情况选择 VeryLazy 或者 BufReadPre ...
