@@ -25,27 +25,27 @@ local kind_icon_txt = {  -------------------------------------------------------
   Module = "module",     -- import
   Method = "method",
   Function = "func",
-  Constructor = "constructor",
-  Field = "fld",
-  Property = "prop",
+  Constructor = "construct",
+  Field = "field",
+  Property = "property",
   Struct = "struct",
-  Class = "class",  -- golang 中 map 的 kind 是 Class
+  Class = "class",  -- golang 中 type 的 kind 是 Class
   Interface = "iface",
-  TypeParameter = "param",
+  TypeParameter = "t-param",
   Unit = "unit",
-  Value = "val",
+  Value = "value",
   Enum = "enum",
   EnumMember = "enum",
-  Keyword = "keywd",
-  Snippet = "snip",
+  Keyword = "keyword",
+  Snippet = "snippet",
   Color = "color",
   Reference = "ref",
-  Folder = "dir/",
-  File = "file~",
+  Folder = "/dir~",
+  File = "/file~",
   Variable = "var",
   Constant = "const",
   Event = "event",
-  Operator = "op",
+  Operator = "operator",
 }
 -- -- }}}
 
@@ -108,7 +108,7 @@ cmp.setup {
 
     format = function(entry, vim_item)
       if vim.bo.filetype == 'go' and vim_item.kind == 'Class' then
-        vim_item.kind = string.format("   %s", 'map')
+        vim_item.kind = string.format("   %s", 'type')
       else
         vim_item.kind = string.format("   %s", kind_icon_txt[vim_item.kind])  --  kind icon 前多个空格
         --vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind)  -- 使用图标和 kind_name
