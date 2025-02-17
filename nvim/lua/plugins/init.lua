@@ -302,7 +302,7 @@ local plugins = {
 
   {
     "nvim-telescope/telescope-fzf-native.nvim",
-    commit = "dae2eac",
+    commit = "2a5ceff",
     build = "make",
 
     lazy = true,  -- telescope 加载时自动加载.
