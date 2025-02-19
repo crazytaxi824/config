@@ -24,7 +24,7 @@ function trash() {
 	fi
 
 	# Use AppleScript to delete multi files.
-	for delete_fp in "$filepath_list"; do
+	for delete_fp in "${filepath_list[@]}"; do
 		local applescript="tell app \"Finder\" to delete POSIX file \"$delete_fp\""
 		osascript -e $applescript
 	done
