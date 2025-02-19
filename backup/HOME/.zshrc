@@ -567,47 +567,6 @@ function Rg() {
 # NOTE: 本文件和 source 文件函数中的 for loop 变量必须先使用 local 定义,
 # 否则在函数执行后变量会变成 global variable.
 # --- [ core shell script functions ] -------------------------------------------------------------- {{{
-
-# trash file/dir to ~/.Trash/ -------------------------------------------------- {{{
-# NOTE: stop using 'rm'
-#alias rm="rm -i"  # prompt every time when 'rm file/dir'
-alias rm="echo '\e[33muse \"trash\" instead\e[0m'; #ignore_rest_cmd"
-
-# using `trash` function
-function trash() {
-	local trash_dir=~/.Trash/
-	# NOTE: linux DO NOT have "~/.Trash/" dir
-	if [[ ! -d $trash_dir ]]; then
-		echo -e "\e[31m$trash_dir is NOT exist.\e[0m"
-		return
-	fi
-
-	# get time_now unix timestamp (second)
-	local now_unix=$(date +%s)
-
-	local filepath  # 防止 for 循环中的变量变成 global variable.
-	for filepath in "$@"
-	do
-		# filepath_tail only, without path. could be filename.ext OR dir name.
-		local filepath_tail=$(basename $filepath)
-
-		# check file/dir existence in '~/.Trash/', if file/dir exists then using unix timestamp.
-		if [[ -f "$trash_dir$filepath_tail" ]]; then
-			# 如果是移动文件, 且文件名在 ~/.Trash/ 中存在.
-			local fname="${filepath_tail%.*}"  # fname only, without ext
-			local ext="${filepath_tail##*.}"   # ext only
-			mv $filepath $trash_dir$fname-$now_unix.$ext  # mv filepath ~/.Trash/fname-timestamp.ext
-		elif [[ -d "$trash_dir$filepath_tail" ]]; then
-			# 如果是移动文件夹, 且文件夹名在 ~/.Trash/ 中存在.
-			mv $filepath $trash_dir$filepath_tail-$now_unix  # mv filepath ~/.Trash/dir-timestamp
-		else
-			# 如果文件/文件夹名在 ~/.Trash/ 中不存在, 则直接移动.
-			mv $filepath $trash_dir  # mv filepath ~/.Trash/
-		fi
-	done
-}
-# }}}
-
 # NOTE:
 # `cp -r src dst/`   注意 src 后面没有 /   copy src 整个文件夹到 dst 文件夹内, 结果: dst/src/...
 # `cp -r src/ dst/`  注意 src 后面有 /     copy src 内所有 file/dir 到 dst 内, 包括隐藏文件.
@@ -728,29 +687,12 @@ function vimExistFile() {
 
 # }}}
 
-# 设置 'open' 命令, 在打开的文件不存在时, 打开当作 URL 打开 -------------------- {{{
-function openFileOrUrl() {
-	# `2>/dev/null` 不打印 error msg
-	# `echo $?` 返回上一个命令的 exitcode
-
-	local file
-	for file in "$@"
-	do
-		# echo $file
-		local exitcode=$(open $file 2>/dev/null; echo $?)
-
-		if (( $exitcode != 0 )); then
-			open -u "https://$file"  # TODO: "http://"
-		fi
-	done
-
-	return 0   # 手动返回 0, 否则会返回 1.
-}
-
-# }}}
+# NOTE: stop using 'rm'
+#alias rm="rm -i"  # prompt every time when 'rm file/dir'
+alias rm="echo '\e[33muse \"trash\" instead\e[0m'; #ignore_rest_cmd"
+alias trash="zsh ~/.config/.my_shell_functions/trash.sh"
 
 ### open/edit file
-alias o="openFileOrUrl"     # open file/url, openFileOrUrl() 函数定义在下面.
 alias e="vimExistFile --"   # edit file, vimExistFile() 函数定义在下面.
 
 # 检查 command tools 是否安装

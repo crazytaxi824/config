@@ -5,7 +5,7 @@ launchd-system-launchDaemons:/System/Library/LaunchDaemons
 launchd-thirdparty-Agents:/Library/LaunchAgents
 launchd-thirdparty-Daemons:/Library/LaunchDaemons
 launchd-user-Agents:~/Library/LaunchAgents
-lima:~/Library/Caches/lima/download
+lima-cache:~/Library/Caches/lima/download
 note:~/notes
 notes:~/notes
 nvim-cache:~/.cache/nvim
