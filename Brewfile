@@ -57,7 +57,7 @@ brew "wget"     # http(s) 下载工具
 #brew "curl"    # http(s) 请求工具, mac 自带.
 
 # 虚拟机
-brew "qemu"  # apple silicon emulator and virtualizer
+#brew "qemu"  # apple silicon emulator and virtualizer
 brew "lima"  # golang Linux virtual machine, deps on "qemu | vz", https://github.com/Code-Hex/vz
 #cask "virtualbuddy"  # Apple Virtualization.framework
 #cask "utm"  # Apple Virtualization.framework for ARM64 operating systems & QEMU for others
