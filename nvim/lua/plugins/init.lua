@@ -92,7 +92,7 @@ local plugins = {
   --- 第三方 module 插件 ---
   {
     "windwp/nvim-ts-autotag",  -- auto close tag <div></div>
-    commit = "1cca23c",
+    commit = "a1d526a",
     config = function() require("plugins.settings.treesitter_autotag") end,
     dependencies = { "nvim-treesitter/nvim-treesitter" },
 
@@ -179,7 +179,7 @@ local plugins = {
   --- 自动括号, 同时依赖 treesitter && cmp
   {
     "windwp/nvim-autopairs",
-    commit = "d2f791c",
+    commit = "68f0e5c",
     config = function() require("plugins.settings.autopairs") end,
     dependencies = {"hrsh7th/nvim-cmp"},  -- cmp.event:on() 设置.
 
@@ -202,7 +202,7 @@ local plugins = {
   --- VVI: "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
-    commit = "02f5275",
+    commit = "f41624e",
     config = function() require("lsp.plugins.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
