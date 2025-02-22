@@ -122,10 +122,10 @@ local keymaps = {
   {{'v', 'i'}, '<D-s>', '<C-c><cmd>lua require("utils.keymaps").save_file()<CR>', opt, 'which_key_ignore'},
 
   --- undo / redo
-  {'n', '<D-z>', 'u', opt, 'which_key_ignore'},
-  {'i', '<D-z>', '<C-o>u', opt, 'which_key_ignore'},
-  {'n', '<S-D-z>', '<C-r>', opt, 'redo'},
-  {'i', '<S-D-z>', '<C-o><C-r>', opt, 'redo'},
+  {'n', '<D-z>', 'u', opt, 'undo'},
+  {'i', '<D-z>', '<C-o>u', opt, 'undo'},
+  {'n', '<S-D-z>', '<C-r>', opt, 'which_key_ignore'},  -- redo
+  {'i', '<S-D-z>', '<C-o><C-r>', opt, 'which_key_ignore'}, -- redo
   {'n', '<D-r>', '<C-r>', opt, 'redo'},
   {'i', '<D-r>', '<C-o><C-r>', opt, 'redo'},
 
@@ -233,7 +233,7 @@ local keymaps = {
   --- 需要使用 `jobs -l` 列出 Suspended 列表,
   --- 使用 `fg %1` 恢复 job,
   --- 或者 `kill %1` 终止 job (不推荐, 会留下 .swp 文件).
-  {{'n','i','v'}, '<C-z>', '<Nop>', opt, '-'},
+  {{'n','i','v'}, '<C-z>', '<Nop>', opt, 'which_key_ignore'},
 
   --- BUG: nvim v0.10.0, conflict to `gc`: 'Comment textobject', `:help commenting`
   {'n', 'gc', '<Nop>', opt, '-'},

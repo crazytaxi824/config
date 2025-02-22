@@ -118,8 +118,8 @@ which_key.setup({
   },
 
   keys = {
-    scroll_down = '<D-down>', -- <C-d> binding to scroll down inside the popup
-    scroll_up = '<D-up>', -- <C-u> binding to scroll up inside the popup
+    scroll_down = '<S-D-down>', -- <C-d> binding to scroll down inside the popup
+    scroll_up = '<S-D-up>', -- <C-u> binding to scroll up inside the popup
   },
 
   sort = { "group", "mod", "desc", "alphanum" },
@@ -133,6 +133,11 @@ which_key.setup({
     -- ft = { "NvimTree", "TelescopePrompt", "mason", "packer", "lazy", "null-ls-info", "lspinfo" },
   },
 })
+
+--- TODO: which-key hidden,real
+-- which_key.add({
+--   { "<C-Z>", hidden = true }, -- hide this keymap
+-- })
 
 --- VVI: mark which key is loaded. vim.cmd('doautocmd User LoadedWhichKey')
 vim.api.nvim_exec_autocmds("User", { pattern = { "LoadedWhichKey" }})
