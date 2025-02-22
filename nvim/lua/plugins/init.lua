@@ -54,7 +54,7 @@ local plugins = {
   {
     "folke/which-key.nvim",
     -- commit = "68e37e1",
-    tag = "v3.16.0",
+    tag = "v3.17.0",
     config = function() require("plugins.settings.which_key") end,
 
     event = "VeryLazy",
