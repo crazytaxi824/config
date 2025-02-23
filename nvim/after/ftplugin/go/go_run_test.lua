@@ -19,9 +19,9 @@
 -- -- }}}
 local opt = { buffer = 0 }
 local go_keymaps = {
-  {'n', '<F5>',  function() require("utils.go").run() end, opt, "Fn: code: Go Run"},  -- go run
-  {'n', '<F6>',  function() require("utils.go").test.single_func() end, opt, "Fn: code: Go Test Single"}, -- go test
-  {'n', '<D-F6>', function() require("utils.go").test.single_func('pprof') end, opt, "Fn: code: Go Test Single Pprof"},
+  {'n', '<F5>',  function() require("utils.go").run() end, opt, "Fn 5: code: Go Run"},  -- go run
+  {'n', '<F6>',  function() require("utils.go").test.single_func() end, opt, "Fn 6: code: Go Test Single"}, -- go test
+  {'n', '<D-F6>', function() require("utils.go").test.single_func('pprof') end, opt, "Fn 6: code: Go Test Single Pprof"},
 }
 
 require('utils.keymaps').set(go_keymaps)

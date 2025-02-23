@@ -9,7 +9,7 @@ vim.api.nvim_buf_create_user_command(0, 'Debug', 'DapContinue', {
 --- set <F9> Toggle Breakpoint,
 vim.keymap.set('n', '<F9>', '<cmd>DapToggleBreakpoint<CR>', {
   buffer = 0,
-  desc = "Fn: debug: Toggle Breakpoint",
+  desc = "Fn 9: debug: Toggle Breakpoint",
 })
 
 

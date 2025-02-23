@@ -51,11 +51,11 @@ end
 local opt = { buffer = 0 }
 local ts_keymaps = {
   --- run dist/current_file ---
-  {'n', '<F5>', function() ts_run(vim.fn.expand('%:.:r')) end, opt, "Fn: code: Run File"},
+  {'n', '<F5>', function() ts_run(vim.fn.expand('%:.:r')) end, opt, "Fn 5: code: Run File"},
 
   --- jest test ---
-  {'n', '<F6>', function() ts_jest(vim.fn.expand('%:.:r'), false) end, opt, "Fn: code: Run Test"},
-  {'n', '<D-F6>', function() ts_jest(vim.fn.expand('%:.:r'), true) end, opt, "Fn: code: Run Test --coverage"},
+  {'n', '<F6>', function() ts_jest(vim.fn.expand('%:.:r'), false) end, opt, "Fn 6: code: Run Test"},
+  {'n', '<D-F6>', function() ts_jest(vim.fn.expand('%:.:r'), true) end, opt, "Fn 6: code: Run Test --coverage"},
 }
 
 require('utils.keymaps').set(ts_keymaps)

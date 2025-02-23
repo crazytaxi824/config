@@ -188,12 +188,12 @@ local keymaps = {
   {'n', '<leader>W', '<cmd>only!<CR>', opt, 'win: Close All Other Windows'},  -- 关闭所有其他窗口, 快捷键 <C-w><C-o>
 
   --- NOTE: terminal key mapping 在其他 plugin 中也有设置.
-  {'n', '<leader>tt', function() mt.open_shell_term() end, opt, "open/new Terminal #(1~999)"},
-  {'n', '<leader>tC', function() mt.close_all() end,   opt, "close All Terminals windows"},
-  {'n', '<leader>tO', function() mt.open_all() end,    opt, "open All Terminals windows"},
-  {'n', '<leader>tT', function() mt.toggle_all() end,  opt, "toggle All Terminals windows"},
-  {'n', '<leader>tW', function() mt.wipeout_all() end, opt, "wipeout All Terminals"},
-  -- {'n', '<leader>tW', function() key_fn.wipe_all_term_bufs() end, opt, "wipeout All Terminals"},  -- alternative
+  {'n', 'tt', function() mt.open_shell_term() end, opt, "open/new Terminal #(1~999)"},
+  {'n', 'tC', function() mt.close_all() end,   opt, "close All Terminals windows"},
+  {'n', 'tO', function() mt.open_all() end,    opt, "open All Terminals windows"},
+  {'n', 'tT', function() mt.toggle_all() end,  opt, "toggle All Terminals windows"},
+  {'n', 'tW', function() mt.wipeout_all() end, opt, "wipeout All Terminals"},
+  -- {'n', 'tW', function() key_fn.wipe_all_term_bufs() end, opt, "wipeout All Terminals"},  -- alternative
 
   --- 其他 -----------------------------------------------------------------------------------------
   --- filepath jump to file, {'n', 'i'} 被 lspconfig keymaps 使用.
@@ -228,23 +228,25 @@ local keymaps = {
   -- {'n', '<C-M-CR>', function() print("<C-M-CR>") end, opt, 'Test: Ctrl-Cmd/Super-Enter'},
   -- {'n', '<D-M-CR>', function() print("<D-M-CR>") end, opt, 'Test: Ctrl-Cmd/Super-Enter'},
 
-  --- VVI: <Nop> -----------------------------------------------------------------------------------
+  --- VVI: <Nop> do nothing ------------------------------------------------------------------------
   --- <Ctrl-Z> 是危险操作. 意思是 :stop. Suspend vim, 退出到 terminal 界面, 但保留 job.
   --- 需要使用 `jobs -l` 列出 Suspended 列表,
   --- 使用 `fg %1` 恢复 job,
   --- 或者 `kill %1` 终止 job (不推荐, 会留下 .swp 文件).
-  {{'n','i','v'}, '<C-z>', '<Nop>', opt, 'which_key_ignore'},
+  {{'n','v'}, '<C-z>', function() end, opt, 'which_key_ignore'},
 
   --- BUG: nvim v0.10.0, conflict to `gc`: 'Comment textobject', `:help commenting`
   {'n', 'gc', '<Nop>', opt, 'Toggle Comment'},
 
-  --- ZZ same as `:x`
-  -- {'n', 'ZZ', '<Nop>', opt},
-  -- {'v', 'ZZ', '<Nop>', opt},
+  --- ZZ same as `:x`, ZQ same as `:q!`
+  {'n', 'Z', function() end, opt, 'which_key_ignore'},
 
   --- <F1> :help help, 避免误操作.
-  -- {'n', '<F1>', '<Nop>', opt},
-  -- {'i', '<F1>', '<Nop>', opt},
+  {{'n','i'}, '<F1>', function() end, opt, 'which_key_ignore'},
+
+  --- ":help t", 使用 fF 更容易. t 用作 terminal.
+  {{'n','o','v'}, 't', function() end, opt, 'which_key_ignore'},
+  {{'n','o','v'}, 'T', function() end, opt, 'which_key_ignore'},
 }
 
 --- 这里是设置所有 key mapping 的地方 --------------------------------------------------------------
@@ -252,7 +254,6 @@ key_fn.set(keymaps, {
   { "<leader>D", group = "Buffers Close" },
   { "<leader>k", group = "Fold" },
   { "<leader>c", group = "Code" },
-  { "<leader>t", group = "my_term" },
 
   --- for key desc only
   { "<leader>", group = "<leader>" },
@@ -260,13 +261,12 @@ key_fn.set(keymaps, {
   { "]", group = "Section Jump Next" },
   { "g", group = "g" },
   { "z", group = "z" },
+  { "t", group = "my_term" },
 
   { "&", desc = "repeat last ':s' replace command" },  -- `:help &-default`
-  { "Y", desc = 'copy whole line without "\\n"' },  -- `:help Y-default`
   { "<C-L>", desc = "nohlsearch | diffupdate" },  -- `:help CTRL-L-default`
 
   --- which-key hidden
-  { "<C-z>", hidden = true },  -- BUG: 'which_key_ignore' is not working for <C-z>
   { "H", hidden = true },  -- hide default keymaps
   { "L", hidden = true },
   { "M", hidden = true },
