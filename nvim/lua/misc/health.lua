@@ -111,7 +111,7 @@ local mason_tools = {
   "lua-language-server",
   "prettier",
   "pyright",
-  "ruff-lsp",
+  "ruff",
   "shfmt",
   "stylua",
   "typescript-language-server",
