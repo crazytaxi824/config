@@ -3,6 +3,47 @@ if not status_ok then
   return
 end
 
+--- HACK: change preset desc
+--- https://github.com/folke/which-key.nvim/blob/main/lua/which-key/plugins/presets.lua
+local wp_ok, wp = pcall(require, "which-key.plugins.presets")
+if wp_ok then
+  wp.motions = {
+    mode = { "o", "x", "n" },
+    preset = true,
+    -- { "h", desc = "Motion C: Left" },
+    -- { "j", desc = "Motion C: Down" },
+    -- { "k", desc = "Motion C: Up" },
+    -- { "l", desc = "Motion C: Right" },
+
+    { "0", desc = "Motion L1: Start of line" },
+    { "^", desc = "Motion L1: Start of line (non ws)" },
+    { "$", desc = "Motion L2: End of line" },
+    { "{", desc = "Motion L3: Prev empty line" },
+    { "}", desc = "Motion L3: Next empty line" },
+
+    { "b", desc = "Motion W1: Prev word" },
+    { "B", desc = "Motion W1: Prev WORD" },
+    { "e", desc = "Motion W2: Next end of word" },
+    { "E", desc = "Motion W2: Next end of WORD" },
+    { "w", desc = "Motion W3: Next word" },
+    { "W", desc = "Motion W3: Next WORD" },
+
+    { "t", desc = "Motion: Move before next char" },
+    { "T", desc = "Motion: Move before prev char" },
+    { "F", desc = "Motion: Move to prev char" },
+    { "f", desc = "Motion: Move to next char" },
+    { ";", desc = "Motion: ftFT Repeat" },
+    { ",", desc = "Motion: ftFT Reverse-Repeat" },
+    { "/", desc = "Motion: Search forward" },
+    { "?", desc = "Motion: Search backward" },
+    { "%", desc = "Motion: Matching (){}[]" },
+
+    { "ge", desc = "motion W: Prev end of word" },
+    -- { "gg", desc = "motion Ln: First line" },
+    -- { "G", desc = "Motion Ln: Last line" },
+  }
+end
+
 --- fn key icons ----------------------------------------------------------------------------------- {{{
 local fn_key_icons = {
   F1  = "F1",
@@ -88,7 +129,7 @@ which_key.setup({
     --- presets 是 which-key 预设好的 keymap. 虽然和系统快捷键功能一样,
     --- 但是进行了二次绑定, 所以会覆盖 keymaps.lua 中的设置.
     presets = {
-      operators = false,  -- 'c', 'r', 'd', 'y', 'v' ... 例如: 'ciw', 'yaw', 'diw' ...
+      operators = false,  -- 不显示 'c', 'd', 'r', 'y', 'v', '<', '>'  ...
       -- motions = true,   -- 'g', 例如: 'gg', 'ge' ...
       -- text_objects = true,  -- 'a' - around, 'i' - inside.
       -- windows = true,  -- <c-w>
