@@ -101,17 +101,17 @@ local keymaps = {
   {{'n','i','v'}, '<S-Down>', function() key_fn.shift.down() end, opt, 'which_key_ignore'},
 
   --- NOTE: <Ctrl-Up/Down/Left/Right> 被 mac 系统占用, 无法直接使用,
-  {{'n','v'}, '<M-Up>', '3<C-y>', opt, 'win: scroll Upwards'},
-  {'i', '<M-Up>', '<C-o>3<C-y>', opt, 'win: scroll Upwards'},
-  {{'n','v'}, '<M-Down>', '3<C-e>', opt, 'win: scroll Downwards'},
-  {'i', '<M-Down>', '<C-o>3<C-e>', opt, 'win: scroll Downwards'},
+  {{'n','v'}, '<M-Up>', '3<C-y>', opt, 'scroll Upwards'},
+  {'i', '<M-Up>', '<C-o>3<C-y>', opt, 'scroll Upwards'},
+  {{'n','v'}, '<M-Down>', '3<C-e>', opt, 'scroll Downwards'},
+  {'i', '<M-Down>', '<C-o>3<C-e>', opt, 'scroll Downwards'},
 
   --- NOTE: zh | zl 在 wrap file 中无法使用.
   --- scroll left/right 用到的机会比较少, 因为大部分情况下不会让 line 超出屏幕宽度.
-  {{'n','v'}, '<S-D-Left>', '6zh', opt, 'win: scroll left'},
-  {'i', '<S-D-Left>', '<C-o>6zh', opt, 'win: scroll left'},  -- 默认在 insert mode 下和 <S-Left> 相同.
-  {{'n','v'}, '<S-D-Right>', '6zl', opt, 'win: scroll right'},
-  {'i', '<S-D-Right>', '<C-o>6zl', opt, 'win: scroll right'},  -- 默认在 insert mode 下和 <S-Right> 相同.
+  {{'n','v'}, '<S-D-Left>', '6zh', opt, 'scroll left'},
+  {'i', '<S-D-Left>', '<C-o>6zh', opt, 'scroll left'},  -- 默认在 insert mode 下和 <S-Left> 相同.
+  {{'n','v'}, '<S-D-Right>', '6zl', opt, 'scroll right'},
+  {'i', '<S-D-Right>', '<C-o>6zl', opt, 'scroll right'},  -- 默认在 insert mode 下和 <S-Right> 相同.
 
   --- Tab ------------------------------------------------------------------------------------------
   {'n', '<Tab>', '<C-w><C-w>', opt, 'which_key_ignore'},  -- 切换到另一个窗口.
@@ -122,12 +122,12 @@ local keymaps = {
   {{'v', 'i'}, '<D-s>', '<C-c><cmd>lua require("utils.keymaps").save_file()<CR>', opt, 'which_key_ignore'},
 
   --- undo / redo
-  {'n', '<D-z>', 'u', opt, 'undo'},
-  {'i', '<D-z>', '<C-o>u', opt, 'undo'},
+  {'n', '<D-z>', 'u', opt, 'do: undo'},
+  {'i', '<D-z>', '<C-o>u', opt, 'do: undo'},
   {'n', '<S-D-z>', '<C-r>', opt, 'which_key_ignore'},  -- redo
   {'i', '<S-D-z>', '<C-o><C-r>', opt, 'which_key_ignore'}, -- redo
-  {'n', '<D-r>', '<C-r>', opt, 'redo'},
-  {'i', '<D-r>', '<C-o><C-r>', opt, 'redo'},
+  {'n', '<D-r>', '<C-r>', opt, 'do: redo'},
+  {'i', '<D-r>', '<C-o><C-r>', opt, 'do: redo'},
 
   --- `gc` & `gcc` is remap by default.
   {'n', '<D-/>', 'gcc', {remap=true}, 'Comment current line'},
@@ -236,7 +236,7 @@ local keymaps = {
   {{'n','i','v'}, '<C-z>', '<Nop>', opt, 'which_key_ignore'},
 
   --- BUG: nvim v0.10.0, conflict to `gc`: 'Comment textobject', `:help commenting`
-  {'n', 'gc', '<Nop>', opt, '-'},
+  {'n', 'gc', '<Nop>', opt, 'Toggle Comment'},
 
   --- ZZ same as `:x`
   -- {'n', 'ZZ', '<Nop>', opt},
@@ -254,7 +254,7 @@ key_fn.set(keymaps, {
   { "<leader>c", group = "Code" },
 
   --- for key desc only
-  { "<leader>", group = "\\" },
+  { "<leader>", group = "<leader>" },
   { "[", group = "Section Jump Prev" },
   { "]", group = "Section Jump Next" },
   { "g", group = "g" },
@@ -264,6 +264,24 @@ key_fn.set(keymaps, {
   { "&", desc = "repeat last ':s' replace command" },  -- `:help &-default`
   { "Y", desc = 'copy whole line without "\\n"' },  -- `:help Y-default`
   { "<C-L>", desc = "nohlsearch | diffupdate" },  -- `:help CTRL-L-default`
+
+  { "{", desc = "{} Prev empty line" },
+  { "}", desc = "{} Next empty line" },
+
+  --- which-key hidden
+  { "<C-z>", hidden = true },  -- BUG: 'which_key_ignore' is not working for <C-z>
+  { "h", hidden = true },  -- hide default keymaps
+  { "l", hidden = true },
+  { "j", hidden = true },
+  { "k", hidden = true },
+  { "G", hidden = true },
+  { "H", hidden = true },
+  { "L", hidden = true },
+  { "M", hidden = true },
+
+  { "O", hidden = true },
+  { "D", hidden = true },
+  { "Y", hidden = true },
 })
 
 
