@@ -87,15 +87,15 @@ which_key.setup({
     --- No actual key bindings are created.
     --- presets 是 which-key 预设好的 keymap. 虽然和系统快捷键功能一样,
     --- 但是进行了二次绑定, 所以会覆盖 keymaps.lua 中的设置.
-    --presets = {
-    --  operators = true,  -- 'c', 'd', 'y', 'v' ... 例如: 'ciw', 'yaw', 'diw' ... VVI: 设为 true 会和 <, > 冲突.
-    --  motions = true,   -- 'g', 例如: 'gg', 'ge' ...
-    --  text_objects = true,  -- 'a' - around, 'i' - inside.
-    --  windows = true,  -- <c-w>
-    --  nav = true,  -- '[', ']' ...
-    --  z = true,    -- 'z=', 'zz', 'zo', 'zc' ...
-    --  g = true,    -- 'gn', 'gN', 'gi', 'gv', 'gx', 'gf', 'g%'
-    --},
+    presets = {
+      operators = false,  -- 'c', 'r', 'd', 'y', 'v' ... 例如: 'ciw', 'yaw', 'diw' ...
+      -- motions = true,   -- 'g', 例如: 'gg', 'ge' ...
+      -- text_objects = true,  -- 'a' - around, 'i' - inside.
+      -- windows = true,  -- <c-w>
+      -- nav = true,  -- '[', ']' ...
+      -- z = true,    -- 'z=', 'zz', 'zo', 'zc' ...
+      -- g = true,    -- 'gn', 'gN', 'gi', 'gv', 'gx', 'gf', 'g%'
+    },
   },
 
   --- `:help which-key.nvim-which-key-triggers`
@@ -133,11 +133,6 @@ which_key.setup({
     -- ft = { "NvimTree", "TelescopePrompt", "mason", "packer", "lazy", "null-ls-info", "lspinfo" },
   },
 })
-
---- TODO: which-key hidden,real
--- which_key.add({
---   { "<C-Z>", hidden = true }, -- hide this keymap
--- })
 
 --- VVI: mark which key is loaded. vim.cmd('doautocmd User LoadedWhichKey')
 vim.api.nvim_exec_autocmds("User", { pattern = { "LoadedWhichKey" }})
