@@ -188,12 +188,12 @@ local keymaps = {
   {'n', '<leader>W', '<cmd>only!<CR>', opt, 'win: Close All Other Windows'},  -- 关闭所有其他窗口, 快捷键 <C-w><C-o>
 
   --- NOTE: terminal key mapping 在其他 plugin 中也有设置.
-  {'n', 'tt', function() mt.open_shell_term() end, opt, "my_term: open/new Terminal #(1~999)"},
-  {'n', 'tC', function() mt.close_all() end,   opt, "my_term: close All Terminals windows"},
-  {'n', 'tO', function() mt.open_all() end,    opt, "my_term: open All Terminals windows"},
-  {'n', 'tT', function() mt.toggle_all() end,  opt, "my_term: toggle All Terminals windows"},
-  {'n', 'tW', function() mt.wipeout_all() end, opt, "my_term: wipeout All Terminals"},
-  -- {'n', 'tW', function() key_fn.wipe_all_term_bufs() end, opt, "terminal: wipeout All Terminals"},  -- alternative
+  {'n', '<leader>tt', function() mt.open_shell_term() end, opt, "open/new Terminal #(1~999)"},
+  {'n', '<leader>tC', function() mt.close_all() end,   opt, "close All Terminals windows"},
+  {'n', '<leader>tO', function() mt.open_all() end,    opt, "open All Terminals windows"},
+  {'n', '<leader>tT', function() mt.toggle_all() end,  opt, "toggle All Terminals windows"},
+  {'n', '<leader>tW', function() mt.wipeout_all() end, opt, "wipeout All Terminals"},
+  -- {'n', '<leader>tW', function() key_fn.wipe_all_term_bufs() end, opt, "wipeout All Terminals"},  -- alternative
 
   --- 其他 -----------------------------------------------------------------------------------------
   --- filepath jump to file, {'n', 'i'} 被 lspconfig keymaps 使用.
@@ -252,30 +252,22 @@ key_fn.set(keymaps, {
   { "<leader>D", group = "Buffers Close" },
   { "<leader>k", group = "Fold" },
   { "<leader>c", group = "Code" },
+  { "<leader>t", group = "my_term" },
 
   --- for key desc only
   { "<leader>", group = "<leader>" },
   { "[", group = "Section Jump Prev" },
   { "]", group = "Section Jump Next" },
   { "g", group = "g" },
-  { "t", group = "Terminal" },
   { "z", group = "z" },
 
   { "&", desc = "repeat last ':s' replace command" },  -- `:help &-default`
   { "Y", desc = 'copy whole line without "\\n"' },  -- `:help Y-default`
   { "<C-L>", desc = "nohlsearch | diffupdate" },  -- `:help CTRL-L-default`
 
-  { "{", desc = "{} Prev empty line" },
-  { "}", desc = "{} Next empty line" },
-
   --- which-key hidden
   { "<C-z>", hidden = true },  -- BUG: 'which_key_ignore' is not working for <C-z>
-  { "h", hidden = true },  -- hide default keymaps
-  { "l", hidden = true },
-  { "j", hidden = true },
-  { "k", hidden = true },
-  { "G", hidden = true },
-  { "H", hidden = true },
+  { "H", hidden = true },  -- hide default keymaps
   { "L", hidden = true },
   { "M", hidden = true },
 
