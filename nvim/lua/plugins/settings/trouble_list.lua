@@ -25,7 +25,7 @@ local tree_keymaps = {
   {'n', '<leader>xX', '<cmd>Trouble diagnostics toggle filter.buf=0<cr>', opts, 'Buffer Diagnostics (Trouble)'},
   {'n', '<leader>xL', '<cmd>Trouble loclist toggle<cr>', opts, 'Location List (Trouble)'},
   {'n', '<leader>xQ', '<cmd>Trouble qflist toggle<cr>', opts, 'Quickfix List (Trouble)'},
-  {'n', '<leader>xs', '<cmd>Trouble symbols toggle<cr>', opts, 'Symbols (Trouble)'},
+  {'n', '<leader>xs', '<cmd>Trouble symbols toggle focus=false<cr>', opts, 'Symbols (Trouble)'},
   {'n', '<leader>xl', '<cmd>Trouble lsp toggle<cr>', opts, 'LSP Definitions / references / ... (Trouble)'},
 }
 
