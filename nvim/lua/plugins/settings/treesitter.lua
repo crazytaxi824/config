@@ -87,15 +87,15 @@ ts_configs.setup {
   },
 
   --- 作用不大.
-  --- incremental_selection = {
-  ---   enable = true,
-  ---   keymaps = {
-  ---     init_selection = "gnn",
-  ---     node_incremental = "grn",
-  ---     scope_incremental = "grc",
-  ---     node_decremental = "grm",
-  ---   },
-  --- },
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+      init_selection = "<leader>g",
+      node_incremental = "<leader>g",  -- visual 下的 keymaps.
+      -- scope_incremental = "<leader>gc",
+      -- node_decremental = "<leader>gm",
+    },
+  },
 
   --- NOTE: This is an experimental feature. 使用 'indent_blankline' 代替.
   --- indent = {
