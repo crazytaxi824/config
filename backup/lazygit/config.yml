@@ -108,24 +108,22 @@ notARepository: 'quit' # one of: 'prompt' | 'create' | 'skip' | 'quit'
 keybinding:
     # 通用快捷键
     universal:
-        pullFiles: <disabled> # use 'fetch' instead of 'pull', 慎用.
-        gotoTop: 'g' # go to top of list
-        gotoBottom: 'G' # go to bottom of list
-    # file (window No.2)
+        pullFiles: <disabled> # use 'fetch' instead of 'pull', 慎用'pull'.
+    # file (window No.2 - file, worktree, submodule)
     files:
         commitChangesWithoutHook: <disabled> # commit changes without pre-commit hook
     submodules:
-        init: <disabled> # [Submodules] 项目子仓库, 使用 'b' 打开 menu 操作
-    # branch (window No.3)
+        init: <disabled> # [Submodules] 项目子仓库, 可以使用 'b' 打开 menu 操作
+    # branch (window No.3 - local, remote, tag)
     branches:
         rebaseBranch: <disabled> # use 'rebase-checkout' carefully.
         fastForward: <disabled> # fast-forward this branch from its upstream. 最好使用 merge.
-        forceCheckoutBranch: <disabled>
+        forceCheckoutBranch: <disabled> # 工作区中有未提交的更改时，通常 Git 不允许你切换分支. 如果强制切换工作区中的改动会被丢弃.
         #fetchRemote: 'f'   # 切换至 [Remotes] 才能 fetch, 默认为 'f'
-    # commit (window No.4)
+    # commit (window No.4 - commit, reflog)
     commits:
-        revertCommit: <disabled> # use 'revert-commit' carefully. no confirm required
-        viewResetOptions: <disabled> # 默认为 'g', 这里是为了避免按键冲突
+        revertCommit: <disabled> # use 'revert commit' carefully. no confirm required.
+        # viewResetOptions: <disabled> # 默认为 'g', 这里是为了避免按键冲突
     # stash (window No.5)
     stash:
-        popStash: 'p' # 默认为 'g', 这里是为了避免按键冲突
+        popStash: 'p' # 默认为 'g'
