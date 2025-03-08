@@ -200,8 +200,8 @@ local keymaps = {
   {'v', '<S-CR>', '<C-c><cmd>lua require("utils.filepath").v_jump()<CR>', opt, 'filepath: Jump to file'},
 
   --- 利用 treesitter 跳转到 prev/next root node.
-  {'n', '[[', function() key_fn.section.goto_prev() end, opt, 'Jump to Prev Section'},
-  {'n', ']]', function() key_fn.section.goto_next() end, opt, 'Jump to Next Section'},
+  {{'n','v'}, '[[', function() key_fn.section.goto_prev() end, opt, 'Jump to Prev Section'},
+  {{'n','v'}, ']]', function() key_fn.section.goto_next() end, opt, 'Jump to Next Section'},
 
   --- 切换 buffer, 目前使用 bufferline 进行 buffer 切换, 如果不使用 bufferline.nvim 则使用以下设置.
   --{'n', '<lt>', '<cmd>bprevious<CR>', opt, 'go to previous buffer'},
