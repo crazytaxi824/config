@@ -690,7 +690,8 @@ function vimExistFile() {
 # NOTE: stop using 'rm'
 #alias rm="rm -i"  # prompt every time when 'rm file/dir'
 alias rm="echo '\e[33muse \"trash\" instead\e[0m'; #ignore_rest_cmd"
-alias trash="zsh ~/.config/.my_shell_functions/trash.sh"
+# NOTE: trash cmd is available in Macos
+# alias trash="zsh ~/.config/.my_shell_functions/trash.sh"
 
 ### open/edit file
 alias e="vimExistFile --"   # edit file, vimExistFile() 函数定义在下面.
