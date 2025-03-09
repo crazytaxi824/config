@@ -83,7 +83,8 @@ local nt_buffer_keymaps = {
   { "?",           nt_api.tree.toggle_help,    "Help" },
 
   { "a",           nt_api.fs.create,   "Create File" },
-  { "d",           nt_api.fs.remove,   "Remove File" },
+  -- { "d",           nt_api.fs.remove,   "Remove File" },
+  { "D",           nt_api.fs.trash,    "Trash File" },
   { "R",           nt_api.fs.rename_full,   "Full Rename" },  -- 类似 `$ mv foo bar`
   { "y",           nt_api.fs.copy.absolute_path,   "Copy Absolute Path" },
   { "C",           nt_api.fs.copy.node,   "Copy File" },
@@ -274,7 +275,7 @@ nvim_tree.setup {
     },
   },
   trash = {
-    cmd = "trash",  -- Mac 没有 trash cmd
+    cmd = "trash",
   },
   ui = {
     confirm = {
