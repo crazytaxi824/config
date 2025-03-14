@@ -248,7 +248,7 @@ local plugins = {
   --- statusline decorator, `:help 'statusline'`
   {
     "nvim-lualine/lualine.nvim",   -- bottom status line
-    commit = "f4f791f",
+    commit = "02d61f5",
     config = function() require("plugins.settings.decor_lualine") end,
 
     event = "VeryLazy",
@@ -258,7 +258,7 @@ local plugins = {
   --- NOTE: dap-ui && dap 设置在同一文件中.
   {
     "mfussenegger/nvim-dap",  -- core debug tool
-    commit = "8228cb0",
+    commit = "a720d49",
     config = function() require("plugins.settings.dap_debug") end,
 
     cmd = {'DapToggleBreakpoint', 'DapContinue', 'DapLoadLaunchJSON'},
@@ -302,7 +302,7 @@ local plugins = {
 
   {
     "nvim-telescope/telescope-fzf-native.nvim",
-    commit = "2a5ceff",
+    commit = "1f08ed6",
     build = "make",
 
     lazy = true,  -- telescope 加载时自动加载.
@@ -314,7 +314,7 @@ local plugins = {
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {
     "lewis6991/gitsigns.nvim",
-    commit = "4c40357",
+    commit = "011dc67",
     -- tag = "v1.0.1",
     config = function() require("plugins.settings.git_signs") end,
 
