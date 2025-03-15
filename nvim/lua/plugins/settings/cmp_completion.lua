@@ -86,12 +86,12 @@ cmp.setup {
 
   window = {
     completion = {
-      -- border = {"","","","│","","","",""},
+      border = {"","","","│","","","","│"},
       -- winhighlight = 'Normal:Pmenu,FloatBorder:Pmenu,CursorLine:PmenuSel,Search:None',
       scrollbar = true,  -- true: 需要时显示 scrollbar; false: 永远不显示 scrollbar.
     },
     documentation = {
-      border = {"", "", "", "▕", "", "", "", "▏"},  -- `:help nvim_open_win()`
+      border = {"", "", "", "▕", "", "", "", " "},  -- `:help nvim_open_win()`
       --winhighlight = 'FloatBorder:NormalFloat',
     },
   },
