@@ -1,16 +1,14 @@
 -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#sumneko_lua
 return {
-  --- will overwrite previous settings because
   on_init = function(client)
+    --- 这里的 on_init 会覆盖 setup 中 on_init 设置, 所以这里需要重新设置 semanticTokensProvider = nil
     if client.server_capabilities then
       client.server_capabilities.semanticTokensProvider = nil
     end
 
-    --- if the root_dir cannot be found, then workspace_folders will be nil.
-    local workspace_folders = client.workspace_folders
-    if workspace_folders then
-      local path = workspace_folders[1].name
-      if vim.uv.fs_stat(path..'/.luarc.json') or vim.uv.fs_stat(path..'/.luarc.jsonc') then
+    if client.workspace_folders then
+      local path = client.workspace_folders[1].name
+      if path ~= vim.fn.stdpath('config') and (vim.loop.fs_stat(path..'/.luarc.json') or vim.loop.fs_stat(path..'/.luarc.jsonc')) then
         return
       end
     end
@@ -30,8 +28,8 @@ return {
           --- NOTE: `:help $VIMRUNTIME` 是 vim 内置的 runtime 环境变量. 和 `:set runtimepath?` 不同.
           vim.env.VIMRUNTIME,  -- /usr/local/Cellar/neovim/0.xxx/share/nvim/runtime/
           vim.fn.stdpath("config"),  -- ~/.config/nvim/ 目录下的 global function
-          "${3rd}/luv/library",  -- vim.vu function
-          -- "${3rd}/busted/library",
+          "${3rd}/luv/library",  -- Luv 是基于 libuv 的 Lua 库提供异步 I/O 操作, eg: vim.vu
+          -- "${3rd}/busted/library", -- Busted 是一个 Lua 的单元测试框架
         }
         -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
         -- library = vim.api.nvim_get_runtime_file("", true)

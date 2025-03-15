@@ -45,6 +45,12 @@ return {
 
   settings = {
     gopls = {
+      -- semanticTokens = true,  -- 默认 false.
+      -- semanticTokenTypes = {  -- allows disabling types
+      --   string = false,
+      --   number = false,
+      -- },
+
       usePlaceholders = true,
       staticcheck = false,
       vulncheck = "Imports",  -- check Go Vulnerability Database check known Vulnerability in your dependencies.
