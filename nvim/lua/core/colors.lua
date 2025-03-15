@@ -91,7 +91,7 @@ Highlights = {
   --- Completion Menu & Floating Window 颜色
   Pmenu = {
     ctermfg=Colors.white.c, fg=Colors.white.g,
-    ctermbg=Colors.black.c, bg=Colors.black.g,
+    ctermbg=Colors.g235.c, bg=Colors.g235.g,
   },
   --- Completion Menu 选中项颜色
   PmenuSel = {
@@ -105,7 +105,7 @@ Highlights = {
   --- NormalFloat 默认 link to Pmenu
   NormalFloat = {link="Pmenu"},
   --- Floating Window border 颜色需要和 Pmenu 的背景色相同. border = {"▄","▄","▄","█","▀","▀","▀","█"}
-  FloatBorder = {ctermfg=Colors.black.c, fg=Colors.black.g},
+  FloatBorder = {ctermfg=Colors.g235.c, fg=Colors.g235.g},
 
   --- 注释颜色
   Comment = {ctermfg=65, fg='#6a9956'},
@@ -134,7 +134,7 @@ Highlights = {
   --- 相当于 hi clear SignColumn, 默认有 bg 颜色.
   SignColumn = {},
   --- textwidth column 颜色
-  ColorColumn = {ctermbg=Colors.g235.c, bg=Colors.g235.g},
+  ColorColumn = {ctermbg=Colors.g234.c, bg=Colors.g234.g},
   --- Quick Fix 选中行颜色
   QuickFixLine = {
     ctermfg=Colors.boolean_blue.c, fg=Colors.boolean_blue.g,
