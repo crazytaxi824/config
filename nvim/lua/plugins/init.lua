@@ -397,8 +397,8 @@ local opts = {
     enabled = false, -- luarocks disabled.
   },
   ui = {
-    size = { width = 0.6, height = 0.9 },
-    border = Nerd_icons.border,
+    size = { width = 0.6, height = 0.75 },
+    border = {"","▄","","","","▀","",""},
     icons = {
       list = { "●", "→", "★", "‒" }
     },
