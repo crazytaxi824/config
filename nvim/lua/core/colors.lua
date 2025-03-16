@@ -41,14 +41,14 @@
 --- VVI: alacritty color based on sRGB
 Colors = {
   --- NOTE: alacritty 颜色对应, 表示 0-15 系统颜色.
-  white = {c=251, g='#c0c0c0'},  -- foreground, text
-  black = {c=233, g='#121212'},  -- black background
-  red   = {c=167, g='#f04c4c'},  -- error message
+  white = {c=251, g='#c0c0c0'},   -- foreground, text
+  black = {c=233, g='#121212'},   -- black background
+  red   = {c=167, g='#f04c4c'},   -- error message
   green = {c=42,  g='#00d787'},   -- markdown title
   yellow = {c=220, g='#ffd800'},  -- Search, lualine: Insert Mode background && tabline: tab seleced background
   blue  = {c=75, g='#75beff'},    -- info message
   magenta = {c=213, g='#ff87ff'}, -- IncSearch, return, if, else, break, package, import
-  cyan  = {c=81, g='#9adafc'},   -- VVI: one of vim's main color. SpecialChar, Underlined, Label ...
+  cyan  = {c=81, g='#9cdcfe'},    -- VVI: one of vim's main color. SpecialChar, Underlined, Label ...
   orange = {c=208, g='#ff8700'},  -- warning message
   hint_grey = {c=244, g='#808080'},  -- hint message
   purple = {c=170, g='#d75fd7'},
@@ -197,8 +197,8 @@ Highlights = {
   Type = {ctermfg=Colors.type_green.c, fg=Colors.type_green.g},
   --- property & parameter
   Identifier = {link = "Normal"},
-  --- 常量颜色. eg: const <Constant> = 100
-  Constant= {link="Boolean"},
+  --- 常量颜色. eg: const <Constant> = "foo"
+  Constant= {ctermfg=Colors.blue.c, fg=Colors.blue.g},
   --Structure = {link = "Type"},  -- 默认 link to Type
 
   --- if, switch, case ...
@@ -314,7 +314,7 @@ Highlights = {
   },
   SpellLocal = {},  -- clear highlight
 
-  --- NOTE: treesitter 颜色设置 --------------------------------------------------------------------
+  --- treesitter 颜色设置 --------------------------------------------------------------------------
   --- comment
   ['@comment.error'] = {link = 'ErrorMsg'},  -- FIXME, BUG, ERROR
   ['@comment.warning'] = { link = "WarningMsg" },  -- HACK, WARN, WARNING, VVI, FIX
@@ -350,12 +350,14 @@ Highlights = {
   ['@keyword.conditional'] = { link = "Conditional" },
   ['@keyword.repeat'] = { link = "Conditional" },
   ['@keyword.return'] = { link = "Conditional" },
-  ['@module'] = { ctermfg=Colors.type_green.c, fg=Colors.type_green.g },  -- package <module>
+  ['@keyword.exception'] = { link = "Conditional" },  -- try catch throw
+  ['@keyword.coroutine'] = { link = "Conditional" },  -- await
+  ['@keyword.import'] = { link = "Conditional" },  -- import export
 
   ['@constant'] = { link = "Constant" },
-  ['@constant.builtin'] = { link = "@constant" },
-  ['@variable'] = { link = "Normal" },
-  ['@@variable.builtin'] = { link = "variable" },
+  ['@constant.builtin'] = { link = "Boolean" },  -- null | undefined
+  ['@variable'] = { link = "Label" },
+  ['@variable.builtin'] = { link = "@variable" },
 
   ['@property'] = { link = "Label" },
   ['@property.private'] = { ctermfg=Colors.g246.c, fg=Colors.g246.g },  -- struct{ a:1 }
@@ -374,15 +376,28 @@ Highlights = {
   --['@function.method.call'] = { link = "Function" },
   ['@function.builtin'] = { link = "Function" },
 
-  ['@namespace'] = { link = "Normal" },  -- package [@namespace]
-
   ['@tag'] = { ctermfg=68, fg='#5396cc' },  -- html, <@tag></@tag>
   ['@tag.delimiter'] = { ctermfg=Colors.g244.c, fg=Colors.g244.g },  -- html, <div></div>, <> 括号颜色
   ['@tag.attribute'] = { link = "@property" },  -- html, <... width=..., @tag.attribute=... >
   ['@punctuation.special'] = { link = 'Special' },  -- js, ts, console.log(`${ ... }`)
 
   --- js / ts constructor. new Foo() 作为一个 type
-  ['@constructor'] = { link = "Type" },
+  -- ['@constructor'] = { link = "Type" },
+
+  --- custom highlight
+  ['@import.underline'] = { link = "Underlined" },
+
+  --- semantic tokens ------------------------------------------------------------------------------
+  --- NOTE: clear highlight in order to use treesitter highlight
+  ['@lsp.type.comment'] = {},
+  ['@lsp.type.variable'] = {},
+  -- ['@lsp.type.keyword'] = {},
+  -- ['@lsp.type.namespace'] = {},
+  -- ['@lsp.type.property'] = {},
+
+  -- readonly = constant
+  ['@lsp.mod.readonly'] = { link = "Constant" },
+  ['@lsp.typemod.variable.readonly'] = { link = "Constant" },
 
   --- NOTE: 以下设置是为了配合 lazy load plugins ---------------------------------------------------
   --- 以下颜色为了 lazy load lualine
@@ -399,7 +414,7 @@ Highlights = {
   },
 
   --- 以下颜色为了 lazy load bufferline
-  TabLineFill = {}, -- NOTE: clear TabLineFill
+  TabLineFill = {}, -- NOTE: clear highlight
   TabLineSel = {
     ctermfg=Colors.func_gold.c, fg=Colors.func_gold.g,
     ctermbg=Colors.black.c, bg=Colors.black.g,
