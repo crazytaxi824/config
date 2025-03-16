@@ -17,7 +17,7 @@ local buf_highlights = {
     ctermbg=Colors.black.c, bg=Colors.black.g
   },
   buffer_selected = {
-    ctermfg=Colors.func_gold.c, fg=Colors.func_gold.g,
+    ctermfg=Colors.gold_fn.c, fg=Colors.gold_fn.g,
     ctermbg=Colors.black.c, bg=Colors.black.g,
     bold = true,
     italic = false,  -- 默认设置中是 buffer_selected.italic = true.

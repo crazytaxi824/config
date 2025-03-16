@@ -11,7 +11,7 @@
 --- Highlights
 vim.api.nvim_set_hl(0, 'my_diagnostic_linehl', {
   -- ctermfg=Colors.cyan.c, fg=Colors.cyan.g,
-  ctermbg=Colors.bg_red.c, bg=Colors.bg_red.g,
+  ctermbg=Colors.red_bg.c, bg=Colors.red_bg.g,
 })
 
 --- `:help vim.diagnostic.config()`

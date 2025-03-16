@@ -54,12 +54,12 @@ Colors = {
   purple = {c=170, g='#D75FD7'},
 
   --- 常用颜色,
-  boolean_blue  = {c=74, g='#569CD6'},   -- Boolean, Special
-  func_gold     = {c=78, g='#DCDCAA'},   -- 78|85, func, function_call, method, method_call ... | bufferline, lualine
-  type_green    = {c=79, g='#4EC9B0'},   -- type, 数据类型
+  blue_boolean  = {c=74, g='#569CD6'},   -- Boolean, Special
+  gold_fn     = {c=78, g='#DCDCAA'},   -- 78|85, func, function_call, method, method_call ... | bufferline, lualine
+  green_type    = {c=79, g='#4EC9B0'},   -- type, 数据类型
 
   --- dark color use for background
-  bg_red = {c=52, g='#66201D'},  --- #4E201E, #72201D
+  red_bg = {c=52, g='#66201D'},  --- #4E201E, #72201D
 
   --- grayscale 颜色
   g234 = {c=234, g='#1C1C1C'},
@@ -137,7 +137,7 @@ Highlights = {
   ColorColumn = {ctermbg=Colors.g234.c, bg=Colors.g234.g},
   --- Quick Fix 选中行颜色
   QuickFixLine = {
-    ctermfg=Colors.boolean_blue.c, fg=Colors.boolean_blue.g,
+    ctermfg=Colors.blue_boolean.c, fg=Colors.blue_boolean.g,
     bold=true,
   },
 
@@ -190,11 +190,11 @@ Highlights = {
 
   --- 基础颜色 -------------------------------------------------------------------------------------
   --- VVI: 最主要的颜色
-  Keyword = {ctermfg=Colors.boolean_blue.c, fg=Colors.boolean_blue.g},
+  Keyword = {ctermfg=Colors.blue_boolean.c, fg=Colors.blue_boolean.g},
   --- func <Function> {}, 定义 & call func 都使用该颜色
-  Function = {ctermfg=Colors.func_gold.c, fg=Colors.func_gold.g},
+  Function = {ctermfg=Colors.gold_fn.c, fg=Colors.gold_fn.g},
   --- type <Type> struct
-  Type = {ctermfg=Colors.type_green.c, fg=Colors.type_green.g},
+  Type = {ctermfg=Colors.green_type.c, fg=Colors.green_type.g},
   --- property & parameter
   Identifier = {link = "Normal"},
   --- 常量颜色. eg: const <Constant> = "foo"
@@ -214,7 +214,7 @@ Highlights = {
   Float  = {link = "Number"}, -- 10.02 float64, float32
 
   --- true / false
-  Boolean = {ctermfg=Colors.boolean_blue.c, fg=Colors.boolean_blue.g},
+  Boolean = {ctermfg=Colors.blue_boolean.c, fg=Colors.blue_boolean.g},
   Special = {link = "Boolean"},  -- console.log(`${ ... }`)
   --SpecialChar = { link = "Special" },  -- format verbs %v %d ...
   PreProc = { link = "Boolean" },  -- checkhealth
@@ -274,7 +274,7 @@ Highlights = {
   },
   DiffDelete = {
     ctermfg=Colors.white.c,
-    ctermbg=52, bg=Colors.bg_red.g,
+    ctermbg=52, bg=Colors.red_bg.g,
   },
   DiffChange = {},  -- 有修改的一整行的文字的颜色, 设置 clear.
   --- changed text
@@ -404,7 +404,7 @@ Highlights = {
   --- 无法使用 lualine 的情况下 StatusLine 颜色, eg: tagbar 有自己设置的 ':set statusline?' 颜色不受 lualine 控制.
   --- active
   StatusLine = {
-    ctermfg=Colors.func_gold.c, fg=Colors.func_gold.g,
+    ctermfg=Colors.gold_fn.c, fg=Colors.gold_fn.g,
     ctermbg=Colors.black.c, bg=Colors.black.g,
   },
   --- inactive, NC (not-current windows)
@@ -416,7 +416,7 @@ Highlights = {
   --- 以下颜色为了 lazy load bufferline
   TabLineFill = {}, -- NOTE: clear highlight
   TabLineSel = {
-    ctermfg=Colors.func_gold.c, fg=Colors.func_gold.g,
+    ctermfg=Colors.gold_fn.c, fg=Colors.gold_fn.g,
     ctermbg=Colors.black.c, bg=Colors.black.g,
     bold=true,
   },
