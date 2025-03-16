@@ -7,7 +7,8 @@
 ;;; NOTE: eg: type T struct { A, a, _a, 你好 string }, 其中 a, _a, 你好 都是私有属性, 无法在 package 外使用.
 ;;; 需要在 colors.lua 中定义 @property.private 颜色.
 (field_declaration name: ((field_identifier) @property.private
-  (#lua-match? @property.private "^[^A-Z]")))
+  (#lua-match? @property.private "^[^A-Z]")
+  (#set! "priority" 200)))
 
 ;;; 初始化 struct 时 private field 的颜色. p := P{a:1, b:2}
 ; (keyed_element (literal_element (identifier) @property.private
