@@ -85,7 +85,7 @@ Highlights = {
   --- non-focus window background color
   NormalNC = {link="Normal"},
   --- Visual mode seleced text color
-  Visual = {ctermbg=24, bg='#264f78'},
+  Visual = {ctermbg=24, bg='#264F78'},
 
   --- VVI: Pmenu & FloatBorder 背景色需要设置为相同, 影响很多窗口的颜色.
   --- Completion Menu & Floating Window 颜色
@@ -95,7 +95,7 @@ Highlights = {
   },
   --- Completion Menu 选中项颜色
   PmenuSel = {
-    ctermbg=Colors.g238.c, bg='#03395e',
+    ctermbg=Colors.g238.c, bg='#03395E',
     bold=true, underline=true,
   },
   --- Completion Menu scroll bar 背景色
@@ -108,7 +108,7 @@ Highlights = {
   FloatBorder = {ctermfg=Colors.g235.c, fg=Colors.g235.g},
 
   --- 注释颜色
-  Comment = {ctermfg=65, fg='#6a9956'},
+  Comment = {ctermfg=65, fg='#6A9955'},
   --- 影响 listchars indentLine 颜色
   NonText = {ctermfg=Colors.g238.c, fg=Colors.g238.g},
   --- window 之间的分隔线颜色
@@ -156,7 +156,7 @@ Highlights = {
 
   --- echoerr 颜色
   ErrorMsg = {
-    ctermfg=255, fg='#ffffff',
+    ctermfg=255, fg='#FFFFFF',
     ctermbg=Colors.red.c, bg=Colors.red.g,
   },
   --- echohl WarningMsg | echo "Don't panic!" | echohl None 颜色
@@ -167,13 +167,13 @@ Highlights = {
 
   --- TODO 颜色
   Todo = {
-    ctermfg=255, fg='#ffffff',
+    ctermfg=255, fg='#FFFFFF',
     ctermbg=22, bg='#008F00',
   },
   --- NOTE 颜色
   SpecialComment = {
-    ctermfg=255, fg='#ffffff',
-    ctermbg=63,  bg='#5f5fff',
+    ctermfg=255, fg='#FFFFFF',
+    ctermbg=63,  bg='#5F5FFF',
   },
 
   --- command 模式自动补全
@@ -210,7 +210,7 @@ Highlights = {
   String = {ctermfg=173, fg='#CE9178'},
   Character = {link = "String"},
 
-  Number = {ctermfg=151, fg='#b5cea8'}, -- 100, int, uint ...
+  Number = {ctermfg=151, fg='#B5CEA8'}, -- 100, int, uint ...
   Float  = {link = "Number"}, -- 10.02 float64, float32
 
   --- true / false
@@ -270,7 +270,7 @@ Highlights = {
   --- diff 颜色 ------------------------------------------------------------------------------------
   DiffAdd = {
     ctermfg=Colors.white.c, fg=Colors.white.g,
-    ctermbg=Colors.green.c, bg='#4c5b2d',
+    ctermbg=Colors.green.c, bg='#4C5B2D',
   },
   DiffDelete = {
     ctermfg=Colors.white.c,
@@ -287,7 +287,7 @@ Highlights = {
   --- diff mode 下, 会自动设置:
   --- `set foldcolumn=2`, 在 foldcolumn 显示在 SignColumn 前面.
   --- `set foldmethod=diff`
-  Folded = {ctermfg=67, fg='#5f87af'}, -- 折叠行文字颜色
+  Folded = {ctermfg=67, fg='#5F87AF'}, -- 折叠行文字颜色
   FoldColumn = {ctermfg=Colors.green.c, fg=Colors.green.g}, -- foldcolumn 中 + - | 的颜色
   CursorLineFold = {link = "FoldColumn"},  -- cursor 所在行 foldcolumn 中 + - | 号颜色
 
@@ -339,7 +339,7 @@ Highlights = {
   ['@markup.link.url'] = { link = "Label" },   -- markdown, [@markup.link.label](@markup.link.url)
   --- markdown, inline `code`
   ['@markup.raw.markdown_inline'] = {
-    ctermfg=173, fg='#ce9178',
+    ctermfg=173, fg='#CE9178',
     ctermbg=Colors.g236.c, bg=Colors.g236.g,
   },
 
@@ -366,7 +366,7 @@ Highlights = {
   ['@parameter'] = { link = "@property" },
 
   --- \n \t ...
-  ['@string.escape'] = {ctermfg=180, fg='#d7ba7d'},
+  ['@string.escape'] = {ctermfg=180, fg='#D7BA7D'},
   --- 'printf' is a language.
   ['@character.printf'] = { link = "Special" },
 
@@ -376,7 +376,7 @@ Highlights = {
   --['@function.method.call'] = { link = "Function" },
   ['@function.builtin'] = { link = "Function" },
 
-  ['@tag'] = { ctermfg=68, fg='#5396cc' },  -- html, <@tag></@tag>
+  ['@tag'] = { ctermfg=68, fg='#5396CC' },  -- html, <@tag></@tag>
   ['@tag.delimiter'] = { ctermfg=Colors.g244.c, fg=Colors.g244.g },  -- html, <div></div>, <> 括号颜色
   ['@tag.attribute'] = { link = "@property" },  -- html, <... width=..., @tag.attribute=... >
   ['@punctuation.special'] = { link = 'Special' },  -- js, ts, console.log(`${ ... }`)
