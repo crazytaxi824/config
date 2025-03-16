@@ -41,39 +41,39 @@
 --- VVI: alacritty color based on sRGB
 Colors = {
   --- NOTE: alacritty 颜色对应, 表示 0-15 系统颜色.
-  white = {c=251, g='#c0c0c0'},   -- foreground, text
+  white = {c=251, g='#C0C0C0'},   -- foreground, text
   black = {c=233, g='#121212'},   -- black background
-  red   = {c=167, g='#f04c4c'},   -- error message
-  green = {c=42,  g='#00d787'},   -- markdown title
-  yellow = {c=220, g='#ffd800'},  -- Search, lualine: Insert Mode background && tabline: tab seleced background
-  blue  = {c=75, g='#75beff'},    -- info message
-  magenta = {c=213, g='#ff87ff'}, -- IncSearch, return, if, else, break, package, import
-  cyan  = {c=81, g='#9cdcfe'},    -- VVI: one of vim's main color. SpecialChar, Underlined, Label ...
-  orange = {c=208, g='#ff8700'},  -- warning message
+  red   = {c=167, g='#F04C4C'},   -- error message
+  green = {c=42,  g='#00D787'},   -- markdown title
+  yellow = {c=220, g='#FFD800'},  -- Search, lualine: Insert Mode background && tabline: tab seleced background
+  blue  = {c=75, g='#4FC1FF'},    -- info message
+  magenta = {c=213, g='#FF87FF'}, -- IncSearch, return, if, else, break, package, import
+  cyan  = {c=81, g='#9CDCFE'},    -- VVI: one of vim's main color. SpecialChar, Underlined, Label ...
+  orange = {c=208, g='#FF8700'},  -- warning message
   hint_grey = {c=244, g='#808080'},  -- hint message
-  purple = {c=170, g='#d75fd7'},
+  purple = {c=170, g='#D75FD7'},
 
   --- 常用颜色,
-  boolean_blue  = {c=74, g='#569cd6'},   -- Boolean, Special
-  func_gold     = {c=78, g='#dce6aa'},   -- 78|85, func, function_call, method, method_call ... | bufferline, lualine
-  type_green    = {c=79, g='#20b691'},   -- type, 数据类型
+  boolean_blue  = {c=74, g='#569CD6'},   -- Boolean, Special
+  func_gold     = {c=78, g='#DCDCAA'},   -- 78|85, func, function_call, method, method_call ... | bufferline, lualine
+  type_green    = {c=79, g='#4EC9B0'},   -- type, 数据类型
 
   --- dark color use for background
   bg_red = {c=52, g='#66201D'},  --- #4E201E, #72201D
 
   --- grayscale 颜色
-  g234 = {c=234, g='#1c1c1c'},
+  g234 = {c=234, g='#1C1C1C'},
   g235 = {c=235, g='#262626'},
   g236 = {c=236, g='#303030'},
-  g237 = {c=237, g='#3a3a3a'},
+  g237 = {c=237, g='#3A3A3A'},
   g238 = {c=238, g='#444444'},
-  g239 = {c=239, g='#4e4e4e'},
+  g239 = {c=239, g='#4E4E4E'},
   g240 = {c=240, g='#585858'},
   g241 = {c=241, g='#626262'},
-  g242 = {c=242, g='#6c6c6c'},
+  g242 = {c=242, g='#6C6C6C'},
   g243 = {c=243, g='#767676'},
   g244 = {c=244, g='#808080'},
-  g245 = {c=245, g='#8a8a8a'},
+  g245 = {c=245, g='#8A8A8A'},
   g246 = {c=246, g='#949494'},
 }
 
@@ -207,7 +207,7 @@ Highlights = {
   Statement = {link = "Conditional"}, -- syntax 中 'package' & 'import' 关键字
   Include   = {link = "Conditional"}, -- treesitter 中 'package', 'import', 'from' ... 关键字
 
-  String = {ctermfg=173, fg='#ce9178'},
+  String = {ctermfg=173, fg='#CE9178'},
   Character = {link = "String"},
 
   Number = {ctermfg=151, fg='#b5cea8'}, -- 100, int, uint ...
