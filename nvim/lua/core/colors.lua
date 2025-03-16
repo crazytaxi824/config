@@ -340,8 +340,10 @@ Highlights = {
   },
 
   --- program language
-  ['@type'] = { link = "Type" },
+  -- ['@type'] = { link = "Type" },
   ['@type.builtin'] = { link = "@type" },
+
+  ['@function.builtin'] = { link = "Function" },  -- copy() delete() make()
 
   ['@keyword.conditional'] = { link = "Conditional" },
   ['@keyword.repeat'] = { link = "Conditional" },
@@ -350,7 +352,7 @@ Highlights = {
   ['@keyword.coroutine'] = { link = "Conditional" },  -- await
   ['@keyword.import'] = { link = "Conditional" },  -- import export
 
-  ['@constant'] = { link = "Constant" },
+  ['@constant'] = { link = "Constant" },  -- constant name
   ['@constant.builtin'] = { link = "Boolean" },  -- null | undefined
   ['@variable'] = { link = "Label" },
   ['@variable.builtin'] = { link = "@variable" },
@@ -361,28 +363,17 @@ Highlights = {
   ['@field'] = { link = "@property" },
   ['@parameter'] = { link = "@property" },
 
-  --- \n \t ...
-  ['@string.escape'] = {ctermfg=180, fg='#D7BA7D'},
-  --- 'printf' is a language.
-  ['@character.printf'] = { link = "Special" },
-
-  --['@function'] = { link = "Function" },
-  --['@function.call'] = { link = "Function" },
-  --['@function.method'] = { link = "Function" },
-  --['@function.method.call'] = { link = "Function" },
-  ['@function.builtin'] = { link = "Function" },
-
   ['@tag'] = { link = "Type" },  -- jsx/tsx custom tags, <BrowserRouter> <ThemeProvider> <Link> <Button> ...
   ['@tag.builtin'] = { link = "Boolean" },  -- html, <div> <h1> <p> <li> ...
   ['@tag.delimiter'] = { ctermfg=Colors.g244.c, fg=Colors.g244.g },  -- html <tag> <> 括号颜色
   ['@tag.attribute'] = { link = "@property" },  -- html, <... width=..., @tag.attribute=... >
   ['@punctuation.special'] = { link = 'Special' },  -- js, ts, console.log(`${ ... }`)
 
-  --- js / ts constructor. new Foo() 作为一个 type
-  -- ['@constructor'] = { link = "Type" },
+  ['@character.printf'] = { link = "Special" },  -- 'printf' 是一个独立的 treesitter query
+  ['@string.escape'] = {ctermfg=180, fg='#D7BA7D'},  -- \n \t ...
 
   --- custom highlight
-  ['@import.underline'] = { link = "Underlined" },
+  ['@import.underline'] = { link = "Underlined" },  -- go import list underline.
 
   --- semantic tokens ------------------------------------------------------------------------------
   --- NOTE: clear highlight in order to use treesitter highlight
