@@ -10,3 +10,6 @@
 
 ;;; 'this' keyword
 ((this) @keyword)
+
+;;; 'super'
+((super) @keyword)
