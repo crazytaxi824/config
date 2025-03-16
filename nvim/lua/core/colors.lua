@@ -321,13 +321,9 @@ Highlights = {
   ['@comment.note'] = { link = "SpecialComment" }, -- XXX, NOTE, DOCS, TEST, INFO
   ['@comment.todo'] = { link = "Todo" },           -- TODO
   ['@punctuation.delimiter.comment'] = { link = "Comment" },
-  ['@string.special.url.comment'] = { link = "Underlined" }, -- VVI: 这里的 comment 设置是 utils/keymaps function 中需要用到的, 不要删除.
 
-  --- url
+  --- url: http://www.abc.com
   ['@string.special.url'] = { link = "Underlined" },  -- url
-  ['@string.special.url.html'] = { link = "String" },  -- html, <href="@text.uri">
-  ['@string.special.url.jsx']  = { link = "String" },  -- html, <href="@text.uri">
-  ['@string.special.url.tsx']  = { link = "String" },  -- html, <href="@text.uri">
 
   --- markdown / markdown_inline
   ['@markup.heading'] = { link = "Title" }, -- markdown, # title
@@ -376,8 +372,9 @@ Highlights = {
   --['@function.method.call'] = { link = "Function" },
   ['@function.builtin'] = { link = "Function" },
 
-  ['@tag'] = { ctermfg=68, fg='#5396CC' },  -- html, <@tag></@tag>
-  ['@tag.delimiter'] = { ctermfg=Colors.g244.c, fg=Colors.g244.g },  -- html, <div></div>, <> 括号颜色
+  ['@tag'] = { link = "Type" },  -- jsx/tsx, <BrowserRouter> <ThemeProvider> <Link> <Button> ...
+  ['@tag.builtin'] = { link = "Boolean" },  -- html, <div> <h1> <p> <li> ...
+  ['@tag.delimiter'] = { ctermfg=Colors.g244.c, fg=Colors.g244.g },  -- html <tag> <> 括号颜色
   ['@tag.attribute'] = { link = "@property" },  -- html, <... width=..., @tag.attribute=... >
   ['@punctuation.special'] = { link = 'Special' },  -- js, ts, console.log(`${ ... }`)
 
@@ -398,6 +395,8 @@ Highlights = {
   -- readonly = constant
   ['@lsp.mod.readonly'] = { link = "Constant" },
   ['@lsp.typemod.variable.readonly'] = { link = "Constant" },
+
+  ['@lsp.typemod.function'] = { link = "Function" },
 
   --- NOTE: 以下设置是为了配合 lazy load plugins ---------------------------------------------------
   --- 以下颜色为了 lazy load lualine
