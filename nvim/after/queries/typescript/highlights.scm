@@ -9,4 +9,4 @@
 ;(variable_declarator value: (new_expression constructor: ((identifier) @type )))
 
 ;;; 'this' keyword
-(member_expression object: ((this) @keyword))
+((this) @keyword)
