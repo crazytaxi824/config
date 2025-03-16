@@ -47,7 +47,7 @@ return {
     gopls = {
       -- semanticTokens = true,  -- 默认 false.
       -- semanticTokenTypes = {  -- allows disabling types
-      --   string = false,
+      --   string = false,  -- 目前只有 string & number 两个 type.
       --   number = false,
       -- },
 
