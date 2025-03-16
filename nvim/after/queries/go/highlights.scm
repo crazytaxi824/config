@@ -20,10 +20,21 @@
 
 ;;; string() byte() ... 等类型转换
 (call_expression function: ((identifier) @type
-	(#any-of? @type "any" "string" "byte" "rune"
-	   "uint" "uint8" "uint16" "uint32" "uint64" "uintptr"
-	   "int" "int" "int8" "int16" "int32" "int64"
-	   "float32" "float64" "complex64" "complex128")))
+  (#any-of? @type "any" "string" "byte" "rune"
+    "uint" "uint8" "uint16" "uint32" "uint64" "uintptr"
+    "int" "int" "int8" "int16" "int32" "int64"
+    "float32" "float64" "complex64" "complex128")))
 
-;;; import ("fmt") underline
-;(import_spec_list (import_spec path: ((interpreted_string_literal) @text.underline)))
+;;; import path list underline
+;;; import (
+;;;   "fmt"
+;;; )
+(import_declaration
+  (import_spec_list
+    (import_spec path: ((interpreted_string_literal
+      (interpreted_string_literal_content) @import.underline)))))
+
+;;; import "fmt"
+(import_declaration
+  (import_spec path: ((interpreted_string_literal
+    (interpreted_string_literal_content) @import.underline))))
