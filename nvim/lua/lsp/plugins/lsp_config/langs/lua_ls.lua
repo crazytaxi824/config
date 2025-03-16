@@ -1,11 +1,6 @@
 -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#sumneko_lua
 return {
   on_init = function(client)
-    --- 这里的 on_init 会覆盖 setup 中 on_init 设置, 所以这里需要重新设置 semanticTokensProvider = nil
-    if client.server_capabilities then
-      client.server_capabilities.semanticTokensProvider = nil
-    end
-
     if client.workspace_folders then
       local path = client.workspace_folders[1].name
       if path ~= vim.fn.stdpath('config') and (vim.loop.fs_stat(path..'/.luarc.json') or vim.loop.fs_stat(path..'/.luarc.jsonc')) then

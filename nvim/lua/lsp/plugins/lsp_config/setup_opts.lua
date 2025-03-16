@@ -85,10 +85,10 @@ M.on_init = function(client, result)
   --- DONOT follow `:help vim.lsp.semantic_tokens.start()` place this in on_attach() function.
   --- 如果需要更改 LSP semantic highlight 颜色, 使用 `:hi @lsp.type...`
   --- client.supports_method("textDocument/semanticTokens")
-  if client.server_capabilities then
-    client.server_capabilities.semanticTokensProvider = nil
-    -- client.server_capabilities.foldingRangeProvider = nil  -- debug: lsp-fold 设置
-  end
+  -- if client.server_capabilities then
+  --   -- client.server_capabilities.semanticTokensProvider = nil  -- lsp: semantic token highlight
+  --   -- client.server_capabilities.foldingRangeProvider = nil  -- debug: lsp-fold 设置
+  -- end
 
   --- NOTE: 这里不需要 notify change. on_init() 是在 start 之前执行的.
   -- client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
