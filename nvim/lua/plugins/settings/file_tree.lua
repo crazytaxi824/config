@@ -209,6 +209,7 @@ nvim_tree.setup {
       ".editorconfig", ".gitignore",
       ".golangci.yml", ".golangci.yaml",
       "eslint.config.mjs", "eslint.config.js", "eslint.config.cjs", "package.json", "package-lock.json",
+      "tsconfig.json", "jsconfig.json",
       "pyproject.toml", "pyrightconfig.json", "ruff.toml",
       ".luarc.json", ".luarc.jsonc",
     },
