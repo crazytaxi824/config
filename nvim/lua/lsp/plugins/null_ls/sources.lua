@@ -108,6 +108,15 @@ M.sources =  {
     end,
   },
 
+  --- code action ----------------------------------------------------------------------------------
+  [M.local_code_actions_key] = {
+    gomodifytags = function()
+      return code_actions.gomodifytags.with(proj_local_settings.tools_keep_extend(M.local_code_actions_key,
+        'gomodifytags', {})
+      )
+    end
+  },
+
   --- NOTE: 目前使用 Conform, Deprecated formatter & code_actions -------------- {{{
   -- [M.local_formatter_key] = {
   --   prettier = function()
@@ -137,15 +146,6 @@ M.sources =  {
   --     return formatting.buf.with(proj_local_settings.keep_extend(M.local_formatter_key, 'buf', {}))
   --   end,
   -- },
-
-  [M.local_code_actions_key] = {
-    gomodifytags = function()
-      return code_actions.gomodifytags.with(proj_local_settings.tools_keep_extend(M.local_code_actions_key,
-        'gomodifytags', {})
-      )
-    end
-  },
-
   -- -- }}}
 }
 
