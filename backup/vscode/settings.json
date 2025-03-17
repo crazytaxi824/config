@@ -192,8 +192,8 @@
     "usePlaceholders": true,
     // "ui.completion.usePlaceholders": true,
 
-    // syntax highlight 不好看
-    // "ui.semanticTokens": true,
+    // lsp syntax highlight
+    "ui.semanticTokens": true,
 
     // If true, enable additional analyses with staticcheck.
     // Warning: This will significantly increase memory usage.
