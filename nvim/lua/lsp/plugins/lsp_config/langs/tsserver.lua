@@ -1,4 +1,4 @@
--- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#tsserver
+-- DEPRECATED: https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#tsserver
 return {
   --cmd = { "typescript-language-server", "--stdio" },
   --filetypes = {

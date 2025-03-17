@@ -6,10 +6,10 @@
   (name) @comment.warning @nospell
   ("(" @punctuation.bracket (user) @constant ")" @punctuation.bracket)?
   ":" @punctuation.delimiter)
-  (#any-of? @comment.warning "VVI"))
+  (#any-of? @comment.warning "VVI" "DEPRECATED"))
 
 ("text" @comment.warning @nospell
- (#any-of? @comment.warning "VVI"))
+ (#any-of? @comment.warning "VVI" "DEPRECATED"))
 
 
 
