@@ -207,11 +207,13 @@ nvim_tree.setup {
     special_files = {
       "Makefile", "MAKEFILE", "README.md", "readme.md", "Readme.md", "DOCS.md",
       ".editorconfig", ".gitignore",
-      ".golangci.yml", ".golangci.yaml",
-      "eslint.config.mjs", "eslint.config.js", "eslint.config.cjs", "package.json", "package-lock.json",
-      "tsconfig.json", "jsconfig.json",
-      "pyproject.toml", "pyrightconfig.json", "ruff.toml",
-      ".luarc.json", ".luarc.jsonc",
+      ".golangci.yml", ".golangci.yaml",  -- golangci-lint
+      "eslint.config.js", "eslint.config.mjs", "eslint.config.cjs",
+      "eslint.config.ts", "eslint.config.mts", "eslint.config.cts",  -- requires additional setup
+      "package.json", "package-lock.json",  -- npm init
+      "tsconfig.json", "jsconfig.json",  -- ts_ls config
+      "pyproject.toml", "pyrightconfig.json", "ruff.toml",  -- python
+      ".luarc.json", ".luarc.jsonc",  -- lua_ls config
     },
     symlink_destination = true,  -- Whether to show the destination of the symlink.
   },
