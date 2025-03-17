@@ -45,8 +45,8 @@ dap.set_log_level('WARN')
 dap.adapters.go = {
   type = 'executable';
   command = 'node';
-  --- VVI: 这里是使用 vscode 的 golang 插件进行 debug.
-  args = {os.getenv('HOME') .. '/.vscode/extensions/golang.go-0.44.0/dist/debugAdapter.js'};
+  --- VVI: 这里是使用 vscode 的 golang 插件进行 debug, 可能需要 update path.
+  args = {os.getenv('HOME') .. '/.vscode/extensions/golang.go-0.46.1/dist/debugAdapter.js'};
 }
 
 --- VVI: 这里直接使用 delve 工具对 go test 进行 debug.
@@ -90,6 +90,44 @@ dap.configurations.go = {
     mode = "test",
     program = "./${relativeFileDirname}"
   }
+}
+-- -- }}}
+
+--- pythond debug settings ----------------------------------------------------- {{{
+dap.adapters.python = function(callback, config)
+  if config.request == 'attach' then
+    local port = (config.connect or config).port
+    local host = (config.connect or config).host or '127.0.0.1'
+    callback({
+      type = 'server',
+      port = assert(port, '`connect.port` is required for a python `attach` configuration'),
+      host = host,
+      options = {
+        source_filetype = 'python',
+      },
+    })
+  else
+    callback({
+      type = 'executable',
+      command = '.venv/bin/python',
+      args = { '-m', 'debugpy.adapter' },
+      options = {
+        source_filetype = 'python',
+      },
+    })
+  end
+end
+
+dap.configurations.python = {
+  {
+    -- The first three options are required by nvim-dap
+    type = 'python'; -- the type here established the link to the adapter definition: `dap.adapters.python`
+    request = 'launch';
+    name = "Launch file";
+
+    -- Options below are for debugpy, see https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings for supported options
+    program = "${file}"; -- This configuration will launch the current file if used.
+  },
 }
 -- -- }}}
 
