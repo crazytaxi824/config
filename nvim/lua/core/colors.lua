@@ -378,6 +378,7 @@ Highlights = {
   --- semantic tokens ------------------------------------------------------------------------------
   --- NOTE: `:help vim.highlight.priorities`
   ['@lsp.type.comment'] = {},  -- clear highlight in order to use treesitter highlight.
+  ['@lsp.type.parameter'] = {},
 
   -- readonly = constant
   ['@lsp.mod.readonly'] = { link = "Constant" },
