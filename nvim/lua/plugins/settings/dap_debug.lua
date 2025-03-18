@@ -42,12 +42,21 @@ dap.set_log_level('WARN')
 -- -- }}}
 --- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#go
 --- golang debug settings ------------------------------------------------------ {{{
-dap.adapters.go = {
-  type = 'executable';
-  command = 'node';
-  --- VVI: 这里是使用 vscode 的 golang 插件进行 debug, 可能需要 update path.
-  args = {os.getenv('HOME') .. '/.vscode/extensions/golang.go-0.46.1/dist/debugAdapter.js'};
-}
+dap.adapters.go = function(callback, config)
+  --- 使用 vscode 的 golang 插件进行 debug
+  local path = '~/.vscode/extensions/golang.go-0.46.1/dist/debugAdapter.js'
+  local expanded_path = vim.fn.expand(path)
+  if vim.fn.filereadable(expanded_path) == 0 then
+    Notify(path .. " is missing", vim.log.levels.ERROR)
+    return
+  end
+
+  callback({
+    type = 'executable';
+    command = 'node';
+    args = {expanded_path};
+  })
+end
 
 --- VVI: 这里直接使用 delve 工具对 go test 进行 debug.
 dap.adapters.delve = function(callback, config)
@@ -93,8 +102,17 @@ dap.configurations.go = {
 }
 -- -- }}}
 
+--- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#python
 --- pythond debug settings ----------------------------------------------------- {{{
 dap.adapters.python = function(callback, config)
+  --- TODO: check executable '.venv/bin/python' & '.venv/bin/debugpy'
+  local py_path = '.venv/bin/python'
+  local debug_path = '.venv/bin/debugpy'
+  if vim.fn.executable(py_path) == 0 or vim.fn.executable(debug_path) == 0 then
+    Notify(py_path .. " or " .. debug_path .. " is missing", vim.log.levels.ERROR)
+    return
+  end
+
   if config.request == 'attach' then
     local port = (config.connect or config).port
     local host = (config.connect or config).host or '127.0.0.1'
@@ -109,7 +127,7 @@ dap.adapters.python = function(callback, config)
   else
     callback({
       type = 'executable',
-      command = '.venv/bin/python',
+      command = py_path,
       args = { '-m', 'debugpy.adapter' },
       options = {
         source_filetype = 'python',
@@ -121,7 +139,7 @@ end
 dap.configurations.python = {
   {
     -- The first three options are required by nvim-dap
-    type = 'python'; -- the type here established the link to the adapter definition: `dap.adapters.python`
+    type = 'python';  -- VVI: dap.adapters.python 名字要对应
     request = 'launch';
     name = "Launch file";
 
