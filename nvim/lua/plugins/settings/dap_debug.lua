@@ -103,7 +103,7 @@ dap.configurations.go = {
 -- -- }}}
 
 --- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#python
---- pythond debug settings ----------------------------------------------------- {{{
+--- python debug settings ------------------------------------------------------ {{{
 dap.adapters.python = function(callback, config)
   --- TODO: check executable '.venv/bin/python' & '.venv/bin/debugpy'
   local py_path = '.venv/bin/python'
@@ -309,7 +309,7 @@ local debug_keymaps = {
     end
   end,  opt, 'Fn 5: debug: Restart'},
 
-  --- 已在 after/ftplugin/go/debug_cmd.lua 中设置.
+  --- 已在 nvim/lua/plugins/init.lua 的 load 条件 init=function() 中设置.
   --{'n', '<F9>', function() dap.toggle_breakpoint() end, opt, "Fn 9: debug: Toggle Breakpoint"},
 
   {'n', '<F10>', function()

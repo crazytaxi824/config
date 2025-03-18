@@ -9,7 +9,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 -- -- }}}
 
---- `:help lazy.nvim-lazy.nvim-plugin-spec`
+--- `:help lazy.nvim`
 --- https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/editor.lua
 --- 如果插件被 require(xxx) or pcall(require, xxx) 会马上加载.
 local plugins = {
@@ -260,6 +260,17 @@ local plugins = {
     "mfussenegger/nvim-dap",  -- core debug tool
     commit = "a720d49",
     config = function() require("plugins.settings.dap_debug") end,
+    init = function(lazyplugin)
+      --- vim.cmd([[command -bang -bar Debug DapContinue]])
+      vim.api.nvim_create_user_command('Debug', 'DapContinue', {
+        bang=true, bar=true
+      })
+
+      --- set <F9> Toggle Breakpoint,
+      vim.keymap.set('n', '<F9>', '<cmd>DapToggleBreakpoint<CR>', {
+        desc = "Fn 9: debug: Toggle Breakpoint",
+      })
+    end,
 
     cmd = {'DapToggleBreakpoint', 'DapContinue', 'DapLoadLaunchJSON'},
   },
