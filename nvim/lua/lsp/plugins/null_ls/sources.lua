@@ -106,6 +106,8 @@ M.sources =  {
     buf = function()
       return diagnostics.buf.with(proj_local_settings.tools_keep_extend(M.local_linter_key, 'buf', diagnostics_opts))
     end,
+
+    --- python: using 'ruff' lsp instead
   },
 
   --- code action ----------------------------------------------------------------------------------

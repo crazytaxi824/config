@@ -74,6 +74,7 @@ local cmd_tools = {
   gomodifytags = {cmd="gomodifytags", install="go install github.com/fatih/gomodifytags@latest", mason="gomodifytags"},
   ["golangci-lint"] = {cmd="golangci-lint", install="go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest", mason="golangci-lint"},
   graphviz = {cmd="dot", install="brew info graphviz"},
+
   wc = { cmd = "wc", install="system builtin" },  -- word, line, byte count of files
 
   --- telescope deps
@@ -104,6 +105,7 @@ local mason_tools = {
   "buf",
   "css-lsp",
   "eslint-lsp",
+  -- "gdtoolkit",  -- GDScript
   "goimports",
   "goimports-reviser",
   "html-lsp",
@@ -113,6 +115,8 @@ local mason_tools = {
   "pyright",
   "ruff",
   "shfmt",
+  -- "sql-formatter",
+  -- "sqls",  -- sql lsp
   "stylua",
   "typescript-language-server",
 }

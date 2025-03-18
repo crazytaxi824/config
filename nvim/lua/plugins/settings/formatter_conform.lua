@@ -9,8 +9,7 @@ local function format_by_ft()
     --- VVI: conform will run multiple formatters sequentially
     go = { "goimports", "goimports-reviser" },
     --- VVI: Use a sub-list to run only the first available formatter
-    --javascript = { "prettier", "prettierd", stop_after_first = true },
-    sql = { "sql_formatter", "sqlfluff", stop_after_first = true },
+    sql = { "sql_formatter", "sqlfmt", "sqruff", "sqlfluff", stop_after_first = true },
 
     sh = { "shfmt" },
     proto = { "buf" },
@@ -102,8 +101,7 @@ local function auto_format()
       conform.format({
         bufnr = params.buf,
         timeout_ms = 3000,
-        -- lsp_fallback = true, --- VVI: try fallback to lsp format if no formatter.
-        lsp_format = "fallback",
+        lsp_format = "fallback", --- VVI: try fallback to lsp format if no formatter.
       })
     end,
     desc = "conform: format file while saving",
@@ -116,8 +114,7 @@ auto_format()
 vim.api.nvim_create_user_command("Format", function()
   conform.format({
     timeout_ms = 3000,
-    -- lsp_fallback = true, --- VVI: try fallback to lsp format if no formatter.
-    lsp_format = "fallback",
+    lsp_format = "fallback", --- VVI: try fallback to lsp format if no formatter.
   }, function(err, did_edit)
     if err then
       Notify(err, "ERROR")

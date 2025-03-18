@@ -36,6 +36,7 @@ M.list = {
     filetypes = {'python'}
   },
   --- pyproject.toml & ruff.toml: https://docs.astral.sh/ruff/tutorial/#configuration
+  --- 'ruff' can be used to replace Flake8, Black, isort, pydocstyle, pyupgrade, autoflake ...
   ruff = {
     cmd = "ruff",
     mason = "ruff",
