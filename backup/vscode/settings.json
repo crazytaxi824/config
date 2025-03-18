@@ -188,18 +188,8 @@
   // go language server 设置
   // https://github.com/golang/tools/blob/master/gopls/doc/settings.md
   "gopls": {
-    // Add parameter placeholders when completing a function.
     "usePlaceholders": true,
-    // "ui.completion.usePlaceholders": true,
-
-    // lsp syntax highlight
-    "ui.semanticTokens": true,
-
-    // If true, enable additional analyses with staticcheck.
-    // Warning: This will significantly increase memory usage.
-    // golangci-lint 中有 staticcheck
-    "staticcheck": false
-    // "ui.diagnostic.staticcheck": false
+    "semanticTokens": true // lsp syntax highlight
   },
 
   // debug 神器，可以通过访问 http://localhost:16060 查看性能参数
@@ -256,7 +246,7 @@
   // pip3 install mypy
   "python.languageServer": "Pylance",
   "[python]": {
-    "editor.defaultFormatter": "ms-python.autopep8"
+    "editor.defaultFormatter": "charliermarsh.ruff"
   },
 
   // jupyter
