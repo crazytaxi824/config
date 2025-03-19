@@ -2,16 +2,15 @@
 --- check virtual environment
 local function venv()
   --- 项目环境
-  local local_venv = '.venv/bin/activate'
+  local root = vim.fs.root(0, '.venv')
+  if not root then
+    return
+  end
+
+  local local_venv = vim.fs.joinpath(root, '.venv/bin/activate')
   if vim.uv.fs_stat(local_venv) then
     return local_venv
   end
-
-  --- 全局环境
-  -- local global_venv = os.getenv("PYTHON_DEFAULT_ENV")
-  -- if global_venv and vim.uv.fs_stat(global_venv .. '/bin/activate') then
-  --   return global_venv .. '/bin/activate'
-  -- end
 end
 
 --- file is absolut path
