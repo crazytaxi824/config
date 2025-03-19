@@ -76,7 +76,6 @@ local function filepath_with_lnum_col(str)
   end
 
   --- file
-  -- if vim.fn.filereadable(absolute_fp) == 1 then
   if finfo.type == 'file' then
     r.type = finfo.type
     r.original_fp = splits[1]

@@ -105,7 +105,7 @@ dap.configurations.go = {
 --- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#python
 --- python debug settings ------------------------------------------------------ {{{
 dap.adapters.python = function(callback, config)
-  --- TODO: check executable '.venv/bin/python' & '.venv/bin/debugpy'
+  --- check executable '.venv/bin/python' & '.venv/bin/debugpy'
   local py_path = '.venv/bin/python'
   local debug_path = '.venv/bin/debugpy'
   if vim.fn.executable(py_path) == 0 or vim.fn.executable(debug_path) == 0 then

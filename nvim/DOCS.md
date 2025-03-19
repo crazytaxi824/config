@@ -498,7 +498,9 @@ vim.api.nvim_win_set_hl_ns(float_win_id, ns)
 ## :help watch-file
 
 ```lua
-local watch = vim.loop.new_fs_event()
+--- vim.loop Use vim.uv instead.
+--- `:help vim.loop`, `:help vim.uv`
+local watch = vim.uv.new_fs_event()
 
 --- Watch file/dir 时, file/dir 必须存在. 否则 watch:start() 无效.
 --- watch file 时, 监控单个 file 的情况.
@@ -534,6 +536,18 @@ function Watch_file(fname)
   end))
 end
 ```
+
+<br />
+
+## file 相关函数
+
+fs_stat() 返回的 'type' 属性可以判断 'file' | 'directory', 但是不能判断 'executable'. 文件权限使用 'mode' 属性判断.
+
+- vim.fn.filereadable() -> vim.uv.fs_stat()
+
+- vim.fn.isdirectory() -> vim.uv.fs_stat()
+
+- vim.fn.executable() 使用 mode 属性(文件权限, eg:0600)判断是否可执行, 但是更麻烦.
 
 <br />
 
