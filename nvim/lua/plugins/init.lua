@@ -259,20 +259,21 @@ local plugins = {
   {
     "mfussenegger/nvim-dap",  -- core debug tool
     commit = "a720d49",
-    config = function() require("plugins.settings.dap_debug") end,
+
+    --- 在 config 之前执行, 用于设置 :Debug 命令
     init = function(lazyplugin)
       --- vim.cmd([[command -bang -bar Debug DapContinue]])
-      vim.api.nvim_create_user_command('Debug', 'DapContinue', {
-        bang=true, bar=true
-      })
-
-      --- set <F9> Toggle Breakpoint,
-      vim.keymap.set('n', '<F9>', '<cmd>DapToggleBreakpoint<CR>', {
-        desc = "Fn 9: debug: Toggle Breakpoint",
-      })
+      vim.api.nvim_create_user_command('Debug', 'DapContinue', { bang=true, bar=true })
     end,
 
-    cmd = {'DapToggleBreakpoint', 'DapContinue', 'DapLoadLaunchJSON'},
+    config = function() require("plugins.settings.dap_debug") end,
+
+    keys = {
+      --- set <F9> Toggle Breakpoint,
+      {'<F9>', '<cmd>DapToggleBreakpoint<CR>', desc = "Fn 9: debug: Toggle Breakpoint"},
+    },
+
+    cmd = {'DapToggleBreakpoint', 'DapContinue'},
   },
 
   {
@@ -345,26 +346,26 @@ local plugins = {
   },
 
   --- https://docs.github.com/en/copilot/getting-started-with-github-copilot
-  -- {
-  --   "github/copilot.vim",
-  --   tag = "v1.22.0",
-  --   -- config = function()  --- {{{
-  --   --   --- VVI: `:help g:copilot_node_command`, using node@18 or above.
-  --   --   --- 安装指定的 nodejs 版本. `brew install node@20`
-  --   --   local node_path = "/opt/homebrew/opt/node@20/bin/node"
-  --   --
-  --   --   --- check node cmd existence
-  --   --   if not vim.uv.fs_stat(node_path) then
-  --   --     Notify({"'" .. node_path .. "' is NOT Exist."}, "WARN", {title = "github/copilot", timeout = false})
-  --   --     return
-  --   --   end
-  --   --
-  --   --   vim.g.copilot_node_command = node_path
-  --   -- end,
-  --   -- -- }}}
-  --
-  --   cmd = {"Copilot"},  -- `:Copilot setup`, `:Copilot enable`, `:help copilot` 查看可用命令.
-  -- },
+  {
+    "github/copilot.vim",
+    tag = "v1.43.0",
+    config = function()  --- {{{
+      --- VVI: `:help g:copilot_node_command`, using node@18 or above.
+      --- 安装指定的 nodejs 版本. `brew install node@20`
+      local node_path = "/opt/homebrew/opt/node@20/bin/node"
+
+      --- check node cmd existence
+      if not vim.uv.fs_stat(node_path) then
+        Notify({"'" .. node_path .. "' is NOT Exist."}, "WARN", {title = "github/copilot", timeout = false})
+        return
+      end
+
+      vim.g.copilot_node_command = node_path
+    end,
+    -- }}}
+
+    cmd = {"Copilot"},  -- `:Copilot setup`, `:Copilot enable`, `:help copilot` 查看可用命令.
+  },
 
   {
     "folke/trouble.nvim",
