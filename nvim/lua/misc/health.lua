@@ -84,8 +84,7 @@ local cmd_tools = {
 
 local function check_cmd_tools(tools)
   for name, tool in pairs(tools) do
-    local result = vim.system({'which', tool.cmd}, { text = true }):wait()
-    if result.code == 0 then
+    if vim.fn.executable(tool.cmd) == 1 then
       health.ok(name)
     else
       local errmsg = {name .. ':'}
