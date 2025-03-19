@@ -12,7 +12,7 @@ notify.setup({
                     -- 可以使用 vim.log.levels (int); 也可以用 vim.log.levels,
                     -- 也可以使用 (string), 大小写都可以.
 
-  stages = "fade_in_slide_out",  -- VVI: Animation style, for `set termguicolors`
+  stages = "slide",  -- VVI: Animation style, for `set termguicolors`
   background_colour = "#000000",
 
   top_down = true,  -- true: top-down; false: bottom-up

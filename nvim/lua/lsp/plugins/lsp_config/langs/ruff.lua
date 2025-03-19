@@ -6,16 +6,16 @@ return {
       return root
     end
 
-    Notify(
-      {
-        "'.venv' NOT found in current or any parent directory.",
-        "Please run:",
-        "  'python3 -m venv .venv'",
-        "  'pip3 install -U debugpy'"
-      },
-      "WARN",
-      {title={"LSP", "gopls.lua"}, timeout = false}
-    )
+    -- Notify(
+    --   {
+    --     "'.venv' NOT found in current or any parent directory.",
+    --     "Please run:",
+    --     "  `python3.xx -m venv .venv`",
+    --     "  `pip3 install -U debugpy`"
+    --   },
+    --   "WARN",
+    --   {title={"LSP", "gopls.lua"}, timeout = false}
+    -- )
     return vim.uv.cwd()
   end
 }

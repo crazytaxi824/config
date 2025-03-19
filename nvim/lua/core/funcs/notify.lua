@@ -1,25 +1,26 @@
 --- 提醒使用 notify 插件或者 vim.notify() 函数
 --- msg - string|[]string
---- lvl - string|number. "TRACE"-0, "DEBUG"-1, "INFO"-2, "WARN"-3, "ERROR"-4,
+--- lvl - string|number. "TRACE"-0, "DEBUG"-1, "INFO"-2, "WARN"-3, "ERROR"-4, "OFF"-5
 ---       `:help vim.log.levels`, `:help notify.setup`
 --- opt - table, nvim-notify 插件专用 `:help notify.Options`, title, timeout...
 function Notify(msg, lvl, opt)
-  --- switch to vim.log.levels
-  local l = nil
-  if type(lvl) == 'number' then  -- vim.log.levels.ERROR & vim.lsp.log_levels.ERROR 都是 number.
-    l = lvl
-  elseif type(lvl) == 'string' then
+  -- vim.log.levels.xxx & vim.lsp.log_levels.xxx 都是 number.
+  if type(lvl) == 'string' then
     if string.upper(lvl) == "TRACE" then
-      l = 0
+      lvl = vim.log.levels.TRACE
     elseif string.upper(lvl) == "DEBUG" then
-      l = 1
+      lvl = vim.log.levels.DEBUG
     elseif string.upper(lvl) == "INFO" then
-      l = 2
+      lvl = vim.log.levels.INFO
     elseif string.upper(lvl) == "WARN" then
-      l = 3
+      lvl = vim.log.levels.WARN
     elseif string.upper(lvl) == "ERROR" then
-      l = 4
+      lvl = vim.log.levels.ERROR
+    elseif string.upper(lvl) == "OFF" then
+      lvl = vim.log.levels.OFF
     end
+  elseif type(lvl) ~= 'number' then
+    lvl = vim.log.levels.INFO
   end
 
   local notify_status_ok, notify = pcall(require, "notify")
@@ -45,15 +46,15 @@ function Notify(msg, lvl, opt)
     opt = vim.tbl_deep_extend('force', default_title, opt)
 
     --- 如果调用本函数时传入了 opt, 则使用传入的值.
-    notify.notify(msg, l, opt)
+    notify.notify(msg, lvl, opt)
 
   else
     --- 如果 nvim-notify 不存在则使用 vim.notify()
     if type(msg) == 'table' then
       --- msg should be table array, join message []string with '\n'
-      vim.notify(table.concat(msg, '\n'), l)
+      vim.notify(table.concat(msg, '\n'), lvl)
     else
-      vim.notify(msg, l)
+      vim.notify(msg, lvl)
     end
   end
 end
