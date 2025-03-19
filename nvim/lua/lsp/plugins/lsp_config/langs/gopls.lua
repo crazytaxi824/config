@@ -30,7 +30,6 @@ return {
     --- 因为 go.work 一般在 go.mod 的父文件夹.
     local root = vim.fs.root(0, 'go.work') or vim.fs.root(0, 'go.mod')
     if root then
-      --- 如果找到 root 则返回 root
       return root
     end
 

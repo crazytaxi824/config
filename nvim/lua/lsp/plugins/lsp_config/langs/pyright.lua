@@ -3,7 +3,6 @@ return {
   root_dir = function(fname)
     local root = vim.fs.root(0, '.venv')
     if root then
-      --- 如果找到 root 则返回 root
       return root
     end
 
