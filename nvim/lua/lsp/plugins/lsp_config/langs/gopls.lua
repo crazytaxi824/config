@@ -26,6 +26,8 @@ return {
     -- end
 
     --- NOTE: 优先获取 go.work 文件夹位置, 如果不存在则获取 go.mod 文件夹位置.
+    --- vim.fs.root(0, {'go.work', 'go.mod'}) 有可能会先找到 go.mod 所在的文件夹,
+    --- 因为 go.work 一般在 go.mod 的父文件夹.
     local root = vim.fs.root(0, 'go.work') or vim.fs.root(0, 'go.mod')
     if root then
       --- 如果找到 root 则返回 root

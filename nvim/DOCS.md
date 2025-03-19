@@ -581,4 +581,8 @@ stack traceback:
 
 - https://github.com/neovim/neovim/issues/28987
 
+## lsp Error
+
+https://github.com/neovim/neovim/issues/28058, planned to be fixed at neovim v0.11.1
+
 <br />
