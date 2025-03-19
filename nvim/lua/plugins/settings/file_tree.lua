@@ -344,7 +344,7 @@ vim.api.nvim_set_hl(0, 'NvimTreeGitIgnoredIcon', {ctermfg=Colors.g244.c, fg=Colo
 
 --- autocmd ---------------------------------------------------------------------------------------- {{{
 --- automatically close the tab/vim when nvim-tree is the last window in the tab.
---vim.cmd [[autocmd BufEnter * ++nested if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpagenr() | quit | endif]]
+--vim.cmd [[au BufEnter * ++nested if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpagenr() | quit | endif]]
 -- -- }}}
 
 --- Event Hooks, `:help nvim-tree-events` ---------------------------------------------------------- {{{
