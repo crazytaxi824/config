@@ -11,8 +11,8 @@ return {
       {
         "'.venv' NOT found in current or any parent directory.",
         "Please run:",
-        "  'python3 -m venv .venv'",
-        "  'pip3 install -U debugpy'"
+        "  `python3.xx -m venv .venv`",
+        "  `pip3 install -U debugpy`"
       },
       "WARN",
       {title={"LSP", "gopls.lua"}, timeout = false}
