@@ -25,13 +25,16 @@ M.new = function(opts)
 end
 
 M.open_shell_term = function()
+  --- curr_buf is for '.venv', need to get before M.new().
+  local curr_buf = vim.api.nvim_get_current_buf()
+
   if vim.v.count1 > 999 then
     Notify("my_term id should be 1~999 in this method", "INFO")
     return
   end
 
   local t = M.get_term_by_id(vim.v.count1)
-  --- terminal 没有被缓存则 :new()
+  --- terminal 没有被缓存则 M.new()
   if not t then
     t = M.new({
       id = vim.v.count1,
@@ -57,7 +60,12 @@ M.open_shell_term = function()
     t:run()
 
     --- source Python Virtual Environment
-    local local_venv = '.venv/bin/activate'
+    local root = vim.fs.root(curr_buf, '.venv')
+    if not root then
+      return
+    end
+
+    local local_venv = vim.fs.joinpath(root, '.venv/bin/activate')
     if vim.uv.fs_stat(local_venv) then
       -- vim.fn.chansend(t.job_id, 'source ' .. local_venv .. '&& clear\n')
       vim.api.nvim_chan_send(t.job_id, 'source ' .. local_venv .. '&& clear\n')
