@@ -27,20 +27,19 @@ return {
 
     --- NOTE: 优先获取 go.work 文件夹位置, 如果不存在则获取 go.mod 文件夹位置.
     local root = vim.fs.root(0, 'go.work') or vim.fs.root(0, 'go.mod')
-
-    --- 如果没找到 root 则返回 pwd/cwd
-    if not root then
-      Notify(
-        {"'go.mod' & 'go.work' NOT found in current or any parent directory.",
-          "Please run 'go mod init xxx'."},
-        "WARN",
-        {title={"LSP", "gopls.lua"}, timeout = false}
-      )
-      return vim.uv.cwd()
+    if root then
+      --- 如果找到 root 则返回 root
+      return root
     end
 
-    --- 如果找到 root 则返回 root
-    return root
+    --- 如果没找到 root 则返回 pwd/cwd
+    Notify(
+      {"'go.mod' & 'go.work' NOT found in current or any parent directory.",
+        "Please run 'go mod init xxx'."},
+      "WARN",
+      {title={"LSP", "gopls.lua"}, timeout = false}
+    )
+    return vim.uv.cwd()
   end,
 
   settings = {
