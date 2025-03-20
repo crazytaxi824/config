@@ -311,8 +311,8 @@ local plugins = {
       "nvim-telescope/telescope-fzf-native.nvim",  -- telescope extension
     },
 
-    event = "VeryLazy",
-    --- TODO: keys = fun(self:LazyPlugin, keys:string[]):(string | LazyKeysSpec)[]
+    cmd = {"Rg"},
+    keys = {"<leader>f", "z="},
   },
 
   {
