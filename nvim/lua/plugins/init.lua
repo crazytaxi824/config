@@ -125,7 +125,7 @@ local plugins = {
     event = "InsertEnter",
   },
 
-  --- NOTE: 以下是 "nvim-cmp" 的 module 插件, 在 nvim-cmp.setup() 中启用的插件.
+  --- 以下是 "nvim-cmp" 的 module 插件, 在 nvim-cmp.setup() 中启用的插件.
   --- VVI: 只有 "cmp-nvim-lsp" 不需要在 "nvim-cmp" 之后加载, 其他 module 插件都需要在 "nvim-cmp" 加载之后再加载, 否则报错.
   {
     "hrsh7th/cmp-nvim-lsp",  -- LSP source for nvim-cmp
@@ -192,9 +192,10 @@ local plugins = {
   {
     "neovim/nvim-lspconfig",
     -- commit = "d88ae66",
-    config = function() require("lsp.plugins.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
+    config = function() require("lsp.plugins.lsp_config") end,
     dependencies = {
-      "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全. NOTE: lspconfig 必须在 cmp_nvim_lsp 之后加载, 否则可能无法提供代码补全.
+      -- VVI: lspconfig 必须在 cmp_nvim_lsp 之后加载, 否则可能无法提供代码补全.
+      "hrsh7th/cmp-nvim-lsp",
     },
   },
 
@@ -258,7 +259,6 @@ local plugins = {
   },
 
   --- Debug tools 安装 -----------------------------------------------------------------------------
-  --- NOTE: dap-ui && dap 设置在同一文件中.
   {
     "mfussenegger/nvim-dap",  -- core debug tool
     commit = "a720d49",
@@ -272,7 +272,6 @@ local plugins = {
     config = function() require("plugins.settings.dap_debug") end,
 
     keys = {
-      --- set <F9> Toggle Breakpoint,
       {'<F9>', '<cmd>DapToggleBreakpoint<CR>', desc = "Fn 9: debug: Toggle Breakpoint"},
     },
 
@@ -333,8 +332,8 @@ local plugins = {
     tag = "v1.0.2",
     config = function() require("plugins.settings.git_signs") end,
 
-    --- NOTE: `nvim dir` 启动时直接打开 dir 时可能会造成 gitsigns 报错. 根据测试情况选择 VeryLazy 或者 BufReadPre ...
-    --event = { "BufReadPre", "BufNewFile" },
+    --- `nvim dir` 启动时直接打开 dir 时可能会造成 gitsigns 报错.
+    --- 根据测试情况选择 VeryLazy 或者 BufReadPre, BufNewFile ...
     event = "VeryLazy",
   },
 
@@ -374,7 +373,7 @@ local plugins = {
   {
     "CopilotC-Nvim/CopilotChat.nvim",
     dependencies = {
-      { "github/copilot.vim" }, -- or zbirenbaum/copilot.lua
+      { "github/copilot.vim" },
       { "nvim-lua/plenary.nvim" }, -- for curl, log and async functions
     },
     config = function() require("plugins.settings.copilotchat") end,
