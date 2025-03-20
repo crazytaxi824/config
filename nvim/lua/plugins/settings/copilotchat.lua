@@ -3,8 +3,13 @@ if not chat_ok then
   return
 end
 
+local chat_select_ok, select = pcall(require, "CopilotChat.select")
+if not chat_select_ok then
+  return
+end
+
 local prompts = {
-  -- Code related prompts
+  --- Code related prompts
   Explain = "Please explain how the following code works.",
   Review = "Please review the following code and provide suggestions for improvement.",
   Tests = "Please explain how the selected code works, then generate unit tests for it.",
@@ -15,14 +20,15 @@ local prompts = {
   Documentation = "Please provide documentation for the following code.",
   SwaggerApiDocs = "Please provide documentation for the following API using Swagger.",
   SwaggerJsDocs = "Please write JSDoc for the following API using Swagger.",
-  -- Text related prompts
+
+  --- Text related prompts
   Summarize = "Please summarize the following text.",
   Spelling = "Please correct any grammar and spelling errors in the following text.",
   Wording = "Please improve the grammar and wording of the following text.",
   Concise = "Please rewrite the following text to make it more concise.",
 }
 
-local opts = {
+chat.setup {
   question_header = "## User ",
   answer_header = "## Copilot ",
   error_header = "## Error ",
@@ -61,9 +67,8 @@ local opts = {
   },
 }
 
-chat.setup(opts)
-
-local select = require("CopilotChat.select")
+--- commands ---------------------------------------------------------------------------------------
+--- Open new window, chat for visual selected
 vim.api.nvim_create_user_command("CopilotChatVisual", function(args)
   chat.ask(args.args, { selection = select.visual })
 end, { nargs = "*", range = true })
@@ -101,3 +106,6 @@ vim.api.nvim_create_autocmd("BufEnter", {
     end
   end,
 })
+
+
+

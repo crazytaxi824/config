@@ -86,7 +86,7 @@ ts_configs.setup {
     additional_vim_regex_highlighting = false,
   },
 
-  --- 作用不大.
+  --- 作用不大, 根据 treesitter 向上/下选择 node
   incremental_selection = {
     enable = true,
     keymaps = {
