@@ -36,7 +36,6 @@ local plugins = {
 
     --- VVI: 需要在 $PATH 或者 vim.env.PATH 中加入 mason.setup({ "install_root_dir" }) 路径,
     --- 否则不能延迟加载 mason, 需要设置下面的 priority.
-    --cmd = {'Mason'},
     priority = 999,
   },
 
@@ -227,12 +226,14 @@ local plugins = {
     dependencies = { "nvim-tree/nvim-web-devicons" },
 
     -- VVI: 本文件最后设置: 在 `nvim dir` 直接打开文件夹的时直接加载 nvim-tree.lua.
-    event = "VeryLazy",
+    keys = {
+      {'<leader>;', '<cmd>NvimTreeToggle<CR>', desc='filetree: toggle' },
+      {'<leader><CR>', '<cmd>NvimTreeFindFile!<CR>', desc='filetree: jump to file' },
+    },
   },
 
   {
     "nvim-tree/nvim-web-devicons",
-
     lazy = true, -- dep of nvim-tree & bufferline
   },
 
@@ -275,7 +276,7 @@ local plugins = {
       {'<F9>', '<cmd>DapToggleBreakpoint<CR>', desc = "Fn 9: debug: Toggle Breakpoint"},
     },
 
-    cmd = {'DapToggleBreakpoint', 'DapContinue'},
+    cmd = {'Debug', 'DapToggleBreakpoint', 'DapContinue'},
   },
 
   {
@@ -292,7 +293,7 @@ local plugins = {
     config = function() require("plugins.settings.dapui_debug") end,
     dependencies = {
       "mfussenegger/nvim-dap",
-      "nvim-neotest/nvim-nio",  -- NOTE: 依赖, 必须安装.
+      "nvim-neotest/nvim-nio",  -- 依赖, 必须安装.
     },
 
     lazy = true,  -- nvim-dap config 文件中 require dapui.
@@ -312,6 +313,7 @@ local plugins = {
     },
 
     event = "VeryLazy",
+    --- TODO: keys = fun(self:LazyPlugin, keys:string[]):(string | LazyKeysSpec)[]
   },
 
   {
@@ -376,6 +378,7 @@ local plugins = {
       { "nvim-lua/plenary.nvim" }, -- for curl, log and async functions
     },
     config = function() require("plugins.settings.copilotchat") end,
+    --- TODO: keys = fun(self:LazyPlugin, keys:string[]):(string | LazyKeysSpec)[]
     keys = {
       -- Show prompts actions with telescope
       {
@@ -465,6 +468,7 @@ local plugins = {
     config = function() require("plugins.settings.trouble_list") end,
 
     event = "VeryLazy",
+    --- TODO: keys = fun(self:LazyPlugin, keys:string[]):(string | LazyKeysSpec)[]
   }
 
   --- recommanded plugins ------------------------------------------------------ {{{
