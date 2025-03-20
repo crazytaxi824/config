@@ -1,3 +1,5 @@
+--- https://github.com/jellydn/lazy-nvim-ide/blob/main/lua/plugins/extras/copilot-chat-v2.lua
+
 local chat_ok, chat = pcall(require, "CopilotChat")
 if not chat_ok then
   return
@@ -9,29 +11,33 @@ if not chat_select_ok then
 end
 
 local prompts = {
+  --- VVI: 所有自定义的 prompts 都会自动创建一个 command, eg: "Foo" -> "CopilotChatFoo"
+  -- Foo = "Foo",
+
   --- Code related prompts
   Explain = "Please explain how the following code works.",
   Review = "Please review the following code and provide suggestions for improvement.",
   Tests = "Please explain how the selected code works, then generate unit tests for it.",
   Refactor = "Please refactor the following code to improve its clarity and readability.",
   FixCode = "Please fix the following code to make it work as intended.",
-  FixError = "Please explain the error in the following text and provide a solution.",
+  FixError = "Please explain the error in the following code and provide a solution.",
   BetterNamings = "Please provide better names for the following variables and functions.",
   Documentation = "Please provide documentation for the following code.",
-  SwaggerApiDocs = "Please provide documentation for the following API using Swagger.",
-  SwaggerJsDocs = "Please write JSDoc for the following API using Swagger.",
+  -- SwaggerApiDocs = "Please provide documentation for the following API using Swagger.",
+  -- SwaggerJsDocs = "Please write JSDoc for the following API using Swagger.",
 
   --- Text related prompts
   Summarize = "Please summarize the following text.",
-  Spelling = "Please correct any grammar and spelling errors in the following text.",
-  Wording = "Please improve the grammar and wording of the following text.",
-  Concise = "Please rewrite the following text to make it more concise.",
+  Correct = "Please correct any grammar and spelling errors in the following text.",
+  Improve = "Please improve the grammar and wording of the following text.",
+  Simplify = "Please rewrite the following text to make it more concise.",
 }
 
 chat.setup {
+  -- show_folds = false, -- foldcolumn = '1' & foldmethod = 'expr'
   question_header = "## User ",
   answer_header = "## Copilot ",
-  error_header = "## Error ",
+  error_header = "## [ERROR!] ",
   prompts = prompts,
   -- model = "claude-3.7-sonnet",
   mappings = {
@@ -53,7 +59,7 @@ chat.setup {
     -- Submit the prompt to Copilot
     submit_prompt = {
       normal = "<CR>",
-      insert = "<C-CR>",
+      insert = "<D-CR>",
     },
     -- Accept the diff
     accept_diff = {
@@ -62,7 +68,7 @@ chat.setup {
     },
     -- Show help
     show_help = {
-      normal = "g?",
+      normal = "?",
     },
   },
 }
@@ -92,20 +98,8 @@ vim.api.nvim_create_user_command("CopilotChatBuffer", function(args)
   chat.ask(args.args, { selection = select.buffer })
 end, { nargs = "*", range = true })
 
--- Custom buffer for CopilotChat
-vim.api.nvim_create_autocmd("BufEnter", {
-  pattern = "copilot-*",
-  callback = function()
-    vim.opt_local.relativenumber = true
-    vim.opt_local.number = true
+--- keymaps ----------------------------------------------------------------------------------------
 
-    -- Get current filetype and set it to markdown if the current filetype is copilot-chat
-    local ft = vim.bo.filetype
-    if ft == "copilot-chat" then
-      vim.bo.filetype = "markdown"
-    end
-  end,
-})
 
 
 

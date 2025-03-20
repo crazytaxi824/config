@@ -311,8 +311,7 @@ local plugins = {
       "nvim-telescope/telescope-fzf-native.nvim",  -- telescope extension
     },
 
-    cmd = {"Rg"},
-    keys = {"<leader>f", "z="},
+    event = "VeryLazy",
   },
 
   {
@@ -348,7 +347,16 @@ local plugins = {
     ft = {"markdown"},  -- markdown-preview 加载时间 < 1ms
   },
 
+  {
+    "folke/trouble.nvim",
+    tag = "v3.7.1",
+    config = function() require("plugins.settings.trouble_list") end,
+
+    event = "VeryLazy",
+  },
+
   --- https://docs.github.com/en/copilot/getting-started-with-github-copilot
+  --- https://github.com/jellydn/lazy-nvim-ide/blob/main/lua/plugins/extras/copilot-chat-v2.lua
   {
     "github/copilot.vim",
     tag = "v1.43.0",
@@ -373,10 +381,10 @@ local plugins = {
   {
     "CopilotC-Nvim/CopilotChat.nvim",
     dependencies = {
-      { "github/copilot.vim" },
-      { "nvim-lua/plenary.nvim" }, -- for curl, log and async functions
+      { "nvim-telescope/telescope.nvim" }, -- Use telescope for help actions
+      { "nvim-lua/plenary.nvim" },
     },
-    config = function() require("plugins.settings.copilotchat") end,
+    config = function() require("plugins.settings.ai_copilotchat") end,
     --- TODO: keys = fun(self:LazyPlugin, keys:string[]):(string | LazyKeysSpec)[]
     keys = {
       -- Show prompts actions with telescope
@@ -460,15 +468,6 @@ local plugins = {
 
     cmd = {"CopilotChatOpen"},
   },
-
-  {
-    "folke/trouble.nvim",
-    tag = "v3.7.1",
-    config = function() require("plugins.settings.trouble_list") end,
-
-    event = "VeryLazy",
-    --- TODO: keys = fun(self:LazyPlugin, keys:string[]):(string | LazyKeysSpec)[]
-  }
 
   --- recommanded plugins ------------------------------------------------------ {{{
   --- null-ls 替代:

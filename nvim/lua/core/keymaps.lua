@@ -266,14 +266,14 @@ key_fn.set(keymaps, {
   { "&", desc = "repeat last ':s' replace command" },  -- `:help &-default`
   { "<C-L>", desc = "nohlsearch | diffupdate" },  -- `:help CTRL-L-default`
 
-  --- which-key hidden
-  { "H", hidden = true },  -- hide default keymaps
-  { "L", hidden = true },
-  { "M", hidden = true },
+  --- which-key hidden default keymaps
+  { "H", hidden = true },  -- To line from top of window
+  { "L", hidden = true },  -- To line from bottom of window
+  { "M", hidden = true },  -- To Middle line of window
 
-  { "O", hidden = true },
-  { "D", hidden = true },
-  { "Y", hidden = true },
+  { "O", hidden = true },  -- Begin a new line
+  { "D", hidden = true },  -- Delete characters
+  { "Y", hidden = true },  -- yank lines
 })
 
 

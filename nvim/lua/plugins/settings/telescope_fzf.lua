@@ -345,6 +345,7 @@ local telescope_keymaps = {
   {'n', '<leader>f/', function() builtin.search_history() end,  opt, 'telescope: History Search'},
   {'n', '<leader>f?', function() builtin.search_history() end,  opt, 'telescope: History Search'},
   {'n', '<leader>fl', function() builtin.highlights() end,  opt, 'telescope: Search Highlight'},
+  {'n', '<leader>fw', function() builtin.spell_suggest() end, opt, 'telescope: Spell Suggests'},  -- 也可以使用 which-key 显示.
   {'n', 'z=', function() builtin.spell_suggest() end, opt, 'telescope: Spell Suggests'},  -- 也可以使用 which-key 显示.
   --{'n', '<leader>fg', function() builtin.live_grep() end,  opt, 'telescope: rg'},  -- NOTE: 使用自定义 :Rg 命令更灵活.
 }
