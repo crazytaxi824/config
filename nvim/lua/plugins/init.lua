@@ -97,7 +97,7 @@ local plugins = {
     config = function() require("plugins.settings.treesitter_autotag") end,
     dependencies = { "nvim-treesitter/nvim-treesitter" },
 
-    event = "VeryLazy",
+    event = "InsertEnter",
   },
 
   --- indent line
@@ -215,7 +215,8 @@ local plugins = {
     tag = "v9.0.0",
     config = function() require("plugins.settings.formatter_conform") end,
 
-    event = "VeryLazy",
+    event = "BufWritePre",
+    cmd = {"Format", "FormatEnable", "FormatDisable"}
   },
 
   --- File explorer --------------------------------------------------------------------------------
