@@ -116,20 +116,22 @@ end, { nargs = "*", range = true })
 --- keymaps ----------------------------------------------------------------------------------------
 local opt = { silent = true }
 local ai_keymaps = {
-  -- Show prompts actions with telescope
-  { "n", "<leader>ap", function() chat.select_prompt({context={"buffers"}}) end, opt, "CopilotChat - Prompt actions"},
+  { {"n", "x"}, "<leader>aa", "<cmd>CopilotChatToggle<CR>", opt, "CopilotChat - Toggle V-split" },
+
+  --- Show prompts actions with telescope
+  --- `:help CopilotChat-contexts`
+  { "n", "<leader>ap", function() chat.select_prompt({context={"buffer"}}) end, opt, "CopilotChat - Prompt actions"},
   { "x", "<leader>ap", function() chat.select_prompt() end, opt, "CopilotChat - Prompt actions"},
 
-  -- Chat with Copilot in visual mode
+  --- Chat with Copilot in visual mode
   { "x", "<leader>av", ":CopilotChatVisual ", nil, "CopilotChat - Open in V-split"},
   { "x", "<leader>ax", ":CopilotChatInline ", nil, "CopilotChat - Inline chat"},
 
-  -- Generate commit message based on the git diff
-  { "n", "<leader>am", "<cmd>CopilotChatCommit<CR>", opt, "CopilotChat - Generate commit messages"},
+  --- System functions
+  { "n", "<leader>am", "<cmd>CopilotChatCommit<CR>", opt, "CopilotChat - Generate commit messages"},  -- Generate commit message based on the git diff
   { "n", "<leader>al", "<cmd>CopilotChatReset<CR>", opt, "CopilotChat - Clear buffer and history" },
-  { "n", "<leader>aa", "<cmd>CopilotChatToggle<CR>", opt, "CopilotChat - Toggle V-split" },
   { "n", "<leader>a?", "<cmd>CopilotChatModels<CR>", opt, "CopilotChat - Select Models" },
-  -- { "n", "<leader>aa", "<cmd>CopilotChatAgents<CR>", opt, "CopilotChat - Select Agents" },
+  { "n", "<leader>ag", "<cmd>CopilotChatAgents<CR>", opt, "CopilotChat - Select Agents" },
 }
 
 require('utils.keymaps').set(ai_keymaps, {
