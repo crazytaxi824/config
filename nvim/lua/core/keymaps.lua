@@ -45,7 +45,7 @@ local mt = require('utils.my_term')  -- my_term terminal
 -- -- }}}
 
 --- vim.keymap.set() - option `:help :map-arguments`
---- { remap = false }, --- VVI: vim.keymap.set() 不接受 'noremap', 只接受 'remap' opt.
+--- { remap = false }, { noremap = true }
 --- { nowait = true },
 --- { silent = true },
 --- { buffer = number },  -- 针对 bufnr 有效, 0 - current buffer

@@ -381,7 +381,6 @@ local plugins = {
   {
     "CopilotC-Nvim/CopilotChat.nvim",
     dependencies = {
-      { "nvim-telescope/telescope.nvim" }, -- Use telescope for help actions
       { "nvim-lua/plenary.nvim" },
     },
     config = function() require("plugins.settings.ai_copilotchat") end,

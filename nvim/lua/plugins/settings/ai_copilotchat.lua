@@ -121,8 +121,8 @@ local ai_keymaps = {
   { "x", "<leader>ap", function() chat.select_prompt() end, opt, "CopilotChat - Prompt actions"},
 
   -- Chat with Copilot in visual mode
-  { "x", "<leader>av", ":CopilotChatVisual ", opt, "CopilotChat - Open in V-split"},
-  { "x", "<leader>ax", ":CopilotChatInline ", opt, "CopilotChat - Inline chat"},
+  { "x", "<leader>av", ":CopilotChatVisual ", nil, "CopilotChat - Open in V-split"},
+  { "x", "<leader>ax", ":CopilotChatInline ", nil, "CopilotChat - Inline chat"},
 
   -- Generate commit message based on the git diff
   { "n", "<leader>am", "<cmd>CopilotChatCommit<CR>", opt, "CopilotChat - Generate commit messages"},
