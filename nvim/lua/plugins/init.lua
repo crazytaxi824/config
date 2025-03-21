@@ -36,7 +36,6 @@ local plugins = {
 
     --- VVI: 需要在 $PATH 或者 vim.env.PATH 中加入 mason.setup({ "install_root_dir" }) 路径,
     --- 否则不能延迟加载 mason, 需要设置下面的 priority.
-    --cmd = {'Mason'},
     priority = 999,
   },
 
@@ -75,7 +74,7 @@ local plugins = {
   --- but if you want to extend a query use the `after/queries/` directory.
   {
     "nvim-treesitter/nvim-treesitter",
-    -- commit = "d22166e",  -- NOTE: tag 更新太慢, 建议两周更新一次.
+    -- commit = "d22166e",
     config = function() require("plugins.settings.treesitter") end,
   },
 
@@ -89,14 +88,15 @@ local plugins = {
     event = "VeryLazy",
   },
 
-  --- 第三方 module 插件 ---
+  --- 第三方 plugin 需要用到 tree-sitter -----------------------------
+  --- auto close tag <div></div>
   {
-    "windwp/nvim-ts-autotag",  -- auto close tag <div></div>
+    "windwp/nvim-ts-autotag",
     commit = "a1d526a",
     config = function() require("plugins.settings.treesitter_autotag") end,
     dependencies = { "nvim-treesitter/nvim-treesitter" },
 
-    event = "VeryLazy",
+    event = "InsertEnter",
   },
 
   --- indent line
@@ -125,7 +125,7 @@ local plugins = {
     event = "InsertEnter",
   },
 
-  --- NOTE: 以下是 "nvim-cmp" 的 module 插件, 在 nvim-cmp.setup() 中启用的插件.
+  --- 以下是 "nvim-cmp" 的 module 插件, 在 nvim-cmp.setup() 中启用的插件.
   --- VVI: 只有 "cmp-nvim-lsp" 不需要在 "nvim-cmp" 之后加载, 其他 module 插件都需要在 "nvim-cmp" 加载之后再加载, 否则报错.
   {
     "hrsh7th/cmp-nvim-lsp",  -- LSP source for nvim-cmp
@@ -192,9 +192,10 @@ local plugins = {
   {
     "neovim/nvim-lspconfig",
     -- commit = "d88ae66",
-    config = function() require("lsp.plugins.lsp_config") end,  -- NOTE: 如果加载地址为文件夹, 则会寻找文件夹中的 init.lua 文件.
+    config = function() require("lsp.plugins.lsp_config") end,
     dependencies = {
-      "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全. NOTE: lspconfig 必须在 cmp_nvim_lsp 之后加载, 否则可能无法提供代码补全.
+      -- VVI: lspconfig 必须在 cmp_nvim_lsp 之后加载, 否则可能无法提供代码补全.
+      "hrsh7th/cmp-nvim-lsp",
     },
   },
 
@@ -214,7 +215,8 @@ local plugins = {
     tag = "v9.0.0",
     config = function() require("plugins.settings.formatter_conform") end,
 
-    event = "VeryLazy",
+    event = "BufWritePre",
+    cmd = {"Format", "FormatEnable", "FormatDisable"}
   },
 
   --- File explorer --------------------------------------------------------------------------------
@@ -225,12 +227,14 @@ local plugins = {
     dependencies = { "nvim-tree/nvim-web-devicons" },
 
     -- VVI: 本文件最后设置: 在 `nvim dir` 直接打开文件夹的时直接加载 nvim-tree.lua.
-    event = "VeryLazy",
+    keys = {
+      {'<leader>;', '<cmd>NvimTreeToggle<CR>', desc='filetree: toggle' },
+      {'<leader><CR>', '<cmd>NvimTreeFindFile!<CR>', desc='filetree: jump to file' },
+    },
   },
 
   {
     "nvim-tree/nvim-web-devicons",
-
     lazy = true, -- dep of nvim-tree & bufferline
   },
 
@@ -255,25 +259,15 @@ local plugins = {
   },
 
   --- Debug tools 安装 -----------------------------------------------------------------------------
-  --- NOTE: dap-ui && dap 设置在同一文件中.
   {
     "mfussenegger/nvim-dap",  -- core debug tool
     commit = "a720d49",
-
-    --- 在 config 之前执行, 用于设置 :Debug 命令
-    init = function(lazyplugin)
-      --- vim.cmd([[command -bang -bar Debug DapContinue]])
-      vim.api.nvim_create_user_command('Debug', 'DapContinue', { bang=true, bar=true })
-    end,
-
     config = function() require("plugins.settings.dap_debug") end,
 
+    cmd = {'Debug', 'DapToggleBreakpoint', 'DapContinue'},
     keys = {
-      --- set <F9> Toggle Breakpoint,
       {'<F9>', '<cmd>DapToggleBreakpoint<CR>', desc = "Fn 9: debug: Toggle Breakpoint"},
     },
-
-    cmd = {'DapToggleBreakpoint', 'DapContinue'},
   },
 
   {
@@ -290,7 +284,7 @@ local plugins = {
     config = function() require("plugins.settings.dapui_debug") end,
     dependencies = {
       "mfussenegger/nvim-dap",
-      "nvim-neotest/nvim-nio",  -- NOTE: 依赖, 必须安装.
+      "nvim-neotest/nvim-nio",  -- 依赖, 必须安装.
     },
 
     lazy = true,  -- nvim-dap config 文件中 require dapui.
@@ -329,8 +323,8 @@ local plugins = {
     tag = "v1.0.2",
     config = function() require("plugins.settings.git_signs") end,
 
-    --- NOTE: `nvim dir` 启动时直接打开 dir 时可能会造成 gitsigns 报错. 根据测试情况选择 VeryLazy 或者 BufReadPre ...
-    --event = { "BufReadPre", "BufNewFile" },
+    --- `nvim dir` 启动时直接打开 dir 时可能会造成 gitsigns 报错.
+    --- 根据测试情况选择 VeryLazy 或者 BufReadPre, BufNewFile ...
     event = "VeryLazy",
   },
 
@@ -343,6 +337,14 @@ local plugins = {
 
     --- NOTE: 无法使用 cmd = { "MarkdownPreview", "MarkdownPreviewStop", "MarkdownPreviewToggle" }, 作为加载条件.
     ft = {"markdown"},  -- markdown-preview 加载时间 < 1ms
+  },
+
+  {
+    "folke/trouble.nvim",
+    tag = "v3.7.1",
+    config = function() require("plugins.settings.trouble_list") end,
+
+    event = "VeryLazy",
   },
 
   --- https://docs.github.com/en/copilot/getting-started-with-github-copilot
@@ -367,103 +369,16 @@ local plugins = {
     cmd = {"Copilot"},  -- `:Copilot setup`, `:Copilot enable`, `:help copilot` 查看可用命令.
   },
 
+  --- https://github.com/jellydn/lazy-nvim-ide/blob/main/lua/plugins/extras/copilot-chat-v2.lua
   {
     "CopilotC-Nvim/CopilotChat.nvim",
     dependencies = {
-      { "github/copilot.vim" }, -- or zbirenbaum/copilot.lua
-      { "nvim-lua/plenary.nvim" }, -- for curl, log and async functions
+      { "nvim-lua/plenary.nvim" },
     },
-    config = function() require("plugins.settings.copilotchat") end,
-    keys = {
-      -- Show prompts actions with telescope
-      {
-        "<leader>ap",
-        function()
-          require("CopilotChat").select_prompt({
-            context = {
-              "buffers",
-            },
-          })
-        end,
-        desc = "CopilotChat - Prompt actions",
-      },
-      {
-        "<leader>ap",
-        function()
-          require("CopilotChat").select_prompt()
-        end,
-        mode = "x",
-        desc = "CopilotChat - Prompt actions",
-      },
-      -- Code related commands
-      { "<leader>ae", "<cmd>CopilotChatExplain<cr>", desc = "CopilotChat - Explain code" },
-      { "<leader>at", "<cmd>CopilotChatTests<cr>", desc = "CopilotChat - Generate tests" },
-      { "<leader>ar", "<cmd>CopilotChatReview<cr>", desc = "CopilotChat - Review code" },
-      { "<leader>aR", "<cmd>CopilotChatRefactor<cr>", desc = "CopilotChat - Refactor code" },
-      { "<leader>an", "<cmd>CopilotChatBetterNamings<cr>", desc = "CopilotChat - Better Naming" },
-      -- Chat with Copilot in visual mode
-      {
-        "<leader>av",
-        ":CopilotChatVisual",
-        mode = "x",
-        desc = "CopilotChat - Open in vertical split",
-      },
-      {
-        "<leader>ax",
-        ":CopilotChatInline",
-        mode = "x",
-        desc = "CopilotChat - Inline chat",
-      },
-      -- Custom input for CopilotChat
-      {
-        "<leader>ai",
-        function()
-          local input = vim.fn.input("Ask Copilot: ")
-          if input ~= "" then
-            vim.cmd("CopilotChat " .. input)
-          end
-        end,
-        desc = "CopilotChat - Ask input",
-      },
-      -- Generate commit message based on the git diff
-      {
-        "<leader>am",
-        "<cmd>CopilotChatCommit<cr>",
-        desc = "CopilotChat - Generate commit message for all changes",
-      },
-      -- Quick chat with Copilot
-      {
-        "<leader>aq",
-        function()
-          local input = vim.fn.input("Quick Chat: ")
-          if input ~= "" then
-            vim.cmd("CopilotChatBuffer " .. input)
-          end
-        end,
-        desc = "CopilotChat - Quick chat",
-      },
-      -- Fix the issue with diagnostic
-      { "<leader>af", "<cmd>CopilotChatFixError<cr>", desc = "CopilotChat - Fix Diagnostic" },
-      -- Clear buffer and chat history
-      { "<leader>al", "<cmd>CopilotChatReset<cr>", desc = "CopilotChat - Clear buffer and chat history" },
-      -- Toggle Copilot Chat Vsplit
-      { "<leader>av", "<cmd>CopilotChatToggle<cr>", desc = "CopilotChat - Toggle" },
-      -- Copilot Chat Models
-      { "<leader>a?", "<cmd>CopilotChatModels<cr>", desc = "CopilotChat - Select Models" },
-      -- Copilot Chat Agents
-      { "<leader>aa", "<cmd>CopilotChatAgents<cr>", desc = "CopilotChat - Select Agents" },
-    },
-
-    cmd = {"CopilotChatOpen"},
-  },
-
-  {
-    "folke/trouble.nvim",
-    tag = "v3.7.1",
-    config = function() require("plugins.settings.trouble_list") end,
+    config = function() require("plugins.settings.ai_copilotchat") end,
 
     event = "VeryLazy",
-  }
+  },
 
   --- recommanded plugins ------------------------------------------------------ {{{
   --- null-ls 替代:

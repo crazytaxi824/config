@@ -307,13 +307,13 @@ local function my_find_pickers()
       results = result_table,
     }),
     attach_mappings = function(prompt_bufnr, map)
-      --- 修改 select_default 的默认方法
+      --- 当用户按下回车键时的动作
       actions.select_default:replace(function()
         --- 获取选中的 item
         local selection = actions_state.get_selected_entry()
         local value = selection.value
 
-        --- 关闭现有 telescope
+        --- 关闭 telescope
         actions.close(prompt_bufnr)
 
         --- 执行新的 picker
@@ -345,6 +345,7 @@ local telescope_keymaps = {
   {'n', '<leader>f/', function() builtin.search_history() end,  opt, 'telescope: History Search'},
   {'n', '<leader>f?', function() builtin.search_history() end,  opt, 'telescope: History Search'},
   {'n', '<leader>fl', function() builtin.highlights() end,  opt, 'telescope: Search Highlight'},
+  {'n', '<leader>fw', function() builtin.spell_suggest() end, opt, 'telescope: Spell Suggests'},  -- 也可以使用 which-key 显示.
   {'n', 'z=', function() builtin.spell_suggest() end, opt, 'telescope: Spell Suggests'},  -- 也可以使用 which-key 显示.
   --{'n', '<leader>fg', function() builtin.live_grep() end,  opt, 'telescope: rg'},  -- NOTE: 使用自定义 :Rg 命令更灵活.
 }

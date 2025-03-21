@@ -98,15 +98,6 @@ local nt_buffer_keymaps = {
   {  "<leader>c",    compare_two_marked_files,   "compare two marked files" },
 }
 
---- global keymap --------------------------------------------------------------
-local opts = { silent=true }
-local tree_keymaps = {
-  {'n', '<leader>;',    '<cmd>NvimTreeToggle<CR>',    opts, 'filetree: toggle'},
-  {'n', '<leader><CR>', '<cmd>NvimTreeFindFile!<CR>', opts, 'filetree: jump to file'},
-}
-
-require('utils.keymaps').set(tree_keymaps)
-
 -- -- }}}
 
 --- `:help nvim-tree-setup` ------------------------------------------------------------------------ {{{

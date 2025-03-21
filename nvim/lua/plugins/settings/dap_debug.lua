@@ -215,12 +215,26 @@ local function close_debug_tab()
   end
 end
 
+local function del_debug_keymaps()
+  local keys = {'<F29>', '<F17>', '<F10>', '<F11>', '<F23>', '<S-D-F5>'}
+
+  local buf_keymaps = vim.api.nvim_get_keymap("n")
+  for _, key in ipairs(keys) do
+    for _, buf_keymap in ipairs(buf_keymaps) do
+      if buf_keymap['lhs'] == key then
+        vim.api.nvim_del_keymap("n", key)
+      end
+    end
+  end
+end
+
 --- terminate debug && close debug tab/buffers
 local function quit_debug()
   --- 判断 session 是否已经结束
   --- session 结束后无法触发 dap.terminate() 函数
   if not dap.session() then
     close_debug_tab()
+    del_debug_keymaps()
     return
   end
 
@@ -230,7 +244,80 @@ local function quit_debug()
   dap.terminate({},{terminateDebugee = true}, function()
     --- NOTE: Callback 异步函数中执行
     close_debug_tab()
+    del_debug_keymaps()
   end)
+end
+
+--- keymaps ----------------------------------------------------------------------------------------
+--- dap 可用方法, `:help dap-api` ---------------------------------------------- {{{
+---   dap.run({config})
+---   dap.run_last()  -- NOTE: run_last() 时, 当前 ('%') buffer 必须是之前运行 debug 时的 buffer.
+---   dap.launch({adapter}, {config})
+---   dap.terminate(terminate_opts, disconnect_opts, callback)
+---
+---   dap.set_breakpoint({condition}, {hit_condition}, {log_message})
+---   dap.toggle_breakpoint({condition}, {hit_condition}, {log_message})
+---   dap.clear_breakpoints()
+---
+---   dap.step_over([{opts}])
+---   dap.step_into([{opts}])
+---   dap.step_out([{opts}])
+---   dap.pause({thread_id})
+---   dap.run_to_cursor()
+---
+---   dap.session()
+---   dap.status()
+-- -- }}}
+local function set_debug_keymaps()
+  local opt = { silent = true }
+  local debug_keymaps = {
+    --- <C-F5>
+    {'n', '<F29>', function()
+      if dap.session() then
+        dap.continue()  -- continue to finish the program
+      else
+        if vim.fn.win_gotoid(vim.t[tabvar_dap]) == 1 then
+          dap.continue()  -- start new debug
+        end
+      end
+    end, opt, 'Fn 5: debug: Start(Continue)'},
+
+    --- <S-F5>
+    {'n', '<F17>', function() dap.terminate() end, opt, 'Fn 5: debug: Stop(End)'},
+
+    {'n', '<S-D-F5>', function()
+      if vim.fn.win_gotoid(vim.t[tabvar_dap]) == 1 then
+        dap.run_last()
+      end
+    end,  opt, 'Fn 5: debug: Restart'},
+
+    --- 已在 nvim/lua/plugins/init.lua 的 load 条件 init=function() 中设置.
+    --{'n', '<F9>', function() dap.toggle_breakpoint() end, opt, "Fn 9: debug: Toggle Breakpoint"},
+
+    {'n', '<F10>', function()
+      if vim.fn.win_gotoid(vim.t[tabvar_dap]) == 1 then
+        dap.step_over()
+      end
+    end, opt, "Fn10: debug: Step Over"},
+
+    {'n', '<F11>', function()
+      if vim.fn.win_gotoid(vim.t[tabvar_dap]) == 1 then
+        dap.step_into()
+      end
+    end, opt, "Fn11: debug: Step Into"},
+
+    --- <S-F11>
+    {'n', '<F23>', function()
+      if vim.fn.win_gotoid(vim.t[tabvar_dap]) == 1 then
+        dap.step_out()
+      end
+    end,  opt, "Fn11: debug: Step Out"},
+
+    {'n', '<leader>cb', function() dap.clear_breakpoints() end, opt, "debug: Clear Breakpoints"},
+    {'n', '<leader>cq', function() quit_debug() end, opt, 'debug: Quit'},
+  }
+
+  require('utils.keymaps').set(debug_keymaps)
 end
 -- -- }}}
 
@@ -239,6 +326,7 @@ end
 --- 启动 debug 之前先打开 new tab
 dap.listeners.before.event_initialized["foo"] = function()
   open_new_tab_for_debug()
+  set_debug_keymaps()
 end
 
 --- 启动 debug 之后, 打开 dap-ui windows
@@ -266,77 +354,6 @@ end
 -- end
 -- -- }}}
 
---- keymaps ----------------------------------------------------------------------------------------
---- dap 可用方法, `:help dap-api` ---------------------------------------------- {{{
----   dap.run({config})
----   dap.run_last()  -- NOTE: run_last() 时, 当前 ('%') buffer 必须是之前运行 debug 时的 buffer.
----   dap.launch({adapter}, {config})
----   dap.terminate(terminate_opts, disconnect_opts, callback)
----
----   dap.set_breakpoint({condition}, {hit_condition}, {log_message})
----   dap.toggle_breakpoint({condition}, {hit_condition}, {log_message})
----   dap.clear_breakpoints()
----
----   dap.step_over([{opts}])
----   dap.step_into([{opts}])
----   dap.step_out([{opts}])
----   dap.pause({thread_id})
----   dap.run_to_cursor()
----
----   dap.session()
----   dap.status()
--- -- }}}
---- TODO: 在进入 debug 模式时设置 keymaps, 退出 debug 模式时删除 keymaps.
-local opt = { silent = true }
-local debug_keymaps = {
-  --- <C-F5>
-  {'n', '<F29>', function()
-    if dap.session() then
-      dap.continue()  -- continue to finish the program
-    else
-      if vim.fn.win_gotoid(vim.t[tabvar_dap]) == 1 then
-        dap.continue()  -- start new debug
-      end
-    end
-  end, opt, 'Fn 5: debug: Start(Continue)'},
-
-  --- <S-F5>
-  {'n', '<F17>', function() dap.terminate() end, opt, 'Fn 5: debug: Stop(End)'},
-
-  {'n', '<S-D-F5>', function()
-    if vim.fn.win_gotoid(vim.t[tabvar_dap]) == 1 then
-      dap.run_last()
-    end
-  end,  opt, 'Fn 5: debug: Restart'},
-
-  --- 已在 nvim/lua/plugins/init.lua 的 load 条件 init=function() 中设置.
-  --{'n', '<F9>', function() dap.toggle_breakpoint() end, opt, "Fn 9: debug: Toggle Breakpoint"},
-
-  {'n', '<F10>', function()
-    if vim.fn.win_gotoid(vim.t[tabvar_dap]) == 1 then
-      dap.step_over()
-    end
-  end, opt, "Fn10: debug: Step Over"},
-
-  {'n', '<F11>', function()
-    if vim.fn.win_gotoid(vim.t[tabvar_dap]) == 1 then
-      dap.step_into()
-    end
-  end, opt, "Fn11: debug: Step Into"},
-
-  --- <S-F11>
-  {'n', '<F23>', function()
-    if vim.fn.win_gotoid(vim.t[tabvar_dap]) == 1 then
-      dap.step_out()
-    end
-  end,  opt, "Fn11: debug: Step Out"},
-
-  {'n', '<leader>cb', function() dap.clear_breakpoints() end, opt, "debug: Clear Breakpoints"},
-  {'n', '<leader>cq', function() quit_debug() end, opt, 'debug: Quit'},
-}
-
-require('utils.keymaps').set(debug_keymaps)
-
 --- keymaps: jump_to_file in dap-repl window -------------------------------------------------------
 local fp = require('utils.filepath')
 vim.api.nvim_create_autocmd("FileType", {
@@ -346,6 +363,9 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
   desc = "dap: keymap for jump_to_file",
 })
+
+--- user command
+vim.api.nvim_create_user_command('Debug', 'DapContinue', { bang=true, bar=true })
 
 
 
