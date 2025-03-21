@@ -10,17 +10,37 @@ if not chat_select_ok then
   return
 end
 
+--- `:help CopilotChat-prompts`
 local prompts = {
   --- VVI: 所有自定义的 prompts 都会自动创建一个 command, eg: "Foo" -> "CopilotChatFoo"
   -- Foo = "Foo",
 
   --- Code related prompts
-  Explain = "Please explain how the following code works.",
-  Review = "Please review the following code and provide suggestions for improvement.",
-  Tests = "Please explain how the selected code works, then generate unit tests for it.",
-  Refactor = "Please refactor the following code to improve its clarity and readability.",
-  FixCode = "Please fix the following code to make it work as intended.",
-  FixError = "Please explain the error in the following code and provide a solution.",
+  -- Explain = "Please explain how the following code works.",
+  Explain = {
+    prompt = "Please explain how the following code works.",
+    mapping = "<leader>ae",
+  },
+  Review = {
+    prompt = "Please review the following code and provide suggestions for improvement.",
+    mapping = "<leader>ar",
+  },
+  Tests = {
+    prompt = "Please explain how the selected code works, then generate unit tests for it.",
+    mapping = "<leader>at",
+  },
+  Refactor = {
+    prompt = "Please refactor the following code to improve its clarity and readability.",
+    mapping = "<leader>aR",
+  },
+  FixCode = {
+    prompt = "Please fix the following code to make it work as intended.",
+    mapping = "<leader>aF",
+  },
+  FixError = {
+    prompt = "Please explain the error in the following code and provide a solution.",
+    mapping = "<leader>af",
+  },
   BetterNamings = "Please provide better names for the following variables and functions.",
   Documentation = "Please provide documentation for the following code.",
   -- SwaggerApiDocs = "Please provide documentation for the following API using Swagger.",
@@ -93,13 +113,28 @@ vim.api.nvim_create_user_command("CopilotChatInline", function(args)
   })
 end, { nargs = "*", range = true })
 
--- Restore CopilotChatBuffer
-vim.api.nvim_create_user_command("CopilotChatBuffer", function(args)
-  chat.ask(args.args, { selection = select.buffer })
-end, { nargs = "*", range = true })
-
 --- keymaps ----------------------------------------------------------------------------------------
+local opt = { silent = true }
+local ai_keymaps = {
+  -- Show prompts actions with telescope
+  { "n", "<leader>ap", function() chat.select_prompt({context={"buffers"}}) end, opt, "CopilotChat - Prompt actions"},
+  { "x", "<leader>ap", function() chat.select_prompt() end, opt, "CopilotChat - Prompt actions"},
 
+  -- Chat with Copilot in visual mode
+  { "x", "<leader>av", ":CopilotChatVisual ", opt, "CopilotChat - Open in V-split"},
+  { "x", "<leader>ax", ":CopilotChatInline ", opt, "CopilotChat - Inline chat"},
+
+  -- Generate commit message based on the git diff
+  { "n", "<leader>am", "<cmd>CopilotChatCommit<CR>", opt, "CopilotChat - Generate commit messages"},
+  { "n", "<leader>al", "<cmd>CopilotChatReset<CR>", opt, "CopilotChat - Clear buffer and history" },
+  { "n", "<leader>aa", "<cmd>CopilotChatToggle<CR>", opt, "CopilotChat - Toggle V-split" },
+  { "n", "<leader>a?", "<cmd>CopilotChatModels<CR>", opt, "CopilotChat - Select Models" },
+  -- { "n", "<leader>aa", "<cmd>CopilotChatAgents<CR>", opt, "CopilotChat - Select Agents" },
+}
+
+require('utils.keymaps').set(ai_keymaps, {
+  { "<leader>a", group = "AI" },
+})
 
 
 
