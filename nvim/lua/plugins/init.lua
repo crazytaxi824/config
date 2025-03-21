@@ -262,20 +262,12 @@ local plugins = {
   {
     "mfussenegger/nvim-dap",  -- core debug tool
     commit = "a720d49",
-
-    --- 在 config 之前执行, 用于设置 :Debug 命令
-    init = function(lazyplugin)
-      --- vim.cmd([[command -bang -bar Debug DapContinue]])
-      vim.api.nvim_create_user_command('Debug', 'DapContinue', { bang=true, bar=true })
-    end,
-
     config = function() require("plugins.settings.dap_debug") end,
 
+    cmd = {'Debug', 'DapToggleBreakpoint', 'DapContinue'},
     keys = {
       {'<F9>', '<cmd>DapToggleBreakpoint<CR>', desc = "Fn 9: debug: Toggle Breakpoint"},
     },
-
-    cmd = {'Debug', 'DapToggleBreakpoint', 'DapContinue'},
   },
 
   {

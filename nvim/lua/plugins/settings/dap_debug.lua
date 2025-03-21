@@ -364,5 +364,8 @@ vim.api.nvim_create_autocmd("FileType", {
   desc = "dap: keymap for jump_to_file",
 })
 
+--- user command
+vim.api.nvim_create_user_command('Debug', 'DapContinue', { bang=true, bar=true })
+
 
 
