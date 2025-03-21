@@ -247,7 +247,6 @@ local function quit_debug()
     del_debug_keymaps()
   end)
 end
--- -- }}}
 
 --- keymaps ----------------------------------------------------------------------------------------
 --- dap 可用方法, `:help dap-api` ---------------------------------------------- {{{
@@ -320,6 +319,7 @@ local function set_debug_keymaps()
 
   require('utils.keymaps').set(debug_keymaps)
 end
+-- -- }}}
 
 --- 开启 new tab 进行 debug ------------------------------------------------------------------------
 --- https://github.com/rcarriga/nvim-dap-ui#usage & `:help dap-extensions`
