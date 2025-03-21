@@ -179,7 +179,7 @@ local plugins = {
   --- 自动括号, 同时依赖 treesitter && cmp
   {
     "windwp/nvim-autopairs",
-    commit = "68f0e5c",
+    commit = "6522027",
     config = function() require("plugins.settings.autopairs") end,
     dependencies = {"hrsh7th/nvim-cmp"},  -- cmp.event:on() 设置.
 
@@ -261,7 +261,7 @@ local plugins = {
   --- Debug tools 安装 -----------------------------------------------------------------------------
   {
     "mfussenegger/nvim-dap",  -- core debug tool
-    commit = "a720d49",
+    commit = "6a5bba0",
     config = function() require("plugins.settings.dap_debug") end,
 
     cmd = {'Debug', 'DapToggleBreakpoint', 'DapContinue'},
