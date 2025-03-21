@@ -66,29 +66,29 @@ wrap_map.exist = function(bufnr)
   return wrap_map[bufname]
 end
 
---- 手动设置 :setlocal wrap 时, 将文件 cache 到 list 中, 同时 set keymaps
---- 手动设置 :setlocal nowrap 时, 将文件 从 list 中移除, 同时 del keymaps
-vim.api.nvim_create_autocmd('OptionSet', {
-  pattern = {"wrap"},
-  callback = function(params)
-    -- vim.print(vim.v.option_new, vim.v.option_old, vim.v.option_oldlocal, vim.v.option_oldglobal)
-    if vim.wo.wrap then
-      wrap_map.add(params.buf)  -- 加入到 list
-      set_cursor_move_in_wrap(params.buf)  -- 设置 keymaps
-    else
-      wrap_map.remove(params.buf)  -- 从 list 中移除
-      del_cursor_move_in_wrap(params.buf)  -- 删除 keymaps 设置
-    end
-  end,
-  desc = "wrap: set (no)wrap triggers keymaps change, eg: <UP>, <HOME> ...",
-})
+--- command 设置 cursor keymaps
+vim.api.nvim_create_user_command("CursorMove", function(params)
+  if params.args == "nowrap" then
+    del_cursor_move_in_wrap(0)
+  elseif params.args == "wrap" then
+    set_cursor_move_in_wrap(0)
+  end
+end, {nargs=1, bar=true})
 
 --- :bwipeout 之后再次打开已经设置为 wrap 的文件时, 自动设置为 wrap.
 vim.api.nvim_create_autocmd('BufWinEnter', {
   pattern = {"*"},
   callback = function(params)
     local win_id = vim.api.nvim_get_current_win()
-    if wrap_map.exist(params.buf) and vim.api.nvim_win_get_buf(win_id) == params.buf then
+    if vim.api.nvim_win_get_buf(win_id) ~= params.buf then
+      Notify("BufWinEnter win_id not match bufnr", "ERROR")
+      return
+    end
+
+    if vim.wo[win_id].wrap then
+      set_cursor_move_in_wrap(params.buf)  -- 设置 keymaps
+      wrap_map.add(params.buf)
+    elseif wrap_map.exist(params.buf) then
       set_cursor_move_in_wrap(params.buf)  -- 设置 keymaps
       vim.api.nvim_set_option_value('wrap', true, { scope='local', win=win_id })
     end
