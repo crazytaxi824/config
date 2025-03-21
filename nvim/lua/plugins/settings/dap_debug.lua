@@ -221,6 +221,7 @@ local function quit_debug()
   --- session 结束后无法触发 dap.terminate() 函数
   if not dap.session() then
     close_debug_tab()
+    --- TODO: 退出 debug 模式时删除 keymaps.
     return
   end
 
@@ -230,6 +231,7 @@ local function quit_debug()
   dap.terminate({},{terminateDebugee = true}, function()
     --- NOTE: Callback 异步函数中执行
     close_debug_tab()
+    --- TODO: 退出 debug 模式时删除 keymaps.
   end)
 end
 -- -- }}}
@@ -239,6 +241,7 @@ end
 --- 启动 debug 之前先打开 new tab
 dap.listeners.before.event_initialized["foo"] = function()
   open_new_tab_for_debug()
+  --- TODO: 设置 debug keymaps.
 end
 
 --- 启动 debug 之后, 打开 dap-ui windows
@@ -286,7 +289,6 @@ end
 ---   dap.session()
 ---   dap.status()
 -- -- }}}
---- TODO: 在进入 debug 模式时设置 keymaps, 退出 debug 模式时删除 keymaps.
 local opt = { silent = true }
 local debug_keymaps = {
   --- <C-F5>
