@@ -300,7 +300,8 @@ local plugins = {
     config = function() require("plugins.settings.telescope_fzf") end,
     dependencies = {
       "nvim-lua/plenary.nvim",
-      "nvim-telescope/telescope-fzf-native.nvim",  -- telescope extension
+      "nvim-telescope/telescope-fzf-native.nvim", -- telescope extension
+      "nvim-telescope/telescope-ui-select.nvim",  -- ui
     },
 
     event = "VeryLazy",
@@ -310,6 +311,13 @@ local plugins = {
     "nvim-telescope/telescope-fzf-native.nvim",
     commit = "1f08ed6",
     build = "make",
+
+    lazy = true,  -- telescope 加载时自动加载.
+  },
+
+  {
+    "nvim-telescope/telescope-ui-select.nvim",
+    commit = "6e51d7d",
 
     lazy = true,  -- telescope 加载时自动加载.
   },
@@ -373,7 +381,9 @@ local plugins = {
   {
     "CopilotC-Nvim/CopilotChat.nvim",
     dependencies = {
-      { "nvim-lua/plenary.nvim" },
+      "nvim-telescope/telescope.nvim",
+      "nvim-telescope/telescope-ui-select.nvim",
+      "nvim-lua/plenary.nvim",
     },
     config = function() require("plugins.settings.ai_copilotchat") end,
 

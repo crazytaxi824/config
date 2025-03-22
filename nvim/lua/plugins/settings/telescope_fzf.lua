@@ -186,10 +186,15 @@ telescope.setup {
                                        -- the default case_mode is "smart_case"
     },
   },
+
+  ["ui-select"] = {
+    require("telescope.themes").get_dropdown()
+  },
 }
 
 --- VVI: load extension after setup()
 telescope.load_extension('fzf')
+telescope.load_extension("ui-select")
 
 --- keymap: toggle `set wrap` for filetype = TelescopePrompt only.
 --- 打开 telescope 时, 设置快捷键用于显示超出 preview window 的内容 --------------------------------
