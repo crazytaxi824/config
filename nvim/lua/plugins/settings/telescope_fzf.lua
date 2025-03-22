@@ -3,13 +3,20 @@ if not status_ok then
   return
 end
 
---- custom actions --------------------------------------------------------------------------------- {{{
---- 多选的情况下 send_selected_to_qflist; 没有任何选择的情况下 edit 光标所在行的 file.
-local actions = require("telescope.actions")  -- 自定义 key mapping 用
-local actions_layout = require("telescope.actions.layout")  -- 自定义 key mapping 用
+local themes = require("telescope.themes")
+local finders = require("telescope.finders")
+local pickers = require("telescope.pickers")
+local builtin_pickers = require("telescope.builtin")
+local make_entry = require("telescope.make_entry")
+local conf = require("telescope.config").values
+local builtin = require("telescope.builtin")
+local actions = require("telescope.actions")
+local actions_layout = require("telescope.actions.layout")
 local actions_state = require("telescope.actions.state")
 local transform_mod = require('telescope.actions.mt').transform_mod
 
+--- custom actions --------------------------------------------------------------------------------- {{{
+--- 多选的情况下 send_selected_to_qflist; 没有任何选择的情况下 edit 光标所在行的 file.
 local my_action = transform_mod({
   edit_or_qf = function(prompt_bufnr)
     --- 参考 https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/actions/init.lua
@@ -177,7 +184,7 @@ telescope.setup {
     },
   },
   extensions = {
-    --- https://github.com/nvim-telescope/telescope-fzf-native.nvim#telescope-setup-and-configuration
+    --- https://github.com/nvim-telescope/telescope-fzf-native.nvim
     fzf = {
       fuzzy = true,                    -- false will only do exact matching
       override_generic_sorter = true,  -- override the generic sorter
@@ -187,8 +194,9 @@ telescope.setup {
     },
   },
 
+  --- https://github.com/nvim-telescope/telescope-ui-select.nvim
   ["ui-select"] = {
-    require("telescope.themes").get_dropdown()
+    themes.get_dropdown()
   },
 }
 
@@ -236,11 +244,6 @@ vim.api.nvim_set_hl(0, "TelescopeMatching", {reverse = true})
 --- Rg command ----------------------------------------------------------------- {{{
 --- 基于 telescope.builtin.grep_string() 修改
 --- https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/builtin/__files.lua
-local pickers = require("telescope.pickers")
-local finders = require("telescope.finders")
-local make_entry = require("telescope.make_entry")
-local conf = require("telescope.config").values
-
 local function my_rg_picker(additional_args)
   --- args 是一个 cmd list, eg: {'rg', '-w', '-s', 'filepath'}
   local args = vim.iter({conf.vimgrep_arguments, additional_args}):flatten():totable()
@@ -286,10 +289,6 @@ vim.api.nvim_create_user_command("Rg",
 --- find pickers --------------------------------------------------------------- {{{
 --- 找出所有的 pickers: builtin & extension
 --- https://github.com/keyvchan/telescope-find-pickers.nvim/blob/main/lua/telescope/_extensions/find_pickers/main.lua
-local builtin_pickers = require("telescope.builtin")
-local extensions_pickers = require("telescope._extensions")
-local themes = require("telescope.themes")
-
 local function my_find_pickers()
   local opts = themes.get_dropdown()
 
@@ -300,9 +299,6 @@ local function my_find_pickers()
 
   local result_table = {}
   for key, _ in pairs(builtin_pickers) do
-    table.insert(result_table, key)
-  end
-  for key, _ in pairs(extensions_pickers.manager) do
     table.insert(result_table, key)
   end
 
@@ -324,8 +320,6 @@ local function my_find_pickers()
         --- 执行新的 picker
         if builtin_pickers[value] ~= nil then
           builtin_pickers[value](opts_pickers)
-        elseif extensions_pickers.manager[value] ~= nil then
-          extensions_pickers.manager[value][value](opts_pickers)
         end
       end)
       return true
@@ -336,7 +330,6 @@ end
 -- -- }}}
 
 --- keymaps ----------------------------------------------------------------------------------------
-local builtin = require("telescope.builtin")
 local opt = { silent = true }
 local telescope_keymaps = {
   --- Picker functions, https://github.com/nvim-telescope/telescope.nvim#pickers

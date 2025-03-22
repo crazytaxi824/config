@@ -9,13 +9,8 @@ local M = {}
 local function check_module()
   local require_list = {
     "bufferline.state",
-
     "nvim-treesitter.parsers",
-
-    "telescope.finders",
     "telescope.make_entry",
-    "telescope.pickers",
-    "telescope.config",
   }
 
   local err_list = {}
