@@ -90,8 +90,8 @@ ts_configs.setup {
   incremental_selection = {
     enable = true,
     keymaps = {
-      init_selection = "<leader>g",
-      node_incremental = "<leader>g",  -- visual 下的 keymaps.
+      init_selection = "<leader><Up>",
+      node_incremental = "<leader><Up>",  -- visual 下的 keymaps.
       -- scope_incremental = "<leader>gc",
       -- node_decremental = "<leader>gm",
     },
