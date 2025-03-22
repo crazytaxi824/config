@@ -78,7 +78,7 @@ chat.setup {
     },
     -- Submit the prompt to Copilot
     submit_prompt = {
-      normal = "<CR>",
+      normal = "<D-CR>",
       insert = "<D-CR>",
     },
     -- Accept the diff
