@@ -349,7 +349,7 @@ local telescope_keymaps = {
 }
 
 require('utils.keymaps').set(telescope_keymaps, {
-  { "<leader>f", group = "Telescope Find" },
+  { "<leader>f", group = "fzf Telescope" },
 })
 
 
