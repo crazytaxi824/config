@@ -4,7 +4,7 @@ if not status_ok then
 end
 
 local function format_by_ft()
-  --- map { filetype = formatter }
+  --- map { filetype = { formatters ... }}
   local filetype_formatter = {
     --- VVI: conform will run multiple formatters sequentially
     go = { "goimports", "goimports-reviser" },
@@ -33,7 +33,7 @@ local function format_by_ft()
     filetype_formatter[ft] = { "prettier" }
   end
 
-  --- gdscript filetypes
+  ---  for Godot's gdscript
   local gd_ft = { 'gd', 'gdscript', 'gdscript3' }
   for _, ft in ipairs(gd_ft) do
     filetype_formatter[ft] = { "gdformat" }
@@ -53,7 +53,11 @@ conform.setup({
   notify_on_error = false,
 
   --- VVI: 不要设置, 否则会覆盖以下 autocmd conform.format({...})
-  --format_on_save = { ... },
+  -- format_on_save = {
+  --   --- These options will be passed to conform.format()
+  --   timeout_ms = 500,
+  --   lsp_format = "fallback",
+  -- },
 })
 
 --- Custome formatter ------------------------------------------------------------------------------
@@ -67,20 +71,6 @@ conform.formatters.prettier = function(bufnr)
       "--end-of-line=lf",  -- Which end of line characters to apply. 默认 'lf'.
       -- "--tab-width=2",  -- Number of spaces per indentation level. 默认 2.
     }
-  }
-end
-
-conform.formatters.gdformat = function(bufnr)
-  --- DOCS: `gdformat` formatter 安装使用方法
-  --- `/path/to/python3 -m venv .venv` 创建虚拟环境.
-  --- 安装最新 gdformat `pip3 install git+https://github.com/Scony/godot-gdscript-toolkit.git`
-  --- 或者 `let $PATH='.venv/bin:'..$PATH` 加入虚拟环境.
-  --- NOTE: `gdformat` 依赖 `python3` 所以必须使用 venv.
-  return {
-    --- using custom path, fallback to $PATH
-    command = require("conform.util").find_executable({
-      ".venv/bin/gdformat",
-    }, "gdformat"),
   }
 end
 
