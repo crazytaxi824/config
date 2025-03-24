@@ -288,9 +288,9 @@ vim.api.nvim_create_user_command("Rg",
 --- find pickers --------------------------------------------------------------- {{{
 --- 找出所有的 pickers: builtin & extension
 --- https://github.com/keyvchan/telescope-find-pickers.nvim/blob/main/lua/telescope/_extensions/find_pickers/main.lua
-local function my_find_pickers()
+local function my_find_pickers(opts)
   -- theme_opts: https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/themes.lua
-  local opts = themes.get_dropdown({
+  opts = opts or themes.get_dropdown({
     -- sorting_strategy = "ascending",
     -- layout_strategy = "center",
     -- layout_config = {
@@ -341,17 +341,17 @@ local opt = { silent = true }
 local telescope_keymaps = {
   --- Picker functions, https://github.com/nvim-telescope/telescope.nvim#pickers
   --- 使用 `:Telescope` 列出所有 Picker
-  {'n', '<leader>ff', function() my_find_pickers() end, opt, 'telescope: find pickers'},
+  {'n', '<leader>ff', function() my_find_pickers(themes.get_dropdown()) end, opt, 'telescope: find pickers'},
   {'n', '<leader>fd', function() builtin.find_files() end, opt, 'telescope: fd'},
   {'n', '<leader>fh', function() builtin.help_tags() end,  opt, 'telescope: Vim Help Doc'},
   {'n', '<leader>fk', function() builtin.keymaps() end,    opt, 'telescope: Keymap normal Mode'},
   {'n', '<leader>fc', function() builtin.commands() end,   opt, 'telescope: All Commands'},
   {'n', '<leader>f:', function() builtin.command_history() end, opt, 'telescope: History Command'},
-  {'n', '<leader>f/', function() builtin.search_history() end,  opt, 'telescope: History Search'},
-  {'n', '<leader>f?', function() builtin.search_history() end,  opt, 'telescope: History Search'},
+  {'n', '<leader>f/', function() builtin.search_history(themes.get_dropdown()) end,  opt, 'telescope: History Search'},
+  {'n', '<leader>f?', function() builtin.search_history(themes.get_dropdown()) end,  opt, 'telescope: History Search'},
   {'n', '<leader>fl', function() builtin.highlights() end,  opt, 'telescope: Search Highlight'},
-  {'n', '<leader>fw', function() builtin.spell_suggest() end, opt, 'telescope: Spell Suggests'},  -- 也可以使用 which-key 显示.
-  {'n', 'z=', function() builtin.spell_suggest() end, opt, 'telescope: Spell Suggests'},  -- 也可以使用 which-key 显示.
+  {'n', '<leader>fw', function() builtin.spell_suggest(themes.get_dropdown()) end, opt, 'telescope: Spell Suggests'},  -- 也可以使用 which-key 显示.
+  {'n', 'z=', function() builtin.spell_suggest(themes.get_dropdown()) end, opt, 'telescope: Spell Suggests'},  -- 也可以使用 which-key 显示.
   --{'n', '<leader>fg', function() builtin.live_grep() end,  opt, 'telescope: rg'},  -- NOTE: 使用自定义 :Rg 命令更灵活.
 }
 
