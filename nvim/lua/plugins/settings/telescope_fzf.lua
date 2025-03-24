@@ -171,7 +171,6 @@ telescope.setup {
       -- -E=**/.*/**              显示隐藏文件夹, 但不列出其中的文件.
       -- -E=**/node_modules/**    显示 node_modules 文件夹, 但不列出其中的文件.
       -- -- }}}
-      --theme = "dropdown",
       find_command = {
         "fd",
         "--follow",  -- descend into symlinked directories.
@@ -192,11 +191,11 @@ telescope.setup {
       case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
                                        -- the default case_mode is "smart_case"
     },
-  },
 
-  --- https://github.com/nvim-telescope/telescope-ui-select.nvim
-  ["ui-select"] = {
-    themes.get_dropdown()
+    --- https://github.com/nvim-telescope/telescope-ui-select.nvim
+    ["ui-select"] = {
+      themes.get_dropdown(),
+    },
   },
 }
 
@@ -290,7 +289,15 @@ vim.api.nvim_create_user_command("Rg",
 --- 找出所有的 pickers: builtin & extension
 --- https://github.com/keyvchan/telescope-find-pickers.nvim/blob/main/lua/telescope/_extensions/find_pickers/main.lua
 local function my_find_pickers()
-  local opts = themes.get_dropdown()
+  -- theme_opts: https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/themes.lua
+  local opts = themes.get_dropdown({
+    -- sorting_strategy = "ascending",
+    -- layout_strategy = "center",
+    -- layout_config = {
+    --   width = 0.4,
+    --   height = 20,
+    -- },
+  })
 
   local opts_pickers = {
     bufnr = vim.api.nvim_get_current_buf(),
