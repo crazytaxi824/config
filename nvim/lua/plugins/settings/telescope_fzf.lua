@@ -293,6 +293,7 @@ local function my_find_pickers(opts)
   opts = opts or themes.get_dropdown({
     -- sorting_strategy = "ascending",
     -- layout_strategy = "center",
+    -- scroll_strategy = "cycle",
     -- layout_config = {
     --   width = 0.4,
     --   height = 20,
@@ -308,6 +309,7 @@ local function my_find_pickers(opts)
   for key, _ in pairs(builtin_pickers) do
     table.insert(result_table, key)
   end
+  table.sort(result_table) -- sort result
 
   pickers.new(opts, {
     prompt_title = "Find Pickers",
@@ -343,13 +345,13 @@ local telescope_keymaps = {
   --- 使用 `:Telescope` 列出所有 Picker
   {'n', '<leader>ff', function() my_find_pickers(themes.get_dropdown()) end, opt, 'telescope: find pickers'},
   {'n', '<leader>fd', function() builtin.find_files() end, opt, 'telescope: fd'},
-  {'n', '<leader>fh', function() builtin.help_tags() end,  opt, 'telescope: Vim Help Doc'},
-  {'n', '<leader>fk', function() builtin.keymaps() end,    opt, 'telescope: Keymap normal Mode'},
-  {'n', '<leader>fc', function() builtin.commands() end,   opt, 'telescope: All Commands'},
+  {'n', '<leader>fh', function() builtin.help_tags() end, opt, 'telescope: Vim Help Doc'},
+  {'n', '<leader>fk', function() builtin.keymaps() end, opt, 'telescope: Keymap normal Mode'},
+  {'n', '<leader>fc', function() builtin.commands() end, opt, 'telescope: All Commands'},
   {'n', '<leader>f:', function() builtin.command_history() end, opt, 'telescope: History Command'},
-  {'n', '<leader>f/', function() builtin.search_history(themes.get_dropdown()) end,  opt, 'telescope: History Search'},
-  {'n', '<leader>f?', function() builtin.search_history(themes.get_dropdown()) end,  opt, 'telescope: History Search'},
-  {'n', '<leader>fl', function() builtin.highlights() end,  opt, 'telescope: Search Highlight'},
+  {'n', '<leader>f/', function() builtin.search_history(themes.get_dropdown()) end, opt, 'telescope: History Search'},
+  {'n', '<leader>f?', function() builtin.search_history(themes.get_dropdown()) end, opt, 'telescope: History Search'},
+  {'n', '<leader>fl', function() builtin.highlights() end, opt, 'telescope: Search Highlight'},
   {'n', '<leader>fw', function() builtin.spell_suggest(themes.get_dropdown()) end, opt, 'telescope: Spell Suggests'},  -- 也可以使用 which-key 显示.
   {'n', 'z=', function() builtin.spell_suggest(themes.get_dropdown()) end, opt, 'telescope: Spell Suggests'},  -- 也可以使用 which-key 显示.
   --{'n', '<leader>fg', function() builtin.live_grep() end,  opt, 'telescope: rg'},  -- NOTE: 使用自定义 :Rg 命令更灵活.
