@@ -14,11 +14,7 @@ local function format_by_ft()
     sh = { "shfmt" },
     proto = { "buf" },
     lua = { "stylua" },
-
-    --- all filetypes.
-    --["*"] = { "codespell" },
-    --- filetypes that don't have other formatters configured.
-    --["_"] = { "trim_whitespace" },
+    --["*"] = { "codespell" }, --- all filetypes
   }
 
   --- https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTINS.md#prettier
