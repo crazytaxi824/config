@@ -112,11 +112,8 @@ M.sources =  {
 
   --- code action ----------------------------------------------------------------------------------
   [M.local_code_actions_key] = {
-    gomodifytags = function()
-      return code_actions.gomodifytags.with(proj_local_settings.tools_keep_extend(M.local_code_actions_key,
-        'gomodifytags', {})
-      )
-    end
+    code_actions.gomodifytags,
+    -- code_actions.impl,  -- BUG
   },
 
   --- NOTE: 目前使用 Conform, Deprecated formatter & code_actions -------------- {{{
