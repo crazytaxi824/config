@@ -118,7 +118,7 @@ M.on_attach = function(client, bufnr)
 
   --- DEBUG: 用
   if __Debug_Neovim.lspconfig then
-    Notify("LSP Server attach: " .. client.name, "DEBUG", {title="LSP"})
+    Notify("LSP Server attach: " .. client.name .. " - bufnr(" .. bufnr .. ")", "DEBUG", {title="LSP"})
   end
 end
 
