@@ -1,6 +1,6 @@
 local M = {}
 
-M.close_pop_wins = function ()
+M.close_pop_wins = function()
   local win_closed
   local wins = vim.api.nvim_tabpage_list_wins(0)
   for _, win_id in ipairs(wins) do

@@ -113,7 +113,7 @@ M.buf_job_output = function(term_obj, term_win_id)
   term_obj.job_id = vim.fn.jobstart(term_obj.cmd, {
     cwd = term_obj.cwd,
 
-    on_stdout = function (job_id, data, event)  -- NOTE: fmt.Print()
+    on_stdout = function(job_id, data, event)  -- NOTE: fmt.Print()
       --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
       if not g.term_buf_exist(term_obj.bufnr) then
         return
@@ -129,7 +129,7 @@ M.buf_job_output = function(term_obj, term_win_id)
       g.exec_callbacks(term_obj.on_stdout, term_obj, job_id, data, event)
     end,
 
-    on_stderr = function (job_id, data, event)  -- NOTE: log.Print()
+    on_stderr = function(job_id, data, event)  -- NOTE: log.Print()
       --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
       if not g.term_buf_exist(term_obj.bufnr) then
         return

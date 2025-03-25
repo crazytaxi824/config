@@ -71,7 +71,8 @@ for lsp_svr, v in pairs(lsp_servers_map) do
           if __Debug_Neovim.lspconfig then
             Notify(":LspStart " .. lsp_svr, "DEBUG", {title="LSP"})
           end
-        end
+        end,
+        desc = "LSP: LspStart <lsp>",
       })
     end,
     desc = "LSP: setup LSP based on FileType",

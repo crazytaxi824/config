@@ -441,7 +441,7 @@ lazy.setup(plugins, opts)
 vim.api.nvim_create_autocmd({"BufWinEnter"}, {
   pattern = {"*"},
   once = true,
-  callback = function (params)
+  callback = function(params)
     local finfo = vim.uv.fs_stat(vim.api.nvim_buf_get_name(params.buf))
     if finfo and finfo.type == 'directory' then
       lazy.load({plugins = {"nvim-tree.lua"}})

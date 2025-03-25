@@ -41,7 +41,7 @@ local function leave_snippet(bufnr)
     and not luasnip.session.jump_active
   then
     --- VVI: 使用 vim.schedule 是为了让 ${1:err} and $1 同步内容.
-    vim.schedule(function ()
+    vim.schedule(function()
       luasnip.unlink_current() -- removes the current snippet from the jumplist.
     end)
   end

@@ -15,7 +15,7 @@ M.default_config = {}
 M.flags = { debounce_text_changes = 500 }   --- 默认 150.
 
 --- NOTE: on_error() invoked when the client operation throws an error.
-M.on_error = function (code)
+M.on_error = function(code)
   Notify(vim.inspect(vim.lsp.rpc.client_errors[code]), "ERROR", {title = "lspconfig/setup_opts.lua"})
 end
 
