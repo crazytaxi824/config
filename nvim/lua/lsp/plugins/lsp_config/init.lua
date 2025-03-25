@@ -52,24 +52,27 @@ for lsp_svr, v in pairs(lsp_servers_map) do
     pattern = v.filetypes,
     once = true,  --- VVI: only need to start LSP server once.
     callback = function(params)
-      --- NOTE: lazyload lspconfig
-      vim.schedule(function()
-        --- lspconfig[lsp_svr].setup(opt), 根据 filetype 设置 lsp
-        lspconfig_setup(lsp_svr)
+      --- setup lsp config
+      lspconfig_setup(lsp_svr)
 
-        --- VVI: 第一次必须要手动 LspStart, 因为 lsp 是在 buffer 加载完成之后才执行 lspconfig[xxx].setup(),
-        --- 所以触发 autocmd FileType 的 buffer 没有办法 attach lsp. 需要手动 `:LspStart` 进行 attach.
-        --- 以下使用了 `:LspStart xxx` 的源代码. 也可以直接使用 vim.cmd('LspStart ' .. lsp_svr)
-        local config = require('lspconfig.configs')[lsp_svr]
-        if config then
-          config.launch()  --- VVI: start & attach to buffer
-        end
+      --- VVI: 第一次必须要手动 LspStart, 因为 lsp 是在 buffer 加载完成之后才执行 lspconfig[xxx].setup(),
+      --- 所以触发 autocmd FileType 的 buffer 没有办法 attach lsp. 需要手动 `:LspStart` 进行 attach.
+      --- 以下使用了 `:LspStart xxx` 的源代码. 也可以直接使用 vim.cmd('LspStart ' .. lsp_svr)
+      vim.api.nvim_create_autocmd("BufEnter", {
+        buffer = params.buf,
+        once = true,  --- VVI: only need to start LSP server once.
+        callback = function(p)
+          local config = require('lspconfig.configs')[lsp_svr]
+          if config then
+            config.launch()  --- VVI: start & attach to buffer
+          end
 
-        --- DEBUG: 用. 每个 lsp 应该只打印一次.
-        if __Debug_Neovim.lspconfig then
-          Notify(":LspStart " .. lsp_svr, "DEBUG", {title="LSP"})
+          --- DEBUG: 用. 每个 lsp 应该只打印一次.
+          if __Debug_Neovim.lspconfig then
+            Notify(":LspStart " .. lsp_svr, "DEBUG", {title="LSP"})
+          end
         end
-      end)
+      })
     end,
     desc = "LSP: setup LSP based on FileType",
   })
