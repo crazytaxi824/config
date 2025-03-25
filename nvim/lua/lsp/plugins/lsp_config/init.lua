@@ -47,20 +47,24 @@ end
 -- -- }}}
 
 --- 以下设置是为了 autocmd 根据 FileType 手动加载/启动不同的 lsp -----------------------------------
+local cache_lsp = {}
 for lsp_svr, v in pairs(lsp_servers_map) do
   vim.api.nvim_create_autocmd("FileType", {
     pattern = v.filetypes,
-    once = true,  --- VVI: only need to start LSP server once.
+    once = true,  --- VVI: LSP should only setup once. 虽然是 once 但不同的 filetype 都会运行一次.
     callback = function(params)
-      --- setup lsp config
-      lspconfig_setup(lsp_svr)
+      --- setup lsp config. VVI: 每次 setup() 都会重新创建一个新的 lsp.
+      if not vim.tbl_contains(cache_lsp, lsp_svr) then
+        lspconfig_setup(lsp_svr)
+        table.insert(cache_lsp, lsp_svr)
+      end
 
       --- VVI: 第一次必须要手动 LspStart, 因为 lsp 是在 buffer 加载完成之后才执行 lspconfig[xxx].setup(),
       --- 所以触发 autocmd FileType 的 buffer 没有办法 attach lsp. 需要手动 `:LspStart` 进行 attach.
       --- 以下使用了 `:LspStart xxx` 的源代码. 也可以直接使用 vim.cmd('LspStart ' .. lsp_svr)
       vim.api.nvim_create_autocmd("BufEnter", {
         buffer = params.buf,
-        once = true,  --- VVI: only need to start LSP server once.
+        once = true,  --- VVI: LSP should start only once.
         callback = function(p)
           local config = require('lspconfig.configs')[lsp_svr]
           if config then
