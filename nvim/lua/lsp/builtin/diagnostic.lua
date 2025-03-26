@@ -25,10 +25,10 @@ local config = {
       [vim.diagnostic.severity.INFO]  = Nerd_icons.diag.info,
       [vim.diagnostic.severity.HINT]  = Nerd_icons.diag.hint,
     },
-    linehl = {
-      [vim.diagnostic.severity.ERROR] = 'my_diagnostic_linehl',
-      -- [vim.diagnostic.severity.WARN]  = 'my_diagnostic_linehl',
-    },
+    -- linehl = {
+    --   [vim.diagnostic.severity.ERROR] = 'my_diagnostic_linehl',
+    --   -- [vim.diagnostic.severity.WARN]  = 'my_diagnostic_linehl',
+    -- },
     -- numhl = {
     --   [vim.diagnostic.severity.ERROR] = 'my_diagnostic_linehl',
     --   [vim.diagnostic.severity.WARN]  = 'my_diagnostic_linehl',

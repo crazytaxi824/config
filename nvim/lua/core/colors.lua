@@ -238,19 +238,19 @@ Highlights = {
 
   --- NOTE: `:help undercurl` sp(guisp) color 改变 undercurl, underline, underdashed ... 颜色.
   DiagnosticUnderlineOk = {
-    ctermfg=Colors.green.c, fg=Colors.green.g,
+    -- ctermfg=Colors.green.c, fg=Colors.green.g,
     sp=Colors.green.g, underline=true,
   },
   DiagnosticUnderlineHint = {
-    ctermfg=Colors.hint_grey.c, fg=Colors.hint_grey.g,
+    -- ctermfg=Colors.hint_grey.c, fg=Colors.hint_grey.g,
     sp=Colors.hint_grey.g, undercurl=true,
   },
   DiagnosticUnderlineInfo = {
-    ctermfg=Colors.blue.c, fg=Colors.blue.g,
+    -- ctermfg=Colors.blue.c, fg=Colors.blue.g,
     sp=Colors.blue.g, undercurl=true,
   },
   DiagnosticUnderlineWarn = {
-    ctermfg=Colors.orange.c, fg=Colors.orange.g,
+    -- ctermfg=Colors.orange.c, fg=Colors.orange.g,
     sp=Colors.orange.g, undercurl=true,
   },
   DiagnosticUnderlineError = {
