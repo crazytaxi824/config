@@ -20,14 +20,12 @@ local plugins = {
   },
 
   --- Performence & Functions ----------------------------------------------------------------------
-  --- Useful lua functions used by lots of plugins
   {
     "nvim-lua/plenary.nvim",
     commit = "857c5ac",
     priority = 1000,  -- 只在 lazy=false 的情况下有效. 影响加载顺序, 默认值为 50.
   },
 
-  --- 安装 & 管理 lsp/formatter/linter/dap-debug tools 的插件
   {
     "williamboman/mason.nvim",
     tag = "v1.11.0",
@@ -39,7 +37,6 @@ local plugins = {
     priority = 999,
   },
 
-  --- 通知功能
   {
     "rcarriga/nvim-notify",
     commit = "22f2909",
@@ -49,7 +46,6 @@ local plugins = {
     event = "VeryLazy",
   },
 
-  --- 快捷键提醒功能, key mapping 的时候需要注册到 which-key
   {
     "folke/which-key.nvim",
     -- commit = "68e37e1",
@@ -88,10 +84,9 @@ local plugins = {
     event = "VeryLazy",
   },
 
-  --- 第三方 plugin 需要用到 tree-sitter -----------------------------
-  --- auto close tag <div></div>
+  --- 第三方 plugin 需要用到 tree-sitter ---
   {
-    "windwp/nvim-ts-autotag",
+    "windwp/nvim-ts-autotag",  -- auto close tag <div></div>
     commit = "a1d526a",
     config = function() require("plugins.settings.treesitter_autotag") end,
     dependencies = { "nvim-treesitter/nvim-treesitter" },
@@ -99,7 +94,6 @@ local plugins = {
     event = "InsertEnter",
   },
 
-  --- indent line
   {
     "lukas-reineke/indent-blankline.nvim",
     tag = "v3.9.0",
@@ -156,9 +150,8 @@ local plugins = {
     lazy = true,  -- nvim-cmp 加载时自动加载.
   },
 
-  --- snippet engine, for "cmp_luasnip", 每次打开文件都会有一个 [Scratch] buffer.
   {
-    "L3MON4D3/LuaSnip",
+    "L3MON4D3/LuaSnip", -- snippet engine, for "cmp_luasnip", 会创建一个 [Scratch] buffer
     commit = "c9b9a22",
     --- for placeholder transformation
     --- https://code.visualstudio.com/docs/editor/userdefinedsnippets#_variable-transforms
@@ -169,14 +162,12 @@ local plugins = {
     lazy = true,  -- cmp_luasnip 加载时自动加载.
   },
 
-  --- snippets content, 自定义 snippets 可以借鉴这个结构.
   {
     "rafamadriz/friendly-snippets",
 
     lazy = true,  -- LuaSnip 加载时自动加载.
   },
 
-  --- 自动括号, 同时依赖 treesitter && cmp
   {
     "windwp/nvim-autopairs",
     commit = "6522027",
@@ -188,9 +179,8 @@ local plugins = {
 
   --- LSP ------------------------------------------------------------------------------------------
   --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
-  --- 官方 LSP 引擎.
   {
-    "neovim/nvim-lspconfig",
+    "neovim/nvim-lspconfig",  -- 官方 LSP 引擎
     -- commit = "d88ae66",
     config = function() require("lsp.plugins.lsp_config") end,
     dependencies = {
@@ -199,8 +189,7 @@ local plugins = {
     },
   },
 
-  --- null-ls 插件 formatters && linters, depends on "nvim-lua/plenary.nvim"
-  --- VVI: "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
+  --- "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
     commit = "a117163",
@@ -239,9 +228,8 @@ local plugins = {
   },
 
   --- Buffer & Status Line -------------------------------------------------------------------------
-  --- tabline decorator, `:help 'tabline'`
   {
-    "akinsho/bufferline.nvim",
+    "akinsho/bufferline.nvim",  -- `:help 'tabline'`
     tag = "v4.9.1",
     config = function() require("plugins.settings.decor_bufferline") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -249,9 +237,8 @@ local plugins = {
     event = "VeryLazy",
   },
 
-  --- statusline decorator, `:help 'statusline'`
   {
-    "nvim-lualine/lualine.nvim",   -- bottom status line
+    "nvim-lualine/lualine.nvim",  -- `:help 'statusline'`
     commit = "b8b60c7",
     config = function() require("plugins.settings.decor_lualine") end,
 
