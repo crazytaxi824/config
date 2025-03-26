@@ -34,6 +34,9 @@ local function lspconfig_setup(lsp_svr)
 
   --- VVI: 这里就是 lspconfig.xxx.setup() 针对不同的 lsp 进行加载.
   lspconfig[lsp_svr].setup(opts)
+
+  --- return config for launch()
+  return lspconfig[lsp_svr]
 end
 
 --- 官方设置 --------------------------------------------------------------------------------------- {{{
@@ -47,37 +50,27 @@ end
 -- -- }}}
 
 --- 以下设置是为了 autocmd 根据 FileType 手动加载/启动不同的 lsp -----------------------------------
-local cache_lsp = {}
+--- lspconfig[lsp].setup() 只能够执行一次, 如果重复执行 setup() 会重新生成一个新的 lsp_client, 同时删除之前的 lsp_client.
+--- 所以必须要记录已经 setup 的 lsp.
+local cache_setup_lsp = {}
+
+--- 这里使用 autocmd FileType 来执行 setup() once, 但是问题是 setup() 并不能启动 lsp, 还需要 :LspStart 来启动.
+--- https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig/configs.lua, 源代码中表明:
+--- M.launch() 函数是在 M.setup() 函数中定义的, 所以只有 setup() 之后才能够使用 launch().
 for lsp_svr, v in pairs(lsp_servers_map) do
   vim.api.nvim_create_autocmd("FileType", {
     pattern = v.filetypes,
     once = true,  --- VVI: LSP should only setup once. 虽然是 once 但不同的 filetype 都会运行一次.
     callback = function(params)
       --- setup lsp config. VVI: 每次 setup() 都会重新创建一个新的 lsp.
-      if not vim.tbl_contains(cache_lsp, lsp_svr) then
-        lspconfig_setup(lsp_svr)
-        table.insert(cache_lsp, lsp_svr)
+      if not vim.tbl_contains(cache_setup_lsp, lsp_svr) then
+        local lsp_cfg = lspconfig_setup(lsp_svr)
+        table.insert(cache_setup_lsp, lsp_svr)
+
+        --- 以下使用了 `:LspStart xxx` 的源代码. 也可以直接使用 vim.cmd('LspStart ' .. lsp_svr)
+        --- https://github.com/neovim/nvim-lspconfig/blob/master/plugin/lspconfig.lua
+        lsp_cfg.launch()
       end
-
-      --- VVI: 第一次必须要手动 LspStart, 因为 lsp 是在 buffer 加载完成之后才执行 lspconfig[xxx].setup(),
-      --- 所以触发 autocmd FileType 的 buffer 没有办法 attach lsp. 需要手动 `:LspStart` 进行 attach.
-      --- 以下使用了 `:LspStart xxx` 的源代码. 也可以直接使用 vim.cmd('LspStart ' .. lsp_svr)
-      vim.api.nvim_create_autocmd("BufEnter", {
-        buffer = params.buf,
-        once = true,  --- VVI: LSP should start only once.
-        callback = function(p)
-          local config = require('lspconfig.configs')[lsp_svr]
-          if config then
-            config.launch()  --- VVI: start & attach to buffer
-          end
-
-          --- DEBUG: 用. 每个 lsp 应该只打印一次.
-          if __Debug_Neovim.lspconfig then
-            Notify(":LspStart " .. lsp_svr, "DEBUG", {title="LSP"})
-          end
-        end,
-        desc = "LSP: LspStart <lsp>",
-      })
     end,
     desc = "LSP: setup LSP based on FileType",
   })
