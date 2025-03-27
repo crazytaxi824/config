@@ -1,4 +1,4 @@
---- DOCS: `:help vim.lsp.start_client()` & `:help vim.lsp.ClientConfig`
+--- DOCS: `:help vim.lsp.start()` & `:help vim.lsp.ClientConfig`
 --  - capabilities  给 cmp 自动补全提供内容.
 --  - on_attach     当 LSP 存在时加载设置 key_mapping, highlight ... 等设置.
 --  - on_init = function(lsp_client) -- https://github.com/neovim/nvim-lspconfig/wiki/Project-local-settings
@@ -83,8 +83,7 @@ M.on_init = function(client, result)
   --- nvim-0.9 中禁止 LSP semantic highlight (根据语义的 highlight) 否则 highlight 显示不正确.
   --- VVI: https://github.com/neovim/nvim-lspconfig/issues/2542
   --- DONOT follow `:help vim.lsp.semantic_tokens.start()` place this in on_attach() function.
-  --- 如果需要更改 LSP semantic highlight 颜色, 使用 `:hi @lsp.type...`
-  --- client.supports_method("textDocument/semanticTokens")
+  --- 设置 "textDocument/semanticTokens" 是否开启
   -- if client.server_capabilities then
   --   -- client.server_capabilities.semanticTokensProvider = nil  -- lsp: semantic token highlight
   --   -- client.server_capabilities.foldingRangeProvider = nil  -- debug: lsp-fold 设置
@@ -107,7 +106,7 @@ end
 M.on_attach = function(client, bufnr)
   --- 加载自定义设置 ---
   --- textDocument/documentHighlight, 显示 references
-  if client.supports_method('textDocument/documentHighlight') then
+  if client:supports_method('textDocument/documentHighlight', bufnr) then
     require("lsp.plugins.custom_requests.doc_highlight").setup(client, bufnr)
   end
 
