@@ -1,2 +1,2 @@
 require("lsp.builtin.custom_handlers.doc_highlight")
-require("lsp.builtin.custom_handlers.hover")
+-- require("lsp.builtin.custom_handlers.hover")
