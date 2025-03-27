@@ -12,7 +12,7 @@ M.go_list = function(dir)
     error(result.stderr ~= '' and result.stderr or result.code)
   end
 
-  return vim.fn.json_decode(result.stdout)
+  return vim.json.decode(result.stdout)
 end
 
 return M
