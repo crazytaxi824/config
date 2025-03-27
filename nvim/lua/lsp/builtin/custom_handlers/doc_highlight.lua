@@ -13,7 +13,8 @@ vim.lsp.handlers["textDocument/documentHighlight"] = function(_, result, req, co
   if not client then
     return
   end
-  --- 这里不要使用 vim.lsp.buf.document_highlight(), 会重新发送 vim.lsp.buf_request('textDocument/documentHighlight').
+
+  --- 这里不要使用 vim.lsp.buf.document_highlight(), document_highlight() 会发送 request 给 lsp,
   --- 而 vim.lsp.util.buf_highlight_references() 只渲染已获取的 result 结果.
   vim.lsp.util.buf_highlight_references(req.bufnr, result, client.offset_encoding)
 
