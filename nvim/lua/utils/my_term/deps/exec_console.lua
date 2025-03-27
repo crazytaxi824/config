@@ -3,6 +3,9 @@ local auto_scroll = require('utils.my_term.deps.auto_scroll')
 
 local M = {}
 
+--- namespace
+local ns = vim.api.nvim_create_namespace('my_term_output')
+
 --- highlight
 vim.api.nvim_set_hl(0, "my_output_sys", {ctermfg=Colors.orange.c, fg=Colors.orange.g})
 vim.api.nvim_set_hl(0, "my_output_sys_error", {
@@ -37,6 +40,11 @@ end
 --- nvim_buf_set_lines(-2, -1) 在最后一行写入.
 --- nvim_buf_set_lines(-1, -1) 在最后一行后面写入, 相当于 append().
 local function set_buf_line_output(bufnr, data, hl)
+  --- skip { "" } empty data.
+  if #data == 1 and data[#data] == '' then
+    return
+  end
+
   local last_line_before_write = vim.api.nvim_buf_line_count(bufnr)
 
   --- 开启 modifiable 准备写入数据.
@@ -60,9 +68,11 @@ local function set_buf_line_output(bufnr, data, hl)
   vim.bo[bufnr].modifiable = false
 
   --- highlight lines
-  for i = last_line_before_write, vim.api.nvim_buf_line_count(bufnr), 1 do
-    vim.api.nvim_buf_add_highlight(bufnr, -1, hl, i, 0, -1)
+  for i = last_line_before_write, vim.api.nvim_buf_line_count(bufnr)-1, 1 do
+    vim.hl.range(bufnr, ns, hl, {i, 0}, {i, -1})
   end
+  --- BUG: vim.api.nvim_buf_clear_namespace() will clear vim.hl.range() multi-line highlight.
+  -- vim.hl.range(bufnr, ns, hl, {last_line_before_write, 0}, {vim.api.nvim_buf_line_count(bufnr)-1, -1})
 end
 
 local function set_buf_line_exit(bufnr, exit_code)
@@ -72,9 +82,9 @@ local function set_buf_line_exit(bufnr, exit_code)
 
   --- highlight
   if exit_code == 0 then
-    vim.api.nvim_buf_add_highlight(bufnr, -1, "my_output_sys", last_line_before_write+1, 0, -1)
+    vim.hl.range(bufnr, ns, "my_output_sys", {last_line_before_write+1, 0}, {last_line_before_write+1, -1})
   else
-    vim.api.nvim_buf_add_highlight(bufnr, -1, "my_output_sys_error", last_line_before_write+1, 0, -1)
+    vim.hl.range(bufnr, ns, "my_output_sys_error", {last_line_before_write+1, 0}, {last_line_before_write+1, -1})
   end
   vim.bo[bufnr].modifiable = false
 end
@@ -103,8 +113,9 @@ M.buf_job_output = function(term_obj, term_win_id)
   elseif cmd_typ == "table" then
     print_cmd = table.concat(term_obj.cmd, ' ')
   end
+
   vim.api.nvim_buf_set_lines(term_obj.bufnr, 0, -1, true, {print_cmd})  -- clear buffer text & print cmd
-  vim.api.nvim_buf_add_highlight(term_obj.bufnr, -1, "my_output_sys", 0, 0, -1)  -- highlight 第一行
+  vim.hl.range(term_obj.bufnr, ns, "my_output_sys", {0, 0}, {0, -1}) -- highlight cmd
   vim.bo[term_obj.bufnr].modifiable = false
 
   --- keymap
