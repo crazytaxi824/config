@@ -4,16 +4,18 @@ local parse = require('utils.filepath.parse')
 
 local M = {}
 
-local cache_hl = nil  --- map {bufnr, ns_ids}
+local cache_hl_bufnr
+
+--- namespace
+local ns = vim.api.nvim_create_namespace('my_filepath_extmarks')
 
 --- delete previous cached highlight
 M.highlight_clear_cache = function()
-  if cache_hl and vim.api.nvim_buf_is_valid(cache_hl.bufnr) then
-    for _, ns_id in ipairs(cache_hl.ns_ids) do
-      vim.api.nvim_buf_clear_namespace(cache_hl.bufnr, ns_id, 0, -1)
-    end
+  if cache_hl_bufnr and vim.api.nvim_buf_is_valid(cache_hl_bufnr) then
+    vim.api.nvim_buf_clear_namespace(cache_hl_bufnr, ns, 0, -1)
   end
-  cache_hl = nil -- delete cache
+
+  cache_hl_bufnr = nil -- delete cache
 end
 
 --- 检查一整行内所有 valide filepath, 然后 highlight.
@@ -24,14 +26,12 @@ local function hl_line()
   end
 
   --- highlight
-  local ns_ids = {}
-  local bufnr
-  for _, r in ipairs(rs) do
-    local ns_id = vim.api.nvim_buf_add_highlight(r.bufnr, 0, "Underlined", r.hl_lnum, r.hl_start_col, r.hl_end_col)
-    bufnr = r.bufnr
-    table.insert(ns_ids, ns_id)
+  for _, pos in ipairs(rs.pos) do
+    --- highlight filepath
+    vim.hl.range(rs.bufnr, ns, "Underlined", {pos.hl_lnum, pos.hl_start_col}, {pos.hl_lnum, pos.hl_end_col})
   end
-  cache_hl = {bufnr = bufnr, ns_ids = ns_ids}
+
+  cache_hl_bufnr = rs.bufnr  -- cache bufnr
 end
 
 --- NOTE: matchadd() 每次执行只能作用在 current window 上. 所有在该 window 打开的 buffer 都会收到影响.
@@ -40,8 +40,8 @@ M.highlight_filepath = function()
   --- delete previous cached highlight
   M.highlight_clear_cache()
 
-  hl_line()   -- highlight 整行中所有的 filepath
-  --hl_cWORD()  -- highlight <cWORD>
+  --- highlight 整行中所有的 filepath
+  hl_line()
 end
 
 return M
