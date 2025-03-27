@@ -19,6 +19,8 @@
 --- 有条件的 highlight_references() / clear_references().
 -- -- }}}
 
+require("lsp.builtin.custom_handlers.doc_highlight")
+
 local M = {}
 
 M.setup = function(client, bufnr)

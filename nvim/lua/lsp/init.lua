@@ -1,6 +1,5 @@
 --- 加载 LSP 相关自定义设置.
 require("lsp.builtin.diagnostic")   -- 加载 diagnostic 设置
-require("lsp.builtin.custom_handlers")  -- 加载自定义 handlers
 --require("lsp.builtin.auto_format")  -- save(:w) 时 format, NOTE: 目前使用 Conform.nvim
 
 --- `:help vim.lsp.set_log_level()`, 影响 `:LspLog`.
