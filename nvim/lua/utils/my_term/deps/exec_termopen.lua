@@ -10,7 +10,9 @@ M.termopen_cmd = function(term_obj, term_win_id)
   --- VVI: 使用 nvim_buf_call() 时 bufnr 必须被某一个 window 显示, 否则 vim 会创建一个看不见的临时 autocmd window
   --- 用于执行 function. 导致 TermOpen event 中获取的 win id 是这个临时 window, 会造成一些 bug.
   vim.api.nvim_buf_call(term_obj.bufnr, function()
-    term_obj.job_id = vim.fn.termopen(term_obj.cmd, {
+    term_obj.job_id = vim.fn.jobstart(term_obj.cmd, {
+      term = true,  -- termopen() deprecated
+
       cwd = term_obj.cwd,
 
       on_stdout = function(job_id, data, event)  -- event 是 'stdout'
