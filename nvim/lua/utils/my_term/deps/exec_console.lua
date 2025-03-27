@@ -60,7 +60,7 @@ local function set_buf_line_output(bufnr, data, hl)
   vim.bo[bufnr].modifiable = false
 
   --- highlight lines
-  for i = last_line_before_write, vim.api.nvim_buf_line_count(bufnr), 1 do
+  for i = last_line_before_write, vim.api.nvim_buf_line_count(bufnr)-1, 1 do
     vim.api.nvim_buf_add_highlight(bufnr, -1, hl, i, 0, -1)
   end
 end
