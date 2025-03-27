@@ -56,7 +56,7 @@ local function debug_autocmd_toggle()
     "BufWinEnter", "BufWinLeave",
     "WinNew", "WinEnter", "WinLeave", "WinClosed",
 
-    "TermOpen", "TermEnter", "TermLeave", "TermClose", "TermResponse",
+    "TermOpen", "TermEnter", "TermLeave", "TermClose", "TermRequest", "TermResponse",
   }
 
   if autocmd_id then
