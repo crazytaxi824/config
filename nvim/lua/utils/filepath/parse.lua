@@ -120,7 +120,12 @@ M.parse_content = function(content)
 end
 
 M.parse_hl_line = function()
-  local rs = {}
+  --- {bufnr, pos=[]}
+  local rs = {
+    bufnr = vim.api.nvim_get_current_buf(),
+    pos = {},
+  }
+
   local lcontent = string.gsub(vim.api.nvim_get_current_line(), '\t', ' ')  --- VVI: replace '\t' with ' '
   local lnum = vim.fn.line('.')
   local lsplits = vim.split(lcontent, ' ', {trimempty=false})
@@ -133,8 +138,7 @@ M.parse_hl_line = function()
         local start_col = pos + r.i -1
         local end_col   = pos + r.j
 
-        table.insert(rs, {
-          bufnr = vim.api.nvim_get_current_buf(),
+        table.insert(rs.pos, {
           type = r.type,
           hl_lnum = lnum -1,
           hl_start_col = start_col,
@@ -148,7 +152,7 @@ M.parse_hl_line = function()
     pos = #value+pos+1 -- NOTE: move pos
   end
 
-  if #rs > 0 then
+  if #rs.pos > 0 then
     return rs
   end
 end

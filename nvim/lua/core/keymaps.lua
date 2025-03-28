@@ -235,7 +235,7 @@ local keymaps = {
   --- 或者 `kill %1` 终止 job (不推荐, 会留下 .swp 文件).
   {{'n','v'}, '<C-z>', function() end, opt, 'which_key_ignore'},
 
-  --- BUG: nvim v0.10.0, conflict to `gc`: 'Comment textobject', `:help commenting`
+  --- BUG: nvim v0.11.0. 'gc' Overlapping with 'gcc'
   {'n', 'gc', '<Nop>', opt, 'Toggle Comment'},
 
   --- ZZ same as `:x`, ZQ same as `:q!`

@@ -3,8 +3,7 @@ if not status_ok then
   return
 end
 
---- HACK: change preset desc
---- https://github.com/folke/which-key.nvim/blob/main/lua/which-key/plugins/presets.lua
+--- change preset desc, https://github.com/folke/which-key.nvim/blob/main/lua/which-key/plugins/presets.lua
 local wp_ok, wp = pcall(require, "which-key.plugins.presets")
 if wp_ok then
   wp.motions = {
