@@ -139,6 +139,7 @@ function M.hover_short()
   }
 
   --- 2. 发送请求到 lsp server
+  --- results: { client_id1 = {}, client_id2 = {} ... }
   vim.lsp.buf_request_all(0, ms.textDocument_hover, client_positional_params(fn_node), function(results, ctx)
     local bufnr = assert(ctx.bufnr)
     if vim.api.nvim_get_current_buf() ~= bufnr then
@@ -154,7 +155,7 @@ function M.hover_short()
       if err then
         vim.lsp.log.error(err.code, err.message)
       elseif result then
-        results1[client_id] = result
+        results1[client_id] = result  -- results1: { client_id1 = {}, client_id2 = {} ... }
       end
     end
 
@@ -171,6 +172,7 @@ function M.hover_short()
 
     local format = 'markdown'
 
+    --- results1: { client_id1 = {}, client_id2 = {} ... }
     for client_id, result in pairs(results1) do
       local client = assert(vim.lsp.get_client_by_id(client_id))
       if nresults > 1 then
