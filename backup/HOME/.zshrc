@@ -8,7 +8,9 @@ export LANG=en_US.UTF-8 # 设置了 LANG, 但是没有设置 LC_ALL 的情况下
 # $VISUAL is a more capable and interactive preference over $EDITOR.
 #  - EDITOR editor should be able to work without use of "advanced" terminal functionality.
 #  - VISUAL editor could be a full screen editor as vi or emacs.
-#export PATH=~/nvim-macos/bin:$PATH  # NOTE: 如果需要测试 neovim 新版本则更改这里.
+#
+# NOTE: 如果需要测试 neovim 新版本则更改这里
+#export PATH=~/nvim-macos/bin:$PATH
 export EDITOR=nvim
 export VISUAL=$EDITOR
 
@@ -392,7 +394,7 @@ export FZF_CTRL_T_COMMAND="$fzf_def_cmd --type=directory"
 
 # Ctrl+T 快捷键 options 设置. 这里会继承 default 设置, 只需要覆盖设置.
 export FZF_CTRL_T_OPTS="--bind='start:unbind(ctrl-e)+unbind(ctrl-o)' \
-	 --header='# Dirs only, <Enter>:accept; <S-Tab>:Preview-win; <Tab>:Select; <C-a>:Toggle-All-Selected'"
+	--header='# Dirs only, <Enter>:accept; <S-Tab>:Preview-win; <Tab>:Select; <C-a>:Toggle-All-Selected'"
 
 # FZF_CTRL_R_OPTS, Ctrl+R 不能设置 Command. ------------------------------------
 # NOTE: Ctrl+R 不能设置 Command.
