@@ -27,7 +27,7 @@ local config = {
     },
     -- linehl = {
     --   [vim.diagnostic.severity.ERROR] = 'my_diagnostic_linehl',
-    --   -- [vim.diagnostic.severity.WARN]  = 'my_diagnostic_linehl',
+    --   [vim.diagnostic.severity.WARN]  = 'my_diagnostic_linehl',
     -- },
     -- numhl = {
     --   [vim.diagnostic.severity.ERROR] = 'my_diagnostic_linehl',
