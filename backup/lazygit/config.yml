@@ -85,7 +85,7 @@ git:
 
 # open & edit file
 os:
-    editPreset: 'nvim'
+    editPreset: '$EDITOR'
     # edit: '$EDITOR {{filename}}'
     # editAtLine: '$EDITOR --line={{line}} {{filename}}'
     # editAtLineAndWait: '$EDITOR --block --line={{line}} {{filename}}'
