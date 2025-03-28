@@ -86,12 +86,12 @@ cmp.setup {
 
   window = {
     completion = {
-      border = {"","","","│","","","","│"},
+      -- border = {"","","","","","","",""},
       -- winhighlight = 'Normal:Pmenu,FloatBorder:Pmenu,CursorLine:PmenuSel,Search:None',
       scrollbar = true,  -- true: 需要时显示 scrollbar; false: 永远不显示 scrollbar.
     },
     documentation = {
-      border = {"", "", "", "▕", "", "", "", " "},  -- `:help nvim_open_win()`
+      border = {"", "", "", "▕", "", "", "", "▏"},  -- `:help nvim_open_win()`
       --winhighlight = 'FloatBorder:NormalFloat',
     },
   },
@@ -143,6 +143,8 @@ cmp.setup {
     --["<Down>"] = cmp.mapping.select_next_item(),
     ["<Up>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior, count = 1 }),  -- 选择 item 的时候不会将内容填到行内.
     ["<Down>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior, count = 1 }),
+    ["<S-Up>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior, count = 3 }),
+    ["<S-Down>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior, count = 3 }),
 
     ["<PageUp>"]   = cmp.mapping(cmp.mapping.scroll_docs(-3), { "i", "c" }),
     ["<PageDown>"] = cmp.mapping(cmp.mapping.scroll_docs(3),  { "i", "c" }),
