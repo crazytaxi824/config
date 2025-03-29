@@ -245,8 +245,8 @@ local keymaps = {
   {{'n','i'}, '<F1>', function() end, opt, 'which_key_ignore'},
 
   --- ":help t", 使用 fF 更容易. t 用作 terminal.
-  {{'n','o','v'}, 't', function() end, opt, 'which_key_ignore'},
-  {{'n','o','v'}, 'T', function() end, opt, 'which_key_ignore'},
+  {'n', 't', function() end, opt, 'which_key_ignore'},
+  {'n', 'T', function() end, opt, 'which_key_ignore'},
 }
 
 --- 这里是设置所有 key mapping 的地方 --------------------------------------------------------------
