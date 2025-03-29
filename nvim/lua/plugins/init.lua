@@ -361,7 +361,7 @@ local plugins = {
     end,
     -- }}}
 
-    cmd = {"Copilot"},  -- `:Copilot setup`, `:Copilot enable`, `:help copilot` 查看可用命令.
+    cmd = { "Copilot" },  -- `:Copilot setup`, `:Copilot enable`, `:help copilot` 查看可用命令.
   },
 
   --- https://github.com/jellydn/lazy-nvim-ide/blob/main/lua/plugins/extras/copilot-chat-v2.lua
@@ -374,7 +374,7 @@ local plugins = {
     },
     config = function() require("plugins.settings.ai_copilotchat") end,
 
-    event = "VeryLazy",
+    cmd = { "CopilotChat" },
   },
 
   --- recommanded plugins ------------------------------------------------------ {{{
