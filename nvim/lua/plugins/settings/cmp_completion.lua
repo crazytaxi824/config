@@ -129,8 +129,8 @@ cmp.setup {
   },
 
   experimental = {
-    ghost_text = false,
-    native_menu = false,   -- VVI: disable it.
+    ghost_text = false, -- this feature conflict with Copilot.vim's preview.
+    native_menu = false, -- disable it. 影响 cmdline auto completion.
   },
 
   --- DOCS: key mapping, `:help cmp-mapping`
@@ -190,17 +190,31 @@ cmp.setup {
   },
 }
 
---- NOTE: command line completion, 分开设置. 因为不能使用自定义 key mapping.
----       不要设置 command line completion, keymap 不好用.
---- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore). ----- {{{
--- cmp.setup.cmdline(':', {
---   mapping = cmp.mapping.preset.cmdline(),
---   sources = cmp.config.sources({
---     { name = 'path' }
---   }, {
---     { name = 'cmdline' }
---   })
--- })
+--- command line completion, 设置
+-- Use buffer source for `/` and `?` (cmp.setup() 中 `native_menu` 必须为 false).
+cmp.setup.cmdline({ '/', '?' }, {
+  mapping = cmp.mapping.preset.cmdline({
+    ["<S-Up>"] = { c = cmp.mapping.select_prev_item() },
+    ["<S-Down>"] = { c = cmp.mapping.select_next_item() },
+  }),
+  sources = {
+    { name = 'buffer' }
+  }
+})
+
+-- Use cmdline & path source for ':' (cmp.setup() 中 `native_menu` 必须为 false).
+cmp.setup.cmdline(':', {
+  mapping = cmp.mapping.preset.cmdline({
+    ["<S-Up>"] = { c = cmp.mapping.select_prev_item() },
+    ["<S-Down>"] = { c = cmp.mapping.select_next_item() },
+  }),
+  sources = cmp.config.sources({
+    { name = 'path' }
+  }, {
+    { name = 'cmdline' }
+  }),
+  matching = { disallow_symbol_nonprefix_matching = false }
+})
 -- -- }}}
 
 --- Cmp completion menu color ---------------------------------------------------------------------- {{{

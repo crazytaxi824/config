@@ -112,11 +112,12 @@ local plugins = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全
       "hrsh7th/cmp-buffer",  -- 当前 buffer 中有的 word
       "hrsh7th/cmp-path",  -- filepath 补全
+      "hrsh7th/cmp-cmdline",
 
       "saadparwaiz1/cmp_luasnip",  -- snippets
     },
 
-    event = "InsertEnter",
+    event = { "InsertEnter", "CmdlineEnter" },
   },
 
   --- 以下是 "nvim-cmp" 的 module 插件, 在 nvim-cmp.setup() 中启用的插件.
