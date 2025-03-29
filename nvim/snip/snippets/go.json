@@ -1,12 +1,12 @@
 {
   "if err": {
     "prefix": "err-if",
-    "body": "if ${1:err} != nil {\n\t${2:log.Println($1)}\n\treturn\n}",
+    "body": "if ${1:err} != nil {\n\t${2:log.Println}($1)\n\treturn\n}",
     "description": "Snippets for if-err"
   },
   "if er short": {
     "prefix": "if-er",
-    "body": "if ${1:er} := ${2:fn()}; er != nil {\n\t${3:log.Println($1)}\n\treturn\n}}",
+    "body": "if ${1:er} := ${2:fn()}; er != nil {\n\t${3:log.Println}($1)\n\treturn\n}}",
     "description": "Snippets for if-er short"
   },
   "fmt.Println()": {
@@ -115,7 +115,7 @@
   },
   "for loop": {
     "prefix": "for-loop",
-    "body": "for ${1:i} := 0; $1 < 100; $1++ {\n\t$2\n}",
+    "body": "for ${1:i} := 0; $1 < ${2:100}; $1++ {\n\t$3\n}",
     "description": "Snippets for For-Loop"
   },
   "for range": {
@@ -155,7 +155,7 @@
   },
   "rand pseudo": {
     "prefix": "rand-pseudo",
-    "body": "r := rand.New(rand.NewSource(${1:time.Now().UnixNano()})) // unixnano() is the seed",
+    "body": "r := rand.New(rand.NewPCG(${1:0}, ${2:uint64(time.Now().UnixNano())})) // unixnano() is the seed",
     "description": "Snippets for Pseudo-Random"
   },
   "rand crypto": {
