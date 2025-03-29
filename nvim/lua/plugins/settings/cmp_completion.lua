@@ -133,37 +133,52 @@ cmp.setup {
     native_menu = false, -- disable it. 影响 cmdline auto completion.
   },
 
-  --- DOCS: key mapping, `:help cmp-mapping`
+  --- DOCS: key mapping, `:help cmp-mapping`, mode = { `i` = insert mode(default), `c` = command mode, `s` = select mode }
+  --- command mode 主要用于 : / ? search; select mode 主要用于 snippet.
   mapping = {
-    ["<Esc>"] = cmp.mapping.abort(), -- 当使用 select_prev/next_item() 的时候. abort() 关闭代码提示窗, 同时回到代码之前的状态;
-                                     -- cmp.mapping.close() 也可以关闭代码提示窗口, 但是会保持代码现在的状态.
-                                     -- 当使用 select_prev_item({behavior=cmp.SelectBehavior}) 的时候, abort() & close() 效果相同.
+    --- 当使用 select_prev/next_item() 的时候. abort() 关闭代码提示窗, 同时回到代码之前的状态;
+    --- cmp.mapping.close() 也可以关闭代码提示窗口, 但是会保持代码现在的状态.
+    --- 当使用 select_prev_item({behavior=cmp.SelectBehavior}) 的时候, abort() & close() 效果相同.
+    ["<ESC>"] = cmp.mapping.abort(),  -- omit mode means insert mode only.
+    ["<C-e>"] = cmp.mapping(cmp.mapping.abort(), { "i", "c", "s" }),
 
-    --["<Up>"] = cmp.mapping.select_prev_item(),  -- 选择 item 的时候会将内容填到行内.
-    --["<Down>"] = cmp.mapping.select_next_item(),
-    ["<Up>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior, count = 1 }),  -- 选择 item 的时候不会将内容填到行内.
-    ["<Down>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior, count = 1 }),
-    ["<S-Up>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior, count = 3 }),
-    ["<S-Down>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior, count = 3 }),
+    --- 如果 backspace 过程中删除了关键 char - "." 则 reset, 用于修复 snip 和 buff 无法显示的问题.
+    ["<BS>"] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+        local line = vim.api.nvim_get_current_line()
+        if col > 0 and line:sub(col, col) == '.' then
+          fallback()  -- 执行快捷键原本的功能
+          cmp.core:reset() -- HACK: :reset() cmp cache. fix: [snip] and [buff] missing when delete dot(.) char.
+        end
+      end
 
-    ["<PageUp>"]   = cmp.mapping(cmp.mapping.scroll_docs(-3), { "i", "c" }),
-    ["<PageDown>"] = cmp.mapping(cmp.mapping.scroll_docs(3),  { "i", "c" }),
+      fallback()  -- 执行快捷键原本的功能
+    end),
+
+    --- SelectBehavior: 选择 item 的时候不会将内容填到行内.
+    ["<Up>"] = cmp.mapping(cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior, count = 1 }),  { "i", "c", "s" }),
+    ["<Down>"] = cmp.mapping(cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior, count = 1 }),{ "i", "c", "s" }),
+
+    ["<S-Up>"] = cmp.mapping(cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior, count = 3 }),  { "i", "c", "s" }),
+    ["<S-Down>"] = cmp.mapping(cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior, count = 3 }),{ "i", "c", "s" }),
+
+    ["<PageUp>"]   = cmp.mapping(cmp.mapping.scroll_docs(-3)),
+    ["<PageDown>"] = cmp.mapping(cmp.mapping.scroll_docs(3)),
+
+    --- Accept currently selected item. If none selected, `select` first item.
+    --- Set `select` to `false` to only confirm explicitly selected items.
+    --- VVI: needed <CR> map to confirm() to enable 'autopairs'
+    ["<CR>"] = cmp.mapping({
+      i = cmp.mapping.confirm({ select = true }),  -- true: 如果没有选中 item, 则选中第一个 item.
+      c = cmp.mapping.confirm({ select = false }), -- false: 如果没有选中 item 则直接执行.
+    }),
 
     ["<C-Space>"] = cmp.mapping(function(fallback)
       --- HACK: :reset() cmp cache. fix: [snip] and [buff] missing when delete dot(.) char.
       cmp.core:reset()
       cmp.complete()
-    end, { "i", "c" }),  -- 手动触发 completion window.
-
-    -- ["<C-e>"] = cmp.mapping {  -- 对 insert, command 模式分别设置不同的行为.
-    --   i = cmp.mapping.abort(),
-    --   c = cmp.mapping.close(),
-    -- },
-
-    --- Accept currently selected item. If none selected, `select` first item.
-    --- Set `select` to `false` to only confirm explicitly selected items.
-    --- VVI: needed <CR> map to confirm() to enable 'autopairs'
-    ["<CR>"] = cmp.mapping.confirm({ select = true }),
+    end, { "i", "c", "s" }),  -- 手动触发 completion window.
 
     --- <Tab> 不同情况下触发不同行为.
     ["<Tab>"] = cmp.mapping(function(fallback)
@@ -178,7 +193,7 @@ cmp.setup {
         --cmp.complete()  -- 手动触发 completion menu.
         fallback()  -- 执行快捷键原本的功能
       end
-    end, {"i","s"}), -- 在 insert select 模式下使用
+    end, { "i", "c", "s" }),
 
     ["<S-Tab>"] = cmp.mapping(function(fallback)
       if luasnip.locally_jumpable(-1) then  -- 如果存在 previous jumpable node
@@ -186,17 +201,14 @@ cmp.setup {
       else
         fallback()  -- 执行快捷键原本的功能
       end
-    end, {"i","s"}),
+    end, { "i", "s" }),
   },
 }
 
 --- command line completion, 设置
 -- Use buffer source for `/` and `?` (cmp.setup() 中 `native_menu` 必须为 false).
 cmp.setup.cmdline({ '/', '?' }, {
-  mapping = cmp.mapping.preset.cmdline({
-    ["<S-Up>"] = { c = cmp.mapping.select_prev_item() },
-    ["<S-Down>"] = { c = cmp.mapping.select_next_item() },
-  }),
+  -- mapping = cmp.mapping.preset.cmdline(),
   sources = {
     { name = 'buffer' }
   }
@@ -204,10 +216,7 @@ cmp.setup.cmdline({ '/', '?' }, {
 
 -- Use cmdline & path source for ':' (cmp.setup() 中 `native_menu` 必须为 false).
 cmp.setup.cmdline(':', {
-  mapping = cmp.mapping.preset.cmdline({
-    ["<S-Up>"] = { c = cmp.mapping.select_prev_item() },
-    ["<S-Down>"] = { c = cmp.mapping.select_next_item() },
-  }),
+  -- mapping = cmp.mapping.preset.cmdline(),
   sources = cmp.config.sources({
     { name = 'path' }
   }, {
