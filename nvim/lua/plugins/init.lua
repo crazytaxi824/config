@@ -328,8 +328,14 @@ local plugins = {
   {
     "iamcco/markdown-preview.nvim",
     commit = "a923f5f",
-    --- VVI: 每次 Update 后需要重新执行 vim.fn["mkdp#util#install"](), 否则可能出现无法运行的情况.
+    --- VVI: 每次 Update 后需要重新执行 `lua vim.fn["mkdp#util#install"]()` or `call mkdp#util#install()`
     build = function() vim.fn["mkdp#util#install"]() end,
+    config = function()
+      local css_path = vim.fn.stdpath("config") .. "/lua/plugins/settings/my_markdown.css"
+      if vim.uv.fs_stat(css_path) then
+        vim.g.mkdp_markdown_css = css_path
+      end
+    end,
 
     --- NOTE: 无法使用 cmd = { "MarkdownPreview", "MarkdownPreviewStop", "MarkdownPreviewToggle" }, 作为加载条件.
     ft = {"markdown"},  -- markdown-preview 加载时间 < 1ms
