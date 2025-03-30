@@ -220,7 +220,7 @@ mods = "Shift"
 
 # NOTE: Command-W 默认设置是 Quit.
 # Command-W -> Ctrl-w
-# vim 中用于 switch vim window, alacritty 默认设置是 Quit.
+# alacritty 中 Ctrl-w 默认设置是 Quit, vim 中用于 switch vim window.
 [[keyboard.bindings]]
 chars = "\u0017"
 key = "W"
