@@ -18,16 +18,12 @@ M.flag_desc = {
 local cache_bg_jobs = {}  -- 缓存 bg_job_id, map-table: [term_bufnr] = {job_id, ... }
 
 local function job_exec(cmd, term_bufnr)
-  --- 执行 cmd
-  --- NOTE: 这里选择使用 termopen() 而不是 jobstart() 来执行 background job 是:
-  --- 1. 为了方便使用 `:ls` 来查看未关闭的 job.
-  --- 2. 同时也可以通过 `:[N]buf` 来查看 bg job 的输出内容.
-
-  --- 创建一个 scratch buffer 用于执行 background job.
+  --- VVI: 这里使用 scratch buffer 来执行 jobstart():
+  ---   1. 为了避免创建新的一个 window.
+  ---   2. 方便使用 `:ls` 来查看未关闭的 job.
+  ---   3. 同时也可以通过 `:[N]buf` 来查看 bg job 的输出内容.
   local scratch_bufnr = vim.api.nvim_create_buf(false, true)
-
   local bg_job_id
-  --- VVI: 这里使用 nvim_buf_call() 来执行 termopen() 是为了避免创建一个 window 来执行 termopen()
   vim.api.nvim_buf_call(scratch_bufnr, function()
     bg_job_id = vim.fn.jobstart(cmd, {
       term = true,
@@ -121,7 +117,7 @@ M.on_exit = function(opts, pprof_dir)
     cmd = {'go', 'tool', 'trace', '-http=localhost:', pprof_dir..opts.flag..'.out'}
   end
 
-  --- VVI: return a on_exit(term) callback function for termopen()
+  --- VVI: return a callback function for jobstart(cmd, { on_exit = function(term) })
   return function(term)
     --- :GoPprof && <F6>
     set_cmd_and_keymaps(term.bufnr, pprof_dir)

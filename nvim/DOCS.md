@@ -439,16 +439,6 @@ Visual-Block 选择多行数字
 
 - `call jobstop(job_id)` - 强制终止 job.
 
-### termopen(cmd) 返回 job_id
-
-`termopen()` 主要用于需要打开 terminal emulator, 同时需要获取 job_id 的情况.
-
-- `echo termopen('ls')` - 在当前 buffer 中打开 terminal, 同时返回 job_id.
-
-- 可以使用 `jobstop(job_id)` 来强制终止 job.
-
-<br />
-
 ## nvim_cmd(), nvim_command(), nvim_exec2() 区别
 
 `vim.cmd()` If a string, it is an alias to `nvim_exec2()` where `opts.output = false`.

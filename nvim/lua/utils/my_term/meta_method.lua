@@ -16,9 +16,9 @@ M.default_opts = {
   job_id = nil,
 
   cmd = vim.go.shell, -- `:help 'shell'`, 相当于 os.getenv('SHELL')
-  cwd = nil,          -- termopen() & jobstart() 中的 opts.
+  cwd = nil,          -- jobstart() 中的 opts.
   auto_scroll = nil,  -- goto bottom of the terminal. 在 on_stdout & on_stderr 中触发.
-  buf_output = nil,   -- bool, 是否用 buf_job_output 执行, 默认使用 termopen().
+  buf_output = nil,   -- bool, true: 在 console 中执行; false: 在 terminal 中执行.
 
   --- callback functions
   before_run = nil, -- func(term), term:run() 时触发. before jobstart().
@@ -54,13 +54,13 @@ end
 --- `:edit term://cmd` 中: 触发顺序 TermOpen -> BufEnter -> BufWinEnter.
 --- my_term 中触发顺序 BufEnter -> BufWinEnter -> TermOpen.
 --- NOTE: nvim_buf_call()
---- 可以使用 nvim_buf_call(bufnr, function() termopen() end) 做到 TermOpen -> BufEnter -> BufWinEnter 顺序,
+--- 可以使用 nvim_buf_call(bufnr, function() jobstart(...) end) 做到 TermOpen -> BufEnter -> BufWinEnter 顺序,
 --- 但在 nvim_buf_call() 的过程中 TermOpen event 获取到的 window id 是临时的 autocmd window 会导致很多问题.
 local function create_my_term(term_obj)
   --- cache old term bufnr
   local old_term_bufnr = term_obj.bufnr
 
-  --- 每次运行 termopen() 之前, 先创建一个新的 scratch buffer 给 terminal.
+  --- 每次运行 jobstart() 之前, 先创建一个新的 scratch buffer 给 terminal.
   term_obj.bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
   vim.bo[term_obj.bufnr].filetype = "my_term"
 

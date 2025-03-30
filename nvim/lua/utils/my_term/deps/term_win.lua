@@ -32,9 +32,9 @@ M.create_term_win = function(bufnr)
   end
 end
 
---- 打开/创建 terminal window 用于 termopen() | jobstart()
---- NOTE: buffer 一旦运行过 termopen() 就不能再次运行 termopen() 了, Can only call this function in an unmodified buffer.
---- 所以需要删除旧的 bufnr 然后重新创建一个新的 scratch bufnr 给 termopen() 使用.
+--- 打开/创建 terminal window 用于 jobstart()
+--- NOTE: buffer 一旦运行过 jobstart() 就不能再次运行 jobstart() 了, Can only call this function in an unmodified buffer.
+--- 所以需要删除旧的 bufnr 然后重新创建一个新的 scratch bufnr 给 jobstart() 使用.
 M.enter_term_win = function(curr_term_bufnr, old_term_bufnr)
   --- 如果 old_term_bufnr 不存在: 创建一个新的 term window 用于加载 new term.bufnr
   if not g.term_buf_exist(old_term_bufnr) then

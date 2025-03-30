@@ -11,7 +11,7 @@ M.termopen_cmd = function(term_obj, term_win_id)
   --- 用于执行 function. 导致 TermOpen event 中获取的 win id 是这个临时 window, 会造成一些 bug.
   vim.api.nvim_buf_call(term_obj.bufnr, function()
     term_obj.job_id = vim.fn.jobstart(term_obj.cmd, {
-      term = true,  -- termopen() deprecated
+      term = true,
 
       cwd = term_obj.cwd,
 
@@ -44,7 +44,7 @@ M.termopen_cmd = function(term_obj, term_win_id)
     })
   end)
 
-  --- set bufname after termopen()
+  --- set bufname after jobstart()
   vim.api.nvim_buf_set_name(term_obj.bufnr, "term://#my_term#" .. term_obj.id)
 end
 
