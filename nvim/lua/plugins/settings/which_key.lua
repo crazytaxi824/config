@@ -147,7 +147,7 @@ which_key.setup({
   -- },
 
   icons = {
-    mappings = false,  -- NOTE: not use mini.icons & nvim-web-devicons
+    mappings = false,  -- NOTE: not use "echasnovski/mini.icons" & "nvim-tree/nvim-web-devicons"
     separator = "»", -- symbol used between a key and it's label
     keys = fn_key_icons,
   },
