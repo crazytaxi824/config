@@ -210,7 +210,7 @@ local keymaps = {
   --- hi Normal ctermbg=234 | hi Normal ctermbg=NONE 切换 bg 颜色
   {'n', '<leader>C', function() key_fn.toggle_comments_color() end, opt, 'change Comments color'},
 
-  --- NOTE: <D-k> 无法执行.
+  --- NOTE: <D-k> 被用于 system shortcut
   {'n', '<C-k>', '<cmd>mes clear<CR>', opt, 'message clear'},
 
   --- TEST: alacritty settings window.option_as_alt 设置 Option 当做 ALT key 使用.
