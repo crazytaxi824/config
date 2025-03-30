@@ -112,7 +112,7 @@ local plugins = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全
       "hrsh7th/cmp-buffer",  -- 当前 buffer 中有的 word
       "hrsh7th/cmp-path",  -- filepath 补全
-      "hrsh7th/cmp-cmdline",
+      "hrsh7th/cmp-cmdline", -- command and search 补全
 
       "saadparwaiz1/cmp_luasnip",  -- snippets
     },
@@ -139,6 +139,13 @@ local plugins = {
   {
     "hrsh7th/cmp-path",  -- filepath 补全
     commit = "91ff86c",
+
+    lazy = true,  -- nvim-cmp 加载时自动加载.
+  },
+
+  {
+    "hrsh7th/cmp-cmdline",
+    commit = "d250c63",
 
     lazy = true,  -- nvim-cmp 加载时自动加载.
   },
@@ -414,7 +421,6 @@ local plugins = {
   --{"ahmedkhalf/project.nvim"},  -- project manager
 
   --{"p00f/nvim-ts-rainbow"}, -- rainbow 括号颜色, treesitter 插件. NOTE: 严重拖慢文件打开速度.
-  --{"hrsh7th/cmp-cmdline"},  -- 自动补全 cmd. nvim-cmp 插件. NOTE: 不好用.
   -- -- }}}
 }
 
