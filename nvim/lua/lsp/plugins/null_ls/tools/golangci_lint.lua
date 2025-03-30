@@ -39,7 +39,7 @@ return {
 
       "--print-issued-lines=false",
       "--out-format=json",
-      "--issues-exit-code=0",
+      "--issues-exit-code=1",
     }
 
     --- DEBUG: 用
