@@ -2,7 +2,7 @@ local auto_scroll = require('utils.my_term.deps.auto_scroll')
 
 local M = {}
 
-M.termopen_cmd = function(term_obj, term_win_id)
+M.terminal_exec = function(term_obj, term_win_id)
   if vim.api.nvim_win_get_buf(term_win_id) ~= term_obj.bufnr then
     return
   end

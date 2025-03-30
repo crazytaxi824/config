@@ -90,7 +90,7 @@ local function set_buf_line_exit(bufnr, exit_code)
 end
 
 --- NOTE: neovim 是单线程, jobstart() 是异步函数.
-M.buf_job_output = function(term_obj, term_win_id)
+M.console_exec = function(term_obj, term_win_id)
   if vim.api.nvim_win_get_buf(term_win_id) ~= term_obj.bufnr then
     return
   end

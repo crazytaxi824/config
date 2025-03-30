@@ -42,7 +42,7 @@ M.autocmd_callback = function(term_obj)
     group = g_id,
     buffer = term_obj.bufnr,
     callback = function(params)
-      --- stop job in buf_job_output()
+      --- stop job in console_exec()
       vim.fn.jobstop(term_obj.job_id)
 
       --- remove from global_my_term_cache

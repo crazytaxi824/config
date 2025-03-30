@@ -2,7 +2,7 @@ local g = require('utils.my_term.deps.global')
 local au_cb = require('utils.my_term.deps.autocmd_callback')
 local t_win = require('utils.my_term.deps.term_win')
 local console = require('utils.my_term.deps.exec_console')
-local topen = require('utils.my_term.deps.exec_termopen')
+local terminal = require('utils.my_term.deps.exec_terminal')
 
 local M = {}
 
@@ -18,7 +18,7 @@ M.default_opts = {
   cmd = vim.go.shell, -- `:help 'shell'`, 相当于 os.getenv('SHELL')
   cwd = nil,          -- jobstart() 中的 opts.
   auto_scroll = nil,  -- goto bottom of the terminal. 在 on_stdout & on_stderr 中触发.
-  buf_output = nil,   -- bool, true: 在 console 中执行; false: 在 terminal 中执行.
+  console_output = nil,   -- bool, true: 在 console 中执行; false: 在 terminal 中执行.
 
   --- callback functions
   before_run = nil, -- func(term), term:run() 时触发. before jobstart().
@@ -78,10 +78,10 @@ local function create_my_term(term_obj)
   --- 进入一个选定的 term window 加载现有 term buffer, 同时 wipeout old_term_bufnr.
   local term_win_id = t_win.enter_term_win(term_obj.bufnr, old_term_bufnr)
   --- VVI: 必须在 bufnr 被 window 显示之后运行. 避免 nvim_buf_call() 生成一个临时 autocmd window.
-  if term_obj.buf_output then
-    console.buf_job_output(term_obj, term_win_id)
+  if term_obj.console_output then
+    console.console_exec(term_obj, term_win_id)
   else
-    topen.termopen_cmd(term_obj, term_win_id)
+    terminal.terminal_exec(term_obj, term_win_id)
   end
 
   local scope={ scope='local', win=term_win_id }
