@@ -326,7 +326,14 @@ Highlights = {
   ['@string.special.url'] = { link = "Underlined" },  -- url
 
   --- markdown / markdown_inline
-  ['@markup.heading'] = { link = "Title" }, -- markdown, # title
+  --- # titles
+  ["@markup.heading.1.markdown"] = {fg=Colors.green.g, underline=true, bold=true},
+  ["@markup.heading.2.markdown"] = {fg=Colors.yellow.g, underline=true, bold=true},
+  ["@markup.heading.3.markdown"] = {fg=Colors.orange.g, bold=true},
+  ["@markup.heading.4.markdown"] = {fg=Colors.blue.g, bold=true},
+  ["@markup.heading.5.markdown"] = {fg=Colors.magenta.g, bold=true},
+  ["@markup.heading.6.markdown"] = {fg=Colors.purple.g, bold=true},
+
   ['@markup.strong'] = { bold = true }, -- markdown, **bold**
   ['@markup.italic'] = { italic = true },  -- markdown, *italic*, _italic_
   ['@markup.underline'] = { underline = true },  -- markdown, <u>underline</u>
