@@ -50,14 +50,15 @@ end
 
 --- Create new terminal ----------------------------------------------------------------------------
 --- VVI: 以下执行顺序很重要!
---- 事件触发顺序和 `:edit term://cmd` 有所不同.
+--- `jobstart(cmd, {opts})` 事件触发顺序和 `:edit term://cmd` 有所不同.
 --- `:edit term://cmd` 中: 触发顺序 TermOpen -> BufEnter -> BufWinEnter.
---- my_term 中触发顺序 BufEnter -> BufWinEnter -> TermOpen.
+--- `jobstart(cmd, {opts})` 触发顺序 BufEnter -> BufWinEnter -> TermOpen.
+---
 --- NOTE: nvim_buf_call()
 --- 可以使用 nvim_buf_call(bufnr, function() jobstart(...) end) 做到 TermOpen -> BufEnter -> BufWinEnter 顺序,
 --- 但在 nvim_buf_call() 的过程中 TermOpen event 获取到的 window id 是临时的 autocmd window 会导致很多问题.
 local function create_my_term(term_obj)
-  --- cache old term bufnr
+  --- cache old term bufnr, for reuse old term_buf window.
   local old_term_bufnr = term_obj.bufnr
 
   --- 每次运行 jobstart() 之前, 先创建一个新的 scratch buffer 给 terminal.
