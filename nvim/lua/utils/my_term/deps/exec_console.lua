@@ -24,7 +24,7 @@ local function stop_job(term_obj)
 end
 
 --- CTRL-C send interrupt signal to output-buffer ONLY. terminal already has this.
-local function set_output_buf_keymaps(term_obj)
+local function set_console_keymaps(term_obj)
   local opt = { buffer = term_obj.bufnr, silent = true }
   local keys = {
     {'n', '<C-c>', function() stop_job(term_obj) end, opt, "my_term: jobstop()"},
@@ -122,7 +122,7 @@ M.console_exec = function(term_obj, term_win_id)
   vim.bo[term_obj.bufnr].modifiable = false
 
   --- keymap
-  set_output_buf_keymaps(term_obj)
+  set_console_keymaps(term_obj)
 
   term_obj.job_id = vim.fn.jobstart(term_obj.cmd, {
     cwd = term_obj.cwd,

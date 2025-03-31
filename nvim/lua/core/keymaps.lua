@@ -189,9 +189,9 @@ local keymaps = {
 
   --- NOTE: terminal key mapping 在其他 plugin 中也有设置.
   {'n', '<leader>tt', function() mt.open_shell_term() end, opt, "open/new Terminal #(1~999)"},
+  {'n', '<leader>ta', function() mt.toggle_all() end,  opt, "toggle All Terminals windows"},
   {'n', '<leader>tC', function() mt.close_all() end,   opt, "close All Terminals windows"},
   {'n', '<leader>tO', function() mt.open_all() end,    opt, "open All Terminals windows"},
-  {'n', '<leader>tT', function() mt.toggle_all() end,  opt, "toggle All Terminals windows"},
   {'n', '<leader>tW', function() mt.wipeout_all() end, opt, "wipeout All Terminals"},
   -- {'n', '<leader>tW', function() key_fn.wipe_all_term_bufs() end, opt, "wipeout All Terminals"},  -- alternative
 

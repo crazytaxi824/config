@@ -86,6 +86,7 @@ end
 
 --- get term_id by term_win_id
 M.get_term_id_by_win = function(win_id)
+  win_id = win_id or vim.api.nvim_get_current_win()
   if vim.api.nvim_win_is_valid(win_id) then
     local bufnr = vim.api.nvim_win_get_buf(win_id)
     return vim.b[bufnr][meta_method.bufvar_myterm]
