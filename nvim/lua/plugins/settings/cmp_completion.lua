@@ -233,7 +233,7 @@ cmp.setup.cmdline(':', {
 vim.api.nvim_set_hl(0, 'CmpItemAbbrMatch', {ctermfg=Colors.magenta.c, fg=Colors.magenta.g})
 vim.api.nvim_set_hl(0, 'CmpItemAbbrMatchFuzzy', {ctermfg=Colors.magenta.c, fg=Colors.magenta.g})
 
---- [lsp], [buff], [path], [snip] 颜色
+--- [lsp], [buff], [path], [snip] icon 颜色
 vim.api.nvim_set_hl(0, 'CmpItemMenu', {ctermfg=Colors.g240.c, fg=Colors.g240.g})
 
 --- VVI: CmpItemKindXXX 默认颜色, 如果没有单独设置 CmpItemKindXXX 颜色则会使用该颜色.

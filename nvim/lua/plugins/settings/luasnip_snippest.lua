@@ -8,7 +8,8 @@ end
 --- https://github.com/L3MON4D3/LuaSnip/blob/master/Examples/snippets.lua
 --- `:help luasnip-config-options`
 -- luasnip.setup({
---   update_events = 'TextChanged,TextChangedI',
+--   update_events = "TextChanged, TextChangedI",
+--   delete_check_events = "TextChanged",
 -- })
 
 --- VVI: 读取配置文件地址 -------------------------------------------------------------------------- {{{

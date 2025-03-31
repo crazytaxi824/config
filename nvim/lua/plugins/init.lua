@@ -159,7 +159,7 @@ local plugins = {
   },
 
   {
-    "L3MON4D3/LuaSnip", -- snippet engine, for "cmp_luasnip", 会创建一个 [Scratch] buffer
+    "L3MON4D3/LuaSnip", -- snippet engine, for "cmp_luasnip", 会创建几个 [Scratch] buffer
     commit = "c9b9a22",
     --- for placeholder transformation
     --- https://code.visualstudio.com/docs/editor/userdefinedsnippets#_variable-transforms
