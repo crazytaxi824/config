@@ -350,6 +350,7 @@ local plugins = {
 
   {
     'MeanderingProgrammer/render-markdown.nvim',
+    commit = "a020c88",
     dependencies = {
       'nvim-treesitter/nvim-treesitter',
       'nvim-tree/nvim-web-devicons'
