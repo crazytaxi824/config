@@ -95,6 +95,9 @@ M.console_exec = function(term_obj, term_win_id)
     return
   end
 
+  --- set bufname
+  vim.api.nvim_buf_set_name(term_obj.bufnr, "term://#my_term#console#" .. term_obj.id)
+
   vim.api.nvim_buf_call(term_obj.bufnr, function()
     vim.api.nvim_set_option_value('wrap', true, { scope='local', win=term_win_id })
     vim.api.nvim_set_option_value('relativenumber', false, { scope='local', win=term_win_id })
@@ -172,9 +175,6 @@ M.console_exec = function(term_obj, term_win_id)
       auto_scroll.buf_scroll_bottom(term_obj)
     end,
   })
-
-  --- set bufname
-  vim.api.nvim_buf_set_name(term_obj.bufnr, "term://#my_term#console#" .. term_obj.id)
 end
 
 return M

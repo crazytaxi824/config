@@ -2,6 +2,7 @@ local auto_scroll = require('utils.my_term.deps.auto_scroll')
 
 local M = {}
 
+--- VVI: terminal 不能改 bufname 否则会重新创建一个新的 terminal.
 M.terminal_exec = function(term_obj, term_win_id)
   if vim.api.nvim_win_get_buf(term_win_id) ~= term_obj.bufnr then
     return
@@ -43,9 +44,6 @@ M.terminal_exec = function(term_obj, term_win_id)
       end,
     })
   end)
-
-  --- set bufname after jobstart()
-  vim.api.nvim_buf_set_name(term_obj.bufnr, "term://#my_term#" .. term_obj.id)
 end
 
 return M
