@@ -341,22 +341,38 @@ vim.api.nvim_set_hl(0, 'NvimTreeGitIgnoredIcon', {ctermfg=Colors.g244.c, fg=Colo
 --- Event Hooks, `:help nvim-tree-events` ---------------------------------------------------------- {{{
 --- FolderCreated 在创建 folder 和 file 时都会触发.
 --- FileCreated 只在创建 file 时会触发.
---- local Event = nt_api.events.Event
---- nt_api.events.subscribe(Event.FolderCreated, function(data)
----   vim.print('folder add:', data)
---- end)
----
---- nt_api.events.subscribe(Event.FolderRemoved, function(data)
----   vim.print('folder remove:', data)
---- end)
----
---- nt_api.events.subscribe(Event.FileCreated, function(data)
----   vim.print('file add:', data)
---- end)
----
---- nt_api.events.subscribe(Event.FileRemoved, function(data)
----   vim.print('file remove:', data)
---- end)
+-- local Event = nt_api.events.Event
+-- nt_api.events.subscribe(Event.FolderCreated, function(data)
+--   vim.print('folder add:', data)
+-- end)
+--
+-- nt_api.events.subscribe(Event.FolderRemoved, function(data)
+--   vim.print('folder remove:', data)
+-- end)
+--
+-- nt_api.events.subscribe(Event.WillFileCreated, function(data)
+--   vim.print('file add:', data)
+-- end)
+--
+-- nt_api.events.subscribe(Event.FileCreated, function(data)
+--   vim.print('file add:', data)
+-- end)
+--
+-- nt_api.events.subscribe(Event.WillRemoveFile, function(data)
+--   local wins = vim.api.nvim_tabpage_list_wins(vim.api.nvim_get_current_tabpage())
+--   for _, win in ipairs(wins) do
+--     local bufnr = vim.api.nvim_win_get_buf(win)
+--     local fp = vim.fs.abspath(vim.api.nvim_buf_get_name(bufnr))  --- get absolute_path
+--     if fp == data.fname then
+--       vim.print("delete ", bufnr)
+--       vim.api.nvim_buf_delete(bufnr, {force=true})
+--     end
+--   end
+-- end)
+--
+-- nt_api.events.subscribe(Event.FileRemoved, function(data)
+--   vim.print('file remove:', data)
+-- end)
 -- -- }}}
 
 
