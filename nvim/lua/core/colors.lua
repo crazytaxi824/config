@@ -338,8 +338,18 @@ Highlights = {
   ['@markup.italic'] = { italic = true },  -- markdown, *italic*, _italic_
   ['@markup.underline'] = { underline = true },  -- markdown, <u>underline</u>
   ['@markup.strikethrough'] = { strikethrough = true },  -- markdown, ~~strike~~
-  ['@markup.link.label'] = { link = "Label" }, -- markdown, [@markup.link.label](@markup.link.url)
-  ['@markup.link.url'] = { link = "Label" },   -- markdown, [@markup.link.label](@markup.link.url)
+
+  --- markdown link: [@markup.link.label](@markup.link.url)
+  ['@markup.link.markdown_inline'] = {},  -- markdown link ![xxx](xxx) 中的括号和感叹号
+  --- markdown, [@markup.link.label](@markup.link.url)
+  ['@markup.link.label'] = {
+    underline = true, sp = Colors.g242.g
+  },
+  --- markdown, [@markup.link.label](@markup.link.url)
+  ['@markup.link.url'] = {
+    fg=Colors.cyan.g,
+    underline = true, sp = Colors.g242.g,
+  },
   --- markdown, inline `code`
   ['@markup.raw.markdown_inline'] = {
     ctermfg=173, fg='#CE9178',
@@ -347,7 +357,7 @@ Highlights = {
   },
 
   --- program language
-  -- ['@type'] = { link = "Type" },
+  ['@type'] = { link = "Type" },
   ['@type.builtin'] = { link = "@type" },
 
   ['@function.builtin'] = { link = "Function" },  -- copy() delete() make()
@@ -418,10 +428,10 @@ Highlights = {
 
   --- 设置 syntax 颜色是为了让 treesitter lazy render 的时候不至于颜色差距太大.
   --- set vim-syntax color to match treesitter color
-  typescriptMember = {link = '@property'},
-  typescriptInterfaceName = {link = 'Type'},
-  typescriptExport = {link = 'Keyword'},
-  typescriptImport = {link = 'Conditional'},
+  typescriptMember = { link = '@property' },
+  typescriptInterfaceName = { link = 'Type' },
+  typescriptExport = { link = 'Keyword' },
+  typescriptImport = { link = 'Conditional' },
 }
 
 --- nvim_set_hl()
