@@ -9,6 +9,9 @@ local cache_hl_bufnr
 --- namespace
 local ns = vim.api.nvim_create_namespace('my_filepath_extmarks')
 
+--- highlight
+vim.api.nvim_set_hl(0, "my_filepath_underline", {underline=true, sp=Colors.cyan.g})
+
 --- delete previous cached highlight
 M.highlight_clear_cache = function()
   if cache_hl_bufnr and vim.api.nvim_buf_is_valid(cache_hl_bufnr) then
@@ -28,7 +31,7 @@ local function hl_line()
   --- highlight
   for _, pos in ipairs(rs.pos) do
     --- highlight filepath
-    vim.hl.range(rs.bufnr, ns, "Underlined", {pos.hl_lnum, pos.hl_start_col}, {pos.hl_lnum, pos.hl_end_col})
+    vim.hl.range(rs.bufnr, ns, "my_filepath_underline", {pos.hl_lnum, pos.hl_start_col}, {pos.hl_lnum, pos.hl_end_col})
   end
 
   cache_hl_bufnr = rs.bufnr  -- cache bufnr
