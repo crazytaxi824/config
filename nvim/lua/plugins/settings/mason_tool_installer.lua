@@ -38,7 +38,7 @@ mason.setup {
 
   ui = {
     check_outdated_packages_on_open = true,  -- 打开面板时检查 outdated lsp
-    --border = Nerd_icons.border,  -- 默认为: 'none'
+    border = Nerd_icons.border,  -- 默认为: 'none'
     icons = {
       package_installed = Nerd_icons.tick,
       package_pending = Nerd_icons.arrows.right,
@@ -53,6 +53,7 @@ mason.setup {
       update_package = "u",           -- reinstall/update a server
       update_all_packages = "U",      -- update all installed servers
       uninstall_package = "D",        -- uninstall a lsp server
+      toggle_help = "?",
     },
   },
 
