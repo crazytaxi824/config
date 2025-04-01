@@ -224,7 +224,6 @@ cmp.setup.cmdline(':', {
   }),
   matching = { disallow_symbol_nonprefix_matching = false }
 })
--- -- }}}
 
 --- Cmp completion menu color ---------------------------------------------------------------------- {{{
 --- https://github.com/hrsh7th/nvim-cmp/wiki/Menu-Appearance
