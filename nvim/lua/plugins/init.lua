@@ -256,7 +256,7 @@ local plugins = {
   --- Debug tools 安装 -----------------------------------------------------------------------------
   {
     "mfussenegger/nvim-dap",  -- core debug tool
-    commit = "2d1bd2b",
+    commit = "7aade9e",
     config = function() require("plugins.settings.dap_debug") end,
 
     cmd = {'Debug', 'DapToggleBreakpoint', 'DapContinue'},
