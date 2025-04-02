@@ -10,7 +10,7 @@ local cache_hl_bufnr
 local ns = vim.api.nvim_create_namespace('my_filepath_extmarks')
 
 --- highlight
-vim.api.nvim_set_hl(0, "my_filepath_underline", {underline=true, sp=Colors.g244.g})
+vim.api.nvim_set_hl(0, "my_filepath_underline", { link = "Underlined" })
 
 --- delete previous cached highlight
 M.highlight_clear_cache = function()

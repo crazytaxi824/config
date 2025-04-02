@@ -340,19 +340,12 @@ Highlights = {
   ['@markup.strikethrough'] = { strikethrough = true },  -- markdown, ~~strike~~
 
   --- markdown link: [@markup.link.label](@markup.link.url)
-  ['@markup.link.markdown_inline'] = {},  -- markdown link ![xxx](xxx) 中的括号和感叹号
-  --- markdown, [@markup.link.label](@markup.link.url)
-  ['@markup.link.label'] = {
-    underline = true, sp = Colors.g242.g
-  },
-  --- markdown, [@markup.link.label](@markup.link.url)
-  ['@markup.link.url'] = {
-    fg=Colors.cyan.g,
-    underline = true, sp = Colors.g242.g,
-  },
+  ['@markup.link.markdown_inline'] = {},  -- markdown link ![xxx](xxx) 中的括号和感叹号颜色
+  ['@markup.link.label'] = { underline = true, sp = Colors.g242.g }, -- markdown, [@markup.link.label](@markup.link.url)
+  ['@markup.link.url'] = { fg=Colors.cyan.g, underline = true }, -- markdown, [@markup.link.label](@markup.link.url)
   --- markdown, inline `code`
   ['@markup.raw.markdown_inline'] = {
-    ctermfg=173, fg='#CE9178',
+    ctermfg=173, fg='#CE9178',  -- 和 String 颜色一样
     ctermbg=Colors.g236.c, bg=Colors.g236.g,
   },
 
