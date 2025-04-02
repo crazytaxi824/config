@@ -4,22 +4,16 @@
 unset LC_ALL  # 清除 LC_ALL 设置
 export LANG=en_US.UTF-8 # 设置了 LANG, 但是没有设置 LC_ALL 的情况下, 其他 LC_* 默认等于 LANG, 但可以单独设置其他 LC_*.
 
-### 手动安装 https://github.com/neovim/neovim/releases/
+# NOTE: 手动安装 https://github.com/neovim/neovim/releases/
+# Run: `xattr -c ./nvim-macos-arm64.tar.gz` (to avoid "unknown developer" warning)
+# Extract: `tar xzvf nvim-macos-arm64.tar.gz`
+#export PATH=$HOME/nvim-macos-arm64/bin:$PATH
+
 # $VISUAL is a more capable and interactive preference over $EDITOR.
 #  - EDITOR editor should be able to work without use of "advanced" terminal functionality.
 #  - VISUAL editor could be a full screen editor as vi or emacs.
-#
-# NOTE: 如果需要测试 neovim 新版本则更改这里
-#export PATH=~/nvim-macos/bin:$PATH
 export EDITOR=nvim
 export VISUAL=$EDITOR
-
-# --- neovim Mason tool ---
-# mason tool path = `vim.fn.stdpath("data") .. "/mason_tools"`
-export PATH=$PATH:$HOME/.local/share/nvim/mason_tools/bin
-
-# --- python tools ---
-export PATH=$PATH:$HOME/pytools/venv/bin
 
 # --- [ oh my zsh ] -------------------------------------------------------------------------------- {{{
 # ohmyzsh #12257 #12328 async problem.
@@ -189,12 +183,15 @@ export HOMEBREW_NO_INSTALL_CLEANUP=true
 
 # `brew bundle --help` Install and upgrade (by default) all dependencies from the Brewfile.
 # `brew bundle check`, `brew bundle cleanup`, `brew bundle list` ...
-export HOMEBREW_BUNDLE_FILE=~/.config/Brewfile  # 默认在 ~/.Brewfile
+export HOMEBREW_BUNDLE_FILE=$HOME/.config/Brewfile  # 默认在 ~/.Brewfile
 #export HOMEBREW_BUNDLE_NO_LOCK=1  # disable Brewfile.lock.json
 # }}}
 
-# go / py / ruby / node ...
-# --- [ languages ] -------------------------------------------------------------------------------- {{{
+# go / py / ruby / node / :Mason ...
+# --- [ Tools PATH ] ------------------------------------------------------------------------------- {{{
+# --- [ neovim Mason tools ] ---
+# mason tool path = `vim.fn.stdpath("data") .. "/mason_tools"`
+#export PATH=$PATH:$HOME/.local/share/nvim/mason_tools/bin
 
 # --- [ golang ] --------------------------------------------------------------- {{{
 ### `go env` 查看
@@ -221,9 +218,7 @@ export GO111MODULE=on  # on | off | auto
 # 创建虚拟环境: `$ python3.12 -m venv /path/to/new/virtual/environment`
 # 进入虚拟环境: `$ source /path/to/new/virtual/environment/bin/activate`
 # 在虚拟环境中安装包: `$ pip install --upgrade pip`, `$ pip install numpy` ...
-
-# NOTE: 以下 env 会被用在 neovim 中用于执行 python 文件.
-#export PYTHON_DEFAULT_ENV=~/.python3_env
+export PATH=$PATH:$HOME/pytools/venv/bin
 
 # }}}
 
@@ -582,7 +577,7 @@ function backupConfigFiles() {
 	# ~/Library/Mobile\ Documents/com~apple~CloudDocs/myautobak  # icloud drive 文件夹
 	# 不能用单/双引号 '~/xxx' "~/xxx", 否则无法解析 ~/ 路径.
 	local backup_folder_list=(
-		~/.config/backup
+		$HOME/.config/backup
 	)
 
 	# mark 是否有备份文件夹不存在
@@ -617,33 +612,33 @@ function backupConfigFiles() {
 		mkdir -p $backup_folder/vscode         # ~/Library/Application\ Support/Code/User/
 
 		# zprofile & zshrc
-		cp ~/.zprofile $backup_folder/HOME/
-		cp ~/.zshrc $backup_folder/HOME/
+		cp $HOME/.zprofile $backup_folder/HOME/
+		cp $HOME/.zshrc $backup_folder/HOME/
 
 		# oh-my-zsh custom themes
-		cp -r ~/.oh-my-zsh/custom/themes $backup_folder/HOME/.oh-my-zsh/custom/
-		cp ~/.warprc $backup_folder/HOME/   # oh-my-zsh plugin `wd` config file
+		cp -r $HOME/.oh-my-zsh/custom/themes $backup_folder/HOME/.oh-my-zsh/custom/
+		cp $HOME/.warprc $backup_folder/HOME/   # oh-my-zsh plugin `wd` config file
 
 		# ~/.ssh/config
-		cp ~/.ssh/config $backup_folder/HOME/.ssh/
+		cp $HOME/.ssh/config $backup_folder/HOME/.ssh/
 
 		# git setting
 		# NOTE: '~/.gitconfig' is a private file, SHOULD NOT be uploaded to internet.
-		cp ~/.gitconfig_ext $backup_folder/HOME/
-		cp ~/.gitconfig_tools $backup_folder/HOME/
-		cp ~/.gitconfig_delta $backup_folder/HOME/
-		cp ~/.gitmessage $backup_folder/HOME/
-		cp ~/.gitignore_global $backup_folder/HOME/
+		cp $HOME/.gitconfig_ext $backup_folder/HOME/
+		cp $HOME/.gitconfig_tools $backup_folder/HOME/
+		cp $HOME/.gitconfig_delta $backup_folder/HOME/
+		cp $HOME/.gitmessage $backup_folder/HOME/
+		cp $HOME/.gitignore_global $backup_folder/HOME/
 
 		# tmux
-		cp ~/.tmux.conf $backup_folder/HOME/
+		cp $HOME/.tmux.conf $backup_folder/HOME/
 
 		# lazygit ~/Library/Application Support/lazygit/config.yml
-		cp ~/Library/Application\ Support/lazygit/config.yml $backup_folder/lazygit/
+		cp $HOME/Library/Application\ Support/lazygit/config.yml $backup_folder/lazygit/
 
 		# vscode settings.json keybindings.json & snippets
-		cp ~/Library/Application\ Support/Code/User/*.json $backup_folder/vscode/
-		cp -r ~/Library/Application\ Support/Code/User/snippets $backup_folder/vscode/
+		cp $HOME/Library/Application\ Support/Code/User/*.json $backup_folder/vscode/
+		cp -r $HOME/Library/Application\ Support/Code/User/snippets $backup_folder/vscode/
 	done
 
 	echo -e "\e[32mBackup Done! Happy Coding!\e[0m"
@@ -696,32 +691,32 @@ function vimExistFile() {
 #alias rm="rm -i"  # prompt every time when 'rm file/dir'
 alias rm="echo '\e[33muse \"trash\" instead\e[0m'; #ignore_rest_cmd"
 # NOTE: trash cmd is available in Macos
-# alias trash="zsh ~/.config/.my_shell_functions/trash.sh"
+# alias trash="zsh $HOME/.config/.my_shell_functions/trash.sh"
 
 ### open/edit file
 alias e="vimExistFile --"   # edit file, vimExistFile() 函数定义在下面.
 
 # 检查 command tools 是否安装
-alias checkZshTools="zsh ~/.config/.my_shell_functions/check_zsh_tools.sh"
+alias checkZshTools="zsh $HOME/.config/.my_shell_functions/check_zsh_tools.sh"
 
 # 检查 terminal 是否支持 256-color
 # 256color [fg | bg | all]
 # 256color 可以直接 sh / bash 执行, 语法兼容.
-alias 256color="sh ~/.config/.my_shell_functions/256color.sh"
+alias 256color="sh $HOME/.config/.my_shell_functions/256color.sh"
 
 # 检查 vscode 开发环境.
 # checkDevelopEnv [go | js | ts | react | py]
 # 只能使用 zsh 执行, 语法不兼容 sh & bash.
-alias checkDevEnv="zsh ~/.config/.my_shell_functions/check_dev_env.sh"
+alias checkDevEnv="zsh $HOME/.config/.my_shell_functions/check_dev_env.sh"
 
 # NOTE: 现在可以使用 `brew bundle check`, `brew bundle cleanup` 来检查不属于 Brewfile 的包.
 # 检查 brew 中所有不属于任何别的包依赖的包.
-#alias checkBrewRootFormula="zsh ~/.config/.my_shell_functions/brew_root_formula.sh"
+#alias checkBrewRootFormula="zsh $HOME/.config/.my_shell_functions/brew_root_formula.sh"
 # 检查 brew dependency 属于哪个包.
-alias checkBrewDependency="bash ~/.config/.my_shell_functions/brew_dep_check.sh"
+alias checkBrewDependency="bash $HOME/.config/.my_shell_functions/brew_dep_check.sh"
 
 # NOTE: DEBUG 用, my test functions
-#source ~/.config/.my_shell_functions/zshrc_custom_functions
+#source $HOME/.config/.my_shell_functions/zshrc_custom_functions
 
 # }}}
 
