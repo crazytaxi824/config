@@ -59,11 +59,6 @@
     "body": "defer func() {\n\t$1\n}()",
     "description": "Snippets for defer-func()"
   },
-  "func main()": {
-    "prefix": "main",
-    "body": "func main() {\n\t$1\n}",
-    "description": "Snippets for func-main()"
-  },
   "TestMain()": {
     "prefix": "test-main",
     "body": "func TestMain(m *testing.M) {\n\t${1:// prepare data}\n\tos.Exit(m.Run())\n}"
