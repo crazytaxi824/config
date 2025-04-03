@@ -85,30 +85,44 @@ local keymaps = {
   {'n', 'O', 'O<C-c><Down>', opt, "add new line above cursor"},
 
   --- move cursor ----------------------------------------------------------------------------------
-  --- NOTE: <PageUp> / <PageDown> / <Home> / <End> 在 mac 中的默认快捷键是 <fn-Up/Down/Left/Right>,
+  --- NOTE: alacritty 中重新 map 了一些组合键:
+  --- <Command-Up>    = <PageUp>;   <Shift-Command-Up>    != <S-PageUp>
+  --- <Command-Down>  = <PageDown>; <Shift-Command-Down>  != <S-PageDown>
+  --- <Command-Left>  = <Home>;     <Shift-Command-Left>  != <S-Home>
+  --- <Command-Right> = <End>;      <Shift-Command-Right> != <S-End>
+  --- <PageUp> / <PageDown> / <Home> / <End> 在 mac 中的默认快捷键是 <fn-Up/Down/Left/Right>,
   {{'n','i','v'}, '<PageUp>', function() key_fn.page.up() end, opt, 'which_key_ignore'},
   {{'n','i','v'}, '<PageDown>', function() key_fn.page.down() end, opt, 'which_key_ignore'},
-  -- {{'n','i','v'}, '<D-Up>', function() key_fn.page.up() end, opt, 'which_key_ignore'},
-  -- {{'n','i','v'}, '<D-Down>', function() key_fn.page.down() end, opt, 'which_key_ignore'},
+  {{'n','i','v'}, '<D-Up>', function() key_fn.page.up() end, opt, 'which_key_ignore'}, -- Alacritty: <D-Up> = <PageUp>, 该设置主要是备用.
+  {{'n','i','v'}, '<D-Down>', function() key_fn.page.down() end, opt, 'which_key_ignore'}, -- Alacritty: <D-Down> = <PageDown>, 该设置主要是备用.
 
   --- NOTE: vim 中 <S-Up> / <S-Down> 默认和 <PageUp> / <PageDown> 作用相同.
   {{'n','i','v'}, '<S-Up>', function() key_fn.shift.up() end, opt, 'which_key_ignore'},
   {{'n','i','v'}, '<S-Down>', function() key_fn.shift.down() end, opt, 'which_key_ignore'},
 
-  --- <Home> 模拟 vscode 行为; <End> 使用默认行为.
+  --- <Home> 模拟 vscode 行为
   {{'n','i','v'}, '<Home>', function() key_fn.home.nowrap() end, opt, 'which_key_ignore'},
+  {{'n','i','v'}, '<D-Left>', function() key_fn.home.nowrap() end, opt, 'which_key_ignore'}, -- Alacritty: <D-Left> = <Home>, 该设置主要是备用.
+  {{'n','i','v'}, '<S-D-Left>', function() key_fn.home.wrap() end, opt, 'which_key_ignore'}, -- <S-D-Left> 并不等于 <S-Home>, <S-Home> 需要使用组合键 Shift-Fn-Left.
+  --- <End> 使用默认行为
+  {{'n', 'v'}, '<D-Right>', '$', opt, 'which_key_ignore'},  -- Alacritty: <D-Right> = <End>, 该设置主要是备用.
+  {'i', '<D-Right>', '<C-o>$', opt, 'which_key_ignore'},  -- Alacritty: <D-Right> = <End>, 该设置主要是备用.
+  {{'n', 'v'}, '<S-D-Right>', 'g$', opt, 'which_key_ignore'}, -- <S-D-Right> 并不等于 <S-End>, <S-End> 需要使用组合键 Shift-Fn-Right.
+  {'i', '<S-D-Right>', '<C-o>g$', opt, 'which_key_ignore'}, -- <S-D-Right> 并不等于 <S-End>, <S-End> 需要使用组合键 Shift-Fn-Right.
+
   --- Alacritty setting: <D-Left> = <Home>; <D-Right> = <End>
-  {{'n','i','v'}, '<S-D-Left>', function() key_fn.home.wrap() end, opt, 'which_key_ignore'},
-  {{'n', 'v'}, '<S-D-Right>', 'g$', opt, 'which_key_ignore'},
-  {'i', '<S-D-Right>', '<C-o>g$', opt, 'which_key_ignore'},
+  --- <S-D-Left> 并不等于 <S-Home>, <S-Home> 需要使用组合键 Shift-Fn-Left.
+  {{'n','v'}, '<S-Home>', '12zh', opt, 'screen: scroll left'},
+  {'i', '<S-Home>', '<C-o>12zh', opt, 'screen: scroll left'},
+  --- <S-D-Right> 并不等于 <S-End>, <S-End> 需要使用组合键 Shift-Fn-Right.
+  {{'n','v'}, '<S-End>', '12zl', opt, 'screen: scroll right'},
+  {'i', '<S-End>', '<C-o>12zl', opt, 'screen: scroll right'},
 
-  --- NOTE: <Ctrl-Up/Down/Left/Right> 被 mac 系统占用, 无法直接使用,
-  {{'n','v'}, '<M-Up>', '3<C-y>', opt, 'scroll Upwards'},
-  {'i', '<M-Up>', '<C-o>3<C-y>', opt, 'scroll Upwards'},
-  {{'n','v'}, '<M-Down>', '3<C-e>', opt, 'scroll Downwards'},
-  {'i', '<M-Down>', '<C-o>3<C-e>', opt, 'scroll Downwards'},
-
-  --- NOTE: zh | zl 在 wrap file 中无法使用.
+  --- NOTE: <Ctrl-Up/Down/Left/Right> 被 mac 系统占用, 无法直接使用.
+  {{'n','v'}, '<M-Up>', '3<C-y>', opt, 'screen: scroll Upwards'},
+  {'i', '<M-Up>', '<C-o>3<C-y>', opt, 'screen: scroll Upwards'},
+  {{'n','v'}, '<M-Down>', '3<C-e>', opt, 'screen: scroll Downwards'},
+  {'i', '<M-Down>', '<C-o>3<C-e>', opt, 'screen: scroll Downwards'},
 
   --- Tab ------------------------------------------------------------------------------------------
   {'n', '<Tab>', '<C-w><C-w>', opt, 'which_key_ignore'},  -- 切换到另一个窗口.
