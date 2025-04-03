@@ -91,14 +91,16 @@ local keymaps = {
   -- {{'n','i','v'}, '<D-Up>', function() key_fn.page.up() end, opt, 'which_key_ignore'},
   -- {{'n','i','v'}, '<D-Down>', function() key_fn.page.down() end, opt, 'which_key_ignore'},
 
-  --- <Home> 模拟 vscode 行为; <End> 使用默认行为.
-  {{'n','i','v'}, '<Home>', function() key_fn.home.nowrap() end, opt, 'which_key_ignore'},
-  -- {{'n','i','v'}, '<D-Left>', function() key_fn.home.nowrap() end, opt, 'which_key_ignore'},
-  -- {{'n','i','v'}, '<D-Right>', '<End>', opt, 'which_key_ignore'},
-
   --- NOTE: vim 中 <S-Up> / <S-Down> 默认和 <PageUp> / <PageDown> 作用相同.
   {{'n','i','v'}, '<S-Up>', function() key_fn.shift.up() end, opt, 'which_key_ignore'},
   {{'n','i','v'}, '<S-Down>', function() key_fn.shift.down() end, opt, 'which_key_ignore'},
+
+  --- <Home> 模拟 vscode 行为; <End> 使用默认行为.
+  {{'n','i','v'}, '<Home>', function() key_fn.home.nowrap() end, opt, 'which_key_ignore'},
+  --- Alacritty setting: <D-Left> = <Home>; <D-Right> = <End>
+  {{'n','i','v'}, '<S-D-Left>', function() key_fn.home.wrap() end, opt, 'which_key_ignore'},
+  {{'n', 'v'}, '<S-D-Right>', 'g$', opt, 'which_key_ignore'},
+  {'i', '<S-D-Right>', '<C-o>g$', opt, 'which_key_ignore'},
 
   --- NOTE: <Ctrl-Up/Down/Left/Right> 被 mac 系统占用, 无法直接使用,
   {{'n','v'}, '<M-Up>', '3<C-y>', opt, 'scroll Upwards'},
@@ -107,11 +109,6 @@ local keymaps = {
   {'i', '<M-Down>', '<C-o>3<C-e>', opt, 'scroll Downwards'},
 
   --- NOTE: zh | zl 在 wrap file 中无法使用.
-  --- scroll left/right 用到的机会比较少, 因为大部分情况下不会让 line 超出屏幕宽度.
-  {{'n','v'}, '<S-D-Left>', '6zh', opt, 'scroll left'},
-  {'i', '<S-D-Left>', '<C-o>6zh', opt, 'scroll left'},  -- 默认在 insert mode 下和 <S-Left> 相同.
-  {{'n','v'}, '<S-D-Right>', '6zl', opt, 'scroll right'},
-  {'i', '<S-D-Right>', '<C-o>6zl', opt, 'scroll right'},  -- 默认在 insert mode 下和 <S-Right> 相同.
 
   --- Tab ------------------------------------------------------------------------------------------
   {'n', '<Tab>', '<C-w><C-w>', opt, 'which_key_ignore'},  -- 切换到另一个窗口.
