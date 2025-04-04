@@ -77,7 +77,6 @@ local plugins = {
   --- 第一方 module 插件 ---
   {
     "nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-    -- commit = "e6cc783",
     config = function() require("plugins.settings.treesitter_ctx") end,
     dependencies = { "nvim-treesitter/nvim-treesitter" },
 
@@ -209,7 +208,8 @@ local plugins = {
 
   {
     "stevearc/conform.nvim",
-    tag = "v9.0.0",
+    -- tag = "v9.0.0",
+    commit = "b1a7532",
     config = function() require("plugins.settings.formatter_conform") end,
 
     event = "BufWritePre",
@@ -247,7 +247,7 @@ local plugins = {
 
   {
     "nvim-lualine/lualine.nvim",  -- `:help 'statusline'`
-    commit = "1517caa",
+    commit = "482ae35",
     config = function() require("plugins.settings.decor_lualine") end,
 
     event = "VeryLazy",
@@ -323,7 +323,8 @@ local plugins = {
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {
     "lewis6991/gitsigns.nvim",
-    tag = "v1.0.2",
+    -- tag = "v1.0.2",
+    commit = "17ab794",
     config = function() require("plugins.settings.git_signs") end,
 
     --- `nvim dir` 启动时直接打开 dir 时可能会造成 gitsigns 报错.
@@ -392,7 +393,6 @@ local plugins = {
   },
 
   --- recommanded plugins ------------------------------------------------------ {{{
-  --- null-ls 替代:
   --{"mfussenegger/nvim-lint"}, -- linter
   --{"ibhagwan/fzf-lua"},       -- fzf telescope
 
