@@ -394,7 +394,20 @@ local plugins = {
 
   --- recommanded plugins ------------------------------------------------------ {{{
   --{"mfussenegger/nvim-lint"}, -- linter
-  --{"ibhagwan/fzf-lua"},       -- fzf telescope
+  -- {
+  --   "ibhagwan/fzf-lua",
+  --   dependencies = { "nvim-tree/nvim-web-devicons" },
+  --   config = function()
+  --     require('fzf-lua').setup({
+  --       fzf_opts = {
+  --         ["--no-header"] = true,  -- zshrc 中设置了 header, 这里取消.
+  --         -- ["--header"] = "ABC",
+  --       },
+  --     })
+  --     --- change default UI `:help vim.ui.select`
+  --     require('fzf-lua').register_ui_select()
+  --   end,
+  -- },
 
   --{"nvim-neo-tree/neo-tree.nvim"},  -- File explorer. nvim-tree.lua 替代
   --{"Tastyep/structlog.nvim"},   -- log 工具
