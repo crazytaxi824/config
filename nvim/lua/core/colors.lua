@@ -383,7 +383,7 @@ Highlights = {
   ['@string.escape'] = {ctermfg=180, fg='#D7BA7D'},  -- \n \t ...
 
   --- custom highlight
-  ['@import.underline'] = { link = "Underlined" },  -- go import list underline.
+  ['@my.import.underline'] = { link = "Underlined" },  -- go import list underline.
 
   --- semantic tokens ------------------------------------------------------------------------------
   --- NOTE: `:help vim.highlight.priorities`
