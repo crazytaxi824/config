@@ -9,14 +9,6 @@ if not snip_status_ok then
   return
 end
 
---- 判断 cursor 前是否有 words.
---- DOCS: https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings#luasnip
-local function has_words_before()
-  unpack = unpack or table.unpack
-  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-end
-
 --- "hrsh7th/nvim-cmp" 主要设置 --------------------------------------------------------------------
 --- https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#completionItemKind
 --- https://github.com/hrsh7th/nvim-cmp/blob/main/lua/cmp/types/lsp.lua#L177
@@ -54,11 +46,11 @@ local kind_icon_txt = {  -------------------------------------------------------
 cmp.setup {
   preselect = cmp.PreselectMode.None,  -- cmp.PreselectMode.None | cmp.PreselectMode.Item
 
-  performance = {
-    -- debounce = 120,  --- 停止输入文字的时间超过该数值, 则向 sources 请求更新 completion Item. 默认 60.
-    -- throttle = 60,   --- 停止输入文字的时间超过该数值, 则匹配和过滤本地已获取的 completion Item. 默认 30.
-    -- fetching_timeout = 200,  --- 默认 200.
-  },
+  -- performance = {
+  --   debounce = 120,  --- 停止输入文字的时间超过该数值, 则向 sources 请求更新 completion Item. 默认 60.
+  --   throttle = 60,   --- 停止输入文字的时间超过该数值, 则匹配和过滤本地已获取的 completion Item. 默认 30.
+  --   fetching_timeout = 200,  --- 默认 200.
+  -- },
 
   snippet = {  -- 给 "saadparwaiz1/cmp_luasnip" 设置 snippet
     expand = function(args)
@@ -71,7 +63,7 @@ cmp.setup {
 
   sources = {
     --- `:help cmp-config.sources`. 其他设置: group_index, max_item_count, priority ...
-    --- 显示 group 1 的时候不会显示 group 2 的内容; 显示 group2 的时候不会显示 group 1 的内容.
+    --- 显示 group 1 的时候不会显示 group 2 的内容; 显示 group 2 的时候不会显示 group 1 的内容.
     { name = "luasnip", priority = 999 }, -- "saadparwaiz1/cmp_luasnip" -> "L3MON4D3/LuaSnip"
     { name = "nvim_lsp" },  -- "hrsh7th/cmp-nvim-lsp"
     { name = "buffer", max_item_count = 6 }, -- "hrsh7th/cmp-buffer", 最多显示 n 条.
@@ -208,6 +200,7 @@ cmp.setup {
 --- command line completion, 设置
 -- Use buffer source for `/` and `?` (cmp.setup() 中 `native_menu` 必须为 false).
 cmp.setup.cmdline({ '/', '?' }, {
+  -- enabled = false,
   -- mapping = cmp.mapping.preset.cmdline(),
   sources = {
     { name = 'buffer' }
@@ -216,6 +209,7 @@ cmp.setup.cmdline({ '/', '?' }, {
 
 -- Use cmdline & path source for ':' (cmp.setup() 中 `native_menu` 必须为 false).
 cmp.setup.cmdline(':', {
+  -- enabled = false,
   -- mapping = cmp.mapping.preset.cmdline(),
   sources = cmp.config.sources({
     { name = 'path' }
