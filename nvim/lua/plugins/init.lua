@@ -4,7 +4,13 @@ local lazydir = vim.fn.stdpath("data") .. "/lazy"
 local lazypath = lazydir .. "/lazy.nvim"
 local lazyrepo = "https://github.com/folke/lazy.nvim.git"
 if not vim.uv.fs_stat(lazypath) then
-  vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+  local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+  if vim.v.shell_error ~= 0 then
+    vim.api.nvim_echo({
+      { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+      { out, "WarningMsg" },
+    }, true, {})
+  end
 end
 vim.opt.rtp:prepend(lazypath)
 -- -- }}}
@@ -432,6 +438,9 @@ local opts = {
   },
   rocks = {
     enabled = false, -- luarocks disabled.
+  },
+  install = {
+    missing = false, -- auto install missing plugins
   },
   ui = {
     size = { width = 0.6, height = 0.75 },
