@@ -224,6 +224,10 @@ local keymaps = {
   --- NOTE: <D-k> 被用于 system shortcut
   {'n', '<C-k>', '<cmd>mes clear<CR>', opt, 'message clear'},
 
+  --- move ) ] } to end of line/word
+  {'i', '<M-e>', function() key_fn.move_char.move_next_char('$') end, opt, 'move next char to end of line' },
+  {'i', '<M-w>', function() key_fn.move_char.move_next_char('e') end, opt, 'move next char to end of word' },
+
   --- TEST: alacritty settings window.option_as_alt 设置 Option 当做 ALT key 使用.
   -- {'n', '<M-a>', function() print("<M-a>") end, opt, 'Test: Option/ALT key'},
   -- {'n', '<D-a>', function() print("<D-a>") end, opt, 'Test: Command key'},
