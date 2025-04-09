@@ -253,7 +253,7 @@ local plugins = {
 
   {
     "nvim-lualine/lualine.nvim",  -- `:help 'statusline'`
-    commit = "834a581",
+    commit = "1ba4000",
     config = function() require("plugins.settings.decor_lualine") end,
 
     event = "VeryLazy",
