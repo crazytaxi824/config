@@ -15,6 +15,13 @@ end
 vim.opt.rtp:prepend(lazypath)
 -- -- }}}
 
+--- `nvim dir` 打开文件夹时直接加载 nvim-tree.lua, `nvim file` 打开 file 时不加载 nvim-tree.lua, 通过快捷键加载.
+local isfile = true
+local finfo = vim.uv.fs_stat(vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf()))
+if finfo and finfo.type == 'directory' then
+  isfile = false
+end
+
 --- `:help lazy.nvim`
 --- https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/editor.lua
 --- 如果插件被 require(xxx) or pcall(require, xxx) 会马上加载.
@@ -234,6 +241,10 @@ local plugins = {
       {'<leader>;', '<cmd>NvimTreeToggle<CR>', desc='filetree: toggle' },
       {'<leader><CR>', '<cmd>NvimTreeFindFile!<CR>', desc='filetree: jump to file' },
     },
+
+    --- `nvim dir` 打开文件夹时直接加载 nvim-tree.lua,
+    --- `nvim file` 打开 file 时不加载 nvim-tree.lua, 通过快捷键加载.
+    lazy = isfile,
   },
 
   {
@@ -458,20 +469,6 @@ local opts = {
 -- end
 
 lazy.setup(plugins, opts)
-
---- `nvim dir` 打开文件夹时直接加载 nvim-tree.lua, `nvim file` 打开 file 时不加载 nvim-tree.lua, 通过快捷键加载.
---- VVI: 这里只能使用 BufWinEnter, 不能使用 BufEnter.
-vim.api.nvim_create_autocmd({"BufWinEnter"}, {
-  pattern = {"*"},
-  once = true,
-  callback = function(params)
-    local finfo = vim.uv.fs_stat(vim.api.nvim_buf_get_name(params.buf))
-    if finfo and finfo.type == 'directory' then
-      lazy.load({plugins = {"nvim-tree.lua"}})
-    end
-  end,
-  desc = "Lazy: load nvim-tree.lua on condition",
-})
 
 
 
