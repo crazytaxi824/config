@@ -62,6 +62,11 @@ local buf_events = {
   "FileWriteCmd", "FileWritePost", "FileWritePre",
 }
 
+local cmd_events = {
+  "CmdUndefined", "CmdlineChanged", "CmdlineEnter", "CmdlineLeave",
+  "CmdwinEnter", "CmdwinLeave",
+}
+
 local cursor_events = { "CursorHold", "CursorHoldI", "CursorMoved", "CursorMovedI", "CursorMovedC" }
 
 local win_events = { "WinNew", "WinEnter", "WinLeave", "WinClosed", "WinScrolled", "WinResized" }
@@ -74,7 +79,7 @@ local term_events = { "TermOpen", "TermClose", "TermEnter", "TermLeave", "TermRe
 
 local function debug_autocmd(e)
   if e.args == "" then
-    vim.notify(e.name .. " need args: buf, win, cursor, vim, lsp, tab, term || all, off", vim.log.levels.WARN)
+    vim.notify(e.name .. " need args: buf, win, cursor, vim, lsp, tab, term, cmd || all, off", vim.log.levels.WARN)
     return
   end
 
@@ -96,6 +101,7 @@ local function debug_autocmd(e)
     vim.list_extend(events, cursor_events)
     vim.list_extend(events, lsp_events)
     vim.list_extend(events, tab_events)
+    vim.list_extend(events, cmd_events)
   else
     if vim.list_contains(e.fargs, "buf") or vim.list_contains(e.fargs, "buffer") or vim.list_contains(e.fargs, "file") then
       vim.list_extend(events, buf_events)
@@ -107,6 +113,10 @@ local function debug_autocmd(e)
 
     if vim.list_contains(e.fargs, "term") or vim.list_contains(e.fargs, "terminal") then
       vim.list_extend(events, term_events)
+    end
+
+    if vim.list_contains(e.fargs, "cmd") or vim.list_contains(e.fargs, "command") then
+      vim.list_extend(events, cmd_events)
     end
 
     if vim.list_contains(e.fargs, "vim") then
@@ -129,7 +139,11 @@ local function debug_autocmd(e)
   autocmd_id = vim.api.nvim_create_autocmd(events, {
     pattern = {"*"},
     callback = function(params)
-      print(vim.api.nvim_get_current_win(), params.buf, params.event, params.file)
+      local curr = {
+        curr_win=vim.api.nvim_get_current_win(),
+        curr_buf=vim.api.nvim_get_current_buf(),
+      }
+      print(vim.json.encode(curr), vim.json.encode(params))
     end,
     desc = "autocmd debug",
   })
