@@ -11,6 +11,7 @@ local M = {
   page = require('utils.keymaps.page'),
   shift = require('utils.keymaps.shift'),
   section = require('utils.keymaps.jump_to_section'),
+  move_char = require('utils.keymaps.move_next_char'),
 
   close_popup_wins = close_wins.close_pop_wins,
   win_choose = goto_win.choose,

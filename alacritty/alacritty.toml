@@ -138,16 +138,6 @@ action = "ScrollPageDown"
 key = "PageDown"
 mode = "~Alt"
 
-[[keyboard.bindings]]
-action = "ScrollToTop"
-key = "Home"
-mode = "~Alt"
-
-[[keyboard.bindings]]
-action = "ScrollToBottom"
-key = "End"
-mode = "~Alt"
-
 # 创建新窗口. 切换窗口(win)使用 Command-` 这个快捷键是 macos 系统中的设置. 设置->键盘->快捷键->键盘(左侧目录)
 [[keyboard.bindings]]
 action = "CreateNewWindow"
@@ -188,31 +178,31 @@ mods = "Option"
 # key = "Down"
 # mods = "Option"
 
-# Command-Left -> Home
+# Command-Left -> Home - 替代 <fn - Left>
 [[keyboard.bindings]]
 chars = "\u001BOH"
 key = "Left"
 mods = "Command"
 
-# Command-Right -> End
+# Command-Right -> End - 替代 <fn - Right>
 [[keyboard.bindings]]
 chars = "\u001BOF"
 key = "Right"
 mods = "Command"
 
-# Command-Up -> PageUp - 替代 <fn - up>
+# Command-Up -> PageUp - 替代 <fn - Up>
 [[keyboard.bindings]]
 chars = "\u001B[5~"
 key = "Up"
 mods = "Command"
 
-# Command-Down -> PageDown - 替代 <fn - down>
+# Command-Down -> PageDown - 替代 <fn - Down>
 [[keyboard.bindings]]
 chars = "\u001B[6~"
 key = "Down"
 mods = "Command"
 
-# Shift-CR
+# Shift-CR 默认没有设置该 key
 [[keyboard.bindings]]
 chars = "\u001B[13;2u"
 key = "Return"

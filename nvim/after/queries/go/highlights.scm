@@ -32,9 +32,9 @@
 (import_declaration
   (import_spec_list
     (import_spec path: ((interpreted_string_literal
-      (interpreted_string_literal_content) @import.underline)))))
+      (interpreted_string_literal_content) @my.import.underline)))))
 
 ;;; import "fmt"
 (import_declaration
   (import_spec path: ((interpreted_string_literal
-    (interpreted_string_literal_content) @import.underline))))
+    (interpreted_string_literal_content) @my.import.underline))))

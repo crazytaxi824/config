@@ -44,44 +44,107 @@
 
 local autocmd_id
 
-local function debug_autocmd_toggle()
-  local common_events = {
-    "VimEnter", "VimLeave",
-    "BufAdd", "BufNew", "BufNewFile",
-    "BufEnter", "BufLeave",
-    "BufReadPre", "FileType", "BufReadPost",
-    "BufWritePre", "BufWritePost",
-    "BufFilePre", "BufFilePost",
-    "BufHidden", "BufDelete", "BufUnload", "BufWipeout",
-    "BufWinEnter", "BufWinLeave",
-    "WinNew", "WinEnter", "WinLeave", "WinClosed",
+local vim_events = { "VimEnter", "VimLeave", "VimLeavePre", "VimResized", "VimResume", "VimSuspend" }
 
-    "TermOpen", "TermEnter", "TermLeave", "TermClose", "TermRequest", "TermResponse",
-  }
+local buf_events = {
+  "BufAdd", "BufDelete",
+  "BufEnter", "BufFilePre", "BufFilePost",
+  "BufHidden", "BufLeave",
+  "BufNew", "BufNewFile",
+  "BufReadPre", "BufReadPost",
+  "BufUnload", "BufWipeout",
+  "BufWinEnter", "BufWinLeave",
+  "BufWritePre", "BufWritePost",
 
-  if autocmd_id then
-    vim.api.nvim_del_autocmd(autocmd_id)
-    autocmd_id = nil
-    vim.notify("debug autocmd events: Disabled")
-  else
-    autocmd_id = vim.api.nvim_create_autocmd(common_events, {
-      pattern = {"*"},
-      callback = function(params)
-        print(vim.api.nvim_get_current_win(), params.buf, params.event, params.file)
-      end,
-      desc = "autocmd debug",
-    })
-    vim.notify("debug autocmd events: Enabled")
+  --- file events
+  "FileType",
+  "FileReadCmd", "FileReadPost", "FileReadPre",
+  "FileWriteCmd", "FileWritePost", "FileWritePre",
+}
+
+local cursor_events = { "CursorHold", "CursorHoldI", "CursorMoved", "CursorMovedI", "CursorMovedC" }
+
+local win_events = { "WinNew", "WinEnter", "WinLeave", "WinClosed", "WinScrolled", "WinResized" }
+
+local lsp_events = { "LspAttach", "LspDetach", "LspNotify", "LspProgress", "LspRequest", "LspTokenUpdate" }
+
+local tab_events = { "TabEnter", "TabLeave", "TabNew", "TabNewEntered", "TabClosed" }
+
+local term_events = { "TermOpen", "TermClose", "TermEnter", "TermLeave", "TermRequest", "TermResponse" }
+
+local function debug_autocmd(e)
+  if e.args == "" then
+    vim.notify(e.name .. " need args: buf, win, cursor, vim, lsp, tab, term || all, off", vim.log.levels.WARN)
+    return
   end
+
+  if e.args == "off" then
+    if autocmd_id then
+      vim.api.nvim_del_autocmd(autocmd_id)
+      autocmd_id = nil
+    end
+    vim.notify("debug autocmd events: Disabled")
+    return
+  end
+
+  local events = {}
+  if e.args == "all" then
+    vim.list_extend(events, buf_events)
+    vim.list_extend(events, win_events)
+    vim.list_extend(events, term_events)
+    vim.list_extend(events, vim_events)
+    vim.list_extend(events, cursor_events)
+    vim.list_extend(events, lsp_events)
+    vim.list_extend(events, tab_events)
+  else
+    if vim.list_contains(e.fargs, "buf") or vim.list_contains(e.fargs, "buffer") or vim.list_contains(e.fargs, "file") then
+      vim.list_extend(events, buf_events)
+    end
+
+    if vim.list_contains(e.fargs, "win") or vim.list_contains(e.fargs, "window") then
+      vim.list_extend(events, win_events)
+    end
+
+    if vim.list_contains(e.fargs, "term") or vim.list_contains(e.fargs, "terminal") then
+      vim.list_extend(events, term_events)
+    end
+
+    if vim.list_contains(e.fargs, "vim") then
+      vim.list_extend(events, vim_events)
+    end
+
+    if vim.list_contains(e.fargs, "cursor") then
+      vim.list_extend(events, cursor_events)
+    end
+
+    if vim.list_contains(e.fargs, "lsp") then
+      vim.list_extend(events, lsp_events)
+    end
+
+    if vim.list_contains(e.fargs, "tab") then
+      vim.list_extend(events, tab_events)
+    end
+  end
+
+  autocmd_id = vim.api.nvim_create_autocmd(events, {
+    pattern = {"*"},
+    callback = function(params)
+      print(vim.api.nvim_get_current_win(), params.buf, params.event, params.file)
+    end,
+    desc = "autocmd debug",
+  })
+  vim.notify("debug autocmd events: Enabled")
 end
 
-vim.api.nvim_create_user_command("AutocmdDebugToggle", function()
-    debug_autocmd_toggle()
-  end,
-  {
-    bang=true,
-    bar=true,
-    desc = 'toggle autocmd debug function, print all events.'
-  }
-)
+vim.api.nvim_create_user_command("AutocmdDebug", function(params)
+  --- params.args: string
+  --- params.fargs: list
+  debug_autocmd(params)
+end,
+{
+  nargs = "*",
+  bang=true,
+  bar=true,
+  desc = 'toggle autocmd debug function, print all events.'
+})
 

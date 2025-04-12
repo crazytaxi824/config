@@ -4,7 +4,13 @@ local lazydir = vim.fn.stdpath("data") .. "/lazy"
 local lazypath = lazydir .. "/lazy.nvim"
 local lazyrepo = "https://github.com/folke/lazy.nvim.git"
 if not vim.uv.fs_stat(lazypath) then
-  vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+  local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+  if vim.v.shell_error ~= 0 then
+    vim.api.nvim_echo({
+      { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+      { out, "WarningMsg" },
+    }, true, {})
+  end
 end
 vim.opt.rtp:prepend(lazypath)
 -- -- }}}
@@ -77,7 +83,6 @@ local plugins = {
   --- 第一方 module 插件 ---
   {
     "nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
-    -- commit = "e6cc783",
     config = function() require("plugins.settings.treesitter_ctx") end,
     dependencies = { "nvim-treesitter/nvim-treesitter" },
 
@@ -106,7 +111,7 @@ local plugins = {
   --- Auto Completion ------------------------------------------------------------------------------
   {
     "hrsh7th/nvim-cmp",
-    commit = "c273707",
+    commit = "059e894",
     config = function() require("plugins.settings.cmp_completion") end,
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全
@@ -200,7 +205,7 @@ local plugins = {
   --- "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
-    commit = "a117163",
+    commit = "8d99472",
     config = function() require("lsp.plugins.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -209,7 +214,8 @@ local plugins = {
 
   {
     "stevearc/conform.nvim",
-    tag = "v9.0.0",
+    -- tag = "v9.0.0",
+    commit = "b1a7532",
     config = function() require("plugins.settings.formatter_conform") end,
 
     event = "BufWritePre",
@@ -247,7 +253,7 @@ local plugins = {
 
   {
     "nvim-lualine/lualine.nvim",  -- `:help 'statusline'`
-    commit = "1517caa",
+    commit = "0ea56f9",
     config = function() require("plugins.settings.decor_lualine") end,
 
     event = "VeryLazy",
@@ -323,7 +329,8 @@ local plugins = {
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {
     "lewis6991/gitsigns.nvim",
-    tag = "v1.0.2",
+    -- tag = "v1.0.2",
+    commit = "17ab794",
     config = function() require("plugins.settings.git_signs") end,
 
     --- `nvim dir` 启动时直接打开 dir 时可能会造成 gitsigns 报错.
@@ -380,6 +387,7 @@ local plugins = {
   --- https://github.com/jellydn/lazy-nvim-ide/blob/main/lua/plugins/extras/copilot-chat-v2.lua
   {
     "CopilotC-Nvim/CopilotChat.nvim",
+    tag = "v3.11.0",
     dependencies = {
       "nvim-telescope/telescope.nvim",
       "nvim-telescope/telescope-ui-select.nvim",
@@ -391,9 +399,21 @@ local plugins = {
   },
 
   --- recommanded plugins ------------------------------------------------------ {{{
-  --- null-ls 替代:
   --{"mfussenegger/nvim-lint"}, -- linter
-  --{"ibhagwan/fzf-lua"},       -- fzf telescope
+  -- {
+  --   "ibhagwan/fzf-lua",
+  --   dependencies = { "nvim-tree/nvim-web-devicons" },
+  --   config = function()
+  --     require('fzf-lua').setup({
+  --       fzf_opts = {
+  --         ["--no-header"] = true,  -- zshrc 中设置了 header, 这里取消.
+  --         -- ["--header"] = "ABC",
+  --       },
+  --     })
+  --     --- change default UI `:help vim.ui.select`
+  --     require('fzf-lua').register_ui_select()
+  --   end,
+  -- },
 
   --{"nvim-neo-tree/neo-tree.nvim"},  -- File explorer. nvim-tree.lua 替代
   --{"Tastyep/structlog.nvim"},   -- log 工具
@@ -418,6 +438,9 @@ local opts = {
   },
   rocks = {
     enabled = false, -- luarocks disabled.
+  },
+  install = {
+    missing = false, -- auto install missing plugins
   },
   ui = {
     size = { width = 0.6, height = 0.75 },

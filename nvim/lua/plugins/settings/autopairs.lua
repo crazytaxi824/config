@@ -26,8 +26,8 @@ autopairs.setup {
 
   --- key mapping
   map_cr = true,  -- adding a newline when you press <cr> inside brackets
-  map_bs = true,  -- <BS>
-  map_c_h = true, -- VVI: <C-h> & Mac <BS> 一次删除一对括号.
+  map_bs = true,  -- map the <BS> key
+  map_c_h = false, -- <C-h> to delete a pair, 默认 <BS> 删除一对括号
   map_c_w = false, -- map <c-w> to delete a pair if possible
 
   --fast_wrap = {},  -- pair 选中的文字. NOTE: 不开启, 使用自定义 keymap.
@@ -55,8 +55,8 @@ local cmp_status_ok, cmp = pcall(require, "cmp")
 if not cmp_status_ok then
   return
 end
-local autopairs_cmp = require("nvim-autopairs.completion.cmp")
-cmp.event:on("confirm_done", autopairs_cmp.on_confirm_done())
+local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 
 
 
