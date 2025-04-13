@@ -52,7 +52,7 @@ local plugins = {
 
   {
     "rcarriga/nvim-notify",
-    commit = "22f2909",
+    commit = "b5825cf",
     -- tag = "v3.15.0",
     config = function() require("plugins.settings.nvim_notify") end,
 
@@ -118,7 +118,7 @@ local plugins = {
   --- Auto Completion ------------------------------------------------------------------------------
   {
     "hrsh7th/nvim-cmp",
-    commit = "059e894",
+    commit = "b5311ab",
     config = function() require("plugins.settings.cmp_completion") end,
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全
@@ -136,21 +136,21 @@ local plugins = {
   --- VVI: 只有 "cmp-nvim-lsp" 不需要在 "nvim-cmp" 之后加载, 其他 module 插件都需要在 "nvim-cmp" 加载之后再加载, 否则报错.
   {
     "hrsh7th/cmp-nvim-lsp",  -- LSP source for nvim-cmp
-    commit = "99290b3",
+    commit = "a8912b8",
 
     lazy = true,  -- nvim-cmp 加载时自动加载.
   },
 
   {
     "hrsh7th/cmp-buffer",  -- 当前 buffer 中有的 word
-    commit = "3022dbc",
+    commit = "b74fab3",
 
     lazy = true,  -- nvim-cmp 加载时自动加载.
   },
 
   {
     "hrsh7th/cmp-path",  -- filepath 补全
-    commit = "91ff86c",
+    commit = "c6635aa",
 
     lazy = true,  -- nvim-cmp 加载时自动加载.
   },
@@ -190,7 +190,7 @@ local plugins = {
 
   {
     "windwp/nvim-autopairs",
-    commit = "6522027",
+    commit = "4d74e75",
     config = function() require("plugins.settings.autopairs") end,
     dependencies = {"hrsh7th/nvim-cmp"},  -- cmp.event:on() 设置.
 
@@ -212,7 +212,7 @@ local plugins = {
   --- "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
-    commit = "8d99472",
+    commit = "1280b79",
     config = function() require("lsp.plugins.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -222,7 +222,7 @@ local plugins = {
   {
     "stevearc/conform.nvim",
     -- tag = "v9.0.0",
-    commit = "b1a7532",
+    commit = "eebc724",
     config = function() require("plugins.settings.formatter_conform") end,
 
     event = "BufWritePre",
@@ -264,7 +264,7 @@ local plugins = {
 
   {
     "nvim-lualine/lualine.nvim",  -- `:help 'statusline'`
-    commit = "0ea56f9",
+    commit = "86fe395",
     config = function() require("plugins.settings.decor_lualine") end,
 
     event = "VeryLazy",
@@ -292,7 +292,7 @@ local plugins = {
   {
     "rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
     -- tag = "v4.0.0",
-    commit = "bc81f8d",
+    commit = "7c9207d",
     config = function() require("plugins.settings.dapui_debug") end,
     dependencies = {
       "mfussenegger/nvim-dap",
@@ -341,7 +341,7 @@ local plugins = {
   {
     "lewis6991/gitsigns.nvim",
     -- tag = "v1.0.2",
-    commit = "17ab794",
+    commit = "fcfa7a9",
     config = function() require("plugins.settings.git_signs") end,
 
     --- `nvim dir` 启动时直接打开 dir 时可能会造成 gitsigns 报错.
