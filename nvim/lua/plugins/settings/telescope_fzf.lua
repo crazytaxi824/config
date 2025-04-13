@@ -15,6 +15,14 @@ local actions_layout = require("telescope.actions.layout")
 local actions_state = require("telescope.actions.state")
 local transform_mod = require('telescope.actions.mt').transform_mod
 
+--- custom dropdown theme layout
+local dropdown_opts = {
+  layout_config = {
+    height = 0.7,
+    width = 0.5,
+  },
+}
+
 --- custom actions --------------------------------------------------------------------------------- {{{
 --- 多选的情况下 send_selected_to_qflist; 没有任何选择的情况下 edit 光标所在行的 file.
 local my_action = transform_mod({
@@ -49,6 +57,10 @@ telescope.setup {
 
     --- `:help telescope.defaults.layout_config`
     layout_config = {
+      center = {
+        height = 0.8,
+        width = 0.8,
+      },
       horizontal = {
         height = 0.9,  -- 占整个 vim 窗口的百分比
         width = 0.92,  -- 占整个 vim 窗口的百分比
@@ -65,7 +77,7 @@ telescope.setup {
       }
     },
     layout_strategy = "horizontal",  -- horizontal(*) - preview 在右边 | vertical - preview 在上面
-    cycle_layout_list = {"vertical", "horizontal"},  -- NOTE: 影响 actions_layout.cycle_layout_next() 显示顺序.
+    cycle_layout_list = {"vertical", "horizontal", "center"},  -- NOTE: 影响 actions_layout.cycle_layout_next() 显示顺序.
     sorting_strategy = "ascending",  -- ascending | descending(*) - descending 在 prompt_position = "bottom" 时候用.
 
     --- rg defaults, `:help telescope.defaults.vimgrep_arguments`
@@ -194,7 +206,7 @@ telescope.setup {
 
     --- https://github.com/nvim-telescope/telescope-ui-select.nvim
     ["ui-select"] = {
-      themes.get_dropdown(),
+      themes.get_dropdown(dropdown_opts),
     },
   },
 }
@@ -348,12 +360,12 @@ local telescope_keymaps = {
   {'n', '<leader>fh', function() builtin.help_tags() end, opt, 'telescope: Vim Help Doc'},
   {'n', '<leader>fk', function() builtin.keymaps() end, opt, 'telescope: Keymap normal Mode'},
   {'n', '<leader>fc', function() builtin.commands() end, opt, 'telescope: All Commands'},
-  {'n', '<leader>f:', function() builtin.command_history() end, opt, 'telescope: History Command'},
-  {'n', '<leader>f/', function() builtin.search_history(themes.get_dropdown()) end, opt, 'telescope: History Search'},
-  {'n', '<leader>f?', function() builtin.search_history(themes.get_dropdown()) end, opt, 'telescope: History Search'},
   {'n', '<leader>fl', function() builtin.highlights() end, opt, 'telescope: Search Highlight'},
-  {'n', '<leader>fw', function() builtin.spell_suggest(themes.get_dropdown()) end, opt, 'telescope: Spell Suggests'},  -- 也可以使用 which-key 显示.
-  {'n', 'z=', function() builtin.spell_suggest(themes.get_dropdown()) end, opt, 'telescope: Spell Suggests'},  -- 也可以使用 which-key 显示.
+  {'n', '<leader>f:', function() builtin.command_history(themes.get_dropdown(dropdown_opts)) end, opt, 'telescope: History Command'},
+  {'n', '<leader>f/', function() builtin.search_history(themes.get_dropdown(dropdown_opts)) end, opt, 'telescope: History Search'},
+  {'n', '<leader>f?', function() builtin.search_history(themes.get_dropdown(dropdown_opts)) end, opt, 'telescope: History Search'},
+  {'n', '<leader>fw', function() builtin.spell_suggest(themes.get_dropdown(dropdown_opts)) end, opt, 'telescope: Spell Suggests'},  -- 也可以使用 which-key 显示.
+  {'n', 'z=', function() builtin.spell_suggest(themes.get_dropdown(dropdown_opts)) end, opt, 'telescope: Spell Suggests'},  -- 也可以使用 which-key 显示.
   --{'n', '<leader>fg', function() builtin.live_grep() end,  opt, 'telescope: rg'},  -- NOTE: 使用自定义 :Rg 命令更灵活.
 }
 
