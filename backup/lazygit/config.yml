@@ -1,14 +1,11 @@
 # DOC: lazygit 配置: https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md
 gui:
-    # stuff relating to the UI
-    #scrollHeight: 5                   # main pannel (右侧主窗口) pageup/pagedown 滚动 n 行, 不要超过 commandLogSize.
-    sidePanelWidth: 0.25 # 左侧边栏屏幕占比 (0~1)
-    expandFocusedSidePanel: true # 选中的 pannel 会变高
-    language: "en" # one of 'auto' | 'en' | 'zh' | 'pl' | 'nl'
-    #mainPanelSplitMode: "horizontal"  # main pannel 分屏方式 'horizontal' | 'flexible'(*) | 'vertical'
-    #commandLogSize: 8                 # 右下角 log 提示窗口所占行高
-    #showFileTree: true                # 左侧边栏文件显示使用 tree 模式(可折叠)
-    nerdFontsVersion: "3"
+    #scrollHeight: 5  # main pannel (右侧主窗口) pageup/pagedown 滚动 n 行, 不要超过 commandLogSize.
+    sidePanelWidth: 0.25  # 左侧边栏屏幕占比 (0~1)
+    expandFocusedSidePanel: true  # 选中的 pannel 会变高
+    language: "en"  # one of 'auto' | 'en' | 'zh' | 'pl' | 'nl'
+    #mainPanelSplitMode: "horizontal"  # main pannel(stage) 分屏方式 'horizontal' | 'flexible'(*) | 'vertical'
+    nerdFontsVersion: "3"  # '2' | '3' | ''(*) - If empty, do not show icon.
     theme:
         activeBorderColor: # cursor 所在 window 的 border 颜色.
             - yellow
@@ -16,13 +13,13 @@ gui:
         inactiveBorderColor: # 未选中窗口的文字和边框颜色, 241
             - '#626262'
         searchingActiveBorderColor: # 在使用 '/' 搜索后, search result window border 的颜色.
-            - cyan
+            - yellow
             - bold
         optionsTextColor: # 最下方跨键键提示文字颜色.
             - blue
         selectedLineBgColor: # 左侧菜单中 cursor line bg 颜色.
             - '#4E4E4E'
-        cherryPickedCommitFgColor: # Commits window 中使用 'c' 选择 cherry pick 的文字颜色.
+        cherryPickedCommitFgColor: # Commits window 中使用 cherry pick 的文字颜色.
             - magenta
             - bold
             - reverse
@@ -58,11 +55,6 @@ git:
         #   \--file-style='75' --file-decoration-style='75 ol'
         #   \--line-numbers-minus-style='167' --minus-style='241 52' --minus-emph-style='246 167'
         #   \--line-numbers-plus-style='28' --plus-style='251 22' --plus-emph-style='255 28'
-
-    # 默认为 true, auto fetch remote repo.
-    # `git fetch origin` 可以将 remote 版本下载到本地仓库. 用于检查 local & remote 中的文件是否不同.
-    # fetch 之后可以通过 `git merge origin/develop` 将 fetch 到的远程版本合并到当前 branch.
-    #autoFetch: true
 
     # Branchs window (window No.3) 右侧显示的 commit tree.
     # DOC: git log format 配置: https://www.git-scm.com/docs/git-log#Documentation/git-log.txt-emnem
