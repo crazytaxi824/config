@@ -26,7 +26,7 @@ local function py_run(file)
   end
 
   local t = require('utils.my_term.instances').console
-  t.cmd = "source " .. py_env .. " && python3 -- " .. file
+  t.cmd = "source " .. py_env .. " && python3 --version && python3 " .. file
   t:stop()
   t:run()
 end
