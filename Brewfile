@@ -41,6 +41,8 @@ brew "luajit"
 brew "node@20"
 brew "perl"
 brew "ruby"
+brew "uv"  # python tool
+#brew "yarn"  # js/ts tool replace npm
 
 # format tools
 #brew "prettier" # js 格式化工具, 使用 Mason 安装, vscode prettier 插件自带命令行工具.
