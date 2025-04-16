@@ -126,6 +126,7 @@ M.console_exec = function(term_obj, term_win_id)
 
   term_obj.job_id = vim.fn.jobstart(term_obj.cmd, {
     cwd = term_obj.cwd,
+    env = term_obj.env,
 
     on_stdout = function(job_id, data, event)  -- NOTE: fmt.Print()
       --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.

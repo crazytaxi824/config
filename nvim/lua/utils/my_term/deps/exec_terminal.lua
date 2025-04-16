@@ -13,8 +13,8 @@ M.terminal_exec = function(term_obj, term_win_id)
   vim.api.nvim_buf_call(term_obj.bufnr, function()
     term_obj.job_id = vim.fn.jobstart(term_obj.cmd, {
       term = true,
-
       cwd = term_obj.cwd,
+      env = term_obj.env,
 
       on_stdout = function(job_id, data, event)  -- event 是 'stdout'
         --- auto_scroll option

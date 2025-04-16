@@ -16,7 +16,8 @@ M.default_opts = {
   job_id = nil,
 
   cmd = vim.go.shell, -- `:help 'shell'`, 相当于 os.getenv('SHELL')
-  cwd = nil,          -- jobstart() 中的 opts.
+  cwd = nil,  -- string, jobstart() opts
+  env = nil,  -- dict, jobstart() opts
   auto_scroll = nil,  -- goto bottom of the terminal. 在 on_stdout & on_stderr 中触发.
   console_output = nil,   -- bool, true: 在 console 中执行; false: 在 terminal 中执行.
 
