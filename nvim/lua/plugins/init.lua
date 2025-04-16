@@ -222,7 +222,7 @@ local plugins = {
   {
     "stevearc/conform.nvim",
     -- tag = "v9.0.0",
-    commit = "eebc724",
+    commit = "6632e7d",
     config = function() require("plugins.settings.formatter_conform") end,
 
     event = "BufWritePre",
@@ -232,7 +232,8 @@ local plugins = {
   --- File explorer --------------------------------------------------------------------------------
   {
     "nvim-tree/nvim-tree.lua",
-    tag = "v1.11.0",
+    -- tag = "v1.11.0",
+    commit = "5bea2b3",
     config = function() require("plugins.settings.file_tree") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
 
@@ -341,7 +342,7 @@ local plugins = {
   {
     "lewis6991/gitsigns.nvim",
     -- tag = "v1.0.2",
-    commit = "fcfa7a9",
+    commit = "d600d39",
     config = function() require("plugins.settings.git_signs") end,
 
     --- `nvim dir` 启动时直接打开 dir 时可能会造成 gitsigns 报错.
