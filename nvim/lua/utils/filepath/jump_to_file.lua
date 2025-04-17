@@ -1,6 +1,7 @@
 --- 跳转到 cursor 所在 filepath
 
 local parse = require('utils.filepath.parse')
+local vs = require('utils.visual_selected')
 
 local M = {}
 
@@ -52,22 +53,6 @@ local function jump_to_dir(dir)
   vim.cmd.new(dir)
 end
 
---- 获取 visual selected word.
-local function visual_selected()
-  --- NOTE: getpos("'<") 和 getpos("'>") 必须在 normal 模式执行,
-  --- 即: <C-c> 从 visual mode 退出后再执行以下函数.
-  --- `:echo getline("'<")[getpos("'<")[2]-1:getpos("'>")[2]-1]`
-  local startpos = vim.fn.getpos("'<")
-  local endpos = vim.fn.getpos("'>")
-
-  --- 如果不在同一行则 return
-  if startpos[2] ~= endpos[2] then
-    return
-  end
-
-  return string.sub(vim.fn.getline("'<"), startpos[3], endpos[3])
-end
-
 --- jump controller
 local function jump(content)
   if not content then
@@ -91,6 +76,6 @@ local function jump(content)
 end
 
 M.n_jump_cWORD = function() jump(vim.fn.expand('<cWORD>')) end
-M.v_jump_selected = function() jump(visual_selected()) end
+M.v_jump_selected = function() jump(vs.visual_selected(true)) end
 
 return M
