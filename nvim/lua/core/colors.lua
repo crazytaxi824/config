@@ -352,6 +352,7 @@ Highlights = {
   --- program language
   ['@type'] = { link = "Type" },
   ['@type.builtin'] = { link = "@type" },
+  ['@constructor'] = { link = "@type" },
 
   ['@function.builtin'] = { link = "Function" },  -- copy() delete() make()
 
