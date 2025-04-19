@@ -12,8 +12,8 @@ function checkBrewDep() {
 		return 2
 	fi
 
-	# [^^] 表示要查询的 word 不能在行的最开始.
-	brew deps --installed | grep --color=always "[^^]$1"
+	# grep 不支持 \s
+	brew deps --installed --1 | grep --color=always " $1[ @]"
 }
 
 # 运行函数
