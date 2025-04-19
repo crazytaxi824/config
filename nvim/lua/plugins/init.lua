@@ -275,7 +275,7 @@ local plugins = {
   {
     "mfussenegger/nvim-dap",  -- core debug tool
     commit = "98bf130",
-    config = function() require("plugins.settings.dap_debug") end,
+    config = function() require("plugins.settings.debug.nvim_dap") end,
 
     cmd = {'Debug', 'DapToggleBreakpoint', 'DapContinue'},
     keys = {
@@ -294,7 +294,7 @@ local plugins = {
     "rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
     -- tag = "v4.0.0",
     commit = "881a69e",
-    config = function() require("plugins.settings.dapui_debug") end,
+    config = function() require("plugins.settings.debug.nvim_dapui") end,
     dependencies = {
       "mfussenegger/nvim-dap",
       "nvim-neotest/nvim-nio",  -- 依赖, 必须安装.
