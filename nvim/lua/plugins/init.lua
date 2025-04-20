@@ -222,7 +222,7 @@ local plugins = {
   {
     "stevearc/conform.nvim",
     -- tag = "v9.0.0",
-    commit = "6632e7d",
+    commit = "372fc52",
     config = function() require("plugins.settings.formatter_conform") end,
 
     event = "BufWritePre",
@@ -233,7 +233,7 @@ local plugins = {
   {
     "nvim-tree/nvim-tree.lua",
     -- tag = "v1.11.0",
-    commit = "5bea2b3",
+    commit = "3a63717",
     config = function() require("plugins.settings.file_tree") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
 
