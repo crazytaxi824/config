@@ -44,7 +44,7 @@ dap.adapters.python = function(callback, config)
   else
     callback({
       type = "executable",
-      command = config.pythonPath, -- VVI: 和 debugpy 在同一个 .venv/bin/ 的 python.
+      command = config.pythonPath, -- VVI: 和 debugpy 在同一个 .venv/bin/ 的 python3.
       args = { "-m", "debugpy.adapter" },
       options = {
         cwd = config.cwd, -- VVI: 必须设置, 否则 debugpy 可能无法找到.
@@ -75,7 +75,7 @@ dap.configurations.python = {
       -- debugpy supports launching an application with a different interpreter then the one used to launch debugpy itself.
       local py_venv = vim.fs.root(0, ".venv")
       if not py_venv then
-        Notify("python venv is missing", vim.log.levels.ERROR)
+        Notify("python3 venv is missing", vim.log.levels.ERROR)
         return
       end
       --- check executable '.venv/bin/python3'
