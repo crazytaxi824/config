@@ -25,7 +25,11 @@ if not dap_status_ok then
 end
 
 --- Defaults to `INFO`, 打印到 'stdpath('cache') .. dap.log'
-dap.set_log_level("WARN")
+if __Debug_Neovim.dap_debug then
+  dap.set_log_level("DEBUG")
+else
+  dap.set_log_level("ERROR")
+end
 
 --- load adapter configs
 require("plugins.settings.debug.adapters.go")

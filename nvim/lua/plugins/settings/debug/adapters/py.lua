@@ -19,17 +19,14 @@ end
 -- -- }}}
 --- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#python
 dap.adapters.python = function(callback, config)
-  local py_venv = vim.fs.root(0, ".venv")
-  if not py_venv then
-    Notify("python venv is missing", vim.log.levels.ERROR)
+  if not config.pythonPath then
     return
   end
 
-  --- check executable '.venv/bin/python' & '.venv/bin/debugpy'
-  local py_path = vim.fs.joinpath(py_venv, ".venv/bin/python3")
-  local debugpy_path = vim.fs.joinpath(py_venv, ".venv/bin/debugpy")
-  if vim.fn.executable(py_path) == 0 or vim.fn.executable(debugpy_path) == 0 then
-    Notify("cmd tool 'python' or 'debugpy' is missing or Not executable", vim.log.levels.ERROR)
+  --- check executable '.venv/bin/debugpy'
+  local debugpy_path = vim.fs.joinpath(config.cwd, ".venv/bin/debugpy")
+  if vim.fn.executable(debugpy_path) == 0 then
+    Notify(debugpy_path .. " is missing or Not executable", vim.log.levels.ERROR)
     return
   end
 
@@ -47,10 +44,10 @@ dap.adapters.python = function(callback, config)
   else
     callback({
       type = "executable",
-      command = py_path, -- VVI: 和 debugpy 在同一个 .venv/bin/ 的 python.
+      command = config.pythonPath, -- VVI: 和 debugpy 在同一个 .venv/bin/ 的 python.
       args = { "-m", "debugpy.adapter" },
       options = {
-        cwd = py_venv, -- VVI: 必须设置, 否则 debugpy 可能无法找到.
+        cwd = config.cwd, -- VVI: 必须设置, 否则 debugpy 可能无法找到.
         source_filetype = "python",
       },
     })
@@ -66,6 +63,29 @@ dap.configurations.python = {
 
     -- Options below are for debugpy, see https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings for supported options
     program = "${file}", -- This configuration will launch the current file if used.
+    -- code = "import debugpy;print(debugpy.__version__)",  -- print debugpy version
+    cwd = function()
+      local py_venv = vim.fs.root(0, ".venv")
+      if not py_venv then
+        return vim.uv.cwd()
+      end
+      return py_venv
+    end,
+    pythonPath = function()
+      -- debugpy supports launching an application with a different interpreter then the one used to launch debugpy itself.
+      local py_venv = vim.fs.root(0, ".venv")
+      if not py_venv then
+        Notify("python venv is missing", vim.log.levels.ERROR)
+        return
+      end
+      --- check executable '.venv/bin/python3'
+      local py_path = vim.fs.joinpath(py_venv, ".venv/bin/python3")
+      if vim.fn.executable(py_path) == 0 then
+        Notify(py_path .. " is missing or Not executable", vim.log.levels.ERROR)
+        return
+      end
+      return py_path
+    end,
   },
 }
 
