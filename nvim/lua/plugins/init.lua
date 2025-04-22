@@ -293,7 +293,7 @@ local plugins = {
   {
     "rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
     -- tag = "v4.0.0",
-    commit = "881a69e",
+    commit = "851f6f0",
     config = function() require("plugins.settings.debug.nvim_dapui") end,
     dependencies = {
       "mfussenegger/nvim-dap",
@@ -342,7 +342,7 @@ local plugins = {
   {
     "lewis6991/gitsigns.nvim",
     -- tag = "v1.0.2",
-    commit = "02eafb1",
+    commit = "2149fc2",
     config = function() require("plugins.settings.git_signs") end,
 
     --- `nvim dir` 启动时直接打开 dir 时可能会造成 gitsigns 报错.
