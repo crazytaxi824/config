@@ -115,6 +115,7 @@ cask "telegram" # 加密聊天工具
 #cask "cloudflare-warp"  # VPN 类工具
 #cask "kindle-comic-converter"
 #cask "chatgpt"
+#cask "trader-workstation"  # IBKR TWS
 
 # 浏览器
 cask "google-chrome"
