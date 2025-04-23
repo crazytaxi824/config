@@ -212,7 +212,7 @@ local plugins = {
   --- "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
-    commit = "fb50cf1",
+    commit = "7864607",
     config = function() require("lsp.plugins.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -232,8 +232,7 @@ local plugins = {
   --- File explorer --------------------------------------------------------------------------------
   {
     "nvim-tree/nvim-tree.lua",
-    -- tag = "v1.11.0",
-    commit = "3a63717",
+    tag = "v1.12.0",
     config = function() require("plugins.settings.file_tree") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
 
@@ -265,7 +264,7 @@ local plugins = {
 
   {
     "nvim-lualine/lualine.nvim",  -- `:help 'statusline'`
-    commit = "86fe395",
+    commit = "15884ce",
     config = function() require("plugins.settings.decor_lualine") end,
 
     event = "VeryLazy",
@@ -342,7 +341,7 @@ local plugins = {
   {
     "lewis6991/gitsigns.nvim",
     -- tag = "v1.0.2",
-    commit = "2149fc2",
+    commit = "b79047e",
     config = function() require("plugins.settings.git_signs") end,
 
     --- `nvim dir` 启动时直接打开 dir 时可能会造成 gitsigns 报错.
@@ -399,8 +398,7 @@ local plugins = {
   --- https://github.com/jellydn/lazy-nvim-ide/blob/main/lua/plugins/extras/copilot-chat-v2.lua
   {
     "CopilotC-Nvim/CopilotChat.nvim",
-    -- tag = "v3.11.0",
-    commit = "634aa58",
+    tag = "v3.11.1",
     dependencies = {
       "nvim-telescope/telescope.nvim",
       "nvim-telescope/telescope-ui-select.nvim",
