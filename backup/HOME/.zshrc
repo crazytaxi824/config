@@ -765,7 +765,7 @@ function diff() {
 ### 使用方法 `Fd foo /path`, eg: `Fd minecraft /`
 ### 查找文件同时显示大小.
 function Fd() {
-	fd --hidden --no-ignore --color="never" -E="/System/" -E=".git/" "$@" | xargs -I {} du -sh "{}"
+	fd --hidden --no-ignore --color="never" -E="/System/" -E=".git/" -E=".Trash/" "$@" | xargs -I {} du -sh "{}"
 }
 
 # }}}
