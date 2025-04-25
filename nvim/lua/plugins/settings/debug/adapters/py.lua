@@ -44,7 +44,7 @@ dap.adapters.python = function(callback, config)
   else
     callback({
       type = "executable",
-      command = config.pythonPath, -- VVI: 和 debugpy 在同一个 .venv/bin/ 的 python3.
+      command = config.pythonPath, -- VVI: 必须是和 debugpy 在同一个 .venv/bin/ 的 python3.
       args = { "-m", "debugpy.adapter" },
       options = {
         cwd = config.cwd, -- VVI: 必须设置, 否则 debugpy 可能无法找到.
