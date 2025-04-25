@@ -196,9 +196,9 @@ export HOMEBREW_BUNDLE_FILE=$HOME/.config/Brewfile  # 默认在 ~/.Brewfile
 # --- [ golang ] --------------------------------------------------------------- {{{
 ### `go env` 查看
 #export GOROOT=/usr/local/go
-export GOPATH=$HOME/gopath
-export GOBIN=$GOPATH/bin
-export PATH=$PATH:$GOBIN
+export GOPATH="$HOME/gopath"
+export GOBIN="$GOPATH/bin"
+export PATH="$PATH:$GOBIN"
 
 export GOFLAGS="-buildvcs=false"
 export GO111MODULE=on  # on | off | auto
@@ -206,7 +206,7 @@ export GO111MODULE=on  # on | off | auto
 #export GOSUMDB=off  # Disable the Go checksum database
 
 
-### DEBUG use only
+### DEBUG use only, 删除所有其他 PATH
 #export PATH=/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin
 #export PATH=/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:$GOBIN
 
@@ -218,7 +218,7 @@ export GO111MODULE=on  # on | off | auto
 # 创建虚拟环境: `$ python3.12 -m venv /path/to/new/virtual/environment`
 # 进入虚拟环境: `$ source /path/to/new/virtual/environment/bin/activate`
 # 在虚拟环境中安装包: `$ pip install --upgrade pip`, `$ pip install numpy` ...
-export PATH=$PATH:$HOME/pytools/venv/bin
+export PATH="$HOME/pytools/venv/bin:$PATH"
 
 # }}}
 
