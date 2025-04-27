@@ -150,6 +150,13 @@ local function debug_autocmd(e)
   vim.notify("debug autocmd events: Enabled")
 end
 
+--- 启动时开启
+if __Debug_Neovim.autocmd then
+  debug_autocmd({ fargs = { 'vim', 'win', 'buf' } })
+end
+
+--- `:AutocmdDebug all`, `:AutocmdDebug off`
+--- `:AutocmdDebug buf`, `:AutocmdDebug buf win lsp`, ...
 vim.api.nvim_create_user_command("AutocmdDebug", function(params)
   --- params.args: string
   --- params.fargs: list

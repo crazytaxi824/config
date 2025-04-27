@@ -567,6 +567,41 @@ vim.api.nvim_create_user_command('SpellCheckToggle', function()
   end
 end, {bang=true, bar=true})
 
+--- 如果删除最后一个 buflisted window, 则在删除之前创建一个新的 window.
+vim.api.nvim_create_autocmd("QuitPre", {
+  callback = function(params)
+    local win_id = vim.api.nvim_get_current_win()
+    if vim.api.nvim_win_get_buf(win_id) ~= params.buf then
+      return
+    end
+
+    local normal_win_count = 0
+    local buflisted_win_count = 0
+    for _, wid in ipairs(vim.api.nvim_list_wins()) do
+      if vim.fn.win_gettype(wid) == '' then
+        normal_win_count = normal_win_count + 1
+      end
+      if vim.fn.buflisted(vim.api.nvim_win_get_buf(wid)) == 1 then
+        buflisted_win_count = buflisted_win_count + 1
+      end
+    end
+
+    --- last normal window
+    if normal_win_count <= 1 then
+      Notify({" Cannot quit the last window.", " use `:qa`"}, "WARN")
+      vim.cmd.split()
+      return
+    end
+
+    --- last buflisted window
+    if vim.fn.buflisted(params.buf) == 1 and buflisted_win_count <= 1 then
+      Notify({" Cannot quit the last buflisted window."}, "WARN")
+      vim.cmd.vsplit()
+    end
+  end,
+  desc = "Do not quit last (buflisted) window",
+})
+
 --- help widnow 放到最右侧
 -- vim.api.nvim_create_autocmd("FileType", {
 --   pattern = {"help"},
