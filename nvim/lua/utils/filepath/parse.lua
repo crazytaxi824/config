@@ -54,8 +54,9 @@ local function filepath_with_lnum_col(str)
   local splits = vim.split(str, ':', {trimempty=true})
 
   --- 判断所有字符是否都是 file name character. `:help \f`
-  local fname = vim.fn.matchstr(splits[1], '\\f\\+')
-  if splits[1] ~= fname then
+  --- 使用 pcall() 防止 str 中含有 \n byte(0) 等 blob chars.
+  local ok, fname = pcall(vim.fn.matchstr, splits[1], '\\f\\+')
+  if not ok or splits[1] ~= fname then
     return
   end
 

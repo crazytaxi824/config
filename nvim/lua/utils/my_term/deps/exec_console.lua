@@ -56,13 +56,13 @@ local function set_buf_line_output(bufnr, data, hl)
     table.remove(data, #data)
   end
 
-  --- VVI: HACK: deal with NUL bytes, replace 所有的 '\n'.
+  --- VVI: deal with NUL bytes, replace 所有的 '\n'.
   --- print('\0', '\x00'), log.Println(string(byte(0))) 是 <null> bytes.
   --- byte(0) 本应该是 '\null' 但是只显示了第一个字符变成了 '\n', 导致 nvim_buf_set_lines() 以为是换行符而报错.
   --vim.print(data)
   for i, d in ipairs(data) do
-    -- data[i] = string.gsub(d, '\n', '\0')  -- 打印为 ^@, 同时会造成 filepath parse panic.
-    data[i] = string.gsub(d, '\n', '󰟢')  -- nerdfont null
+    data[i] = string.gsub(d, '\n', '\0')  -- 打印为 ^@
+    -- data[i] = string.gsub(d, '\n', '󰟢')  -- nerdfont null
   end
 
   --- write output to buffer
