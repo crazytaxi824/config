@@ -50,11 +50,13 @@ end
 
 --- 从 str 中获取 filepath or dir, eg: /a/b/c:12:3
 local function filepath_with_lnum_col(str)
+  -- str:gsub(str, '%z', '󰟢')  -- lua 中 %z 表示 Null(\0)
+
   --- split filename:lnum:col
   local splits = vim.split(str, ':', {trimempty=true})
 
   --- 判断所有字符是否都是 file name character. `:help \f`
-  --- 使用 pcall() 防止 str 中含有 \n byte(0) 等 blob chars.
+  --- 使用 pcall() 防止 str 中含有 Null(\0) 等 blob chars.
   local ok, fname = pcall(vim.fn.matchstr, splits[1], '\\f\\+')
   if not ok or splits[1] ~= fname then
     return
