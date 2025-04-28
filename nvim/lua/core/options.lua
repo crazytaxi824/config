@@ -587,8 +587,8 @@ vim.api.nvim_create_autocmd("QuitPre", {
     end
 
     --- last normal window
-    if normal_win_count <= 1 then
-      Notify({" Cannot quit the last window.", " use `:qa`"}, "WARN")
+    if vim.fn.win_gettype(win_id) == '' and normal_win_count <= 1 then
+      Notify({" Cannot quit the last normal window.", " use `:qa`"}, "WARN")
       vim.cmd.split()
       return
     end
