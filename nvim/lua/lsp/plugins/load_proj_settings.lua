@@ -5,6 +5,7 @@
 --    require() - is more complicated; it keeps a table of modules
 --                that have already been loaded and their return results,
 --                to ensure that the same code isn't loaded twice.
+local ms = require('vim.lsp.protocol').Methods
 
 --- 全局变量
 local M = {}
@@ -144,7 +145,7 @@ local function reload_local_settings(old_content, new_content)
 
     --- NOTE: 暴力方案, `:LspRestart` 重启所有 lspconfig.setup() 的 lsp, null-ls 不是由 lspconfig.setup
     -- vim.cmd('LspRestart')
-    c.notify("workspace/didChangeConfiguration", { settings = c.config.settings })
+    c:notify(ms.workspace_didChangeConfiguration , { settings = c.config.settings })
 
     table.insert(update_settings, lsp_name)
   end)

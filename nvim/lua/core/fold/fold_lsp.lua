@@ -2,6 +2,7 @@
 --- https://github.com/kevinhwang91/nvim-ufo
 --- https://github.com/kevinhwang91/nvim-ufo/blob/main/lua/ufo/provider/lsp/nvim.lua
 local expr_ts = require("core.fold.fold_treesitter")
+local ms = require('vim.lsp.protocol').Methods
 
 local M = {}
 
@@ -145,7 +146,7 @@ M.lsp_fold_request = function(bufnr, win_id, opts)
   buf_timer[bufnr] = {}
   buf_timer[bufnr].timer = vim.defer_fn(function()
     local params = {textDocument = vim.lsp.util.make_text_document_params(bufnr)}
-    buf_timer[bufnr].cancel = vim.lsp.buf_request_all(bufnr, 'textDocument/foldingRange', params, function(resp)
+    buf_timer[bufnr].cancel = vim.lsp.buf_request_all(bufnr, ms.textDocument_foldingRange, params, function(resp)
       --- VVI: 获取到 resps 之后再 init cache, 否则可能出现 init cache 之后
       --- buf_request_all() 失败导致 str_cache[bufnr] = {'0', ...} 被全部初始化为 "0".
       if not init_expr_cache(bufnr) then
