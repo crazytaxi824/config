@@ -29,6 +29,7 @@ __Debug_Neovim = {
   lspconfig = false,  -- lspconfig DEBUG, Notify msg.
   luasnip = false,  -- LuaSnip DEBUG, stdpath('log') .. '/luasnip.log' set_loglevel().
   dap_debug = false,  -- `:help dap.set_log_level()`
+  autocmd = false,  -- debug_autocmd.lua
 }
 
 --- 读取设置: ~/.config/nvim/lua/xxx.lua

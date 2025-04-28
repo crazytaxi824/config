@@ -15,7 +15,7 @@ notify.setup({
   stages = "slide",  -- VVI: Animation style, for `set termguicolors`
   background_colour = "#000000",
 
-  top_down = true,  -- true: top-down; false: bottom-up
+  top_down = false,  -- true: top-down; false: bottom-up
 
   on_close = nil,
   on_open = function(win_id)
@@ -30,7 +30,7 @@ notify.setup({
     vim.keymap.set('n', 'q', '<cmd>q<CR>', { buffer=bufnr, desc="close window" })
   end,
 
-  timeout = 5000,     -- Default timeout for notifications
+  timeout = 1000,     -- Default timeout for notifications
   minimum_width = 50, -- Minimum width for notification windows
 
   --- Max number of columns for messages
