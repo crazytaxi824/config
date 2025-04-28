@@ -586,17 +586,23 @@ vim.api.nvim_create_autocmd("QuitPre", {
       end
     end
 
+    --- skip netrw/NvirTree filetype
+    if vim.bo.filetype == "NvimTree" or vim.bo.filetype == "netrw" then
+      return
+    end
+
     --- last normal window
     if vim.fn.win_gettype(win_id) == '' and normal_win_count <= 1 then
       Notify({" Cannot quit the last normal window.", " use `:qa`"}, "WARN")
-      vim.cmd.split()
+      vim.cmd.vsplit()  -- 使用 vsplit 防止 window 高度改变
       return
     end
 
     --- last buflisted window
     if vim.fn.buflisted(params.buf) == 1 and buflisted_win_count <= 1 then
       Notify({" Cannot quit the last buflisted window."}, "WARN")
-      vim.cmd.vsplit()
+      vim.cmd.vsplit()  -- 使用 vsplit 防止 window 高度改变
+      return
     end
   end,
   desc = "Do not quit last (buflisted) window",
