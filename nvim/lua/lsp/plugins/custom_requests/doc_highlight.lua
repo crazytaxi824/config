@@ -90,7 +90,7 @@ local function doc_highlight_handler(results, ctx)
     --- augroup id
     local group_id = vim.api.nvim_create_augroup("my_documentHighlight_CursorMoved_#lsp:"..client_id..'_#buf:'..bufnr, {clear=true})
 
-    vim.api.nvim_create_autocmd({"CursorMoved", "CursorMovedI"}, {
+    vim.api.nvim_create_autocmd({"CursorMoved"}, {
       group = group_id,
       buffer = bufnr,  -- 对指定 buffer 有效
       callback = function(params)
@@ -115,7 +115,7 @@ local function doc_highlight_handler(results, ctx)
       desc = "LSP: documentHighlight CursorMove clear_references",
     })
 
-    vim.api.nvim_create_autocmd({"WinLeave"}, {
+    vim.api.nvim_create_autocmd({"WinLeave", "ModeChanged"}, {
       group = group_id,
       buffer = bufnr,  -- 对指定 buffer 有效
       callback = function(params)
@@ -132,7 +132,7 @@ M.setup = function(client, bufnr)
   local group_id = vim.api.nvim_create_augroup("my_documentHighlight_#lsp:"..client.id..'_#buf:'..bufnr, {clear=true})
 
   --- documentHighlight
-  vim.api.nvim_create_autocmd({"CursorHold", "CursorHoldI"}, {
+  vim.api.nvim_create_autocmd({"CursorHold"}, {
     group = group_id,
     buffer = bufnr,  -- 对指定 buffer 有效
     callback = function(params)
