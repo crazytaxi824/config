@@ -172,7 +172,7 @@ local plugins = {
 
   {
     "L3MON4D3/LuaSnip", -- snippet engine, for "cmp_luasnip", 会创建几个 [Scratch] buffer
-    commit = "c9b9a22",
+    commit = "7351d67",
     --- for placeholder transformation
     --- https://code.visualstudio.com/docs/editor/userdefinedsnippets#_variable-transforms
     build = "make install_jsregexp",
@@ -341,7 +341,7 @@ local plugins = {
   {
     "lewis6991/gitsigns.nvim",
     -- tag = "v1.0.2",
-    commit = "ee28ba3",
+    commit = "1796c7c",
     config = function() require("plugins.settings.git_signs") end,
 
     --- `nvim dir` 启动时直接打开 dir 时可能会造成 gitsigns 报错.
