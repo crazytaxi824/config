@@ -14,6 +14,7 @@ brew "fd"      # rust find
 brew "bat"     # rust cat
 brew "ripgrep" # rust grep, `rg`
 brew "tree"
+brew "htop"  # cui top
 
 # git
 brew "git"
@@ -23,7 +24,7 @@ brew "lazygit"   # git cui 工具, 还有 "gitui"
 
 # terminal
 brew "ranger" # terminal file explorer 文件管理器
-brew "viu"    # terminal 图片显示工具
+#brew "viu"   # terminal 图片显示工具
 #brew "w3m"   # terminal 访问网页工具
 
 # editor
@@ -85,9 +86,10 @@ cask "postman"   # http(s) 测试工具
 
 # 数据库工具
 cask "beekeeper-studio"  # Postgre, Mysql, MariaDB, SQLite, CockroachDB, AWS Redshift, MS SQL server, 开源免费软件.
-cask "tableplus"         # Postgre, Mysql, MariaDB, SQLite, CockroachDB, AWS Redshift, MS SQL server, redis, MongoDB, Oracle, Cassandra, Snowflake, Vertica
-#cask "another-redis-desktop-manager"  # redis GUI client
+cask "redis-insight"  # official redis client
 #cask "pgadmin4"   # Postgre GUI client
+#cask "tableplus"  # Postgre, Mysql, MariaDB, SQLite, CockroachDB, AWS Redshift, MS SQL server, redis, MongoDB, Oracle, Cassandra, Snowflake, Vertica
+#cask "another-redis-desktop-manager"  # redis GUI client
 
 # 笔记工具
 cask "obsidian" # markdown 编辑软件
@@ -115,7 +117,8 @@ cask "telegram" # 加密聊天工具
 #cask "cloudflare-warp"  # VPN 类工具
 #cask "kindle-comic-converter"
 #cask "chatgpt"
-#cask "trader-workstation"  # IBKR TWS
+#cask "claude"
+cask "trader-workstation"  # IBKR TWS
 
 # 浏览器
 cask "google-chrome"
