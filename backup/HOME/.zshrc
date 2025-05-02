@@ -213,12 +213,10 @@ export GO111MODULE=on  # on | off | auto
 # }}}
 
 # --- [ python ] --------------------------------------------------------------- {{{
-# 安装 `$ brew install python@3.12`
-# 从 python3.12 开始必须使用 "venv": virtual environments
-# 创建虚拟环境: `$ python3.12 -m venv /path/to/new/virtual/environment`
-# 进入虚拟环境: `$ source /path/to/new/virtual/environment/bin/activate`
-# 在虚拟环境中安装包: `$ pip install --upgrade pip`, `$ pip install numpy` ...
-export PATH="$HOME/pytools/venv/bin:$PATH"
+# 安装 `$ brew install uv`
+# `uv pip install <pkg>`
+# uv 默认全局虚拟环境是 ~/.venv/, 在没有 source 其他虚拟环境的时候默认使用这个环境.
+export PATH="$HOME/.venv/bin:$PATH"
 
 # }}}
 
