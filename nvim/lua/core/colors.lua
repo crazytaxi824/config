@@ -396,6 +396,7 @@ Highlights = {
   ['@lsp.typemod.variable.readonly'] = { link = "Constant" },
 
   ['@lsp.typemod.function'] = { link = "Function" },
+  ['@lsp.typemod.string.format'] = { link = "Boolean" },  -- fmt "%s" 颜色
 
   --- NOTE: 以下设置是为了配合 lazy load plugins ---------------------------------------------------
   --- 以下颜色为了 lazy load lualine
