@@ -19,7 +19,6 @@ local function py_run(file)
     Notify({
       "need to create python Virtual Environment first:",
       '  `python3.xx -m venv .venv` or `uv venv`',
-      '  `source .venv/bin/activate`',
     })
     return
   end
@@ -27,9 +26,9 @@ local function py_run(file)
   local py_path = vim.fs.joinpath(py_venv, '.venv/bin')
 
   local t = require('utils.my_term.instances').console
-  -- t.cmd = "which python3 && python3 --version && python3 " .. file  -- DEBUG
+  -- t.cmd = "echo $PATH && which python3 && python3 --version && python3 " .. file  -- DEBUG
   t.cmd = "python3 " .. file
-  t.env = { PATH = py_path..":$PATH" }  -- same as 'source .venv/bin/activate'
+  t.env = { PATH = py_path .. ':' .. os.getenv('PATH') }  -- same as 'source .venv/bin/activate'
   t:stop()
   t:run()
 end
