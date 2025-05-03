@@ -730,7 +730,7 @@ alias checkBrewDependency="bash $HOME/.config/.my_shell_functions/brew_dep_check
 ### bat 主题颜色, 'bat --list-themes' 查看 theme 样式.
 # "base16" 使用 0-15 color 兼容性好.
 # "ansi" 只使用 0-7 color, 兼容性最好.
-export BAT_THEME="Visual Studio Dark+"
+export BAT_THEME="Dracula"
 
 ### firefox chrome ssl key 文件保存位置, 用于 wireshark 解密 https tls 数据.
 # wireshark `设置 -> Protocols -> TLS -> (Pre)-Master-Secret log filename` 中
