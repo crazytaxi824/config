@@ -75,6 +75,10 @@ git:
     #autoFetch: true    # 自动执行 git fetch, 可以检查 remote 和 local git 的状态不同.
     #autoRefresh: true  # 自动刷新本地 git 文件状态
 
+    # If not "none", lazygit will automatically forward branches to their upstream after fetching.
+    # Possible values: 'none' | 'onlyMainBranches' | 'allBranches'
+    autoForwardBranches: none
+
 # 刷新状态
 # refresher:
 #   refreshInterval: 10 # 单位(s). 刷新本地 git 文件状态. 可以通过 'git.autoRefresh' 启用/禁用.
