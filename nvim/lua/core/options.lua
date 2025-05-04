@@ -371,6 +371,23 @@ vim.opt.listchars = 'tab:│ ,lead: ,trail:·,extends:→,precedes:←,nbsp:␣'
 -- -- }}}
 vim.opt.fillchars = 'fold: ,diff: ,vert:│,eob:~'
 
+local chars_toggle = false
+vim.api.nvim_create_user_command('ToggleChars', function()
+  if not chars_toggle then
+    vim.opt.listchars:append('eol:󰌑')
+    vim.opt.listchars:append('lead:·')
+    vim.opt.fillchars:append('lastline:@')
+    chars_toggle = true
+    vim.notify("listchars && fillchars: Enabled")
+  else
+    vim.opt.listchars:remove('eol')
+    vim.opt.listchars:remove('lead')
+    vim.opt.fillchars:remove('lastline')
+    chars_toggle = false
+    vim.notify("listchars && fillchars: Disabled")
+  end
+end, {bang=true, bar=true})
+
 --- fold 设置 -------------------------------------------------------------------------------------- {{{
 --- VVI: 不要设置 foldmethod=syntax, 会严重拖慢文件切换速度. eg: jump to definition.
 ---
@@ -557,13 +574,15 @@ vim.api.nvim_create_autocmd("CmdwinEnter", {
 
 --- spell check Command
 vim.opt.spelllang = "en_us,cjk"
-vim.api.nvim_create_user_command('SpellCheckToggle', function()
+vim.api.nvim_create_user_command('ToggleSpellCheck', function()
   local win_id = vim.api.nvim_get_current_win()
   local scope={ scope='local', win=win_id }
   if vim.wo[win_id].spell then
     vim.api.nvim_set_option_value('spell', false, scope)
+    vim.notify("Spell Check: Disabled")
   else
     vim.api.nvim_set_option_value('spell', true, scope)
+    vim.notify("Spell Check: Enabled")
   end
 end, {bang=true, bar=true})
 
