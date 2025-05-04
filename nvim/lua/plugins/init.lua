@@ -226,7 +226,7 @@ local plugins = {
     config = function() require("plugins.settings.formatter_conform") end,
 
     event = "BufWritePre",
-    cmd = {"Format", "FormatEnable", "FormatDisable"}
+    cmd = {"Format", "ToggleAutoFormat"}
   },
 
   --- File explorer --------------------------------------------------------------------------------

@@ -71,9 +71,8 @@ conform.formatters.prettier = function(bufnr)
 end
 
 --- auto format ------------------------------------------------------------------------------------
-local g_id
 local function auto_format()
-  g_id = vim.api.nvim_create_augroup('my_auto_format', {clear=true})
+  local g_id = vim.api.nvim_create_augroup('my_auto_format', {clear=true})
   vim.api.nvim_create_autocmd("BufWritePre", {
     group = g_id,
     pattern = {"*"},
@@ -92,11 +91,14 @@ local function auto_format()
     end,
     desc = "conform: format file while saving",
   })
+  return g_id
 end
+
 --- enable auto_format by default.
-auto_format()
+local autoformat_group_id = auto_format()
 
 --- user command -----------------------------------------------------------------------------------
+--- 手动 format file
 vim.api.nvim_create_user_command("Format", function()
   conform.format({
     timeout_ms = 3000,
@@ -113,25 +115,15 @@ vim.api.nvim_create_user_command("Format", function()
   end)
 end, { bang = true, bar = true })
 
-vim.api.nvim_create_user_command("FormatEnable", function()
-  if g_id then
-    vim.notify("Auto Format already Enabled")
-    return
+vim.api.nvim_create_user_command("ToggleAutoFormat", function()
+  if autoformat_group_id > 0 then
+    vim.api.nvim_del_augroup_by_id(autoformat_group_id)
+    autoformat_group_id = 0
+    vim.notify("Auto Format: Disabled")
+  else
+    auto_format()
+    vim.notify("Auto Format: Enabled")
   end
-
-  auto_format()
-  vim.notify("Auto Format Enabled")
-end, { bang = true, bar = true })
-
-vim.api.nvim_create_user_command("FormatDisable", function()
-  if not g_id then
-    vim.notify("Auto Format already Disabled")
-    return
-  end
-
-  vim.api.nvim_del_augroup_by_id(g_id)
-  g_id = nil
-  vim.notify("Auto Format Disabled")
 end, { bang = true, bar = true })
 
 
