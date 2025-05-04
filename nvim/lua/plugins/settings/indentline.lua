@@ -21,7 +21,7 @@ vim.api.nvim_set_hl(0, 'RainbowCyan',   {ctermfg=Colors.cyan.c, fg=Colors.cyan.g
 --- set list & set listchars, NOTE: 在 settings.lua 中设置.
 --vim.opt.list = true
 --vim.opt.listchars:append("space:⋅")
---vim.opt.listchars:append("eol:↴")
+--vim.opt.listchars:append("eol:󱞣")
 
 --- `:help indent-blankline` -----------------------------------------------------------------------
 indent_blankline.setup({

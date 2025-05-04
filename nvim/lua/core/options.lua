@@ -314,16 +314,21 @@ vim.opt.ttimeout = false  -- <ESC> (\x1b) 组合键是否开启.
                           -- ttimeoutlen=0 的情况下, 模式转换时肯定会经过 normal. 因为按下 <ESC> 时马上就会转成 normal 模式.
 
 --- 功能设置 ---------------------------------------------------------------------------------------
-vim.opt.backspace = 'indent,eol,start'  -- 设置 backspace 模式.
+vim.opt.backspace = {'indent', 'eol', 'start'}  -- 设置 backspace 模式.
 vim.opt.history = 10000    -- command 保存的数量，默认(10000)
 vim.opt.autoindent = true  -- 继承前一行的缩进方式，适用于多行注释
 vim.opt.autowrite = true   -- 可以自动保存 buffer，例如在 buffer 切换的时候.
 vim.opt.updatetime = 600   -- faster completion (4000ms default)
-vim.opt.wildmenu = true    -- Command 模式下 <Tab> completion. `:help wildmenu` - enhanced mode of command-line completion.
-vim.opt.wildmode = "full"  -- Complete the next full match.
-vim.opt.wildoptions = ""   -- default "pum,tagfile", pum - popupmenu | tagfile - <C-d> list matches
-vim.opt.wildignorecase = true  -- command 自动补全时忽略大小写.
 vim.opt.hidden = true      -- VVI: 很多插件需要用到 hidden buffer. When 'false' a buffer is unloaded when it is abandoned.
+
+-- vim.opt.wildmenu = true    -- Command 模式下 <Tab> completion. `:help wildmenu` - enhanced mode of command-line completion.
+-- vim.opt.wildmode = "full"  -- Complete the next full match.
+vim.opt.wildoptions = { "fuzzy" }  -- default "pum,tagfile", pum - popupmenu | tagfile - <C-d> list matches
+vim.opt.wildignorecase = true  -- command 自动补全时忽略大小写.
+
+--- Donot add end of line char (\n) when save file.
+vim.opt.endofline = false
+vim.opt.fixendofline = false
 
 --- markdown 文件自动执行 SpellCheck 命令
 --vim.cmd [[au Filetype pandoc,markdown setlocal spell spelllang=en,cjk]]
@@ -353,13 +358,14 @@ vim.api.nvim_create_autocmd('WinEnter', {
 })
 
 --- 换行符, space, tab, cr ... 显示设置. `:help listchars` ----------------------------------------- {{{
----   eol:↴ - 换行
----   lead/trail - 行首(尾)的空格
+---   eol:󱞣 - 󰌑 󱞥 󱞣 换行
+---   space - 所有空格
+---   lead/trail - 行首(尾)的空格, Overrides 'space' & 'multispace' settings.
 ---   precedes/extends - 不换行(:set nowrap)的情况下, 内容长度超出屏幕的行会有该标记
 ---   nbsp - non-breakable space (0xA0, byte(160)), normal space (0x20, byte(32))
 -- -- }}}
 vim.opt.list = true
-vim.opt.listchars = 'tab:│ ,lead: ,trail:·,extends:→,precedes:←,nbsp:␣'
+vim.opt.listchars = { tab='│ ', trail='·', extends='→', precedes='←', nbsp='␣' }
 
 --- 填充符, `:help fillchars` ---------------------------------------------------------------------- {{{
 ---   diff  - vimdiff 中被删除的行的填充字符.
@@ -369,21 +375,21 @@ vim.opt.listchars = 'tab:│ ,lead: ,trail:·,extends:→,precedes:←,nbsp:␣'
 ---   stlnc - non-current window 的 statusline 中间的填充字符.
 ---   eob   - 文件最后一行之后, 空白行的行号.
 -- -- }}}
-vim.opt.fillchars = 'fold: ,diff: ,vert:│,eob:~'
+vim.opt.fillchars = { fold=' ', diff=' ', vert='│', eob='~' }
 
-local chars_toggle = false
 vim.api.nvim_create_user_command('ToggleChars', function()
-  if not chars_toggle then
-    vim.opt.listchars:append('eol:󰌑')
-    vim.opt.listchars:append('lead:·')
+  local lcs = vim.opt_local.listchars:get()
+  if not lcs['space'] then
+    vim.opt.listchars:append('tab:│->')  -- :append() 可以单独设置内部元素
+    vim.opt.listchars:append('space:·')
+    vim.opt.listchars:append('eol:󱞣')
     vim.opt.fillchars:append('lastline:@')
-    chars_toggle = true
     vim.notify("listchars && fillchars: Enabled")
   else
+    vim.opt.listchars:append('tab:│ ')  -- :append() 可以单独设置内部元素
+    vim.opt.listchars:remove('space')
     vim.opt.listchars:remove('eol')
-    vim.opt.listchars:remove('lead')
     vim.opt.fillchars:remove('lastline')
-    chars_toggle = false
     vim.notify("listchars && fillchars: Disabled")
   end
 end, {bang=true, bar=true})
@@ -457,7 +463,7 @@ vim.opt.relativenumber = true  -- 显示相对行号
 --vim.opt.numberwidth = 4  -- 默认行号占 4 列
 
 vim.opt.cursorline = true    -- 显示当前行. hi CursorLine, CursorLineNr
-vim.opt.cursorlineopt = "number,screenline"  -- screenline 和 line 的区别在于 `set wrap` 情况下 cursorline 显示.
+vim.opt.cursorlineopt = { "number", "screenline" }  -- screenline 和 line 的区别在于 `set wrap` 情况下 cursorline 显示.
 --vim.opt.cursorcolumn = true       -- 突出显示当前列. 包括: 背景色...
 
 vim.opt.colorcolumn = '+1'  -- highlight column after 'textwidth'
@@ -573,7 +579,7 @@ vim.api.nvim_create_autocmd("CmdwinEnter", {
 })
 
 --- spell check Command
-vim.opt.spelllang = "en_us,cjk"
+vim.opt.spelllang = { "en_us", "cjk" }
 vim.api.nvim_create_user_command('ToggleSpellCheck', function()
   local win_id = vim.api.nvim_get_current_win()
   local scope={ scope='local', win=win_id }

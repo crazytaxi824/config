@@ -103,10 +103,6 @@ M.console_exec = function(term_obj, term_win_id)
     vim.api.nvim_set_option_value('wrap', true, { scope='local', win=term_win_id })
     vim.api.nvim_set_option_value('relativenumber', false, { scope='local', win=term_win_id })
     vim.api.nvim_set_option_value('signcolumn', 'no', { scope='local', win=term_win_id })
-
-    --- listchars 添加空格标记
-    local listchars = vim.wo[term_win_id].listchars .. ',space:·'
-    vim.api.nvim_set_option_value('listchars', listchars, { scope='local', win=term_win_id })
   end)
 
   --- print cmd
