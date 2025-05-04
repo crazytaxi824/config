@@ -6,11 +6,9 @@ else
   vim.lsp.set_log_level("OFF")
 end
 
-vim.api.nvim_create_user_command("LspSetLogLevel", function(params)
-  vim.lsp.set_log_level(params.args)
-end, {bang=true, nargs=1})
-
 --- NOTE: `:help lsp-events` 可以使用 lsp 专用 autocmd events.
+--- LspAttach
+--- LspDetach
 
 
 
