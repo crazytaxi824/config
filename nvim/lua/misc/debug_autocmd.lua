@@ -157,7 +157,7 @@ end
 
 --- `:AutocmdDebug all`, `:AutocmdDebug off`
 --- `:AutocmdDebug buf`, `:AutocmdDebug buf win lsp`, ...
-vim.api.nvim_create_user_command("AutocmdDebug", function(params)
+vim.api.nvim_create_user_command("DebugAutocmd", function(params)
   --- params.args: string
   --- params.fargs: list
   debug_autocmd(params)
