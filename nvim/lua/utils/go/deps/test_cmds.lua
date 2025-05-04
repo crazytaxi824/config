@@ -114,7 +114,8 @@ end
 ---   on_exit = function(term, job_id, exit_code, event)
 --- }
 M.my_term_opts = function(opts)
-  local go_test = {'go', 'test', '-v'}
+  --- '-count=1' disable go test cache result.
+  local go_test = {'go', 'test', '-count=1', '-v'}
 
   --- 'cpu', 'mem', 'mutex', 'block', 'trace'
   if vim.tbl_contains(pprof_choices, opts.flag) then
