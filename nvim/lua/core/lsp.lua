@@ -6,9 +6,5 @@ else
   vim.lsp.set_log_level("OFF")
 end
 
---- NOTE: `:help lsp-events` 可以使用 lsp 专用 autocmd events.
---- LspAttach
---- LspDetach
-
 
 
