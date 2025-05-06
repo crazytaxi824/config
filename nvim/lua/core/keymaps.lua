@@ -230,19 +230,12 @@ local keymaps = {
   {'i', '<S-M-W>', function() key_fn.move_char.move_next_char('E') end, opt, 'move next char to end of word' },
 
   --- TEST: alacritty settings window.option_as_alt 设置 Option 当做 ALT key 使用.
-  -- {'n', '<M-a>', function() print("<M-a>") end, opt, 'Test: Option/ALT key'},
-  -- {'n', '<D-a>', function() print("<D-a>") end, opt, 'Test: Command key'},
-  -- {'n', '<S-CR>', function() print("<S-CR>") end, opt, 'Test: Shift-Enter'},
-  -- {'n', '<C-CR>', function() print("<C-CR>") end, opt, 'Test: Control-Enter'},
-  -- {'n', '<M-CR>', function() print("<M-CR>") end, opt, 'Test: Option/Alt-Enter'},
-  -- {'n', '<D-CR>', function() print("<D-CR>") end, opt, 'Test: Command/Super key'},
-
   -- {'n', '<S-C-CR>', function() print("<S-C-CR>") end, opt, 'Test: Shift-Contrl-Enter'},
   -- {'n', '<S-M-CR>', function() print("<S-M-CR>") end, opt, 'Test: Shift-Opt/Alt-Enter'},
   -- {'n', '<S-D-CR>', function() print("<S-D-CR>") end, opt, 'Test: Shift-Cmd/Super-Enter'},
-  -- {'n', '<C-D-CR>', function() print("<C-D-CR>") end, opt, 'Test: Ctrl-Cmd/Super-Enter'},
   -- {'n', '<C-M-CR>', function() print("<C-M-CR>") end, opt, 'Test: Ctrl-Cmd/Super-Enter'},
   -- {'n', '<D-M-CR>', function() print("<D-M-CR>") end, opt, 'Test: Ctrl-Cmd/Super-Enter'},
+  -- {'n', '<C-D-CR>', function() print("<C-D-CR>") end, opt, 'Test: Ctrl-Cmd/Super-Enter'},
 
   --- VVI: <Nop> do nothing ------------------------------------------------------------------------
   --- <Ctrl-Z> 是危险操作. 意思是 :stop. Suspend vim, 退出到 terminal 界面, 但保留 job.
