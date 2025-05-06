@@ -41,7 +41,7 @@ local plugins = {
 
   {
     "williamboman/mason.nvim",
-    tag = "v1.11.0",
+    tag = "v2.0.0",
     -- build = ":MasonUpdate", -- :MasonUpdate updates All Registries, NOT packages.
     config = function() require("plugins.settings.mason_tool_installer") end,
 
