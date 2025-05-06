@@ -93,7 +93,7 @@ M.on_init = function(client, result)
   -- client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
 
   --- DEBUG: 用
-  if __Debug_Neovim.lspconfig then
+  if __Debug_Neovim.lsp then
     Notify("LSP Server init: " .. client.name, "DEBUG", {title="LSP"})
   end
 
@@ -116,7 +116,7 @@ M.on_attach = function(client, bufnr)
   lsp_keymaps.diagnostic_keymaps(bufnr)
 
   --- DEBUG: 用
-  if __Debug_Neovim.lspconfig then
+  if __Debug_Neovim.lsp then
     Notify("LSP Server attach: " .. client.name .. " - bufnr(" .. bufnr .. ")", "DEBUG", {title="LSP"})
   end
 end

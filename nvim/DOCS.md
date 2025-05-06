@@ -543,7 +543,7 @@ fs_stat() 返回的 'type' 属性可以判断 'file' | 'directory', 但是不能
 
 # FIXME
 
-## which-key 有时候报错.
+## which-key 有时候报错:
 
 - ERROR Failed to run healthcheck for "which-key" plugin. Exception:
   function health#check, line 25
@@ -563,16 +563,18 @@ stack traceback:
         ...al/share/nvim/lazy/which-key.nvim/lua/which-key/init.lua:49: in function 'show'
         [string ":lua"]:1: in main chunk
 
-## https://github.com/golang/go/issues/50750, gopls, workspace `go.work` lsp.log 中报错:
+## gopls, workspace `go.work` lsp.log 中报错:
 
-- stderr: go: finding module for package github.com/my/foo\nbar/src imports\n\tgithub.com/my/foo: cannot find module providing package github.com/my/foo: module lookup disabled by GOPROXY=off\n\n"
-
-## LspRestart -> :bdelete -> error
-
-- https://github.com/neovim/neovim/issues/28987
+https://github.com/golang/go/issues/50750
+stderr: go: finding module for package github.com/my/foo\nbar/src imports\n\tgithub.com/my/foo: cannot find module providing package github.com/my/foo: module lookup disabled by GOPROXY=off\n\n"
 
 ## lsp Error
 
-https://github.com/neovim/neovim/issues/28058, planned to be fixed at neovim v0.11.1
+https://github.com/neovim/neovim/issues/28058, planned to be fixed at neovim v0.11.2
 
-<br />
+## neovim Freeze
+
+https://github.com/neovim/neovim/issues/33599
+
+
+
