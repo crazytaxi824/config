@@ -3,46 +3,6 @@ if not status_ok then
   return
 end
 
---- change preset desc, https://github.com/folke/which-key.nvim/blob/main/lua/which-key/plugins/presets.lua
-local wp_ok, wp = pcall(require, "which-key.plugins.presets")
-if wp_ok then
-  wp.motions = {
-    mode = { "o", "x", "n" },
-    preset = true,
-    -- { "h", desc = "Motion C: Left" },
-    -- { "j", desc = "Motion C: Down" },
-    -- { "k", desc = "Motion C: Up" },
-    -- { "l", desc = "Motion C: Right" },
-
-    { "0", desc = "Motion L1: Start of line" },
-    { "^", desc = "Motion L1: Start of line (non ws)" },
-    { "$", desc = "Motion L2: End of line" },
-    { "{", desc = "Motion L3: Prev empty line" },
-    { "}", desc = "Motion L3: Next empty line" },
-
-    { "b", desc = "Motion W1: Prev word" },
-    { "B", desc = "Motion W1: Prev WORD" },
-    { "e", desc = "Motion W2: Next end of word" },
-    { "E", desc = "Motion W2: Next end of WORD" },
-    { "w", desc = "Motion W3: Next word" },
-    { "W", desc = "Motion W3: Next WORD" },
-
-    { "t", desc = "Motion: Move before next char" },
-    { "T", desc = "Motion: Move before prev char" },
-    { "F", desc = "Motion: Move to prev char" },
-    { "f", desc = "Motion: Move to next char" },
-    { ";", desc = "Motion: ftFT Repeat" },
-    { ",", desc = "Motion: ftFT Reverse-Repeat" },
-    { "/", desc = "Motion: Search forward" },
-    { "?", desc = "Motion: Search backward" },
-    { "%", desc = "Motion: Matching (){}[]" },
-
-    { "ge", desc = "motion W: Prev end of word" },
-    -- { "gg", desc = "motion Ln: First line" },
-    -- { "G", desc = "Motion Ln: Last line" },
-  }
-end
-
 --- fn key icons ----------------------------------------------------------------------------------- {{{
 local fn_key_icons = {
   F1  = "F1",
@@ -139,12 +99,13 @@ which_key.setup({
   },
 
   --- `:help which-key.nvim-which-key-triggers`
-  -- triggers = {
-  --   { "<auto>", mode = "nxso" },
-  --   { "<auto>", mode = "nixsotc" },
-  --   { "a", mode = { "n", "v" } },
-  --   { "<leader>", mode = { "n", "v" } },
-  -- },
+  --- `:help operator`
+  --- `:help map-table`
+  triggers = {
+    -- { "<auto>", mode = "nixsotc" },  -- default
+    { "<auto>", mode = "niso" },
+    { "<leader>", mode = { "n", "v" } },
+  },
 
   icons = {
     mappings = false,  -- NOTE: not use "echasnovski/mini.icons" & "nvim-tree/nvim-web-devicons"
