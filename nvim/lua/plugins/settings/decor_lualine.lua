@@ -43,7 +43,7 @@ local my_theme = {
   },
   visual = {
     a = { fg = lualine_colors.black, bg = lualine_colors.orange, gui = 'bold' },
-    b = { fg = lualine_colors.black, bg = lualine_colors.orange },
+    b = { fg = lualine_colors.black, bg = 202 },
     c = { fg = lualine_colors.white, bg = 52 },
   },
   command = {

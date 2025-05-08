@@ -306,7 +306,7 @@ vim.opt.timeout = true    -- 组合键延迟开启.
 vim.opt.timeoutlen = 600  -- 组合键延迟时间, 默认1000ms. eg: <leader>w, <C-W><C-O>...
 
 vim.opt.ttimeout = false  -- <ESC> (\x1b) 组合键是否开启.
---vim.opt.ttimeoutlen = 0   -- <ESC> 延迟时间, 默认 50ms.  <ESC> 的主要作用是切换模式.
+vim.opt.ttimeoutlen = 50  -- <ESC> 延迟时间, 默认 50ms.  <ESC> 的主要作用是切换模式.
                           -- <ESC> 是发送 ^[ 相当于是 <C-[> 组合键.
                           -- ttimeoutlen>0 的情况下, 其他模式转成 normal 模式需要 <ESC><ESC> 两次, 或者等待延迟结束;
                           -- ttimeoutlen=0 的情况下, 其他模式转成 normal 模式只需要 <ESC> 一次.
