@@ -110,7 +110,8 @@ Highlights = {
   --- 注释颜色
   Comment = {ctermfg=65, fg='#6A9955'},
   --- 影响 listchars indentLine 颜色
-  NonText = {ctermfg=Colors.g238.c, fg=Colors.g238.g},
+  NonText = {ctermfg=Colors.g238.c, fg=Colors.g238.g},  -- "eol", "extends", "precedes"
+  SpecialKey = { link = "NonText" },  -- "nbsp", "tab" and "trail"
   --- window 之间的分隔线颜色
   WinSeparator = {ctermfg=Colors.g236.c, fg=Colors.g236.g},
   VertSplit = {link = 'WinSeparator'},

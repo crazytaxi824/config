@@ -375,21 +375,19 @@ vim.opt.listchars = { tab='│ ', trail='·', extends='→', precedes='←', nbs
 ---   stlnc - non-current window 的 statusline 中间的填充字符.
 ---   eob   - 文件最后一行之后, 空白行的行号.
 -- -- }}}
-vim.opt.fillchars = { fold=' ', diff=' ', vert='│', eob='~' }
+vim.opt.fillchars = { fold=' ', diff=' ', vert='│', eob='~', lastline='@' }
 
 vim.api.nvim_create_user_command('ToggleChars', function()
   local lcs = vim.opt_local.listchars:get()
   if not lcs['space'] then
     vim.opt.listchars:append('tab:│->')  -- :append() 可以单独设置内部元素
-    vim.opt.listchars:append('space:·')
+    vim.opt.listchars:append('lead:·')
     vim.opt.listchars:append('eol:󱞣')
-    vim.opt.fillchars:append('lastline:@')
     vim.notify("listchars && fillchars: Enabled")
   else
     vim.opt.listchars:append('tab:│ ')  -- :append() 可以单独设置内部元素
-    vim.opt.listchars:remove('space')
+    vim.opt.listchars:remove('lead')
     vim.opt.listchars:remove('eol')
-    vim.opt.fillchars:remove('lastline')
     vim.notify("listchars && fillchars: Disabled")
   end
 end, {bang=true, bar=true})
