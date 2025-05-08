@@ -178,25 +178,25 @@ mods = "Option"
 # key = "Down"
 # mods = "Option"
 
-# Command-Left -> Home - 替代 <fn - Left>
+# Command-Left -> <Home> - 替代 <fn - Left>
 [[keyboard.bindings]]
 chars = "\u001BOH"
 key = "Left"
 mods = "Command"
 
-# Command-Right -> End - 替代 <fn - Right>
+# Command-Right -> <End> - 替代 <fn - Right>
 [[keyboard.bindings]]
 chars = "\u001BOF"
 key = "Right"
 mods = "Command"
 
-# Command-Up -> PageUp - 替代 <fn - Up>
+# Command-Up -> <PageUp> - 替代 <fn - Up>
 [[keyboard.bindings]]
 chars = "\u001B[5~"
 key = "Up"
 mods = "Command"
 
-# Command-Down -> PageDown - 替代 <fn - Down>
+# Command-Down -> <PageDown> - 替代 <fn - Down>
 [[keyboard.bindings]]
 chars = "\u001B[6~"
 key = "Down"
