@@ -628,6 +628,9 @@ function backupConfigFiles() {
 		cp $HOME/.gitmessage $backup_folder/HOME/
 		cp $HOME/.gitignore_global $backup_folder/HOME/
 
+		# vimrc
+		cp $HOME/.vimrc $backup_folder/HOME/
+
 		# tmux
 		cp $HOME/.tmux.conf $backup_folder/HOME/
 
