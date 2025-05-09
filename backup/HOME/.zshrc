@@ -191,7 +191,7 @@ export HOMEBREW_BUNDLE_FILE=$HOME/.config/Brewfile  # 默认在 ~/.Brewfile
 # --- [ Tools PATH ] ------------------------------------------------------------------------------- {{{
 # --- [ neovim Mason tools ] ---
 # mason tool path = `vim.fn.stdpath("data") .. "/mason_tools"`
-#export PATH=$PATH:$HOME/.local/share/nvim/mason_tools/bin
+export PATH=$PATH:$HOME/.local/share/nvim/mason_tools/bin
 
 # --- [ golang ] --------------------------------------------------------------- {{{
 ### `go env` 查看

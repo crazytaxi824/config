@@ -95,10 +95,6 @@ hi Search ctermfg=233 ctermbg=220
 hi IncSearch cterm=bold ctermfg=233 ctermbg=213
 hi! link CurSearch IncSearch
 
-""" tabline 顶部显示文件名
-hi clear TabLineFill
-hi TabLineSel ctermfg=78 ctermbg=233
-
 """ fold
 hi clear Folded
 hi Folded ctermfg=67
@@ -139,11 +135,20 @@ hi! link PreProc Boolean
 
 hi Comment ctermfg=65
 
+""" statusline 底部显示 mode() 和文件信息
 hi StatusLine ctermbg=233 ctermfg=233
 hi StatusLineNC ctermbg=233 ctermfg=233
 hi StatusLineTerm ctermbg=233 ctermfg=233
 hi StatusLineTermNC ctermbg=233 ctermfg=233
 
+""" tabline 顶部显示文件名
+hi clear TabLineFill
+hi TabLineSel ctermfg=78 ctermbg=233
+hi clear TabLine
+hi TabLine ctermfg=246 ctermbg=236
+
 """ plugins ----------------------------------------------------------------------------------------
 source ~/.vim/statueline.vim
 source ~/.vim/keymaps.vim
+source ~/.vim/tabline.vim
+source ~/.vim/format.vim
