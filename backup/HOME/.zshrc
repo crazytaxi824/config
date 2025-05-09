@@ -630,6 +630,7 @@ function backupConfigFiles() {
 
 		# vimrc
 		cp $HOME/.vimrc $backup_folder/HOME/
+		cp -r $HOME/.vim $backup_folder/HOME/
 
 		# tmux
 		cp $HOME/.tmux.conf $backup_folder/HOME/
