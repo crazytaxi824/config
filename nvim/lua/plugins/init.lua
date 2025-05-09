@@ -341,8 +341,9 @@ local plugins = {
   {
     "lewis6991/gitsigns.nvim",
     -- tag = "v1.0.2",
-    commit = "5624b5e",
+    commit = "43b0c85",
     config = function() require("plugins.settings.git_signs") end,
+    dependencies = { "folke/trouble.nvim" },
 
     --- `nvim dir` 启动时直接打开 dir 时可能会造成 gitsigns 报错.
     --- 根据测试情况选择 VeryLazy 或者 BufReadPre, BufNewFile ...
