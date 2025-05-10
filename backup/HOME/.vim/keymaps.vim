@@ -26,6 +26,9 @@ nnoremap ZQ <Nop>
 nnoremap <F1> <Nop>
 inoremap <F1> <Nop>
 
+""" 清除系统自动为 netrw 加载的 <buffer> keymaps
+au FileType netrw mapclear <buffer>
+
 """ 进入文件夹
 nnoremap <leader><CR> <cmd>execute("edit" .. fnamemodify(bufname(), ':p:h')) <CR>
 nnoremap <leader>; <cmd>e .<CR>
@@ -108,6 +111,37 @@ def s:MyHome()
 enddef
 
 nnoremap <HOME> <cmd>call <SID>MyHome()<CR>
+
+""" -, = switch buffer -----------------------------------------------------------------------------
+def s:MyPrevBuffer()
+	var bn = filter(range(1, bufnr('$')), (_, val) => buflisted(val))
+	var bufferNums = filter(bn, (_, val) => isdirectory(bufname(val)) == 0)  # do not include netrw dir
+	var i = index(bufferNums, bufnr('%'))
+
+	if i < 1
+		execute('buffer ' .. bufferNums[0])
+	else
+		execute('buffer ' .. bufferNums[i - 1])
+	endif
+enddef
+
+def s:MyNextBuffer()
+	var bn = filter(range(1, bufnr('$')), (_, val) => buflisted(val))
+	var bufferNums = filter(bn, (_, val) => isdirectory(bufname(val)) == 0)  # do not include netrw dir
+	var i = index(bufferNums, bufnr('%'))
+	var l = len(bufferNums)
+
+	if i < 0
+		execute('buffer ' .. bufferNums[0])
+	elseif i >= l - 1
+		execute('buffer ' .. bufferNums[l - 1])
+	else
+		execute('buffer ' .. bufferNums[i + 1])
+	endif
+enddef
+
+nnoremap - <cmd>call <SID>MyPrevBuffer()<CR>
+nnoremap = <cmd>call <SID>MyNextBuffer()<CR>
 
 
 
