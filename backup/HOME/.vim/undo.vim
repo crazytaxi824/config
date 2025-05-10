@@ -1,19 +1,31 @@
 vim9script
 
+set nobackup
+set nowritebackup
+
+set swapfile
+set dir=~/.vim/swap,.
+
+set undofile
+set undolevels=1000
+set undodir=/tmp/vim/undo
+
 def MyCreateUndoDir()
-	const undodir = '/tmp/vim/undo'
-	if isdirectory(undodir) == 0
-		const rs = systemlist('mkdir -p /tmp/vim/undo')
-		if v:shell_error == 0
-			echom " /tmp/vim/undo/ dir is created"
-		else
-			echohl WarningMsg
-			for l in rs
-				echom l
-			endfor
-			echohl None
+	const dirs = ['/tmp/vim/undo', expand('~/.vim/swap')]
+	for dir in dirs
+		if isdirectory(dir) == 0
+			const rs = systemlist('mkdir -p ' .. dir)
+			if v:shell_error == 0
+				echom dir .. " dir is created"
+			else
+				echohl WarningMsg
+				for l in rs
+					echom l
+				endfor
+				echohl None
+			endif
 		endif
-	endif
+	endfor
 enddef
 
 augroup MyUndoGroup

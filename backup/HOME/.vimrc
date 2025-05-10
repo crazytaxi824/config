@@ -41,16 +41,6 @@ set scrolloff=4
 set sidescrolloff=6
 set display=lastline
 
-""" backup & swap & undo
-set nobackup
-set nowritebackup
-
-"set swapfile
-
-set undofile
-"set undolevels=1000
-set undodir=/tmp/vim/undo
-
 """ listchars & fillchars
 set list
 "set listchars=tab:│->,trail:·,extends:→,precedes:←,nbsp:␣,eol:󱞣
