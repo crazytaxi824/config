@@ -162,8 +162,8 @@ Highlights = {
   },
   --- echohl WarningMsg | echo "Don't panic!" | echohl None 颜色
   WarningMsg = {
-    ctermfg=Colors.black.c,  fg=Colors.black.g,
-    ctermbg=Colors.orange.c, bg=Colors.orange.g,
+    -- ctermfg=Colors.black.c,  fg=Colors.black.g,
+    ctermfg=Colors.orange.c, fg=Colors.orange.g,
   },
 
   --- TODO 颜色
