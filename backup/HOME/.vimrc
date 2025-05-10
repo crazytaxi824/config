@@ -1,3 +1,5 @@
+""" NOTE: this is VIM9 settings
+
 """ cursor shape `:help terminal-output-codes`
 "   - 0, 1 or none    blinking block cursor
 "   - 2               block cursor
