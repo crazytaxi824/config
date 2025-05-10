@@ -11,6 +11,21 @@ xnoremap D "_x
 
 vnoremap <leader>y "*y
 
+nnoremap s <Nop>
+inoremap s <Nop>
+vnoremap s <Nop>
+
+""" <Ctrl-Z> 是危险操作. 意思是 :stop. Suspend vim, 退出到 terminal 界面, 但保留 job.
+""" 需要使用 `jobs -l` 列出 Suspended 列表, 使用 `fg %1` 恢复 job, 或者 `kill %1` (不推荐, 会留下 .swp 文件)
+nnoremap <C-z> <Nop>
+vnoremap <C-z> <Nop>
+
+nnoremap ZZ <Nop>
+nnoremap ZQ <Nop>
+
+nnoremap <F1> <Nop>
+inoremap <F1> <Nop>
+
 """ 进入文件夹
 nnoremap <leader><CR> <cmd>execute("edit" .. fnamemodify(bufname(), ':p:h')) <CR>
 nnoremap <leader>; <cmd>e .<CR>
