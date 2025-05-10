@@ -2,13 +2,14 @@ vim9script
 
 set nobackup
 set nowritebackup
+#set backupdir=/tmp/vim,.
 
 set swapfile
 set dir=~/.vim/swap,.
 
 set undofile
 set undolevels=1000
-set undodir=/tmp/vim/undo
+set undodir=/tmp/vim/undo,.
 
 def MyCreateUndoDir()
 	const dirs = ['/tmp/vim/undo', expand('~/.vim/swap')]
