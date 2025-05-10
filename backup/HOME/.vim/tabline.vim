@@ -1,5 +1,11 @@
 vim9script
 
+hi clear TabLineFill
+hi TabLineSel ctermfg=78 ctermbg=233
+hi clear TabLine
+hi TabLine ctermfg=246 ctermbg=236
+
+# 自定义 highlight
 hi Selected cterm=bold ctermbg=233 ctermfg=78
 hi SelectedReadOnly cterm=bold ctermbg=233 ctermfg=208
 hi SelectedModified cterm=bold ctermbg=233 ctermfg=81

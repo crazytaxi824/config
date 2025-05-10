@@ -1,5 +1,12 @@
 vim9script
 
+# statusline 底部显示 mode() 和文件信息
+hi StatusLine ctermbg=233 ctermfg=233
+hi StatusLineNC ctermbg=233 ctermfg=233
+hi StatusLineTerm ctermbg=233 ctermfg=233
+hi StatusLineTermNC ctermbg=233 ctermfg=233
+
+# 自定义 highlight
 hi myInsertMode ctermbg=81  ctermfg=233 cterm=bold
 hi myNormalMode ctermbg=220 ctermfg=233 cterm=bold
 hi myReplaceMode ctermbg=124 ctermfg=251 cterm=bold
