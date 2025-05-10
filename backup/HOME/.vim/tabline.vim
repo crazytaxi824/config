@@ -17,18 +17,15 @@ hi NotSelectedModified ctermbg=236 ctermfg=68
 hi NotSelectedReadOnlyModified cterm=bold ctermbg=167 ctermfg=233
 
 def g:MyTabLine(): string
+	var bn = filter(range(1, bufnr('$')), (_, val) => buflisted(val))
+	var bufferNums = filter(bn, (_, val) => isdirectory(bufname(val)) == 0)  # do not include netrw dir
+	#var bufferNums = filter(range(1, bufnr('$')), 'bufexists(v:val)')  # Debug
+	
 	var s = ''
-	var bufferNums = filter(range(1, bufnr('$')), 'buflisted(v:val)')
-	#var bufferNums = filter(range(1, bufnr('$')), 'bufexists(v:val)')
 	for i in bufferNums
 		var name = bufname(i)
 		if name == ''
 			name = '[No Name]'
-		endif
-
-		# do not include netrw dir
-		if isdirectory(name) == 1
-			continue
 		endif
 
 		if i == bufnr('%')
