@@ -46,7 +46,7 @@ set display=lastline
 """ listchars & fillchars
 set list
 "set listchars=tab:│->,trail:·,extends:→,precedes:←,nbsp:␣,eol:󱞣
-set listchars=tab:\ \ ,lead:·,trail:·,extends:→,precedes:←,nbsp:␣
+set listchars=tab:│\ ,lead:\ ,trail:·,extends:→,precedes:←,nbsp:␣
 set fillchars=vert:│,fold:\ ,diff:\ ,eob:~,lastline:@
 
 set hlsearch

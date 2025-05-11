@@ -64,8 +64,8 @@ inoremap <F1> <Nop>
 
 """ 替换系统自动为 netrw 加载的 <buffer> keymaps
 au FileType netrw nnoremap <buffer> - <Nop>
-au FileType netrw nmap <buffer> <S-Up> <cmd>call <SID>MyShiftUp()<CR>
-au FileType netrw nmap <buffer> <S-Down> <cmd>call <SID>MyShiftDown()<CR>
+au FileType netrw nnoremap <buffer> <S-Up> <cmd>call <SID>MyShiftUp()<CR>
+au FileType netrw nnoremap <buffer> <S-Down> <cmd>call <SID>MyShiftDown()<CR>
 
 """ custome keymap function ------------------------------------------------------------------------
 """ gk, gj 可以在 wrap 行内移动
@@ -101,7 +101,11 @@ def s:MyShiftDown()
 enddef
 
 nnoremap <S-Up> <cmd>call <SID>MyShiftUp()<CR>
+inoremap <S-Up> <cmd>call <SID>MyShiftUp()<CR>
+vnoremap <S-Up> <cmd>call <SID>MyShiftUp()<CR>
 nnoremap <S-Down> <cmd>call <SID>MyShiftDown()<CR>
+inoremap <S-Down> <cmd>call <SID>MyShiftDown()<CR>
+vnoremap <S-Down> <cmd>call <SID>MyShiftDown()<CR>
 
 """ HOME
 def s:MyHome()
