@@ -379,7 +379,7 @@ vim.opt.fillchars = { fold=' ', diff=' ', vert='│', eob='~', lastline='@' }
 
 vim.api.nvim_create_user_command('ToggleChars', function()
   local lcs = vim.opt_local.listchars:get()
-  if not lcs['space'] then
+  if not lcs['lead'] then
     vim.opt.listchars:append('tab:│->')  -- :append() 可以单独设置内部元素
     vim.opt.listchars:append('lead:·')
     vim.opt.listchars:append('eol:󱞣')
