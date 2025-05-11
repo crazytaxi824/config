@@ -45,10 +45,21 @@ set display=lastline
 
 """ listchars & fillchars
 set list
-"set listchars=tab:│->,trail:·,extends:→,precedes:←,nbsp:␣,eol:󱞣
-set listchars=tab:│\ ,lead:\ ,trail:·,extends:→,precedes:←,nbsp:␣
+set listchars=tab:│\ ,trail:·,extends:→,precedes:←,nbsp:␣
 set fillchars=vert:│,fold:\ ,diff:\ ,eob:~,lastline:@
 
+def s:MyToggleChars()
+	if match(&listchars, 'lead') < 0
+		set listchars=tab:│->,lead:·,trail:·,extends:→,precedes:←,nbsp:␣,eol:󱞣
+		echo "'listchars' & 'fillchars': Enabled"
+	else
+		set listchars=tab:│\ ,trail:·,extends:→,precedes:←,nbsp:␣
+		echo "'listchars' & 'fillchars': Disabled"
+	endif
+enddef
+command! ToggleChars call <SID>MyToggleChars()
+
+""" search
 set hlsearch
 set ignorecase
 set smartcase
@@ -144,3 +155,4 @@ source ~/.vim/keymaps.vim
 source ~/.vim/tabline.vim
 source ~/.vim/format.vim
 source ~/.vim/undo.vim
+source ~/.vim/terminal.vim
