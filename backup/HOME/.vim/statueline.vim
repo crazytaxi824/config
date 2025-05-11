@@ -41,25 +41,25 @@ def MyStatusLine()
 	var inactive = { A: "%#myInactive#" }
 
 	var a = mode()
-	var statuslineStr = "%%<%s %s %s %%h%%w%%m%%r%%=%%f %s %%y %s %%l:%%v (c:%%c) "
+	var statuslineStr = "%%<%s %s %s %%h%%w%%m%%r%%=%%F %s %%y %s  %s %%3p%%%%:%%-2v "
 
 	var wins = getwininfo()
 	for win in wins
 		if win.winid == win_getid()
 			if m[a] ==? "INSERT" || m[a] ==? "TERMINAL"
-				&l:statusline = printf(statuslineStr, insert.A, m[a], insert.C, insert.B, insert.A)
+				&l:statusline = printf(statuslineStr, insert.A, m[a], insert.C, insert.B, &fileencoding, insert.A)
 				return
 			elseif m[a] ==? "REPLACE" || m[a] ==? "V-REPLACE"
-				&l:statusline = printf(statuslineStr, replace.A, m[a], replace.C, replace.B, replace.A)
+				&l:statusline = printf(statuslineStr, replace.A, m[a], replace.C, replace.B, &fileencoding, replace.A)
 				return
 			elseif m[a] ==? "VISUAL" || m[a] ==? "V-LINE" || m[a] ==? "V-BLOCK" || m[a] ==? "SELECT" || m[a] ==? "S-LINE" || m[a] ==? "S-BLOCK"
-				&l:statusline = printf(statuslineStr, visual.A, m[a], visual.C, visual.B, visual.A)
+				&l:statusline = printf(statuslineStr, visual.A, m[a], visual.C, visual.B, &fileencoding, visual.A)
 				return
 			elseif m[a] ==? "COMMAND"
-				&l:statusline = printf(statuslineStr, command.A, m[a], command.C, command.B, command.A)
+				&l:statusline = printf(statuslineStr, command.A, m[a], command.C, command.B, &fileencoding, command.A)
 				return
 			else
-				&l:statusline = printf(statuslineStr, normal.A, m[a], normal.C, normal.B, normal.A)
+				&l:statusline = printf(statuslineStr, normal.A, m[a], normal.C, normal.B, &fileencoding, normal.A)
 			endif
 		else
 			var inactiveSL = printf("%%<%s %%f %%m%%r%%=%%y ", inactive.A)
