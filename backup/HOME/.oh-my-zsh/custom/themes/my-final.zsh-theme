@@ -35,7 +35,7 @@ local PR_USER PR_PROMPT PR_HOST
 
 # Check the UID. 根据 user 或者 root user 显示不同颜色和 prompt ($ # ... 可以为任意 char)
 if [[ $UID -ne 0 ]]; then # normal user
-  PR_USER='%K{237}%F{215}%n%f%k' # 灰底橙字
+  PR_USER='%K{237}%F{215} %n%f%k' # 灰底橙字
   PR_PROMPT='%b%f%k$' # 命令最前端的符号一般为 $ / #, $ 前的 %f%k 用于清除之前的颜色.
 else # root user
   PR_USER='%K{237}%F{1}%n%f%k' # 灰底红字
