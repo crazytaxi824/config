@@ -383,12 +383,12 @@ vim.api.nvim_create_user_command('ToggleChars', function()
     vim.opt.listchars:append('tab:│->')  -- :append() 可以单独设置内部元素
     vim.opt.listchars:append('lead:·')
     vim.opt.listchars:append('eol:󱞣')
-    vim.notify("listchars && fillchars: Enabled")
+    vim.notify("'listchars' & 'fillchars': Enabled")
   else
     vim.opt.listchars:append('tab:│ ')  -- :append() 可以单独设置内部元素
     vim.opt.listchars:remove('lead')
     vim.opt.listchars:remove('eol')
-    vim.notify("listchars && fillchars: Disabled")
+    vim.notify("'listchars' & 'fillchars': Disabled")
   end
 end, {bang=true, bar=true})
 
