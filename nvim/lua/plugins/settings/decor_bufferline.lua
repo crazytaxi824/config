@@ -246,8 +246,13 @@ end
 --- 关闭整个 tab 以及其中的 buffer. 如果 tab 中的 buffer 同时存在于其他的 tab 中, 则不删除.
 local function close_current_tab()
   local total_tab_num = vim.fn.tabpagenr('$')  --- 获取 tab 总数. 大于 1 说明有多个 tab.
-  if total_tab_num < 2 then
-    return false  -- 没有 tab 可以 close.
+  if total_tab_num <= 1 then
+    return false  -- 只有一个 tab
+  end
+
+  if vim.fn.tabpagenr() == 1 then
+    Notify("cannot :tabclose 1st tab", "WARN")
+    return false  -- 不删除第一个 tab
   end
 
   --- 获取当前 tab 中的所有 bufnr. return list.
@@ -375,7 +380,7 @@ local function bufferline_del_current_buffer(ignore_tab)
   if #listed_buffers == 1 then
     --- listed_buffers 只剩一个, 而且 current_bufinfo.listed == 1,
     --- 说明 current buffer 一定是最后一个 listed buffer.
-    Notify("Cannot close last listed-buffer", "WARN")
+    Notify("cannot :bdelete last listed-buffer", "WARN")
     return
   end
 
