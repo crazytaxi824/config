@@ -16,6 +16,9 @@ hi NotSelectedReadOnly ctermbg=236 ctermfg=246
 hi NotSelectedModified ctermbg=236 ctermfg=68
 hi NotSelectedReadOnlyModified cterm=bold ctermbg=167 ctermfg=233
 
+hi myCurrentTab ctermfg=233 ctermbg=220
+hi myOtherTab ctermfg=220
+
 def g:MyTabLine(): string
 	var bn = filter(range(1, bufnr('$')), (_, val) => buflisted(val))
 	var bufferNums = filter(bn, (_, val) => isdirectory(bufname(val)) == 0)  # do not include netrw dir
@@ -53,8 +56,26 @@ def g:MyTabLine(): string
 		s ..= ' ' .. i .. ': ' .. fnamemodify(name, ':t') .. ' │'
 	endfor
 
-	s ..= '%#TabLineFill#%T'
+	s ..= '%#TabLineFill#%='
+
+	# tabpagenr
+	#'%1T 1 %T%1X × %X| %2T 2 %T%2X × %X|'  # Clicking tabnr goto tab [N], click x :tabclose [N]
+	#'%999X × '  # click x :tabclose current
+	var tabcount = tabpagenr('$')
+	if tabcount > 1
+		for tabnr in range(1, tabcount)
+			if tabnr == tabpagenr()
+				s ..= '%#myCurrentTab#%' .. tabnr .. 'T ' .. tabnr .. ' %T%#TabLineFill#'
+			else
+				s ..= '%#myOtherTab#%' .. tabnr .. 'T ' .. tabnr .. ' %T%#TabLineFill#'
+			endif
+		endfor
+	endif
+
 	return s
 enddef
 
 set tabline=%!MyTabLine()
+
+
+
