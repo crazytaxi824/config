@@ -47,6 +47,12 @@ set scrolloff=4
 set sidescrolloff=6
 set display=lastline
 
+""" menu
+set wildmenu
+set wildmode=longest:full
+set wildoptions+=fuzzy
+set wildoptions+=pum
+
 """ listchars & fillchars
 set list
 set listchars=tab:│\ ,trail:·,extends:→,precedes:←,nbsp:␣
