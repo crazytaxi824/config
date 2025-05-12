@@ -13,7 +13,7 @@ hi SelectedReadOnlyModified cterm=bold ctermbg=233 ctermfg=167
 
 hi NotSelected ctermbg=236 ctermfg=246
 hi NotSelectedReadOnly ctermbg=236 ctermfg=246
-hi NotSelectedModified ctermbg=236 ctermfg=68
+hi NotSelectedModified ctermbg=236 ctermfg=81
 hi NotSelectedReadOnlyModified cterm=bold ctermbg=167 ctermfg=233
 
 hi myCurrentTab ctermfg=233 ctermbg=220
@@ -22,7 +22,7 @@ hi mySeparator ctermfg=246
 
 def g:MyTabLine(): string
 	var bn = filter(range(1, bufnr('$')), (_, val) => buflisted(val))
-	var bufferNums = filter(bn, (_, val) => isdirectory(bufname(val)) == 0)  # do not include netrw dir
+	var bufferNums = filter(bn, (_, val) => !isdirectory(bufname(val)))  # do not include netrw dir
 	#var bufferNums = filter(range(1, bufnr('$')), 'bufexists(v:val)')  # Debug
 	
 	var s = ''
@@ -54,7 +54,7 @@ def g:MyTabLine(): string
 			endif
 		endif
 
-		s ..= ' ' .. i .. ': ' .. fnamemodify(name, ':t') .. ' %#mySeparator# '
+		s ..= ' ' .. i .. '. ' .. fnamemodify(name, ':t') .. ' %#mySeparator# '
 	endfor
 
 	s ..= '%#TabLineFill#%='

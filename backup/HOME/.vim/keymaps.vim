@@ -122,7 +122,7 @@ nnoremap <HOME> <cmd>call <SID>MyHome()<CR>
 """ -, = switch buffer -----------------------------------------------------------------------------
 def s:MyPrevBuffer()
 	var bn = filter(range(1, bufnr('$')), (_, val) => buflisted(val))
-	var bufferNums = filter(bn, (_, val) => isdirectory(bufname(val)) == 0)  # do not include netrw dir
+	var bufferNums = filter(bn, (_, val) => !isdirectory(bufname(val)))  # do not include netrw dir
 	var i = index(bufferNums, bufnr('%'))
 
 	if i < 1
@@ -134,7 +134,7 @@ enddef
 
 def s:MyNextBuffer()
 	var bn = filter(range(1, bufnr('$')), (_, val) => buflisted(val))
-	var bufferNums = filter(bn, (_, val) => isdirectory(bufname(val)) == 0)  # do not include netrw dir
+	var bufferNums = filter(bn, (_, val) => !isdirectory(bufname(val)))  # do not include netrw dir
 	var i = index(bufferNums, bufnr('%'))
 	var l = len(bufferNums)
 
@@ -195,15 +195,23 @@ enddef
 def s:MyDeleteOtherBuffers()
 	var listedbufs = getbufinfo({'buflisted': 1})
 	for buf in listedbufs
-		if buf.changed == 0 && buf.hidden == 1
+		if !buf.changed && buf.hidden
 			execute('bdelete ' .. buf.bufnr)
 		endif
 	endfor
 	redrawtabline
 enddef
 
+def s:MyGotoBuffer()
+	var x = v:count1
+	if bufexists(x) && buflisted(x) && !isdirectory(bufname(x))
+		execute('buffer ' .. x)
+	endif
+enddef
+
 nnoremap <leader>d <cmd>call <SID>MyDeleteBufferAndTab()<CR>
 nnoremap <leader>Da <cmd>call <SID>MyDeleteOtherBuffers()<CR>
+nnoremap <leader>\ <cmd>call <SID>MyGotoBuffer()<CR>
 
 
 

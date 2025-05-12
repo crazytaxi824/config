@@ -14,9 +14,9 @@ set undodir=/tmp/vim/undo,.
 def MyCreateUndoDir()
 	const dirs = ['/tmp/vim/undo', expand('~/.vim/swap')]
 	for dir in dirs
-		if isdirectory(dir) == 0
+		if !isdirectory(dir)
 			const rs = systemlist('mkdir -p ' .. dir)
-			if v:shell_error == 0
+			if !v:shell_error
 				echom dir .. " dir is created"
 			else
 				echohl WarningMsg
