@@ -58,9 +58,9 @@ def g:MyTabLine(): string
 
 	s ..= '%#TabLineFill#%='
 
-	# tabpagenr
-	#'%1T 1 %T%1X × %X| %2T 2 %T%2X × %X|'  # Clicking tabnr goto tab [N], click x :tabclose [N]
-	#'%999X × '  # click x :tabclose current
+	# 显示 tabpagenr
+	#'%1T 1 %T%1X × %X| %2T 2 %T%2X × %X|'  # 点击 tabnr goto tab [N], 点击 x :tabclose [N]
+	#'%999X × '  # 点击 x :tabclose current
 	var tabcount = tabpagenr('$')
 	if tabcount > 1
 		for tabnr in range(1, tabcount)
