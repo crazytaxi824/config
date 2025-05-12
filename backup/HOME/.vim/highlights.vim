@@ -38,6 +38,13 @@ hi CursorLineNr ctermfg=220 cterm=bold
 hi ErrorMsg ctermfg=255 ctermbg=167
 hi WarningMsg ctermfg=208
 
+""" menu
+hi Pmenu ctermfg=251 ctermbg=235
+hi PmenuSel ctermfg=74 ctermbg=238 cterm=bold,underline
+hi PmenuSbar ctermbg=233
+hi PmenuThumb ctermbg=240
+
+"""
 hi Todo ctermfg=22 ctermbg=255 cterm=reverse
 hi SpecialComment ctermfg=63 ctermbg=255 cterm=reverse
 hi Directory cterm=bold ctermfg=81
