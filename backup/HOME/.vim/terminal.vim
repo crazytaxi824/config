@@ -1,4 +1,4 @@
 au TerminalWinOpen *
-	\ set nonumber | set norelativenumber |
-	\ set sidescrolloff=0 | set scrolloff=0 |
-	\ set signcolumn=no
+	\ setlocal nonumber | setlocal norelativenumber |
+	\ setlocal sidescrolloff=0 | setlocal scrolloff=0 |
+	\ setlocal signcolumn=no
