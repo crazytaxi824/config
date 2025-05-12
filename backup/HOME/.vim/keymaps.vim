@@ -54,9 +54,6 @@ vnoremap s <Nop>
 nnoremap <C-z> <Nop>
 vnoremap <C-z> <Nop>
 
-nnoremap ZZ <Nop>
-nnoremap ZQ <Nop>
-
 nnoremap <F1> <Nop>
 inoremap <F1> <Nop>
 
