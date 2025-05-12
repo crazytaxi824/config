@@ -58,9 +58,11 @@ nnoremap <F1> <Nop>
 inoremap <F1> <Nop>
 
 """ 替换系统自动为 netrw 加载的 <buffer> keymaps
+au FileType netrw nnoremap <buffer> <ESC> <cmd>bdelete<CR>
 au FileType netrw nnoremap <buffer> - <Nop>
 au FileType netrw nnoremap <buffer> <S-Up> <cmd>call <SID>MyShiftUp()<CR>
 au FileType netrw nnoremap <buffer> <S-Down> <cmd>call <SID>MyShiftDown()<CR>
+
 
 """ custome keymap function ------------------------------------------------------------------------
 """ gk, gj 可以在 wrap 行内移动
@@ -147,6 +149,61 @@ enddef
 
 nnoremap - <cmd>call <SID>MyPrevBuffer()<CR>
 nnoremap = <cmd>call <SID>MyNextBuffer()<CR>
+
+""" <leader>d - delete buffer/tab ------------------------------------------------------------------
+def s:MyDeleteBufferAndTab()
+	var tabcount = tabpagenr('$')
+	if tabcount <= 1
+		# only 1 tab
+		# Do not bdelete last listed buffer
+		if len(getbufinfo({'buflisted': 1})) <= 1 && buflisted(bufnr())
+			echohl WarningMsg | echom "cannot :bdelete last listed-buffer" | echohl None
+			return
+		endif
+
+		if &modified
+			echohl WarningMsg | echom "cannot :bdelete unsaved buffer" | echohl None
+			return
+		endif
+
+		bdelete  # current buffer
+		return
+	endif
+
+	# keep 1st tab
+	if tabpagenr() == 1
+		echohl WarningMsg | echom "cannot :tabclose 1-st tab" | echohl None
+		return
+	endif
+
+	var firstTabBufs = tabpagebuflist(1)
+	var currTabBufs = tabpagebuflist()
+	var bdBufs = filter(currTabBufs, (_, val) => index(firstTabBufs, val) < 0)
+
+	for bufnr in bdBufs
+		if getbufvar(bufnr, '&modified')
+			echohl WarningMsg | echom "tabpage has unsaved buffers" | echohl None
+			return
+		endif
+	endfor
+	
+	tabfirst
+	execute('bdelete ' .. join(bdBufs, ' '))
+	redrawtabline
+enddef
+
+def s:MyDeleteOtherBuffers()
+	var listedbufs = getbufinfo({'buflisted': 1})
+	for buf in listedbufs
+		if buf.changed == 0 && buf.hidden == 1
+			execute('bdelete ' .. buf.bufnr)
+		endif
+	endfor
+	redrawtabline
+enddef
+
+nnoremap <leader>d <cmd>call <SID>MyDeleteBufferAndTab()<CR>
+nnoremap <leader>Da <cmd>call <SID>MyDeleteOtherBuffers()<CR>
 
 
 
