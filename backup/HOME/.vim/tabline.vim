@@ -18,6 +18,7 @@ hi NotSelectedReadOnlyModified cterm=bold ctermbg=167 ctermfg=233
 
 hi myCurrentTab ctermfg=233 ctermbg=220
 hi myOtherTab ctermfg=220
+hi mySeparator ctermfg=246
 
 def g:MyTabLine(): string
 	var bn = filter(range(1, bufnr('$')), (_, val) => buflisted(val))
@@ -53,7 +54,7 @@ def g:MyTabLine(): string
 			endif
 		endif
 
-		s ..= ' ' .. i .. ': ' .. fnamemodify(name, ':t') .. ' │'
+		s ..= ' ' .. i .. ': ' .. fnamemodify(name, ':t') .. ' %#mySeparator# '
 	endfor
 
 	s ..= '%#TabLineFill#%='
