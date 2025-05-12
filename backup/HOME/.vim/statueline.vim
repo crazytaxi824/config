@@ -42,24 +42,28 @@ def MyStatusLine()
 
 	var a = mode()
 	var statuslineStr = "%%<%s %s %s %%h%%w%%m%%r%%=%%F %s %%y %s  %s %%3p%%%%:%%-2v "
+	var fe = &fileencoding
+	if fe == ''
+		fe = '-'
+	endif
 
 	var wins = getwininfo()
 	for win in wins
 		if win.winid == win_getid()
 			if m[a] ==? "INSERT" || m[a] ==? "TERMINAL"
-				&l:statusline = printf(statuslineStr, insert.A, m[a], insert.C, insert.B, &fileencoding, insert.A)
+				&l:statusline = printf(statuslineStr, insert.A, m[a], insert.C, insert.B, fe, insert.A)
 				return
 			elseif m[a] ==? "REPLACE" || m[a] ==? "V-REPLACE"
-				&l:statusline = printf(statuslineStr, replace.A, m[a], replace.C, replace.B, &fileencoding, replace.A)
+				&l:statusline = printf(statuslineStr, replace.A, m[a], replace.C, replace.B, fe, replace.A)
 				return
 			elseif m[a] ==? "VISUAL" || m[a] ==? "V-LINE" || m[a] ==? "V-BLOCK" || m[a] ==? "SELECT" || m[a] ==? "S-LINE" || m[a] ==? "S-BLOCK"
-				&l:statusline = printf(statuslineStr, visual.A, m[a], visual.C, visual.B, &fileencoding, visual.A)
+				&l:statusline = printf(statuslineStr, visual.A, m[a], visual.C, visual.B, fe, visual.A)
 				return
 			elseif m[a] ==? "COMMAND"
-				&l:statusline = printf(statuslineStr, command.A, m[a], command.C, command.B, &fileencoding, command.A)
+				&l:statusline = printf(statuslineStr, command.A, m[a], command.C, command.B, fe, command.A)
 				return
 			else
-				&l:statusline = printf(statuslineStr, normal.A, m[a], normal.C, normal.B, &fileencoding, normal.A)
+				&l:statusline = printf(statuslineStr, normal.A, m[a], normal.C, normal.B, fe, normal.A)
 			endif
 		else
 			var inactiveSL = printf("%%<%s %%f %%m%%r%%=%%y ", inactive.A)
