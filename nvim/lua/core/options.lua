@@ -323,8 +323,6 @@ vim.opt.hidden = true      -- VVI: 很多插件需要用到 hidden buffer. When 
 
 -- vim.opt.wildmenu = true    -- Command 模式下 <Tab> completion. `:help wildmenu` - enhanced mode of command-line completion.
 -- vim.opt.wildmode = "full"  -- Complete the next full match.
-vim.opt.wildoptions = { "fuzzy" }  -- default "pum,tagfile", pum - popupmenu | tagfile - <C-d> list matches
-vim.opt.wildignorecase = true  -- command 自动补全时忽略大小写.
 
 --- Donot add end of line char (\n) when save file.
 vim.opt.endofline = false

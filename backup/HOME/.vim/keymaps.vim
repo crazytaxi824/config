@@ -1,8 +1,6 @@
 """ this is not a vim9script
 
 """ normal setting ---------------------------------------------------------------------------------
-nnoremap <S-Up> <C-u>
-nnoremap <S-Down> <C-d>
 tnoremap <ESC> <C-\><C-n>
 nnoremap <tab> <C-w><C-w>
 
@@ -106,6 +104,9 @@ vnoremap <S-Up> <cmd>call <SID>MyShiftUp()<CR>
 nnoremap <S-Down> <cmd>call <SID>MyShiftDown()<CR>
 inoremap <S-Down> <cmd>call <SID>MyShiftDown()<CR>
 vnoremap <S-Down> <cmd>call <SID>MyShiftDown()<CR>
+
+nnoremap <S-CR> <CR>
+vnoremap <S-CR> <CR>
 
 """ HOME
 def s:MyHome()
