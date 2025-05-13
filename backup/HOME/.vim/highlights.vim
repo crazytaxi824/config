@@ -44,6 +44,12 @@ hi PmenuSel ctermfg=74 ctermbg=238 cterm=bold,underline
 hi PmenuSbar ctermbg=233
 hi PmenuThumb ctermbg=240
 
+""" Diff mode
+hi DiffAdd ctermfg=251 ctermbg=22
+hi DiffText ctermfg=213 ctermbg=233 cterm=reverse
+hi clear DiffChange
+hi DiffDelete ctermfg=251 ctermbg=52
+
 """
 hi Todo ctermfg=22 ctermbg=255 cterm=reverse
 hi SpecialComment ctermfg=63 ctermbg=255 cterm=reverse
