@@ -21,8 +21,9 @@ hi myOtherTab ctermfg=220
 hi mySeparator ctermfg=246
 
 def g:MyTabLine(): string
-	var bn = filter(range(1, bufnr('$')), (_, val) => buflisted(val))
-	var bufferNums = filter(bn, (_, val) => !isdirectory(bufname(val)))  # do not include netrw dir
+	var lbs = getbufinfo({'buflisted': 1})
+	var fbs = filter(lbs, (_, item) => !isdirectory(item->get('name')))  # do not include netrw dir
+	var bufferNums = map(copy(fbs), (_, item) => item->get('bufnr'))
 	#var bufferNums = filter(range(1, bufnr('$')), 'bufexists(v:val)')  # Debug
 	
 	var s = ''

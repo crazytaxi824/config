@@ -119,8 +119,9 @@ nnoremap <HOME> <cmd>call <SID>MyHome()<CR>
 
 """ -, = switch buffer -----------------------------------------------------------------------------
 def s:MyPrevBuffer()
-	var bn = filter(range(1, bufnr('$')), (_, val) => buflisted(val))
-	var bufferNums = filter(bn, (_, val) => !isdirectory(bufname(val)))  # do not include netrw dir
+	var lbs = getbufinfo({'buflisted': 1})
+	var fbs = filter(lbs, (_, item) => !isdirectory(item->get('name')))  # do not include netrw dir
+	var bufferNums = map(copy(fbs), (_, item) => item->get('bufnr'))
 	var i = index(bufferNums, bufnr('%'))
 	var l = len(bufferNums)
 	if l < 1
@@ -135,8 +136,9 @@ def s:MyPrevBuffer()
 enddef
 
 def s:MyNextBuffer()
-	var bn = filter(range(1, bufnr('$')), (_, val) => buflisted(val))
-	var bufferNums = filter(bn, (_, val) => !isdirectory(bufname(val)))  # do not include netrw dir
+	var lbs = getbufinfo({'buflisted': 1})
+	var fbs = filter(lbs, (_, item) => !isdirectory(item->get('name')))  # do not include netrw dir
+	var bufferNums = map(copy(fbs), (_, item) => item->get('bufnr'))
 	var i = index(bufferNums, bufnr('%'))
 	var l = len(bufferNums)
 	if l < 1
