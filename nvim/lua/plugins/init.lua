@@ -399,7 +399,7 @@ local plugins = {
   --- https://github.com/jellydn/lazy-nvim-ide/blob/main/lua/plugins/extras/copilot-chat-v2.lua
   {
     "CopilotC-Nvim/CopilotChat.nvim",
-    tag = "v3.11.1",
+    tag = "v3.12.0",
     dependencies = {
       "nvim-telescope/telescope.nvim",
       "nvim-telescope/telescope-ui-select.nvim",

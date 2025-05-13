@@ -1,5 +1,5 @@
 {
-  "CopilotChat.nvim": { "branch": "main", "commit": "6cb362d040f4f7e1177145fa27b3aee1c0bd6bff" },
+  "CopilotChat.nvim": { "branch": "main", "commit": "eddc9a98930cda0b3819cc1d93427b402697dfab" },
   "LuaSnip": { "branch": "master", "commit": "c1851d5c519611dfc451b6582961b2602e0af89b" },
   "bufferline.nvim": { "branch": "main", "commit": "655133c3b4c3e5e05ec549b9f8cc2894ac6f51b3" },
   "cmp-buffer": { "branch": "main", "commit": "b74fab3656eea9de20a9b8116afa3cfc4ec09657" },
@@ -8,7 +8,7 @@
   "cmp-path": { "branch": "main", "commit": "c6635aae33a50d6010bf1aa756ac2398a2d54c32" },
   "cmp_luasnip": { "branch": "master", "commit": "98d9cb5c2c38532bd9bdb481067b20fea8f32e90" },
   "conform.nvim": { "branch": "master", "commit": "372fc521f8421b7830ea6db4d6ea3bae1c77548c" },
-  "copilot.vim": { "branch": "release", "commit": "18f485d892b56b311fd752039d6977333ebc2a0f" },
+  "copilot.vim": { "branch": "release", "commit": "d1e8429bef7f7709586886b0a23a46fbecc685c4" },
   "friendly-snippets": { "branch": "main", "commit": "572f5660cf05f8cd8834e096d7b4c921ba18e175" },
   "gitsigns.nvim": { "branch": "main", "commit": "43b0c856ae5f32a195d83f4a27fe21d63e6c966c" },
   "indent-blankline.nvim": { "branch": "master", "commit": "005b56001b2cb30bfa61b7986bc50657816ba4ba" },
