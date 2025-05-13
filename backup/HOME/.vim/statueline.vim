@@ -63,6 +63,7 @@ def MyStatusLine()
 				&l:statusline = printf(statuslineStr, command.A, m[a], command.C, command.B, fe, command.A)
 				return
 			else
+				# Normal & Other modes
 				&l:statusline = printf(statuslineStr, normal.A, m[a], normal.C, normal.B, fe, normal.A)
 			endif
 		else
