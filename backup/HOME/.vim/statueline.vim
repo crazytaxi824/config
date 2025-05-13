@@ -20,6 +20,15 @@ hi myVisualB ctermbg=202 ctermfg=233
 hi myVisualC ctermbg=52 ctermfg=78
 hi myInactive ctermbg=233 ctermfg=245
 
+def g:GitBranch(): string
+	var dir = fnamemodify(bufname(), ':p:h')
+	var branch = system('cd ' .. dir ..  ' && git rev-parse --abbrev-ref HEAD')
+	if !v:shell_error
+		return '  ' .. substitute(branch, '\n', '', '')
+	endif
+	return '-'
+enddef
+
 def MyStatusLine()
 	var m = {
 		n: "NORMAL", no: "O-PENDING", nov: "O-PENDING", noV: "O-PENDING", "no\<C-V>": "O-PENDING",
@@ -41,7 +50,7 @@ def MyStatusLine()
 	var inactive = { A: "%#myInactive#" }
 
 	var a = mode()
-	var statuslineStr = "%%<%s %s %s %%h%%w%%m%%r%%=%%F %s %%y %s  %s %%3p%%%%:%%-2v "
+	var statuslineStr = "%%<%s %s %s %%{GitBranch()} %s %%h%%w%%m%%r%%=%%F %s %%y %s  %s %%3p%%%%:%%-2v "
 	var fe = &fileencoding
 	if fe == ''
 		fe = '-'
@@ -51,20 +60,20 @@ def MyStatusLine()
 	for win in wins
 		if win.winid == win_getid()
 			if m[a] ==? "INSERT" || m[a] ==? "TERMINAL"
-				&l:statusline = printf(statuslineStr, insert.A, m[a], insert.C, insert.B, fe, insert.A)
+				&l:statusline = printf(statuslineStr, insert.A, m[a], insert.B, insert.C, insert.B, fe, insert.A)
 				return
 			elseif m[a] ==? "REPLACE" || m[a] ==? "V-REPLACE"
-				&l:statusline = printf(statuslineStr, replace.A, m[a], replace.C, replace.B, fe, replace.A)
+				&l:statusline = printf(statuslineStr, replace.A, m[a], replace.B, replace.C, replace.B, fe, replace.A)
 				return
 			elseif m[a] ==? "VISUAL" || m[a] ==? "V-LINE" || m[a] ==? "V-BLOCK" || m[a] ==? "SELECT" || m[a] ==? "S-LINE" || m[a] ==? "S-BLOCK"
-				&l:statusline = printf(statuslineStr, visual.A, m[a], visual.C, visual.B, fe, visual.A)
+				&l:statusline = printf(statuslineStr, visual.A, m[a], visual.B, visual.C, visual.B, fe, visual.A)
 				return
 			elseif m[a] ==? "COMMAND"
-				&l:statusline = printf(statuslineStr, command.A, m[a], command.C, command.B, fe, command.A)
+				&l:statusline = printf(statuslineStr, command.A, m[a], command.B, command.C, command.B, fe, command.A)
 				return
 			else
 				# Normal & Other modes
-				&l:statusline = printf(statuslineStr, normal.A, m[a], normal.C, normal.B, fe, normal.A)
+				&l:statusline = printf(statuslineStr, normal.A, m[a], normal.B, normal.C, normal.B, fe, normal.A)
 			endif
 		else
 			var inactiveSL = printf("%%<%s %%f %%m%%r%%=%%y ", inactive.A)
