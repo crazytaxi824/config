@@ -20,40 +20,41 @@ hi myVisualB ctermbg=202 ctermfg=233
 hi myVisualC ctermbg=52 ctermfg=78
 hi myInactive ctermbg=233 ctermfg=245
 
+# `:help mode()`
+const m = {
+	n: "NORMAL", no: "O-PENDING", nov: "O-PENDING", noV: "O-PENDING", "no\<C-V>": "O-PENDING",
+	niI: "NORMAL", niR: "NORMAL", niV: "NORMAL", nt: "NORMAL",
+	v: "VISUAL", vs: "VISUAL", V: "V-LINE", Vs: "V-LINE", "\<C-v>": "V-BLOCK", "\<C-v>s": "V-BLOCK",
+	s: "SELECT", S: "S-LINE", "\<C-s>": "S-BLOCK",
+	i: "INSERT", ic: "INSERT", ix: "INSERT",
+	R: "REPLACE", Rc: "REPLACE", Rx: "REPLACE", Rv: "V-REPLACE", Rvc: "V-REPLACE", Rvx: "V-REPLACE",
+	c: "COMMAND", ct: "COMMAND", cr: "COMMAND",
+	cv: "EX", cvr: "EX", ce: "EX",
+	r: "REPLACE", rm: "MORE", 'r?': "CONFIRM", '!': "SHELL", t: "TERMINAL"
+}
+
+const normal = { A: "%#myNormalMode#", B: "%#myNormalCommandB#", C: "%#myNormalCommandC#" }
+const visual = { A: "%#myVisualMode#", B: "%#myVisualB#", C: "%#myVisualC#" }
+const insert = { A: "%#myInsertMode#", B: "%#myInsertReplaceB#", C: "%#myInsertReplaceC#" }
+const replace = { A: "%#myReplaceMode#", B: "%#myInsertReplaceB#", C: "%#myInsertReplaceC#" }
+const command = { A: "%#myCommandMode#", B: "%#myNormalCommandB#", C: "%#myNormalCommandC#" }
+const inactive = { A: "%#myInactive#" }
+
 def g:GitBranch(): string
 	var dir = fnamemodify(bufname(), ':p:h')
 	var branch = system('cd ' .. dir ..  ' && git rev-parse --abbrev-ref HEAD')
 	if !v:shell_error
 		return '  ' .. substitute(branch, '\n', '', '')
 	endif
-	return '-'
+	return ' - '
 enddef
 
 def MyStatusLine()
-	var m = {
-		n: "NORMAL", no: "O-PENDING", nov: "O-PENDING", noV: "O-PENDING", "no\<C-V>": "O-PENDING",
-		niI: "NORMAL", niR: "NORMAL", niV: "NORMAL", nt: "NORMAL",
-		v: "VISUAL", vs: "VISUAL", V: "V-LINE", Vs: "V-LINE", "\<C-v>": "V-BLOCK", "\<C-v>s": "V-BLOCK",
-		s: "SELECT", S: "S-LINE", "\<C-s>": "S-BLOCK",
-		i: "INSERT", ic: "INSERT", ix: "INSERT",
-		R: "REPLACE", Rc: "REPLACE", Rx: "REPLACE", Rv: "V-REPLACE", Rvc: "V-REPLACE", Rvx: "V-REPLACE",
-		c: "COMMAND", ct: "COMMAND", cr: "COMMAND",
-		cv: "EX", cvr: "EX", ce: "EX",
-		r: "REPLACE", rm: "MORE", 'r?': "CONFIRM", '!': "SHELL", t: "TERMINAL"
-	}
-
-	var normal = { A: "%#myNormalMode#", B: "%#myNormalCommandB#", C: "%#myNormalCommandC#" }
-	var visual = { A: "%#myVisualMode#", B: "%#myVisualB#", C: "%#myVisualC#" }
-	var insert = { A: "%#myInsertMode#", B: "%#myInsertReplaceB#", C: "%#myInsertReplaceC#" }
-	var replace = { A: "%#myReplaceMode#", B: "%#myInsertReplaceB#", C: "%#myInsertReplaceC#" }
-	var command = { A: "%#myCommandMode#", B: "%#myNormalCommandB#", C: "%#myNormalCommandC#" }
-	var inactive = { A: "%#myInactive#" }
-
 	var a = mode()
-	var statuslineStr = "%%<%s %s %s %%{GitBranch()} %s %%h%%w%%m%%r%%=%%F %s %%y %s  %s %%3p%%%%:%%-2v "
+	var statuslineStr = "%%<%s %s %s %%{GitBranch()} %s %%h%%w%%m%%r%%=%%F %s %%y%s %s %%3p%%%%:%%-2v "
 	var fe = &fileencoding
-	if fe == ''
-		fe = '-'
+	if fe != ''
+		fe = ' ' .. fe .. ' '
 	endif
 
 	var wins = getwininfo()
@@ -61,16 +62,12 @@ def MyStatusLine()
 		if win.winid == win_getid()
 			if m[a] ==? "INSERT" || m[a] ==? "TERMINAL"
 				&l:statusline = printf(statuslineStr, insert.A, m[a], insert.B, insert.C, insert.B, fe, insert.A)
-				return
 			elseif m[a] ==? "REPLACE" || m[a] ==? "V-REPLACE"
 				&l:statusline = printf(statuslineStr, replace.A, m[a], replace.B, replace.C, replace.B, fe, replace.A)
-				return
 			elseif m[a] ==? "VISUAL" || m[a] ==? "V-LINE" || m[a] ==? "V-BLOCK" || m[a] ==? "SELECT" || m[a] ==? "S-LINE" || m[a] ==? "S-BLOCK"
 				&l:statusline = printf(statuslineStr, visual.A, m[a], visual.B, visual.C, visual.B, fe, visual.A)
-				return
 			elseif m[a] ==? "COMMAND"
 				&l:statusline = printf(statuslineStr, command.A, m[a], command.B, command.C, command.B, fe, command.A)
-				return
 			else
 				# Normal & Other modes
 				&l:statusline = printf(statuslineStr, normal.A, m[a], normal.B, normal.C, normal.B, fe, normal.A)
