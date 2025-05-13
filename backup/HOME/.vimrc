@@ -100,5 +100,4 @@ source ~/.vim/tabline.vim
 source ~/.vim/format.vim
 source ~/.vim/undo.vim
 source ~/.vim/terminal.vim
-
 source ~/.vim/highlights.vim

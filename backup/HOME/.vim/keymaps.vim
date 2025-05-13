@@ -46,8 +46,6 @@ nnoremap <leader><lt> viw<C-c>`>a><C-c>`<lt>i<lt><C-c>
 
 """ <Nop>
 nnoremap s <Nop>
-inoremap s <Nop>
-vnoremap s <Nop>
 
 """ <Ctrl-Z> 是危险操作. 意思是 :stop. Suspend vim, 退出到 terminal 界面, 但保留 job.
 """ 需要使用 `jobs -l` 列出 Suspended 列表, 使用 `fg %1` 恢复 job, 或者 `kill %1` (不推荐, 会留下 .swp 文件)
@@ -124,10 +122,14 @@ def s:MyPrevBuffer()
 	var bn = filter(range(1, bufnr('$')), (_, val) => buflisted(val))
 	var bufferNums = filter(bn, (_, val) => !isdirectory(bufname(val)))  # do not include netrw dir
 	var i = index(bufferNums, bufnr('%'))
+	var l = len(bufferNums)
+	if l < 1
+		return
+	endif
 
-	if i < 1
+	if i < 0
 		execute('buffer ' .. bufferNums[0])
-	else
+	elseif i > 0
 		execute('buffer ' .. bufferNums[i - 1])
 	endif
 enddef
@@ -137,12 +139,13 @@ def s:MyNextBuffer()
 	var bufferNums = filter(bn, (_, val) => !isdirectory(bufname(val)))  # do not include netrw dir
 	var i = index(bufferNums, bufnr('%'))
 	var l = len(bufferNums)
+	if l < 1
+		return
+	endif
 
 	if i < 0
 		execute('buffer ' .. bufferNums[0])
-	elseif i >= l - 1
-		execute('buffer ' .. bufferNums[l - 1])
-	else
+	elseif i < l - 1
 		execute('buffer ' .. bufferNums[i + 1])
 	endif
 enddef
