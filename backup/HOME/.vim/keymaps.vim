@@ -169,7 +169,7 @@ def s:MyDeleteBufferAndTab()
 			return
 		endif
 
-		bdelete  # current buffer
+		bdelete
 		return
 	endif
 
