@@ -9,9 +9,9 @@ xnoremap D "_x
 
 vnoremap <leader>y "*y
 
-""" 进入文件夹
-nnoremap <leader><CR> <cmd>execute("edit" .. fnamemodify(bufname(), ':p:h')) <CR>
-nnoremap <leader>; <cmd>e .<CR>
+""" 进入文件夹 netrw
+nnoremap <leader><CR> <cmd>execute("Explore! " .. fnamemodify(bufname(), ':p:h')) <CR>
+nnoremap <leader>; <cmd>execute("Explore! " .. getcwd())<CR>
 
 """ 自动括号
 vnoremap <leader>" <C-c>`>a"<C-c>`<i"<C-c>v`><right><right>
@@ -118,51 +118,51 @@ enddef
 nnoremap <HOME> <cmd>call <SID>MyHome()<CR>
 
 """ -, = switch buffer -----------------------------------------------------------------------------
-def s:MyPrevBuffer()
+def s:MyPrevBuffer(): number
 	var lbs = getbufinfo({'buflisted': 1})
 	var fbs = filter(lbs, (_, item) => !isdirectory(item->get('name')))  # do not include netrw dir
 	var bufferNums = map(copy(fbs), (_, item) => item->get('bufnr'))
 	var i = index(bufferNums, bufnr('%'))
 	var l = len(bufferNums)
-	if l < 1
-		return
+	if l > 0
+		if i < 0
+			return bufferNums[0]
+		elseif i > 0
+			return bufferNums[i - 1]
+		endif
 	endif
-
-	if i < 0
-		execute('buffer ' .. bufferNums[0])
-	elseif i > 0
-		execute('buffer ' .. bufferNums[i - 1])
-	endif
+	return -1
 enddef
 
-def s:MyNextBuffer()
+def s:MyNextBuffer(): number
 	var lbs = getbufinfo({'buflisted': 1})
 	var fbs = filter(lbs, (_, item) => !isdirectory(item->get('name')))  # do not include netrw dir
 	var bufferNums = map(copy(fbs), (_, item) => item->get('bufnr'))
 	var i = index(bufferNums, bufnr('%'))
 	var l = len(bufferNums)
-	if l < 1
-		return
+	if l > 0
+		if i < 0
+			return bufferNums[0]
+		elseif i < l - 1
+			return bufferNums[i + 1]
+		endif
 	endif
-
-	if i < 0
-		execute('buffer ' .. bufferNums[0])
-	elseif i < l - 1
-		execute('buffer ' .. bufferNums[i + 1])
-	endif
+	return -1
 enddef
-
-nnoremap - <cmd>call <SID>MyPrevBuffer()<CR>
-nnoremap = <cmd>call <SID>MyNextBuffer()<CR>
 
 """ <leader>d - delete buffer/tab ------------------------------------------------------------------
 def s:MyDeleteBufferAndTab()
 	var tabcount = tabpagenr('$')
 	if tabcount <= 1
-		# only 1 tab
-		# Do not bdelete last listed buffer
-		if len(getbufinfo({'buflisted': 1})) <= 1 && buflisted(bufnr())
-			echohl WarningMsg | echom "cannot :bdelete last listed-buffer" | echohl None
+		# only 1 tab, close curren buffer
+		var lbs = getbufinfo({'buflisted': 1})
+		var fbs = filter(lbs, (_, item) => !isdirectory(item->get('name')))  # do not include netrw dir
+		var bufferNums = map(copy(fbs), (_, item) => item->get('bufnr'))
+		var i = index(bufferNums, bufnr('%'))
+		var l = len(bufferNums)
+		if l < 1
+			# no buflisted buffer exists
+			bdelete
 			return
 		endif
 
@@ -171,7 +171,23 @@ def s:MyDeleteBufferAndTab()
 			return
 		endif
 
-		bdelete
+		var curr_bufnr = bufnr('%')
+		if i < 0
+			echom bufferNums[0]
+			execute('buffer ' .. bufferNums[0])
+		elseif i == 0 && l <= 1
+			echohl WarningMsg | echom "cannot :bdelete last listed-buffer" | echohl None
+			return
+		elseif i == 0 && l > 1
+			echom bufferNums[1]
+			execute('buffer ' .. bufferNums[1])
+		else
+			echom bufferNums[i - 1]
+			execute('buffer ' .. bufferNums[i - 1])
+		endif
+
+		execute('bdelete ' .. curr_bufnr)
+		redrawtabline
 		return
 	endif
 
@@ -181,6 +197,7 @@ def s:MyDeleteBufferAndTab()
 		return
 	endif
 
+	# tabclose & bdelete all the buffer in this tab
 	var firstTabBufs = tabpagebuflist(1)
 	var currTabBufs = tabpagebuflist()
 	var bdBufs = filter(currTabBufs, (_, val) => index(firstTabBufs, val) < 0)
@@ -207,15 +224,17 @@ def s:MyDeleteOtherBuffers()
 	redrawtabline
 enddef
 
-def s:MyGotoBuffer()
-	var x = v:count1
-	if bufexists(x) && buflisted(x) && !isdirectory(bufname(x))
-		execute('buffer ' .. x)
+def s:MyGotoBuffer(bufnr: number = v:count1)
+	if bufexists(bufnr) && buflisted(bufnr) && !isdirectory(bufname(bufnr))
+		execute('buffer ' .. bufnr)
 	endif
 enddef
 
 nnoremap <leader>d <cmd>call <SID>MyDeleteBufferAndTab()<CR>
 nnoremap <leader>Da <cmd>call <SID>MyDeleteOtherBuffers()<CR>
+
+nnoremap - <cmd>call <SID>MyGotoBuffer(<SID>MyPrevBuffer())<CR>
+nnoremap = <cmd>call <SID>MyGotoBuffer(<SID>MyNextBuffer())<CR>
 nnoremap <leader>\ <cmd>call <SID>MyGotoBuffer()<CR>
 
 
