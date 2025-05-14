@@ -4,7 +4,8 @@
 live_config_reload = true
 
 [env]
-TERM = "xterm-256color"  # `xterm-256color` | `alacritty`, `$ echo $TERM` 环境变量.
+TERM = "alacritty"  # `xterm-256color` | `alacritty`, `$ echo $TERM` 环境变量.
+# TERM = "xterm-256color"  # `xterm-256color` | `alacritty`, `$ echo $TERM` 环境变量.
 
 [window]
 decorations = "none"  # 不显示 titlebar 和 buttons (window 左上角关闭/缩小按钮)
