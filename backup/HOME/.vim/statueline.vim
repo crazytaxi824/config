@@ -12,7 +12,7 @@ hi myNormalMode ctermbg=220 ctermfg=233 cterm=bold
 hi myReplaceMode ctermbg=124 ctermfg=251 cterm=bold
 hi myVisualMode ctermbg=208 ctermfg=233 cterm=bold
 hi myCommandMode ctermbg=65 ctermfg=233 cterm=bold
-hi myNormalCommandB ctermbg=236 ctermfg=251
+hi myNormalCommandB ctermbg=235 ctermfg=251
 hi myNormalCommandC ctermbg=233 ctermfg=78
 hi myInsertReplaceB ctermbg=20 ctermfg=251
 hi myInsertReplaceC ctermbg=17 ctermfg=78
@@ -46,7 +46,7 @@ def g:GitBranch(): string
 	if !v:shell_error
 		return '  ' .. substitute(branch, '\n', '', '')
 	endif
-	return ' - '
+	return ''
 enddef
 
 def MyStatusLine()
@@ -60,6 +60,7 @@ def MyStatusLine()
 	var wins = getwininfo()
 	for win in wins
 		if win.winid == win_getid()
+			# 设置当前 window
 			if m[a] ==? "INSERT" || m[a] ==? "TERMINAL"
 				&l:statusline = printf(statuslineStr, insert.A, m[a], insert.B, insert.C, insert.B, fe, insert.A)
 			elseif m[a] ==? "REPLACE" || m[a] ==? "V-REPLACE"
@@ -73,6 +74,7 @@ def MyStatusLine()
 				&l:statusline = printf(statuslineStr, normal.A, m[a], normal.B, normal.C, normal.B, fe, normal.A)
 			endif
 		else
+			# 设置其他 window
 			var inactiveSL = printf("%%<%s %%f %%m%%r%%=%%y ", inactive.A)
 			setwinvar(win.winid, '&statusline', inactiveSL)
 		endif
