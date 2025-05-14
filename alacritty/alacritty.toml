@@ -216,6 +216,12 @@ chars = "\u0017"
 key = "W"
 mods = "Command"
 
+# Do nothing
+[[keyboard.bindings]]
+action = "None"
+key = "M"
+mods = "Command"
+
 # --- debug ----------------------------------------------------------------------------------------
 [debug]
 persistent_logging = false  # Keep the log file after quitting Alacritty.
