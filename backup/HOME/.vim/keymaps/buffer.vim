@@ -1,5 +1,7 @@
-""" -, = switch buffer -----------------------------------------------------------------------------
-def s:MyPrevBuffer(): number
+vim9script
+
+### -, = switch buffer -----------------------------------------------------------------------------
+def MyPrevBuffer(): number
 	var lbs = getbufinfo({'buflisted': 1})
 	var fbs = filter(lbs, (_, item) => !isdirectory(item->get('name')))  # do not include netrw dir
 	var bufferNums = map(copy(fbs), (_, item) => item->get('bufnr'))
@@ -15,7 +17,7 @@ def s:MyPrevBuffer(): number
 	return -1
 enddef
 
-def s:MyNextBuffer(): number
+def MyNextBuffer(): number
 	var lbs = getbufinfo({'buflisted': 1})
 	var fbs = filter(lbs, (_, item) => !isdirectory(item->get('name')))  # do not include netrw dir
 	var bufferNums = map(copy(fbs), (_, item) => item->get('bufnr'))
@@ -31,8 +33,8 @@ def s:MyNextBuffer(): number
 	return -1
 enddef
 
-""" <leader>d - delete buffer/tab ------------------------------------------------------------------
-def s:MyDeleteBufferAndTab()
+### <leader>d - delete buffer/tab ------------------------------------------------------------------
+def MyDeleteBufferAndTab()
 	var tabcount = tabpagenr('$')
 	if tabcount <= 1
 		# only 1 tab, close curren buffer
@@ -92,7 +94,7 @@ def s:MyDeleteBufferAndTab()
 	redrawtabline
 enddef
 
-def s:MyDeleteOtherBuffers()
+def MyDeleteOtherBuffers()
 	var listedbufs = getbufinfo({'buflisted': 1})
 	for buf in listedbufs
 		if !buf.changed && buf.hidden
@@ -102,7 +104,7 @@ def s:MyDeleteOtherBuffers()
 	redrawtabline
 enddef
 
-def s:MyGotoBuffer(bufnr: number = v:count1)
+def MyGotoBuffer(bufnr: number = v:count1)
 	if bufexists(bufnr) && buflisted(bufnr) && !isdirectory(bufname(bufnr))
 		execute('buffer ' .. bufnr)
 	endif
