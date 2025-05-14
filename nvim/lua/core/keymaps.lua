@@ -244,9 +244,6 @@ local keymaps = {
   --- BUG: nvim v0.11.0. 'gc' Overlapping with 'gcc'
   {'n', 'gc', '<Nop>', opt, 'Toggle Comment'},
 
-  --- ZZ same as `:x`, ZQ same as `:q!`
-  {'n', 'Z', function() end, opt, 'which_key_ignore'},
-
   --- <F1> :help help, 避免误操作.
   {{'n','i'}, '<F1>', function() end, opt, 'which_key_ignore'},
 
