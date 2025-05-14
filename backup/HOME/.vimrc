@@ -94,7 +94,7 @@ set cursorlineopt=number,screenline
 "set signcolumn=yes  " sign
 
 """ plugins ----------------------------------------------------------------------------------------
-source ~/.vim/statueline.vim
+source ~/.vim/statusline.vim
 source ~/.vim/keymaps.vim
 source ~/.vim/tabline.vim
 source ~/.vim/format.vim

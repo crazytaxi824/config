@@ -57,7 +57,7 @@ def MyStatusLine()
 	const sectionZ = "%%=%%(%%F %%)"   # separator & color & file path
 	const sectionY = "%s%%( %%y %s  %%)"  # color & filetype & fileencoding
 	const sectionX = "%s%%( %%3p%%%%:%%-2v %%)"  # color & line percentage & column
-	
+
 	var a = mode()
 	var fe = &fileencoding
 
