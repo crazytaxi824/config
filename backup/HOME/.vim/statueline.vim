@@ -42,36 +42,70 @@ const inactive = { A: "%#myInactive#" }
 
 def g:GitBranch(): string
 	var dir = fnamemodify(bufname(), ':p:h')
-	var branch = system('cd ' .. dir ..  ' && git rev-parse --abbrev-ref HEAD')
+	var branch = system('cd ' .. dir ..  ' && git rev-parse --abbrev-ref HEAD 2>/dev/null')
 	if !v:shell_error
-		return '  ' .. substitute(branch, '\n', '', '')
+		return ' ' .. substitute(branch, '\n', '', '')
 	endif
 	return ''
 enddef
 
 def MyStatusLine()
+	#var statuslineStr = "%%<%s %s %s%%(  %%{GitBranch()} %%)%s %%h%%w%%m%%r%%=%%F %s%%( %%y %s  %%)%s %%3p%%%%:%%-2v "
+	const sectionA = "%s%%( %s %%)"  # color & mode()
+	const sectionB = "%s%%(  %%{GitBranch()} %%)"  # color & git branch
+	const sectionC = "%s%%( %%h%%w%%m%%r%%)"  # color & [help] & [Preview] & Modified  & Readonly
+	const sectionZ = "%%=%%(%%F %%)"   # separator & color & file path
+	const sectionY = "%s%%( %%y %s  %%)"  # color & filetype & fileencoding
+	const sectionX = "%s%%( %%3p%%%%:%%-2v %%)"  # color & line percentage & column
+	
 	var a = mode()
-	var statuslineStr = "%%<%s %s %s %%{GitBranch()} %s %%h%%w%%m%%r%%=%%F %s %%y%s %s %%3p%%%%:%%-2v "
 	var fe = &fileencoding
-	if fe != ''
-		fe = ' ' .. fe .. ' '
-	endif
 
 	var wins = getwininfo()
 	for win in wins
 		if win.winid == win_getid()
 			# 设置当前 window
 			if m[a] ==? "INSERT" || m[a] ==? "TERMINAL"
-				&l:statusline = printf(statuslineStr, insert.A, m[a], insert.B, insert.C, insert.B, fe, insert.A)
+				&l:statusline   = printf(sectionA, insert.A, m[a])
+				&l:statusline ..= printf(sectionB, insert.B)
+				&l:statusline ..= printf(sectionC, insert.C)
+				&l:statusline ..= printf(sectionZ)
+				&l:statusline ..= printf(sectionY, insert.B, fe)
+				&l:statusline ..= printf(sectionX, insert.A)
+				#&l:statusline = printf(statuslineStr, insert.A, m[a], insert.B, insert.C, insert.B, fe, insert.A)
 			elseif m[a] ==? "REPLACE" || m[a] ==? "V-REPLACE"
-				&l:statusline = printf(statuslineStr, replace.A, m[a], replace.B, replace.C, replace.B, fe, replace.A)
+				&l:statusline   = printf(sectionA, replace.A, m[a])
+				&l:statusline ..= printf(sectionB, replace.B)
+				&l:statusline ..= printf(sectionC, replace.C)
+				&l:statusline ..= printf(sectionZ)
+				&l:statusline ..= printf(sectionY, replace.B, fe)
+				&l:statusline ..= printf(sectionX, replace.A)
+				#&l:statusline = printf(statuslineStr, replace.A, m[a], replace.B, replace.C, replace.B, fe, replace.A)
 			elseif m[a] ==? "VISUAL" || m[a] ==? "V-LINE" || m[a] ==? "V-BLOCK" || m[a] ==? "SELECT" || m[a] ==? "S-LINE" || m[a] ==? "S-BLOCK"
-				&l:statusline = printf(statuslineStr, visual.A, m[a], visual.B, visual.C, visual.B, fe, visual.A)
+				&l:statusline   = printf(sectionA, visual.A, m[a])
+				&l:statusline ..= printf(sectionB, visual.B)
+				&l:statusline ..= printf(sectionC, visual.C)
+				&l:statusline ..= printf(sectionZ)
+				&l:statusline ..= printf(sectionY, visual.B, fe)
+				&l:statusline ..= printf(sectionX, visual.A)
+				#&l:statusline = printf(statuslineStr, visual.A, m[a], visual.B, visual.C, visual.B, fe, visual.A)
 			elseif m[a] ==? "COMMAND"
-				&l:statusline = printf(statuslineStr, command.A, m[a], command.B, command.C, command.B, fe, command.A)
+				&l:statusline   = printf(sectionA, command.A, m[a])
+				&l:statusline ..= printf(sectionB, command.B)
+				&l:statusline ..= printf(sectionC, command.C)
+				&l:statusline ..= printf(sectionZ)
+				&l:statusline ..= printf(sectionY, command.B, fe)
+				&l:statusline ..= printf(sectionX, command.A)
+				#&l:statusline = printf(statuslineStr, command.A, m[a], command.B, command.C, command.B, fe, command.A)
 			else
 				# Normal & Other modes
-				&l:statusline = printf(statuslineStr, normal.A, m[a], normal.B, normal.C, normal.B, fe, normal.A)
+				&l:statusline   = printf(sectionA, normal.A, m[a])
+				&l:statusline ..= printf(sectionB, normal.B)
+				&l:statusline ..= printf(sectionC, normal.C)
+				&l:statusline ..= printf(sectionZ)
+				&l:statusline ..= printf(sectionY, normal.B, fe)
+				&l:statusline ..= printf(sectionX, normal.A)
+				#&l:statusline = printf(statuslineStr, normal.A, m[a], normal.B, normal.C, normal.B, fe, normal.A)
 			endif
 		else
 			# 设置其他 window
