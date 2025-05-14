@@ -12,6 +12,9 @@ let &t_SR = "\e[4 q"  " Replace Mode
 let &t_EI = "\e[2 q"  " everything else
 
 let mapleader = "\\"
+
+""" mouse
+"set term=xterm-256color
 set mouse=a
 
 """ 必须先加载 colorscheme, 否则以后的 highlight 设置可能无效.

@@ -52,14 +52,17 @@ enddef
 def MyStatusLine()
 	#var statuslineStr = "%%<%s %s %s%%(  %%{GitBranch()} %%)%s %%h%%w%%m%%r%%=%%F %s%%( %%y %s  %%)%s %%3p%%%%:%%-2v "
 	const sectionA = "%s%%( %s %%)"  # color & mode()
-	const sectionB = "%s%%(  %%{GitBranch()} %%)"  # color & git branch
+	const sectionB = "%s%%( %%{GitBranch()} %%)"  # color & git branch
 	const sectionC = "%s%%( %%h%%w%%m%%r%%)"  # color & [help] & [Preview] & Modified  & Readonly
 	const sectionZ = "%%=%%(%%F %%)"   # separator & color & file path
-	const sectionY = "%s%%( %%y %s  %%)"  # color & filetype & fileencoding
+	const sectionY = "%s%%( %%y%s %%)"  # color & filetype & fileencoding
 	const sectionX = "%s%%( %%3p%%%%:%%-2v %%)"  # color & line percentage & column
 
 	var a = mode()
 	var fe = &fileencoding
+	if fe != ''
+		fe = ' ' .. fe
+	endif
 
 	var wins = getwininfo()
 	for win in wins
