@@ -42,9 +42,9 @@ const inactive = { A: "%#myInactive#" }
 
 def g:GitBranch(): string
 	var dir = fnamemodify(bufname(), ':p:h')
-	var branch = system('cd ' .. dir ..  ' && git rev-parse --abbrev-ref HEAD 2>/dev/null')
-	if !v:shell_error
-		return ' ' .. substitute(branch, '\n', '', '')
+	var branch = system('cd ' .. dir .. ' && git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null')
+	if branch != ''
+		return ' ' .. trim(branch)
 	endif
 	return ''
 enddef
