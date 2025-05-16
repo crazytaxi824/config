@@ -6,7 +6,7 @@ autocmd FileType
 
 autocmd FileType go setlocal formatprg=goimports
 
-:command! Format normal! gggqG
+command! Format normal! gggqG
 
 # auto format when save file
 #autocmd BufWritePre * normal! gggqG
