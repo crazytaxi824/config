@@ -411,7 +411,6 @@ local plugins = {
   },
 
   --- recommanded plugins ------------------------------------------------------ {{{
-  --{"mfussenegger/nvim-lint"}, -- linter
   -- {
   --   "ibhagwan/fzf-lua",
   --   dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -428,6 +427,7 @@ local plugins = {
   -- },
 
   --{"nvim-neo-tree/neo-tree.nvim"},  -- File explorer. nvim-tree.lua 替代
+  --{"mfussenegger/nvim-lint"},   -- linter
   --{"Tastyep/structlog.nvim"},   -- log 工具
   --{"rebelot/heirline.nvim"},    -- lualine + bufferline 替代
   --{"willothy/nvim-cokeline"},   -- bufferline 替代
@@ -436,7 +436,7 @@ local plugins = {
   --{"goolord/alpha-nvim"},  -- neovim 启动页面
   --{"ahmedkhalf/project.nvim"},  -- project manager
 
-  --{"p00f/nvim-ts-rainbow"}, -- rainbow 括号颜色, treesitter 插件. NOTE: 严重拖慢文件打开速度.
+  --{"p00f/nvim-ts-rainbow"},  -- rainbow 括号颜色, treesitter 插件. NOTE: 严重拖慢文件打开速度.
   -- -- }}}
 }
 
