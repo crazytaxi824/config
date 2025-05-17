@@ -35,6 +35,13 @@ end
 require("plugins.settings.debug.adapters.go")
 require("plugins.settings.debug.adapters.py")
 
+--- custom command for repl ------------------------------------------------------------------------
+local repl = require('dap.repl')
+repl.commands = vim.tbl_extend('force', repl.commands, {
+  -- Add a new alias for the existing .exit command
+  exit = {'.exit', '.q', '.quit'},
+})
+
 --- functions -------------------------------------------------------------------------------------- {{{
 --- NOTE: 通过 set/get tab var 来确定 debug_tab 是否存在.
 local tabvar_dap = "my_debug_tab_main_winid"
