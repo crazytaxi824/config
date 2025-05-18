@@ -58,7 +58,7 @@ def g:GitBranch(): string
 	if dir == ''
 		return ''
 	endif
-	
+
 	var branch = system('cd ' .. dir .. ' && (git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)')
 	if branch == ''
 		return ''

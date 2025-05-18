@@ -25,7 +25,7 @@ def g:MyTabLine(): string
 	var fbs = filter(lbs, (_, item) => !isdirectory(item->get('name')))  # do not include netrw dir
 	var bufferNums = map(copy(fbs), (_, item) => item->get('bufnr'))
 	#var bufferNums = filter(range(1, bufnr('$')), 'bufexists(v:val)')  # Debug
-	
+
 	var s = ''
 	for i in bufferNums
 		var name = bufname(i)
