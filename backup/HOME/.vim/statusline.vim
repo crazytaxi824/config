@@ -82,7 +82,7 @@ def MyStatusLine()
 	const sectionA = "%s%%( %s %%)"  # color & mode()
 	const sectionB = "%s%%( %%{GitBranch()} %%)"  # color & git branch
 	const sectionC = "%s%%( %%{CheckTrailingWhitespace()}%%)"  # color & Trailing Whitespace
-	const sectionZ = "%%=%%(%%F %%)%%(%%h%%w%%m%%r %%)"   # separator & file path & [help] & [Preview] & Modified  & Readonly
+	const sectionZ = "%%=%%<%%(%%F %%)%%(%%h%%w%%m%%r %%)"   # separator & file path & [help] & [Preview] & Modified  & Readonly
 	const sectionY = "%s%%( %%y%s %%)"  # color & filetype & fileencoding
 	const sectionX = "%s%%( %%3p%%%%:%%-2v %%)"  # color & line percentage & column
 
