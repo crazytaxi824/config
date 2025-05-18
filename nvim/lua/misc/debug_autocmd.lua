@@ -144,6 +144,9 @@ local function debug_autocmd(e)
         curr_buf=vim.api.nvim_get_current_buf(),
       }
       print(vim.json.encode(curr), vim.json.encode(params))
+      if params.event == "VimLeave" then
+        vim.fn.getchar()  -- pause neovim before VimLeave
+      end
     end,
     desc = "autocmd debug",
   })

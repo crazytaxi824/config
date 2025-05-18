@@ -321,6 +321,7 @@ vim.opt.autowrite = true   -- 可以自动保存 buffer，例如在 buffer 切�
 vim.opt.updatetime = 600   -- faster completion (4000ms default)
 vim.opt.hidden = true      -- VVI: 很多插件需要用到 hidden buffer. When 'false' a buffer is unloaded when it is abandoned.
 
+vim.opt.wildoptions = "fuzzy" -- fuzzy search
 -- vim.opt.wildmenu = true    -- Command 模式下 <Tab> completion. `:help wildmenu` - enhanced mode of command-line completion.
 -- vim.opt.wildmode = "full"  -- Complete the next full match.
 
@@ -614,14 +615,14 @@ vim.api.nvim_create_autocmd("QuitPre", {
 
     --- last normal window
     if vim.fn.win_gettype(win_id) == '' and normal_win_count <= 1 then
-      Notify({" Cannot quit the last normal window.", " use `:qa`"}, "WARN")
+      vim.notify("Cannot quit the last normal window. use `:qa`", vim.log.levels.WARN)
       vim.cmd.vsplit()  -- 使用 vsplit 防止 window 高度改变
       return
     end
 
     --- last buflisted window
     if vim.fn.buflisted(params.buf) == 1 and buflisted_win_count <= 1 then
-      Notify({" Cannot quit the last buflisted window."}, "WARN")
+      vim.notify("Cannot quit the last buflisted window.", vim.log.levels.WARN)
       vim.cmd.vsplit()  -- 使用 vsplit 防止 window 高度改变
       return
     end
