@@ -40,13 +40,31 @@ const replace = { A: "%#myReplaceMode#", B: "%#myInsertReplaceB#", C: "%#myInser
 const command = { A: "%#myCommandMode#", B: "%#myNormalCommandB#", C: "%#myNormalCommandC#" }
 const inactive = { A: "%#myInactive#" }
 
-def g:GitBranch(): string
-	var dir = fnamemodify(bufname(), ':p:h')
-	var branch = system('cd ' .. dir .. ' && git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null')
-	if branch != ''
-		return ' ' .. trim(branch)
+def FindGitRoot(): string
+	var path = expand('%:p:h')
+	while path !=# '/' && !isdirectory(path .. '/.git')
+		path = fnamemodify(path, ':h')
+	endwhile
+
+	if isdirectory(path .. '/.git')
+		return path
 	endif
+	# Not found
 	return ''
+enddef
+
+def g:GitBranch(): string
+	var dir = FindGitRoot()
+	if dir == ''
+		return ''
+	endif
+	
+	var branch = system('cd ' .. dir .. ' && (git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)')
+	if branch == ''
+		return ''
+	endif
+
+	return ' ' .. trim(branch)
 enddef
 
 def MyStatusLine()
