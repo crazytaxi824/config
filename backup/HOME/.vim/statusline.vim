@@ -40,6 +40,16 @@ const replace = { A: "%#myReplaceMode#", B: "%#myInsertReplaceB#", C: "%#myInser
 const command = { A: "%#myCommandMode#", B: "%#myNormalCommandB#", C: "%#myNormalCommandC#" }
 const inactive = { A: "%#myInactive#" }
 
+def g:CheckTrailingWhitespace(): string
+	var lines = getline(1, '$')
+	for i in range(len(lines))
+		if lines[i] =~ '\s\+$'
+			return 'T:' .. (i + 1)
+		endif
+	endfor
+	return ''
+enddef
+
 def FindGitRoot(): string
 	var path = expand('%:p:h')
 	while path !=# '/' && !isdirectory(path .. '/.git')
@@ -71,8 +81,8 @@ def MyStatusLine()
 	#var statuslineStr = "%%<%s %s %s%%(  %%{GitBranch()} %%)%s %%h%%w%%m%%r%%=%%F %s%%( %%y %s  %%)%s %%3p%%%%:%%-2v "
 	const sectionA = "%s%%( %s %%)"  # color & mode()
 	const sectionB = "%s%%( %%{GitBranch()} %%)"  # color & git branch
-	const sectionC = "%s%%( %%h%%w%%m%%r%%)"  # color & [help] & [Preview] & Modified  & Readonly
-	const sectionZ = "%%=%%(%%F %%)"   # separator & color & file path
+	const sectionC = "%s%%( %%{CheckTrailingWhitespace()}%%)"  # color & Trailing Whitespace
+	const sectionZ = "%%=%%(%%F %%)%%(%%h%%w%%m%%r %%)"   # separator & file path & [help] & [Preview] & Modified  & Readonly
 	const sectionY = "%s%%( %%y%s %%)"  # color & filetype & fileencoding
 	const sectionX = "%s%%( %%3p%%%%:%%-2v %%)"  # color & line percentage & column
 
@@ -130,7 +140,7 @@ def MyStatusLine()
 			endif
 		else
 			# 设置其他 window
-			var inactiveSL = printf("%%<%s %%f %%m%%r%%=%%y ", inactive.A)
+			var inactiveSL = printf("%%<%s %%f %%m%%r %%{CheckTrailingWhitespace()}%%=%%y ", inactive.A)
 			setwinvar(win.winid, '&statusline', inactiveSL)
 		endif
 	endfor
