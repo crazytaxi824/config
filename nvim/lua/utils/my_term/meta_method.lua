@@ -15,7 +15,7 @@ M.default_opts = {
   bufnr = nil,
   job_id = nil,
 
-  cmd = vim.go.shell, -- `:help 'shell'`, 相当于 os.getenv('SHELL')
+  cmd = vim.go.shell, -- `:help 'shell'`, 相当于 os.getenv('SHELL'), vim.env.SHELL
   cwd = nil,  -- string, jobstart() opts
   env = nil,  -- dict, jobstart() opts
   auto_scroll = nil,  -- goto bottom of the terminal. 在 on_stdout & on_stderr 中触发.

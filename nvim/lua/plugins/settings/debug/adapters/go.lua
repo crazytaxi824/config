@@ -20,7 +20,7 @@ end
 --- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#go
 --- 使用 vscode 插件运行 debug, vscode extension 位置 "~/.vscode/extensions/golang.go-0.46.1/dist/debugAdapter.js"
 local vscode_debug_path = vim.fs.find({ "debugAdapter.js" }, { type = "file", path = "~/.vscode/extensions" })
-local pattern = vim.fs.joinpath(os.getenv("HOME"), "%.vscode/extensions/golang.*/dist/debugAdapter%.js")
+local pattern = vim.fs.joinpath(vim.env.HOME, "%.vscode/extensions/golang.*/dist/debugAdapter%.js")
 if #vscode_debug_path > 0 and string.match(vscode_debug_path[1], pattern) then
   dap.adapters.go = function(callback, config)
     callback({

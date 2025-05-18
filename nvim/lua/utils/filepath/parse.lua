@@ -62,7 +62,7 @@ local function filepath_with_lnum_col(str)
     return
   end
 
-  local absolute_fp = vim.fn.fnamemodify(splits[1], ':p')
+  local absolute_fp = vim.fs.abspath(splits[1])
   local finfo = vim.uv.fs_stat(absolute_fp)
   if not finfo then
     return
