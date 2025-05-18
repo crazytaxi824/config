@@ -2,20 +2,22 @@
 --- check virtual environment
 local function venv()
   --- 项目环境
-  local py_venv = vim.fs.root(0, '.venv')
-  if not py_venv then
+  local py_paths = vim.fs.find({'.venv/bin/python3'}, {
+    upward = true,
+    path = vim.api.nvim_buf_get_name(0),
+    stop = vim.env.HOME,
+    type = "file",
+  })
+  if #py_paths < 1 then
     return
   end
-
-  if vim.uv.fs_stat(vim.fs.joinpath(py_venv, '.venv/bin/activate')) then
-    return py_venv
-  end
+  return py_paths[1]
 end
 
 --- file is absolut path
 local function py_run(file)
-  local py_venv = venv()
-  if not py_venv then
+  local py_path = venv()
+  if not py_path then
     Notify({
       "need to create python Virtual Environment first:",
       '  `python3.xx -m venv .venv` or `uv venv`',
@@ -23,12 +25,12 @@ local function py_run(file)
     return
   end
 
-  local py_path = vim.fs.joinpath(py_venv, '.venv/bin')
+  --- 先相对 HOME, 再相对 cwd.
+  py_path = vim.fn.fnamemodify(py_path, ':~:.')
+  file = vim.fn.fnamemodify(file, ':~:.')
 
   local t = require('utils.my_term.instances').console
-  -- t.cmd = "echo $PATH && which python3 && python3 --version && python3 " .. file  -- DEBUG
-  t.cmd = "python3 " .. file
-  t.env = { PATH = py_path .. ':' .. vim.env.PATH }  -- same as 'source .venv/bin/activate'
+  t.cmd = py_path .. " -- " .. file
   t:stop()
   t:run()
 end

@@ -30,6 +30,9 @@ M.open_shell_term = function()
     return
   end
 
+  --- get current buffer before terminal:run()
+  local curr_bufname = vim.api.nvim_buf_get_name(0)
+
   local t = M.get_term_by_id(vim.v.count1)
   --- terminal 没有被缓存则 M.new()
   if not t then
@@ -57,17 +60,18 @@ M.open_shell_term = function()
     t:run()
 
     --- source Python Virtual Environment
-    local root = vim.fs.root(0, '.venv')
-    if not root then
+    local py_venv = vim.fs.find({'.venv/bin/activate'}, {
+      upward = true,
+      path = curr_bufname,
+      stop = vim.env.HOME,
+      type = "file",
+    })
+    if #py_venv < 1 then
       return
     end
 
-    local local_venv = vim.fs.joinpath(root, '.venv/bin/activate')
-    if vim.uv.fs_stat(local_venv) then
-      -- vim.fn.chansend(t.job_id, 'source ' .. local_venv .. '&& clear\n')
-      vim.api.nvim_chan_send(t.job_id, 'source ' .. local_venv .. '&& clear\n')
-    end
-
+    -- vim.fn.chansend(t.job_id, 'source ' .. py_venv[1] .. ' && clear\n')
+    vim.api.nvim_chan_send(t.job_id, 'source ' .. py_venv[1] .. ' && clear\n')
     return
   end
 
