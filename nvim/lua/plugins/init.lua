@@ -234,7 +234,8 @@ local plugins = {
   --- File explorer --------------------------------------------------------------------------------
   {
     "nvim-tree/nvim-tree.lua",
-    tag = "v1.12.0",
+    -- tag = "v1.12.0",
+    commit = "25d16aa",
     config = function() require("plugins.settings.file_tree") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
 
