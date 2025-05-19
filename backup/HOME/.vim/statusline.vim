@@ -20,6 +20,12 @@ hi myVisualB ctermbg=202 ctermfg=233
 hi myVisualC ctermbg=52 ctermfg=78
 hi myInactive ctermbg=233 ctermfg=245
 
+# for mix indentation & trailing whitespace warning message
+hi myNormalMTC ctermbg=233 ctermfg=208 cterm=bold
+hi myInsertMTC ctermbg=17  ctermfg=208 cterm=bold
+hi myVisualMTC ctermbg=52  ctermfg=208 cterm=bold
+hi myInactiveMTC ctermbg=233 ctermfg=208 cterm=bold
+
 # `:help mode()`
 const m = {
 	n: "NORMAL", no: "O-PENDING", nov: "O-PENDING", noV: "O-PENDING", "no\<C-V>": "O-PENDING",
@@ -39,6 +45,7 @@ const insert = { A: "%#myInsertMode#", B: "%#myInsertReplaceB#", C: "%#myInsertR
 const replace = { A: "%#myReplaceMode#", B: "%#myInsertReplaceB#", C: "%#myInsertReplaceC#" }
 const command = { A: "%#myCommandMode#", B: "%#myNormalCommandB#", C: "%#myNormalCommandC#" }
 const inactive = { A: "%#myInactive#" }
+const warn = { insert: "%#myInsertMTC#", normal: "%#myNormalMTC#", visual: "%#myVisualMTC#", inactive: "%#myInactiveMTC#" }
 
 # VVI: 缓存 statusline 触发时的 bufnr, 和 bufnr() 获取到的可能不同.
 var curr_bufnr = 0
@@ -135,7 +142,7 @@ def MyStatusLine()
 	#var statuslineStr = "%%<%s %s %s%%(  %%{GitBranch()} %%)%s %%h%%w%%m%%r%%=%%F %s%%( %%y %s  %%)%s %%3p%%%%:%%-2v "
 	const sectionA = "%s%%( %s %%)"
 	const sectionB = "%s%%( %%{GitBranch()} %%)"
-	const sectionC = "%s%%( %%{CheckMiTws()}%%)"
+	const sectionC = "%s%%( %%{CheckMiTws()}%%)%s"
 	const sectionZ = "%%=%%<%%(%%F %%)%%(%%h%%w%%m%%r %%)"
 	const sectionY = "%s%%( %%y%s %%)"
 	const sectionX = "%s%%( %%3p%%%%:%%-2v %%)"
@@ -153,28 +160,28 @@ def MyStatusLine()
 			if m[a] ==? "INSERT" || m[a] ==? "TERMINAL"
 				&l:statusline   = printf(sectionA, insert.A, m[a])
 				&l:statusline ..= printf(sectionB, insert.B)
-				&l:statusline ..= printf(sectionC, insert.C)
+				&l:statusline ..= printf(sectionC, warn.insert, insert.C)
 				&l:statusline ..= printf(sectionZ)
 				&l:statusline ..= printf(sectionY, insert.B, fe)
 				&l:statusline ..= printf(sectionX, insert.A)
 			elseif m[a] ==? "REPLACE" || m[a] ==? "V-REPLACE"
 				&l:statusline   = printf(sectionA, replace.A, m[a])
 				&l:statusline ..= printf(sectionB, replace.B)
-				&l:statusline ..= printf(sectionC, replace.C)
+				&l:statusline ..= printf(sectionC, warn.insert, replace.C)
 				&l:statusline ..= printf(sectionZ)
 				&l:statusline ..= printf(sectionY, replace.B, fe)
 				&l:statusline ..= printf(sectionX, replace.A)
 			elseif m[a] ==? "VISUAL" || m[a] ==? "V-LINE" || m[a] ==? "V-BLOCK" || m[a] ==? "SELECT" || m[a] ==? "S-LINE" || m[a] ==? "S-BLOCK"
 				&l:statusline   = printf(sectionA, visual.A, m[a])
 				&l:statusline ..= printf(sectionB, visual.B)
-				&l:statusline ..= printf(sectionC, visual.C)
+				&l:statusline ..= printf(sectionC, warn.visual, visual.C)
 				&l:statusline ..= printf(sectionZ)
 				&l:statusline ..= printf(sectionY, visual.B, fe)
 				&l:statusline ..= printf(sectionX, visual.A)
 			elseif m[a] ==? "COMMAND"
 				&l:statusline   = printf(sectionA, command.A, m[a])
 				&l:statusline ..= printf(sectionB, command.B)
-				&l:statusline ..= printf(sectionC, command.C)
+				&l:statusline ..= printf(sectionC, warn.normal, command.C)
 				&l:statusline ..= printf(sectionZ)
 				&l:statusline ..= printf(sectionY, command.B, fe)
 				&l:statusline ..= printf(sectionX, command.A)
@@ -182,14 +189,14 @@ def MyStatusLine()
 				# Normal & Other modes
 				&l:statusline   = printf(sectionA, normal.A, m[a])
 				&l:statusline ..= printf(sectionB, normal.B)
-				&l:statusline ..= printf(sectionC, normal.C)
+				&l:statusline ..= printf(sectionC, warn.normal, normal.C)
 				&l:statusline ..= printf(sectionZ)
 				&l:statusline ..= printf(sectionY, normal.B, fe)
 				&l:statusline ..= printf(sectionX, normal.A)
 			endif
 		else
 			# 设置其他 window
-			var inactiveSL = printf("%%<%s %%{CheckMiTws()}%%=%%f %%(%%m%%r %%)", inactive.A)
+			var inactiveSL = printf("%%<%s %%{CheckMiTws()}%s%%=%%f %%(%%m%%r %%)", warn.inactive, inactive.A)
 			setwinvar(win.winid, '&statusline', inactiveSL)
 		endif
 	endfor
