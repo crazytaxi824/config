@@ -40,15 +40,39 @@ const replace = { A: "%#myReplaceMode#", B: "%#myInsertReplaceB#", C: "%#myInser
 const command = { A: "%#myCommandMode#", B: "%#myNormalCommandB#", C: "%#myNormalCommandC#" }
 const inactive = { A: "%#myInactive#" }
 
+# VVI: statusline 触发时当前 bufnr
+var curr_bufnr = 0
+
+var cache_tws: dict<string> = {}
 def g:CheckTrailingWhitespace(): string
+	if bufnr() != curr_bufnr
+		return cache_tws->get(bufnr(), '')  # 如果 key 不存在, 默认返回 ''
+	endif
+
+	if mode() != 'n'
+		return cache_tws->get(bufnr(), '')  # 如果 key 不存在, 默认返回 ''
+	endif
+
 	var lines = getline(1, '$')
 	for i in range(len(lines))
 		if lines[i] =~ '\s\+$'
-			return 'T:' .. (i + 1)
+			# cache data
+			cache_tws[bufnr()] = 'T:' .. (i + 1)
+			return cache_tws->get(bufnr())
 		endif
 	endfor
+
+	# delete cache data
+	if has_key(cache_tws, bufnr())
+		remove(cache_tws, bufnr())
+	endif
 	return ''
 enddef
+
+# Debug
+#def g:DebugTWS()
+#	echom cache_tws
+#enddef
 
 def FindGitRoot(): string
 	var path = expand('%:p:h')
@@ -78,6 +102,8 @@ def g:GitBranch(): string
 enddef
 
 def MyStatusLine()
+	curr_bufnr = bufnr('%')
+
 	#var statuslineStr = "%%<%s %s %s%%(  %%{GitBranch()} %%)%s %%h%%w%%m%%r%%=%%F %s%%( %%y %s  %%)%s %%3p%%%%:%%-2v "
 	const sectionA = "%s%%( %s %%)"  # color & mode()
 	const sectionB = "%s%%( %%{GitBranch()} %%)"  # color & git branch
