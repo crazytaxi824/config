@@ -40,11 +40,12 @@ const replace = { A: "%#myReplaceMode#", B: "%#myInsertReplaceB#", C: "%#myInser
 const command = { A: "%#myCommandMode#", B: "%#myNormalCommandB#", C: "%#myNormalCommandC#" }
 const inactive = { A: "%#myInactive#" }
 
-# VVI: statusline 触发时当前 bufnr
+# VVI: 缓存 statusline 触发时的 bufnr, 和 bufnr() 获取到的可能不同.
 var curr_bufnr = 0
 
 var cache_tws: dict<string> = {}
 def g:CheckTrailingWhitespace(): string
+	# inactive window
 	if bufnr() != curr_bufnr
 		return cache_tws->get(bufnr(), '')  # 如果 key 不存在, 默认返回 ''
 	endif
@@ -68,11 +69,6 @@ def g:CheckTrailingWhitespace(): string
 	endif
 	return ''
 enddef
-
-# Debug
-#def g:DebugTWS()
-#	echom cache_tws
-#enddef
 
 def FindGitRoot(): string
 	var path = expand('%:p:h')
@@ -177,6 +173,11 @@ augroup MyStatusLineGroup
 	au VimEnter * ++once MyStatusLine()
 	au WinEnter,BufEnter,Modechanged * MyStatusLine()
 augroup END
+
+# Debug
+#def g:DebugTWS()
+#	echom cache_tws
+#enddef
 
 
 
