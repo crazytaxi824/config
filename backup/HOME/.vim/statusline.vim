@@ -57,9 +57,9 @@ def g:CheckTrailingWhitespace(): string
 	var lines = getline(1, '$')
 	for i in range(len(lines))
 		if lines[i] =~ '\s\+$'
-			# cache data
-			cache_tws[bufnr()] = 'T:' .. (i + 1)
-			return cache_tws->get(bufnr())
+			var msg = 'T:' .. (i + 1)
+			cache_tws[bufnr()] = msg
+			return msg
 		endif
 	endfor
 
@@ -83,18 +83,34 @@ def FindGitRoot(): string
 	return ''
 enddef
 
+# { bufnr: { last: localtime(), branch: string }}
+var cache_git: dict<any> = {}
 def g:GitBranch(): string
+	var timenow = localtime()
+	if has_key(cache_git, bufnr())
+		var gb = cache_git->get(bufnr())
+
+		# refresh git status after N seconds
+		if timenow - gb->get("last", 0) <= 5
+			return gb->get("branch", '')
+		endif
+	endif
+
 	var dir = FindGitRoot()
 	if dir == ''
+		cache_git[bufnr()] = { last: timenow, branch: '' }
 		return ''
 	endif
 
 	var branch = system('cd ' .. dir .. ' && (git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)')
 	if branch == ''
+		cache_git[bufnr()] = { last: timenow, branch: '' }
 		return ''
 	endif
 
-	return ' ' .. trim(branch)
+	branch = ' ' .. trim(branch)
+	cache_git[bufnr()] = { last: timenow, branch: branch }
+	return branch
 enddef
 
 def MyStatusLine()
@@ -175,8 +191,9 @@ augroup MyStatusLineGroup
 augroup END
 
 # Debug
-#def g:DebugTWS()
+#def g:DebugStatusLine()
 #	echom cache_tws
+#	echom cache_git
 #enddef
 
 
