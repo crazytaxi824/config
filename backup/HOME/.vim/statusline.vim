@@ -43,29 +43,46 @@ const inactive = { A: "%#myInactive#" }
 # VVI: 缓存 statusline 触发时的 bufnr, 和 bufnr() 获取到的可能不同.
 var curr_bufnr = 0
 
-var cache_tws: dict<string> = {}
-def g:CheckTrailingWhitespace(): string
+var check_mt: dict<string> = {}
+def g:CheckMiTws(): string
 	# inactive window
 	if bufnr() != curr_bufnr
-		return cache_tws->get(bufnr(), '')  # 如果 key 不存在, 默认返回 ''
+		return check_mt->get(bufnr(), '')  # 如果 key 不存在, 默认返回 ''
 	endif
 
 	if mode() != 'n'
-		return cache_tws->get(bufnr(), '')  # 如果 key 不存在, 默认返回 ''
+		return check_mt->get(bufnr(), '')  # 如果 key 不存在, 默认返回 ''
 	endif
 
 	var lines = getline(1, '$')
 	for i in range(len(lines))
+		var tws = ''
+		var mi = ''
+		# check Trailing Whitespace
 		if lines[i] =~ '\s\+$'
-			var msg = 'T:' .. (i + 1)
-			cache_tws[bufnr()] = msg
+			tws = 'T:' .. (i + 1)
+		endif
+		# check mix indentation
+		if lines[i] =~ '^\(\t\+ \+\| \+\t\+\)'
+			mi = 'M:' .. (i + 1)
+		endif
+
+		var msg = ''
+		if tws != '' && mi != ''
+			msg = tws .. ' ' .. mi
+		else
+			msg = tws .. mi
+		endif
+
+		if msg != ''
+			check_mt[bufnr()] = msg
 			return msg
 		endif
 	endfor
 
 	# delete cache data
-	if has_key(cache_tws, bufnr())
-		remove(cache_tws, bufnr())
+	if has_key(check_mt, bufnr())
+		remove(check_mt, bufnr())
 	endif
 	return ''
 enddef
@@ -86,6 +103,11 @@ enddef
 # { bufnr: { last: localtime(), branch: string }}
 var cache_git: dict<any> = {}
 def g:GitBranch(): string
+	# exclusion
+	if &buftype != '' || &filetype == 'netrw'
+		return ''
+	endif
+
 	var timenow = localtime()
 	if has_key(cache_git, bufnr())
 		var gb = cache_git->get(bufnr())
@@ -119,7 +141,7 @@ def MyStatusLine()
 	#var statuslineStr = "%%<%s %s %s%%(  %%{GitBranch()} %%)%s %%h%%w%%m%%r%%=%%F %s%%( %%y %s  %%)%s %%3p%%%%:%%-2v "
 	const sectionA = "%s%%( %s %%)"  # color & mode()
 	const sectionB = "%s%%( %%{GitBranch()} %%)"  # color & git branch
-	const sectionC = "%s%%( %%{CheckTrailingWhitespace()}%%)"  # color & Trailing Whitespace
+	const sectionC = "%s%%( %%{CheckMiTws()}%%)"  # color & Trailing Whitespace
 	const sectionZ = "%%=%%<%%(%%F %%)%%(%%h%%w%%m%%r %%)"   # separator & file path & [help] & [Preview] & Modified  & Readonly
 	const sectionY = "%s%%( %%y%s %%)"  # color & filetype & fileencoding
 	const sectionX = "%s%%( %%3p%%%%:%%-2v %%)"  # color & line percentage & column
@@ -178,7 +200,7 @@ def MyStatusLine()
 			endif
 		else
 			# 设置其他 window
-			var inactiveSL = printf("%%<%s %%f %%m%%r %%{CheckTrailingWhitespace()}%%=%%y ", inactive.A)
+			var inactiveSL = printf("%%<%s %%f %%m%%r %%{CheckMiTws()}%%=%%y ", inactive.A)
 			setwinvar(win.winid, '&statusline', inactiveSL)
 		endif
 	endfor
@@ -192,7 +214,7 @@ augroup END
 
 # Debug
 #def g:DebugStatusLine()
-#	echom cache_tws
+#	echom check_mt
 #	echom cache_git
 #enddef
 
