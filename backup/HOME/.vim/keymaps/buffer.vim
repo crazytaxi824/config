@@ -88,7 +88,7 @@ def MyDeleteBufferAndTab()
 			return
 		endif
 	endfor
-	
+
 	tabfirst
 	execute('bdelete ' .. join(bdBufs, ' '))
 	redrawtabline

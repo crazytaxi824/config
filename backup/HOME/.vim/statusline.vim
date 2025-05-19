@@ -54,31 +54,25 @@ def g:CheckMiTws(): string
 		return check_mt->get(bufnr(), '')  # 如果 key 不存在, 默认返回 ''
 	endif
 
-	var lines = getline(1, '$')
-	for i in range(len(lines))
-		var tws = ''
-		var mi = ''
-		# check Trailing Whitespace
-		if lines[i] =~ '\s\+$'
-			tws = 'T:' .. (i + 1)
-		endif
-		# check mix indentation
-		if lines[i] =~ '^\(\t\+ \+\| \+\t\+\)'
-			mi = 'M:' .. (i + 1)
-		endif
+	const tws_pat = '\s\+$'
+	const mi_pat = '^\(\t\+ \+\| \+\t\+\)'
 
-		var msg = ''
-		if tws != '' && mi != ''
-			msg = tws .. ' ' .. mi
-		else
-			msg = tws .. mi
-		endif
+	var tws = search(tws_pat, 'nwc')
+	var mi = search(mi_pat, 'nwc')
 
-		if msg != ''
-			check_mt[bufnr()] = msg
-			return msg
-		endif
-	endfor
+	var msg = ''
+	if tws > 0 && mi > 0
+		msg = 'T:' .. tws .. ' M:' .. mi
+	elseif tws > 0 && mi <= 0
+		msg = 'T:' .. tws
+	elseif tws <= 0 && mi > 0
+		msg = 'M:' .. mi
+	endif
+
+	if msg != ''
+		check_mt[bufnr()] = msg
+		return msg
+	endif
 
 	# delete cache data
 	if has_key(check_mt, bufnr())
@@ -103,7 +97,7 @@ enddef
 # { bufnr: { last: localtime(), branch: string }}
 var cache_git: dict<any> = {}
 def g:GitBranch(): string
-	# exclusion
+	# 排除类型
 	if &buftype != '' || &filetype == 'netrw'
 		return ''
 	endif
@@ -112,7 +106,7 @@ def g:GitBranch(): string
 	if has_key(cache_git, bufnr())
 		var gb = cache_git->get(bufnr())
 
-		# refresh git status after N seconds
+		# VVI: refresh git status after N seconds
 		if timenow - gb->get("last", 0) <= 5
 			return gb->get("branch", '')
 		endif
@@ -139,12 +133,12 @@ def MyStatusLine()
 	curr_bufnr = bufnr('%')
 
 	#var statuslineStr = "%%<%s %s %s%%(  %%{GitBranch()} %%)%s %%h%%w%%m%%r%%=%%F %s%%( %%y %s  %%)%s %%3p%%%%:%%-2v "
-	const sectionA = "%s%%( %s %%)"  # color & mode()
-	const sectionB = "%s%%( %%{GitBranch()} %%)"  # color & git branch
-	const sectionC = "%s%%( %%{CheckMiTws()}%%)"  # color & Trailing Whitespace
-	const sectionZ = "%%=%%<%%(%%F %%)%%(%%h%%w%%m%%r %%)"   # separator & file path & [help] & [Preview] & Modified  & Readonly
-	const sectionY = "%s%%( %%y%s %%)"  # color & filetype & fileencoding
-	const sectionX = "%s%%( %%3p%%%%:%%-2v %%)"  # color & line percentage & column
+	const sectionA = "%s%%( %s %%)"
+	const sectionB = "%s%%( %%{GitBranch()} %%)"
+	const sectionC = "%s%%( %%{CheckMiTws()}%%)"
+	const sectionZ = "%%=%%<%%(%%F %%)%%(%%h%%w%%m%%r %%)"
+	const sectionY = "%s%%( %%y%s %%)"
+	const sectionX = "%s%%( %%3p%%%%:%%-2v %%)"
 
 	var a = mode()
 	var fe = &fileencoding
@@ -163,7 +157,6 @@ def MyStatusLine()
 				&l:statusline ..= printf(sectionZ)
 				&l:statusline ..= printf(sectionY, insert.B, fe)
 				&l:statusline ..= printf(sectionX, insert.A)
-				#&l:statusline = printf(statuslineStr, insert.A, m[a], insert.B, insert.C, insert.B, fe, insert.A)
 			elseif m[a] ==? "REPLACE" || m[a] ==? "V-REPLACE"
 				&l:statusline   = printf(sectionA, replace.A, m[a])
 				&l:statusline ..= printf(sectionB, replace.B)
@@ -171,7 +164,6 @@ def MyStatusLine()
 				&l:statusline ..= printf(sectionZ)
 				&l:statusline ..= printf(sectionY, replace.B, fe)
 				&l:statusline ..= printf(sectionX, replace.A)
-				#&l:statusline = printf(statuslineStr, replace.A, m[a], replace.B, replace.C, replace.B, fe, replace.A)
 			elseif m[a] ==? "VISUAL" || m[a] ==? "V-LINE" || m[a] ==? "V-BLOCK" || m[a] ==? "SELECT" || m[a] ==? "S-LINE" || m[a] ==? "S-BLOCK"
 				&l:statusline   = printf(sectionA, visual.A, m[a])
 				&l:statusline ..= printf(sectionB, visual.B)
@@ -179,7 +171,6 @@ def MyStatusLine()
 				&l:statusline ..= printf(sectionZ)
 				&l:statusline ..= printf(sectionY, visual.B, fe)
 				&l:statusline ..= printf(sectionX, visual.A)
-				#&l:statusline = printf(statuslineStr, visual.A, m[a], visual.B, visual.C, visual.B, fe, visual.A)
 			elseif m[a] ==? "COMMAND"
 				&l:statusline   = printf(sectionA, command.A, m[a])
 				&l:statusline ..= printf(sectionB, command.B)
@@ -187,7 +178,6 @@ def MyStatusLine()
 				&l:statusline ..= printf(sectionZ)
 				&l:statusline ..= printf(sectionY, command.B, fe)
 				&l:statusline ..= printf(sectionX, command.A)
-				#&l:statusline = printf(statuslineStr, command.A, m[a], command.B, command.C, command.B, fe, command.A)
 			else
 				# Normal & Other modes
 				&l:statusline   = printf(sectionA, normal.A, m[a])
@@ -196,11 +186,10 @@ def MyStatusLine()
 				&l:statusline ..= printf(sectionZ)
 				&l:statusline ..= printf(sectionY, normal.B, fe)
 				&l:statusline ..= printf(sectionX, normal.A)
-				#&l:statusline = printf(statuslineStr, normal.A, m[a], normal.B, normal.C, normal.B, fe, normal.A)
 			endif
 		else
 			# 设置其他 window
-			var inactiveSL = printf("%%<%s %%f %%m%%r %%{CheckMiTws()}%%=%%y ", inactive.A)
+			var inactiveSL = printf("%%<%s %%{CheckMiTws()}%%=%%f %%(%%m%%r %%)", inactive.A)
 			setwinvar(win.winid, '&statusline', inactiveSL)
 		endif
 	endfor
