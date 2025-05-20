@@ -1,3 +1,5 @@
+""" this is not a vim9script
+
 """ NOTE: 必须先加载 colorscheme, 否则以下 highlight 设置可能无效.
 
 """ CursorLine

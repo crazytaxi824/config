@@ -51,7 +51,7 @@ vnoremap <C-z> <Nop>
 nnoremap <F1> <Nop>
 inoremap <F1> <Nop>
 
-"""" -----------------------------------------------------------------------------------------------
+""" ------------------------------------------------------------------------------------------------
 source ~/.vim/keymaps/buffer.vim
 source ~/.vim/keymaps/cursor_move.vim
 source ~/.vim/keymaps/terminal.vim
