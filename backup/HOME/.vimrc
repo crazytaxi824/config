@@ -49,6 +49,7 @@ set splitright
 set scrolloff=4
 set sidescrolloff=6
 set display=lastline
+set shortmess=ltToOCF
 
 """ menu
 set wildmenu
