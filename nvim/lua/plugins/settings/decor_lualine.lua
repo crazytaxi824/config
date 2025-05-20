@@ -68,6 +68,7 @@ local my_theme = {
 --- check Trailing-Whitespace && Mixed-indent ---------------------------------- {{{
 --- check Trailing-Whitespace --------------------------------------------------
 local function check_trailing_whitespace()
+  --- search() 是 C 实现的函数, 速度快.
   local space = vim.fn.search([[\s\+$]], 'nwc')
   return space ~= 0 and "T:"..space or ""
 end
@@ -176,7 +177,7 @@ local function modified()
 end
 -- -- }}}
 
---- filetype & fileencoding & -------------------------------------------------- {{{
+--- filetype & fileencoding ---------------------------------------------------- {{{
 local function my_filetype_encoding()
   local str = ''
   if vim.bo.filetype ~= '' and vim.bo.fileencoding ~= '' then
