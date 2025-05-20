@@ -7,23 +7,23 @@ nnoremap <tab> <C-w><C-w>
 nnoremap D "_dd
 xnoremap D "_x
 
-vnoremap <leader>y "*y
+xnoremap <leader>y "*y
 
 """ 自动括号
-vnoremap <leader>" <C-c>`>a"<C-c>`<i"<C-c>v`><right><right>
-vnoremap <leader>' <C-c>`>a'<C-c>`<i'<C-c>v`><right><right>
-vnoremap <leader>` <C-c>`>a`<C-c>`<i`<C-c>v`><right><right>
-vnoremap <leader>* <C-c>`>a*<C-c>`<i*<C-c>v`><right><right>
-vnoremap <leader>_ <C-c>`>a_<C-c>`<i_<C-c>v`><right><right>
-vnoremap <leader>$ <C-c>`>a$<C-c>`<i$<C-c>v`><right><right>
-vnoremap <leader>{ <C-c>`>a}<C-c>`<i{<C-c>v`><right><right>
-vnoremap <leader>} <C-c>`>a}<C-c>`<i{<C-c>v`><right><right>
-vnoremap <leader>[ <C-c>`>a]<C-c>`<i[<C-c>v`><right><right>
-vnoremap <leader>] <C-c>`>a]<C-c>`<i[<C-c>v`><right><right>
-vnoremap <leader>( <C-c>`>a)<C-c>`<i(<C-c>v`><right><right>
-vnoremap <leader>) <C-c>`>a)<C-c>`<i(<C-c>v`><right><right>
-vnoremap <leader>> <C-c>`>a><C-c>`<i<<C-c>v`><right><right>
-vnoremap <leader><lt> <C-c>`>a><C-c>`<lt>i<lt><C-c>v`><right><right>
+xnoremap <leader>" <C-c>`>a"<C-c>`<i"<C-c>v`><right><right>
+xnoremap <leader>' <C-c>`>a'<C-c>`<i'<C-c>v`><right><right>
+xnoremap <leader>` <C-c>`>a`<C-c>`<i`<C-c>v`><right><right>
+xnoremap <leader>* <C-c>`>a*<C-c>`<i*<C-c>v`><right><right>
+xnoremap <leader>_ <C-c>`>a_<C-c>`<i_<C-c>v`><right><right>
+xnoremap <leader>$ <C-c>`>a$<C-c>`<i$<C-c>v`><right><right>
+xnoremap <leader>{ <C-c>`>a}<C-c>`<i{<C-c>v`><right><right>
+xnoremap <leader>} <C-c>`>a}<C-c>`<i{<C-c>v`><right><right>
+xnoremap <leader>[ <C-c>`>a]<C-c>`<i[<C-c>v`><right><right>
+xnoremap <leader>] <C-c>`>a]<C-c>`<i[<C-c>v`><right><right>
+xnoremap <leader>( <C-c>`>a)<C-c>`<i(<C-c>v`><right><right>
+xnoremap <leader>) <C-c>`>a)<C-c>`<i(<C-c>v`><right><right>
+xnoremap <leader>> <C-c>`>a><C-c>`<i<<C-c>v`><right><right>
+xnoremap <leader><lt> <C-c>`>a><C-c>`<lt>i<lt><C-c>v`><right><right>
 
 nnoremap <leader>" viw<C-c>`>a"<C-c>`<i"<C-c>
 nnoremap <leader>' viw<C-c>`>a'<C-c>`<i'<C-c>
@@ -55,6 +55,7 @@ inoremap <F1> <Nop>
 source ~/.vim/keymaps/buffer.vim
 source ~/.vim/keymaps/cursor_move.vim
 source ~/.vim/keymaps/terminal.vim
+source ~/.vim/keymaps/help.vim
 
 
 
