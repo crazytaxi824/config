@@ -52,20 +52,25 @@ var curr_bufnr = 0
 
 var check_mt: dict<string> = {}
 def g:CheckMiTws(): string
-	# inactive window
+	# line 超过 N 则不检查
+	const max_line = 2000
+	if line('$') > max_line
+		return 'Ln>' .. max_line
+	endif
+
+	# inactive window 不更新
 	if bufnr() != curr_bufnr
 		return check_mt->get(bufnr(), '')  # 如果 key 不存在, 默认返回 ''
 	endif
 
+	# 回到 normal mode 时更新
 	if mode() != 'n'
 		return check_mt->get(bufnr(), '')  # 如果 key 不存在, 默认返回 ''
 	endif
 
-	const tws_pat = '\s\+$'
-	const mi_pat = '^\(\t\+ \+\| \+\t\+\)'
-
-	var tws = search(tws_pat, 'nwc')
-	var mi = search(mi_pat, 'nwc')
+	# search() 是 C 语言实现, 速度快.
+	var tws = search('\s\+$', 'nwc')
+	var mi = search('^\(\t\+ \+\| \+\t\+\)', 'nwc')
 
 	var msg = ''
 	if tws > 0 && mi > 0
