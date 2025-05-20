@@ -2,6 +2,7 @@
 
 """ normal setting ---------------------------------------------------------------------------------
 tnoremap <ESC> <C-\><C-n>
+nnoremap <expr> <ESC> v:hlsearch ? ":nohlsearch\<CR>" : "\<ESC>"
 nnoremap <tab> <C-w><C-w>
 
 nnoremap D "_dd
