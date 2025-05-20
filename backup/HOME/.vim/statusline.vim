@@ -50,8 +50,14 @@ const warn = { insert: "%#myInsertMTC#", normal: "%#myNormalMTC#", visual: "%#my
 # VVI: 缓存 statusline 触发时的 bufnr, 和 bufnr() 获取到的可能不同.
 var curr_bufnr = 0
 
-var check_mt: dict<string> = {}
-def g:CheckMiTws(): string
+# check trailing whitespace & mixed indentation
+const bufvar_MiTs = 'my_MiTs'
+def g:CheckMiTs(): string
+	# 排除类型
+	if &buftype != '' || &filetype == 'netrw'
+		return ''
+	endif
+
 	# line 超过 N 则不检查
 	const max_line = 2000
 	if line('$') > max_line
@@ -60,36 +66,34 @@ def g:CheckMiTws(): string
 
 	# inactive window 不更新
 	if bufnr() != curr_bufnr
-		return check_mt->get(bufnr(), '')  # 如果 key 不存在, 默认返回 ''
+		return getbufvar(bufnr(), bufvar_MiTs, '')
 	endif
 
 	# 回到 normal mode 时更新
 	if mode() != 'n'
-		return check_mt->get(bufnr(), '')  # 如果 key 不存在, 默认返回 ''
+		return getbufvar(bufnr(), bufvar_MiTs, '')
 	endif
 
 	# search() 是 C 语言实现, 速度快.
-	var tws = search('\s\+$', 'nwc')
+	var ts = search('\s\+$', 'nwc')
 	var mi = search('^\(\t\+ \+\| \+\t\+\)', 'nwc')
 
 	var msg = ''
-	if tws > 0 && mi > 0
-		msg = 'T:' .. tws .. ' M:' .. mi
-	elseif tws > 0 && mi <= 0
-		msg = 'T:' .. tws
-	elseif tws <= 0 && mi > 0
+	if ts > 0 && mi > 0
+		msg = 'T:' .. ts .. ' M:' .. mi
+	elseif ts > 0 && mi <= 0
+		msg = 'T:' .. ts
+	elseif ts <= 0 && mi > 0
 		msg = 'M:' .. mi
 	endif
 
 	if msg != ''
-		check_mt[bufnr()] = msg
+		setbufvar(bufnr(), bufvar_MiTs, msg)
 		return msg
 	endif
 
-	# delete cache data
-	if has_key(check_mt, bufnr())
-		remove(check_mt, bufnr())
-	endif
+	# delete bufvar value
+	setbufvar(bufnr(), bufvar_MiTs, '')
 	return ''
 enddef
 
@@ -106,8 +110,9 @@ def FindGitRoot(): string
 	return ''
 enddef
 
-# { bufnr: { last: localtime(), branch: string }}
-var cache_git: dict<any> = {}
+# get git branch name or hash
+const bufvar_git_time = "my_git_time"
+const bufvar_git_branch = "my_git_branch"
 def g:GitBranch(): string
 	# 排除类型
 	if &buftype != '' || &filetype == 'netrw'
@@ -115,29 +120,29 @@ def g:GitBranch(): string
 	endif
 
 	var timenow = localtime()
-	if has_key(cache_git, bufnr())
-		var gb = cache_git->get(bufnr())
 
-		# VVI: refresh git status after N seconds
-		if timenow - gb->get("last", 0) <= 5
-			return gb->get("branch", '')
-		endif
+	# VVI: refresh git status after N seconds
+	if timenow - getbufvar(bufnr(), bufvar_git_time, 0) <= 5
+		return getbufvar(bufnr(), bufvar_git_branch, '')
 	endif
+
+	# reset git_time
+	setbufvar(bufnr(), bufvar_git_time, timenow)
 
 	var dir = FindGitRoot()
 	if dir == ''
-		cache_git[bufnr()] = { last: timenow, branch: '' }
+		setbufvar(bufnr(), bufvar_git_branch, '')
 		return ''
 	endif
 
 	var branch = system('cd ' .. dir .. ' && (git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)')
 	if branch == ''
-		cache_git[bufnr()] = { last: timenow, branch: '' }
+		setbufvar(bufnr(), bufvar_git_branch, '')
 		return ''
 	endif
 
 	branch = ' ' .. trim(branch)
-	cache_git[bufnr()] = { last: timenow, branch: branch }
+	setbufvar(bufnr(), bufvar_git_branch, branch)
 	return branch
 enddef
 
@@ -147,7 +152,7 @@ def MyStatusLine()
 	#var statuslineStr = "%%<%s %s %s%%(  %%{GitBranch()} %%)%s %%h%%w%%m%%r%%=%%F %s%%( %%y %s  %%)%s %%3p%%%%:%%-2v "
 	const sectionA = "%s%%( %s %%)"
 	const sectionB = "%s%%( %%{GitBranch()} %%)"
-	const sectionC = "%s%%( %%{CheckMiTws()}%%)%s"
+	const sectionC = "%s%%( %%{CheckMiTs()}%%)%s"
 	const sectionZ = "%%=%%<%%(%%F %%)%%(%%h%%w%%m%%r %%)"
 	const sectionY = "%s%%( %%y%s %%)"
 	const sectionX = "%s%%( %%3p%%%%:%%-2v %%)"
@@ -201,7 +206,7 @@ def MyStatusLine()
 			endif
 		else
 			# 设置其他 window
-			var inactiveSL = printf("%%<%s %%{CheckMiTws()}%s%%=%%f %%(%%m%%r %%)", warn.inactive, inactive.A)
+			var inactiveSL = printf("%%<%s %%{CheckMiTs()}%s%%=%%f %%(%%m%%r %%)", warn.inactive, inactive.A)
 			setwinvar(win.winid, '&statusline', inactiveSL)
 		endif
 	endfor
@@ -212,12 +217,6 @@ augroup MyStatusLineGroup
 	au VimEnter * ++once MyStatusLine()
 	au WinEnter,BufEnter,Modechanged * MyStatusLine()
 augroup END
-
-# Debug
-#def g:DebugStatusLine()
-#	echom check_mt
-#	echom cache_git
-#enddef
 
 
 
