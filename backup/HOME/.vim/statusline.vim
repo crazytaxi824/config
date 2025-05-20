@@ -52,6 +52,7 @@ var curr_bufnr = 0
 
 # check trailing whitespace & mixed indentation
 const bufvar_MiTs = 'my_MiTs'
+const bufvar_changedtick = 'my_CT'
 def g:CheckMiTs(): string
 	# 排除类型
 	if &buftype != '' || &filetype == 'netrw'
@@ -64,13 +65,10 @@ def g:CheckMiTs(): string
 		return 'Ln>' .. max_line
 	endif
 
-	# inactive window 不更新
-	if bufnr() != curr_bufnr
-		return getbufvar(bufnr(), bufvar_MiTs, '')
-	endif
-
-	# 回到 normal mode 时更新
-	if mode() != 'n'
+	# bufnr() != curr_bufnr   inactive window
+	# mode() !+ 'n'   not normal mode
+	# bufvar_changedtick == b:changedtick   buffer not changed
+	if bufnr() != curr_bufnr || mode() != 'n' ||  getbufvar(bufnr(), bufvar_changedtick, 0) == b:changedtick
 		return getbufvar(bufnr(), bufvar_MiTs, '')
 	endif
 
@@ -86,6 +84,9 @@ def g:CheckMiTs(): string
 	elseif ts <= 0 && mi > 0
 		msg = 'M:' .. mi
 	endif
+
+	# cache changedtick
+	setbufvar(bufnr(), bufvar_changedtick, b:changedtick)
 
 	if msg != ''
 		setbufvar(bufnr(), bufvar_MiTs, msg)
