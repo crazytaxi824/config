@@ -51,6 +51,11 @@ set sidescrolloff=6
 set display=lastline
 set shortmess=ltToOCF
 
+""" ins-completion-menu
+set completeopt=menuone,noinsert
+set pumheight=16
+"set pumwidth=15
+
 """ menu
 set wildmenu
 set wildmode=longest:full
