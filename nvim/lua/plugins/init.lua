@@ -43,7 +43,8 @@ local plugins = {
 
   {
     "williamboman/mason.nvim",
-    tag = "v2.0.0",
+    -- tag = "v2.0.0",
+    commit = "9eaedb8",
     -- build = ":MasonUpdate", -- :MasonUpdate updates All Registries, NOT packages.
     config = function() require("plugins.settings.mason_tool_installer") end,
 
@@ -159,7 +160,7 @@ local plugins = {
 
   {
     "hrsh7th/cmp-cmdline",
-    commit = "d250c63",
+    commit = "d126061",
 
     lazy = true,  -- nvim-cmp 加载时自动加载.
   },
@@ -174,7 +175,7 @@ local plugins = {
 
   {
     "L3MON4D3/LuaSnip", -- snippet engine, for "cmp_luasnip", 会创建几个 [Scratch] buffer
-    commit = "c1851d5",
+    commit = "faf3c94",
     --- for placeholder transformation
     --- https://code.visualstudio.com/docs/editor/userdefinedsnippets#_variable-transforms
     build = "make install_jsregexp",
@@ -214,7 +215,7 @@ local plugins = {
   --- "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
-    commit = "7c493a2",
+    commit = "90e4a27",
     config = function() require("lsp.plugins.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -224,7 +225,7 @@ local plugins = {
   {
     "stevearc/conform.nvim",
     -- tag = "v9.0.0",
-    commit = "372fc52",
+    commit = "a4bb5d6",
     config = function() require("plugins.settings.formatter_conform") end,
 
     event = "BufWritePre",
@@ -267,7 +268,7 @@ local plugins = {
 
   {
     "nvim-lualine/lualine.nvim",  -- `:help 'statusline'`
-    commit = "15884ce",
+    commit = "ecfcfee",
     config = function() require("plugins.settings.decor_lualine") end,
 
     event = "VeryLazy",
@@ -344,7 +345,7 @@ local plugins = {
   {
     "lewis6991/gitsigns.nvim",
     -- tag = "v1.0.2",
-    commit = "e399f97",
+    commit = "8b729e4",
     config = function() require("plugins.settings.git_signs") end,
     dependencies = { "folke/trouble.nvim" },
 
