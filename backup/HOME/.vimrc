@@ -31,7 +31,8 @@ set textwidth=120
 set nowrap
 set notermguicolors  " 在 VIM 中不使用, 如果要使用的话用 Neovim.
 
-syntax on  " syntax highlight
+filetype on " filetype detection on
+syntax on   " syntax highlight
 
 """ 组合键延迟
 set timeout
