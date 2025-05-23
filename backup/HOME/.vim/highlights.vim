@@ -46,6 +46,16 @@ hi PmenuSel ctermfg=74 ctermbg=238 cterm=bold,underline
 hi PmenuSbar ctermbg=233
 hi PmenuThumb ctermbg=240
 
+""" spell
+hi! clear SpellBad
+hi SpellBad ctermfg=208 cterm=bold,underline
+hi! clear SpellCap
+hi SpellCap ctermfg=208 cterm=bold,underline
+hi! clear SpellRare
+hi SpellRare ctermfg=208 cterm=bold,underline
+hi! clear SpellLocal
+hi SpellLocal ctermfg=208 cterm=bold,underline
+
 """ Diff mode
 hi DiffAdd ctermfg=251 ctermbg=22
 hi DiffText ctermfg=213 ctermbg=233 cterm=reverse

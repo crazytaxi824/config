@@ -52,7 +52,7 @@ var curr_bufnr = 0
 
 # check trailing whitespace & mixed indentation
 const bufvar_MiTs = 'my_MiTs'
-const bufvar_changedtick = 'my_CT'
+const bufvar_tick = 'my_stl_tick'
 def g:CheckMiTs(): string
 	# 排除类型
 	if &buftype != '' || &filetype == 'netrw'
@@ -67,8 +67,8 @@ def g:CheckMiTs(): string
 
 	# bufnr() != curr_bufnr   inactive window
 	# mode() !+ 'n'   not normal mode
-	# bufvar_changedtick == b:changedtick   buffer not changed
-	if bufnr() != curr_bufnr || mode() != 'n' ||  getbufvar(bufnr(), bufvar_changedtick, 0) == b:changedtick
+	# bufvar_tick == b:changedtick   buffer not changed
+	if bufnr() != curr_bufnr || mode() != 'n' ||  getbufvar(bufnr(), bufvar_tick, 0) == b:changedtick
 		return getbufvar(bufnr(), bufvar_MiTs, '')
 	endif
 
@@ -86,7 +86,7 @@ def g:CheckMiTs(): string
 	endif
 
 	# cache changedtick
-	setbufvar(bufnr(), bufvar_changedtick, b:changedtick)
+	setbufvar(bufnr(), bufvar_tick, b:changedtick)
 
 	if msg != ''
 		setbufvar(bufnr(), bufvar_MiTs, msg)
