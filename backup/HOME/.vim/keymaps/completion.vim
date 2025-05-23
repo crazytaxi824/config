@@ -45,14 +45,14 @@ def GetBufferKeywords(bufnr: number, start: number, end: number): dict<bool>
 		var line = getbufoneline(bufnr, lnum)
 		var pos = 0
 		while pos < len(line)
-			var match = matchstrpos(line, '\k\+', pos)
-			if empty(match[0])
+			var [word, w_start, w_end] = matchstrpos(line, '\k\+', pos)
+			if empty(word)
 				break  # break while, not for loop
 			endif
-			if len(match[0]) > 1
-				result[match[0]] = true  # 记录到字典中
+			if len(word) > 1
+				result[word] = true  # 记录到字典中
 			endif
-			pos = match[2]  # 移动到匹配结束位置, 准备下次匹配
+			pos = w_end  # 移动到匹配结束位置, 准备下次匹配
 		endwhile
 	endfor
 	return result
@@ -80,8 +80,8 @@ def BufferCompletion(prev_keyword: string)
 
 	# 更新 current buffer keywords list
 	if cached_bufnr != bufnr || cached_tick != tick
-		var line_range = GetCursorlineRange()
-		cached_keywords = keys(GetBufferKeywords(bufnr, line_range[0], line_range[1]))
+		var [start, end] = GetCursorlineRange()
+		cached_keywords = keys(GetBufferKeywords(bufnr, start, end))
 		cached_bufnr = bufnr
 		cached_tick = tick
 	endif
@@ -90,9 +90,9 @@ def BufferCompletion(prev_keyword: string)
 	var winwords: dict<bool> = {}
 	for wininfo in getwininfo()
 		if wininfo.bufnr != bufnr
-			var wl = GetWinLines(wininfo.winid)
-			if wl[0] > 0
-				extend(winwords, GetBufferKeywords(wl[0], wl[1], wl[2]))
+			var [win_bufnr, win_start, win_end] = GetWinLines(wininfo.winid)
+			if win_bufnr > 0
+				extend(winwords, GetBufferKeywords(win_bufnr, win_start, win_end))
 			endif
 		endif
 	endfor
