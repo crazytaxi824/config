@@ -46,7 +46,7 @@ def PopupSpellSuggests()
 	popup_menu(popup_items, {
 		callback: MyPopupCallback,
 		title: "choose spell:",
-		border: [1],  # 上右下左, 1: 开启, 0: 关闭.
+		#border: [1],  # 上右下左, 1: 开启, 0: 关闭.
 		padding: [0, 1, 0, 1],  # 上右下左, 空N格
 		cursorline: true,  # highlight the cursor line in popup window
 		#filter: 'popup_filter_menu',  # keymaps, 默认
