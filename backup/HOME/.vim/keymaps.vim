@@ -58,6 +58,7 @@ source ~/.vim/keymaps/cursor_move.vim
 source ~/.vim/keymaps/terminal.vim
 source ~/.vim/keymaps/help.vim
 source ~/.vim/keymaps/completion.vim
+source ~/.vim/keymaps/spell.vim
 
 
 
