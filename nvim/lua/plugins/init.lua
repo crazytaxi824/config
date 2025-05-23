@@ -225,7 +225,7 @@ local plugins = {
   {
     "stevearc/conform.nvim",
     -- tag = "v9.0.0",
-    commit = "a4bb5d6",
+    commit = "6feb2f2",
     config = function() require("plugins.settings.formatter_conform") end,
 
     event = "BufWritePre",
@@ -268,7 +268,7 @@ local plugins = {
 
   {
     "nvim-lualine/lualine.nvim",  -- `:help 'statusline'`
-    commit = "ecfcfee",
+    commit = "0c6cca9",
     config = function() require("plugins.settings.decor_lualine") end,
 
     event = "VeryLazy",
@@ -277,7 +277,7 @@ local plugins = {
   --- Debug tools 安装 -----------------------------------------------------------------------------
   {
     "mfussenegger/nvim-dap",  -- core debug tool
-    commit = "8df427a",
+    commit = "b0f9835",
     config = function() require("plugins.settings.debug.nvim_dap") end,
 
     cmd = {'Debug', 'DapToggleBreakpoint', 'DapContinue'},
