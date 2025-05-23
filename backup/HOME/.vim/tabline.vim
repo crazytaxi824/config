@@ -58,6 +58,7 @@ def g:MyTabLine(): string
 		s ..= ' ' .. i .. '. ' .. fnamemodify(name, ':t') .. ' %#mySeparator# '
 	endfor
 
+	# separator to tabpagenr
 	s ..= '%#TabLineFill#%='
 
 	# 显示 tabpagenr
