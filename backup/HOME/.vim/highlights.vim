@@ -1,6 +1,16 @@
 """ this is not a vim9script
 
 """ NOTE: 必须先加载 colorscheme, 否则以下 highlight 设置可能无效.
+" 213, 207  Magenta
+" 208   Orange
+" 220   Yellow
+" 167   Red
+" 251   White
+" 233   Black
+" 74    Cyan
+" 78    Green_Type
+" 65    Green_Comment
+" 63    Blue
 
 """ CursorLine
 hi clear CursorLine
@@ -29,7 +39,7 @@ hi! link CurSearch IncSearch
 
 """ fold
 hi clear Folded
-hi Folded ctermfg=67
+hi Folded ctermfg=74
 
 """ 行号 set number
 hi LineNr ctermfg=240
@@ -40,11 +50,13 @@ hi CursorLineNr ctermfg=220 cterm=bold
 hi ErrorMsg ctermfg=255 ctermbg=167
 hi WarningMsg ctermfg=208
 
-""" menu
+""" popup menu
 hi Pmenu ctermfg=251 ctermbg=235
 hi PmenuSel ctermfg=74 ctermbg=238 cterm=bold,underline
-hi PmenuSbar ctermbg=233
+hi PmenuSbar ctermbg=235
 hi PmenuThumb ctermbg=240
+hi PmenuMatch ctermfg=207 ctermbg=235
+hi PmenuMatchSel ctermfg=207 ctermbg=238 cterm=bold,underline
 
 """ spell
 hi! clear SpellBad
