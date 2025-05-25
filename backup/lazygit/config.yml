@@ -1,84 +1,68 @@
 # DOC: lazygit 配置: https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md
 gui:
-    #scrollHeight: 5  # main pannel (右侧主窗口) pageup/pagedown 滚动 n 行, 不要超过 commandLogSize.
-    sidePanelWidth: 0.25  # 左侧边栏屏幕占比 (0~1)
-    expandFocusedSidePanel: true  # 选中的 pannel 会变高
-    language: "en"  # one of 'auto' | 'en' | 'zh' | 'pl' | 'nl'
-    #mainPanelSplitMode: "horizontal"  # main pannel(stage) 分屏方式 'horizontal' | 'flexible'(*) | 'vertical'
-    nerdFontsVersion: "3"  # '2' | '3' | ''(*) - If empty, do not show icon.
-    theme:
-        activeBorderColor: # cursor 所在 window 的 border 颜色.
-            - yellow
-            - bold
-        inactiveBorderColor: # 未选中窗口的文字和边框颜色, 241
-            - '#626262'
-        searchingActiveBorderColor: # 在使用 '/' 搜索后, search result window border 的颜色.
-            - yellow
-            - bold
-        optionsTextColor: # 最下方跨键键提示文字颜色.
-            - blue
-        selectedLineBgColor: # 左侧菜单中 cursor line bg 颜色.
-            - '#4E4E4E'
-        cherryPickedCommitFgColor: # Commits window 中使用 cherry pick 的文字颜色.
-            - magenta
-            - bold
-            - reverse
-        cherryPickedCommitBgColor: # 不使用任何 bg 颜色, 默认为 cyan.
-            - ''
-
+  #scrollHeight: 5  # main pannel (右侧主窗口) pageup/pagedown 滚动 n 行, 不要超过 commandLogSize.
+  sidePanelWidth: 0.25 # 左侧边栏屏幕占比 (0~1)
+  expandFocusedSidePanel: true # 选中的 pannel 会变高
+  language: "en" # one of 'auto' | 'en' | 'zh' | 'pl' | 'nl'
+  #mainPanelSplitMode: "horizontal"  # main pannel(stage) 分屏方式 'horizontal' | 'flexible'(*) | 'vertical'
+  nerdFontsVersion: "3" # '2' | '3' | ''(*) - If empty, do not show icon.
+  theme:
+    activeBorderColor: # cursor 所在 window 的 border 颜色.
+      - yellow
+      - bold
+    inactiveBorderColor: # 未选中窗口的文字和边框颜色, 241
+      - '#626262'
+    searchingActiveBorderColor: # 在使用 '/' 搜索后, search result window border 的颜色.
+      - yellow
+      - bold
+    optionsTextColor: # 最下方跨键键提示文字颜色.
+      - blue
+    selectedLineBgColor: # 左侧菜单中 cursor line bg 颜色.
+      - '#4E4E4E'
+    cherryPickedCommitFgColor: # Commits window 中使用 cherry pick 的文字颜色.
+      - magenta
+      - bold
+      - reverse
+    cherryPickedCommitBgColor: # 不使用任何 bg 颜色, 默认为 cyan.
+      - ''
 # Config relating to git
 git:
-    # merging:
-    #   args: '--no-ff'  # no-fast-forward
+  # merging:
+  #   args: '--no-ff'  # no-fast-forward
 
-    # DOC: lazygit diff 配置: https://github.com/jesseduffield/lazygit/blob/master/docs/Custom_Pagers.md
-    # 需要安装 brew install git-delta; https://github.com/dandavison/delta
-    paging:
-        colorArg: always
-        # delta commands
-        # --dark/--light: use dark/light theme for delta diff.
-        # --no-gitconfig: Do not read any settings from git config.
-        # --line-numbers: Display line numbers.
-        # --syntax-theme: diff text block syntax highlight. `delta --list-syntax-themes`
-        pager: delta --dark --line-numbers --paging=never --syntax-theme=none
-          \--file-style='75' --file-decoration-style='75 ol'
-          \--line-numbers-minus-style='#D75F5F' --minus-style='241 "#300000"' --minus-emph-style='246 "#803030"'
-          \--line-numbers-plus-style='#008700' --plus-style='42' --plus-emph-style='234 42'
-        ### syntax-theme 开启
-        # syntax color:	# syntax 表示 text fg 使用 syntax-theme highlight. 如果 syntax-theme=none, 则会使用 white/normal 作为 fg 颜色.
-        # pager: delta --dark --line-numbers --paging=never --syntax-theme='Visual Studio Dark+'
-        #   \--file-style='75' --file-decoration-style='75 ol'
-        #   \--line-numbers-minus-style='#D75F5F' --minus-style='241 "#300000"' --minus-emph-style='246 "#803030"'
-        #   \--line-numbers-plus-style='#008700' --plus-style='syntax "#001C00"' --plus-emph-style='255 "#005A00"'
-        ### 256-color - 没有 gui 的 linux server 环境用
-        # pager: delta --dark --line-numbers --paging=never --syntax-theme=none
-        #   \--file-style='75' --file-decoration-style='75 ol'
-        #   \--line-numbers-minus-style='167' --minus-style='241 52' --minus-emph-style='246 167'
-        #   \--line-numbers-plus-style='28' --plus-style='251 22' --plus-emph-style='255 28'
-
-    # Branchs window (window No.3) 右侧显示的 commit tree.
-    # DOC: git log format 配置: https://www.git-scm.com/docs/git-log#Documentation/git-log.txt-emnem
-    # 最后的换行是为了让每一个 commit 都占2行位置. 如果不换行则有些占一行，有些占两行.
-    # 显示 current branch git log
-    # %C(auto) - 继承 .gitconfig color 设置.
-    #branchLogCmd: git log --graph {{branchName}} --format=format:'%C(42)%h%C(reset) -%C(207)%d%C(reset) %C(251)%s%C(reset) %C(243)(%ar)%C(reset)%n'' '
-    branchLogCmd: git log --graph --color=always --format=format:'%C(auto)%h -%d %s %C(243)(%ar)%C(reset)%n'' ' {{branchName}} --
-
-    # Status window (window No.1) 按 'a' 键显示 all Branches commit tree.
-    # 显示 all branches git log
-    # DOC: strftime format, --date, https://stackoverflow.com/questions/7853332/how-to-change-git-log-date-formats#34778736
-    # 第2行之前的空格是为了对齐.
-    # %C(auto) - 继承 .gitconfig color 设置.
-    #allBranchesLogCmd: git log --date=format:'%d-%b-%Y %H:%M:%S' --graph --all --format=format:'%C(42)%h%C(reset) -%C(207)%d%C(reset) %C(74)%ad%C(reset) %C(243)(%ar) - %C(173)%an%C(reset)%n''          %C(251)%s%C(reset)%n'' '
-    allBranchesLogCmd: git log --color=always --date=format:'%d-%b-%Y %H:%M:%S' --graph --all --format=format:'%C(auto)%h -%d %C(74)%ad %C(243)(%ar) - %C(173)%an%C(reset)%n''          %C(auto)%s%n'' '
-    # git 状态刷新
-    #autoFetch: true    # 自动执行 git fetch, 可以检查 remote 和 local git 的状态不同.
-    #autoRefresh: true  # 自动刷新本地 git 文件状态
-
-    # If not "none", lazygit will automatically forward branches to their upstream after fetching.
-    # Possible values: 'none' | 'onlyMainBranches' | 'allBranches'
-    autoForwardBranches: none
-
+  # DOC: lazygit diff 配置: https://github.com/jesseduffield/lazygit/blob/master/docs/Custom_Pagers.md
+  # 需要安装 brew install git-delta; https://github.com/dandavison/delta
+  paging:
+    colorArg: always
+    # delta commands
+    # --dark/--light: use dark/light theme for delta diff.
+    # --no-gitconfig: Do not read any settings from git config.
+    # --line-numbers: Display line numbers.
+    # --syntax-theme: diff text block syntax highlight. `delta --list-syntax-themes`
+    pager: delta --dark --line-numbers --paging=never --syntax-theme=none \--file-style='75' --file-decoration-style='75 ol' \--line-numbers-minus-style='#D75F5F' --minus-style='241 "#300000"' --minus-emph-style='246 "#803030"' \--line-numbers-plus-style='#008700' --plus-style='42' --plus-emph-style='234 42'
+    ### syntax-theme 开启
+    # syntax color:	# syntax 表示 text fg 使用 syntax-theme highlight. 如果 syntax-theme=none, 则会使用 white/normal 作为 fg 颜色.
+    # pager: delta --dark --line-numbers --paging=never --syntax-theme='Visual Studio Dark+'
+    #   \--file-style='75' --file-decoration-style='75 ol'
+    #   \--line-numbers-minus-style='#D75F5F' --minus-style='241 "#300000"' --minus-emph-style='246 "#803030"'
+    #   \--line-numbers-plus-style='#008700' --plus-style='syntax "#001C00"' --plus-emph-style='255 "#005A00"'
+    ### 256-color - 没有 gui 的 linux server 环境用
+    # pager: delta --dark --line-numbers --paging=never --syntax-theme=none
+    #   \--file-style='75' --file-decoration-style='75 ol'
+    #   \--line-numbers-minus-style='167' --minus-style='241 52' --minus-emph-style='246 167'
+    #   \--line-numbers-plus-style='28' --plus-style='251 22' --plus-emph-style='255 28'
+  # Branchs window (window No.3) 右侧显示的 commit tree.
+  # DOC: git log format 配置: https://www.git-scm.com/docs/git-log#Documentation/git-log.txt-emnem
+  # 最后的换行是为了让每一个 commit 都占2行位置. 如果不换行则有些占一行，有些占两行.
+  # 显示 current branch git log
+  # %C(auto) - 继承 .gitconfig color 设置.
+  #branchLogCmd: git log --graph {{branchName}} --format=format:'%C(42)%h%C(reset) -%C(207)%d%C(reset) %C(251)%s%C(reset) %C(243)(%ar)%C(reset)%n'' '
+  branchLogCmd: git log --graph --color=always --format=format:'%C(auto)%h -%d %s %C(243)(%ar)%C(reset)%n'' ' {{branchName}} --
+  # If not "none", lazygit will automatically forward branches to their upstream after fetching.
+  # Possible values: 'none' | 'onlyMainBranches' | 'allBranches'
+  autoForwardBranches: none
+  allBranchesLogCmds:
+    - git log --color=always --date=format:'%d-%b-%Y %H:%M:%S' --graph --all --format=format:'%C(auto)%h -%d %C(74)%ad %C(243)(%ar) - %C(173)%an%C(reset)%n''          %C(auto)%s%n'' '
 # 刷新状态
 # refresher:
 #   refreshInterval: 10 # 单位(s). 刷新本地 git 文件状态. 可以通过 'git.autoRefresh' 启用/禁用.
@@ -88,28 +72,27 @@ git:
 # prompt - 选择是否创建 repository
 # create - 创建 git repository
 notARepository: 'quit' # one of: 'prompt' | 'create' | 'skip' | 'quit'
-
 # 这里 keybinding 设置主要是为了避免误操作, 将 key 绑定到不常用键上.
 # keybinding 的键是可以重复的.
 keybinding:
-    # 通用快捷键
-    universal:
-        pullFiles: <disabled> # use 'fetch' instead of 'pull', 慎用'pull'.
-    # file (window No.2 - file, worktree, submodule)
-    files:
-        commitChangesWithoutHook: <disabled> # commit changes without pre-commit hook
-    submodules:
-        init: <disabled> # [Submodules] 项目子仓库, 可以使用 'b' 打开 menu 操作
-    # branch (window No.3 - local, remote, tag)
-    branches:
-        rebaseBranch: <disabled> # use 'rebase-checkout' carefully.
-        fastForward: <disabled> # fast-forward this branch from its upstream. 最好使用 merge.
-        forceCheckoutBranch: <disabled> # 工作区中有未提交的更改时，通常 Git 不允许你切换分支. 如果强制切换工作区中的改动会被丢弃.
-        #fetchRemote: 'f'   # 切换至 [Remotes] 才能 fetch, 默认为 'f'
-    # commit (window No.4 - commit, reflog)
-    commits:
-        revertCommit: <disabled> # use 'revert commit' carefully. no confirm required.
-        # viewResetOptions: <disabled> # 默认为 'g', 这里是为了避免按键冲突
-    # stash (window No.5)
-    stash:
-        popStash: 'p' # 默认为 'g'
+  # 通用快捷键
+  universal:
+    pullFiles: <disabled> # use 'fetch' instead of 'pull', 慎用'pull'.
+  # file (window No.2 - file, worktree, submodule)
+  files:
+    commitChangesWithoutHook: <disabled> # commit changes without pre-commit hook
+  submodules:
+    init: <disabled> # [Submodules] 项目子仓库, 可以使用 'b' 打开 menu 操作
+  # branch (window No.3 - local, remote, tag)
+  branches:
+    rebaseBranch: <disabled> # use 'rebase-checkout' carefully.
+    fastForward: <disabled> # fast-forward this branch from its upstream. 最好使用 merge.
+    forceCheckoutBranch: <disabled> # 工作区中有未提交的更改时，通常 Git 不允许你切换分支. 如果强制切换工作区中的改动会被丢弃.
+    #fetchRemote: 'f'   # 切换至 [Remotes] 才能 fetch, 默认为 'f'
+  # commit (window No.4 - commit, reflog)
+  commits:
+    revertCommit: <disabled> # use 'revert commit' carefully. no confirm required.
+    # viewResetOptions: <disabled> # 默认为 'g', 这里是为了避免按键冲突
+  # stash (window No.5)
+  stash:
+    popStash: 'p' # 默认为 'g'
