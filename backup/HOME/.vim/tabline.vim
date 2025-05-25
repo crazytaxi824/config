@@ -23,10 +23,22 @@ hi mySeparator ctermfg=246
 var cached_list_buffer: list<number> = []
 def g:MyTabLine(): string
 	var lbs = getbufinfo({'buflisted': 1})
-	var fbs = filter(lbs, (_, item) => !isdirectory(item->get('name')))  # do not include netrw dir
-	var bufferNums = map(copy(fbs), (_, item) => item->get('bufnr'))
+
+	# bwipeout! netrw created [No Name] buffer
+	for lb in lbs
+		if !empty(getbufvar(lb.bufnr, 'netrw_browser_active')) && empty(lb.name)
+			def MyBd(timer: number)
+				execute('bwipeout! ' .. lb.bufnr)
+			enddef
+			timer_start(200, MyBd)  # VVI: 延迟执行
+		endif
+	endfor
+
+	# do not include netrw
+	var fbs = filter(lbs, (_, buf) => empty(getbufvar(buf.bufnr, 'netrw_browser_active')))
+	var bufferNums = map(copy(fbs), (_, buf) => buf.bufnr)
 	#var bufferNums = filter(range(1, bufnr('$')), 'bufexists(v:val)')  # Debug
-	cached_list_buffer = bufferNums
+	cached_list_buffer = bufferNums  # cache listed bufnr
 
 	var s = ''
 	for i in range(len(cached_list_buffer))
