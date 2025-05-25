@@ -1,38 +1,5 @@
 vim9script
 
-### -, = switch buffer -----------------------------------------------------------------------------
-def MyPrevBuffer(): number
-	var lbs = getbufinfo({'buflisted': 1})
-	var fbs = filter(lbs, (_, item) => !isdirectory(item->get('name')))  # do not include netrw dir
-	var bufferNums = map(copy(fbs), (_, item) => item->get('bufnr'))
-	var i = index(bufferNums, bufnr('%'))
-	var l = len(bufferNums)
-	if l > 0
-		if i < 0
-			return bufferNums[0]
-		elseif i > 0
-			return bufferNums[i - 1]
-		endif
-	endif
-	return -1
-enddef
-
-def MyNextBuffer(): number
-	var lbs = getbufinfo({'buflisted': 1})
-	var fbs = filter(lbs, (_, item) => !isdirectory(item->get('name')))  # do not include netrw dir
-	var bufferNums = map(copy(fbs), (_, item) => item->get('bufnr'))
-	var i = index(bufferNums, bufnr('%'))
-	var l = len(bufferNums)
-	if l > 0
-		if i < 0
-			return bufferNums[0]
-		elseif i < l - 1
-			return bufferNums[i + 1]
-		endif
-	endif
-	return -1
-enddef
-
 ### <leader>d - delete buffer/tab ------------------------------------------------------------------
 def MyDeleteBufferAndTab()
 	var tabcount = tabpagenr('$')
@@ -104,18 +71,8 @@ def MyDeleteOtherBuffers()
 	redrawtabline
 enddef
 
-def MyGotoBuffer(bufnr: number = v:count1)
-	if bufexists(bufnr) && buflisted(bufnr) && !isdirectory(bufname(bufnr))
-		execute('buffer ' .. bufnr)
-	endif
-enddef
-
 nnoremap <leader>d <cmd>call <SID>MyDeleteBufferAndTab()<CR>
 nnoremap <leader>Da <cmd>call <SID>MyDeleteOtherBuffers()<CR>
 
-#nnoremap - <cmd>call <SID>MyGotoBuffer(<SID>MyPrevBuffer())<CR>
-#nnoremap = <cmd>call <SID>MyGotoBuffer(<SID>MyNextBuffer())<CR>
-
-#nnoremap <leader>\ <cmd>call <SID>MyGotoBuffer()<CR>
 
 
