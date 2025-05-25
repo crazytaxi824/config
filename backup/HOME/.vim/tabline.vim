@@ -20,42 +20,45 @@ hi myCurrentTab ctermfg=233 ctermbg=220
 hi myOtherTab ctermfg=220
 hi mySeparator ctermfg=246
 
+var cached_list_buffer: list<number> = []
 def g:MyTabLine(): string
 	var lbs = getbufinfo({'buflisted': 1})
 	var fbs = filter(lbs, (_, item) => !isdirectory(item->get('name')))  # do not include netrw dir
 	var bufferNums = map(copy(fbs), (_, item) => item->get('bufnr'))
 	#var bufferNums = filter(range(1, bufnr('$')), 'bufexists(v:val)')  # Debug
+	cached_list_buffer = bufferNums
 
 	var s = ''
-	for i in bufferNums
-		var name = bufname(i)
+	for i in range(len(cached_list_buffer))
+		var bufnr = cached_list_buffer[i]
+		var name = bufname(bufnr)
 		if name == ''
 			name = '[No Name]'
 		endif
 
-		if i == bufnr('%')
-			if getbufvar(i, '&readonly') && getbufvar(i, '&modified')
+		if bufnr == bufnr('%')
+			if getbufvar(bufnr, '&readonly') && getbufvar(bufnr, '&modified')
 				s ..= '%#SelectedReadOnlyModified#'
-			elseif getbufvar(i, '&readonly') && !getbufvar(i, '&modified')
+			elseif getbufvar(bufnr, '&readonly') && !getbufvar(bufnr, '&modified')
 				s ..= '%#SelectedReadOnly#'
-			elseif !getbufvar(i, '&readonly') && getbufvar(i, '&modified')
+			elseif !getbufvar(bufnr, '&readonly') && getbufvar(bufnr, '&modified')
 				s ..= '%#SelectedModified#'
 			else
 				s ..= '%#Selected#'
 			endif
 		else
-			if getbufvar(i, '&readonly') && getbufvar(i, '&modified')
+			if getbufvar(bufnr, '&readonly') && getbufvar(bufnr, '&modified')
 				s ..= '%#NotSelectedReadOnlyModified#'
-			elseif getbufvar(i, '&readonly') && !getbufvar(i, '&modified')
+			elseif getbufvar(bufnr, '&readonly') && !getbufvar(bufnr, '&modified')
 				s ..= '%#NotSelectedReadOnly#'
-			elseif !getbufvar(i, '&readonly') && getbufvar(i, '&modified')
+			elseif !getbufvar(bufnr, '&readonly') && getbufvar(bufnr, '&modified')
 				s ..= '%#NotSelectedModified#'
 			else
 				s ..= '%#NotSelected#'
 			endif
 		endif
 
-		s ..= ' ' .. i .. '. ' .. fnamemodify(name, ':t') .. ' %#mySeparator# '
+		s ..= ' ' .. (i + 1) .. '. ' .. fnamemodify(name, ':t') .. ' %#mySeparator# '
 	endfor
 
 	# separator to tabpagenr
@@ -79,6 +82,33 @@ def g:MyTabLine(): string
 enddef
 
 set tabline=%!MyTabLine()
+
+# --- keymaps --------------------------------------------------------------------------------------
+def MyGotoBuffer(idx: number = (v:count1 - 1))
+	var bufnr = cached_list_buffer[idx]
+	if bufexists(bufnr) && buflisted(bufnr) && !isdirectory(bufname(bufnr))
+		execute('buffer ' .. bufnr)
+	endif
+enddef
+
+def MyPrevBuffer(): number
+	var i = index(cached_list_buffer, bufnr('%'))
+	return i - 1
+enddef
+
+def MyNextBuffer(): number
+	var i = index(cached_list_buffer, bufnr('%'))
+	var l = len(cached_list_buffer)
+	if i >= l - 1
+		return 0
+	endif
+	return i + 1
+enddef
+
+nnoremap <leader>\ <cmd>call <SID>MyGotoBuffer()<CR>
+
+nnoremap - <cmd>call <SID>MyGotoBuffer(<SID>MyPrevBuffer())<CR>
+nnoremap = <cmd>call <SID>MyGotoBuffer(<SID>MyNextBuffer())<CR>
 
 
 
