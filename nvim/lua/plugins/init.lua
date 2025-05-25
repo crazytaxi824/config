@@ -44,7 +44,7 @@ local plugins = {
   {
     "williamboman/mason.nvim",
     -- tag = "v2.0.0",
-    commit = "9eaedb8",
+    commit = "8024d64",
     -- build = ":MasonUpdate", -- :MasonUpdate updates All Registries, NOT packages.
     config = function() require("plugins.settings.mason_tool_installer") end,
 
@@ -215,7 +215,7 @@ local plugins = {
   --- "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
-    commit = "90e4a27",
+    commit = "db2a48b",
     config = function() require("lsp.plugins.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -236,7 +236,7 @@ local plugins = {
   {
     "nvim-tree/nvim-tree.lua",
     -- tag = "v1.12.0",
-    commit = "25d16aa",
+    commit = "cbc3165",
     config = function() require("plugins.settings.file_tree") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
 
