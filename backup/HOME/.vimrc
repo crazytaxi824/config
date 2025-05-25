@@ -23,8 +23,8 @@ colorscheme default
 """ VVI
 const tab_width = 4
 let &tabstop = tab_width  " 相当于 set tabstop=4
-let &softtabstop = -1
 let &shiftwidth = tab_width
+set softtabstop=-1
 set noexpandtab
 set nosmarttab
 set textwidth=120
@@ -39,6 +39,11 @@ set timeout
 set timeoutlen=1000
 set ttimeout
 set ttimeoutlen=50
+
+""" netrw
+let g:netrw_banner=0
+let g:netrw_liststyle=3
+let g:netrw_list_hide='\.DS_Store$,.*\~$,.*\.swp$'
 
 """ options
 set history=300
