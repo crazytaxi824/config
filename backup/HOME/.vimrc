@@ -21,18 +21,26 @@ set mouse=a
 colorscheme default
 
 """ VVI
+filetype on " filetype detection on
+syntax on   " syntax highlight
+
+set notermguicolors  " 在 VIM 中不使用, 如果要使用的话用 Neovim.
+set nowrap
+
+""" tabstop / shiftwidth 相关设置
 const tab_width = 4
 let &tabstop = tab_width  " 相当于 set tabstop=4
 let &shiftwidth = tab_width
-set softtabstop=-1
+set softtabstop=-1  " -1: use shiftwidth
 set noexpandtab
 set nosmarttab
 set textwidth=120
-set nowrap
-set notermguicolors  " 在 VIM 中不使用, 如果要使用的话用 Neovim.
 
-filetype on " filetype detection on
-syntax on   " syntax highlight
+au FileType json,jsonc,javascript,javascriptreact,typescript,typescriptreact,
+	\vue,svelte,html,css,less,scss,graphql,yaml,lua
+	\ setlocal expandtab tabstop=2 shiftwidth=2
+
+au FileType python set expandtab textwidth=79
 
 """ 组合键延迟
 set timeout

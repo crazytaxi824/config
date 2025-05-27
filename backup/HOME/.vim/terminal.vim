@@ -1,7 +1,5 @@
 vim9script
 
 autocmd TerminalWinOpen *
-	\ setlocal nonumber | setlocal norelativenumber |
-	\ setlocal sidescrolloff=0 | setlocal scrolloff=0 |
-	\ setlocal signcolumn=no |
-	\ setlocal nobuflisted
+	\ setlocal nonumber norelativenumber sidescrolloff=0
+	\ scrolloff=0 signcolumn=no nobuflisted

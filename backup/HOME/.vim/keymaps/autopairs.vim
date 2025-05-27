@@ -55,6 +55,50 @@ def MyAutoDelPair(): string
 	return "\<BS>"
 enddef
 
+# return [end_insert_str, mid_insert_str]
+def MyIndentStr(line: string): list<string>
+	# space-indent
+	if &expandtab
+		var spaces = matchstr(line, '^ *')
+		var n = len(spaces) / &tabstop
+		return [repeat(' ', n * &tabstop), repeat(' ', (n + 1) * &tabstop)]
+	endif
+
+	# tab-indent
+	var spaces = matchstr(line, '^\t*')
+	var n = len(spaces)
+	return [repeat("\t", n), repeat("\t", n + 1)]
+enddef
+
+# auto indent
+def MyCR()
+	# for autocompletion
+	if pumvisible()
+		feedkeys("\<CR>", 'n')
+		return
+	endif
+
+	var [_, lnum, col, _] = getcharpos('.')
+	var line = getline(lnum)
+	var [end_str, mid_str] = MyIndentStr(line)
+
+	# 有括号的情况
+	var [bc, ac] = MyCharAroundCursor()
+	if !empty(bc) && !empty(ac) && input_pairs->get(bc, '') == ac
+		setline(lnum, trim(strcharpart(line, 0, col - 1), '', 2))
+		append(lnum, [mid_str, end_str .. trim(strcharpart(line, col - 1), '', 1)])
+		setcursorcharpos(lnum + 1, strlen(mid_str) + 1)
+		return
+	endif
+
+	# 一般情况
+	setline(lnum, trim(strcharpart(line, 0, col - 1), '', 2))
+	append(lnum, end_str .. trim(strcharpart(line, col - 1), '', 1))
+	setcursorcharpos(lnum + 1, strlen(end_str) + 1)
+enddef
+
+# keymaps ------------------------------------------------------------
+inoremap <CR> <cmd>call <SID>MyCR()<CR>
 inoremap <expr> <BS> MyAutoDelPair()
 
 inoremap ( ()<Left>
