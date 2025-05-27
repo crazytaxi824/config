@@ -10,37 +10,6 @@ xnoremap D "_x
 
 xnoremap <leader>y "*y
 
-""" 自动括号
-xnoremap <leader>" <C-c>`>a"<C-c>`<i"<C-c>v`><right><right>
-xnoremap <leader>' <C-c>`>a'<C-c>`<i'<C-c>v`><right><right>
-xnoremap <leader>` <C-c>`>a`<C-c>`<i`<C-c>v`><right><right>
-xnoremap <leader>* <C-c>`>a*<C-c>`<i*<C-c>v`><right><right>
-xnoremap <leader>_ <C-c>`>a_<C-c>`<i_<C-c>v`><right><right>
-xnoremap <leader>$ <C-c>`>a$<C-c>`<i$<C-c>v`><right><right>
-xnoremap <leader>{ <C-c>`>a}<C-c>`<i{<C-c>v`><right><right>
-xnoremap <leader>} <C-c>`>a}<C-c>`<i{<C-c>v`><right><right>
-xnoremap <leader>[ <C-c>`>a]<C-c>`<i[<C-c>v`><right><right>
-xnoremap <leader>] <C-c>`>a]<C-c>`<i[<C-c>v`><right><right>
-xnoremap <leader>( <C-c>`>a)<C-c>`<i(<C-c>v`><right><right>
-xnoremap <leader>) <C-c>`>a)<C-c>`<i(<C-c>v`><right><right>
-xnoremap <leader>> <C-c>`>a><C-c>`<i<<C-c>v`><right><right>
-xnoremap <leader><lt> <C-c>`>a><C-c>`<lt>i<lt><C-c>v`><right><right>
-
-nnoremap <leader>" viw<C-c>`>a"<C-c>`<i"<C-c>
-nnoremap <leader>' viw<C-c>`>a'<C-c>`<i'<C-c>
-nnoremap <leader>` viw<C-c>`>a`<C-c>`<i`<C-c>
-nnoremap <leader>* viw<C-c>`>a*<C-c>`<i*<C-c>
-nnoremap <leader>_ viw<C-c>`>a_<C-c>`<i_<C-c>
-nnoremap <leader>$ viw<C-c>`>a$<C-c>`<i$<C-c>
-nnoremap <leader>{ viw<C-c>`>a}<C-c>`<i{<C-c>
-nnoremap <leader>} viw<C-c>`>a}<C-c>`<i{<C-c>
-nnoremap <leader>[ viw<C-c>`>a]<C-c>`<i[<C-c>
-nnoremap <leader>] viw<C-c>`>a]<C-c>`<i[<C-c>
-nnoremap <leader>( viw<C-c>`>a)<C-c>`<i(<C-c>
-nnoremap <leader>) viw<C-c>`>a)<C-c>`<i(<C-c>
-nnoremap <leader>> viw<C-c>`>a><C-c>`<i<<C-c>
-nnoremap <leader><lt> viw<C-c>`>a><C-c>`<lt>i<lt><C-c>
-
 """ <Nop>
 nnoremap s <Nop>
 
@@ -59,6 +28,7 @@ source ~/.vim/keymaps/terminal.vim
 source ~/.vim/keymaps/help.vim
 source ~/.vim/keymaps/completion.vim
 source ~/.vim/keymaps/spell.vim
+source ~/.vim/keymaps/autopairs.vim
 
 
 
