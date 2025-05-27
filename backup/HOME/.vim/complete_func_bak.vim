@@ -114,8 +114,7 @@ def FilepathCompletion(prev_filepath: string)
 	var filepaths = glob(prev_filepath .. "*", true, true)
 
 	# 入参 v 是 glob() 返回的路径
-	# isdirectory() 不能判断 ~/ 相对路径, 这里正好和 glob() 配合使用.
-	def KeepPrevFilepath(_, v: string): string
+	filepaths = filepaths->map((_, v: string): string => {
 		var result = v
 		var head = fnamemodify(v, ':h') .. '/'
 		if head != prev_filepath
@@ -123,12 +122,12 @@ def FilepathCompletion(prev_filepath: string)
 			result = substitute(v, head, prev_filepath, '')
 		endif
 
+		# isdirectory() 不能判断 ~/ 相对路径, 这里正好和 glob() 配合使用.
 		if isdirectory(v)
 			return result .. '/'
 		endif
 		return result
-	enddef
-	filepaths = filepaths->map(KeepPrevFilepath)
+	})
 
 	# insert & Replace mode 才执行 complete()
 	if mode() =~# '^[iR]' && !empty(filepaths)

@@ -27,10 +27,10 @@ def g:MyTabLine(): string
 	# bwipeout! netrw created [No Name] buffer
 	for lb in lbs
 		if !empty(getbufvar(lb.bufnr, 'netrw_browser_active')) && empty(lb.name)
-			def MyBd(timer: number)
+			# VVI: 延迟执行
+			timer_start(200, (timer: number) => {
 				execute('bwipeout! ' .. lb.bufnr)
-			enddef
-			timer_start(200, MyBd)  # VVI: 延迟执行
+			})
 		endif
 	endfor
 

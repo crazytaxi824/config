@@ -74,5 +74,3 @@ enddef
 nnoremap <leader>d <cmd>call <SID>MyDeleteBufferAndTab()<CR>
 nnoremap <leader>Da <cmd>call <SID>MyDeleteOtherBuffers()<CR>
 
-
-

@@ -33,18 +33,8 @@ def PopupSpellSuggests()
 		return
 	endif
 
-	# 回调函数：当用户选择某个选项后执行
-	def MyPopupCallback(winid: number, result: number)
-		var idx = result - 1
-		if idx >= 0
-			var choice = popup_items[idx]
-			ReplaceWord(cword, choice)
-		endif
-	enddef
-
 	# `:help popup_create-arguments`
 	popup_menu(popup_items, {
-		callback: MyPopupCallback,
 		title: "choose spell:",
 		#border: [1],  # 上右下左, 1: 开启, 0: 关闭.
 		padding: [0, 1, 0, 1],  # 上右下左, 空N格
@@ -53,9 +43,15 @@ def PopupSpellSuggests()
 		minwidth: 60,
 		minheight: 6,
 		maxheight: 18,
+		callback: (winid: number, result: number) => {
+			var idx = result - 1
+			if idx >= 0
+				var choice = popup_items[idx]
+				ReplaceWord(cword, choice)
+			endif
+		},
 	})
 enddef
 
 nnoremap z= <cmd>call <SID>PopupSpellSuggests()<CR>
-
 

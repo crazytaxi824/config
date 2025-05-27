@@ -32,5 +32,3 @@ enddef
 inoremap <expr> <Tab> MyTab()
 inoremap <S-Tab> <Tab>
 
-
-
