@@ -31,6 +31,7 @@ def MyTab(): string
 	return "\<Tab>"
 enddef
 
+# --- keymaps --------------------------------------------------------------------------------------
 inoremap <expr><silent> <Tab> MyTab()
 inoremap <S-Tab> <Tab>
 

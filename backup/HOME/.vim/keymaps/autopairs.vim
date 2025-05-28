@@ -110,7 +110,7 @@ def MyCR()
 	setcursorcharpos(lnum + 1, strlen(end_str) + 1)
 enddef
 
-# keymaps ------------------------------------------------------------
+# --- keymaps --------------------------------------------------------------------------------------
 inoremap <CR> <cmd>call <SID>MyCR()<CR>
 
 inoremap <expr> <BS> MyAutoDelPair()

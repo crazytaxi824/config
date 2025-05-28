@@ -45,7 +45,7 @@ au FileType python set expandtab textwidth=79
 """ 组合键延迟
 set timeout
 set timeoutlen=1000
-set ttimeout
+set nottimeout
 set ttimeoutlen=50
 
 """ netrw

@@ -60,6 +60,7 @@ def MyPopupSpellSuggests()
 	})
 enddef
 
+# --- keymaps --------------------------------------------------------------------------------------
 nnoremap z= <cmd>call <SID>MyPopupSpellSuggests()<CR>
 
 

@@ -13,12 +13,8 @@ def MyPageDown()
 	execute("normal! " .. c .. "gj")
 enddef
 
-nnoremap <PageUp> <cmd>call <SID>MyPageUp()<CR>
-nnoremap <PageDown> <cmd>call <SID>MyPageDown()<CR>
-
 ### Shift-Up/Down
 var count = 3  # script scope var
-
 def MyShiftUp()
 	if v:count > 0
 		count = v:count
@@ -33,16 +29,6 @@ def MyShiftDown()
 	execute("normal! " .. count .. "gj")
 enddef
 
-nnoremap <S-Up> <cmd>call <SID>MyShiftUp()<CR>
-inoremap <S-Up> <cmd>call <SID>MyShiftUp()<CR>
-vnoremap <S-Up> <cmd>call <SID>MyShiftUp()<CR>
-nnoremap <S-Down> <cmd>call <SID>MyShiftDown()<CR>
-inoremap <S-Down> <cmd>call <SID>MyShiftDown()<CR>
-vnoremap <S-Down> <cmd>call <SID>MyShiftDown()<CR>
-
-nnoremap <S-CR> <CR>
-vnoremap <S-CR> <CR>
-
 ### HOME
 def MyHome()
 	var before_pos = getpos('.')
@@ -53,8 +39,6 @@ def MyHome()
 	endif
 enddef
 
-nnoremap <HOME> <cmd>call <SID>MyHome()<CR>
-
 ### netrw ------------------------------------------------------------------------------------------
 ### 替换系统自动为 netrw 加载的 <buffer> keymaps
 au FileType netrw nnoremap <buffer> <ESC> <cmd>bdelete<CR>
@@ -62,6 +46,22 @@ au FileType netrw nnoremap <nowait> <buffer> q <cmd>bdelete<CR>
 au FileType netrw nnoremap <buffer> - <Nop>
 au FileType netrw nnoremap <buffer> <S-Up> <cmd>call <SID>MyShiftUp()<CR>
 au FileType netrw nnoremap <buffer> <S-Down> <cmd>call <SID>MyShiftDown()<CR>
+
+# --- keymaps --------------------------------------------------------------------------------------
+nnoremap <S-Up> <cmd>call <SID>MyShiftUp()<CR>
+inoremap <S-Up> <cmd>call <SID>MyShiftUp()<CR>
+vnoremap <S-Up> <cmd>call <SID>MyShiftUp()<CR>
+nnoremap <S-Down> <cmd>call <SID>MyShiftDown()<CR>
+inoremap <S-Down> <cmd>call <SID>MyShiftDown()<CR>
+vnoremap <S-Down> <cmd>call <SID>MyShiftDown()<CR>
+
+nnoremap <S-CR> <CR>
+vnoremap <S-CR> <CR>
+
+nnoremap <PageUp> <cmd>call <SID>MyPageUp()<CR>
+nnoremap <PageDown> <cmd>call <SID>MyPageDown()<CR>
+
+nnoremap <HOME> <cmd>call <SID>MyHome()<CR>
 
 ### 进入文件夹 netrw
 nnoremap <leader><CR> <cmd>execute("30Lexplore " .. expand('%:p:h')) <CR>

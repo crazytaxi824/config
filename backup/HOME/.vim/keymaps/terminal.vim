@@ -7,6 +7,7 @@ def MyWipeAllTerminal()
 	endif
 enddef
 
+# --- keymaps --------------------------------------------------------------------------------------
 nnoremap <leader>tt <cmd>terminal<CR>
 nnoremap <leader>tW <cmd>call <SID>MyWipeAllTerminal()<CR>
 
