@@ -1,24 +1,31 @@
 vim9script
 
+# 主要函数 matchstrpos() 只能用于 byte-indexing, col().
+# 所以前面使用 getpos(), 而后面需要 charidx() 来转换 index.
 def ReplaceWord(cword: string, repl_str: string)
-	var lnum = line('.')
-	var lineText = getline(".")
-	var col = col('.') - 1  # 0-based
+	var [_, lnum, col, _] = getpos('.')
+	col = col - 1  # 0-based
+	var line = getline(lnum)
 
 	var pos = 0
-	while pos < len(lineText)
-		var [word, w_start, w_end] = matchstrpos(lineText, cword, pos)
+	while pos < len(line)
+		var [word, w_start, w_end] = matchstrpos(line, cword, pos)
+		# 匹配结束
 		if empty(word)
-			break
-		endif
-		if w_start <= col && col < w_end
-			# 找到 <cword> 位置, replace <cword>
-			var prefix = strcharpart(lineText, 0, charidx(lineText, w_start))
-			var suffix = strcharpart(lineText, charidx(lineText, w_end))
-			setline(lnum, prefix .. repl_str .. suffix)
 			return
 		endif
-		pos = w_end  # 移动到匹配结束位置, 准备下次匹配
+
+		if col < w_end
+			# 找到 <cword> 位置, replace <cword>
+			var prefix = strcharpart(line, 0, charidx(line, w_start))
+			var suffix = strcharpart(line, charidx(line, w_end))
+			setline(lnum, prefix .. repl_str .. suffix)
+			cursor(lnum, w_start + 1)
+			return
+		endif
+
+		# 移动到匹配结束位置, 准备下次匹配
+		pos = w_end
 	endwhile
 enddef
 

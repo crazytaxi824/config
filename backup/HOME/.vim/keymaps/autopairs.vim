@@ -21,7 +21,7 @@ const del_pairs: dict<string> = MyInputPairs(pairs, true)
 
 # insert mode 下获取 cursor 前后一个 char.
 def MyCharAroundCursor(): list<string>
-	var [_, lnum, charcol, _] = getcharpos('.')  # [bufnum, lnum, col, off]
+	var [_, lnum, charcol, _] = getcharpos('.')  # [bufnum, lnum, charcol, off]
 	var line = getline(lnum)
 
 	# 获取前后字符
@@ -81,22 +81,22 @@ def MyCR()
 		return
 	endif
 
-	var [_, lnum, col, _] = getcharpos('.')
+	var [_, lnum, charcol, _] = getcharpos('.')
 	var line = getline(lnum)
 	var [end_str, mid_str] = MyIndentStr(line)
 
 	# (|), cursor 在括号内的情况.
 	var [bc, ac] = MyCharAroundCursor()
 	if !empty(bc) && !empty(ac) && input_pairs->get(bc, '') == ac
-		setline(lnum, trim(strcharpart(line, 0, col - 1), '', 2))
-		append(lnum, [mid_str, end_str .. trim(strcharpart(line, col - 1), '', 1)])
+		setline(lnum, trim(strcharpart(line, 0, charcol - 1), '', 2))
+		append(lnum, [mid_str, end_str .. trim(strcharpart(line, charcol - 1), '', 1)])
 		setcursorcharpos(lnum + 1, strlen(mid_str) + 1)
 		return
 	endif
 
 	# 一般情况
-	setline(lnum, trim(strcharpart(line, 0, col - 1), '', 2))
-	append(lnum, end_str .. trim(strcharpart(line, col - 1), '', 1))
+	setline(lnum, trim(strcharpart(line, 0, charcol - 1), '', 2))
+	append(lnum, end_str .. trim(strcharpart(line, charcol - 1), '', 1))
 	setcursorcharpos(lnum + 1, strlen(end_str) + 1)
 enddef
 
@@ -114,8 +114,8 @@ inoremap <expr> ] MyClosePair(']')
 inoremap <expr> } MyClosePair('}')
 inoremap <expr> > MyClosePair('>')
 
-cnoremap ( ()<Left>
-cnoremap <expr> ) MyClosePair(')')
+#cnoremap ( ()<Left>
+#cnoremap <expr> ) MyClosePair(')')
 
 inoremap <expr> ' MyQuotePair("'")
 inoremap <expr> " MyQuotePair('"')
