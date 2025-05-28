@@ -53,6 +53,8 @@ let g:netrw_banner=0
 let g:netrw_liststyle=3
 let g:netrw_list_hide='\.DS_Store$,.*\~$,.*\.swp$'
 
+au WinLeave Netrw* q!
+
 """ options
 set history=300
 set hidden
