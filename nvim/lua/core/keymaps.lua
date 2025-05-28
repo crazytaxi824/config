@@ -74,8 +74,9 @@ local keymaps = {
     end
 
     --- default <ESC> function
-    local esc = vim.api.nvim_replace_termcodes('<ESC>', true, false, true)
-    vim.api.nvim_feedkeys(esc, 'n', false)
+    -- local esc = vim.api.nvim_replace_termcodes('<ESC>', true, false, true)
+    -- vim.api.nvim_feedkeys(esc, 'n', false)
+    vim.fn.feedkeys("\\<ESC>", 'n')
   end, opt, "which_key_ignore"},
 
   --- common use -----------------------------------------------------------------------------------
