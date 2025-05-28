@@ -67,3 +67,5 @@ au FileType netrw nnoremap <buffer> <S-Down> <cmd>call <SID>MyShiftDown()<CR>
 nnoremap <leader><CR> <cmd>execute("30Lexplore " .. expand('%:p:h')) <CR>
 nnoremap <leader>; <cmd>execute("30Lexplore " .. getcwd())<CR>
 
+
+

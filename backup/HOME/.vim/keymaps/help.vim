@@ -18,3 +18,5 @@ enddef
 nnoremap K <cmd>call execute('help ' .. expand('<cword>'))<CR>
 xnoremap K <C-c><cmd>call <SID>MyHelpVisual()<CR>
 
+
+
