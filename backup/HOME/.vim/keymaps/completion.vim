@@ -7,7 +7,7 @@ vim9script
 # insert mode 下, 获取光标前的 keywords
 def CursorPrevKeyword(): list<string>
 	# 这里不能使用 col('.'), 汉字长度和英文不同.
-	var [_, lnum, charcol, _] = getcharpos('.')  # [bufnum, lnum, charcol, off]
+	var [_, lnum, charcol, _] = getcharpos('.')
 	var line = getline(lnum)
 
 	# regexp 匹配 filepath | keywrod

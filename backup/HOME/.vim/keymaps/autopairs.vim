@@ -26,14 +26,12 @@ def MyCharAroundCursor(cmd: bool = false): list<string>
 
 	if cmd
 		line = getcmdline()
-		charcol = charidx(line, getcmdpos())
-		if charcol < 0
-			charcol = strcharlen(line) + 1
-		endif
+		charcol = charidx(line, getcmdpos())  # cursor 在最后的时候 charidx() 返回 -1
+		charcol = (charcol < 0) ? strcharlen(line) + 1 : charcol
 	else
-		var [_, lnum, c_col, _] = getcharpos('.')  # [bufnum, lnum, charcol, off]
+		var [_, lnum, char_col, _] = getcharpos('.')
 		line = getline(lnum)
-		charcol = c_col
+		charcol = char_col
 	endif
 
 	# 获取前后字符

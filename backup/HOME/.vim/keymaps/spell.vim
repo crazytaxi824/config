@@ -15,8 +15,8 @@ def ReplaceWord(cword: string, repl_str: string)
 			return
 		endif
 
+		# 已找到 <cword> 位置, replace <cword>
 		if col < w_end
-			# 找到 <cword> 位置, replace <cword>
 			var prefix = strcharpart(line, 0, charidx(line, w_start))
 			var suffix = strcharpart(line, charidx(line, w_end))
 			setline(lnum, prefix .. repl_str .. suffix)
