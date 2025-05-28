@@ -20,9 +20,21 @@ const input_pairs: dict<string> = MyInputPairs(pairs)
 const del_pairs: dict<string> = MyInputPairs(pairs, true)
 
 # insert mode 下获取 cursor 前后一个 char.
-def MyCharAroundCursor(): list<string>
-	var [_, lnum, charcol, _] = getcharpos('.')  # [bufnum, lnum, charcol, off]
-	var line = getline(lnum)
+def MyCharAroundCursor(cmd: bool = false): list<string>
+	var charcol = -1
+	var line = ''
+
+	if cmd
+		line = getcmdline()
+		charcol = charidx(line, getcmdpos())
+		if charcol < 0
+			charcol = strcharlen(line) + 1
+		endif
+	else
+		var [_, lnum, c_col, _] = getcharpos('.')  # [bufnum, lnum, charcol, off]
+		line = getline(lnum)
+		charcol = c_col
+	endif
 
 	# 获取前后字符
 	var char_before = (charcol > 1) ? strcharpart(line, charcol - 2, 1) : ''
@@ -30,16 +42,16 @@ def MyCharAroundCursor(): list<string>
 	return [char_before, char_after]
 enddef
 
-def MyClosePair(key: string): string
-	var [bc, ac] = MyCharAroundCursor()
+def MyClosePair(key: string, cmd: bool = false): string
+	var [bc, ac] = MyCharAroundCursor(cmd)
 	if !empty(bc) && !empty(ac) && del_pairs->get(ac, '') == bc
 		return "\<Right>"
 	endif
 	return key
 enddef
 
-def MyQuotePair(key: string): string
-	var [bc, ac] = MyCharAroundCursor()
+def MyQuotePair(key: string, cmd: bool = false): string
+	var [bc, ac] = MyCharAroundCursor(cmd)
 	if bc != key
 		return key .. key .. "\<Left>"
 	elseif bc == key && ac == key
@@ -48,8 +60,8 @@ def MyQuotePair(key: string): string
 	return key
 enddef
 
-def MyAutoDelPair(): string
-	var [bc, ac] = MyCharAroundCursor()
+def MyAutoDelPair(cmd: bool = false): string
+	var [bc, ac] = MyCharAroundCursor(cmd)
 	if !empty(bc) && !empty(ac) && input_pairs->get(bc, '') == ac
 		return "\<Del>\<BS>"
 	endif
@@ -102,24 +114,37 @@ enddef
 
 # keymaps ------------------------------------------------------------
 inoremap <CR> <cmd>call <SID>MyCR()<CR>
+
 inoremap <expr> <BS> MyAutoDelPair()
+cnoremap <expr> <BS> MyAutoDelPair(true)
 
 inoremap ( ()<Left>
 inoremap [ []<Left>
 inoremap { {}<Left>
 inoremap < <><Left>
 
+cnoremap ( ()<Left>
+cnoremap [ []<Left>
+cnoremap { {}<Left>
+cnoremap < <><Left>
+
 inoremap <expr> ) MyClosePair(')')
 inoremap <expr> ] MyClosePair(']')
 inoremap <expr> } MyClosePair('}')
 inoremap <expr> > MyClosePair('>')
 
-#cnoremap ( ()<Left>
-#cnoremap <expr> ) MyClosePair(')')
+cnoremap <expr> ) MyClosePair(')', true)
+cnoremap <expr> ] MyClosePair(']', true)
+cnoremap <expr> } MyClosePair('}', true)
+cnoremap <expr> > MyClosePair('>', true)
 
 inoremap <expr> ' MyQuotePair("'")
 inoremap <expr> " MyQuotePair('"')
 inoremap <expr> ` MyQuotePair('`')
+
+cnoremap <expr> ' MyQuotePair("'", true)
+cnoremap <expr> " MyQuotePair('"', true)
+cnoremap <expr> ` MyQuotePair('`', true)
 
 xnoremap <leader>" <C-c>`>a"<C-c>`<i"<C-c>v`><right><right>
 xnoremap <leader>' <C-c>`>a'<C-c>`<i'<C-c>v`><right><right>
