@@ -19,14 +19,15 @@ enddef
 const input_pairs: dict<string> = MyInputPairs(pairs)
 const del_pairs: dict<string> = MyInputPairs(pairs, true)
 
+# insert mode 下获取 cursor 前后一个 char.
 def MyCharAroundCursor(): list<string>
-  var [_, lnum, col, _] = getcharpos('.')  # [bufnum, lnum, col, off]
-  var line = getline(lnum)
+	var [_, lnum, charcol, _] = getcharpos('.')  # [bufnum, lnum, col, off]
+	var line = getline(lnum)
 
-  # 获取前后字符
-  var char_before = (col > 1) ? line[col - 2] : ''
-  var char_after = (col <= len(line)) ? line[col - 1] : ''
-  return [char_before, char_after]
+	# 获取前后字符
+	var char_before = (charcol > 1) ? strcharpart(line, charcol - 2, 1) : ''
+	var char_after = (charcol <= strcharlen(line)) ? strcharpart(line, charcol - 1, 1) : ''
+	return [char_before, char_after]
 enddef
 
 def MyClosePair(key: string): string
@@ -112,6 +113,9 @@ inoremap <expr> ) MyClosePair(')')
 inoremap <expr> ] MyClosePair(']')
 inoremap <expr> } MyClosePair('}')
 inoremap <expr> > MyClosePair('>')
+
+cnoremap ( ()<Left>
+cnoremap <expr> ) MyClosePair(')')
 
 inoremap <expr> ' MyQuotePair("'")
 inoremap <expr> " MyQuotePair('"')
