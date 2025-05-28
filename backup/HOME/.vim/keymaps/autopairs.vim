@@ -56,6 +56,8 @@ def MyAutoDelPair(): string
 enddef
 
 # return [end_insert_str, mid_insert_str]
+# mid_insert_str: cursor 单独一行, 需要多一级 indent.
+# end_insert_str: 反括号行, 和回车行同一级 indent.
 def MyIndentStr(line: string): list<string>
 	# space-indent
 	if &expandtab
@@ -82,7 +84,7 @@ def MyCR()
 	var line = getline(lnum)
 	var [end_str, mid_str] = MyIndentStr(line)
 
-	# 有括号的情况
+	# (|), cursor 在括号内的情况.
 	var [bc, ac] = MyCharAroundCursor()
 	if !empty(bc) && !empty(ac) && input_pairs->get(bc, '') == ac
 		setline(lnum, trim(strcharpart(line, 0, col - 1), '', 2))
