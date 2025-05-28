@@ -1,6 +1,6 @@
 vim9script
 
-def g:MyHelpVisual()
+def MyHelpVisual()
 	# 中文字符和行使用 getpos() 获取的位置不对. 需要使用 getcharpos()
 	# getpos() 获取视觉选区的起止位置
 	var start = getcharpos("'<")
@@ -16,5 +16,5 @@ def g:MyHelpVisual()
 enddef
 
 nnoremap K <cmd>call execute('help ' .. expand('<cword>'))<CR>
-xnoremap K <C-c><cmd>call MyHelpVisual()<CR>
+xnoremap K <C-c><cmd>call <SID>MyHelpVisual()<CR>
 

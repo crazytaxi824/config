@@ -53,7 +53,7 @@ var curr_bufnr = 0
 # check trailing whitespace & mixed indentation
 const bufvar_MiTs = 'my_MiTs'
 const bufvar_tick = 'my_stl_tick'
-def g:CheckMiTs(): string
+def g:MyCheckMiTs(): string
 	# 排除类型
 	if &buftype != '' || &filetype == 'netrw'
 		return ''
@@ -98,7 +98,7 @@ def g:CheckMiTs(): string
 	return ''
 enddef
 
-def FindGitRoot(): string
+def MyFindGitRoot(): string
 	var path = expand('%:p:h')
 	while path !=# '/' && !isdirectory(path .. '/.git')
 		path = fnamemodify(path, ':h')
@@ -114,7 +114,7 @@ enddef
 # get git branch name or hash
 const bufvar_git_time = "my_git_time"
 const bufvar_git_branch = "my_git_branch"
-def g:GitBranch(): string
+def g:MyGitBranch(): string
 	# 排除类型
 	if &buftype != '' || &filetype == 'netrw'
 		return ''
@@ -130,7 +130,7 @@ def g:GitBranch(): string
 	# reset git_time
 	setbufvar(bufnr(), bufvar_git_time, timenow)
 
-	var dir = FindGitRoot()
+	var dir = MyFindGitRoot()
 	if dir == ''
 		setbufvar(bufnr(), bufvar_git_branch, '')
 		return ''
@@ -150,10 +150,10 @@ enddef
 def MyStatusLine()
 	curr_bufnr = bufnr('%')
 
-	#var statuslineStr = "%%<%s %s %s%%(  %%{GitBranch()} %%)%s %%h%%w%%m%%r%%=%%F %s%%( %%y %s  %%)%s %%3p%%%%:%%-2v "
+	#var statuslineStr = "%%<%s %s %s%%(  %%{MyGitBranch()} %%)%s %%h%%w%%m%%r%%=%%F %s%%( %%y %s  %%)%s %%3p%%%%:%%-2v "
 	const sectionA = "%s%%( %s %%)"
-	const sectionB = "%s%%( %%{GitBranch()} %%)"
-	const sectionC = "%s%%( %%{CheckMiTs()}%%)%s"
+	const sectionB = "%s%%( %%{MyGitBranch()} %%)"
+	const sectionC = "%s%%( %%{MyCheckMiTs()}%%)%s"
 	const sectionZ = "%%=%%<%%(%%F %%)%%(%%h%%w%%m%%r %%)"
 	const sectionY = "%s%%( %%y%s %%)"
 	const sectionX = "%s%%( %%3p%%%%:%%-2v %%)"
@@ -207,7 +207,7 @@ def MyStatusLine()
 			endif
 		else
 			# 设置其他 window
-			var inactiveSL = printf("%%<%s %%{CheckMiTs()}%s%%=%%f %%(%%m%%r %%)", warn.inactive, inactive.A)
+			var inactiveSL = printf("%%<%s %%{MyCheckMiTs()}%s%%=%%f %%(%%m%%r %%)", warn.inactive, inactive.A)
 			setwinvar(win.winid, '&statusline', inactiveSL)
 		endif
 	endfor

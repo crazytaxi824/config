@@ -2,7 +2,7 @@ vim9script
 
 # 主要函数 matchstrpos() 只能用于 byte-indexing, col().
 # 所以前面使用 getpos(), 而后面需要 charidx() 来转换 index.
-def ReplaceWord(cword: string, repl_str: string)
+def MyReplaceWord(cword: string, repl_str: string)
 	var [_, lnum, col, _] = getpos('.')
 	col = col - 1  # 0-based
 	var line = getline(lnum)
@@ -29,7 +29,7 @@ def ReplaceWord(cword: string, repl_str: string)
 	endwhile
 enddef
 
-def PopupSpellSuggests()
+def MyPopupSpellSuggests()
 	var cword = expand('<cword>')
 	if empty(cword)
 		return
@@ -54,11 +54,11 @@ def PopupSpellSuggests()
 			var idx = result - 1
 			if idx >= 0
 				var choice = popup_items[idx]
-				ReplaceWord(cword, choice)
+				MyReplaceWord(cword, choice)
 			endif
 		},
 	})
 enddef
 
-nnoremap z= <cmd>call <SID>PopupSpellSuggests()<CR>
+nnoremap z= <cmd>call <SID>MyPopupSpellSuggests()<CR>
 
