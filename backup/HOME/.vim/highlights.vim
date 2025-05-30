@@ -1,56 +1,56 @@
-""" this is not a vim9script
+vim9script
 
-""" NOTE: 必须先加载 colorscheme, 否则以下 highlight 设置可能无效.
-" 213, 207  Magenta
-" 208   Orange
-" 220   Yellow
-" 167   Red
-" 251   White
-" 233   Black
-" 74    Cyan
-" 78    Green_Type
-" 65    Green_Comment
-" 63    Blue
+# NOTE: 必须先加载 colorscheme, 否则以下 highlight 设置可能无效.
+# 213, 207  Magenta
+# 208   Orange
+# 220   Yellow
+# 167   Red
+# 251   White
+# 233   Black
+# 74    Cyan
+# 78    Green_Type
+# 65    Green_Comment
+# 63    Blue
 
-""" CursorLine
+# CursorLine
 hi clear CursorLine
 hi CursorLine ctermbg=236
 
-""" Visual selected
+# Visual selected
 hi clear Visual
 hi Visual ctermbg=24
 
-""" split window
+# split window
 hi clear VertSplit
 hi VertSplit ctermfg=236
 
-""" 括号 {} [] ()
+# 括号 {} [] ()
 hi clear MatchParen
 hi MatchParen cterm=underline,bold ctermfg=220
 
-""" listchars
+# listchars
 hi NonText ctermfg=238
 hi! link SpecialKey NonText
 
-""" Search
+# Search
 hi Search ctermfg=233 ctermbg=220
 hi IncSearch cterm=bold ctermfg=233 ctermbg=213
 hi! link CurSearch IncSearch
 
-""" fold
+# fold
 hi clear Folded
 hi Folded ctermfg=74
 
-""" 行号 set number
+# 行号 set number
 hi LineNr ctermfg=240
 hi CursorLine ctermbg=236
 hi CursorLineNr ctermfg=220 cterm=bold
 
-""" msg
+# msg
 hi ErrorMsg ctermfg=255 ctermbg=167
 hi WarningMsg ctermfg=208
 
-""" popup menu
+# popup menu
 hi Pmenu ctermfg=251 ctermbg=235
 hi PmenuSel ctermfg=74 ctermbg=238 cterm=bold,underline
 hi PmenuSbar ctermbg=235
@@ -58,7 +58,7 @@ hi PmenuThumb ctermbg=240
 hi PmenuMatch ctermfg=207 ctermbg=235
 hi PmenuMatchSel ctermfg=207 ctermbg=238 cterm=bold,underline
 
-""" spell
+# spell
 hi! clear SpellBad
 hi SpellBad ctermfg=208 cterm=bold,underline
 hi! clear SpellCap
@@ -68,18 +68,18 @@ hi SpellRare ctermfg=208 cterm=bold,underline
 hi! clear SpellLocal
 hi SpellLocal ctermfg=208 cterm=bold,underline
 
-""" Diff mode
+# Diff mode
 hi DiffAdd ctermfg=251 ctermbg=22
 hi DiffText ctermfg=213 ctermbg=233 cterm=reverse
 hi clear DiffChange
 hi DiffDelete ctermfg=251 ctermbg=52
 
-"""
+# others
 hi Todo ctermfg=22 ctermbg=255 cterm=reverse
 hi SpecialComment ctermfg=63 ctermbg=255 cterm=reverse
 hi Directory cterm=bold ctermfg=81
 
-""" code
+# code
 hi Keyword ctermfg=74
 hi Function ctermfg=78
 hi Type ctermfg=79
