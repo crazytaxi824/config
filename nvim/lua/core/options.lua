@@ -596,6 +596,16 @@ vim.api.nvim_create_autocmd("QuitPre", {
       return
     end
 
+    --- skip unsaved file
+    if vim.bo[params.buf].modified then
+      return
+    end
+
+    --- skip netrw/NvirTree filetype
+    if vim.bo[params.buf].filetype == "NvimTree" or vim.bo[params.buf].filetype == "netrw" then
+      return
+    end
+
     local normal_win_count = 0
     local buflisted_win_count = 0
     for _, wid in ipairs(vim.api.nvim_list_wins()) do
@@ -605,11 +615,6 @@ vim.api.nvim_create_autocmd("QuitPre", {
       if vim.fn.buflisted(vim.api.nvim_win_get_buf(wid)) == 1 then
         buflisted_win_count = buflisted_win_count + 1
       end
-    end
-
-    --- skip netrw/NvirTree filetype
-    if vim.bo.filetype == "NvimTree" or vim.bo.filetype == "netrw" then
-      return
     end
 
     --- last normal window
