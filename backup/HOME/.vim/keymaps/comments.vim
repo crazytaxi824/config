@@ -71,10 +71,10 @@ def MyToggleComment(start: number, end: number)
 			endif
 		else
 			if lines[i] != ''
-				# 给空行注释
+				# 正常注释
 				setline(lnum, indent_prefix .. comm_chars .. ' ' .. strcharpart(lines[i], n))
 			else
-				# 正常注释
+				# 给空行注释
 				setline(lnum, indent_prefix .. comm_chars)
 			endif
 		endif
