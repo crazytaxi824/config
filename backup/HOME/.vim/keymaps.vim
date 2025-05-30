@@ -30,6 +30,7 @@ source ~/.vim/keymaps/help.vim
 source ~/.vim/keymaps/completion.vim
 source ~/.vim/keymaps/spell.vim
 source ~/.vim/keymaps/autopairs.vim
+source ~/.vim/keymaps/comments.vim
 
 
 
