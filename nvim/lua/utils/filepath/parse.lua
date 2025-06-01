@@ -39,7 +39,7 @@ local function clear_brackets(str)
   return str
 end
 
---- clear file:// schema
+--- clear 'file://' schema
 local function clear_file_schema(str)
   local t = string.match(str, 'file://(.*)')
   if t then
