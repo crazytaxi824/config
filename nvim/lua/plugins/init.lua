@@ -225,7 +225,7 @@ local plugins = {
   {
     "stevearc/conform.nvim",
     -- tag = "v9.0.0",
-    commit = "6feb2f2",
+    commit = "f643d1b",
     config = function() require("plugins.settings.formatter_conform") end,
 
     event = "BufWritePre",
@@ -345,7 +345,7 @@ local plugins = {
   {
     "lewis6991/gitsigns.nvim",
     -- tag = "v1.0.2",
-    commit = "8bdaccd",
+    commit = "5f1b1e2",
     config = function() require("plugins.settings.git_signs") end,
     dependencies = { "folke/trouble.nvim" },
 

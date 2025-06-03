@@ -3,10 +3,12 @@ if not ts_ctx_status_ok then
   return
 end
 
+local max_ln = (vim.wo.scrolloff >= 6) and vim.wo.scrolloff or 6
+
 --- https://github.com/nvim-treesitter/nvim-treesitter-context#configuration
 ts_ctx.setup{
   enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
-  max_lines = 0, -- How many lines the window should span. Values <= 0 mean no limit.
+  max_lines = max_ln, -- How many lines the window should span. Values <= 0 mean no limit.
                  -- VVI: 会受到 set scrolloff 影响.
   min_window_height = 0, -- Minimum editor window height to enable context. Values <= 0 mean no limit.
   line_numbers = true,   -- show line numbers.
