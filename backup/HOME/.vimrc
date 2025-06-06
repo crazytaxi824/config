@@ -44,7 +44,7 @@ au FileType json,jsonc,javascript,javascriptreact,typescript,typescriptreact,
 	\vue,svelte,html,css,less,scss,graphql,yaml,lua
 	\ setlocal expandtab tabstop=2 shiftwidth=2
 
-au FileType python set expandtab textwidth=79
+au FileType python setlocal expandtab textwidth=79
 
 # 组合键延迟
 set timeout
@@ -119,7 +119,7 @@ set cursorline
 set cursorlineopt=number,screenline
 
 #set cursorcolumn
-#set colorcolumn=+1  # highlight column after 'textwidth'
+set colorcolumn=+1  # highlight column after 'textwidth'
 #set signcolumn=yes  # sign
 
 # plugins ----------------------------------------------------------------------------------------

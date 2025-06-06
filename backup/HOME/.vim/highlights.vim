@@ -45,6 +45,7 @@ hi Folded ctermfg=74
 hi LineNr ctermfg=240
 hi CursorLine ctermbg=236
 hi CursorLineNr ctermfg=220 cterm=bold
+hi ColorColumn ctermbg=234
 
 # msg
 hi ErrorMsg ctermfg=255 ctermbg=167
