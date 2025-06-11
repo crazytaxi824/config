@@ -175,7 +175,7 @@ local plugins = {
 
   {
     "L3MON4D3/LuaSnip", -- snippet engine, for "cmp_luasnip", 会创建几个 [Scratch] buffer
-    commit = "776a29c",
+    commit = "fb52516",
     --- for placeholder transformation
     --- https://code.visualstudio.com/docs/editor/userdefinedsnippets#_variable-transforms
     build = "make install_jsregexp",
@@ -225,7 +225,7 @@ local plugins = {
   {
     "stevearc/conform.nvim",
     -- tag = "v9.0.0",
-    commit = "f643d1b",
+    commit = "8132ec7",
     config = function() require("plugins.settings.formatter_conform") end,
 
     event = "BufWritePre",
@@ -268,7 +268,7 @@ local plugins = {
 
   {
     "nvim-lualine/lualine.nvim",  -- `:help 'statusline'`
-    commit = "0c6cca9",
+    commit = "a94fc68",
     config = function() require("plugins.settings.decor_lualine") end,
 
     event = "VeryLazy",
@@ -345,7 +345,7 @@ local plugins = {
   {
     "lewis6991/gitsigns.nvim",
     -- tag = "v1.0.2",
-    commit = "d0f90ef",
+    commit = "731b581",
     config = function() require("plugins.settings.git_signs") end,
     dependencies = { "folke/trouble.nvim" },
 
