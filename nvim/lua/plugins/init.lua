@@ -193,7 +193,7 @@ local plugins = {
 
   {
     "windwp/nvim-autopairs",
-    commit = "4d74e75",
+    commit = "2647cce",
     config = function() require("plugins.settings.autopairs") end,
     dependencies = {"hrsh7th/nvim-cmp"},  -- cmp.event:on() 设置.
 
@@ -236,7 +236,7 @@ local plugins = {
   {
     "nvim-tree/nvim-tree.lua",
     -- tag = "v1.13.0",
-    commit = "d87b41c",
+    commit = "d54a187",
     config = function() require("plugins.settings.file_tree") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
 
@@ -277,7 +277,7 @@ local plugins = {
   --- Debug tools 安装 -----------------------------------------------------------------------------
   {
     "mfussenegger/nvim-dap",  -- core debug tool
-    commit = "40a8189",
+    commit = "2edd637",
     config = function() require("plugins.settings.debug.nvim_dap") end,
 
     cmd = {'Debug', 'DapToggleBreakpoint', 'DapContinue'},
@@ -345,7 +345,7 @@ local plugins = {
   {
     "lewis6991/gitsigns.nvim",
     -- tag = "v1.0.2",
-    commit = "731b581",
+    commit = "1b0350a",
     config = function() require("plugins.settings.git_signs") end,
     dependencies = { "folke/trouble.nvim" },
 
@@ -403,7 +403,7 @@ local plugins = {
   --- https://github.com/jellydn/lazy-nvim-ide/blob/main/lua/plugins/extras/copilot-chat-v2.lua
   {
     "CopilotC-Nvim/CopilotChat.nvim",
-    tag = "v3.12.0",
+    tag = "v3.12.1",
     dependencies = {
       "nvim-telescope/telescope.nvim",
       "nvim-telescope/telescope-ui-select.nvim",
