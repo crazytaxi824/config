@@ -55,7 +55,7 @@ local plugins = {
 
   {
     "rcarriga/nvim-notify",
-    commit = "b5825cf",
+    commit = "a22f5d7",
     -- tag = "v3.15.0",
     config = function() require("plugins.settings.nvim_notify") end,
 
