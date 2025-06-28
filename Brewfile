@@ -23,7 +23,7 @@ brew "git-delta" # git diff 工具
 brew "lazygit"   # git cui 工具, 还有 "gitui"
 
 # terminal
-brew "ranger" # terminal file explorer 文件管理器
+#brew "ranger" # terminal file explorer 文件管理器
 #brew "viu"   # terminal 图片显示工具
 #brew "w3m"   # terminal 访问网页工具
 
@@ -96,7 +96,7 @@ cask "obsidian" # markdown 编辑软件
 #cask "typora"   # markdown 编辑软件
 
 # 个人工具
-cask "squirrel"   # RIME 输入法客户端
+cask "squirrel-app"   # RIME 输入法客户端
 cask "appcleaner" # app 卸载工具
 cask "app-cleaner"  # mac 系统清理工具, 类似 CleanMyMac
 cask "keepassxc"  # keepass 客户端, 密码管理工具, eg: "macpass", "authpass" ...
