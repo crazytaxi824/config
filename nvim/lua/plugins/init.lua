@@ -153,7 +153,7 @@ local plugins = {
 
   {
     "hrsh7th/cmp-path",  -- filepath 补全
-    commit = "c6635aa",
+    commit = "e52e640",
 
     lazy = true,  -- nvim-cmp 加载时自动加载.
   },
@@ -175,7 +175,7 @@ local plugins = {
 
   {
     "L3MON4D3/LuaSnip", -- snippet engine, for "cmp_luasnip", 会创建几个 [Scratch] buffer
-    commit = "eda5be8",
+    commit = "66b5c27",
     --- for placeholder transformation
     --- https://code.visualstudio.com/docs/editor/userdefinedsnippets#_variable-transforms
     build = "make install_jsregexp",
@@ -225,7 +225,7 @@ local plugins = {
   {
     "stevearc/conform.nvim",
     -- tag = "v9.0.0",
-    commit = "8132ec7",
+    commit = "973f3cb",
     config = function() require("plugins.settings.formatter_conform") end,
 
     event = "BufWritePre",
@@ -236,7 +236,7 @@ local plugins = {
   {
     "nvim-tree/nvim-tree.lua",
     -- tag = "v1.13.0",
-    commit = "d54a187",
+    commit = "b0b4955",
     config = function() require("plugins.settings.file_tree") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
 
@@ -277,7 +277,7 @@ local plugins = {
   --- Debug tools 安装 -----------------------------------------------------------------------------
   {
     "mfussenegger/nvim-dap",  -- core debug tool
-    commit = "14fe46a",
+    commit = "cc77338",
     config = function() require("plugins.settings.debug.nvim_dap") end,
 
     cmd = {'Debug', 'DapToggleBreakpoint', 'DapContinue'},
@@ -296,7 +296,7 @@ local plugins = {
   {
     "rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
     -- tag = "v4.0.0",
-    commit = "73a26ab",
+    commit = "cf91d5e",
     config = function() require("plugins.settings.debug.nvim_dapui") end,
     dependencies = {
       "mfussenegger/nvim-dap",
@@ -345,7 +345,7 @@ local plugins = {
   {
     "lewis6991/gitsigns.nvim",
     -- tag = "v1.0.2",
-    commit = "1b0350a",
+    commit = "7bbc674",
     config = function() require("plugins.settings.git_signs") end,
     dependencies = { "folke/trouble.nvim" },
 
@@ -404,7 +404,7 @@ local plugins = {
   {
     "CopilotC-Nvim/CopilotChat.nvim",
     -- tag = "v3.12.1",
-    commit = "55f2162",
+    commit = "a90a92a",
     dependencies = {
       "nvim-telescope/telescope.nvim",
       "nvim-telescope/telescope-ui-select.nvim",
