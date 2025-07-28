@@ -37,14 +37,14 @@ local plugins = {
   --- Performence & Functions ----------------------------------------------------------------------
   {
     "nvim-lua/plenary.nvim",
-    commit = "857c5ac",
+    commit = "b9fd522",
     priority = 1000,  -- 只在 lazy=false 的情况下有效. 影响加载顺序, 默认值为 50.
   },
 
   {
     "williamboman/mason.nvim",
     -- tag = "v2.0.0",
-    commit = "8024d64",
+    commit = "3671ab0",
     -- build = ":MasonUpdate", -- :MasonUpdate updates All Registries, NOT packages.
     config = function() require("plugins.settings.mason_tool_installer") end,
 
@@ -175,7 +175,7 @@ local plugins = {
 
   {
     "L3MON4D3/LuaSnip", -- snippet engine, for "cmp_luasnip", 会创建几个 [Scratch] buffer
-    commit = "831a130",
+    commit = "3d5bced",
     --- for placeholder transformation
     --- https://code.visualstudio.com/docs/editor/userdefinedsnippets#_variable-transforms
     build = "make install_jsregexp",
@@ -215,7 +215,7 @@ local plugins = {
   --- "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
-    commit = "a5954f0",
+    commit = "3ce66bc",
     config = function() require("lsp.plugins.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -236,7 +236,7 @@ local plugins = {
   {
     "nvim-tree/nvim-tree.lua",
     -- tag = "v1.13.0",
-    commit = "b0b4955",
+    commit = "a9156c0",
     config = function() require("plugins.settings.file_tree") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
 
@@ -345,7 +345,7 @@ local plugins = {
   {
     "lewis6991/gitsigns.nvim",
     -- tag = "v1.0.2",
-    commit = "93f882f",
+    commit = "b014331",
     config = function() require("plugins.settings.git_signs") end,
     dependencies = { "folke/trouble.nvim" },
 
@@ -403,7 +403,8 @@ local plugins = {
   --- https://github.com/jellydn/lazy-nvim-ide/blob/main/lua/plugins/extras/copilot-chat-v2.lua
   {
     "CopilotC-Nvim/CopilotChat.nvim",
-    tag = "v3.12.2",
+    -- tag = "v3.12.2",
+    commit = "4c80c0b",
     dependencies = {
       "nvim-telescope/telescope.nvim",
       "nvim-telescope/telescope-ui-select.nvim",
