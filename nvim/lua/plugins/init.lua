@@ -44,7 +44,7 @@ local plugins = {
   {
     "williamboman/mason.nvim",
     -- tag = "v2.0.0",
-    commit = "3671ab0",
+    commit = "9e25c98",
     -- build = ":MasonUpdate", -- :MasonUpdate updates All Registries, NOT packages.
     config = function() require("plugins.settings.mason_tool_installer") end,
 
@@ -153,7 +153,7 @@ local plugins = {
 
   {
     "hrsh7th/cmp-path",  -- filepath 补全
-    commit = "e52e640",
+    commit = "c642487",
 
     lazy = true,  -- nvim-cmp 加载时自动加载.
   },
@@ -175,7 +175,7 @@ local plugins = {
 
   {
     "L3MON4D3/LuaSnip", -- snippet engine, for "cmp_luasnip", 会创建几个 [Scratch] buffer
-    commit = "3d5bced",
+    commit = "de10d84",
     --- for placeholder transformation
     --- https://code.visualstudio.com/docs/editor/userdefinedsnippets#_variable-transforms
     build = "make install_jsregexp",
@@ -236,7 +236,7 @@ local plugins = {
   {
     "nvim-tree/nvim-tree.lua",
     -- tag = "v1.13.0",
-    commit = "a9156c0",
+    commit = "65bae44",
     config = function() require("plugins.settings.file_tree") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
 
@@ -344,8 +344,7 @@ local plugins = {
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {
     "lewis6991/gitsigns.nvim",
-    -- tag = "v1.0.2",
-    commit = "b014331",
+    commit = "8270378",
     config = function() require("plugins.settings.git_signs") end,
     dependencies = { "folke/trouble.nvim" },
 
@@ -404,7 +403,7 @@ local plugins = {
   {
     "CopilotC-Nvim/CopilotChat.nvim",
     -- tag = "v3.12.2",
-    commit = "4c80c0b",
+    commit = "9fd068f",
     dependencies = {
       "nvim-telescope/telescope.nvim",
       "nvim-telescope/telescope-ui-select.nvim",
