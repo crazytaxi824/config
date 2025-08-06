@@ -215,7 +215,7 @@ local plugins = {
   --- "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
-    commit = "3ce66bc",
+    commit = "5fcb739",
     config = function() require("lsp.plugins.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -236,7 +236,7 @@ local plugins = {
   {
     "nvim-tree/nvim-tree.lua",
     -- tag = "v1.13.0",
-    commit = "65bae44",
+    commit = "dd2364d",
     config = function() require("plugins.settings.file_tree") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
 
@@ -277,7 +277,7 @@ local plugins = {
   --- Debug tools 安装 -----------------------------------------------------------------------------
   {
     "mfussenegger/nvim-dap",  -- core debug tool
-    commit = "5dd4d50",
+    commit = "a479e25",
     config = function() require("plugins.settings.debug.nvim_dap") end,
 
     cmd = {'Debug', 'DapToggleBreakpoint', 'DapContinue'},
@@ -344,7 +344,7 @@ local plugins = {
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {
     "lewis6991/gitsigns.nvim",
-    commit = "8270378",
+    commit = "736f51d",
     config = function() require("plugins.settings.git_signs") end,
     dependencies = { "folke/trouble.nvim" },
 
@@ -402,8 +402,8 @@ local plugins = {
   --- https://github.com/jellydn/lazy-nvim-ide/blob/main/lua/plugins/extras/copilot-chat-v2.lua
   {
     "CopilotC-Nvim/CopilotChat.nvim",
-    -- tag = "v3.12.2",
-    commit = "9fd068f",
+    -- tag = "v4.3.0",
+    commit = "06e5453",
     dependencies = {
       "nvim-telescope/telescope.nvim",
       "nvim-telescope/telescope-ui-select.nvim",
