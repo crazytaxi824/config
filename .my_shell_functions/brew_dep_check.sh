@@ -13,7 +13,7 @@ function checkBrewDep() {
 	fi
 
 	# grep 不支持 \s
-	brew deps --installed --1 | grep --color=always " $1[ @]"
+	brew deps --installed | grep --color=always " $1[ @]"
 }
 
 # 运行函数
