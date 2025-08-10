@@ -44,7 +44,7 @@ local plugins = {
   {
     "williamboman/mason.nvim",
     -- tag = "v2.0.0",
-    commit = "9e25c98",
+    commit = "7dc4fac",
     -- build = ":MasonUpdate", -- :MasonUpdate updates All Registries, NOT packages.
     config = function() require("plugins.settings.mason_tool_installer") end,
 
@@ -344,7 +344,7 @@ local plugins = {
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {
     "lewis6991/gitsigns.nvim",
-    commit = "736f51d",
+    commit = "c7d37ca",
     config = function() require("plugins.settings.git_signs") end,
     dependencies = { "folke/trouble.nvim" },
 
@@ -378,41 +378,43 @@ local plugins = {
     event = "VeryLazy",
   },
 
+  --- AI ----------------------------------------------------------------------- {{{
   --- https://docs.github.com/en/copilot/getting-started-with-github-copilot
-  {
-    "github/copilot.vim",
-    config = function()  --- {{{
-      --- VVI: `:help g:copilot_node_command`, using node@18 or above.
-      --- 安装指定的 nodejs 版本. `brew install node@20`
-      local node_path = "/opt/homebrew/opt/node@20/bin/node"
-
-      --- check node cmd existence
-      if not vim.uv.fs_stat(node_path) then
-        Notify({"'" .. node_path .. "' is NOT Exist."}, "WARN", {title = "github/copilot", timeout = false})
-        return
-      end
-
-      vim.g.copilot_node_command = node_path
-    end,
-    -- }}}
-
-    cmd = { "Copilot" },  -- `:Copilot setup`, `:Copilot enable`, `:help copilot` 查看可用命令.
-  },
+  -- {
+  --   "github/copilot.vim",
+  --   config = function()  --- {{{
+  --     --- VVI: `:help g:copilot_node_command`, using node@18 or above.
+  --     --- 安装指定的 nodejs 版本. `brew install node@20`
+  --     local node_path = "/opt/homebrew/opt/node@20/bin/node"
+  --
+  --     --- check node cmd existence
+  --     if not vim.uv.fs_stat(node_path) then
+  --       Notify({"'" .. node_path .. "' is NOT Exist."}, "WARN", {title = "github/copilot", timeout = false})
+  --       return
+  --     end
+  --
+  --     vim.g.copilot_node_command = node_path
+  --   end,
+  --   -- }}}
+  --
+  --   cmd = { "Copilot" },  -- `:Copilot setup`, `:Copilot enable`, `:help copilot` 查看可用命令.
+  -- },
 
   --- https://github.com/jellydn/lazy-nvim-ide/blob/main/lua/plugins/extras/copilot-chat-v2.lua
-  {
-    "CopilotC-Nvim/CopilotChat.nvim",
-    -- tag = "v4.3.0",
-    commit = "06e5453",
-    dependencies = {
-      "nvim-telescope/telescope.nvim",
-      "nvim-telescope/telescope-ui-select.nvim",
-      "nvim-lua/plenary.nvim",
-    },
-    config = function() require("plugins.settings.ai_copilotchat") end,
-
-    cmd = { "CopilotChat" },
-  },
+  -- {
+  --   "CopilotC-Nvim/CopilotChat.nvim",
+  --   -- tag = "v4.3.1",
+  --   commit = "f1d6bb5",
+  --   dependencies = {
+  --     "nvim-telescope/telescope.nvim",
+  --     "nvim-telescope/telescope-ui-select.nvim",
+  --     "nvim-lua/plenary.nvim",
+  --   },
+  --   config = function() require("plugins.settings.ai_copilotchat") end,
+  --
+  --   cmd = { "CopilotChat" },
+  -- },
+  -- -- }}}
 
   --- recommanded plugins ------------------------------------------------------ {{{
   -- {
