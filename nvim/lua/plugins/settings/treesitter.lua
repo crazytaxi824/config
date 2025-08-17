@@ -48,6 +48,10 @@ ts_configs.setup {
   --- install languages synchronously (only applied to `ensure_installed`)
   sync_install = false,
 
+  -- Automatically install missing parsers when entering buffer
+  -- Recommendation: set to false if you don't have `tree-sitter-cli` installed locally
+  auto_install = false,
+
   --- VVI: opt 加载 nvim-treesitter 时最好使用默认路径. 否则 run=":TSUpdate" 会在本 config 文件加载之前进行安装,
   --- 这时候 nvim-treesitter 并没有读取到 parser_install_dir 导致 parser 被安装在默认位置.
   --- nvim-treesitter 加载 config 后会在多个文件夹中读取到重复的 parser 造成冲突而报错.
