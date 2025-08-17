@@ -139,7 +139,7 @@ local plugins = {
   --- VVI: 只有 "cmp-nvim-lsp" 不需要在 "nvim-cmp" 之后加载, 其他 module 插件都需要在 "nvim-cmp" 加载之后再加载, 否则报错.
   {
     "hrsh7th/cmp-nvim-lsp",  -- LSP source for nvim-cmp
-    commit = "a8912b8",
+    commit = "bd5a7d6",
 
     lazy = true,  -- nvim-cmp 加载时自动加载.
   },
@@ -235,8 +235,8 @@ local plugins = {
   --- File explorer --------------------------------------------------------------------------------
   {
     "nvim-tree/nvim-tree.lua",
-    -- tag = "v1.13.0",
-    commit = "dd2364d",
+    -- tag = "v1.14.0",
+    commit = "f0e9951",
     config = function() require("plugins.settings.file_tree") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
 
@@ -344,7 +344,7 @@ local plugins = {
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {
     "lewis6991/gitsigns.nvim",
-    commit = "c7d37ca",
+    commit = "6e3c665",
     config = function() require("plugins.settings.git_signs") end,
     dependencies = { "folke/trouble.nvim" },
 
