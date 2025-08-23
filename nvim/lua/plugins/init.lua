@@ -224,8 +224,8 @@ local plugins = {
 
   {
     "stevearc/conform.nvim",
-    -- tag = "v9.0.0",
-    commit = "973f3cb",
+    tag = "v9.1.0",
+    -- commit = "973f3cb",
     config = function() require("plugins.settings.formatter_conform") end,
 
     event = "BufWritePre",
@@ -236,7 +236,7 @@ local plugins = {
   {
     "nvim-tree/nvim-tree.lua",
     -- tag = "v1.14.0",
-    commit = "f0e9951",
+    commit = "b70a741",
     config = function() require("plugins.settings.file_tree") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
 
@@ -277,7 +277,7 @@ local plugins = {
   --- Debug tools 安装 -----------------------------------------------------------------------------
   {
     "mfussenegger/nvim-dap",  -- core debug tool
-    commit = "a479e25",
+    commit = "f777d1d",
     config = function() require("plugins.settings.debug.nvim_dap") end,
 
     cmd = {'Debug', 'DapToggleBreakpoint', 'DapContinue'},
