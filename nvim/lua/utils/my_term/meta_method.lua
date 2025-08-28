@@ -42,7 +42,8 @@ local function set_buf_keymaps(term_obj)
   local keys = {
     {'n', '<leader>tc', function() M.close_others(term_obj.id) end,   opt, 'my_term: close other my_terms windows'},
     {'n', '<leader>tw', function() M.wipeout_others(term_obj.id) end, opt, 'my_term: wipeout other my_terms'},
-    {'n', 'q',  function() M.wipeout(term_obj.id) end, opt, 'my_term: wipeout current my_term'},
+    {'n', 'q', '<cmd>q<CR>', opt, 'my_term: close current my_term window'},
+    {'n', 'Q', function() M.wipeout(term_obj.id) end, opt, 'my_term: wipeout current my_term'},
   }
   require('utils.keymaps').set(keys)
 end
