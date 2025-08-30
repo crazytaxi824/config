@@ -3,7 +3,8 @@ if not ts_ctx_status_ok then
   return
 end
 
-local max_ln = (vim.wo.scrolloff >= 6) and vim.wo.scrolloff or 6
+-- local max_ln = (vim.wo.scrolloff >= 6) and vim.wo.scrolloff or 6
+local max_ln = 3
 
 --- https://github.com/nvim-treesitter/nvim-treesitter-context#configuration
 ts_ctx.setup{
