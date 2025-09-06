@@ -77,7 +77,10 @@ notARepository: 'quit' # one of: 'prompt' | 'create' | 'skip' | 'quit'
 keybinding:
   # 通用快捷键
   universal:
+    suspendApp: <disabled>
     pullFiles: <disabled> # use 'fetch' instead of 'pull', 慎用'pull'.
+    undo: <disabled>
+    redo: <disabled>
   # file (window No.2 - file, worktree, submodule)
   files:
     commitChangesWithoutHook: <disabled> # commit changes without pre-commit hook
