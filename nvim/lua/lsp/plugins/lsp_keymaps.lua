@@ -47,9 +47,6 @@ M.textDocument_keymaps = function(bufnr)
     {"n", "<F12>",   function() vim.lsp.buf.definition() end, opts, "Fn12: LSP: Definition"},
     {"n", "<D-F12>", function() vim.lsp.buf.references() end, opts, "Fn12: LSP: References"},
     {"n", "<F24>",   function() vim.lsp.buf.implementation() end, opts, "Fn12: LSP: Implementation (Interface)"},  -- <S-F12>
-
-    --- 使用 hover 代替 signature_help, 因为有些 LSP 还不支持 signature_help, eg: typescript, javascript ...
-    -- {"n", "K", function() vim.lsp.buf.signature_help() end, opts},
   }
 
   require('utils.keymaps').set(textdoc_keymaps)
