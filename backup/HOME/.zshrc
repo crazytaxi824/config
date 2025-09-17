@@ -7,7 +7,7 @@ export LANG=en_US.UTF-8 # 设置了 LANG, 但是没有设置 LC_ALL 的情况下
 # NOTE: 手动安装 https://github.com/neovim/neovim/releases/
 # Run: `xattr -c ./nvim-macos-arm64.tar.gz` (to avoid "unknown developer" warning)
 # Extract: `tar xzvf nvim-macos-arm64.tar.gz`
-#export PATH=$HOME/nvim-macos-arm64/bin:$PATH
+# export PATH=$HOME/nvim-macos-arm64/bin:$PATH
 
 # $VISUAL is a more capable and interactive preference over $EDITOR.
 #  - EDITOR editor should be able to work without use of "advanced" terminal functionality.
@@ -189,9 +189,10 @@ export HOMEBREW_BUNDLE_FILE=$HOME/.config/Brewfile  # 默认在 ~/.Brewfile
 
 # go / py / ruby / node / :Mason ...
 # --- [ Tools PATH ] ------------------------------------------------------------------------------- {{{
-# --- [ neovim Mason tools ] ---
+# --- [ neovim tools ] --------------------------------------------------------- {{{
 # mason tool path = `vim.fn.stdpath("data") .. "/mason_tools"`
 export PATH=$PATH:$HOME/.local/share/nvim/mason_tools/bin
+# }}}
 
 # --- [ golang ] --------------------------------------------------------------- {{{
 ### `go env` 查看
