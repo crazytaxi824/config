@@ -102,7 +102,7 @@ local plugins = {
   --- 第三方 plugin 需要用到 tree-sitter ---
   {
     "windwp/nvim-ts-autotag",  -- auto close tag <div></div>
-    commit = "a1d526a",
+    commit = "c4ca798",
     config = function() require("plugins.settings.treesitter_autotag") end,
     dependencies = { "nvim-treesitter/nvim-treesitter" },
 
@@ -175,7 +175,7 @@ local plugins = {
 
   {
     "L3MON4D3/LuaSnip", -- snippet engine, for "cmp_luasnip", 会创建几个 [Scratch] buffer
-    commit = "21f74f7",
+    commit = "b310491",
     --- for placeholder transformation
     --- https://code.visualstudio.com/docs/editor/userdefinedsnippets#_variable-transforms
     build = "make install_jsregexp",
@@ -215,7 +215,7 @@ local plugins = {
   --- "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
-    commit = "f0b3dc0",
+    commit = "78111a9",
     config = function() require("lsp.plugins.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -236,7 +236,7 @@ local plugins = {
   {
     "nvim-tree/nvim-tree.lua",
     -- tag = "v1.14.0",
-    commit = "b70a741",
+    commit = "e179ad2",
     config = function() require("plugins.settings.file_tree") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
 
@@ -372,7 +372,8 @@ local plugins = {
 
   {
     "folke/trouble.nvim",
-    tag = "v3.7.1",
+    -- tag = "v3.7.1",
+    commit = "3fb3bd7",
     config = function() require("plugins.settings.trouble_list") end,
 
     event = "VeryLazy",
