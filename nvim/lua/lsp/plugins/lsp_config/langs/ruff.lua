@@ -1,12 +1,16 @@
 --- 主要是设置 lsp root_dir
 return {
-  root_dir = function(fname)
-    local root = vim.fs.root(0, {'pyproject.toml', 'ruff.toml', '.ruff.toml'})
+  root_dir = function(bufnr, on_dir)
+    local root = vim.fs.root(bufnr, {'pyproject.toml', 'ruff.toml', '.ruff.toml'})
     if root then
-      return root
+      on_dir(root)
+      return
     end
 
-    return vim.uv.cwd()
+    Notify(
+      {"'pyproject.toml', 'ruff.toml', '.ruff.toml' NOT found"},
+      "WARN",
+      {title={"LSP", "ruff.lua"}, timeout = false}
+    )
   end
 }
-
