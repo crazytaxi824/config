@@ -1,6 +1,6 @@
 local M = {}
 
-M.move_next_char = function(m)
+M.move_bracket = function(m)
   local line = vim.api.nvim_get_current_line()
   local row, col = unpack(vim.api.nvim_win_get_cursor(0))
   local next_char = line:sub(col + 1, col + 1)
