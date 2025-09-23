@@ -71,11 +71,8 @@ M.on_init = function(client, result)
   if proj_local_settings.content[M.local_lspconfig_key] and proj_local_settings.content[M.local_lspconfig_key][client.name] then
     local local_settings = proj_local_settings.content[M.local_lspconfig_key][client.name]
     for key, value in pairs(local_settings) do
-      if not client.config.settings[key] then
-        client.config.settings[key] = value
-      else
-        client.config.settings[key] = vim.tbl_deep_extend('force', client.config.settings[key], value)
-      end
+      local lsetting = client.config.settings[key] or {}
+      client.config.settings[key] = vim.tbl_deep_extend('force', lsetting, value)
     end
   end
 

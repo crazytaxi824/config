@@ -37,7 +37,7 @@ require("plugins.settings.debug.adapters.py")
 
 --- custom command for repl ------------------------------------------------------------------------
 local repl = require('dap.repl')
-repl.commands = vim.tbl_extend('force', repl.commands, {
+repl.commands = vim.tbl_deep_extend('force', repl.commands, {
   -- Add a new alias for the existing .exit command
   exit = {'.exit', '.q', '.quit'},
 })

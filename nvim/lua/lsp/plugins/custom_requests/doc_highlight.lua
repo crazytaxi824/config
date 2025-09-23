@@ -27,9 +27,7 @@ local function client_positional_params(params)
   local win = vim.api.nvim_get_current_win()
   return function(client)
     local ret = vim.lsp.util.make_position_params(win, client.offset_encoding)
-    if params then
-      ret = vim.tbl_extend('force', ret, params)
-    end
+    ret = vim.tbl_deep_extend('force', ret, params or {})
     return ret
   end
 end

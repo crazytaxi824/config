@@ -133,7 +133,8 @@ local function reload_local_settings(old_content, new_content)
     if new_content[lsp_key] and new_content[lsp_key][lsp_name] then
       --- local settings 新添加或者改动的情况
       for key, value in pairs(new_content[lsp_key][lsp_name]) do
-        c.config.settings[key] = vim.tbl_deep_extend('force', lsp_default_opts[lsp_name][key], value)
+        local lsp_default_opt = lsp_default_opts[lsp_name][key] or {}
+        c.config.settings[key] = vim.tbl_deep_extend('force', lsp_default_opt, value)
       end
     else
       --- local settings 被删除的情况
