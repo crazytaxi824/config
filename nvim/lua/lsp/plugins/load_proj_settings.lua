@@ -138,8 +138,8 @@ local function reload_local_settings(old_content, new_content)
       --- local settings 新添加或者改动的情况, 更新 settings
       c.config.settings = vim.tbl_deep_extend('force', c.config.settings or {}, new_content[lsp_key][lsp_name])
     else
-      --- local settings 被删除的情况, 重新设置 settings 为 default_config
-      local lsp_default_cfg = vim.lsp.config[lsp_name]["default_config"] or {}
+      --- local settings 被删除的情况, 重新设置 settings 为初始设置
+      local lsp_default_cfg = vim.lsp.config[lsp_name].settings or {}
       c.config.settings = lsp_default_cfg
     end
 
@@ -147,6 +147,8 @@ local function reload_local_settings(old_content, new_content)
     -- vim.cmd('LspRestart ' .. lsp_name )
     vim.lsp.enable(lsp_name, false)
     vim.lsp.enable(lsp_name, true)
+    --- NOTE: notify() NOT WORKING
+    -- c:notify(ms.workspace_didChangeConfiguration, { settings = c.config.settings })
 
     --- cache tool name, 用于 notify.
     table.insert(update_settings, lsp_name)

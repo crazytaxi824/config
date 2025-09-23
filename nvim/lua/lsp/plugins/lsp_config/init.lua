@@ -18,8 +18,6 @@ local function lspconfig_setup(lsp_svr)
   if lsp_custom_status_ok then
     --- lsp_custom_opts: 初始设置
     opts = vim.tbl_deep_extend("force", opts, lsp_custom_opts)
-    --- default_config: cache settings, 用于删除 local project settings 后恢复初始设置
-    opts = vim.tbl_deep_extend('force', opts, {default_config=opts.settings or {}})
   end
 
   --- VVI: 启动 lsp
