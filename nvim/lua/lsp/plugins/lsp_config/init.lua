@@ -1,16 +1,6 @@
 --- 通过 mason 安装 lsp 时需要对应名字. https://github.com/williamboman/mason-lspconfig.nvim/blob/main/doc/server-mapping.md
 --- 要手动启动 lsp, 使用 `:LspStart xxx`
 
---- "neovim/nvim-lspconfig" 官方插件
-local lspconfig_ok, lspconfig = pcall(require, "lspconfig")
-if not lspconfig_ok then
-  return
-end
-
---- change `:LspInfo` border, `:help lspconfig-highlight`
-require('lspconfig.ui.windows').default_options.border = Nerd_icons.border
-vim.api.nvim_set_hl(0, 'LspInfoBorder', {link = 'FloatBorder'})
-
 --- 获取 lsp 列表.
 local lsp_servers_map = require('lsp.svr_list').list
 
