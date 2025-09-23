@@ -59,7 +59,7 @@ local pwd = vim.uv.cwd()  -- cache pwd
 local function back_to_pwd()
   nt_api.tree.change_root(pwd)
 end
--- --}}}
+-- -- }}}
 
 --- nvim-tree buffer keymaps ---------------------------------------------------
 --- only works within "NvimTree_X" buffer.
@@ -69,6 +69,8 @@ local nt_buffer_keymaps = {
   { "e",           nt_api.node.open.edit,   "Open" },
   { "<C-v>",       nt_api.node.open.vertical,     "Open vsplit" },  -- vsplit edit
   { "<C-x>",       nt_api.node.open.horizontal,   "Open split" },
+  {  "O",          nt_api.node.run.system,   "show file in finder" },
+
   { "<F8>",        nt_api.node.navigate.diagnostics.next,  "Next Diagnostic Item" },  -- next diagnostics item
   { "<D-F8>",      nt_api.node.navigate.diagnostics.prev,  "Prev Diagnostic Item" },  -- previous diagnostics item
 
@@ -94,13 +96,30 @@ local nt_buffer_keymaps = {
   { "M",           nt_api.marks.clear,    "Clear All Marks" },
 
   --- 自定义功能
-  {  "o",            back_to_pwd,                "back to Original pwd" },
+  {  "<leader>o",    back_to_pwd,                "back to Original pwd" },
   {  "<leader>c",    compare_two_marked_files,   "compare two marked files" },
 }
 
 -- -- }}}
 
 --- `:help nvim-tree-setup` ------------------------------------------------------------------------ {{{
+--- system_open config --------------------------------------------------------- {{{
+local function system_open_cfg()
+  local os_uname = vim.uv.os_uname()
+
+  --- Mac 中 `open -R file` 表示从 finder 打开
+  if os_uname and os_uname.sysname == "Darwin" then
+    return {
+      cmd = "open",
+      args = {"-R"},
+    }
+  end
+
+  --- 其他系统用 default setting
+  return nil
+end
+-- -- }}}
+
 nvim_tree.setup {
   --- NOTE: on_attach 主要是设置 keymaps 的.
   --- ":help nvim-tree.on_attach" & ":help nvim-tree-mappings"
@@ -216,10 +235,10 @@ nvim_tree.setup {
                           -- the file is not under current root directory.
     ignore_list = {},
   },
-  -- system_open = {
-  --   cmd = "",  -- Mac 中可以改为 "open", NOTE: 无法处理错误, 推荐使用 action_cb.
-  --   args = {},
-  -- },
+
+  --- 影响 nvim_tree.api.node.run.system()
+  system_open = system_open_cfg(),
+
   git = {
     enable = true,  -- VVI: 开启 git filename 和 icon 颜色显示.
                     -- 需要开启 renderer.highlight_git 和 renderer.icons.show.git
