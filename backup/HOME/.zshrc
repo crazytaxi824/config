@@ -315,7 +315,7 @@ export CPPFLAGS="-I/opt/homebrew/opt/ruby/include"
 #      ctrl-e:become(...)                 become(...) 相当于 abort+execute(...)
 #      ctrl-e:abort+execute(nvim -- {})   nvim/vim 编辑文件. 这里将 ctrl-e 绑定了两个命令, 命令间用 + 连接.
 #                                         先 abort 关闭 fzf 窗口, 然后执行 nvim 操作. 否则 fzf 窗口不会自动关闭.
-#      ctrl-o:abort+execute(open {})      打开文件.
+#      ctrl-o:abort+execute(open -R {})   在 finder 中显示文件.
 #
 #      btab:change-preview-window(down,border-top|hidden|)'  # <Shift-Tab> 滚动切换 preview-window 展示方式,
 #                                                            # NOTE: 注意最后有个 |
@@ -383,7 +383,7 @@ export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS" --height=80% --ansi --multi --layout=
 	--bind='pgup:preview-half-page-up,pgdn:preview-half-page-down' \
 	--bind='ctrl-a:select-all,ctrl-d:deselect-all' \
 	--bind='ctrl-e:become($EDITOR \"+lua FZF_selected([[{+f}]])\" > /dev/tty)' \
-	--bind='ctrl-o:execute(open {})'"
+	--bind='ctrl-o:execute(open -R {})'"
 
 # FZF_CTRL_T_COMMAND & FZF_CTRL_T_OPTS -----------------------------------------
 # NOTE: 需要先设置 key bindings 和 fuzzy completion.
@@ -554,7 +554,7 @@ function Rg() {
 	fzf --delimiter=':' \
 		--preview "bat --color=always --style=numbers --highlight-line={2} {1}" \
 		--preview-window '+{2}/2' \
-		--bind "ctrl-o:execute(open {1})"
+		--bind "ctrl-o:execute(open -R {1})"
 }
 
 # }}}
