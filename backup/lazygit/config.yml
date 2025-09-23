@@ -39,7 +39,7 @@ git:
     # --no-gitconfig: Do not read any settings from git config.
     # --line-numbers: Display line numbers.
     # --syntax-theme: diff text block syntax highlight. `delta --list-syntax-themes`
-    pager: delta --dark --line-numbers --paging=never --syntax-theme=none \--file-style='75' --file-decoration-style='75 ol' \--line-numbers-minus-style='#D75F5F' --minus-style='241 "#300000"' --minus-emph-style='246 "#803030"' \--line-numbers-plus-style='#008700' --plus-style='42' --plus-emph-style='234 42'
+    pager: delta --dark --line-numbers --tabs=4 --paging=never --syntax-theme=none \--file-style='75' --file-decoration-style='75 ol' \--line-numbers-minus-style='#D75F5F' --minus-style='241 "#300000"' --minus-emph-style='246 "#803030"' \--line-numbers-plus-style='#008700' --plus-style='42' --plus-emph-style='234 42'
     ### syntax-theme 开启
     # syntax color:	# syntax 表示 text fg 使用 syntax-theme highlight. 如果 syntax-theme=none, 则会使用 white/normal 作为 fg 颜色.
     # pager: delta --dark --line-numbers --paging=never --syntax-theme='Visual Studio Dark+'
