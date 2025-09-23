@@ -31,7 +31,6 @@ local my_action = transform_mod({
     --- 中 send_selected_to_qf 函数设置.
     local picker = actions_state.get_current_picker(prompt_bufnr)
     local selected_items = picker:get_multi_selection()
-    -- vim.print(selected_items, #selected_items)
 
     if #selected_items == 0 then
       actions.select_default(prompt_bufnr)
@@ -40,6 +39,21 @@ local my_action = transform_mod({
       vim.cmd.copen()
     end
   end,
+
+  system_open = function()
+    local entry = actions_state.get_selected_entry()
+    if entry.path or entry.filename then
+      local absolute_fp = entry.path or entry.filename
+
+      --- Mac 中 `open -R file` 表示从 finder 打开
+      local os_uname = vim.uv.os_uname()
+      if os_uname and os_uname.sysname == "Darwin" then
+        vim.ui.open(absolute_fp, {cmd = {"open", "-R"}})
+      else
+        vim.ui.open(absolute_fp)
+      end
+    end
+  end
 })
 
 -- -- }}}
@@ -100,6 +114,7 @@ telescope.setup {
       i = {
         ["<CR>"] = my_action.edit_or_qf,
         ["<C-e>"] = my_action.edit_or_qf,
+        ["<C-o>"] = my_action.system_open,    -- system open file
         ["<C-x>"] = actions.select_horizontal,  -- open file in split horizontal
         ["<C-v>"] = actions.select_vertical,    -- open file in split vertical
         --["<C-t>"] = actions.select_tab,  -- open file in new tab
@@ -141,6 +156,7 @@ telescope.setup {
 
         ["<CR>"] = my_action.edit_or_qf,
         ["<C-e>"] = my_action.edit_or_qf,
+        ["<C-o>"] = my_action.system_open,    -- system open file
         ["<C-x>"] = actions.select_horizontal,  -- open file in split horizontal
         ["<C-v>"] = actions.select_vertical,    -- open file in split vertical
         --["<C-t>"] = actions.select_tab,  -- open file in new tab
