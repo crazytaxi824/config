@@ -7,9 +7,6 @@
 
 local M = {}
 
---- cache default configs. map[lsp: settings]
-M.default_config = {}
-
 --- NOTE: 停止输入文字的时间超过该数值, 则向 lsp server 发送请求.
 --- 如果 "diagnostic.config({update_in_insert = false})", 则该设置应该不生效.
 M.flags = { debounce_text_changes = 500 }   --- 默认 150.

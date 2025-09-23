@@ -6,22 +6,24 @@
 --                that have already been loaded and their return results,
 --                to ensure that the same code isn't loaded twice.
 local ms = require('vim.lsp.protocol').Methods
+local lsp_key = require("lsp.plugins.lsp_config.setup_opts").local_lspconfig_key
 
 --- 全局变量
 local M = {}
 
 local function parse_local_settings(s)
-  if not s or not s.lsp then
+  if not s or not s[lsp_key] then
     return s
   end
 
-  for key, value in pairs(s.lsp) do
+  for key, value in pairs(s[lsp_key]) do
+    --- split 是为了分开 lsp_name 和 setting_name, eg: ["pyright:python"] = {...}
     local r = vim.split(key, ':', {trimempty=true})
     if #r == 1 then
-      s.lsp[key] = {[key] = s.lsp[key]}
+      s[lsp_key][key] = {[key] = s[lsp_key][key]}
     elseif #r == 2 then
-      s.lsp[r[1]] = {[r[2]] = s.lsp[key]}
-      s.lsp[key] = nil
+      s[lsp_key][r[1]] = {[r[2]] = s[lsp_key][key]}
+      s[lsp_key][key] = nil
     else
       error('project local settings format error')
     end
@@ -104,17 +106,17 @@ end
 
 --- set command for Reload local project settings --------------------------------------------------
 --- compare content, 如果内容不同则执行 callback.
-local function compare_content_settings(old_content, new_content, typ, callback)
-  if not old_content[typ] and new_content[typ] then
-    for tool, _ in pairs(new_content[typ]) do
+local function compare_content_settings(old_content, new_content, tool_typ, callback)
+  if not old_content[tool_typ] and new_content[tool_typ] then
+    for tool, _ in pairs(new_content[tool_typ]) do
       callback(tool)
     end
-  elseif old_content[typ] and not new_content[typ] then
-    for tool, _ in pairs(old_content[typ]) do
+  elseif old_content[tool_typ] and not new_content[tool_typ] then
+    for tool, _ in pairs(old_content[tool_typ]) do
       callback(tool)
     end
-  elseif old_content[typ] and new_content[typ] then
-    local tool = deep_compare(old_content[typ], new_content[typ])
+  elseif old_content[tool_typ] and new_content[tool_typ] then
+    local tool = deep_compare(old_content[tool_typ], new_content[tool_typ])
     if tool then
       callback(tool)
     end
@@ -126,29 +128,27 @@ local function reload_local_settings(old_content, new_content)
   local update_settings = {} -- cache tool name, 用于 notify.
 
   --- lsp = { gopls = { ... }, tsserver = { ... } }
-  local lsp_key = require("lsp.plugins.lsp_config.setup_opts").local_lspconfig_key
-  local lsp_default_opts = require("lsp.plugins.lsp_config.setup_opts").default_config
   compare_content_settings(old_content, new_content, lsp_key, function(lsp_name)
     local c = vim.lsp.get_clients({name = lsp_name})[1]
+    if not c then
+      return
+    end
+
     if new_content[lsp_key] and new_content[lsp_key][lsp_name] then
-      --- local settings 新添加或者改动的情况
-      for key, value in pairs(new_content[lsp_key][lsp_name]) do
-        local lsp_default_opt = lsp_default_opts[lsp_name][key] or {}
-        c.config.settings[key] = vim.tbl_deep_extend('force', lsp_default_opt, value)
-      end
+      --- local settings 新添加或者改动的情况, 更新 settings
+      c.config.settings = vim.tbl_deep_extend('force', c.config.settings or {}, new_content[lsp_key][lsp_name])
     else
-      --- local settings 被删除的情况
-      if lsp_default_opts[lsp_name] then
-        for key, value in pairs(lsp_default_opts[lsp_name]) do
-          c.config.settings[key] = value
-        end
-      end
+      --- local settings 被删除的情况, 重新设置 settings 为 default_config
+      local lsp_default_cfg = vim.lsp.config[lsp_name]["default_config"] or {}
+      c.config.settings = lsp_default_cfg
     end
 
     --- NOTE: 暴力方案, `:LspRestart` 重启所有 lspconfig.setup() 的 lsp, null-ls 不是由 lspconfig.setup
-    -- vim.cmd('LspRestart')
-    c:notify(ms.workspace_didChangeConfiguration , { settings = c.config.settings })
+    -- vim.cmd('LspRestart ' .. lsp_name )
+    vim.lsp.enable(lsp_name, false)
+    vim.lsp.enable(lsp_name, true)
 
+    --- cache tool name, 用于 notify.
     table.insert(update_settings, lsp_name)
   end)
 
@@ -166,6 +166,7 @@ local function reload_local_settings(old_content, new_content)
     null_ls.deregister(tool_name)  -- 注销, 删除原服务.
     null_ls.register(s.sources[s.local_linter_key][tool_name]())  -- 重新注册. register 后, 自动 enable.
 
+    --- cache tool name, 用于 notify.
     table.insert(update_settings, tool_name)
   end)
 
@@ -187,14 +188,13 @@ vim.api.nvim_create_user_command("LocalSettingsReload", function()
   --- 更新 local_settings
   M.content = new_content
 
-  --- 重新加载 local settings.
+  --- 重新加载 local settings
   reload_local_settings(old_content, M.content)
 end, { bang=true, bar=true, desc = 'reload "lsp" and "null-ls" after change ".nvim/settings.lua"' })
 
 --- command 显示 project local settings 示例.
 vim.api.nvim_create_user_command("LocalSettingsExample", function()
   --- NOTE: 主要保证 key 设置正确.
-  local lsp_key = require("lsp.plugins.lsp_config.setup_opts").local_lspconfig_key
   local linter_sources = require("lsp.plugins.null_ls.sources")
 
   local example = {
