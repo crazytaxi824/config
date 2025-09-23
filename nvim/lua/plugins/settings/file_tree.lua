@@ -69,7 +69,7 @@ local nt_buffer_keymaps = {
   { "e",           nt_api.node.open.edit,   "Open" },
   { "<C-v>",       nt_api.node.open.vertical,     "Open vsplit" },  -- vsplit edit
   { "<C-x>",       nt_api.node.open.horizontal,   "Open split" },
-  {  "O",          nt_api.node.run.system,   "show file in finder" },
+  { "<C-o>",       nt_api.node.run.system,   "show file in finder" },
 
   { "<F8>",        nt_api.node.navigate.diagnostics.next,  "Next Diagnostic Item" },  -- next diagnostics item
   { "<D-F8>",      nt_api.node.navigate.diagnostics.prev,  "Prev Diagnostic Item" },  -- previous diagnostics item
