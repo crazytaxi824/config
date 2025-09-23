@@ -318,7 +318,7 @@ export CPPFLAGS="-I/opt/homebrew/opt/ruby/include"
 #      ctrl-o:abort+execute(open -R {})   在 finder 中显示文件.
 #
 #      btab:change-preview-window(down,border-top|hidden|)'  # <Shift-Tab> 滚动切换 preview-window 展示方式,
-#                                                            # NOTE: 注意最后有个 |
+#                                                            # NOTE: 注意最后有个 '|'
 #
 #    --preview'  展示预览, 默认使用 cat.
 #      可以设置为:
@@ -327,19 +327,23 @@ export CPPFLAGS="-I/opt/homebrew/opt/ruby/include"
 #
 #    fzf 对 stdin 字符串的处理.
 #       {}    代表光标所在行的 string.
-#       {1}   代表光标所在行按照 --delimiter 分隔后的 str[0], --delimiter 默认是空格.
+#       {1}   代表光标所在行按照 --delimiter (默认空格) 分隔后的 str[0]
 #       {2}   代表光标所在行 str[1].
 #
 #       {-1}     光标所在行 split string 中的最后一个.
 #       {1..3}   光标所在行 str[0:3]
 #       {-4..-2} 光标所在行 split string 中倒数第4个 ~ 倒数第2个. eg: ls -l | fzf --preview="echo user={3} when={-4..-2}; cat {-1}"
 #
-#       {+}   NOTE: 表示多个 <tab> selected item.
-#                   如果没有 selected items 则返回当前行;
+#       {+}   NOTE: 表示多个 <tab> selected items.
+#                   如果没有 selected items 则返回当前 item, 即: {}
 #                   如果有 selected items 则返回 selected items.
-#       {+1}  表示多个 <tab> selected item 中的 []str[0]
 #
-#       {+f}  NOTE: 创建一个临时文件, 然后将多选 items 写入其中. 可用其他程序读取该文件.
+#       {+1}  NOTE: 是 {+} 和 {1} 的结合
+#                   表示多个 <tab> selected items 中每一个 item 的 str[0] 组成的 list
+#                   结果是 []string{item1[0], item2[0], ...}
+#
+#       {+f}  NOTE: 是 {+} 和 {f} 的结合
+#                   创建一个临时文件, 然后将多选 items 写入其中. 可用其他程序读取该文件.
 #                   {+f} 临时文件的路径通常是固定的, 不会无限创建新文件. 只是每次多选后 replace 该文件中的内容.
 #                   如果是 fd 选择的结果, 则临时文件中记录的是 filepath|dir.
 #                   如果是 rg 返回的结果, 则临时文件中记录的是 <filepath:line:col:content>
