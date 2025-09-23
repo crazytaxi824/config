@@ -125,7 +125,7 @@ M.console_exec = function(term_obj, term_win_id)
     cwd = term_obj.cwd,
     env = term_obj.env,
 
-    on_stdout = function(job_id, data, event)  -- NOTE: fmt.Print()
+    on_stdout = function(job_id, data, event)  -- NOTE: for fmt.Println()
       --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
       if not g.term_buf_exist(term_obj.bufnr) then
         return
@@ -141,7 +141,7 @@ M.console_exec = function(term_obj, term_win_id)
       g.exec_callbacks(term_obj.on_stdout, term_obj, job_id, data, event)
     end,
 
-    on_stderr = function(job_id, data, event)  -- NOTE: log.Print()
+    on_stderr = function(job_id, data, event)  -- NOTE: for log.Println()
       --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
       if not g.term_buf_exist(term_obj.bufnr) then
         return

@@ -35,7 +35,7 @@ M.visual_selected = function(trim)
     v_selected = table.concat(lines, '')
   end
 
-  print(v_selected)
+  vim.notify(v_selected)
 
   return v_selected
 end
