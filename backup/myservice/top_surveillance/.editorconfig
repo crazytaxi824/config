@@ -1,0 +1,37 @@
+# https://editorconfig.org/
+# These settings will affect 'prettier' format, 'github.com' display, neovim, vscode...
+#
+# neovim:   `:help editorconfig-properties`
+# prettier: `prettier --no-editorconfig`, Don't take '.editorconfig' into account when parsing configuration.
+#           "end_of_line" -> `prettier --end-of-line <lf|cr|crlf>`
+#           "indent_style" -> `prettier --use-tabs <true|false>`
+#           "indent_size/tab_width" -> `prettier --tab-width <int>`
+
+# top-most EditorConfig file. Do not need to search for '.editorconfig' file in upper directories.
+root = true
+
+# every file
+[*]
+charset = utf-8
+# <tab|space>. space: '\t' will be converted to spaces.
+indent_style = tab
+# width of indent level.
+indent_size = 4
+# width of '\t', default is 'indent_size'.
+#tab_width = 4
+# 'lf' = '\n' | 'cr' = '\r' | 'crlf' = '\r\n'.
+end_of_line = lf
+# remove any whitespace characters preceding newline characters.
+trim_trailing_whitespace = true
+# ensure file ends with a newline.
+#insert_final_newline = true
+
+[*.{htm,html,js,jsx,ts,tsx,cjs,cts,ctsx,mjs,mts,mtsx,css,sass,scss,less,pcss,svg,vue,json,jsonc,yaml,yml,graphql,md,lua}]
+indent_style = space
+indent_size = 2
+
+[*.{htm,html,js,jsx,ts,tsx,cjs,cts,ctsx,mjs,mts,mtsx,css,sass,scss,less,pcss,vue}]
+quote_type = single
+
+[*.py]
+indent_style = space

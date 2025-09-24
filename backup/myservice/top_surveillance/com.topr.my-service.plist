@@ -6,11 +6,11 @@
 	<string>com.topr.my-service</string>
 	<key>ProgramArguments</key>
 	<array>
-		<string>/Users/ray/.config/backup/myservice/topr</string>
+	<string>/fullpath/to/topr</string>
 	</array>
 	<key>RunAtLoad</key>
-	<true/>
-	<key>KeepAlive</key>
-	<true/>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
 </dict>
 </plist>

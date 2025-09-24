@@ -1,0 +1,21 @@
+# http://git-scm.com/docs/gitignore
+# "/" files|dirs in project_root path.
+/.vscode
+/.vim
+/.history
+/.idea
+/*.iml
+
+# DO NOT upload config files to any repositories. password may exposed.
+/config.*
+
+# "**/" files|dirs in any folder.
+# "file" equals "**/file"; "dir" equals "**/dir"; dir/file NOT equals **/dir/file, but equals /dir/file
+.DS_Store
+**/coverage
+**/*.gorun
+**/debug
+**/go.sum
+**/vendor
+**/*.bak
+**/*.swp
