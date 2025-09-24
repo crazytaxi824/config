@@ -53,6 +53,7 @@ local function get_local_settings_content()
   --- result 是执行结果. 可能为 nil, 可能是执行失败的 error message.
   if not ok then
     error(vim.inspect(result)) -- local_settings 语法错误, 保持之前的配置
+    return nil
   end
 
   return parse_local_settings(result) or {}  -- local_settings 读取成功, result 可能为 nil. 这里需要更新配置.
