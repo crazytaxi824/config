@@ -1,5 +1,3 @@
-local ms = require('vim.lsp.protocol').Methods
-
 --- 官方设置方法, `:help vim.lsp.buf.document_highlight()` ------------------------------------ {{{
 --- color: "LspReferenceText", "LspReferenceRead", "LspReferenceWrite"
 --
@@ -20,6 +18,8 @@ local ms = require('vim.lsp.protocol').Methods
 --- SOLUTION: 重写 lsp.buf.document_highlight() 方法, 在其 handler 中对 lsp 返回的 result 进行
 --- 有条件的 highlight_references() / clear_references().
 -- -- }}}
+
+local ms = vim.lsp.protocol.Methods
 
 local M = {}
 

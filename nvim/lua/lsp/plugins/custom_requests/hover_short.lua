@@ -1,5 +1,3 @@
-local ms = require('vim.lsp.protocol').Methods
-
 --- 自定义 hover_short handler 用于在写代码的过程中可以迅速查看方法中的参数类型, 而不用移动光标或退出 insert mode.
 --- 实现方法: 获取光标所在 method/func 的名字, 简化 "textDocument/hover" 返回内容.
 --- 根据 vim.lsp.buf.hover() 方法修改. https://github.com/neovim/neovim/blob/master/runtime/lua/vim/lsp/buf.lua
@@ -9,6 +7,8 @@ local ms = require('vim.lsp.protocol').Methods
 ---   2. 将上述 func_position 通过 vim.lsp.buf_request_all("textDocument/hover", func_position) 向 lsp server 发送请求.
 ---   3. 修改 lsp server 返回的内容用于 floating window 显示: 只保留 lsp server 返回内容的第一行.
 ---   4. 修改 floating window 的位置.
+
+local ms = vim.lsp.protocol.Methods
 
 local M = {}
 

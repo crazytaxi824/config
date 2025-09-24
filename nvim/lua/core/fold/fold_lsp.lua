@@ -2,7 +2,7 @@
 --- https://github.com/kevinhwang91/nvim-ufo
 --- https://github.com/kevinhwang91/nvim-ufo/blob/main/lua/ufo/provider/lsp/nvim.lua
 local expr_ts = require("core.fold.fold_treesitter")
-local ms = require('vim.lsp.protocol').Methods
+local ms = vim.lsp.protocol.Methods
 
 local M = {}
 
