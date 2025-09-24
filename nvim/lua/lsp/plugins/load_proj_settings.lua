@@ -5,7 +5,6 @@
 --    require() - is more complicated; it keeps a table of modules
 --                that have already been loaded and their return results,
 --                to ensure that the same code isn't loaded twice.
-local ms = require('vim.lsp.protocol').Methods
 local lsp_key = require("lsp.plugins.lsp_config.setup_opts").local_lspconfig_key
 
 --- 全局变量
@@ -140,15 +139,17 @@ local function reload_local_settings(old_content, new_content)
       c.config.settings = vim.tbl_deep_extend('force', c.config.settings or {}, new_content[lsp_key][lsp_name])
     else
       --- local settings 被删除的情况, 重新设置 settings 为初始设置
-      local lsp_default_cfg = vim.lsp.config[lsp_name].settings or {}
-      c.config.settings = lsp_default_cfg
+      --- lsp init settings could be: nil | {} | {lsp={...}}
+      local lsp_init_cfg = vim.lsp.config[lsp_name].settings or {}
+      c.config.settings = lsp_init_cfg
     end
 
     --- NOTE: 暴力方案, `:LspRestart` 重启所有 lspconfig.setup() 的 lsp, null-ls 不是由 lspconfig.setup
     -- vim.cmd('LspRestart ' .. lsp_name )
     vim.lsp.enable(lsp_name, false)
     vim.lsp.enable(lsp_name, true)
-    --- NOTE: notify() NOT WORKING
+    --- NOTE: client:notify() is NOT WORKING if client.config.settings <Object> 被整个替换, 除非逐一给 settings 中的属性赋值
+    -- local ms = vim.lsp.protocol.Methods
     -- c:notify(ms.workspace_didChangeConfiguration, { settings = c.config.settings })
 
     --- cache tool name, 用于 notify.
