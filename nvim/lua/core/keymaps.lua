@@ -195,6 +195,7 @@ local keymaps = {
   --- Window 控制
   {'n', '<leader>w', function() key_fn.win_choose() end, opt, 'win: Jump to Window'},  -- 跳转到指定 window
   {'n', '<leader>W', '<cmd>only!<CR>', opt, 'win: Close All Other Windows'},  -- 关闭所有其他窗口, 快捷键 <C-w><C-o>
+  {'n', '<D-w>', "<C-w>", opt, 'win: command replace <C-w>'},
 
   --- NOTE: terminal key mapping 在其他 plugin 中也有设置.
   {'n', '<leader>tt', function() mt.open_shell_term() end, opt, "open/new Terminal #(1~999)"},
@@ -223,11 +224,12 @@ local keymaps = {
   {'n', '<C-k>', '<cmd>mes clear<CR>', opt, 'message clear'},
 
   --- move ) ] } to end of line/word, like autopairs FastWrap
-  {'i', '<M-e>', function() key_fn.move_char.move_bracket('$') end, opt, 'move next char to end of line' },
-  {'i', '<M-w>', function() key_fn.move_char.move_bracket('e') end, opt, 'move next char to end of <word>' },
-  {'i', '<S-M-W>', function() key_fn.move_char.move_bracket('E') end, opt, 'move next char to end of <WORD>' },
+  {'i', '<D-e>', function() key_fn.move_char.move_bracket('$') end, opt, 'move next char to end of line' },
+  {'i', '<D-E>', function() key_fn.move_char.move_bracket('e') end, opt, 'move next char to end of <word>' },
 
   --- TEST: alacritty settings window.option_as_alt 设置 Option 当做 ALT key 使用.
+  -- {'n', '<D-o>', function() print("<D-o>") end, opt, 'Test: Cmd/Super-o'},
+  -- {'n', '<D-O>', function() print("<D-S-o>") end, opt, 'Test: Cmd/Super-Shift-O'},
   -- {'n', '<S-C-CR>', function() print("<S-C-CR>") end, opt, 'Test: Shift-Contrl-Enter'},
   -- {'n', '<S-M-CR>', function() print("<S-M-CR>") end, opt, 'Test: Shift-Opt/Alt-Enter'},
   -- {'n', '<S-D-CR>', function() print("<S-D-CR>") end, opt, 'Test: Shift-Cmd/Super-Enter'},
