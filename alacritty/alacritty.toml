@@ -8,10 +8,10 @@ TERM = "alacritty"  # `xterm-256color` | `alacritty`, `$ echo $TERM` 环境变�
 # TERM = "xterm-256color"  # `xterm-256color` | `alacritty`, `$ echo $TERM` 环境变量.
 
 [window]
-decorations = "none"  # 不显示 titlebar 和 buttons (window 左上角关闭/缩小按钮)
+decorations = "None"  # 不显示 titlebar 和 buttons (左上角关闭/缩小按钮), NOTE: 副作用: 不能创建 New Tabs
 dynamic_padding = true  # 自动调整 padding, 避免右侧空白大于左侧.
 option_as_alt = "OnlyLeft"  # VVI: MAC 上左 opt 键可以作为 ALT 键使用. "OnlyLeft" | "OnlyRight" | "Both" | "None" # (macos only)
-startup_mode = "Maximized"
+startup_mode = "Maximized"  # "Windowed" | "Maximized" | "Fullscreen" | "SimpleFullscreen"(macOS only)
 opacity = 0.96
 
 # 窗口四周添加 padding
@@ -120,6 +120,7 @@ blinking = "Always"  # "Never" | "Off"(*) | "On" | "Always"
 shape = "Block"  # "Block"(*) | "Underline" | "Beam"
 
 # --- keymaps --------------------------------------------------------------------------------------
+# 默认设置: https://alacritty.org/config-alacritty-bindings.html
 # NOTE: 中文输入法输入过程中, delete 键不会删除之前的字符.
 # 因为这个键默认是 delete 键 (Control-H, "\x08") 而不是 backspace 键.
 # unset a default binding set to `ReceiveChar`
@@ -209,18 +210,23 @@ chars = "\u001B[13;2u"
 key = "Return"
 mods = "Shift"
 
-# NOTE: Command-W 默认设置是 Quit.
-# Command-W -> Ctrl-w
-# alacritty 中 Ctrl-w 默认设置是 Quit, vim 中用于 switch vim window.
+# NOTE: 取消快捷键设置, "ReceiveChar" 恢复发送默认 char
+# Quit, 和 <C-q> 一样
 [[keyboard.bindings]]
-chars = "\u0017"
+action = "ReceiveChar"
 key = "W"
 mods = "Command"
 
-# Do nothing
+# Minimize current window
 [[keyboard.bindings]]
-action = "None"
+action = "ReceiveChar"
 key = "M"
+mods = "Command"
+
+# CreateNewTab, NOTE: windonw.decorations = "None" 时不能使用 Tabs
+[[keyboard.bindings]]
+action = "ReceiveChar"
+key = "T"
 mods = "Command"
 
 # --- debug ----------------------------------------------------------------------------------------
