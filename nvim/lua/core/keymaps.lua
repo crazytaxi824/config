@@ -45,10 +45,10 @@ local mt = require('utils.my_term')  -- my_term terminal
 -- -- }}}
 
 --- vim.keymap.set() - option `:help :map-arguments`
---- { remap = false }, { noremap = true }
+--- { remap = false } (default), { noremap = true }
 --- { nowait = true },
 --- { silent = true },
---- { buffer = number },  -- 针对 bufnr 有效, 0 - current buffer
+--- { buffer = number }, -- 如果设置了 buffer 相当于 nvim_buf_set_keymap(), 0 - current buffer
 --- { script = true },
 --- { expr = true },
 --- { unique = true }, define a new mapping or abbreviation, the command will fail if the mapping or abbreviation already exists.
