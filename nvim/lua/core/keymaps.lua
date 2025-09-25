@@ -193,9 +193,9 @@ local keymaps = {
   --{'n', '<leader>d', 'bdelete', opt, 'buf: Close Current Buffer'},
 
   --- Window 控制
+  {'n', '<D-w>', "<C-w>", opt, 'win: command replace <C-w>'},
   {'n', '<leader>w', function() key_fn.win_choose() end, opt, 'win: Jump to Window'},  -- 跳转到指定 window
   {'n', '<leader>W', '<cmd>only!<CR>', opt, 'win: Close All Other Windows'},  -- 关闭所有其他窗口, 快捷键 <C-w><C-o>
-  {'n', '<D-w>', "<C-w>", opt, 'win: command replace <C-w>'},
 
   --- NOTE: terminal key mapping 在其他 plugin 中也有设置.
   {'n', '<leader>tt', function() mt.open_shell_term() end, opt, "open/new Terminal #(1~999)"},
