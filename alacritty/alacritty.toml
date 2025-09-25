@@ -121,25 +121,6 @@ shape = "Block"  # "Block"(*) | "Underline" | "Beam"
 
 # --- keymaps --------------------------------------------------------------------------------------
 # 默认设置: https://alacritty.org/config-alacritty-bindings.html
-# NOTE: 中文输入法输入过程中, delete 键不会删除之前的字符.
-# 因为这个键默认是 delete 键 (Control-H, "\x08") 而不是 backspace 键.
-# unset a default binding set to `ReceiveChar`
-# 以下设置覆盖 alacritty 默认设置.
-# [[keyboard.bindings]]
-# action = "ReceiveChar"
-# key = "Back"
-
-# 翻页
-[[keyboard.bindings]]
-action = "ScrollPageUp"
-key = "PageUp"
-mode = "~Alt"
-
-[[keyboard.bindings]]
-action = "ScrollPageDown"
-key = "PageDown"
-mode = "~Alt"
-
 # 创建新窗口. 切换窗口(win)使用 Command-` 这个快捷键是 macos 系统中的设置. 设置->键盘->快捷键->键盘(左侧目录)
 [[keyboard.bindings]]
 action = "CreateNewWindow"
@@ -182,13 +163,13 @@ mods = "Option"
 
 # Command-Left -> <Home> - 替代 <fn - Left>
 [[keyboard.bindings]]
-chars = "\u001BOH"
+chars = "\u001BOH"  # 或者用 \u001B[7~ 替换
 key = "Left"
 mods = "Command"
 
 # Command-Right -> <End> - 替代 <fn - Right>
 [[keyboard.bindings]]
-chars = "\u001BOF"
+chars = "\u001BOF"  # 或者用 \u001B[8~ 替换
 key = "Right"
 mods = "Command"
 
@@ -203,6 +184,17 @@ mods = "Command"
 chars = "\u001B[6~"
 key = "Down"
 mods = "Command"
+
+# NOTE: <PageUp> <PageDown> 去掉默认设置中需要的 Shift mods
+[[keyboard.bindings]]
+action = "ScrollPageUp"
+key = "PageUp"
+mode = "~Alt"
+
+[[keyboard.bindings]]
+action = "ScrollPageDown"
+key = "PageDown"
+mode = "~Alt"
 
 # Shift-CR 默认没有设置该 key
 [[keyboard.bindings]]
@@ -228,6 +220,88 @@ mods = "Command"
 action = "ReceiveChar"
 key = "T"
 mods = "Command"
+
+# --- unset <cmd+1~9> ---
+[[keyboard.bindings]]
+action = "ReceiveChar"
+key = "1"
+mods = "Command"
+
+[[keyboard.bindings]]
+action = "ReceiveChar"
+key = "2"
+mods = "Command"
+
+[[keyboard.bindings]]
+action = "ReceiveChar"
+key = "3"
+mods = "Command"
+
+[[keyboard.bindings]]
+action = "ReceiveChar"
+key = "4"
+mods = "Command"
+
+[[keyboard.bindings]]
+action = "ReceiveChar"
+key = "5"
+mods = "Command"
+
+[[keyboard.bindings]]
+action = "ReceiveChar"
+key = "6"
+mods = "Command"
+
+[[keyboard.bindings]]
+action = "ReceiveChar"
+key = "7"
+mods = "Command"
+
+[[keyboard.bindings]]
+action = "ReceiveChar"
+key = "8"
+mods = "Command"
+
+[[keyboard.bindings]]
+action = "ReceiveChar"
+key = "9"
+mods = "Command"
+
+[[keyboard.bindings]]
+action = "ReceiveChar"
+key = "0"
+mods = "Command"
+
+[[keyboard.bindings]]
+action = "ReceiveChar"
+key = "-"
+mods = "Command"
+
+[[keyboard.bindings]]
+action = "ReceiveChar"
+key = "="
+mods = "Command"
+
+[[keyboard.bindings]]
+action = "ReceiveChar"
+key = "+"
+mods = "Command"
+
+# --- Set font size, default: <cmd-0> ---
+[[keyboard.bindings]]
+action = "ResetFontSize"
+key = "0"
+mods = "Command|Control"
+
+[[keyboard.bindings]]
+action = "DecreaseFontSize"
+key = "-"
+mods = "Command|Control"
+
+[[keyboard.bindings]]
+action = "IncreaseFontSize"
+key = "="
+mods = "Command|Control"
 
 # --- debug ----------------------------------------------------------------------------------------
 [debug]
