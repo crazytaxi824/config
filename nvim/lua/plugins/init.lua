@@ -44,7 +44,7 @@ local plugins = {
   {
     "williamboman/mason.nvim",
     -- tag = "v2.0.0",
-    commit = "7dc4fac",
+    commit = "b3689a4",
     -- build = ":MasonUpdate", -- :MasonUpdate updates All Registries, NOT packages.
     config = function() require("plugins.settings.mason_tool_installer") end,
 
@@ -277,7 +277,7 @@ local plugins = {
   --- Debug tools 安装 -----------------------------------------------------------------------------
   {
     "mfussenegger/nvim-dap",  -- core debug tool
-    commit = "7523676",
+    commit = "7367cec",
     config = function() require("plugins.settings.debug.nvim_dap") end,
 
     cmd = {'Debug', 'DapToggleBreakpoint', 'DapContinue'},
