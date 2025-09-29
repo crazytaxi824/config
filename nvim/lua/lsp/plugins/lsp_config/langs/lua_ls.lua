@@ -1,4 +1,4 @@
--- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#sumneko_lua
+-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#lua_ls
 return {
   on_init = function(client)
     if client.workspace_folders then
@@ -14,7 +14,7 @@ return {
         version = 'LuaJIT'
       },
       diagnostics = {
-        globals = { "vim" },
+        globals = { "vim" },  -- Recognize 'vim' as a global variable
       },
       -- Make the server aware of Neovim runtime files
       workspace = {

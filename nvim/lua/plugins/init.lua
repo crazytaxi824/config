@@ -124,6 +124,8 @@ local plugins = {
     commit = "b5311ab",
     config = function() require("plugins.settings.cmp_completion") end,
     dependencies = {
+      --- VVI: 只有 "cmp-nvim-lsp" 不需要在 "nvim-cmp" 之后加载, 其他 module 都需要在 "nvim-cmp" 之后再加载, 否则报错.
+      --- cmp-buffer, cmp-path, cmp-cmdline 加载时会自动 require("nvim-cmp"), 导致 nvim-cmp 提前加载.
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全
       "hrsh7th/cmp-buffer",  -- 当前 buffer 中有的 word
       "hrsh7th/cmp-path",  -- filepath 补全
@@ -136,12 +138,11 @@ local plugins = {
   },
 
   --- 以下是 "nvim-cmp" 的 module 插件, 在 nvim-cmp.setup() 中启用的插件.
-  --- VVI: 只有 "cmp-nvim-lsp" 不需要在 "nvim-cmp" 之后加载, 其他 module 插件都需要在 "nvim-cmp" 加载之后再加载, 否则报错.
   {
     "hrsh7th/cmp-nvim-lsp",  -- LSP source for nvim-cmp
     commit = "bd5a7d6",
 
-    lazy = true,  -- nvim-cmp 加载时自动加载.
+    lazy = true,  -- nvim-lspconfig 加载时自动加载. VVI: 必须在 vim.lsp.enable() 之前加载, 否则无法提供代码补全
   },
 
   {
@@ -207,8 +208,7 @@ local plugins = {
     -- commit = "d88ae66",
     config = function() require("lsp.plugins.lsp_config") end,
     dependencies = {
-      -- VVI: lspconfig 必须在 cmp_nvim_lsp 之后加载, 否则可能无法提供代码补全.
-      "hrsh7th/cmp-nvim-lsp",
+      "hrsh7th/cmp-nvim-lsp",  -- VVI: vim.lsp.enable() 必须在 cmp_nvim_lsp 之后加载, 否则无法提供代码补全
     },
   },
 

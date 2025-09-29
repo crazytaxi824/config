@@ -1,4 +1,4 @@
---- 主要是设置 lsp root_dir
+--- 修改 lspconfig 中默认 root_dir 设置
 return {
   root_dir = function(bufnr, on_dir)
     local root = vim.fs.root(bufnr, {'pyproject.toml', 'ruff.toml', '.ruff.toml'})

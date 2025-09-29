@@ -1,7 +1,7 @@
 --- 官方文档
---- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#gopls
+--- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#gopls
 --- https://github.com/golang/tools/blob/master/gopls/doc/settings.md
---- https://github.com/golang/tools/blob/master/gopls/doc/vim.md#neovim-config
+--- https://github.com/golang/tools/blob/master/gopls/doc/editor/vim.md#neovim-config
 
 --- BUG: https://github.com/golang/go/issues/50750
 --- 使用 workspace 'go.work' 的情况下, `:LspLog` 打印错误 `go mod tidy` Error.
