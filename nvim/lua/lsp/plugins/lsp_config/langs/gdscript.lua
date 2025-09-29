@@ -6,4 +6,6 @@ if not vim.uv.fs_stat(pipepath) then
   vim.fn.serverstart(pipepath)
 end
 
-return {}
+return {
+  settings = {}
+}
