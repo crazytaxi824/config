@@ -9,6 +9,7 @@
 ---   4. 修改 floating window 的位置.
 
 local ms = vim.lsp.protocol.Methods
+local hover_ns = vim.api.nvim_create_namespace('nvim.lsp.hover_range')
 
 local M = {}
 
@@ -116,8 +117,20 @@ local function client_positional_params(fn_node)
   end
 end
 
-local hover_ns = vim.api.nvim_create_namespace('nvim.lsp.hover_range')
+--- cache hover winid
+local hover_winid
 
+--- toggle hover window
+function M.toggle_hover_short()
+  if hover_winid and vim.api.nvim_win_is_valid(hover_winid) then
+    vim.api.nvim_win_close(hover_winid, true)
+    hover_winid = nil
+  else
+    M.hover_short()
+  end
+end
+
+--- 只获取 textDocument/hover 中 signature 部分
 function M.hover_short()
   local fn_node = find_fn_call_before_cursor()
   if not fn_node then  -- 如果 cursor 不在 'arguments' 内, 则结束.
@@ -125,6 +138,7 @@ function M.hover_short()
   end
 
   --- 4. 修改 hover_short floating window 显示的位置.
+  --- `:help vim.lsp.util.open_floating_preview.Opts`
   local config = {
     offset_x = fn_node.offset_x,
     offset_y = fn_node.offset_y,
@@ -233,10 +247,10 @@ function M.hover_short()
       return
     end
 
-    local _, winid = vim.lsp.util.open_floating_preview(contents, format, config)
+    _, hover_winid = vim.lsp.util.open_floating_preview(contents, format, config)
 
     vim.api.nvim_create_autocmd('WinClosed', {
-      pattern = tostring(winid),
+      pattern = tostring(hover_winid),
       once = true,
       callback = function()
         vim.api.nvim_buf_clear_namespace(bufnr, hover_ns, 0, -1)
