@@ -19,6 +19,8 @@
 --- 有条件的 highlight_references() / clear_references().
 -- -- }}}
 
+--- cursor 在未移出当前 documentHighlight <word> 的范围时不重新发送 vim.lsp.buf_request_all()
+
 local ms = vim.lsp.protocol.Methods
 
 local M = {}
