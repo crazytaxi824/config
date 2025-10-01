@@ -44,7 +44,7 @@ local plugins = {
   {
     "williamboman/mason.nvim",
     -- tag = "v2.0.0",
-    commit = "b3689a4",
+    commit = "a83eabd",
     -- build = ":MasonUpdate", -- :MasonUpdate updates All Registries, NOT packages.
     config = function() require("plugins.settings.mason_tool_installer") end,
 
@@ -176,7 +176,7 @@ local plugins = {
 
   {
     "L3MON4D3/LuaSnip", -- snippet engine, for "cmp_luasnip", 会创建几个 [Scratch] buffer
-    commit = "b310491",
+    commit = "7381330",
     --- for placeholder transformation
     --- https://code.visualstudio.com/docs/editor/userdefinedsnippets#_variable-transforms
     build = "make install_jsregexp",
@@ -215,7 +215,7 @@ local plugins = {
   --- "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
-    commit = "78111a9",
+    commit = "5cf6384",
     config = function() require("lsp.plugins.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -236,7 +236,7 @@ local plugins = {
   {
     "nvim-tree/nvim-tree.lua",
     -- tag = "v1.14.0",
-    commit = "e179ad2",
+    commit = "87d096a",
     config = function() require("plugins.settings.file_tree") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
 
@@ -344,7 +344,7 @@ local plugins = {
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {
     "lewis6991/gitsigns.nvim",
-    commit = "23ae90a",
+    commit = "0c68263",
     config = function() require("plugins.settings.git_signs") end,
     dependencies = { "folke/trouble.nvim" },
 
