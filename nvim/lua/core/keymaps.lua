@@ -124,10 +124,13 @@ local keymaps = {
   {{'n','v'}, '<M-Down>', '3<C-e>', opt, 'screen: scroll Downwards'},
   {'i', '<M-Down>', '<C-o>3<C-e>', opt, 'screen: scroll Downwards'},
 
-  --- Tab ------------------------------------------------------------------------------------------
+  --- <Tab> key
   {'n', '<Tab>', '<C-w><C-w>', opt, 'which_key_ignore'},  -- 切换到另一个窗口.
 
-  --- CMD ------------------------------------------------------------------------------------------
+  --- tabline
+  {'n', '<S-D-->', '<cmd>tabp<CR>', opt, 'tab: previous'},
+  {'n', '<S-D-=>', '<cmd>tabn<CR>', opt, 'tab: next'},
+
   --- save/write file
   {'n', '<D-s>', function() key_fn.save_file() end, opt, 'which_key_ignore'},
   {{'v', 'i'}, '<D-s>', '<C-c><cmd>lua require("utils.keymaps").save_file()<CR>', opt, 'which_key_ignore'},
