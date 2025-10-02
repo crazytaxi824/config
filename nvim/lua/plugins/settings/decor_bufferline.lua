@@ -560,8 +560,8 @@ local bufferline_keymaps = {
 
   --- NOTE: 如果 cursor 所在的 window 中显示的(active) buffer 是 unlisted (即: 不显示在 tabline 上的 buffer),
   --- 不能使用 BufferLineCycleNext/Prev 来进行 buffer 切换, 但是可以使用 bufferline.go_to() 直接跳转.
-  {'n', '-', function() bufferline.cycle(-1) end, opt, 'buffer: go to Prev buffer'},
-  {'n', '=', function() bufferline.cycle(1)  end, opt, 'buffer: go to Next buffer'},
+  {'n', '<S-D-[>', function() bufferline.cycle(-1) end, opt, 'buffer: go to Prev buffer'},
+  {'n', '<S-D-]>', function() bufferline.cycle(1)  end, opt, 'buffer: go to Next buffer'},
 
   --- 左右移动 buffer
   {'n', '<leader><Left>', '<cmd>BufferLineMovePrev<CR>', opt, 'buffer: Move Buffer Left'},
