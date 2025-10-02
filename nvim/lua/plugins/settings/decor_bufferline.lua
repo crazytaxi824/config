@@ -554,7 +554,6 @@ bufferline.setup({
 --- keymaps ----------------------------------------------------------------------------------------
 local opt = { silent = true }
 local bufferline_keymaps = {
-  --- NOTE: according to bufferline source code, `go_to_buffer()` is deprecate. it calls `go_to()`
   --- https://github.com/akinsho/bufferline.nvim/blob/master/lua/bufferline.lua
   {'n', '<leader>\\', function() if gotoable() then bufferline.go_to(vim.v.count1, true) end end, opt, 'which_key_ignore'},
 
