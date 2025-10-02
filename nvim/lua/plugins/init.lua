@@ -43,8 +43,8 @@ local plugins = {
 
   {
     "williamboman/mason.nvim",
-    -- tag = "v2.0.0",
-    commit = "a83eabd",
+    tag = "v2.1.0",
+    -- commit = "a83eabd",
     -- build = ":MasonUpdate", -- :MasonUpdate updates All Registries, NOT packages.
     config = function() require("plugins.settings.mason_tool_installer") end,
 
@@ -344,7 +344,7 @@ local plugins = {
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {
     "lewis6991/gitsigns.nvim",
-    commit = "0c68263",
+    commit = "1ee5c1f",
     config = function() require("plugins.settings.git_signs") end,
     dependencies = { "folke/trouble.nvim" },
 
