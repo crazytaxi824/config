@@ -96,4 +96,7 @@ function my_git_info() {
   # 最后调用 git_prompt_info() 打印整个 git info 的字符串.
   # echo $(git_prompt_info), 打印结果为 %K{xx}%F{xx} %B feature/dev ✔ %b%f%k
   echo $(git_prompt_info)  # %K{xx}%F{xx} %B feature/dev ✔ %b%f%k
+
+  # NOTE: 如果使用 $(_omz_git_prompt_info) 则不需要在 .zshrc 中设置 zstyle ':omz:alpha:lib:git' async-prompt no
+  # echo $(_omz_git_prompt_info)
 }
