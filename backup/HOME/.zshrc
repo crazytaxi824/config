@@ -16,7 +16,7 @@ export EDITOR=nvim
 export VISUAL=$EDITOR
 
 # --- [ oh my zsh ] -------------------------------------------------------------------------------- {{{
-# ohmyzsh #12257 #12328 async problem.
+# NOTE: ohmyzsh #12257 #12328 async problem.
 # https://github.com/ohmyzsh/ohmyzsh/issues/12328
 # set before `source oh-my-zsh.sh`
 zstyle ':omz:alpha:lib:git' async-prompt no
