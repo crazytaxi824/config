@@ -60,5 +60,11 @@ mason.setup {
   log_level = vim.log.levels.WARN,  -- 影响 `:MasonLog`
 }
 
+--- NOTE: 必须在 mason.setup() 之后才能获取到 pkgs
+-- local reg = require("mason-registry")
+-- for _, pkg in ipairs(reg.get_installed_package_names()) do
+--   print(pkg)
+-- end
+
 
 
