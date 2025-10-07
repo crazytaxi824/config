@@ -611,8 +611,7 @@ function backupConfigFiles() {
 		# 'mkdir -p' 如果文件夹不存在则创建, 递归创建所有文件夹.
 		mkdir -p $backup_folder/HOME/.oh-my-zsh/custom   # ~/, ~/.oh-my-zsh/custom/theme/
 		mkdir -p $backup_folder/HOME/.ssh      # ~/.ssh/
-		mkdir -p $backup_folder/lazygit        # ~/Library/Application\ Support/lazygit/
-		mkdir -p $backup_folder/vscode         # ~/Library/Application\ Support/Code/User/
+		mkdir -p $backup_folder/HOME/Library/Application\ Support/lazygit   # ~/Library/Application\ Support/lazygit/
 
 		# zprofile & zshrc
 		cp $HOME/.zprofile $backup_folder/HOME/
@@ -641,11 +640,7 @@ function backupConfigFiles() {
 		cp $HOME/.tmux.conf $backup_folder/HOME/
 
 		# lazygit ~/Library/Application Support/lazygit/config.yml
-		cp $HOME/Library/Application\ Support/lazygit/config.yml $backup_folder/lazygit/
-
-		# vscode settings.json keybindings.json & snippets
-		cp $HOME/Library/Application\ Support/Code/User/*.json $backup_folder/vscode/
-		cp -r $HOME/Library/Application\ Support/Code/User/snippets $backup_folder/vscode/
+		cp $HOME/Library/Application\ Support/lazygit/config.yml $backup_folder/HOME/Library/Application\ Support/lazygit
 	done
 
 	echo -e "\e[32mBackup Done! Happy Coding!\e[0m"
