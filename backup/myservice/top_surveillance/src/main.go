@@ -18,9 +18,8 @@ var (
 	home        string                        // HOME dir
 	logfilename          = "top_surveillance" // filename under $HOME
 
-	maxCPU      float64 = 80               // (n)%
-	maxFilesize int64   = 10 * 1 << 20     // (n)MB
-	sleep               = 30 * time.Second // (n)s
+	maxCPU      float64 = 80           // (n)%
+	maxFilesize int64   = 10 * 1 << 20 // (n)MB
 )
 
 func main() {
@@ -33,35 +32,36 @@ func main() {
 		return
 	}
 
-	for {
-		// top logging command
-		// NOTE: 可以使用 `COLUMNS=999 ps -p 527 -o pid=,command=` 获取command & args
-		cmd := exec.Command("top", "-l", "2", "-n", "5", "-s", "1", "-o", "cpu", "-stats", "cpu,mem,pid,command")
-		cmd.Env = []string{"COLUMNS=999"} // 防止 top 打印不全
-		stdout, err := cmd.StdoutPipe()
-		if err != nil {
-			log.Println(err)
-			return
-		}
+	// top logging command
+	// NOTE: 可以使用 `COLUMNS=999 ps -p 527 -o pid=,command=` 获取command & args
+	// -l 2  采样次数为 2, 第一次采样时结果都是 0
+	// -s 1  每隔 1 秒获取一次数据, 相当于第二次采样是 1 秒内数据
+	// -n 5  显示前 5 个进程
+	// -o cpu  按 CPU 使用率排序(从高到低)
+	cmd := exec.Command("top", "-l", "2", "-n", "5", "-s", "1", "-o", "cpu", "-stats", "cpu,mem,pid,command")
+	cmd.Env = []string{"COLUMNS=999"} // 防止 top 打印不全
+	stdout, err := cmd.StdoutPipe()
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	defer stdout.Close()
 
-		if err = cmd.Start(); err != nil {
-			log.Println(err)
-			return
-		}
+	if err = cmd.Start(); err != nil {
+		log.Println(err)
+		return
+	}
 
-		// parse data & write log file
-		if err = parseTopData(stdout); err != nil {
-			log.Println(err)
-			return
-		}
+	// parse data & write log file
+	if err = parseTopData(stdout); err != nil {
+		log.Println(err)
+		return
+	}
 
-		// Wait for the command to finish
-		if err = cmd.Wait(); err != nil {
-			log.Println(err)
-			return
-		}
-
-		time.Sleep(sleep)
+	// Wait for the command to finish
+	if err = cmd.Wait(); err != nil {
+		log.Println(err)
+		return
 	}
 }
 
