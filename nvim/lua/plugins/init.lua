@@ -373,7 +373,7 @@ local plugins = {
   {
     "folke/trouble.nvim",
     -- tag = "v3.7.1",
-    commit = "f176232",
+    commit = "c098362",
     config = function() require("plugins.settings.trouble_list") end,
 
     event = "VeryLazy",
