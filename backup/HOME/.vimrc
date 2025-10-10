@@ -2,6 +2,13 @@ vim9script
 
 # NOTE: this is VIM 9.1 settings
 
+# set option 在 vim9script 中可以使用
+# - &option (:set - setglobal & setlocal)
+# - &g:option (:setglobal - global only)
+# - &b:option (类似 vim.bo.opt)
+# - &w:option (类似 vim.wo.opt)
+# - &l:option (:setlocal - to buffer or window) 相当于自动选择是 buffer-local  还是 window-local
+
 # cursor shape `:help terminal-output-codes`
 #  - 0, 1 or none    blinking block cursor
 #  - 2               block cursor

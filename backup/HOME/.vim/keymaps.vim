@@ -1,5 +1,7 @@
 vim9script
 
+# NOTE: "key-notation" 中 <D-*> 只在 MacVIM (gui) 中可以使用.
+
 # normal setting -----------------------------------------------------------------------------------
 tnoremap <ESC> <C-\><C-n>
 nnoremap <expr> <ESC> v:hlsearch ? ":nohlsearch\<CR>" : "\<ESC>"
