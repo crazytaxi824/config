@@ -143,8 +143,7 @@ telescope.setup {
         --["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
 
         --- NOTE: put all <tab> selected files to quickfix list.
-        ["<C-l>"] = actions.send_selected_to_qflist + actions.open_qflist,
-        --["<C-l>"] = actions.complete_tag,
+        --["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
         --["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
         --["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
 
@@ -180,7 +179,7 @@ telescope.setup {
         ["<S-Tab>"] = actions_layout.cycle_layout_next,  -- layout window
 
         --- NOTE: put all <tab> selected files to quickfix list.
-        ["<C-l>"] = actions.send_selected_to_qflist + actions.open_qflist,
+        --["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
         --["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
         --["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
 
@@ -250,7 +249,7 @@ vim.api.nvim_create_autocmd("User", {
     end
 
     --- NOTE: 快捷键设置在 prompt bufnr 中, 因为其他 telescope window 通常不会 enter.
-    vim.keymap.set({'n', 'i'}, '<C-k>', function()
+    vim.keymap.set({'n', 'i'}, '<C-l>', function()
       --- toggle `set wrap`
       vim.api.nvim_set_option_value('wrap', not vim.wo[preview_winid].wrap, {scope='local', win=preview_winid})
     end,
