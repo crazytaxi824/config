@@ -371,18 +371,19 @@ fzf_def_cmd="fd --color=always --follow --hidden --no-ignore \
 export FZF_DEFAULT_COMMAND="$fzf_def_cmd"
 
 # NOTE: The $'…' quoting syntax, which expands ANSI-C backslash-escaped characters in the text between the single quotes, is supported (see ANSI-C Quoting).
-FZF_DEFAULT_OPTS=$'--header="<C-e>:Edit; <C-o>:Open; <Tab>:Select; <S-Tab>:Prev-win; <C-k>:Prev-wrap; <C-a>:Select-ALL; <C-d>:Deselect-All"'
+FZF_DEFAULT_OPTS=$'--header="<C-e>:Edit; <C-o>:Sys-Open; <Tab>:Select; <S-Tab>:Preview-win\n<C-l>:Line-wrap; <C-a>:Select-ALL; <C-d>:Deselect-ALL\n<C-k>:Raw; <C-n>:Next-match; <C-p>:Prev-match"'
 
 # btab=<Shift-Tab>
 # Vim: Warning: Output not to a terminal. 解决方法: `vim/nvim "filepath" > /dev/tty`
 export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS" --height=80% --ansi --multi --layout=reverse --border --scrollbar='▌▐' \
-	--marker='✔' --pointer='▸' --info='inline-right' \
+	--marker='✔' --pointer='▸' --info='inline-right' --gutter=' ' --gutter-raw='▎' \
 	--color='dark,hl:191:reverse,hl+:191:reverse,fg+:underline,bg+:238:bold,border:240' \
-	--color='scrollbar:240,pointer:191,marker:191,gutter:-1,header:71:italic:underline' \
+	--color='scrollbar:240,pointer:191,marker:191,gutter:191,header:71:italic:underline' \
 	--preview='([[ -d {} ]] && (tree -NC -L 1 {})) || ([[ -f {} ]] && (bat --color=always --style=numbers {}))' \
 	--preview-window='right,60%,border-left' \
 	--bind='btab:change-preview-window(top,70%,border-bottom|hidden|)' \
-	--bind='ctrl-k:toggle-preview-wrap+toggle-wrap' \
+	--bind='ctrl-l:toggle-preview-wrap+toggle-wrap' \
+	--bind='ctrl-k:toggle-raw' \
 	--bind='shift-up:half-page-up,shift-down:half-page-down' \
 	--bind='pgup:preview-half-page-up,pgdn:preview-half-page-down' \
 	--bind='ctrl-a:select-all,ctrl-d:deselect-all' \
