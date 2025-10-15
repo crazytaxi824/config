@@ -176,7 +176,7 @@ local plugins = {
 
   {
     "L3MON4D3/LuaSnip", -- snippet engine, for "cmp_luasnip", 会创建几个 [Scratch] buffer
-    commit = "7381330",
+    commit = "21e9fec",
     --- for placeholder transformation
     --- https://code.visualstudio.com/docs/editor/userdefinedsnippets#_variable-transforms
     build = "make install_jsregexp",
@@ -224,8 +224,8 @@ local plugins = {
 
   {
     "stevearc/conform.nvim",
-    tag = "v9.1.0",
-    -- commit = "973f3cb",
+    -- tag = "v9.1.0",
+    commit = "fbcb4fa",
     config = function() require("plugins.settings.formatter_conform") end,
 
     event = "BufWritePre",
