@@ -1,0 +1,19 @@
+Installed
+  ✓ bash-language-server
+  ✓ buf
+  ✓ css-lsp
+  ✓ eslint-lsp
+  ✓ gdtoolkit
+  ✓ goimports
+  ✓ goimports-reviser
+  ✓ html-lsp
+  ✓ json-lsp
+  ✓ lua-language-server
+  ✓ prettier
+  ✓ pyright
+  ✓ ruff
+  ✓ shfmt
+  ✓ sql-formatter
+  ✓ sqls
+  ✓ stylua
+  ✓ typescript-language-server
