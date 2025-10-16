@@ -251,7 +251,9 @@ vim.api.nvim_create_autocmd("User", {
     --- NOTE: 快捷键设置在 prompt bufnr 中, 因为其他 telescope window 通常不会 enter.
     vim.keymap.set({'n', 'i'}, '<C-l>', function()
       --- toggle `set wrap`
-      vim.api.nvim_set_option_value('wrap', not vim.wo[preview_winid].wrap, {scope='local', win=preview_winid})
+      if vim.api.nvim_win_is_valid(preview_winid) then
+        vim.api.nvim_set_option_value('wrap', not vim.wo[preview_winid].wrap, {scope='local', win=preview_winid})
+      end
     end,
     {
       buffer=prompt_bufnr,
@@ -312,10 +314,10 @@ vim.api.nvim_create_user_command("Rg",
 {nargs="+"})
 -- -- }}}
 
---- find pickers --------------------------------------------------------------- {{{
+--- list builtin pickers ------------------------------------------------------- {{{
 --- 找出所有的 pickers: builtin & extension
 --- https://github.com/keyvchan/telescope-find-pickers.nvim/blob/main/lua/telescope/_extensions/find_pickers/main.lua
-local function my_find_pickers(opts)
+local function my_list_builtin_pickers(opts)
   -- theme_opts: https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/themes.lua
   opts = opts or themes.get_dropdown({
     -- sorting_strategy = "ascending",
@@ -370,7 +372,7 @@ local opt = { silent = true }
 local telescope_keymaps = {
   --- Picker functions, https://github.com/nvim-telescope/telescope.nvim#pickers
   --- 使用 `:Telescope` 列出所有 Picker
-  {'n', '<leader>ff', function() my_find_pickers(themes.get_dropdown()) end, opt, 'telescope: find pickers'},
+  {'n', '<leader>ff', function() my_list_builtin_pickers(themes.get_dropdown()) end, opt, 'telescope: list builtin pickers'},
   {'n', '<leader>fd', function() builtin.find_files() end, opt, 'telescope: fd'},
   {'n', '<leader>fh', function() builtin.help_tags() end, opt, 'telescope: Vim Help Doc'},
   {'n', '<leader>fk', function() builtin.keymaps() end, opt, 'telescope: Keymap normal Mode'},
