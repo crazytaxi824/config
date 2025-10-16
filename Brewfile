@@ -94,6 +94,7 @@ cask "obsidian" # markdown 编辑软件
 #cask "typora"   # markdown 编辑软件
 
 # 个人工具
+cask "font-fira-code-nerd-font"  # alacritty font
 cask "squirrel-app"   # RIME 输入法客户端
 cask "appcleaner" # app 卸载工具
 cask "app-cleaner"  # mac 系统清理工具, 类似 CleanMyMac
