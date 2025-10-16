@@ -226,7 +226,7 @@ telescope.setup {
   },
 }
 
---- VVI: load extension after setup()
+--- VVI: load extension after setup(), 修改默认 vim.ui.select() 样式.
 telescope.load_extension('fzf')
 telescope.load_extension("ui-select")
 
@@ -318,17 +318,6 @@ vim.api.nvim_create_user_command("Rg",
 --- 找出所有的 pickers: builtin & extension
 --- https://github.com/keyvchan/telescope-find-pickers.nvim/blob/main/lua/telescope/_extensions/find_pickers/main.lua
 local function my_list_builtin_pickers(opts)
-  -- theme_opts: https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/themes.lua
-  opts = opts or themes.get_dropdown({
-    -- sorting_strategy = "ascending",
-    -- layout_strategy = "center",
-    -- scroll_strategy = "cycle",
-    -- layout_config = {
-    --   width = 0.4,
-    --   height = 20,
-    -- },
-  })
-
   local opts_pickers = {
     bufnr = vim.api.nvim_get_current_buf(),
     winnr = vim.api.nvim_get_current_win(),
@@ -340,30 +329,53 @@ local function my_list_builtin_pickers(opts)
   end
   table.sort(result_table) -- sort result
 
-  pickers.new(opts, {
-    prompt_title = "Find Pickers",
-    finder = finders.new_table({
-      results = result_table,
-    }),
-    attach_mappings = function(prompt_bufnr, map)
-      --- 当用户按下回车键时的动作
-      actions.select_default:replace(function()
-        --- 获取选中的 item
-        local selection = actions_state.get_selected_entry()
-        local value = selection.value
+  --- 使用 telescope.load_extension("ui-select")
+  vim.ui.select(result_table, {
+    prompt = 'Builtin Pickers',
+    format_item = function(item)
+      return item
+    end
+  }, function(choice)
+    if choice then
+      builtin_pickers[choice](opts_pickers)
+    end
+  end)
 
-        --- 关闭 telescope
-        actions.close(prompt_bufnr)
+  -- theme_opts: https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/themes.lua
+  -- opts = opts or themes.get_dropdown({
+  --   -- sorting_strategy = "ascending",
+  --   -- layout_strategy = "center",
+  --   -- scroll_strategy = "cycle",
+  --   -- layout_config = {
+  --   --   width = 0.4,
+  --   --   height = 20,
+  --   -- },
+  -- })
 
-        --- 执行新的 picker
-        if builtin_pickers[value] ~= nil then
-          builtin_pickers[value](opts_pickers)
-        end
-      end)
-      return true
-    end,
-    sorter = conf.generic_sorter(opts),  -- VVI: 设置 sorter 后可以通过 fzf 输入框对 results 进行过滤.
-  }):find()
+  -- pickers.new(opts, {
+  --   prompt_title = "Find Pickers",
+  --   finder = finders.new_table({
+  --     results = result_table,
+  --   }),
+  --   attach_mappings = function(prompt_bufnr, map)
+  --     --- 当用户按下回车键时的动作
+  --     actions.select_default:replace(function()
+  --       --- 获取选中的 item
+  --       local selection = actions_state.get_selected_entry()
+  --       local value = selection.value
+  --
+  --       --- 关闭 telescope
+  --       actions.close(prompt_bufnr)
+  --
+  --       --- 执行新的 picker
+  --       if builtin_pickers[value] ~= nil then
+  --         builtin_pickers[value](opts_pickers)
+  --       end
+  --     end)
+  --     return true
+  --   end,
+  --   sorter = conf.generic_sorter(opts),  -- VVI: 设置 sorter 后可以通过 fzf 输入框对 results 进行过滤.
+  -- }):find()
 end
 -- -- }}}
 
@@ -372,7 +384,7 @@ local opt = { silent = true }
 local telescope_keymaps = {
   --- Picker functions, https://github.com/nvim-telescope/telescope.nvim#pickers
   --- 使用 `:Telescope` 列出所有 Picker
-  {'n', '<leader>ff', function() my_list_builtin_pickers(themes.get_dropdown()) end, opt, 'telescope: list builtin pickers'},
+  {'n', '<leader>ff', function() my_list_builtin_pickers() end, opt, 'telescope: list builtin pickers'},
   {'n', '<leader>fd', function() builtin.find_files() end, opt, 'telescope: fd'},
   {'n', '<leader>fh', function() builtin.help_tags() end, opt, 'telescope: Vim Help Doc'},
   {'n', '<leader>fk', function() builtin.keymaps() end, opt, 'telescope: Keymap normal Mode'},
