@@ -176,7 +176,7 @@ local plugins = {
 
   {
     "L3MON4D3/LuaSnip", -- snippet engine, for "cmp_luasnip", 会创建几个 [Scratch] buffer
-    commit = "21e9fec",
+    version = "v2.*",
     --- for placeholder transformation
     --- https://code.visualstudio.com/docs/editor/userdefinedsnippets#_variable-transforms
     build = "make install_jsregexp",
@@ -311,8 +311,7 @@ local plugins = {
   --- telescope 的 preview syntax 默认使用的是 treesitter, 如果没有 treesitter 则使用 vim syntax highlights.
   {
     "nvim-telescope/telescope.nvim",
-    branch = "0.1.x",  -- master branch is nightly version.
-    tag = "0.1.8",
+    tag = "0.1.8",  -- master branch is nightly version.
     config = function() require("plugins.settings.telescope_fzf") end,
     dependencies = {
       "nvim-lua/plenary.nvim",
