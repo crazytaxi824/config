@@ -74,5 +74,8 @@
 ### lazygit config
 - `backup/HOME/Library/Application Support/lazygit/config` 设置
 
+### python env
+- `cd; uv venv` 在 HOME 目录创建 `~/.venv` 全局环境
+
 
 
