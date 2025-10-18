@@ -215,8 +215,7 @@ export GO111MODULE=on  # on | off | auto
 
 # --- [ python ] --------------------------------------------------------------- {{{
 # 安装 `$ brew install uv`
-# `uv pip install <pkg>`
-# uv 默认全局虚拟环境是 ~/.venv/, 在没有 source 其他虚拟环境的时候默认使用这个环境.
+# uv 默认全局虚拟环境是 ~/.venv/, 如果没有则使用 `cd; uv venv`. 在没有 source 其他虚拟环境的时候默认使用这个环境.
 export PATH="$HOME/.venv/bin:$PATH"
 
 # }}}
