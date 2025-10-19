@@ -6,8 +6,6 @@ launchd-thirdparty-Agents:/Library/LaunchAgents
 launchd-thirdparty-Daemons:/Library/LaunchDaemons
 launchd-user-Agents:~/Library/LaunchAgents
 lima-cache:~/Library/Caches/lima/download
-note:~/notes
-notes:~/notes
 nvim-cache:~/.cache/nvim
 nvim-config:~/.config/nvim
 nvim-data:~/.local/share/nvim
