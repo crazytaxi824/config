@@ -2,11 +2,16 @@ Installed
   ✓ bash-language-server
   ✓ buf
   ✓ css-lsp
+  ✓ delve
   ✓ eslint-lsp
   ✓ gdtoolkit
   ✓ goimports
   ✓ goimports-reviser
+  ✓ gomodifytags
+  ✓ gopls
+  ✓ gotests
   ✓ html-lsp
+  ✓ impl
   ✓ json-lsp
   ✓ lua-language-server
   ✓ prettier
