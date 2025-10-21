@@ -23,7 +23,8 @@ Nerd_icons = {
     corner = "└",
   },
   border = {"▄","▄","▄","█","▀","▀","▀","█"},  -- `:h nvim_open_win()`
-  -- border = {"┌","─","┐","│","┘","─","└","│"}, -- "Box Drawings Light"
+  -- border = {"┌","─","┐","│","┘","─","└","│"},  -- "Box Drawings Light"
+  -- border = {"╭","─","╮","│","╯","─","╰","│"},  -- "Box Drawings Light Arc"
   tick  = '✓',  -- ✓✔︎  
   cross = '⛌', -- ❌✕✖︎✗✘⛌ 
   star  = '★',
