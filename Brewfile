@@ -29,7 +29,7 @@ brew "lazygit"   # git cui 工具, 还有 "gitui"
 
 # editor
 brew "neovim"
-#brew "vim"
+#brew "vim"  # 苹果自带 vim
 brew "tmux"
 brew "pandoc"  # 文档格式转换工具, 支持 word, pdf, markdown ... 各种格式
 #brew "universal-ctags"  # 各种语言的 object 分析工具. vim/neovim tagbar 插件使用
@@ -58,10 +58,11 @@ brew "wget"     # http(s) 下载工具
 #brew "curl"    # http(s) 请求工具, mac 自带.
 
 # 虚拟机
-#brew "qemu"  # apple silicon emulator and virtualizer
 brew "lima"  # golang Linux virtual machine, deps on "qemu | vz", https://github.com/Code-Hex/vz
-#cask "virtualbuddy"  # Apple Virtualization.framework
+#brew "qemu"  # apple silicon emulator and virtualizer
 #cask "utm"  # Apple Virtualization.framework for ARM64 operating systems & QEMU for others
+#cask "vmware-fusion"  # Hypervisor 工具
+#cask "virtualbuddy"  # Apple Virtualization.framework
 
 # Dependencies
 #brew "ca-certificates"
@@ -77,10 +78,8 @@ cask "alacritty"
 #cask "iterm2"
 cask "raycast"  # alfred 替代
 cask "visual-studio-code" # vscode
-cask "postman"   # http(s) 测试工具
-#cask "wireshark" # http 请求分析工具
-#cask "sourcetree"     # git 工具, 好用但不开源, 目前使用 lazygit 代替
-#cask "vmware-fusion"  # Hypervisor 工具
+cask "postman"  # http(s) 测试工具
+#cask "wireshark"  # http 请求分析工具
 
 # 数据库工具
 cask "beekeeper-studio"  # Postgre, Mysql, MariaDB, SQLite, CockroachDB, AWS Redshift, MS SQL server, 开源免费软件.
@@ -115,9 +114,10 @@ cask "telegram" # 加密聊天工具
 #cask "calibre"  # 电子书工具, epub, mobi ..., 网页下载更快.
 #cask "cloudflare-warp"  # VPN 类工具
 #cask "kindle-comic-converter"
-#cask "chatgpt"
-#cask "claude"
+cask "chatgpt"
+cask "claude"
 cask "trader-workstation"  # IBKR TWS
+cask "basictex"  # 提供 pandoc --pdf-engine=xelatex
 
 # 浏览器
 cask "google-chrome"
