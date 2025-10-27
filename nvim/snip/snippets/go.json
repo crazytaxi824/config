@@ -100,7 +100,7 @@
   },
   "switch type": {
     "prefix": "switch-type",
-    "body": "switch ${1:interface}.(type) {\ncase ${2:int}:\n\t$3\ndefault:\n\t$4\n}",
+    "body": "switch ${2:v} := ${1:any}.(type) {\ncase ${3:int}:\n\t$4\ndefault:\n\t$5\n}",
     "description": "Snippets for Switch-(interface{})Type"
   },
   "select case": {

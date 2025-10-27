@@ -31,7 +31,7 @@ local plugins = {
   {
     "folke/lazy.nvim",
     -- version = "*",  -- 相当于 tag='stable'
-    tag = "v11.17.1",
+    tag = "v11.17.2",
   },
 
   --- Performence & Functions ----------------------------------------------------------------------
@@ -121,7 +121,7 @@ local plugins = {
   --- Auto Completion ------------------------------------------------------------------------------
   {
     "hrsh7th/nvim-cmp",
-    commit = "b5311ab",
+    commit = "a7bcf1d",
     config = function() require("plugins.settings.cmp_completion") end,
     dependencies = {
       --- VVI: 只有 "cmp-nvim-lsp" 不需要在 "nvim-cmp" 之后加载, 其他 module 都需要在 "nvim-cmp" 之后再加载, 否则报错.
@@ -225,7 +225,7 @@ local plugins = {
   {
     "stevearc/conform.nvim",
     -- tag = "v9.1.0",
-    commit = "fbcb4fa",
+    commit = "9fd3d5e",
     config = function() require("plugins.settings.formatter_conform") end,
 
     event = "BufWritePre",
@@ -268,7 +268,7 @@ local plugins = {
 
   {
     "nvim-lualine/lualine.nvim",  -- `:help 'statusline'`
-    commit = "a94fc68",
+    commit = "3946f01",
     config = function() require("plugins.settings.decor_lualine") end,
 
     event = "VeryLazy",
@@ -343,7 +343,7 @@ local plugins = {
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {
     "lewis6991/gitsigns.nvim",
-    commit = "1ee5c1f",
+    commit = "20ad441",
     config = function() require("plugins.settings.git_signs") end,
     dependencies = { "folke/trouble.nvim" },
 
@@ -372,7 +372,7 @@ local plugins = {
   {
     "folke/trouble.nvim",
     -- tag = "v3.7.1",
-    commit = "c098362",
+    commit = "76030c5",
     config = function() require("plugins.settings.trouble_list") end,
 
     event = "VeryLazy",
