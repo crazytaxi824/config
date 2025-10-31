@@ -64,9 +64,9 @@ cmp.setup {
   sources = {
     --- `:help cmp-config.sources`. 其他设置: group_index, max_item_count, priority ...
     --- 显示 group 1 的时候不会显示 group 2 的内容; 显示 group 2 的时候不会显示 group 1 的内容.
-    { name = "luasnip", priority = 999 }, -- "saadparwaiz1/cmp_luasnip" -> "L3MON4D3/LuaSnip"
+    { name = "luasnip", max_item_count = 3, priority = 999 }, -- "saadparwaiz1/cmp_luasnip" -> "L3MON4D3/LuaSnip"
     { name = "nvim_lsp" },  -- "hrsh7th/cmp-nvim-lsp"
-    { name = "buffer", max_item_count = 6 }, -- "hrsh7th/cmp-buffer", 最多显示 n 条.
+    { name = "buffer", max_item_count = 3 }, -- "hrsh7th/cmp-buffer", 最多显示 n 条.
     { name = "path" },  -- "hrsh7th/cmp-path"
     --- NOTE: other snippets engine -------------------------------------------- {{{
     --{ name = 'vsnip' },      -- For vsnip users      -- "hrsh7th/vim-vsnip" vim-script
