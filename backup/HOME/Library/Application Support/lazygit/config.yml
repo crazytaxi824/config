@@ -25,6 +25,7 @@ gui:
       - reverse
     cherryPickedCommitBgColor: # 不使用任何 bg 颜色, 默认为 cyan.
       - ''
+
 # Config relating to git
 git:
   # merging:
@@ -32,25 +33,26 @@ git:
 
   # DOC: lazygit diff 配置: https://github.com/jesseduffield/lazygit/blob/master/docs/Custom_Pagers.md
   # 需要安装 brew install git-delta; https://github.com/dandavison/delta
-  paging:
-    colorArg: always
-    # delta commands
-    # --dark/--light: use dark/light theme for delta diff.
-    # --no-gitconfig: Do not read any settings from git config.
-    # --line-numbers: Display line numbers.
-    # --syntax-theme: diff text block syntax highlight. `delta --list-syntax-themes`
-    pager: delta --dark --line-numbers --tabs=4 --paging=never --syntax-theme=none \--file-style='75' --file-decoration-style='75 ol' \--line-numbers-minus-style='#D75F5F' --minus-style='241 "#300000"' --minus-emph-style='246 "#803030"' \--line-numbers-plus-style='#008700' --plus-style='42' --plus-emph-style='234 42'
-    ### syntax-theme 开启
-    # syntax color:	# syntax 表示 text fg 使用 syntax-theme highlight. 如果 syntax-theme=none, 则会使用 white/normal 作为 fg 颜色.
-    # pager: delta --dark --line-numbers --paging=never --syntax-theme='Visual Studio Dark+'
-    #   \--file-style='75' --file-decoration-style='75 ol'
-    #   \--line-numbers-minus-style='#D75F5F' --minus-style='241 "#300000"' --minus-emph-style='246 "#803030"'
-    #   \--line-numbers-plus-style='#008700' --plus-style='syntax "#001C00"' --plus-emph-style='255 "#005A00"'
-    ### 256-color - 没有 gui 的 linux server 环境用
-    # pager: delta --dark --line-numbers --paging=never --syntax-theme=none
-    #   \--file-style='75' --file-decoration-style='75 ol'
-    #   \--line-numbers-minus-style='167' --minus-style='241 52' --minus-emph-style='246 167'
-    #   \--line-numbers-plus-style='28' --plus-style='251 22' --plus-emph-style='255 28'
+  pagers:
+    - colorArg: always
+      # delta commands
+      # --dark/--light: use dark/light theme for delta diff.
+      # --no-gitconfig: Do not read any settings from git config.
+      # --line-numbers: Display line numbers.
+      # --syntax-theme: diff text block syntax highlight. `delta --list-syntax-themes`
+      pager: delta --dark --line-numbers --tabs=4 --paging=never --syntax-theme=none \--file-style='75' --file-decoration-style='75 ol' \--line-numbers-minus-style='#D75F5F' --minus-style='241 "#300000"' --minus-emph-style='246 "#803030"' \--line-numbers-plus-style='#008700' --plus-style='42' --plus-emph-style='234 42'
+      ### syntax-theme 开启
+      # syntax color:	# syntax 表示 text fg 使用 syntax-theme highlight. 如果 syntax-theme=none, 则会使用 white/normal 作为 fg 颜色.
+      # pager: delta --dark --line-numbers --paging=never --syntax-theme='Visual Studio Dark+'
+      #   \--file-style='75' --file-decoration-style='75 ol'
+      #   \--line-numbers-minus-style='#D75F5F' --minus-style='241 "#300000"' --minus-emph-style='246 "#803030"'
+      #   \--line-numbers-plus-style='#008700' --plus-style='syntax "#001C00"' --plus-emph-style='255 "#005A00"'
+      ### 256-color - 没有 gui 的 linux server 环境用
+      # pager: delta --dark --line-numbers --paging=never --syntax-theme=none
+      #   \--file-style='75' --file-decoration-style='75 ol'
+      #   \--line-numbers-minus-style='167' --minus-style='241 52' --minus-emph-style='246 167'
+      #   \--line-numbers-plus-style='28' --plus-style='251 22' --plus-emph-style='255 28'
+
   # Branchs window (window No.3) 右侧显示的 commit tree.
   # DOC: git log format 配置: https://www.git-scm.com/docs/git-log#Documentation/git-log.txt-emnem
   # 最后的换行是为了让每一个 commit 都占2行位置. 如果不换行则有些占一行，有些占两行.
@@ -63,6 +65,7 @@ git:
   autoForwardBranches: none
   allBranchesLogCmds:
     - git log --color=always --date=format:'%d-%b-%Y %H:%M:%S' --graph --all --format=format:'%C(auto)%h -%d %C(74)%ad %C(243)(%ar) - %C(173)%an%C(reset)%n''          %C(auto)%s%n'' '
+
 # 刷新状态
 # refresher:
 #   refreshInterval: 10 # 单位(s). 刷新本地 git 文件状态. 可以通过 'git.autoRefresh' 启用/禁用.
@@ -72,6 +75,7 @@ git:
 # prompt - 选择是否创建 repository
 # create - 创建 git repository
 notARepository: 'quit' # one of: 'prompt' | 'create' | 'skip' | 'quit'
+
 # 这里 keybinding 设置主要是为了避免误操作, 将 key 绑定到不常用键上.
 # keybinding 的键是可以重复的.
 keybinding:

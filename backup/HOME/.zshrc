@@ -217,10 +217,10 @@ export GO111MODULE=on  # on | off | auto
 export PATH="$HOME/.venv/bin:$PATH"
 # }}}
 
-# --- [ node@20 ] -------------------------------------------------------------- {{{
-export PATH="/opt/homebrew/opt/node@20/bin:$PATH"
-export LDFLAGS="-L/opt/homebrew/opt/node@20/lib"
-export CPPFLAGS="-I/opt/homebrew/opt/node@20/include"
+# --- [ node@24 ] -------------------------------------------------------------- {{{
+export PATH="/opt/homebrew/opt/node@24/bin:$PATH"
+export LDFLAGS="-L/opt/homebrew/opt/node@24/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/node@24/include"
 # }}}
 
 # }}}

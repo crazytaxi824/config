@@ -39,7 +39,7 @@ brew "pandoc"  # 文档格式转换工具, 支持 word, pdf, markdown ... 各种
 #brew "rust"
 #brew "lua"
 brew "luajit"
-brew "node@20"
+brew "node@24"
 brew "uv"  # python tool
 #brew "yarn"  # js/ts tool replace npm
 
