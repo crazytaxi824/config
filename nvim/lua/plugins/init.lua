@@ -31,7 +31,7 @@ local plugins = {
   {
     "folke/lazy.nvim",
     -- version = "*",  -- 相当于 tag='stable'
-    tag = "v11.17.2",
+    tag = "v11.17.4",
   },
 
   --- Performence & Functions ----------------------------------------------------------------------
@@ -121,7 +121,7 @@ local plugins = {
   --- Auto Completion ------------------------------------------------------------------------------
   {
     "hrsh7th/nvim-cmp",
-    commit = "a7bcf1d",
+    commit = "106c4bc",
     config = function() require("plugins.settings.cmp_completion") end,
     dependencies = {
       --- VVI: 只有 "cmp-nvim-lsp" 不需要在 "nvim-cmp" 之后加载, 其他 module 都需要在 "nvim-cmp" 之后再加载, 否则报错.
@@ -225,7 +225,7 @@ local plugins = {
   {
     "stevearc/conform.nvim",
     -- tag = "v9.1.0",
-    commit = "9fd3d5e",
+    commit = "26c02e1",
     config = function() require("plugins.settings.formatter_conform") end,
 
     event = "BufWritePre",
@@ -372,7 +372,7 @@ local plugins = {
   {
     "folke/trouble.nvim",
     -- tag = "v3.7.1",
-    commit = "76030c5",
+    commit = "bd67efe",
     config = function() require("plugins.settings.trouble_list") end,
 
     event = "VeryLazy",
