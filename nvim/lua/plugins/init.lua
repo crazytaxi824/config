@@ -31,7 +31,7 @@ local plugins = {
   {
     "folke/lazy.nvim",
     -- version = "*",  -- 相当于 tag='stable'
-    tag = "v11.17.4",
+    tag = "v11.17.5",
   },
 
   --- Performence & Functions ----------------------------------------------------------------------
@@ -215,7 +215,7 @@ local plugins = {
   --- "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
-    commit = "5cf6384",
+    commit = "5501975",
     config = function() require("lsp.plugins.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -225,7 +225,7 @@ local plugins = {
   {
     "stevearc/conform.nvim",
     -- tag = "v9.1.0",
-    commit = "26c02e1",
+    commit = "cde4da5",
     config = function() require("plugins.settings.formatter_conform") end,
 
     event = "BufWritePre",
@@ -324,7 +324,7 @@ local plugins = {
 
   {
     "nvim-telescope/telescope-fzf-native.nvim",
-    commit = "1f08ed6",
+    commit = "6fea601",
     build = "make",
 
     lazy = true,  -- telescope 加载时自动加载.
