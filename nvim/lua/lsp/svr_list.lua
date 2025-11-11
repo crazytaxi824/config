@@ -69,6 +69,11 @@ M.list = {
     install = "system builtin",
     filetypes = { 'gd', 'gdscript', 'gdscript3' },
   },
+  sourcekit = {
+    cmd = "sourcekit-lsp",
+    install = "`brew install sourcekit-lsp` or `xcode-select --install`",
+    filetypes = { 'swift' }, -- { "swift", "objc", "objcpp", "c", "cpp" }
+  },
 }
 
 --- { javascript = { eslint, tsserver }, ... }
