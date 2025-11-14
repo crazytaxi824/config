@@ -140,7 +140,7 @@ local plugins = {
   --- 以下是 "nvim-cmp" 的 module 插件, 在 nvim-cmp.setup() 中启用的插件.
   {
     "hrsh7th/cmp-nvim-lsp",  -- LSP source for nvim-cmp
-    commit = "bd5a7d6",
+    commit = "cbc7b02",
 
     lazy = true,  -- nvim-lspconfig 加载时自动加载. VVI: 必须在 vim.lsp.enable() 之前加载, 否则无法提供代码补全
   },
