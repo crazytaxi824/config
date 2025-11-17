@@ -121,7 +121,7 @@ vim.api.nvim_create_user_command("ToggleAutoFormat", function()
     autoformat_group_id = 0
     vim.notify("Auto Format: Disabled")
   else
-    auto_format()
+    autoformat_group_id = auto_format()
     vim.notify("Auto Format: Enabled")
   end
 end, { bang = true, bar = true })
