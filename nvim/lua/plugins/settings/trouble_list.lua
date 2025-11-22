@@ -26,8 +26,8 @@ local tree_keymaps = {
   {'n', '<leader>xL', '<cmd>Trouble loclist toggle<cr>', opts, 'Location List (Trouble)'},
   {'n', '<leader>xQ', '<cmd>Trouble qflist toggle<cr>', opts, 'Quickfix List (Trouble)'},
   {'n', '<leader>xs', '<cmd>Trouble symbols toggle focus=false<cr>', opts, 'Symbols (Trouble)'},
-  {'n', '<leader>xl', '<cmd>Trouble lsp toggle<cr>', opts, 'LSP Definitions / references / ... (Trouble)'},
-  {'n', '<S-D-F12>',  '<cmd>Trouble lsp toggle<cr>', opts, 'LSP Definitions / references / ... (Trouble)'},
+  {'n', '<leader>xl', '<cmd>Trouble lsp toggle<cr>', opts, 'LSP: Definitions / references / ... (Trouble)'},
+  {'n', '<S-D-F12>',  '<cmd>Trouble lsp toggle<cr>', opts, 'LSP: Definitions / references / ... (Trouble)'},
 }
 
 require('utils.keymaps').set(tree_keymaps, {
