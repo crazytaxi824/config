@@ -7,42 +7,28 @@ local test_cmds = require("utils.go.deps.test_cmds")
 local M = {}
 
 --- get test function name Test/Benchmark/FuzzXxx -------------------------------------------------- {{{
-local function get_func_line()  -- return (func_name: string|nil)
-  local lcontent = vim.fn.getline('.')  -- 获取行内容
-
-  --- 如果找到 ^func.* 则返回整行内容.
-  if string.match(lcontent, "^func .*") then
-    return lcontent
-  end
-  --- 如果没找到则返回 nil
-end
-
 --- 返回 Test Function Name, "TestXxx(t *testing.T)", "BenchmarkXxx(b *testing.B)", "FuzzXxx(f *testing.F)"
 --- return {funcname: string|nil, mode :string|nil}
 local function get_test_func_name()
-  local func_line = get_func_line()
-  if not func_line then
-    return
-  end
+  local lcontent = vim.fn.getline('.')  -- 获取行内容
 
   --- NOTE: go test 函数不允许 func [T any]TestXxx(), 不允许有 type param.
   --- %w     - 单个 char [a-zA-Z0-9]
   --- [%w_]  - 单个 char [a-zA-Z0-9] && _
   --- [BFMT] - 单个 char B|F|M|T
-
-  local testfn = string.match(func_line, "func Test[%w_]*%([%w_]* ?%*testing%.T%)")
+  local testfn = lcontent:match("^func%s+(Test[%w_]*)%s*%([%w_]*%s*%*testing%.T%)")
   if testfn then
-    return string.match(testfn, "Test[%w_]*"), 'run'
+    return testfn, 'run'
   end
 
-  testfn = string.match(func_line, "func Benchmark[%w_]*%([%w_]* ?%*testing%.B%)")
+  testfn = lcontent:match("^func%s+(Benchmark[%w_]*)%s*%([%w_]*%s*%*testing%.B%)")
   if testfn then
-    return string.match(testfn, "Benchmark[%w_]*"), 'bench'
+    return testfn, 'bench'
   end
 
-  testfn = string.match(func_line, "func Fuzz[%w_]*%([%w_]* ?%*testing%.F%)")
+  testfn = lcontent:match("^func%s+(Fuzz[%w_]*)%s*%([%w_]*%s*%*testing%.F%)")
   if testfn then
-    return string.match(testfn, "Fuzz[%w_]*"), 'fuzz'
+    return testfn, 'fuzz'
   end
 end
 -- -- }}}
