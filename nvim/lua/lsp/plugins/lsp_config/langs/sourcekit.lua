@@ -14,7 +14,7 @@ return {
     )
   end,
 
-  --- sudo xcode-select -s /Applications/Xcode.app/Contents/Developer  (XCode)
+  --- sudo xcode-select -s /Applications/Xcode.app/Contents/Developer  (XCode) has XCTest
   --- sudo xcode-select -s /Library/Developer/CommandLineTools  (CommandLineTools)
   --- 使用 XCode.app 中的 sourcekit-lsp 时需要设置环境变量, 如果使用 CommandLineTools 可以直接注释掉.
   cmd_env = {
