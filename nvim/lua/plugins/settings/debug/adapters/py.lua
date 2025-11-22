@@ -67,7 +67,6 @@ dap.configurations.python = {
       -- debugpy supports launching an application with a different interpreter then the one used to launch debugpy itself.
       local py_paths = vim.fs.find({'.venv/bin/python3'}, {
         upward = true,
-        path = vim.api.nvim_buf_get_name(0),
         stop = vim.env.HOME,
         type = "file",
       })

@@ -4,7 +4,6 @@ local function venv()
   --- 项目环境
   local py_paths = vim.fs.find({'.venv/bin/python3'}, {
     upward = true,
-    path = vim.api.nvim_buf_get_name(0),
     stop = vim.env.HOME,
     type = "file",
   })

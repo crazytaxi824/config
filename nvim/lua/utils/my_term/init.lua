@@ -30,9 +30,6 @@ M.open_shell_term = function()
     return
   end
 
-  --- get current buffer before terminal:run()
-  local curr_bufname = vim.api.nvim_buf_get_name(0)
-
   local t = M.get_term_by_id(vim.v.count1)
   --- terminal 没有被缓存则 M.new()
   if not t then
@@ -62,7 +59,6 @@ M.open_shell_term = function()
     --- source Python Virtual Environment
     local py_venv = vim.fs.find({'.venv/bin/activate'}, {
       upward = true,
-      path = curr_bufname,
       stop = vim.env.HOME,
       type = "file",
     })
