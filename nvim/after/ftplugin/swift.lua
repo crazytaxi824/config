@@ -38,7 +38,7 @@ local function swift_test_pkg()
 
   --- 判断 class 是否为 class .*: XCTestCase
   local lcontent = vim.fn.getline('.')  -- 获取行内容
-  local test_class = lcontent:match("class%s+([%w_]+)%s*:%s*XCTestCase")
+  local test_class = lcontent:match("class%s+([%w_]+)%s*:%s*[%w_]+TestCase")
   if not test_class then
     Notify('not XCTestCase class', "ERROR")
     return
