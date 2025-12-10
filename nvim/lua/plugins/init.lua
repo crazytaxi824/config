@@ -311,7 +311,7 @@ local plugins = {
   --- telescope 的 preview syntax 默认使用的是 treesitter, 如果没有 treesitter 则使用 vim syntax highlights.
   {
     "nvim-telescope/telescope.nvim",
-    tag = "0.1.8",  -- master branch is nightly version.
+    tag = "v0.2.0",  -- master branch is nightly version.
     config = function() require("plugins.settings.telescope_fzf") end,
     dependencies = {
       "nvim-lua/plenary.nvim",
