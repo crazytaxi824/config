@@ -242,8 +242,9 @@ local plugins = {
 
     -- VVI: 本文件最后设置: 在 `nvim dir` 直接打开文件夹的时直接加载 nvim-tree.lua.
     keys = {
-      {'<leader>;', '<cmd>NvimTreeToggle<CR>', desc='filetree: toggle' },
-      {'<leader><CR>', '<cmd>NvimTreeFindFile!<CR>', desc='filetree: jump to file' },
+      -- {'<leader>;', '<cmd>NvimTreeToggle<CR>', desc='filetree: toggle' },
+      -- {'<leader><CR>', '<cmd>NvimTreeFindFile!<CR>', desc='filetree: jump to file' },
+      {'<S-Tab>', '<cmd>NvimTreeFindFile!<CR>', desc='filetree: jump to file' },
     },
 
     --- `nvim dir` 打开文件夹时直接加载 nvim-tree.lua,
