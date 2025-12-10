@@ -85,8 +85,8 @@ local nt_buffer_keymaps = {
   { "?",           nt_api.tree.toggle_help,    "Help" },
 
   { "a",           nt_api.fs.create,   "Create File" },
-  -- { "d",           nt_api.fs.remove,   "Remove File" },
-  { "D",           nt_api.fs.trash,    "Trash File" },
+  -- { "D",           nt_api.fs.remove,   "Remove File" },  -- `rm file`, 无法将其移动到 Trash Bin
+  { "D",           nt_api.fs.trash,    "Trash File" },   -- `trash file`, 将文件移动到 Trash Bin, 可以还原
   { "R",           nt_api.fs.rename_full,   "Full Rename" },  -- 类似 `$ mv foo bar`
   { "y",           nt_api.fs.copy.absolute_path,   "Copy Absolute Path" },
   { "C",           nt_api.fs.copy.node,   "Copy File" },
@@ -173,7 +173,7 @@ nvim_tree.setup {
   view = {
     --- 在 floating window 中打开 nvim-tree
     float = {
-      enable = true,
+      enable = false,
       open_win_config = {
         relative = "editor",
         border = {"","","","█","▀","▀","▀","█"},
@@ -270,7 +270,7 @@ nvim_tree.setup {
       exclude = { "node_modules", ".mypy_cache", ".git" },  -- NOTE: 排除 expand dir
     },
     open_file = {
-      quit_on_open = false,  -- VVI: 打开文件后自动关闭 Nvimtree
+      quit_on_open = true,  -- VVI: 打开文件后自动关闭 Nvimtree
       resize_window = true,  -- VVI: 重新渲染 nvimtree 窗口大小.
 
       --- 有多个 win 的情况下, 在 nvim-tree 中打开文件时需要选择 window.
