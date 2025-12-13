@@ -223,6 +223,10 @@ export LDFLAGS="-L/opt/homebrew/opt/node@24/lib"
 export CPPFLAGS="-I/opt/homebrew/opt/node@24/include"
 # }}}
 
+# --= [ Godot ] ---------------------------------------------------------------- {{{
+export PATH="/Applications/Godot.app/Contents/MacOS:$PATH"
+# }}}
+
 # }}}
 
 # NOTE: 必须放在 $EDITOR 设置后. `man fzf`
