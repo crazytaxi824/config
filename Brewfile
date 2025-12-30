@@ -6,6 +6,7 @@
 #tap "homebrew/core"
 #tap "homebrew/services"
 #tap "homebrew/bundle"
+tap "gittower/tap"
 
 ### `brew install` ---------------------------------------------------------------------------------
 # fzf
@@ -18,7 +19,7 @@ brew "htop"  # cui top
 
 # git
 brew "git"
-brew "git-flow"  # "git-flow-avh", 二选一即可
+brew "git-flow-next" # brew tap gittower/tap, `$ git flow init`
 brew "git-delta" # git diff 工具
 brew "lazygit"   # git cui 工具, 还有 "gitui"
 
