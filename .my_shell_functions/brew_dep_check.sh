@@ -12,8 +12,7 @@ function checkBrewDep() {
 		return 2
 	fi
 
-	# grep 不支持 \s
-	brew deps --installed | grep --color=always " $1[ @]"
+	brew uses --recursive --installed $1
 }
 
 # 运行函数
