@@ -43,7 +43,7 @@ local plugins = {
 
   {
     "williamboman/mason.nvim",
-    tag = "v2.1.0",
+    tag = "v2.2.1",
     -- commit = "a83eabd",
     -- build = ":MasonUpdate", -- :MasonUpdate updates All Registries, NOT packages.
     config = function() require("plugins.settings.mason_tool_installer") end,
@@ -64,8 +64,8 @@ local plugins = {
 
   {
     "folke/which-key.nvim",
-    -- commit = "68e37e1",
-    tag = "v3.17.0",
+    commit = "3aab214",
+    -- tag = "v3.17.0",
     config = function() require("plugins.settings.which_key") end,
 
     event = "VeryLazy",
@@ -121,7 +121,7 @@ local plugins = {
   --- Auto Completion ------------------------------------------------------------------------------
   {
     "hrsh7th/nvim-cmp",
-    commit = "d97d85e",
+    commit = "85bbfad",
     config = function() require("plugins.settings.cmp_completion") end,
     dependencies = {
       --- VVI: 只有 "cmp-nvim-lsp" 不需要在 "nvim-cmp" 之后加载, 其他 module 都需要在 "nvim-cmp" 之后再加载, 否则报错.
@@ -194,7 +194,7 @@ local plugins = {
 
   {
     "windwp/nvim-autopairs",
-    commit = "d9e44e5",
+    commit = "c2a0dd0",
     config = function() require("plugins.settings.autopairs") end,
     dependencies = {"hrsh7th/nvim-cmp"},  -- cmp.event:on() 设置.
 
@@ -215,7 +215,7 @@ local plugins = {
   --- "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
-    commit = "5abf619",
+    commit = "3c206df",
     config = function() require("lsp.plugins.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -225,7 +225,7 @@ local plugins = {
   {
     "stevearc/conform.nvim",
     -- tag = "v9.1.0",
-    commit = "ffe26e8",
+    commit = "c2526f1",
     config = function() require("plugins.settings.formatter_conform") end,
 
     event = "BufWritePre",
@@ -235,8 +235,7 @@ local plugins = {
   --- File explorer --------------------------------------------------------------------------------
   {
     "nvim-tree/nvim-tree.lua",
-    -- tag = "v1.14.0",
-    commit = "eb33612",
+    tag = "v1.15.0",
     config = function() require("plugins.settings.file_tree") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
 
@@ -278,7 +277,7 @@ local plugins = {
   --- Debug tools 安装 -----------------------------------------------------------------------------
   {
     "mfussenegger/nvim-dap",  -- core debug tool
-    commit = "5860c7c",
+    commit = "085386b",
     config = function() require("plugins.settings.debug.nvim_dap") end,
 
     cmd = {'Debug', 'DapToggleBreakpoint', 'DapContinue'},
@@ -312,7 +311,7 @@ local plugins = {
   --- telescope 的 preview syntax 默认使用的是 treesitter, 如果没有 treesitter 则使用 vim syntax highlights.
   {
     "nvim-telescope/telescope.nvim",
-    tag = "v0.2.0",  -- master branch is nightly version.
+    tag = "v0.2.1",  -- master branch is nightly version.
     config = function() require("plugins.settings.telescope_fzf") end,
     dependencies = {
       "nvim-lua/plenary.nvim",
@@ -344,7 +343,7 @@ local plugins = {
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {
     "lewis6991/gitsigns.nvim",
-    commit = "5813e48",
+    tag = "v2.0.0",
     config = function() require("plugins.settings.git_signs") end,
     dependencies = { "folke/trouble.nvim" },
 
