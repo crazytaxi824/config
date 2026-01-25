@@ -255,8 +255,11 @@ nvim_tree.setup {
   },
   filters = {
     git_ignored = false,  -- 不显示 .gitignore files
-    dotfiles = false,  -- true:不显示隐藏文件, false:显示隐藏文件.
-    custom = { '^\\.DS_Store$', '^\\.git$', '.*\\.swp$', '.*\\.gd\\.uid' },  -- NOTE: 不显示指定文件
+    dotfiles = false,  -- true: 不显示隐藏文件; false: 显示隐藏文件.
+    custom = {  -- NOTE: 不显示指定文件
+      '^\\.DS_Store$', '^\\.git$', '.*\\.swp$',
+      '.*\\.uid$', -- gdscript file
+    },
     exclude = {},  -- List of dir or files to exclude from filtering: always show them.
   },
   actions = {
