@@ -102,7 +102,7 @@ local plugins = {
   --- 第三方 plugin 需要用到 tree-sitter ---
   {
     "windwp/nvim-ts-autotag",  -- auto close tag <div></div>
-    commit = "c4ca798",
+    commit = "db15f2e",
     config = function() require("plugins.settings.treesitter_autotag") end,
     dependencies = { "nvim-treesitter/nvim-treesitter" },
 
@@ -121,7 +121,7 @@ local plugins = {
   --- Auto Completion ------------------------------------------------------------------------------
   {
     "hrsh7th/nvim-cmp",
-    commit = "85bbfad",
+    commit = "da88697",
     config = function() require("plugins.settings.cmp_completion") end,
     dependencies = {
       --- VVI: 只有 "cmp-nvim-lsp" 不需要在 "nvim-cmp" 之后加载, 其他 module 都需要在 "nvim-cmp" 之后再加载, 否则报错.
