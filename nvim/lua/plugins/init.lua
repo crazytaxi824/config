@@ -102,7 +102,7 @@ local plugins = {
   --- 第三方 plugin 需要用到 tree-sitter ---
   {
     "windwp/nvim-ts-autotag",  -- auto close tag <div></div>
-    commit = "db15f2e",
+    commit = "8e1c0a3",
     config = function() require("plugins.settings.treesitter_autotag") end,
     dependencies = { "nvim-treesitter/nvim-treesitter" },
 
@@ -194,7 +194,7 @@ local plugins = {
 
   {
     "windwp/nvim-autopairs",
-    commit = "c2a0dd0",
+    commit = "59bce2e",
     config = function() require("plugins.settings.autopairs") end,
     dependencies = {"hrsh7th/nvim-cmp"},  -- cmp.event:on() 设置.
 
@@ -215,7 +215,7 @@ local plugins = {
   --- "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
-    commit = "3c206df",
+    commit = "68ed8b9",
     config = function() require("lsp.plugins.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -277,7 +277,7 @@ local plugins = {
   --- Debug tools 安装 -----------------------------------------------------------------------------
   {
     "mfussenegger/nvim-dap",  -- core debug tool
-    commit = "085386b",
+    commit = "e47878d",
     config = function() require("plugins.settings.debug.nvim_dap") end,
 
     cmd = {'Debug', 'DapToggleBreakpoint', 'DapContinue'},
