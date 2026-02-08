@@ -57,9 +57,8 @@ end
 --- 初始化 list cache 用于计算和缓存 foldmethod=expr 结果.
 local function init_expr_cache(bufnr)
   local line_count = vim.api.nvim_buf_line_count(bufnr)
-  if line_count < 1 then
-    --- VVI: nvim_buf_line_count() 一个 bdelete bufnr 返回 0.
-    return
+  if line_count <= 1 then
+    return  -- 不需要 fold
   end
 
   foldlevel_cache[bufnr] = {}
@@ -141,23 +140,25 @@ end
 --- https://github.com/kevinhwang91/nvim-ufo/blob/main/lua/ufo/provider/lsp/nvim.lua
 --- 必须保证 lsp 的 client.server_capabilities.foldingRangeProvider == true
 M.lsp_fold_request = function(bufnr, win_id, opts)
+  --- cancel vim.lsp.buf_request_all() if it's already started.
+  --- stop & close timer(defer_fn)
   clearInterval(bufnr)
 
   buf_timer[bufnr] = {}
   buf_timer[bufnr].timer = vim.defer_fn(function()
-    local params = {textDocument = vim.lsp.util.make_text_document_params(bufnr)}
+    local params = { textDocument = vim.lsp.util.make_text_document_params(bufnr) }
     buf_timer[bufnr].cancel = vim.lsp.buf_request_all(bufnr, ms.textDocument_foldingRange, params, function(resp)
-      --- VVI: 获取到 resps 之后再 init cache, 否则可能出现 init cache 之后
+      --- VVI: 获取到 resp 之后再 init cache, 否则可能出现 init cache 之后
       --- buf_request_all() 失败导致 str_cache[bufnr] = {'0', ...} 被全部初始化为 "0".
       if not init_expr_cache(bufnr) then
-        --- 如果返回 false 说明 bufnr 已经被关闭, 不需要计算 fold 了.
+        --- 如果返回 false 说明 bufnr 不需要计算 fold.
         return
       end
 
       --- lsp fold 是否设置成功.
       local set_fold_success = false
 
-      --- resps = { client_id: data }.
+      --- resp = { client_id: data }
       for lsp_client_id, data in pairs(resp) do
         if data.result and #data.result > 0 then
           --- VVI: 因为 buf_request_all() 是一个异步函数, 这里必须检查 win_id 是否存在.
