@@ -6,6 +6,8 @@ gui:
   language: "en" # one of 'auto' | 'en' | 'zh' | 'pl' | 'nl'
   #mainPanelSplitMode: "horizontal"  # main pannel(stage) 分屏方式 'horizontal' | 'flexible'(*) | 'vertical'
   nerdFontsVersion: "3" # '2' | '3' | ''(*) - If empty, do not show icon.
+  timeFormat: 02-Jan-2006  # Uses Go's time format syntax: https://pkg.go.dev/time#Time.Format
+  shortTimeFormat: 15:04 # Format used when displaying time if the time is less than 24 hours ago.
   theme:
     activeBorderColor: # cursor 所在 window 的 border 颜色.
       - yellow
@@ -67,9 +69,9 @@ git:
     - git log --color=always --date=format:'%d-%b-%Y %H:%M:%S' --graph --all --format=format:'%C(auto)%h -%d %C(74)%ad %C(243)(%ar) - %C(173)%an%C(reset)%n''          %C(auto)%s%n'' '
 
 # 刷新状态
-# refresher:
-#   refreshInterval: 10 # 单位(s). 刷新本地 git 文件状态. 可以通过 'git.autoRefresh' 启用/禁用.
-#   fetchInterval: 60 #  单位(s). 自动执行 git fetch. 可以通过 'git.autoFetch' 启用/禁用.
+refresher:
+  refreshInterval: 10 # (s). 刷新本地 git 文件状态. 可以通过 'git.autoRefresh' 启用/禁用.
+  fetchInterval: 300  # (s). 自动执行 git fetch. 可以通过 'git.autoFetch' 启用/禁用.
 
 # 打开 lazygit 的文件夹不是 git repository 文件夹时的 action
 # prompt - 选择是否创建 repository
