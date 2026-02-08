@@ -13,12 +13,22 @@ M.foldtext_str = 'v:lua.require("core.fold.foldtext").foldtext_lsp()'
 --- VVI: foldexpr='v:lua.xxx' 设置时, vim 中的 table key 必须是连续的 int, 或者是 string.
 local foldlevel_cache = {}
 
-M.clear_cache =function(bufnr)
-  foldlevel_cache[bufnr] = nil
+--- `set foldexpr=xxx` 用
+--- NOTE: 每次 `set foldmethod=expr` 都会重新执行 foldexpr()
+M.foldexpr = function(lnum)
+  local bufnr = vim.api.nvim_get_current_buf()
+  if foldlevel_cache[bufnr] then
+    return foldlevel_cache[bufnr][lnum] or 0
+  end
+  return 0
 end
 
 M.debug = function()
   vim.print(foldlevel_cache)
+end
+
+M.clear_cache =function(bufnr)
+  foldlevel_cache[bufnr] = nil
 end
 
 --- cache map[bufnr] = { timer = defer_fn(), cancel = vim.lsp.buf_request_all() }
@@ -31,6 +41,7 @@ local function clearInterval(bufnr)
   end
 
   --- cancel vim.lsp.buf_request_all() if it's already started.
+  --- 只要调用了 cancel()，handler 函数就不会被调用.
   local cancel = buf_timer[bufnr].cancel
   if cancel then cancel() end
 
@@ -42,16 +53,6 @@ local function clearInterval(bufnr)
       timer:close()
     end
   end
-end
-
---- `set foldexpr=xxx` 用
---- NOTE: 每次 `set foldmethod=expr` 都会重新执行 foldexpr()
-M.foldexpr = function(lnum)
-  local bufnr = vim.api.nvim_get_current_buf()
-  if foldlevel_cache[bufnr] then
-    return foldlevel_cache[bufnr][lnum] or 0
-  end
-  return 0
 end
 
 --- 初始化 list cache 用于计算和缓存 foldmethod=expr 结果.
@@ -141,7 +142,7 @@ end
 --- 必须保证 lsp 的 client.server_capabilities.foldingRangeProvider == true
 M.lsp_fold_request = function(bufnr, win_id, opts)
   --- cancel vim.lsp.buf_request_all() if it's already started.
-  --- stop & close timer(defer_fn)
+  --- stop & close timer(由 defer_fn() 返回)
   clearInterval(bufnr)
 
   buf_timer[bufnr] = {}
