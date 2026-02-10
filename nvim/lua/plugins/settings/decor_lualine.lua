@@ -193,6 +193,7 @@ end
 
 -- -- }}}
 
+--- current git branch
 local bufvar_branch = 'my_current_branch'
 
 --- `:help lualine-Global-options`
