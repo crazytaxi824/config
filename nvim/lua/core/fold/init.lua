@@ -1,6 +1,5 @@
 local expr_lsp = require("core.fold.fold_lsp")
 local expr_ts = require("core.fold.fold_treesitter")
-local filetype_lsp = require("lsp.svr_list").filetype_lsp
 
 --- 使用 lsp 来 fold, 如果 lsp_fold 设置成功则返回 true.
 local function fold_lsp(bufnr, win_id, opts)
@@ -46,47 +45,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end
 
     --- 如果 lsp 和 filetype 不对应则返回, 防止 null-ls 等 lsp 工具参与设置 fold.
-    if
-      vim.tbl_contains(filetype_lsp[vim.bo[params.buf].filetype], client.name)
-      and client:supports_method("textDocument/foldingRange", params.buf)
-    then
+    if client:supports_method("textDocument/foldingRange", params.buf) then
       fold_lsp(params.buf, win_id, { treesitter_fallback = true })
     end
   end,
   desc = "Fold: fold-lsp when LspAttach with treesitter_fallback",
-})
-
-vim.api.nvim_create_autocmd("FileType", {
-  group = g_id,
-  pattern = { "*" },
-  callback = function(params)
-    --- 如果是有 lsp 的 filetype 则等 LspAttach 时设置 fold.
-    if vim.tbl_contains(vim.tbl_keys(filetype_lsp), vim.bo[params.buf].filetype) then
-      return
-    end
-
-    local win_id = vim.api.nvim_get_current_win()
-
-    --- 确保当前 focused window 没有加载其他 buffer.
-    if vim.api.nvim_win_get_buf(win_id) ~= params.buf then
-      return
-    end
-
-    --- foldmethod 可能是 marker, indent, expr...
-    --- foldmethod ~= manual 说明其他插件已经设置过 foldmethod.
-    if vim.wo[win_id].foldmethod ~= "manual" then
-      return
-    end
-
-    --- fold 已经设置成功了.
-    if vim.wo[win_id].foldexpr ~= "0" then
-      return
-    end
-
-    --- try fold-treesitter
-    fold_treesitter(params.buf, win_id)
-  end,
-  desc = "Fold: fold-treesitter when FileType",
 })
 
 --- 重新设置 foldmethod=expr 来 update foldexpr().
@@ -138,10 +101,7 @@ vim.api.nvim_create_user_command("FoldReset", function()
   local clients = vim.lsp.get_clients({ bufnr = bufnr })
   for _, client in ipairs(clients) do
     --- 如果 lsp 和 filetype 不对应则返回, 防止 null-ls 等 lsp 工具参与设置 fold.
-    if
-      vim.tbl_contains(filetype_lsp[vim.bo[bufnr].filetype], client.name)
-      and client:supports_method("textDocument/foldingRange", bufnr)
-    then
+    if client:supports_method("textDocument/foldingRange", bufnr) then
       fold_lsp(bufnr, win_id, { treesitter_fallback = true })
       vim.api.nvim_set_option_value('foldlevel', 0, { scope = 'local', win = win_id })
       return

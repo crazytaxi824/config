@@ -10,79 +10,79 @@ M.list = {
   lua_ls = {
     cmd = "lua-language-server",
     mason = "lua-language-server",
-    filetypes = {'lua'}
+    -- filetypes = {'lua'}
   },
   ts_ls = {
     cmd = "typescript-language-server",
     mason = "typescript-language-server",
-    filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" }
+    -- filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" }
   },
   bashls = {
     cmd = "bash-language-server",
     mason = "bash-language-server",
-    filetypes = {'sh'}
+    -- filetypes = {'sh'}
   },
   gopls = {
     cmd = "gopls",
     mason = "gopls",
     install = "go install golang.org/x/tools/gopls@latest",
-    filetypes = {'go', 'gomod', 'gowork', 'gotmpl'}
+    -- filetypes = {'go', 'gomod', 'gowork', 'gotmpl'}
   },
   --- pyrightconfig.json: https://github.com/microsoft/pyright/blob/main/docs/configuration.md
   --- pyproject.toml: https://github.com/microsoft/pyright/blob/main/docs/configuration.md#sample-pyprojecttoml-file
   pyright = {  --- for textDocument/hover ...
     cmd = "pyright",
     mason = "pyright",
-    filetypes = {'python'}
+    -- filetypes = {'python'}
   },
   --- pyproject.toml & ruff.toml: https://docs.astral.sh/ruff/tutorial/#configuration
   --- 'ruff' can be used to replace Flake8, Black, isort, pydocstyle, pyupgrade, autoflake ...
   ruff = {
     cmd = "ruff",
     mason = "ruff",
-    filetypes = {'python'}
+    -- filetypes = {'python'}
   },
   html = {
     cmd = "vscode-html-language-server",
     mason = "html-lsp",
-    filetypes = {'html'}
+    -- filetypes = {'html'}
   },
   cssls = {
     cmd = "vscode-css-language-server",
     mason = "css-lsp",
-    filetypes = {'css', 'scss', 'less'}
+    -- filetypes = {'css', 'scss', 'less'}
   },
   jsonls = {
     cmd = "vscode-json-language-server",
     mason = "json-lsp",
-    filetypes = {'json', 'jsonc'}
+    -- filetypes = {'json', 'jsonc'}
   },
   --- VVI: need `npm install eslint`, `npm init @eslint/config`. 会生成 "eslint.config.mjs" 配置文件.
   --- 没有 "eslint.config.mjs" 配置文件 eslint-lsp 无法找到 root, 因此无法启动.
   eslint = {
     cmd = "vscode-json-language-server",
     mason = "eslint-lsp",
-    filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx", "vue", "svelte", "astro" },
+    -- filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx", "vue", "svelte", "astro" },
   },
   gdscript = {
     cmd = "nc", -- system builtin: TCP and UDP connections and listens
     install = "system builtin",
-    filetypes = { 'gd', 'gdscript', 'gdscript3' },
+    -- filetypes = { 'gd', 'gdscript', 'gdscript3' },
   },
   sourcekit = {
     cmd = "sourcekit-lsp",
     install = "`brew install sourcekit-lsp` or `xcode-select --install`",
-    filetypes = { 'swift' }, -- { "swift", "objc", "objcpp", "c", "cpp" }
+    -- filetypes = { 'swift' }, -- { "swift", "objc", "objcpp", "c", "cpp" }
   },
 }
 
---- { javascript = { eslint, tsserver }, ... }
-M.filetype_lsp = {}
-for lsp_svr, v in pairs(M.list) do
-  for _, ft in ipairs(v.filetypes) do
-    M.filetype_lsp[ft] = M.filetype_lsp[ft] or {}
-    table.insert(M.filetype_lsp[ft], lsp_svr)
-  end
-end
+-- --- { javascript = { eslint, tsserver }, ... }
+-- M.filetype_lsp = {}
+-- for lsp_svr, v in pairs(M.list) do
+--   for _, ft in ipairs(v.filetypes) do
+--     M.filetype_lsp[ft] = M.filetype_lsp[ft] or {}
+--     table.insert(M.filetype_lsp[ft], lsp_svr)
+--   end
+-- end
 
 return M
