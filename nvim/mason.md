@@ -16,7 +16,6 @@ Installed
   ✓ lua-language-server
   ✓ prettier
   ✓ pyright
-  ✓ ruff
   ✓ shfmt
   ✓ sql-formatter
   ✓ sqls
