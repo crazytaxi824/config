@@ -88,7 +88,7 @@ vim.api.nvim_create_user_command("Fold", function(params)
     return
   end
 
-  vim.notify("Fold auto | Fold lsp | Fold ts")
+  vim.notify(":Fold auto | lsp | ts", vim.log.levels.WARN)
 end, {
   nargs = 1,
   bang = true,
