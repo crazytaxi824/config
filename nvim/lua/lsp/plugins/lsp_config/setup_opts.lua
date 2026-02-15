@@ -1,21 +1,19 @@
---- DOCS: `:help vim.lsp.start()` & `:help vim.lsp.ClientConfig`
---  - capabilities  给 cmp 自动补全提供内容.
---  - on_attach     当 LSP 存在时加载设置 key_mapping, highlight ... 等设置.
---  - on_init = function(lsp_client) -- https://github.com/neovim/nvim-lspconfig/wiki/Project-local-settings
---      可以用来加载 project local settings.
---      修改之后使用 lsp_client.notify("workspace/didChangeConfiguration") 通知 LSP server.
+--- DOCS: `:help vim.lsp.ClientConfig`
+
+local ms = vim.lsp.protocol.Methods
 
 local M = {}
 
---- NOTE: 停止输入文字的时间超过该数值, 则向 lsp server 发送请求.
+--- 停止输入文字的时间超过该数值, 则向 lsp server 发送请求.
 --- 如果 "diagnostic.config({update_in_insert = false})", 则该设置应该不生效.
 M.flags = { debounce_text_changes = 500 }   --- 默认 150.
 
---- NOTE: on_error() invoked when the client operation throws an error.
+--- on_error() invoked when the client operation throws an error. ----------------------------------
 M.on_error = function(code)
   Notify(vim.inspect(vim.lsp.rpc.client_errors[code]), "ERROR", {title = "lspconfig/setup_opts.lua"})
 end
 
+--- capabilities -----------------------------------------------------------------------------------
 --- VVI: lspconfig 必须在 cmp_nvim_lsp 之后加载, 否则可能无法提供代码补全.
 local status_ok, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
 if not status_ok then
@@ -25,7 +23,7 @@ if not status_ok then
     'LSP Auto-Completion may NOT be able to use.',
   }, 'INFO')
 
-  --- NOTE: lspconfig default_config 中 capabilities 有默认设置.
+  --- lspconfig default_config 中 capabilities 有默认设置.
   --- https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig/util.lua
   M.capabilities = vim.lsp.protocol.make_client_capabilities()
 else
@@ -42,7 +40,7 @@ M.capabilities.textDocument.foldingRange = {
   lineFoldingOnly = true
 }
 
---- NOTE: before_init() can be used to debug lsp configs.
+--- before_init() can be used to debug lsp configs. ------------------------------------------------
 -- M.before_init = function(initialize_params, config)
 --   vim.print(initialize_params)
 --   vim.print(config)
@@ -62,6 +60,11 @@ M.local_lspconfig_key = "lsp"
 
 --- on_init() run before on_attach(), 可以通过打印看出先后顺序.
 M.on_init = function(client, result)
+  --- 如果 client.config.settings 不存在, 则赋值/修改也无法生效.
+  if not client.config.settings then
+    return
+  end
+
   --- 加载项目本地设置, 覆盖 global settings -----------------------------
   --- DOCS: https://github.com/neovim/nvim-lspconfig/wiki/Project-local-settings
   local proj_local_settings = require("lsp.plugins.load_proj_settings")
@@ -92,12 +95,12 @@ M.on_init = function(client, result)
   return true
 end
 
---- NOTE: on_attach - 加载 Key mapping & highlight 设置
----       这里传入的 client 是正在加载的 lsp_client, vim.print(client) 中可以看到 codeActionKind.
+--- on_attach - 加载 Key mapping & highlight 设置
+--- 这里传入的 client 是正在加载的 lsp_client, vim.print(client) 中可以看到 codeActionKind.
 M.on_attach = function(client, bufnr)
   --- 加载自定义设置 ---
   --- textDocument/documentHighlight, 显示 references
-  if client:supports_method('textDocument/documentHighlight', bufnr) then
+  if client:supports_method(ms.textDocument_documentHighlight, bufnr) then
     require("lsp.plugins.custom_requests.doc_highlight").setup(client, bufnr)
   end
 
@@ -111,9 +114,5 @@ M.on_attach = function(client, bufnr)
     Notify("LSP Server attach: " .. client.name .. " - bufnr(" .. bufnr .. ")", "DEBUG", {title="LSP"})
   end
 end
-
---- VVI: autostart 不要设置为 false, 会造成很多问题.
---- 需要启动多个 lsp 实例的时候, 如果 autostart 为 false, 则每次都需要手动启动. eg: `:LspStart pyright`
---M.autostart = false  -- 默认为 true
 
 return M
