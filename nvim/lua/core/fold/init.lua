@@ -2,12 +2,10 @@ local expr_lsp = require("core.fold.fold_lsp")
 local expr_ts = require("core.fold.fold_treesitter")
 local ms = vim.lsp.protocol.Methods
 
---- NOTE: 根据 "lsp.lsp_config.lsp_list".filetype_lsp 判断使用 lsp fold OR treesitter fold.
---- 如果 lsp 不支持 'textDocument/foldingRange' 则尝试 treesitter fold.
 --- FileType 在 LspAttach 前触发.
-local g_id = vim.api.nvim_create_augroup("my_fold_lsp", { clear = true })
-vim.api.nvim_create_autocmd("LspAttach", {
-  group = g_id,
+local ts_gid = vim.api.nvim_create_augroup("my_fold_ts", { clear = true })
+vim.api.nvim_create_autocmd("FileType", {
+  group = ts_gid,
   pattern = { "*" },
   callback = function(params)
     local win_id = vim.api.nvim_get_current_win()
@@ -15,16 +13,35 @@ vim.api.nvim_create_autocmd("LspAttach", {
     --- foldmethod = "manual" | "marker" | "indent" | "expr" ...
     --- foldmethod ~= "manual" 说明其他插件已经设置过 foldmethod.
     --- foldexpr ~= "0" 说明 foldexpr 已经被设置.
-    if vim.wo[win_id].foldmethod ~= "manual" or vim.wo[win_id].foldexpr ~= "0" then
-      return
+    local can_ts_fold = vim.wo[win_id].foldmethod == "manual" and vim.wo[win_id].foldexpr == "0"
+    if can_ts_fold then
+      expr_ts.set_fold(params.buf, win_id)
     end
+  end,
+  desc = "Fold: fold-ts when FileType",
+})
+
+--- NOTE: 根据 "lsp.lsp_config.lsp_list".filetype_lsp 判断使用 lsp fold OR treesitter fold.
+--- 如果 lsp 不支持 'textDocument/foldingRange' 则尝试 treesitter fold.
+local lsp_gid = vim.api.nvim_create_augroup("my_fold_lsp", { clear = true })
+vim.api.nvim_create_autocmd("LspAttach", {
+  group = lsp_gid,
+  pattern = { "*" },
+  callback = function(params)
+    local win_id = vim.api.nvim_get_current_win()
 
     local client = vim.lsp.get_client_by_id(params.data.client_id)
     if not client or not client:supports_method(ms.textDocument_foldingRange, params.buf) then
       return
     end
 
-    expr_lsp.set_fold(params.buf, win_id)
+    --- foldmethod = "manual" | "marker" | "indent" | "expr" ...
+    local can_lsp_fold = (vim.wo[win_id].foldmethod == "manual" and vim.wo[win_id].foldexpr == "0") or
+      (vim.wo[win_id].foldmethod == "expr" and vim.wo[win_id].foldexpr == 'v:lua.vim.treesitter.foldexpr()')
+
+    if can_lsp_fold then
+      expr_lsp.set_fold(params.buf, win_id)
+    end
   end,
   desc = "Fold: fold-lsp when LspAttach",
 })
