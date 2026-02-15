@@ -37,7 +37,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
     --- foldmethod = "manual" | "marker" | "indent" | "expr" ...
     local can_lsp_fold = (vim.wo[win_id].foldmethod == "manual" and vim.wo[win_id].foldexpr == "0") or
-      (vim.wo[win_id].foldmethod == "expr" and vim.wo[win_id].foldexpr == 'v:lua.vim.treesitter.foldexpr()')
+      (vim.wo[win_id].foldmethod == "expr" and vim.wo[win_id].foldexpr == expr_ts.foldexpr_str)
 
     if can_lsp_fold then
       expr_lsp.set_fold(params.buf, win_id)
