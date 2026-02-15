@@ -2,12 +2,10 @@ local expr_lsp = require("core.fold.fold_lsp")
 local expr_ts = require("core.fold.fold_treesitter")
 local ms = vim.lsp.protocol.Methods
 
---- create fold augroup
-local g_id = vim.api.nvim_create_augroup("my_fold", { clear = true })
-
 --- NOTE: 根据 "lsp.lsp_config.lsp_list".filetype_lsp 判断使用 lsp fold OR treesitter fold.
 --- 如果 lsp 不支持 'textDocument/foldingRange' 则尝试 treesitter fold.
---- LspAttach 和 FileType 执行顺序不确定.
+--- FileType 在 LspAttach 前触发.
+local g_id = vim.api.nvim_create_augroup("my_fold_lsp", { clear = true })
 vim.api.nvim_create_autocmd("LspAttach", {
   group = g_id,
   pattern = { "*" },
@@ -34,11 +32,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
 --- User Command 手动强制重新设置 fold -------------------------------------------------------------
 --- Fold auto | Fold lsp | Fold ts
 vim.api.nvim_create_user_command("Fold", function(params)
-  --- params.args: string
-  --- params.fargs: list
   local win_id = vim.api.nvim_get_current_win()
   local bufnr = vim.api.nvim_win_get_buf(win_id)
 
+  --- params.args: string
+  --- params.fargs: list
   local arg = params.args:lower()
   if arg == "auto" then
     --- 如果有 lsp 则尝试 lsp fold, fallback to treesitter fold.
@@ -57,7 +55,6 @@ vim.api.nvim_create_user_command("Fold", function(params)
     return
 
   elseif arg == "lsp" then
-    --- 如果有 lsp 则尝试 lsp fold, fallback to treesitter fold.
     local clients = vim.lsp.get_clients({ bufnr = bufnr })
     for _, client in ipairs(clients) do
       if client:supports_method(ms.textDocument_foldingRange, bufnr) then
@@ -69,7 +66,6 @@ vim.api.nvim_create_user_command("Fold", function(params)
     return
 
   elseif arg == "ts" or arg == "treesitter" then
-    --- 没有 lsp 直接尝试 treesitter fold
     expr_ts.set_fold(bufnr, win_id)
     vim.api.nvim_set_option_value('foldlevel', 0, { scope = 'local', win = win_id })
     return

@@ -1,5 +1,4 @@
---- nvim-treesitter 提供的 fold 方法 'nvim_treesitter#foldexpr()', 不是很稳定.
-
+--- NOTE: `:help vim.treesitter.foldexpr()`
 local foldexpr_str = 'v:lua.vim.treesitter.foldexpr()'
 local foldtext_str = 'v:lua.require("core.fold.foldtext").foldtext()'
 
