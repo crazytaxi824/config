@@ -1,3 +1,4 @@
+--- https://www.schemastore.org
 local schemas = {
   {
     description = "TypeScript compiler configuration file",
@@ -168,14 +169,5 @@ return {
       validate = { enable = true },  -- VVI: 开启 diagnostic, 默认不开启.
       schemas = schemas,
     },
-  },
-  setup = {
-    commands = {
-      Format = {
-        function()
-          vim.lsp.buf.range_formatting({}, { 0, 0 }, { vim.fn.line "$", 0 })
-        end,
-      },
-    },
-  },
+  }
 }
