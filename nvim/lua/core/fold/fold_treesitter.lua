@@ -2,7 +2,6 @@ local M = {}
 
 --- NOTE: `:help vim.treesitter.foldexpr()`
 M.foldexpr_str = 'v:lua.vim.treesitter.foldexpr()'
-M.foldtext_str = 'v:lua.require("core.fold.foldtext").foldtext()'
 
 M.set_fold = function(bufnr, win_id)
   --- VVI: 可能在异步函数中执行, 必须检查 window 中的 buffer 是否已经被改变.
@@ -17,7 +16,6 @@ M.set_fold = function(bufnr, win_id)
   end
 
   vim.api.nvim_set_option_value('foldexpr', M.foldexpr_str, { scope = 'local', win = win_id })
-  vim.api.nvim_set_option_value('foldtext', M.foldtext_str, { scope = 'local', win = win_id })
   vim.api.nvim_set_option_value('foldmethod', 'expr', { scope = 'local', win = win_id })
 end
 
