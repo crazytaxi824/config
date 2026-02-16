@@ -1,4 +1,5 @@
 Installed
+  ✓ golangci-lint
   ✓ bash-language-server
   ✓ buf
   ✓ css-lsp
@@ -16,6 +17,7 @@ Installed
   ✓ lua-language-server
   ✓ prettier
   ✓ pyright
+  ✓ ruff
   ✓ shfmt
   ✓ sql-formatter
   ✓ sqls
