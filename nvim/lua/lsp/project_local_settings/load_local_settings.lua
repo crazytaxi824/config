@@ -1,3 +1,5 @@
+local lsp_key = require("lsp.plugins.lsp_config.setup_opts").local_lspconfig_key
+
 --- read settings.json file
 --- 如果 return {} 表示 settings.json 被清除, 需要更新 lsp settings. 包含两种情况:
 ---   1. settings.json 被删除
@@ -72,5 +74,15 @@ local function parse_local_lsp_settings(settings)
   return settings
 end
 
+local M = {}
 
+M.get_local_settings_content = function()
+  local r = read_local_settings()
+  if not r then
+    error("project local 'settings.json' format error")
+    return {}
+  end
+  return parse_local_lsp_settings(r)
+end
 
+return M

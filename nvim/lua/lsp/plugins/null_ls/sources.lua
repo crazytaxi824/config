@@ -10,6 +10,7 @@ if not null_ls_status_ok then
   return
 end
 
+--- 加载 local settings
 local proj_local_settings = require("lsp.plugins.load_proj_settings")
 
 local M = {}
