@@ -14,7 +14,7 @@ local proj_local_settings = require("lsp.plugins.load_proj_settings")
 
 local M = {}
 
---- diagnostics_opts 用于下面的 sources diagnostics 设置
+--- diagnostics_opts 用于下面的 sources diagnostics 设置 ------------------------------------------- {{{
 local diagnostics_opts = {
   --method = null_ls.methods.DIAGNOSTICS_ON_SAVE,  -- `lua vim.print(require('null-ls').methods)`
   --timeout = 3000,  -- 单独给 linter 设置超时时间. 全局设置了 default_timeout.
@@ -39,15 +39,13 @@ local diagnostics_opts = {
   --   diagnostic.message = diagnostic.message .. ' [null-ls]'
   -- end,
 }
+-- }}}
 
 --- linters 设置 -----------------------------------------------------------------------------------
 M.local_linter_key = "linter"
 M.local_code_actions_key = "code_actions"
 -- M.local_formatter_key = "format"
 
---- NOTE: 同一个工具可能有好几种不同的用途, 需要分开设置, eg: `buf`
---- - null_ls.builtins.diagnostics.buf  linter protobuf
---- - null_ls.builtins.formatting.buf   format protobuf
 local diagnostics = null_ls.builtins.diagnostics
 local code_actions = null_ls.builtins.code_actions
 -- local formatting = null_ls.builtins.formatting
@@ -70,6 +68,9 @@ M.sources =  {
     end,
 
     --- protobuf: buf
+    --- NOTE: 同一个工具可能有好几种不同的用途, 需要分开设置, eg: `buf`
+    --- - null_ls.builtins.diagnostics.buf  linter protobuf
+    --- - null_ls.builtins.formatting.buf   format protobuf
     buf = function()
       return diagnostics.buf.with(proj_local_settings.tools_keep_extend(M.local_linter_key, 'buf', diagnostics_opts))
     end,
