@@ -17,7 +17,6 @@ local function format_by_ft()
     --["*"] = { "codespell" }, --- all filetypes
   }
 
-  --- https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTINS.md#prettier
   --- all prettier filetypes
   local prettier_ft = {
     "javascript", "javascriptreact", "typescript", "typescriptreact",
@@ -32,7 +31,7 @@ local function format_by_ft()
   ---  for Godot's gdscript
   local gd_ft = { 'gd', 'gdscript', 'gdscript3' }
   for _, ft in ipairs(gd_ft) do
-    filetype_formatter[ft] = { "gdformat" }
+    filetype_formatter[ft] = { "gdformat" }  -- mason: gdtoolkit
   end
 
   return filetype_formatter
