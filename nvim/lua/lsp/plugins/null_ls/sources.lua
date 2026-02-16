@@ -90,7 +90,7 @@ local code_actions = null_ls.builtins.code_actions
 --- 而调用函数返回 table 的好处是: 每次执行函数时 table 中的内容都会重新生成.
 M.sources =  {
   [M.local_linter_key] = {
-    --- golangci-lint 配置文件位置自动查找 ------------------------------------- {{{
+    --- go:golangci-lint 配置文件位置自动查找 ---------------------------------- {{{
     --- DOCS: https://golangci-lint.run/usage/configuration/#linters-configuration
     --- golangci-lint 会自动寻找 '.golangci.yml', '.golangci.yaml', '.golangci.toml', '.golangci.json'.
     --- GolangCI-Lint also searches for config files in all directories from the directory of
@@ -105,6 +105,11 @@ M.sources =  {
     --- protobuf: buf
     buf = function()
       return diagnostics.buf.with(proj_local_settings.tools_keep_extend(M.local_linter_key, 'buf', diagnostics_opts))
+    end,
+
+    --- gdscript: gdlint
+    gdlint = function()
+      return diagnostics.gdlint.with(diagnostics_opts)
     end,
 
     --- python: using 'ruff' lsp instead
