@@ -16,51 +16,18 @@ local M = {}
 
 --- diagnostics_opts 用于下面的 sources diagnostics 设置
 local diagnostics_opts = {
-  --- 只在 save 的时候执行 diagnostics.
-  --- 其他 methods ------------------------------------------------------------- {{{
-  --- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/master/lua/null-ls/methods.lua
-  -- local internal_methods = {
-  --     --- for code_actions
-  --     CODE_ACTION = "NULL_LS_CODE_ACTION",
-  --
-  --     --- for linter diagnostics
-  --     DIAGNOSTICS = "NULL_LS_DIAGNOSTICS",
-  --     DIAGNOSTICS_ON_OPEN = "NULL_LS_DIAGNOSTICS_ON_OPEN",
-  --     DIAGNOSTICS_ON_SAVE = "NULL_LS_DIAGNOSTICS_ON_SAVE",
-  --
-  --     --- for formatter
-  --     FORMATTING = "NULL_LS_FORMATTING",
-  --     RANGE_FORMATTING = "NULL_LS_RANGE_FORMATTING",
-  --
-  --     --- for hover
-  --     HOVER = "NULL_LS_HOVER",
-  --
-  --     --- for COMPLETION
-  --     COMPLETION = "NULL_LS_COMPLETION",
-  -- }
-  --- --}}}
-  method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
+  --method = null_ls.methods.DIAGNOSTICS_ON_SAVE,  -- `lua vim.print(require('null-ls').methods)`
+  --timeout = 3000,  -- 单独给 linter 设置超时时间. 全局设置了 default_timeout.
+  --diagnostics_format = "#{m} [null-ls:#{s}]",  -- 单独给 linter 设置 diagnostics_format.
 
   --- VVI: 耗资源, 每次运行 linter 前都要运行该函数, 不要进行复杂运算.
   runtime_condition = function(params)
-    --- DO NOT lint readonly files
+    --- DO NOT lint readonly files, readonly 包括了 'go env GOROOT GOMODCACHE'
     if vim.bo.readonly then
       return false  -- false 不执行 lint
     end
-
-    --- NOTE: ignore 文件夹中的文件不进行 lint
-    local ignore_lint_folders = {"node_modules"}  -- readonly 中包括了 'go env GOROOT GOMODCACHE'
-    for _, ignored in ipairs(ignore_lint_folders) do
-      if string.match(params.bufname, ignored) then
-        return false  -- false 不执行 lint
-      end
-    end
-
     return true
   end,
-
-  --timeout = 3000,   -- 单独给 linter 设置超时时间. 全局设置了 default_timeout.
-  --diagnostics_format = "#{m} [null-ls:#{s}]",  -- 单独给 linter 设置 diagnostics_format.
 
   --- NOTE: Post Hook, 会导致 diagnostics_format 设置失效. 可以单独给 linter 设置 post hook.
   --- This option is not compatible with 'diagnostics_format'.
@@ -108,9 +75,7 @@ M.sources =  {
     end,
 
     --- gdscript: gdlint
-    gdlint = function()
-      return diagnostics.gdlint.with(diagnostics_opts)
-    end,
+    diagnostics.gdlint,
 
     --- python: using 'ruff' lsp instead
   },
