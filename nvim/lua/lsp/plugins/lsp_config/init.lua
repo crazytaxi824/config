@@ -1,5 +1,4 @@
---- 通过 mason 安装 lsp 时需要对应名字. https://github.com/williamboman/mason-lspconfig.nvim/blob/main/doc/server-mapping.md
---- 要手动启动 lsp, 使用 `:LspStart xxx`
+--- NOTE: lsp 设置: https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
 
 --- 获取 lsp 列表.
 local lsp_servers_map = require('lsp.svr_list').list
@@ -12,8 +11,7 @@ local function lspconfig_setup(lsp_svr)
 
   --- 加载 lsp 配置文件, "~/.config/nvim/lua/lsp/plugins/lsp_config/langs/..."
   --- 如果文件存在, 则加载自定义设置, 如果没有自定义设置则加载默认设置.
-  --- NOTE: 单独 lsp 设置: https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
-  --- VVI: 必须 after require("lsp.plugins.lsp_config.setup_opts").
+  --- VVI: 必须 after require("lsp.plugins.lsp_config.setup_opts")
   local lsp_custom_status_ok, lsp_custom_opts = pcall(require, "lsp.plugins.lsp_config.langs." .. lsp_svr)
   if lsp_custom_status_ok then
     --- lsp_custom_opts: 初始设置
