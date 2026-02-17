@@ -11,12 +11,12 @@ if not null_ls_status_ok then
 end
 
 --- 加载 local settings
-local proj_local_settings = require("lsp.plugins.load_proj_settings")
 local local_linter_settings = require("lsp.project_local_settings.load_local_settings").get_local_linter_settings()
 
 local M = {}
 
 --- diagnostics_opts 用于下面的 sources diagnostics 设置 ------------------------------------------- {{{
+--- https://github.com/nvimtools/none-ls.nvim/blob/main/doc/HELPERS.md
 local diagnostics_opts = {
   --method = null_ls.methods.DIAGNOSTICS_ON_SAVE,  -- `lua vim.print(require('null-ls').methods)`
   --timeout = 3000,  -- 单独给 linter 设置超时时间. 全局设置了 default_timeout.
