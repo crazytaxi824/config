@@ -2,7 +2,7 @@
 --- <cword> under the cursor need to be a interface name.
 --  `impl -dir src Cat IAnimal`
 --      - 'Cat'      是我们需要定义的 type, 也就是以下传入的 obj.
---      - 'Animal'   是 interface 的名字, 使用时需要将 cursor 放在 Animal 上.
+--      - 'IAnimal'   是 interface 的名字, NOTE: 使用时需要将 cursor 放在 IAnimal 上 <cword>.
 --  `:call writefile(["foo"], "src/main.go", "a")`  -- 'a': append mode, 将数据写入文件最后.
 --
 --  操作方法, cursor 指向 interface Name <cword>, 使用 Command `:GoImpl Foo`
@@ -39,6 +39,7 @@ M.go_impl = function(arglist)
   --- 写入当前文件
   vim.fn.writefile(msg, vim.fn.bufname(), 'a')  -- 'a' append mode
 
+  --- FIXME: nvim_buf_set_lines()
   vim.cmd.checktime()
   vim.cmd.normal({ args = {'G'}, bang=true })  -- ':normal! G'
 end
