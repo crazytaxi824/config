@@ -15,7 +15,7 @@ local local_linter_settings = require("lsp.project_local_settings.load_local_set
 
 local M = {}
 
---- diagnostics_opts 用于下面的 sources diagnostics 设置 ------------------------------------------- {{{
+--- diagnostics_opts 用于下面的 sources diagnostics 设置 --- {{{
 --- https://github.com/nvimtools/none-ls.nvim/blob/main/doc/HELPERS.md
 local diagnostics_opts = {
   --method = null_ls.methods.DIAGNOSTICS_ON_SAVE,  -- `lua vim.print(require('null-ls').methods)`
@@ -44,10 +44,6 @@ local diagnostics_opts = {
 -- }}}
 
 --- linters 设置 -----------------------------------------------------------------------------------
-M.local_linter_key = "linter"
-M.local_code_actions_key = "code_actions"
--- M.local_formatter_key = "format"
-
 local diagnostics = null_ls.builtins.diagnostics
 local code_actions = null_ls.builtins.code_actions
 -- local formatting = null_ls.builtins.formatting
@@ -56,46 +52,43 @@ local code_actions = null_ls.builtins.code_actions
 --- 直接定义一个 table 的问题是: module 在第一次 require() 之后 table 中的内容就缓存了.
 --- 而调用函数返回 table 的好处是: 每次执行函数时 table 中的内容都会重新生成.
 M.sources =  {
-  [M.local_linter_key] = {
-    --- go:golangci-lint 配置文件位置自动查找 ---------------------------------- {{{
-    --- DOCS: https://golangci-lint.run/usage/configuration/#linters-configuration
-    --- golangci-lint 会自动寻找 '.golangci.yml', '.golangci.yaml', '.golangci.toml', '.golangci.json'.
-    --- GolangCI-Lint also searches for config files in all directories from the directory of
-    --- the first analyzed path up to the root.
-    -- -- }}}
-    golangci_lints = function()
-      local global_settings = require("lsp.plugins.null_ls.tools.golangci_lint")
+  --- diagnostics (linter) -------------------------------------------------------------------------
+  --- go:golangci-lint 配置文件位置自动查找 ---------------------------------- {{{
+  --- DOCS: https://golangci-lint.run/usage/configuration/#linters-configuration
+  --- golangci-lint 会自动寻找 '.golangci.yml', '.golangci.yaml', '.golangci.toml', '.golangci.json'.
+  --- GolangCI-Lint also searches for config files in all directories from the directory of
+  --- the first analyzed path up to the root.
+  -- -- }}}
+  function()
+    local global_settings = require("lsp.plugins.null_ls.tools.golangci_lint")
 
-      --- 加载 global_settings & opts
-      local opts = vim.tbl_deep_extend('force', diagnostics_opts, global_settings)
+    --- 加载 global_settings & opts
+    local opts = vim.tbl_deep_extend('force', diagnostics_opts, global_settings)
 
-      --- 加载 project_local_settings
-      if local_linter_settings and local_linter_settings["golangci_lint"] then
-        opts = vim.tbl_deep_extend('force', local_linter_settings["golangci_lint"], opts)
-      end
+    --- 加载 project_local_settings
+    if local_linter_settings and local_linter_settings["golangci_lint"] then
+      opts = vim.tbl_deep_extend('force', local_linter_settings["golangci_lint"], opts)
+    end
 
-      return diagnostics.golangci_lint.with(opts)
-    end,
+    return diagnostics.golangci_lint.with(opts)
+  end,
 
-    --- protobuf: buf
-    --- NOTE: 同一个工具可能有好几种不同的用途, 需要分开设置, eg: `buf`
-    --- - null_ls.builtins.diagnostics.buf  linter protobuf
-    --- - null_ls.builtins.formatting.buf   format protobuf
-    diagnostics.buf.with(diagnostics_opts),
+  --- protobuf: buf
+  --- NOTE: 同一个工具可能有好几种不同的用途, 需要分开设置, eg: `buf`
+  --- - null_ls.builtins.diagnostics.buf  linter protobuf
+  --- - null_ls.builtins.formatting.buf   format protobuf
+  diagnostics.buf.with(diagnostics_opts),
 
-    --- gdscript: gdlint
-    diagnostics.gdlint,
+  --- gdscript: gdlint
+  diagnostics.gdlint,
 
-    --- python: using 'ruff' lsp instead
-  },
+  --- python: using 'ruff' lsp instead
 
   --- code action ----------------------------------------------------------------------------------
-  [M.local_code_actions_key] = {
-    code_actions.gomodifytags,
-    -- code_actions.impl,  -- BUG
-  },
+  code_actions.gomodifytags,
+  -- code_actions.impl,  -- BUG: cwd 必须在 bufnr 所在文件夹下才能使用.
 
-  --- NOTE: 目前使用 Conform, Deprecated formatter & code_actions -------------- {{{
+  --- formatter: 目前使用 Conform, Deprecated formatter & code_actions ----------------------------- {{{
   -- [M.local_formatter_key] = {
   --   prettier = function()
   --     return formatting.prettier.with(proj_local_settings.keep_extend(M.local_formatter_key, 'prettier',

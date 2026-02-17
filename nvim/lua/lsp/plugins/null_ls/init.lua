@@ -3,26 +3,11 @@ if not null_ls_status_ok then
   return
 end
 
-local s = require("lsp.plugins.null_ls.sources")
-
---- 合并 sources 到一个 list
-local function combine_sources()
-  local list = {}
-
-  for _, tool_types in pairs(s.sources) do
-    for _, tool_setup in pairs(tool_types) do
-      table.insert(list, tool_setup)
-    end
-  end
-
-  return list
-end
-
 --- null-ls setup() 在这里加载上面设置的 formatting & linter ---------------------------------------
 --- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/CONFIG.md
 null_ls.setup({
   --- VVI: 设置 linter / formatter / code actions
-  sources = combine_sources(),
+  sources = require("lsp.plugins.null_ls.sources").sources,
 
   --- VVI: project root, 影响 linter 执行时的 pwd. 这里的 root_dir 是一个全局设置,
   --- 对 null-ls 中的所有 linter 有效. root_dir 需要传入一个回调函数 func(params):string.
