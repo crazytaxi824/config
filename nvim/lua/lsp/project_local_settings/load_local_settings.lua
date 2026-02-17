@@ -1,11 +1,12 @@
 local lsp_file = ".nvim/lsp.json"
 local linter_file = ".nvim/linter.json"
 
---- read settings.json file
---- 如果 return {} 表示 settings.json 被清除, 需要 reload lsp settings. 包含两种情况:
----   1. settings.json 被删除
----   2. settings.json 为空
---- 如果 return nil 表示 settings.json 格式错误, 则不要 reload lsp settings.
+--- read json file
+--- 如果 return vim.empty_dict() 表示 json 文件被清除, 需要 reload lsp settings. 包含以下几种情况:
+---   1. json 文件被删除
+---   2. json 文件为空
+---   3. json 文件为 {}
+--- 如果 return nil 表示 json 格式错误, 则不要 reload lsp settings.
 local function read_local_settings(json_file)
   local local_settings_filepaths = vim.fs.find(json_file, {
     upward = true, -- 从 pwd 向上寻找 .nvim/settings.lua 文件.
@@ -15,7 +16,7 @@ local function read_local_settings(json_file)
   })
 
   if #local_settings_filepaths < 1 then
-    return {} -- settings.json 为空, 或被删除, 需要更新 lsp settings
+    return vim.empty_dict() -- json 为空, 或被删除, 需要 reload lsp settings
   end
 
   local lines = vim.fn.readfile(local_settings_filepaths[1])
@@ -43,19 +44,20 @@ local function read_local_settings(json_file)
   --- 使用 [-1][^1] 技巧在 Lua 中匹配包含换行符的所有字符
   local json_content = vim.trim(table.concat(strip_lines, ""):gsub("/%*.-%*/", ""))
   if json_content == "" then
-    return {} -- settings.json 为空, 或被删除, 需要更新 lsp settings
+    return vim.empty_dict() -- json 为空, 或被删除, 需要 reload lsp settings
   end
 
   --- parse json
   local ok, result = pcall(vim.json.decode, json_content)
   if ok then
-    return result
+    return result -- json 不为空, 需要 reload lsp settings
   end
+  return nil -- json 格式错误, 不需要 reload lsp settings
 end
 
 local function parse_local_lsp_settings(settings)
-  if not settings then
-    return nil
+  if vim.tbl_isempty(settings) then
+    return vim.empty_dict() -- json 为空, 或被删除, 需要 reload lsp settings
   end
 
   local s = {}
@@ -68,8 +70,8 @@ local function parse_local_lsp_settings(settings)
     elseif #r == 2 then
       s[r[1]] = {[r[2]] = settings[key]}
     else
-      error("project local 'settings.json' format error")
-      return {}
+      error("project local '" .. lsp_file .. "' format error")
+      return nil
     end
   end
   return s
@@ -81,7 +83,7 @@ M.get_local_lsp_settings = function()
   local sf = read_local_settings(lsp_file)
   if not sf then
     error("project local '" .. lsp_file .. "' format error")
-    return {}
+    return nil
   end
   return parse_local_lsp_settings(sf)
 end
@@ -90,7 +92,7 @@ M.get_local_linter_settings = function()
   local sf = read_local_settings(linter_file)
   if not sf then
     error("project local '" .. linter_file .. "' format error")
-    return {}
+    return nil
   end
   return sf
 end
