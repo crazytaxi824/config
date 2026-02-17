@@ -12,6 +12,7 @@ end
 
 --- 加载 local settings
 local proj_local_settings = require("lsp.plugins.load_proj_settings")
+local local_linter_settings = require("lsp.project_local_settings.load_local_settings").get_local_linter_settings()
 
 local M = {}
 
@@ -62,19 +63,25 @@ M.sources =  {
     --- GolangCI-Lint also searches for config files in all directories from the directory of
     --- the first analyzed path up to the root.
     -- -- }}}
-    golangci_lint = function()
-      return diagnostics.golangci_lint.with(proj_local_settings.tools_keep_extend(M.local_linter_key, 'golangci_lint',
-        require("lsp.plugins.null_ls.tools.golangci_lint"),  -- NOTE: 加载单独设置 null_ls/tools/golangci_lint.lua
-        diagnostics_opts))
+    golangci_lints = function()
+      local global_settings = require("lsp.plugins.null_ls.tools.golangci_lint")
+
+      --- 加载 global_settings & opts
+      local opts = vim.tbl_deep_extend('force', diagnostics_opts, global_settings)
+
+      --- 加载 project_local_settings
+      if local_linter_settings and local_linter_settings["golangci_lint"] then
+        opts = vim.tbl_deep_extend('force', local_linter_settings["golangci_lint"], opts)
+      end
+
+      return diagnostics.golangci_lint.with(opts)
     end,
 
     --- protobuf: buf
     --- NOTE: 同一个工具可能有好几种不同的用途, 需要分开设置, eg: `buf`
     --- - null_ls.builtins.diagnostics.buf  linter protobuf
     --- - null_ls.builtins.formatting.buf   format protobuf
-    buf = function()
-      return diagnostics.buf.with(proj_local_settings.tools_keep_extend(M.local_linter_key, 'buf', diagnostics_opts))
-    end,
+    diagnostics.buf.with(diagnostics_opts),
 
     --- gdscript: gdlint
     diagnostics.gdlint,
