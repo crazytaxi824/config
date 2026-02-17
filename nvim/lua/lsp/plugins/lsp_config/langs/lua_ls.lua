@@ -3,12 +3,13 @@ return {
   on_init = function(client)
     if client.workspace_folders then
       local path = client.workspace_folders[1].name
+      --- 1. 如果有 .luarc.json 的情况下不用额外设置.
       if path ~= vim.fn.stdpath('config') and (vim.uv.fs_stat(path..'/.luarc.json') or vim.uv.fs_stat(path..'/.luarc.jsonc')) then
         return
       end
     end
 
-    --- 这里是在没有 .luarc.json 的情况下向 settings 中插入设置.
+    --- 2. 没有 .luarc.json 的情况下向 settings 中插入设置.
     client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
       runtime = {
         version = 'LuaJIT'
