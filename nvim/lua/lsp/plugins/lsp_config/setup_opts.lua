@@ -2,6 +2,9 @@
 
 local ms = vim.lsp.protocol.Methods
 
+--- 加载 local settings
+local local_lsp_settings = require("lsp.project_local_settings.load_local_settings").get_local_lsp_settings()
+
 local M = {}
 
 --- 停止输入文字的时间超过该数值, 则向 lsp server 发送请求.
@@ -46,18 +49,6 @@ M.capabilities.textDocument.foldingRange = {
 --   vim.print(config)
 -- end
 
---- .nvim/settings.lua 中的 local 设置. ---------------------------------------- {{{
--- return {
---   lsp = {
---     gopls = {
---       -- ["ui.completion.usePlaceholders"] = false,
---       -- ["ui.diagnostic.staticcheck"] = false,
---     }
---   },
--- }
--- -- }}}
-M.local_lspconfig_key = "lsp"
-
 --- on_init() run before on_attach(), 可以通过打印看出先后顺序.
 M.on_init = function(client, result)
   --- 如果 client.config.settings 不存在, 则赋值/修改也无法生效.
@@ -66,13 +57,14 @@ M.on_init = function(client, result)
   end
 
   --- 加载项目本地设置, 覆盖 global settings -----------------------------
-  --- DOCS: https://github.com/neovim/nvim-lspconfig/wiki/Project-local-settings
-  local proj_local_settings = require("lsp.plugins.load_proj_settings")
-  if proj_local_settings.content[M.local_lspconfig_key] and proj_local_settings.content[M.local_lspconfig_key][client.name] then
-    local local_settings = proj_local_settings.content[M.local_lspconfig_key][client.name]
+  --- local_lsp_settings 设置中没有需要修改的设置
+  if local_lsp_settings and local_lsp_settings[client.name] then
+    local local_settings = local_lsp_settings[client.name]
     for key, value in pairs(local_settings) do
-      local lsetting = client.config.settings[key] or {}
-      client.config.settings[key] = vim.tbl_deep_extend('force', lsetting, value)
+      local client_settings = client.config.settings[key]
+      if client_settings then
+        client.config.settings[key] = vim.tbl_deep_extend('force', client_settings, value)
+      end
     end
   end
 
