@@ -1,3 +1,32 @@
+--- .nvim/lsp.json
+-- {
+--   "gopls": {
+--     "semanticTokens": true,
+--     "usePlaceholders": false,
+--     "buildFlags": ["-tags=!prod"]
+--   },
+--   "pyright:python": {
+--     "analysis": {
+--       "autoSearchPaths": false,
+--       "diagnosticMode": "openFilesOnly",
+--       "useLibraryCodeForTypes": true
+--     }
+--   },
+--   "lua_ls:Lua": {
+--     "codeLens": {
+--       "enable": true
+--     }
+--   }
+-- }
+
+--- .nvim/linter.json
+-- {
+--   "golangci_lint": {
+--     "extra_args": ["-c", "./.golangci.yml"]
+--   }
+-- }
+
+--- project local settings 文件名
 local lsp_file = ".nvim/lsp.json"
 local linter_file = ".nvim/linter.json"
 
