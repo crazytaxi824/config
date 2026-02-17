@@ -1,12 +1,13 @@
-local lsp_key = require("lsp.plugins.lsp_config.setup_opts").local_lspconfig_key
+local lsp_file = ".nvim/lsp.json"
+local linter_file = ".nvim/linter.json"
 
 --- read settings.json file
---- 如果 return {} 表示 settings.json 被清除, 需要更新 lsp settings. 包含两种情况:
+--- 如果 return {} 表示 settings.json 被清除, 需要 reload lsp settings. 包含两种情况:
 ---   1. settings.json 被删除
 ---   2. settings.json 为空
---- 如果 return nil 表示 settings.json 格式错误, 则不要更新 lsp settings.
-local function read_local_settings()
-  local local_settings_filepaths = vim.fs.find({'.nvim/settings.json'}, {
+--- 如果 return nil 表示 settings.json 格式错误, 则不要 reload lsp settings.
+local function read_local_settings(json_file)
+  local local_settings_filepaths = vim.fs.find(json_file, {
     upward = true, -- 从 pwd 向上寻找 .nvim/settings.lua 文件.
     stop = vim.env.HOME,  -- 直到 $HOME 为止.
     type = "file",
@@ -53,36 +54,45 @@ local function read_local_settings()
 end
 
 local function parse_local_lsp_settings(settings)
-  if not settings or not settings[lsp_key] then
-    return settings  -- 如果 settings={} 则返回 settings, 如果 settings=nil 则返回 nil
+  if not settings then
+    return nil
   end
 
-  for key, value in pairs(settings[lsp_key]) do
+  local s = {}
+  for key, value in pairs(settings) do
     --- split 是为了分开 lsp_name 和 setting_name, eg: ["pyright:python"] = {...}
     --- eg: pyright 是 lsp tool name, python 是需要放在 settings{} 中的 name
     local r = vim.split(key, ':', {trimempty=true})
     if #r == 1 then
-      settings[lsp_key][key] = {[key] = settings[lsp_key][key]}
+      s[key] = {[key] = settings[key]}
     elseif #r == 2 then
-      settings[lsp_key][r[1]] = {[r[2]] = settings[lsp_key][key]}
-      settings[lsp_key][key] = nil
+      s[r[1]] = {[r[2]] = settings[key]}
     else
       error("project local 'settings.json' format error")
       return {}
     end
   end
-  return settings
+  return s
 end
 
 local M = {}
 
-M.get_local_settings_content = function()
-  local r = read_local_settings()
-  if not r then
-    error("project local 'settings.json' format error")
+M.get_local_lsp_settings = function()
+  local sf = read_local_settings(lsp_file)
+  if not sf then
+    error("project local '" .. lsp_file .. "' format error")
     return {}
   end
-  return parse_local_lsp_settings(r)
+  return parse_local_lsp_settings(sf)
+end
+
+M.get_local_linter_settings = function()
+  local sf = read_local_settings(linter_file)
+  if not sf then
+    error("project local '" .. linter_file .. "' format error")
+    return {}
+  end
+  return sf
 end
 
 return M
