@@ -1,3 +1,4 @@
+--- NOTE: lsp 设置: https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
 --- DOCS: `:help vim.lsp.ClientConfig`
 
 local ms = vim.lsp.protocol.Methods
