@@ -67,7 +67,7 @@ M.sources =  {
 
     --- 加载 project_local_settings
     if local_linter_settings and local_linter_settings["golangci_lint"] then
-      opts = vim.tbl_deep_extend('force', local_linter_settings["golangci_lint"], opts)
+      opts = vim.tbl_deep_extend('force', opts, local_linter_settings["golangci_lint"])
     end
 
     return diagnostics.golangci_lint.with(opts)
