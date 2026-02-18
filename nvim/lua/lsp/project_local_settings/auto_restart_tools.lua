@@ -1,3 +1,5 @@
+local utils = require("lsp.project_local_settings.find_local_settings")
+
 --- 两个 table 中内容不相同的 key list
 local function find_diff_tool(t1, t2)
   local diff_tools = {}
@@ -21,33 +23,13 @@ local function find_diff_tool(t1, t2)
   return diff_tools
 end
 
-local M = {}
-
-M.lsp_file = ".nvim/lsp.json"
-M.linter_file = ".nvim/linter.json"
-
-M.find_local_settings_file = function(json_file)
-  local local_settings_filepaths = vim.fs.find(json_file, {
-    upward = true, -- 从 pwd 向上寻找 .nvim/settings.lua 文件.
-    stop = vim.env.HOME,  -- 直到 $HOME 为止.
-    type = "file",
-    limit = 1, -- NOTE: 只找最近的一个文件.
-  })
-
-  if #local_settings_filepaths < 1 then
-    return nil -- json 为空, 或被删除, 需要 reload lsp settings
-  end
-
-  return vim.fs.abspath(local_settings_filepaths[1])
-end
-
 --- reload local settings when ".nvim/lsp.json" changed
 local lsp_gid = vim.api.nvim_create_augroup("my_reload_local_lsp_settings", {clear=true})
 vim.api.nvim_create_autocmd({'BufWritePost'}, {
   group = lsp_gid,
-  pattern = { "**/" .. M.lsp_file },
+  pattern = { "**/" .. utils.lsp_file },
   callback = function(params)
-    if vim.fs.abspath(params.file) == M.find_local_settings_file(".nvim/lsp.json") then
+    if vim.fs.abspath(params.file) == utils.find_local_settings_file(utils.lsp_file) then
       local p = require("lsp.lsp_config.update_config")
       local old = p.exist_settings()
       p.reload_local_settings()
@@ -67,9 +49,9 @@ vim.api.nvim_create_autocmd({'BufWritePost'}, {
 local linter_gid = vim.api.nvim_create_augroup("my_reload_local_linter_settings", {clear=true})
 vim.api.nvim_create_autocmd({'BufWritePost'}, {
   group = linter_gid,
-  pattern = { "**/" .. M.linter_file },
+  pattern = { "**/" .. utils.linter_file },
   callback = function(params)
-    if vim.fs.abspath(params.file) == M.find_local_settings_file(".nvim/linter.json") then
+    if vim.fs.abspath(params.file) == utils.find_local_settings_file(utils.linter_file) then
       local p = require("lsp.null_ls.sources")
       local old = p.exist_settings()
       p.reload_local_settings()
@@ -85,5 +67,5 @@ vim.api.nvim_create_autocmd({'BufWritePost'}, {
   desc = "reload local settings when '.nvim/linter.json' changed",
 })
 
-return M
+
 
