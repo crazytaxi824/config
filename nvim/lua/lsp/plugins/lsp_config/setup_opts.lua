@@ -2,9 +2,6 @@
 
 local ms = vim.lsp.protocol.Methods
 
---- 加载 local settings
-local local_lsp_settings = require("lsp.project_local_settings.load_local_settings").get_local_lsp_settings()
-
 local M = {}
 
 --- 停止输入文字的时间超过该数值, 则向 lsp server 发送请求.
@@ -51,31 +48,13 @@ M.capabilities.textDocument.foldingRange = {
 
 --- on_init() run before on_attach(), 可以通过打印看出先后顺序.
 M.on_init = function(client, result)
-  --- 如果 client.config.settings 不存在, 则赋值/修改也无法生效.
-  if not client.config.settings then
-    return
-  end
-
-  --- 加载项目本地设置, 覆盖 global settings -----------------------------
-  --- local_lsp_settings 设置中没有需要修改的设置
-  if local_lsp_settings and local_lsp_settings[client.name] then
-    local local_settings = local_lsp_settings[client.name]
-    for key, value in pairs(local_settings) do
-      local client_settings = client.config.settings[key]
-      if client_settings then
-        client.config.settings[key] = vim.tbl_deep_extend('force', client_settings, value)
-      end
-    end
-  end
-
-  --- semantic token: https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide
-  --- nvim-0.9 中禁止 LSP semantic highlight (根据语义的 highlight) 否则 highlight 显示不正确.
-  --- VVI: https://github.com/neovim/nvim-lspconfig/issues/2542
-  --- DONOT follow `:help vim.lsp.semantic_tokens.start()` place this in on_attach() function.
-  --- 设置 "textDocument/semanticTokens" 是否开启
   -- if client.server_capabilities then
-  --   -- client.server_capabilities.semanticTokensProvider = nil  -- lsp: semantic token highlight
-  --   -- client.server_capabilities.foldingRangeProvider = nil  -- debug: lsp-fold 设置
+  --   --- semantic token: https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide
+  --   --- `:help vim.lsp.semantic_tokens.start()`
+  --   client.server_capabilities.semanticTokensProvider = nil  -- lsp: "textDocument/semanticTokens" highlight
+  --
+  --   --- DEBUG: lsp-fold 设置
+  --   client.server_capabilities.foldingRangeProvider = nil
   -- end
 
   --- DEBUG: 用

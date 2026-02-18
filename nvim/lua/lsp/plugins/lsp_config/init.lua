@@ -3,20 +3,59 @@
 --- 获取 lsp 列表.
 local lsp_servers_map = require('lsp.svr_list').list
 
+--- 加载 local settings
+local local_lsp_settings = require("lsp.project_local_settings.load_local_settings").get_local_lsp_settings()
+
+--- 加载 lsp 配置文件, "~/.config/nvim/lua/lsp/plugins/lsp_config/langs/..."
+--- 如果文件存在, 则加载自定义设置, 如果没有自定义设置则加载默认设置.
+local function lsp_global_opts(lsp_svr, opts)
+  local status_ok, global_opts = pcall(require, "lsp.plugins.lsp_config.langs." .. lsp_svr)
+  if not status_ok then
+    return opts
+  end
+  return vim.tbl_deep_extend("force", opts, global_opts)
+end
+
+--- 加载项目本地设置, 覆盖 global settings.
+local function lsp_local_opts(lsp_svr, opts)
+  if not local_lsp_settings then
+    return opts
+  end
+
+  local local_opts = local_lsp_settings[lsp_svr]
+  if not local_opts then
+    return opts
+  end
+
+  --- 如果原本没有设置 settings, 则设置 settings.
+  if not opts.settings then
+    opts.settings = local_opts
+    return opts
+  end
+
+  --- 如果原本设置了 settings, 则修改 settings 设置.
+  for key, value in pairs(local_opts) do
+    local settings = opts.settings[key]
+    if settings then
+      --- key 存在
+      opts.settings[key] = vim.tbl_deep_extend('force', settings, value)
+    else
+      --- key 不存在
+      opts.settings[key] = value
+    end
+  end
+  return opts
+end
+
 --- 设置 & 启动单个 lsp
 local function lspconfig_setup(lsp_svr)
-  --- opts 必须包含 on_attach, capabilities 两个属性.
-  --- 这里的 opts 获取到的是 require 文件中返回的 M.
+  --- NOTE: opts 必须包含 on_attach, capabilities 两个属性.
   local opts = require("lsp.plugins.lsp_config.setup_opts")
+  opts = vim.tbl_deep_extend('force', opts, {})  -- deep copy table
 
-  --- 加载 lsp 配置文件, "~/.config/nvim/lua/lsp/plugins/lsp_config/langs/..."
-  --- 如果文件存在, 则加载自定义设置, 如果没有自定义设置则加载默认设置.
-  --- VVI: 必须 after require("lsp.plugins.lsp_config.setup_opts")
-  local lsp_custom_status_ok, lsp_custom_opts = pcall(require, "lsp.plugins.lsp_config.langs." .. lsp_svr)
-  if lsp_custom_status_ok then
-    --- lsp_custom_opts: 初始设置
-    opts = vim.tbl_deep_extend("force", opts, lsp_custom_opts)
-  end
+  --- 先加载 global_opts, 再加载 project_local_settings
+  opts = lsp_global_opts(lsp_svr, opts)
+  opts = lsp_local_opts(lsp_svr, opts)
 
   --- VVI: 启动 lsp
   vim.lsp.config(lsp_svr, opts)
