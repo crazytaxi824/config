@@ -108,6 +108,7 @@ end
 
 local M = {}
 
+--- 获取 lsp 设置
 M.get_local_lsp_settings = function()
   local sf = read_local_settings(lsp_file)
   if not sf then
@@ -117,6 +118,7 @@ M.get_local_lsp_settings = function()
   return parse_local_lsp_settings(sf)
 end
 
+--- 获取 none-ls linter 设置
 M.get_local_linter_settings = function()
   local sf = read_local_settings(linter_file)
   if not sf then
