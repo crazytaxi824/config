@@ -8,8 +8,8 @@ local local_lsp_settings = require("lsp.project_local_settings.load_local_settin
 
 --- 加载 lsp 配置文件, "~/.config/nvim/lua/lsp/lsp_config/tools/..."
 --- 如果文件存在, 则加载自定义设置, 如果没有自定义设置则加载默认设置.
-local function lsp_global_opts(lsp_svr, opts)
-  local status_ok, global_opts = pcall(require, "lsp.lsp_config.tools." .. lsp_svr)
+local function lsp_global_opts(lsp_tool, opts)
+  local status_ok, global_opts = pcall(require, "lsp.lsp_config.tools." .. lsp_tool)
   if not status_ok then
     return opts
   end
@@ -17,12 +17,12 @@ local function lsp_global_opts(lsp_svr, opts)
 end
 
 --- 加载项目本地设置, 覆盖 global settings.
-local function lsp_local_opts(lsp_svr, opts)
+local function lsp_local_opts(lsp_tool, opts)
   if not local_lsp_settings then
     return opts
   end
 
-  local local_opts = local_lsp_settings[lsp_svr]
+  local local_opts = local_lsp_settings[lsp_tool]
   if not local_opts then
     return opts
   end
@@ -48,23 +48,23 @@ local function lsp_local_opts(lsp_svr, opts)
 end
 
 --- 设置 & 启动单个 lsp
-local function lspconfig_setup(lsp_svr)
+local function lspconfig_setup(lsp_tool)
   --- NOTE: opts 必须包含 on_attach, capabilities 两个属性.
   local opts = require("lsp.lsp_config.setup_opts")
   opts = vim.tbl_deep_extend('force', opts, {})  -- deep copy table
 
   --- 先加载 global_opts, 再加载 project_local_settings
-  opts = lsp_global_opts(lsp_svr, opts)
-  opts = lsp_local_opts(lsp_svr, opts)
+  opts = lsp_global_opts(lsp_tool, opts)
+  opts = lsp_local_opts(lsp_tool, opts)
 
   --- VVI: 启动 lsp
-  vim.lsp.config(lsp_svr, opts)
-  vim.lsp.enable(lsp_svr)
+  vim.lsp.config(lsp_tool, opts)
+  vim.lsp.enable(lsp_tool)
 end
 
 --- setup 所有 lsp
-for lsp_svr, _ in pairs(lsp_servers_map) do
-  lspconfig_setup(lsp_svr)
+for lsp_tool, _ in pairs(lsp_servers_map) do
+  lspconfig_setup(lsp_tool)
 end
 
 --- `set filetype=xxx` 时 detach previous LSP.
