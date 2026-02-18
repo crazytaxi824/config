@@ -10,6 +10,11 @@ lsp_update_config.reload_local_settings()
 --- setup 所有 lsp
 for lsp_tool, _ in pairs(lsp_servers_map) do
   lsp_update_config.lspconfig_setup(lsp_tool)
+
+  --- VVI: 在 schedule() 中等待 lspconfig_setup() 配置完成后再启动.
+  vim.schedule(function()
+    vim.lsp.enable(lsp_tool)
+  end)
 end
 
 --- `set filetype=xxx` 时 detach previous LSP.

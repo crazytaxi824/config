@@ -58,7 +58,7 @@ end
 
 --- 设置 & 启动单个 lsp
 M.lspconfig_setup = function(lsp_tool)
-  --- NOTE: opts 必须包含 on_attach, capabilities 两个属性.
+  --- config 必须包含 on_attach, capabilities 两个属性.
   local config = require("lsp.lsp_config.client_config")
   config = vim.tbl_deep_extend('force', config, {})  -- VVI: deep copy table, 否则会污染整个 table
 
@@ -66,14 +66,17 @@ M.lspconfig_setup = function(lsp_tool)
   config = lsp_global_opts(lsp_tool, config)
   config = lsp_local_opts(lsp_tool, config)
 
-  --- VVI: 启动 lsp
   vim.lsp.config(lsp_tool, config)
-  vim.lsp.enable(lsp_tool)
 end
 
 M.restart_lsp = function(lsp_tool)
-  vim.lsp.enable(lsp_tool, false)  -- disable
-  M.lspconfig_setup(lsp_tool) -- enable
+  M.lspconfig_setup(lsp_tool)  -- 重新配置
+
+  --- VVI: 在 schedule() 中等待 lspconfig_setup() 配置完成后再启动, 否则可能导致 lsp config 配置无法更新.
+  vim.schedule(function()
+    vim.lsp.enable(lsp_tool, false)
+    vim.lsp.enable(lsp_tool)
+  end)
 end
 
 return M
