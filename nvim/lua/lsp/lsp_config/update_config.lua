@@ -1,5 +1,5 @@
 --- 加载 local settings
-local project_local_settings = require("lsp.project_local_settings.load_local_settings")
+local project_local_settings = require("lsp.project_local_settings")
 
 --- cache local lsp settings
 local local_lsp_settings = nil

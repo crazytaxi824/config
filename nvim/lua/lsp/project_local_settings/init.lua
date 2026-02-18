@@ -28,6 +28,9 @@
 
 local utils = require("lsp.project_local_settings.find_local_settings")
 
+--- 加载 autocmd
+require("lsp.project_local_settings.auto_restart_tools")
+
 --- read json file
 --- 如果 return vim.empty_dict() 表示 json 文件被清除, 需要 reload lsp settings. 包含以下几种情况:
 ---   1. json 文件被删除

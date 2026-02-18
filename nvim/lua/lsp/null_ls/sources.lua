@@ -11,7 +11,7 @@ if not null_ls_status_ok then
 end
 
 --- 加载 local settings
-local project_local_settings = require("lsp.project_local_settings.load_local_settings")
+local project_local_settings = require("lsp.project_local_settings")
 
 --- cache local linter settings
 local local_linter_settings = nil
