@@ -36,9 +36,7 @@ vim.api.nvim_create_autocmd({'BufWritePost'}, {
       local new = p.exist_settings()
 
       local tools = find_diff_tool(old, new)
-      for _, tool in ipairs(tools) do
-        p.restart_lsp(tool)
-      end
+      p.restart_lsps(tools)
       vim.notify("restart lsp: " .. table.concat(tools, ", "))
     end
   end,
@@ -58,9 +56,7 @@ vim.api.nvim_create_autocmd({'BufWritePost'}, {
       local new = p.exist_settings()
 
       local tools = find_diff_tool(old, new)
-      for _, tool in ipairs(tools) do
-        p.restart_linter(tool)
-      end
+      p.restart_linters(tools)
       vim.notify("restart linter: " .. table.concat(tools, ", "))
     end
   end,

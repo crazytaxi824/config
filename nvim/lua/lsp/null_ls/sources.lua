@@ -108,10 +108,12 @@ M.sources = function()
   return sources_list
 end
 
-M.restart_linter = function(linter_tool)
-  null_ls.disable(linter_tool)  -- 清除 diagnostic messages & signs
-  null_ls.deregister(linter_tool)  -- 注销, 删除原服务.
-  null_ls.register(M.linter[linter_tool]())  -- 重新注册. register 后, 自动 enable.
+M.restart_linters = function(linter_tools)
+  for _, linter_tool in ipairs(linter_tools) do
+    null_ls.disable(linter_tool)  -- 清除 diagnostic messages & signs
+    null_ls.deregister(linter_tool)  -- 注销, 删除原服务.
+    null_ls.register(M.linter[linter_tool]())  -- 重新注册. register 后, 自动 enable.
+  end
 end
 
 return M

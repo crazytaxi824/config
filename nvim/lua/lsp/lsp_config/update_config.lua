@@ -57,6 +57,7 @@ M.exist_settings = function()
 end
 
 --- 设置 & 启动单个 lsp
+--- @param lsp_tool string
 M.lspconfig_setup = function(lsp_tool)
   --- config 必须包含 on_attach, capabilities 两个属性.
   local config = require("lsp.lsp_config.client_config")
@@ -69,13 +70,16 @@ M.lspconfig_setup = function(lsp_tool)
   vim.lsp.config(lsp_tool, config)
 end
 
-M.restart_lsp = function(lsp_tool)
-  vim.lsp.enable(lsp_tool, false) -- disable
-  M.lspconfig_setup(lsp_tool)  -- 重新配置
+--- @param lsp_tools string[]
+M.restart_lsps = function(lsp_tools)
+  vim.lsp.enable(lsp_tools, false) -- disable
+  for _, lsp_tool in ipairs(lsp_tools) do
+    M.lspconfig_setup(lsp_tool)  -- 重新配置
+  end
 
   --- VVI: 在 schedule() 中等待 lspconfig_setup() 配置完成后再启动, 否则可能导致 lsp config 配置无法更新.
   vim.schedule(function()
-    vim.lsp.enable(lsp_tool)  -- enable
+    vim.lsp.enable(lsp_tools)  -- enable
   end)
 end
 
