@@ -52,6 +52,10 @@ M.reload_local_settings = function()
   local_lsp_settings = project_local_settings.get_local_lsp_settings()
 end
 
+M.exist_settings = function()
+  return local_lsp_settings
+end
+
 --- 设置 & 启动单个 lsp
 M.lspconfig_setup = function(lsp_tool)
   --- NOTE: opts 必须包含 on_attach, capabilities 两个属性.
@@ -65,6 +69,11 @@ M.lspconfig_setup = function(lsp_tool)
   --- VVI: 启动 lsp
   vim.lsp.config(lsp_tool, config)
   vim.lsp.enable(lsp_tool)
+end
+
+M.restart_lsp = function(lsp_tool)
+  vim.lsp.enable(lsp_tool, false)  -- disable
+  M.lspconfig_setup(lsp_tool) -- enable
 end
 
 return M
