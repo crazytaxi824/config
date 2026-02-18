@@ -46,11 +46,6 @@ local diagnostics_opts = {
 
 local M = {}
 
---- 重新读取 project local settings 文件
-M.reload_local_settings = function()
-  local_linter_settings = project_local_settings.get_local_linter_settings()
-end
-
 --- linter (diagnostics) tools
 local diagnostics = null_ls.builtins.diagnostics
 M.linter = {
@@ -96,12 +91,27 @@ M.code_actions = {
   -- code_actions.impl,
 }
 
+--- 重新读取 project local settings 文件
+M.reload_local_settings = function()
+  local_linter_settings = project_local_settings.get_local_linter_settings()
+end
+
+M.exist_settings = function()
+  return local_linter_settings
+end
+
 --- 返回一个 list
 M.sources = function()
   local sources_list = {}
   vim.list_extend(sources_list, vim.tbl_values(M.linter))
   vim.list_extend(sources_list, vim.tbl_values(M.code_actions))
   return sources_list
+end
+
+M.restart_linter = function(linter_tool)
+  null_ls.disable(linter_tool)  -- 清除 diagnostic messages & signs
+  null_ls.deregister(linter_tool)  -- 注销, 删除原服务.
+  null_ls.register(M.linter[linter_tool]())  -- 重新注册. register 后, 自动 enable.
 end
 
 return M
