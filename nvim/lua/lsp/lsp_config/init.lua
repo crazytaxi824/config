@@ -4,7 +4,7 @@ local lsp_servers_map = require('lsp.svr_list').list
 --- 设置 lsp config
 local lsp_update_config = require("lsp.lsp_config.update_config")
 
---- 读取 local_settings files
+--- 读取 & cache local_settings files
 lsp_update_config.reload_local_settings()
 
 --- setup 所有 lsp
