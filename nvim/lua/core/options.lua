@@ -169,9 +169,9 @@
 --- while you can keep it for the file types WITHOUT parser.
 --- https://github.com/nvim-treesitter/nvim-treesitter/issues/359
 --- vim 内置语法高亮, 基于正则表达式的语法高亮.
---vim.cmd('syntax on')    -- 默认开启. `:echo g:syntax_on`, 可以查看 syntax 是否开启.
-                          -- nvim-treesitter 插件会强制将 syntax 设置为 `syntax manual`. `:help :syn-manual`
-                          -- NOTE: 如果直接设置 `syntax off` 则, vim 不会加载 after/syntax. (但是不影响加载 after/ftplugin)
+--vim.cmd('syntax on') -- 默认开启. `:echo g:syntax_on`, 可以查看 syntax 是否开启.
+                       -- nvim-treesitter 插件会强制将 syntax 设置为 `syntax manual`. `:help :syn-manual`
+                       -- NOTE: 如果直接设置 `syntax off` 则, vim 不会加载 after/syntax. (但是不影响加载 after/ftplugin)
 
 --- VVI: 不使用 $VIMRUNTIME/ftplugin/xxx.vim 中预设的 keymaps.
 --- disable plugin maps 后会导致部分 keymaps 无法使用, 需要手动设置. eg: 'gO'
