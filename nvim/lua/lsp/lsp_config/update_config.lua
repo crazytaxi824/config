@@ -70,12 +70,12 @@ M.lspconfig_setup = function(lsp_tool)
 end
 
 M.restart_lsp = function(lsp_tool)
+  vim.lsp.enable(lsp_tool, false) -- disable
   M.lspconfig_setup(lsp_tool)  -- 重新配置
 
   --- VVI: 在 schedule() 中等待 lspconfig_setup() 配置完成后再启动, 否则可能导致 lsp config 配置无法更新.
   vim.schedule(function()
-    vim.lsp.enable(lsp_tool, false)
-    vim.lsp.enable(lsp_tool)
+    vim.lsp.enable(lsp_tool)  -- enable
   end)
 end
 
