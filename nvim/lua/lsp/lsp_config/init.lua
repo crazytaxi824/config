@@ -7,15 +7,13 @@ local lsp_update_config = require("lsp.lsp_config.update_config")
 --- 读取 & cache local_settings files
 lsp_update_config.reload_local_settings()
 
---- setup 所有 lsp
+--- setup 所有 lsp config
 for lsp_tool, _ in pairs(lsp_servers_map) do
   lsp_update_config.lspconfig_setup(lsp_tool)
-
-  --- VVI: 在 schedule() 中等待 lspconfig_setup() 配置完成后再启动.
-  vim.schedule(function()
-    vim.lsp.enable(lsp_tool)
-  end)
 end
+
+--- 启动所有 lsp
+vim.lsp.enable(vim.tbl_keys(lsp_servers_map))
 
 --- `set filetype=xxx` 时 detach previous LSP.
 vim.api.nvim_create_autocmd("FileType", {
