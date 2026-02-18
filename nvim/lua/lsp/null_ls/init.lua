@@ -3,11 +3,17 @@ if not null_ls_status_ok then
   return
 end
 
+--- 获取 sources
+local null_sources = require("lsp.null_ls.sources")
+
+--- 读取 & cache local_settings files
+null_sources.reload_local_settings()
+
 --- null-ls setup() 在这里加载上面设置的 formatting & linter ---------------------------------------
 --- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/CONFIG.md
 null_ls.setup({
   --- VVI: 设置 linter / formatter / code actions
-  sources = require("lsp.null_ls.sources").sources,
+  sources = null_sources.sources(),
 
   --- VVI: project root, 影响 linter 执行时的 pwd. 这里的 root_dir 是一个全局设置,
   --- 对 null-ls 中的所有 linter 有效. root_dir 需要传入一个回调函数 func(params):string.

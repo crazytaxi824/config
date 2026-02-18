@@ -11,12 +11,10 @@ if not null_ls_status_ok then
 end
 
 --- 加载 local settings
-local local_linter_settings = require("lsp.project_local_settings.load_local_settings").get_local_linter_settings()
+local project_local_settings = require("lsp.project_local_settings.load_local_settings")
 
---- linters 设置 -----------------------------------------------------------------------------------
-local diagnostics = null_ls.builtins.diagnostics
-local code_actions = null_ls.builtins.code_actions
--- local formatting = null_ls.builtins.formatting
+--- cache local linter settings
+local local_linter_settings = nil
 
 --- diagnostics_opts 用于下面的 sources diagnostics 设置 --- {{{
 --- https://github.com/nvimtools/none-ls.nvim/blob/main/doc/HELPERS.md
@@ -48,18 +46,21 @@ local diagnostics_opts = {
 
 local M = {}
 
---- VVI: 这里使用函数来返回 table, 而不是直接定义一个 table 的原因是:
---- 直接定义一个 table 的问题是: module 在第一次 require() 之后 table 中的内容就缓存了.
---- 而调用函数返回 table 的好处是: 每次执行函数时 table 中的内容都会重新生成.
-M.sources = {
-  --- diagnostics (linter) -------------------------------------------------------------------------
+--- 重新读取 project local settings 文件
+M.reload_local_settings = function()
+  local_linter_settings = project_local_settings.get_local_linter_settings()
+end
+
+--- linter (diagnostics) tools
+local diagnostics = null_ls.builtins.diagnostics
+M.linter = {
   --- go:golangci-lint 配置文件位置自动查找 ---------------------------------- {{{
   --- DOCS: https://golangci-lint.run/usage/configuration/#linters-configuration
   --- golangci-lint 会自动寻找 '.golangci.yml', '.golangci.yaml', '.golangci.toml', '.golangci.json'.
   --- GolangCI-Lint also searches for config files in all directories from the directory of
   --- the first analyzed path up to the root.
   -- -- }}}
-  function()
+  golangci_lint = function()
     local global_settings = require("lsp.null_ls.tools.golangci_lint")
 
     --- 加载 global_settings & opts
@@ -83,41 +84,24 @@ M.sources = {
   diagnostics.gdlint,
 
   --- python: using 'ruff' lsp instead
-
-  --- code action ----------------------------------------------------------------------------------
-  code_actions.gomodifytags,
-  -- code_actions.impl,  -- BUG: cwd 必须在 bufnr 所在文件夹下才能使用.
-
-  --- formatter: 目前使用 Conform, Deprecated formatter & code_actions ----------------------------- {{{
-  -- [M.local_formatter_key] = {
-  --   prettier = function()
-  --     return formatting.prettier.with(proj_local_settings.keep_extend(M.local_formatter_key, 'prettier',
-  --       require("lsp.null_ls.tools.prettier")))  -- NOTE: 加载单独设置 null_ls/tools/prettier.lua
-  --   end,
-  --
-  --   --- go: goimports, goimports_reviser, gofmt, gofumpt
-  --   --- go 需要在这里使用 'goimports', 因为 gopls 默认不会处理 "source.organizeImports",
-  --   --- 但是需要 gopls 格式化 go.mod 文件.
-  --   goimports = function()
-  --     return formatting.goimports.with(proj_local_settings.keep_extend(M.local_formatter_key, 'goimports', {}))
-  --   end,
-  --
-  --   --- goimports_reviser 只是对 import (...) 排序, 无法进行 format 操作.
-  --   --- BUG: 目前 goimports_reviser 和 goimports 执行顺序上有问题. 导致 goimports_reviser 无法排序.
-  --   --- 目前在 'auto_format.lua' 的 autocmd BufWritePost 中执行.
-  --   --goimports_reviser = null_ls.builtins.formatting.goimports_reviser,
-  --
-  --   --- sh shell: shfmt
-  --   shfmt = function()
-  --     return formatting.shfmt.with(proj_local_settings.keep_extend(M.local_formatter_key, 'shfmt', {}))
-  --   end,
-  --
-  --   --- protobuf: buf
-  --   buf = function()
-  --     return formatting.buf.with(proj_local_settings.keep_extend(M.local_formatter_key, 'buf', {}))
-  --   end,
-  -- },
-  -- -- }}}
 }
+
+--- code_actions tools
+local code_actions = null_ls.builtins.code_actions
+M.code_actions = {
+  --- go json tags
+  code_actions.gomodifytags,
+
+  --- BUG: cwd 必须在 bufnr 所在文件夹下才能使用.
+  -- code_actions.impl,
+}
+
+--- 返回一个 list
+M.sources = function()
+  local sources_list = {}
+  vim.list_extend(sources_list, vim.tbl_values(M.linter))
+  vim.list_extend(sources_list, vim.tbl_values(M.code_actions))
+  return sources_list
+end
 
 return M
