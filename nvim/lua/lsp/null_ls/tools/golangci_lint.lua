@@ -7,14 +7,16 @@ return {
   ---  可以通过设置 setup() 中的 debug = true, 打开 `:NullLsLog` 查看命令行默认参数.
   args = function(params)
     local golangci_args = {
-      "run", "--fast-only", "--fix=false",
-      "--output.json.path=stdout",
-      "--show-stats=false",  -- 不显示最后的 (N) issues.
+      "run",
 
       --- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/HELPERS.md#args
       --- NOTE: 不能使用 $FILENAME lint 单个文件. 会导致其他 package 中定义的 var 无法被 golangci 找到.
       --- 如果缺省该设置则会 lint 整个 project.
       "$DIRNAME",
+
+      "--fix=false",  -- 不要自动 fix code.
+      "--output.json.path=stdout",  -- 使用 json 格式输出.
+      "--show-stats=false",  -- 不显示最后的 (N) issues, 否则 null-ls parse json 会报错.
 
       --- Path prefix to add to output.
       --- VVI: 默认情况下运行 golangci-lint run 时 output 中 filename 是一个相对 pwd/cwd 的相对文件路径.
