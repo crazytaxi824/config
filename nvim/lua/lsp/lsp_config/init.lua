@@ -50,7 +50,7 @@ end
 --- 设置 & 启动单个 lsp
 local function lspconfig_setup(lsp_tool)
   --- NOTE: opts 必须包含 on_attach, capabilities 两个属性.
-  local opts = require("lsp.lsp_config.setup_opts")
+  local opts = require("lsp.lsp_config.client_config")
   opts = vim.tbl_deep_extend('force', opts, {})  -- deep copy table
 
   --- 先加载 global_opts, 再加载 project_local_settings
