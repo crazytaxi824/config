@@ -26,7 +26,7 @@
 --   }
 -- }
 
-local utils = require("lsp.project_local_settings.find_local_settings")
+local utils = require("lsp.project_local_settings.utils")
 
 --- 加载 autocmd
 require("lsp.project_local_settings.auto_restart_tools")
