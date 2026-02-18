@@ -95,9 +95,9 @@ local function parse_local_lsp_settings(settings)
     --- eg: pyright 是 lsp tool name, python 是需要放在 settings{} 中的 name
     local r = vim.split(key, ':', {trimempty=true})
     if #r == 1 then
-      s = vim.tbl_deep_extend('force', s, {[key] = {[key] = settings[key]}})
+      s = vim.tbl_deep_extend('force', s, {[key] = {[key] = value}})
     elseif #r == 2 then
-      s = vim.tbl_deep_extend('force', s, {[r[1]] = {[r[2]] = settings[key]}})
+      s = vim.tbl_deep_extend('force', s, {[r[1]] = {[r[2]] = value}})
     else
       error("project local '" .. lsp_file .. "' format error")
       return nil
