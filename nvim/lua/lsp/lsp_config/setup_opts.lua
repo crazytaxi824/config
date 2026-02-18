@@ -72,11 +72,11 @@ M.on_attach = function(client, bufnr)
   --- 加载自定义设置 ---
   --- textDocument/documentHighlight, 显示 references
   if client:supports_method(ms.textDocument_documentHighlight, bufnr) then
-    require("lsp.plugins.custom_requests.doc_highlight").setup(client, bufnr)
+    require("lsp.custom_requests.doc_highlight").setup(client, bufnr)
   end
 
   --- keymaps ---
-  local lsp_keymaps = require("lsp.plugins.lsp_keymaps")
+  local lsp_keymaps = require("lsp.lsp_keymaps")
   lsp_keymaps.textDocument_keymaps(bufnr)
   lsp_keymaps.diagnostic_keymaps(bufnr)
 

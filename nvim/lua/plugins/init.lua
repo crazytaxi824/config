@@ -206,7 +206,7 @@ local plugins = {
   {
     "neovim/nvim-lspconfig",  -- 官方 LSP 引擎
     -- commit = "d88ae66",
-    config = function() require("lsp.plugins.lsp_config") end,
+    config = function() require("lsp.lsp_config") end,
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",  -- VVI: vim.lsp.enable() 必须在 cmp_nvim_lsp 之后加载, 否则无法提供代码补全
     },
@@ -216,7 +216,7 @@ local plugins = {
   {
     "nvimtools/none-ls.nvim",
     commit = "68ed8b9",
-    config = function() require("lsp.plugins.null_ls") end,
+    config = function() require("lsp.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
     event = "VeryLazy",

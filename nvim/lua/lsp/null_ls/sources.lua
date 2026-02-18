@@ -60,7 +60,7 @@ M.sources =  {
   --- the first analyzed path up to the root.
   -- -- }}}
   function()
-    local global_settings = require("lsp.plugins.null_ls.tools.golangci_lint")
+    local global_settings = require("lsp.null_ls.tools.golangci_lint")
 
     --- 加载 global_settings & opts
     local opts = vim.tbl_deep_extend('force', diagnostics_opts, global_settings)
@@ -92,7 +92,7 @@ M.sources =  {
   -- [M.local_formatter_key] = {
   --   prettier = function()
   --     return formatting.prettier.with(proj_local_settings.keep_extend(M.local_formatter_key, 'prettier',
-  --       require("lsp.plugins.null_ls.tools.prettier")))  -- NOTE: 加载单独设置 null_ls/tools/prettier.lua
+  --       require("lsp.null_ls.tools.prettier")))  -- NOTE: 加载单独设置 null_ls/tools/prettier.lua
   --   end,
   --
   --   --- go: goimports, goimports_reviser, gofmt, gofumpt

@@ -7,7 +7,7 @@ end
 --- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/CONFIG.md
 null_ls.setup({
   --- VVI: 设置 linter / formatter / code actions
-  sources = require("lsp.plugins.null_ls.sources").sources,
+  sources = require("lsp.null_ls.sources").sources,
 
   --- VVI: project root, 影响 linter 执行时的 pwd. 这里的 root_dir 是一个全局设置,
   --- 对 null-ls 中的所有 linter 有效. root_dir 需要传入一个回调函数 func(params):string.
@@ -47,7 +47,7 @@ null_ls.setup({
   --- 以下callback 都是 DEBUG: 用
   --- keymaps ---
   on_attach = function(client, bufnr)
-    require("lsp.plugins.lsp_keymaps").diagnostic_keymaps(bufnr)
+    require("lsp.lsp_keymaps").diagnostic_keymaps(bufnr)
 
     if __Debug_Neovim.null_ls then
       Notify("LSP Server attach: " .. client.name, "DEBUG", {title="Null-ls"})
