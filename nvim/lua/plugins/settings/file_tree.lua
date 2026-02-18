@@ -217,7 +217,7 @@ nvim_tree.setup {
     special_files = {
       "Makefile", "MAKEFILE", "README.md", "readme.md", "Readme.md", "DOCS.md",
       ".editorconfig", ".gitignore",
-      ".golangci.yml", ".golangci.yaml",  -- golangci-lint
+      ".golangci.yml", ".golangci.yaml", ".golangci.toml", ".golangci.json", -- golangci-lint
       "eslint.config.js", "eslint.config.mjs", "eslint.config.cjs",
       "eslint.config.ts", "eslint.config.mts", "eslint.config.cts",  -- requires additional setup
       "package.json", "package-lock.json",  -- npm init
