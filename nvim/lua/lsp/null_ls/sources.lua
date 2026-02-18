@@ -13,7 +13,10 @@ end
 --- 加载 local settings
 local local_linter_settings = require("lsp.project_local_settings.load_local_settings").get_local_linter_settings()
 
-local M = {}
+--- linters 设置 -----------------------------------------------------------------------------------
+local diagnostics = null_ls.builtins.diagnostics
+local code_actions = null_ls.builtins.code_actions
+-- local formatting = null_ls.builtins.formatting
 
 --- diagnostics_opts 用于下面的 sources diagnostics 设置 --- {{{
 --- https://github.com/nvimtools/none-ls.nvim/blob/main/doc/HELPERS.md
@@ -43,15 +46,12 @@ local diagnostics_opts = {
 }
 -- }}}
 
---- linters 设置 -----------------------------------------------------------------------------------
-local diagnostics = null_ls.builtins.diagnostics
-local code_actions = null_ls.builtins.code_actions
--- local formatting = null_ls.builtins.formatting
+local M = {}
 
 --- VVI: 这里使用函数来返回 table, 而不是直接定义一个 table 的原因是:
 --- 直接定义一个 table 的问题是: module 在第一次 require() 之后 table 中的内容就缓存了.
 --- 而调用函数返回 table 的好处是: 每次执行函数时 table 中的内容都会重新生成.
-M.sources =  {
+M.sources = {
   --- diagnostics (linter) -------------------------------------------------------------------------
   --- go:golangci-lint 配置文件位置自动查找 ---------------------------------- {{{
   --- DOCS: https://golangci-lint.run/usage/configuration/#linters-configuration
