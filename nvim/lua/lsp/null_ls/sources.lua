@@ -17,7 +17,7 @@ local project_local_settings = require("lsp.project_local_settings")
 local local_linter_settings = nil
 
 --- diagnostics_opts 用于下面的 sources diagnostics 设置 --- {{{
---- https://github.com/nvimtools/none-ls.nvim/blob/main/doc/HELPERS.md
+--- https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTIN_CONFIG.md
 local diagnostics_opts = {
   --method = null_ls.methods.DIAGNOSTICS_ON_SAVE,  -- `lua vim.print(require('null-ls').methods)`
   --timeout = 3000,  -- 单独给 linter 设置超时时间. 全局设置了 default_timeout.
@@ -34,12 +34,12 @@ local diagnostics_opts = {
 
   --- NOTE: Post Hook, 会导致 diagnostics_format 设置失效. 可以单独给 linter 设置 post hook.
   --- This option is not compatible with 'diagnostics_format'.
-  -- diagnostics_postprocess = function(diagnostic)
+  -- diagnostics_postprocess = function(diagnostic, opts)
   --   --- 会导致所有 error msg 都是设置的 severity level, ERROR(1) | WARN(2) | INFO(3) | HINT(4)
-  --   diagnostic.severity = vim.diagnostic.severity.WARN
+  --   -- diagnostic.severity = vim.diagnostic.severity.WARN
   --
   --   --- 相当于重新设置 diagnostics_format.
-  --   diagnostic.message = diagnostic.message .. ' [null-ls]'
+  --   -- diagnostic.message = diagnostic.message .. ' [null-ls]'
   -- end,
 }
 -- }}}
