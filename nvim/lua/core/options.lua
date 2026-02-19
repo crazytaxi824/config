@@ -587,7 +587,7 @@ vim.api.nvim_create_user_command('ToggleSpellCheck', function()
   end
 end, {bang=true, bar=true})
 
---- 如果删除最后一个 buflisted window, 则在删除之前创建一个新的 window.
+--- 如果删除最后一个 buflisted window, 则在删除之前创建一个新的 window. ---------------------------- {{{
 vim.api.nvim_create_autocmd("QuitPre", {
   callback = function(params)
     local win_id = vim.api.nvim_get_current_win()
@@ -600,8 +600,9 @@ vim.api.nvim_create_autocmd("QuitPre", {
       return
     end
 
-    --- skip netrw/NvirTree filetype
-    if vim.bo[params.buf].filetype == "NvimTree" or vim.bo[params.buf].filetype == "netrw" then
+    --- skip netrw/NvimTree filetype
+    local skip_filetypes = { "NvimTree", "netrw" }
+    if vim.tbl_contains(skip_filetypes, vim.bo[params.buf].filetype) then
       return
     end
 
@@ -616,24 +617,20 @@ vim.api.nvim_create_autocmd("QuitPre", {
       end
     end
 
-    --- last normal window
-    if vim.fn.win_gettype(win_id) == '' and normal_win_count <= 1 then
-      vim.notify("Cannot quit the last normal window. use `:qa`", vim.log.levels.WARN)
-      vim.cmd.vsplit()  -- 使用 vsplit 防止 window 高度改变
-      return
-    end
-
-    --- last buflisted window
-    if vim.fn.buflisted(params.buf) == 1 and buflisted_win_count <= 1 then
-      vim.notify("Cannot quit the last buflisted window.", vim.log.levels.WARN)
-      vim.cmd.vsplit()  -- 使用 vsplit 防止 window 高度改变
-      return
+    if vim.fn.win_gettype(win_id) == '' and normal_win_count <= 1  --- last normal window
+      or vim.fn.buflisted(params.buf) == 1 and buflisted_win_count <= 1  --- last buflisted window
+    then
+      local choice = vim.fn.confirm("close last normal/buflisted window?", "&Yes\n&No", 2)
+      if choice ~= 1 then
+        vim.cmd.vsplit()  --- 通过 vsplit() 创建一个新的 window, vsplit() 不会改变 window 高度.
+      end
     end
   end,
   desc = "Do not quit last (buflisted) window",
 })
+-- }}}
 
---- help widnow 放到最右侧
+--- help widnow 放到最右侧 ------------------------------------------------------------------------- {{{
 -- vim.api.nvim_create_autocmd("FileType", {
 --   pattern = {"help"},
 --   callback = function(params)
@@ -644,6 +641,6 @@ vim.api.nvim_create_autocmd("QuitPre", {
 --   end,
 --   desc = "help window vertically splitright",
 -- })
-
+-- }}}
 
 
