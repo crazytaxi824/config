@@ -588,45 +588,20 @@ vim.api.nvim_create_user_command('ToggleSpellCheck', function()
 end, {bang=true, bar=true})
 
 --- 如果删除最后一个 buflisted window, 则在删除之前创建一个新的 window. ---------------------------- {{{
-vim.api.nvim_create_autocmd("QuitPre", {
+vim.api.nvim_create_autocmd({"ExitPre"}, {
   callback = function(params)
-    local win_id = vim.api.nvim_get_current_win()
-    if vim.api.nvim_win_get_buf(win_id) ~= params.buf then
+    --- 如果是 :qa, :qa!, :xa, :xa! 则不做任何操作
+    local quit_cmd = vim.fn.histget("cmd", -1)
+    if vim.endswith(quit_cmd, "a") or vim.endswith(quit_cmd, "a!") then
       return
     end
 
-    --- skip unsaved file
-    if vim.bo[params.buf].modified then
-      return
-    end
-
-    --- skip netrw/NvimTree filetype
-    local skip_filetypes = { "NvimTree", "netrw" }
-    if vim.tbl_contains(skip_filetypes, vim.bo[params.buf].filetype) then
-      return
-    end
-
-    local normal_win_count = 0
-    local buflisted_win_count = 0
-    for _, wid in ipairs(vim.api.nvim_list_wins()) do
-      if vim.fn.win_gettype(wid) == '' then
-        normal_win_count = normal_win_count + 1
-      end
-      if vim.fn.buflisted(vim.api.nvim_win_get_buf(wid)) == 1 then
-        buflisted_win_count = buflisted_win_count + 1
-      end
-    end
-
-    if vim.fn.win_gettype(win_id) == '' and normal_win_count <= 1  --- last normal window
-      or vim.fn.buflisted(params.buf) == 1 and buflisted_win_count <= 1  --- last buflisted window
-    then
-      local choice = vim.fn.confirm("close last normal/buflisted window?", "&Yes\n&No", 2)
-      if choice ~= 1 then
-        vim.cmd.vsplit()  --- 通过 vsplit() 创建一个新的 window, vsplit() 不会改变 window 高度.
-      end
+    local choice = vim.fn.confirm("close last normal/buflisted window?", "&Yes\n&No", 2)
+    if choice ~= 1 then
+      vim.cmd.vsplit()  --- 通过 vsplit() 创建一个新的 window, vsplit() 不会改变 window 高度.
     end
   end,
-  desc = "Do not quit last (buflisted) window",
+  desc = "confirm: quit last window",
 })
 -- }}}
 
