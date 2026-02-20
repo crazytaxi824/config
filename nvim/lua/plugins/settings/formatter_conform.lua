@@ -76,8 +76,8 @@ local function auto_format()
     group = g_id,
     pattern = {"*"},
     callback = function(params)
-      --- NOTE: exclude some of the filetypes to auto format
-      local exclude_auto_format_filtypes = { "markdown", "yaml", "lua", "jsonc" }
+      --- NOTE: 以下文件类型不执行 auto format, 需要手动执行 :Format 命令
+      local exclude_auto_format_filtypes = { "markdown", "yaml", "lua" }
       if vim.tbl_contains(exclude_auto_format_filtypes, vim.bo[params.buf].filetype) then
         return
       end
