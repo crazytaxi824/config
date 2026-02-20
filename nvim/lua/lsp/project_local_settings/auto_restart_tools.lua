@@ -34,7 +34,6 @@ vim.api.nvim_create_autocmd({'BufWritePost'}, {
 
       local tools = utils.find_diff_tool(old, new)
       p.restart_linters(tools)
-      vim.notify("restart linter: " .. table.concat(tools, ", "))
     end
   end,
   desc = "reload local settings when '.nvim/linter.json' changed",

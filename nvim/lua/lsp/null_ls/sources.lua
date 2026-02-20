@@ -109,10 +109,17 @@ M.sources = function()
 end
 
 M.restart_linters = function(linter_tools)
+  local tools = {}
   for _, linter_tool in ipairs(linter_tools) do
-    null_ls.disable(linter_tool)  -- 清除 diagnostic messages & signs
-    null_ls.deregister(linter_tool)  -- 注销, 删除原服务.
-    null_ls.register(M.linter[linter_tool]())  -- 重新注册. register 后, 自动 enable.
+    if M.linter[linter_tool] then
+      null_ls.disable(linter_tool)  -- 清除 diagnostic messages & signs
+      null_ls.deregister(linter_tool)  -- 注销, 删除原服务.
+      null_ls.register(M.linter[linter_tool]())  -- 重新注册. register 后, 自动 enable.
+      table.insert(tools, linter_tool)
+    end
+  end
+  if #tools > 0 then
+    vim.notify("restart linter: " .. table.concat(tools, ", "))
   end
 end
 
