@@ -7,6 +7,9 @@ local lsp_servers_map = require('lsp.svr_list').list
 --- cache local lsp settings
 local local_lsp_settings = nil
 
+---获取全局和本地 lsp 设置
+---@param lsp_tool string (lsp name)
+---@return table (lsp config)
 local function load_lsp_configs(lsp_tool)
   --- 1. 如果文件存在, 则加载自定义设置, 如果没有自定义设置则加载默认设置.
   local status_ok, lsp_config = pcall(require, "lsp.lsp_config.tools." .. lsp_tool)
@@ -30,17 +33,19 @@ end
 
 local M = {}
 
---- 重新读取 project local settings 文件
+---重新读取 project local settings 文件
 M.reload_local_settings = function()
   local_lsp_settings = project_local_settings.get_local_lsp_settings()
 end
 
+---返回当前本地 lsp 设置
+---@return table|nil
 M.exist_settings = function()
   return local_lsp_settings
 end
 
---- 设置 & 启动单个 lsp
---- @param lsp_tool string
+---设置 & 启动单个 lsp
+---@param lsp_tool string
 M.lspconfig_setup = function(lsp_tool)
   --- config 必须包含 on_attach, capabilities 两个属性.
   local common_config = require("lsp.lsp_config.client_config")
@@ -48,25 +53,23 @@ M.lspconfig_setup = function(lsp_tool)
   vim.lsp.config(lsp_tool, lsp_config)
 end
 
---- @param lsp_tools string[]
+---重启 lsp
+---@param lsp_tools string[]
 M.restart_lsps = function(lsp_tools)
   local tools = {}
 
   for _, lsp_tool in ipairs(lsp_tools) do
     if lsp_servers_map[lsp_tool] then
-      M.lspconfig_setup(lsp_tool)  -- 重新配置
+      M.lspconfig_setup(lsp_tool)  -- 重新配置 lsp config
       table.insert(tools, lsp_tool)
     end
   end
 
+  --- restart lsps
   if #tools > 0 then
-    vim.lsp.enable(tools, false) -- disable
-
-    --- VVI: 在 schedule() 中等待 lspconfig_setup() 配置完成后再启动, 否则可能导致 lsp config 配置无法更新.
-    vim.schedule(function()
-      vim.lsp.enable(tools)  -- enable
-      vim.notify("restart lsp: " .. table.concat(tools, ", "))
-    end)
+    vim.lsp.enable(tools, false)
+    vim.lsp.enable(tools)
+    vim.notify("restart lsp: " .. table.concat(tools, ", "))
   end
 end
 
