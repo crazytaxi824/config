@@ -45,8 +45,8 @@ end
 M.lspconfig_setup = function(lsp_tool)
   --- config 必须包含 on_attach, capabilities 两个属性.
   local common_config = require("lsp.lsp_config.client_config")
-  local config = vim.tbl_deep_extend('force', common_config, load_lsp_configs(lsp_tool))
-  vim.lsp.config(lsp_tool, config)
+  local lsp_config = vim.tbl_deep_extend('force', common_config, load_lsp_configs(lsp_tool))
+  vim.lsp.config(lsp_tool, lsp_config)
 end
 
 --- @param lsp_tools string[]
