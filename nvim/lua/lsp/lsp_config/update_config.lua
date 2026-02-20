@@ -8,20 +8,19 @@ local lsp_servers_map = require('lsp.svr_list').list
 local local_lsp_settings = nil
 
 local function load_lsp_configs(lsp_tool)
-  --- 加载 lsp 配置文件, "~/.config/nvim/lua/lsp/lsp_config/tools/..."
-  --- 如果文件存在, 则加载自定义设置, 如果没有自定义设置则加载默认设置.
+  --- 1. 如果文件存在, 则加载自定义设置, 如果没有自定义设置则加载默认设置.
   local status_ok, lsp_config = pcall(require, "lsp.lsp_config.tools." .. lsp_tool)
   if not status_ok then
     lsp_config = {}
   end
 
-  --- 加载项目本地设置, 覆盖 global settings.
+  --- 2. 加载项目本地设置, 覆盖 global settings.
   local local_settings = nil
   if local_lsp_settings and local_lsp_settings[lsp_tool] then
     local_settings = local_lsp_settings[lsp_tool]
   end
 
-  --- merge settings
+  --- 3. merge settings
   if local_settings then
     return vim.tbl_deep_extend('force', lsp_config, {settings = local_settings})
   end
