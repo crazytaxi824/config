@@ -11,6 +11,7 @@ local function lsp_global_opts(lsp_tool, config)
   if not status_ok then
     return config
   end
+  global_config = vim.deepcopy(global_config) -- VVI: deep copy 防止 require() 的内容后续被修改
   return vim.tbl_deep_extend("force", config, global_config)
 end
 
@@ -61,7 +62,7 @@ end
 M.lspconfig_setup = function(lsp_tool)
   --- config 必须包含 on_attach, capabilities 两个属性.
   local config = require("lsp.lsp_config.client_config")
-  config = vim.tbl_deep_extend('force', config, {})  -- VVI: deep copy table, 否则会污染整个 table
+  config = vim.deepcopy(config)  -- VVI: deep copy 防止 require() 的内容后续被修改
 
   --- 先加载 global_opts
   config = lsp_global_opts(lsp_tool, config)
