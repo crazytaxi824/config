@@ -43,10 +43,14 @@
 local M = {}
 
 --- ADD Tags and Options --------------------------------------------------------------------------- {{{
---- arglist[1] is tag options. could be 'json', 'json=foo',
----   'json,xml=bar', 'json=foo,xml=bar', 'json=foo,json=fuz,xml=bar'
+
+--- arglist[1] is tag options. could be 'json', 'json=foo', 'json=foo,xml', 'json=foo,json=fuz,xml=bar'
 --- arglist[2] = <可为空>|snakecase|camelcase|...
-M.go_add_tags_and_opts = function(arglist, go_add_tags_cmd, offset)
+---
+---@param arglist string[] ({ "json,xml" "camelcase" } | { "json=string,xml=bar" "camelcase" })
+---@param go_add_tags_cmd string ("GoTagAdd"|"GoTagAddAllStruct")
+---@param offset? integer (vim.fn.line2byte(vim.fn.line('.')))
+function M.go_add_tags_and_opts(arglist, go_add_tags_cmd, offset)
   if vim.bo.readonly then
     Notify("cannot add tags to readonly file","ERROR")
     return
@@ -161,9 +165,14 @@ end
 -- -- }}}
 
 --- Remove Tags and Options ------------------------------------------------------------------------ {{{
+
 --- if no args,  remove all tags, use '-clear-tags'
 --- if has args, remove specified tags, use '-remove-tags'
-M.go_remove_tags = function(arglist, go_remove_tags_cmd, offset)
+---
+---@param arglist string[] ({} | {"json,xml"})
+---@param go_remove_tags_cmd string ("GoTagRemove")
+---@param offset? integer (vim.fn.line2byte(vim.fn.line('.')))
+function M.go_remove_tags(arglist, go_remove_tags_cmd, offset)
   if vim.bo.readonly then
     Notify("cannot remove tags from readonly file","ERROR")
     return
@@ -220,9 +229,14 @@ end
 -- -- }}}
 
 --- Remove Tag's Options --------------------------------------------------------------------------- {{{
+
 --- if no args,  remove all tags' options, use '-clear-options'
 --- if has args, remove specified tag's options, use '-remove-options'
-M.go_remove_tags_opts = function(arglist, go_remove_tag_opts_cmd, offset)
+---
+---@param arglist string[] ({} | {"json=foo,xml=bar"})
+---@param go_remove_tag_opts_cmd string ("GoTagOptionsRemove")
+---@param offset? integer (vim.fn.line2byte(vim.fn.line('.')))
+function M.go_remove_tags_opts(arglist, go_remove_tag_opts_cmd, offset)
   if vim.bo.readonly then
     Notify("cannot remove tags's options from readonly file","ERROR")
     return
