@@ -2,14 +2,19 @@
 
 local M = {}
 
-M.go_list = function(dir)
+---go list -json 分析
+---
+---@param cwd string|nil (directory)
+---@return table|nil
+M.go_list = function(cwd)
   local result = vim.system({'go', 'list', '-json'}, {
     --- cwd 可以是 relative path 或者是 absolute path.
-    cwd = dir or vim.fs.dirname(vim.api.nvim_buf_get_name(0)),
+    cwd = cwd or vim.fs.dirname(vim.api.nvim_buf_get_name(0)),
     text = true,
   }):wait()
   if result.code ~= 0 then
     error(result.stderr ~= '' and result.stderr or result.code)
+    return nil
   end
 
   return vim.json.decode(result.stdout)

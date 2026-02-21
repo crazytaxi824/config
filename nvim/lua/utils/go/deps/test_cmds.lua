@@ -200,6 +200,9 @@ M.get_testflag_desc = function(flag)
   return f.desc
 end
 
+---go test
+---
+---@param opts table
 M.go_test = function(opts)
   local term_opts = M.my_term_opts(opts)
   if not term_opts then

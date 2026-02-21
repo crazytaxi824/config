@@ -5,7 +5,9 @@ local test_cmds = require("utils.go.deps.test_cmds")
 
 local M = {}
 
---- mode = 'run'|'bench'
+---测试 package `go test run/bench ImportPath`
+---
+---@param mode 'run'|'bench'
 M.go_test_pkg = function(mode)
   --- 获取 go list info, `cd src/xxx && go list -json`
   local go_list = go_list_module.go_list()

@@ -5,6 +5,7 @@ local go_utils_mod = require("utils.go.deps.go_list")
 
 local M = {}
 
+---`go run ImportPath`
 M.go_run = function()
   --- 获取 go list info, `cd src/xxx && go list -json`
   local go_list = go_utils_mod.go_list()

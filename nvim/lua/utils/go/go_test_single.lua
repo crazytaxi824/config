@@ -6,9 +6,12 @@ local test_cmds = require("utils.go.deps.test_cmds")
 
 local M = {}
 
---- get test function name Test/Benchmark/FuzzXxx -------------------------------------------------- {{{
---- 返回 Test Function Name, "TestXxx(t *testing.T)", "BenchmarkXxx(b *testing.B)", "FuzzXxx(f *testing.F)"
---- return {funcname: string|nil, mode :string|nil}
+---get test function name Test/Benchmark/FuzzXxx -------------------------------------------------- {{{
+
+---返回 Test Function Name, "TestXxx(t *testing.T)", "BenchmarkXxx(b *testing.B)", "FuzzXxx(f *testing.F)"
+---
+---@return string|nil
+---@return 'run'|'bench'|'fuzz'|nil
 local function get_test_func_name()
   local lcontent = vim.fn.getline('.')  -- 获取行内容
 
@@ -33,7 +36,9 @@ local function get_test_func_name()
 end
 -- -- }}}
 
---- go test single function under the cursor -------------------------------------------------------
+---`go test run/bench=^TEST_Func_Name$ ImportPath`
+---
+---@param prompt string|nil
 M.go_test_single_func = function(prompt)
   --- 判断当前文件是否 _test.go
   if not string.match(vim.fn.bufname(), "_test%.go$") then
