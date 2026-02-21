@@ -2,11 +2,11 @@
 
 local M = {}
 
----go list -json 分析
+---`go list -json` 内容分析
 ---
----@param cwd string|nil (directory)
+---@param cwd string|nil (directory, nil: 则使用当前 buffer 的 dir)
 ---@return table|nil
-M.go_list = function(cwd)
+function M.go_list(cwd)
   local result = vim.system({'go', 'list', '-json'}, {
     --- cwd 可以是 relative path 或者是 absolute path.
     cwd = cwd or vim.fs.dirname(vim.api.nvim_buf_get_name(0)),

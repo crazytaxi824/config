@@ -43,6 +43,7 @@ if not vim.uv.fs_stat(pprof_dir) then
   end
 end
 
+--- pprof flag description
 local flag_desc = {
   none = { desc = '[No Extra Flag]', cmd = {} },  -- VVI: cmd 不能为 nil.
 
@@ -80,20 +81,22 @@ local pprof_flags = {
   '-trace', 'trace.out',
 }
 
+--- 可选的 pprof flags
 local pprof_choices = {'cpu', 'mem', 'mutex', 'block', 'trace'}
 
---- opts = {
----   testfn_name = testfn_name,
----   mode = mode,
----   flag = 'none' | 'cpu' | 'mem' | ...,
----   go_list = {},
----   project = string|nil,
---- }
---- mode = 'run' | 'bench' | 'fuzz'
+---@param opts table {
+---   testfn_name: string (函数名),
+---   mode:        'run' | 'bench' | 'fuzz',
+---   flag:        'none' | 'cpu' | 'mem' | ...,
+---   go_list:     table (`go list -json`),
+---   project:     string|boolean|nil (标记),
+---}
+---
+---@return string[] { cmd }
 local function mode_flags(opts)
   local scope = opts.go_list.ImportPath
   if opts.project then
-    scope = './...'
+    scope = './...'  -- NOTE: './...' 意思是整个项目.
   end
 
   if opts.mode == 'run' then
@@ -107,13 +110,22 @@ local function mode_flags(opts)
   end
 end
 
---- my_term_opts = {
----   cwd = dir,
----   cmd = {cmd_list},
----   before_run = function(term),
----   on_exit = function(term, job_id, exit_code, event)
---- }
-M.my_term_opts = function(opts)
+
+---@param opts table {
+---   testfn_name: string (函数名),
+---   mode:        'run' | 'bench' | 'fuzz',
+---   flag:        'none' | 'cpu' | 'mem' | ...,
+---   go_list:     table (`go list -json`),
+---   project:     string|boolean|nil (标记),
+---}
+---
+---@return table {
+---  cwd = string (directory),
+---  cmd = string[] {cmd_list},
+---  before_run = function(term)|nil,
+---  on_exit = function(term, job_id, exit_code, event)|nil
+---}
+function M.my_term_opts(opts)
   --- '-count=1' disable go test cache result.
   local go_test = {'go', 'test', '-count=1', '-v'}
 
@@ -187,8 +199,11 @@ M.my_term_opts = function(opts)
   end
 end
 
---- 返回 description
-M.get_testflag_desc = function(flag)
+--- 返回 pprof flag description
+---
+---@param flag string
+---@return string
+function M.get_testflag_desc(flag)
   local f = flag_desc[flag]
   if not f then
     return '[flag: "' .. flag .. '" is NOT in "testflags.lua" table]'
@@ -200,14 +215,15 @@ M.get_testflag_desc = function(flag)
   return f.desc
 end
 
----go test
----
----@param opts table
-M.go_test = function(opts)
+---@param opts table {
+---   testfn_name: string (函数名),
+---   mode:        'run' | 'bench' | 'fuzz',
+---   flag:        'none' | 'cpu' | 'mem' | ...,
+---   go_list:     table (`go list -json`),
+---   project:     string|boolean|nil (标记),
+---}
+function M.go_test(opts)
   local term_opts = M.my_term_opts(opts)
-  if not term_opts then
-    return
-  end
 
   --- my_term 执行 command
   local t = require('utils.my_term.instances').console

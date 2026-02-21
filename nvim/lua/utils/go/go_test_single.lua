@@ -8,9 +8,12 @@ local M = {}
 
 ---get test function name Test/Benchmark/FuzzXxx -------------------------------------------------- {{{
 
----返回 Test Function Name, "TestXxx(t *testing.T)", "BenchmarkXxx(b *testing.B)", "FuzzXxx(f *testing.F)"
+--- 返回 Test Function Name
+--- - `TestXxx(t *testing.T)`
+--- - `BenchmarkXxx(b *testing.B)`
+--- - `FuzzXxx(f *testing.F)`
 ---
----@return string|nil
+---@return string|nil (如果返回 nil 说明不是 test 函数)
 ---@return 'run'|'bench'|'fuzz'|nil
 local function get_test_func_name()
   local lcontent = vim.fn.getline('.')  -- 获取行内容
@@ -38,8 +41,8 @@ end
 
 ---`go test run/bench=^TEST_Func_Name$ ImportPath`
 ---
----@param prompt string|nil
-M.go_test_single_func = function(prompt)
+---@param prompt? string ('pprof')
+function M.go_test_single_func(prompt)
   --- 判断当前文件是否 _test.go
   if not string.match(vim.fn.bufname(), "_test%.go$") then
     Notify('not "_test.go" file', "ERROR")

@@ -7,7 +7,9 @@
 
 local M ={}
 
----可选 pprof
+--- pprof flag description
+--- 可选 pprof flags (没有 fuzz 可选). 因为 fuzz 每次只能 test 一个 fuzz 函数.
+--- 一次 fuzz 多个函数会报错: FAIL: testing: will not fuzz, -fuzz matches more than one fuzz test
 M.flag_desc = {
   cpu   = { desc = 'CPU profile' },
   mem   = { desc = 'Memory profile' },
