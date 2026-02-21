@@ -134,18 +134,18 @@ end
 
 ---go tool pprof hook
 ---
----@param opts { testfn_name: string, mode: 'run'|'bench'|'fuzz', flag: string, go_list: table, project?: string} {
+---@param opts { testfn_name: string, mode: 'run'|'bench'|'fuzz', flag: string, go_list: table, project: string?} {
 ---   testfn_name: string (函数名),
 ---   mode:        'run' | 'bench' | 'fuzz',
 ---   flag:        'none' | 'cpu' | 'mem' | ...,
 ---   go_list:     table (`go list -json`),
----   project?:    string (标记),
+---   project:     string? (标记),
 ---}
 ---
 ---@param pprof_dir string (directory 存放 pprof files)
 ---@return function
 function M.on_exit(opts, pprof_dir)
-  --- FIXME: opts.flag == 'none'
+  --- opts.flag == 'none' | 'fuzz' 时, 没有 on_exit function.
   local cmd = {'go', 'tool', 'pprof', '-http=localhost:', pprof_dir..opts.flag..'.out'}
   if opts.flag == 'trace' then
     cmd = {'go', 'tool', 'trace', '-http=localhost:', pprof_dir..opts.flag..'.out'}

@@ -45,7 +45,7 @@ end
 
 --- pprof flag description
 local flag_desc = {
-  none = { desc = '[No Extra Flag]', cmd = {} },  -- VVI: cmd 不能为 nil.
+  none = { desc = '[No Extra Flag]' },
 
   --- pprof 的 4 个 testflag, '-cpuprofile', '-memprofile', '-blockprofile', '-mutexprofile'
   cpu   = go_pprof.flag_desc.cpu,
@@ -111,7 +111,7 @@ local function mode_flags(opts)
 end
 
 
----@param opts table {
+---@param opts { testfn_name: string, mode: 'run'|'bench'|'fuzz', flag: string, go_list: table, project: string?} {
 ---   testfn_name: string (函数名),
 ---   mode:        'run' | 'bench' | 'fuzz',
 ---   flag:        'none' | 'cpu' | 'mem' | ...,
@@ -119,7 +119,7 @@ end
 ---   project:     string|boolean|nil (标记),
 ---}
 ---
----@return table {
+---@return { cwd: string, cmd: string[], before_run: function?, on_exit: function? } {
 ---  cwd = string (directory),
 ---  cmd = string[] {cmd_list},
 ---  before_run = function(term)|nil,
@@ -201,8 +201,8 @@ end
 
 --- 返回 pprof flag description
 ---
----@param flag string
----@return string
+---@param flag string ('none' | 'cpu' | 'mem' | ...)
+---@return string (description)
 function M.get_testflag_desc(flag)
   local f = flag_desc[flag]
   if not f then
@@ -215,7 +215,7 @@ function M.get_testflag_desc(flag)
   return f.desc
 end
 
----@param opts table {
+---@param opts { testfn_name: string, mode: 'run'|'bench'|'fuzz', flag: string, go_list: table, project: string?} {
 ---   testfn_name: string (函数名),
 ---   mode:        'run' | 'bench' | 'fuzz',
 ---   flag:        'none' | 'cpu' | 'mem' | ...,
