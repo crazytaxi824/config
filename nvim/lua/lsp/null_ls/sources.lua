@@ -88,19 +88,22 @@ M.code_actions = {
   code_actions.gomodifytags,
 
   --- BUG: cwd 必须在 bufnr 所在文件夹下才能使用.
-  -- code_actions.impl,
+  --code_actions.impl,
 }
 
---- 重新读取 project local settings 文件
+---重新读取 project local settings 文件
 M.reload_local_settings = function()
   local_linter_settings = project_local_settings.get_local_linter_settings()
 end
 
+---返回当前本地 linter 设置
+---@return table|nil
 M.exist_settings = function()
   return local_linter_settings
 end
 
---- 返回一个 list
+---返回一个 list sources
+---@return table
 M.sources = function()
   local sources_list = {}
   vim.list_extend(sources_list, vim.tbl_values(M.linter))
@@ -108,6 +111,7 @@ M.sources = function()
   return sources_list
 end
 
+---重启 linters
 M.restart_linters = function(linter_tools)
   local tools = {}
   for _, linter_tool in ipairs(linter_tools) do
