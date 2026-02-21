@@ -20,7 +20,7 @@ M.flag_desc = {
 
 local cache_bg_jobs = {}  -- 缓存 bg_job_id, map-table: [term_bufnr] = {job_id, ... }
 
----在指定 terminal bufnr 中执行命令
+---在指定 terminal bufnr 中执行 {cmd} 命令
 ---
 ---@param cmd string[]
 ---@param term_bufnr integer
@@ -134,10 +134,18 @@ end
 
 ---go tool pprof hook
 ---
----@param opts table
+---@param opts { testfn_name: string, mode: 'run'|'bench'|'fuzz', flag: string, go_list: table, project?: string} {
+---   testfn_name: string (函数名),
+---   mode:        'run' | 'bench' | 'fuzz',
+---   flag:        'none' | 'cpu' | 'mem' | ...,
+---   go_list:     table (`go list -json`),
+---   project?:    string (标记),
+---}
+---
 ---@param pprof_dir string (directory 存放 pprof files)
 ---@return function
-M.on_exit = function(opts, pprof_dir)
+function M.on_exit(opts, pprof_dir)
+  --- FIXME: opts.flag == 'none'
   local cmd = {'go', 'tool', 'pprof', '-http=localhost:', pprof_dir..opts.flag..'.out'}
   if opts.flag == 'trace' then
     cmd = {'go', 'tool', 'trace', '-http=localhost:', pprof_dir..opts.flag..'.out'}
