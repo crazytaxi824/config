@@ -5,11 +5,10 @@ local vs = require('utils.visual_selected')
 
 local M = {}
 
---- :call cursor('a','b') 的时候, cursor 不会动;
---- :call cursor(3,'b')   的时候, cursor 跳转到第三行第一列;
---- :call cursor('a',3)   的时候, cursor 跳转到本行第三列;
---- :call cursor(3, 3)    的时候, cursor 跳转到第三行第三列;
---- :call cursor('3','3') 的时候, cursor 跳转到第三行第三列;
+---跳转到 filepath
+---@param absolute_path string
+---@param lnum integer
+---@param col integer
 local function jump_to_file(absolute_path, lnum, col)
   lnum = lnum or 1
   col = col or 1
@@ -46,6 +45,8 @@ local function jump_to_file(absolute_path, lnum, col)
   end
 end
 
+---跳转到 directory
+---@param dir string
 local function jump_to_dir(dir)
   --- NOTE: 新窗口中打开 dir, 因为 nvim-tree 设置 hijack_netrw=true & hijack_directories=true,
   --- 如果直接使用 `:edit dir` 会导致打开 dir 的窗口被关闭 (hijack).
@@ -53,7 +54,9 @@ local function jump_to_dir(dir)
   vim.cmd.new(dir)
 end
 
---- jump controller
+---jump to filepath/directory
+---
+---@param content string|nil (filepath:{lnum}:{col})
 local function jump(content)
   if not content then
     return

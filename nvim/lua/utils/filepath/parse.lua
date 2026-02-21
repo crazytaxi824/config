@@ -1,14 +1,23 @@
 local M = {}
 
-local function table_index(tbl, v)
-  for index, value in ipairs(tbl) do
+---index elem of a list
+---
+---@param list string[]
+---@param v string
+---@return integer|nil
+local function index_of(list, v)
+  for index, value in ipairs(list) do
     if value == v then
       return index
     end
   end
 end
 
---- Lua Patterns: escape '()[]+-*.?%^$'
+---Lua Patterns: escape '()[]+-*.?%^$'
+---
+---@param x string|number
+---@return string
+---@return integer count
 local function lua_escape(x)
   return string.gsub(x, '[%%%(%)%[%]%?%+%-%*%^%$%.]', {
     ['%'] = "%%",
@@ -26,12 +35,15 @@ local function lua_escape(x)
   })
 end
 
---- clear { '`', '"', "'", '(', '[', '{', '<'}
+---clear { '`', '"', "'", '(', '[', '{', '<'}
+---
+---@param str string
+---@return string
 local function clear_brackets(str)
   local start_brackets = { '`', '"', "'", '(', '[', '{', '<'}
   local end_brackets   = { '`', '"', "'", ')', ']', '}', '>'}
 
-  local b_index = table_index(start_brackets, string.sub(str,1,1))
+  local b_index = index_of(start_brackets, string.sub(str,1,1))
   if b_index and string.sub(str,-1,-1) == end_brackets[b_index] then
     str = string.sub(str, 2, -2)
   end
@@ -40,6 +52,9 @@ local function clear_brackets(str)
 end
 
 --- clear 'file://' schema
+---
+---@param str string
+---@return string
 local function clear_file_schema(str)
   local t = string.match(str, 'file://(.*)')
   if t then
@@ -48,7 +63,10 @@ local function clear_file_schema(str)
   return str
 end
 
---- 从 str 中获取 filepath or dir, eg: /a/b/c:12:3
+---从 str 中获取 filepath or dir, eg: /a/b/c:12:3
+---
+---@param str string
+---@return table|nil
 local function filepath_with_lnum_col(str)
   -- str:gsub(str, '%z', '󰟢')  -- lua 中 %z 表示 Null(\0)
 
@@ -89,7 +107,11 @@ local function filepath_with_lnum_col(str)
   end
 end
 
---- 分析 filepath
+---分析 filepath
+---
+---@param str string
+---@param hl string|boolean|nil (是否计算 highlight lnum, start_col, end_col)
+---@return table|nil
 local function filepath_from_str(str, hl)
   local tmp = clear_brackets(str)  -- <>, (), [], ...
   tmp = clear_file_schema(tmp)  -- file://
@@ -99,7 +121,7 @@ local function filepath_from_str(str, hl)
     return  -- NOTE: not a filepath, return nil
   end
 
-  --- 需要计算 highlight
+  --- 需要计算 highlight lnum, start_col, end_col
   if hl then
     local find = lua_escape(r.original_fp)
     if r.lnum then
@@ -115,13 +137,17 @@ local function filepath_from_str(str, hl)
   return r
 end
 
---- hl 不存在则只需要分析 absolute filepath 可用于 jump to path, 不需要分析 highlight start_col & end_col.
---- hl 存在则使用 string.find() & nvim_buf_add_highlight() 可用于 highlight.
+---hl 不存在则只需要分析 absolute filepath 可用于 jump to path, 不需要分析 highlight start_col & end_col.
+---hl 存在则使用 string.find() & nvim_buf_add_highlight() 可用于 highlight.
+---
+---@param content string
+---@return table|nil
 M.parse_content = function(content)
-  local r = filepath_from_str(content)
-  return r
+  return filepath_from_str(content)
 end
 
+---获取所有需要 highlight 的 filepaths
+---@return table|nil
 M.parse_hl_line = function()
   --- {bufnr, pos=[]}
   local rs = {
