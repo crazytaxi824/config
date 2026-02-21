@@ -1,3 +1,4 @@
+--- DOCS: lsp.json linter.json 配置 ---------------------------------------------------------------- {{{
 --- .nvim/lsp.json
 -- {
 --   "gopls": {
@@ -25,18 +26,23 @@
 --     "extra_args": ["-c", "./.golangci.yml"]
 --   }
 -- }
+-- }}}
 
 local utils = require("lsp.project_local_settings.utils")
 
 --- 加载 autocmd
 require("lsp.project_local_settings.auto_restart_tools")
 
---- read json file
---- 如果 return vim.empty_dict() 表示 json 文件被清除, 需要 reload lsp settings. 包含以下几种情况:
----   1. json 文件被删除
----   2. json 文件为空
----   3. json 文件为 {}
---- 如果 return nil 表示 json 格式错误, 则不要 reload lsp settings.
+---read json file
+---
+---如果 return vim.empty_dict() 需要 reload lsp settings. 包含以下几种情况:
+---  1. json 文件被删除
+---  2. json 文件为空
+---  3. json 文件为 {}
+---如果 return nil 表示 json 格式错误, 则不要 reload lsp settings.
+---
+---@param json_file string (file path)
+---@return table|nil
 local function read_local_settings(json_file)
   local local_settings_filepath = utils.find_local_settings_file(json_file)
 
@@ -80,6 +86,12 @@ local function read_local_settings(json_file)
   return nil -- json 格式错误, 不需要 reload lsp settings
 end
 
+---解析 lsp settings
+---
+---{ pyright:python = { ... } } 转成 { pyright = python = { ... } }
+---
+---@param settings table
+---@return table|nil
 local function parse_local_lsp_settings(settings)
   if vim.tbl_isempty(settings) then
     return vim.empty_dict() -- json 为空, 或被删除, 需要 reload lsp settings
@@ -104,7 +116,7 @@ end
 
 local M = {}
 
---- 获取 lsp 设置
+---获取本地 lsp 设置
 M.get_local_lsp_settings = function()
   local sf = read_local_settings(utils.lsp_file)
   if not sf then
@@ -114,7 +126,7 @@ M.get_local_lsp_settings = function()
   return parse_local_lsp_settings(sf)
 end
 
---- 获取 none-ls linter 设置
+---获取本地 none-ls linter 设置
 M.get_local_linter_settings = function()
   local sf = read_local_settings(utils.linter_file)
   if not sf then
