@@ -10,9 +10,6 @@ local M = {}
 M.go_run = function()
   --- 获取 go list info, `cd src/xxx && go list -json`
   local go_list = go_utils_mod.go_list()
-  if not go_list then
-    return
-  end
 
   --- Q: 这里为什么要 `cd src/xxx` 之后再 `go run | go list`?
   --- A: 因为 cd 之后再去执行 go list / go run 可以忽略当前 pwd, 在任何 pwd 下执行其他路径中的代码.

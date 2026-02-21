@@ -58,9 +58,6 @@ function M.go_test_single_func(prompt)
 
   --- 获取 go list info, `cd src/xxx && go list -json`
   local go_list = go_list_module.go_list()
-  if not go_list then
-    return
-  end
 
   --- opts = {
   ---   testfn_name = testfn_name,
