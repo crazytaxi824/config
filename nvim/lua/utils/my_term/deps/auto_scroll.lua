@@ -1,7 +1,9 @@
 local M = {}
 
+--- 自动滚动页面到底部.
+---
 ---@param term_obj MyTerm
-M.buf_scroll_bottom = function(term_obj)
+function M.buf_scroll_bottom(term_obj)
   if not term_obj.auto_scroll then
     return
   end

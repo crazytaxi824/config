@@ -39,10 +39,9 @@ local function create_my_term(term_obj)
 
   --- 每次运行 jobstart() 之前, 先创建一个新的 scratch buffer 给 terminal.
   term_obj.bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
-  vim.bo[term_obj.bufnr].filetype = "my_term"
 
-  --- 给 buffer 设置 var: my_term_id
-  vim.b[term_obj.bufnr][M.bufvar_myterm] = term_obj.id
+  vim.bo[term_obj.bufnr].filetype = "my_term"  --- set filetype
+  vim.b[term_obj.bufnr][M.bufvar_myterm] = term_obj.id  --- 设置 bufvar: {my_term_id}
 
   --- autocmd 放在这里运行主要是有两个限制条件:
   --- 1. 在获取到 terminal bufnr 之后运行, 为了在 autocmd 中使用 bufnr 作为触发条件.

@@ -16,6 +16,7 @@ vim.api.nvim_set_hl(0, "my_output_stdout", {ctermfg=Colors.blue.c, fg=Colors.blu
 vim.api.nvim_set_hl(0, "my_output_stderr", {ctermfg=Colors.red.c, fg=Colors.red.g})
 
 --- 强制结束 job
+---
 ---@param term_obj MyTerm
 local function stop_job(term_obj)
   if term_obj.job_id and vim.fn.jobstop(term_obj.job_id) == 1 then
@@ -26,6 +27,7 @@ local function stop_job(term_obj)
 end
 
 --- CTRL-C send interrupt signal to output-buffer ONLY. terminal already has this.
+---
 ---@param term_obj MyTerm
 local function set_console_keymaps(term_obj)
   local opt = { buffer = term_obj.bufnr, silent = true }
@@ -84,6 +86,7 @@ local function set_buf_line_output(bufnr, data, hl)
 end
 
 --- job done 后处理: 在最后一行显示 [Process exited 'exit_code']
+---
 ---@param bufnr integer
 ---@param exit_code integer
 local function set_buf_line_exit(bufnr, exit_code)

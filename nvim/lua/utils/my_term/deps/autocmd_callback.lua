@@ -2,8 +2,10 @@ local g = require('utils.my_term.deps.global')
 
 local M = {}
 
+--- autocmd 根据 events 执行 on_open(), on_close()
+---
 ---@param term_obj MyTerm
-M.autocmd_callback = function(term_obj)
+function M.autocmd_callback(term_obj)
   --- 关闭 terminal window 之后再打开时触发 BufWinEnter, 但不会触发 TermOpen.
   --- buffer 离开所有 window 才会触发 BufWinLeave.
   local g_id = vim.api.nvim_create_augroup('my_term_bufnr_' .. term_obj.bufnr, {clear=true})
@@ -24,6 +26,7 @@ M.autocmd_callback = function(term_obj)
     desc = "my_term: on_open() & on_close() callback",
   })
 
+  --- 全局保存 my_term window height
   vim.api.nvim_create_autocmd("WinClosed", {
     group = g_id,
     buffer = term_obj.bufnr,
@@ -38,7 +41,7 @@ M.autocmd_callback = function(term_obj)
     desc = "my_term: persist window height",
   })
 
-  --- delete augroup
+  --- auto delete augroup
   vim.api.nvim_create_autocmd("BufWipeout", {
     group = g_id,
     buffer = term_obj.bufnr,

@@ -1,6 +1,7 @@
 local g = require('utils.my_term.deps.global')
 
 --- close all other terms except term_id
+---
 ---@param term_id integer
 local function close_others(term_id)
   local t = g.global_my_term_cache[term_id]
@@ -17,6 +18,7 @@ local function close_others(term_id)
 end
 
 --- wipeout term
+---
 ---@param term_id integer
 local function wipeout_term(term_id)
   local t = g.global_my_term_cache[term_id]
@@ -34,6 +36,7 @@ local function wipeout_term(term_id)
 end
 
 --- wipeout all other terms except term_id
+---
 ---@param term_id integer
 local function wipeout_others(term_id)
   local t = g.global_my_term_cache[term_id]
@@ -53,6 +56,7 @@ end
 local M = {}
 
 --- set keymaps for my_term terminal & output-buffer.
+---
 ---@param term_obj MyTerm
 function M.set_buf_keymaps(term_obj)
   local opt = { buffer = term_obj.bufnr, silent = true }
