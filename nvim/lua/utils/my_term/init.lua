@@ -72,31 +72,20 @@ end
 
 --- return an term object by id
 ---@param term_id integer
----@return MyTerm
-M.get_term_by_id = function(term_id)
+---@return MyTerm?
+function M.get_term_by_id(term_id)
   return g.global_my_term_cache[term_id]
 end
 
---- get term_id from term_win_id
----@param win_id integer
----@return integer|nil
-M.get_term_id_by_win = function(win_id)
-  win_id = win_id or vim.api.nvim_get_current_win()
-  if vim.api.nvim_win_is_valid(win_id) then
-    local bufnr = vim.api.nvim_win_get_buf(win_id)
-    return vim.b[bufnr][my_term.bufvar_myterm]
-  end
-end
-
 --- close all my_term windows
-M.close_all = function()
+function M.close_all()
   for _, term_obj in pairs(g.global_my_term_cache) do
     term_obj:close_win()
   end
 end
 
 --- open all terms which are cached in global_my_term_cache and bufnr is valid.
-M.open_all = function()
+function M.open_all()
   for _, term_obj in pairs(g.global_my_term_cache) do
     if g.term_buf_exist(term_obj.bufnr) then
       local term_wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
@@ -107,7 +96,8 @@ M.open_all = function()
   end
 end
 
-M.wipeout_all = function()
+--- jobstop(job_id) & :bwipeout all terminal buffers
+function M.wipeout_all()
   for _, term_obj in pairs(g.global_my_term_cache) do
     if g.term_buf_exist(term_obj.bufnr) then
       term_obj:wipeout()
@@ -116,7 +106,7 @@ M.wipeout_all = function()
 end
 
 --- close all first, then open all
-M.toggle_all = function()
+function M.toggle_all()
   --- 获取所有的 my_term windows
   local open_winid_list= {}
   for _, term_obj in pairs(g.global_my_term_cache) do
