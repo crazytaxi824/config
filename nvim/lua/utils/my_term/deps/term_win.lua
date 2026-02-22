@@ -43,11 +43,11 @@ end
 --- 所以需要删除旧的 bufnr 然后重新创建一个新的 scratch bufnr 给 jobstart() 使用.
 ---
 ---@param curr_term_bufnr integer
----@param old_term_bufnr integer
+---@param old_term_bufnr? integer
 ---@return integer
 function M.enter_term_win(curr_term_bufnr, old_term_bufnr)
   --- 如果 old_term_bufnr 不存在: 创建一个新的 term window 用于加载 new term.bufnr
-  if not g.term_buf_exist(old_term_bufnr) then
+  if not old_term_bufnr or not g.term_buf_exist(old_term_bufnr) then
     return M.create_term_win(curr_term_bufnr)
   end
 
