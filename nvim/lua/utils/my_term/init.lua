@@ -14,15 +14,7 @@ function M.new(opts)
   end
 
   --- terminal object
-  local term_obj = vim.tbl_deep_extend('force', my_term, opts)
-
-  --- generate metatable - term:methods()
-  local mt = my_term.metatable_funcs()
-
-  --- VVI: set all term:methods() to terminal object's metatable
-  setmetatable(term_obj, { __index = mt })
-
-  return term_obj
+  return vim.tbl_deep_extend('force', my_term, opts)
 end
 
 --- create shell terminal

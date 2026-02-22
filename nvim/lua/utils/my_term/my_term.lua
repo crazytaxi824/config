@@ -5,35 +5,23 @@ local console = require('utils.my_term.deps.exec_console')
 local terminal = require('utils.my_term.deps.exec_terminal')
 local keymaps  = require('utils.my_term.deps.term_keymaps')
 
---- my_term object
----@class MyTerm: MyTermOpts  继承 MyTermOpts
----@field bufnr integer  -- bufnr 在 :run() 过程中创建
----@field job_id? integer  -- job_id 在 :run() 过程中创建
----
----以下是 MyTerm 方法, 放在 metatable 中防止被修改.
----@field run fun(self: MyTerm)
----@field stop fun(self: MyTerm)
----@field is_open fun(self: MyTerm)
----@field open_win fun(self: MyTerm)
----@field close_win fun(self: MyTerm)
----@field job_status fun(self: MyTerm)
----@field wipeout fun(self: MyTerm)
-local M = {}
+--- deps functions --------------------------------------------------------------------------------- {{{
 
-M.bufvar_myterm = "my_term"
-
---- Create new terminal ----------------------------------------------------------------------------
---- VVI: 以下执行顺序很重要!
---- `jobstart(cmd, {opts})` 事件触发顺序和 `:edit term://cmd` 有所不同.
---- `:edit term://cmd` 中: 触发顺序 TermOpen -> BufEnter -> BufWinEnter.
---- `jobstart(cmd, {opts})` 触发顺序 BufEnter -> BufWinEnter -> TermOpen.
+--- Create new terminal
 ---
---- NOTE: nvim_buf_call()
---- 可以使用 nvim_buf_call(bufnr, function() jobstart(...) end) 做到 TermOpen -> BufEnter -> BufWinEnter 顺序,
---- 但在 nvim_buf_call() 的过程中 TermOpen event 获取到的 window id 是临时的 autocmd window 会导致很多问题.
 ---@param term_obj MyTerm
 ---@return integer
-local function create_my_term(term_obj)
+local function create_my_term_win(term_obj)
+  --- VVI: 以下执行顺序很重要!
+  --- `jobstart(cmd, {opts})` 事件触发顺序和 `:edit term://cmd` 有所不同.
+  --- `:edit term://cmd` 中: 触发顺序 TermOpen -> BufEnter -> BufWinEnter.
+  --- `jobstart(cmd, {opts})` 触发顺序 BufEnter -> BufWinEnter -> TermOpen.
+  ---
+  --- NOTE: nvim_buf_call()
+  --- 可以使用 nvim_buf_call(bufnr, function() jobstart(...) end) 做到 TermOpen -> BufEnter -> BufWinEnter 顺序,
+  --- 但在 nvim_buf_call() 的过程中 TermOpen event 获取到的 window id 是临时的 autocmd window, 所以需要先创建一个
+  --- window 然后 win_gotoid(win_id)
+
   --- cache old term bufnr, for reuse old term_buf window.
   local old_term_bufnr = term_obj.bufnr
 
@@ -41,7 +29,7 @@ local function create_my_term(term_obj)
   term_obj.bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
 
   vim.bo[term_obj.bufnr].filetype = "my_term"  --- set filetype
-  vim.b[term_obj.bufnr][M.bufvar_myterm] = term_obj.id  --- 设置 bufvar: {my_term_id}
+  vim.b[term_obj.bufnr][term_obj.bufvar_myterm] = term_obj.id  --- 设置 bufvar: {my_term_id}
 
   --- autocmd 放在这里运行主要是有两个限制条件:
   --- 1. 在获取到 terminal bufnr 之后运行, 为了在 autocmd 中使用 bufnr 作为触发条件.
@@ -62,7 +50,8 @@ local function create_my_term(term_obj)
   return term_win_id
 end
 
----jobstart(cmd, opts)
+--- jobstart(cmd, opts)
+---
 ---@param term_obj MyTerm
 ---@param term_win_id integer
 local function my_term_exec(term_obj, term_win_id)
@@ -79,107 +68,120 @@ local function my_term_exec(term_obj, term_win_id)
   --- 先触发 BufEnter, 再触发 BufWinEnter
   vim.api.nvim_exec_autocmds({"BufEnter", "BufWinEnter"}, { buffer = term_obj.bufnr })
 end
+-- }}}
+
+--- my_term object
+---@class MyTerm: MyTermOpts  继承 MyTermOpts
+---@field bufnr integer  -- bufnr 在 :run() 过程中创建
+---@field job_id? integer  -- job_id 在 :run() 过程中创建
+---
+---以下是 MyTerm 方法, 放在 metatable 中防止被修改.
+---@field run fun(self: MyTerm) @readonly
+---@field stop fun(self: MyTerm) @readonly
+---@field is_open fun(self: MyTerm): boolean @readonly
+---@field open_win fun(self: MyTerm): integer|nil @readonly
+---@field close_win fun(self: MyTerm) @readonly
+---@field job_status fun(self: MyTerm): integer @readonly
+---@field wipeout fun(self: MyTerm) @readonly
+local M = {}
+
+M.bufvar_myterm = "my_term"
 
 --- NOTE: setmetatable() 将全部 term:methods() 放在 metatable 中, 防止方法被修改.
 --- 如果 my_term 被 tbl_deep_extend() 则无法使用 methods, 因为 tbl_deep_extend() 无法 extend metatable.
-function M.metatable_funcs()
-  local meta_funcs = {}
-
-  function meta_funcs:run()
-    if self:job_status() == -1 then
-      Notify("job_id is still running, please use `term:stop()` or `CTRL-C` first.", "WARN", {title="my_term"})
-      return
-    end
-
-    --- executed before jobstart(). DO NOT have 'term.bufnr' and 'term.job_id' ...
-    if self.before_run then
-      self.before_run(self)
-    end
-
-    --- 创建 my term window and buffer, 创建 my_term.bufnr
-    local term_win_id = create_my_term(self)
-
-    --- 执行 jobstart(cmd), 创建 my_term.job_id
-    my_term_exec(self, term_win_id)
-
-    --- executed after jobstart(). Have 'term.bufnr' and 'term.job_id' ...
-    --- 和 on_exit 的区别是不用等到 jobdone.
-    if self.after_run then
-      self.after_run(self)
-    end
-
-    --- cache terminal object
-    g.global_my_term_cache[self.id] = self
+function M:run()
+  if self:job_status() == -1 then
+    Notify("job_id is still running, please use `term:stop()` or `CTRL-C` first.", "WARN", {title="my_term"})
+    return
   end
 
-  --- 终止 job, 会触发 jobdone.
-  function meta_funcs:stop()
-    if self.job_id then
-      vim.fn.jobstop(self.job_id)
-    end
+  --- executed before jobstart(). DO NOT have 'term.bufnr' and 'term.job_id' ...
+  if self.before_run then
+    self.before_run(self)
   end
 
-  --- is_open(). true: window is opened; false: window is closed.
-  function meta_funcs:is_open()
-    if g.term_buf_exist(self.bufnr) then
-      local term_wins = vim.fn.getbufinfo(self.bufnr)[1].windows
-      if #term_wins > 0 then
-        return true
-      end
-    end
+  --- 创建 my term window and buffer, 创建 my_term.bufnr
+  local term_win_id = create_my_term_win(self)
+
+  --- 执行 jobstart(cmd), 创建 my_term.job_id
+  my_term_exec(self, term_win_id)
+
+  --- executed after jobstart(). Have 'term.bufnr' and 'term.job_id' ...
+  --- 和 on_exit 的区别是不用等到 jobdone.
+  if self.after_run then
+    self.after_run(self)
   end
 
-  --- open terminal window or goto terminal window, return win_id
-  function meta_funcs:open_win()
-    if g.term_buf_exist(self.bufnr) then
-      local term_wins = vim.fn.getbufinfo(self.bufnr)[1].windows
-      if #term_wins > 0 then
-        --- 如果有 window 正在显示该 term buffer, 则跳转到该 window.
-        if vim.fn.win_gotoid(term_wins[1]) == 0 then
-          error('vim cannot win_gotoid(' .. term_wins[1] .. ')')
-        end
+  --- cache terminal object
+  g.global_my_term_cache[self.id] = self
+end
 
-        return term_wins[1]
-      else
-        --- 如果没有任何 window 显示该 terminal 则创建一个新的 window, 然后加载该 buffer.
-        return t_win.create_term_win(self.bufnr)
-      end
-    end
-  end
-
-  --- close all windows which displays this term buffer.
-  function meta_funcs:close_win()
-    if g.term_buf_exist(self.bufnr) then
-      local term_wins = vim.fn.getbufinfo(self.bufnr)[1].windows
-      for _, w in ipairs(term_wins) do
-        vim.api.nvim_win_close(w, true)
-      end
-    end
-  end
-
-  --- 检查 terminal 运行情况.
-  function meta_funcs:job_status()
-    --- `:help jobwait()`
-    return vim.fn.jobwait({self.job_id}, 0)[1]
-  end
-
-  --- wipeout term buffer.
-  function meta_funcs:wipeout()
-    if not g.term_buf_exist(self.bufnr) then
-      return
-    end
-
-    --- VVI: 保险起见先 jobstop() 再 wipeout buffer, 否则 job 可能还在继续执行.
+--- 终止 job, 会触发 jobdone.
+function M:stop()
+  if self.job_id then
     vim.fn.jobstop(self.job_id)
+  end
+end
 
-    --- wipeout term buffer
-    vim.api.nvim_buf_delete(self.bufnr, {force=true})
+--- is_open(). true: window is opened; false: window is closed.
+function M:is_open()
+  if g.term_buf_exist(self.bufnr) then
+    local term_wins = vim.fn.getbufinfo(self.bufnr)[1].windows
+    if #term_wins > 0 then
+      return true
+    end
+  end
+  return false
+end
 
-    --- clear term bufnr
-    self.bufnr = nil
+--- open terminal window or goto terminal window, return win_id
+function M:open_win()
+  if g.term_buf_exist(self.bufnr) then
+    local term_wins = vim.fn.getbufinfo(self.bufnr)[1].windows
+    if #term_wins > 0 then
+      --- 如果有 window 正在显示该 term buffer, 则跳转到该 window.
+      if vim.fn.win_gotoid(term_wins[1]) == 0 then
+        error('vim cannot win_gotoid(' .. term_wins[1] .. ')')
+      end
+
+      return term_wins[1]
+    else
+      --- 如果没有任何 window 显示该 terminal 则创建一个新的 window, 然后加载该 buffer.
+      return t_win.create_term_win(self.bufnr)
+    end
+  end
+end
+
+--- close all windows which displays this term buffer.
+function M:close_win()
+  if g.term_buf_exist(self.bufnr) then
+    local term_wins = vim.fn.getbufinfo(self.bufnr)[1].windows
+    for _, w in ipairs(term_wins) do
+      vim.api.nvim_win_close(w, true)
+    end
+  end
+end
+
+--- 检查 terminal 运行情况.
+function M:job_status()
+  --- `:help jobwait()`
+  return vim.fn.jobwait({self.job_id}, 0)[1]
+end
+
+--- wipeout term buffer.
+function M:wipeout()
+  if not g.term_buf_exist(self.bufnr) then
+    return
   end
 
-  return meta_funcs
+  --- VVI: 保险起见先 jobstop() 再 wipeout buffer, 否则 job 可能还在继续执行.
+  vim.fn.jobstop(self.job_id)
+
+  --- wipeout term buffer
+  vim.api.nvim_buf_delete(self.bufnr, {force=true})
+
+  --- clear term bufnr
+  self.bufnr = nil
 end
 
 return M
