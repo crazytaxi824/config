@@ -64,6 +64,16 @@ local function create_my_term(term_obj)
 
   --- 进入一个选定的 term window 加载现有 term buffer, 同时 wipeout old_term_bufnr.
   local term_win_id = t_win.enter_term_win(term_obj.bufnr, old_term_bufnr)
+
+  --- 设置 term win 属性
+  local scope={ scope='local', win=term_win_id }
+  vim.api.nvim_set_option_value('sidescrolloff', 0, scope)
+  vim.api.nvim_set_option_value('scrolloff', 0, scope)
+
+  return term_win_id
+end
+
+local function my_term_exec(term_obj, term_win_id)
   --- VVI: 必须在 bufnr 被 window 显示之后运行. 避免 nvim_buf_call() 生成一个临时 autocmd window.
   if term_obj.console_output then
     console.console_exec(term_obj, term_win_id)
@@ -71,11 +81,8 @@ local function create_my_term(term_obj)
     terminal.terminal_exec(term_obj, term_win_id)
   end
 
-  local scope={ scope='local', win=term_win_id }
-  vim.api.nvim_set_option_value('sidescrolloff', 0, scope)
-  vim.api.nvim_set_option_value('scrolloff', 0, scope)
-
-  --- VVI: doautocmd "BufEnter & BufWinEnter term://"
+  --- VVI: 手动触发 BufEnter & BufWinEnter event
+  --- doautocmd "BufEnter & BufWinEnter term://"
   --- 触发时机在 after TermOpen & before TermClose
   --- 先触发 BufEnter, 再触发 BufWinEnter
   vim.api.nvim_exec_autocmds({"BufEnter", "BufWinEnter"}, { buffer = term_obj.bufnr })
@@ -95,7 +102,11 @@ M.metatable_funcs = function()
     --- executed before jobstart(). DO NOT have 'term.bufnr' and 'term.job_id' ...
     g.exec_callbacks(self.before_run, self)
 
-    create_my_term(self)
+    --- 创建 my term window and buffer
+    local term_win_id = create_my_term(self)
+
+    --- 执行 jobstart(cmd)
+    my_term_exec(self, term_win_id)
 
     --- executed after jobstart(). Have 'term.bufnr' and 'term.job_id' ...
     --- 和 on_exit 的区别是不用等到 jobdone.
