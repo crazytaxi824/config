@@ -93,7 +93,9 @@ function M.metatable_funcs()
     end
 
     --- executed before jobstart(). DO NOT have 'term.bufnr' and 'term.job_id' ...
-    g.exec_callbacks(self.before_run, self)
+    if self.before_run then
+      self.before_run(self)
+    end
 
     --- 创建 my term window and buffer
     local term_win_id = create_my_term(self)
@@ -103,7 +105,9 @@ function M.metatable_funcs()
 
     --- executed after jobstart(). Have 'term.bufnr' and 'term.job_id' ...
     --- 和 on_exit 的区别是不用等到 jobdone.
-    g.exec_callbacks(self.after_run, self)
+    if self.after_run then
+      self.after_run(self)
+    end
 
     --- cache terminal object
     g.global_my_term_cache[self.id] = self

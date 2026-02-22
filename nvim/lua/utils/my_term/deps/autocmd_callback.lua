@@ -13,12 +13,12 @@ M.autocmd_callback = function(term_obj)
     callback = function(params)
       --- callback
       if params.event == "BufWinEnter" and term_obj.on_open then
-        g.exec_callbacks(term_obj.on_open, term_obj)
+        term_obj.on_open(term_obj)
         return
       end
       --- callback
       if params.event == "BufWinLeave" and term_obj.on_close then
-        g.exec_callbacks(term_obj.on_close, term_obj)
+        term_obj.on_close(term_obj)
       end
     end,
     desc = "my_term: on_open() & on_close() callback",
