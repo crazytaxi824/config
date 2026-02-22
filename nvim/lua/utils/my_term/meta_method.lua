@@ -4,6 +4,19 @@ local t_win = require('utils.my_term.deps.term_win')
 local console = require('utils.my_term.deps.exec_console')
 local terminal = require('utils.my_term.deps.exec_terminal')
 
+--- my_term object
+---@class MyTerm: MyTermOpts  继承 MyTermOpts
+---@field bufnr integer
+---@field job_id integer
+---
+---以下是方法
+---@field run fun(self: MyTerm)
+---@field stop fun(self: MyTerm)
+---@field is_open fun(self: MyTerm)
+---@field open_win fun(self: MyTerm)
+---@field close_win fun(self: MyTerm)
+---@field job_status fun(self: MyTerm)
+---@field wipeout fun(self: MyTerm)
 local M = {}
 
 M.bufvar_myterm = "my_term"
