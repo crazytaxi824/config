@@ -29,7 +29,7 @@ local function create_my_term_win(term_obj)
   term_obj.bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
 
   vim.bo[term_obj.bufnr].filetype = "my_term"  --- set filetype
-  vim.b[term_obj.bufnr][term_obj.bufvar_myterm] = term_obj.id  --- 设置 bufvar: {my_term = term_id}
+  -- vim.b[term_obj.bufnr]["my_term"] = term_obj.id  --- 设置 bufvar: {my_term = term_id}
 
   --- autocmd 放在这里运行主要是有两个限制条件:
   --- 1. 在获取到 terminal bufnr 之后运行, 为了在 autocmd 中使用 bufnr 作为触发条件.
@@ -84,8 +84,6 @@ end
 ---@field job_status fun(self: MyTerm): integer @readonly
 ---@field wipeout fun(self: MyTerm) @readonly
 local M = {}
-
-M.bufvar_myterm = "my_term"
 
 --- execute cmd with opts
 function M:run()
