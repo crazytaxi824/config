@@ -7,7 +7,7 @@ local keymaps  = require('utils.my_term.deps.term_keymaps')
 
 --- deps functions --------------------------------------------------------------------------------- {{{
 
---- Create new terminal
+--- Create new terminal buffer and window, 给 my_term.bufnr 赋值.
 ---
 ---@param term_obj MyTerm
 ---@return integer
@@ -50,7 +50,7 @@ local function create_my_term_win(term_obj)
   return term_win_id
 end
 
---- jobstart(cmd, opts)
+--- jobstart(cmd, opts), 给 my_term.job_id 赋值.
 ---
 ---@param term_obj MyTerm
 ---@param term_win_id integer
