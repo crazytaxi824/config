@@ -1,6 +1,6 @@
 local g = require('utils.my_term.deps.global')
 local t_win = require('utils.my_term.deps.term_win')
-local meta_method = require("utils.my_term.meta_method")
+local my_term = require("utils.my_term.my_term")
 
 local M = {}
 
@@ -8,23 +8,21 @@ local M = {}
 ---@param opts MyTermOpts
 ---@return MyTerm
 M.new = function(opts)
-  opts = vim.tbl_deep_extend('force', meta_method.default_opts, opts or {})
-
   --- NOTE: terminal 已经存在, 无法使用相同 id 创建新的 terminal.
   if g.global_my_term_cache[opts.id] then
     error('terminal id='.. opts.id .. ' is already created')
   end
 
   --- terminal object
-  local my_term = opts
+  local term_obj = vim.tbl_deep_extend('force', my_term, opts)
 
   --- generate metatable - term:methods()
-  local mt = meta_method.metatable_funcs()
+  local mt = my_term.metatable_funcs()
 
   --- VVI: set all term:methods() to terminal object's metatable
-  setmetatable(my_term, { __index = mt })
+  setmetatable(term_obj, { __index = mt })
 
-  return my_term
+  return term_obj
 end
 
 M.open_shell_term = function()
@@ -89,7 +87,7 @@ M.get_term_id_by_win = function(win_id)
   win_id = win_id or vim.api.nvim_get_current_win()
   if vim.api.nvim_win_is_valid(win_id) then
     local bufnr = vim.api.nvim_win_get_buf(win_id)
-    return vim.b[bufnr][meta_method.bufvar_myterm]
+    return vim.b[bufnr][my_term.bufvar_myterm]
   end
 end
 

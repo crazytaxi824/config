@@ -21,33 +21,6 @@ local M = {}
 
 M.bufvar_myterm = "my_term"
 
---- default_opts 相当于 global setting.
-M.default_opts = {
-  --- VVI: 这三个属性不应该被外部手动修改.
-  id = 1,  -- v:count1, VVI: 保证每个 id 只和一个 bufnr 对应. id 一旦设置应该无法改变.
-  bufnr = nil,
-  job_id = nil,
-
-  cmd = vim.go.shell, -- `:help 'shell'`, 相当于 os.getenv('SHELL'), vim.env.SHELL
-  cwd = nil,  -- string, jobstart() opts
-  env = nil,  -- dict, jobstart() opts
-  auto_scroll = nil,  -- goto bottom of the terminal. 在 on_stdout & on_stderr 中触发.
-  console_output = nil,   -- bool, true: 在 console 中执行; false: 在 terminal 中执行.
-
-  --- callback functions
-  before_run = nil, -- func(term), term:run() 时触发. before jobstart().
-  after_run = nil,  -- func(term), term:run() 时触发. 在 jobstart() 之后马上执行, 和 on_exit 的区别是不用等到 jobdone.
-
-  on_open = nil,   -- func(term), BufWinEnter. NOTE: 每次 term:// buffer 被 win 显示的时候都会触发,
-                   -- 同一个 buffer 被多个窗口显示时也会触发.
-  on_close = nil,  -- func(term), BufWinLeave. NOTE: BufWinLeave 只会在 buffer 离开最后一个 win 的时候触发.
-
-  on_stdout = nil, -- func(term, job_id, data, event), 可用于 auto_scroll to bottom
-  on_stderr = nil, -- func(term, job_id, data, event), 可用于 auto_scroll to bottom
-  on_exit = nil,   -- func(term, job_id, exit_code, event), TermClose, jobstop() 时触发.
-                   -- 可用于 `:silent! bwipeout! term_bufnr`
-}
-
 --- keymaps: for terminal buffer only --------------------------------------------------------------
 --- set keymaps for my_term terminal & output-buffer.
 local function set_buf_keymaps(term_obj)
