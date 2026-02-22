@@ -4,6 +4,9 @@ local meta_method = require("utils.my_term.meta_method")
 
 local M = {}
 
+---new MyTerm object
+---@param opts MyTermOpts
+---@return MyTerm
 M.new = function(opts)
   opts = vim.tbl_deep_extend('force', meta_method.default_opts, opts or {})
 

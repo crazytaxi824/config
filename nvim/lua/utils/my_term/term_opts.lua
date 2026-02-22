@@ -18,7 +18,7 @@
 ---@class MyTermOpts
 ---@field id integer @readonly  VVI: 保证每个 id 只和一个 bufnr 对应. id 一旦设置应该无法改变.
 ---
----@field cmd string|string[]     `:help jobstart()` cmd
+---@field cmd? string|string[]    `:help jobstart()` cmd FIXME: remove cmd
 ---@field cwd? string             `:help jobstart-options` cwd
 ---@field env? string             `:help jobstart-options` env
 ---@field auto_scroll? boolean    goto bottom of the terminal. 在 on_stdout & on_stderr 中触发.
