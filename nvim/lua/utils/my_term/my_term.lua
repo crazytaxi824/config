@@ -7,8 +7,8 @@ local keymaps  = require('utils.my_term.deps.term_keymaps')
 
 --- my_term object
 ---@class MyTerm: MyTermOpts  继承 MyTermOpts
----@field bufnr integer
----@field job_id integer
+---@field bufnr integer  -- bufnr 在 :run() 过程中创建
+---@field job_id? integer  -- job_id 在 :run() 过程中创建
 ---
 ---以下是 MyTerm 方法, 放在 metatable 中防止被修改.
 ---@field run fun(self: MyTerm)
@@ -96,10 +96,10 @@ function M.metatable_funcs()
       self.before_run(self)
     end
 
-    --- 创建 my term window and buffer
+    --- 创建 my term window and buffer, 创建 my_term.bufnr
     local term_win_id = create_my_term(self)
 
-    --- 执行 jobstart(cmd)
+    --- 执行 jobstart(cmd), 创建 my_term.job_id
     my_term_exec(self, term_win_id)
 
     --- executed after jobstart(). Have 'term.bufnr' and 'term.job_id' ...
