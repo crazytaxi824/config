@@ -1,5 +1,6 @@
 local M = {}
 
+---@param term_obj MyTerm
 M.buf_scroll_bottom = function(term_obj)
   if not term_obj.auto_scroll then
     return

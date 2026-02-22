@@ -15,6 +15,8 @@ vim.api.nvim_set_hl(0, "my_output_sys_error", {
 vim.api.nvim_set_hl(0, "my_output_stdout", {ctermfg=Colors.blue.c, fg=Colors.blue.g})
 vim.api.nvim_set_hl(0, "my_output_stderr", {ctermfg=Colors.red.c, fg=Colors.red.g})
 
+--- 强制结束 job
+---@param term_obj MyTerm
 local function stop_job(term_obj)
   if term_obj.job_id and vim.fn.jobstop(term_obj.job_id) == 1 then
     vim.bo[term_obj.bufnr].modifiable = true
@@ -24,6 +26,7 @@ local function stop_job(term_obj)
 end
 
 --- CTRL-C send interrupt signal to output-buffer ONLY. terminal already has this.
+---@param term_obj MyTerm
 local function set_console_keymaps(term_obj)
   local opt = { buffer = term_obj.bufnr, silent = true }
   local keys = {
@@ -39,6 +42,10 @@ end
 --- nvim_buf_set_lines(-2, -2) 在最后一行前面写入, 即: 在倒数第二行后面写入.
 --- nvim_buf_set_lines(-2, -1) 在最后一行写入.
 --- nvim_buf_set_lines(-1, -1) 在最后一行后面写入, 相当于 append().
+---
+---@param bufnr integer
+---@param data string[]
+---@param hl string  highlight name `vim.hl.range()`
 local function set_buf_line_output(bufnr, data, hl)
   --- skip { "" } empty data.
   if #data == 1 and data[#data] == '' then
@@ -76,6 +83,9 @@ local function set_buf_line_output(bufnr, data, hl)
   -- vim.hl.range(bufnr, ns, hl, {last_line_before_write, 0}, {vim.api.nvim_buf_line_count(bufnr)-1, -1})
 end
 
+--- job done 后处理: 在最后一行显示 [Process exited 'exit_code']
+---@param bufnr integer
+---@param exit_code integer
 local function set_buf_line_exit(bufnr, exit_code)
   local last_line_before_write = vim.api.nvim_buf_line_count(bufnr)
   vim.bo[bufnr].modifiable = true
@@ -90,10 +100,18 @@ local function set_buf_line_exit(bufnr, exit_code)
   vim.bo[bufnr].modifiable = false
 end
 
---- NOTE: neovim 是单线程, jobstart() 是异步函数.
-M.console_exec = function(term_obj, term_win_id)
+--- 后台执行 jobstart(cmd), 将 output 手动写入 buffer. (buftype = 'nofile')
+--- 主要区别是 `:help jobstart-options` { term = nil|false } 在后台运行, 结果需要手动输出.
+---
+---@param term_obj MyTerm
+---@param term_win_id integer
+function M.console_exec(term_obj, term_win_id)
   if vim.api.nvim_win_get_buf(term_win_id) ~= term_obj.bufnr then
     return
+  end
+
+  if not term_obj.cmd then
+    error("MyTerm.cmd is missing")
   end
 
   --- set bufname
@@ -106,12 +124,9 @@ M.console_exec = function(term_obj, term_win_id)
   end)
 
   --- print cmd
-  local print_cmd
-  local cmd_typ = type(term_obj.cmd)
-  if cmd_typ == "string" then
-    print_cmd = term_obj.cmd
-  elseif cmd_typ == "table" then
-    print_cmd = table.concat(term_obj.cmd, ' ')
+  local print_cmd = term_obj.cmd
+  if type(print_cmd) == "table" then
+    print_cmd = table.concat(print_cmd, ' ')
   end
 
   vim.api.nvim_buf_set_lines(term_obj.bufnr, 0, -1, true, {print_cmd})  -- clear buffer text & print cmd

@@ -2,6 +2,7 @@ local g = require('utils.my_term.deps.global')
 
 local M = {}
 
+---@param term_obj MyTerm
 M.autocmd_callback = function(term_obj)
   --- 关闭 terminal window 之后再打开时触发 BufWinEnter, 但不会触发 TermOpen.
   --- buffer 离开所有 window 才会触发 BufWinLeave.
