@@ -3,6 +3,7 @@ local au_cb = require('utils.my_term.deps.autocmd_callback')
 local t_win = require('utils.my_term.deps.term_win')
 local console = require('utils.my_term.deps.exec_console')
 local terminal = require('utils.my_term.deps.exec_terminal')
+local keymaps  = require('utils.my_term.deps.term_keymaps')
 
 --- my_term object
 ---@class MyTerm: MyTermOpts  继承 MyTermOpts
@@ -21,19 +22,6 @@ local M = {}
 
 M.bufvar_myterm = "my_term"
 
---- keymaps: for terminal buffer only --------------------------------------------------------------
---- set keymaps for my_term terminal & output-buffer.
-local function set_buf_keymaps(term_obj)
-  local opt = { buffer = term_obj.bufnr, silent = true }
-  local keys = {
-    {'n', '<leader>tc', function() M.close_others(term_obj.id) end,   opt, 'my_term: close other my_terms windows'},
-    {'n', '<leader>tw', function() M.wipeout_others(term_obj.id) end, opt, 'my_term: wipeout other my_terms'},
-    {'n', 'q', '<cmd>q<CR>', opt, 'my_term: close current my_term window'},
-    {'n', 'Q', function() M.wipeout(term_obj.id) end, opt, 'my_term: wipeout current my_term'},
-  }
-  require('utils.keymaps').set(keys)
-end
-
 --- Create new terminal ----------------------------------------------------------------------------
 --- VVI: 以下执行顺序很重要!
 --- `jobstart(cmd, {opts})` 事件触发顺序和 `:edit term://cmd` 有所不同.
@@ -43,6 +31,8 @@ end
 --- NOTE: nvim_buf_call()
 --- 可以使用 nvim_buf_call(bufnr, function() jobstart(...) end) 做到 TermOpen -> BufEnter -> BufWinEnter 顺序,
 --- 但在 nvim_buf_call() 的过程中 TermOpen event 获取到的 window id 是临时的 autocmd window 会导致很多问题.
+---@param term_obj MyTerm
+---@return integer
 local function create_my_term(term_obj)
   --- cache old term bufnr, for reuse old term_buf window.
   local old_term_bufnr = term_obj.bufnr
@@ -60,7 +50,7 @@ local function create_my_term(term_obj)
   au_cb.autocmd_callback(term_obj)
 
   --- 快捷键设置: 在获取到 term.bufnr 和 term.id 之后运行.
-  set_buf_keymaps(term_obj)
+  keymaps.set_buf_keymaps(term_obj)
 
   --- 进入一个选定的 term window 加载现有 term buffer, 同时 wipeout old_term_bufnr.
   local term_win_id = t_win.enter_term_win(term_obj.bufnr, old_term_bufnr)
@@ -73,6 +63,9 @@ local function create_my_term(term_obj)
   return term_win_id
 end
 
+---jobstart(cmd, opts)
+---@param term_obj MyTerm
+---@param term_win_id integer
 local function my_term_exec(term_obj, term_win_id)
   --- VVI: 必须在 bufnr 被 window 显示之后运行. 避免 nvim_buf_call() 生成一个临时 autocmd window.
   if term_obj.console_output then
@@ -90,7 +83,7 @@ end
 
 --- NOTE: setmetatable() 将全部 term:methods() 放在 metatable 中, 如果 term 被 tbl_deep_extend() 则无法
 --- 使用 methods, 因为 tbl_deep_extend() 无法 extend metatable.
-M.metatable_funcs = function()
+function M.metatable_funcs()
   local meta_funcs = {}
 
   function meta_funcs:run()
@@ -207,55 +200,6 @@ M.metatable_funcs = function()
   end
 
   return meta_funcs
-end
-
---- 以下函数用于 term buffer keymaps ---------------------------------------------------------------
-
---- NOTE: M.close() 没有实现, 可以使用 `:q` 代替.
-
---- close all other terms except term_id
-M.close_others = function(term_id)
-  local t = g.global_my_term_cache[term_id]
-  if not t then
-    Notify('term: "' .. term_id .. '" is not exist', "WARN")
-    return
-  end
-
-  for _, term_obj in pairs(g.global_my_term_cache) do
-    if term_obj.bufnr ~= t.bufnr then
-      term_obj:close_win()
-    end
-  end
-end
-
-M.wipeout = function(term_id)
-  local t = g.global_my_term_cache[term_id]
-  if not t then
-    Notify('term: "' .. term_id .. '" is not exist', "WARN")
-    return
-  end
-
-  if t:job_status() == -1 then
-    Notify("job_id is still running, please use `term:stop()` or `CTRL-C` first.", "WARN", {title="my_term"})
-    return
-  end
-
-  t:wipeout()
-end
-
---- wipeout all other terms except term_id
-M.wipeout_others = function(term_id)
-  local t = g.global_my_term_cache[term_id]
-  if not t then
-    Notify('term: "' .. term_id .. '" is not exist', "WARN")
-    return
-  end
-
-  for _, term_obj in pairs(g.global_my_term_cache) do
-    if term_obj.bufnr ~= t.bufnr then
-      term_obj:wipeout()
-    end
-  end
 end
 
 return M
