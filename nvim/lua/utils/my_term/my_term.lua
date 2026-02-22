@@ -10,7 +10,7 @@ local keymaps  = require('utils.my_term.deps.term_keymaps')
 ---@field bufnr integer
 ---@field job_id integer
 ---
----以下是方法
+---以下是 MyTerm 方法, 放在 metatable 中防止被修改.
 ---@field run fun(self: MyTerm)
 ---@field stop fun(self: MyTerm)
 ---@field is_open fun(self: MyTerm)
@@ -80,8 +80,8 @@ local function my_term_exec(term_obj, term_win_id)
   vim.api.nvim_exec_autocmds({"BufEnter", "BufWinEnter"}, { buffer = term_obj.bufnr })
 end
 
---- NOTE: setmetatable() 将全部 term:methods() 放在 metatable 中, 如果 term 被 tbl_deep_extend() 则无法
---- 使用 methods, 因为 tbl_deep_extend() 无法 extend metatable.
+--- NOTE: setmetatable() 将全部 term:methods() 放在 metatable 中, 防止方法被修改.
+--- 如果 my_term 被 tbl_deep_extend() 则无法使用 methods, 因为 tbl_deep_extend() 无法 extend metatable.
 function M.metatable_funcs()
   local meta_funcs = {}
 
