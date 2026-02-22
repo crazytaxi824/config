@@ -20,7 +20,7 @@ M.flag_desc = {
 
 local cache_bg_jobs = {}  -- 缓存 bg_job_id, map-table: [term_bufnr] = {job_id, ... }
 
----在指定 terminal bufnr 中执行 {cmd} 命令
+--- 在指定 bufnr 中执行 jobstart(cmd), 但该 buffer 不显示在任何 window 中. (类似后台运行)
 ---
 ---@param cmd string[]
 ---@param term_bufnr integer
