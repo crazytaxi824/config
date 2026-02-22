@@ -7,7 +7,7 @@ local M = {}
 ---new MyTerm object
 ---@param opts MyTermOpts
 ---@return MyTerm
-M.new = function(opts)
+function M.new(opts)
   --- NOTE: terminal 已经存在, 无法使用相同 id 创建新的 terminal.
   if g.global_my_term_cache[opts.id] then
     error('terminal id='.. opts.id .. ' is already created')
@@ -25,7 +25,8 @@ M.new = function(opts)
   return term_obj
 end
 
-M.open_shell_term = function()
+--- create shell terminal
+function M.open_shell_term()
   if vim.v.count1 > 999 then
     Notify("my_term id should be 1~999 in this method", "INFO")
     return
@@ -78,11 +79,15 @@ M.open_shell_term = function()
 end
 
 --- return an term object by id
-M.get_term_by_id = function(id)
-  return g.global_my_term_cache[id]
+---@param term_id integer
+---@return MyTerm
+M.get_term_by_id = function(term_id)
+  return g.global_my_term_cache[term_id]
 end
 
---- get term_id by term_win_id
+--- get term_id from term_win_id
+---@param win_id integer
+---@return integer|nil
 M.get_term_id_by_win = function(win_id)
   win_id = win_id or vim.api.nvim_get_current_win()
   if vim.api.nvim_win_is_valid(win_id) then
