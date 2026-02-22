@@ -172,8 +172,10 @@ nvim_tree.setup {
 
   view = {
     --- 在 floating window 中打开 nvim-tree
+    --- BUG: 开启 float win 时 delete file 会 error.
+    --- 关闭 float win (使用 split window) 时, 会自动调整 my_term win 大小.
     float = {
-      enable = false,
+      enable = true,
       open_win_config = {
         relative = "editor",
         border = {"","","","█","▀","▀","▀","█"},
