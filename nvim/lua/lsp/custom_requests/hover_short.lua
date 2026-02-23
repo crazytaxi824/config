@@ -13,8 +13,11 @@ local hover_ns = vim.api.nvim_create_namespace('nvim.lsp.hover_range')
 
 local M = {}
 
---- NOTE: 这里 node_row 和 node_char 都是从 0 开始计算.
---- node_char 是指行内第几个字符, \t 算一个字符.
+--- NOTE: 这里 row 和 char_pos 都是从 0 开始计算.
+---
+--- @param lsp_req_pos_line integer
+--- @param lsp_req_pos_char integer  char_pos 是指行内第几个字符, \t 算一个字符.
+--- @return table
 local function calculate_offset(lsp_req_pos_line, lsp_req_pos_char)
   local cursor_line, cursor_col = unpack(vim.api.nvim_win_get_cursor(0))  -- (1,0)-indexed
 
@@ -42,6 +45,10 @@ local function calculate_offset(lsp_req_pos_line, lsp_req_pos_char)
 end
 
 --- 计算 argument list 前面一个 node 的 start 位置.
+---
+--- @param row integer
+--- @param col integer
+--- @return table
 local function node_before_arguments(row, col)
   local node_before_args = vim.treesitter.get_node({pos={row, col}})
   if not node_before_args then
@@ -66,6 +73,8 @@ end
 --        argument_list  -- func call '(xxx)' 中的所有内容, 包括括号 ().
 --        func call 名字 -- call_expression.function.field
 -- }}}
+---
+--- @return table|nil
 local function find_fn_call_before_cursor()
   --- 获取 node at cursor.
   local cur_line, cur_col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -100,8 +109,11 @@ local function find_fn_call_before_cursor()
   end
 end
 
---- VVI: 以下代码大多从源代码中复制 ----------------------------------------------------------------
+--- 创建 vim.lsp.buf_request_all(_, _, params, _) 中的 params
 --- https://github.com/neovim/neovim/blob/master/runtime/lua/vim/lsp/buf.lua
+---
+--- @param fn_node table
+--- @return fun(client: vim.lsp.Client, bufnr: integer):table?
 local function client_positional_params(fn_node)
   local win = vim.api.nvim_get_current_win()
   return function(client)
@@ -130,6 +142,7 @@ function M.toggle_hover_short()
   end
 end
 
+--- VVI: 以下代码大多从源代码中复制 ----------------------------------------------------------------
 --- 只获取 textDocument/hover 中 signature 部分
 function M.hover_short()
   local fn_node = find_fn_call_before_cursor()
@@ -137,7 +150,7 @@ function M.hover_short()
     return
   end
 
-  --- 4. 修改 hover_short floating window 显示的位置.
+  --- 1. 修改 hover_short floating window 显示的位置.
   --- `:help vim.lsp.util.open_floating_preview.Opts`
   local config = {
     offset_x = fn_node.offset_x,
