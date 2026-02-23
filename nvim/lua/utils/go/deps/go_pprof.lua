@@ -22,8 +22,8 @@ local cache_bg_jobs = {}  -- 缓存 bg_job_id, map-table: [term_bufnr] = {job_id
 
 --- 在指定 bufnr 中执行 jobstart(cmd), 但该 buffer 不显示在任何 window 中. (类似后台运行)
 ---
----@param cmd string[]
----@param term_bufnr integer
+--- @param cmd string[]
+--- @param term_bufnr integer
 local function job_exec(cmd, term_bufnr)
   --- VVI: 这里使用 scratch buffer 来执行 jobstart():
   ---   1. 为了避免创建新的一个 window.
@@ -48,9 +48,9 @@ local function job_exec(cmd, term_bufnr)
   end
 end
 
----jobstop() 所有在 bufnr 中运行的 job
+--- jobstop() 所有在 bufnr 中运行的 job
 ---
----@param term_bufnr integer
+--- @param term_bufnr integer
 local function shutdown_all_jobs(term_bufnr)
   for _, j_id in ipairs(cache_bg_jobs[term_bufnr]) do
     vim.fn.jobstop(j_id)
@@ -60,9 +60,9 @@ local function shutdown_all_jobs(term_bufnr)
   cache_bg_jobs[term_bufnr] = nil
 end
 
----autocmd: 在bufnr 被 wipeout 的时候停止所有在 bufnr 中运行的 job
+--- autocmd: 在bufnr 被 wipeout 的时候停止所有在 bufnr 中运行的 job
 ---
----@param term_bufnr integer
+--- @param term_bufnr integer
 local function autocmd_shutdown_all_jobs(term_bufnr)
   --- jobstop() all jobs after this buffer removed.
   --- NOTE: 这里使用 group_id 是为了避免多次重复设置同一个 autocmd.
@@ -82,10 +82,10 @@ local function autocmd_shutdown_all_jobs(term_bufnr)
   })
 end
 
----选择使用哪种 pprof
+--- 选择使用哪种 pprof
 ---
----@param term_bufnr integer
----@param pprof_dir string (directory 存放 pprof files)
+--- @param term_bufnr integer
+--- @param pprof_dir string (directory 存放 pprof files)
 local function select_pprof(term_bufnr, pprof_dir)
   --- 在后台静默运行 `go tool pprof/trace ...`
   local select = {'cpu', 'mem', 'mutex', 'block', 'trace'}
@@ -107,10 +107,10 @@ local function select_pprof(term_bufnr, pprof_dir)
   end)
 end
 
----create :GoPprof command & <F6> keymap
+--- create :GoPprof command & <F6> keymap
 ---
----@param term_bufnr integer
----@param pprof_dir string (directory 存放 pprof files)
+--- @param term_bufnr integer
+--- @param pprof_dir string (directory 存放 pprof files)
 local function set_cmd_and_keymaps(term_bufnr, pprof_dir)
   --- user command
   vim.api.nvim_buf_create_user_command(term_bufnr, 'GoPprof', function()
@@ -132,18 +132,11 @@ local function set_cmd_and_keymaps(term_bufnr, pprof_dir)
 end
 
 
----go tool pprof hook
+--- go tool pprof hook
 ---
----@param opts { testfn_name: string, mode: 'run'|'bench'|'fuzz', flag: string, go_list: table, project: string?} {
----   testfn_name: string (函数名),
----   mode:        'run' | 'bench' | 'fuzz',
----   flag:        'none' | 'cpu' | 'mem' | ...,
----   go_list:     table (`go list -json`),
----   project:     string? (标记),
----}
----
----@param pprof_dir string (directory 存放 pprof files)
----@return MyTermOptsOnExit
+--- @param opts GoTestOpts
+--- @param pprof_dir string (directory 存放 pprof files)
+--- @return MyTermOptsOnExit
 function M.on_exit(opts, pprof_dir)
   --- opts.flag == 'none' | 'fuzz' 时, 没有 on_exit function.
   local cmd = {'go', 'tool', 'pprof', '-http=localhost:', pprof_dir..opts.flag..'.out'}

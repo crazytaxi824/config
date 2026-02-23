@@ -3,10 +3,10 @@
 
 local M = {}
 
----`go tool cover` hook
+--- `go tool cover` hook
 ---
----@param coverage_dir string (directory)
----@return MyTermOptsCB
+--- @param coverage_dir string (directory)
+--- @return MyTermOptsCB
 function M.before_run(coverage_dir)
   return function()
     --- mkdir for coverage files
@@ -19,11 +19,11 @@ function M.before_run(coverage_dir)
   end
 end
 
----`go tool cover` hook
+--- `go tool cover` hook
 ---
----@param cover_out string (filepath)
----@param cover_html string (filepath)
----@return MyTermOptsOnExit
+--- @param cover_out string (filepath)
+--- @param cover_html string (filepath)
+--- @return MyTermOptsOnExit
 function M.on_exit(cover_out, cover_html)
   return function()
     --- convert cover.out -> cover.html

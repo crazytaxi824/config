@@ -29,11 +29,11 @@
 
 --- go test options
 --- @class GoTestOpts
---- @field testfn_name string  (函数名)
+--- @field testfn_name string  函数名 `^Test.*`, `^Benchmark.*` ...
 --- @field mode 'run' | 'bench' | 'fuzz'
 --- @field flag string  'none' | 'cpu' | 'mem' | ...
---- @field go_list table  (`go list -json`)
---- @field project string|boolean|nil  (标记)
+--- @field go_list table  `go list -json`
+--- @field project? string|boolean  标记是否运行整个 project 所有 test
 
 
 local go_pprof = require("utils.go.deps.go_pprof")
