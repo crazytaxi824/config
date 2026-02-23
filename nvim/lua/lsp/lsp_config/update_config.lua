@@ -8,8 +8,8 @@ local lsp_servers_map = require('lsp.svr_list').list
 local local_lsp_settings = nil
 
 ---获取全局和本地 lsp 设置
----@param lsp_tool string (lsp name)
----@return table (lsp config)
+---@param lsp_tool string (lsp_name)
+---@return table lsp_config
 local function load_lsp_configs(lsp_tool)
   --- 1. 如果文件存在, 则加载自定义设置, 如果没有自定义设置则加载默认设置.
   local status_ok, lsp_config = pcall(require, "lsp.lsp_config.tools." .. lsp_tool)

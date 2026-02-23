@@ -13,8 +13,8 @@ local M = {}
 --- - `BenchmarkXxx(b *testing.B)`
 --- - `FuzzXxx(f *testing.F)`
 ---
----@return string|nil (如果返回 nil 说明不是 test 函数)
----@return 'run'|'bench'|'fuzz'|nil
+---@return string|nil func_name (如果返回 nil 说明不是 test 函数)
+---@return 'run'|'bench'|'fuzz'|nil mode
 local function get_test_func_name()
   local lcontent = vim.fn.getline('.')  -- 获取行内容
 
