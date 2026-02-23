@@ -89,6 +89,7 @@ end
 local M = {}
 
 --- execute cmd with opts
+--- NOTE: 在第一次 run 之前 bufnr, job_id 不存在.
 function M:run()
   if t_act.job_status(self.id) == -1 then
     Notify("job_id is still running, please use `term:stop()` or `CTRL-C` first.", "WARN", {title="my_term"})
@@ -100,10 +101,10 @@ function M:run()
     self.before_run(self)
   end
 
-  --- 创建 my term window and buffer, 创建 my_term.bufnr
+  --- 创建 term window & buffer
   local term_bufnr, term_win_id = create_my_term_win(self, self.bufnr)
 
-  --- 执行 jobstart(cmd), 创建 my_term.job_id
+  --- 执行 jobstart(cmd)
   local job_id = my_term_exec(self, term_bufnr, term_win_id)
 
   --- executed after jobstart(). Have 'term.bufnr' and 'term.job_id' ...
@@ -116,7 +117,7 @@ function M:run()
   self.bufnr = term_bufnr
   self.job_id = job_id
 
-  --- cache terminal object
+  --- NOTE: cache terminal object
   g.global_my_term_cache[self.id] = self
 end
 
