@@ -4,7 +4,10 @@ M.lsp_file = ".nvim/lsp.json"
 M.linter_file = ".nvim/linter.json"
 
 --- 查找 ".nvim/lsp.json" 和 ".nvim/linter.json"
-M.find_local_settings_file = function(json_file)
+---
+---@param json_file string
+---@return string|nil
+function M.find_local_settings_file(json_file)
   local local_settings_filepaths = vim.fs.find(json_file, {
     upward = true, -- 从 pwd 向上寻找 .nvim/settings.lua 文件.
     stop = vim.env.HOME,  -- 直到 $HOME 为止.
@@ -20,7 +23,14 @@ M.find_local_settings_file = function(json_file)
 end
 
 --- 两个 table 中内容不相同的 key list
-M.find_diff_tool = function(t1, t2)
+---
+---@param t1 table|nil
+---@param t2 table|nil
+---@return string[]
+function M.find_diff_tool(t1, t2)
+  t1 = t1 or {}
+  t2 = t2 or {}
+
   local diff_tools = {}
 
   -- 第一遍：遍历 t1，找缺失或变更
