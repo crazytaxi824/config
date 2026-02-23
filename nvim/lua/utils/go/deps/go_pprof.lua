@@ -143,7 +143,7 @@ end
 ---}
 ---
 ---@param pprof_dir string (directory 存放 pprof files)
----@return function
+---@return MyTermOptsOnExit
 function M.on_exit(opts, pprof_dir)
   --- opts.flag == 'none' | 'fuzz' 时, 没有 on_exit function.
   local cmd = {'go', 'tool', 'pprof', '-http=localhost:', pprof_dir..opts.flag..'.out'}
@@ -152,15 +152,15 @@ function M.on_exit(opts, pprof_dir)
   end
 
   --- VVI: return a callback function for jobstart(cmd, { on_exit = function(term) })
-  return function(term)
+  return function(_, bufnr)
     --- :GoPprof && <F6>
-    set_cmd_and_keymaps(term.bufnr, pprof_dir)
+    set_cmd_and_keymaps(bufnr, pprof_dir)
 
     --- autocmd BufWipeout jobstop()
-    autocmd_shutdown_all_jobs(term.bufnr)
+    autocmd_shutdown_all_jobs(bufnr)
 
     --- run `go tool pprof/trace ...` in background
-    job_exec(cmd, term.bufnr)
+    job_exec(cmd, bufnr)
   end
 end
 

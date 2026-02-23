@@ -119,12 +119,7 @@ end
 ---   project:     string|boolean|nil (标记),
 ---}
 ---
----@return { cwd: string, cmd: string[], before_run: function?, on_exit: function? } {
----  cwd = string (directory),
----  cmd = string[] {cmd_list},
----  before_run = function(term)|nil,
----  on_exit = function(term, job_id, exit_code, event)|nil
----}
+---@return MyTermOpts
 function M.my_term_opts(opts)
   --- '-count=1' disable go test cache result.
   local go_test = {'go', 'test', '-count=1', '-v'}

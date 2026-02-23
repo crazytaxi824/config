@@ -23,7 +23,7 @@ end
 ---
 ---@param cover_out string (filepath)
 ---@param cover_html string (filepath)
----@return function
+---@return MyTermOptsOnExit
 function M.on_exit(cover_out, cover_html)
   return function()
     --- convert cover.out -> cover.html
