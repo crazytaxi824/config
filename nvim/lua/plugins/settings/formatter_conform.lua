@@ -104,8 +104,7 @@ vim.api.nvim_create_user_command("Format", function()
     lsp_format = "fallback", --- VVI: try fallback to lsp format if no formatter.
   }, function(err, did_edit)
     if err then
-      Notify(err, "ERROR")
-      return
+      error(err)
     end
 
     if did_edit then
