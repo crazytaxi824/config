@@ -122,8 +122,9 @@ end
 
 --- 终止 job, 会触发 jobdone.
 function M:stop()
-  if self.job_id then
-    vim.fn.jobstop(self.job_id)
+  local t = g.global_my_term_cache[self.id]
+  if t then
+    vim.fn.jobstop(t.job_id)
   end
 end
 
