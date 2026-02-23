@@ -92,19 +92,19 @@ M.code_actions = {
 }
 
 ---重新读取 project local settings 文件
-M.reload_local_settings = function()
+function M.reload_local_settings()
   local_linter_settings = project_local_settings.get_local_linter_settings()
 end
 
 ---返回当前本地 linter 设置
 ---@return table|nil
-M.exist_local_settings = function()
+function M.exist_local_settings()
   return local_linter_settings
 end
 
 ---返回一个 list sources
 ---@return table
-M.sources = function()
+function M.sources()
   local sources_list = {}
   vim.list_extend(sources_list, vim.tbl_values(M.linter))
   vim.list_extend(sources_list, vim.tbl_values(M.code_actions))
@@ -112,7 +112,7 @@ M.sources = function()
 end
 
 ---重启 linters
-M.restart_linters = function(linter_tools)
+function M.restart_linters(linter_tools)
   local tools = {}
   for _, linter_tool in ipairs(linter_tools) do
     if M.linter[linter_tool] then
