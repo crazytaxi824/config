@@ -1,6 +1,7 @@
 local g = require('utils.my_term.deps.global')
 local au_cb = require('utils.my_term.deps.autocmd_callback')
 local t_win = require('utils.my_term.deps.term_win')
+local t_act = require('utils.my_term.term_actions')
 local console = require('utils.my_term.deps.exec_console')
 local terminal = require('utils.my_term.deps.exec_terminal')
 local keymaps  = require('utils.my_term.deps.term_keymaps')
@@ -84,16 +85,11 @@ end
 ---以下是 MyTerm 方法, 放在 metatable 中防止被修改.
 ---@field run fun(self: MyTerm) @readonly
 ---@field stop fun(self: MyTerm) @readonly
----
----@field open_win fun(self: MyTerm): integer|nil @readonly
----@field close_win fun(self: MyTerm) @readonly
----@field job_status fun(self: MyTerm): integer @readonly
----@field wipeout fun(self: MyTerm) @readonly
 local M = {}
 
 --- execute cmd with opts
 function M:run()
-  if self:job_status() == -1 then
+  if t_act.job_status(self.id) == -1 then
     Notify("job_id is still running, please use `term:stop()` or `CTRL-C` first.", "WARN", {title="my_term"})
     return
   end
@@ -128,56 +124,6 @@ function M:stop()
   if self.job_id then
     vim.fn.jobstop(self.job_id)
   end
-end
-
---- open terminal window or goto terminal window, return win_id
-function M:open_win()
-  if vim.api.nvim_buf_is_valid(self.bufnr) then
-    local term_wins = vim.fn.getbufinfo(self.bufnr)[1].windows
-    if #term_wins > 0 then
-      --- 如果有 window 正在显示该 term buffer, 则跳转到该 window.
-      if vim.fn.win_gotoid(term_wins[1]) == 0 then
-        error('vim cannot win_gotoid(' .. term_wins[1] .. ')')
-      end
-
-      return term_wins[1]
-    else
-      --- 如果没有任何 window 显示该 terminal 则创建一个新的 window, 然后加载该 buffer.
-      return t_win.create_term_win(self.bufnr)
-    end
-  end
-end
-
---- close all windows which displays this term buffer.
-function M:close_win()
-  if vim.api.nvim_buf_is_valid(self.bufnr) then
-    local term_wins = vim.fn.getbufinfo(self.bufnr)[1].windows
-    for _, w in ipairs(term_wins) do
-      vim.api.nvim_win_close(w, true)
-    end
-  end
-end
-
---- 检查 terminal 运行情况.
-function M:job_status()
-  --- `:help jobwait()`
-  return vim.fn.jobwait({self.job_id}, 0)[1]
-end
-
---- wipeout term buffer.
-function M:wipeout()
-  if not vim.api.nvim_buf_is_valid(self.bufnr) then
-    return
-  end
-
-  --- VVI: 保险起见先 jobstop() 再 wipeout buffer, 否则 job 可能还在继续执行.
-  vim.fn.jobstop(self.job_id)
-
-  --- wipeout term buffer
-  vim.api.nvim_buf_delete(self.bufnr, {force=true})
-
-  --- clear term bufnr
-  self.bufnr = nil
 end
 
 return M

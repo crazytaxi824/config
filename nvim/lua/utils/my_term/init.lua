@@ -1,5 +1,6 @@
 local g = require('utils.my_term.deps.global')
 local t_win = require('utils.my_term.deps.term_win')
+local t_act = require('utils.my_term.term_actions')
 local my_term = require("utils.my_term.my_term")
 
 local M = {}
@@ -65,7 +66,7 @@ function M.open_shell_term()
     return
   end
 
-  if not t:open_win() then
+  if not t_act.open_win(t.id) then
     error('cached my_term has No bufnr')
   end
 end
@@ -80,7 +81,7 @@ end
 --- close all my_term windows
 function M.close_all()
   for _, term_obj in pairs(g.global_my_term_cache) do
-    term_obj:close_win()
+    t_act.close_win(term_obj.id)
   end
 end
 
@@ -100,7 +101,7 @@ end
 function M.wipeout_all()
   for _, term_obj in pairs(g.global_my_term_cache) do
     if vim.api.nvim_buf_is_valid(term_obj.bufnr) then
-      term_obj:wipeout()
+      t_act.wipeout(term_obj.id)
     end
   end
 end

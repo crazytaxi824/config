@@ -27,6 +27,8 @@ function M.open_win(term_id)
 end
 
 --- close all windows which displays this term buffer.
+---
+---@param term_id integer
 function M.close_win(term_id)
   local t = g.global_my_term_cache[term_id]
   if not t then
@@ -51,7 +53,6 @@ function M.job_status(term_id)
   --- `:help jobwait()`
   return vim.fn.jobwait({t.job_id}, 0)[1]
 end
-
 
 --- wipeout term buffer and jobstop(job_id)
 ---
