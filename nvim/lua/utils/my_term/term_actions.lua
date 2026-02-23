@@ -6,6 +6,7 @@ local M = {}
 --- open terminal window
 ---
 ---@param term_id integer
+---@return integer|nil win_id
 function M.open_win(term_id)
   local t = g.global_my_term_cache[term_id]
   if not t then
@@ -44,6 +45,7 @@ end
 --- 检查 terminal 运行情况.
 ---
 ---@param term_id integer
+---@return integer|nil job_status
 function M.job_status(term_id)
   local t = g.global_my_term_cache[term_id]
   if not t then

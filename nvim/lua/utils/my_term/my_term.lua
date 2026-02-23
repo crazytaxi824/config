@@ -53,6 +53,7 @@ end
 --- jobstart(cmd, opts), 给 my_term.job_id 赋值.
 ---
 ---@param term_opts MyTermOpts
+---@param term_bufnr integer
 ---@param term_win_id integer
 ---@return integer job_id
 local function my_term_exec(term_opts, term_bufnr, term_win_id)
