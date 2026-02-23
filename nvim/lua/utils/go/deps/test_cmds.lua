@@ -27,6 +27,15 @@
 --- go test -v -fuzztime 15s -run ^$ -fuzz "^FuzzFoo$" local/src/color
 --- }}}
 
+--- go test options
+--- @class GoTestOpts
+--- @field testfn_name string  (函数名)
+--- @field mode 'run' | 'bench' | 'fuzz'
+--- @field flag string  'none' | 'cpu' | 'mem' | ...
+--- @field go_list table  (`go list -json`)
+--- @field project string|boolean|nil  (标记)
+
+
 local go_pprof = require("utils.go.deps.go_pprof")
 local go_cover = require("utils.go.deps.go_cover")
 
@@ -84,15 +93,10 @@ local pprof_flags = {
 --- 可选的 pprof flags
 local pprof_choices = {'cpu', 'mem', 'mutex', 'block', 'trace'}
 
----@param opts table {
----   testfn_name: string (函数名),
----   mode:        'run' | 'bench' | 'fuzz',
----   flag:        'none' | 'cpu' | 'mem' | ...,
----   go_list:     table (`go list -json`),
----   project:     string|boolean|nil (标记),
----}
+--- 根据 flags 返回 {cmd}
 ---
----@return string[] { cmd }
+--- @param opts GoTestOpts
+--- @return string[] cmd
 local function mode_flags(opts)
   local scope = opts.go_list.ImportPath
   if opts.project then
@@ -110,16 +114,10 @@ local function mode_flags(opts)
   end
 end
 
-
----@param opts { testfn_name: string, mode: 'run'|'bench'|'fuzz', flag: string, go_list: table, project: string?} {
----   testfn_name: string (函数名),
----   mode:        'run' | 'bench' | 'fuzz',
----   flag:        'none' | 'cpu' | 'mem' | ...,
----   go_list:     table (`go list -json`),
----   project:     string|boolean|nil (标记),
----}
+--- 根据 go test opts 生成 my_term opts
 ---
----@return MyTermOpts
+--- @param opts GoTestOpts
+--- @return MyTermOpts
 function M.my_term_opts(opts)
   --- '-count=1' disable go test cache result.
   local go_test = {'go', 'test', '-count=1', '-v'}
@@ -196,8 +194,8 @@ end
 
 --- 返回 pprof flag description
 ---
----@param flag string ('none' | 'cpu' | 'mem' | ...)
----@return string (description)
+--- @param flag string ('none' | 'cpu' | 'mem' | ...)
+--- @return string description
 function M.get_testflag_desc(flag)
   local f = flag_desc[flag]
   if not f then
@@ -210,13 +208,9 @@ function M.get_testflag_desc(flag)
   return f.desc
 end
 
----@param opts { testfn_name: string, mode: 'run'|'bench'|'fuzz', flag: string, go_list: table, project: string?} {
----   testfn_name: string (函数名),
----   mode:        'run' | 'bench' | 'fuzz',
----   flag:        'none' | 'cpu' | 'mem' | ...,
----   go_list:     table (`go list -json`),
----   project:     string|boolean|nil (标记),
----}
+--- 通过 my_term console 运行 `go test`
+---
+--- @param opts GoTestOpts
 function M.go_test(opts)
   local term_opts = M.my_term_opts(opts)
 
