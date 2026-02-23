@@ -110,7 +110,6 @@ local function find_fn_call_before_cursor()
 end
 
 --- 创建 vim.lsp.buf_request_all(_, _, params, _) 中的 params
---- https://github.com/neovim/neovim/blob/master/runtime/lua/vim/lsp/buf.lua
 ---
 --- @param fn_node table
 --- @return fun(client: vim.lsp.Client, bufnr: integer):table?
@@ -143,6 +142,7 @@ function M.toggle_hover_short()
 end
 
 --- VVI: 以下代码大多从源代码中复制 ----------------------------------------------------------------
+--- https://github.com/neovim/neovim/blob/master/runtime/lua/vim/lsp/buf.lua
 --- 只获取 textDocument/hover 中 signature 部分
 function M.hover_short()
   local fn_node = find_fn_call_before_cursor()
@@ -150,7 +150,7 @@ function M.hover_short()
     return
   end
 
-  --- 1. 修改 hover_short floating window 显示的位置.
+  --- 1. NOTE: 修改 hover_short floating window 显示的位置.
   --- `:help vim.lsp.util.open_floating_preview.Opts`
   local config = {
     offset_x = fn_node.offset_x,
@@ -165,8 +165,7 @@ function M.hover_short()
     focus_id = ms.textDocument_hover  -- 'textDocument' request
   }
 
-  --- 2. 发送请求到 lsp server
-  --- results: { client_id1 = {}, client_id2 = {} ... }
+  --- 发送请求到 lsp server
   vim.lsp.buf_request_all(0, ms.textDocument_hover, client_positional_params(fn_node), function(results, ctx)
     local bufnr = assert(ctx.bufnr)
     if vim.api.nvim_get_current_buf() ~= bufnr then
@@ -176,19 +175,49 @@ function M.hover_short()
 
     -- Filter errors from results
     local results1 = {} --- @type table<integer,lsp.Hover>
+    local empty_response = false
 
     for client_id, resp in pairs(results) do
       local err, result = resp.err, resp.result
       if err then
         vim.lsp.log.error(err.code, err.message)
-      elseif result then
-        results1[client_id] = result  -- results1: { client_id1 = {}, client_id2 = {} ... }
+      elseif result and result.contents then
+        -- Make sure the response is not empty
+        -- Five response shapes:
+        -- - MarkupContent: { kind="markdown", value="doc" }
+        -- - MarkedString-string: "doc"
+        -- - MarkedString-pair: { language="c", value="doc" }
+        -- - MarkedString[]-string: { "doc1", ... }
+        -- - MarkedString[]-pair: { { language="c", value="doc1" }, ... }
+        if
+          (
+            type(result.contents) == 'table'
+            and #(
+                vim.tbl_get(result.contents, 'value') -- MarkupContent or MarkedString-pair
+                or vim.tbl_get(result.contents, 1, 'value') -- MarkedString[]-pair
+                or result.contents[1] -- MarkedString[]-string
+                or ''
+              )
+              > 0
+          )
+          or (
+            type(result.contents) == 'string' and #result.contents > 0 -- MarkedString-string
+          )
+        then
+          results1[client_id] = result
+        else
+          empty_response = true
+        end
       end
     end
 
     if vim.tbl_isempty(results1) then
       if config.silent ~= true then
-        vim.notify('No information available')
+        if empty_response then
+          vim.notify('Empty hover response', vim.log.levels.INFO)
+        else
+          vim.notify('No information available', vim.log.levels.INFO)
+        end
       end
       return
     end
@@ -220,7 +249,7 @@ function M.hover_short()
           contents[#contents + 1] = '```'
         end
       else
-        --- 3. 修改 lsp server 返回的内容用于 floating window 显示: 只保留 lsp server 返回内容的第一行.
+        --- 2. NOTE: 修改 lsp server 返回的内容用于 floating window 显示: 只保留 lsp server 返回内容的第一行.
         --- 寻找 "```" end line, 忽略后面的所有内容.
         local tmp = {}
         for _, line in ipairs(vim.lsp.util.convert_input_to_markdown_lines(result.contents)) do
@@ -231,6 +260,7 @@ function M.hover_short()
         end
         vim.list_extend(contents, tmp)
       end
+
       local range = result.range
       if range then
         local start = range.start
@@ -260,6 +290,7 @@ function M.hover_short()
       return
     end
 
+    --- 3. NOTE: 修改为手动 toggle hover_short window
     _, hover_winid = vim.lsp.util.open_floating_preview(contents, format, config)
 
     vim.api.nvim_create_autocmd('WinClosed', {
