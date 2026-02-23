@@ -25,6 +25,10 @@ local ms = vim.lsp.protocol.Methods
 
 local M = {}
 
+--- 创建 vim.lsp.buf_request_all(_, _, params, _) 中的 params
+---
+--- @param params? table
+--- @return fun(client: vim.lsp.Client, bufnr: integer):table?
 local function client_positional_params(params)
   local win = vim.api.nvim_get_current_win()
   return function(client)
@@ -56,6 +60,11 @@ end
 --- ...
 --- }
 -- -- }}}
+
+--- 创建 vim.lsp.buf_request_all(_, _, _, handler) 中的 handler
+---
+--- @param results table<integer,{err: lsp.ResponseError?, result: any}>
+--- @param ctx lsp.HandlerContext
 local function doc_highlight_handler(results, ctx)
   local bufnr = assert(ctx.bufnr)
   if vim.api.nvim_get_current_buf() ~= bufnr then
@@ -127,6 +136,10 @@ local function doc_highlight_handler(results, ctx)
   end
 end
 
+--- 在 CursorHold 时发送 'textDocument/documentHighlight' request
+---
+--- @param client vim.lsp.Client
+--- @param bufnr integer
 M.setup = function(client, bufnr)
   --- VVI: 这里必须使用 augroup, 否则在 `:LspRestart` 的情况下会叠加多个 autocmd.
   local group_id = vim.api.nvim_create_augroup("my_documentHighlight_#lsp:"..client.id..'_#buf:'..bufnr, {clear=true})
