@@ -5,31 +5,24 @@ local test_cmds = require("utils.go.deps.test_cmds")
 
 local M = {}
 
----测试 package `go test run/bench ImportPath`
----
----@param mode 'run'|'bench'
-M.go_test_pkg = function(mode)
-  --- 获取 go list info, `cd src/xxx && go list -json`
-  local go_list = go_list_module.go_list()
-
-  --- opts = {
-  ---   testfn_name = testfn_name,
-  ---   mode = mode,
-  ---   flag = 'none' | 'cpu' | 'mem' | ...,
-  ---   go_list = {},
-  ---   project = string|nil,
-  --- }
-  local opts = { go_list = go_list }
+--- @param mode 'run'|'bench'
+--- @return string
+local function get_testfn_name(mode)
   if mode == 'run' then
-    opts.testfn_name = '^Test.*'
-    opts.mode = 'run'
+    return '^Test.*'
   elseif mode == 'bench' then
-    opts.testfn_name = '^Benchmark.*'
-    opts.mode = 'bench'
+    return '^Benchmark.*'
   else
+    --- internal error
     error('go test mode error: "run" | "bench" only.')
   end
+end
 
+--- 测试 package `go test run/bench ImportPath`
+---
+--- @param mode 'run'|'bench'
+M.go_test_pkg = function(mode)
+  --- VVI: 异步函数, 必须在回调函数中运行 go test
   local select = {'none', 'cpu', 'mem', 'mutex', 'block', 'trace', 'cover', 'coverprofile'}
   vim.ui.select(select, {
     prompt = 'choose go test flag:',
@@ -38,7 +31,15 @@ M.go_test_pkg = function(mode)
     end
   }, function(choice)
     if choice then
-      opts.flag = choice
+      --- @type GoTestOpts
+      local opts = {
+        testfn_name = get_testfn_name(mode),
+        go_list = go_list_module.go_list(),
+        mode = mode,
+        flag = choice,
+      }
+
+      --- 运行 `go test`
       test_cmds.go_test(opts)
     end
   end)
