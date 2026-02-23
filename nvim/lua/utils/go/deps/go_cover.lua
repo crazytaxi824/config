@@ -6,7 +6,7 @@ local M = {}
 ---`go tool cover` hook
 ---
 ---@param coverage_dir string (directory)
----@return function
+---@return MyTermOptsCB
 function M.before_run(coverage_dir)
   return function()
     --- mkdir for coverage files

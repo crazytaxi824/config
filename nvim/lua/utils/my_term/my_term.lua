@@ -63,6 +63,7 @@ local function my_term_exec(term_opts, term_bufnr, term_win_id)
     job_id = terminal.terminal_exec(term_opts, term_bufnr, term_win_id)
   end
 
+  --- buffer 被 wipeout 的时候自动 jobstop()
   au_cb.autocmd_jobstop(term_opts, term_bufnr, job_id)
 
   --- VVI: 手动触发 BufEnter & BufWinEnter event

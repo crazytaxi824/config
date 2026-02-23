@@ -41,7 +41,7 @@ end
 
 ---`go test run/bench=^TEST_Func_Name$ ImportPath`
 ---
----@param prompt? string ('pprof')
+---@param prompt? 'pprof'
 function M.go_test_single_func(prompt)
   --- 判断当前文件是否 _test.go
   if not string.match(vim.fn.bufname(), "_test%.go$") then
