@@ -4,23 +4,24 @@ local M = {}
 
 --- autocmd 根据 events 执行 on_open(), on_close()
 ---
----@param term_obj MyTerm
-function M.autocmd_callback(term_obj)
+---@param term_opts MyTermOpts
+---@param term_bufnr integer
+function M.autocmd_callback(term_opts, term_bufnr)
   --- 关闭 terminal window 之后再打开时触发 BufWinEnter, 但不会触发 TermOpen.
   --- buffer 离开所有 window 才会触发 BufWinLeave.
-  local g_id = vim.api.nvim_create_augroup('my_term_bufnr_' .. term_obj.bufnr, {clear=true})
+  local g_id = vim.api.nvim_create_augroup('my_term_bufnr_' .. term_bufnr, {clear=true})
   vim.api.nvim_create_autocmd({"BufWinEnter", "BufWinLeave"}, {
     group = g_id,
-    buffer = term_obj.bufnr,
+    buffer = term_bufnr,
     callback = function(params)
       --- callback
-      if params.event == "BufWinEnter" and term_obj.on_open then
-        term_obj.on_open(term_obj)
+      if params.event == "BufWinEnter" and term_opts.on_open then
+        term_opts.on_open(term_opts, term_bufnr)
         return
       end
       --- callback
-      if params.event == "BufWinLeave" and term_obj.on_close then
-        term_obj.on_close(term_obj)
+      if params.event == "BufWinLeave" and term_opts.on_close then
+        term_opts.on_close(term_opts, term_bufnr)
       end
     end,
     desc = "my_term: on_open() & on_close() callback",
@@ -29,7 +30,7 @@ function M.autocmd_callback(term_obj)
   --- 全局保存 my_term window height
   vim.api.nvim_create_autocmd("WinClosed", {
     group = g_id,
-    buffer = term_obj.bufnr,
+    buffer = term_bufnr,
     callback = function(params)
       --- persist window height
       --- NOTE: 在 WinClosed event 中, params.file & params.match 都是 win_id, 数据类型是 string.
@@ -44,17 +45,34 @@ function M.autocmd_callback(term_obj)
   --- auto delete augroup
   vim.api.nvim_create_autocmd("BufWipeout", {
     group = g_id,
-    buffer = term_obj.bufnr,
+    buffer = term_bufnr,
     callback = function(params)
-      --- stop job in console_exec()
-      vim.fn.jobstop(term_obj.job_id)
-
-      --- remove from global_my_term_cache
-      g.global_my_term_cache[term_obj.id] = nil
-
       vim.api.nvim_del_augroup_by_id(g_id)
     end,
     desc = "my_term: delete augroup by id",
+  })
+end
+
+--- buffer 被 wipeout 的时候自动 jobstop()
+---@param term_opts MyTermOpts
+---@param term_bufnr integer
+---@param job_id integer
+function M.autocmd_jobstop(term_opts, term_bufnr, job_id)
+  local g_id = vim.api.nvim_create_augroup('my_term_job_' .. job_id, {clear=true})
+  vim.api.nvim_create_autocmd("BufWipeout", {
+    group = g_id,
+    buffer = term_bufnr,
+    callback = function(params)
+      --- stop job in console_exec()
+      vim.fn.jobstop(job_id)
+
+      --- remove from global_my_term_cache
+      g.global_my_term_cache[term_opts.id] = nil
+
+      --- delete augroup
+      vim.api.nvim_del_augroup_by_id(g_id)
+    end,
+    desc = "my_term: jobstop() when buffer wipeout",
   })
 end
 

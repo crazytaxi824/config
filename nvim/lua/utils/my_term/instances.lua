@@ -8,10 +8,10 @@ M.console = mt.new({
   id = 1001,
   auto_scroll = true,
   console_output = true,  -- 这里使用 console_exec(), ignore "jobdone" 设置.
-  after_run = function(term_obj)
+  after_run = function(_, term_bufnr)
     --- highlight filepath & jump to filepath
-    if term_obj.bufnr then
-      fp.setup(term_obj.bufnr)
+    if term_bufnr then
+      fp.setup(term_bufnr)
     end
   end,
 })

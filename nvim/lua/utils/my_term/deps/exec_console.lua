@@ -17,23 +17,25 @@ vim.api.nvim_set_hl(0, "my_output_stderr", {ctermfg=Colors.red.c, fg=Colors.red.
 
 --- 强制结束 job
 ---
----@param term_obj MyTerm
-local function stop_job(term_obj)
-  if term_obj.job_id and vim.fn.jobstop(term_obj.job_id) == 1 then
-    vim.bo[term_obj.bufnr].modifiable = true
-    vim.api.nvim_buf_set_lines(term_obj.bufnr, -1, -1, true, {"signal: interrupt"})
-    vim.bo[term_obj.bufnr].modifiable = false
+---@param term_bufnr integer
+---@param job_id integer
+local function stop_job(term_bufnr, job_id)
+  if vim.fn.jobstop(job_id) == 1 then
+    vim.bo[term_bufnr].modifiable = true
+    vim.api.nvim_buf_set_lines(term_bufnr, -1, -1, true, {"signal: interrupt"})
+    vim.bo[term_bufnr].modifiable = false
   end
 end
 
 --- CTRL-C send interrupt signal to output-buffer ONLY. terminal already has this.
 ---
----@param term_obj MyTerm
-local function set_console_keymaps(term_obj)
-  local opt = { buffer = term_obj.bufnr, silent = true }
+---@param term_bufnr integer
+---@param job_id integer
+local function set_console_keymaps(term_bufnr, job_id)
+  local opt = { buffer = term_bufnr, silent = true }
   local keys = {
-    {'n', '<C-c>', function() stop_job(term_obj) end, opt, "my_term: jobstop()"},
-    {'i', '<C-c>', function() stop_job(term_obj) end, opt, "my_term: jobstop()"},
+    {'n', '<C-c>', function() stop_job(term_bufnr, job_id) end, opt, "my_term: jobstop()"},
+    {'i', '<C-c>', function() stop_job(term_bufnr, job_id) end, opt, "my_term: jobstop()"},
   }
   require('utils.keymaps').set(keys)
 end
@@ -106,97 +108,101 @@ end
 --- 后台执行 jobstart(cmd), 将 output 手动写入 buffer. (buftype = 'nofile')
 --- 主要区别是 `:help jobstart-options` { term = nil|false } 在后台运行, 结果需要手动输出.
 ---
----@param term_obj MyTerm
+---@param term_opts MyTermOpts
+---@param term_bufnr integer
 ---@param term_win_id integer
-function M.console_exec(term_obj, term_win_id)
-  if vim.api.nvim_win_get_buf(term_win_id) ~= term_obj.bufnr then
-    return
+---@return integer job_id
+function M.console_exec(term_opts, term_bufnr, term_win_id)
+  if vim.api.nvim_win_get_buf(term_win_id) ~= term_bufnr then
+    error("MyTerm win_id and bufnr do not match")
   end
 
-  if not term_obj.cmd then
+  if not term_opts.cmd then
     error("MyTerm.cmd is missing")
   end
 
   --- set bufname
-  vim.api.nvim_buf_set_name(term_obj.bufnr, "term://#my_term#console#" .. term_obj.id)
+  vim.api.nvim_buf_set_name(term_bufnr, "term://#my_term#console#" .. term_opts.id)
 
-  vim.api.nvim_buf_call(term_obj.bufnr, function()
+  vim.api.nvim_buf_call(term_bufnr, function()
     vim.api.nvim_set_option_value('wrap', true, { scope='local', win=term_win_id })
     vim.api.nvim_set_option_value('relativenumber', false, { scope='local', win=term_win_id })
     vim.api.nvim_set_option_value('signcolumn', 'no', { scope='local', win=term_win_id })
   end)
 
   --- print cmd
-  local print_cmd = term_obj.cmd
+  local print_cmd = term_opts.cmd
   if type(print_cmd) == "table" then
     print_cmd = table.concat(print_cmd, ' ')
   end
 
-  vim.api.nvim_buf_set_lines(term_obj.bufnr, 0, -1, true, {print_cmd})  -- clear buffer text & print cmd
-  vim.hl.range(term_obj.bufnr, ns, "my_output_sys", {0, 0}, {0, -1}) -- highlight cmd
-  vim.bo[term_obj.bufnr].modifiable = false
+  vim.api.nvim_buf_set_lines(term_bufnr, 0, -1, true, {print_cmd})  -- clear buffer text & print cmd
+  vim.hl.range(term_bufnr, ns, "my_output_sys", {0, 0}, {0, -1}) -- highlight cmd
+  vim.bo[term_bufnr].modifiable = false
 
-  --- keymap
-  set_console_keymaps(term_obj)
-
-  term_obj.job_id = vim.fn.jobstart(term_obj.cmd, {
-    cwd = term_obj.cwd,
-    env = term_obj.env,
+  local job_id = vim.fn.jobstart(term_opts.cmd, {
+    cwd = term_opts.cwd,
+    env = term_opts.env,
 
     on_stdout = function(job_id, data, event)  -- NOTE: for fmt.Println()
       --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
-      if not g.term_buf_exist(term_obj.bufnr) then
+      if not g.term_buf_exist(term_bufnr) then
         return
       end
 
       --- write output to buffer
-      set_buf_line_output(term_obj.bufnr, data, "my_output_stdout")
+      set_buf_line_output(term_bufnr, data, "my_output_stdout")
 
       --- auto_scroll option
-      auto_scroll.buf_scroll_bottom(term_obj)
+      auto_scroll.buf_scroll_bottom(term_opts, term_bufnr)
 
       --- callback
-      if term_obj.on_stdout then
-        term_obj.on_stdout(term_obj, job_id, data, event)
+      if term_opts.on_stdout then
+        term_opts.on_stdout(term_opts, job_id, data, event)
       end
     end,
 
     on_stderr = function(job_id, data, event)  -- NOTE: for log.Println()
       --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
-      if not g.term_buf_exist(term_obj.bufnr) then
+      if not g.term_buf_exist(term_bufnr) then
         return
       end
 
       --- write output to buffer
-      set_buf_line_output(term_obj.bufnr, data, "my_output_stderr")
+      set_buf_line_output(term_bufnr, data, "my_output_stderr")
 
       --- auto_scroll option
-      auto_scroll.buf_scroll_bottom(term_obj)
+      auto_scroll.buf_scroll_bottom(term_opts, term_bufnr)
 
       --- callback
-      if term_obj.on_stderr then
-        term_obj.on_stderr(term_obj, job_id, data, event)
+      if term_opts.on_stderr then
+        term_opts.on_stderr(term_opts, job_id, data, event)
       end
     end,
 
     on_exit = function(job_id, exit_code, event)
       --- callback
-      if term_obj.on_exit then
-        term_obj.on_exit(term_obj, job_id, exit_code, event)
+      if term_opts.on_exit then
+        term_opts.on_exit(term_opts, job_id, exit_code, event)
       end
 
       --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
-      if not g.term_buf_exist(term_obj.bufnr) then
+      if not g.term_buf_exist(term_bufnr) then
         return
       end
 
       --- write exit to buffer
-      set_buf_line_exit(term_obj.bufnr, exit_code)
+      set_buf_line_exit(term_bufnr, exit_code)
 
       --- auto_scroll option
-      auto_scroll.buf_scroll_bottom(term_obj)
+      auto_scroll.buf_scroll_bottom(term_opts, term_bufnr)
     end,
   })
+
+  --- keymap
+  set_console_keymaps(term_bufnr, job_id)
+
+  return job_id
 end
 
 return M

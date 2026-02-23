@@ -57,9 +57,10 @@ local M = {}
 
 --- set keymaps for my_term terminal & output-buffer.
 ---
----@param term_obj MyTerm
-function M.set_buf_keymaps(term_obj)
-  local opt = { buffer = term_obj.bufnr, silent = true }
+---@param term_obj MyTermOpts
+---@param term_bufnr integer
+function M.set_buf_keymaps(term_obj, term_bufnr)
+  local opt = { buffer = term_bufnr, silent = true }
   local keys = {
     {'n', '<leader>tc', function() close_others(term_obj.id) end,   opt, 'my_term: close other my_terms windows'},
     {'n', '<leader>tw', function() wipeout_others(term_obj.id) end, opt, 'my_term: wipeout other my_terms'},

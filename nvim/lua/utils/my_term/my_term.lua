@@ -9,9 +9,11 @@ local keymaps  = require('utils.my_term.deps.term_keymaps')
 
 --- Create new terminal buffer and window, 给 my_term.bufnr 赋值.
 ---
----@param term_obj MyTerm
----@return integer
-local function create_my_term_win(term_obj)
+---@param term_opts MyTermOpts
+---@param old_term_bufnr? integer
+---@return integer bufnr
+---@return integer win_id
+local function create_my_term_win(term_opts, old_term_bufnr)
   --- VVI: 以下执行顺序很重要!
   --- `jobstart(cmd, {opts})` 事件触发顺序和 `:edit term://cmd` 有所不同.
   --- `:edit term://cmd` 中: 触发顺序 TermOpen -> BufEnter -> BufWinEnter.
@@ -22,51 +24,54 @@ local function create_my_term_win(term_obj)
   --- 但在 nvim_buf_call() 的过程中 TermOpen event 获取到的 window id 是临时的 autocmd window, 所以需要先创建一个
   --- window 然后 win_gotoid(win_id)
 
-  --- cache old term bufnr, for reuse old term_buf window.
-  local old_term_bufnr = term_obj.bufnr
-
   --- 每次运行 jobstart() 之前, 先创建一个新的 scratch buffer 给 terminal.
-  term_obj.bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
+  local term_bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
 
-  vim.bo[term_obj.bufnr].filetype = "my_term"  --- set filetype
-  -- vim.b[term_obj.bufnr]["my_term"] = term_obj.id  --- 设置 bufvar: {my_term = term_id}
+  vim.bo[term_bufnr].filetype = "my_term"  --- set filetype
+  -- vim.b[term_bufnr]["my_term"] = term_opts.id  --- 设置 bufvar: {my_term = term_id}
 
   --- autocmd 放在这里运行主要是有两个限制条件:
   --- 1. 在获取到 terminal bufnr 之后运行, 为了在 autocmd 中使用 bufnr 作为触发条件.
   --- 2. 在 term window 打开并加载 term bufnr 之前运行, 为了触发 BufWinEnter event.
-  au_cb.autocmd_callback(term_obj)
+  au_cb.autocmd_callback(term_opts, term_bufnr)
 
   --- 快捷键设置: 在获取到 term.bufnr 和 term.id 之后运行.
-  keymaps.set_buf_keymaps(term_obj)
+  keymaps.set_buf_keymaps(term_opts, term_bufnr)
 
   --- 进入一个选定的 term window 加载现有 term buffer, 同时 wipeout old_term_bufnr.
-  local term_win_id = t_win.enter_term_win(term_obj.bufnr, old_term_bufnr)
+  local term_win_id = t_win.enter_term_win(term_bufnr, old_term_bufnr)
 
   --- 设置 term win 属性
   local scope={ scope='local', win=term_win_id }
   vim.api.nvim_set_option_value('sidescrolloff', 0, scope)
   vim.api.nvim_set_option_value('scrolloff', 0, scope)
 
-  return term_win_id
+  return term_bufnr, term_win_id
 end
 
 --- jobstart(cmd, opts), 给 my_term.job_id 赋值.
 ---
----@param term_obj MyTerm
+---@param term_opts MyTermOpts
 ---@param term_win_id integer
-local function my_term_exec(term_obj, term_win_id)
+---@return integer job_id
+local function my_term_exec(term_opts, term_bufnr, term_win_id)
   --- VVI: 必须在 bufnr 被 window 显示之后运行. 避免 nvim_buf_call() 生成一个临时 autocmd window.
-  if term_obj.console_output then
-    console.console_exec(term_obj, term_win_id)
+  local job_id
+  if term_opts.console_output then
+    job_id = console.console_exec(term_opts, term_bufnr, term_win_id)
   else
-    terminal.terminal_exec(term_obj, term_win_id)
+    job_id = terminal.terminal_exec(term_opts, term_bufnr, term_win_id)
   end
+
+  au_cb.autocmd_jobstop(term_opts, term_bufnr, job_id)
 
   --- VVI: 手动触发 BufEnter & BufWinEnter event
   --- doautocmd "BufEnter & BufWinEnter term://"
   --- 触发时机在 after TermOpen & before TermClose
   --- 先触发 BufEnter, 再触发 BufWinEnter
-  vim.api.nvim_exec_autocmds({"BufEnter", "BufWinEnter"}, { buffer = term_obj.bufnr })
+  vim.api.nvim_exec_autocmds({"BufEnter", "BufWinEnter"}, { buffer = term_bufnr })
+
+  return job_id
 end
 -- }}}
 
@@ -98,16 +103,20 @@ function M:run()
   end
 
   --- 创建 my term window and buffer, 创建 my_term.bufnr
-  local term_win_id = create_my_term_win(self)
+  local term_bufnr, term_win_id = create_my_term_win(self)
 
   --- 执行 jobstart(cmd), 创建 my_term.job_id
-  my_term_exec(self, term_win_id)
+  local job_id = my_term_exec(self, term_bufnr, term_win_id)
 
   --- executed after jobstart(). Have 'term.bufnr' and 'term.job_id' ...
   --- 和 on_exit 的区别是不用等到 jobdone.
   if self.after_run then
-    self.after_run(self)
+    self.after_run(self, term_bufnr)
   end
+
+  --- NOTE: MyTermOpts -> MyTerm
+  self.bufnr = term_bufnr
+  self.job_id = job_id
 
   --- cache terminal object
   g.global_my_term_cache[self.id] = self
