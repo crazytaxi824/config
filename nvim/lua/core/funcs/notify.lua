@@ -1,8 +1,8 @@
 --- 提醒使用 notify 插件或者 vim.notify() 函数
---- msg - string|[]string
---- lvl - string|number. "TRACE"-0, "DEBUG"-1, "INFO"-2, "WARN"-3, "ERROR"-4, "OFF"-5
----       `:help vim.log.levels`, `:help notify.setup`
---- opt - table, nvim-notify 插件专用 `:help notify.Options`, title, timeout...
+---
+--- @param msg string|string[]
+--- @param lvl? string|integer  "TRACE"-0, "DEBUG"-1, "INFO"-2, "WARN"-3, "ERROR"-4, "OFF"-5
+--- @param opt? {title: string, timeout: number|boolean}  `:help notify.Options`
 function Notify(msg, lvl, opt)
   -- vim.log.levels.xxx & vim.lsp.log_levels.xxx 都是 number.
   if type(lvl) == 'string' then
@@ -50,6 +50,8 @@ function Notify(msg, lvl, opt)
 
   else
     --- 如果 nvim-notify 不存在则使用 vim.notify()
+
+    ---@cast lvl integer
     if type(msg) == 'table' then
       --- msg should be table array, join message []string with '\n'
       vim.notify(table.concat(msg, '\n'), lvl)

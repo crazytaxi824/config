@@ -34,19 +34,19 @@ end
 local M = {}
 
 ---重新读取 project local settings 文件
-M.reload_local_settings = function()
+function M.reload_local_settings()
   local_lsp_settings = project_local_settings.get_local_lsp_settings()
 end
 
 ---返回当前本地 lsp 设置
 ---@return table|nil
-M.exist_local_settings = function()
+function M.exist_local_settings()
   return local_lsp_settings
 end
 
 ---设置 & 启动单个 lsp
 ---@param lsp_tool string
-M.lspconfig_setup = function(lsp_tool)
+function M.lspconfig_setup(lsp_tool)
   --- config 必须包含 on_attach, capabilities 两个属性.
   local common_config = require("lsp.lsp_config.client_config")
   local lsp_config = vim.tbl_deep_extend('force', common_config, load_lsp_configs(lsp_tool))
@@ -55,7 +55,7 @@ end
 
 ---重启 lsp
 ---@param lsp_tools string[]
-M.restart_lsps = function(lsp_tools)
+function M.restart_lsps(lsp_tools)
   local tools = {}
 
   for _, lsp_tool in ipairs(lsp_tools) do
