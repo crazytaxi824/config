@@ -4,7 +4,7 @@ local M = {}
 --local win_height = 10
 M.win_height = math.ceil(vim.o.lines/4)
 
---- map-like table { job_id: MyTerm }
+--- cache all my_term object
 ---@type table<integer, MyTermPost>
 M.global_my_term_cache = {}
 

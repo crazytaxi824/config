@@ -73,7 +73,7 @@ end
 
 --- return an term object by id
 ---@param term_id integer
----@return MyTerm?
+---@return MyTerm? (MyTermPost 降级为 MyTerm)
 function M.get_term_by_id(term_id)
   return g.global_my_term_cache[term_id]
 end
