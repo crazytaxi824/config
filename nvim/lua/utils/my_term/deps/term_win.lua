@@ -22,11 +22,11 @@ local function find_exist_term_win()
   return win_id
 end
 
---- 创建一个 window 或者 re-use 一个 my_term window 用于 jobstart() 运行.
+--- create/re-use, enter `win_gotoid(win_id)` 一个 window 用于 jobstart() 运行.
 ---
 ---@param bufnr integer
 ---@return integer win_id
-M.create_term_win = function(bufnr)
+function M.create_term_win(bufnr)
   if not vim.api.nvim_buf_is_valid(bufnr) then
     error("bufnr is not exist")
   end

@@ -53,7 +53,7 @@ function M.autocmd_callback(term_opts, term_bufnr)
   })
 end
 
---- buffer 被 wipeout 的时候自动 jobstop()
+--- buffer 被 wipeout 的时候自动 jobstop(), 同时 remove terminal object from my_term cache.
 ---@param term_opts MyTermOpts
 ---@param term_bufnr integer
 ---@param job_id integer
