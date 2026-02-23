@@ -8,9 +8,9 @@ vim.api.nvim_create_autocmd({'BufWritePost'}, {
   callback = function(params)
     if vim.fs.abspath(params.file) == utils.find_local_settings_file(utils.lsp_file) then
       local p = require("lsp.lsp_config.update_config")
-      local old = p.exist_settings()
+      local old = p.exist_local_settings()
       p.reload_local_settings()
-      local new = p.exist_settings()
+      local new = p.exist_local_settings()
 
       local tools = utils.find_diff_tool(old, new)
       p.restart_lsps(tools)
@@ -27,9 +27,9 @@ vim.api.nvim_create_autocmd({'BufWritePost'}, {
   callback = function(params)
     if vim.fs.abspath(params.file) == utils.find_local_settings_file(utils.linter_file) then
       local p = require("lsp.null_ls.sources")
-      local old = p.exist_settings()
+      local old = p.exist_local_settings()
       p.reload_local_settings()
-      local new = p.exist_settings()
+      local new = p.exist_local_settings()
 
       local tools = utils.find_diff_tool(old, new)
       p.restart_linters(tools)

@@ -40,7 +40,7 @@ end
 
 ---返回当前本地 lsp 设置
 ---@return table|nil
-M.exist_settings = function()
+M.exist_local_settings = function()
   return local_lsp_settings
 end
 
