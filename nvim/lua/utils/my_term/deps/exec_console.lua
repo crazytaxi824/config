@@ -158,7 +158,7 @@ function M.console_exec(term_opts, term_bufnr, term_win_id)
 
       --- callback
       if term_opts.on_stdout then
-        term_opts.on_stdout(term_opts, job_id, data, event)
+        term_opts.on_stdout(term_opts, term_bufnr, job_id, data)
       end
     end,
 
@@ -176,14 +176,14 @@ function M.console_exec(term_opts, term_bufnr, term_win_id)
 
       --- callback
       if term_opts.on_stderr then
-        term_opts.on_stderr(term_opts, job_id, data, event)
+        term_opts.on_stderr(term_opts, term_bufnr, job_id, data)
       end
     end,
 
     on_exit = function(job_id, exit_code, event)
       --- callback
       if term_opts.on_exit then
-        term_opts.on_exit(term_opts, job_id, exit_code, event)
+        term_opts.on_exit(term_opts, term_bufnr, job_id, exit_code)
       end
 
       --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.

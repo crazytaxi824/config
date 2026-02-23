@@ -33,7 +33,7 @@ function M.terminal_exec(term_opts, term_bufnr, term_win_id)
 
         --- callback
         if term_opts.on_stdout then
-          term_opts.on_stdout(term_opts, job_id, data, event)
+          term_opts.on_stdout(term_opts, term_bufnr, job_id, data)
         end
       end,
 
@@ -43,14 +43,14 @@ function M.terminal_exec(term_opts, term_bufnr, term_win_id)
 
         --- callback
         if term_opts.on_stderr then
-          term_opts.on_stderr(term_opts, job_id, data, event)
+          term_opts.on_stderr(term_opts, term_bufnr, job_id, data)
         end
       end,
 
       on_exit = function(job_id, exit_code, event)  -- event 是 'exit'
         --- callback
         if term_opts.on_exit then
-          term_opts.on_exit(term_opts, job_id, exit_code, event)
+          term_opts.on_exit(term_opts, term_bufnr, job_id, exit_code)
         end
       end,
     })
