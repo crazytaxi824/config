@@ -146,7 +146,7 @@ function M.console_exec(term_opts, term_bufnr, term_win_id)
 
     on_stdout = function(job_id, data, event)  -- NOTE: for fmt.Println()
       --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
-      if not g.term_buf_exist(term_bufnr) then
+      if not vim.api.nvim_buf_is_valid(term_bufnr) then
         return
       end
 
@@ -164,7 +164,7 @@ function M.console_exec(term_opts, term_bufnr, term_win_id)
 
     on_stderr = function(job_id, data, event)  -- NOTE: for log.Println()
       --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
-      if not g.term_buf_exist(term_bufnr) then
+      if not vim.api.nvim_buf_is_valid(term_bufnr) then
         return
       end
 
@@ -187,7 +187,7 @@ function M.console_exec(term_opts, term_bufnr, term_win_id)
       end
 
       --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
-      if not g.term_buf_exist(term_bufnr) then
+      if not vim.api.nvim_buf_is_valid(term_bufnr) then
         return
       end
 

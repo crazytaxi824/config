@@ -38,7 +38,7 @@ function M.open_shell_term()
       end,
       on_exit = function(_, term_bufnr)
         --- VVI: 手动 :bw 删除 buffer 时会触发 TermClose, 导致重复 wipeout buffer 而报错.
-        if g.term_buf_exist(term_bufnr) then
+        if vim.api.nvim_buf_is_valid(term_bufnr) then
           vim.api.nvim_buf_delete(term_bufnr, {force=true})
         end
 
@@ -87,7 +87,7 @@ end
 --- open all terms which are cached in global_my_term_cache and bufnr is valid.
 function M.open_all()
   for _, term_obj in pairs(g.global_my_term_cache) do
-    if g.term_buf_exist(term_obj.bufnr) then
+    if vim.api.nvim_buf_is_valid(term_obj.bufnr) then
       local term_wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
       if #term_wins < 1 then
         t_win.create_term_win(term_obj.bufnr)
@@ -99,7 +99,7 @@ end
 --- jobstop(job_id) & :bwipeout all terminal buffers
 function M.wipeout_all()
   for _, term_obj in pairs(g.global_my_term_cache) do
-    if g.term_buf_exist(term_obj.bufnr) then
+    if vim.api.nvim_buf_is_valid(term_obj.bufnr) then
       term_obj:wipeout()
     end
   end
@@ -110,7 +110,7 @@ function M.toggle_all()
   --- 获取所有的 my_term windows
   local open_winid_list= {}
   for _, term_obj in pairs(g.global_my_term_cache) do
-    if g.term_buf_exist(term_obj.bufnr) then
+    if vim.api.nvim_buf_is_valid(term_obj.bufnr) then
       local term_wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
       for _, w in ipairs(term_wins) do
         table.insert(open_winid_list, w)

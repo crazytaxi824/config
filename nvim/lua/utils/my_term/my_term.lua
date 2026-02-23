@@ -84,7 +84,7 @@ end
 ---以下是 MyTerm 方法, 放在 metatable 中防止被修改.
 ---@field run fun(self: MyTerm) @readonly
 ---@field stop fun(self: MyTerm) @readonly
----@field is_open fun(self: MyTerm): boolean @readonly
+---
 ---@field open_win fun(self: MyTerm): integer|nil @readonly
 ---@field close_win fun(self: MyTerm) @readonly
 ---@field job_status fun(self: MyTerm): integer @readonly
@@ -130,20 +130,9 @@ function M:stop()
   end
 end
 
---- is_open(). true: window is opened; false: window is closed.
-function M:is_open()
-  if g.term_buf_exist(self.bufnr) then
-    local term_wins = vim.fn.getbufinfo(self.bufnr)[1].windows
-    if #term_wins > 0 then
-      return true
-    end
-  end
-  return false
-end
-
 --- open terminal window or goto terminal window, return win_id
 function M:open_win()
-  if g.term_buf_exist(self.bufnr) then
+  if vim.api.nvim_buf_is_valid(self.bufnr) then
     local term_wins = vim.fn.getbufinfo(self.bufnr)[1].windows
     if #term_wins > 0 then
       --- 如果有 window 正在显示该 term buffer, 则跳转到该 window.
@@ -161,7 +150,7 @@ end
 
 --- close all windows which displays this term buffer.
 function M:close_win()
-  if g.term_buf_exist(self.bufnr) then
+  if vim.api.nvim_buf_is_valid(self.bufnr) then
     local term_wins = vim.fn.getbufinfo(self.bufnr)[1].windows
     for _, w in ipairs(term_wins) do
       vim.api.nvim_win_close(w, true)
@@ -177,7 +166,7 @@ end
 
 --- wipeout term buffer.
 function M:wipeout()
-  if not g.term_buf_exist(self.bufnr) then
+  if not vim.api.nvim_buf_is_valid(self.bufnr) then
     return
   end
 

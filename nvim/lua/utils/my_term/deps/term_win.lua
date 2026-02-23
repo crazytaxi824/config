@@ -9,7 +9,7 @@ local function find_exist_term_win()
   local win_id = -1
 
   for _, term_obj in pairs(g.global_my_term_cache) do
-    if g.term_buf_exist(term_obj.bufnr) then
+    if vim.api.nvim_buf_is_valid(term_obj.bufnr) then
       local term_wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
       for _, w in ipairs(term_wins) do
         if w > win_id then
@@ -52,7 +52,7 @@ end
 ---@return integer win_id
 function M.enter_term_win(curr_term_bufnr, old_term_bufnr)
   --- 如果 old_term_bufnr 不存在: 创建一个新的 term window 用于加载 new term.bufnr
-  if not old_term_bufnr or not g.term_buf_exist(old_term_bufnr) then
+  if not old_term_bufnr or not vim.api.nvim_buf_is_valid(old_term_bufnr) then
     return M.create_term_win(curr_term_bufnr)
   end
 
