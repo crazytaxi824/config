@@ -66,7 +66,7 @@ function M.open_shell_term()
   end
 
   if not t:open_win() then
-    Notify('cached my_term with No bufnr', "ERROR")
+    error('cached my_term has No bufnr')
   end
 end
 

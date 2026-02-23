@@ -10,7 +10,7 @@ local keymaps  = require('utils.my_term.deps.term_keymaps')
 --- Create new terminal buffer and window, 给 my_term.bufnr 赋值.
 ---
 ---@param term_opts MyTermOpts
----@param old_term_bufnr? integer
+---@param old_term_bufnr integer  TODO: 这个值有可能是 nil, 但是必须要传入函数中.
 ---@return integer bufnr
 ---@return integer win_id
 local function create_my_term_win(term_opts, old_term_bufnr)
