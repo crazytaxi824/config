@@ -1,10 +1,10 @@
 local g = require('utils.my_term.deps.global')
+local console = require('utils.my_term.deps.exec_console')
+local terminal = require('utils.my_term.deps.exec_terminal')
 local au_cb = require('utils.my_term.deps.autocmd_callback')
 local t_win = require('utils.my_term.deps.term_win')
 local t_act = require('utils.my_term.term_actions')
-local console = require('utils.my_term.deps.exec_console')
-local terminal = require('utils.my_term.deps.exec_terminal')
-local keymaps  = require('utils.my_term.deps.term_keymaps')
+local t_key  = require('utils.my_term.term_keymaps')
 
 --- deps functions --------------------------------------------------------------------------------- {{{
 
@@ -37,7 +37,7 @@ local function create_my_term_win(term_opts, old_term_bufnr)
   au_cb.autocmd_callback(term_opts, term_bufnr)
 
   --- 快捷键设置: 在获取到 term.bufnr 和 term.id 之后运行.
-  keymaps.set_buf_keymaps(term_opts, term_bufnr)
+  t_key.set_buf_keymaps(term_opts, term_bufnr)
 
   --- 进入一个选定的 term window 加载现有 term buffer, 同时 wipeout old_term_bufnr.
   local term_win_id = t_win.enter_term_win(term_bufnr, old_term_bufnr)
