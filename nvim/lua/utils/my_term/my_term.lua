@@ -104,7 +104,7 @@ function M:run()
   end
 
   --- 创建 my term window and buffer, 创建 my_term.bufnr
-  local term_bufnr, term_win_id = create_my_term_win(self)
+  local term_bufnr, term_win_id = create_my_term_win(self, self.bufnr)
 
   --- 执行 jobstart(cmd), 创建 my_term.job_id
   local job_id = my_term_exec(self, term_bufnr, term_win_id)
