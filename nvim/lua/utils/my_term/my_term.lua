@@ -80,10 +80,6 @@ end
 
 --- my_term object
 ---@class MyTerm: MyTermOpts  继承 MyTermOpts
----@field bufnr integer  -- bufnr 在 :run() 过程中创建
----@field job_id integer  -- job_id 在 :run() 过程中创建
----
----以下是 MyTerm 方法, 放在 metatable 中防止被修改.
 ---@field run fun(self: MyTerm) @readonly
 ---@field stop fun(self: MyTerm) @readonly
 local M = {}
@@ -113,7 +109,8 @@ function M:run()
     self.after_run(self, term_bufnr)
   end
 
-  --- NOTE: MyTermOpts -> MyTerm
+  --- MyTerm -> MyTermPost
+  ---@cast self MyTermPost
   self.bufnr = term_bufnr
   self.job_id = job_id
 

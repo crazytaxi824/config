@@ -23,3 +23,8 @@
 ---@field on_stderr? MyTermOptsOnOutput
 ---@field on_exit?   MyTermOptsOnExit
 
+
+--- MyTermPost
+---@class MyTermPost: MyTerm
+---@field bufnr integer
+---@field job_id integer
