@@ -14,7 +14,7 @@ local M = {}
 --- @return string|nil func_name (如果返回 nil 说明不是 test 函数)
 --- @return 'run'|'bench'|'fuzz'|nil mode
 function M.get_exact_testfn_name()
-  local lcontent = vim.fn.getline('.')  -- 获取行内容
+  local lcontent = vim.api.nvim_get_current_line()  -- 获取行内容
 
   --- NOTE: go test 函数不允许 func [T any]TestXxx(), 不允许有 type param.
   --- %w     - 单个 char [a-zA-Z0-9]
