@@ -56,7 +56,7 @@ M.choose = function()
   vim.cmd.redraw()
 
   --- prompt choose window
-  vim.notify("Choose window:")
+  vim.api.nvim_echo({{"Choose window: ", "WarningMsg"}}, false, {})
   local char = string.upper(get_user_input_char())  -- 这里返回的是 string 类型
 
   --- jump to window
