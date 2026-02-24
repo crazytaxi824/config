@@ -38,29 +38,8 @@ local function client_positional_params(params)
   end
 end
 
---- 根据 vim.lsp.buf.hover() 方法修改. https://github.com/neovim/neovim/blob/master/runtime/lua/vim/lsp/buf.lua
---- textDocument_documentHighlight, https://github.com/neovim/neovim/blob/master/runtime/lua/vim/lsp/handlers.lua
---- results: {  --- {{{
---- client_id1 = {
----   kind=1,
----   range={
----     start = {
----       line = ...
----       character = ...
----     },
----     end = {
----       line = ...
----       character = ...
----     },
----   }
---- },
---- client_id2 = {
----   ...
---- }
---- ...
---- }
--- -- }}}
-
+--- 根据 https://github.com/neovim/neovim/blob/master/runtime/lua/vim/lsp/buf.lua 中 M.hover(config) 函数修改
+---
 --- 创建 vim.lsp.buf_request_all(_, _, _, handler) 中的 handler
 ---
 --- @param results table<integer,{err: lsp.ResponseError?, result: any}>
@@ -73,7 +52,7 @@ local function doc_highlight_handler(results, ctx)
   end
 
   -- Filter errors from results
-  local results1 = {} --- @type table<integer,lsp.Hover>
+  local results1 = {} --- @type table<integer,lsp.DocumentHighlight>
 
   for client_id, resp in pairs(results) do
     local err, result = resp.err, resp.result
@@ -98,7 +77,6 @@ local function doc_highlight_handler(results, ctx)
 
     --- augroup id
     local group_id = vim.api.nvim_create_augroup("my_documentHighlight_CursorMoved_#lsp:"..client_id..'_#buf:'..bufnr, {clear=true})
-
     vim.api.nvim_create_autocmd({"CursorMoved"}, {
       group = group_id,
       buffer = bufnr,  -- 对指定 buffer 有效

@@ -142,7 +142,9 @@ function M.toggle_hover_short()
 end
 
 --- VVI: 以下代码大多从源代码中复制 ----------------------------------------------------------------
---- https://github.com/neovim/neovim/blob/master/runtime/lua/vim/lsp/buf.lua
+
+--- 根据 https://github.com/neovim/neovim/blob/master/runtime/lua/vim/lsp/buf.lua 中 M.hover(config) 函数修改
+---
 --- 只获取 textDocument/hover 中 signature 部分
 function M.hover_short()
   local fn_node = find_fn_call_before_cursor()
@@ -151,7 +153,7 @@ function M.hover_short()
   end
 
   --- 1. NOTE: 修改 hover_short floating window 显示的位置.
-  --- `:help vim.lsp.util.open_floating_preview.Opts`
+  --- @type vim.lsp.buf.hover.Opts
   local config = {
     offset_x = fn_node.offset_x,
     offset_y = fn_node.offset_y,
