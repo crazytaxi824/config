@@ -12,7 +12,7 @@ local ns = vim.api.nvim_create_namespace('my_filepath_extmarks')
 --- highlight
 vim.api.nvim_set_hl(0, "my_filepath_underline", { link = "Underlined" })
 
----delete previous cached highlight
+--- delete previous cached highlight
 M.highlight_clear_cache = function()
   if cache_hl_bufnr and vim.api.nvim_buf_is_valid(cache_hl_bufnr) then
     vim.api.nvim_buf_clear_namespace(cache_hl_bufnr, ns, 0, -1)
@@ -21,7 +21,7 @@ M.highlight_clear_cache = function()
   cache_hl_bufnr = nil -- delete cache
 end
 
----检查一整行内所有 valide filepath, 然后 highlight.
+--- 检查一整行内所有 valide filepath, 然后 highlight.
 local function hl_line()
   local rs = parse.parse_hl_line()
   if not rs then
@@ -37,8 +37,8 @@ local function hl_line()
   cache_hl_bufnr = rs.bufnr  -- cache bufnr
 end
 
----NOTE: matchadd() 每次执行只能作用在 current window 上. 所有在该 window 打开的 buffer 都会收到影响.
----而且状态持续, 当该 window 打开别的 buffer 时, highlight 一样会存在.
+--- NOTE: matchadd() 每次执行只能作用在 current window 上. 所有在该 window 打开的 buffer 都会收到影响.
+--- 而且状态持续, 当该 window 打开别的 buffer 时, highlight 一样会存在.
 M.highlight_filepath = function()
   --- delete previous cached highlight
   M.highlight_clear_cache()

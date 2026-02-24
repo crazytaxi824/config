@@ -5,10 +5,11 @@ local vs = require('utils.visual_selected')
 
 local M = {}
 
----跳转到 filepath
----@param absolute_path string
----@param lnum integer
----@param col integer
+--- 跳转到 filepath
+---
+--- @param absolute_path string
+--- @param lnum integer
+--- @param col integer
 local function jump_to_file(absolute_path, lnum, col)
   lnum = lnum or 1
   col = col or 1
@@ -45,8 +46,8 @@ local function jump_to_file(absolute_path, lnum, col)
   end
 end
 
----跳转到 directory
----@param dir string
+--- 跳转到 directory
+--- @param dir string
 local function jump_to_dir(dir)
   --- NOTE: 新窗口中打开 dir, 因为 nvim-tree 设置 hijack_netrw=true & hijack_directories=true,
   --- 如果直接使用 `:edit dir` 会导致打开 dir 的窗口被关闭 (hijack).
@@ -54,9 +55,9 @@ local function jump_to_dir(dir)
   vim.cmd.new(dir)
 end
 
----jump to filepath/directory
+--- jump to filepath/directory
 ---
----@param content string|nil (filepath:{lnum}:{col})
+--- @param content string|nil (filepath:{lnum}:{col})
 local function jump(content)
   if not content then
     return
@@ -78,7 +79,10 @@ local function jump(content)
   Notify('cannot open: "' .. content .. '"', "INFO", {timeout = 1500})
 end
 
+--- jump to <cword>
 M.n_jump_cWORD = function() jump(vim.fn.expand('<cWORD>')) end
+
+--- jump to VISUAL selected content
 M.v_jump_selected = function() jump(vs.visual_selected(true)) end
 
 return M
