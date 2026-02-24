@@ -111,7 +111,7 @@ local plugins = {
 
   {
     "lukas-reineke/indent-blankline.nvim",
-    tag = "v3.9.0",
+    tag = "v3.9.1",
     config = function() require("plugins.settings.indentline") end,  -- setup() 设置 use_treesitter = true
     dependencies = {"nvim-treesitter/nvim-treesitter"},  -- for setup({scope})
 
