@@ -2,8 +2,8 @@
 vim.api.nvim_buf_create_user_command(
   0,
   "GoImpl",
-  function(params) require("utils.go").tool.impl(params.fargs) end,
-  {bang=true, nargs="+"}
+  function(params) require("utils.go").tool.impl(params.args) end,
+  {bang=true, nargs=1}
 )
 
 

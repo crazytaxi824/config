@@ -7,31 +7,78 @@
 --
 --  操作方法, cursor 指向 interface Name <cword>, 使用 Command `:GoImpl Foo`
 
+
+--- 从 type IFoo[K string, V int, R any, T interface{ int | int64 }, N Bar[M], M int] interface {}
+--- 中获取 IFoo[K,V,R,T,N,M]
+---
+--- @param line string
+--- @return string|nil iface_name
+--- @return string iface_type
+local function get_iface_name_type(line)
+  -- 核心模式串说明：
+  -- [%w_]+   匹配字母或数字 IFoo
+  local name, rest = line:match("^type%s+([%w_]+)%s*(.*)%s+interface")
+  if not name then
+    return nil, ""
+  end
+
+  -- %b[]  匹配对称的方括号及其内部内容 [K string, V int, R any, T interface{ int | int64 }]
+  local generics = rest:match("(%b[])")
+  if not generics then
+    return name, ""
+  end
+
+  local params = {}
+
+  -- 去掉首尾的 [ 和 ]
+  local inner = generics:sub(2, -2)
+
+  -- 匹配每一个参数对. 逻辑: 匹配非逗号的内容, 并取其中的第一个单词
+  for var in inner:gmatch("%s*([%w_]+)[^,]*") do
+    if var then table.insert(params, var) end
+  end
+
+  if #params > 0 then
+    return name, "[" .. table.concat(params, ",") .. "]"
+  end
+
+  return name, ""
+end
+
 local M = {}
 
 --- `impl -dir src Cat IAnimal`
 --- 实现 interface, 需要获取 `<cword>` (光标在 interface 名上)
 ---
---- @param arglist string[]
-function M.go_impl(arglist)
+--- @param params string
+function M.go_impl(params)
   if vim.bo.readonly then
     Notify("this is a readonly file","ERROR")
     return
   end
 
-  if #arglist > 1 then
-    Notify({"only one args is allowed", "  :GoImpl Foo"},"ERROR")
+  local dir = vim.fs.dirname(vim.api.nvim_buf_get_name(0))
+  local iface_line = vim.api.nvim_get_current_line()
+
+  --- 检查 interface name 是否正确
+  if not iface_line then
+    Notify("not a interface", "WARN")
     return
   end
 
-  local dir = vim.fs.dirname(vim.api.nvim_buf_get_name(0))
-  local iface_name = vim.fn.expand('<cword>')
+  --- 获取 IFoo[T any] 中的 IFoo[T]
+  local iface_name, iface_type = get_iface_name_type(iface_line)
+  if not iface_name then
+    Notify("not a interface", "WARN")
+    return
+  end
 
   --- 打印 cmd
-  local sh_cmd = {'impl', '-dir', dir, arglist[1], iface_name}
-  vim.notify(table.concat(sh_cmd, ' '), vim.log.levels.INFO)
+  local sh_cmd_print = {'impl', '-dir', dir,'"'..params..iface_type..'"', '"'..iface_name..iface_type..'"'}
+  vim.notify(table.concat(sh_cmd_print, ' '), vim.log.levels.INFO)
 
   --- 执行 shell cmd
+  local sh_cmd = {'impl', '-dir', dir, params..iface_type, iface_name..iface_type}
   local result = vim.system(sh_cmd, { text = true }):wait()
   if result.code ~= 0 then
     error(result.stderr ~= '' and result.stderr or result.code)
@@ -39,12 +86,10 @@ function M.go_impl(arglist)
 
   --- 删除 result 最后的空行.
   local content = vim.split(result.stdout, '\n', {trimempty=true})
-
-  --- add 'type Foo struct{}'
-  local msg = vim.list_extend({"", "type " .. arglist[1] .. " struct{}", ""}, content)
+  table.insert(content, 1, "")  -- 最前面插入一个空行
 
   --- append 写入当前文件
-  vim.api.nvim_buf_set_lines(0, -1, -1, false, msg)
+  vim.api.nvim_buf_set_lines(0, -1, -1, false, content)
 
   --- ':normal! G'
   vim.cmd.normal({ args = {'G'}, bang=true })
