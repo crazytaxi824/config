@@ -40,7 +40,18 @@
 ---       文件被外部修改之后会重新加载所有针对该 <buffer> 的插件, eg: rundo - read undo file.
 -- -- }}}
 
-local utils = require("utils.go.deps.utils")
+--- 重写整个 buffer 的内容
+---
+--- @param data string
+--- @param bufnr? integer
+local function rewrite_buffer(data, bufnr)
+  --- split string
+  local lines = vim.split(data, "\n", { trimempty=false })
+
+  --- 从 0 ~ -1 行, 重写整个 buffer
+  --- bufnr = 0, 表示当前 buffer
+  vim.api.nvim_buf_set_lines(bufnr or 0, 0, -1, false, lines)
+end
 
 local M = {}
 
@@ -164,7 +175,7 @@ function M.go_add_tags_and_opts(arglist, go_add_tags_cmd, offset)
   end
 
   --- 重写整个 buffer
-  utils.rewrite_buffer(vim.trim(result.stdout))
+  rewrite_buffer(vim.trim(result.stdout))
 end
 -- -- }}}
 
@@ -231,7 +242,7 @@ function M.go_remove_tags(arglist, go_remove_tags_cmd, offset)
   end
 
   --- 重写整个 buffer
-  utils.rewrite_buffer(vim.trim(result.stdout))
+  rewrite_buffer(vim.trim(result.stdout))
 end
 -- -- }}}
 
@@ -298,7 +309,7 @@ function M.go_remove_tags_opts(arglist, go_remove_tag_opts_cmd, offset)
   end
 
   --- 重写整个 buffer
-  utils.rewrite_buffer(vim.trim(result.stdout))
+  rewrite_buffer(vim.trim(result.stdout))
 end
 -- -- }}}
 

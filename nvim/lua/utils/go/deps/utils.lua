@@ -53,17 +53,4 @@ function M.get_testfn_name_regexp(mode)
   end
 end
 
---- 重写整个 buffer 的内容
----
---- @param data string
---- @param bufnr? integer
-function M.rewrite_buffer(data, bufnr)
-  --- split string
-  local lines = vim.split(data, "\n", { trimempty=false })
-
-  --- 从 0 ~ -1 行, 重写整个 buffer
-  --- bufnr = 0, 表示当前 buffer
-  vim.api.nvim_buf_set_lines(bufnr or 0, 0, -1, false, lines)
-end
-
 return M
