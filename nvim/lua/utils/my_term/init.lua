@@ -5,9 +5,10 @@ local my_term = require("utils.my_term.my_term")
 
 local M = {}
 
----new MyTerm object
----@param opts MyTermOpts
----@return MyTerm
+--- new MyTerm object
+---
+--- @param opts MyTermOpts
+--- @return MyTerm
 function M.new(opts)
   --- NOTE: terminal 已经存在, 无法使用相同 id 创建新的 terminal.
   if g.global_my_term_cache[opts.id] then
@@ -72,8 +73,9 @@ function M.open_shell_term()
 end
 
 --- return an term object by id
----@param term_id integer
----@return MyTerm? (MyTermPost 降级为 MyTerm)
+---
+--- @param term_id integer
+--- @return MyTerm? (MyTermPost 降级为 MyTerm)
 function M.get_term_by_id(term_id)
   return g.global_my_term_cache[term_id]
 end

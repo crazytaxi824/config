@@ -5,7 +5,7 @@ local M = {}
 M.win_height = math.ceil(vim.o.lines/4)
 
 --- cache all my_term object
----@type table<integer, MyTermPost>
+--- @type table<integer, MyTermPost>
 M.global_my_term_cache = {}
 
 return M

@@ -5,8 +5,8 @@ local M = {}
 
 --- open terminal window
 ---
----@param term_id integer
----@return integer|nil win_id
+--- @param term_id integer
+--- @return integer|nil win_id
 function M.open_win(term_id)
   local t = g.global_my_term_cache[term_id]
   if not t then
@@ -29,7 +29,7 @@ end
 
 --- close all windows which displays this term buffer.
 ---
----@param term_id integer
+--- @param term_id integer
 function M.close_win(term_id)
   local t = g.global_my_term_cache[term_id]
   if not t then
@@ -44,8 +44,8 @@ end
 
 --- 检查 terminal 运行情况.
 ---
----@param term_id integer
----@return integer|nil job_status
+--- @param term_id integer
+--- @return integer|nil job_status
 function M.job_status(term_id)
   local t = g.global_my_term_cache[term_id]
   if not t then
@@ -58,7 +58,7 @@ end
 
 --- wipeout term buffer and jobstop(job_id)
 ---
----@param term_id integer
+--- @param term_id integer
 function M.wipeout(term_id)
   local t = g.global_my_term_cache[term_id]
   if not t then

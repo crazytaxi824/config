@@ -17,8 +17,8 @@ vim.api.nvim_set_hl(0, "my_output_stderr", {ctermfg=Colors.red.c, fg=Colors.red.
 
 --- 强制结束 job
 ---
----@param term_bufnr integer
----@param job_id integer
+--- @param term_bufnr integer
+--- @param job_id integer
 local function stop_job(term_bufnr, job_id)
   if vim.fn.jobstop(job_id) == 1 then
     vim.bo[term_bufnr].modifiable = true
@@ -29,8 +29,8 @@ end
 
 --- CTRL-C send interrupt signal to output-buffer ONLY. terminal already has this.
 ---
----@param term_bufnr integer
----@param job_id integer
+--- @param term_bufnr integer
+--- @param job_id integer
 local function set_console_keymaps(term_bufnr, job_id)
   local opt = { buffer = term_bufnr, silent = true }
   local keys = {
@@ -47,9 +47,9 @@ end
 --- nvim_buf_set_lines(-2, -1) 在最后一行写入.
 --- nvim_buf_set_lines(-1, -1) 在最后一行后面写入, 相当于 append().
 ---
----@param bufnr integer
----@param data string[]
----@param hl string  highlight name `vim.hl.range()`
+--- @param bufnr integer
+--- @param data string[]
+--- @param hl string  highlight name `vim.hl.range()`
 local function set_buf_line_output(bufnr, data, hl)
   --- skip { "" } empty data.
   if #data == 1 and data[#data] == '' then
@@ -89,8 +89,8 @@ end
 
 --- job done 后处理: 在最后一行显示 [Process exited 'exit_code']
 ---
----@param bufnr integer
----@param exit_code integer
+--- @param bufnr integer
+--- @param exit_code integer
 local function set_buf_line_exit(bufnr, exit_code)
   local last_line_before_write = vim.api.nvim_buf_line_count(bufnr)
   vim.bo[bufnr].modifiable = true
@@ -108,10 +108,10 @@ end
 --- 后台执行 jobstart(cmd), 将 output 手动写入 buffer. (buftype = 'nofile')
 --- 主要区别是 `:help jobstart-options` { term = nil|false } 在后台运行, 结果需要手动输出.
 ---
----@param term_opts MyTermOpts
----@param term_bufnr integer
----@param term_win_id integer
----@return integer job_id
+--- @param term_opts MyTermOpts
+--- @param term_bufnr integer
+--- @param term_win_id integer
+--- @return integer job_id
 function M.console_exec(term_opts, term_bufnr, term_win_id)
   if vim.api.nvim_win_get_buf(term_win_id) ~= term_bufnr then
     error("MyTerm win_id and bufnr do not match")

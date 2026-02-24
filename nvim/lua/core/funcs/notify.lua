@@ -51,7 +51,7 @@ function Notify(msg, lvl, opt)
   else
     --- 如果 nvim-notify 不存在则使用 vim.notify()
 
-    ---@cast lvl integer
+    --- @cast lvl integer
     if type(msg) == 'table' then
       --- msg should be table array, join message []string with '\n'
       vim.notify(table.concat(msg, '\n'), lvl)

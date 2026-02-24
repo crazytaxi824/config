@@ -4,7 +4,7 @@ local M = {}
 
 --- 寻找已有的最后 (last) my_term window ID, 不包括 normal terminal window.
 ---
----@return integer win_id
+--- @return integer win_id
 local function find_exist_term_win()
   local win_id = -1
 
@@ -24,8 +24,8 @@ end
 
 --- create/re-use, enter `win_gotoid(win_id)` 一个 window 用于 jobstart() 运行.
 ---
----@param bufnr integer
----@return integer win_id
+--- @param bufnr integer
+--- @return integer win_id
 function M.create_term_win(bufnr)
   if not vim.api.nvim_buf_is_valid(bufnr) then
     error("bufnr is not exist")
@@ -47,9 +47,9 @@ end
 --- NOTE: buffer 一旦运行过 jobstart() 就不能再次运行 jobstart() 了, Can only call this function in an unmodified buffer.
 --- 所以需要删除旧的 bufnr 然后重新创建一个新的 scratch bufnr 给 jobstart() 使用.
 ---
----@param curr_term_bufnr integer
----@param old_term_bufnr? integer
----@return integer win_id
+--- @param curr_term_bufnr integer
+--- @param old_term_bufnr? integer
+--- @return integer win_id
 function M.enter_term_win(curr_term_bufnr, old_term_bufnr)
   --- 如果 old_term_bufnr 不存在: 创建一个新的 term window 用于加载 new term.bufnr
   if not old_term_bufnr or not vim.api.nvim_buf_is_valid(old_term_bufnr) then
@@ -57,7 +57,7 @@ function M.enter_term_win(curr_term_bufnr, old_term_bufnr)
   end
 
   --- 这里是为了 re-use term window
-  ---@type integer
+  --- @type integer
   local win_id
 
   --- 获取 old_term_bufnr 所在的 windows id.

@@ -10,10 +10,10 @@ local t_key  = require('utils.my_term.term_keymaps')
 
 --- Create new terminal buffer and window, 给 my_term.bufnr 赋值.
 ---
----@param term_opts MyTermOpts
----@param old_term_bufnr integer  TODO: 这个值有可能是 nil, 但是必须要传入函数中.
----@return integer bufnr
----@return integer win_id
+--- @param term_opts MyTermOpts
+--- @param old_term_bufnr integer  TODO: 这个值有可能是 nil, 但是必须要传入函数中.
+--- @return integer bufnr
+--- @return integer win_id
 local function create_my_term_win(term_opts, old_term_bufnr)
   --- VVI: 以下执行顺序很重要!
   --- `jobstart(cmd, {opts})` 事件触发顺序和 `:edit term://cmd` 有所不同.
@@ -52,10 +52,10 @@ end
 
 --- jobstart(cmd, opts), 给 my_term.job_id 赋值.
 ---
----@param term_opts MyTermOpts
----@param term_bufnr integer
----@param term_win_id integer
----@return integer job_id
+--- @param term_opts MyTermOpts
+--- @param term_bufnr integer
+--- @param term_win_id integer
+--- @return integer job_id
 local function my_term_exec(term_opts, term_bufnr, term_win_id)
   --- VVI: 必须在 bufnr 被 window 显示之后运行. 避免 nvim_buf_call() 生成一个临时 autocmd window.
   local job_id
@@ -79,9 +79,10 @@ end
 -- }}}
 
 --- my_term object
----@class MyTerm: MyTermOpts  继承 MyTermOpts
----@field run fun(self: MyTerm) @readonly
----@field stop fun(self: MyTerm) @readonly
+---
+--- @class MyTerm: MyTermOpts  继承 MyTermOpts
+--- @field run fun(self: MyTerm) @readonly
+--- @field stop fun(self: MyTerm) @readonly
 local M = {}
 
 --- execute cmd with opts
@@ -110,7 +111,7 @@ function M:run()
   end
 
   --- MyTerm -> MyTermPost
-  ---@cast self MyTermPost
+  --- @cast self MyTermPost
   self.bufnr = term_bufnr
   self.job_id = job_id
 

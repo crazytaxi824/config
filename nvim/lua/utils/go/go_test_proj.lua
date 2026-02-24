@@ -7,9 +7,9 @@ local utils = require("utils.go.deps.utils")
 
 local M = {}
 
----测试整个 project `go test run/bench ./...`
+--- 测试整个 project `go test run/bench ./...`
 ---
----@param mode 'run'|'bench'
+--- @param mode 'run'|'bench'
 M.go_test_proj = function(mode)
   --- cannot use pprof flag with multiple packages
   local select = {'none', 'cover', 'coverprofile'}

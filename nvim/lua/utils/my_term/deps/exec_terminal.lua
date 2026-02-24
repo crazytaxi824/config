@@ -5,10 +5,10 @@ local M = {}
 --- 在 buffer 中执行 jobstart(cmd). (buftype = 'terminal')
 --- 主要区别是 `:help jobstart-options` { term = true } 将当前 buffer 转成 terminal buffer 用于显示 output.
 ---
----@param term_opts MyTermOpts
----@param term_bufnr integer
----@param term_win_id integer
----@return integer job_id
+--- @param term_opts MyTermOpts
+--- @param term_bufnr integer
+--- @param term_win_id integer
+--- @return integer job_id
 function M.terminal_exec(term_opts, term_bufnr, term_win_id)
   if vim.api.nvim_win_get_buf(term_win_id) ~= term_bufnr then
     error("MyTerm win_id and bufnr do not match")
