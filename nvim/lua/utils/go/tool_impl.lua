@@ -11,6 +11,7 @@ local M = {}
 
 --- `impl -dir src Cat IAnimal`
 --- 实现 interface, 需要获取 `<cword>` (光标在 interface 名上)
+---
 --- @param arglist string[]
 function M.go_impl(arglist)
   if vim.bo.readonly then
@@ -26,8 +27,11 @@ function M.go_impl(arglist)
   local dir = vim.fs.dirname(vim.api.nvim_buf_get_name(0))
   local iface_name = vim.fn.expand('<cword>')
 
-  --- 执行 shell cmd
+  --- 打印 cmd
   local sh_cmd = {'impl', '-dir', dir, arglist[1], iface_name}
+  vim.notify(table.concat(sh_cmd, ' '), vim.log.levels.INFO)
+
+  --- 执行 shell cmd
   local result = vim.system(sh_cmd, { text = true }):wait()
   if result.code ~= 0 then
     error(result.stderr ~= '' and result.stderr or result.code)
@@ -39,12 +43,11 @@ function M.go_impl(arglist)
   --- add 'type Foo struct{}'
   local msg = vim.list_extend({"", "type " .. arglist[1] .. " struct{}", ""}, content)
 
-  --- 写入当前文件
-  vim.fn.writefile(msg, vim.fn.bufname(), 'a')  -- 'a' append mode
+  --- append 写入当前文件
+  vim.api.nvim_buf_set_lines(0, -1, -1, false, msg)
 
-  --- FIXME: nvim_buf_set_lines()
-  vim.cmd.checktime()
-  vim.cmd.normal({ args = {'G'}, bang=true })  -- ':normal! G'
+  --- ':normal! G'
+  vim.cmd.normal({ args = {'G'}, bang=true })
 end
 
 return M
