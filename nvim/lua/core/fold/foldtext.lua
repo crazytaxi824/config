@@ -1,5 +1,9 @@
 local M = {}
 
+--- `:help fold-foldtext`
+--- 设置位置在 `core/options.lua`
+---
+--- @return string
 function M.foldtext()
   --- startline: VVI: replace '\t' with 'N-spaces'. 否则 \t 会被认为是一个 char, 导致 line 开头的内容部分被隐藏.
   --- N-spaces 根据 buffer 的 tabstop 决定.
