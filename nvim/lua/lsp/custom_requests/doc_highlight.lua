@@ -23,24 +23,24 @@
 
 local ms = vim.lsp.protocol.Methods
 
---- cache last documentHighlight result
---- @type {bufnr: integer, result: lsp.DocumentHighlight[]}
-local last_doc_hl = {}
+--- cache last documentHighlight references
+--- @type {bufnr: integer, refs: lsp.DocumentHighlight[]}
+local last_results = {}
 
 
 local M = {}
 
 --- 判断当前 cursor 是否仍然在 range 之内
 ---
---- @param result lsp.DocumentHighlight[]
+--- @param refs lsp.DocumentHighlight[]
 --- @return boolean|nil inside
-local function cursor_inside_range(result)
+local function cursor_inside_range(refs)
   --- getcharpos(): 1-index
   local cur_pos = vim.fn.getcharpos('.')
   local cur_line, cur_col = cur_pos[2]-1, cur_pos[3]-1
 
   --- result.range: 0-index
-  for _, ref in ipairs(last_doc_hl.result) do
+  for _, ref in ipairs(refs) do
     local start_line, start_char = ref['range']['start']['line'], ref['range']['start']['character']
     local end_line, end_char = ref['range']['end']['line'], ref['range']['end']['character']
     if cur_line >= start_line and cur_col >= start_char and cur_line <= end_line and cur_col <= end_char then
@@ -80,18 +80,18 @@ local function doc_highlight_handler(results, ctx)
 
   for client_id, resp in pairs(results) do
     local err = resp.err
-    local result = resp.result or {}
+    local refs = resp.result or {}
     if err then
       vim.lsp.log.error(err.code, err.message)
-    elseif result then
-      cache = vim.list_extend(cache, result)
+    elseif refs then
+      cache = vim.list_extend(cache, refs)
       local client = assert(vim.lsp.get_client_by_id(client_id))
-      vim.lsp.util.buf_highlight_references(bufnr, result, client.offset_encoding)  -- NOTE: 渲染 references
+      vim.lsp.util.buf_highlight_references(bufnr, refs, client.offset_encoding)  -- NOTE: highlight references
     end
   end
 
   --- VVI: cache result
-  last_doc_hl = { bufnr = bufnr, result = cache }
+  last_results = { bufnr = bufnr, refs = cache }
 end
 
 M.setup = function (client, bufnr)
@@ -104,9 +104,9 @@ M.setup = function (client, bufnr)
     group = group_id,
     buffer = bufnr,  -- 对指定 buffer 有效
     callback = function(params)
-      if last_doc_hl.bufnr and last_doc_hl.bufnr == bufnr
-        and last_doc_hl.result and #last_doc_hl.result > 0
-        and cursor_inside_range(last_doc_hl.result)
+      if last_results.bufnr and last_results.bufnr == bufnr
+        and last_results.refs and #last_results.refs > 0
+        and cursor_inside_range(last_results.refs)
       then
         return
       end
@@ -125,7 +125,7 @@ M.setup = function (client, bufnr)
     group = group_id,
     buffer = bufnr,  -- 对指定 buffer 有效
     callback = function(params)
-      last_doc_hl = {}
+      last_results = {}
       vim.lsp.util.buf_clear_references(bufnr)
     end,
     desc = "LSP: clear highlight when leave window",
@@ -137,7 +137,7 @@ M.setup = function (client, bufnr)
     group = group_id,
     buffer = bufnr,  -- 对指定 buffer 有效
     callback = function(params)
-      last_doc_hl = {}
+      last_results = {}
       vim.lsp.util.buf_clear_references(bufnr)
       vim.api.nvim_del_augroup_by_id(group_id)
     end,
