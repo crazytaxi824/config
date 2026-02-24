@@ -1,5 +1,4 @@
 Installed
-  ✓ golangci-lint
   ✓ bash-language-server
   ✓ buf
   ✓ css-lsp
@@ -8,6 +7,7 @@ Installed
   ✓ gdtoolkit
   ✓ goimports
   ✓ goimports-reviser
+  ✓ golangci-lint
   ✓ gomodifytags
   ✓ gopls
   ✓ gotests
