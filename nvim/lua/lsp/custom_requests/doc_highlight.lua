@@ -38,6 +38,49 @@ local function client_positional_params(params)
   end
 end
 
+--- 是否需要在 CursorMoved 的时候清除 highlight, 避免重新渲染时造成闪烁.
+---
+--- @param client_id integer
+--- @param bufnr integer
+--- @param result lsp.DocumentHighlight[]
+local function auto_remove_highlight(client_id, bufnr, result)
+  local group_id = vim.api.nvim_create_augroup("my_documentHighlight_CursorMoved_#lsp:"..client_id..'_#buf:'..bufnr, {clear=true})
+  vim.api.nvim_create_autocmd({"CursorMoved"}, {
+    group = group_id,
+    buffer = bufnr,  -- 对指定 buffer 有效
+    callback = function(params)
+      --- getcharpos(): 1-index
+      local cur_pos = vim.fn.getcharpos('.')
+      local cur_line, cur_col = cur_pos[2]-1, cur_pos[3]-1
+
+      --- result.range: 0-index
+      for _, ref in ipairs(result) do
+        local start_line, start_char = ref['range']['start']['line'], ref['range']['start']['character']
+        local end_line, end_char = ref['range']['end']['line'], ref['range']['end']['character']
+        if cur_line >= start_line and cur_col >= start_char and cur_line <= end_line and cur_col <= end_char then
+          --- VVI: cursor still in references range, do nothing.
+          return
+        end
+      end
+
+      --- else, remove highlight
+      vim.lsp.util.buf_clear_references(bufnr)
+      vim.api.nvim_del_augroup_by_id(group_id)
+    end,
+    desc = "LSP: documentHighlight CursorMove clear_references",
+  })
+
+  vim.api.nvim_create_autocmd({"WinLeave", "ModeChanged"}, {
+    group = group_id,
+    buffer = bufnr,  -- 对指定 buffer 有效
+    callback = function(params)
+      vim.lsp.util.buf_clear_references(bufnr)
+      vim.api.nvim_del_augroup_by_id(group_id)
+    end,
+    desc = "LSP: documentHighlight WinLeave clear_references",
+  })
+end
+
 --- 根据 https://github.com/neovim/neovim/blob/master/runtime/lua/vim/lsp/buf.lua 中 M.hover(config) 函数修改
 ---
 --- 创建 vim.lsp.buf_request_all(_, _, _, handler) 中的 handler
@@ -52,7 +95,7 @@ local function doc_highlight_handler(results, ctx)
   end
 
   -- Filter errors from results
-  local results1 = {} --- @type table<integer,lsp.DocumentHighlight>
+  local results1 = {} --- @type table<integer,lsp.DocumentHighlight[]>
 
   for client_id, resp in pairs(results) do
     local err, result = resp.err, resp.result
@@ -75,42 +118,8 @@ local function doc_highlight_handler(results, ctx)
     --- VVI: vim.lsp.util.buf_highlight_references() 用于渲染 result 结果.
     vim.lsp.util.buf_highlight_references(bufnr, result, client.offset_encoding)
 
-    --- augroup id
-    local group_id = vim.api.nvim_create_augroup("my_documentHighlight_CursorMoved_#lsp:"..client_id..'_#buf:'..bufnr, {clear=true})
-    vim.api.nvim_create_autocmd({"CursorMoved"}, {
-      group = group_id,
-      buffer = bufnr,  -- 对指定 buffer 有效
-      callback = function(params)
-        --- getcharpos(): 1-index
-        local cur_pos = vim.fn.getcharpos('.')
-        local cur_line, cur_col = cur_pos[2]-1, cur_pos[3]-1
-
-        --- result.range: 0-index
-        for _, ref in ipairs(result) do
-          local start_line, start_char = ref['range']['start']['line'], ref['range']['start']['character']
-          local end_line, end_char = ref['range']['end']['line'], ref['range']['end']['character']
-          if cur_line >= start_line and cur_col >= start_char and cur_line <= end_line and cur_col <= end_char then
-            --- VVI: cursor still in references range, do nothing.
-            return
-          end
-        end
-
-        --- else, remove highlight
-        vim.lsp.util.buf_clear_references(bufnr)
-        vim.api.nvim_del_augroup_by_id(group_id)
-      end,
-      desc = "LSP: documentHighlight CursorMove clear_references",
-    })
-
-    vim.api.nvim_create_autocmd({"WinLeave", "ModeChanged"}, {
-      group = group_id,
-      buffer = bufnr,  -- 对指定 buffer 有效
-      callback = function(params)
-        vim.lsp.util.buf_clear_references(bufnr)
-        vim.api.nvim_del_augroup_by_id(group_id)
-      end,
-      desc = "LSP: documentHighlight WinLeave clear_references",
-    })
+    --- auto remove highlight
+    auto_remove_highlight(client_id, bufnr, result)
   end
 end
 
