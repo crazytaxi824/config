@@ -40,6 +40,8 @@
 ---       文件被外部修改之后会重新加载所有针对该 <buffer> 的插件, eg: rundo - read undo file.
 -- -- }}}
 
+local utils = require("utils.go.deps.utils")
+
 local M = {}
 
 --- ADD Tags and Options --------------------------------------------------------------------------- {{{
@@ -136,8 +138,6 @@ function M.go_add_tags_and_opts(arglist, go_add_tags_cmd, offset)
     "-add-tags", table.concat(tag_list,','),
     "-transform", transform,
     "-skip-unexported",
-    "-quiet",
-    "-w",
     "-override",
   }
 
@@ -153,14 +153,18 @@ function M.go_add_tags_and_opts(arglist, go_add_tags_cmd, offset)
     table.insert(sh_cmd, "-add-options="..table.concat(opt_list,','))
   end
 
+  --- print cmd
+  vim.notify(table.concat(sh_cmd, ' '), vim.log.levels.INFO)
+
+  --- 执行 cmd
   local result = vim.system(sh_cmd, { text = true }):wait()
   if result.code ~= 0 then
-    Notify(vim.trim(result.stderr), "WARN")
+    Notify(vim.trim(result.stderr), "ERROR")
     return
   end
 
-  --- VVI: refresh & reload buffer
-  vim.cmd.checktime()
+  --- 重写整个 buffer
+  utils.rewrite_buffer(vim.trim(result.stdout))
 end
 -- -- }}}
 
@@ -200,8 +204,6 @@ function M.go_remove_tags(arglist, go_remove_tags_cmd, offset)
   local sh_cmd = {
     "gomodifytags",
     "-file", fp,
-    "-quiet",
-    "-w",
   }
 
   --- -offset / -all
@@ -218,13 +220,18 @@ function M.go_remove_tags(arglist, go_remove_tags_cmd, offset)
     table.insert(sh_cmd, "-remove-tags=" .. arglist[1])
   end
 
+  --- print cmd
+  vim.notify(table.concat(sh_cmd, ' '), vim.log.levels.INFO)
+
+  --- 执行 cmd
   local result = vim.system(sh_cmd, { text = true }):wait()
   if result.code ~= 0 then
     Notify(vim.trim(result.stderr), "WARN")
     return
   end
 
-  vim.cmd.checktime()  -- VVI: refresh & reload buffer
+  --- 重写整个 buffer
+  utils.rewrite_buffer(vim.trim(result.stdout))
 end
 -- -- }}}
 
@@ -264,8 +271,6 @@ function M.go_remove_tags_opts(arglist, go_remove_tag_opts_cmd, offset)
   local sh_cmd = {
     "gomodifytags",
     "-file", fp,
-    "-quiet",
-    "-w",
   }
 
   --- -offset / -all
@@ -282,14 +287,18 @@ function M.go_remove_tags_opts(arglist, go_remove_tag_opts_cmd, offset)
     table.insert(sh_cmd, "-remove-options=" .. arglist[1])
   end
 
+  --- print cmd
+  vim.notify(table.concat(sh_cmd, ' '), vim.log.levels.INFO)
+
+  --- 执行 cmd
   local result = vim.system(sh_cmd, { text = true }):wait()
   if result.code ~= 0 then
     Notify(vim.trim(result.stderr), "WARN")
     return
   end
 
-  --- VVI: refresh & reload buffer
-  vim.cmd.checktime()
+  --- 重写整个 buffer
+  utils.rewrite_buffer(vim.trim(result.stdout))
 end
 -- -- }}}
 
