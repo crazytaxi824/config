@@ -4,7 +4,54 @@ if not dap_status_ok then
   return
 end
 
+--- cache golang vscode extension filepath
+--- @type string|nil filepath
+local cache_vscode_debug_path
+
 --- NOTE: Debug adapters & configurations settings
+--- https://codeberg.org/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#go
+--- 插件 https://github.com/golang/vscode-go
+--- 使用 vscode 插件运行 debug, vscode extension 位置 "~/.vscode/extensions/golang.go-0.46.1/dist/debugAdapter.js"
+---
+--- @return string[] filepath
+local function find_vscode_extension()
+  local vscode_debug_path = vim.fs.find(function (name, path)
+    return name == 'debugAdapter.js' and path:match('~/%.vscode/extensions/golang.*/dist')
+  end, {
+    path = "~/.vscode/extensions",
+    limit = math.huge, -- NOTE: no limit
+    type = "file",
+  })
+
+  return vscode_debug_path
+end
+
+dap.adapters.go = function(callback, config)
+  if not cache_vscode_debug_path then
+    print("ok")
+    local vscode_debug_path = find_vscode_extension()
+    if #vscode_debug_path < 1 then
+      Notify("vscode extension 'golang' is missing")
+      return
+    end
+
+    local release_ver = vscode_debug_path[1]  -- stable version
+    local pre_release_ver = vscode_debug_path[#vscode_debug_path]  -- latest version
+
+    cache_vscode_debug_path = pre_release_ver
+  end
+
+  callback({
+    type = "executable",
+    command = "node",
+    args = { cache_vscode_debug_path },
+    options = {
+      source_filetype = "go",
+    },
+  })
+end
+
+--- 直接使用 delve 工具对 go test 进行 debug
 --- Some variables are supported --- {{{
 ---   "${port}": nvim-dap resolves a free port.
 ---   "${file}": Active filename
@@ -17,24 +64,6 @@ end
 ---   "${workspaceFolder}": The current working directory of Neovim
 ---   "${workspaceFolderBasename}": The name of the folder opened in Neovim
 -- -- }}}
---- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#go
---- 使用 vscode 插件运行 debug, vscode extension 位置 "~/.vscode/extensions/golang.go-0.46.1/dist/debugAdapter.js"
-local vscode_debug_path = vim.fs.find({ "debugAdapter.js" }, { type = "file", path = "~/.vscode/extensions" })
-local pattern = vim.fs.joinpath(vim.env.HOME, "%.vscode/extensions/golang.*/dist/debugAdapter%.js")
-if #vscode_debug_path > 0 and string.match(vscode_debug_path[1], pattern) then
-  dap.adapters.go = function(callback, config)
-    callback({
-      type = "executable",
-      command = "node",
-      args = { vscode_debug_path[1] },
-      options = {
-        source_filetype = "go",
-      },
-    })
-  end
-end
-
---- 直接使用 delve 工具对 go test 进行 debug
 dap.adapters.delve = function(callback, config)
   if config.mode == "remote" and config.request == "attach" then
     callback({
@@ -47,11 +76,11 @@ dap.adapters.delve = function(callback, config)
     })
   else
     callback({
-      type = "server",
-      port = "${port}",
+      type = 'server',
+      port = '${port}',
       executable = {
-        command = "dlv",
-        args = { "dap", "-l", "127.0.0.1:${port}", "--log", "--log-output=dap" },
+        command = 'dlv',
+        args = { 'dap', '-l', '127.0.0.1:${port}', '--log', '--log-output=dap' },
         detached = vim.fn.has("win32") == 0,
       },
       options = {
@@ -65,7 +94,7 @@ end
 dap.configurations.go = {
   -- vscode-go test project
   {
-    name = "nvim-dap: Go Debug",
+    name = "nvim-dap(vscode): Go Debug",
     type = "go", -- VVI: dap.adapters.go 名字要对应
     request = "launch",
     showLog = false,
@@ -75,7 +104,7 @@ dap.configurations.go = {
 
   -- dlv test packages
   {
-    name = "nvim-dap: Go Debug test (pkg)",
+    name = "nvim-dap(delve): Go Debug test (pkg)",
     type = "delve", -- VVI: dap.adapters.delve 名字要对应
     request = "launch",
     mode = "test",

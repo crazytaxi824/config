@@ -57,7 +57,7 @@ end
 dap.configurations.python = {
   {
     -- The first three options are required by nvim-dap
-    name = "nvim-dap: Python debugpy file",
+    name = "nvim-dap(debugpy): Python file",
     type = "python", -- VVI: dap.adapters.python 名字要对应
     request = "launch",
 
