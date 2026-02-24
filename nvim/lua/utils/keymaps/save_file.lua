@@ -2,6 +2,7 @@
 
 local M = {}
 
+--- save buffer to file
 M.save = function()
   local fname = vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf())
   if fname == '' then

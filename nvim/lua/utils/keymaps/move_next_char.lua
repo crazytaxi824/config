@@ -1,5 +1,6 @@
 local M = {}
 
+--- insert mode 下将光标后 ')' 移动到 line / word 后面
 M.move_bracket = function(m)
   local line = vim.api.nvim_get_current_line()
   local row, col = unpack(vim.api.nvim_win_get_cursor(0))

@@ -22,7 +22,7 @@ local function get_user_input_char()
   return vim.fn.nr2char(c)
 end
 
---- choose window
+--- choose window to `win_gotoid()`
 M.choose = function()
   local win_map = {}  -- cache window id map
   local win_marker = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ"  -- 窗口标识.

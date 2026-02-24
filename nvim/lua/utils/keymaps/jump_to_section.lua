@@ -11,6 +11,10 @@ local function find_ts_root_node()
     error(vim.inspect(tsparser))
   end
 
+  if not tsparser then
+    error("treesitter parser is missing")
+  end
+
   --- tsparser:parse() return a {table} of immutable trees
   local tstree = tsparser:parse()[1]
   if tstree then
