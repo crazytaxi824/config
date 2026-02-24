@@ -23,7 +23,31 @@
 
 local ms = vim.lsp.protocol.Methods
 
+--- cache last documentHighlight result
+--- @type {bufnr: integer, result: lsp.DocumentHighlight[]}
+local last_doc_hl = {}
+
+
 local M = {}
+
+--- 判断当前 cursor 是否仍然在 range 之内
+---
+--- @param result lsp.DocumentHighlight[]
+--- @return boolean|nil inside
+local function cursor_inside_range(result)
+  --- getcharpos(): 1-index
+  local cur_pos = vim.fn.getcharpos('.')
+  local cur_line, cur_col = cur_pos[2]-1, cur_pos[3]-1
+
+  --- result.range: 0-index
+  for _, ref in ipairs(last_doc_hl.result) do
+    local start_line, start_char = ref['range']['start']['line'], ref['range']['start']['character']
+    local end_line, end_char = ref['range']['end']['line'], ref['range']['end']['character']
+    if cur_line >= start_line and cur_col >= start_char and cur_line <= end_line and cur_col <= end_char then
+      return true  --- cursor still inside references range
+    end
+  end
+end
 
 --- 创建 vim.lsp.buf_request_all(_, _, params, _) 中的 params
 ---
@@ -36,49 +60,6 @@ local function client_positional_params(params)
     ret = vim.tbl_deep_extend('force', ret, params or {})
     return ret
   end
-end
-
---- 是否需要在 CursorMoved 的时候清除 highlight, 避免重新渲染时造成闪烁.
----
---- @param client_id integer
---- @param bufnr integer
---- @param result lsp.DocumentHighlight[]
-local function auto_remove_highlight(client_id, bufnr, result)
-  local group_id = vim.api.nvim_create_augroup("my_documentHighlight_CursorMoved_#lsp:"..client_id..'_#buf:'..bufnr, {clear=true})
-  vim.api.nvim_create_autocmd({"CursorMoved"}, {
-    group = group_id,
-    buffer = bufnr,  -- 对指定 buffer 有效
-    callback = function(params)
-      --- getcharpos(): 1-index
-      local cur_pos = vim.fn.getcharpos('.')
-      local cur_line, cur_col = cur_pos[2]-1, cur_pos[3]-1
-
-      --- result.range: 0-index
-      for _, ref in ipairs(result) do
-        local start_line, start_char = ref['range']['start']['line'], ref['range']['start']['character']
-        local end_line, end_char = ref['range']['end']['line'], ref['range']['end']['character']
-        if cur_line >= start_line and cur_col >= start_char and cur_line <= end_line and cur_col <= end_char then
-          --- VVI: cursor still in references range, do nothing.
-          return
-        end
-      end
-
-      --- else, remove highlight
-      vim.lsp.util.buf_clear_references(bufnr)
-      vim.api.nvim_del_augroup_by_id(group_id)
-    end,
-    desc = "LSP: documentHighlight CursorMove clear_references",
-  })
-
-  vim.api.nvim_create_autocmd({"WinLeave", "ModeChanged"}, {
-    group = group_id,
-    buffer = bufnr,  -- 对指定 buffer 有效
-    callback = function(params)
-      vim.lsp.util.buf_clear_references(bufnr)
-      vim.api.nvim_del_augroup_by_id(group_id)
-    end,
-    desc = "LSP: documentHighlight WinLeave clear_references",
-  })
 end
 
 --- 根据 https://github.com/neovim/neovim/blob/master/runtime/lua/vim/lsp/buf.lua 中 M.hover(config) 函数修改
@@ -94,61 +75,69 @@ local function doc_highlight_handler(results, ctx)
     return
   end
 
-  -- Filter errors from results
-  local results1 = {} --- @type table<integer,lsp.DocumentHighlight[]>
+  --- @type lsp.DocumentHighlight[]
+  local cache = {}
 
   for client_id, resp in pairs(results) do
     local err, result = resp.err, resp.result
     if err then
       vim.lsp.log.error(err.code, err.message)
     elseif result then
-      results1[client_id] = result  -- results1: { client_id1 = {}, client_id2 = {} ... }
+      cache = vim.list_extend(cache, result)
+      local client = assert(vim.lsp.get_client_by_id(client_id))
+      vim.lsp.util.buf_highlight_references(bufnr, result, client.offset_encoding)  -- NOTE: 渲染 references
     end
   end
 
-  --- No information available
-  if vim.tbl_isempty(results1) then
-    return
-  end
-
-  --- results: { client_id1 = {}, client_id2 = {} ... }
-  for client_id, result in pairs(results1) do
-    local client = assert(vim.lsp.get_client_by_id(client_id))
-
-    --- VVI: vim.lsp.util.buf_highlight_references() 用于渲染 result 结果.
-    vim.lsp.util.buf_highlight_references(bufnr, result, client.offset_encoding)
-
-    --- auto remove highlight
-    auto_remove_highlight(client_id, bufnr, result)
-  end
+  --- VVI: cache result
+  last_doc_hl = { bufnr = bufnr, result = cache }
 end
 
---- 在 CursorHold 时发送 'textDocument/documentHighlight' request
----
---- @param client vim.lsp.Client
---- @param bufnr integer
-M.setup = function(client, bufnr)
+M.setup = function (client, bufnr)
   --- VVI: 这里必须使用 augroup, 否则在 `:LspRestart` 的情况下会叠加多个 autocmd.
-  local group_id = vim.api.nvim_create_augroup("my_documentHighlight_#lsp:"..client.id..'_#buf:'..bufnr, {clear=true})
+  local group_id = vim.api.nvim_create_augroup("my_documentHighlight_#buf:"..bufnr, {clear=true})
 
-  --- documentHighlight
+  --- CursorHold 时, 如果没有超出 range 则不发送 documentHighlight 请求,
+  --- 如果超出 range 则重新发送 documentHighlight 并 highlight references
   vim.api.nvim_create_autocmd({"CursorHold"}, {
     group = group_id,
     buffer = bufnr,  -- 对指定 buffer 有效
     callback = function(params)
-      --- send 'textDocument/documentHighlight' request.
+      if last_doc_hl.bufnr and last_doc_hl.bufnr == bufnr
+        and last_doc_hl.result and #last_doc_hl.result > 0
+        and cursor_inside_range(last_doc_hl.result)
+      then
+        return
+      end
+
+      --- 清除旧 highlight
+      vim.lsp.util.buf_clear_references(bufnr)
+
+      --- send 'textDocument/documentHighlight' request. 重新渲染 highlight
       vim.lsp.buf_request_all(bufnr, ms.textDocument_documentHighlight, client_positional_params(), doc_highlight_handler)
     end,
     desc = "LSP: documentHighlight",
   })
 
-  --- delete documentHighlight augroup
-  --- VVI: 这里必须使用 BufDelete, 否则 buffer 如果更改了 filetype 只能使用 :bwipeout 来删除 documentHighlight
+  --- cursor 离开 window 时清除 references highlight
+  vim.api.nvim_create_autocmd({'WinLeave'}, {
+    group = group_id,
+    buffer = bufnr,  -- 对指定 buffer 有效
+    callback = function(params)
+      last_doc_hl = {}
+      vim.lsp.util.buf_clear_references(bufnr)
+    end,
+    desc = "LSP: clear highlight when leave window",
+  })
+
+  --- bdelete buffer 的时会触发 LspDetach
+  --- buffer 被 delete 时清除 references highlight, 同时删除整个 augroup
   vim.api.nvim_create_autocmd({'LspDetach', 'BufDelete', 'BufWipeout'}, {
     group = group_id,
     buffer = bufnr,  -- 对指定 buffer 有效
     callback = function(params)
-      vim.lsp.util.buf_clear_references(params.buf)
+      last_doc_hl = {}
+      vim.lsp.util.buf_clear_references(bufnr)
       vim.api.nvim_del_augroup_by_id(group_id)
     end,
     desc = "LSP: delete documentHighlight augroup",
