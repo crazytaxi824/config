@@ -62,8 +62,14 @@ function M.open_shell_term()
       return
     end
 
-    -- vim.fn.chansend(t.job_id, 'source ' .. py_venv[1] .. ' && clear\n')
-    vim.api.nvim_chan_send(t.job_id, 'source ' .. py_venv[1] .. ' && clear\n')
+    --- t 是 MyTerm, 这里返回的是 MyTermPost.job_id
+    local job_id = g.get_job_id(t.id)
+    if not job_id then
+      error("no job_id after run()")
+    end
+
+    -- vim.fn.chansend(job_id, 'source ' .. py_venv[1] .. ' && clear\n')
+    vim.api.nvim_chan_send(job_id, 'source ' .. py_venv[1] .. ' && clear\n')
     return
   end
 

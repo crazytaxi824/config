@@ -25,12 +25,7 @@ local function create_my_term_win(term_opts)
   --- window 然后 win_gotoid(win_id)
 
   --- 获取是否已经 run() 并用于 term_bufnr
-  --- @type integer|nil
-  local old_term_bufnr
-  local t = g.global_my_term_cache[term_opts.id]
-  if t then
-    old_term_bufnr = t.bufnr
-  end
+  local old_term_bufnr = g.get_bufnr(term_opts.id)
 
   --- 每次运行 jobstart() 之前, 先创建一个新的 scratch buffer 给 terminal.
   local term_bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
@@ -117,12 +112,10 @@ function M:run()
     self.after_run(self, term_bufnr)
   end
 
-  --- @cast self MyTermPost  断言 MyTerm -> MyTermPost
-  self.bufnr = term_bufnr
-  self.job_id = job_id
-
-  --- NOTE: cache terminal object
-  g.global_my_term_cache[self.id] = self
+  --- NOTE: cache MyTermPost
+  --- @type MyTermPost
+  local tp = vim.tbl_deep_extend('keep', {bufnr = term_bufnr, job_id = job_id}, self)
+  g.global_my_term_cache[self.id] = tp
 end
 
 --- 终止 job, 会触发 jobdone.
