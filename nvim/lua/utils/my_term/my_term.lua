@@ -11,10 +11,9 @@ local t_key  = require('utils.my_term.term_keymaps')
 --- Create new terminal buffer and window, 给 my_term.bufnr 赋值.
 ---
 --- @param term_opts MyTermOpts
---- @param old_term_bufnr integer  NOTE: 这个值有可能是 nil, 但是必须要传入函数中.
 --- @return integer bufnr
 --- @return integer win_id
-local function create_my_term_win(term_opts, old_term_bufnr)
+local function create_my_term_win(term_opts)
   --- VVI: 以下执行顺序很重要!
   --- `jobstart(cmd, {opts})` 事件触发顺序和 `:edit term://cmd` 有所不同.
   --- `:edit term://cmd` 中: 触发顺序 TermOpen -> BufEnter -> BufWinEnter.
@@ -24,6 +23,14 @@ local function create_my_term_win(term_opts, old_term_bufnr)
   --- 可以使用 nvim_buf_call(bufnr, function() jobstart(...) end) 做到 TermOpen -> BufEnter -> BufWinEnter 顺序,
   --- 但在 nvim_buf_call() 的过程中 TermOpen event 获取到的 window id 是临时的 autocmd window, 所以需要先创建一个
   --- window 然后 win_gotoid(win_id)
+
+  --- 获取是否已经 run() 并用于 term_bufnr
+  --- @type integer|nil
+  local old_term_bufnr
+  local t = g.global_my_term_cache[term_opts.id]
+  if t then
+    old_term_bufnr = t.bufnr
+  end
 
   --- 每次运行 jobstart() 之前, 先创建一个新的 scratch buffer 给 terminal.
   local term_bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
@@ -99,7 +106,7 @@ function M:run()
   end
 
   --- 创建 term window & buffer
-  local term_bufnr, term_win_id = create_my_term_win(self, self.bufnr)
+  local term_bufnr, term_win_id = create_my_term_win(self)
 
   --- 执行 jobstart(cmd)
   local job_id = my_term_exec(self, term_bufnr, term_win_id)
@@ -110,8 +117,7 @@ function M:run()
     self.after_run(self, term_bufnr)
   end
 
-  --- MyTerm -> MyTermPost
-  --- @cast self MyTermPost
+  --- @cast self MyTermPost  断言 MyTerm -> MyTermPost
   self.bufnr = term_bufnr
   self.job_id = job_id
 
