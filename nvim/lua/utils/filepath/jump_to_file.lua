@@ -3,18 +3,11 @@
 local parse = require('utils.filepath.parse')
 local vs = require('utils.visual_selected')
 
-local M = {}
-
---- 跳转到 filepath
+--- 则选择合适的 window 显示文件
 ---
 --- @param absolute_path string
---- @param lnum integer
---- @param col integer
-local function jump_to_file(absolute_path, lnum, col)
-  lnum = lnum or 1
-  col = col or 1
-
-  --- 则选择合适的 window 显示文件.
+--- @return integer|nil
+local function find_win_to_jump(absolute_path)
   local display_win_id
 
   --- 在当前 tab 中寻找第一个显示 listed-buffer 的 window, 用于显示 filepath.
@@ -34,8 +27,23 @@ local function jump_to_file(absolute_path, lnum, col)
       display_win_id = win_id
     end
   end
+  return display_win_id
+end
 
-  if vim.fn.win_gotoid(display_win_id) == 1 then
+--- 跳转到 file
+---
+--- @param absolute_path string
+--- @param lnum integer
+--- @param col integer
+local function jump_to_file(absolute_path, lnum, col)
+  lnum = lnum or 1
+  col = col or 1
+
+  --- 则选择合适的 window 显示文件.
+  local display_win_id = find_win_to_jump(absolute_path)
+
+  --- 进入 window
+  if display_win_id and vim.fn.win_gotoid(display_win_id) == 1 then
     --- 如果 win_id 可以跳转, 则直接在该 window 中打开文件.
     vim.cmd.edit(absolute_path)
     vim.api.nvim_win_set_cursor(display_win_id, {lnum, col-1})
@@ -47,6 +55,7 @@ local function jump_to_file(absolute_path, lnum, col)
 end
 
 --- 跳转到 directory
+---
 --- @param dir string
 local function jump_to_dir(dir)
   --- NOTE: 新窗口中打开 dir, 因为 nvim-tree 设置 hijack_netrw=true & hijack_directories=true,
@@ -55,9 +64,9 @@ local function jump_to_dir(dir)
   vim.cmd.new(dir)
 end
 
---- jump to filepath/directory
+--- jump to file/directory
 ---
---- @param content string|nil (filepath:{lnum}:{col})
+--- @param content string|nil filepath:{lnum}:{col}
 local function jump(content)
   if not content then
     return
@@ -78,6 +87,8 @@ local function jump(content)
 
   Notify('cannot open: "' .. content .. '"', "INFO", {timeout = 1500})
 end
+
+local M = {}
 
 --- jump to <cword>
 M.n_jump_cWORD = function() jump(vim.fn.expand('<cWORD>')) end
