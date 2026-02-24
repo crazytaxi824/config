@@ -3,45 +3,13 @@
 
 local go_list_module = require("utils.go.deps.go_list")
 local test_cmds = require("utils.go.deps.test_cmds")
+local utils = require("utils.go.deps.utils")
 
 local M = {}
 
----get test function name Test/Benchmark/FuzzXxx -------------------------------------------------- {{{
-
---- 返回 Test Function Name
---- - `TestXxx(t *testing.T)`
---- - `BenchmarkXxx(b *testing.B)`
---- - `FuzzXxx(f *testing.F)`
+--- `go test run/bench=^TEST_Func_Name$ ImportPath`
 ---
----@return string|nil func_name (如果返回 nil 说明不是 test 函数)
----@return 'run'|'bench'|'fuzz'|nil mode
-local function get_test_func_name()
-  local lcontent = vim.fn.getline('.')  -- 获取行内容
-
-  --- NOTE: go test 函数不允许 func [T any]TestXxx(), 不允许有 type param.
-  --- %w     - 单个 char [a-zA-Z0-9]
-  --- [%w_]  - 单个 char [a-zA-Z0-9] && _
-  --- [BFMT] - 单个 char B|F|M|T
-  local testfn = lcontent:match("^func%s+(Test[%w_]*)%s*%([%w_]*%s*%*testing%.T%)")
-  if testfn then
-    return testfn, 'run'
-  end
-
-  testfn = lcontent:match("^func%s+(Benchmark[%w_]*)%s*%([%w_]*%s*%*testing%.B%)")
-  if testfn then
-    return testfn, 'bench'
-  end
-
-  testfn = lcontent:match("^func%s+(Fuzz[%w_]*)%s*%([%w_]*%s*%*testing%.F%)")
-  if testfn then
-    return testfn, 'fuzz'
-  end
-end
--- -- }}}
-
----`go test run/bench=^TEST_Func_Name$ ImportPath`
----
----@param prompt? 'pprof'
+--- @param prompt? 'pprof' `go test pprof`
 function M.go_test_single_func(prompt)
   --- 判断当前文件是否 _test.go
   if not string.match(vim.fn.bufname(), "_test%.go$") then
@@ -50,22 +18,15 @@ function M.go_test_single_func(prompt)
   end
 
   --- 判断当前函数是否 TestXXX. 如果是, 则获取 test function name.
-  local testfn_name, mode = get_test_func_name()
+  local testfn_name, mode = utils.get_exact_testfn_name()
   if not testfn_name or not mode then
-    Notify('Please Put cursor on "func Test/Benchmark/Fuzz_XXX()"', "INFO")
     return
   end
 
   --- 获取 go list info, `cd src/xxx && go list -json`
   local go_list = go_list_module.go_list()
 
-  --- opts = {
-  ---   testfn_name = testfn_name,
-  ---   mode = mode,
-  ---   flag = 'none' | 'cpu' | 'mem' | ...,
-  ---   go_list = {},
-  ---   project = string|nil,
-  --- }
+  --- @type GoTestOpts
   local opts = {
     testfn_name = '^'..testfn_name..'$',
     mode = mode,
@@ -73,13 +34,13 @@ function M.go_test_single_func(prompt)
     go_list = go_list,
   }
 
-  --- no prompt for testflags
+  --- no prompt
   if not prompt then
     test_cmds.go_test(opts)
     return
   end
 
-  --- prompt choose testflags
+  --- prompt exist
   if mode == 'run' or mode == 'bench' then
     local select = {'cpu', 'mem', 'mutex', 'block', 'trace', 'cover', 'coverprofile'}
     vim.ui.select(select, {
@@ -93,7 +54,10 @@ function M.go_test_single_func(prompt)
         test_cmds.go_test(opts)
       end
     end)
-  elseif mode == 'fuzz' then
+    return
+  end
+
+  if mode == 'fuzz' then
     local select = {'fuzz30s', 'fuzz60s', 'fuzz5m', 'fuzz10m', 'fuzz_input'}
     vim.ui.select(select, {
       prompt = 'choose go test flag: [Fuzz test cannot use pprof & coverage flags]',
@@ -106,9 +70,11 @@ function M.go_test_single_func(prompt)
         test_cmds.go_test(opts)
       end
     end)
-  else
-    Notify("go test single function {mode} should be: 'run' | 'bench' | 'fuzz'", "DEBUG")
+    return
   end
+
+  --- mode error
+  Notify("go test single function {mode} should be: 'run' | 'bench' | 'fuzz'", "WARN")
 end
 
 return M

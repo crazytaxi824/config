@@ -2,21 +2,9 @@
 
 local go_list_module = require("utils.go.deps.go_list")
 local test_cmds = require("utils.go.deps.test_cmds")
+local utils = require("utils.go.deps.utils")
 
 local M = {}
-
---- @param mode 'run'|'bench'
---- @return string
-local function get_testfn_name(mode)
-  if mode == 'run' then
-    return '^Test.*'
-  elseif mode == 'bench' then
-    return '^Benchmark.*'
-  else
-    --- internal error
-    error('go test mode error: "run" | "bench" only.')
-  end
-end
 
 --- 测试 package `go test run/bench ImportPath`
 ---
@@ -33,7 +21,7 @@ M.go_test_pkg = function(mode)
     if choice then
       --- @type GoTestOpts
       local opts = {
-        testfn_name = get_testfn_name(mode),
+        testfn_name = utils.get_testfn_name_regexp(mode),
         go_list = go_list_module.go_list(),
         mode = mode,
         flag = choice,

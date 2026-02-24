@@ -16,6 +16,7 @@ function M.go_list(cwd)
     error(result.stderr ~= '' and result.stderr or result.code)
   end
 
+  --- 如果不合法会 error()
   return vim.json.decode(result.stdout)
 end
 
