@@ -1,11 +1,14 @@
 --- typescript -------------------------------------------------------------------------------------
 --- tsc ts_file && node js_file --------------------------------------------------------------------
---- tsc -p ./tsconfig.json   -- 将 ts 编译成 js 文件.
---- node ./dist/xxx.js       -- 使用 node 运行编译后的 js 文件.
+
+--- `tsc -p ./tsconfig.json`   -- 将 ts 编译成 js 文件.
+--- `node ./dist/xxx.js`       -- 使用 node 运行编译后的 js 文件.
 --- NOTE: dist 文件夹是 tsconfig.json 中 "outDir" 定义的.
 ---       src/ 文件夹是 tsconfig.json 中 "include" 定义的.
 ---       所以运行时 pwd 必须是在 tsconfig 所在文件夹, 即 project root 文件夹.
-local function ts_run(file)
+---
+--- @param filename string
+local function ts_run(filename)
   --- check tsconfig.json file
   local pwd = vim.uv.cwd()
   if not vim.uv.fs_stat(pwd..'/tsconfig.json') then
@@ -14,15 +17,20 @@ local function ts_run(file)
   end
 
   local t = require('utils.my_term.instances').console
-  t.cmd = "tsc -p ./tsconfig.json && node dist/" .. file .. '.js'
+  t.cmd = "tsc -p ./tsconfig.json && node dist/" .. filename .. '.js'
   t:stop()
   t:run()
 end
 
 --- jest js_file -----------------------------------------------------------------------------------
-local function ts_jest(file, coverage)
+
+--- jest 进行 test
+---
+--- @param filename string
+--- @param coverage string|boolean|nil  标记: 是否使用 `--coverage`
+local function ts_jest(filename, coverage)
   --- check xxx.test.js file
-  if not string.match(file, ".*%.test$") then
+  if not string.match(filename, ".*%.test$") then
     Notify("not a test file.", "ERROR")
     return
   end
@@ -36,9 +44,9 @@ local function ts_jest(file, coverage)
 
   local cmd = ''
   if coverage then
-    cmd = "tsc -p ./tsconfig.json && jest --coverage dist/" .. file ..'.js'
+    cmd = "tsc -p ./tsconfig.json && jest --coverage dist/" .. filename ..'.js'
   else
-    cmd = "tsc -p ./tsconfig.json && jest dist/" .. file ..'.js'
+    cmd = "tsc -p ./tsconfig.json && jest dist/" .. filename ..'.js'
   end
 
   local t = require('utils.my_term.instances').console

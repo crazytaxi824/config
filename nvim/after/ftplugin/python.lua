@@ -1,4 +1,5 @@
 --- python3 ----------------------------------------------------------------------------------------
+
 --- check virtual environment
 local function venv()
   --- 项目环境
@@ -14,7 +15,9 @@ local function venv()
 end
 
 --- file is absolut path
-local function py_run(file)
+---
+--- @param filepath string
+local function py_run(filepath)
   local py_path = venv()
   if not py_path then
     Notify({
@@ -26,10 +29,10 @@ local function py_run(file)
 
   --- 先相对 HOME, 再相对 cwd.
   py_path = vim.fn.fnamemodify(py_path, ':~:.')
-  file = vim.fn.fnamemodify(file, ':~:.')
+  filepath = vim.fn.fnamemodify(filepath, ':~:.')
 
   local t = require('utils.my_term.instances').console
-  t.cmd = py_path .. " -- " .. file
+  t.cmd = py_path .. " -- " .. filepath
   t:stop()
   t:run()
 end

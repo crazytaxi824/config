@@ -1,7 +1,11 @@
 --- javascript -------------------------------------------------------------------------------------
-local function js_run(file)
+
+--- `node file.js`
+---
+--- @param filepath string
+local function js_run(filepath)
   local t = require('utils.my_term.instances').console
-  t.cmd = {"node", file}
+  t.cmd = {"node", filepath}
   t:stop()
   t:run()
 end
