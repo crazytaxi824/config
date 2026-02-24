@@ -4,7 +4,7 @@
 --- @alias MyTermOptsOnExit fun(term_opts: MyTermOpts, bufnr: integer, job_id: integer, exit_code: integer)
 
 
---- MyTermOpts ---------------------------------------------
+--- MyTermOpts
 --- @class MyTermOpts
 --- @field id integer @readonly    VVI: 保证每个 id 只和一个 bufnr 对应. id 一旦设置应该无法改变.
 --- @field cmd? string|string[]    `:help jobstart()` cmd
@@ -24,7 +24,7 @@
 --- @field on_exit?   MyTermOptsOnExit
 
 
---- MyTermPost ---------------------------------------------
+--- MyTermPost 继承自 MyTerm
 --- @class MyTermPost: MyTerm  继承 MyTerm
 --- @field bufnr integer
 --- @field job_id integer
