@@ -11,7 +11,7 @@ local M = {}
 
 --- `impl -dir src Cat IAnimal`
 --- 实现 interface, 需要获取 `<cword>` (光标在 interface 名上)
----@param arglist string[]
+--- @param arglist string[]
 function M.go_impl(arglist)
   if vim.bo.readonly then
     Notify("this is a readonly file","ERROR")
