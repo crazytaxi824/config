@@ -3,6 +3,8 @@
 --- 如果是 fd 选择的结果, 则临时文件中记录的是 filepath/dir.
 --- 如果是 rg 返回的结果, 则临时文件中记录的是 <filepath:line:col:content>
 --- 结论: {+f} 临时文件中记录的是 fzf 中显示的结果.
+---
+--- @param fzf_tmp_file string filepath
 function FZF_selected(fzf_tmp_file)
   if not vim.uv.fs_stat(fzf_tmp_file) then
     Notify({"fzf `{+f}` tmp file is NOT readable.", "path: `" .. fzf_tmp_file .. "`"}, "ERROR")
