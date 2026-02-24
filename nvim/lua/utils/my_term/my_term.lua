@@ -85,9 +85,9 @@ local function my_term_exec(term_opts, term_bufnr, term_win_id)
 end
 -- }}}
 
---- my_term object
+--- MyTerm 继承 MyTermOpts
 ---
---- @class MyTerm: MyTermOpts  继承 MyTermOpts
+--- @class MyTerm: MyTermOpts
 --- @field run fun(self: MyTerm) @readonly
 --- @field stop fun(self: MyTerm) @readonly
 local M = {}
