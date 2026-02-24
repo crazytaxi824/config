@@ -79,7 +79,8 @@ local function doc_highlight_handler(results, ctx)
   local cache = {}
 
   for client_id, resp in pairs(results) do
-    local err, result = resp.err, resp.result
+    local err = resp.err
+    local result = resp.result or {}
     if err then
       vim.lsp.log.error(err.code, err.message)
     elseif result then
