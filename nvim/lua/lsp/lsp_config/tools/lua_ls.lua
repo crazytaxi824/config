@@ -35,6 +35,12 @@ return {
 
   --- 这里是在有 .luarc.json 的情况下不设置任何属性.
   settings = {
-    Lua = {}  -- VVI: 必须为 {}, 否则在上面 tbl_deep_extend() 时会报错.
+  --- lua_ls settings: https://github.com/LuaLS/lua-language-server/wiki/Settings
+    Lua = {
+      --- lua_ls diagnostics: https://luals.github.io/wiki/diagnostics/
+      diagnostics = {
+        disable = { "unused-function" },
+      },
+    }
   }
 }
