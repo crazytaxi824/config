@@ -13,9 +13,9 @@ M.global_my_term_cache = {}
 --- @param term_id integer
 --- @return integer|nil
 function M.get_bufnr(term_id)
-  local t = M.global_my_term_cache[term_id]
-  if t then
-    return t.bufnr
+  local tp = M.global_my_term_cache[term_id]
+  if tp then
+    return tp.bufnr
   end
 end
 
@@ -24,9 +24,9 @@ end
 --- @param term_id integer
 --- @return integer|nil
 function M.get_job_id(term_id)
-  local t = M.global_my_term_cache[term_id]
-  if t then
-    return t.job_id
+  local tp = M.global_my_term_cache[term_id]
+  if tp then
+    return tp.job_id
   end
 end
 
