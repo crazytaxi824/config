@@ -30,9 +30,6 @@
 
 local utils = require("lsp.project_local_settings.utils")
 
---- 加载 autocmd
-require("lsp.project_local_settings.auto_restart_tools")
-
 --- read json file
 ---
 --- 如果 return vim.empty_dict() 需要 reload lsp settings. 包含以下几种情况:

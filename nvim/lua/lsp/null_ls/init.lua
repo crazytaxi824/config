@@ -5,6 +5,7 @@ end
 
 --- 获取 sources
 local null_sources = require("lsp.null_ls.sources")
+local utils = require("lsp.project_local_settings.utils")
 
 --- 读取 & cache local_settings files
 null_sources.reload_local_settings()
@@ -65,6 +66,24 @@ null_ls.setup({
   -- on_exit = function()
   --   Notify("Null-ls on_exit() event.", "warn", {title = "Null-ls"})
   -- end,
+})
+
+--- reload local settings when ".nvim/linter.json" changed
+local linter_gid = vim.api.nvim_create_augroup("my_reload_local_linter_settings", {clear=true})
+vim.api.nvim_create_autocmd({'BufWritePost'}, {
+  group = linter_gid,
+  pattern = { "**/" .. utils.linter_file },
+  callback = function(params)
+    if vim.fs.abspath(params.file) == utils.find_local_settings_file(utils.linter_file) then
+      local old = null_sources.exist_local_settings()
+      null_sources.reload_local_settings()
+      local new = null_sources.exist_local_settings()
+
+      local tools = utils.find_diff_tool(old, new)
+      null_sources.restart_linters(tools)
+    end
+  end,
+  desc = "reload local settings when '.nvim/linter.json' changed",
 })
 
 
