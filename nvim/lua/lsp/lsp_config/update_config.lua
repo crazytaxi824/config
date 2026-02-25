@@ -1,5 +1,6 @@
 --- 加载 local settings
 local project_local_settings = require("lsp.project_local_settings")
+local common_config = require("lsp.lsp_config.client_config")
 
 --- 获取 lsp 列表
 local lsp_servers_map = require('lsp.svr_list').list
@@ -46,17 +47,16 @@ function M.exist_local_settings()
   return local_lsp_settings
 end
 
---- 设置 & 启动单个 lsp
+--- 设置单个 lsp
 ---
 --- @param lsp_tool string
 function M.lspconfig_setup(lsp_tool)
-  --- config 必须包含 on_attach, capabilities 两个属性.
-  local common_config = require("lsp.lsp_config.client_config")
   local lsp_config = vim.tbl_deep_extend('force', common_config, load_lsp_configs(lsp_tool))
   vim.lsp.config(lsp_tool, lsp_config)
 end
 
 --- 重启 lsp
+---
 --- @param lsp_tools string[]
 function M.restart_lsps(lsp_tools)
   local tools = {}
