@@ -34,9 +34,18 @@ local function job_exec(cmd, term_bufnr)
   vim.api.nvim_buf_call(scratch_bufnr, function()
     bg_job_id = vim.fn.jobstart(cmd, {
       term = true,
-      on_exit = function()
+      on_stdout = function(job_id, data)
+        --- print http address for Serving web UI
+        vim.notify(table.concat(data,"\n"), vim.log.levels.INFO)
+      end,
+      on_stderr = function(job_id, data)
+        --- print error message
+        vim.notify(table.concat(data,"\n"), vim.log.levels.WARN)
+      end,
+      on_exit = function(job_id, exit_code)
+        --- :bdelete bufnr when jobdone
         vim.api.nvim_buf_delete(scratch_bufnr, {force=true})
-      end
+      end,
     })
   end)
 
@@ -60,7 +69,7 @@ local function shutdown_all_jobs(term_bufnr)
   cache_bg_jobs[term_bufnr] = nil
 end
 
---- autocmd: 在bufnr 被 wipeout 的时候停止所有在 bufnr 中运行的 job
+--- autocmd: 在 bufnr 被 wipeout 的时候 jobstop() 所有 jobs attched to bufnr.
 ---
 --- @param term_bufnr integer
 local function autocmd_shutdown_all_jobs(term_bufnr)
@@ -72,7 +81,7 @@ local function autocmd_shutdown_all_jobs(term_bufnr)
     group = group_id,
     buffer = term_bufnr,
     callback = function(params)
-      --- delete all running jobs
+      --- jobstop() all running jobs
       shutdown_all_jobs(term_bufnr)
 
       --- delete augroup
@@ -149,7 +158,7 @@ function M.on_exit(opts, pprof_dir)
     --- :GoPprof && <F6>
     set_cmd_and_keymaps(bufnr, pprof_dir)
 
-    --- autocmd BufWipeout jobstop()
+    --- autocmd: 在 bufnr 被 wipeout 的时候 jobstop() 所有 jobs attched to bufnr.
     autocmd_shutdown_all_jobs(bufnr)
 
     --- run `go tool pprof/trace ...` in background
