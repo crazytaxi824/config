@@ -115,7 +115,7 @@ function M:run()
   --- NOTE: cache MyTermPost
   --- @type MyTermPost
   local tp = vim.tbl_deep_extend('keep', {bufnr = term_bufnr, job_id = job_id}, self)
-  g.set_TermPost(self.id, tp)
+  g.set_TermPost(tp.id, tp)
 end
 
 --- 终止 job, 会触发 jobdone.
