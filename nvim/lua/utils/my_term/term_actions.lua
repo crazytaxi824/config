@@ -8,7 +8,7 @@ local M = {}
 --- @param term_id integer
 --- @return integer|nil win_id
 function M.open_win(term_id)
-  local tp = g.global_my_term_cache[term_id]
+  local tp = g.get_TermPost(term_id)
   if not tp then
     return
   end
@@ -31,7 +31,7 @@ end
 ---
 --- @param term_id integer
 function M.close_win(term_id)
-  local tp = g.global_my_term_cache[term_id]
+  local tp = g.get_TermPost(term_id)
   if not tp then
     return
   end
@@ -47,7 +47,7 @@ end
 --- @param term_id integer
 --- @return integer|nil job_status
 function M.job_status(term_id)
-  local tp = g.global_my_term_cache[term_id]
+  local tp = g.get_TermPost(term_id)
   if not tp then
     return
   end
@@ -60,7 +60,7 @@ end
 ---
 --- @param term_id integer
 function M.wipeout(term_id)
-  local tp = g.global_my_term_cache[term_id]
+  local tp = g.get_TermPost(term_id)
   if not tp then
     return
   end
@@ -74,7 +74,7 @@ function M.wipeout(term_id)
   vim.api.nvim_buf_delete(tp.bufnr, {force=true})
 
   --- remove from cache
-  g.global_my_term_cache[term_id] = nil
+  g.delete_TermPost(term_id)
 end
 
 return M

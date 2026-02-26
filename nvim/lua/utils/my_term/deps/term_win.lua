@@ -8,16 +8,16 @@ local M = {}
 local function find_exist_term_win()
   local win_id = -1
 
-  for _, term_obj in pairs(g.global_my_term_cache) do
-    if vim.api.nvim_buf_is_valid(term_obj.bufnr) then
-      local term_wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
+  g.range_TermPost(function (_, term_post)
+    if vim.api.nvim_buf_is_valid(term_post.bufnr) then
+      local term_wins = vim.fn.getbufinfo(term_post.bufnr)[1].windows
       for _, w in ipairs(term_wins) do
         if w > win_id then
           win_id = w
         end
       end
     end
-  end
+  end)
 
   return win_id
 end

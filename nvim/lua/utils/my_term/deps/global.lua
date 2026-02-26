@@ -6,14 +6,14 @@ M.win_height = math.ceil(vim.o.lines/4)
 
 --- cache all my_term object
 --- @type table<integer, MyTermPost>
-M.global_my_term_cache = {}
+local global_my_term_cache = {}
 
 --- 根据 id 返回 MyTermPost.bufnr
 ---
 --- @param term_id integer
 --- @return integer|nil
 function M.get_bufnr(term_id)
-  local tp = M.global_my_term_cache[term_id]
+  local tp = global_my_term_cache[term_id]
   if tp then
     return tp.bufnr
   end
@@ -24,10 +24,47 @@ end
 --- @param term_id integer
 --- @return integer|nil
 function M.get_job_id(term_id)
-  local tp = M.global_my_term_cache[term_id]
+  local tp = global_my_term_cache[term_id]
   if tp then
     return tp.job_id
   end
+end
+
+--- 根据 id 返回 MyTermPost
+---
+--- @param term_id integer
+--- @return MyTermPost|nil
+function M.get_TermPost(term_id)
+  return global_my_term_cache[term_id]
+end
+
+--- 缓存 MyTermPost
+---
+--- @param term_id integer
+--- @param termpost MyTermPost
+function M.set_TermPost(term_id, termpost)
+  global_my_term_cache[term_id] = termpost
+end
+
+--- 删除 MyTermPost
+---
+--- @param term_id any
+function M.delete_TermPost(term_id)
+  global_my_term_cache[term_id] = nil
+end
+
+--- for range MyTermPost dict
+---
+--- @param callback fun(term_id: integer, term_post: MyTermPost)
+function M.range_TermPost(callback)
+  for term_id, term_post in pairs(global_my_term_cache) do
+    callback(term_id, term_post)
+  end
+end
+
+--- debug ------------------------------------------------------------------------------------------
+function Get_all_my_terms()
+  vim.print(global_my_term_cache)
 end
 
 return M

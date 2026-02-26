@@ -11,7 +11,7 @@ local M = {}
 --- @return MyTerm
 function M.new(opts)
   --- NOTE: terminal 已经存在, 无法使用相同 id 创建新的 terminal.
-  if g.global_my_term_cache[opts.id] then
+  if g.get_TermPost(opts.id) then
     error('terminal id='.. opts.id .. ' is already exist')
   end
 
@@ -83,49 +83,50 @@ end
 --- @param term_id integer
 --- @return MyTerm? (MyTermPost 降级为 MyTerm)
 function M.get_term_by_id(term_id)
-  return g.global_my_term_cache[term_id]
+  return g.get_TermPost(term_id)
 end
 
 --- close all my_term windows
 function M.close_all()
-  for _, term_obj in pairs(g.global_my_term_cache) do
-    t_act.close_win(term_obj.id)
-  end
+  g.range_TermPost(function (_, term_post)
+    t_act.close_win(term_post.id)
+  end)
 end
 
 --- open all terms which are cached in global_my_term_cache and bufnr is valid.
 function M.open_all()
-  for _, term_obj in pairs(g.global_my_term_cache) do
-    if vim.api.nvim_buf_is_valid(term_obj.bufnr) then
-      local term_wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
+  g.range_TermPost(function (_, term_post)
+    if vim.api.nvim_buf_is_valid(term_post.bufnr) then
+      local term_wins = vim.fn.getbufinfo(term_post.bufnr)[1].windows
       if #term_wins < 1 then
-        t_win.create_term_win(term_obj.bufnr)
+        t_win.create_term_win(term_post.bufnr)
       end
     end
-  end
+  end)
 end
 
 --- jobstop(job_id) & :bwipeout all terminal buffers
 function M.wipeout_all()
-  for _, term_obj in pairs(g.global_my_term_cache) do
-    if vim.api.nvim_buf_is_valid(term_obj.bufnr) then
-      t_act.wipeout(term_obj.id)
+  g.range_TermPost(function (_, term_post)
+    if vim.api.nvim_buf_is_valid(term_post.bufnr) then
+      t_act.wipeout(term_post.id)
     end
-  end
+  end)
 end
 
 --- close all first, then open all
 function M.toggle_all()
   --- 获取所有的 my_term windows
   local open_winid_list= {}
-  for _, term_obj in pairs(g.global_my_term_cache) do
-    if vim.api.nvim_buf_is_valid(term_obj.bufnr) then
-      local term_wins = vim.fn.getbufinfo(term_obj.bufnr)[1].windows
+
+  g.range_TermPost(function (_, term_post)
+    if vim.api.nvim_buf_is_valid(term_post.bufnr) then
+      local term_wins = vim.fn.getbufinfo(term_post.bufnr)[1].windows
       for _, w in ipairs(term_wins) do
         table.insert(open_winid_list, w)
       end
     end
-  end
+  end)
 
   --- 如果有任何 my_term window 是打开的状态, 则全部关闭.
   if #open_winid_list > 0 then
@@ -137,11 +138,6 @@ function M.toggle_all()
 
   --- 如果所有 my_term window 都是关闭状态, 则 open_all()
   M.open_all()
-end
-
---- debug ------------------------------------------------------------------------------------------
-function Get_all_my_terms()
-  vim.print(g.global_my_term_cache)
 end
 
 return M

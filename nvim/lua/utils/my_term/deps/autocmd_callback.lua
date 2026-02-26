@@ -68,7 +68,7 @@ function M.autocmd_jobstop(term_opts, term_bufnr, job_id)
       vim.fn.jobstop(job_id)
 
       --- remove from cache
-      g.global_my_term_cache[term_opts.id] = nil
+      g.delete_TermPost(term_opts.id)
 
       --- delete augroup
       vim.api.nvim_del_augroup_by_id(g_id)

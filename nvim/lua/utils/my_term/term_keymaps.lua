@@ -5,24 +5,24 @@ local t_act = require('utils.my_term.term_actions')
 ---
 --- @param term_id integer
 local function close_others(term_id)
-  local tp = g.global_my_term_cache[term_id]
+  local tp = g.get_TermPost(term_id)
   if not tp then
     Notify('term: "' .. term_id .. '" is not exist', "WARN")
     return
   end
 
-  for _, term_obj in pairs(g.global_my_term_cache) do
-    if term_obj.bufnr ~= tp.bufnr then
-      t_act.close_win(term_obj.id)
+  g.range_TermPost(function (_, term_post)
+    if term_post.bufnr ~= tp.bufnr then
+      t_act.close_win(term_post.id)
     end
-  end
+  end)
 end
 
 --- wipeout term
 ---
 --- @param term_id integer
 local function wipeout_term(term_id)
-  local tp = g.global_my_term_cache[term_id]
+  local tp = g.get_TermPost(term_id)
   if not tp then
     Notify('term: "' .. term_id .. '" is not exist', "WARN")
     return
@@ -40,17 +40,17 @@ end
 ---
 --- @param term_id integer
 local function wipeout_others(term_id)
-  local tp = g.global_my_term_cache[term_id]
+  local tp = g.get_TermPost(term_id)
   if not tp then
     Notify('term: "' .. term_id .. '" is not exist', "WARN")
     return
   end
 
-  for _, term_obj in pairs(g.global_my_term_cache) do
-    if term_obj.bufnr ~= tp.bufnr then
-      t_act.wipeout(term_obj.id)
+  g.range_TermPost(function (_, term_post)
+    if term_post.bufnr ~= tp.bufnr then
+      t_act.wipeout(term_post.id)
     end
-  end
+  end)
 end
 
 --- keymaps: for terminal buffer only --------------------------------------------------------------
