@@ -12,7 +12,7 @@ local M = {}
 function M.new(opts)
   --- NOTE: terminal 已经存在, 无法使用相同 id 创建新的 terminal.
   if g.global_my_term_cache[opts.id] then
-    error('terminal id='.. opts.id .. ' is already created')
+    error('terminal id='.. opts.id .. ' is already exist')
   end
 
   --- terminal object
