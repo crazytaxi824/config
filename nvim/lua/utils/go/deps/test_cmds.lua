@@ -84,6 +84,8 @@ local test_args = {
   --- eg: '-cpuprofile a/b/c.out'  文件会生成在 pprof_dir/a/b/c.out
   --- eg: '-cpuprofile /a/b/c.out' 文件会生成在 /a/b/c.out
   '-outputdir', pprof_dir,
+
+  --- 生成 profile 文件
   '-cpuprofile', 'cpu.out',
   '-memprofile', 'mem.out',
   '-mutexprofile', 'mutex.out',

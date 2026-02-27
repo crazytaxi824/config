@@ -1,5 +1,5 @@
---- go test -cover -coverprofile cover.out ...
---- go tool cover -html=cover.out -o cover.html && open cover.html
+--- `go test -cover -coverprofile cover.out ...`
+--- `go tool cover -html=cover.out -o cover.html && open cover.html`  生成 cover.html 再打开 html 文件
 
 local M = {}
 
