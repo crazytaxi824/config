@@ -18,32 +18,38 @@ M.flag_desc = {
   trace = { desc = 'Trace' },
 }
 
-local cache_bg_jobs = {}  -- 缓存 bg_job_id, map-table: [term_bufnr] = {job_id, ... }
+--- 缓存 job_id dict: `<term_bufnr = [job_id, ...]>`
+---
+--- @type table<integer, integer[]>
+local cache_bg_jobs = {}
 
 --- 在指定 bufnr 中执行 jobstart(cmd), 但该 buffer 不显示在任何 window 中. (类似后台运行)
 ---
 --- @param cmd string[]
 --- @param term_bufnr integer
-local function job_exec(cmd, term_bufnr)
+--- @param flag? string  'cpu'|'mem'|'mutex'|...
+local function job_exec(cmd, term_bufnr, flag)
   --- VVI: 这里使用 scratch buffer 来执行 jobstart():
   ---   1. 为了避免创建新的一个 window.
   ---   2. 方便使用 `:ls` 来查看未关闭的 job.
   ---   3. 同时也可以通过 `:[N]buf` 来查看 bg job 的输出内容.
   local scratch_bufnr = vim.api.nvim_create_buf(false, true)
-  local bg_job_id
-  vim.api.nvim_buf_call(scratch_bufnr, function()
-    bg_job_id = vim.fn.jobstart(cmd, {
-      term = true,
+  local bg_job_id = vim.api.nvim_buf_call(scratch_bufnr, function()
+    return vim.fn.jobstart(cmd, {
+      term = true, -- 将 scratch_bufnr 作为 terminal buffer
+
+      --- print http address for Serving web UI
       on_stdout = function(job_id, data)
-        --- print http address for Serving web UI
-        vim.notify(table.concat(data,"\n"), vim.log.levels.INFO)
+        vim.notify("[" .. flag .. "]: " .. table.concat(data,"\n"), vim.log.levels.INFO)
       end,
+
+      --- print error message
       on_stderr = function(job_id, data)
-        --- print error message
-        vim.notify(table.concat(data,"\n"), vim.log.levels.WARN)
+        vim.notify("[" .. flag .. "]: " .. table.concat(data,"\n"), vim.log.levels.WARN)
       end,
+
+      --- :bdelete bufnr when jobdone
       on_exit = function(job_id, exit_code)
-        --- :bdelete bufnr when jobdone
         vim.api.nvim_buf_delete(scratch_bufnr, {force=true})
       end,
     })
@@ -112,7 +118,7 @@ local function select_pprof(term_bufnr, pprof_dir)
     if choice == 'trace' then
       cmd = {'go', 'tool', 'trace', '-http=localhost:', pprof_dir..choice..'.out'}
     end
-    job_exec(cmd, term_bufnr)
+    job_exec(cmd, term_bufnr, choice)
   end)
 end
 
@@ -131,7 +137,7 @@ local function set_cmd_and_keymaps(term_bufnr, pprof_dir)
     select_pprof(term_bufnr, pprof_dir)
   end,
   {
-    buffer=term_bufnr,
+    buffer = term_bufnr,
     silent = true,
     desc = 'Fn 6: go_pprof: Go tool pprof/trace',
   })
@@ -162,7 +168,7 @@ function M.on_exit(opts, pprof_dir)
     autocmd_shutdown_all_jobs(bufnr)
 
     --- run `go tool pprof/trace ...` in background
-    job_exec(cmd, bufnr)
+    job_exec(cmd, bufnr, opts.flag)
   end
 end
 
