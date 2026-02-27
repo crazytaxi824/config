@@ -40,6 +40,7 @@ local go_pprof = require("utils.go.deps.go_pprof")
 local go_cover = require("utils.go.deps.go_cover")
 local utils = require("utils.go.deps.utils")
 
+
 local M = {}
 
 --- NOTE: 必须是绝对路径.
@@ -79,7 +80,7 @@ local flag_desc = {
 local test_args = {
   --- go.test 可执行文件生成位置. NOTE: 必须指定位置, 否则会生成在当前文件夹下.
   --- '-o' 是 `$ go help build` 的 flag.
-  '-o', pprof_dir .. 'go.test',
+  '-o', vim.fs.joinpath(pprof_dir, 'go.test'),
 
   --- 以下所有 profile 文件生成的路径都在该路径下, 除非指定绝对路径.
   --- eg: '-cpuprofile a/b/c.out'  文件会生成在 pprof_dir/a/b/c.out
