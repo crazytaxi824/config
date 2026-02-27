@@ -74,7 +74,8 @@ local flag_desc = {
   fuzz_input = { desc = 'Input fuzztime: 15s|20m|1h20m30s (duration) | 1000x (times)' }
 }
 
-local pprof_flags = {
+--- `$ go help testflag`
+local test_args = {
   --- go.test 可执行文件生成位置. NOTE: 必须指定位置, 否则会生成在当前文件夹下.
   --- '-o' 是 `$ go help build` 的 flag.
   '-o', pprof_dir .. 'go.test',
@@ -126,7 +127,7 @@ function M.my_term_opts(opts)
   if vim.tbl_contains(pprof_choices, opts.flag) then
     return {
       cwd = opts.go_list.Root,
-      cmd = vim.iter({go_test, pprof_flags, mode_flags(opts)}):flatten():totable(),
+      cmd = vim.iter({go_test, test_args, mode_flags(opts)}):flatten():totable(),
       on_exit = go_pprof.on_exit(opts, pprof_dir),
     }
   elseif opts.flag == 'cover' then
@@ -199,10 +200,10 @@ end
 function M.get_testflag_desc(flag)
   local f = flag_desc[flag]
   if not f then
-    return '[flag: "' .. flag .. '" is NOT in "testflags.lua" table]'
+    return '[flag: "' .. flag .. '" is NOT in defined]'
   end
   if not f.desc then
-    return '[flag: "' .. flag .. '.desc" is MISSING from "testflags.lua" table]'
+    return '[flag: "' .. flag .. '.desc" is MISSING]'
   end
 
   return f.desc
