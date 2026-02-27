@@ -5,7 +5,8 @@ if not dap_status_ok then
 end
 
 --- cache golang vscode extension filepath
---- @type string|nil filepath
+---
+--- @type string|nil
 local cache_vscode_debug_path
 
 --- NOTE: Debug adapters & configurations settings
@@ -15,20 +16,17 @@ local cache_vscode_debug_path
 ---
 --- @return string[] filepath
 local function find_vscode_extension()
-  local vscode_debug_path = vim.fs.find(function (name, path)
+  return vim.fs.find(function (name, path)
     return name == 'debugAdapter.js' and path:match('~/%.vscode/extensions/golang.*/dist')
   end, {
     path = "~/.vscode/extensions",
     limit = math.huge, -- NOTE: no limit
     type = "file",
   })
-
-  return vscode_debug_path
 end
 
 dap.adapters.go = function(callback, config)
   if not cache_vscode_debug_path then
-    print("ok")
     local vscode_debug_path = find_vscode_extension()
     if #vscode_debug_path < 1 then
       Notify("vscode extension 'golang' is missing")
