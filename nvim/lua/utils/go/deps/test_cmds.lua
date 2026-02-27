@@ -38,6 +38,7 @@
 
 local go_pprof = require("utils.go.deps.go_pprof")
 local go_cover = require("utils.go.deps.go_cover")
+local utils = require("utils.go.deps.utils")
 
 local M = {}
 
@@ -96,26 +97,6 @@ local test_args = {
 --- 可选的 pprof flags
 local pprof_choices = {'cpu', 'mem', 'mutex', 'block', 'trace'}
 
---- 根据 flags 返回 {cmd}
----
---- @param opts GoTestOpts
---- @return string[] cmd
-local function mode_flags(opts)
-  local scope = opts.go_list.ImportPath
-  if opts.project then
-    scope = './...'  -- NOTE: './...' 意思是整个项目.
-  end
-
-  if opts.mode == 'run' then
-    return {'-run', opts.testfn_name, scope}
-  elseif opts.mode == 'bench' then
-    return {'-run', '^$', '-bench', opts.testfn_name, scope}
-  elseif opts.mode == 'fuzz' then
-    return {'-run', '^$', '-fuzz', opts.testfn_name, scope}
-  else
-    error("mode can only be 'run' | 'bench' | 'fuzz'")
-  end
-end
 
 --- 根据 go test opts 生成 my_term opts
 ---
@@ -129,13 +110,13 @@ function M.my_term_opts(opts)
   if vim.tbl_contains(pprof_choices, opts.flag) then
     return {
       cwd = opts.go_list.Root,
-      cmd = vim.iter({go_test, test_args, mode_flags(opts)}):flatten():totable(),
+      cmd = vim.iter({go_test, test_args, utils.mode_flags(opts)}):flatten():totable(),
       on_exit = go_pprof.on_exit(opts, pprof_dir),
     }
   elseif opts.flag == 'cover' then
     return {
       cwd = opts.go_list.Root,
-      cmd = vim.iter({go_test, '-cover', mode_flags(opts)}):flatten():totable(),
+      cmd = vim.iter({go_test, '-cover', utils.mode_flags(opts)}):flatten():totable(),
     }
   elseif opts.flag == 'coverprofile' then
     --- NOTE: 使用 '-coverprofile' 生成的 'cover.out' 文件必须在 go workspace 中, 否则无法进行分析.
@@ -150,29 +131,29 @@ function M.my_term_opts(opts)
 
     return {
       cwd = opts.go_list.Root,
-      cmd = vim.iter({go_test, '-coverprofile', cover_out, mode_flags(opts)}):flatten():totable(),
+      cmd = vim.iter({go_test, '-coverprofile', cover_out, utils.mode_flags(opts)}):flatten():totable(),
       before_run = go_cover.before_run(coverage_dir),
       on_exit = go_cover.on_exit(cover_out, cover_html),
     }
   elseif opts.flag == 'fuzz30s' then
     return {
       cwd = opts.go_list.Root,
-      cmd = vim.iter({go_test, '-fuzztime', '30s', mode_flags(opts)}):flatten():totable(),
+      cmd = vim.iter({go_test, '-fuzztime', '30s', utils.mode_flags(opts)}):flatten():totable(),
     }
   elseif opts.flag == 'fuzz60s' then
     return {
       cwd = opts.go_list.Root,
-      cmd = vim.iter({go_test, '-fuzztime', '60s', mode_flags(opts)}):flatten():totable(),
+      cmd = vim.iter({go_test, '-fuzztime', '60s', utils.mode_flags(opts)}):flatten():totable(),
     }
   elseif opts.flag == 'fuzz5m' then
     return {
       cwd = opts.go_list.Root,
-      cmd = vim.iter({go_test, '-fuzztime', '5m', mode_flags(opts)}):flatten():totable(),
+      cmd = vim.iter({go_test, '-fuzztime', '5m', utils.mode_flags(opts)}):flatten():totable(),
     }
   elseif opts.flag == 'fuzz10m' then
     return {
       cwd = opts.go_list.Root,
-      cmd = vim.iter({go_test, '-fuzztime', '10m', mode_flags(opts)}):flatten():totable(),
+      cmd = vim.iter({go_test, '-fuzztime', '10m', utils.mode_flags(opts)}):flatten():totable(),
     }
   elseif opts.flag == 'fuzz_input' then
     local fuzz_time
@@ -184,13 +165,13 @@ function M.my_term_opts(opts)
 
     return {
       cwd = opts.go_list.Root,
-      cmd = vim.iter({go_test, '-fuzztime', fuzz_time, mode_flags(opts)}):flatten():totable(),
+      cmd = vim.iter({go_test, '-fuzztime', fuzz_time, utils.mode_flags(opts)}):flatten():totable(),
     }
   else
     --- flag='none'
     return {
       cwd = opts.go_list.Root,
-      cmd = vim.iter({go_test, mode_flags(opts)}):flatten():totable(),
+      cmd = vim.iter({go_test, utils.mode_flags(opts)}):flatten():totable(),
     }
   end
 end

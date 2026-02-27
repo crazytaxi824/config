@@ -53,4 +53,25 @@ function M.get_testfn_name_regexp(mode)
   end
 end
 
+--- 根据 flags 返回 {cmd} args
+---
+--- @param opts GoTestOpts
+--- @return string[] cmd_args
+function M.mode_flags(opts)
+  local scope = opts.go_list.ImportPath
+  if opts.project then
+    scope = './...'  -- NOTE: './...' 意思是整个项目.
+  end
+
+  if opts.mode == 'run' then
+    return {'-run', opts.testfn_name, scope}
+  elseif opts.mode == 'bench' then
+    return {'-run', '^$', '-bench', opts.testfn_name, scope}
+  elseif opts.mode == 'fuzz' then
+    return {'-run', '^$', '-fuzz', opts.testfn_name, scope}
+  else
+    error("mode can only be 'run' | 'bench' | 'fuzz'")
+  end
+end
+
 return M
