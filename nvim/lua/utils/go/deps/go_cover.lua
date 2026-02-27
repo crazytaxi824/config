@@ -1,5 +1,6 @@
 --- `go test -cover -coverprofile cover.out ...`
 --- `go tool cover -html=cover.out -o cover.html && open cover.html`  生成 cover.html 再打开 html 文件
+--- NOTE: cover 可以用于 single_fn, package, project
 
 local M = {}
 
@@ -38,4 +39,3 @@ function M.on_exit(cover_out, cover_html)
 end
 
 return M
-

@@ -4,6 +4,8 @@
 -- go tool pprof -http=localhost: mem.out
 -- go tool pprof -http=localhost: mutex.out
 -- go tool trace -http=localhost: trace.out  -- VVI: 注意这里是 'trace' 不是 'pprof'
+-- NOTE: pprof 只能用于 single_fn, package
+-- NOTE: fuzz  只能用于 single_fn
 
 local M ={}
 
