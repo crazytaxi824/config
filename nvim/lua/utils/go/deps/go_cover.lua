@@ -1,5 +1,11 @@
---- `go test -cover -coverprofile cover.out ...`
+--- coverage 可以用于 run 和 bench, 但是用于 bench 意义不大. 可直接用于 fuzz.out 文件.
+--- `go test -cover -run "..." ImportPath`  屏幕上打印 coverage
+---
+--- `go test -coverprofile cover.out -run "..." ImportPath`  生成 cover.out 文件
 --- `go tool cover -html=cover.out -o cover.html && open cover.html`  生成 cover.html 再打开 html 文件
+---
+--- `go too cover -html=fuzz.out`  可以直接打开 fuzz.out 文件.
+---
 --- NOTE: cover 可以用于 single_fn, package, project
 
 local M = {}
