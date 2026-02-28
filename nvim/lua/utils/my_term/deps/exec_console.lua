@@ -144,6 +144,9 @@ function M.console_exec(term_opts, term_bufnr, term_win_id)
     cwd = term_opts.cwd,
     env = term_opts.env,
 
+    --- @param job_id integer
+    --- @param data string[]  output
+    --- @param event string  'stdout'
     on_stdout = function(job_id, data, event)  -- NOTE: for fmt.Println()
       --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
       if not vim.api.nvim_buf_is_valid(term_bufnr) then
@@ -162,6 +165,9 @@ function M.console_exec(term_opts, term_bufnr, term_win_id)
       end
     end,
 
+    --- @param job_id integer
+    --- @param data string[]  err_msg
+    --- @param event string  'stderr'
     on_stderr = function(job_id, data, event)  -- NOTE: for log.Println()
       --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
       if not vim.api.nvim_buf_is_valid(term_bufnr) then
@@ -180,6 +186,9 @@ function M.console_exec(term_opts, term_bufnr, term_win_id)
       end
     end,
 
+    --- @param job_id integer
+    --- @param exit_code integer
+    --- @param event string  'exit'
     on_exit = function(job_id, exit_code, event)
       --- callback
       if term_opts.on_exit then
