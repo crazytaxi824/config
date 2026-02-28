@@ -71,7 +71,9 @@ function M.wipeout(term_id)
   --- wipeout term buffer
   --- require('utils.my_term.deps.autocmd_callback').autocmd_jobstop()
   --- buffer 被 wipeout 的时候自动 jobstop(), 同时 remove terminal object from cache.
-  vim.api.nvim_buf_delete(tp.bufnr, {force=true})
+  if vim.api.nvim_buf_is_valid(tp.bufnr) then
+    vim.api.nvim_buf_delete(tp.bufnr, {force=true})
+  end
 
   --- remove from cache
   g.delete_TermPost(term_id)

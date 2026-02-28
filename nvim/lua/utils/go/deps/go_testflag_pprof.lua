@@ -89,7 +89,9 @@ local function job_exec(cmd, term_bufnr, flag)
       --- @param job_id integer
       --- @param exit_code integer
       on_exit = function(job_id, exit_code)
-        vim.api.nvim_buf_delete(scratch_bufnr, {force=true})
+        if vim.api.nvim_buf_is_valid(scratch_bufnr) then
+          vim.api.nvim_buf_delete(scratch_bufnr, {force=true})
+        end
       end,
     })
   end)
