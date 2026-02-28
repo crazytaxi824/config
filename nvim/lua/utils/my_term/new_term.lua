@@ -8,11 +8,14 @@ local M = {}
 ---
 --- @param id integer
 --- @param opts MyTermOpts
+--- @param force? 'force'
 --- @return MyTerm
-function M._new(id, opts)
-  --- NOTE: terminal 已经存在, 无法使用相同 id 创建新的 terminal.
-  if g.get_TermPost(id) then
-    error('terminal id='.. id .. ' is already exist')
+function M._new(id, opts, force)
+  if not force then
+    --- NOTE: terminal 已经存在, 无法使用相同 id 创建新的 terminal.
+    if g.get_TermPost(id) then
+      error('terminal id='.. id .. ' is already exist')
+    end
   end
 
   --- terminal object

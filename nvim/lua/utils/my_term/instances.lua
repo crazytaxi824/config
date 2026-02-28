@@ -39,16 +39,7 @@ local M = {}
 ---
 --- @return MyTerm
 M.console = function()
-  local tp = g.get_TermPost(console_id)
-  if tp then
-    --- reset console terminal callbacks
-    for key, value in pairs(default_opts) do
-      tp[key] = value
-    end
-    return tp
-  end
-
-  return new_mt._new(console_id, default_opts)
+  return new_mt._new(console_id, default_opts, 'force')
 end
 
 return M
