@@ -171,13 +171,17 @@ local function gen_term_opts(dir)
 end
 
 
---- @type table<string, GoTestFlag>
+--- @type GoTestFlagDict
 local M = {
-  cpu   = { desc = 'CPU profile', term_opts = gen_term_opts(pprof_dir)},
-  mem   = { desc = 'Memory profile', term_opts = gen_term_opts(pprof_dir) },
-  mutex = { desc = 'Mutex profile', term_opts = gen_term_opts(pprof_dir) },
-  block = { desc = 'Block profile', term_opts = gen_term_opts(pprof_dir) },
-  trace = { desc = 'Trace', term_opts = gen_term_opts(pprof_dir) },
+  list = { "cpu", "mem", "mutex", "block", "trace" },
+
+  flags = {
+    cpu   = { desc = 'CPU profile', term_opts = gen_term_opts(pprof_dir)},
+    mem   = { desc = 'Memory profile', term_opts = gen_term_opts(pprof_dir) },
+    mutex = { desc = 'Mutex profile', term_opts = gen_term_opts(pprof_dir) },
+    block = { desc = 'Block profile', term_opts = gen_term_opts(pprof_dir) },
+    trace = { desc = 'Trace', term_opts = gen_term_opts(pprof_dir) },
+  }
 }
 
 return M

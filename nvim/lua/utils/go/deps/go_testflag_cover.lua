@@ -49,41 +49,45 @@ local function on_exit(cover_out, cover_html)
   end
 end
 
---- @type table<string, GoTestFlag>
+--- @type GoTestFlagDict
 local M = {
-  cover = {
-    desc = 'Coverage print on screen',
+  list = {"cover", "coverprofile"},
 
-    term_opts = function(opts)
-      return {
-        cwd = opts.go_list.Root,
-        cmd = vim.iter({go_test, '-cover', utils.mode_flags(opts)}):flatten():totable(),
-      }
-    end
-  },
+  flags = {
+    cover = {
+      desc = 'Coverage print on screen',
 
-  coverprofile = {
-    desc = 'Coverage profile (detail)',
+      term_opts = function(opts)
+        return {
+          cwd = opts.go_list.Root,
+          cmd = vim.iter({go_test, '-cover', utils.mode_flags(opts)}):flatten():totable(),
+        }
+      end
+    },
 
-    term_opts = function(opts)
-      --- NOTE: 使用 '-coverprofile' 生成的 'cover.out' 文件必须在 go workspace 中, 否则无法进行分析.
-      --- '-coverprofile /xxx/cover.out' 最好是是绝对路径, 避免和 '-outputdir' 冲突.
-      local coverage_dir = opts.go_list.Root .. '/coverage/'
+    coverprofile = {
+      desc = 'Coverage profile (detail)',
 
-      --- NOTE: 如果是 `go test -coverprofile ./...` , go_list 中需要传递 project 属性, 用于指定文件名.
-      --- 后半部分是将 filepath 中的 / 替换成 %.
-      local cover_filename = opts.project or string.gsub(opts.go_list.ImportPath, '/', '%%')
-      local cover_out = coverage_dir .. cover_filename .. '_cover.out'
-      local cover_html = coverage_dir .. cover_filename .. '_cover.html'
+      term_opts = function(opts)
+        --- NOTE: 使用 '-coverprofile' 生成的 'cover.out' 文件必须在 go workspace 中, 否则无法进行分析.
+        --- '-coverprofile /xxx/cover.out' 最好是是绝对路径, 避免和 '-outputdir' 冲突.
+        local coverage_dir = opts.go_list.Root .. '/coverage/'
 
-      return {
-        cwd = opts.go_list.Root,
-        cmd = vim.iter({go_test, '-coverprofile', cover_out, utils.mode_flags(opts)}):flatten():totable(),
-        before_run = before_run(coverage_dir),
-        on_exit = on_exit(cover_out, cover_html),
-      }
-    end
-  },
+        --- NOTE: 如果是 `go test -coverprofile ./...` , go_list 中需要传递 project 属性, 用于指定文件名.
+        --- 后半部分是将 filepath 中的 / 替换成 %.
+        local cover_filename = opts.project or string.gsub(opts.go_list.ImportPath, '/', '%%')
+        local cover_out = coverage_dir .. cover_filename .. '_cover.out'
+        local cover_html = coverage_dir .. cover_filename .. '_cover.html'
+
+        return {
+          cwd = opts.go_list.Root,
+          cmd = vim.iter({go_test, '-coverprofile', cover_out, utils.mode_flags(opts)}):flatten():totable(),
+          before_run = before_run(coverage_dir),
+          on_exit = on_exit(cover_out, cover_html),
+        }
+      end
+    },
+  }
 }
 
 return M
