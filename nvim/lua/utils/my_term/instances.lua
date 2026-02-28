@@ -1,5 +1,5 @@
 local g = require('utils.my_term.deps.global')
-local mt = require('utils.my_term')
+local new_mt = require('utils.my_term.new_term')
 local fp = require('utils.filepath')
 
 local console_id = 1001
@@ -8,7 +8,7 @@ local console_id = 1001
 local M = {}
 
 --- execute terminals: run cmd ---------------------------------------------------------------------
-M.console = mt.new({
+M.console = new_mt._new({
   id = console_id,
   auto_scroll = true,
   console_output = true,  -- 这里使用 console_exec()
