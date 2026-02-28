@@ -22,7 +22,7 @@ end
 
 --- @type GoTestFlagDict
 local M = {
-  list = {},
+  list = { 'fuzz30s', 'fuzz60s', 'fuzz5m', 'fuzz10m', 'fuzz1000x', 'fuzz_input' },
 
   flags = {
     fuzz30s = { desc = 'fuzztime 30s', term_opts = gen_term_opts('30s') },
