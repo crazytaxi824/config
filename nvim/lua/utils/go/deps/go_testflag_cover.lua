@@ -49,20 +49,23 @@ local function on_exit(cover_out, cover_html)
   end
 end
 
---- @type GoTestFlag
+--- @type table<string, GoTestFlag>
 local M = {
-  flag_desc = {
-    cover = { desc = 'Coverage print on screen' },
-    coverprofile = { desc = 'Coverage profile (detail)' },
-  },
+  cover = {
+    desc = 'Coverage print on screen',
 
-  term_opts = function(self, opts)
-    if opts.flag == 'cover' then
+    term_opts = function(opts)
       return {
         cwd = opts.go_list.Root,
         cmd = vim.iter({go_test, '-cover', utils.mode_flags(opts)}):flatten():totable(),
       }
-    elseif opts.flag == 'coverprofile' then
+    end
+  },
+
+  coverprofile = {
+    desc = 'Coverage profile (detail)',
+
+    term_opts = function(opts)
       --- NOTE: 使用 '-coverprofile' 生成的 'cover.out' 文件必须在 go workspace 中, 否则无法进行分析.
       --- '-coverprofile /xxx/cover.out' 最好是是绝对路径, 避免和 '-outputdir' 冲突.
       local coverage_dir = opts.go_list.Root .. '/coverage/'
@@ -80,9 +83,7 @@ local M = {
         on_exit = on_exit(cover_out, cover_html),
       }
     end
-
-    error("flag is not defined")
-  end,
+  },
 }
 
 return M
