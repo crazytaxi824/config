@@ -51,17 +51,17 @@ function M.open_shell_term()
     return
   end
 
-  local t = M.get_term_by_id(vim.v.count1)
-  if t then
+  local tp = g.get_TermPost(vim.v.count1)
+  if tp then
     --- open & enter window
-    if not t_act.open_win(t.id) then
+    if not t_act.open_win(tp.id) then
       error('cached my_term has No bufnr')
     end
     return
   end
 
   --- terminal 没有被缓存则 M.new()
-  t = M.new({
+  local t = M.new({
     id = vim.v.count1,
     cmd = vim.go.shell,  -- `:help 'shell'`, 相当于 os.getenv('SHELL'), vim.env.SHELL
     after_run = function(_, term_bufnr)
