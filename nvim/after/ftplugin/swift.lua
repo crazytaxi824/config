@@ -2,21 +2,21 @@ local function swift_run_file()
   --- 先相对 HOME, 再相对 cwd. (absolut filepath)
   local file = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ':~:.')
 
-  local t = require('utils.my_term.instances').console
+  local t = require('utils.my_term').console()
   t.cmd = "swift -- " .. file
   t:stop()
   t:run()
 end
 
 local function swift_run_proj()
-  local t = require('utils.my_term.instances').console
+  local t = require('utils.my_term').console()
   t.cmd = "swift run"
   t:stop()
   t:run()
 end
 
 local function swift_test_all()
-  local t = require('utils.my_term.instances').console
+  local t = require('utils.my_term').console()
   t.cmd = "swift test"
   t:stop()
   t:run()
@@ -44,7 +44,7 @@ local function swift_test_pkg()
     return
   end
 
-  local t = require('utils.my_term.instances').console
+  local t = require('utils.my_term').console()
   t.cmd = "swift test --filter " .. test_class
   t:stop()
   t:run()

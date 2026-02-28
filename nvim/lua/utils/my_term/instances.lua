@@ -19,11 +19,6 @@ local default_opts = {
 }
 
 
-local M = {}
-
---- execute terminals: run cmd ---------------------------------------------------------------------
-M.console = new_mt._new(default_opts)
-
 --- keymaps ----------------------------------------------------------------------------------------
 local opt = { silent = true }
 local my_term_keymaps = {
@@ -35,5 +30,25 @@ local my_term_keymaps = {
   end, opt, "Fn 5: code: Re-Run Last cmd"},
 }
 require('utils.keymaps').set(my_term_keymaps)
+
+
+--- execute terminals: run cmd
+local M = {}
+
+--- reset console terminal callbacks
+---
+--- @return MyTerm
+M.console = function()
+  local tp = g.get_TermPost(console_id)
+  if tp then
+    --- reset console terminal callbacks
+    for key, value in pairs(default_opts) do
+      tp[key] = value
+    end
+    return tp
+  end
+
+  return new_mt._new(default_opts)
+end
 
 return M
