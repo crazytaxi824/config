@@ -10,10 +10,10 @@ local t_key  = require('utils.my_term.term_keymaps')
 
 --- Create new terminal buffer and window, 给 my_term.bufnr 赋值.
 ---
---- @param term_opts MyTermOpts
+--- @param term MyTerm
 --- @return integer bufnr
 --- @return integer win_id
-local function create_my_term_win(term_opts)
+local function create_my_term_win(term)
   --- VVI: 以下执行顺序很重要!
   --- `jobstart(cmd, {opts})` 事件触发顺序和 `:edit term://cmd` 有所不同.
   --- `:edit term://cmd` 中: 触发顺序 TermOpen -> BufEnter -> BufWinEnter.
@@ -25,21 +25,21 @@ local function create_my_term_win(term_opts)
   --- window 然后 win_gotoid(win_id)
 
   --- 获取是否已经 run() 并用于 term_bufnr
-  local old_term_bufnr = g.get_bufnr(term_opts.id)
+  local old_term_bufnr = g.get_bufnr(term.id)
 
   --- 每次运行 jobstart() 之前, 先创建一个新的 scratch buffer 给 terminal.
   local term_bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
 
   vim.bo[term_bufnr].filetype = "my_term"  --- set filetype
-  -- vim.b[term_bufnr]["my_term"] = term_opts.id  --- 设置 bufvar: {my_term = term_id}
+  -- vim.b[term_bufnr]["my_term"] = term.id  --- 设置 bufvar: {my_term = term_id}
 
   --- autocmd 放在这里运行主要是有两个限制条件:
   --- 1. 在获取到 terminal bufnr 之后运行, 为了在 autocmd 中使用 bufnr 作为触发条件.
   --- 2. 在 term window 打开并加载 term bufnr 之前运行, 为了触发 BufWinEnter event.
-  au_cb.autocmd_callback(term_opts, term_bufnr)
+  au_cb.autocmd_callback(term, term_bufnr)
 
   --- 快捷键设置: 在获取到 term.bufnr 和 term.id 之后运行.
-  t_key.set_buf_keymaps(term_opts, term_bufnr)
+  t_key.set_buf_keymaps(term, term_bufnr)
 
   --- 进入一个选定的 term window 加载现有 term buffer, 同时 wipeout old_term_bufnr.
   local term_win_id = t_win.enter_term_win(term_bufnr, old_term_bufnr)
@@ -54,21 +54,21 @@ end
 
 --- jobstart(cmd, opts), 给 my_term.job_id 赋值.
 ---
---- @param term_opts MyTermOpts
+--- @param term MyTerm
 --- @param term_bufnr integer
 --- @param term_win_id integer
 --- @return integer job_id
-local function my_term_exec(term_opts, term_bufnr, term_win_id)
+local function my_term_exec(term, term_bufnr, term_win_id)
   --- VVI: 必须在 bufnr 被 window 显示之后运行. 避免 nvim_buf_call() 生成一个临时 autocmd window.
   local job_id
-  if term_opts.console_output then
-    job_id = console.console_exec(term_opts, term_bufnr, term_win_id)
+  if term.console_output then
+    job_id = console.console_exec(term, term_bufnr, term_win_id)
   else
-    job_id = terminal.terminal_exec(term_opts, term_bufnr, term_win_id)
+    job_id = terminal.terminal_exec(term, term_bufnr, term_win_id)
   end
 
   --- buffer 被 wipeout 的时候自动 jobstop()
-  au_cb.autocmd_jobstop(term_opts, term_bufnr, job_id)
+  au_cb.autocmd_jobstop(term, term_bufnr, job_id)
 
   --- VVI: 手动触发 BufEnter & BufWinEnter event
   --- doautocmd "BufEnter & BufWinEnter term://"
@@ -83,7 +83,14 @@ end
 --- MyTerm 继承 MyTermOpts
 ---
 --- @class MyTerm: MyTermOpts
+---
+--- VVI: 保证每个 id 只和一个 bufnr 对应. id 一旦设置应该无法改变.
+--- @field id integer @readonly
+---
+--- jobstart(cmd, { env, cwd, on_stdout, on_stderr, on_exit, ... })
 --- @field run fun(self: MyTerm) @readonly
+---
+--- jobstop(job_id)
 --- @field stop fun(self: MyTerm) @readonly
 local M = {}
 

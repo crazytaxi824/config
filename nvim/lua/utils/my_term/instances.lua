@@ -48,7 +48,7 @@ M.console = function()
     return tp
   end
 
-  return new_mt._new(default_opts)
+  return new_mt._new(console_id, default_opts)
 end
 
 return M

@@ -1,4 +1,3 @@
-local g = require('utils.my_term.deps.global')
 local auto_scroll = require('utils.my_term.deps.auto_scroll')
 
 local M = {}
@@ -108,21 +107,21 @@ end
 --- 后台执行 jobstart(cmd), 将 output 手动写入 buffer. (buftype = 'nofile')
 --- 主要区别是 `:help jobstart-options` { term = nil|false } 在后台运行, 结果需要手动输出.
 ---
---- @param term_opts MyTermOpts
+--- @param term MyTerm
 --- @param term_bufnr integer
 --- @param term_win_id integer
 --- @return integer job_id
-function M.console_exec(term_opts, term_bufnr, term_win_id)
+function M.console_exec(term, term_bufnr, term_win_id)
   if vim.api.nvim_win_get_buf(term_win_id) ~= term_bufnr then
     error("MyTerm win_id and bufnr do not match")
   end
 
-  if not term_opts.cmd then
+  if not term.cmd then
     error("MyTerm.cmd is missing")
   end
 
   --- set bufname
-  vim.api.nvim_buf_set_name(term_bufnr, "term://#my_term#console#" .. term_opts.id)
+  vim.api.nvim_buf_set_name(term_bufnr, "term://#my_term#console#" .. term.id)
 
   vim.api.nvim_buf_call(term_bufnr, function()
     vim.api.nvim_set_option_value('wrap', true, { scope='local', win=term_win_id })
@@ -131,7 +130,7 @@ function M.console_exec(term_opts, term_bufnr, term_win_id)
   end)
 
   --- print cmd
-  local print_cmd = term_opts.cmd
+  local print_cmd = term.cmd
   if type(print_cmd) == "table" then
     print_cmd = table.concat(print_cmd, ' ')
   end
@@ -140,9 +139,9 @@ function M.console_exec(term_opts, term_bufnr, term_win_id)
   vim.hl.range(term_bufnr, ns, "my_output_sys", {0, 0}, {0, -1}) -- highlight cmd
   vim.bo[term_bufnr].modifiable = false
 
-  local job_id = vim.fn.jobstart(term_opts.cmd, {
-    cwd = term_opts.cwd,
-    env = term_opts.env,
+  local job_id = vim.fn.jobstart(term.cmd, {
+    cwd = term.cwd,
+    env = term.env,
 
     --- @param job_id integer
     --- @param data string[]  output
@@ -157,11 +156,11 @@ function M.console_exec(term_opts, term_bufnr, term_win_id)
       set_buf_line_output(term_bufnr, data, "my_output_stdout")
 
       --- auto_scroll option
-      auto_scroll.buf_scroll_bottom(term_opts, term_bufnr)
+      auto_scroll.buf_scroll_bottom(term, term_bufnr)
 
       --- callback
-      if term_opts.on_stdout then
-        term_opts.on_stdout(term_opts, term_bufnr, job_id, data)
+      if term.on_stdout then
+        term.on_stdout(term, term_bufnr, job_id, data)
       end
     end,
 
@@ -178,11 +177,11 @@ function M.console_exec(term_opts, term_bufnr, term_win_id)
       set_buf_line_output(term_bufnr, data, "my_output_stderr")
 
       --- auto_scroll option
-      auto_scroll.buf_scroll_bottom(term_opts, term_bufnr)
+      auto_scroll.buf_scroll_bottom(term, term_bufnr)
 
       --- callback
-      if term_opts.on_stderr then
-        term_opts.on_stderr(term_opts, term_bufnr, job_id, data)
+      if term.on_stderr then
+        term.on_stderr(term, term_bufnr, job_id, data)
       end
     end,
 
@@ -191,8 +190,8 @@ function M.console_exec(term_opts, term_bufnr, term_win_id)
     --- @param event string  'exit'
     on_exit = function(job_id, exit_code, event)
       --- callback
-      if term_opts.on_exit then
-        term_opts.on_exit(term_opts, term_bufnr, job_id, exit_code)
+      if term.on_exit then
+        term.on_exit(term, term_bufnr, job_id, exit_code)
       end
 
       --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
@@ -204,7 +203,7 @@ function M.console_exec(term_opts, term_bufnr, term_win_id)
       set_buf_line_exit(term_bufnr, exit_code)
 
       --- auto_scroll option
-      auto_scroll.buf_scroll_bottom(term_opts, term_bufnr)
+      auto_scroll.buf_scroll_bottom(term, term_bufnr)
     end,
   })
 

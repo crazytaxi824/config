@@ -4,9 +4,9 @@ local M = {}
 
 --- autocmd 根据 events 执行 on_open(), on_close()
 ---
---- @param term_opts MyTermOpts
+--- @param term MyTerm
 --- @param term_bufnr integer
-function M.autocmd_callback(term_opts, term_bufnr)
+function M.autocmd_callback(term, term_bufnr)
   --- 关闭 terminal window 之后再打开时触发 BufWinEnter, 但不会触发 TermOpen.
   --- buffer 离开所有 window 才会触发 BufWinLeave.
   local g_id = vim.api.nvim_create_augroup('my_term_bufnr_' .. term_bufnr, {clear=true})
@@ -15,13 +15,13 @@ function M.autocmd_callback(term_opts, term_bufnr)
     buffer = term_bufnr,
     callback = function(params)
       --- callback
-      if params.event == "BufWinEnter" and term_opts.on_open then
-        term_opts.on_open(term_opts, term_bufnr)
+      if params.event == "BufWinEnter" and term.on_open then
+        term.on_open(term, term_bufnr)
         return
       end
       --- callback
-      if params.event == "BufWinLeave" and term_opts.on_close then
-        term_opts.on_close(term_opts, term_bufnr)
+      if params.event == "BufWinLeave" and term.on_close then
+        term.on_close(term, term_bufnr)
       end
     end,
     desc = "my_term: on_open() & on_close() callback",
@@ -55,10 +55,10 @@ end
 
 --- buffer 被 wipeout 的时候自动 jobstop(), 同时 remove terminal object from my_term cache.
 ---
---- @param term_opts MyTermOpts
+--- @param term MyTerm
 --- @param term_bufnr integer
 --- @param job_id integer
-function M.autocmd_jobstop(term_opts, term_bufnr, job_id)
+function M.autocmd_jobstop(term, term_bufnr, job_id)
   local g_id = vim.api.nvim_create_augroup('my_term_job_' .. job_id, {clear=true})
   vim.api.nvim_create_autocmd("BufWipeout", {
     group = g_id,
@@ -68,7 +68,7 @@ function M.autocmd_jobstop(term_opts, term_bufnr, job_id)
       vim.fn.jobstop(job_id)
 
       --- remove from cache
-      g.delete_TermPost(term_opts.id)
+      g.delete_TermPost(term.id)
 
       --- delete augroup
       vim.api.nvim_del_augroup_by_id(g_id)

@@ -1,14 +1,11 @@
---- @alias MyTermOptsCB fun(term_opts: MyTermOpts)
---- @alias MyTermOptsCBWithBufnr fun(term_opts: MyTermOpts, bufnr: integer)
---- @alias MyTermOptsOnOutput fun(term_opts: MyTermOpts, bufnr: integer, job_id: integer, data: string[])
---- @alias MyTermOptsOnExit fun(term_opts: MyTermOpts, bufnr: integer, job_id: integer, exit_code: integer)
+--- @alias MyTermOptsCB fun(term: MyTerm)
+--- @alias MyTermOptsCBWithBufnr fun(term: MyTerm, bufnr: integer)
+--- @alias MyTermOptsOnOutput fun(term: MyTerm, bufnr: integer, job_id: integer, data: string[])
+--- @alias MyTermOptsOnExit fun(term: MyTerm, bufnr: integer, job_id: integer, exit_code: integer)
 
 
 --- MyTermOpts
 --- @class MyTermOpts
----
---- VVI: 保证每个 id 只和一个 bufnr 对应. id 一旦设置应该无法改变.
---- @field id integer @readonly
 ---
 --- `:help jobstart()` cmd
 --- @field cmd? string|string[]
