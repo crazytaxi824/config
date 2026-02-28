@@ -389,7 +389,7 @@ vim.api.nvim_set_hl(0, 'NvimTreeGitIgnoredIcon', {ctermfg=Colors.g244.c, fg=Colo
 --     local fp = vim.fs.abspath(vim.api.nvim_buf_get_name(bufnr))  --- get absolute_path
 --     if fp == data.fname then
 --       vim.print("delete ", bufnr)
---       vim.api.nvim_buf_delete(bufnr, {force=true})
+--       vim.api.nvim_buf_delete(bufnr, {force=true})  -- :bwipeout
 --     end
 --   end
 -- end)

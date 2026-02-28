@@ -55,9 +55,9 @@ function M.open_shell_term()
       end
     end,
     on_exit = function(_, term_bufnr)
-      --- VVI: 手动 :bw 删除 buffer 时会触发 TermClose, 导致重复 wipeout buffer 而报错.
+      --- VVI: 手动 :bwipeout 删除 buffer 时会触发 TermClose, 导致重复 wipeout buffer 而报错.
       if vim.api.nvim_buf_is_valid(term_bufnr) then
-        vim.api.nvim_buf_delete(term_bufnr, {force=true})
+        vim.api.nvim_buf_delete(term_bufnr, {force=true})  -- :bwipeout
       end
 
       --- NOTE: jobdone 的时候 cursor 在 terminal window 中则执行 stopinsert.

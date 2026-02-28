@@ -78,8 +78,8 @@ function M.enter_term_win(curr_term_bufnr, old_term_bufnr)
     win_id = M.create_term_win(curr_term_bufnr)
   end
 
-  --- NOTE: 放在最后避免 delete(old_term_bufnr) 时关闭了 old_term_wins.
-  vim.api.nvim_buf_delete(old_term_bufnr, {force=true})
+  --- NOTE: 放在最后避免 :bwipeout old_term_bufnr 时关闭了 old_term_wins.
+  vim.api.nvim_buf_delete(old_term_bufnr, {force=true})  -- :bwipeout
 
   return win_id
 end

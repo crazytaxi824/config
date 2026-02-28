@@ -5,7 +5,7 @@ local M = {}
 M.wipeout_all_terminals = function()
   for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
     if vim.bo[bufnr].buftype == 'terminal' then
-      vim.api.nvim_buf_delete(bufnr, {force=true})  -- wipeout buffer
+      vim.api.nvim_buf_delete(bufnr, {force=true})  -- :bwipeout
     end
   end
 end
