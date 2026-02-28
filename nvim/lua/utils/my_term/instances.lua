@@ -7,7 +7,7 @@ local M = {}
 M.console = mt.new({
   id = 1001,
   auto_scroll = true,
-  console_output = true,  -- 这里使用 console_exec(), ignore "jobdone" 设置.
+  console_output = true,  -- 这里使用 console_exec()
   after_run = function(_, term_bufnr)
     --- highlight filepath & jump to filepath
     if term_bufnr then
