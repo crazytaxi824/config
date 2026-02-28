@@ -5,7 +5,7 @@ local go_pprof = require("utils.go.deps.go_testflag_pprof")
 local go_cover = require("utils.go.deps.go_testflag_cover")
 
 local go_list_module = require("utils.go.deps.go_list")
-local test_cmds = require("utils.go.deps.test_cmds2")
+local test_cmds = require("utils.go.deps.test_cmds")
 local utils = require("utils.go.deps.utils")
 
 local M = {}
