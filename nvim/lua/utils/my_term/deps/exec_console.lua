@@ -10,7 +10,7 @@ local ns = vim.api.nvim_create_namespace('my_term_output')
 vim.api.nvim_set_hl(0, "my_output_sys", {ctermfg=Colors.orange.c, fg=Colors.orange.g})
 vim.api.nvim_set_hl(0, "my_output_sys_error", {
   ctermfg=Colors.black.c, fg=Colors.black.g,
-  ctermbg=Colors.orange.c, bg=Colors.orange.g,
+  ctermbg=Colors.red.c, bg=Colors.red.g,
 })
 vim.api.nvim_set_hl(0, "my_output_stdout", {ctermfg=Colors.blue.c, fg=Colors.blue.g})
 vim.api.nvim_set_hl(0, "my_output_stderr", {ctermfg=Colors.red.c, fg=Colors.red.g})
@@ -94,7 +94,7 @@ end
 local function set_buf_line_exit(bufnr, exit_code)
   local last_line_before_write = vim.api.nvim_buf_line_count(bufnr)
   vim.bo[bufnr].modifiable = true
-  vim.api.nvim_buf_set_lines(bufnr, -1, -1, true, {"", "[Process exited " .. exit_code .. "]"})
+  vim.api.nvim_buf_set_lines(bufnr, -1, -1, true, {"", "[Process exited " .. exit_code .. "]", ""})
 
   --- highlight
   if exit_code == 0 then
