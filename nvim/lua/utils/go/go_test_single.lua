@@ -1,16 +1,21 @@
 --- `go test run/bench` single test function.
 --- `go test run/bench=^TEST_Func_Name$ ImportPath`, test 单独的 package.
 
+local go_none = require("utils.go.deps.go_testflag_none")
+local go_fuzz = require("utils.go.deps.go_testflag_fuzz")
+local go_pprof = require("utils.go.deps.go_testflag_pprof")
+local go_cover = require("utils.go.deps.go_testflag_cover")
+
 local go_list_module = require("utils.go.deps.go_list")
-local test_cmds = require("utils.go.deps.test_cmds")
+local test_cmds = require("utils.go.deps.test_cmds2")
 local utils = require("utils.go.deps.utils")
 
 local M = {}
 
 --- `go test run/bench=^TEST_Func_Name$ ImportPath`
 ---
---- @param prompt? 'pprof' `go test pprof`
-function M.go_test_single_func(prompt)
+--- @param profile? 'profile' `go test pprof`
+function M.go_test_single_func(profile)
   --- 判断当前文件是否 _test.go
   if not string.match(vim.fn.bufname(), "_test%.go$") then
     Notify('not "_test.go" file', "ERROR")
@@ -23,51 +28,66 @@ function M.go_test_single_func(prompt)
     return
   end
 
-  --- 获取 go list info, `cd src/xxx && go list -json`
-  local go_list = go_list_module.go_list()
-
   --- @type GoTestOpts
   local opts = {
     testfn_name = '^'..testfn_name..'$',
     mode = mode,
     flag = 'none',
-    go_list = go_list,
+    go_list = go_list_module.go_list(),
   }
 
-  --- no prompt
-  if not prompt then
-    test_cmds.go_test(opts)
+  --- no profile
+  if not profile then
+    local myterm_opts = go_none.flags['none'].term_opts(opts)
+    test_cmds.go_test(myterm_opts)
     return
   end
 
   --- prompt exist
   if mode == 'run' or mode == 'bench' then
-    local select = {'cpu', 'mem', 'mutex', 'block', 'trace', 'cover', 'coverprofile'}
+    --- 排序
+    local select = vim.iter({go_pprof.list, go_cover.list}):flatten():totable()
+
+    --- @type table<string, GoTestFlag>
+    local test_flags = vim.tbl_deep_extend('force', go_pprof.flags, go_cover.flags)
+
     vim.ui.select(select, {
       prompt = 'choose go test flag:',
       format_item = function(item)
-        return test_cmds.get_testflag_desc(item)
+        return test_flags[item].desc
       end
     }, function(choice)
       if choice then
+        --- change GoTestOpts.flag
         opts.flag = choice
-        test_cmds.go_test(opts)
+
+        --- 运行 `go test`
+        local myterm_opts = test_flags[choice].term_opts(opts)
+        test_cmds.go_test(myterm_opts)
       end
     end)
     return
   end
 
   if mode == 'fuzz' then
-    local select = {'fuzz30s', 'fuzz60s', 'fuzz5m', 'fuzz10m', 'fuzz_input'}
+    local select = go_fuzz.list
+
+    --- @type table<string, GoTestFlag>
+    local test_flags = go_fuzz.flags
+
     vim.ui.select(select, {
       prompt = 'choose go test flag: [Fuzz test cannot use pprof & coverage flags]',
       format_item = function(item)
-        return test_cmds.get_testflag_desc(item)
+        return test_flags[item].desc
       end
     }, function(choice)
       if choice then
+        --- change GoTestOpts.flag
         opts.flag = choice
-        test_cmds.go_test(opts)
+
+        --- 运行 `go test`
+        local myterm_opts = test_flags[choice].term_opts(opts)
+        test_cmds.go_test(myterm_opts)
       end
     end)
     return

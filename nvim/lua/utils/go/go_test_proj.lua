@@ -1,8 +1,11 @@
 --- `go test run/bench ./...` whole project
 --- 在 project root 下执行 'go test ./...', 即 test 整个 Project.
 
+local go_none = require("utils.go.deps.go_testflag_none")
+local go_cover = require("utils.go.deps.go_testflag_cover")
+
 local go_list_module = require("utils.go.deps.go_list")
-local test_cmds = require("utils.go.deps.test_cmds")
+local test_cmds = require("utils.go.deps.test_cmds2")
 local utils = require("utils.go.deps.utils")
 
 local M = {}
@@ -11,12 +14,16 @@ local M = {}
 ---
 --- @param mode 'run'|'bench'
 M.go_test_proj = function(mode)
-  --- cannot use pprof flag with multiple packages
-  local select = {'none', 'cover', 'coverprofile'}
+  --- 排序
+  local select = vim.iter({go_none.list, go_cover.list}):flatten():totable()
+
+  --- @type table<string, GoTestFlag>
+  local test_flags = vim.tbl_deep_extend('force', go_none.flags, go_cover.flags)
+
   vim.ui.select(select, {
     prompt = 'choose go test flag: [go test multiple packages cannot use pprof flags]',
     format_item = function(item)
-      return test_cmds.get_testflag_desc(item)
+      return test_flags[item].desc
     end
   }, function(choice)
     if choice then
@@ -30,7 +37,8 @@ M.go_test_proj = function(mode)
       }
 
       --- 运行 `go test`
-      test_cmds.go_test(opts)
+      local myterm_opts = test_flags[choice].term_opts(opts)
+      test_cmds.go_test(myterm_opts)
     end
   end)
 end
