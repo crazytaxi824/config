@@ -39,15 +39,6 @@ local test_args = {
   '-trace', 'trace.out',
 }
 
---- description
-local flag_desc = {
-  cpu   = { desc = 'CPU profile' },
-  mem   = { desc = 'Memory profile' },
-  mutex = { desc = 'Mutex profile' },
-  block = { desc = 'Block profile' },
-  trace = { desc = 'Trace' },
-}
-
 
 --- 在指定 bufnr 中执行 jobstart(cmd), 但该 buffer 不显示在任何 window 中. (类似后台运行)
 ---
@@ -92,8 +83,9 @@ end
 --- 选择使用哪种 pprof
 ---
 --- @param term_bufnr integer
+--- @param flag_desc table
 --- @param dir string (directory 存放 pprof files)
-local function select_pprof(term_bufnr, dir)
+local function select_pprof(term_bufnr, flag_desc, dir)
   --- 在后台静默运行 `go tool pprof/trace ...`
   local select = vim.tbl_keys(flag_desc)
   vim.ui.select(select, {
@@ -119,16 +111,17 @@ end
 --- create :GoPprof command & <F6> keymap
 ---
 --- @param term_bufnr integer
+--- @param flag_desc table
 --- @param dir string (directory 存放 pprof files)
-local function set_cmd_and_keymaps(term_bufnr, dir)
+local function set_cmd_and_keymaps(term_bufnr, flag_desc, dir)
   --- user command
   vim.api.nvim_buf_create_user_command(term_bufnr, 'GoPprof', function()
-    select_pprof(term_bufnr, dir)
+    select_pprof(term_bufnr, flag_desc, dir)
   end, {bang=true})
 
   --- keymap
   vim.keymap.set('n', '<F6>', function()
-    select_pprof(term_bufnr, dir)
+    select_pprof(term_bufnr, flag_desc, dir)
   end,
   {
     buffer = term_bufnr,
@@ -177,9 +170,10 @@ end
 --- go tool pprof hook
 ---
 --- @param opts GoTestOpts
+--- @param flag_desc table
 --- @param dir string (directory 存放 pprof files)
 --- @return MyTermOptsOnExit
-local function on_exit(opts, dir)
+local function on_exit(opts, flag_desc, dir)
   local pprof_filepath = vim.fs.joinpath(dir, opts.flag .. '.out')
 
   --- opts.flag == 'none' | 'fuzz' 时, 没有 on_exit function.
@@ -191,7 +185,7 @@ local function on_exit(opts, dir)
   --- VVI: return a callback function for jobstart(cmd, { on_exit = function(term) })
   return function(_, bufnr)
     --- :GoPprof && <F6>
-    set_cmd_and_keymaps(bufnr, dir)
+    set_cmd_and_keymaps(bufnr,flag_desc, dir)
 
     --- autocmd: 在 bufnr 被 wipeout 的时候 jobstop() 所有 jobs attched to bufnr.
     autocmd_shutdown_all_jobs(bufnr)
@@ -204,26 +198,15 @@ end
 
 --- @type GoTestFlag
 local M = {
-  flags = function()
-    return vim.tbl_keys(flag_desc)
-  end,
+  flag_desc = {
+    cpu   = { desc = 'CPU profile' },
+    mem   = { desc = 'Memory profile' },
+    mutex = { desc = 'Mutex profile' },
+    block = { desc = 'Block profile' },
+    trace = { desc = 'Trace' },
+  },
 
-  contains = function(flag)
-    if flag_desc[flag] then
-      return true
-    end
-  end,
-
-  get_description = function (flag)
-    local f = flag_desc[flag]
-    if not f then
-      error("flag is not defined")
-    end
-
-    return f.desc
-  end,
-
-  term_opts = function (opts)
+  term_opts = function(self, opts)
     --- mkdir when module required, NOTE: will run only once.
     if not vim.uv.fs_stat(pprof_dir) then
       local result = vim.system({'mkdir', '-p', pprof_dir}, { text = true }):wait()
@@ -235,7 +218,7 @@ local M = {
     return {
       cwd = opts.go_list.Root,
       cmd = vim.iter({go_test, test_args, utils.mode_flags(opts)}):flatten():totable(),
-      on_exit = on_exit(opts, pprof_dir),
+      on_exit = on_exit(opts, self.flag_desc, pprof_dir),
     }
   end
 }

@@ -14,11 +14,6 @@ local utils = require("utils.go.deps.utils")
 --- go test cmd
 local go_test = {'go', 'test', '-count=1', '-v'}
 
---- description
-local flag_desc = {
-  cover = { desc = 'Coverage print on screen' },
-  coverprofile = { desc = 'Coverage profile (detail)' },
-}
 
 --- `go tool cover` hook
 ---
@@ -56,26 +51,12 @@ end
 
 --- @type GoTestFlag
 local M = {
-  flags = function()
-    return vim.tbl_keys(flag_desc)
-  end,
+  flag_desc = {
+    cover = { desc = 'Coverage print on screen' },
+    coverprofile = { desc = 'Coverage profile (detail)' },
+  },
 
-  contains = function(flag)
-    if flag_desc[flag] then
-      return true
-    end
-  end,
-
-  get_description = function(flag)
-    local f = flag_desc[flag]
-    if not f then
-      error("flag is not defined")
-    end
-
-    return f.desc
-  end,
-
-  term_opts = function(opts)
+  term_opts = function(self, opts)
     if opts.flag == 'cover' then
       return {
         cwd = opts.go_list.Root,

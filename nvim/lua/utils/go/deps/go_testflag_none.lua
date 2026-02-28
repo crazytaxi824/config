@@ -9,19 +9,9 @@ local go_test = {'go', 'test', '-count=1', '-v'}
 
 --- @type GoTestFlag
 local M = {
-  flags = function ()
-    return { 'none' }
-  end,
+  flag_desc = { none = { desc = '[No Extra Flag]' }},
 
-  contains = function(flag)
-    return flag == 'none'
-  end,
-
-  get_description = function(flag)
-    return '[No Extra Flag]'
-  end,
-
-  term_opts = function(opts)
+  term_opts = function(self, opts)
     return {
       cwd = opts.go_list.Root,
       cmd = vim.iter({go_test, utils.mode_flags(opts)}):flatten():totable(),
