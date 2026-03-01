@@ -13,12 +13,28 @@ local t_key  = require('utils.my_term.term_keymaps')
 --- @param term_win_id integer
 --- @return integer job_id
 local function my_term_exec(term, term_bufnr, term_win_id)
+  --- autocmd 放在这里运行主要是有两个限制条件:
+  --- 1. 在获取到 terminal bufnr 之后运行, 为了在 autocmd 中使用 bufnr 作为触发条件.
+  --- 2. 在 term window 打开并加载 term bufnr 之前运行, 为了触发 BufWinEnter event.
+  cb.autocmd_callback(term, term_bufnr)  -- FIXME: before nvim_win_set_buf() 才能触发 on_open
+
+  --- executed before jobstart(). DO NOT have 'term.bufnr' and 'term.job_id' ...
+  if term.before_run then
+    term.before_run(term)  -- TODO: add bufnr
+  end
+
   --- VVI: 必须在 bufnr 被 window 显示之后运行. 避免 nvim_buf_call() 生成一个临时 autocmd window.
   local job_id
   if term.console_output then
     job_id = console.console_exec(term, term_bufnr, term_win_id)
   else
     job_id = terminal.terminal_exec(term, term_bufnr, term_win_id)
+  end
+
+  --- executed after jobstart(). Have 'term.bufnr' and 'term.job_id' ...
+  --- 和 on_exit 的区别是不用等到 jobdone.
+  if term.after_run then
+    term.after_run(term, term_bufnr)  -- TODO: add job_id
   end
 
   --- buffer 被 wipeout 的时候自动 jobstop()
@@ -59,27 +75,11 @@ function M._new(id, opts, force)
       --- 创建 term window & buffer
       local term_bufnr, term_win_id = t_win.create_my_term_win(self)  -- TODO: rename function
 
-      --- autocmd 放在这里运行主要是有两个限制条件:
-      --- 1. 在获取到 terminal bufnr 之后运行, 为了在 autocmd 中使用 bufnr 作为触发条件.
-      --- 2. 在 term window 打开并加载 term bufnr 之前运行, 为了触发 BufWinEnter event.
-      cb.autocmd_callback(self, term_bufnr)
-
       --- 快捷键设置: 在获取到 term.bufnr 和 term.id 之后运行.
       t_key.set_buf_keymaps(self, term_bufnr)
 
-      --- executed before jobstart(). DO NOT have 'term.bufnr' and 'term.job_id' ...
-      if self.before_run then
-        self.before_run(self)  -- TODO: add bufnr
-      end
-
       --- VVI(jobstart): 执行 cmd
       local job_id = my_term_exec(self, term_bufnr, term_win_id)
-
-      --- executed after jobstart(). Have 'term.bufnr' and 'term.job_id' ...
-      --- 和 on_exit 的区别是不用等到 jobdone.
-      if self.after_run then
-        self.after_run(self, term_bufnr)  -- TODO: add job_id
-      end
 
       --- NOTE: cache MyTermPost
       --- @type MyTermPost
