@@ -22,7 +22,7 @@ local function find_exist_term_win()
   return win_id
 end
 
---- create & `win_gotoid(win_id)` 一个 window 用于 jobstart() 运行.
+--- create & enter 一个 window, 显示指定 bufnr, 用于 jobstart() 运行.
 --- 寻找已有的(用于显示 MyTermPost.bufnr 的) window, 然后在右侧创建一个新的 window,
 --- 如果没有用于显示 MyTermPost.bufnr 的 window, 则在底部创建一个新的 window.
 ---
@@ -33,11 +33,12 @@ function M.create_term_win(bufnr)
     error("bufnr is not exist")
   end
 
-  local exist_win_id = find_exist_term_win()
+  local exist_term_win_id = find_exist_term_win()
 
-  if vim.fn.win_gotoid(exist_win_id) == 1 then
+  if exist_term_win_id > 0 then
+    --- `nvim_open_win()`, 显示 buffer, 同时进入 window.
     --- at least 1 terminal window exist, 在该 my_term win 右边创建一个新的 my_term window
-    return vim.api.nvim_open_win(bufnr, true, { win = exist_win_id, split = 'right' })
+    return vim.api.nvim_open_win(bufnr, true, { win = exist_term_win_id, split = 'right' })
   else
     --- no terminal window exist, create a botright window for terminals.
     return vim.api.nvim_open_win(bufnr, true, { height = g.win_height, split = 'below' })
