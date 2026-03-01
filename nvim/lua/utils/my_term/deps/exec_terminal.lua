@@ -21,6 +21,13 @@ function M.terminal_exec(term, term_bufnr, term_win_id)
   --- VVI: terminal 不能改 bufname 否则会重新创建一个新的 terminal.
   --- VVI: 使用 nvim_buf_call() 时 bufnr 必须被某一个 window 显示, 否则 vim 会创建一个看不见的临时 autocmd window
   --- 用于执行 function. 导致 TermOpen event 中获取的 win id 是这个临时 window, 会造成一些 bug.
+  ---
+  --- DOCS: `:help nvim_buf_call()`, If the current
+  --- window already shows "buffer", the window is not switched. If a window
+  --- inside the current tabpage (including a float) already shows the buffer,
+  --- then one of those windows will be set as current window temporarily.
+  --- Otherwise a temporary scratch window (called the "autocmd window" for
+  --- historical reasons) will be used.
   return vim.api.nvim_buf_call(term_bufnr, function()
     return vim.fn.jobstart(term.cmd, {
       term = true,  -- VVI: 将 output 结果输出到 bufnr

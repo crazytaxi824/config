@@ -14,15 +14,12 @@ local t_key  = require('utils.my_term.term_keymaps')
 --- @return integer bufnr
 --- @return integer win_id
 local function create_my_term_win(term)
-  --- VVI: 以下执行顺序很重要!
-  --- `jobstart(cmd, {opts})` 事件触发顺序和 `:edit term://cmd` 有所不同.
-  --- `:edit term://cmd` 中: 触发顺序 TermOpen -> BufEnter -> BufWinEnter.
-  --- `jobstart(cmd, {opts})` 触发顺序 BufEnter -> BufWinEnter -> TermOpen.
-  ---
-  --- NOTE: nvim_buf_call()
-  --- 可以使用 nvim_buf_call(bufnr, function() jobstart(...) end) 做到 TermOpen -> BufEnter -> BufWinEnter 顺序,
-  --- 但在 nvim_buf_call() 的过程中 TermOpen event 获取到的 window id 是临时的 autocmd window, 所以需要先创建一个
-  --- window 然后 win_gotoid(win_id)
+  --- DOCS: `:help nvim_buf_call()`, If the current
+  --- window already shows "buffer", the window is not switched. If a window
+  --- inside the current tabpage (including a float) already shows the buffer,
+  --- then one of those windows will be set as current window temporarily.
+  --- Otherwise a temporary scratch window (called the "autocmd window" for
+  --- historical reasons) will be used.
 
   --- 获取是否已经 run() 并用于 term_bufnr
   local old_term_bufnr
@@ -73,12 +70,6 @@ local function my_term_exec(term, term_bufnr, term_win_id)
 
   --- buffer 被 wipeout 的时候自动 jobstop()
   cb.autocmd_jobstop(term, term_bufnr, job_id)
-
-  --- VVI: 手动触发 BufEnter & BufWinEnter event
-  --- doautocmd "BufEnter & BufWinEnter term://"
-  --- 触发时机在 after TermOpen & before TermClose
-  --- 先触发 BufEnter, 再触发 BufWinEnter
-  vim.api.nvim_exec_autocmds({"BufEnter", "BufWinEnter"}, { buffer = term_bufnr })
 
   return job_id
 end
