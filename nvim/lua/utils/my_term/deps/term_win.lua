@@ -2,7 +2,7 @@ local g = require('utils.my_term.deps.global')
 
 local M = {}
 
---- 寻找已有的最后 (last) my_term window ID, 不包括 normal terminal window.
+--- 根据 cached MyTermPost bufnr 寻找已有的 window ID, 不包括 normal terminal window.
 ---
 --- @return integer win_id
 local function find_exist_term_win()
@@ -22,7 +22,9 @@ local function find_exist_term_win()
   return win_id
 end
 
---- create/re-use, enter `win_gotoid(win_id)` 一个 window 用于 jobstart() 运行.
+--- create & `win_gotoid(win_id)` 一个 window 用于 jobstart() 运行.
+--- 寻找已有的(用于显示 MyTermPost.bufnr 的) window, 然后在右侧创建一个新的 window,
+--- 如果没有用于显示 MyTermPost.bufnr 的 window, 则在底部创建一个新的 window.
 ---
 --- @param bufnr integer
 --- @return integer win_id
@@ -33,7 +35,7 @@ function M.create_term_win(bufnr)
 
   local exist_win_id = find_exist_term_win()
 
-  if vim.fn.win_gotoid(exist_win_id)==1 then
+  if vim.fn.win_gotoid(exist_win_id) == 1 then
     --- at least 1 terminal window exist, 在该 my_term win 右边创建一个新的 my_term window
     return vim.api.nvim_open_win(bufnr, true, { win = exist_win_id, split = 'right' })
   else
@@ -44,8 +46,10 @@ end
 
 --- 打开/创建, 并且进入(win_gotoid) terminal window 用于 jobstart()
 ---
---- NOTE: buffer 一旦运行过 jobstart() 就不能再次运行 jobstart() 了, Can only call this function in an unmodified buffer.
---- 所以需要删除旧的 bufnr 然后重新创建一个新的 scratch bufnr 给 jobstart() 使用.
+--- NOTE:
+--- 运行过 jobstart() 的 buffer 不能再次运行 jobstart() 了. Can only call this function in an unmodified buffer.
+--- 需要删除旧的 bufnr 然后重新创建一个新的 scratch bufnr 给 jobstart() 使用. 但是在删除旧 buffer 之前可以 re-use
+--- 旧 buffer 的 window, 避免重新创建新的 window, 关闭旧的 window 造成的闪烁.
 ---
 --- @param curr_term_bufnr integer
 --- @param old_term_bufnr? integer
@@ -56,7 +60,7 @@ function M.enter_term_win(curr_term_bufnr, old_term_bufnr)
     return M.create_term_win(curr_term_bufnr)
   end
 
-  --- 这里是为了 re-use term window
+  --- 这里是为了 re-use old terminal window
   --- @type integer
   local win_id
 
