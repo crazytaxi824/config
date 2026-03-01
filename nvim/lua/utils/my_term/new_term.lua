@@ -6,53 +6,6 @@ local t_win = require('utils.my_term.deps.term_win')
 local t_act = require('utils.my_term.term_actions')
 local t_key  = require('utils.my_term.term_keymaps')
 
---- deps functions --------------------------------------------------------------------------------- {{{
-
---- Create new terminal buffer and window, 给 my_term.bufnr 赋值.
----
---- @param term MyTerm
---- @return integer bufnr
---- @return integer win_id
-local function create_my_term_win(term)
-  --- DOCS: `:help nvim_buf_call()`, If the current
-  --- window already shows "buffer", the window is not switched. If a window
-  --- inside the current tabpage (including a float) already shows the buffer,
-  --- then one of those windows will be set as current window temporarily.
-  --- Otherwise a temporary scratch window (called the "autocmd window" for
-  --- historical reasons) will be used.
-
-  --- 获取是否已经 run() 并用于 term_bufnr
-  local old_term_bufnr
-  local tp = g.get_TermPost(term.id)
-  if tp then
-    old_term_bufnr = tp.bufnr
-  end
-
-  --- 每次运行 jobstart() 之前, 先创建一个新的 scratch buffer 给 terminal.
-  local term_bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
-
-  vim.bo[term_bufnr].filetype = "my_term"  --- set filetype
-  -- vim.b[term_bufnr]["my_term"] = term.id  --- 设置 bufvar: {my_term = term_id}
-
-  --- autocmd 放在这里运行主要是有两个限制条件:
-  --- 1. 在获取到 terminal bufnr 之后运行, 为了在 autocmd 中使用 bufnr 作为触发条件.
-  --- 2. 在 term window 打开并加载 term bufnr 之前运行, 为了触发 BufWinEnter event.
-  cb.autocmd_callback(term, term_bufnr)
-
-  --- 快捷键设置: 在获取到 term.bufnr 和 term.id 之后运行.
-  t_key.set_buf_keymaps(term, term_bufnr)
-
-  --- 进入一个选定的 term window 加载现有 term buffer, 同时 wipeout old_term_bufnr.
-  local term_win_id = t_win.enter_term_win(term_bufnr, old_term_bufnr)
-
-  --- 设置 term win 属性
-  local scope={ scope='local', win=term_win_id }
-  vim.api.nvim_set_option_value('sidescrolloff', 0, scope)
-  vim.api.nvim_set_option_value('scrolloff', 0, scope)
-
-  return term_bufnr, term_win_id
-end
-
 --- jobstart(cmd, opts), 给 my_term.job_id 赋值.
 ---
 --- @param term MyTerm
@@ -73,7 +26,6 @@ local function my_term_exec(term, term_bufnr, term_win_id)
 
   return job_id
 end
--- }}}
 
 
 local M = {}
@@ -104,21 +56,29 @@ function M._new(id, opts, force)
         return
       end
 
+      --- 创建 term window & buffer
+      local term_bufnr, term_win_id = t_win.create_my_term_win(self)  -- TODO: rename function
+
+      --- autocmd 放在这里运行主要是有两个限制条件:
+      --- 1. 在获取到 terminal bufnr 之后运行, 为了在 autocmd 中使用 bufnr 作为触发条件.
+      --- 2. 在 term window 打开并加载 term bufnr 之前运行, 为了触发 BufWinEnter event.
+      cb.autocmd_callback(self, term_bufnr)
+
+      --- 快捷键设置: 在获取到 term.bufnr 和 term.id 之后运行.
+      t_key.set_buf_keymaps(self, term_bufnr)
+
       --- executed before jobstart(). DO NOT have 'term.bufnr' and 'term.job_id' ...
       if self.before_run then
-        self.before_run(self)
+        self.before_run(self)  -- TODO: add bufnr
       end
 
-      --- 创建 term window & buffer
-      local term_bufnr, term_win_id = create_my_term_win(self)
-
-      --- 执行 jobstart(cmd)
+      --- VVI(jobstart): 执行 cmd
       local job_id = my_term_exec(self, term_bufnr, term_win_id)
 
       --- executed after jobstart(). Have 'term.bufnr' and 'term.job_id' ...
       --- 和 on_exit 的区别是不用等到 jobdone.
       if self.after_run then
-        self.after_run(self, term_bufnr)
+        self.after_run(self, term_bufnr)  -- TODO: add job_id
       end
 
       --- NOTE: cache MyTermPost
