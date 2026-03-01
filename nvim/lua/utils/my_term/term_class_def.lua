@@ -1,5 +1,5 @@
---- @alias MyTermOptsCB fun(term: MyTerm)
---- @alias MyTermOptsCBWithBufnr fun(term: MyTerm, bufnr: integer)
+--- @alias MyTermOptsCB fun(term: MyTerm, bufnr: integer)
+--- @alias MyTermOptsCBWithJob fun(term: MyTerm, bufnr: integer, job_id: integer)
 --- @alias MyTermOptsOnOutput fun(term: MyTerm, bufnr: integer, job_id: integer, data: string[])
 --- @alias MyTermOptsOnExit fun(term: MyTerm, bufnr: integer, job_id: integer, exit_code: integer)
 
@@ -26,13 +26,13 @@
 --- @field before_run? MyTermOptsCB
 ---
 --- term:run() 时触发. 在 jobstart() 之后马上执行, 和 on_exit 的区别是不用等到 jobdone.
---- @field after_run?  MyTermOptsCBWithBufnr
+--- @field after_run?  MyTermOptsCBWithJob
 ---
 --- BufWinEnter. NOTE: 每次 term:// buffer 被 win 显示的时候都会触发, 同一个 buffer 被多个窗口显示时也会触发.
---- @field on_open?    MyTermOptsCBWithBufnr
+--- @field on_open?    MyTermOptsCB
 ---
 --- BufWinLeave. NOTE: BufWinLeave 只会在 buffer 离开最后一个 win 的时候触发.
---- @field on_close?   MyTermOptsCBWithBufnr
+--- @field on_close?   MyTermOptsCB
 ---
 --- jobstart() 中 callback 函数
 --- @field on_stdout? MyTermOptsOnOutput
