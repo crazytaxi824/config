@@ -1,4 +1,5 @@
 local g = require('utils.my_term.deps.global')
+local cb = require('utils.my_term.deps.autocmd_callback')
 
 local M = {}
 
@@ -102,6 +103,11 @@ function M.my_term_buf_win(term)
 
   --- 每次运行 jobstart() 之前, 先创建一个新的 scratch buffer 给 terminal.
   local term_bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
+
+  --- autocmd 放在这里运行主要是有两个限制条件:
+  --- 1. 在获取到 terminal bufnr 之后运行, 为了在 autocmd 中使用 bufnr 作为触发条件.
+  --- 2. 在 term window 打开并加载 term bufnr 之前运行, 为了触发 BufWinEnter event.
+  cb.autocmd_callback(term, term_bufnr)
 
   --- 设置 term buffer 属性
   vim.bo[term_bufnr].filetype = "my_term"  --- set filetype
