@@ -45,6 +45,21 @@
 
 
 
+--- MyTerm 继承 MyTermOpts
+---
+--- @class MyTerm: MyTermOpts
+---
+--- VVI: 保证每个 id 只和一个 bufnr 对应. id 一旦设置应该无法改变.
+--- @field id integer @readonly
+---
+--- jobstart(cmd, { env, cwd, on_stdout, on_stderr, on_exit, ... })
+--- @field run fun(self: MyTerm) @readonly
+---
+--- jobstop(job_id)
+--- @field stop fun(self: MyTerm) @readonly
+
+
+
 --- MyTermPost 继承自 MyTerm
 --- @class MyTermPost: MyTerm  继承 MyTerm
 ---
