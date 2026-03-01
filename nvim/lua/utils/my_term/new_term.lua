@@ -72,8 +72,8 @@ function M._new(id, opts, force)
         return
       end
 
-      --- 创建 term window & buffer
-      local term_bufnr, term_win_id = t_win.create_my_term_win(self)  -- TODO: rename function
+      --- 创建并进入 term window & buffer
+      local term_bufnr, term_win_id = t_win.my_term_buf_win(self)
 
       --- 快捷键设置: 在获取到 term.bufnr 和 term.id 之后运行.
       t_key.set_buf_keymaps(self, term_bufnr)

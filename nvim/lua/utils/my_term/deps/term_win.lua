@@ -92,7 +92,7 @@ end
 --- @param term MyTerm
 --- @return integer bufnr
 --- @return integer win_id
-function M.create_my_term_win(term)
+function M.my_term_buf_win(term)
   --- DOCS: `:help nvim_buf_call()`, If the current
   --- window already shows "buffer", the window is not switched. If a window
   --- inside the current tabpage (including a float) already shows the buffer,
