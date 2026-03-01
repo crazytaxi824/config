@@ -17,13 +17,13 @@ local function python_env(term_id)
   end
 
   --- 返回 MyTermPost.job_id
-  local job_id = g.get_job_id(term_id)
-  if not job_id then
-    error("no job_id after run()")
+  local tp = g.get_TermPost(term_id)
+  if not tp then
+    error("MyTermPost is not cached after run()")
   end
 
   -- vim.fn.chansend(job_id, 'source ' .. py_venv[1] .. ' && clear\n')
-  vim.api.nvim_chan_send(job_id, 'source ' .. py_venv[1] .. ' && clear\n')
+  vim.api.nvim_chan_send(tp.job_id, 'source ' .. py_venv[1] .. ' && clear\n')
 end
 
 

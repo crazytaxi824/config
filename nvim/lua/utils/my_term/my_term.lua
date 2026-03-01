@@ -25,7 +25,11 @@ local function create_my_term_win(term)
   --- window 然后 win_gotoid(win_id)
 
   --- 获取是否已经 run() 并用于 term_bufnr
-  local old_term_bufnr = g.get_bufnr(term.id)
+  local old_term_bufnr
+  local tp = g.get_TermPost(term.id)
+  if tp then
+    old_term_bufnr = tp.bufnr
+  end
 
   --- 每次运行 jobstart() 之前, 先创建一个新的 scratch buffer 给 terminal.
   local term_bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
