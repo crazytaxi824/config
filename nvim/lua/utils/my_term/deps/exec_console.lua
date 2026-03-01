@@ -20,9 +20,7 @@ vim.api.nvim_set_hl(0, "my_output_stderr", {ctermfg=Colors.red.c, fg=Colors.red.
 --- @param job_id integer
 local function stop_job(term_bufnr, job_id)
   if vim.fn.jobstop(job_id) == 1 then
-    vim.bo[term_bufnr].modifiable = true
     vim.api.nvim_buf_set_lines(term_bufnr, -1, -1, true, {"signal: interrupt"})
-    vim.bo[term_bufnr].modifiable = false
   end
 end
 
@@ -57,9 +55,6 @@ local function set_buf_line_output(bufnr, data, hl)
 
   local last_line_before_write = vim.api.nvim_buf_line_count(bufnr)
 
-  --- 开启 modifiable 准备写入数据.
-  vim.bo[bufnr].modifiable = true
-
   --- VVI: 处理 EOF, data 最后会多一行 empty line.
   --- `:help channel-callback`, `:help channel-lines`, 中说明: EOF is a single-item list: `['']`.
   if data[#data] == '' then
@@ -76,7 +71,6 @@ local function set_buf_line_output(bufnr, data, hl)
 
   --- write output to buffer
   vim.api.nvim_buf_set_lines(bufnr, -1, -1, true, data)
-  vim.bo[bufnr].modifiable = false
 
   --- highlight lines
   for i = last_line_before_write, vim.api.nvim_buf_line_count(bufnr)-1, 1 do
@@ -92,7 +86,6 @@ end
 --- @param exit_code integer
 local function set_buf_line_exit(bufnr, exit_code)
   local last_line_before_write = vim.api.nvim_buf_line_count(bufnr)
-  vim.bo[bufnr].modifiable = true
   vim.api.nvim_buf_set_lines(bufnr, -1, -1, true, {"", "[Process exited " .. exit_code .. "]", ""})
 
   --- highlight
@@ -101,7 +94,6 @@ local function set_buf_line_exit(bufnr, exit_code)
   else
     vim.hl.range(bufnr, ns, "my_output_sys_error", {last_line_before_write+1, 0}, {last_line_before_write+1, -1})
   end
-  vim.bo[bufnr].modifiable = false
 end
 
 --- 后台执行 jobstart(cmd), 将 output 手动写入 buffer. (buftype = 'nofile')
@@ -119,6 +111,17 @@ function M.console_exec(term, term_bufnr, term_win_id)
   if not term.cmd then
     error("MyTerm.cmd is missing")
   end
+
+  --- VVI: "prompt" 不能通过 insert mode 修改内容, 只能用 nvim_buf_set_lines() 修改内容.
+  vim.bo[term_bufnr].buftype = "prompt"
+  vim.fn.prompt_setprompt(term_bufnr, "> ")
+
+  --- 处理 prompt input
+  vim.fn.prompt_setcallback(term_bufnr, function(input)
+    if input == 'exit' then
+      vim.api.nvim_buf_delete(term_bufnr, {force = true})  --- :bwipeout
+    end
+  end)
 
   --- set bufname
   vim.api.nvim_buf_set_name(term_bufnr, "term://#my_term#console#" .. term.id)
@@ -146,7 +149,6 @@ function M.console_exec(term, term_bufnr, term_win_id)
 
   vim.api.nvim_buf_set_lines(term_bufnr, 0, -1, true, {print_cmd})  -- clear buffer text & print cmd
   vim.hl.range(term_bufnr, ns, "my_output_sys", {0, 0}, {0, -1}) -- highlight cmd
-  vim.bo[term_bufnr].modifiable = false
 
   local job_id = vim.fn.jobstart(term.cmd, {
     cwd = term.cwd,
