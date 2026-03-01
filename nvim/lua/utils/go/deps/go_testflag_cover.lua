@@ -19,7 +19,7 @@ local go_test = {'go', 'test', '-count=1', '-v'}
 ---
 --- @param cover_out string (filepath)
 --- @param cover_html string (filepath)
---- @return MyTermOptsOnExit
+--- @return MyTermOnExit
 local function on_exit(cover_out, cover_html)
   return function()
     --- convert cover.out -> cover.html

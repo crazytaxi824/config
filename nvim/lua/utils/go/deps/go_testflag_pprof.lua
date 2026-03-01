@@ -132,7 +132,7 @@ end
 ---
 --- @param opts GoTestOpts
 --- @param dir string  pprof_dir
---- @return MyTermOptsOnExit
+--- @return MyTermOnExit
 local function on_exit(opts, dir)
   local pprof_filepath = vim.fs.joinpath(dir, opts.flag .. '.out')
 
