@@ -1,10 +1,22 @@
 --- @class HighLightPos
---- @field type 'file'|'directory' uv.fs_stat.result.type
---- @field original_fp string filepath
---- @field absolute_fp string absolute_filepath
---- @field hl_end_col integer
---- @field hl_lnum integer
+---
+--- uv.fs_stat.result.type
+--- @field type 'file'|'directory'
+---
+--- filepath
+--- @field original_fp string
+---
+--- absolute_filepath `vim.fs.abspath()`
+--- @field absolute_fp string
+---
+--- highlight start column `vim.hl.range()`
 --- @field hl_start_col integer
+---
+--- highlight end column `vim.hl.range()`
+--- @field hl_end_col integer
+---
+--- highlight line number (start & end same line) `vim.hl.range()`
+--- @field hl_lnum integer
 
 
 local M = {}
