@@ -17,22 +17,6 @@ local go_test = {'go', 'test', '-count=1', '-v'}
 
 --- `go tool cover` hook
 ---
---- @param coverage_dir string (directory)
---- @return MyTermOptsCB
-local function before_run(coverage_dir)
-  return function()
-    --- mkdir for coverage files
-    if not vim.uv.fs_stat(coverage_dir) then
-      local result = vim.system({'mkdir', '-p', coverage_dir}, { text = true }):wait()
-      if result.code ~= 0 then
-        error(result.stderr ~= '' and result.stderr or result.code)
-      end
-    end
-  end
-end
-
---- `go tool cover` hook
----
 --- @param cover_out string (filepath)
 --- @param cover_html string (filepath)
 --- @return MyTermOptsOnExit
@@ -72,6 +56,13 @@ local M = {
         --- NOTE: 使用 '-coverprofile' 生成的 'cover.out' 文件必须在 go workspace 中, 否则无法进行分析.
         --- '-coverprofile /xxx/cover.out' 最好是是绝对路径, 避免和 '-outputdir' 冲突.
         local coverage_dir = opts.go_list.Root .. '/coverage/'
+        --- mkdir for coverage files
+        if not vim.uv.fs_stat(coverage_dir) then
+          local result = vim.system({'mkdir', '-p', coverage_dir}, { text = true }):wait()
+          if result.code ~= 0 then
+            error(result.stderr ~= '' and result.stderr or result.code)
+          end
+        end
 
         --- NOTE: 如果是 `go test -coverprofile ./...` , go_list 中需要传递 project 属性, 用于指定文件名.
         --- 后半部分是将 filepath 中的 / 替换成 %.
@@ -82,7 +73,6 @@ local M = {
         return {
           cwd = opts.go_list.Root,
           cmd = vim.iter({go_test, '-coverprofile', cover_out, utils.mode_flags(opts)}):flatten():totable(),
-          before_run = before_run(coverage_dir),
           on_exit = on_exit(cover_out, cover_html),
         }
       end
