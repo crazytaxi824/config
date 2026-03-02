@@ -61,6 +61,39 @@ local function back_to_pwd()
 end
 -- -- }}}
 
+--- trash_buffer --------------------------------------------------------------- {{{
+
+local function trash_buffer()
+  local node = nt_api.tree.get_node_under_cursor()
+  local bufnr_under_cursor = vim.fn.bufnr(node.absolute_path)
+
+  if bufnr_under_cursor > 0 then
+    --- 获取 windows
+    local wins = vim.fn.getbufinfo(bufnr_under_cursor)[1].windows
+
+    local target_bufnr
+    local listed_buffers = vim.fn.getbufinfo({buflisted=1})
+    if #listed_buffers <= 1 then
+      target_bufnr = vim.api.nvim_create_buf(true, false)  --- create listed buffer
+    else
+      for _, value in ipairs(listed_buffers) do
+        if value.bufnr ~= bufnr_under_cursor then
+          target_bufnr = value.bufnr
+          break
+        end
+      end
+    end
+
+    for _, win_id in ipairs(wins) do
+      vim.api.nvim_win_set_buf(win_id, target_bufnr)
+    end
+
+    nt_api.fs.trash(node)
+  end
+end
+--- }}}
+
+
 --- nvim-tree buffer keymaps ---------------------------------------------------
 --- only works within "NvimTree_X" buffer.
 --- ":help nvim-tree-mappings-default"
@@ -86,7 +119,8 @@ local nt_buffer_keymaps = {
 
   { "a",           nt_api.fs.create,   "Create File" },
   -- { "D",           nt_api.fs.remove,   "Remove File" },  -- `rm file`, 无法将其移动到 Trash Bin
-  { "D",           nt_api.fs.trash,    "Trash File" },   -- `trash file`, 将文件移动到 Trash Bin, 可以还原
+  -- { "D",           nt_api.fs.trash,    "Trash File" },   -- `trash file`, 将文件移动到 Trash Bin, 可以还原
+  { "D",           trash_buffer,    "Trash File" },   -- `trash file`, 将文件移动到 Trash Bin, 可以还原
   { "R",           nt_api.fs.rename_full,   "Full Rename" },  -- 类似 `$ mv foo bar`
   { "y",           nt_api.fs.copy.absolute_path,   "Copy Absolute Path" },
   { "C",           nt_api.fs.copy.node,   "Copy File" },
