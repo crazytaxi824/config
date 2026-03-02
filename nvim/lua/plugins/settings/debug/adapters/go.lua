@@ -4,6 +4,8 @@ if not dap_status_ok then
   return
 end
 
+local utils = require("utils.go.deps.utils")
+
 --- cache golang vscode extension filepath
 ---
 --- @type string|nil
@@ -82,20 +84,47 @@ dap.configurations.go = {
     type = "go",
     request = "launch",
     mode = "test",
-    showLog = false,
+    showLog = true,
     dlvToolPath = vim.fn.exepath("dlv"), -- Adjust to where delve is installed
-
     program = "${fileDirname}",
 
-    --- 设置为 func, 动态获取 <cword>
     args = function()
-      return { "-test.v", "-test.run", "^" .. vim.fn.expand('<cword>') .. "$" }
+      --- 判断当前函数是否 TestXXX. 如果是, 则获取 test function name.
+      local testfn_name, mode = utils.get_exact_testfn_name()
+      if not testfn_name or not mode then
+        return { "-test.v", "-test.run", "^" .. vim.fn.expand('<cword>') .. "$" }
+      end
+
+      if mode == 'run' then
+        return { "-test.v", "-test.run", "^" .. testfn_name .. "$" }
+      elseif mode == 'bench' then
+        return {
+          "-test.v",
+          "-test.run", "^$",
+          "-test.bench", "^" .. testfn_name .. "$",
+          "-test.benchmem"
+        }
+      elseif mode == 'fuzz' then
+        local fp = vim.fs.dirname(vim.api.nvim_buf_get_name(0))
+        local testdata = vim.fs.joinpath(fp, "testdata", "fuzz")
+        --- debug fuzz 函数时, 只运行 Seed Corpus (f.Add 的数据) 和 testdata 里的失败案例.
+        --- 所以需要给 -run, -fuzz 都设置函数名.
+        return {
+          "-test.v",
+          "-test.run", "^$",
+          "-test.fuzz", "^" .. testfn_name .. "$",
+          "-test.fuzzcachedir", testdata,  -- fuzzing input data
+          "-test.fuzztime", "15s",
+        }
+      else
+        error("mode is not 'run'|'bench'|'fuzz'")
+      end
     end
   },
 
-  --- test packages
+  --- test run packages
   {
-    name = "nvim-dap(vscode): Go Debug test (pkg)",
+    name = "nvim-dap(vscode): Go Debug test run (pkg)",
     type = "go",
     request = "launch",
     mode = "test",
@@ -105,6 +134,5 @@ dap.configurations.go = {
     program = "${fileDirname}",
   },
 }
-
 
 
