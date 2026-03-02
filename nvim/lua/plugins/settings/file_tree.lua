@@ -63,6 +63,7 @@ end
 
 --- trash_buffer --------------------------------------------------------------- {{{
 
+--- BUG: FIXME: fix(#3187): prevent closing the last non-floating window when deleting files
 local function trash_buffer()
   --- 获取光标指向的 nvim-tree Node
   local node = nt_api.tree.get_node_under_cursor()
