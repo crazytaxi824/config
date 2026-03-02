@@ -215,7 +215,7 @@ local plugins = {
   --- "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
-    commit = "68ed8b9",
+    commit = "f61f46d",
     config = function() require("lsp.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -225,7 +225,7 @@ local plugins = {
   {
     "stevearc/conform.nvim",
     -- tag = "v9.1.0",
-    commit = "c2526f1",
+    commit = "40dcec5",
     config = function() require("plugins.settings.formatter_conform") end,
 
     event = "BufWritePre",
@@ -277,7 +277,7 @@ local plugins = {
   --- Debug tools 安装 -----------------------------------------------------------------------------
   {
     "mfussenegger/nvim-dap",  -- core debug tool
-    commit = "e47878d",
+    commit = "b516f20",
     config = function() require("plugins.settings.debug.nvim_dap") end,
 
     cmd = {'Debug', 'DapToggleBreakpoint', 'DapContinue'},
