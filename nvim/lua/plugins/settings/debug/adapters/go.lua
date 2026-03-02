@@ -25,6 +25,7 @@ local function find_vscode_extension()
   })
 end
 
+
 dap.adapters.go = function(callback, config)
   if not cache_vscode_debug_path then
     local vscode_debug_path = find_vscode_extension()
@@ -49,7 +50,8 @@ dap.adapters.go = function(callback, config)
   })
 end
 
---- 直接使用 delve 工具对 go test 进行 debug
+
+--- https://github.com/go-delve/delve/blob/master/Documentation/usage/dlv_dap.md
 --- Some variables are supported --- {{{
 ---   "${port}": nvim-dap resolves a free port.
 ---   "${file}": Active filename
@@ -62,51 +64,45 @@ end
 ---   "${workspaceFolder}": The current working directory of Neovim
 ---   "${workspaceFolderBasename}": The name of the folder opened in Neovim
 -- -- }}}
-dap.adapters.delve = function(callback, config)
-  if config.mode == "remote" and config.request == "attach" then
-    callback({
-      type = "server",
-      host = config.host or "127.0.0.1",
-      port = config.port or "38697",
-      options = {
-        source_filetype = "go",
-      },
-    })
-  else
-    callback({
-      type = 'server',
-      port = '${port}',
-      executable = {
-        command = 'dlv',
-        args = { 'dap', '-l', '127.0.0.1:${port}', '--log', '--log-output=dap' },
-        detached = vim.fn.has("win32") == 0,
-      },
-      options = {
-        source_filetype = "go",
-      },
-    })
-  end
-end
-
--- https://github.com/go-delve/delve/blob/master/Documentation/usage/dlv_dap.md
 dap.configurations.go = {
-  -- vscode-go test project
+  --- vscode-go test project
   {
     name = "nvim-dap(vscode): Go Debug",
     type = "go", -- VVI: dap.adapters.go 名字要对应
     request = "launch",
     showLog = false,
-    program = "${file}",
     dlvToolPath = vim.fn.exepath("dlv"), -- Adjust to where delve is installed
+
+    program = "${file}",
   },
 
-  -- dlv test packages
+  --- test function
   {
-    name = "nvim-dap(delve): Go Debug test (pkg)",
-    type = "delve", -- VVI: dap.adapters.delve 名字要对应
+    name = "nvim-dap(vscode): Go Debug test (func)",
+    type = "go",
     request = "launch",
     mode = "test",
-    program = "./${relativeFileDirname}",
+    showLog = false,
+    dlvToolPath = vim.fn.exepath("dlv"), -- Adjust to where delve is installed
+
+    program = "${fileDirname}",
+
+    --- 设置为 func, 动态获取 <cword>
+    args = function()
+      return { "-test.v", "-test.run", "^" .. vim.fn.expand('<cword>') .. "$" }
+    end
+  },
+
+  --- test packages
+  {
+    name = "nvim-dap(vscode): Go Debug test (pkg)",
+    type = "go",
+    request = "launch",
+    mode = "test",
+    showLog = false,
+    dlvToolPath = vim.fn.exepath("dlv"), -- Adjust to where delve is installed
+
+    program = "${fileDirname}",
   },
 }
 
