@@ -92,6 +92,7 @@ dap.configurations.go = {
       --- 判断当前函数是否 TestXXX. 如果是, 则获取 test function name.
       local testfn_name, mode = utils.get_exact_testfn_name()
       if not testfn_name or not mode then
+        --- default setting
         return { "-test.v", "-test.run", "^" .. vim.fn.expand('<cword>') .. "$" }
       end
 
@@ -106,14 +107,14 @@ dap.configurations.go = {
         }
       elseif mode == 'fuzz' then
         local fp = vim.fs.dirname(vim.api.nvim_buf_get_name(0))
-        local testdata = vim.fs.joinpath(fp, "testdata", "fuzz")
+        local testdata = vim.fs.joinpath(fp, "testdata", "fuzz")  --- fuzz test data dir
         --- debug fuzz 函数时, 只运行 Seed Corpus (f.Add 的数据) 和 testdata 里的失败案例.
         --- 所以需要给 -run, -fuzz 都设置函数名.
         return {
           "-test.v",
           "-test.run", "^$",
           "-test.fuzz", "^" .. testfn_name .. "$",
-          "-test.fuzzcachedir", testdata,  -- fuzzing input data
+          "-test.fuzzcachedir", testdata,  -- fuzzing input data, 必须要
           "-test.fuzztime", "15s",
         }
       else
