@@ -64,32 +64,36 @@ end
 --- trash_buffer --------------------------------------------------------------- {{{
 
 local function trash_buffer()
+  --- 获取光标指向的 nvim-tree Node
   local node = nt_api.tree.get_node_under_cursor()
-  local bufnr_under_cursor = vim.fn.bufnr(node.absolute_path)
 
+  --- 如果 node (filepath) 没有被显示, 则返回 -1, 可以直接 trash()
+  local bufnr_under_cursor = vim.fn.bufnr(node.absolute_path)
   if bufnr_under_cursor > 0 then
-    --- 获取 windows
-    local wins = vim.fn.getbufinfo(bufnr_under_cursor)[1].windows
+    local listed_buffers = vim.fn.getbufinfo({buflisted = 1})
 
     local target_bufnr
-    local listed_buffers = vim.fn.getbufinfo({buflisted=1})
-    if #listed_buffers <= 1 then
-      target_bufnr = vim.api.nvim_create_buf(true, false)  --- create listed buffer
-    else
-      for _, value in ipairs(listed_buffers) do
-        if value.bufnr ~= bufnr_under_cursor then
-          target_bufnr = value.bufnr
-          break
-        end
+    for _, value in ipairs(listed_buffers) do
+      local bufnr = value.bufnr
+      if bufnr_under_cursor ~= bufnr then
+        target_bufnr = bufnr
+        break
       end
     end
 
+    --- 如果 target_bufnr 不存在则创建一个新的 listed buffer
+    if not target_bufnr then
+      target_bufnr = vim.api.nvim_create_buf(true, false)  --- 创建一个 listed buffer
+    end
+
+    --- 获取正在显示 bufnr_under_cursor 的所有 windows
+    local wins = vim.fn.getbufinfo(bufnr_under_cursor)[1].windows
     for _, win_id in ipairs(wins) do
       vim.api.nvim_win_set_buf(win_id, target_bufnr)
     end
-
-    nt_api.fs.trash(node)
   end
+
+  nt_api.fs.trash(node)
 end
 --- }}}
 
