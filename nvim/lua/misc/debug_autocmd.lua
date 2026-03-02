@@ -140,8 +140,8 @@ local function debug_autocmd(e)
     pattern = {"*"},
     callback = function(params)
       local curr = {
-        curr_win=vim.api.nvim_get_current_win(),
-        curr_buf=vim.api.nvim_get_current_buf(),
+        curr_win = vim.api.nvim_get_current_win(),
+        curr_buf = vim.api.nvim_get_current_buf(),
       }
       print(vim.json.encode(curr), vim.json.encode(params))
       if params.event == "VimLeave" then

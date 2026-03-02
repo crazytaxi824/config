@@ -57,8 +57,7 @@ local function open_new_tab_for_debug()
   end
 
   --- if debug tab NOT exist, open a new tab for debug.
-  local bufnr = vim.api.nvim_get_current_buf()
-  vim.cmd.tabnew(vim.api.nvim_buf_get_name(bufnr))
+  vim.cmd.tabnew(vim.api.nvim_buf_get_name(0))
 
   --- 标记该 tab.
   vim.t[tabvar_dap] = vim.api.nvim_get_current_win()

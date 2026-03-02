@@ -4,7 +4,7 @@ local M = {}
 
 --- save buffer to file
 M.save = function()
-  local fname = vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf())
+  local fname = vim.api.nvim_buf_get_name(0)
   if fname == '' then
     --- file not exist, prompt filename
     local prompt = "save to filename: "

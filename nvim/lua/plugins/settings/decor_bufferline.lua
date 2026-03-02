@@ -419,7 +419,7 @@ end
 --- load 鼠标点击的 buffer
 local function load_bufnr_on_left_click(bufnr)
   --- cursor 所在 window 中是 listed-buffer, 则允许加载指定 bufnr.
-  if vim.fn.buflisted(vim.api.nvim_get_current_buf()) == 1 then
+  if vim.fn.buflisted(0) == 1 then
     vim.api.nvim_set_current_buf(bufnr)  -- load 指定 buffer
     return
   end

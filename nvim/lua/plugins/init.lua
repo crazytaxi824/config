@@ -19,7 +19,7 @@ vim.opt.rtp:prepend(lazypath)
 
 --- `nvim dir` 打开文件夹时直接加载 nvim-tree.lua, `nvim file` 打开 file 时不加载 nvim-tree.lua, 通过快捷键加载.
 local isfile = true
-local finfo = vim.uv.fs_stat(vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf()))
+local finfo = vim.uv.fs_stat(vim.api.nvim_buf_get_name(0))
 if finfo and finfo.type == 'directory' then
   isfile = false
 end

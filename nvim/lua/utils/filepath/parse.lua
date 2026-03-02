@@ -171,7 +171,7 @@ end
 ---
 --- @return {bufnr: integer, pos: HighLightPos[]}|nil hl_params
 M.parse_hl_line = function()
-  --- {bufnr, pos=[]}
+  --- { bufnr, pos=[] }
   local rs = {
     bufnr = vim.api.nvim_get_current_buf(),
 
