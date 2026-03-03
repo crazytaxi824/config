@@ -125,7 +125,6 @@ local nt_buffer_keymaps = {
   { "a",           nt_api.fs.create,   "Create File" },
   -- { "D",           nt_api.fs.remove,   "Remove File" },  -- `rm file`, 无法将其移动到 Trash Bin
   -- { "D",           nt_api.fs.trash,    "Trash File" },   -- `trash file`, 将文件移动到 Trash Bin, 可以还原
-  { "D",           trash_buffer,    "Trash File" },   -- `trash file`, 将文件移动到 Trash Bin, 可以还原
   { "R",           nt_api.fs.rename_full,   "Full Rename" },  -- 类似 `$ mv foo bar`
   { "y",           nt_api.fs.copy.absolute_path,   "Copy Absolute Path" },
   { "C",           nt_api.fs.copy.node,   "Copy File" },
@@ -135,8 +134,9 @@ local nt_buffer_keymaps = {
   { "M",           nt_api.marks.clear,    "Clear All Marks" },
 
   --- 自定义功能
-  {  "<leader>o",    back_to_pwd,                "back to Original pwd" },
-  {  "<leader>c",    compare_two_marked_files,   "compare two marked files" },
+  { "D",           trash_buffer,    "Trash File" },   -- `trash file`, 将文件移动到 Trash Bin, 可以还原
+  {  "<leader>o",  back_to_pwd,     "back to Original pwd" },
+  {  "<leader>c",  compare_two_marked_files,   "compare two marked files" },
 }
 
 -- -- }}}
