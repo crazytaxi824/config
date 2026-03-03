@@ -12,7 +12,7 @@ local t_key  = require('utils.my_term.term_keymaps')
 --- @param term_bufnr integer
 --- @param term_win_id integer
 --- @return integer job_id
-local function my_term_exec(term, term_bufnr, term_win_id)
+local function myterm_exec(term, term_bufnr, term_win_id)
   --- executed before jobstart(). DO NOT have 'term.bufnr' and 'term.job_id' ...
   if term.before_run then
     term.before_run(term, term_bufnr)
@@ -65,13 +65,13 @@ function M._new(id, opts, force)
       end
 
       --- 创建并进入 term window & buffer
-      local term_bufnr, term_win_id = t_win.my_term_buf_win(self)
+      local term_bufnr, term_win_id = t_win.set_myterm_current_win(self)
 
       --- 快捷键设置: 在获取到 term.bufnr 和 term.id 之后运行
       t_key.set_buf_keymaps(self, term_bufnr)
 
       --- VVI(jobstart): 执行 cmd
-      local job_id = my_term_exec(self, term_bufnr, term_win_id)
+      local job_id = myterm_exec(self, term_bufnr, term_win_id)
 
       --- buffer 被 wipeout 的时候自动 jobstop()
       cb.autocmd_jobstop(self, term_bufnr, job_id)
