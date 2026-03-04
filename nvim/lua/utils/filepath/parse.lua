@@ -34,28 +34,6 @@ local function index_of(list, v)
   end
 end
 
---- Lua Patterns: escape '()[]+-*.?%^$'
----
---- @param x string|number
---- @return string
---- @return integer count
-local function lua_escape(x)
-  return string.gsub(x, '[%%%(%)%[%]%?%+%-%*%^%$%.]', {
-    ['%'] = "%%",
-    ["("] = "%(",
-    [")"] = "%)",
-    ["["] = "%[",
-    ["]"] = "%]",
-    ["?"] = "%?",
-    ["+"] = "%+",
-    ["-"] = "%-",
-    ["*"] = "%*",
-    ["^"] = "%^",
-    ["$"] = "%$",
-    ["."] = "%.",
-  })
-end
-
 --- clear { '`', '"', "'", '(', '[', '{', '<'}
 ---
 --- @param str string
@@ -72,15 +50,15 @@ local function clear_brackets(str)
   return str
 end
 
---- clear 'file://' schema
+--- 去掉所有常用符号
 ---
 --- @param str string
 --- @return string
-local function clear_file_schema(str)
-  local t = string.match(str, 'file://(.*)')
-  if t then
-    return t
-  end
+local function normalize_str(str)
+  str = str:match('(.-)[,;!?]*$') or str  -- 去掉结尾的 , ; ! ? 符号
+  str = clear_brackets(str)  -- 去掉第外层 () [] <> {} ...
+  str = str:match('[%w_]+://(.*)') or str  -- 去掉 file://(...)
+  str = clear_brackets(str)  -- 去掉第内层 () [] <> {} ...
   return str
 end
 
@@ -107,35 +85,31 @@ local function filepath_with_lnum_col(str)
     return
   end
 
-  local r = {}
-
-  --- dir
-  if finfo.type == 'directory' then
-    r.type = finfo.type
-    r.original_fp = splits[1]
-    r.absolute_fp = absolute_fp
-    return r
-  end
+  local r = {
+    original_fp = splits[1],
+    absolute_fp = absolute_fp,
+    type        = finfo.type,
+  }
 
   --- file
   if finfo.type == 'file' then
-    r.type = finfo.type
-    r.original_fp = splits[1]
-    r.absolute_fp = absolute_fp
     r.lnum = tonumber(splits[2])
     r.col = tonumber(splits[3])
-    return r
+  elseif finfo.type ~= 'directory' then
+    return
   end
+
+  return r
 end
 
 --- 分析 filepath
 ---
 --- @param str string
---- @param hl string|boolean|nil (标记: 是否计算 highlight lnum, start_col, end_col)
+--- @param need_hl string|boolean|nil (标记: 是否计算 highlight lnum, start_col, end_col)
 --- @return table|nil
-local function filepath_from_str(str, hl)
-  local tmp = clear_brackets(str)  -- <>, (), [], ...
-  tmp = clear_file_schema(tmp)  -- file://
+local function filepath_from_str(str, need_hl)
+  --- <>, (), [], ..., file://(...)
+  local tmp = normalize_str(str)
 
   local r = filepath_with_lnum_col(tmp)
   if not r then
@@ -143,16 +117,21 @@ local function filepath_from_str(str, hl)
   end
 
   --- 需要计算 highlight lnum, start_col, end_col
-  if hl then
-    local find = lua_escape(r.original_fp)
+  if need_hl then
+    local pat_plain = r.original_fp
     if r.lnum then
-      find = find .. ':' .. r.lnum
+      pat_plain = pat_plain .. ':' .. r.lnum
       if r.col then
-        find = find .. ':' .. r.col
+        pat_plain = pat_plain .. ':' .. r.col
       end
     end
 
-    r.i, r.j = string.find(str, find)
+    --- 1: 从第一个 char 还是匹配
+    --- true: plain=true, 关闭正则匹配, 避免 'pattern' 被解析为 Lua pattern
+    r.i, r.j = string.find(str, pat_plain, 1, true)
+    if not r.i or not r.j then
+      error("string find error")
+    end
   end
 
   return r
@@ -171,34 +150,29 @@ end
 ---
 --- @return {bufnr: integer, pos: HighLightPos[]}|nil hl_params
 M.parse_hl_line = function()
-  --- { bufnr, pos=[] }
-  local rs = {
-    bufnr = vim.api.nvim_get_current_buf(),
-
-    --- @type HighLightPos[]
-    pos = {},
-  }
-
   local lcontent = string.gsub(vim.api.nvim_get_current_line(), '\t', ' ')  --- VVI: replace '\t' with ' '
   local lnum = vim.fn.line('.')
   local lsplits = vim.split(lcontent, ' ', {trimempty=false})
+
+  --- { bufnr, pos=[] }
+  local rs = {
+    bufnr = vim.api.nvim_get_current_buf(),
+    pos = {}, --- @type HighLightPos[]
+  }
 
   local pos = 0
   for _, value in ipairs(lsplits) do
     if #value ~= 0 then
       local r = filepath_from_str(value, 'hl')
       if r then
-        local start_col = pos + r.i -1
-        local end_col   = pos + r.j
-
         --- @type HighLightPos
         local hl_pos = {
-          type = r.type,
-          hl_lnum = lnum -1,
-          hl_start_col = start_col,
-          hl_end_col = end_col,
-          original_fp = r.original_fp,
-          absolute_fp = r.absolute_fp,
+          type         = r.type,
+          hl_lnum      = lnum -1,
+          hl_start_col = pos + r.i -1,
+          hl_end_col   = pos + r.j,
+          original_fp  = r.original_fp,
+          absolute_fp  = r.absolute_fp,
         }
 
         table.insert(rs.pos, hl_pos)
