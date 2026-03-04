@@ -53,7 +53,8 @@ local function set_buf_line_output(bufnr, data, hl)
     return
   end
 
-  local last_line_before_write = vim.api.nvim_buf_line_count(bufnr)
+  --- cache 开始进行 highlight 的 lnum
+  local hl_start_lnum = vim.api.nvim_buf_line_count(bufnr)
 
   --- VVI: 处理 EOF, data 最后会多一行 empty line.
   --- `:help channel-callback`, `:help channel-lines`, 中说明: EOF is a single-item list: `['']`.
@@ -66,18 +67,13 @@ local function set_buf_line_output(bufnr, data, hl)
   --- byte(0) 本应该是 '\null' 但是只显示了第一个字符变成了 '\n', 导致 nvim_buf_set_lines() 以为是换行符而报错.
   for i, d in ipairs(data) do
     data[i] = string.gsub(d, '\n', '\0')  -- 打印为 ^@
-    -- data[i] = string.gsub(d, '\n', '󰟢')  -- nerdfont null
   end
 
-  --- write output to buffer
+  --- append output {data} to buffer
   vim.api.nvim_buf_set_lines(bufnr, -1, -1, true, data)
 
   --- highlight lines
-  for i = last_line_before_write, vim.api.nvim_buf_line_count(bufnr)-1, 1 do
-    vim.hl.range(bufnr, ns, hl, {i, 0}, {i, -1})
-  end
-  --- BUG: vim.api.nvim_buf_clear_namespace() will clear vim.hl.range() multi-line highlight.
-  -- vim.hl.range(bufnr, ns, hl, {last_line_before_write, 0}, {vim.api.nvim_buf_line_count(bufnr)-1, -1})
+  vim.hl.range(bufnr, ns, hl, {hl_start_lnum, 0}, {vim.api.nvim_buf_line_count(bufnr)-1, -1})
 end
 
 --- job done 后处理: 在最后一行显示 [Process exited 'exit_code']
@@ -85,14 +81,14 @@ end
 --- @param bufnr integer
 --- @param exit_code integer
 local function set_buf_line_exit(bufnr, exit_code)
-  local last_line_before_write = vim.api.nvim_buf_line_count(bufnr)
+  local hl_start_lnum = vim.api.nvim_buf_line_count(bufnr)
   vim.api.nvim_buf_set_lines(bufnr, -1, -1, true, {"", "[Process exited " .. exit_code .. "]", ""})
 
   --- highlight
   if exit_code == 0 then
-    vim.hl.range(bufnr, ns, "my_output_sys", {last_line_before_write+1, 0}, {last_line_before_write+1, -1})
+    vim.hl.range(bufnr, ns, "my_output_sys", {hl_start_lnum+1, 0}, {hl_start_lnum+1, -1})
   else
-    vim.hl.range(bufnr, ns, "my_output_sys_error", {last_line_before_write+1, 0}, {last_line_before_write+1, -1})
+    vim.hl.range(bufnr, ns, "my_output_sys_error", {hl_start_lnum+1, 0}, {hl_start_lnum+1, -1})
   end
 end
 
@@ -148,11 +144,8 @@ function M.console_exec(term, term_bufnr, term_win_id)
     --- @param data string[]  output
     --- @param event string  'stdout'
     on_stdout = function(job_id, data, event)  -- NOTE: for fmt.Println()
-      --- write output to buffer
-      set_buf_line_output(term_bufnr, data, "my_output_stdout")
-
-      --- auto_scroll option
-      utils.buf_scroll_bottom(term, term_bufnr)
+      set_buf_line_output(term_bufnr, data, "my_output_stdout")  --- write output to buffer
+      utils.buf_scroll_bottom(term, term_bufnr)  --- auto_scroll option
 
       --- callback
       if term.on_stdout then
@@ -169,11 +162,8 @@ function M.console_exec(term, term_bufnr, term_win_id)
     --- @param data string[]  err_msg
     --- @param event string  'stderr'
     on_stderr = function(job_id, data, event)  -- NOTE: for log.Println()
-      --- write output to buffer
-      set_buf_line_output(term_bufnr, data, "my_output_stderr")
-
-      --- auto_scroll option
-      utils.buf_scroll_bottom(term, term_bufnr)
+      set_buf_line_output(term_bufnr, data, "my_output_stderr")  --- write output to buffer
+      utils.buf_scroll_bottom(term, term_bufnr)  --- auto_scroll option
 
       --- callback
       if term.on_stderr then
@@ -190,20 +180,12 @@ function M.console_exec(term, term_bufnr, term_win_id)
     --- @param exit_code integer
     --- @param event string  'exit'
     on_exit = function(job_id, exit_code, event)
-      --- write exit to buffer
-      set_buf_line_exit(term_bufnr, exit_code)
-
-      --- auto_scroll option
-      utils.buf_scroll_bottom(term, term_bufnr)
+      set_buf_line_exit(term_bufnr, exit_code)   --- write [exit_code] to buffer
+      utils.buf_scroll_bottom(term, term_bufnr)  --- auto_scroll option
 
       --- callback
       if term.on_exit then
         term.on_exit(term, term_bufnr, job_id, exit_code)
-
-        --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
-        if not vim.api.nvim_buf_is_valid(term_bufnr) then
-          error("should not delete terminal buffer")
-        end
       end
     end,
   })

@@ -80,11 +80,6 @@ function M.terminal_exec(term, term_bufnr, term_win_id)
         --- callback
         if term.on_exit then
           term.on_exit(term, term_bufnr, job_id, exit_code)
-
-          --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
-          if not vim.api.nvim_buf_is_valid(term_bufnr) then
-            error("should not delete terminal buffer")
-          end
         end
       end,
     })
