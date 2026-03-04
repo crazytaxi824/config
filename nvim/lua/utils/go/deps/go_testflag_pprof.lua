@@ -56,7 +56,7 @@ end
 --- 在指定 bufnr 中执行 jobstart(cmd), 但该 buffer 不显示在任何 window 中. (类似后台运行)
 ---
 --- @param cmd string[]
---- @param term_bufnr integer
+--- @param term_bufnr integer  attach to this buffer
 --- @param flag string  'cpu'|'mem'|'mutex'|...
 local function job_exec(cmd, term_bufnr, flag)
   --- VVI: 这里使用 scratch buffer 来执行 jobstart():
