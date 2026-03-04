@@ -1,4 +1,4 @@
-local auto_scroll = require('utils.my_term.deps.auto_scroll')
+local utils = require('utils.my_term.deps.utils')
 
 local M = {}
 
@@ -148,20 +148,20 @@ function M.console_exec(term, term_bufnr, term_win_id)
     --- @param data string[]  output
     --- @param event string  'stdout'
     on_stdout = function(job_id, data, event)  -- NOTE: for fmt.Println()
-      --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
-      if not vim.api.nvim_buf_is_valid(term_bufnr) then
-        return
-      end
-
       --- write output to buffer
       set_buf_line_output(term_bufnr, data, "my_output_stdout")
 
       --- auto_scroll option
-      auto_scroll.buf_scroll_bottom(term, term_bufnr)
+      utils.buf_scroll_bottom(term, term_bufnr)
 
       --- callback
       if term.on_stdout then
         term.on_stdout(term, term_bufnr, job_id, data)
+
+        --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
+        if not vim.api.nvim_buf_is_valid(term_bufnr) then
+          error("should not delete terminal buffer")
+        end
       end
     end,
 
@@ -169,20 +169,20 @@ function M.console_exec(term, term_bufnr, term_win_id)
     --- @param data string[]  err_msg
     --- @param event string  'stderr'
     on_stderr = function(job_id, data, event)  -- NOTE: for log.Println()
-      --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
-      if not vim.api.nvim_buf_is_valid(term_bufnr) then
-        return
-      end
-
       --- write output to buffer
       set_buf_line_output(term_bufnr, data, "my_output_stderr")
 
       --- auto_scroll option
-      auto_scroll.buf_scroll_bottom(term, term_bufnr)
+      utils.buf_scroll_bottom(term, term_bufnr)
 
       --- callback
       if term.on_stderr then
         term.on_stderr(term, term_bufnr, job_id, data)
+
+        --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
+        if not vim.api.nvim_buf_is_valid(term_bufnr) then
+          error("should not delete terminal buffer")
+        end
       end
     end,
 
@@ -190,21 +190,21 @@ function M.console_exec(term, term_bufnr, term_win_id)
     --- @param exit_code integer
     --- @param event string  'exit'
     on_exit = function(job_id, exit_code, event)
-      --- callback
-      if term.on_exit then
-        term.on_exit(term, term_bufnr, job_id, exit_code)
-      end
-
-      --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
-      if not vim.api.nvim_buf_is_valid(term_bufnr) then
-        return
-      end
-
       --- write exit to buffer
       set_buf_line_exit(term_bufnr, exit_code)
 
       --- auto_scroll option
-      auto_scroll.buf_scroll_bottom(term, term_bufnr)
+      utils.buf_scroll_bottom(term, term_bufnr)
+
+      --- callback
+      if term.on_exit then
+        term.on_exit(term, term_bufnr, job_id, exit_code)
+
+        --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
+        if not vim.api.nvim_buf_is_valid(term_bufnr) then
+          error("should not delete terminal buffer")
+        end
+      end
     end,
   })
 
