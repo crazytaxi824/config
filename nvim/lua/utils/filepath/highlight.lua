@@ -4,6 +4,8 @@ local parse = require('utils.filepath.parse')
 
 local M = {}
 
+--- current highlight buffer
+--- @type integer|nil
 local cache_hl_bufnr
 
 --- namespace
@@ -40,11 +42,8 @@ end
 --- NOTE: matchadd() 每次执行只能作用在 current window 上. 所有在该 window 打开的 buffer 都会收到影响.
 --- 而且状态持续, 当该 window 打开别的 buffer 时, highlight 一样会存在.
 M.highlight_filepath = function()
-  --- delete previous cached highlight
-  M.highlight_clear_cache()
-
-  --- highlight 整行中所有的 filepath
-  hl_line()
+  M.highlight_clear_cache()  --- delete previous cached highlight
+  hl_line()  --- highlight 整行中所有的 filepath
 end
 
 return M
