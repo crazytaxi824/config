@@ -1,6 +1,6 @@
 --- 跳转到 cursor 所在 filepath
 
-local parse = require('utils.filepath.parse')
+local parser = require('utils.filepath.parser')
 local vs = require('utils.visual_selected')
 
 --- 则选择合适的 window 显示文件
@@ -72,7 +72,7 @@ local function jump(content)
     return
   end
 
-  local r = parse.parse_content(content)
+  local r = parser.parse_content(content)
   if not r then
     return
   end

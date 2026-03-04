@@ -1,6 +1,6 @@
 --- highlight filepath
 
-local parse = require('utils.filepath.parse')
+local parser = require('utils.filepath.parser')
 
 local M = {}
 
@@ -25,7 +25,7 @@ end
 
 --- 检查一整行内所有 valide filepath, 然后 highlight.
 local function hl_filepath_in_current_line()
-  local rs = parse.parse_current_line()
+  local rs = parser.parse_current_line()
   if not rs then
     return
   end
