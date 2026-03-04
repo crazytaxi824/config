@@ -88,8 +88,7 @@ local function trash_buffer()
     end
 
     --- 获取正在显示 bufnr_under_cursor 的所有 windows
-    local wins = vim.fn.getbufinfo(bufnr_under_cursor)[1].windows
-    for _, win_id in ipairs(wins) do
+    for _, win_id in ipairs(vim.fn.win_findbuf(bufnr_under_cursor)) do
       vim.api.nvim_win_set_buf(win_id, target_bufnr)
     end
   end

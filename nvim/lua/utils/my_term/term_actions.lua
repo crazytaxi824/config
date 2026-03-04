@@ -13,7 +13,7 @@ function M.open_win(term_id)
     return
   end
 
-  local term_wins = vim.fn.getbufinfo(tp.bufnr)[1].windows
+  local term_wins = vim.fn.win_findbuf(tp.bufnr)
   if #term_wins > 0 then
     --- 如果有 window 正在显示该 term buffer, 则跳转到该 window.
     if vim.fn.win_gotoid(term_wins[1]) == 0 then
@@ -36,8 +36,7 @@ function M.close_win(term_id)
     return
   end
 
-  local term_wins = vim.fn.getbufinfo(tp.bufnr)[1].windows
-  for _, w in ipairs(term_wins) do
+  for _, w in ipairs(vim.fn.win_findbuf(tp.bufnr)) do
     vim.api.nvim_win_close(w, true)
   end
 end

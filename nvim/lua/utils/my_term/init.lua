@@ -26,7 +26,7 @@ end
 function M.open_all()
   g.range_TermPost(function (_, term_post)
     if vim.api.nvim_buf_is_valid(term_post.bufnr) then
-      local term_wins = vim.fn.getbufinfo(term_post.bufnr)[1].windows
+      local term_wins = vim.fn.win_findbuf(term_post.bufnr)
       if #term_wins < 1 then
         t_win.create_term_win(term_post.bufnr)
       end
@@ -50,8 +50,7 @@ function M.toggle_all()
 
   g.range_TermPost(function (_, term_post)
     if vim.api.nvim_buf_is_valid(term_post.bufnr) then
-      local term_wins = vim.fn.getbufinfo(term_post.bufnr)[1].windows
-      for _, w in ipairs(term_wins) do
+      for _, w in ipairs(vim.fn.win_findbuf(term_post.bufnr)) do
         table.insert(open_winid_list, w)
       end
     end

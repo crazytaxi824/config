@@ -11,8 +11,7 @@ local function find_exist_term_win()
 
   g.range_TermPost(function (_, term_post)
     if vim.api.nvim_buf_is_valid(term_post.bufnr) then
-      local term_wins = vim.fn.getbufinfo(term_post.bufnr)[1].windows
-      for _, w in ipairs(term_wins) do
+      for _, w in ipairs(vim.fn.win_findbuf(term_post.bufnr)) do
         if w > win_id then
           win_id = w
         end
@@ -60,12 +59,14 @@ local function reuse_term_win(new_term_bufnr, old_term_bufnr)
     error("bufnr is not exist")
   end
 
+  --- @type integer
   local win_id
 
-  local term_wins = vim.fn.getbufinfo(old_term_bufnr)[1].windows
+  local term_wins = vim.fn.win_findbuf(old_term_bufnr)
   if #term_wins > 0 then
     win_id = term_wins[1]
-    --- enter window
+
+    --- enter window & load buffer
     if vim.fn.win_gotoid(win_id) == 1 then
       --- 将 bufnr 加载到指定 win_id
       vim.api.nvim_win_set_buf(win_id, new_term_bufnr)
