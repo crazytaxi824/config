@@ -149,7 +149,7 @@ end
 --- 获取所有需要 highlight 的 filepaths
 ---
 --- @return {bufnr: integer, pos: HighLightPos[]}|nil hl_params
-M.parse_hl_line = function()
+M.parse_current_line = function()
   local lcontent = string.gsub(vim.api.nvim_get_current_line(), '\t', ' ')  --- VVI: replace '\t' with ' '
   local lnum = vim.fn.line('.')
   local lsplits = vim.split(lcontent, ' ', {trimempty=false})

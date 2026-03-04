@@ -24,8 +24,8 @@ M.highlight_clear_cache = function()
 end
 
 --- 检查一整行内所有 valide filepath, 然后 highlight.
-local function hl_line()
-  local rs = parse.parse_hl_line()
+local function hl_filepath_in_current_line()
+  local rs = parse.parse_current_line()
   if not rs then
     return
   end
@@ -43,7 +43,7 @@ end
 --- 而且状态持续, 当该 window 打开别的 buffer 时, highlight 一样会存在.
 M.highlight_filepath = function()
   M.highlight_clear_cache()  --- delete previous cached highlight
-  hl_line()  --- highlight 整行中所有的 filepath
+  hl_filepath_in_current_line()  --- highlight 整行中所有的 filepath
 end
 
 return M
