@@ -3,7 +3,8 @@
 local parser = require('utils.filepath.parser')
 local vs = require('utils.visual_selected')
 
---- 则选择合适的 window 显示文件
+--- 在当前 tab 中选择合适的 window 用于显示文件
+--- 优先选择已显示目标文件的 window，其次选择第一个 listed buffer window
 ---
 --- @param absolute_path string
 --- @return integer|nil
@@ -14,9 +15,9 @@ local function find_win_to_jump(absolute_path)
   local tab_wins = vim.api.nvim_tabpage_list_wins(0)
   for _, win_id in ipairs(tab_wins) do
     local bufnr = vim.api.nvim_win_get_buf(win_id)
-    local buffer_fullpath = vim.api.nvim_buf_get_name(bufnr)
 
     --- 寻找是否有 window 已经显示了指定文件.
+    local buffer_fullpath = vim.api.nvim_buf_get_name(bufnr)
     if buffer_fullpath == absolute_path then
       display_win_id = win_id
       break
@@ -27,6 +28,7 @@ local function find_win_to_jump(absolute_path)
       display_win_id = win_id
     end
   end
+
   return display_win_id
 end
 
@@ -49,8 +51,8 @@ local function jump_to_file(absolute_path, lnum, col)
     vim.api.nvim_win_set_cursor(display_win_id, {lnum, col-1})
   else
     --- 如果 win_id 不能跳转, 则在 terminal 正上方创建一个新的 window 用于显示 log filepath
-    vim.cmd.split({mods={split='leftabove'}, args={absolute_path}})
-    vim.api.nvim_win_set_cursor(0, {lnum, col-1})
+    vim.cmd.split({ mods = { split = 'leftabove' }, args = { absolute_path } })
+    vim.api.nvim_win_set_cursor(0, { lnum, col - 1 })
   end
 end
 
