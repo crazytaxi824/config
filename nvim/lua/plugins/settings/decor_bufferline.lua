@@ -272,7 +272,7 @@ local function close_current_tab()
   local del_nochanged_buf_list = {}
   for _, bufnr in ipairs(cur_tab_buf_list) do
     if not vim.tbl_contains(exclude_buffer_list, bufnr)  -- 排除存在于其他 tab 中 buffer.
-      and vim.fn.getbufinfo(bufnr)[1].changed == 0  -- 排除 unsaved buffer.
+      and not vim.bo[bufnr].modified  -- 排除 unsaved buffer.
       and vim.fn.buflisted(bufnr) == 1   -- 排除 unlisted buffer
     then
       table.insert(del_nochanged_buf_list, bufnr)
@@ -337,23 +337,17 @@ local function bufferline_del_current_buffer(ignore_tab)
     return
   end
 
-  --- NOTE: 以下是 single tab 情况下删除 current buffer.
-  local current_bufnr = vim.fn.bufnr()
-  if current_bufnr < 1 then
-    Notify("current bufnr < 1", "DEBUG")
-    return
-  end
-
-  local current_bufinfo = vim.fn.getbufinfo(current_bufnr)[1]
+  --- NOTE: 以下是 single (last) tab 情况下删除 current buffer.
+  local current_bufnr = vim.api.nvim_get_current_buf()
 
   --- current buffer 修改后未保存.
-  if current_bufinfo.changed == 1 then
+  if vim.bo[current_bufnr].modified then
     Notify("Cannot close Unsaved buffer", "WARN")
     return
   end
 
   --- current buffer 是 unlisted active buffer
-  if current_bufinfo.listed == 0 then
+  if vim.fn.buflisted(current_bufnr) == 0 then
     --- 如果有其他任何 window 中显示的是 listed buffer 则直接 :bdelete current buffer.
     for _, wininfo in ipairs(vim.fn.getwininfo()) do
       if vim.fn.buflisted(wininfo.bufnr) == 1 then
@@ -376,7 +370,7 @@ local function bufferline_del_current_buffer(ignore_tab)
 
   --- NOTE: 以下是 current_bufinfo.listed == 1 的情况.
   --- 如果 current buffer 是最后一个 listed buffer 则不删除.
-  local listed_buffers = vim.fn.getbufinfo({buflisted=1})
+  local listed_buffers = vim.fn.getbufinfo({ buflisted = 1 })
   if #listed_buffers == 1 then
     --- listed_buffers 只剩一个, 而且 current_bufinfo.listed == 1,
     --- 说明 current buffer 一定是最后一个 listed buffer.
@@ -398,7 +392,7 @@ end
 --- 删除指定 buffer
 local function bufferline_del_buffer_by_bufnr(bufnr)
   --- 判断指定 bufnr 是否为仅剩的最后一个 listed buffer
-  local listed_buffers = vim.fn.getbufinfo({buflisted=1})
+  local listed_buffers = vim.fn.getbufinfo({ buflisted = 1 })
   if #listed_buffers < 2 then
     Notify("Cannot close last listed-buffer", "WARN")
     return
@@ -610,7 +604,7 @@ local function bufferline_custom_sort_order()
     end, state.components)
   else
     --- 如果 custom_sort 不存在, 说明 buffer 位置是按照 bufnr 排序的(buffer 打开的顺序)
-    local listed_buffer = vim.fn.getbufinfo({buflisted=1})
+    local listed_buffer = vim.fn.getbufinfo({ buflisted = 1 })
     list = vim.tbl_map(function(item)
       return item.bufnr
     end, listed_buffer)

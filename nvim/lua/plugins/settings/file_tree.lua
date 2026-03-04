@@ -71,7 +71,7 @@ local function trash_buffer()
   --- 如果 node (filepath) 没有被显示, 则返回 -1, 可以直接 trash()
   local bufnr_under_cursor = vim.fn.bufnr(node.absolute_path)
   if bufnr_under_cursor > 0 then
-    local listed_buffers = vim.fn.getbufinfo({buflisted = 1})
+    local listed_buffers = vim.fn.getbufinfo({ buflisted = 1 })
 
     local target_bufnr
     for _, value in ipairs(listed_buffers) do
