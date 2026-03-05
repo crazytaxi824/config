@@ -13,6 +13,7 @@ vim.api.nvim_set_hl(0, "my_output_sys_error", {
 })
 vim.api.nvim_set_hl(0, "my_output_stdout", {ctermfg=Colors.blue.c, fg=Colors.blue.g})
 vim.api.nvim_set_hl(0, "my_output_stderr", {ctermfg=Colors.red.c, fg=Colors.red.g})
+vim.api.nvim_set_hl(0, "my_output_eof", {ctermfg=Colors.g238.c, fg=Colors.g238.g})
 
 --- 强制结束 job
 ---
@@ -79,17 +80,46 @@ end
 --- job done 后处理: 在最后一行显示 [Process exited 'exit_code']
 ---
 --- @param bufnr integer
+--- @param job_id integer
 --- @param exit_code integer
-local function set_buf_line_exit(bufnr, exit_code)
+local function set_buf_line_exit(bufnr, job_id, exit_code)
   local hl_start_lnum = vim.api.nvim_buf_line_count(bufnr)
-  vim.api.nvim_buf_set_lines(bufnr, -1, -1, true, {"", "[Process exited " .. exit_code .. "]", ""})
+  vim.api.nvim_buf_set_lines(bufnr, -1, -1, true, {"[EOF]", "[Process (job: " .. job_id .. ") has exited: " .. exit_code .. "]"})
 
   --- highlight
+  vim.hl.range(bufnr, ns, "my_output_eof", {hl_start_lnum, 0}, {hl_start_lnum, -1})
   if exit_code == 0 then
     vim.hl.range(bufnr, ns, "my_output_sys", {hl_start_lnum+1, 0}, {hl_start_lnum+1, -1})
   else
     vim.hl.range(bufnr, ns, "my_output_sys_error", {hl_start_lnum+1, 0}, {hl_start_lnum+1, -1})
   end
+end
+
+--- print cmd, job info
+---
+--- @param term MyTerm
+--- @param term_bufnr integer
+--- @param job_id integer
+local function print_job_info(term, term_bufnr, job_id)
+  local lines = {}  ---@type string[]
+
+  --- cmd string
+  local cmd = term.cmd
+  if type(cmd) == "string" then
+    table.insert(lines, cmd)
+  elseif type(cmd) == "table" then
+    table.insert(lines, table.concat(cmd, ' '))
+  else
+    error("term.cmd is not string|string[]")
+  end
+
+  --- process, job info
+  local job_info = "Process: " .. vim.fn.jobpid(job_id) .. " (job: " .. job_id .. ")"
+  table.insert(lines, job_info)
+
+  --- highlight
+  vim.api.nvim_buf_set_lines(term_bufnr, 0, -1, true, lines)  -- clear buffer text & print cmd
+  vim.hl.range(term_bufnr, ns, "my_output_sys", {0, 0}, {#lines-1, -1}) -- highlight cmd
 end
 
 --- 后台执行 jobstart(cmd), 将 output 手动写入 buffer. (buftype = 'nofile')
@@ -126,15 +156,6 @@ function M.console_exec(term, term_bufnr, term_win_id)
   vim.api.nvim_set_option_value('wrap', true, { scope='local', win=term_win_id })
   vim.api.nvim_set_option_value('relativenumber', false, { scope='local', win=term_win_id })
   vim.api.nvim_set_option_value('signcolumn', 'no', { scope='local', win=term_win_id })
-
-  --- print cmd
-  local print_cmd = term.cmd
-  if type(print_cmd) == "table" then
-    print_cmd = table.concat(print_cmd, ' ')
-  end
-
-  vim.api.nvim_buf_set_lines(term_bufnr, 0, -1, true, {print_cmd})  -- clear buffer text & print cmd
-  vim.hl.range(term_bufnr, ns, "my_output_sys", {0, 0}, {0, -1}) -- highlight cmd
 
   local job_id = vim.fn.jobstart(term.cmd, {
     cwd = term.cwd,
@@ -180,7 +201,7 @@ function M.console_exec(term, term_bufnr, term_win_id)
     --- @param exit_code integer
     --- @param event string  'exit'
     on_exit = function(job_id, exit_code, event)
-      set_buf_line_exit(term_bufnr, exit_code)   --- write [exit_code] to buffer
+      set_buf_line_exit(term_bufnr, job_id, exit_code)   --- write [exit_code] to buffer
       utils.buf_scroll_bottom(term, term_bufnr)  --- auto_scroll option
 
       --- callback
@@ -189,6 +210,10 @@ function M.console_exec(term, term_bufnr, term_win_id)
       end
     end,
   })
+
+  --- print cmd, job info
+  --- vim.fn.jobstart() 是异步函数, 所以 print_job_info() 会在 on_stdout, on_stderr 之前执行.
+  print_job_info(term, term_bufnr, job_id)
 
   --- keymap
   set_console_keymaps(term_bufnr, job_id)
