@@ -49,8 +49,33 @@
 
 
 
---- MyTermOpts
+--- @class MyTermOptsCallbackList
+---
+--- term:run() 时触发. before jobstart().
+--- @field before_run? MyTermCallback[]
+---
+--- term:run() 时触发. 在 jobstart() 之后马上执行, 和 on_exit 的区别是不用等到 jobdone.
+--- @field after_run?  MyTermCBWithJob[]
+---
+--- BufWinEnter. NOTE: 每次 term:// buffer 被 win 显示的时候都会触发, 同一个 buffer 被多个窗口显示时也会触发.
+--- @field on_open?    MyTermCallback[]
+---
+--- BufWinLeave. NOTE: BufWinLeave 只会在 buffer 离开最后一个 win 的时候触发.
+--- @field on_close?   MyTermCallback[]
+---
+--- jobstart() 中 callback 函数
+--- @field on_stdout? MyTermOnOutput[]
+---
+--- jobstart() 中 callback 函数
+--- @field on_stderr? MyTermOnOutput[]
+---
+--- jobstart() 中 callback 函数
+--- @field on_exit?   MyTermOnExit[]
+
+
+
 --- @class MyTermOpts: MyTermOptsProps, MyTermOptsCallbacks
+--- @class MyTermInternalOpts: MyTermOptsProps, MyTermOptsCallbackList
 
 
 
@@ -62,7 +87,7 @@
 --- @field id integer @readonly
 ---
 --- internal cache MyTermOpts
---- @field _opts MyTermOpts
+--- @field _opts MyTermInternalOpts
 ---
 --- jobstart(cmd, { env, cwd, on_stdout, on_stderr, on_exit, ... })
 --- @field run fun(self: MyTerm) @readonly
@@ -70,8 +95,8 @@
 --- jobstop(job_id)
 --- @field stop fun(self: MyTerm) @readonly
 ---
---- update MyTermOpts
---- @field update fun(self: MyTerm, new_opts: MyTermOpts)
+--- update MyTermInternalOpts
+--- @field update fun(self: MyTerm, new_opts: MyTermOpts, cb_mode?: 'append'|'replace')
 
 
 

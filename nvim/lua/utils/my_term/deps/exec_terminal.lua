@@ -43,7 +43,9 @@ function M.terminal_exec(term, term_bufnr, term_win_id)
 
         --- callback
         if term._opts.on_stdout then
-          term._opts.on_stdout(term, term_bufnr, job_id, data)
+          for _, on_stdout in ipairs(term._opts.on_stdout) do
+            on_stdout(term, term_bufnr, job_id, data)
+          end
 
           --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
           if not vim.api.nvim_buf_is_valid(term_bufnr) then
@@ -61,7 +63,9 @@ function M.terminal_exec(term, term_bufnr, term_win_id)
 
         --- callback
         if term._opts.on_stderr then
-          term._opts.on_stderr(term, term_bufnr, job_id, data)
+          for _, on_stderr in ipairs(term._opts.on_stderr) do
+            on_stderr(term, term_bufnr, job_id, data)
+          end
 
           --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
           if not vim.api.nvim_buf_is_valid(term_bufnr) then
@@ -79,7 +83,9 @@ function M.terminal_exec(term, term_bufnr, term_win_id)
 
         --- callback
         if term._opts.on_exit then
-          term._opts.on_exit(term, term_bufnr, job_id, exit_code)
+          for _, on_exit in ipairs(term._opts.on_exit) do
+            on_exit(term, term_bufnr, job_id, exit_code)
+          end
         end
       end,
     })
