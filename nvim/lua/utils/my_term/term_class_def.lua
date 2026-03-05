@@ -4,8 +4,8 @@
 --- @alias MyTermOnExit fun(term: MyTerm, bufnr: integer, job_id: integer, exit_code: integer)
 
 
---- MyTermOpts
---- @class MyTermOpts
+
+--- @class MyTermOptsProps
 ---
 --- `:help jobstart()` cmd
 --- @field cmd? string|string[]
@@ -21,6 +21,10 @@
 ---
 --- true: 在 console 中执行; false: 在 terminal 中执行.
 --- @field console_output? boolean
+
+
+
+--- @class MyTermOptsCallbacks
 ---
 --- term:run() 时触发. before jobstart().
 --- @field before_run? MyTermCallback
@@ -42,6 +46,11 @@
 ---
 --- jobstart() 中 callback 函数
 --- @field on_exit?   MyTermOnExit
+
+
+
+--- MyTermOpts
+--- @class MyTermOpts: MyTermOptsProps, MyTermOptsCallbacks
 
 
 

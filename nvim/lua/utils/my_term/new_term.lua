@@ -6,6 +6,7 @@ local t_win = require('utils.my_term.deps.term_win')
 local t_act = require('utils.my_term.term_actions')
 local t_key  = require('utils.my_term.term_keymaps')
 
+
 --- jobstart(cmd, opts), 给 my_term.job_id 赋值.
 ---
 --- @param term MyTerm
