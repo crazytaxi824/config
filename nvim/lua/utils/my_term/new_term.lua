@@ -96,7 +96,6 @@ function M._new(id, opts, force)
       end
     end,
 
-    --- @param self MyTerm
     run = function(self)
       if t_act.job_status(self.id) == -1 then
         Notify("job_id is still running, please use `term:stop()` or `CTRL-C` first.", "WARN", {title="my_term"})

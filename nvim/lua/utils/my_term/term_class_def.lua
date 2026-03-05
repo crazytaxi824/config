@@ -94,7 +94,7 @@
 --- @field stop fun(self: MyTerm) @readonly
 ---
 --- update MyTermInternalOpts
---- @field update fun(self: MyTerm, new_opts: MyTermOpts, cb_mode?: 'append'|'replace')
+--- @field update fun(self: MyTerm, opts: MyTermOpts, cb_mode?: 'append'|'replace')
 
 
 
