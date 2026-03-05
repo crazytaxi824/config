@@ -15,13 +15,13 @@ function M.autocmd_callback(term, term_bufnr)
     buffer = term_bufnr,
     callback = function(params)
       --- callback
-      if params.event == "BufWinEnter" and term.on_open then
-        term.on_open(term, term_bufnr)
+      if params.event == "BufWinEnter" and term._opts.on_open then
+        term._opts.on_open(term, term_bufnr)
         return
       end
       --- callback
-      if params.event == "BufWinLeave" and term.on_close then
-        term.on_close(term, term_bufnr)
+      if params.event == "BufWinLeave" and term._opts.on_close then
+        term._opts.on_close(term, term_bufnr)
       end
     end,
     desc = "my_term: on_open() & on_close() callback",

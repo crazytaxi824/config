@@ -14,7 +14,7 @@ function M.terminal_exec(term, term_bufnr, term_win_id)
     error("MyTerm win_id and bufnr do not match")
   end
 
-  if not term.cmd then
+  if not term._opts.cmd then
     error("MyTerm.cmd is missing")
   end
 
@@ -29,10 +29,10 @@ function M.terminal_exec(term, term_bufnr, term_win_id)
   --- Otherwise a temporary scratch window (called the "autocmd window" for
   --- historical reasons) will be used.
   return vim.api.nvim_buf_call(term_bufnr, function()
-    return vim.fn.jobstart(term.cmd, {
+    return vim.fn.jobstart(term._opts.cmd, {
       term = true,  -- VVI: 将 output 结果输出到 bufnr
-      cwd = term.cwd,
-      env = term.env,
+      cwd = term._opts.cwd,
+      env = term._opts.env,
 
       --- @param job_id integer
       --- @param data string[]  output
@@ -42,8 +42,8 @@ function M.terminal_exec(term, term_bufnr, term_win_id)
         utils.buf_scroll_bottom(term, term_bufnr)
 
         --- callback
-        if term.on_stdout then
-          term.on_stdout(term, term_bufnr, job_id, data)
+        if term._opts.on_stdout then
+          term._opts.on_stdout(term, term_bufnr, job_id, data)
 
           --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
           if not vim.api.nvim_buf_is_valid(term_bufnr) then
@@ -60,8 +60,8 @@ function M.terminal_exec(term, term_bufnr, term_win_id)
         utils.buf_scroll_bottom(term, term_bufnr)
 
         --- callback
-        if term.on_stderr then
-          term.on_stderr(term, term_bufnr, job_id, data)
+        if term._opts.on_stderr then
+          term._opts.on_stderr(term, term_bufnr, job_id, data)
 
           --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
           if not vim.api.nvim_buf_is_valid(term_bufnr) then
@@ -78,8 +78,8 @@ function M.terminal_exec(term, term_bufnr, term_win_id)
         utils.buf_scroll_bottom(term, term_bufnr)
 
         --- callback
-        if term.on_exit then
-          term.on_exit(term, term_bufnr, job_id, exit_code)
+        if term._opts.on_exit then
+          term._opts.on_exit(term, term_bufnr, job_id, exit_code)
         end
       end,
     })

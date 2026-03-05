@@ -14,13 +14,13 @@ local t_key  = require('utils.my_term.term_keymaps')
 --- @return integer job_id
 local function myterm_exec(term, term_bufnr, term_win_id)
   --- executed before jobstart(). DO NOT have 'term.bufnr' and 'term.job_id' ...
-  if term.before_run then
-    term.before_run(term, term_bufnr)
+  if term._opts.before_run then
+    term._opts.before_run(term, term_bufnr)
   end
 
   --- VVI: 必须在 bufnr 被 window 显示之后运行. 避免 nvim_buf_call() 生成一个临时 autocmd window.
   local job_id
-  if term.console_output then
+  if term._opts.console_output then
     job_id = console.console_exec(term, term_bufnr, term_win_id)
   else
     job_id = terminal.terminal_exec(term, term_bufnr, term_win_id)
@@ -28,8 +28,8 @@ local function myterm_exec(term, term_bufnr, term_win_id)
 
   --- executed after jobstart(). Have 'term.bufnr' and 'term.job_id' ...
   --- 和 on_exit 的区别是不用等到 jobdone.
-  if term.after_run then
-    term.after_run(term, term_bufnr, job_id)
+  if term._opts.after_run then
+    term._opts.after_run(term, term_bufnr, job_id)
   end
 
   return job_id
@@ -56,11 +56,10 @@ function M._new(id, opts, force)
   --- @type MyTerm
   local my_term = {
     id = id,
+    _opts = opts,
 
     update = function(self, new_opts)
-      for key, value in pairs(new_opts) do
-        self[key] = value
-      end
+      self._opts = vim.tbl_deep_extend('force', self._opts, new_opts)
     end,
 
     --- @param self MyTerm

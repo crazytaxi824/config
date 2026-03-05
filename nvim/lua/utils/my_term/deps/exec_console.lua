@@ -104,7 +104,7 @@ local function print_job_info(term, term_bufnr, job_id)
   local lines = {}  ---@type string[]
 
   --- cmd string
-  local cmd = term.cmd
+  local cmd = term._opts.cmd
   if type(cmd) == "string" then
     table.insert(lines, cmd)
   elseif type(cmd) == "table" then
@@ -134,7 +134,7 @@ function M.console_exec(term, term_bufnr, term_win_id)
     error("MyTerm win_id and bufnr do not match")
   end
 
-  if not term.cmd then
+  if not term._opts.cmd then
     error("MyTerm.cmd is missing")
   end
 
@@ -157,9 +157,9 @@ function M.console_exec(term, term_bufnr, term_win_id)
   vim.api.nvim_set_option_value('relativenumber', false, { scope='local', win=term_win_id })
   vim.api.nvim_set_option_value('signcolumn', 'no', { scope='local', win=term_win_id })
 
-  local job_id = vim.fn.jobstart(term.cmd, {
-    cwd = term.cwd,
-    env = term.env,
+  local job_id = vim.fn.jobstart(term._opts.cmd, {
+    cwd = term._opts.cwd,
+    env = term._opts.env,
 
     --- @param job_id integer
     --- @param data string[]  output
@@ -169,8 +169,8 @@ function M.console_exec(term, term_bufnr, term_win_id)
       utils.buf_scroll_bottom(term, term_bufnr)  --- auto_scroll option
 
       --- callback
-      if term.on_stdout then
-        term.on_stdout(term, term_bufnr, job_id, data)
+      if term._opts.on_stdout then
+        term._opts.on_stdout(term, term_bufnr, job_id, data)
 
         --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
         if not vim.api.nvim_buf_is_valid(term_bufnr) then
@@ -187,8 +187,8 @@ function M.console_exec(term, term_bufnr, term_win_id)
       utils.buf_scroll_bottom(term, term_bufnr)  --- auto_scroll option
 
       --- callback
-      if term.on_stderr then
-        term.on_stderr(term, term_bufnr, job_id, data)
+      if term._opts.on_stderr then
+        term._opts.on_stderr(term, term_bufnr, job_id, data)
 
         --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
         if not vim.api.nvim_buf_is_valid(term_bufnr) then
@@ -205,8 +205,8 @@ function M.console_exec(term, term_bufnr, term_win_id)
       utils.buf_scroll_bottom(term, term_bufnr)  --- auto_scroll option
 
       --- callback
-      if term.on_exit then
-        term.on_exit(term, term_bufnr, job_id, exit_code)
+      if term._opts.on_exit then
+        term._opts.on_exit(term, term_bufnr, job_id, exit_code)
       end
     end,
   })
