@@ -79,8 +79,6 @@
 
 
 
---- MyTerm 继承 MyTermOpts
----
 --- @class MyTerm
 ---
 --- VVI: 保证每个 id 只和一个 bufnr 对应. id 一旦设置应该无法改变.
@@ -100,7 +98,6 @@
 
 
 
---- MyTermPost 继承自 MyTerm
 --- @class MyTermPost: MyTerm  继承 MyTerm
 ---
 --- MyTerm jobstart() 时使用的 buffer
