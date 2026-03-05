@@ -11,7 +11,7 @@ local function close_others(term_id)
     return
   end
 
-  g.range_TermPost(function (_, term_post)
+  g.range_TermPost(function(term_post)
     if term_post.bufnr ~= tp.bufnr then
       t_act.close_win(term_post.id)
     end
@@ -46,7 +46,7 @@ local function wipeout_others(term_id)
     return
   end
 
-  g.range_TermPost(function (_, term_post)
+  g.range_TermPost(function(term_post)
     if term_post.bufnr ~= tp.bufnr then
       t_act.wipeout(term_post.id)
     end

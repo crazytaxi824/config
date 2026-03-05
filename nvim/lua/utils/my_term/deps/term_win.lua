@@ -9,7 +9,7 @@ local M = {}
 local function find_exist_term_win()
   local win_id = -1
 
-  g.range_TermPost(function (_, term_post)
+  g.range_TermPost(function(term_post)
     if vim.api.nvim_buf_is_valid(term_post.bufnr) then
       for _, w in ipairs(vim.fn.win_findbuf(term_post.bufnr)) do
         if w > win_id then

@@ -34,10 +34,10 @@ end
 
 --- for range MyTermPost dict
 ---
---- @param callback fun(term_id: integer, term_post: MyTermPost)
+--- @param callback fun(term_post: MyTermPost)
 function M.range_TermPost(callback)
   for term_id, term_post in pairs(global_my_term_cache) do
-    callback(term_id, term_post)
+    callback(term_post)
   end
 end
 

@@ -17,14 +17,14 @@ M.console = console.console
 
 --- close all my_term windows
 function M.close_all()
-  g.range_TermPost(function (_, term_post)
+  g.range_TermPost(function(term_post)
     t_act.close_win(term_post.id)
   end)
 end
 
 --- open all terms which are cached in global_my_term_cache and bufnr is valid.
 function M.open_all()
-  g.range_TermPost(function (_, term_post)
+  g.range_TermPost(function(term_post)
     if vim.api.nvim_buf_is_valid(term_post.bufnr) then
       local term_wins = vim.fn.win_findbuf(term_post.bufnr)
       if #term_wins < 1 then
@@ -36,7 +36,7 @@ end
 
 --- jobstop(job_id) & :bwipeout all terminal buffers
 function M.wipeout_all()
-  g.range_TermPost(function (_, term_post)
+  g.range_TermPost(function(term_post)
     if vim.api.nvim_buf_is_valid(term_post.bufnr) then
       t_act.wipeout(term_post.id)
     end
@@ -48,7 +48,7 @@ function M.toggle_all()
   --- 获取所有的 my_term windows
   local open_winid_list= {}
 
-  g.range_TermPost(function (_, term_post)
+  g.range_TermPost(function(term_post)
     if vim.api.nvim_buf_is_valid(term_post.bufnr) then
       for _, w in ipairs(vim.fn.win_findbuf(term_post.bufnr)) do
         table.insert(open_winid_list, w)
