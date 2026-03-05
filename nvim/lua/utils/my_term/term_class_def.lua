@@ -57,6 +57,9 @@
 ---
 --- jobstop(job_id)
 --- @field stop fun(self: MyTerm) @readonly
+---
+--- update MyTermOpts
+--- @field update fun(self: MyTerm, new_opts: MyTermOpts)
 
 
 

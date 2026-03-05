@@ -57,6 +57,12 @@ function M._new(id, opts, force)
   local my_term = {
     id = id,
 
+    update = function(self, new_opts)
+      for key, value in pairs(new_opts) do
+        self[key] = value
+      end
+    end,
+
     --- @param self MyTerm
     run = function(self)
       if t_act.job_status(self.id) == -1 then

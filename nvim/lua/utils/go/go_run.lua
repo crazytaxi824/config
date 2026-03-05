@@ -16,8 +16,10 @@ M.go_run = function()
   -- local cmd = "go run " .. go_list.ImportPath  -- go run local/src
   local cmd = {"go", "run", go_list.ImportPath}  -- go run local/src
   local t = require('utils.my_term').console()
-  t.cmd = cmd
-  t.cwd = go_list.Root
+  t:update({
+    cmd = cmd,
+    cwd = go_list.Root,
+  })
   t:stop()
   t:run()
 end

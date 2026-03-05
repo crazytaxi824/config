@@ -5,7 +5,9 @@
 --- @param filepath string
 local function js_run(filepath)
   local t = require('utils.my_term').console()
-  t.cmd = {"node", filepath}
+  t:update({
+    cmd = { "node", filepath }
+  })
   t:stop()
   t:run()
 end

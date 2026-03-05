@@ -32,7 +32,9 @@ local function py_run(filepath)
   filepath = vim.fn.fnamemodify(filepath, ':~:.')
 
   local t = require('utils.my_term').console()
-  t.cmd = py_path .. " -- " .. filepath
+  t:update({
+    cmd = py_path .. " -- " .. filepath
+  })
   t:stop()
   t:run()
 end
