@@ -21,7 +21,7 @@ vim.api.nvim_set_hl(0, "my_output_eof", {ctermfg=Colors.g238.c, fg=Colors.g238.g
 --- @param job_id integer
 local function stop_job(term_bufnr, job_id)
   if vim.fn.jobstop(job_id) == 1 then
-    vim.api.nvim_buf_set_lines(term_bufnr, -1, -1, true, {"signal: interrupt"})
+    vim.api.nvim_buf_set_lines(term_bufnr, -1, -1, true, {"^C"})
   end
 end
 

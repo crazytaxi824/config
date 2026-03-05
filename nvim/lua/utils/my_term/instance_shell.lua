@@ -49,21 +49,16 @@ function M.open_shell_term()
   local t = new_mt._new(vim.v.count1, {
     cmd = vim.go.shell,  -- `:help 'shell'`, 相当于 os.getenv('SHELL'), vim.env.SHELL
     after_run = function(_, term_bufnr)
-      --- after_run 的时候 cursor 在 terminal window 中则执行 stopinsert.
+      --- after_run 的时候 cursor 在 terminal window 中则执行 startinsert.
       if vim.api.nvim_win_get_buf(vim.api.nvim_get_current_win()) == term_bufnr then
         vim.cmd.startinsert()
       end
     end,
     on_exit = function(_, term_bufnr)
-      --- VVI: 手动 :bwipeout 删除 buffer 时会触发 TermClose, 导致重复 wipeout buffer 而报错.
+      --- 在 jobdone (exit) 的时候 :bwipeout terminal buffer
       if vim.api.nvim_buf_is_valid(term_bufnr) then
         vim.api.nvim_buf_delete(term_bufnr, {force=true})  -- :bwipeout
       end
-
-      --- NOTE: jobdone 的时候 cursor 在 terminal window 中则执行 stopinsert.
-      -- if vim.api.nvim_win_get_buf(vim.api.nvim_get_current_win()) == term_bufnr then
-      --   vim.cmd.stopinsert()
-      -- end
     end,
   })
   t:run()

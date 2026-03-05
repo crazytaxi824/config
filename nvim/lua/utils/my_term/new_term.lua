@@ -81,16 +81,17 @@ function M._new(id, opts, force)
 
     update = function(self, new_opts, cb_mode)
       cb_mode = cb_mode or 'append'
+
       for key, value in pairs(new_opts) do
         if type(value) == "function" then
-          --- MyTermOptsCallbackList
+          --- 如果 opts 是 function 则 append/replace callback list
           if cb_mode == 'append' and self._opts[key] then
             table.insert(self._opts[key] or {}, value)
           else
             self._opts[key] = { value }
           end
         else
-          --- MyTermOptsProps
+          --- 如果 opts 是 props (k,v) 则直接替换
           self._opts[key] = value
         end
       end
