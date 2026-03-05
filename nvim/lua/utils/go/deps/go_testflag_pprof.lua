@@ -19,11 +19,6 @@ local utils = require("utils.go.deps.utils")
 --- NOTE: 必须是绝对路径.
 local pprof_dir = '/tmp/nvim/go_pprof/'
 
---- 缓存 job_id dict: `<term_bufnr = job_id>`
----
---- @type table<integer, integer>
-local cache_bg_jobs = {}
-
 --- go test cmd
 local go_test = {'go', 'test', '-count=1', '-v'}
 
@@ -58,6 +53,7 @@ end
 --- @param cmd string[]
 --- @param term_bufnr integer  attach to this buffer
 --- @param flag string  'cpu'|'mem'|'mutex'|...
+--- @return integer job_id
 local function job_exec(cmd, term_bufnr, flag)
   --- VVI: 这里使用 scratch buffer 来执行 jobstart():
   ---   1. 为了避免创建新的一个 window.
@@ -96,32 +92,23 @@ local function job_exec(cmd, term_bufnr, flag)
     })
   end)
 
-  --- 缓存当前 bg_job_id
-  cache_bg_jobs[term_bufnr] = bg_job_id
+  return bg_job_id
 end
 
 --- autocmd: 在 bufnr 被 wipeout 的时候 jobstop() 所有 jobs attched to bufnr.
 ---
 --- @param term_bufnr integer
-local function autocmd_jobstop(term_bufnr)
+--- @param job_id integer
+local function autocmd_jobstop(term_bufnr, job_id)
   --- jobstop() all jobs after this buffer removed.
   --- NOTE: 这里使用 group_id 是为了避免多次重复设置同一个 autocmd.
   --- NOTE: 这里不能用 BufDelete, 因为 terminal 本来就不在 buflist 中, 所以不会触发 BufDelete.
-  local group_id = vim.api.nvim_create_augroup("my_term_bg_job_" .. term_bufnr, {clear = true})
+  local group_id = vim.api.nvim_create_augroup("my_term_bg_job_" .. term_bufnr .. "_" .. job_id, {clear = true})
   vim.api.nvim_create_autocmd("BufWipeout", {
     group = group_id,
     buffer = term_bufnr,
     callback = function(params)
-      --- jobstop()
-      local job_id = cache_bg_jobs[term_bufnr]
-      if job_id then
-        vim.fn.jobstop(job_id)
-      end
-
-      --- 清空 cache
-      cache_bg_jobs[term_bufnr] = nil
-
-      --- delete augroup
+      vim.fn.jobstop(job_id)
       vim.api.nvim_del_augroup_by_id(group_id)
     end,
     desc = 'go_pprof: delete all jobs when this buffer is wiped out',
@@ -144,11 +131,11 @@ local function on_exit(opts, dir)
 
   --- VVI: return a callback function for jobstart(cmd, { on_exit = function(term) })
   return function(_, bufnr)
-    --- autocmd: 在 bufnr 被 wipeout 的时候 jobstop() 所有 jobs attched to bufnr.
-    autocmd_jobstop(bufnr)
-
     --- run `go tool pprof/trace ...` in background
-    job_exec(cmd, bufnr, opts.flag)
+    local bg_job_id = job_exec(cmd, bufnr, opts.flag)
+
+    --- autocmd: 在 bufnr 被 wipeout 的时候 jobstop()
+    autocmd_jobstop(bufnr, bg_job_id)
   end
 end
 
