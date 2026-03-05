@@ -6,12 +6,7 @@ local M = {}
 function M.go_test(term_opts)
   --- my_term 执行 command
   local t = require('utils.my_term').console()
-  t:update({
-    cmd = term_opts.cmd,
-    cwd = term_opts.cwd,
-    before_run = term_opts.before_run,
-    on_exit = term_opts.on_exit,
-  })
+  t:update(term_opts)
   t:stop()
   t:run()
 end
