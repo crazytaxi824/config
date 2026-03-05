@@ -114,7 +114,7 @@ local function print_job_info(term, term_bufnr, job_id)
   end
 
   --- process, job info
-  local job_info = "Process: " .. vim.fn.jobpid(job_id) .. " (job: " .. job_id .. ")"
+  local job_info = "[Process: " .. vim.fn.jobpid(job_id) .. " (job: " .. job_id .. ") starts]"
   table.insert(lines, job_info)
 
   --- highlight
