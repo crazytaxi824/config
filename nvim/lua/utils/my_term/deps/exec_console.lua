@@ -139,17 +139,6 @@ function M.console_exec(term, term_bufnr, term_win_id)
     error("MyTerm.cmd is missing")
   end
 
-  --- VVI: "prompt" 不能通过 insert mode 修改内容, 只能用 nvim_buf_set_lines() 修改内容.
-  vim.bo[term_bufnr].buftype = "prompt"
-  vim.fn.prompt_setprompt(term_bufnr, "> ")
-
-  --- 处理 prompt input
-  vim.fn.prompt_setcallback(term_bufnr, function(input)
-    if input == 'exit' then
-      vim.api.nvim_buf_delete(term_bufnr, {force = true})  --- :bwipeout
-    end
-  end)
-
   --- set bufname
   vim.api.nvim_buf_set_name(term_bufnr, "term://#my_term#console#" .. term.id)
 
@@ -157,6 +146,17 @@ function M.console_exec(term, term_bufnr, term_win_id)
   vim.api.nvim_set_option_value('wrap', true, { scope='local', win=term_win_id })
   vim.api.nvim_set_option_value('relativenumber', false, { scope='local', win=term_win_id })
   vim.api.nvim_set_option_value('signcolumn', 'no', { scope='local', win=term_win_id })
+
+  --- VVI: "prompt" 不能通过 insert mode 修改内容, 只能用 nvim_buf_set_lines() 修改内容.
+  vim.api.nvim_set_option_value('buftype', 'prompt', { scope='local', buf=term_bufnr })
+
+  --- 处理 prompt input
+  vim.fn.prompt_setprompt(term_bufnr, "> ")
+  vim.fn.prompt_setcallback(term_bufnr, function(input)
+    if input == 'exit' then
+      vim.api.nvim_buf_delete(term_bufnr, {force = true})  --- :bwipeout
+    end
+  end)
 
   local job_id = vim.fn.jobstart(cmd, {
     cwd = term.cwd(),

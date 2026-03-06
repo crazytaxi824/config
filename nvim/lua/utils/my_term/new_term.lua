@@ -32,7 +32,7 @@ local function myterm_exec(term, term_bufnr, term_win_id)
 
   --- executed after jobstart(). Have 'term.bufnr' and 'term.job_id' ...
   --- 和 on_exit 的区别是不用等到 jobdone.
-  local callbacks = term.after_run()
+  callbacks = term.after_run()
   if callbacks then
     for _, after_run in ipairs(callbacks) do
       after_run(term, term_bufnr, job_id)
