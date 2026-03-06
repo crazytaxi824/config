@@ -209,6 +209,7 @@ case $1 in
 		fgGrayscale
 		echo "Color cube, 6x6x6: 16~231"
 		fgCube
+		echo "The color palette is using 'sRGB' Hex value"
 		;;
 	"bg")
 		echo "System colors: 0~15 normal & bright colors"
@@ -217,6 +218,7 @@ case $1 in
 		bgGrayscale
 		echo "Color cube, 6x6x6: 16~231"
 		bgCube
+		echo "The color palette is using 'sRGB' Hex value"
 		;;
 	"all")
 		echo "System colors: 0~15 normal & bright colors"
@@ -228,6 +230,7 @@ case $1 in
 		echo "Color cube, 6x6x6: 16~231"
 		bgCube
 		fgCube
+		echo "The color palette is using 'sRGB' Hex value"
 		;;
 	*)
 		echo "256color [fg | bg | all]"
