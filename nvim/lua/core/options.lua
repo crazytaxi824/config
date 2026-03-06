@@ -342,9 +342,10 @@ vim.opt.sidescrolloff = 6  -- 和上面类似, 横向留空 n 列. NOTE: 配合 
 
 --- popup widnow 不要设置 scrolloff & sidescrolloff.
 --- `:help win_gettype()`, 'popup' window setlocal scrolloff=0 | sidescrolloff=0
-vim.api.nvim_create_autocmd('WinEnter', {
+vim.api.nvim_create_autocmd('WinNew', {
   pattern = {"*"},
   callback = function(params)
+    --- WinNew 中获取的 current win 一定是刚创建的 win_id
     local win_id = vim.api.nvim_get_current_win()
     if vim.fn.win_gettype(win_id) == 'popup' then
       --- 'scrolloff' & 'sidescrolloff' 都是 `global or local to window`,
@@ -353,7 +354,7 @@ vim.api.nvim_create_autocmd('WinEnter', {
       vim.api.nvim_set_option_value('sidescrolloff', 0, scope)
     end
   end,
-  desc = "setlocal scrolloff when enter floating window",
+  desc = "setlocal 'scrolloff' when open floating window",
 })
 
 --- 换行符, space, tab, cr ... 显示设置. `:help listchars` ----------------------------------------- {{{
@@ -531,7 +532,7 @@ vim.opt.undodir = '/tmp/nvim/undo'  -- undodir 是全局设置, 无法单独给�
 --vim.cmd [[au Filetype qf :wincmd J]]  --- 打开 qf window 时, 始终显示在屏幕最下方.
 --vim.cmd [[au Filetype qf :setlocal nobuflisted]]  --- nobuflisted for quickfix && location-list
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = {"qf"},
+  pattern = {"qf", "help"},
   callback = function(params)
     --- setlocal nobuflisted
     vim.bo[params.buf].buflisted = false
@@ -586,17 +587,5 @@ vim.api.nvim_create_autocmd({"ExitPre"}, {
   desc = "confirm: quit last window",
 })
 
---- help widnow 放到最右侧 ------------------------------------------------------------------------- {{{
--- vim.api.nvim_create_autocmd("FileType", {
---   pattern = {"help"},
---   callback = function(params)
---     --- 设置 bdelete 时 unload 之后, 再次打开 help 时会触发 FileType.
---     vim.bo[params.buf].bufhidden = 'unload'
---     --- move help window to the right side.
---     vim.cmd('wincmd L')
---   end,
---   desc = "help window vertically splitright",
--- })
--- }}}
 
 
