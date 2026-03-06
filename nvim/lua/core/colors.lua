@@ -90,7 +90,7 @@ Highlights = {
   --- VVI: Pmenu & FloatBorder 背景色需要设置为相同, 影响很多窗口的颜色.
   --- Completion Menu & Floating Window 颜色
   Pmenu = {
-    ctermfg=Colors.white.c, fg=Colors.white.g,
+    -- ctermfg=Colors.white.c, fg=Colors.white.g,
     ctermbg=Colors.g235.c, bg=Colors.g235.g,
   },
   --- Completion Menu 选中项颜色
