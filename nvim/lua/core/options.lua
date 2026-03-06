@@ -409,7 +409,7 @@ end, {bang=true, bar=true})
 --- vim `:h pattern-overview` 中使用双引号和单引号是不一样的. 单引号 '\(\)\+' 在双引号中需要写成 "\\(\\)\\+"
 --- \@<= 用法: \(an\_s\+\)\@<=file, 返回 "file" after "an" and white space or an
 --- vim.opt.foldtext = "printf('%s  %s', getline(v:foldstart), matchstr(getline(v:foldend), '\\(.*\\)\\@<=[})]\\+'))"
--- -- }}}
+--- }}}
 vim.opt.foldenable = true  -- 折叠代码.
 -- vim.opt.foldcolumn = "1"   -- 类似 signcolumn
 vim.opt.foldlevel = 99  -- `:help fold-foldlevel`, 在可 fold 的情况下 fold 第几层
@@ -510,7 +510,7 @@ vim.opt.completeopt = { "menuone", "noselect" } -- 代码补全, nvim-cmp 设置
 vim.opt.pumheight = 16  -- Maximum number of items to show in the popup menu. 默认 0
 --vim.opt.pumwidth = 15   -- Minimum width for the popup menu (ins-completion-menu). 默认 15
 
---- backup swapfile undofile ----------------------------------------------------------------------- {{{
+--- backup swapfile undofile -----------------------------------------------------------------------
 --- `:help backup-table`, 四种设置情况.
 --- 禁用 backup 功能.
 vim.opt.backup = false
@@ -524,25 +524,7 @@ vim.opt.undofile = true
 vim.opt.undodir = '/tmp/nvim/undo'  -- undodir 是全局设置, 无法单独给某个文件设置.
 --vim.opt.undolevels = 1000  -- 默认 1000. NOTE: undolevels 太大可能影响 opening buffer 速度.
 
---- 这里使用 VimEnter 是因为只需要执行一次命令.
-vim.api.nvim_create_autocmd("VimEnter", {
-  pattern = {"*"},
-  once = true,  -- "++once" 只在进入 neovim 时执行一次 autocmd
-  callback = function(params)
-    --- 延迟执行
-    vim.schedule(function()
-      --- undodir 不存在的情况下, `mkdir -p` 创建该文件夹.
-      if not vim.uv.fs_stat(vim.go.undodir) then
-        local result = vim.system({'mkdir', '-p', vim.go.undodir}, { text = true }):wait()  -- :wait() sync run
-        if result.code ~= 0 then
-          error(result.stderr ~= '' and result.stderr or result.code)
-        end
-      end
-    end)
-  end,
-  desc = "mkdir -p undodir",
-})
--- -- }}}
+--- autocmd ----------------------------------------------------------------------------------------
 
 --- NOTE: 'quickfix' & 'location-list' 的 filetype 都是 'qf'.
 --- :wincmd 快捷键是 <Ctrl-w>
@@ -587,7 +569,7 @@ vim.api.nvim_create_user_command('ToggleSpellCheck', function()
   end
 end, {bang=true, bar=true})
 
---- 如果删除最后一个 buflisted window, 则在删除之前创建一个新的 window. ---------------------------- {{{
+--- 如果删除最后一个 buflisted window, 则在删除之前创建一个新的 window
 vim.api.nvim_create_autocmd({"ExitPre"}, {
   callback = function(params)
     --- 如果是 :qa, :qa!, :xa, :xa! 则不做任何操作
@@ -603,7 +585,6 @@ vim.api.nvim_create_autocmd({"ExitPre"}, {
   end,
   desc = "confirm: quit last window",
 })
--- }}}
 
 --- help widnow 放到最右侧 ------------------------------------------------------------------------- {{{
 -- vim.api.nvim_create_autocmd("FileType", {

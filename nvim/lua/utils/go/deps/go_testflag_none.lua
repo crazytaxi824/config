@@ -6,6 +6,7 @@ local utils = require("utils.go.deps.utils")
 --- go test cmd
 local go_test = {'go', 'test', '-count=1', '-v'}
 
+
 --- @type GoTestFlagDict
 local M = {
   list = { 'none' },

@@ -33,6 +33,7 @@ local function on_exit(cover_out, cover_html)
   end
 end
 
+
 --- @type GoTestFlagDict
 local M = {
   list = {"cover", "coverprofile"},

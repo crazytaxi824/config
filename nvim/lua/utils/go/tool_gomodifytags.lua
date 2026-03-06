@@ -17,11 +17,11 @@
 ---   :GoTagOptionsRemoveAllStruct  -- remove tag's options to all struct in this file.
 ---
 --- 命令行工具使用: `gomodifytags --help`
---- silent execute "!gomodifytags -file src/main.go -offset 219 -add-tags json,xml -add-options json=omitempty,xml=omitempty -transform snakecase -skip-unexported -quiet -w" | checktime
---- silent execute "!gomodifytags -file src/main.go -offset 219 -clear-tags -quiet -w" | checktime  -- 删除所有 tag
---- silent execute "!gomodifytags -file src/main.go -offset 219 -clear-options -quiet -w" | checktime  -- 删除所有 tag 的所有 options
---- silent execute "!gomodifytags -file src/main.go -offset 219 -remove-tags json -quiet -w" | checktime  -- 删除指定 tag
---- silent execute "!gomodifytags -file src/main.go -offset 219 -remove-options json=omitempty -quiet -w" | checktime  -- 删除指定 tag 的指定 option.
+--- silent execute "!gomodifytags -file src/main.go -offset 219 -add-tags json,xml -add-options json=omitempty,xml=omitempty -transform snakecase -skip-unexported"
+--- silent execute "!gomodifytags -file src/main.go -offset 219 -clear-tags"  -- 删除所有 tag
+--- silent execute "!gomodifytags -file src/main.go -offset 219 -clear-options"  -- 删除所有 tag 的所有 options
+--- silent execute "!gomodifytags -file src/main.go -offset 219 -remove-tags json"  -- 删除指定 tag
+--- silent execute "!gomodifytags -file src/main.go -offset 219 -remove-options json=omitempty"  -- 删除指定 tag 的指定 option.
 ---
 --- 可选填项:
 ---   -file       filepath
@@ -34,10 +34,8 @@
 ---   -sort       按照 tags 首字母排序
 ---   -override   覆盖更改
 ---   -quiet      不打印运行结果
----   -w          保存文件
+---   -w          保存文件(外部修改文件)
 ---
---- NOTE: checktime - refresh buffer. 主要用于文件在 vim 外部被修改后刷新. eg: `gomodifytags`, `call writefile()` 等
----       文件被外部修改之后会重新加载所有针对该 <buffer> 的插件, eg: rundo - read undo file.
 -- -- }}}
 
 --- 重写整个 buffer 的内容

@@ -10,6 +10,7 @@ local go_list_module = require("utils.go.deps.go_list")
 local test_cmds = require("utils.go.deps.test_cmds")
 local utils = require("utils.go.deps.utils")
 
+
 local M = {}
 
 --- `go test run/bench=^TEST_Func_Name$ ImportPath`
@@ -36,14 +37,14 @@ function M.go_test_single_func(profile)
     go_list = go_list_module.go_list(),
   }
 
-  --- no profile
+  --- no profile: choose [none]
   if not profile then
     local myterm_opts = go_none.flags['none'].term_opts(opts)
     test_cmds.go_test(myterm_opts)
     return
   end
 
-  --- prompt exist
+  --- profile: choose [pprof]
   if mode == 'run' or mode == 'bench' then
     --- 排序
     local select = vim.iter({go_pprof.list, go_cover.list}):flatten():totable()

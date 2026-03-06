@@ -1,12 +1,12 @@
---- 使用 `impl` 命令给指定 interface 生成代码, 实现该 interface 的所有方法.
+--- 使用 `impl` 命令给指定 interface 生成代码, 实现该 interface 的所有方法 ------------------------- {{{
 --- <cword> under the cursor need to be a interface name.
---  `impl -dir src Cat IAnimal`
---      - 'Cat'      是我们需要定义的 type, 也就是以下传入的 obj.
---      - 'IAnimal'   是 interface 的名字, NOTE: 使用时需要将 cursor 放在 IAnimal 上 <cword>.
---  `:call writefile(["foo"], "src/main.go", "a")`  -- 'a': append mode, 将数据写入文件最后.
---
---  操作方法, cursor 指向 interface Name <cword>, 使用 Command `:GoImpl Foo`
-
+--- `impl -dir src Cat IAnimal`
+---     - 'Cat'      是我们需要定义的 type, 也就是以下传入的 obj.
+---     - 'IAnimal'   是 interface 的名字, NOTE: 使用时需要将 cursor 放在 IAnimal 上 <cword>.
+--- `:call writefile(["foo"], "src/main.go", "a")`  -- 'a': append mode, 将数据写入文件最后.
+---
+--- 操作方法, cursor 指向 interface Name <cword>, 使用 Command `:GoImpl Foo`
+--- }}}
 
 --- 从 type IFoo[K string, V int, R any, T interface{ int | int64 }, N Bar[M], M int] interface {}
 --- 中获取 IFoo[K,V,R,T,N,M]
@@ -44,6 +44,7 @@ local function get_iface_name_type(line)
 
   return name, ""
 end
+
 
 local M = {}
 
