@@ -14,7 +14,8 @@ function M.terminal_exec(term, term_bufnr, term_win_id)
     error("MyTerm win_id and bufnr do not match")
   end
 
-  if not term._opts.cmd then
+  local cmd = term.cmd()
+  if not cmd then
     error("MyTerm.cmd is missing")
   end
 
@@ -29,10 +30,10 @@ function M.terminal_exec(term, term_bufnr, term_win_id)
   --- Otherwise a temporary scratch window (called the "autocmd window" for
   --- historical reasons) will be used.
   return vim.api.nvim_buf_call(term_bufnr, function()
-    return vim.fn.jobstart(term._opts.cmd, {
+    return vim.fn.jobstart(cmd, {
       term = true,  -- VVI: 将 output 结果输出到 bufnr
-      cwd = term._opts.cwd,
-      env = term._opts.env,
+      cwd = term.cwd(),
+      env = term.env(),
 
       --- @param job_id integer
       --- @param data string[]  output
@@ -42,8 +43,9 @@ function M.terminal_exec(term, term_bufnr, term_win_id)
         utils.buf_scroll_bottom(term, term_bufnr)
 
         --- callback
-        if term._opts.on_stdout then
-          for _, on_stdout in ipairs(term._opts.on_stdout) do
+        local callbacks = term.on_stdout()
+        if callbacks then
+          for _, on_stdout in ipairs(callbacks) do
             on_stdout(term, term_bufnr, job_id, data)
           end
 
@@ -62,8 +64,9 @@ function M.terminal_exec(term, term_bufnr, term_win_id)
         utils.buf_scroll_bottom(term, term_bufnr)
 
         --- callback
-        if term._opts.on_stderr then
-          for _, on_stderr in ipairs(term._opts.on_stderr) do
+        local callbacks = term.on_stderr()
+        if callbacks then
+          for _, on_stderr in ipairs(callbacks) do
             on_stderr(term, term_bufnr, job_id, data)
           end
 
@@ -82,8 +85,9 @@ function M.terminal_exec(term, term_bufnr, term_win_id)
         utils.buf_scroll_bottom(term, term_bufnr)
 
         --- callback
-        if term._opts.on_exit then
-          for _, on_exit in ipairs(term._opts.on_exit) do
+        local callbacks = term.on_exit()
+        if callbacks then
+          for _, on_exit in ipairs(callbacks) do
             on_exit(term, term_bufnr, job_id, exit_code)
           end
         end

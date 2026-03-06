@@ -14,17 +14,19 @@ function M.autocmd_callback(term, term_bufnr)
     group = g_id,
     buffer = term_bufnr,
     callback = function(params)
-      --- callback
-      if params.event == "BufWinEnter" and term._opts.on_open then
-        for _, on_open in ipairs(term._opts.on_open) do
-          on_open(term, term_bufnr)
+      if params.event == "BufWinEnter" then
+        local callbacks = term.on_open()
+        if callbacks then
+          for _, on_open in ipairs(callbacks) do
+            on_open(term, term_bufnr)
+          end
         end
-        return
-      end
-      --- callback
-      if params.event == "BufWinLeave" and term._opts.on_close then
-        for _, on_close in ipairs(term._opts.on_close) do
-          on_close(term, term_bufnr)
+      elseif params.event == "BufWinLeave" then
+        local callbacks = term.on_close()
+        if callbacks then
+          for _, on_close in ipairs(callbacks) do
+            on_close(term, term_bufnr)
+          end
         end
       end
     end,

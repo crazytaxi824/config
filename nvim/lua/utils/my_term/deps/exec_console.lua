@@ -104,7 +104,7 @@ local function print_job_info(term, term_bufnr, job_id)
   local lines = {}  ---@type string[]
 
   --- cmd string
-  local cmd = term._opts.cmd
+  local cmd = term.cmd()
   if type(cmd) == "string" then
     table.insert(lines, cmd)
   elseif type(cmd) == "table" then
@@ -134,7 +134,8 @@ function M.console_exec(term, term_bufnr, term_win_id)
     error("MyTerm win_id and bufnr do not match")
   end
 
-  if not term._opts.cmd then
+  local cmd = term.cmd()
+  if not cmd then
     error("MyTerm.cmd is missing")
   end
 
@@ -157,9 +158,9 @@ function M.console_exec(term, term_bufnr, term_win_id)
   vim.api.nvim_set_option_value('relativenumber', false, { scope='local', win=term_win_id })
   vim.api.nvim_set_option_value('signcolumn', 'no', { scope='local', win=term_win_id })
 
-  local job_id = vim.fn.jobstart(term._opts.cmd, {
-    cwd = term._opts.cwd,
-    env = term._opts.env,
+  local job_id = vim.fn.jobstart(cmd, {
+    cwd = term.cwd(),
+    env = term.env(),
 
     --- @param job_id integer
     --- @param data string[]  output
@@ -169,8 +170,9 @@ function M.console_exec(term, term_bufnr, term_win_id)
       utils.buf_scroll_bottom(term, term_bufnr)  --- auto_scroll option
 
       --- callback
-      if term._opts.on_stdout then
-        for _, on_stdout in ipairs(term._opts.on_stdout) do
+      local callbacks = term.on_stdout()
+      if callbacks then
+        for _, on_stdout in ipairs(callbacks) do
           on_stdout(term, term_bufnr, job_id, data)
         end
 
@@ -189,8 +191,9 @@ function M.console_exec(term, term_bufnr, term_win_id)
       utils.buf_scroll_bottom(term, term_bufnr)  --- auto_scroll option
 
       --- callback
-      if term._opts.on_stderr then
-        for _, on_stderr in ipairs(term._opts.on_stderr) do
+      local callbacks = term.on_stderr()
+      if callbacks then
+        for _, on_stderr in ipairs(callbacks) do
           on_stderr(term, term_bufnr, job_id, data)
         end
 
@@ -209,8 +212,9 @@ function M.console_exec(term, term_bufnr, term_win_id)
       utils.buf_scroll_bottom(term, term_bufnr)  --- auto_scroll option
 
       --- callback
-      if term._opts.on_exit then
-        for _, on_exit in ipairs(term._opts.on_exit) do
+      local callbacks = term.on_exit()
+      if callbacks then
+        for _, on_exit in ipairs(callbacks) do
           on_exit(term, term_bufnr, job_id, exit_code)
         end
       end

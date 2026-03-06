@@ -15,15 +15,16 @@ local t_key  = require('utils.my_term.term_keymaps')
 --- @return integer job_id
 local function myterm_exec(term, term_bufnr, term_win_id)
   --- executed before jobstart(). DO NOT have 'term.bufnr' and 'term.job_id' ...
-  if term._opts.before_run then
-    for _, before_run in ipairs(term._opts.before_run) do
+  local callbacks = term.before_run()
+  if callbacks then
+    for _, before_run in ipairs(callbacks) do
       before_run(term, term_bufnr)
     end
   end
 
   --- VVI: 必须在 bufnr 被 window 显示之后运行. 避免 nvim_buf_call() 生成一个临时 autocmd window.
   local job_id
-  if term._opts.console_output then
+  if term.console_output() then
     job_id = console.console_exec(term, term_bufnr, term_win_id)
   else
     job_id = terminal.terminal_exec(term, term_bufnr, term_win_id)
@@ -31,8 +32,9 @@ local function myterm_exec(term, term_bufnr, term_win_id)
 
   --- executed after jobstart(). Have 'term.bufnr' and 'term.job_id' ...
   --- 和 on_exit 的区别是不用等到 jobdone.
-  if term._opts.after_run then
-    for _, after_run in ipairs(term._opts.after_run) do
+  local callbacks = term.after_run()
+  if callbacks then
+    for _, after_run in ipairs(callbacks) do
       after_run(term, term_bufnr, job_id)
     end
   end
@@ -74,10 +76,28 @@ function M._new(id, opts, force)
     end
   end
 
+  --- 只读
+  local _opts = init_opts(opts)
+
   --- @type MyTerm
   local my_term = {
     id = id,
-    _opts = init_opts(opts),
+
+    --- props
+    cmd = function() return _opts.cmd end,
+    cwd = function() return _opts.cwd end,
+    env = function() return _opts.env end,
+    auto_scroll = function() return _opts.auto_scroll end,
+    console_output = function() return _opts.console_output end,
+
+    --- callbacks
+    before_run = function() return _opts.before_run end,
+    after_run = function() return _opts.after_run end,
+    on_open = function() return _opts.on_open end,
+    on_close = function() return _opts.on_close end,
+    on_stdout = function() return _opts.on_stdout end,
+    on_stderr = function() return _opts.on_stderr end,
+    on_exit = function() return _opts.on_exit end,
 
     update = function(self, new_opts, cb_mode)
       cb_mode = cb_mode or 'append'
@@ -85,14 +105,14 @@ function M._new(id, opts, force)
       for key, value in pairs(new_opts) do
         if type(value) == "function" then
           --- 如果 opts 是 function 则 append/replace callback list
-          if cb_mode == 'append' and self._opts[key] then
-            table.insert(self._opts[key] or {}, value)
+          if cb_mode == 'append' and _opts[key] then
+            table.insert(_opts[key] or {}, value)
           else
-            self._opts[key] = { value }
+            _opts[key] = { value }
           end
         else
           --- 如果 opts 是 props (k,v) 则直接替换
-          self._opts[key] = value
+          _opts[key] = value
         end
       end
     end,
