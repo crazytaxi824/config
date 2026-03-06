@@ -34,6 +34,12 @@ local function set_console_keymaps(term_bufnr, job_id)
   local keys = {
     {'n', '<C-c>', function() stop_job(term_bufnr, job_id) end, opt, "my_term: jobstop()"},
     {'i', '<C-c>', function() stop_job(term_bufnr, job_id) end, opt, "my_term: jobstop()"},
+    {'n', '<C-l>', function()
+      local win_id = vim.api.nvim_get_current_win()
+      if vim.api.nvim_win_get_buf(win_id) == term_bufnr then
+        vim.api.nvim_set_option_value('wrap', not vim.wo[win_id].wrap, { scope='local', win=win_id })
+      end
+    end, opt, "my_term: toggle wrap" },
   }
   require('utils.keymaps').set(keys)
 end
