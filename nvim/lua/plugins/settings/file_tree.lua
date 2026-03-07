@@ -140,7 +140,7 @@ local nt_buffer_keymaps = {
 
 -- -- }}}
 
---- `:help nvim-tree-setup` ------------------------------------------------------------------------ {{{
+--- `:help nvim-tree-setup` ------------------------------------------------------------------------
 --- system_open config --------------------------------------------------------- {{{
 local function system_open_cfg()
   local os_uname = vim.uv.os_uname()
@@ -209,11 +209,10 @@ nvim_tree.setup {
   },
 
   view = {
-    --- 在 floating window 中打开 nvim-tree
-    --- BUG: 开启 float win 时 delete file 会 error.
-    --- 关闭 float win (使用 split window) 时, 会自动调整 my_term win 大小.
+    --- BUG: FIXME: fix(#3187): prevent closing the last non-floating window when deleting files
+    --- BUG: 使用 split window 时, 会自动调整 my_term win 大小.
     float = {
-      enable = true,
+      enable = true,  --- 在 floating window 中打开 nvim-tree
       open_win_config = {
         relative = "editor",
         border = {"","","","█","▀","▀","▀","█"},
@@ -356,7 +355,6 @@ nvim_tree.setup {
   },
 } -- END_DEFAULT_OPTS
 
--- -- }}}
 
 --- `:help nvim-tree-highlight` -------------------------------------------------------------------- {{{
 vim.api.nvim_set_hl(0, 'NvimTreeNormalNC', {link="NormalNC"})  -- non-foucs nvim-tree window color
