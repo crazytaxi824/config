@@ -37,7 +37,7 @@
 ---   TermClose: when job done/end
 ---   TermEnter: after Terminal-Insert Mode
 ---   TermLeave: after Terminal-Normal Mode
--- -- }}}
+--- }}}
 --- VVI:
 ---   FileType 在 buffer 第一次加载到 window 中的时候触发; `:bdelete` 后再次加载 buffer 的情况下也会触发.
 ---   BufEnter 每次 buffer 切换的时候. FileType 触发的情况 & hidden -> display 的时候.

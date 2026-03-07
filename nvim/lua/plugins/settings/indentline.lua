@@ -41,7 +41,7 @@ indent_blankline.setup({
     --   'RainbowViolet',
     --   'RainbowCyan',
     -- },
-    -- -- }}}
+    --- }}}
   },
 
   --- `:help ibl.config.whitespace`

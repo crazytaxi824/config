@@ -56,7 +56,7 @@ local my_action = transform_mod({
   end
 })
 
--- -- }}}
+--- }}}
 
 --- `:help telescope.setup()`
 telescope.setup {
@@ -186,7 +186,7 @@ telescope.setup {
         ["?"] = actions.which_key, -- key help
       },
     },
-    -- -- }}}
+    --- }}}
   },
   --- https://github.com/nvim-telescope/telescope.nvim/wiki/Configuration-Recipes#remove--from-fd-results
   pickers = {
@@ -197,7 +197,7 @@ telescope.setup {
       -- -E=.git                  不显示名为 .git 的文件(夹)
       -- -E=**/.*/**              显示隐藏文件夹, 但不列出其中的文件.
       -- -E=**/node_modules/**    显示 node_modules 文件夹, 但不列出其中的文件.
-      -- -- }}}
+      --- }}}
       find_command = {
         "fd",
         "--follow",  -- descend into symlinked directories.
@@ -262,7 +262,7 @@ vim.api.nvim_create_autocmd("User", {
   end,
   desc = "set keymap of `:set wrap` for telescope preview window",
 })
--- -- }}}
+--- }}}
 
 --- highlights -------------------------------------------------------------------------------------
 vim.api.nvim_set_hl(0, "TelescopeMatching", {reverse = true})
@@ -305,13 +305,13 @@ end
 ---   Rg -wi 'foo' ./
 ---   Rg -ws 'foo' ./src
 ---   Rg -wS 'foo' ./src /tmp
--- -- }}}
+--- }}}
 vim.api.nvim_create_user_command("Rg",
   function(params)
     my_rg_picker(params.fargs)
   end,
 {nargs="+"})
--- -- }}}
+--- }}}
 
 --- list builtin pickers ------------------------------------------------------- {{{
 --- 找出所有的 pickers: builtin & extension
@@ -376,7 +376,7 @@ local function my_list_builtin_pickers(opts)
   --   sorter = conf.generic_sorter(opts),  -- VVI: 设置 sorter 后可以通过 fzf 输入框对 results 进行过滤.
   -- }):find()
 end
--- -- }}}
+--- }}}
 
 --- keymaps ----------------------------------------------------------------------------------------
 local opt = { silent = true }

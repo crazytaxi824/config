@@ -198,7 +198,7 @@ vim.api.nvim_set_hl(0, 'NvimTreeFileExplorer', vim.tbl_deep_extend('force', High
   ctermbg=Colors.g235.c, bg=Colors.g235.g, underline=true,
 }))
 
--- -- }}}
+--- }}}
 
 --- functions for gotoable ------------------------------------------------------------------------- {{{
 --- 是否可以 go_to() 到别的 buffer.
@@ -237,7 +237,7 @@ local function gotoable()
   --- 如果所有 window 都不符合要求. 则当前 window 允许 go_to() 到别的 buffer.
   return true
 end
--- -- }}}
+--- }}}
 
 --- functions for delete buffer/tab ---------------------------------------------------------------- {{{
 --- 用于 <leader>d 快捷键和 mouse actions 设置.
@@ -407,7 +407,7 @@ local function bufferline_del_buffer_by_bufnr(bufnr)
   end
 end
 
--- -- }}}
+--- }}}
 
 --- functions for left_mouse_command --------------------------------------------------------------- {{{
 --- load 鼠标点击的 buffer
@@ -430,7 +430,7 @@ local function load_bufnr_on_left_click(bufnr)
   --- 如果所有 window 都是 unlisted-buffer 则允许加载指定 bufnr.
   vim.api.nvim_set_current_buf(bufnr)  -- load 指定 buffer
 end
--- -- }}}
+--- }}}
 
 --- `:help bufferline-configuration`
 bufferline.setup({
@@ -541,7 +541,7 @@ bufferline.setup({
     --     return true
     --   end
     -- end,
-    -- -- }}}
+    --- }}}
   },
 })
 
@@ -633,7 +633,7 @@ vim.api.nvim_create_autocmd({"BufDelete", "BufWinEnter"}, {
   end,
   desc = "bufferline: sort bufnr manually",
 })
--- -- }}}
+--- }}}
 
 --- DEBUG: 用, 查看 ordinal, bufnr/id, list_index, 之间的关系 -------------------------------------- {{{
 -- function Bufferline_info(bufferline_index)
@@ -654,6 +654,6 @@ vim.api.nvim_create_autocmd({"BufDelete", "BufWinEnter"}, {
 --     end)
 --   end
 -- end
--- -- }}}
+--- }}}
 
 

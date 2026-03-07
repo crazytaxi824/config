@@ -14,7 +14,7 @@ local function gitsigns_hunk_actions()
     end
   end)
 end
--- -- }}}
+--- }}}
 
 --- `:help gitsigns`
 git_signs.setup({

@@ -37,7 +37,7 @@ ts_configs.setup {
   --   "ssh_config",
   --   "sql",
   -- },
-  -- -- }}}
+  --- }}}
 
   --- 黑名单, ts 启动时不安装. list 中的 lang 在 :TSUpdate & :TSInstall 时安装速度太慢.
   --- ignore 的 lang 可以手动更新 `:TSUpdate rust`, 但是不能使用 `:TSUpdate` 自动更新.

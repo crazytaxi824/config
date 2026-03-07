@@ -42,7 +42,7 @@ local mt = require('utils.my_term')  -- my_term terminal
 ---   - i_CTRL-O  - 用于在 insert mode 中执行一个 command 然后回到 insert mode.
 ---   - i_CTRL-C | v_CTRL-C  - insert/visual 退回到 normal mode.
 ---   - v_CTRL-G  - 切换 visual/select mode, select mode 是 visual 的一个子模式, 多用于代码补全的默认值.
--- -- }}}
+--- }}}
 
 --- vim.keymap.set() - option `:help :map-arguments`
 --- { remap = false } (default), { noremap = true }

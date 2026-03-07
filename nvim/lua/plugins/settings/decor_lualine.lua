@@ -58,7 +58,7 @@ local my_theme = {
     c = { fg = lualine_colors.light_grey, bg = lualine_colors.black },
   },
 }
--- -- }}}
+--- }}}
 
 --- 自定义 components ------------------------------------------------------------------------------ {{{
 --- NOTE: https://github.com/nvim-lualine/lualine.nvim/wiki/Component-snippets
@@ -134,7 +134,7 @@ local function my_trailing_whitespace()
 
   return vim.b[bufvar_lualine] or ''
 end
--- -- }}}
+--- }}}
 
 --- 修改 location && progress component ---------------------------------------- {{{
 --- 参照 https://github.com/nvim-lualine/lualine.nvim/blob/master/lua/lualine/components/progress.lua
@@ -151,7 +151,7 @@ local function my_progress()
   --- ▏ ▎ ▍ ▌ ▋ ▊ ▉ █
   return '%3p%%:𝌆 %L'
 end
--- -- }}}
+--- }}}
 
 --- indicate 文件是否 modified / readonly -------------------------------------- {{{
 --- VVI: 这里分为3个 components 主要是为了解决 section 中无法按照情况分别设置颜色.
@@ -175,7 +175,7 @@ local function modified()
   end
   return ''
 end
--- -- }}}
+--- }}}
 
 --- filetype & fileencoding ---------------------------------------------------- {{{
 local function my_filetype_encoding()
@@ -189,9 +189,9 @@ local function my_filetype_encoding()
   end
   return str
 end
--- -- }}}
+--- }}}
 
--- -- }}}
+--- }}}
 
 --- current git branch
 local bufvar_branch = 'my_current_branch'
@@ -401,7 +401,7 @@ lualine.setup {
   -- },
   -- winbar = {},  -- 设置方法都一样.
   -- inactive_winbar = {},
-  -- -- }}}
+  --- }}}
 
   --- lualine extensions change statusline appearance for a window/buffer with specified filetypes.
   --- https://github.com/nvim-lualine/lualine.nvim#extensions

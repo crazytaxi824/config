@@ -36,7 +36,7 @@
 ---   -quiet      不打印运行结果
 ---   -w          保存文件(外部修改文件)
 ---
--- -- }}}
+--- }}}
 
 --- 重写整个 buffer 的内容
 ---
@@ -175,7 +175,7 @@ function M.go_add_tags_and_opts(arglist, go_add_tags_cmd, offset)
   --- 重写整个 buffer
   rewrite_buffer(vim.trim(result.stdout))
 end
--- -- }}}
+--- }}}
 
 --- Remove Tags and Options ------------------------------------------------------------------------ {{{
 
@@ -242,7 +242,7 @@ function M.go_remove_tags(arglist, go_remove_tags_cmd, offset)
   --- 重写整个 buffer
   rewrite_buffer(vim.trim(result.stdout))
 end
--- -- }}}
+--- }}}
 
 --- Remove Tag's Options --------------------------------------------------------------------------- {{{
 
@@ -309,6 +309,6 @@ function M.go_remove_tags_opts(arglist, go_remove_tag_opts_cmd, offset)
   --- 重写整个 buffer
   rewrite_buffer(vim.trim(result.stdout))
 end
--- -- }}}
+--- }}}
 
 return M

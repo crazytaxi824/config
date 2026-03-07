@@ -39,7 +39,7 @@ autopairs.setup {
 --autopairs.add_rule(Rule('<','>'))  -- 添加 rules 给所有 filetype.
 --autopairs.add_rule(Rule('<','>',"javascript"))   -- 添加 rules 给指定 filetype.
 --autopairs.add_rule(Rule('<','>',"-javascript"))  -- 添加 rules 给所有 filetype, 除了指定 filetype.
--- -- }}}
+--- }}}
 local Rule = require('nvim-autopairs.rule')
 local cond = require('nvim-autopairs.conds')
 --- 从规则中排除指定 filetype

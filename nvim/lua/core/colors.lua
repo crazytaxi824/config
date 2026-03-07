@@ -36,7 +36,7 @@
 ---   nvim_create_namespace({name}), namespace are used for buffer highlights.
 ---   nvim_buf_add_highlight(), 有点类似 matchaddpos() 但是不是完全一样.
 ---
--- -- }}}
+--- }}}
 
 --- VVI: alacritty color based on sRGB
 Colors = {

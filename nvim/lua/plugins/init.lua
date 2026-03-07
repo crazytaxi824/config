@@ -15,7 +15,7 @@ if not vim.uv.fs_stat(lazypath) then
   end
 end
 vim.opt.rtp:prepend(lazypath)
--- -- }}}
+--- }}}
 
 --- `nvim dir` 打开文件夹时直接加载 nvim-tree.lua, `nvim file` 打开 file 时不加载 nvim-tree.lua, 通过快捷键加载.
 local isfile = true
@@ -79,7 +79,7 @@ local plugins = {
   --- `:TSUninstall {lang}`   -- Uninstall languages
   --- `:TSUpdate`             -- Update the installed languages
   --- `:TSUpdateSync`         -- Update the installed languages synchronously
-  -- -- }}}
+  --- }}}
   --- DOCS: https://github.com/nvim-treesitter/nvim-treesitter#adding-queries
   --- All queries found in the runtime directories will be combined.
   --- By convention, if you want to write a query, use the `queries/` directory,
@@ -414,7 +414,7 @@ local plugins = {
   --
   --   cmd = { "CopilotChat" },
   -- },
-  -- -- }}}
+  --- }}}
 
   --- recommanded plugins ------------------------------------------------------ {{{
   -- {
@@ -443,7 +443,7 @@ local plugins = {
   --{"ahmedkhalf/project.nvim"},  -- project manager
 
   --{"p00f/nvim-ts-rainbow"},  -- rainbow 括号颜色, treesitter 插件. NOTE: 严重拖慢文件打开速度.
-  -- -- }}}
+  --- }}}
 }
 
 --- lazy.nvim settings

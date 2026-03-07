@@ -54,7 +54,7 @@ M.linter = {
   --- golangci-lint 会自动寻找 '.golangci.yml', '.golangci.yaml', '.golangci.toml', '.golangci.json'.
   --- GolangCI-Lint also searches for config files in all directories from the directory of
   --- the first analyzed path up to the root.
-  -- -- }}}
+  --- }}}
   golangci_lint = function()
     local global_settings = require("lsp.null_ls.tools.golangci_lint")
 

@@ -39,7 +39,7 @@ local kind_icon_txt = {  -------------------------------------------------------
   Event = "event",
   Operator = "operator",
 }
--- -- }}}
+--- }}}
 
 --- 默认设置: https://github.com/hrsh7th/nvim-cmp/blob/main/lua/cmp/config/default.lua
 --- DOCS: `:help nvim-cmp`
@@ -73,7 +73,7 @@ cmp.setup {
     --{ name = 'luasnip' },    -- For luasnip users    -- "L3MON4D3/LuaSnip" lua
     --{ name = 'snippy' },     -- For snippy users     -- "dcampos/nvim-snippy" lua
     --{ name = 'ultisnips' },  -- For ultisnips users  -- "SirVer/ultisnips" python
-    -- -- }}}
+    --- }}}
   },
 
   window = {
@@ -253,6 +253,6 @@ vim.api.nvim_set_hl(0, 'CmpItemKindFolder',  {ctermfg=Colors.blue_boolean.c, fg=
 --- grey, 弃用的 suggestion.
 vim.api.nvim_set_hl(0, 'CmpItemAbbrDeprecated',  {ctermfg=Colors.g242.c, fg=Colors.g242.g, underline = true})
 
--- -- }}}
+--- }}}
 
 

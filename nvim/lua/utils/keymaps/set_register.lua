@@ -22,7 +22,7 @@ local function wk_reg(key_reg)
     ---   noremap = true, -- use `noremap` when creating keymaps
     ---   nowait = false, -- use `nowait` when creating keymaps
     --- }
-    -- -- }}}
+    --- }}}
     require("which-key").add(key_reg)
   else
     --- cache key register for which-key lazy load.

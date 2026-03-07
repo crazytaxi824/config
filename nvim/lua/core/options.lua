@@ -147,7 +147,7 @@
 ---  eg2:
 ---    `:let g:bar="bar" | lua print(vim.g.bar)`
 ---
--- -- }}}
+--- }}}
 
 --- VVI: neovim 特殊设置 --------------------------------------------------------------------------- {{{
 --- filetype && syntax
@@ -203,7 +203,7 @@ vim.g.loaded_perl_provider = 0  -- Disable Perl |remote-plugin| support
 --vim.g.perl_host_prog = '' -- To use perl remote-plugins with Nvim.
                             -- need to install `cpanm -n Neovim::Ext`.
 
--- -- }}}
+--- }}}
 
 --- tabstop / shiftwidth - prettier indent 设置 ---------------------------------------------------- {{{
 --- VVI: `:help editorconfig`, nvim-0.9 中默认读取 editorconfig 文件来设置以下属性.
@@ -288,7 +288,7 @@ vim.api.nvim_create_autocmd('FileType', {
 vim.g.markdown_recommended_style = 0
 vim.g.markdown_folding = 1
 
--- -- }}}
+--- }}}
 
 --- 以下都是默认设置
 --vim.opt.compatible = false
@@ -363,7 +363,7 @@ vim.api.nvim_create_autocmd('WinNew', {
 ---   lead/trail - 行首(尾)的空格, Overrides 'space' & 'multispace' settings.
 ---   precedes/extends - 不换行(:set nowrap)的情况下, 内容长度超出屏幕的行会有该标记
 ---   nbsp - non-breakable space (0xA0, byte(160)), normal space (0x20, byte(32))
--- -- }}}
+--- }}}
 vim.opt.list = true
 vim.opt.listchars = { tab='│ ', trail='·', extends='→', precedes='←', nbsp='␣' }
 
@@ -374,7 +374,7 @@ vim.opt.listchars = { tab='│ ', trail='·', extends='→', precedes='←', nbs
 ---   stl   - statusline 中间的填充字符.
 ---   stlnc - non-current window 的 statusline 中间的填充字符.
 ---   eob   - 文件最后一行之后, 空白行的行号.
--- -- }}}
+--- }}}
 vim.opt.fillchars = { fold=' ', diff=' ', vert='│', eob='~', lastline='@' }
 
 vim.api.nvim_create_user_command('ToggleListChars', function()
@@ -498,7 +498,7 @@ vim.opt.colorcolumn = '+1'  -- highlight column after 'textwidth'
 --   end,
 --   desc = "`set cursorline` when enter window, `set nocursorline` to other windows",
 -- })
--- -- }}}
+--- }}}
 
 vim.opt.signcolumn = 'yes:1'  -- 'auto:1-3', 最少预留 1 个 sign 的宽度, 最多显示 3 个 sign 的宽度.
                               -- 'yes:1' 表示永远显示 1 个 sign 的宽度.

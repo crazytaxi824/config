@@ -17,7 +17,7 @@
 ---    .b or .back         Same as |dap.step_back|
 ---    .rc or
 ---    .reverse-continue   Same as |dap.reverse_continue|
--- -- }}}
+--- }}}
 --- `:help dap.txt`
 local dap_status_ok, dap = pcall(require, "dap")
 if not dap_status_ok then
@@ -142,7 +142,7 @@ end
 ---
 ---   dap.session()
 ---   dap.status()
--- -- }}}
+--- }}}
 local function set_debug_keymaps()
   local opt = { silent = true }
   local debug_keymaps = {
@@ -248,7 +248,7 @@ local function set_debug_keymaps()
 
   require("utils.keymaps").set(debug_keymaps)
 end
--- -- }}}
+--- }}}
 
 --- 开启 new tab 进行 debug ------------------------------------------------------------------------
 --- https://github.com/rcarriga/nvim-dap-ui#usage & `:help dap-extensions`
@@ -281,7 +281,7 @@ end
 --   vim.cmd.stopinsert()
 --   close_debug_tab_and_buffers()
 -- end
--- -- }}}
+--- }}}
 
 --- keymaps: jump_to_file in dap-repl window -------------------------------------------------------
 local fp = require("utils.filepath")
@@ -314,7 +314,7 @@ vim.fn.sign_define(
   { text = "○", texthl = "DapBreakpointRejectedHL", numhl = "", linehl = "" }
 )
 vim.fn.sign_define("DapStopped", { text = "", texthl = "DapStoppedHL", numhl = "", linehl = "DapStoppedLineHL" })
--- -- }}}
+--- }}}
 
 
 

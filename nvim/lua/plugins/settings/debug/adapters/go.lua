@@ -65,7 +65,7 @@ end
 ---   "${relativeFileDirname}": The current file's dirname relative to |getcwd()|
 ---   "${workspaceFolder}": The current working directory of Neovim
 ---   "${workspaceFolderBasename}": The name of the folder opened in Neovim
--- -- }}}
+--- }}}
 dap.configurations.go = {
   --- vscode-go test project
   {

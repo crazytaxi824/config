@@ -16,7 +16,7 @@ end
 --- 默认加载 `:set runtimepath?` 中的 package.json 文件.
 --- NOTE: package.json, go.json ... 不能有注释 否则无法解析.
 --- 可以参照 https://github.com/rafamadriz/friendly-snippets 自己定义 snippets
--- -- }}}
+--- }}}
 --- NOTE: `:help luasnip-loaders`
 require("luasnip.loaders.from_vscode").lazy_load({
   --- 这里读取的是 "~/.config/nvim/snip/package.json" 文件.

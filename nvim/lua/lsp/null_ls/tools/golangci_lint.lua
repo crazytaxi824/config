@@ -13,7 +13,7 @@ return {
   --- golangci-lint 会自动寻找 '.golangci.yml', '.golangci.yaml', '.golangci.toml', '.golangci.json'.
   --- GolangCI-Lint also searches for config files in all directories from the directory of
   --- the first analyzed path up to the root.
-  -- -- }}}
+  --- }}}
   --extra_args = { '--config', vim.uv.cwd() .. "/.golangci.yml"},
 
   ---  可以通过设置 setup() 中的 debug = true, 打开 `:NullLsLog` 查看命令行默认参数.

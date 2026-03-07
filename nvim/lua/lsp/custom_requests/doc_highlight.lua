@@ -17,7 +17,7 @@
 
 --- SOLUTION: 重写 lsp.buf.document_highlight() 方法, 在其 handler 中对 lsp 返回的 result 进行
 --- 有条件的 highlight_references() / clear_references().
--- -- }}}
+--- }}}
 
 --- cursor 在未移出当前 documentHighlight <word> 的范围时不重新发送 vim.lsp.buf_request_all()
 
