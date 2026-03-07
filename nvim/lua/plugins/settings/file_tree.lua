@@ -9,8 +9,6 @@ end
 --vim.g.loaded_netrw = 1
 --vim.g.loaded_netrwPlugin = 1
 
-local nt_api = require("nvim-tree.api")
-
 --- file/dir icons --------------------------------------------------------------------------------- {{{
 local nt_indent_line = {
   edge   = Nerd_icons.indent.edge .. " ",
@@ -38,12 +36,12 @@ local diagnostics_icons = {
   error   = Nerd_icons.diag.error,
 }
 
--- -- }}}
+--- }}}
 
 --- nvim-tree keymaps ------------------------------------------------------------------------------ {{{
 --- compare two marked files, using `:vert diffsplit <filename>` --------------- {{{
 local function compare_two_marked_files()
-  local marks_list = nt_api.marks.list()  -- 获取 mark 的 nodes
+  local marks_list = require("nvim-tree.api").marks.list()  -- 获取 mark 的 nodes
   if #marks_list ~= 2 then
     Notify("more than 2 marks available, can only campare exactly 2 files")
     return
@@ -52,19 +50,21 @@ local function compare_two_marked_files()
   vim.cmd.tabnew(marks_list[1].absolute_path)  -- open new tab for compare
   vim.cmd.diffsplit({ args = {marks_list[2].absolute_path}, mods = {vertical=true} }) -- compare file
 end
--- -- }}}
+--- }}}
 
 --- go back to pwd ------------------------------------------------------------- {{{
 local pwd = vim.uv.cwd()  -- cache pwd
 local function back_to_pwd()
-  nt_api.tree.change_root(pwd)
+  require("nvim-tree.api").tree.change_root(pwd)
 end
--- -- }}}
+--- }}}
 
 --- trash_buffer --------------------------------------------------------------- {{{
 
 --- BUG: FIXME: fix(#3187): prevent closing the last non-floating window when deleting files
 local function trash_buffer()
+  local nt_api = require("nvim-tree.api")
+
   --- 获取光标指向的 nvim-tree Node
   local node = nt_api.tree.get_node_under_cursor()
 
@@ -101,44 +101,60 @@ end
 --- nvim-tree buffer keymaps ---------------------------------------------------
 --- only works within "NvimTree_X" buffer.
 --- ":help nvim-tree-mappings-default"
-local nt_buffer_keymaps = {
-  { "<CR>",        nt_api.node.open.edit,   "Open" },
-  { "e",           nt_api.node.open.edit,   "Open" },
-  { "<C-v>",       nt_api.node.open.vertical,     "Open vsplit" },  -- vsplit edit
-  { "<C-x>",       nt_api.node.open.horizontal,   "Open split" },
-  { "<C-o>",       nt_api.node.run.system,   "show file in finder" },
 
-  { "<F8>",        nt_api.node.navigate.diagnostics.next,  "Next Diagnostic Item" },  -- next diagnostics item
-  { "<D-F8>",      nt_api.node.navigate.diagnostics.prev,  "Prev Diagnostic Item" },  -- previous diagnostics item
+local function nt_buffer_keymaps(bufnr)
+  local nt_api = require("nvim-tree.api")
 
-  { "E",           nt_api.tree.collapse_all,   "Collapse All" },  -- vscode 自定义按键为 cmd+E
-  { "W",           nt_api.tree.expand_all,     "Expand All" },
-  { "r",           nt_api.tree.reload,         "Refresh" },
-  { "H",           nt_api.tree.toggle_hidden_filter,      "Toggle Hidden Files" },  -- 隐藏文件
-  { "<leader>gi",  nt_api.tree.toggle_gitignore_filter,   "Toggle Git Ignored" },   -- toggle show git ignored files
-  { "<leader>gf",  nt_api.tree.toggle_git_clean_filter,   "Toggle Git Status Changed" },  -- toggle show git_status changed files ONLY
-  { "<S-CR>",      nt_api.tree.change_root_to_node,   "cd" },  -- `cd` in the directory under the cursor
-  { "q",           nt_api.tree.close,          "Close" },  -- close nvim-tree window
-  { "?",           nt_api.tree.toggle_help,    "Help" },
+  local keys = {
+    { "<CR>",        nt_api.node.open.edit,   "Open" },
+    { "e",           nt_api.node.open.edit,   "Open" },
+    { "<C-v>",       nt_api.node.open.vertical,     "Open vsplit" },  -- vsplit edit
+    { "<C-x>",       nt_api.node.open.horizontal,   "Open split" },
+    { "<C-o>",       nt_api.node.run.system,   "show file in finder" },
 
-  { "a",           nt_api.fs.create,   "Create File" },
-  -- { "D",           nt_api.fs.remove,   "Remove File" },  -- `rm file`, 无法将其移动到 Trash Bin
-  -- { "D",           nt_api.fs.trash,    "Trash File" },   -- `trash file`, 将文件移动到 Trash Bin, 可以还原
-  { "R",           nt_api.fs.rename_full,   "Full Rename" },  -- 类似 `$ mv foo bar`
-  { "y",           nt_api.fs.copy.absolute_path,   "Copy Absolute Path" },
-  { "C",           nt_api.fs.copy.node,   "Copy File" },
-  { "P",           nt_api.fs.paste,       "Paste File" },
+    { "<F8>",        nt_api.node.navigate.diagnostics.next,  "Next Diagnostic Item" },  -- next diagnostics item
+    { "<D-F8>",      nt_api.node.navigate.diagnostics.prev,  "Prev Diagnostic Item" },  -- previous diagnostics item
 
-  { "m",           nt_api.marks.toggle,   "Toggle Mark" },
-  { "M",           nt_api.marks.clear,    "Clear All Marks" },
+    { "E",           nt_api.tree.collapse_all,   "Collapse All" },  -- vscode 自定义按键为 cmd+E
+    { "W",           nt_api.tree.expand_all,     "Expand All" },
+    { "r",           nt_api.tree.reload,         "Refresh" },
+    { "H",           nt_api.tree.toggle_hidden_filter,      "Toggle Hidden Files" },  -- 隐藏文件
+    { "<leader>gi",  nt_api.tree.toggle_gitignore_filter,   "Toggle Git Ignored" },   -- toggle show git ignored files
+    { "<leader>gf",  nt_api.tree.toggle_git_clean_filter,   "Toggle Git Status Changed" },  -- toggle show git_status changed files ONLY
+    { "<S-CR>",      nt_api.tree.change_root_to_node,   "cd" },  -- `cd` in the directory under the cursor
+    { "q",           nt_api.tree.close,          "Close" },  -- close nvim-tree window
+    { "?",           nt_api.tree.toggle_help,    "Help" },
 
-  --- 自定义功能
-  { "D",           trash_buffer,    "Trash File" },   -- `trash file`, 将文件移动到 Trash Bin, 可以还原
-  {  "<leader>o",  back_to_pwd,     "back to Original pwd" },
-  {  "<leader>c",  compare_two_marked_files,   "compare two marked files" },
-}
+    { "a",           nt_api.fs.create,   "Create File" },
+    -- { "D",           nt_api.fs.remove,   "Remove File" },  -- `rm file`, 无法将其移动到 Trash Bin
+    { "D",           nt_api.fs.trash,    "Trash File" },   -- `trash file`, 将文件移动到 Trash Bin, 可以还原
+    { "R",           nt_api.fs.rename_full,   "Full Rename" },  -- 类似 `$ mv foo bar`
+    { "y",           nt_api.fs.copy.absolute_path,   "Copy Absolute Path" },
+    { "C",           nt_api.fs.copy.node,   "Copy File" },
+    { "P",           nt_api.fs.paste,       "Paste File" },
 
--- -- }}}
+    { "m",           nt_api.marks.toggle,   "Toggle Mark" },
+    { "M",           nt_api.marks.clear,    "Clear All Marks" },
+
+    --- 自定义功能
+    -- { "D",           trash_buffer,    "Trash File" },   -- `trash file`, 将文件移动到 Trash Bin, 可以还原
+    {  "<leader>o",  back_to_pwd,     "back to Original pwd" },
+    {  "<leader>c",  compare_two_marked_files,   "compare two marked files" },
+  }
+
+  local function opt(desc)
+    if not desc then
+      return {  buffer = bufnr, silent = true, nowait = true }
+    end
+    return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, silent = true, nowait = true }
+  end
+
+  for _, keymap in ipairs(keys) do
+    vim.keymap.set('n', keymap[1], keymap[2], opt(keymap[3]))
+  end
+end
+
+--- }}}
 
 --- `:help nvim-tree-setup` ------------------------------------------------------------------------
 --- system_open config --------------------------------------------------------- {{{
@@ -156,28 +172,18 @@ local function system_open_cfg()
   --- 其他系统用 default setting
   return nil
 end
--- -- }}}
+--- }}}
 
-nvim_tree.setup {
+local config = {
   --- NOTE: on_attach 主要是设置 keymaps 的.
   --- ":help nvim-tree.on_attach" & ":help nvim-tree-mappings"
-  on_attach = function(bufnr)
-    local function opt(desc)
-      if not desc then
-        return {  buffer = bufnr, silent = true, nowait = true }
-      end
-      return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, silent = true, nowait = true }
-    end
+  on_attach = nt_buffer_keymaps,  -- 设置 keymaps
+  system_open = system_open_cfg(), -- 影响 nvim_tree.api.node.run.system()
 
-    for _, keymap in ipairs(nt_buffer_keymaps) do
-      vim.keymap.set('n', keymap[1], keymap[2], opt(keymap[3]))
-    end
-  end,
-
-  auto_reload_on_write = true,  -- NOTE: `:w` 时刷新 nvim-tree.
+  auto_reload_on_write = true, -- NOTE: `:w` 时刷新 nvim-tree.
   sync_root_with_cwd = false,  -- Changes the tree root directory on `DirChanged` and refreshes the tree.
 
-  --- VVI: Don't change disable_netrw, hijack_netrw, hijack_directories settings. --- {{{
+  --- VVI: Don't change these settings ----------------------------------------- {{{
   --- DOCS: `:help nvim-tree-netrw`, netrw: vim's builtin file explorer.
   --disable_netrw = false,  -- completely disable netrw. VVI: 不要设为 true, 否则 netrw 的所有功能都无法使用.
 
@@ -197,22 +203,18 @@ nvim_tree.setup {
   --  --- hijack_directories 时自动打开 nvim-tree open().
   --  auto_open = true,
   --},
-  -- -- }}}
 
-  hijack_cursor = false,  -- keeps the cursor on the first letter of the filename
-  hijack_unnamed_buffer_when_opening = false,  -- Opens in place of the unnamed buffer if it's empty. 默认 false.
+  --- keeps the cursor on the first letter of the filename
+  --hijack_cursor = false,
 
-  sort = {
-    sorter = "name",
-    folders_first = true, -- Sort folders before files.
-    files_first = false,  -- Sort files before folders. If set to `true` it overrides |folders_first|.
-  },
+  --- Opens in place of the unnamed buffer if it's empty. 默认 false.
+  --hijack_unnamed_buffer_when_opening = false,
+  --- }}}
 
   view = {
-    --- BUG: FIXME: fix(#3187): prevent closing the last non-floating window when deleting files
-    --- BUG: 使用 split window 时, 会自动调整 my_term win 大小.
+    --- BUG: 在 float mode 下 fs.trash 当前 buffer 会报错.
     float = {
-      enable = true,  --- 在 floating window 中打开 nvim-tree
+      enable = false,  --- true: floating window | false: split window
       open_win_config = {
         relative = "editor",
         border = {"","","","█","▀","▀","▀","█"},
@@ -224,10 +226,17 @@ nvim_tree.setup {
     },
     side = "left", -- left / right
     width = 36,    -- OR "25%"
-    preserve_window_proportions = false,
+    preserve_window_proportions = true, -- VVI: 使用 split window 时, 缓存所有 window 的大小和位置.
+                                        -- 如果设置为 false, 在 nvim-tree window 打开时, 其他 window 的大小也会改变.
     number = false,          -- 显示 line number
     relativenumber = false,  -- 显示 relative number
     signcolumn = "yes",      -- VVI: 显示 signcolumn, "yes" | "auto" | "no"
+  },
+
+  sort = {
+    sorter = "name",
+    folders_first = true, -- Sort folders before files.
+    files_first = false,  -- Sort files before folders. If set to `true` it overrides |folders_first|.
   },
 
   renderer = {
@@ -275,9 +284,6 @@ nvim_tree.setup {
     ignore_list = {},
   },
 
-  --- 影响 nvim_tree.api.node.run.system()
-  system_open = system_open_cfg(),
-
   git = {
     enable = true,  -- VVI: 开启 git filename 和 icon 颜色显示.
                     -- 需要开启 renderer.highlight_git 和 renderer.icons.show.git
@@ -286,12 +292,14 @@ nvim_tree.setup {
     disable_for_dirs = {},
     timeout = 400,  -- Kills the git process after some time if it takes too long.
   },
+
   diagnostics = {  --- VVI: 显示 vim diagnostics (Hint|Info|Warn|Error) 需要设置 vim.signcolumn='yes'
     enable = true,
     show_on_dirs = true,  -- 在文件所属的 dir name 前也显示 sign.
     show_on_open_dirs = false,  -- 打开的文件夹上不显示 sign.
     icons = diagnostics_icons,
   },
+
   filters = {
     git_ignored = false,  -- 不显示 .gitignore files
     dotfiles = false,  -- true: 不显示隐藏文件; false: 显示隐藏文件.
@@ -301,6 +309,7 @@ nvim_tree.setup {
     },
     exclude = {},  -- List of dir or files to exclude from filtering: always show them.
   },
+
   actions = {
     use_system_clipboard = true,
     change_dir = {
@@ -329,13 +338,15 @@ nvim_tree.setup {
       },
     },
   },
+
   trash = {
     cmd = "trash",
   },
+
   ui = {
     confirm = {
-      remove = true,
-      trash = true,
+      remove = true, -- 影响 nvim_tree.api.fs.remove()
+      trash = true,  -- 影响 nvim_tree.api.fs.trash()
       default_yes = false,
     },
   },
@@ -353,8 +364,9 @@ nvim_tree.setup {
       profile = false,
     },
   },
-} -- END_DEFAULT_OPTS
+}
 
+nvim_tree.setup(config)
 
 --- `:help nvim-tree-highlight` -------------------------------------------------------------------- {{{
 vim.api.nvim_set_hl(0, 'NvimTreeNormalNC', {link="NormalNC"})  -- non-foucs nvim-tree window color
@@ -391,12 +403,12 @@ vim.api.nvim_set_hl(0, 'NvimTreeGitNewIcon',     {ctermfg=Colors.red.c, fg=Color
 vim.api.nvim_set_hl(0, 'NvimTreeGitDeletedIcon', {ctermfg=Colors.red.c, fg=Colors.red.g})
 vim.api.nvim_set_hl(0, 'NvimTreeGitIgnoredIcon', {ctermfg=Colors.g244.c, fg=Colors.g244.g})
 
--- -- }}}
+--- }}}
 
 --- autocmd ---------------------------------------------------------------------------------------- {{{
 --- automatically close the tab/vim when nvim-tree is the last window in the tab.
 --vim.cmd [[au BufEnter * ++nested if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpagenr() | quit | endif]]
--- -- }}}
+--- }}}
 
 --- Event Hooks, `:help nvim-tree-events` ---------------------------------------------------------- {{{
 --- FolderCreated 在创建 folder 和 file 时都会触发.
@@ -433,7 +445,7 @@ vim.api.nvim_set_hl(0, 'NvimTreeGitIgnoredIcon', {ctermfg=Colors.g244.c, fg=Colo
 -- nt_api.events.subscribe(Event.FileRemoved, function(data)
 --   vim.print('file remove:', data)
 -- end)
--- -- }}}
+--- }}}
 
 
 
