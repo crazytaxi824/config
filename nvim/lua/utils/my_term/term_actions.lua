@@ -1,6 +1,7 @@
 local g = require('utils.my_term.deps.global')
 local t_win = require('utils.my_term.deps.term_win')
 
+
 local M = {}
 
 --- open terminal window

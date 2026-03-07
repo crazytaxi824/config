@@ -1,5 +1,6 @@
 local g = require('utils.my_term.deps.global')
 
+
 local M = {}
 
 --- autocmd 根据 events 执行 on_open(), on_close()

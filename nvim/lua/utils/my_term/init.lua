@@ -10,10 +10,8 @@ local M = {}
 --- open shell terminal
 M.open_shell_term = shell_term.open_shell_term
 
-
 --- return console terminal
 M.console = console.console
-
 
 --- close all my_term windows
 function M.close_all()

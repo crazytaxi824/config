@@ -53,6 +53,7 @@ local function wipeout_others(term_id)
   end)
 end
 
+
 --- keymaps: for terminal buffer only --------------------------------------------------------------
 local M = {}
 

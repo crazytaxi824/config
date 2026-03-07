@@ -1,6 +1,7 @@
 local g = require('utils.my_term.deps.global')
 local cb = require('utils.my_term.deps.autocmd_callback')
 
+
 local M = {}
 
 --- 根据 cached MyTermPost bufnr 寻找已有的 window ID, 不包括 normal terminal window.
