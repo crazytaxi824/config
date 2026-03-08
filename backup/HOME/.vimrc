@@ -19,6 +19,7 @@ vim9script
 &t_SI = "\e[6 q"  # Insert Mode
 &t_SR = "\e[4 q"  # Replace Mode
 &t_EI = "\e[2 q"  # everything else
+&t_kB = "\e[Z"    # 启用按键 <S-Tab>
 
 # 设置 <leader>
 g:mapleader = '\'  # 或者 "\\", single quote 内没有 escape

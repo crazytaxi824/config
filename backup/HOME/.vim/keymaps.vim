@@ -33,6 +33,7 @@ source ~/.vim/keymaps/completion.vim
 source ~/.vim/keymaps/spell.vim
 source ~/.vim/keymaps/autopairs.vim
 source ~/.vim/keymaps/comments.vim
+source ~/.vim/keymaps/file_explorer.vim
 
 
 

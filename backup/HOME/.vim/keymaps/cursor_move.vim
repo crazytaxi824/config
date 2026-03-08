@@ -63,9 +63,5 @@ nnoremap <PageDown> <cmd>call <SID>MyPageDown()<CR>
 
 nnoremap <HOME> <cmd>call <SID>MyHome()<CR>
 
-### 进入文件夹 netrw
-nnoremap <leader><CR> <cmd>execute("30Lexplore " .. expand('%:p:h')) <CR>
-nnoremap <leader>; <cmd>execute("30Lexplore " .. getcwd())<CR>
-
 
 
