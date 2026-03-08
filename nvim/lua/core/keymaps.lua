@@ -55,7 +55,8 @@ local mt = require('utils.my_term')  -- my_term terminal
 --- { desc = "key_description" }  -- 会影响 which-key 显示.
 local opt = { silent = true }
 
---- { mode, key, remap, opt, description }  - description for 'which-key'
+--- `:help map-table`, `:help key-notation`
+--- { mode, key, remap, opt, description } - description for 'which-key'
 local keymaps = {
   --- VVI: <ESC> 退出 Ternimal (Insert) Mode 进入 (Terminal) Normal 模式.
   {'t', '<ESC>', '<C-\\><C-n>', opt, "Ternimal: Normal Mode"},
@@ -239,6 +240,7 @@ local keymaps = {
   -- {'n', '<C-M-CR>', function() print("<C-M-CR>") end, opt, 'Test: Ctrl-Cmd/Super-Enter'},
   -- {'n', '<D-M-CR>', function() print("<D-M-CR>") end, opt, 'Test: Ctrl-Cmd/Super-Enter'},
   -- {'n', '<C-D-CR>', function() print("<C-D-CR>") end, opt, 'Test: Ctrl-Cmd/Super-Enter'},
+  {{'n', 'l', 'v', 'o', 't'}, '<C-D-M>', function() print(vim.fn.mode()) end, opt, 'mode()'},
 
   --- VVI: <Nop> do nothing ------------------------------------------------------------------------
   --- <Ctrl-Z> 是危险操作. 意思是 :stop. Suspend vim, 退出到 terminal 界面, 但保留 job.
