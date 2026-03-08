@@ -641,6 +641,25 @@ function backupConfigFiles() {
 
 # }}}
 
+# 清理 Neovim 孤儿进程 (Orphan Processes) -------------------------------------- {{{
+function nvim_clean() {
+    # 查找符合条件的 PID
+	# `ps -eo pid,ppid,tty,comm` 获取 pid, ppid, tty, command 这几个属性.
+	# `grep [n]vim` 避免 grep 进程被杀. grep 进程中不会出现 nvim, 而是 [n]vim.
+	# `awk $2 == 1`         ppid == 1 说明是 Orphan Processes
+	# `awk $3 ~ /^\?\??$/`  tty 正则匹配 `^?$` or `^??$`. linux 中是一个 ?, macos 中是 ??.
+	# `awk {print $1}`  打印 pid
+    local pids=$(ps -eo pid,ppid,tty,comm | grep "[n]vim" | awk '$2 == 1 && $3 ~ /^\?\??$/ {print $1}')
+
+	# kill all Processes
+    if [ -n "$pids" ]; then
+        echo "Neovim Orphan Processes Found:\n$pids"
+        echo "$pids" | xargs kill -9
+        echo "Cleaned"
+    fi
+}
+# }}}
+
 # 设置 'vimExistFile -- [filepath]' 命令, 不打开不存在的文件 ------------------- {{{
 # 'vim --'   Arguments after this will be handled as a file name.
 #            This can be used to edit a filename that starts with a '-'.
@@ -651,6 +670,8 @@ function backupConfigFiles() {
 #   `vimExistFile +[num] -- file`      # 检查 file 是否存在. 同时传入 flags.
 #   `vimExistFile +{command} -- file`  # 同上
 function vimExistFile() {
+	nvim_clean  # kill nvim Orphan Processes
+
 	local dashdash=0         # 1 = using '--'
 	local notexistfiles=''   # 不存在的文件, 报错用.
 	local notexistmark=0     # 1 = 有不存在的文件; 0 = 文件都存在
