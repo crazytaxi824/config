@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.batterycheck.my-service</string>
+	<key>ProgramArguments</key>
+
+	<!-- 执行 apple script -->
+	<array>
+		<string>/Users/ray/.config/backup/myservice/battery_check.applescript</string>
+	</array>
+
+	<!-- 每 20 分钟执行一次 -->
+    <key>StartInterval</key>
+	<integer>1200</integer>
+
+	<!-- 启动时立即执行一次 -->
+	<key>RunAtLoad</key>
+	<true/>
+
+    <key>StandardErrorPath</key>
+    <string>/tmp/my-service.log</string>
+</dict>
+</plist>

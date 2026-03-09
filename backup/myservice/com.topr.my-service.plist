@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.topr.my-service</string>
+	<key>ProgramArguments</key>
+
+	<!--
+	`ps -eo ...`   获取 Process 属性
+	`-r`           按 CPU 降序排列
+	`head`         获取前 n 个 item
+	-->
+	<array>
+		<string>/bin/zsh</string>
+		<string>-c</string>
+		<string>now=$(date '+%Y/%m/%d %H:%M:%S'); ps -eo pid=,pcpu=,rss=,command= -r | head -10 | awk -v now="[$now]" '$2 > 80 {print now, $2, $3, $4}'</string>
+	</array>
+
+	<!-- 每 N 秒执行一次 -->
+	<key>StartInterval</key>
+	<integer>30</integer>
+
+	<!-- 启动时立即执行一次 -->
+	<key>RunAtLoad</key>
+	<true/>
+
+	<!-- 将内容写入文件中 -->
+    <key>StandardOutPath</key>
+	<string>/Users/ray/top_surveillance.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/tmp/my-service.log</string>
+</dict>
+</plist>

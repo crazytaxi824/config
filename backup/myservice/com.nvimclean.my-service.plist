@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.nvimclean.my-service</string>
+	<key>ProgramArguments</key>
+
+	<!--
+	`ps -eo pid,ppid,tty,comm`  获取 pid, ppid, tty, command 这几个属性
+	`grep [n]vim`               避免 grep 进程被杀. grep 进程中不会出现 nvim, 而是 [n]vim
+	`awk $2 == 1`               父进程 ppid == 1 说明是 Orphan Processes
+	`awk $3 ~ /^\?\??$/`        tty 正则匹配 `^?$` or `^??$`. linux 中是一个 ?, macos 中是 ??
+	`awk {print $1}`            输出 pid
+	-->
+    <array>
+        <string>/bin/zsh</string>
+        <string>-c</string>
+        <string>
+            pids=$(ps -eo pid,ppid,tty,command | grep '[n]vim' | awk '$2 == 1 &amp;&amp; $3 ~ /^\?\??$/ {print $1}');
+            if [ -n "$pids" ]; then
+				echo "$pids" | xargs kill -9;
+				osascript -e "display notification \"Cleaned PID: $pids\" with title \"Neovim Orphan Cleaned\" sound name \"Glass\"";
+            fi
+        </string>
+    </array>
+
+	<!-- 每 30 分钟执行一次 -->
+    <key>StartInterval</key>
+	<integer>1800</integer>
+
+	<!-- 启动时立即执行一次 -->
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>StandardErrorPath</key>
+    <string>/tmp/my-service.log</string>
+</dict>
+</plist>
