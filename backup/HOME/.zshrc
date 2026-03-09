@@ -670,8 +670,6 @@ function nvim_clean() {
 #   `vimExistFile +[num] -- file`      # 检查 file 是否存在. 同时传入 flags.
 #   `vimExistFile +{command} -- file`  # 同上
 function vimExistFile() {
-	nvim_clean  # kill nvim Orphan Processes
-
 	local dashdash=0         # 1 = using '--'
 	local notexistfiles=''   # 不存在的文件, 报错用.
 	local notexistmark=0     # 1 = 有不存在的文件; 0 = 文件都存在
