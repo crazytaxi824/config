@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+# 主要是清理 nvim --embed 进程, 如果 lsp 变成孤儿则需要另外的清理手段
 function nvim_clean() {
 	local now=$(date '+%Y/%m/%d %H:%M:%S')
 
@@ -8,11 +9,16 @@ function nvim_clean() {
 	# `awk $2 == 1`          父进程 ppid == 1 说明是 Orphan Processes
 	# `awk $3 ~ /^\?\??$/`   tty 正则匹配 `^?$` or `^??$`. linux 中是一个 ?, macos 中是 ??
 	# `awk {print $1}`       只输出 pid list
-	# `tr '\n' ' '`          将换行符替换为空格
-	local pids=$(ps -eo pid,ppid,tty,command | grep '[n]vim' | awk '$2 == 1 && $3 ~ /^\?\??$/ {print $1}' | tr '\n' ' ')
+	local now=$(date '+%Y/%m/%d %H:%M:%S')
+	local process=$(ps -eo pid=,ppid=,tty=,command= | grep '[n]vim' | awk '$2 == 1 && $3 ~ /^\?\??$/')
+
+	# 只输出 pids
+	# xargs 将换行转成 list
+	local pids=$(echo "$process" | awk '{print $1}' | xargs)
 	if [ -n "$pids" ]; then
 		kill -9 $pids
-		echo "[$now] $pids" # 输出内容到 plist 中
+		echo "[$now]:"
+		echo "$process"
 	fi
 }
 
