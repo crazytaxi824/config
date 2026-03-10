@@ -641,25 +641,6 @@ function backupConfigFiles() {
 
 # }}}
 
-# 清理 Neovim 孤儿进程 (Orphan Processes) -------------------------------------- {{{
-function nvim_clean() {
-    # 查找符合条件的 PID
-	# `ps -eo pid,ppid,tty,comm` 获取 pid, ppid, tty, command 这几个属性.
-	# `grep [n]vim` 避免 grep 进程被杀. grep 进程中不会出现 nvim, 而是 [n]vim.
-	# `awk $2 == 1`         ppid == 1 说明是 Orphan Processes
-	# `awk $3 ~ /^\?\??$/`  tty 正则匹配 `^?$` or `^??$`. linux 中是一个 ?, macos 中是 ??.
-	# `awk {print $1}`  打印 pid
-    local pids=$(ps -eo pid,ppid,tty,comm | grep "[n]vim" | awk '$2 == 1 && $3 ~ /^\?\??$/ {print $1}')
-
-	# kill all Processes
-    if [ -n "$pids" ]; then
-        echo "Neovim Orphan Processes Found:\n$pids"
-        echo "$pids" | xargs kill -9
-        echo "Cleaned"
-    fi
-}
-# }}}
-
 # 设置 'vimExistFile -- [filepath]' 命令, 不打开不存在的文件 ------------------- {{{
 # 'vim --'   Arguments after this will be handled as a file name.
 #            This can be used to edit a filename that starts with a '-'.
@@ -710,22 +691,11 @@ alias rm="echo '\e[33muse \"trash\" instead\e[0m'; #ignore_rest_cmd"
 ### open/edit file
 alias e="vimExistFile --"   # edit file, vimExistFile() 函数定义在下面.
 
-# 检查 command tools 是否安装
-alias checkZshTools="zsh $HOME/.config/.my_shell_functions/check_zsh_tools.sh"
-
 # 检查 terminal 是否支持 256-color
 # 256color [fg | bg | all]
 # 256color 可以直接 sh / bash 执行, 语法兼容.
 alias 256color="bash $HOME/.config/.my_shell_functions/256color.sh"
 
-# 检查 vscode 开发环境.
-# checkDevelopEnv [go | js | ts | react | py]
-# 只能使用 zsh 执行, 语法不兼容 sh & bash.
-alias checkDevEnv="zsh $HOME/.config/.my_shell_functions/check_dev_env.sh"
-
-# NOTE: 现在可以使用 `brew bundle check`, `brew bundle cleanup` 来检查不属于 Brewfile 的包.
-# 检查 brew 中所有不属于任何别的包依赖的包.
-#alias checkBrewRootFormula="zsh $HOME/.config/.my_shell_functions/brew_root_formula.sh"
 # 检查 brew dependency 属于哪个包.
 alias checkBrewDependency="bash $HOME/.config/.my_shell_functions/brew_dep_check.sh"
 

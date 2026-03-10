@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # 检查有哪些包 deps on 指定的 Formulae
 function checkBrewDep() {
