@@ -1,3 +1,5 @@
+--- mode 变更的时候会自动刷新 statusline, 不需要 `:redrawstatus`
+
 local M = {}
 
 --- `:help mode()`
