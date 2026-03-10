@@ -12,7 +12,7 @@ function nvim_clean() {
 	local pids=$(ps -eo pid,ppid,tty,command | grep '[n]vim' | awk '$2 == 1 && $3 ~ /^\?\??$/ {print $1}' | tr '\n' ' ')
 	if [ -n "$pids" ]; then
 		kill -9 $pids
-		echo "[$now] $pids"
+		echo "[$now] $pids" # 输出内容到 plist 中
 	fi
 }
 

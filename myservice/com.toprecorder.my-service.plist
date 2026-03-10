@@ -3,18 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>Label</key>
-	<string>com.topr.my-service</string>
+	<string>com.toprecorder.my-service</string>
 	<key>ProgramArguments</key>
 
-	<!--
-	`ps -eo ...`   获取 Process 属性
-	`-r`           按 CPU 降序排列
-	`head`         获取前 n 个 item
-	-->
 	<array>
-		<string>/bin/zsh</string>
-		<string>-c</string>
-		<string>now=$(date '+%Y/%m/%d %H:%M:%S'); ps -eo pid=,pcpu=,rss=,command= -r | head -10 | awk -v now="[$now]" '$2 > 80 {print now, $2, $3, $4}'</string>
+		<string>/Users/ray/.config/myservice/top_recorder.sh</string>
 	</array>
 
 	<!-- 每 N 秒执行一次 -->
@@ -27,7 +20,7 @@
 
 	<!-- 将内容写入文件中 -->
     <key>StandardOutPath</key>
-	<string>/Users/ray/top_surveillance.log</string>
+	<string>/Users/ray/top_recorder.log</string>
 
     <key>StandardErrorPath</key>
     <string>/tmp/my-service.log</string>
