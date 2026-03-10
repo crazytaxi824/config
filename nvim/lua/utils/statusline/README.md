@@ -19,7 +19,7 @@ right half transition: `▐` U+2590. fg(right_color), bg(left_color)
 
 - `%-`  左对齐, 默认右对齐
 - `%#`  highlight group. `%#highlight#`
-- `%<`  从左侧开始截断. truncate line (from here) if too long.
+- `%<`  保留左侧内容, 丢弃右侧超出的部分. truncate line (from here) if too long.
 - `%=`  Separation point between alignment sections.
 
 - `%f`, `%F`  [filepath]|[full filepath]
@@ -67,3 +67,60 @@ tabline 特有刷新: (Tabline 是全局的，它的刷新频率通常低于 Sta
 - 标签页增减: 执行 `:tabnew`, `:tabclose`, `:tabmove`
 - Buffer 增减: 如果你使用的是类似 bufferline.nvim 的插件（将 tabline 当作 buffer 列表用），那么当 `BufAdd`, `BufDelete`, `BufWipeout` 发生时会触发刷新
 - 强制刷新: 执行 `:redrawtabline` 命令时
+
+## Components
+
+### diagnostic
+
+`:lua vim.print(vim.diagnostic.get(0))`  获取所有 HINT, INFO, WARN, ERROR 所有的 diagnostic.
+
+`:lua vim.print(vim.diagnostic.get(0, {severity = vim.diagnostic.severity.ERROR}))`  只获取 ERROR diagnostic.
+
+### mode
+
+```
+local mode_map = {
+    n  = "NORMAL",
+    no  = "O-PENDING",  -- eg: press `d` motion 后触发
+    nov = "O-PENDING",
+    noV = "O-PENDING",
+    ["\22no"]   = "O-PENDING",  -- noCTRL-V
+    niI = "NORMAL",  -- INSERT mode press `Ctrl-O`
+    niR = "NORMAL",  -- REPLACE mode press `Ctrl-O`
+    niV = "NORMAL",  -- Virtual-Replace mode `gR` press `Ctrl-O`, V-REPLACE 按屏幕显示宽度替换，考虑 tab、全角字符等占用的实际显示宽度.
+    nt  = "NORMAL",  -- terminal normal mode, 按 `t_Ctrl-\_Ctrl-N` 退出 Terminal 模式.
+    ntT = "NORMAL",  -- terminal `t_CTRL-\_CTRL-O` mode
+
+    v  = "VISUAL",
+    vs = "VISUAL",  -- Select 模式下 `Ctrl-O` 的临时 Visual
+    V  = "V-LINE",
+    Vs = "V-LINE",  -- S-LINE 模式下 `Ctrl-O` 的临时 V-LINE
+    ["\22"]  = "V-BLOCK",  -- Ctrl-V
+    ["\22s"] = "V-BLOCK",  -- Select mode 下 `Ctrl-V`
+
+    s  = "SELECT",
+    S  = "S-LINE",
+    ["\19"] = "S-BLOCK",  -- Ctrl-S
+
+    i  = "INSERT",
+    ic = "INSERT",  -- completion, 按 `Ctrl-N` 或 `Ctrl-P` 触发补全时进入
+    ix = "INSERT",  -- completion, 按 `Ctrl-X` 进入补全子模式，然后再按 `Ctrl-N/Ctrl-F/Ctrl-L` 等触发
+
+    R   = "REPLACE",
+    Rc  = "REPLACE",    -- completion
+    Rx  = "REPLACE",    -- Ctrl-X completion
+    Rv  = "V-REPLACE",
+    Rvc = "V-REPLACE",  -- completion
+    Rvx = "V-REPLACE",  -- Ctrl-X completion
+
+    c  = "COMMAND",
+    cr  = "COMMAND",    -- overstrike, Command 模式下按 Insert 键切换到 overstrike（覆盖输入）模式
+    cv  = "EX",         -- Vim Ex mode, 按 `gQ` 进入 Vim Ex 模式
+    cvr = "EX",         -- Ex mode overstrike, Ex 模式下按 Insert 键切换到 overstrike 模式
+
+    t  = "TERMINAL",
+}
+
+local mode = mode_map[vim.fn.mode()] or vim.fn.mode()
+```
+
