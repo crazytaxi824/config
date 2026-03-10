@@ -716,7 +716,7 @@ alias checkZshTools="zsh $HOME/.config/.my_shell_functions/check_zsh_tools.sh"
 # 检查 terminal 是否支持 256-color
 # 256color [fg | bg | all]
 # 256color 可以直接 sh / bash 执行, 语法兼容.
-alias 256color="sh $HOME/.config/.my_shell_functions/256color.sh"
+alias 256color="bash $HOME/.config/.my_shell_functions/256color.sh"
 
 # 检查 vscode 开发环境.
 # checkDevelopEnv [go | js | ts | react | py]
