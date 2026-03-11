@@ -1,4 +1,5 @@
 local stl_sec = require('utils.statusline.sections')
+local stl_hl = require('utils.statusline.highlights')
 local c_mode = require('utils.statusline.mode')
 
 --- active & inactive window
@@ -15,11 +16,12 @@ vim.api.nvim_create_autocmd({"WinEnter", "WinLeave"}, {
 })
 
 --- change color
--- vim.api.nvim_create_autocmd({"ModeChanged"}, {
---   group = gid,
---   callback = function(args)
---     -- stl.update_hl()
---   end
--- })
+vim.api.nvim_create_autocmd({"ModeChanged"}, {
+  group = gid,
+  callback = function(args)
+    stl_hl.update_act_hl({})
+  end
+})
+
 
 
