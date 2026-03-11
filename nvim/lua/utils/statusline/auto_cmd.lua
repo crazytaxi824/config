@@ -2,8 +2,11 @@ local stl_sec = require('utils.statusline.sections')
 local stl_hl = require('utils.statusline.highlights')
 local c_mode = require('utils.statusline.mode')
 
---- active & inactive window
+
 local gid = vim.api.nvim_create_augroup("my_statusline", {clear=true})
+
+
+--- active & inactive window
 vim.api.nvim_create_autocmd({"WinEnter", "WinLeave"}, {
   group = gid,
   callback = function(args)

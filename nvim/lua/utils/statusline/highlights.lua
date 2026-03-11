@@ -1,3 +1,6 @@
+--- @alias StlHighlights {a?: vim.api.keyset.highlight, b?: vim.api.keyset.highlight, c?: vim.api.keyset.highlight}
+
+
 local STL_act_A = "STL_act_A"
 local STL_act_B = "STL_act_B"
 local STL_act_C = "STL_act_C"

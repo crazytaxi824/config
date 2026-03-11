@@ -1,5 +1,4 @@
 --- @alias StlSections {a?: string, b?: string, c?: string, x?: string, y?: string, z?: string}
---- @alias StlHighlights {a?: vim.api.keyset.highlight, b?: vim.api.keyset.highlight, c?: vim.api.keyset.highlight}
 
 
 --- active window
