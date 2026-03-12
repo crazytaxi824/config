@@ -241,7 +241,7 @@ lualine.setup {
         fmt = function(git_branch)
           vim.b[bufvar_branch] = git_branch
           if git_branch ~= '' and vim.api.nvim_win_get_width(0) <= 80 then
-            return Nerd_icons.ellipsis  -- branch has icon
+            return Nerd_icons.ellipsis  -- 显示为 ` `
           end
           return git_branch
         end,

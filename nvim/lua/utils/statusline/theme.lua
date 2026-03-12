@@ -7,7 +7,7 @@
 
 
 --- @type StlTheme
-local theme = {
-  default = {},
-}
+-- local theme = {
+--   default = {},
+-- }
 
