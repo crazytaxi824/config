@@ -105,12 +105,13 @@ end
 
 --- 合并两个 check, 同时检查 ---------------------------------------------------
 --- NOTE: 通过设置 set/get buffer var 来缓存 whitespace && mixed_indent 结果.
-local bufvar_lualine = 'my_lualine_checks'
-local cache_changetick = 0  --- FIXME: cache_changetick 需要带 bufnr
+local bufvar_tw_mi = 'my_tw_mi_checks'
+local bufvar_changetick = 'my_prev_changetick'
+
 local function my_trailing_whitespace()
   --- `:help b:changedtick` 判断 text 是否已经改变.
-  if cache_changetick == vim.b.changedtick then
-    return vim.b[bufvar_lualine] or ''
+  if vim.b[bufvar_changetick] == vim.b.changedtick then
+    return vim.b[bufvar_tw_mi] or ''
   end
 
   --- 只在 Normal mode 下 update lualine, 可以减少计算量.
@@ -119,20 +120,20 @@ local function my_trailing_whitespace()
     local ts = check_trailing_whitespace()
 
     if mi ~= '' and ts ~= '' then
-      vim.b[bufvar_lualine] = mi..' '..ts
+      vim.b[bufvar_tw_mi] = mi..' '..ts
     elseif mi ~= '' and ts == '' then
-      vim.b[bufvar_lualine] = mi
+      vim.b[bufvar_tw_mi] = mi
     elseif mi == '' and ts ~= '' then
-      vim.b[bufvar_lualine] = ts
+      vim.b[bufvar_tw_mi] = ts
     else
-      vim.b[bufvar_lualine] = nil
+      vim.b[bufvar_tw_mi] = nil
     end
 
     --- NOTE: 在计算结果之后 update changedtick.
-    cache_changetick = vim.b.changedtick
+    vim.b[bufvar_changetick] = vim.b.changedtick
   end
 
-  return vim.b[bufvar_lualine] or ''
+  return vim.b[bufvar_tw_mi] or ''
 end
 --- }}}
 
