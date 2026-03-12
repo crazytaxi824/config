@@ -106,7 +106,7 @@ end
 --- 合并两个 check, 同时检查 ---------------------------------------------------
 --- NOTE: 通过设置 set/get buffer var 来缓存 whitespace && mixed_indent 结果.
 local bufvar_lualine = 'my_lualine_checks'
-local cache_changetick = 0
+local cache_changetick = 0  --- FIXME: cache_changetick 需要带 bufnr
 local function my_trailing_whitespace()
   --- `:help b:changedtick` 判断 text 是否已经改变.
   if cache_changetick == vim.b.changedtick then
@@ -174,20 +174,6 @@ local function modified()
     return "modified"
   end
   return ''
-end
---- }}}
-
---- filetype & fileencoding ---------------------------------------------------- {{{
-local function my_filetype_encoding()
-  local str = ''
-  if vim.bo.filetype ~= '' and vim.bo.fileencoding ~= '' then
-    str = vim.bo.filetype .. ' ' .. vim.bo.fileencoding
-  elseif vim.bo.filetype ~= '' and vim.bo.fileencoding == '' then
-    str = vim.bo.filetype
-  elseif vim.bo.filetype == '' and vim.bo.fileencoding ~= '' then
-    str = vim.bo.fileencoding
-  end
-  return str
 end
 --- }}}
 
@@ -313,12 +299,18 @@ lualine.setup {
     },
     lualine_y = {
       {
-        my_filetype_encoding,
+        'filetype',
+        fmt = function(str)
+          return " " .. str
+        end
+      },
+      {
+        'encoding',
         fmt = function(str)
           if str ~= '' and vim.api.nvim_win_get_width(0) <= 80 then
-            return string.sub(str,1,1) .. ' ' .. Nerd_icons.ellipsis
+            return ""
           end
-          return str
+          return "[".. str .."]"
         end
       },
     },
