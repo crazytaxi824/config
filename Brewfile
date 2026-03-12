@@ -9,13 +9,10 @@
 tap "gittower/tap"
 
 ### `brew install` ---------------------------------------------------------------------------------
-# fzf
 brew "fzf"
 brew "fd"      # rust find
 brew "bat"     # rust cat
 brew "ripgrep" # rust grep, `rg`
-brew "tree"
-brew "htop"  # cui top
 
 # git
 brew "git"
@@ -23,7 +20,10 @@ brew "git-flow-next" # brew tap gittower/tap, `$ git flow init`
 brew "git-delta" # git diff 工具
 brew "lazygit"   # git cui 工具, 还有 "gitui"
 
-# terminal
+# terminal tools
+brew "yazi"  # rust file explorer
+brew "tree"
+brew "htop"  # cui top
 #brew "ranger" # terminal file explorer 文件管理器
 #brew "viu"   # terminal 图片显示工具
 #brew "w3m"   # terminal 访问网页工具
@@ -35,7 +35,7 @@ brew "tmux"
 brew "pandoc"  # 文档格式转换工具, 支持 word, pdf, markdown ... 各种格式
 #brew "universal-ctags"  # 各种语言的 object 分析工具. vim/neovim tagbar 插件使用
 
-# language & tools
+# language tools
 #brew "go"   # 推荐使用 https://go.dev 中下载安装.
 #brew "rust"
 #brew "lua"
