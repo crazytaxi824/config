@@ -77,40 +77,31 @@ end
 local function check_mixed_indent()
   local space_pat = [[\v^ +]]
   local tab_pat = [[\v^\t+]]
-  local space_indent = vim.fn.search(space_pat, 'nwc')
-  local tab_indent = vim.fn.search(tab_pat, 'nwc')
-  local mixed = (space_indent > 0 and tab_indent > 0)  -- 判断同一个 file 中是否有 mixed_indent
 
-  local mixed_same_line
-  if not mixed then
-    mixed_same_line = vim.fn.search([[\v^(\t+ | +\t)]], 'nwc')  -- 判断同一行中是否有 mixed_indent
-    mixed = mixed_same_line > 0
-  end
-  if not mixed then return '' end  --- no mixed_indent
-
-  --- 如果 mixed_same_line 则先返回 mixed_same_line
-  if mixed_same_line ~= nil and mixed_same_line > 0 then
-     return 'M:'..mixed_same_line
-  end
-
-  --- 如果 mixed_indent in file, 则返回数量少的 indent line.
-  local space_indent_cnt = vim.fn.searchcount({pattern=space_pat, max_count=1e3}).total
-  local tab_indent_cnt =  vim.fn.searchcount({pattern=tab_pat, max_count=1e3}).total
-  if space_indent_cnt > tab_indent_cnt then
-    return 'M:'..tab_indent
+  --- @type integer lnum
+  local indent_lnum
+  if vim.bo.expandtab then
+    --- using space indent
+    indent_lnum = vim.fn.search(tab_pat, 'nwc')
   else
-    return 'M:'..space_indent
+    --- using "\t" indent
+    indent_lnum = vim.fn.search(space_pat, 'nwc')
   end
+
+  if indent_lnum > 0 then
+    return 'M:'..indent_lnum
+  end
+  return ''
 end
 
 --- 合并两个 check, 同时检查 ---------------------------------------------------
 --- NOTE: 通过设置 set/get buffer var 来缓存 whitespace && mixed_indent 结果.
 local bufvar_tw_mi = 'my_tw_mi_checks'
-local bufvar_changetick = 'my_prev_changetick'
+local bufvar_changedtick = 'my_prev_changedtick'
 
 local function my_trailing_whitespace()
   --- `:help b:changedtick` 判断 text 是否已经改变.
-  if vim.b[bufvar_changetick] == vim.b.changedtick then
+  if vim.b[bufvar_changedtick] == vim.b.changedtick then
     return vim.b[bufvar_tw_mi] or ''
   end
 
@@ -130,7 +121,7 @@ local function my_trailing_whitespace()
     end
 
     --- NOTE: 在计算结果之后 update changedtick.
-    vim.b[bufvar_changetick] = vim.b.changedtick
+    vim.b[bufvar_changedtick] = vim.b.changedtick
   end
 
   return vim.b[bufvar_tw_mi] or ''
