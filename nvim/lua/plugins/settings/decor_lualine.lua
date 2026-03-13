@@ -135,30 +135,6 @@ local function my_progress()
 end
 --- }}}
 
---- indicate 文件是否 modified / readonly -------------------------------------- {{{
---- VVI: 这里分为3个 components 主要是为了解决 section 中无法按照情况分别设置颜色.
-local function modified_readonly()
-  if vim.bo.modified and vim.bo.readonly then  -- 对 readonly 文件做出修改
-    return "modified readonly"
-  end
-  return ''
-end
-
-local function readonly()
-  if vim.bo.readonly and not vim.bo.modified then  -- 如果是 modified_readonly 则不显示
-    return "readonly"
-  end
-  return ''
-end
-
-local function modified()
-  if vim.bo.modified and not vim.bo.readonly then  -- 如果是 modified_readonly 则不显示
-    return "modified"
-  end
-  return ''
-end
---- }}}
-
 --- }}}
 
 --- current git branch
@@ -365,29 +341,25 @@ lualine.setup {
       },
     },
     lualine_x = {
-      --- VVI: 分为3个 components 主要是为了解决 inactive_sections 中的 filename 无法分别设置颜色.
-      {modified_readonly, color = {fg = lualine_colors.white, bg = lualine_colors.red, gui='bold'}},
       {
-        modified,
-        color = {fg = lualine_colors.cyan, gui='bold'},
-        fmt = function(str)
-          if str ~= '' and vim.api.nvim_win_get_width(0) <= 60 then
-            return Nerd_icons.modified  -- branch has icon
+        'filename',
+        path = 0,
+        symbols = {
+          modified = Nerd_icons.modified, -- Text to show when the file is modified.
+          readonly = Nerd_icons.lock,     -- Text to show when the file is non-modifiable or readonly.
+          unnamed  = '[No Name]', -- Text to show for unnamed buffers.
+        },
+        color = function()
+          if vim.bo.modified and vim.bo.readonly then  -- 对 readonly 文件做出修改
+            return {fg = lualine_colors.white, bg = lualine_colors.red, gui='bold'}
+          elseif vim.bo.modified then  -- 修改后未保存的文件
+            return {fg = lualine_colors.cyan, gui='bold'}
+          elseif vim.bo.readonly then  -- readonly 文件
+            return {fg = lualine_colors.orange, gui='bold'}
           end
-          return str
+          return {fg = lualine_colors.light_grey} -- 其他情况
         end,
       },
-      {
-        readonly,
-        color = {fg = lualine_colors.orange, gui='bold'},
-        fmt = function(str)
-          if str ~= '' and vim.api.nvim_win_get_width(0) <= 60 then
-            return Nerd_icons.modified  -- branch has icon
-          end
-          return str
-        end,
-      },
-      {'filename', path = 0 },
     },
     lualine_y = {},
     lualine_z = {},
