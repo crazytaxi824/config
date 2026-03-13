@@ -31,6 +31,8 @@ indent_blankline.setup({
   indent = {
     char = "│",      -- space indent char
     tab_char = "│",  -- tab indent char
+
+    --- default highlight: `Whitespace`
     -- highlight = {  -- colorful indent line.  --- {{{
     --   'RainbowGrey',
     --   'RainbowRed',
