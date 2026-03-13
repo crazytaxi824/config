@@ -104,7 +104,7 @@ Highlights = {
   PmenuThumb = {ctermbg=Colors.g240.c, bg=Colors.g240.g},
   --- NormalFloat 默认 link to Pmenu
   NormalFloat = {link="Pmenu"},
-  --- Floating Window border 颜色需要和 Pmenu 的背景色相同. border = {"▄","▄","▄","█","▀","▀","▀","█"}
+  --- Floating Window border fg 颜色需要和 Pmenu 的 bg 颜色相同. border = {"▄","▄","▄","█","▀","▀","▀","█"}
   FloatBorder = {ctermfg=Colors.g235.c, fg=Colors.g235.g},
 
   --- 注释颜色
@@ -113,7 +113,7 @@ Highlights = {
   NonText = {ctermfg=Colors.g238.c, fg=Colors.g238.g},  -- "eol", "extends", "precedes"
   SpecialKey = { link = "NonText" },  -- "nbsp", "tab" and "trail"
   --- window 之间的分隔线颜色
-  WinSeparator = {ctermfg=Colors.g236.c, fg=Colors.g236.g},
+  WinSeparator = {ctermfg=Colors.g240.c, fg=Colors.g240.g},
   VertSplit = {link = 'WinSeparator'},
   --- 括号匹配颜色
   MatchParen = {

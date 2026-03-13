@@ -18,13 +18,14 @@ Nerd_icons = {
     tri_left  = '',
   },
   indent = {
-    edge   = "│",
+    edge   = "│",  -- nvim-tree, listchars.tab, indent-line
     item   = "├",
     corner = "└",
   },
   border = {"▄","▄","▄","█","▀","▀","▀","█"},  -- `:h nvim_open_win()`
   -- border = {"┌","─","┐","│","┘","─","└","│"},  -- "Box Drawings Light"
   -- border = {"╭","─","╮","│","╯","─","╰","│"},  -- "Box Drawings Light Arc"
+  separator = '┃',  -- 用于 fillchars, bufferline offsets.separator
   tick  = '✓',  -- ✓✔︎  
   cross = '⛌', -- ❌✕✖︎✗✘⛌ 
   star  = '★',

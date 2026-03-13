@@ -29,8 +29,8 @@ indent_blankline.setup({
 
   --- `:help ibl.config.indent`
   indent = {
-    char = "│",      -- space indent char
-    tab_char = "│",  -- tab indent char
+    char = Nerd_icons.indent.edge,      -- space indent char
+    tab_char = Nerd_icons.indent.edge,  -- tab indent char, 默认使用 `listchars.tab`
 
     --- default highlight: `Whitespace`
     -- highlight = {  -- colorful indent line.  --- {{{

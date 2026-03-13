@@ -364,8 +364,22 @@ vim.api.nvim_create_autocmd('WinNew', {
 ---   precedes/extends - 不换行(:set nowrap)的情况下, 内容长度超出屏幕的行会有该标记
 ---   nbsp - non-breakable space (0xA0, byte(160)), normal space (0x20, byte(32))
 --- }}}
+local listchars_orig = {
+  tab = Nerd_icons.indent.edge .. ' ',
+  trail = '·',
+  precedes = Nerd_icons.arrows.left,
+  extends = Nerd_icons.arrows.right,
+  nbsp = '␣'
+}
+
+local listchars_rich = vim.tbl_deep_extend('force', listchars_orig, {
+  tab = Nerd_icons.indent.edge .. '->',
+  lead = listchars_orig.trail,
+  eol = '󱞣',
+})
+
 vim.opt.list = true
-vim.opt.listchars = { tab='│ ', trail='·', extends='→', precedes='←', nbsp='␣' }
+vim.opt.listchars = listchars_orig
 
 --- 填充符, `:help fillchars` ---------------------------------------------------------------------- {{{
 ---   diff  - vimdiff 中被删除的行的填充字符.
@@ -375,19 +389,15 @@ vim.opt.listchars = { tab='│ ', trail='·', extends='→', precedes='←', nbs
 ---   stlnc - non-current window 的 statusline 中间的填充字符.
 ---   eob   - 文件最后一行之后, 空白行的行号.
 --- }}}
-vim.opt.fillchars = { fold=' ', diff=' ', vert='│', eob='~', lastline='@' }
+vim.opt.fillchars = { fold=' ', diff=' ', vert=Nerd_icons.separator }
 
-vim.api.nvim_create_user_command('ToggleListChars', function()
+vim.api.nvim_create_user_command('ToggleChars', function()
   local lcs = vim.opt_local.listchars:get()
   if not lcs['lead'] then
-    vim.opt.listchars:append('tab:│->')  -- :append() 可以单独设置内部元素
-    vim.opt.listchars:append('lead:·')
-    vim.opt.listchars:append('eol:󱞣')
+    vim.opt.listchars = listchars_rich
     vim.notify("'listchars' & 'fillchars': Enabled")
   else
-    vim.opt.listchars:append('tab:│ ')  -- :append() 可以单独设置内部元素
-    vim.opt.listchars:remove('lead')
-    vim.opt.listchars:remove('eol')
+    vim.opt.listchars = listchars_orig
     vim.notify("'listchars' & 'fillchars': Disabled")
   end
 end, {bang=true, bar=true})

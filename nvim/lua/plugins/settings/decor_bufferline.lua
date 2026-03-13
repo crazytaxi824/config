@@ -101,8 +101,8 @@ local buf_highlights = {
     ctermbg=Colors.yellow.c, bg=Colors.yellow.g,
   },
 
-  --- "offset_separator" 为 File Explorer 和 bufferline 之间的 separator, 样式不能自定义
-  offset_separator = { link = 'VertSplit' },
+  --- "offset_separator" 为 File Explorer 和 bufferline 之间的 separator
+  offset_separator = { link = 'WinSeparator' },
 
   --- error, warning, info, hint 颜色 --------------------------------------------------------------
   --- NOTE: 这里只是 diagnostic 部分的颜色显示, 不包括 buffer_num && buffer_name 颜色. eg: (1)
@@ -511,8 +511,8 @@ bufferline.setup({
 
     --- ':help bufferline-configuration', 在 nvim-tree 上显示 "File Explorer"
     offsets = {
-      {filetype="NvimTree", text="File Explorer", text_align="center", highlight="NvimTreeFileExplorer", separator=true},
-      {filetype="trouble", text="Trouble", text_align="center", highlight="NvimTreeFileExplorer", separator=true}
+      {filetype="NvimTree", text="File Explorer", text_align="center", highlight="NvimTreeFileExplorer", separator=Nerd_icons.separator},
+      {filetype="trouble", text="Trouble", text_align="center", highlight="NvimTreeFileExplorer", separator=Nerd_icons.separator}
     },
     --- 要使用 hover 必须 enable 'mousemoveevent'
     -- hover = {
