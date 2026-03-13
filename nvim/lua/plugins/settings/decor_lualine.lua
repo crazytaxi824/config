@@ -188,11 +188,24 @@ lualine.setup {
     globalstatus = false,  -- true - 则全局所有 window 使用同一个 status line;
                            -- false - 每个window 单独自己的 status line.
 
-    -- refresh = {
-    --   statusline = 100, -- (ms)
-    --   tabline = 100,
-    --   winbar = 100,
+    -- refresh = {  ------------------------------------------------------------ {{{
+    --   statusline = 1000, -- (ms)
+    --   tabline = 1000,
+    --   winbar = 1000,
+    --   events = {
+    --     'WinEnter',
+    --     'BufEnter',
+    --     'BufWritePost',
+    --     'SessionLoadPost',
+    --     'FileChangedShellPost',
+    --     'VimResized',
+    --     'Filetype',
+    --     'CursorMoved',
+    --     'CursorMovedI',
+    --     'ModeChanged',
+    --   },
     -- },
+    --- }}}
   },
 
   --- VVI: https://github.com/nvim-lualine/lualine.nvim#changing-components-in-lualine-sections
@@ -245,7 +258,7 @@ lualine.setup {
       },
       {
         my_trailing_whitespace,
-        color = {fg=lualine_colors.orange, gui='bold'},
+        color = {fg=lualine_colors.blue, gui='bold'},
         cond = function() return vim.bo.filetype~='' and vim.bo.buftype=='' end,  -- normal buffer with a filetype
       },
     },
@@ -337,7 +350,7 @@ lualine.setup {
       },
       {
         my_trailing_whitespace,
-        color = {fg=lualine_colors.orange, gui='bold'},
+        color = {fg=lualine_colors.blue, gui='bold'},
         cond = function() return vim.bo.filetype~='' and vim.bo.buftype=='' end,  -- normal buffer with a filetype
       },
     },
@@ -387,7 +400,12 @@ lualine.setup {
 
   --- lualine extensions change statusline appearance for a window/buffer with specified filetypes.
   --- https://github.com/nvim-lualine/lualine.nvim#extensions
-  extensions = {'nvim-tree', 'nerdtree', 'quickfix'},  -- NOTE: 'quickfix' includes loclist and quickfix
+  extensions = {
+    'nvim-tree', 'nerdtree', 'neo-tree',
+    'quickfix',  --- 'quickfix' includes 'loclist' and 'quickfix'
+    'trouble',
+    -- 'mason', 'lazy', 'fzf',
+  },
 }
 
 
