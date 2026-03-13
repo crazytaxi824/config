@@ -306,6 +306,23 @@ lualine.setup {
           if str ~= '' and vim.api.nvim_win_get_width(0) <= 80 then
             return ""
           end
+          return str
+        end
+      },
+      {
+        'fileformat',
+        padding = { left=0, right=1 },
+        fmt = function(str)
+          if str ~= '' and vim.api.nvim_win_get_width(0) <= 80 then
+            return ""
+          end
+          if str == 'unix' then
+            return "[LF]"
+          elseif str == 'dos' then
+            return "[CRLF]"
+          elseif str == 'mac' then
+            return "[CR]"
+          end
           return "[".. str .."]"
         end
       },
