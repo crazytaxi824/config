@@ -70,26 +70,23 @@ local my_theme = {
 local function check_trailing_whitespace()
   --- search() 是 C 实现的函数, 速度快.
   local space_lnum = vim.fn.search([[\s\+$]], 'nwc')
-  return space_lnum > 0 and "T:"..space_lnum or ""
+  return space_lnum > 0 and "Ts:"..space_lnum or ""
 end
 
 --- check Mixed-indent ---------------------------------------------------------
 local function check_mixed_indent()
-  local space_pat = [[\v^ +]]
-  local tab_pat = [[\v^\t+]]
-
   --- @type integer lnum
   local indent_lnum
   if vim.bo.expandtab then
-    --- using space indent
-    indent_lnum = vim.fn.search(tab_pat, 'nwc')
+    --- using space as indent, find "\t" indent
+    indent_lnum = vim.fn.search([[\v^\t+]], 'nwc')
   else
-    --- using "\t" indent
-    indent_lnum = vim.fn.search(space_pat, 'nwc')
+    --- using "\t" as indent, find space indent
+    indent_lnum = vim.fn.search([[\v^ +]], 'nwc')
   end
 
   if indent_lnum > 0 then
-    return 'M:'..indent_lnum
+    return 'Mi:'..indent_lnum
   end
   return ''
 end
@@ -99,14 +96,9 @@ end
 local bufvar_mi_ts = 'my_mi_ts'
 local bufvar_changedtick = 'my_prev_changedtick'
 
-local function my_trailing_whitespace()
-  --- `:help b:changedtick` 判断 text 是否已经改变.
-  if vim.b[bufvar_changedtick] == vim.b.changedtick then
-    return vim.b[bufvar_mi_ts] or ''
-  end
-
+local function trailing_whitespace_mixed_indent()
   --- 只在 Normal mode 下 update lualine, 可以减少计算量.
-  if vim.fn.mode() == 'n' then
+  if vim.fn.mode() == 'n' and vim.b[bufvar_changedtick] ~= vim.b.changedtick then
     local mi = check_mixed_indent()
     local ts = check_trailing_whitespace()
 
@@ -257,7 +249,7 @@ lualine.setup {
         },
       },
       {
-        my_trailing_whitespace,
+        trailing_whitespace_mixed_indent,
         color = {fg=lualine_colors.blue, gui='bold'},
         cond = function() return vim.bo.filetype~='' and vim.bo.buftype=='' end,  -- normal buffer with a filetype
       },
@@ -309,6 +301,7 @@ lualine.setup {
       },
       {
         'encoding',
+        padding = { left=0, right=1 },
         fmt = function(str)
           if str ~= '' and vim.api.nvim_win_get_width(0) <= 80 then
             return ""
@@ -349,7 +342,7 @@ lualine.setup {
         },
       },
       {
-        my_trailing_whitespace,
+        trailing_whitespace_mixed_indent,
         color = {fg=lualine_colors.blue, gui='bold'},
         cond = function() return vim.bo.filetype~='' and vim.bo.buftype=='' end,  -- normal buffer with a filetype
       },
