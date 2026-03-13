@@ -357,7 +357,9 @@ lualine.setup {
           elseif vim.bo.readonly then  -- readonly 文件
             return {fg = lualine_colors.orange, gui='bold'}
           end
-          return {fg = lualine_colors.light_grey} -- 其他情况
+
+          -- BUG: 必须设置 bg color, 否则会随 Insert Mode 改变 filename bg color
+          return {fg = lualine_colors.light_grey, bg = my_theme.inactive.c.bg}
         end,
       },
     },
