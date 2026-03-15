@@ -548,9 +548,9 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.bo[params.buf].buflisted = false
 
     --- close window
-    vim.keymap.set('n', 'q', '<cmd>q<CR>', {buffer=params.buf, desc="close window"})
+    vim.keymap.set('n', 'q', '<cmd>q<CR>', { buffer=params.buf, desc="close window" })
   end,
-  desc = "<q> close quickfix window",
+  desc = "<q> close window",
 })
 
 --- `:help command-line-window`, 包括 q: q/ q? 打开的窗口.
