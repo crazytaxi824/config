@@ -242,59 +242,6 @@ end
 --- functions for delete buffer/tab ---------------------------------------------------------------- {{{
 --- 用于 <leader>d 快捷键和 mouse actions 设置.
 
---- tab 是一组 win 的集合. `:tabclose` 本质是关闭 tab 中所有的 win. 并不 bdelete buffer.
---- 关闭整个 tab 以及其中的 buffer. 如果 tab 中的 buffer 同时存在于其他的 tab 中, 则不删除.
-local function close_current_tab()
-  local total_tab_num = vim.fn.tabpagenr('$')  --- 获取 tab 总数. 大于 1 说明有多个 tab.
-  if total_tab_num <= 1 then
-    return false  -- 只有一个 tab
-  end
-
-  if vim.fn.tabpagenr() == 1 then
-    Notify("cannot :tabclose 1st tab", "WARN")
-    return false  -- 不删除第一个 tab
-  end
-
-  --- 获取当前 tab 中的所有 bufnr. return list.
-  --- tabpagebuflist() 返回属于该 tab 的各个 win 正在显示的 buffer, NOTE: 包括 unlisted buffer.
-  local cur_tab_buf_list = vim.fn.tabpagebuflist()
-
-  --- 获取其他 tab 中的所有 buffer list.
-  local current_tabnr = vim.fn.tabpagenr()
-  local exclude_buffer_list = {}  --- buffers which also in other tabs
-  for i = 1, total_tab_num, 1 do
-    if i ~= current_tabnr then
-      vim.list_extend(exclude_buffer_list, vim.fn.tabpagebuflist(i))
-    end
-  end
-
-  --- 排除存在于其他 tab 中 buffer, 和 unsaved buffer.
-  local del_nochanged_buf_list = {}
-  for _, bufnr in ipairs(cur_tab_buf_list) do
-    if not vim.tbl_contains(exclude_buffer_list, bufnr)  -- 排除存在于其他 tab 中 buffer.
-      and not vim.bo[bufnr].modified  -- 排除 unsaved buffer.
-      and vim.fn.buflisted(bufnr) == 1   -- 排除 unlisted buffer
-    then
-      table.insert(del_nochanged_buf_list, bufnr)
-    end
-  end
-
-  vim.cmd.tabclose()
-
-  --- `:tabclose` 关闭整个 tab
-  --- `:bdelete 1 2 3` 删除 tab 中的所有 buffer
-  if #del_nochanged_buf_list > 0 then
-    --- tabclose 之后, 判断 buffer 是否存在.
-    for _, bufnr in ipairs(del_nochanged_buf_list) do
-      if vim.api.nvim_buf_is_valid(bufnr) and vim.fn.buflisted(bufnr) == 1 then
-        vim.cmd.bdelete(bufnr)
-      end
-    end
-  end
-
-  return true  -- 已经成功 close tab.
-end
-
 --- `:help bufferline-functions`
 --- require("bufferline").exec(index, function(index_bufinfo, visible_buffers_info))
 ---  - index 是指在 bufferline 中 (最上方的文件栏) 从左向右的位置,
@@ -331,14 +278,9 @@ end
 --- 删除当前 buffer.
 --- ignore_tab 用于避免 close 最后一个 tab 导致报错: "Cannot close last tab page"
 --- 如果 ignore_tab == true, 则不运行 close_current_tab()
-local function bufferline_del_current_buffer(ignore_tab)
-  --- NOTE: multi tab 的情况下, 使用 :tabclose 关闭整个 tab, 同时 bdelete 该 tab 中的所有 buffer.
-  if not ignore_tab and close_current_tab() then  -- return true: 有多个 tab, 并已关闭当前 tab.
-    return
-  end
-
-  --- NOTE: 以下是 single (last) tab 情况下删除 current buffer.
+local function bufferline_del_current_buffer()
   local current_bufnr = vim.api.nvim_get_current_buf()
+  local current_win = vim.api.nvim_get_current_win()
 
   --- current buffer 修改后未保存.
   if vim.bo[current_bufnr].modified then
@@ -346,47 +288,39 @@ local function bufferline_del_current_buffer(ignore_tab)
     return
   end
 
-  --- current buffer 是 unlisted active buffer
+  --- current buffer is not listed buffer
   if vim.fn.buflisted(current_bufnr) == 0 then
-    --- 如果有其他任何 window 中显示的是 listed buffer 则直接 :bdelete current buffer.
-    for _, wininfo in ipairs(vim.fn.getwininfo()) do
-      if vim.fn.buflisted(wininfo.bufnr) == 1 then
-        vim.cmd.bdelete()
-        return
-      end
-    end
-
-    --- 如果所有 window 中的 buffer 都是 unlisted 则跳到 buffer #, '#' 表示 previous buffer.
-    --- 如果 buffer # 也是 unlisted buffer, 则跳到最后一个 visible buffer.
-    --- NOTE: 这里不再需要 ':bdelete #' 删除 current buffer, 因为 current buffer 本身就是 unlisted.
-    local prev_bufnr = vim.fn.bufnr('#')
-    if vim.fn.buflisted(prev_bufnr) == 1 then
-      vim.api.nvim_set_current_buf(prev_bufnr)  -- ':buffer #'
-    else
-      bufferline.go_to(-1, true)  -- go_to(-1, true) 跳到最后一个 visible buffer
-    end
+    vim.cmd.bdelete(current_bufnr)
     return
   end
 
-  --- NOTE: 以下是 current_bufinfo.listed == 1 的情况.
-  --- 如果 current buffer 是最后一个 listed buffer 则不删除.
+  --- current buffer is listed buffer in multi windows, close current window
+  if #vim.fn.win_findbuf(current_bufnr) > 1 then
+    vim.api.nvim_win_close(current_win, false)
+    return
+  end
+
+  --- current buffer is the only listed buffer in only one window
   local listed_buffers = vim.fn.getbufinfo({ buflisted = 1 })
   if #listed_buffers == 1 then
-    --- listed_buffers 只剩一个, 而且 current_bufinfo.listed == 1,
-    --- 说明 current buffer 一定是最后一个 listed buffer.
-    Notify("cannot :bdelete last listed-buffer", "WARN")
+    Notify("cannot delete last listed-buffer", "WARN")
     return
   end
 
-  --- 如果当前 buffer 是排在最后的 listed buffer 则跳到前一个 buffer;
-  --- 如果当前 buffer 不是排在最后的 listed buffer 则跳到后一个 buffer;
-  if is_last_bufferline_index(current_bufnr) then
-    bufferline.cycle(-1)  -- 跳转到 prev buffer
-  else
+  --- current_bufnr is Not the only listed buffer
+  local prev_buf = vim.fn.bufnr('#')  -- prev_buf 可能为不存在(-1), 或者指向 unlisted buffer.
+
+  if vim.fn.buflisted(prev_buf) == 1 then
+    vim.api.nvim_win_set_buf(current_win, prev_buf)
+  elseif is_first_bufferline_index(current_bufnr) then
+    --- 如果当前 buffer 是排在最前面的 listed buffer 则跳到后一个 buffer;
     bufferline.cycle(1)   -- 跳转到 next buffer
+  else
+    --- 如果当前 buffer 不是排在最前面的 listed buffer 则跳到前一个 buffer;
+    bufferline.cycle(-1)  -- 跳转到 prev buffer
   end
 
-  vim.cmd.bdelete('#')
+  vim.cmd.bdelete(current_bufnr)
 end
 
 --- 删除指定 buffer
@@ -394,13 +328,13 @@ local function bufferline_del_buffer_by_bufnr(bufnr)
   --- 判断指定 bufnr 是否为仅剩的最后一个 listed buffer
   local listed_buffers = vim.fn.getbufinfo({ buflisted = 1 })
   if #listed_buffers < 2 then
-    Notify("Cannot close last listed-buffer", "WARN")
+    Notify("cannot delete last listed-buffer", "WARN")
     return
   end
 
   if vim.api.nvim_get_current_buf() == bufnr then
     --- NOTE: 删除的 buffer 是当前 buffer 时, 避免直接退出 nvim.
-    bufferline_del_current_buffer('ignore_tab')
+    bufferline_del_current_buffer()
   else
     --- 如果关闭的不是当前 buffer, 则直接删除.
     vim.cmd.bdelete({ args = {bufnr}, bang=true})  -- `:bdelete! bufnr`
@@ -441,9 +375,13 @@ bufferline.setup({
   options = {
     mode = "buffers", -- set to "tabs" to only show tabpages instead
     numbers = "ordinal", -- "none" | "ordinal" | "buffer_id" | "both" | func({ordinal,id,lower,raise}):string
-    sort_by = 'id',  -- insert_after_current |insert_at_end | id | extension | relative_directory | directory | tabs | func(buf_a, buf_b)
     persist_buffer_sort = true, -- whether or not custom sorted buffers should persist between sessions.
                                 -- 会创建一个全局变量 g:BufferlinePositions 保存自 state.custom_sort
+
+    -- sort_by = 'id',  -- insert_after_current |insert_at_end | id | extension | relative_directory | directory | tabs | func(buf_a, buf_b)
+    sort_by = function(buffer_a,buffer_b)
+      return vim.b[buffer_a.id]["my_winenter_time"] < vim.b[buffer_b.id]["my_winenter_time"]
+    end,
 
     always_show_bufferline = true, -- VVI: 一直显示 bufferline
     show_tab_indicators = true, -- 多个 tab 时在右上角显示 1 | 2 | ...
@@ -573,87 +511,5 @@ local bufferline_keymaps = {
 
 require('utils.keymaps').set(bufferline_keymaps)
 
---- HACK: 被 bdelete / bwipeout 的 buffer 重新打开时, 分配到 bufferline list 的最后 ---------------- {{{
---- 原理: 在 buffer 被 bdelete / bwipeout 的时候修改 state.custom_sort = {bufnr ...},
---- 来改变 bufferline 的显示顺序.
---- 需要用到 state.components, 即 bufferline.exec(callback()) 中的 visible_buffers_info
---- 如果需要手动刷新 bufferline 显示, 需要使用 require("bufferline.ui").refresh()
-local state_ok, state = pcall(require, "bufferline.state")
-if not state_ok then
-  Notify('cannot load "bufferline.state", state.custom_sort cannot be changed', "WARN")
-  return
-end
-
---- 获取 elem 在 list 中的 pos
-local function table_index(list, elem)
-  for index, value in ipairs(list) do
-    if value == elem then
-      return index
-    end
-  end
-end
-
---- 获取当前 bufferline 中 custom_sort 排序
-local function bufferline_custom_sort_order()
-  local list = {}
-  if state.custom_sort then
-    --- 如果 custom_sort 存在, 说明 buffer 位置排序已经被改变过.
-    --- VVI: 从 state.components 中获取位置顺序
-    list = vim.tbl_map(function(item)
-      return item.id
-    end, state.components)
-  else
-    --- 如果 custom_sort 不存在, 说明 buffer 位置是按照 bufnr 排序的(buffer 打开的顺序)
-    local listed_buffer = vim.fn.getbufinfo({ buflisted = 1 })
-    list = vim.tbl_map(function(item)
-      return item.bufnr
-    end, listed_buffer)
-  end
-  return list
-end
-
---- BufDelete 触发条件: bdelete, bwipeout
-vim.api.nvim_create_autocmd({"BufDelete", "BufWinEnter"}, {
-  pattern = {"*"},
-  callback = function(params)
-    --- 获取 bufferline 中 custom_sort 排序
-    local list = bufferline_custom_sort_order()
-
-    --- 获取 bufnr 在 list 中的 index
-    local buf_index = table_index(list, params.buf)
-
-    --- VVI: 手动给 custom_sort 赋值, 排序.
-    if params.event == "BufWinEnter" and not buf_index then
-      table.insert(list, params.buf)
-      state.custom_sort = list
-    elseif params.event == "BufDelete" and buf_index then
-      table.remove(list, buf_index)
-      state.custom_sort = list
-    end
-  end,
-  desc = "bufferline: sort bufnr manually",
-})
---- }}}
-
---- DEBUG: 用, 查看 ordinal, bufnr/id, list_index, 之间的关系 -------------------------------------- {{{
--- function Bufferline_info(bufferline_index)
---   -- vim.print("state.components:", state.components)
---   vim.print("state.custom_sort (bufnrs order):", state.custom_sort)
---   if bufferline_index then
---     bufferline.exec(bufferline_index, function(index_info, visible_infos)
---       --- 如果 index 不存在, 则 callback function 不执行.
---       if index_info then
---         print("index:", bufferline_index, "ordinal:", index_info.ordinal, "; bufnr:", index_info.id, "; bufname:", index_info.path)
---       end
---     end)
---   else
---     bufferline.exec(1, function(index_info, visible_infos)
---       for i, value in ipairs(visible_infos) do
---         print("index:", i, "ordinal:", value.ordinal, "; bufnr:", value.id, "; bufname:", value.path)
---       end
---     end)
---   end
--- end
---- }}}
 
 
