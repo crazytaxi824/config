@@ -225,12 +225,12 @@ end
 local function gotoable()
   if check_buftype_buflisted_filetype() then
     return true
-  else
-    --- 如果有任意一个 window 符合要求 go_to() 要求. 则当前 window 不允许 go_to() 到别的 buffer.
-    for _, wininfo in ipairs(vim.fn.getwininfo()) do
-      if check_buftype_buflisted_filetype(wininfo.bufnr) then
-        return false
-      end
+  end
+
+  --- 如果有任意一个 window 符合要求 go_to() 要求. 则当前 window 不允许 go_to() 到别的 buffer.
+  for _, wininfo in ipairs(vim.fn.getwininfo()) do
+    if check_buftype_buflisted_filetype(wininfo.bufnr) then
+      return false
     end
   end
 
@@ -398,7 +398,7 @@ local function bufferline_del_buffer_by_bufnr(bufnr)
     return
   end
 
-  if vim.fn.bufnr() == bufnr then
+  if vim.api.nvim_get_current_buf() == bufnr then
     --- NOTE: 删除的 buffer 是当前 buffer 时, 避免直接退出 nvim.
     bufferline_del_current_buffer('ignore_tab')
   else
