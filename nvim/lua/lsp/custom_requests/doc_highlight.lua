@@ -100,7 +100,7 @@ M.setup = function (client, bufnr)
 
   --- CursorHold 时, 如果没有超出 range 则不发送 documentHighlight 请求,
   --- 如果超出 range 则重新发送 documentHighlight 并 highlight references
-  vim.api.nvim_create_autocmd({"CursorHold"}, {
+  vim.api.nvim_create_autocmd({"CursorHold", "CursorHoldI"}, {
     group = group_id,
     buffer = bufnr,  -- 对指定 buffer 有效
     callback = function(params)
