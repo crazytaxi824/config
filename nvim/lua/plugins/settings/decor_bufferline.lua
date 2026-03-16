@@ -380,7 +380,16 @@ bufferline.setup({
 
     -- sort_by = 'id',  -- insert_after_current |insert_at_end | id | extension | relative_directory | directory | tabs | func(buf_a, buf_b)
     sort_by = function(buffer_a,buffer_b)
-      return vim.b[buffer_a.id]["my_winenter_time"] < vim.b[buffer_b.id]["my_winenter_time"]
+      local time_a = vim.b[buffer_a.id]["my_winenter_time"] or -1
+      local time_b = vim.b[buffer_b.id]["my_winenter_time"] or -1
+
+      --- '-1' means the biggest number
+      if time_a == -1 then
+        return false
+      elseif time_b == -1 then
+        return true
+      end
+      return time_a < time_b
     end,
 
     always_show_bufferline = true, -- VVI: 一直显示 bufferline
