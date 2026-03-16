@@ -294,10 +294,21 @@ local function bufferline_del_current_buffer()
     return
   end
 
-  --- current buffer is listed buffer in multi windows, close current window
+  --- current buffer is listed buffer
   if #vim.fn.win_findbuf(current_bufnr) > 1 then
+    --- current buffer in multi windows
     vim.api.nvim_win_close(current_win, false)
     return
+  end
+
+  --- multi listed buffer & multi listed window
+  local wins = vim.api.nvim_list_wins()
+  for _, win_id in ipairs(wins) do
+    local buf = vim.api.nvim_win_get_buf(win_id)
+    if win_id ~= current_win and buf ~= current_bufnr and vim.fn.buflisted(buf) == 1 then
+      vim.cmd.bdelete(current_bufnr)
+      return
+    end
   end
 
   --- current buffer is the only listed buffer in only one window
@@ -307,7 +318,7 @@ local function bufferline_del_current_buffer()
     return
   end
 
-  --- current_bufnr is Not the only listed buffer
+  --- multi listed buffer & only listed window
   local prev_buf = vim.fn.bufnr('#')  -- prev_buf 可能为不存在(-1), 或者指向 unlisted buffer.
 
   if vim.fn.buflisted(prev_buf) == 1 then
