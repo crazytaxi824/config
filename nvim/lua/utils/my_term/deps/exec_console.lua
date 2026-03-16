@@ -82,6 +82,9 @@ local function set_buf_line_output(bufnr, data, hl)
 
   --- highlight lines
   vim.hl.range(bufnr, ns, hl, {hl_start_lnum, 0}, {vim.api.nvim_buf_line_count(bufnr)-1, -1})
+
+  --- set nomodified
+  vim.api.nvim_set_option_value('modified', false, { scope='local', buf=bufnr })
 end
 
 --- job done 后处理: 在最后一行显示 [Process exited 'exit_code']
@@ -100,6 +103,9 @@ local function set_buf_line_exit(bufnr, job_id, exit_code)
   else
     vim.hl.range(bufnr, ns, "my_output_sys_error", {hl_start_lnum+1, 0}, {hl_start_lnum+1, -1})
   end
+
+  --- set nomodified
+  vim.api.nvim_set_option_value('modified', false, { scope='local', buf=bufnr })
 end
 
 --- print cmd, job info
