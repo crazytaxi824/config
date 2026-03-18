@@ -2,6 +2,7 @@ local winvar = "my_winbar"
 local indicator = '▌'
 
 
+--- 将一个 value 从 list 中 remove
 local function list_remove_value(list, val)
   for i, v in ipairs(list) do
     if v == val then
@@ -12,9 +13,11 @@ local function list_remove_value(list, val)
 end
 
 
+--- 给 bufname 前后添加 highlight, idx, indicator
+---
 --- @param idx integer
 --- @param bufname string
---- @param selected? boolean
+--- @param selected? boolean  是否是 current window & current buffer
 --- @return string
 local function winbar_buf(idx, bufname, selected)
   if bufname == '' then
@@ -31,6 +34,23 @@ local function winbar_buf(idx, bufname, selected)
 end
 
 
+--- bufname modification
+---
+--- @param buf integer
+--- @return string
+local function bufname_mod(buf)
+  local bufname = vim.fs.basename(vim.api.nvim_buf_get_name(buf))
+  if bufname == '' and vim.fn.buflisted(buf) == 1 then
+    bufname = '[No Name]'
+  elseif bufname ~= '' and vim.fn.buflisted(buf) == 0 then
+    bufname = '<' .. bufname .. '>'
+  end
+  return bufname
+end
+
+
+--- 通过 winvar 给 winbar 设置 buffers
+---
 --- @param win_id integer
 --- @param enter? boolean  是否需要计算 selected buffer
 local function set_winbar(win_id, enter)
@@ -44,13 +64,7 @@ local function set_winbar(win_id, enter)
 
   local str = ''
   for idx, buf in ipairs(win_bufs) do
-    local bufname = vim.fs.basename(vim.api.nvim_buf_get_name(buf))
-    if bufname == '' and vim.fn.buflisted(buf) == 1 then
-      bufname = '[No Name]'
-    elseif bufname ~= '' and vim.fn.buflisted(buf) == 0 then
-      bufname = '<' .. bufname .. '>'
-    end
-
+    local bufname = bufname_mod(buf)
     local winbar_buf_str = winbar_buf(idx, bufname, enter and buf == current_buf)
     if str == '' then
       str = winbar_buf_str
