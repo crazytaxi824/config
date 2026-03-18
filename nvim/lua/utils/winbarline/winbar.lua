@@ -1,5 +1,5 @@
 local winvar = "my_winbar"
-local indicator = '▌'
+local indicator = ''  -- ▌
 
 
 --- 将一个 value 从 list 中 remove
@@ -44,6 +44,8 @@ local function bufname_mod(buf)
     bufname = '[No Name]'
   elseif bufname ~= '' and vim.fn.buflisted(buf) == 0 then
     bufname = '<' .. bufname .. '>'
+  elseif bufname == '' and vim.fn.buflisted(buf) == 0 then
+    bufname = '<' .. vim.bo[buf].buftype .. '>'
   end
   return bufname
 end
@@ -78,6 +80,7 @@ end
 
 --- autocmd ----------------------------------------------------------------------------------------
 local gid = vim.api.nvim_create_augroup(winvar, { clear = true })
+
 vim.api.nvim_create_autocmd({"BufWinEnter"}, {
   group = gid,
   callback = function(args)
