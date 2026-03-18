@@ -14,10 +14,10 @@ end
 
 --- @param idx integer
 --- @param bufname string
---- @param prop? 'selected'
-local function winbar_buf(idx, bufname, prop)
+--- @param selected? boolean
+local function winbar_buf(idx, bufname, selected)
   local str = ''
-  if prop == 'selected' then
+  if selected then
     str = '%#MyWinBarLineIndicatorSelected#' .. indicator .. '%#MyWinBarLineBufferSelected# ' .. idx .. '. ' .. bufname .. ' %*'
   else
     str = '%#MyWinBarLine# ' .. idx .. '. ' .. bufname .. ' %*'
@@ -27,21 +27,24 @@ end
 
 
 --- @param win_id integer
-local function set_winbar(win_id)
+--- @param enter? boolean  是否需要计算 selected buffer
+local function set_winbar(win_id, enter)
   local current_buf = vim.api.nvim_get_current_buf()
 
+  --- 没有 winvar 的 window 不显示
+  local win_bufs = vim.w[win_id][winvar]
+  if not win_bufs then
+    return
+  end
+
   local str = ''
-  local win_bufs = vim.w[win_id][winvar] or {}
   for idx, buf in ipairs(win_bufs) do
     local bufname = vim.fs.basename(vim.api.nvim_buf_get_name(buf))
-
-    local winbar_buf_str
-    if buf == current_buf then
-      winbar_buf_str = winbar_buf(idx, bufname, 'selected')
-    else
-      winbar_buf_str = winbar_buf(idx, bufname)
+    if bufname == '' and vim.fn.buflisted(buf) == 1 then
+      bufname = '[No Name]'
     end
 
+    local winbar_buf_str = winbar_buf(idx, bufname, enter and buf == current_buf)
     if str == '' then
       str = winbar_buf_str
     else
@@ -58,12 +61,19 @@ vim.api.nvim_create_autocmd({"BufWinEnter"}, {
   group = gid,
   callback = function(args)
     local win_id = vim.api.nvim_get_current_win()
+
+    --- floating window 不显示
+    local win_cfg = vim.api.nvim_win_get_config(win_id)
+    if win_cfg.relative ~= '' then
+      return
+    end
+
     local win_bufs = vim.w[win_id][winvar] or {}
     if not vim.list_contains(win_bufs, args.buf) then
       table.insert(win_bufs, args.buf)
     end
     vim.w[win_id][winvar] = win_bufs
-    set_winbar(win_id)
+    set_winbar(win_id, true)
   end
 })
 
@@ -72,12 +82,13 @@ vim.api.nvim_create_autocmd({"BufWinEnter"}, {
 vim.api.nvim_create_autocmd({"BufUnload"}, {
   group = gid,
   callback = function(args)
+    local current_win = vim.api.nvim_get_current_win()
     local buf_wins = vim.fn.win_findbuf(args.buf)
     for _, win_id in ipairs(buf_wins) do
       local win_bufs = vim.w[win_id][winvar] or {}
       list_remove_value(win_bufs, args.buf)
       vim.w[win_id][winvar] = win_bufs
-      set_winbar(win_id)
+      set_winbar(win_id, win_id == current_win)
     end
   end
 })
@@ -87,7 +98,7 @@ vim.api.nvim_create_autocmd({"WinEnter", "WinLeave"}, {
   group = gid,
   callback = function(args)
     local win_id = vim.api.nvim_get_current_win()
-    set_winbar(win_id)
+    set_winbar(win_id, args.event == 'WinEnter')
   end
 })
 
