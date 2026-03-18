@@ -15,7 +15,12 @@ end
 --- @param idx integer
 --- @param bufname string
 --- @param selected? boolean
+--- @return string
 local function winbar_buf(idx, bufname, selected)
+  if bufname == '' then
+    return ''
+  end
+
   local str = ''
   if selected then
     str = '%#MyWinBarLineIndicatorSelected#' .. indicator .. '%#MyWinBarLineBufferSelected# ' .. idx .. '. ' .. bufname .. ' %*'
@@ -31,7 +36,7 @@ end
 local function set_winbar(win_id, enter)
   local current_buf = vim.api.nvim_get_current_buf()
 
-  --- 没有 winvar 的 window 不显示
+  --- 没有 winvar 的 window 不显示 WinBarLine
   local win_bufs = vim.w[win_id][winvar]
   if not win_bufs then
     return
@@ -42,6 +47,8 @@ local function set_winbar(win_id, enter)
     local bufname = vim.fs.basename(vim.api.nvim_buf_get_name(buf))
     if bufname == '' and vim.fn.buflisted(buf) == 1 then
       bufname = '[No Name]'
+    elseif bufname ~= '' and vim.fn.buflisted(buf) == 0 then
+      bufname = '<' .. bufname .. '>'
     end
 
     local winbar_buf_str = winbar_buf(idx, bufname, enter and buf == current_buf)
@@ -62,7 +69,7 @@ vim.api.nvim_create_autocmd({"BufWinEnter"}, {
   callback = function(args)
     local win_id = vim.api.nvim_get_current_win()
 
-    --- floating window 不显示
+    --- floating window 不显示 WinBarLine
     local win_cfg = vim.api.nvim_win_get_config(win_id)
     if win_cfg.relative ~= '' then
       return
@@ -83,8 +90,8 @@ vim.api.nvim_create_autocmd({"BufUnload"}, {
   group = gid,
   callback = function(args)
     local current_win = vim.api.nvim_get_current_win()
-    local buf_wins = vim.fn.win_findbuf(args.buf)
-    for _, win_id in ipairs(buf_wins) do
+    local wins = vim.api.nvim_list_wins()
+    for _, win_id in ipairs(wins) do
       local win_bufs = vim.w[win_id][winvar] or {}
       list_remove_value(win_bufs, args.buf)
       vim.w[win_id][winvar] = win_bufs
