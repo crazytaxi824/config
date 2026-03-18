@@ -422,6 +422,10 @@ Highlights = {
   },
   --TabLine = {ctermfg = 234},
 
+  --- clear WinBar
+  WinBar = {},
+  WinBarNC = {},
+
   --- 设置 syntax 颜色是为了让 treesitter lazy render 的时候不至于颜色差距太大.
   --- set vim-syntax color to match treesitter color
   typescriptMember = { link = '@property' },
