@@ -39,9 +39,10 @@ vim.api.nvim_set_hl(0, "MyWinBarLineModified", {
 })
 
 --- separator --------------------------------------------------------------------------------------
--- vim.api.nvim_set_hl(0, "MyWinBarLineSeparator", {
---   ctermfg=Colors.g234.c, fg=Colors.g234.g,
--- })
+vim.api.nvim_set_hl(0, "MyWinBarLineTab", {
+  ctermfg=Colors.black.c, fg=Colors.black.g,
+  ctermbg=Colors.yellow.c, bg=Colors.yellow.g,
+})
 
 --- diagnostic -------------------------------------------------------------------------------------
 vim.api.nvim_set_hl(0, "MyWinBarLineDiagnosticError", {

@@ -19,7 +19,7 @@ end
 --- @param bufname string
 --- @param selected? boolean  是否是 current window & current buffer
 --- @return string
-local function winbar_buf(idx, bufname, selected)
+local function winbar_highlight(idx, bufname, selected)
   if bufname == '' then
     return ''
   end
@@ -30,6 +30,12 @@ local function winbar_buf(idx, bufname, selected)
   else
     str = '%#MyWinBarLine# ' .. idx .. '. ' .. bufname .. ' %*'
   end
+
+  local tabs = vim.api.nvim_list_tabpages()
+  if #tabs > 1 then
+    str = str .. '%=%#MyWinBarLineTab# ' .. vim.fn.tabpagenr() .. ' '
+  end
+
   return str
 end
 
@@ -67,7 +73,7 @@ local function set_winbar(win_id, enter)
   local str = ''
   for idx, buf in ipairs(win_bufs) do
     local bufname = bufname_mod(buf)
-    local winbar_buf_str = winbar_buf(idx, bufname, enter and buf == current_buf)
+    local winbar_buf_str = winbar_highlight(idx, bufname, enter and buf == current_buf)
     if str == '' then
       str = winbar_buf_str
     else
