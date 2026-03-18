@@ -256,14 +256,14 @@ local plugins = {
   },
 
   --- Buffer & Status Line -------------------------------------------------------------------------
-  {
-    "akinsho/bufferline.nvim",  -- `:help 'tabline'`
-    tag = "v4.9.1",
-    config = function() require("plugins.settings.decor_bufferline") end,
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-
-    event = "VeryLazy",
-  },
+  -- {
+  --   "akinsho/bufferline.nvim",  -- `:help 'tabline'`
+  --   tag = "v4.9.1",
+  --   config = function() require("plugins.settings.decor_bufferline") end,
+  --   dependencies = { "nvim-tree/nvim-web-devicons" },
+  --
+  --   event = "VeryLazy",
+  -- },
 
   {
     "nvim-lualine/lualine.nvim",  -- `:help 'statusline'`

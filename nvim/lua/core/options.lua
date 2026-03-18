@@ -456,7 +456,7 @@ vim.opt.smartcase = true   -- 如果 search 文字中有大写字母则 case sen
 vim.opt.hlsearch = true    -- / ? 搜索时显示所有匹配项. 颜色设置 `hi Search` & `hi IncSearch`
 
 --- 样式设置 ---------------------------------------------------------------------------------------
-vim.opt.showtabline = 2   -- always show tabline 屏幕最顶部显示 buffer name 的行.
+vim.opt.showtabline = 0   -- always show tabline 屏幕最顶部显示 buffer name 的行.
 
 vim.opt.laststatus = 2    -- last window always show statusline, 屏幕底部状栏.
 vim.opt.showmode = false  -- statusline 不显示 mode() 模式信息. airline/lualine 插件显示.
