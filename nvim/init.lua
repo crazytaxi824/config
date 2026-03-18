@@ -40,4 +40,4 @@ require("misc")     -- 其他设置.
 
 
 
-require('utils.winbar.win_bar')
+require('utils.winbarline.winbar')
