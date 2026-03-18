@@ -52,6 +52,7 @@ local function set_winbar(win_id)
 end
 
 
+--- autocmd ----------------------------------------------------------------------------------------
 local gid = vim.api.nvim_create_augroup(winvar, { clear = true })
 vim.api.nvim_create_autocmd({"BufWinEnter"}, {
   group = gid,
@@ -78,6 +79,15 @@ vim.api.nvim_create_autocmd({"BufUnload"}, {
       vim.w[win_id][winvar] = win_bufs
       set_winbar(win_id)
     end
+  end
+})
+
+
+vim.api.nvim_create_autocmd({"WinEnter", "WinLeave"}, {
+  group = gid,
+  callback = function(args)
+    local win_id = vim.api.nvim_get_current_win()
+    set_winbar(win_id)
   end
 })
 
