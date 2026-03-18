@@ -1,4 +1,5 @@
 local winvar = "my_winbar"
+local indicator = '▌'
 
 
 local function list_remove_value(list, val)
@@ -11,16 +12,30 @@ local function list_remove_value(list, val)
 end
 
 
+--- @param idx integer
+--- @param bufname string
+--- @param prop? 'selected'
+local function winbar_str(idx, bufname, prop)
+  local str = ''
+  if prop == 'selected' then
+    str = '%#MyWinBarLineIndicatorSelected#' .. indicator .. '%#MyWinBarLineBufferSelected# ' .. idx .. '. ' .. bufname .. ' %*'
+  else
+    str = '%#MyWinBarLine# ' .. idx .. '. ' .. bufname .. ' %*'
+  end
+  return str
+end
+
+
 --- @param win_id integer
 local function set_winbar(win_id)
   local str = ''
   local win_bufs = vim.w[win_id][winvar] or {}
-  for _, buf in ipairs(win_bufs) do
+  for idx, buf in ipairs(win_bufs) do
     local bufname = vim.fs.basename(vim.api.nvim_buf_get_name(buf))
     if str == '' then
-      str = bufname
+      str = winbar_str(idx, bufname, 'selected')
     else
-      str = str .. " │ " .. bufname
+      str = str .. " " .. winbar_str(idx, bufname)
     end
   end
   vim.api.nvim_set_option_value('winbar', str, { scope='local', win=win_id })
