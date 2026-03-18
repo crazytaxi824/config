@@ -15,7 +15,7 @@ end
 --- @param idx integer
 --- @param bufname string
 --- @param prop? 'selected'
-local function winbar_str(idx, bufname, prop)
+local function winbar_buf(idx, bufname, prop)
   local str = ''
   if prop == 'selected' then
     str = '%#MyWinBarLineIndicatorSelected#' .. indicator .. '%#MyWinBarLineBufferSelected# ' .. idx .. '. ' .. bufname .. ' %*'
@@ -28,14 +28,24 @@ end
 
 --- @param win_id integer
 local function set_winbar(win_id)
+  local current_buf = vim.api.nvim_get_current_buf()
+
   local str = ''
   local win_bufs = vim.w[win_id][winvar] or {}
   for idx, buf in ipairs(win_bufs) do
     local bufname = vim.fs.basename(vim.api.nvim_buf_get_name(buf))
-    if str == '' then
-      str = winbar_str(idx, bufname, 'selected')
+
+    local winbar_buf_str
+    if buf == current_buf then
+      winbar_buf_str = winbar_buf(idx, bufname, 'selected')
     else
-      str = str .. " " .. winbar_str(idx, bufname)
+      winbar_buf_str = winbar_buf(idx, bufname)
+    end
+
+    if str == '' then
+      str = winbar_buf_str
+    else
+      str = str .. " " .. winbar_buf_str
     end
   end
   vim.api.nvim_set_option_value('winbar', str, { scope='local', win=win_id })
