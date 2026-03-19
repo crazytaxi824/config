@@ -21,20 +21,13 @@ vim.api.nvim_create_autocmd({"BufWinEnter"}, {
     end
     vim.w[win_id][utils.winvar] = win_bufs
 
-    --- 如果 bufname 存在则直接渲染.
-    --- 如果 bufname == '' 则延迟用于获取准确的 bufname.
-    local bufname = vim.api.nvim_buf_get_name(args.buf)
-    if bufname ~= '' then
-      utils.set_winbar(win_id, true)
-    else
-      vim.schedule(function() utils.set_winbar(win_id, true) end)
-    end
+    utils.set_winbar(win_id, true)
   end
 })
 
 
 --- 从所有的 window buffer list 中删除 buf
-vim.api.nvim_create_autocmd({"BufDelete"}, {
+vim.api.nvim_create_autocmd({"BufWipeout"}, {
   group = gid,
   callback = function(args)
     local current_win = vim.api.nvim_get_current_win()
@@ -60,7 +53,7 @@ vim.api.nvim_create_autocmd({"WinEnter", "WinLeave"}, {
 
 
 --- 更新 winbar
-vim.api.nvim_create_autocmd({"TextChanged", "TextChangedI", "TextChangedP", "BufWritePost", "DiagnosticChanged"}, {
+vim.api.nvim_create_autocmd({"TextChanged", "TextChangedI", "TextChangedP", "BufWritePost", "BufFilePost", "FileChangedShellPost", "DiagnosticChanged"}, {
   group = gid,
   callback = function(args)
     local current_win = vim.api.nvim_get_current_win()
