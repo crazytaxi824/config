@@ -48,11 +48,6 @@ local function winbar_highlight(idx, bufname, selected)
     str = '%#MyWinBarLine# ' .. idx .. '. ' .. bufname .. ' %*'
   end
 
-  local tabs = vim.api.nvim_list_tabpages()
-  if #tabs > 1 then
-    str = str .. '%=%#MyWinBarLineTab# ' .. vim.fn.tabpagenr() .. ' '
-  end
-
   return str
 end
 
@@ -105,6 +100,12 @@ local function set_winbar(win_id, enter)
       str = str .. " " .. winbar_buf_str
     end
   end
+
+  local tabs = vim.api.nvim_list_tabpages()
+  if #tabs > 1 then
+    str = str .. '%=%#MyWinBarLineTab# ' .. vim.fn.tabpagenr() .. ' '
+  end
+
   vim.api.nvim_set_option_value('winbar', str, { scope='local', win=win_id })
 end
 
@@ -166,6 +167,7 @@ vim.api.nvim_create_autocmd({"WinEnter", "WinLeave"}, {
 })
 
 
+--- functions --------------------------------------------------------------------------------------
 --- Debug
 function WinbarLine()
   local win_id = vim.api.nvim_get_current_win()
