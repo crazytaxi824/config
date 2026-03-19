@@ -60,7 +60,7 @@ vim.api.nvim_create_autocmd({"WinEnter", "WinLeave"}, {
 
 
 --- 更新 winbar
-vim.api.nvim_create_autocmd({"TextChanged", "TextChangedI", "TextChangedP", "BufWritePost"}, {
+vim.api.nvim_create_autocmd({"TextChanged", "TextChangedI", "TextChangedP", "BufWritePost", "DiagnosticChanged"}, {
   group = gid,
   callback = function(args)
     local current_win = vim.api.nvim_get_current_win()
