@@ -1,5 +1,6 @@
 local utils = require('utils.winbarline.utils')
 
+
 --- 相当于 :[N]buf
 ---
 --- @param idx integer
@@ -21,6 +22,7 @@ local function goto(idx)
 
   vim.api.nvim_win_set_buf(curr_win, win_bufs[idx])
 end
+
 
 --- @param move 'next'|'prev'
 local function cycle(move)
@@ -54,6 +56,35 @@ local function cycle(move)
   else
     error('move error: ' .. move)
   end
+end
+
+
+--- @param opt 'left'|'right'|'others'
+local function delete_buffers(opt)
+  local curr_win = vim.api.nvim_get_current_win()
+  local curr_buf = vim.api.nvim_win_get_buf(curr_win)
+
+  local win_bufs = vim.w[curr_win][utils.winvar]
+  if not win_bufs then
+    return
+  end
+
+  local idx = utils.list_index_value(win_bufs, curr_buf)
+  if not idx then
+    error("current buffer is not in the win_bufs")
+  end
+
+  if opt == 'left' then
+    vim.w[curr_win][utils.winvar] = table.move(win_bufs, idx, #win_bufs, 1, {})
+  elseif opt == 'right' then
+    vim.w[curr_win][utils.winvar] = table.move(win_bufs, 1, idx, 1, {})
+  elseif opt == 'others' then
+    vim.w[curr_win][utils.winvar] = { curr_buf }
+  else
+    error('opt value error: ' .. opt)
+  end
+
+  utils.set_winbar(curr_win, true)
 end
 
 
@@ -111,13 +142,16 @@ local function delete_current_buf()
 end
 
 
---- set keymaps
+--- set keymaps ------------------------------------------------------------------------------------
 local opt = { silent = true }
 local winbar_keymaps = {
   {'n', '<leader>\\', function() goto(vim.v.count1) end , opt, 'which_key_ignore'},
   {'n', '<S-D-[>', function() cycle('prev') end, opt, 'buffer: go to Prev buffer'},
   {'n', '<S-D-]>', function() cycle('next')  end, opt, 'buffer: go to Next buffer'},
   {'n', '<leader>d', function() delete_current_buf() end, opt, 'buffer: Close Current Buffer/Tab'},
+  {'n', '<leader>D<Left>', function() delete_buffers('left') end, opt, 'buffer: Close Left Side Buffers'},
+  {'n', '<leader>D<Right>', function() delete_buffers('right') end, opt, 'buffer: Close Right Side Buffers'},
+  {'n', '<leader>Da', function() delete_buffers('others') end, opt, 'buffer: Close all other buffers'},
 }
 
 require('utils.keymaps').set(winbar_keymaps)
