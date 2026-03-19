@@ -2,13 +2,30 @@ local winvar = "my_winbar"
 local indicator = ''  -- ▌
 
 
---- 将一个 value 从 list 中 remove
-local function list_remove_value(list, val)
+--- 找出 value 在 list 中的 index
+---
+--- @generic T
+--- @param list T[]
+--- @param val T
+--- @return integer|nil
+local function list_index_value(list, val)
   for i, v in ipairs(list) do
     if v == val then
-      table.remove(list, i)
-      return
+      return i
     end
+  end
+end
+
+
+--- 将一个 value 从 list 中 remove
+---
+--- @generic T
+--- @param list T[]
+--- @param val T
+local function list_remove_value(list, val)
+  local idx = list_index_value(list, val)
+  if idx then
+    table.remove(list, idx)
   end
 end
 
@@ -131,7 +148,7 @@ vim.api.nvim_create_autocmd({"BufUnload"}, {
     local current_win = vim.api.nvim_get_current_win()
     local wins = vim.api.nvim_list_wins()
     for _, win_id in ipairs(wins) do
-      local win_bufs = vim.w[win_id][winvar] or {}
+      local win_bufs = vim.w[win_id][winvar] or {}  --- @type integer[]
       list_remove_value(win_bufs, args.buf)
       vim.w[win_id][winvar] = win_bufs
       set_winbar(win_id, win_id == current_win)
@@ -153,4 +170,84 @@ vim.api.nvim_create_autocmd({"WinEnter", "WinLeave"}, {
 function WinbarLine()
   local win_id = vim.api.nvim_get_current_win()
   print(win_id, vim.inspect(vim.w[win_id][winvar]))
+end
+
+
+--- @param move 'next'|'prev'
+function WinBarCycle(move)
+  local curr_win = vim.api.nvim_get_current_win()
+  local curr_buf = vim.api.nvim_win_get_buf(curr_win)
+
+  local win_bufs = vim.w[curr_win][winvar]
+  if not win_bufs then
+    return
+  end
+
+  local idx = list_index_value(win_bufs, curr_buf)
+  if not idx then
+    error("buffer is not register to the window")
+  end
+
+  if move == 'next' then
+    local next = idx < #win_bufs and idx+1 or 1
+    if vim.api.nvim_buf_is_valid(win_bufs[next]) then
+      vim.api.nvim_win_set_buf(curr_win, win_bufs[next])
+    else
+      error('buffer is not valid')
+    end
+  elseif move == 'prev' then
+    local prev = idx > 1 and idx-1 or #win_bufs
+    if vim.api.nvim_buf_is_valid(win_bufs[prev]) then
+      vim.api.nvim_win_set_buf(curr_win, win_bufs[prev])
+    else
+      error('buffer is not valid')
+    end
+  else
+    error('move error: ' .. move)
+  end
+end
+
+
+function WinBarDelete()
+  local curr_win = vim.api.nvim_get_current_win()
+  local curr_buf = vim.api.nvim_win_get_buf(curr_win)
+
+  local win_bufs = vim.w[curr_win][winvar]
+  if not win_bufs then
+    return
+  end
+
+  if #win_bufs <= 1 then
+    local new_bufnr = vim.api.nvim_create_buf(true, false)
+    vim.api.nvim_win_set_buf(curr_win, new_bufnr)
+
+    vim.w[curr_win][winvar] = { new_bufnr }
+    set_winbar(curr_win, true)
+    return
+  end
+
+  local idx = list_index_value(win_bufs, curr_buf)
+  if not idx then
+    error("buffer is not register to the window")
+  end
+
+  if idx == 1 then
+    local next = idx < #win_bufs and idx+1 or 1
+    if vim.api.nvim_buf_is_valid(win_bufs[next]) then
+      vim.api.nvim_win_set_buf(curr_win, win_bufs[next])
+    else
+      error('buffer is not valid')
+    end
+  else
+    local prev = idx > 1 and idx-1 or #win_bufs
+    if vim.api.nvim_buf_is_valid(win_bufs[prev]) then
+      vim.api.nvim_win_set_buf(curr_win, win_bufs[prev])
+    else
+      error('buffer is not valid')
+    end
+  end
+
+  table.remove(win_bufs, idx)
+  vim.w[curr_win][winvar] = win_bufs
+  set_winbar(curr_win, true)
 end
