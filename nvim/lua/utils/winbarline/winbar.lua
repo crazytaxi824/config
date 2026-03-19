@@ -175,7 +175,7 @@ vim.api.nvim_create_autocmd({"WinEnter", "WinLeave"}, {
 
 
 --- 更新 winbar
-vim.api.nvim_create_autocmd({"TextChanged", "TextChangedI", "TextChangedP"}, {
+vim.api.nvim_create_autocmd({"TextChanged", "TextChangedI", "TextChangedP", "BufWritePost"}, {
   group = gid,
   callback = function(args)
     local current_win = vim.api.nvim_get_current_win()
@@ -190,8 +190,10 @@ vim.api.nvim_create_autocmd({"TextChanged", "TextChangedI", "TextChangedP"}, {
 --- functions --------------------------------------------------------------------------------------
 --- Debug
 function WinbarLine()
-  local win_id = vim.api.nvim_get_current_win()
-  print(win_id, vim.inspect(vim.w[win_id][winvar]))
+  local wins = vim.api.nvim_list_wins()
+  for _, win_id in ipairs(wins) do
+    print(win_id, vim.inspect(vim.w[win_id][winvar]))
+  end
 end
 
 
