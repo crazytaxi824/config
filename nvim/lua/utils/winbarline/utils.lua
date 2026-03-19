@@ -133,15 +133,31 @@ function M.set_winbar(win_id, enter)
   end
 
   local str = ''
+  local remove_idx = {}
+
   for idx, buf in ipairs(win_bufs) do
-    local winbar_buf_str = winbar_highlight(idx, buf, enter and buf == current_buf)
-    if str == '' then
-      str = winbar_buf_str
+    if vim.api.nvim_buf_is_valid(buf) then
+      local winbar_buf_str = winbar_highlight(idx, buf, enter and buf == current_buf)
+      if str == '' then
+        str = winbar_buf_str
+      else
+        str = str .. " " .. winbar_buf_str
+      end
     else
-      str = str .. " " .. winbar_buf_str
+      --- 需要删除的 buffer 的 index, 倒序插入
+      table.insert(remove_idx, 1, idx)
     end
   end
 
+  --- 从 win_bufs 中删除
+  for _, remove in ipairs(remove_idx) do
+    table.remove(win_bufs, remove)
+  end
+
+  --- 清除 invalid buffer 后重新赋值
+  vim.w[win_id][M.winvar] = win_bufs
+
+  --- tabpagenr
   local tabs = vim.api.nvim_list_tabpages()
   if #tabs > 1 then
     str = str .. '%=%#MyWinBarLineTab# ' .. vim.fn.tabpagenr() .. ' '

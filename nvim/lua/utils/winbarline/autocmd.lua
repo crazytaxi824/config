@@ -27,7 +27,7 @@ vim.api.nvim_create_autocmd({"BufWinEnter"}, {
 
 
 --- 从所有的 window buffer list 中删除 buf
-vim.api.nvim_create_autocmd({"BufWipeout"}, {
+vim.api.nvim_create_autocmd({"BufDelete", "BufWipeout"}, {
   group = gid,
   callback = function(args)
     local current_win = vim.api.nvim_get_current_win()
@@ -43,17 +43,7 @@ vim.api.nvim_create_autocmd({"BufWipeout"}, {
 
 
 --- 更新 winbar
-vim.api.nvim_create_autocmd({"WinEnter", "WinLeave"}, {
-  group = gid,
-  callback = function(args)
-    local win_id = vim.api.nvim_get_current_win()
-    utils.set_winbar(win_id, args.event == 'WinEnter')
-  end
-})
-
-
---- 更新 winbar
-vim.api.nvim_create_autocmd({"TextChanged", "TextChangedI", "TextChangedP", "BufWritePost", "BufFilePost", "FileChangedShellPost", "DiagnosticChanged"}, {
+vim.api.nvim_create_autocmd({"CursorMoved", "CursorMovedI", "BufWritePost", "ModeChanged", "FileChangedShellPost", "DiagnosticChanged"}, {
   group = gid,
   callback = function(args)
     local current_win = vim.api.nvim_get_current_win()
