@@ -1,5 +1,26 @@
 local utils = require('utils.winbarline.utils')
 
+--- 相当于 :[N]buf
+---
+--- @param idx integer
+local function goto(idx)
+  local curr_win = vim.api.nvim_get_current_win()
+  local win_bufs = vim.w[curr_win][utils.winvar]
+  if not win_bufs then
+    return
+  end
+
+  local bufnr = win_bufs[idx]
+  if not bufnr then
+    return
+  end
+
+  if not vim.api.nvim_buf_is_valid(bufnr) then
+    return
+  end
+
+  vim.api.nvim_win_set_buf(curr_win, win_bufs[idx])
+end
 
 --- @param move 'next'|'prev'
 local function cycle(move)
@@ -93,6 +114,7 @@ end
 --- set keymaps
 local opt = { silent = true }
 local winbar_keymaps = {
+  {'n', '<leader>\\', function() goto(vim.v.count1) end , opt, 'which_key_ignore'},
   {'n', '<S-D-[>', function() cycle('prev') end, opt, 'buffer: go to Prev buffer'},
   {'n', '<S-D-]>', function() cycle('next')  end, opt, 'buffer: go to Next buffer'},
   {'n', '<leader>d', function() delete_current_buf() end, opt, 'buffer: Close Current Buffer/Tab'},
