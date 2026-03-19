@@ -1,17 +1,8 @@
 local utils = require('utils.winbarline.utils')
 
 
---- Debug
-function WinbarLine()
-  local wins = vim.api.nvim_list_wins()
-  for _, win_id in ipairs(wins) do
-    print(win_id, vim.inspect(vim.w[win_id][utils.winvar]))
-  end
-end
-
-
 --- @param move 'next'|'prev'
-function WinBarCycle(move)
+local function cycle(move)
   local curr_win = vim.api.nvim_get_current_win()
   local curr_buf = vim.api.nvim_win_get_buf(curr_win)
 
@@ -45,7 +36,7 @@ function WinBarCycle(move)
 end
 
 
-function WinBarDeleteCurrentBuf()
+local function delete_current_buf()
   local curr_win = vim.api.nvim_get_current_win()
   local curr_buf = vim.api.nvim_win_get_buf(curr_win)
 
@@ -97,3 +88,14 @@ function WinBarDeleteCurrentBuf()
   vim.w[curr_win][utils.winvar] = win_bufs
   utils.set_winbar(curr_win, true)
 end
+
+
+--- set keymaps
+local opt = { silent = true }
+local winbar_keymaps = {
+  {'n', '<S-D-[>', function() cycle('prev') end, opt, 'buffer: go to Prev buffer'},
+  {'n', '<S-D-]>', function() cycle('next')  end, opt, 'buffer: go to Next buffer'},
+  {'n', '<leader>d', function() delete_current_buf() end, opt, 'buffer: Close Current Buffer/Tab'},
+}
+
+require('utils.keymaps').set(winbar_keymaps)

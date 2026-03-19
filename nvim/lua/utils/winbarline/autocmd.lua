@@ -72,3 +72,13 @@ vim.api.nvim_create_autocmd({"TextChanged", "TextChangedI", "TextChangedP", "Buf
 })
 
 
+--- Debug
+function WinbarLine()
+  local wins = vim.api.nvim_list_wins()
+  for _, win_id in ipairs(wins) do
+    print(win_id, vim.inspect(vim.w[win_id][utils.winvar]))
+  end
+end
+
+
+
