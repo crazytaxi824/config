@@ -50,9 +50,13 @@ local function bufname_mod(buf)
   if bufname == '' and vim.fn.buflisted(buf) == 1 then
     bufname = '[No Name]'
   elseif bufname == '' and vim.fn.buflisted(buf) == 0 then
-    bufname = '(' .. vim.bo[buf].buftype .. ')'  -- 特殊情况
+    if vim.bo[buf].buftype == 'nofile' then
+      bufname = '[Scratch]'  -- 特殊情况
+    else
+      bufname = '[' .. vim.bo[buf].buftype .. ']'
+    end
   elseif bufname ~= '' and vim.fn.buflisted(buf) == 0 then
-    bufname = '<' .. vim.fs.basename(bufname) .. '>'
+    bufname = '[' .. vim.fs.basename(bufname) .. ']'  -- unlisted buffer
   else
     bufname = vim.fs.basename(bufname)
   end
@@ -108,17 +112,14 @@ vim.api.nvim_create_autocmd({"BufWinEnter"}, {
     end
     vim.w[win_id][winvar] = win_bufs
 
-    --- 如果 bufname 存在则直接渲染
+    --- 如果 bufname 存在则直接渲染.
+    --- 如果 bufname == '' 则延迟用于获取准确的 bufname.
     local bufname = vim.api.nvim_buf_get_name(args.buf)
     if bufname ~= '' then
       set_winbar(win_id, true)
-      return
+    else
+      vim.schedule(function() set_winbar(win_id, true) end)
     end
-
-    --- 如果 bufname == '' 则延迟用于获取准确的 bufname
-    vim.schedule(function ()
-      set_winbar(win_id, true)
-    end)
   end
 })
 
