@@ -1,5 +1,6 @@
 local utils = require('utils.winbarline.utils')
 
+
 --- autocmd ----------------------------------------------------------------------------------------
 local gid = vim.api.nvim_create_augroup(utils.winvar, { clear = true })
 
