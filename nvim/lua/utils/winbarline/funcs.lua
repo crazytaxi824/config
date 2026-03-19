@@ -1,0 +1,99 @@
+local utils = require('utils.winbarline.utils')
+
+
+--- Debug
+function WinbarLine()
+  local wins = vim.api.nvim_list_wins()
+  for _, win_id in ipairs(wins) do
+    print(win_id, vim.inspect(vim.w[win_id][utils.winvar]))
+  end
+end
+
+
+--- @param move 'next'|'prev'
+function WinBarCycle(move)
+  local curr_win = vim.api.nvim_get_current_win()
+  local curr_buf = vim.api.nvim_win_get_buf(curr_win)
+
+  local win_bufs = vim.w[curr_win][utils.winvar]
+  if not win_bufs then
+    return
+  end
+
+  local idx = utils.list_index_value(win_bufs, curr_buf)
+  if not idx then
+    error("current buffer is not register to current  window")
+  end
+
+  if move == 'next' then
+    local next = idx < #win_bufs and idx+1 or 1
+    if vim.api.nvim_buf_is_valid(win_bufs[next]) then
+      vim.api.nvim_win_set_buf(curr_win, win_bufs[next])
+    else
+      error('buffer is not valid')
+    end
+  elseif move == 'prev' then
+    local prev = idx > 1 and idx-1 or #win_bufs
+    if vim.api.nvim_buf_is_valid(win_bufs[prev]) then
+      vim.api.nvim_win_set_buf(curr_win, win_bufs[prev])
+    else
+      error('buffer is not valid')
+    end
+  else
+    error('move error: ' .. move)
+  end
+end
+
+
+function WinBarDeleteCurrentBuf()
+  local curr_win = vim.api.nvim_get_current_win()
+  local curr_buf = vim.api.nvim_win_get_buf(curr_win)
+
+  if vim.bo[curr_buf].modified then
+    Notify("cannot delete modified buffer")
+    return
+  end
+
+  local win_bufs = vim.w[curr_win][utils.winvar]
+  if not win_bufs then
+    --- floating window
+    vim.api.nvim_win_close(curr_win, false)
+    return
+  end
+
+  --- 如果 window 中只有最后一个 buffer 则. 创建一个新的 buffer.
+  if #win_bufs <= 1 then
+    local new_bufnr = vim.api.nvim_create_buf(true, false)
+    vim.api.nvim_win_set_buf(curr_win, new_bufnr)
+
+    vim.w[curr_win][utils.winvar] = { new_bufnr }
+    utils.set_winbar(curr_win, true)
+    return
+  end
+
+  --- 如果有多个 buffer, 则跳到另一个 buffer 后, 删除当前 buffer.
+  local idx = utils.list_index_value(win_bufs, curr_buf)
+  if not idx then
+    error("current buffer is not register to current  window")
+  end
+
+  if idx == 1 then
+    local next = idx < #win_bufs and idx+1 or 1
+    if vim.api.nvim_buf_is_valid(win_bufs[next]) then
+      vim.api.nvim_win_set_buf(curr_win, win_bufs[next])
+    else
+      error('buffer is not valid')
+    end
+  else
+    local prev = idx > 1 and idx-1 or #win_bufs
+    if vim.api.nvim_buf_is_valid(win_bufs[prev]) then
+      vim.api.nvim_win_set_buf(curr_win, win_bufs[prev])
+    else
+      error('buffer is not valid')
+    end
+  end
+
+  table.remove(win_bufs, idx)
+  vim.w[curr_win][utils.winvar] = win_bufs
+  utils.set_winbar(curr_win, true)
+end
