@@ -1,26 +1,29 @@
 --- `:hi WinBar`, `:hi WinBarNC`
 
---- 默认设置, 其他设置缺省的时候使用该设置.
-vim.api.nvim_set_hl(0, "MyWinBarLine", {
+--- buffer -----------------------------------------------------------------------------------------
+vim.api.nvim_set_hl(0, "MyWinBarLineBuffer", {
   ctermfg=Colors.g246.c, fg=Colors.g246.g,
   ctermbg=Colors.g236.c, bg=Colors.g236.g,
 })
 
---- buffer -----------------------------------------------------------------------------------------
+vim.api.nvim_set_hl(0, "MyWinBarLineBufferModified", {
+  ctermfg=Colors.cyan.c, fg=Colors.cyan.g,
+  ctermbg=Colors.g236.c, bg=Colors.g236.g,
+})
+
 --- cursor 在当前 window 时, buffer filename 颜色
 vim.api.nvim_set_hl(0, "MyWinBarLineBufferSelected", {
   ctermfg=Colors.gold_fn.c, fg=Colors.gold_fn.g,
   ctermbg=Colors.black.c, bg=Colors.black.g,
   bold = true,
-  italic = false,  -- 默认设置中是 buffer_selected.italic = true.
 })
 
---- cursor 在别的 window 时, buffer filename 颜色
-vim.api.nvim_set_hl(0, "MyWinBarLineBufferVisible", {
-  ctermfg=Colors.g244.c, fg=Colors.g244.g,
+vim.api.nvim_set_hl(0, "MyWinBarLineBufferSelectedModified", {
+  ctermfg=Colors.cyan.c, fg=Colors.cyan.g,
   ctermbg=Colors.black.c, bg=Colors.black.g,
-  italic = true,
+  bold = true,
 })
+
 
 --- indicator --------------------------------------------------------------------------------------
 vim.api.nvim_set_hl(0, "MyWinBarLineIndicatorSelected", {
@@ -32,11 +35,6 @@ vim.api.nvim_set_hl(0, "MyWinBarLineIndicatorVisible", {
   ctermbg=Colors.black.c, bg=Colors.black.g,
 })
 
---- modified ---------------------------------------------------------------------------------------
-vim.api.nvim_set_hl(0, "MyWinBarLineModified", {
-  ctermfg=Colors.cyan.c, fg=Colors.cyan.g,
-  ctermbg=Colors.g236.c, bg=Colors.g236.g,
-})
 
 --- separator --------------------------------------------------------------------------------------
 vim.api.nvim_set_hl(0, "MyWinBarLineTab", {

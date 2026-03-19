@@ -1,5 +1,7 @@
 local winvar = "my_winbar"
-local indicator = ''  -- ▌
+
+local sign_indicator = ''  -- ▌
+local sign_modified = '●'
 
 
 --- 找出 value 在 list 中的 index
@@ -30,28 +32,6 @@ local function list_remove_value(list, val)
 end
 
 
---- 给 bufname 前后添加 highlight, idx, indicator
----
---- @param idx integer
---- @param bufname string
---- @param selected? boolean  是否是 current window & current buffer
---- @return string
-local function winbar_highlight(idx, bufname, selected)
-  if bufname == '' then
-    return ''
-  end
-
-  local str = ''
-  if selected then
-    str = '%#MyWinBarLineIndicatorSelected#' .. indicator .. '%#MyWinBarLineBufferSelected# ' .. idx .. '. ' .. bufname .. ' %*'
-  else
-    str = '%#MyWinBarLine# ' .. idx .. '. ' .. bufname .. ' %*'
-  end
-
-  return str
-end
-
-
 --- bufname modification
 ---
 --- @param buf integer
@@ -77,6 +57,33 @@ local function bufname_mod(buf)
 end
 
 
+--- 给 bufname 前后添加 highlight, idx, indicator
+---
+--- @param idx integer
+--- @param bufnr integer
+--- @param selected? boolean  是否是 current window & current buffer
+--- @return string
+local function winbar_highlight(idx, bufnr, selected)
+  local bufname = bufname_mod(bufnr)
+  if bufname == '' then
+    return ''
+  end
+
+  local str = ''
+  if selected and not vim.bo[bufnr].modified then
+    str = '%#MyWinBarLineIndicatorSelected#' .. sign_indicator .. '%#MyWinBarLineBufferSelected# ' .. idx .. '. ' .. bufname .. ' %*'
+  elseif selected and vim.bo[bufnr].modified then
+    str = '%#MyWinBarLineIndicatorSelected#' .. sign_indicator .. '%#MyWinBarLineBufferSelectedModified# ' .. idx .. '. ' .. bufname .. ' ' .. sign_modified .. ' %*'
+  elseif not selected and vim.bo[bufnr].modified then
+    str = '%#MyWinBarLineBuffer# ' .. idx .. '. ' .. bufname .. '%#MyWinBarLineBufferModified# ' .. sign_modified .. ' %*'
+  else
+    str = '%#MyWinBarLineBuffer# ' .. idx .. '. ' .. bufname .. ' %*'
+  end
+
+  return str
+end
+
+
 --- 通过 winvar 给 winbar 设置 buffers
 ---
 --- @param win_id integer
@@ -92,8 +99,7 @@ local function set_winbar(win_id, enter)
 
   local str = ''
   for idx, buf in ipairs(win_bufs) do
-    local bufname = bufname_mod(buf)
-    local winbar_buf_str = winbar_highlight(idx, bufname, enter and buf == current_buf)
+    local winbar_buf_str = winbar_highlight(idx, buf, enter and buf == current_buf)
     if str == '' then
       str = winbar_buf_str
     else
@@ -158,11 +164,25 @@ vim.api.nvim_create_autocmd({"BufDelete"}, {
 })
 
 
+--- 更新 winbar
 vim.api.nvim_create_autocmd({"WinEnter", "WinLeave"}, {
   group = gid,
   callback = function(args)
     local win_id = vim.api.nvim_get_current_win()
     set_winbar(win_id, args.event == 'WinEnter')
+  end
+})
+
+
+--- 更新 winbar
+vim.api.nvim_create_autocmd({"TextChanged", "TextChangedI", "TextChangedP"}, {
+  group = gid,
+  callback = function(args)
+    local current_win = vim.api.nvim_get_current_win()
+    local wins = vim.api.nvim_list_wins()
+    for _, win_id in ipairs(wins) do
+      set_winbar(win_id, win_id == current_win)
+    end
   end
 })
 
