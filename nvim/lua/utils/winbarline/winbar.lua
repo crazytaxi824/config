@@ -232,7 +232,7 @@ function WinBarCycle(move)
 end
 
 
-function WinBarDelete()
+function WinBarDeleteCurrentBuf()
   local curr_win = vim.api.nvim_get_current_win()
   local curr_buf = vim.api.nvim_win_get_buf(curr_win)
 
