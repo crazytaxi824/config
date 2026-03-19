@@ -2,7 +2,7 @@ local M = {}
 
 M.winvar = "my_winbar"
 
-local sign_indicator = ''  -- ▌
+local sign_indicator = '▌'
 local sign_modified = '●'
 
 
@@ -73,9 +73,9 @@ local function winbar_highlight(idx, bufnr, selected)
 
   local str = ''
   if selected and not vim.bo[bufnr].modified then
-    str = '%#MyWinBarLineIndicatorSelected#' .. sign_indicator .. '%#MyWinBarLineBufferSelected# ' .. idx .. '. ' .. bufname .. ' %*'
+    str = '%#MyWinBarLineIndicatorSelected#' .. sign_indicator .. '%#MyWinBarLineBufferSelected#' .. idx .. '. ' .. bufname .. ' %*'
   elseif selected and vim.bo[bufnr].modified then
-    str = '%#MyWinBarLineIndicatorSelected#' .. sign_indicator .. '%#MyWinBarLineBufferSelectedModified# ' .. idx .. '. ' .. bufname .. ' ' .. sign_modified .. ' %*'
+    str = '%#MyWinBarLineIndicatorSelected#' .. sign_indicator .. '%#MyWinBarLineBufferSelectedModified#' .. idx .. '. ' .. bufname .. ' ' .. sign_modified .. ' %*'
   elseif not selected and vim.bo[bufnr].modified then
     str = '%#MyWinBarLineBuffer# ' .. idx .. '. ' .. bufname .. '%#MyWinBarLineBufferModified# ' .. sign_modified .. ' %*'
   else
