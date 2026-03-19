@@ -45,14 +45,18 @@ end
 --- @param buf integer
 --- @return string
 local function bufname_mod(buf)
-  local bufname = vim.fs.basename(vim.api.nvim_buf_get_name(buf))
+  local bufname = vim.api.nvim_buf_get_name(buf)
+
   if bufname == '' and vim.fn.buflisted(buf) == 1 then
     bufname = '[No Name]'
-  elseif bufname ~= '' and vim.fn.buflisted(buf) == 0 then
-    bufname = '<' .. bufname .. '>'
   elseif bufname == '' and vim.fn.buflisted(buf) == 0 then
-    bufname = '<' .. vim.bo[buf].buftype .. '>'
+    bufname = '(' .. vim.bo[buf].buftype .. ')'  -- 特殊情况
+  elseif bufname ~= '' and vim.fn.buflisted(buf) == 0 then
+    bufname = '<' .. vim.fs.basename(bufname) .. '>'
+  else
+    bufname = vim.fs.basename(bufname)
   end
+
   return bufname
 end
 
@@ -103,7 +107,18 @@ vim.api.nvim_create_autocmd({"BufWinEnter"}, {
       table.insert(win_bufs, args.buf)
     end
     vim.w[win_id][winvar] = win_bufs
-    set_winbar(win_id, true)
+
+    --- 如果 bufname 存在则直接渲染
+    local bufname = vim.api.nvim_buf_get_name(args.buf)
+    if bufname ~= '' then
+      set_winbar(win_id, true)
+      return
+    end
+
+    --- 如果 bufname == '' 则延迟用于获取准确的 bufname
+    vim.schedule(function ()
+      set_winbar(win_id, true)
+    end)
   end
 })
 
