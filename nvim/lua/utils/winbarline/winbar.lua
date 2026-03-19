@@ -142,7 +142,7 @@ vim.api.nvim_create_autocmd({"BufWinEnter"}, {
 
 
 --- 从所有的 window buffer list 中删除 buf
-vim.api.nvim_create_autocmd({"BufUnload"}, {
+vim.api.nvim_create_autocmd({"BufDelete"}, {
   group = gid,
   callback = function(args)
     local current_win = vim.api.nvim_get_current_win()
@@ -185,7 +185,7 @@ function WinBarCycle(move)
 
   local idx = list_index_value(win_bufs, curr_buf)
   if not idx then
-    error("buffer is not register to the window")
+    error("current buffer is not register to current  window")
   end
 
   if move == 'next' then
@@ -212,11 +212,19 @@ function WinBarDelete()
   local curr_win = vim.api.nvim_get_current_win()
   local curr_buf = vim.api.nvim_win_get_buf(curr_win)
 
-  local win_bufs = vim.w[curr_win][winvar]
-  if not win_bufs then
+  if vim.bo[curr_buf].modified then
+    Notify("cannot delete modified buffer")
     return
   end
 
+  local win_bufs = vim.w[curr_win][winvar]
+  if not win_bufs then
+    --- floating window
+    vim.api.nvim_win_close(curr_win, false)
+    return
+  end
+
+  --- 如果 window 中只有最后一个 buffer 则. 创建一个新的 buffer.
   if #win_bufs <= 1 then
     local new_bufnr = vim.api.nvim_create_buf(true, false)
     vim.api.nvim_win_set_buf(curr_win, new_bufnr)
@@ -226,9 +234,10 @@ function WinBarDelete()
     return
   end
 
+  --- 如果有多个 buffer, 则跳到另一个 buffer 后, 删除当前 buffer.
   local idx = list_index_value(win_bufs, curr_buf)
   if not idx then
-    error("buffer is not register to the window")
+    error("current buffer is not register to current  window")
   end
 
   if idx == 1 then
