@@ -62,7 +62,7 @@ end
 --- trash_buffer --------------------------------------------------------------- {{{
 
 --- BUG: FIXME: fix(#3187): prevent closing the last non-floating window when deleting files
-local function trash_buffer()
+local function floating_win_trash_buffer()
   local nt_api = require("nvim-tree.api")
 
   --- 获取光标指向的 nvim-tree Node
@@ -137,7 +137,7 @@ local function nt_buffer_keymaps(bufnr)
     { "M",           nt_api.marks.clear,    "Clear All Marks" },
 
     --- 自定义功能
-    -- { "D",           trash_buffer,    "Trash File" },   -- `trash file`, 将文件移动到 Trash Bin, 可以还原
+    -- { "D",           floating_win_trash_buffer,    "Trash File" },   -- `trash file`, 将文件移动到 Trash Bin, 可以还原
     {  "<leader>o",  back_to_pwd,     "back to Original pwd" },
     {  "<leader>c",  compare_two_marked_files,   "compare two marked files" },
   }
