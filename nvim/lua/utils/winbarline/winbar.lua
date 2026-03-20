@@ -45,11 +45,16 @@ local function winbar_highlight(idx, bufnr, win_id)
     return ''
   end
 
-  --- diagnostic count
-  local count = vim.diagnostic.count(bufnr) or {}
-  local total = 0
-  for _, num in pairs(count) do
-    total = total + num
+  --- diagnostic
+  local diagnostics = vim.diagnostic.count(bufnr) or {}
+  local diag_count = 0
+  local severity = 9
+  for s, c in pairs(diagnostics) do
+    diag_count = diag_count + c
+
+    if s < severity then
+      severity = s
+    end
   end
 
   local str = ''
@@ -57,14 +62,8 @@ local function winbar_highlight(idx, bufnr, win_id)
     --- selected buffer
     str = '%#MyWinBarLineBufferSelectedIndicator#' .. sign_indicator .. '%#MyWinBarLineBufferSelected#' .. idx .. '. ' .. bufname
 
-    if count[vim.diagnostic.severity.ERROR] then
-      str = str .. ' %#MyWinBarLineBufferSelectedError#(' .. total .. ')'
-    elseif count[vim.diagnostic.severity.WARN] then
-      str = str .. ' %#MyWinBarLineBufferSelectedWarn#(' .. total .. ')'
-    elseif count[vim.diagnostic.severity.INFO] then
-      str = str .. ' %#MyWinBarLineBufferSelectedInfo#(' .. total .. ')'
-    elseif count[vim.diagnostic.severity.HINT] then
-      str = str .. ' %#MyWinBarLineBufferSelectedHint#(' .. total .. ')'
+    if diag_count > 0 then
+      str = str .. ' %#MyWinBarLineBufferSelectedSeverity_' .. severity ..  '#(' .. diag_count .. ')'
     end
 
     if vim.bo[bufnr].modified then
@@ -79,14 +78,8 @@ local function winbar_highlight(idx, bufnr, win_id)
       str = '%#MyWinBarLineBuffer# ' .. idx .. '. ' .. bufname
     end
 
-    if count[vim.diagnostic.severity.ERROR] then
-      str = str .. ' %#MyWinBarLineBufferError#(' .. total .. ')'
-    elseif count[vim.diagnostic.severity.WARN] then
-      str = str .. ' %#MyWinBarLineBufferWarn#(' .. total .. ')'
-    elseif count[vim.diagnostic.severity.INFO] then
-      str = str .. ' %#MyWinBarLineBufferInfo#(' .. total .. ')'
-    elseif count[vim.diagnostic.severity.HINT] then
-      str = str .. ' %#MyWinBarLineBufferHint#(' .. total .. ')'
+    if diag_count > 0 then
+      str = str .. ' %#MyWinBarLineBufferSeverity_' .. severity ..  '#(' .. diag_count .. ')'
     end
 
     if vim.bo[bufnr].modified then
