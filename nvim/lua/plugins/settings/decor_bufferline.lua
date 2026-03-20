@@ -213,7 +213,7 @@ local function check_buftype_buflisted_filetype(bufnr)
 
   --- `:help 'buftype'`, exclude buftype: nofile, terminal, quickfix, prompt, help ...
   if vim.bo[bufnr].buftype == ''
-    and vim.fn.buflisted(bufnr) == 1  -- listed buffer
+    and vim.bo[bufnr].buflisted  -- listed buffer
     and not vim.tbl_contains(exclude_filetypes, vim.bo[bufnr].filetype)
   then
     return true
@@ -289,7 +289,7 @@ local function bufferline_del_current_buffer()
   end
 
   --- current buffer is not listed buffer
-  if vim.fn.buflisted(current_bufnr) == 0 then
+  if not vim.bo[current_bufnr].buflisted then
     vim.cmd.bdelete(current_bufnr)
     return
   end
@@ -305,7 +305,7 @@ local function bufferline_del_current_buffer()
   local wins = vim.api.nvim_list_wins()
   for _, win_id in ipairs(wins) do
     local buf = vim.api.nvim_win_get_buf(win_id)
-    if win_id ~= current_win and buf ~= current_bufnr and vim.fn.buflisted(buf) == 1 then
+    if win_id ~= current_win and buf ~= current_bufnr and vim.bo[buf].buflisted then
       vim.cmd.bdelete(current_bufnr)
       return
     end
@@ -321,7 +321,7 @@ local function bufferline_del_current_buffer()
   --- multi listed buffer & only listed window
   local prev_buf = vim.fn.bufnr('#')  -- prev_buf 可能为不存在(-1), 或者指向 unlisted buffer.
 
-  if vim.fn.buflisted(prev_buf) == 1 then
+  if vim.bo[prev_buf].buflisted then
     vim.api.nvim_win_set_buf(current_win, prev_buf)
   elseif is_first_bufferline_index(current_bufnr) then
     --- 如果当前 buffer 是排在最前面的 listed buffer 则跳到后一个 buffer;
@@ -358,7 +358,7 @@ end
 --- load 鼠标点击的 buffer
 local function load_bufnr_on_left_click(bufnr)
   --- cursor 所在 window 中是 listed-buffer, 则允许加载指定 bufnr.
-  if vim.fn.buflisted(0) == 1 then
+  if vim.bo.buflisted then
     vim.api.nvim_set_current_buf(bufnr)  -- load 指定 buffer
     return
   end
@@ -366,7 +366,7 @@ local function load_bufnr_on_left_click(bufnr)
   --- cursor 所在 window 中是 unlisted-buffer 的情况.
   for _, win_id in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
     --- 如果有任意 window 是 listed-buffer 则不允许加载指定 bufnr.
-    if vim.fn.buflisted(vim.api.nvim_win_get_buf(win_id)) == 1 then
+    if vim.bo[vim.api.nvim_win_get_buf(win_id)].buflisted then
       Notify("Cannot load buffer {" .. bufnr .. "} in this window (unlisted-buffer)", "WARN")
       return
     end

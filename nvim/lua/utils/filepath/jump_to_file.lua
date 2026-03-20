@@ -24,7 +24,7 @@ local function find_win_to_jump(absolute_path)
     end
 
     --- 记录当前 tab 中第一个显示 listed-buffer 的 window, 用于显示 filepath.
-    if not display_win_id and vim.fn.buflisted(bufnr) == 1 then
+    if not display_win_id and vim.bo[bufnr].buflisted then
       display_win_id = win_id
     end
   end

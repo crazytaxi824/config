@@ -15,15 +15,15 @@ local M = {}
 local function bufname_mod(buf)
   local bufname = vim.api.nvim_buf_get_name(buf)
 
-  if bufname == '' and vim.fn.buflisted(buf) == 1 then
+  if bufname == '' and vim.bo[buf].buflisted then
     bufname = '[No Name]'
-  elseif bufname == '' and vim.fn.buflisted(buf) == 0 then
+  elseif bufname == '' and not vim.bo[buf].buflisted then
     if vim.bo[buf].buftype == 'nofile' then
       bufname = '[Scratch]'  -- 特殊情况
     else
       bufname = '[' .. vim.bo[buf].buftype .. ']'
     end
-  elseif bufname ~= '' and vim.fn.buflisted(buf) == 0 then
+  elseif bufname ~= '' and not vim.bo[buf].buflisted then
     bufname = '[' .. vim.fs.basename(bufname) .. ']'  -- unlisted buffer
   else
     bufname = vim.fs.basename(bufname)
