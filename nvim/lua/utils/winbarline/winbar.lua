@@ -33,13 +33,13 @@ local function bufname_mod(buf)
 end
 
 
---- 给 bufname 前后添加 highlight, idx, indicator
+--- 给单个 bufname 前后添加 highlight, idx, indicator
 ---
 --- @param idx integer
 --- @param bufnr integer
 --- @param win_id integer
 --- @return string
-local function winbar_highlight(idx, bufnr, win_id)
+local function winbar_buf(idx, bufnr, win_id)
   local bufname = bufname_mod(bufnr)
   if bufname == '' then
     return ''
@@ -87,7 +87,54 @@ local function winbar_highlight(idx, bufnr, win_id)
     end
   end
 
+  --- '%*' reset highlight
   str = str .. ' %*'
+
+  return str
+end
+
+
+--- 将 window 的所有 buffer 拼接成 winbar string
+---
+--- @param win_id integer
+--- @return string|nil
+local function winbar_buffers(win_id)
+  --- 没有 winvar 的 window 不显示 WinBarLine
+  local win_bufs = wb.get_win_bufs(win_id)
+  if not win_bufs then
+    return
+  end
+
+  local str = ''
+  local remove_idxes = {}
+
+  for idx, buf in ipairs(win_bufs) do
+    if vim.api.nvim_buf_is_valid(buf) then
+      local winbar_buf_str = winbar_buf(idx, buf, win_id)
+      if str == '' then
+        str = winbar_buf_str
+      else
+        str = str .. " " .. winbar_buf_str
+      end
+    else
+      --- 需要删除的 buffer 的 index, 倒序插入
+      table.insert(remove_idxes, 1, idx)
+    end
+  end
+
+  --- 从 win_bufs 中删除 invalid buffer
+  for _, idx in ipairs(remove_idxes) do
+    table.remove(win_bufs, idx)
+  end
+
+  --- 清除 invalid buffer 后重新赋值
+  wb.set_win_bufs(win_id, win_bufs)
+
+  --- 添加 tabpagenr
+  local tabs = vim.api.nvim_list_tabpages()
+  if #tabs > 1 then
+    str = str .. '%=%#MyWinBarLineTab# ' .. vim.fn.tabpagenr() .. ' '
+  end
 
   return str
 end
@@ -97,44 +144,11 @@ end
 ---
 --- @param win_id integer
 function M.set_winbar(win_id)
-  --- 没有 winvar 的 window 不显示 WinBarLine
-  local win_bufs = wb.get_win_bufs(win_id)
-  if not win_bufs then
-    return
+  local winbar_str = winbar_buffers(win_id)
+
+  if winbar_str then
+    vim.api.nvim_set_option_value('winbar', winbar_str, { scope='local', win=win_id })
   end
-
-  local str = ''
-  local remove_idx = {}
-
-  for idx, buf in ipairs(win_bufs) do
-    if vim.api.nvim_buf_is_valid(buf) then
-      local winbar_buf_str = winbar_highlight(idx, buf, win_id)
-      if str == '' then
-        str = winbar_buf_str
-      else
-        str = str .. " " .. winbar_buf_str
-      end
-    else
-      --- 需要删除的 buffer 的 index, 倒序插入
-      table.insert(remove_idx, 1, idx)
-    end
-  end
-
-  --- 从 win_bufs 中删除 invalid buffer
-  for _, remove in ipairs(remove_idx) do
-    table.remove(win_bufs, remove)
-  end
-
-  --- 清除 invalid buffer 后重新赋值
-  wb.set_win_bufs(win_id, win_bufs)
-
-  --- tabpagenr
-  local tabs = vim.api.nvim_list_tabpages()
-  if #tabs > 1 then
-    str = str .. '%=%#MyWinBarLineTab# ' .. vim.fn.tabpagenr() .. ' '
-  end
-
-  vim.api.nvim_set_option_value('winbar', str, { scope='local', win=win_id })
 end
 
 
