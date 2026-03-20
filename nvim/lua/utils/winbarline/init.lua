@@ -1,3 +1,3 @@
 require('utils.winbarline.highlights')
-require('utils.winbarline.autocmd')
-require('utils.winbarline.keymaps')
+require('utils.winbarline.autocmd2')
+require('utils.winbarline.keymaps2')
