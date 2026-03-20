@@ -66,16 +66,17 @@ vim.api.nvim_create_autocmd({"WinClosed"}, {
 
 
 --- 需要更新当前 window winbar 的情况
-vim.api.nvim_create_autocmd({"CursorMoved", "CursorMovedI"}, {
-  group = gid,
-  callback = function(args)
-    wb.set_winbar(vim.api.nvim_get_current_win(), true)
-  end
-})
+-- vim.api.nvim_create_autocmd({"CursorMoved", "CursorMovedI"}, {
+--   group = gid,
+--   callback = function(args)
+--     wb.set_winbar(vim.api.nvim_get_current_win(), true)
+--   end
+-- })
 
 
---- buffer modified 后需要更新相关 winbar
-vim.api.nvim_create_autocmd({"TextChanged", "TextChangedI", "TextChangedP", "BufWritePost"}, {
+--- buffer 相关事件, 影响多个 window, 如果 buffer 被加入到多个 window 中
+--- ModeChanged 可以影响 terminal
+vim.api.nvim_create_autocmd({"TextChanged", "TextChangedI", "TextChangedP", "BufWritePost", "FileChangedShellPost", "DiagnosticChanged", "ModeChanged"}, {
   group = gid,
   callback = function(args)
     local buf_wins = wbvar.get_buf_wins(args.buf)
@@ -88,6 +89,7 @@ vim.api.nvim_create_autocmd({"TextChanged", "TextChangedI", "TextChangedP", "Buf
     end
   end
 })
+
 
 --- window 修改后需要更新相关 winbar
 vim.api.nvim_create_autocmd({"WinEnter", "WinLeave"}, {
