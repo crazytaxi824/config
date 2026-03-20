@@ -8,7 +8,7 @@ local sign_modified = '●'
 local M = {}
 
 
---- bufname modification
+--- modify bufname
 ---
 --- @param buf integer
 --- @return string
@@ -70,26 +70,14 @@ local function winbar_highlight(idx, bufnr, win_id)
     if vim.bo[bufnr].modified then
       str = str .. ' %#MyWinBarLineBufferSelectedModified#' .. sign_modified
     end
-  elseif win_id ~= vim.api.nvim_get_current_win() and bufnr == vim.api.nvim_win_get_buf(win_id) then
-    --- visible buffer
-    str = '%#MyWinBarLineBufferIndicator#' .. sign_indicator .. '%#MyWinBarLineBuffer#' .. idx .. '. ' .. bufname
-
-    if count[vim.diagnostic.severity.ERROR] then
-      str = str .. ' %#MyWinBarLineBufferError#(' .. total .. ')'
-    elseif count[vim.diagnostic.severity.WARN] then
-      str = str .. ' %#MyWinBarLineBufferWarn#(' .. total .. ')'
-    elseif count[vim.diagnostic.severity.INFO] then
-      str = str .. ' %#MyWinBarLineBufferInfo#(' .. total .. ')'
-    elseif count[vim.diagnostic.severity.HINT] then
-      str = str .. ' %#MyWinBarLineBufferHint#(' .. total .. ')'
-    end
-
-    if vim.bo[bufnr].modified then
-      str = str .. ' %#MyWinBarLineBufferModified#' .. sign_modified
-    end
   else
-    --- other buffer
-    str = '%#MyWinBarLineBuffer# ' .. idx .. '. ' .. bufname
+    if bufnr == vim.api.nvim_win_get_buf(win_id) then
+      --- visible buffer
+      str = '%#MyWinBarLineBufferIndicator#' .. sign_indicator .. '%#MyWinBarLineBuffer#' .. idx .. '. ' .. bufname
+    else
+      --- other buffer
+      str = '%#MyWinBarLineBuffer# ' .. idx .. '. ' .. bufname
+    end
 
     if count[vim.diagnostic.severity.ERROR] then
       str = str .. ' %#MyWinBarLineBufferError#(' .. total .. ')'
