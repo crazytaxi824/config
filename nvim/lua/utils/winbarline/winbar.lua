@@ -37,9 +37,9 @@ end
 ---
 --- @param idx integer
 --- @param bufnr integer
---- @param selected? boolean  是否是 current window & current buffer
+--- @param win_id integer
 --- @return string
-local function winbar_highlight(idx, bufnr, selected)
+local function winbar_highlight(idx, bufnr, win_id)
   local bufname = bufname_mod(bufnr)
   if bufname == '' then
     return ''
@@ -53,8 +53,9 @@ local function winbar_highlight(idx, bufnr, selected)
   end
 
   local str = ''
-  if selected then
-    str = '%#MyWinBarLineBufferIndicator#' .. sign_indicator .. '%#MyWinBarLineBufferSelected#' .. idx .. '. ' .. bufname
+  if win_id == vim.api.nvim_get_current_win() and bufnr == vim.api.nvim_win_get_buf(win_id) then
+    --- selected buffer
+    str = '%#MyWinBarLineBufferSelectedIndicator#' .. sign_indicator .. '%#MyWinBarLineBufferSelected#' .. idx .. '. ' .. bufname
 
     if count[vim.diagnostic.severity.ERROR] then
       str = str .. ' %#MyWinBarLineBufferSelectedError#(' .. total .. ')'
@@ -69,7 +70,25 @@ local function winbar_highlight(idx, bufnr, selected)
     if vim.bo[bufnr].modified then
       str = str .. ' %#MyWinBarLineBufferSelectedModified#' .. sign_modified
     end
+  elseif win_id ~= vim.api.nvim_get_current_win() and bufnr == vim.api.nvim_win_get_buf(win_id) then
+    --- visible buffer
+    str = '%#MyWinBarLineBufferIndicator#' .. sign_indicator .. '%#MyWinBarLineBuffer#' .. idx .. '. ' .. bufname
+
+    if count[vim.diagnostic.severity.ERROR] then
+      str = str .. ' %#MyWinBarLineBufferError#(' .. total .. ')'
+    elseif count[vim.diagnostic.severity.WARN] then
+      str = str .. ' %#MyWinBarLineBufferWarn#(' .. total .. ')'
+    elseif count[vim.diagnostic.severity.INFO] then
+      str = str .. ' %#MyWinBarLineBufferInfo#(' .. total .. ')'
+    elseif count[vim.diagnostic.severity.HINT] then
+      str = str .. ' %#MyWinBarLineBufferHint#(' .. total .. ')'
+    end
+
+    if vim.bo[bufnr].modified then
+      str = str .. ' %#MyWinBarLineBufferModified#' .. sign_modified
+    end
   else
+    --- other buffer
     str = '%#MyWinBarLineBuffer# ' .. idx .. '. ' .. bufname
 
     if count[vim.diagnostic.severity.ERROR] then
@@ -96,10 +115,7 @@ end
 --- 通过 winvar 给 winbar 设置 buffers
 ---
 --- @param win_id integer
---- @param is_curr_win? boolean  是否需要计算 selected buffer
-function M.set_winbar(win_id, is_curr_win)
-  local current_buf = vim.api.nvim_get_current_buf()
-
+function M.set_winbar(win_id)
   --- 没有 winvar 的 window 不显示 WinBarLine
   local win_bufs = wb.get_win_bufs(win_id)
   if not win_bufs then
@@ -111,7 +127,7 @@ function M.set_winbar(win_id, is_curr_win)
 
   for idx, buf in ipairs(win_bufs) do
     if vim.api.nvim_buf_is_valid(buf) then
-      local winbar_buf_str = winbar_highlight(idx, buf, is_curr_win and buf == current_buf)
+      local winbar_buf_str = winbar_highlight(idx, buf, win_id)
       if str == '' then
         str = winbar_buf_str
       else
@@ -123,7 +139,7 @@ function M.set_winbar(win_id, is_curr_win)
     end
   end
 
-  --- 从 win_bufs 中删除
+  --- 从 win_bufs 中删除 invalid buffer
   for _, remove in ipairs(remove_idx) do
     table.remove(win_bufs, remove)
   end

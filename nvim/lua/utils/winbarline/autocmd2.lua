@@ -18,7 +18,7 @@ vim.api.nvim_create_autocmd({"BufWinEnter"}, {
     wbvar.append_buf_to_win(curr_win, args.buf)
     wbvar.append_win_to_buf(args.buf, curr_win)
 
-    wb.set_winbar(curr_win, true)
+    wb.set_winbar(curr_win)
   end
 })
 
@@ -36,7 +36,7 @@ vim.api.nvim_create_autocmd({"BufDelete", "BufWipeout"}, {
 
     for win_id, _ in pairs(buf_wins) do
       wbvar.remove_buf_from_win(win_id, args.buf)
-      wb.set_winbar(win_id, win_id == vim.api.nvim_get_current_win())
+      wb.set_winbar(win_id)
     end
   end
 })
@@ -85,17 +85,24 @@ vim.api.nvim_create_autocmd({"TextChanged", "TextChangedI", "TextChangedP", "Buf
     end
 
     for win_id, _ in pairs(buf_wins) do
-      wb.set_winbar(win_id, win_id == vim.api.nvim_get_current_win())
+      wb.set_winbar(win_id)
     end
   end
 })
 
 
---- window 修改后需要更新相关 winbar
-vim.api.nvim_create_autocmd({"WinEnter", "WinLeave"}, {
+--- 更新相关 winbar
+vim.api.nvim_create_autocmd({"WinEnter"}, {
   group = gid,
   callback = function(args)
-    wb.set_winbar(vim.api.nvim_get_current_win(), args.event == 'WinEnter')
+    wb.set_winbar(vim.api.nvim_get_current_win())
+
+    --- 修改 preview window 的 winbar
+    local prev_winnr = vim.fn.winnr('#')
+    if prev_winnr > 0 then
+      local prev_win_id = vim.fn.win_getid(prev_winnr)
+      wb.set_winbar(prev_win_id)
+    end
   end
 })
 

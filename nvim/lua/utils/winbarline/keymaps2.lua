@@ -114,7 +114,7 @@ local function delete_buffers(opt)
     wbvar.remove_win_from_buf(d_buf, curr_win)
   end
 
-  wb.set_winbar(curr_win, true)
+  wb.set_winbar(curr_win)
 end
 
 
@@ -145,7 +145,7 @@ local function delete_current_buf()
     wbvar.append_win_to_buf(new_bufnr, curr_win)
     wbvar.remove_win_from_buf(curr_buf, curr_win)
 
-    wb.set_winbar(curr_win, true)
+    wb.set_winbar(curr_win)
     return
   end
 
@@ -173,7 +173,7 @@ local function delete_current_buf()
 
   wbvar.remove_buf_from_win(curr_win, curr_buf)
   wbvar.remove_win_from_buf(curr_buf, curr_win)
-  wb.set_winbar(curr_win, true)
+  wb.set_winbar(curr_win)
 end
 
 
