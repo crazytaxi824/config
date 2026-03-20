@@ -1,6 +1,22 @@
 local utils = require('utils.winbarline.utils')
 
 
+local bufvar = 'my_winbarline_unused'
+local overdue = 300000  -- ms
+
+local function cleanup_unused_buffers()
+  local now = vim.uv.now()
+
+  vim.schedule(function ()
+    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+      if not vim.bo[buf].modified and vim.b[buf][bufvar] and now - vim.b[buf][bufvar] > overdue then
+        vim.api.nvim_buf_delete(buf, { force=false })
+      end
+    end
+  end)
+end
+
+
 --- @type { [integer]: integer[]}
 local win_buf_list = {}
 
@@ -103,9 +119,12 @@ function M.remove_win_from_buf(bufnr, win_id)
   buf_wins[win_id] = nil
   if vim.tbl_isempty(buf_wins) then
     buf_win_dict[bufnr] = nil
+    vim.b[bufnr][bufvar] = vim.uv.now()
   else
     buf_win_dict[bufnr] = buf_wins
   end
+
+  cleanup_unused_buffers()
 end
 
 --- @param bufnr integer
