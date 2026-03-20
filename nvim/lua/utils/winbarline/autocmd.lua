@@ -23,6 +23,28 @@ vim.api.nvim_create_autocmd({"BufWinEnter"}, {
 })
 
 
+--- split window 中不会触发 BufWinEnter, 所以利用 CursorMoved 来解决.
+vim.api.nvim_create_autocmd({"CursorMoved"}, {
+  group = gid,
+  callback = function(args)
+    local curr_win = vim.api.nvim_get_current_win()
+
+    --- floating window 不显示 WinBarLine
+    local win_cfg = vim.api.nvim_win_get_config(curr_win)
+    if win_cfg.relative ~= '' then
+      return
+    end
+
+    local win_bufs = wbvar.get_win_bufs(curr_win)
+    if not win_bufs then
+      wbvar.append_buf_to_win(curr_win, args.buf)
+      wbvar.append_win_to_buf(args.buf, curr_win)
+      wb.set_winbar(curr_win)
+    end
+  end
+})
+
+
 --- buffer 所在的 windows 中清理 window-buffer list
 vim.api.nvim_create_autocmd({"BufDelete", "BufWipeout"}, {
   group = gid,
@@ -63,15 +85,6 @@ vim.api.nvim_create_autocmd({"WinClosed"}, {
     end
   end
 })
-
-
---- 需要更新当前 window winbar 的情况
--- vim.api.nvim_create_autocmd({"CursorMoved", "CursorMovedI"}, {
---   group = gid,
---   callback = function(args)
---     wb.set_winbar(vim.api.nvim_get_current_win(), true)
---   end
--- })
 
 
 --- buffer 相关事件, 影响多个 window, 如果 buffer 被加入到多个 window 中
