@@ -24,8 +24,8 @@ end
 function M.open_all()
   g.range_TermPost(function(term_post)
     if vim.api.nvim_buf_is_valid(term_post.bufnr) then
-      local term_wins = vim.fn.win_findbuf(term_post.bufnr)
-      if #term_wins < 1 then
+      local term_win = vim.fn.bufwinid(term_post.bufnr)
+      if term_win < 0 then
         t_win.create_term_win(term_post.bufnr)
       end
     end

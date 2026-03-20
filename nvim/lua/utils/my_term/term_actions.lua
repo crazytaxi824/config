@@ -14,14 +14,14 @@ function M.open_win(term_id)
     return
   end
 
-  local term_wins = vim.fn.win_findbuf(tp.bufnr)
-  if #term_wins > 0 then
+  local term_win = vim.fn.bufwinid(tp.bufnr)
+  if term_win > 0 then
     --- 如果有 window 正在显示该 term buffer, 则跳转到该 window.
-    if vim.fn.win_gotoid(term_wins[1]) == 0 then
-      error('vim cannot win_gotoid(' .. term_wins[1] .. ')')
+    if vim.fn.win_gotoid(term_win) == 0 then
+      error('vim cannot win_gotoid(' .. term_win .. ')')
     end
 
-    return term_wins[1]
+    return term_win
   else
     --- 如果没有任何 window 显示该 terminal 则创建一个新的 window, 然后加载该 buffer.
     return t_win.create_term_win(tp.bufnr)

@@ -60,26 +60,21 @@ local function reuse_term_win(new_term_bufnr, old_term_bufnr)
     error("bufnr is not exist")
   end
 
-  --- @type integer
-  local win_id
-
-  local term_wins = vim.fn.win_findbuf(old_term_bufnr)
-  if #term_wins > 0 then
-    win_id = term_wins[1]
-
+  local term_win = vim.fn.bufwinid(old_term_bufnr)
+  if term_win > 0 then
     --- enter window & load buffer
-    if vim.fn.win_gotoid(win_id) == 1 then
+    if vim.fn.win_gotoid(term_win) == 1 then
       --- 将 bufnr 加载到指定 win_id
-      vim.api.nvim_win_set_buf(win_id, new_term_bufnr)
+      vim.api.nvim_win_set_buf(term_win, new_term_bufnr)
     else
-      error("term_win_id: " .. win_id .. " is not exist")
+      error("term_win_id: " .. term_win .. " is not exist")
     end
   end
 
   --- NOTE: 放在最后避免 :bwipeout old_term_bufnr 时关闭了 old_term_wins.
   vim.api.nvim_buf_delete(old_term_bufnr, {force=true})  -- :bwipeout
 
-  return win_id
+  return term_win > 0 and term_win or nil
 end
 
 
