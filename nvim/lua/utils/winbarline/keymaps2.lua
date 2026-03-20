@@ -113,7 +113,7 @@ local function delete_current_buf()
     --- nvim_win_set_buf() 不会触发 BufWinEnter
     vim.api.nvim_win_set_buf(curr_win, new_bufnr)
     wbvar.set_win_bufs(curr_win, { new_bufnr })
-    wbvar.set_buf_wins(new_bufnr, { curr_win })
+    wbvar.set_buf_wins(new_bufnr, { curr_win = true })
 
     wb.set_winbar(curr_win, true)
     return

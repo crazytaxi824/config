@@ -1,9 +1,6 @@
 local utils = require('utils.winbarline.utils')
 
 
-local winvar = "my_win_bufs"
-local bufvar = "my_buf_wins"
-
 --- @type { [integer]: integer[]}
 local win_buf_list = {}
 
@@ -22,11 +19,11 @@ function M.append_buf_to_win(win_id, bufnr)
   end
 
   --- @type integer[]
-  local win_bufs = vim.w[win_id][winvar] or {}
+  local win_bufs = win_buf_list[win_id] or {}
 
   if not vim.list_contains(win_bufs, bufnr) then
     table.insert(win_bufs, bufnr)
-    vim.w[win_id][winvar] = win_bufs
+    win_buf_list[win_id] = win_bufs
   end
 end
 
@@ -40,7 +37,7 @@ function M.remove_buf_from_win(win_id, bufnr)
 
   --- floating window 没有 buffer list
   --- @type integer[]
-  local win_bufs = vim.w[win_id][winvar]
+  local win_bufs = win_buf_list[win_id]
   if not win_bufs then
     return
   end
@@ -51,20 +48,25 @@ function M.remove_buf_from_win(win_id, bufnr)
   end
 
   table.remove(win_bufs, idx)
-  vim.w[win_id][winvar] = win_bufs
+  win_buf_list[win_id] = win_bufs
 end
 
 
 --- @param win_id integer
+function M.delete_win(win_id)
+  win_buf_list[win_id] = nil
+end
+
+--- @param win_id integer
 --- @return integer[]|nil
 function M.get_win_bufs(win_id)
-  return vim.w[win_id][winvar]
+  return win_buf_list[win_id]
 end
 
 --- @param win_id integer
 --- @param win_bufs integer[]
 function M.set_win_bufs(win_id, win_bufs)
-  vim.w[win_id][winvar] = win_bufs
+  win_buf_list[win_id] = win_bufs
 end
 
 --- for bufvar -------------------------------------------------------------------------------------
@@ -76,13 +78,10 @@ function M.append_win_to_buf(bufnr, win_id)
     error('win_id: ' .. win_id .. ', or bufnr: ' .. bufnr .. ' is not valid' )
   end
 
-  --- @type integer[]
-  local buf_wins = vim.b[bufnr][bufvar] or {}
-
-  if not vim.list_contains(buf_wins, win_id) then
-    table.insert(buf_wins, win_id)
-    vim.b[bufnr][bufvar] = buf_wins
-  end
+  --- @type { [integer]: boolean }
+  local buf_wins = buf_win_dict[bufnr] or {}
+  buf_wins[win_id] = true
+  buf_win_dict[bufnr] = buf_wins
 end
 
 
@@ -94,31 +93,31 @@ function M.remove_win_from_buf(bufnr, win_id)
   end
 
   --- buffer 可以没有 win list
-  --- @type integer[]
-  local buf_wins = vim.b[bufnr][bufvar]
+  --- @type { [integer]: boolean }
+  local buf_wins = buf_win_dict[bufnr]
   if not buf_wins then
     return
   end
 
-  local idx = utils.list_index_value(buf_wins, win_id)
-  if not idx then
-    return
-  end
-
-  table.remove(buf_wins, win_id)
-  vim.b[bufnr][bufvar] = buf_wins
+  buf_wins[win_id] = nil
+  buf_win_dict[bufnr] = buf_wins
 end
 
 --- @param bufnr integer
---- @return integer[]|nil
+function M.delete_buf(bufnr)
+  buf_win_dict[bufnr] = nil
+end
+
+--- @param bufnr integer
+--- @return { [integer]: boolean }|nil
 function M.get_buf_wins(bufnr)
-  return vim.b[bufnr][bufvar]
+  return buf_win_dict[bufnr]
 end
 
 --- @param bufnr integer
---- @param buf_wins integer[]
+--- @param buf_wins { [integer]: boolean }
 function M.set_buf_wins(bufnr, buf_wins)
-  vim.b[bufnr][bufvar] = buf_wins
+  buf_win_dict[bufnr] = buf_wins
 end
 
 return M

@@ -32,9 +32,10 @@ vim.api.nvim_create_autocmd({"BufDelete", "BufWipeout"}, {
       return
     end
 
-    for _, win_id in ipairs(buf_wins) do
+    wbvar.delete_buf(args.buf)
+
+    for win_id, _ in pairs(buf_wins) do
       wbvar.remove_buf_from_win(win_id, args.buf)
-      --- buf delete 之后 bufvar 会被清空
       wb.set_winbar(win_id, win_id == vim.api.nvim_get_current_win())
     end
   end
@@ -51,10 +52,11 @@ vim.api.nvim_create_autocmd({"WinClosed"}, {
     end
 
     local win_bufs = wbvar.get_win_bufs(win_id)
-    print(win_id, vim.inspect(win_bufs))
     if not win_bufs then
       return
     end
+
+    wbvar.delete_win(win_id)
 
     for _, buf in ipairs(win_bufs) do
       wbvar.remove_win_from_buf(buf, win_id)
@@ -81,7 +83,7 @@ vim.api.nvim_create_autocmd({"TextChanged", "TextChangedI", "TextChangedP", "Buf
       return
     end
 
-    for _, win_id in ipairs(buf_wins) do
+    for win_id, _ in pairs(buf_wins) do
       wb.set_winbar(win_id, win_id == vim.api.nvim_get_current_win())
     end
   end
@@ -108,7 +110,7 @@ function WinbarLine()
   for _, buf in ipairs(vim.api.nvim_list_bufs()) do
     local buf_wins = wbvar.get_buf_wins(buf)
     if buf_wins then
-      print('buf:', buf, vim.inspect(buf_wins))
+      print('buf:', buf, vim.inspect(vim.tbl_keys(buf_wins)))
     end
   end
 end
