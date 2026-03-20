@@ -47,6 +47,7 @@ function M.remove_buf_from_win(win_id, bufnr)
     return
   end
 
+  --- win_bufs 不可能也不应该为 empty, 因为 window 中必须显示一个 buffer.
   table.remove(win_bufs, idx)
   win_buf_list[win_id] = win_bufs
 end
@@ -100,7 +101,11 @@ function M.remove_win_from_buf(bufnr, win_id)
   end
 
   buf_wins[win_id] = nil
-  buf_win_dict[bufnr] = buf_wins
+  if vim.tbl_isempty(buf_wins) then
+    buf_win_dict[bufnr] = nil
+  else
+    buf_win_dict[bufnr] = buf_wins
+  end
 end
 
 --- @param bufnr integer
