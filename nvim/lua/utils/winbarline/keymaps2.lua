@@ -76,14 +76,42 @@ local function delete_buffers(opt)
     error("current buffer is not in the win_bufs")
   end
 
+  local delete_bufs = {}
+  local new_win_bufs = {}
+
   if opt == 'left' then
-    wbvar.set_win_bufs(curr_win, table.move(win_bufs, idx, #win_bufs, 1, {}))
+    for i, buf in ipairs(win_bufs) do
+      if i < idx then
+        table.insert(delete_bufs, buf)
+      else
+        table.insert(new_win_bufs, buf)
+      end
+    end
   elseif opt == 'right' then
-    wbvar.set_win_bufs(curr_win, table.move(win_bufs, 1, idx, 1, {}))
+    for i, buf in ipairs(win_bufs) do
+      if i <= idx then
+        table.insert(new_win_bufs, buf)
+      else
+        table.insert(delete_bufs, buf)
+      end
+    end
   elseif opt == 'others' then
-    wbvar.set_win_bufs(curr_win, { curr_buf })
+    new_win_bufs = { curr_buf }
+    for i, buf in ipairs(win_bufs) do
+      if i ~= idx then
+        table.insert(delete_bufs, buf)
+      end
+    end
   else
     error('opt value error: ' .. opt)
+  end
+
+  --- set win_bufs
+  wbvar.set_win_bufs(curr_win, new_win_bufs)
+
+  --- set buf_wins
+  for _, d_buf in ipairs(delete_bufs) do
+    wbvar.remove_win_from_buf(d_buf, curr_win)
   end
 
   wb.set_winbar(curr_win, true)
@@ -112,8 +140,10 @@ local function delete_current_buf()
 
     --- nvim_win_set_buf() 不会触发 BufWinEnter
     vim.api.nvim_win_set_buf(curr_win, new_bufnr)
+
     wbvar.set_win_bufs(curr_win, { new_bufnr })
-    wbvar.set_buf_wins(new_bufnr, { curr_win = true })
+    wbvar.append_win_to_buf(new_bufnr, curr_win)
+    wbvar.remove_win_from_buf(curr_buf, curr_win)
 
     wb.set_winbar(curr_win, true)
     return
