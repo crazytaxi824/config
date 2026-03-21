@@ -5,11 +5,8 @@
 --- @param filepath string
 local function js_run(filepath)
   local t = require('utils.my_term').console()
-  t:update({
-    cmd = { "node", filepath }
-  })
   t:stop()
-  t:run()
+  t:run({ "node", filepath })
 end
 
 --- keymap -----------------------------------------------------------------------------------------

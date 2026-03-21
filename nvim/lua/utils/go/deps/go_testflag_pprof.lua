@@ -140,7 +140,7 @@ local function on_exit(opts, dir)
 end
 
 --- @param dir string  pprof_dir
---- @return fun(opts: GoTestOpts): MyTermOpts
+--- @return fun(opts: GoTestOpts): string|string[], MyTermOpts
 local function gen_term_opts(dir)
   --- mkdir when module required, NOTE: will run only once.
   if not vim.uv.fs_stat(dir) then
@@ -151,9 +151,9 @@ local function gen_term_opts(dir)
   end
 
   return function(opts)
-    return {
+    local cmd = vim.iter({go_test, gen_extra_args(dir, opts.flag), utils.mode_flags(opts)}):flatten():totable()
+    return cmd, {
       cwd = opts.go_list.Root,
-      cmd = vim.iter({go_test, gen_extra_args(dir, opts.flag), utils.mode_flags(opts)}):flatten():totable(),
       on_exit = on_exit(opts, dir),
     }
   end

@@ -3,29 +3,20 @@ local function swift_run_file()
   local file = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ':~:.')
 
   local t = require('utils.my_term').console()
-  t:update({
-    cmd = "swift -- " .. file
-  })
   t:stop()
-  t:run()
+  t:run("swift -- " .. file)
 end
 
 local function swift_run_proj()
   local t = require('utils.my_term').console()
-  t:update({
-    cmd = "swift run"
-  })
   t:stop()
-  t:run()
+  t:run("swift run")
 end
 
 local function swift_test_all()
   local t = require('utils.my_term').console()
-  t:update({
-    cmd = "swift test"
-  })
   t:stop()
-  t:run()
+  t:run("swift test")
 end
 
 local function swift_test_pkg()
@@ -51,11 +42,8 @@ local function swift_test_pkg()
   end
 
   local t = require('utils.my_term').console()
-  t:update({
-    cmd = "swift test --filter " .. test_class
-  })
   t:stop()
-  t:run()
+  t:run("swift test --filter " .. test_class)
 end
 
 --- key mapping ------------------------------------------------------------------------------------

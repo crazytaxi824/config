@@ -7,9 +7,6 @@
 
 --- @class MyTermOptsProps
 ---
---- `:help jobstart()` cmd
---- @field cmd? string|string[]
----
 --- `:help jobstart-options` cwd
 --- @field cwd? string
 ---
@@ -84,9 +81,6 @@
 --- VVI: 保证每个 id 只和一个 bufnr 对应. id 一旦设置应该无法改变.
 --- @field id integer @readonly
 ---
---- `:help jobstart()` cmd
---- @field cmd fun(): string|string[]|nil
----
 --- `:help jobstart-options` cwd
 --- @field cwd fun(): string|nil
 ---
@@ -121,7 +115,7 @@
 --- @field on_exit    fun(): MyTermOnExit[]|nil
 ---
 --- jobstart(cmd, { env, cwd, on_stdout, on_stderr, on_exit, ... })
---- @field run fun(self: MyTerm) @readonly
+--- @field run fun(self: MyTerm, cmd?: string|string[]) @readonly
 ---
 --- jobstop(job_id)
 --- @field stop fun(self: MyTerm) @readonly

@@ -9,12 +9,12 @@ local utils = require("utils.go.deps.utils")
 local go_test = {'go', 'test', '-count=1', '-v'}
 
 --- @param fuzztime string
---- @return fun(opts: GoTestOpts): MyTermOpts
+--- @return fun(opts: GoTestOpts): string|string[], MyTermOpts
 local function gen_term_opts(fuzztime)
   return function(opts)
-    return {
+    local cmd = vim.iter({go_test, '-fuzztime', fuzztime, utils.mode_flags(opts)}):flatten():totable()
+    return cmd, {
       cwd = opts.go_list.Root,
-      cmd = vim.iter({go_test, '-fuzztime', fuzztime, utils.mode_flags(opts)}):flatten():totable(),
     }
   end
 end
@@ -43,9 +43,9 @@ local M = {
           end
         end)
 
-        return {
+        local cmd = vim.iter({go_test, '-fuzztime', fuzz_time, utils.mode_flags(opts)}):flatten():totable()
+        return cmd, {
           cwd = opts.go_list.Root,
-          cmd = vim.iter({go_test, '-fuzztime', fuzz_time, utils.mode_flags(opts)}):flatten():totable(),
         }
       end
     }

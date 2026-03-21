@@ -3,12 +3,12 @@ local M = {}
 --- 通过 my_term console 运行 `go test`
 ---
 --- @param term_opts MyTermOpts
-function M.go_test(term_opts)
+function M.go_test(cmd, term_opts)
   --- my_term 执行 command
   local t = require('utils.my_term').console()
   t:update(term_opts)
   t:stop()
-  t:run()
+  t:run(cmd)
 end
 
 return M

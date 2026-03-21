@@ -110,14 +110,12 @@ end
 
 --- print cmd, job info
 ---
---- @param term MyTerm
+--- @param cmd string|string[]
 --- @param term_bufnr integer
 --- @param job_id integer
-local function print_job_info(term, term_bufnr, job_id)
+local function print_job_info(cmd, term_bufnr, job_id)
   local lines = {}  ---@type string[]
 
-  --- cmd string
-  local cmd = term.cmd()
   if type(cmd) == "string" then
     table.insert(lines, cmd)
   elseif type(cmd) == "table" then
@@ -138,18 +136,14 @@ end
 --- 后台执行 jobstart(cmd), 将 output 手动写入 buffer. (buftype = 'nofile')
 --- 主要区别是 `:help jobstart-options` { term = nil|false } 在后台运行, 结果需要手动输出.
 ---
+--- @param cmd string|string[]
 --- @param term MyTerm
 --- @param term_bufnr integer
 --- @param term_win_id integer
 --- @return integer job_id
-function M.console_exec(term, term_bufnr, term_win_id)
+function M.console_exec(cmd, term, term_bufnr, term_win_id)
   if vim.api.nvim_win_get_buf(term_win_id) ~= term_bufnr then
     error("MyTerm win_id and bufnr do not match")
-  end
-
-  local cmd = term.cmd()
-  if not cmd then
-    error("MyTerm.cmd is missing")
   end
 
   --- set bufname
@@ -236,7 +230,7 @@ function M.console_exec(term, term_bufnr, term_win_id)
 
   --- print cmd, job info
   --- vim.fn.jobstart() 是异步函数, 所以 print_job_info() 会在 on_stdout, on_stderr 之前执行.
-  print_job_info(term, term_bufnr, job_id)
+  print_job_info(cmd, term_bufnr, job_id)
 
   --- keymap
   set_console_keymaps(term_bufnr, job_id)

@@ -6,18 +6,14 @@ local M = {}
 --- 在 buffer 中执行 jobstart(cmd). (buftype = 'terminal')
 --- 主要区别是 `:help jobstart-options` { term = true } 将当前 buffer 转成 terminal buffer 用于显示 output.
 ---
+--- @param cmd string|string[]
 --- @param term MyTerm
 --- @param term_bufnr integer
 --- @param term_win_id integer
 --- @return integer job_id
-function M.terminal_exec(term, term_bufnr, term_win_id)
+function M.terminal_exec(cmd, term, term_bufnr, term_win_id)
   if vim.api.nvim_win_get_buf(term_win_id) ~= term_bufnr then
     error("MyTerm win_id and bufnr do not match")
-  end
-
-  local cmd = term.cmd()
-  if not cmd then
-    error("MyTerm.cmd is missing")
   end
 
   --- VVI: terminal 不能改 bufname 否则会重新创建一个新的 terminal.

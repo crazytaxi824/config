@@ -9,11 +9,12 @@ local t_key  = require('utils.my_term.term_keymaps')
 
 --- jobstart(cmd, opts), 给 my_term.job_id 赋值.
 ---
+--- @param cmd string|string[]
 --- @param term MyTerm
 --- @param term_bufnr integer
 --- @param term_win_id integer
 --- @return integer job_id
-local function myterm_exec(term, term_bufnr, term_win_id)
+local function myterm_exec(cmd, term, term_bufnr, term_win_id)
   --- executed before jobstart(). DO NOT have 'term.bufnr' and 'term.job_id' ...
   local callbacks = term.before_run()
   if callbacks then
@@ -25,9 +26,9 @@ local function myterm_exec(term, term_bufnr, term_win_id)
   --- VVI: 必须在 bufnr 被 window 显示之后运行. 避免 nvim_buf_call() 生成一个临时 autocmd window.
   local job_id
   if term.console_output() then
-    job_id = console.console_exec(term, term_bufnr, term_win_id)
+    job_id = console.console_exec(cmd, term, term_bufnr, term_win_id)
   else
-    job_id = terminal.terminal_exec(term, term_bufnr, term_win_id)
+    job_id = terminal.terminal_exec(cmd, term, term_bufnr, term_win_id)
   end
 
   --- executed after jobstart(). Have 'term.bufnr' and 'term.job_id' ...
@@ -79,12 +80,14 @@ function M._new(id, opts, force)
   --- 只读
   local _opts = init_opts(opts)
 
+  --- @type string|string[]|nil
+  local last_cmd
+
   --- @type MyTerm
   local my_term = {
     id = id,
 
     --- props
-    cmd = function() return _opts.cmd end,
     cwd = function() return _opts.cwd end,
     env = function() return _opts.env end,
     auto_scroll = function() return _opts.auto_scroll end,
@@ -117,7 +120,16 @@ function M._new(id, opts, force)
       end
     end,
 
-    run = function(self)
+    run = function(self, cmd)
+      cmd = cmd or last_cmd
+      if not cmd then
+        vim.notify("no 'cmd' for my_term", vim.log.levels.WARN)
+        return
+      end
+
+      --- cache last cmd
+      last_cmd = cmd
+
       if t_act.job_status(self.id) == -1 then
         Notify("job_id is still running, please use `term:stop()` or `CTRL-C` first.", "WARN", {title="my_term"})
         return
@@ -130,7 +142,7 @@ function M._new(id, opts, force)
       t_key.set_buf_keymaps(self, term_bufnr)
 
       --- VVI(jobstart): 执行 cmd
-      local job_id = myterm_exec(self, term_bufnr, term_win_id)
+      local job_id = myterm_exec(cmd, self, term_bufnr, term_win_id)
 
       --- buffer 被 wipeout 的时候自动 jobstop()
       cb.autocmd_jobstop(self, term_bufnr, job_id)

@@ -39,8 +39,8 @@ function M.go_test_single_func(profile)
 
   --- no profile: choose [none]
   if not profile then
-    local myterm_opts = go_none.flags['none'].term_opts(opts)
-    test_cmds.go_test(myterm_opts)
+    local cmd, myterm_opts = go_none.flags['none'].term_opts(opts)
+    test_cmds.go_test(cmd, myterm_opts)
     return
   end
 
@@ -63,8 +63,8 @@ function M.go_test_single_func(profile)
         opts.flag = choice
 
         --- 运行 `go test`
-        local myterm_opts = test_flags[choice].term_opts(opts)
-        test_cmds.go_test(myterm_opts)
+        local cmd, myterm_opts = test_flags[choice].term_opts(opts)
+        test_cmds.go_test(cmd, myterm_opts)
       end
     end)
     return
@@ -87,8 +87,8 @@ function M.go_test_single_func(profile)
         opts.flag = choice
 
         --- 运行 `go test`
-        local myterm_opts = test_flags[choice].term_opts(opts)
-        test_cmds.go_test(myterm_opts)
+        local cmd, myterm_opts = test_flags[choice].term_opts(opts)
+        test_cmds.go_test(cmd, myterm_opts)
       end
     end)
     return

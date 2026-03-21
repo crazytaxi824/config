@@ -6,7 +6,7 @@
 --- @field desc string
 ---
 --- 根据 GoTestOpts 生成 MyTermOpts 用于执行
---- @field term_opts fun(opts: GoTestOpts): MyTermOpts
+--- @field term_opts fun(opts: GoTestOpts): string|string[], MyTermOpts
 
 
 

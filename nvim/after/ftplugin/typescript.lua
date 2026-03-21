@@ -17,11 +17,8 @@ local function ts_run(filename)
   end
 
   local t = require('utils.my_term').console()
-  t:update({
-    cmd = "tsc -p ./tsconfig.json && node dist/" .. filename .. '.js'
-  })
   t:stop()
-  t:run()
+  t:run("tsc -p ./tsconfig.json && node dist/" .. filename .. '.js')
 end
 
 --- jest js_file -----------------------------------------------------------------------------------
@@ -52,9 +49,8 @@ local function ts_jest(filename, coverage)
   end
 
   local t = require('utils.my_term').console()
-  t:update({ cmd = cmd })
   t:stop()
-  t:run()
+  t:run(cmd)
 end
 
 --- keymap -----------------------------------------------------------------------------------------

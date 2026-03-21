@@ -43,9 +43,9 @@ local M = {
       desc = 'Coverage print on screen',
 
       term_opts = function(opts)
-        return {
+        local cmd = vim.iter({go_test, '-cover', utils.mode_flags(opts)}):flatten():totable()
+        return cmd, {
           cwd = opts.go_list.Root,
-          cmd = vim.iter({go_test, '-cover', utils.mode_flags(opts)}):flatten():totable(),
         }
       end
     },
@@ -71,9 +71,9 @@ local M = {
         local cover_out = coverage_dir .. cover_filename .. '_cover.out'
         local cover_html = coverage_dir .. cover_filename .. '_cover.html'
 
-        return {
+        local cmd = vim.iter({go_test, '-coverprofile', cover_out, utils.mode_flags(opts)}):flatten():totable()
+        return cmd, {
           cwd = opts.go_list.Root,
-          cmd = vim.iter({go_test, '-coverprofile', cover_out, utils.mode_flags(opts)}):flatten():totable(),
           on_exit = on_exit(cover_out, cover_html),
         }
       end

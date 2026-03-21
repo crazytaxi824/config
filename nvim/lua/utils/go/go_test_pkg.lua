@@ -38,8 +38,8 @@ M.go_test_pkg = function(mode)
       }
 
       --- 运行 `go test`
-      local myterm_opts = test_flags[choice].term_opts(opts)
-      test_cmds.go_test(myterm_opts)
+      local cmd, myterm_opts = test_flags[choice].term_opts(opts)
+      test_cmds.go_test(cmd, myterm_opts)
     end
   end)
 end
