@@ -133,7 +133,7 @@ local function winbar_buffers(win_id)
   --- 添加 tabpagenr
   local tabs = vim.api.nvim_list_tabpages()
   if #tabs > 1 then
-    str = str .. '%=%#MyWinBarLineTab# ' .. vim.fn.tabpagenr() .. ' '
+    str = str .. '%=%#MyWinBarLineTab# ' .. vim.fn.tabpagenr() ..'/'.. #tabs .. ' '
   end
 
   return str

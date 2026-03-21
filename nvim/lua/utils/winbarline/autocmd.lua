@@ -54,10 +54,10 @@ vim.api.nvim_create_autocmd({"BufDelete", "BufWipeout"}, {
       return
     end
 
-    --- 从 cache 中删除 buffer 信息
+    --- 从 cache 中删除整个 buffer 信息
     wb_var.delete_buf(args.buf)
 
-    --- 从每个 win buffer list 中删除 buf
+    --- 从每个 win-buffer list 中删除 buf
     for win_id, _ in pairs(buf_wins) do
       wb_var.remove_buf_from_win(win_id, args.buf)
       wb.set_winbar(win_id)
@@ -80,8 +80,10 @@ vim.api.nvim_create_autocmd({"WinClosed"}, {
       return
     end
 
+    --- 从 cache 中删除整个 window 信息
     wb_var.delete_win(win_id)
 
+    --- 从每个 buf-window list 中删除 win
     for _, buf in ipairs(win_bufs) do
       wb_var.remove_win_from_buf(buf, win_id)
     end
@@ -91,7 +93,11 @@ vim.api.nvim_create_autocmd({"WinClosed"}, {
 
 --- buffer 相关事件, 影响多个 window, 如果 buffer 被加入到多个 window 中
 --- ModeChanged 可以影响 terminal
-vim.api.nvim_create_autocmd({"TextChanged", "TextChangedI", "TextChangedP", "BufWritePost", "FileChangedShellPost", "DiagnosticChanged", "ModeChanged", "TabClosed"}, {
+vim.api.nvim_create_autocmd({
+  "TextChanged", "TextChangedI", "TextChangedP",
+  "BufWritePost", "FileChangedShellPost", "DiagnosticChanged",
+  "ModeChanged", "TabClosed",
+}, {
   group = gid,
   callback = function(args)
     local buf_wins = wb_var.get_buf_wins(args.buf)
@@ -123,7 +129,7 @@ vim.api.nvim_create_autocmd({"WinEnter"}, {
 
 
 --- Debug
-function WinbarLine()
+function Get_WinbarLine()
   for _, win_id in ipairs(vim.api.nvim_list_wins()) do
     local win_bufs = wb_var.get_win_bufs(win_id)
     if win_bufs then
