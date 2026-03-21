@@ -88,9 +88,6 @@ local function reuse_term_win(new_term_bufnr, old_term_bufnr)
     end
   end
 
-  --- NOTE: 放在最后避免 :bwipeout old_term_bufnr 时关闭了 old_term_wins.
-  vim.api.nvim_buf_delete(old_term_bufnr, {force=true})  -- :bwipeout
-
   return term_win > 0 and term_win or nil
 end
 
@@ -133,6 +130,9 @@ function M.set_myterm_current_win(term)
   if tp then
     --- enter existing window
     term_win_id = reuse_term_win(term_bufnr, tp.bufnr)
+
+    --- 放在最后避免 :bwipeout bufnr 时关闭了 term_win
+    vim.api.nvim_buf_delete(tp.bufnr, { force=true })  -- :bwipeout
   end
 
   if not term_win_id then
