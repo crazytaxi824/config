@@ -1,4 +1,4 @@
-local wbvar = require('utils.winbarline.win_buf_var')
+local wb_var = require('utils.winbarline.win_buf_var')
 local wb = require('utils.winbarline.winbar')
 local utils = require('utils.winbarline.utils')
 
@@ -10,7 +10,7 @@ local M = {}
 --- @param idx integer
 function M.goto(idx)
   local curr_win = vim.api.nvim_get_current_win()
-  local win_bufs = wbvar.get_win_bufs(curr_win)
+  local win_bufs = wb_var.get_win_bufs(curr_win)
   if not win_bufs then
     return
   end
@@ -33,7 +33,7 @@ function M.cycle(move)
   local curr_win = vim.api.nvim_get_current_win()
   local curr_buf = vim.api.nvim_win_get_buf(curr_win)
 
-  local win_bufs = wbvar.get_win_bufs(curr_win)
+  local win_bufs = wb_var.get_win_bufs(curr_win)
   if not win_bufs then
     return
   end
@@ -68,7 +68,7 @@ function M.delete_buffers(opt)
   local curr_win = vim.api.nvim_get_current_win()
   local curr_buf = vim.api.nvim_win_get_buf(curr_win)
 
-  local win_bufs = wbvar.get_win_bufs(curr_win)
+  local win_bufs = wb_var.get_win_bufs(curr_win)
   if not win_bufs then
     return
   end
@@ -109,11 +109,11 @@ function M.delete_buffers(opt)
   end
 
   --- set win_bufs
-  wbvar.set_win_bufs(curr_win, new_win_bufs)
+  wb_var.set_win_bufs(curr_win, new_win_bufs)
 
   --- set buf_wins
   for _, d_buf in ipairs(delete_bufs) do
-    wbvar.remove_win_from_buf(d_buf, curr_win)
+    wb_var.remove_win_from_buf(d_buf, curr_win)
   end
 
   wb.set_winbar(curr_win)
@@ -129,7 +129,7 @@ function M.delete_current_buf()
     return
   end
 
-  local win_bufs = wbvar.get_win_bufs(curr_win)
+  local win_bufs = wb_var.get_win_bufs(curr_win)
   if not win_bufs then
     --- floating window
     vim.api.nvim_win_close(curr_win, false)
@@ -179,8 +179,8 @@ function M.delete_current_buf()
     end
   end
 
-  wbvar.remove_buf_from_win(curr_win, curr_buf)
-  wbvar.remove_win_from_buf(curr_buf, curr_win)
+  wb_var.remove_buf_from_win(curr_win, curr_buf)
+  wb_var.remove_win_from_buf(curr_buf, curr_win)
   wb.set_winbar(curr_win)
 end
 

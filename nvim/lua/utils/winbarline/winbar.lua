@@ -1,4 +1,4 @@
-local wbvar = require('utils.winbarline.win_buf_var')
+local wb_var = require('utils.winbarline.win_buf_var')
 
 
 local sign_indicator = '▌'
@@ -100,7 +100,7 @@ end
 --- @return string|nil
 local function winbar_buffers(win_id)
   --- 没有 winvar 的 window 不显示 WinBarLine
-  local win_bufs = wbvar.get_win_bufs(win_id)
+  local win_bufs = wb_var.get_win_bufs(win_id)
   if not win_bufs then
     return
   end
@@ -128,7 +128,7 @@ local function winbar_buffers(win_id)
   end
 
   --- 清除 invalid buffer 后重新赋值
-  wbvar.set_win_bufs(win_id, win_bufs)
+  wb_var.set_win_bufs(win_id, win_bufs)
 
   --- 添加 tabpagenr
   local tabs = vim.api.nvim_list_tabpages()

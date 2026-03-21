@@ -1,4 +1,4 @@
-local wbvar = require('utils.winbarline.win_buf_var')
+local wb_var = require('utils.winbarline.win_buf_var')
 local wb = require('utils.winbarline.winbar')
 
 
@@ -15,8 +15,8 @@ vim.api.nvim_create_autocmd({"BufWinEnter"}, {
       return
     end
 
-    wbvar.append_buf_to_win(curr_win, args.buf)
-    wbvar.append_win_to_buf(args.buf, curr_win)
+    wb_var.append_buf_to_win(curr_win, args.buf)
+    wb_var.append_win_to_buf(args.buf, curr_win)
 
     wb.set_winbar(curr_win)
   end
@@ -35,10 +35,10 @@ vim.api.nvim_create_autocmd({"CursorMoved"}, {
       return
     end
 
-    local win_bufs = wbvar.get_win_bufs(curr_win)
+    local win_bufs = wb_var.get_win_bufs(curr_win)
     if not win_bufs then
-      wbvar.append_buf_to_win(curr_win, args.buf)
-      wbvar.append_win_to_buf(args.buf, curr_win)
+      wb_var.append_buf_to_win(curr_win, args.buf)
+      wb_var.append_win_to_buf(args.buf, curr_win)
       wb.set_winbar(curr_win)
     end
   end
@@ -49,15 +49,15 @@ vim.api.nvim_create_autocmd({"CursorMoved"}, {
 vim.api.nvim_create_autocmd({"BufDelete", "BufWipeout"}, {
   group = gid,
   callback = function(args)
-    local buf_wins = wbvar.get_buf_wins(args.buf)
+    local buf_wins = wb_var.get_buf_wins(args.buf)
     if not buf_wins then
       return
     end
 
-    wbvar.delete_buf(args.buf)
+    wb_var.delete_buf(args.buf)
 
     for win_id, _ in pairs(buf_wins) do
-      wbvar.remove_buf_from_win(win_id, args.buf)
+      wb_var.remove_buf_from_win(win_id, args.buf)
       wb.set_winbar(win_id)
     end
   end
@@ -73,15 +73,15 @@ vim.api.nvim_create_autocmd({"WinClosed"}, {
       error("win_id error: " .. args.match)
     end
 
-    local win_bufs = wbvar.get_win_bufs(win_id)
+    local win_bufs = wb_var.get_win_bufs(win_id)
     if not win_bufs then
       return
     end
 
-    wbvar.delete_win(win_id)
+    wb_var.delete_win(win_id)
 
     for _, buf in ipairs(win_bufs) do
-      wbvar.remove_win_from_buf(buf, win_id)
+      wb_var.remove_win_from_buf(buf, win_id)
     end
   end
 })
@@ -92,7 +92,7 @@ vim.api.nvim_create_autocmd({"WinClosed"}, {
 vim.api.nvim_create_autocmd({"TextChanged", "TextChangedI", "TextChangedP", "BufWritePost", "FileChangedShellPost", "DiagnosticChanged", "ModeChanged", "TabClosed"}, {
   group = gid,
   callback = function(args)
-    local buf_wins = wbvar.get_buf_wins(args.buf)
+    local buf_wins = wb_var.get_buf_wins(args.buf)
     if not buf_wins then
       return
     end
@@ -123,14 +123,14 @@ vim.api.nvim_create_autocmd({"WinEnter"}, {
 --- Debug
 function WinbarLine()
   for _, win_id in ipairs(vim.api.nvim_list_wins()) do
-    local win_bufs = wbvar.get_win_bufs(win_id)
+    local win_bufs = wb_var.get_win_bufs(win_id)
     if win_bufs then
       print('win:', win_id, vim.inspect(win_bufs))
     end
   end
 
   for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-    local buf_wins = wbvar.get_buf_wins(buf)
+    local buf_wins = wb_var.get_buf_wins(buf)
     if buf_wins then
       print('buf:', buf, vim.inspect(vim.tbl_keys(buf_wins)))
     end
