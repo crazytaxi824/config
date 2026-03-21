@@ -89,7 +89,7 @@ vim.api.nvim_create_autocmd({"WinClosed"}, {
 
 --- buffer 相关事件, 影响多个 window, 如果 buffer 被加入到多个 window 中
 --- ModeChanged 可以影响 terminal
-vim.api.nvim_create_autocmd({"TextChanged", "TextChangedI", "TextChangedP", "BufWritePost", "FileChangedShellPost", "DiagnosticChanged", "ModeChanged"}, {
+vim.api.nvim_create_autocmd({"TextChanged", "TextChangedI", "TextChangedP", "BufWritePost", "FileChangedShellPost", "DiagnosticChanged", "ModeChanged", "TabClosed"}, {
   group = gid,
   callback = function(args)
     local buf_wins = wbvar.get_buf_wins(args.buf)
