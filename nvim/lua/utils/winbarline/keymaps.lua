@@ -134,22 +134,28 @@ local function delete_current_buf()
     return
   end
 
-  --- 如果 window 中只有最后一个 buffer 则. 创建一个新的 buffer.
   if #win_bufs <= 1 then
-    local new_bufnr = vim.api.nvim_create_buf(true, false)
+    if win_bufs[1] ~= curr_buf then
+      error("win_bufs records error")
+    end
 
-    --- nvim_win_set_buf() 不会触发 BufWinEnter
-    vim.api.nvim_win_set_buf(curr_win, new_bufnr)
+    --- 如果 neovim 中有另一个 buflisted window 则 close window
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+      local buf = vim.api.nvim_win_get_buf(win)
+      if win ~= curr_win and vim.bo[buf].buflisted then
+        if vim.fn.win_gotoid(win) == 1 then
+          vim.api.nvim_win_close(curr_win, false)
+        end
+        return
+      end
+    end
 
-    wbvar.set_win_bufs(curr_win, { new_bufnr })
-    wbvar.append_win_to_buf(new_bufnr, curr_win)
-    wbvar.remove_win_from_buf(curr_buf, curr_win)
-
-    wb.set_winbar(curr_win)
+    --- 如果 current window 是 neovim 中最后一个 buflisted window
+    Notify("Cannot delete last buflisted buffer", "WARN")
     return
   end
 
-  --- 如果有多个 buffer, 则跳到另一个 buffer 后, 删除当前 buffer.
+  --- 如果有多个 buffer, 则跳到另一个 buffer 后, 删除当前 buffer
   local idx = utils.list_index_value(win_bufs, curr_buf)
   if not idx then
     error("current buffer is not register to current  window")
