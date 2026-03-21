@@ -68,7 +68,8 @@ function M.remove_buf_from_win(win_id, bufnr)
   win_buf_list[win_id] = win_bufs
 end
 
-
+--- 将 win 从 cache 中整个删除
+---
 --- @param win_id integer
 function M.delete_win(win_id)
   win_buf_list[win_id] = nil
@@ -127,6 +128,8 @@ function M.remove_win_from_buf(bufnr, win_id)
   cleanup_unused_buffers()
 end
 
+--- 将 bufnr 从 cache 中整个删除
+---
 --- @param bufnr integer
 function M.delete_buf(bufnr)
   buf_win_dict[bufnr] = nil

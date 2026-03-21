@@ -54,8 +54,10 @@ vim.api.nvim_create_autocmd({"BufDelete", "BufWipeout"}, {
       return
     end
 
+    --- 从 cache 中删除 buffer 信息
     wb_var.delete_buf(args.buf)
 
+    --- 从每个 win buffer list 中删除 buf
     for win_id, _ in pairs(buf_wins) do
       wb_var.remove_buf_from_win(win_id, args.buf)
       wb.set_winbar(win_id)
