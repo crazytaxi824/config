@@ -7,7 +7,7 @@ local M = {}
 --- 根据 cached MyTermPost bufnr 寻找已有的 window ID, 不包括 normal terminal window.
 ---
 --- @return integer win_id
-local function find_exist_term_win()
+local function find_last_myterm_win()
   local win_id = -1
 
   g.range_TermPost(function(term_post)
@@ -17,6 +17,23 @@ local function find_exist_term_win()
           win_id = w
         end
       end
+    end
+  end)
+
+  return win_id
+end
+
+
+--- 根据 cached MyTermPost bufnr 寻找已有的 window ID, 不包括 normal terminal window.
+---
+--- @return integer win_id
+local function find_first_myterm_win()
+  local win_id = -1
+
+  g.range_TermPost(function(term_post)
+    win_id = vim.fn.bufwinid(term_post.bufnr)
+    if win_id > 0 then
+      return false  -- break for-loop
     end
   end)
 
@@ -36,7 +53,7 @@ function M.create_term_win(bufnr)
     error("bufnr is not exist")
   end
 
-  local exist_term_win_id = find_exist_term_win()
+  local exist_term_win_id = find_last_myterm_win()
 
   if exist_term_win_id > 0 then
     --- `nvim_open_win()`, 显示 buffer, 同时进入 window.

@@ -34,10 +34,12 @@ end
 
 --- for range MyTermPost dict
 ---
---- @param callback fun(term_post: MyTermPost)
+--- @param callback fun(term_post: MyTermPost): boolean|nil
 function M.range_TermPost(callback)
   for term_id, term_post in pairs(global_my_term_cache) do
-    callback(term_post)
+    if callback(term_post) == false then
+      return  -- break for-loop
+    end
   end
 end
 
