@@ -20,9 +20,14 @@ local function bufname_mod(buf)
     return '[' .. vim.fs.basename(bufname) .. ']'  -- unlisted buffer
   end
 
+  --- 以下是特殊情况
+  if vim.fn.getcmdwintype() ~= '' then
+    return "[Command Line]"
+  end
+
   local bt = vim.bo[buf].buftype
   if bt == "quickfix" then
-    return "[qf/loc List]"
+    return "[Qf/Loc List]"
   elseif bt == "nofile" then
     return "[Scratch]"
   elseif bt == "terminal" then
@@ -31,9 +36,9 @@ local function bufname_mod(buf)
     return "[Prompt]"
   elseif bt == "help" then
     return "[Help]"
+  else
+    return "[No Name]"  -- buftype == ''
   end
-
-  return "[No Name]"
 end
 
 

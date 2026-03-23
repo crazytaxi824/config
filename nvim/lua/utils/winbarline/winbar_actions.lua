@@ -145,9 +145,7 @@ function M.delete_current_buf()
     for _, win in ipairs(vim.api.nvim_list_wins()) do
       local buf = vim.api.nvim_win_get_buf(win)
       if win ~= curr_win and vim.bo[buf].buflisted and vim.bo[buf].buftype == '' then
-        if vim.fn.win_gotoid(win) == 1 then
-          vim.api.nvim_win_close(curr_win, false)
-        end
+        vim.api.nvim_win_close(curr_win, false)
         return
       end
     end
