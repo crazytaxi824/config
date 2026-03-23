@@ -33,7 +33,7 @@ function M:remove_buf(bufnr)
   end
 end
 
---- @return integer[]
+--- @return integer[]  bufnrs
 function M:list_bufs()
   return self.buf_list
 end
