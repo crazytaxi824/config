@@ -9,9 +9,10 @@ M.__index = M
 ---@param win_id integer
 ---@return WinbarLineBuffer
 function M.new(bufnr, win_id)
+  --- @type WinbarLineBuffer
   local self = setmetatable({
     bufnr = bufnr,
-    wins = { [win_id] = true },
+    win_dict = { [win_id] = true },
   }, M)
   return self
 end

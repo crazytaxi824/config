@@ -12,6 +12,7 @@ M.__index = M
 ---@param win_id integer
 ---@return WinbarLineWindow
 function M.new(win_id, bufnr)
+  --- @type WinbarLineWindow
   local self = setmetatable({
     win_id = win_id,
     buf_list = { bufnr },

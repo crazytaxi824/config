@@ -57,24 +57,24 @@ function M:format()
   end
 
   --- index
-  table.insert(components, { str = self.index .. '. ', hl = '' })
+  table.insert(components, { str = self.index .. '. ', hl_suffix = '' })
 
   --- prefix
   if self.prefix then
-    table.insert(components, { str = self.prefix, hl = 'Prefix' })
+    table.insert(components, { str = self.prefix, hl_suffix = 'Prefix' })
   end
 
   --- bufname
-  table.insert(components, { str = self.bufname .. ' ', hl = '' })
+  table.insert(components, { str = self.bufname .. ' ', hl_suffix = '' })
 
   --- diagnostic
   if self.diagnostic then
-    table.insert(components, { str = '('..self.diagnostic.count..') ', hl = 'Severity_'..self.diagnostic.severity })
+    table.insert(components, { str = '('..self.diagnostic.count..') ', hl_suffix = 'Severity_'..self.diagnostic.severity })
   end
 
   --- modified
   if vim.bo[self.bufnr].modified then
-    table.insert(components, { str = sign_modified .. ' ', hl = 'Modified'})
+    table.insert(components, { str = sign_modified .. ' ', hl_suffix = 'Modified'})
   end
 
 
