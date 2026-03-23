@@ -1,4 +1,4 @@
-local g = require('utils.winbarline2.global')
+local u = require('utils.winbarline2.utils')
 
 
 --- @class WinbarLineWindow
@@ -27,7 +27,7 @@ end
 
 ---@param bufnr integer
 function M:remove_buf(bufnr)
-  local idx = g.list_index_value(self.buf_list, bufnr)
+  local idx = u.list_index_value(self.buf_list, bufnr)
   if idx then
     table.remove(self.buf_list, idx)
   end
