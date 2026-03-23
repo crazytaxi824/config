@@ -141,10 +141,10 @@ function M.delete_current_buf()
       error("win_bufs records error")
     end
 
-    --- 如果 neovim 中有另一个 buflisted window 则 close window
+    --- 如果 neovim 中有另一个 buflisted & buftype == '' 的 window 则 close window
     for _, win in ipairs(vim.api.nvim_list_wins()) do
       local buf = vim.api.nvim_win_get_buf(win)
-      if win ~= curr_win and vim.bo[buf].buflisted then
+      if win ~= curr_win and vim.bo[buf].buflisted and vim.bo[buf].buftype == '' then
         if vim.fn.win_gotoid(win) == 1 then
           vim.api.nvim_win_close(curr_win, false)
         end
@@ -153,7 +153,7 @@ function M.delete_current_buf()
     end
 
     --- 如果 current window 是 neovim 中最后一个 buflisted window
-    Notify("Cannot delete last buflisted buffer", "WARN")
+    Notify("Cannot delete last 'buflisted' 'normal' buffer", "WARN")
     return
   end
 
