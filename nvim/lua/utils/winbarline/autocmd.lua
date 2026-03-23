@@ -1,5 +1,5 @@
 local wb_var = require('utils.winbarline.win_buf_var')
-local wb = require('utils.winbarline.winbar')
+local wb_str = require('utils.winbarline.winbar_str')
 
 
 local gid = vim.api.nvim_create_augroup('my_winbarline', { clear = true })
@@ -18,7 +18,7 @@ vim.api.nvim_create_autocmd({"BufWinEnter"}, {
     wb_var.append_buf_to_win(curr_win, args.buf)
     wb_var.append_win_to_buf(args.buf, curr_win)
 
-    wb.set_winbar(curr_win)
+    wb_str.set_winbar(curr_win)
   end
 })
 
@@ -39,7 +39,7 @@ vim.api.nvim_create_autocmd({"CursorMoved"}, {
     if not win_bufs then
       wb_var.append_buf_to_win(curr_win, args.buf)
       wb_var.append_win_to_buf(args.buf, curr_win)
-      wb.set_winbar(curr_win)
+      wb_str.set_winbar(curr_win)
     end
   end
 })
@@ -60,7 +60,7 @@ vim.api.nvim_create_autocmd({"BufDelete", "BufWipeout"}, {
     --- 从每个 win-buffer list 中删除 buf
     for win_id, _ in pairs(buf_wins) do
       wb_var.remove_buf_from_win(win_id, args.buf)
-      wb.set_winbar(win_id)
+      wb_str.set_winbar(win_id)
     end
   end
 })
@@ -106,7 +106,7 @@ vim.api.nvim_create_autocmd({
     end
 
     for win_id, _ in pairs(buf_wins) do
-      wb.set_winbar(win_id)
+      wb_str.set_winbar(win_id)
     end
   end
 })
@@ -116,13 +116,13 @@ vim.api.nvim_create_autocmd({
 vim.api.nvim_create_autocmd({"WinEnter"}, {
   group = gid,
   callback = function(args)
-    wb.set_winbar(vim.api.nvim_get_current_win())
+    wb_str.set_winbar(vim.api.nvim_get_current_win())
 
     --- 修改 preview window 的 winbar
     local prev_winnr = vim.fn.winnr('#')
     if prev_winnr > 0 then
       local prev_win_id = vim.fn.win_getid(prev_winnr)
-      wb.set_winbar(prev_win_id)
+      wb_str.set_winbar(prev_win_id)
     end
   end
 })

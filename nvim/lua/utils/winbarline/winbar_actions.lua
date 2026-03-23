@@ -1,5 +1,5 @@
 local wb_var = require('utils.winbarline.win_buf_var')
-local wb = require('utils.winbarline.winbar')
+local wb_str = require('utils.winbarline.winbar_str')
 local utils = require('utils.winbarline.utils')
 
 
@@ -116,7 +116,7 @@ function M.delete_buffers(opt)
     wb_var.remove_win_from_buf(d_buf, curr_win)
   end
 
-  wb.set_winbar(curr_win)
+  wb_str.set_winbar(curr_win)
 end
 
 
@@ -179,7 +179,7 @@ function M.delete_current_buf()
 
   wb_var.remove_buf_from_win(curr_win, curr_buf)
   wb_var.remove_win_from_buf(curr_buf, curr_win)
-  wb.set_winbar(curr_win)
+  wb_str.set_winbar(curr_win)
 end
 
 return M
