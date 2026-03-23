@@ -9,7 +9,7 @@ local M = {}
 ---@param bufnr integer
 ---@param win_id integer
 ---@return WinbarLineWindow
-local function binding_win_buf(win_id, bufnr)
+function M.binding_win_buf(win_id, bufnr)
   if not vim.api.nvim_buf_is_valid(bufnr) or not vim.api.nvim_win_is_valid(win_id) then
     error('win: ' .. win_id .. ', or bufnr: ' .. bufnr .. ' is not valid' )
   end
@@ -37,7 +37,7 @@ end
 ---@param bufnr integer
 ---@param win_id integer
 ---@return WinbarLineWindow
-local function unbind_win_buf(win_id, bufnr)
+function M.unbind_win_buf(win_id, bufnr)
   if not vim.api.nvim_buf_is_valid(bufnr) or not vim.api.nvim_win_is_valid(win_id) then
     error('win: ' .. win_id .. ', or bufnr: ' .. bufnr .. ' is not valid' )
   end
