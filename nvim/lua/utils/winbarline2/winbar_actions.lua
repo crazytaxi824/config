@@ -53,6 +53,7 @@ function M.unbind_win_buf(win_id, bufnr)
     error("buffer: " .. bufnr .. " is not exist")
   end
 
+  --- 相互 remove
   buf:remove_win(win_id)
   win:remove_buf(bufnr)
 
@@ -135,8 +136,8 @@ function M.delete_buffers(opt)
     error("current buffer is not in the win_bufs")
   end
 
-  local delete_bufs = {}
-  local new_win_bufs = {}
+  local delete_bufs = {}  --- @type integer[] 需要删除的 buffers
+  local new_win_bufs = {} --- @type integer[] 需要留下的 buffers
 
   if opt == 'left' then
     for i, buf in ipairs(win_bufs) do
@@ -165,12 +166,15 @@ function M.delete_buffers(opt)
     error('opt value error: ' .. opt)
   end
 
-  --- set win_bufs
+  --- 从 win 中删除不需要的 buffers
   w:set_bufs(new_win_bufs)
 
-  --- set buf_wins
+  --- 从 bufs 中删除 win
   for _, d_buf in ipairs(delete_bufs) do
     local b = g.bufs[d_buf]
+    if not b then
+      error('buffer: '.. d_buf .. ' is not exist')
+    end
     b:remove_win(curr_win)
   end
 
@@ -214,7 +218,7 @@ function M.delete_current_buf()
     return
   end
 
-  --- 如果有多个 buffer, 则跳到另一个 buffer 后, 删除当前 buffer
+  --- 如果有多个 buffer, 则跳到另一个 buffer, 然后删除当前 buffer
   local idx = u.list_index_value(win_bufs, curr_buf)
   if not idx then
     error("current buffer is not register to current  window")
@@ -242,6 +246,7 @@ function M.delete_current_buf()
     error("buffer: ".. curr_buf .. ' is not exist')
   end
 
+  --- 相互 remove
   b:remove_win(curr_win)
   w:remove_buf(curr_buf)
 

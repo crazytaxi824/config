@@ -7,6 +7,7 @@ M.bufs = {}
 --- @type table<integer, WinbarLineWindow>
 M.wins = {}
 
+--- TODO: 使用函数
 
 --- debug ------------------------------------------------------------------------------------------
 function M:debug()

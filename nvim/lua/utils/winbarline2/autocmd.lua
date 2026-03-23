@@ -55,6 +55,7 @@ vim.api.nvim_create_autocmd({"BufDelete", "BufWipeout"}, {
   callback = function(args)
     local buf = g.bufs[args.buf]
     if not buf then
+      --- 有些 buffer 可能从没有 BufWinEnter, 例如 lsp 会自动加载 pkg 中的文件.
       return
     end
 
@@ -89,9 +90,10 @@ vim.api.nvim_create_autocmd({"WinClosed"}, {
     --- 从每个 buf-window list 中删除 win
     for _, buf in ipairs(w:list_bufs()) do
       local b = g.bufs[buf]
-      if b then
-        b:remove_win(win_id)
+      if not b then
+        error('buffer: '.. buf .. ' is not exist')
       end
+      b:remove_win(win_id)
     end
 
     --- delete winbar_win from cache
@@ -110,6 +112,7 @@ vim.api.nvim_create_autocmd({
   callback = function(args)
     local b = g.bufs[args.buf]
     if not b then
+      --- 有些 buffer 可能从没有 BufWinEnter, 例如 lsp 会自动加载 pkg 中的文件.
       return
     end
 
