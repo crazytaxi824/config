@@ -54,6 +54,8 @@ function M:format()
   --- indicator
   if self.active then
     table.insert(components, { str = sign_indicator, hl_suffix = 'Indicator' })
+  else
+    table.insert(components, { str = ' ', hl_suffix = 'Indicator' })
   end
 
   --- index
@@ -81,7 +83,7 @@ function M:format()
   local str = ''
   for _, comp in ipairs(components) do
     local hl
-    if self.in_current_win then
+    if self.in_current_win and self.active then
       hl = '%#' .. hl_prefix .. 'Selected' .. comp.hl_suffix .. '#'
     else
       hl = '%#' .. hl_prefix .. comp.hl_suffix .. '#'
