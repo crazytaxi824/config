@@ -45,7 +45,7 @@ function M:name()
 
   local bt = vim.bo[self.bufnr].buftype
   if bt == "quickfix" then
-    return "[Qf/Loc List]"
+    return "[List]"
   elseif bt == "nofile" then
     return "[Scratch]"
   elseif bt == "terminal" then
