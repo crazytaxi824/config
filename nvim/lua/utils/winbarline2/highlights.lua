@@ -17,7 +17,7 @@ local hl = {
 
   --- override base color
   prefix = {
-    ctermfg=Colors.hint_grey.c, fg=Colors.hint_grey.g,
+    ctermfg=Colors.g241.c, fg=Colors.g241.g,
     bold = false,
   },
   indicator = {
