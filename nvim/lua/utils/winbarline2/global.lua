@@ -9,13 +9,13 @@ M.wins = {}
 
 
 --- debug ------------------------------------------------------------------------------------------
-function Get_WinbarLine()
-  for win_id, w in ipairs(M.wins) do
-    print('win:', win_id, vim.inspect(w))
+function M:debug()
+  for win_id, w in pairs(self.wins) do
+    print('win:', win_id, vim.inspect(w:list_bufs()))
   end
 
-  for bufnr, b in ipairs(M.bufs) do
-    print('buf:', bufnr, vim.inspect(b))
+  for bufnr, b in pairs(self.bufs) do
+    print('buf:', bufnr, vim.inspect(b:list_wins()))
   end
 end
 

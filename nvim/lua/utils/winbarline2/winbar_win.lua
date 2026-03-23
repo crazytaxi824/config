@@ -47,7 +47,10 @@ end
 
 --- set winbar for this window
 function M:set_winbar()
-  wb_fmt.winbar_format(self.win_id)
+  local winbar_str = wb_fmt.winbar_format(self.win_id)
+  if winbar_str then
+    vim.api.nvim_set_option_value('winbar', winbar_str, { scope='local', win=self.win_id })
+  end
 end
 
 return M

@@ -1,4 +1,4 @@
-local wb_act = require('utils.winbarline.winbar_actions')
+local wb_act = require('utils.winbarline2.winbar_actions')
 
 
 --- set keymaps ------------------------------------------------------------------------------------
