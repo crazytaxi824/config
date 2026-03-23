@@ -39,6 +39,10 @@ function M:list_bufs()
   return self.buf_list
 end
 
+--- @param bufnrs integer[]
+function M:set_bufs(bufnrs)
+  self.buf_list = bufnrs
+end
 
 --- set winbar for this window
 function M:set_winbar()
