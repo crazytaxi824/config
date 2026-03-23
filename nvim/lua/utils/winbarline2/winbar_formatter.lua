@@ -70,7 +70,16 @@ function M.winbar_format(win_id)
     table.insert(fmt_items, fmt_item:format())
   end
 
-  return table.concat(fmt_items, ' ')
+  --- concat 所有 buffer 的 winbar format
+  local str = table.concat(fmt_items, ' ')
+
+  --- 添加 tabpagenr
+  local tabs = vim.api.nvim_list_tabpages()
+  if #tabs > 1 then
+    str = str .. '%=%#MyWinBarLineTab# ' .. vim.fn.tabpagenr() ..'/'.. #tabs .. ' '
+  end
+
+  return str
 end
 
 
