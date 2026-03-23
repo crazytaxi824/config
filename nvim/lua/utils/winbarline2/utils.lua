@@ -28,41 +28,49 @@ local function split_path_reversed(path)
   return parts
 end
 
---- 获取两个路径的最短唯一显示名
----@param path_a string
----@param path_b string
----@return string[], string[]
-function M.unique_short_path(path_a, path_b)
-  local parts_a = split_path_reversed(path_a)
-  local parts_b = split_path_reversed(path_b)
-
-  -- basename 不同，直接返回
-  if parts_a[1] ~= parts_b[1] then
-    return { parts_a[1] }, { parts_b[1] }
+--- 获取多个路径各自的最短唯一显示名
+---@param paths string[]
+---@return string[][]
+function M.unique_short_paths(paths)
+  local all_parts = {}
+  for _, path in ipairs(paths) do
+    all_parts[#all_parts + 1] = split_path_reversed(path)
   end
 
-  -- basename 相同，逐段向前对比
-  local max_len = math.max(#parts_a, #parts_b)
-  for i = 1, max_len do
-    local seg_a = parts_a[i] or "(root)"
-    local seg_b = parts_b[i] or "(root)"
+  local results = {}
 
-    if seg_a ~= seg_b then
-      -- 把从头到第 i 段拼回来（反转回正向）
-      local result_a = {}  ---@type string[]
-      local result_b = {}  ---@type string[]
+  for i, parts_a in ipairs(all_parts) do
+    local max_depth = 1
 
-      --- 倒序插入
-      for j = i, 1, -1 do
-        table.insert(result_a, parts_a[j] or "")
-        table.insert(result_b, parts_b[j] or "")
+    for j, parts_b in ipairs(all_parts) do
+      if i ~= j then
+        local max_len = math.max(#parts_a, #parts_b)
+        for k = 1, max_len do
+          if parts_a[k] ~= parts_b[k] then
+            if k > max_depth then
+              max_depth = k
+            end
+            break
+          end
+        end
       end
-      return result_a, result_b
     end
+
+    -- 直接返回 slice，从 max_depth 到 1（正向顺序）
+    local result = {}
+    for k = math.min(max_depth, #parts_a), 1, -1 do
+      result[#result + 1] = parts_a[k]
+    end
+
+    -- 如果需要的深度超过实际段数，说明路径更短，在最前面补 ""
+    if max_depth > #parts_a then
+      table.insert(result, 1, "")
+    end
+
+    results[#results + 1] = result
   end
 
-  -- 完全相同的路径
-  return {path_a}, {path_b}
+  return results
 end
 
 return M
