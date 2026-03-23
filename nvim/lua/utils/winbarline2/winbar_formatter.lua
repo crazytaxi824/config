@@ -66,7 +66,7 @@ function M.winbar_format(win_id)
       error('buffer: ' .. bufnr .. ' is not cached')
     end
 
-    local fmt_item = wb_fmt_item.new(win_id, bufnr, i, path_list, g.bufs[bufnr].diagnostic)
+    local fmt_item = wb_fmt_item.new(win_id, bufnr, i, path_list, b:diagnostic())
     table.insert(fmt_items, fmt_item:format())
   end
 

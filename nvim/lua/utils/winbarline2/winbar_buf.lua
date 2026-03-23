@@ -1,7 +1,6 @@
 --- @class WinbarLineBuffer
 --- @field bufnr integer
 --- @field private win_dict table<integer, boolean>
---- @field diagnostic? {count: integer, severity: integer}
 local M = {}
 M.__index = M
 
@@ -60,8 +59,9 @@ function M:name()
   end
 end
 
---- 更新 diagnostic info
-function M:update_diagnostic()
+--- 获取 diagnostic info
+--- @return {count: integer, severity: integer}|nil
+function M:diagnostic()
   local diagnostics = vim.diagnostic.count(self.bufnr) or {}
   local diag_count = 0
   local severity = 9
@@ -74,9 +74,7 @@ function M:update_diagnostic()
   end
 
   if diag_count > 0 then
-    self.diagnostic = { count = diag_count, severity = severity }
-  else
-    self.diagnostic = nil
+    return { count = diag_count, severity = severity }
   end
 end
 

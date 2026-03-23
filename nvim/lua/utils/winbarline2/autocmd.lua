@@ -151,3 +151,7 @@ vim.api.nvim_create_autocmd({"WinEnter"}, {
 
 
 
+--- debug ------------------------------------------------------------------------------------------
+function Get_WinbarLine()
+  g:debug()
+end
