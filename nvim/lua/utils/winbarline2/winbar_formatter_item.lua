@@ -46,8 +46,6 @@ end
 
 --- @return string
 function M:format()
-  local hl_prefix = 'MyWinBarLineBuffer'
-
   --- @type { str: string, hl_suffix: string }[]
   local components = {}
 
@@ -80,18 +78,26 @@ function M:format()
   end
 
 
+  --- highlight prefix
+  local hl_prefix_default = 'MyWinBarLineBuffer'
+  local hl_prefix_selected = 'MyWinBarLineBufferSelected'
+
   local str = ''
   for _, comp in ipairs(components) do
-    local hl
+    --- @type string
+    local hl = ''
+
+    --- 如果是 active & in current window 则使用 Selected highlight
     if self.in_current_win and self.active then
-      hl = '%#' .. hl_prefix .. 'Selected' .. comp.hl_suffix .. '#'
+      hl = '%#' .. hl_prefix_selected .. comp.hl_suffix .. '#'
     else
-      hl = '%#' .. hl_prefix .. comp.hl_suffix .. '#'
+      hl = '%#' .. hl_prefix_default .. comp.hl_suffix .. '#'
     end
 
     str = str .. hl .. comp.str
   end
 
+  --- '%*' reset highlight
   return str .. '%*'
 end
 
