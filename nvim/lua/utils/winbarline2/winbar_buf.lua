@@ -1,7 +1,7 @@
 --- @class WinbarLineBuffer
 --- @field bufnr integer
 --- @field private win_dict table<integer, boolean>
---- @field private diagnostic? {count: integer, severity: integer}
+--- @field diagnostic? {count: integer, severity: integer}
 local M = {}
 M.__index = M
 

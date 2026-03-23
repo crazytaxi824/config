@@ -27,7 +27,7 @@ local function bufname_mod(buf)
 
   local bt = vim.bo[buf].buftype
   if bt == "quickfix" then
-    return "[Qf/Loc List]"
+    return "[List]"
   elseif bt == "nofile" then
     return "[Scratch]"
   elseif bt == "terminal" then
