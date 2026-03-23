@@ -1,4 +1,5 @@
 local u = require('utils.winbarline2.utils')
+local wb_fmt = require('utils.winbarline2.winbar_formatter')
 
 
 --- @class WinbarLineWindow
@@ -41,7 +42,7 @@ end
 
 --- set winbar for this window
 function M:set_winbar()
-  error("TODO")  -- TODO
+  wb_fmt.winbar_format(self.win_id)
 end
 
 return M
