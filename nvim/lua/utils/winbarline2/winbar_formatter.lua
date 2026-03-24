@@ -55,8 +55,9 @@ local function fmt_items_len(fmt_items)
   local count = 0
   for _, item in ipairs(fmt_items) do
     for _, comp in ipairs(item) do
-      count = count + comp.len + 1 -- 每个 buffer 后的空格
+      count = count + comp.len
     end
+    count = count + 1  -- 每个 item 后一个空格
   end
   return count
 end
@@ -119,7 +120,6 @@ function M.winbar_format(win_id)
       table.insert(components, comp)
     end
     if fmt_items_len(components) < vim.api.nvim_win_get_config(win_id).width or level == 1 then
-      print(fmt_items_len(components), vim.api.nvim_win_get_config(win_id).width)
       break
     end
     components = {}
