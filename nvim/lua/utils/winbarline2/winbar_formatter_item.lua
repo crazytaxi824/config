@@ -43,8 +43,9 @@ end
 
 --- @alias WinbarFormatterItemComponents { str: string, hl: string, len: integer }[]
 
+--- @param opts 5|4|3|2|1 -- level: 'full', 'init', 'base', 'short', 'none'
 --- @return WinbarFormatterItemComponents
-function M:parse()
+function M:parse(opts)
   --- @type WinbarFormatterItemComponents
   local components = {}
 
@@ -57,17 +58,33 @@ function M:parse()
   table.insert(components, { str = idx_str, hl = 'Index', len = vim.fn.strdisplaywidth(idx_str) })
 
   --- prefix
-  if self.prefix then
-    local prefix_str = table.concat(self.prefix, '/') .. '/'
+  if self.prefix and opts > 3 then
+    local prefix_str = ''
+    if opts == 5 then
+      prefix_str = table.concat(self.prefix, '/') .. '/'
+    elseif opts == 4 then
+      for _, path in ipairs(self.prefix) do
+        local s = vim.fn.strcharlen(path) > 0 and vim.fn.strcharpart(path, 0, 1) or ''
+        prefix_str = prefix_str .. s .. '/'
+      end
+    end
     table.insert(components, { str = prefix_str, hl = 'Prefix', len = vim.fn.strdisplaywidth(prefix_str) })
   end
 
   --- bufname
-  local bufname_str = self.bufname .. ' '
-  table.insert(components, { str = bufname_str, hl = '', len = vim.fn.strdisplaywidth(bufname_str) })
+  if opts > 2 or self.active then
+    local bufname_str = self.bufname .. ' '
+    table.insert(components, { str = bufname_str, hl = '', len = vim.fn.strdisplaywidth(bufname_str) })
+  elseif opts == 2 then
+    local bufname_str = self.bufname:sub(1,3) .. ' '
+    table.insert(components, { str = bufname_str, hl = '', len = vim.fn.strdisplaywidth(bufname_str) })
+  else
+    local bufname_str = ' '
+    table.insert(components, { str = bufname_str, hl = '', len = vim.fn.strdisplaywidth(bufname_str) })
+  end
 
   --- diagnostic
-  if self.diagnostic then
+  if self.diagnostic and opts > 2 then
     local diag_str = '('..self.diagnostic.count..') '
     table.insert(components, { str = diag_str, hl = 'Severity_'..self.diagnostic.severity, len = vim.fn.strdisplaywidth(diag_str) })
   end

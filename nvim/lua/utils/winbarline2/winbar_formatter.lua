@@ -48,6 +48,20 @@ local function uniqie_bufnames(bufnrs)
   return u.unique_short_paths(bufnames)
 end
 
+
+--- @param fmt_items WinbarFormatterItemComponents[]
+--- @return integer
+local function fmt_items_len(fmt_items)
+  local count = 0
+  for _, item in ipairs(fmt_items) do
+    for _, comp in ipairs(item) do
+      count = count + comp.len
+    end
+  end
+  return count
+end
+
+
 --- @param fmt_items WinbarFormatterItemComponents[]
 --- @return string
 local function format_winbar_items(fmt_items)
@@ -94,7 +108,7 @@ function M.winbar_format(win_id)
     end
 
     local fmt_item = wb_fmt_item.new(win_id, bufnr, i, path_list, b:diagnostic())
-    table.insert(fmt_items, fmt_item:parse())
+    table.insert(fmt_items, fmt_item:parse(4))
   end
 
   return format_winbar_items(fmt_items)
