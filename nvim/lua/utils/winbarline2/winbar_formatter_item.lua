@@ -5,7 +5,7 @@ local sign_modified = '●'
 --- @class WinbarFormatterItem
 --- @field bufnr integer
 --- @field index integer
---- @field prefix? string
+--- @field prefix? string[]
 --- @field bufname string
 --- @field diagnostic? { count: integer, severity: integer }
 --- @field in_current_win boolean
@@ -24,7 +24,7 @@ function M.new(win_id, bufnr, index, path_list, diagnostic)
   if #path_list < 1 then
     error(bufnr .. " path_list is empty")
   elseif #path_list > 1 then
-    prefix = table.concat(path_list, '/', 1, #path_list-1) .. '/'
+    prefix = table.move(path_list, 1, #path_list-1, 1, {})
   end
 
   local self = setmetatable({
@@ -58,7 +58,8 @@ function M:parse()
 
   --- prefix
   if self.prefix then
-    table.insert(components, { str = self.prefix, hl = 'Prefix', len = vim.fn.strdisplaywidth(self.prefix) })
+    local prefix_str = table.concat(self.prefix, '/') .. '/'
+    table.insert(components, { str = prefix_str, hl = 'Prefix', len = vim.fn.strdisplaywidth(prefix_str) })
   end
 
   --- bufname
