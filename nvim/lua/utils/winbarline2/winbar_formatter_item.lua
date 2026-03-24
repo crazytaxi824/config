@@ -53,8 +53,8 @@ function M:parse()
   table.insert(components, { str = indicator_str, hl = 'Indicator', len = vim.fn.strdisplaywidth(indicator_str) })
 
   --- index
-  local idx_str = self.index .. '. '
-  table.insert(components, { str = idx_str, hl = '', len = vim.fn.strdisplaywidth(idx_str) })
+  local idx_str = self.index .. ' '
+  table.insert(components, { str = idx_str, hl = 'Index', len = vim.fn.strdisplaywidth(idx_str) })
 
   --- prefix
   if self.prefix then

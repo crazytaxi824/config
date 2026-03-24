@@ -16,6 +16,9 @@ local hl = {
   },
 
   --- override base color
+  index = {
+    ctermfg=Colors.white.c, fg=Colors.white.g,
+  },
   prefix = {
     ctermfg=Colors.g241.c, fg=Colors.g241.g,
     bold = false,
@@ -47,6 +50,7 @@ local hl = {
 
 
 vim.api.nvim_set_hl(0, "MyWinBarLineBufferSelected",  hl.selected)
+vim.api.nvim_set_hl(0, "MyWinBarLineBufferSelectedIndex", hl.selected)
 vim.api.nvim_set_hl(0, "MyWinBarLineBufferSelectedPrefix", vim.tbl_extend('force', hl.selected, hl.prefix))
 vim.api.nvim_set_hl(0, "MyWinBarLineBufferSelectedIndicator", vim.tbl_extend('force', hl.selected, hl.indicator))
 vim.api.nvim_set_hl(0, "MyWinBarLineBufferSelectedModified", vim.tbl_extend('force', hl.selected, hl.modified))
@@ -56,6 +60,7 @@ vim.api.nvim_set_hl(0, "MyWinBarLineBufferSelectedSeverity_3", vim.tbl_extend('f
 vim.api.nvim_set_hl(0, "MyWinBarLineBufferSelectedSeverity_4", vim.tbl_extend('force', hl.selected, hl.diagnostic_hint))
 
 vim.api.nvim_set_hl(0, "MyWinBarLineBuffer", hl.default)
+vim.api.nvim_set_hl(0, "MyWinBarLineBufferIndex", vim.tbl_extend('force', hl.default, hl.index))
 vim.api.nvim_set_hl(0, "MyWinBarLineBufferPrefix", vim.tbl_extend('force', hl.default, hl.prefix))
 vim.api.nvim_set_hl(0, "MyWinBarLineBufferIndicator", vim.tbl_extend('force', hl.default, hl.indicator))
 vim.api.nvim_set_hl(0, "MyWinBarLineBufferModified", vim.tbl_extend('force', hl.default, hl.modified))
