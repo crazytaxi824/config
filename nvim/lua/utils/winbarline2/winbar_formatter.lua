@@ -8,6 +8,7 @@ local wb_fmt_item = require('utils.winbarline2.winbar_formatter_item')
 --- @field tabnr integer
 local M = {}
 
+--- @return string
 local function bufname_mod(bufnr)
   local bufname = vim.api.nvim_buf_get_name(bufnr)
   if bufname ~= '' then
@@ -37,6 +38,7 @@ end
 
 
 --- @param bufnrs integer[]
+--- @return string[][]
 local function uniqie_bufnames(bufnrs)
   local bufnames = {}  ---@type string[]
   for _, bufnr in ipairs(bufnrs) do
@@ -46,8 +48,33 @@ local function uniqie_bufnames(bufnrs)
   return u.unique_short_paths(bufnames)
 end
 
+--- @param fmt_items WinbarFormatterItemComponents[]
+--- @return string
+local function format_winbar_items(fmt_items)
+  local str_list = {}
+  for _, item in ipairs(fmt_items) do
+    local str = ''
+    for _, comp in ipairs(item) do
+      str = str .. comp.hl .. comp.str
+    end
+    str = str .. '%*'  -- '%*' reset highligh>
+    table.insert(str_list, str)
+  end
+
+  --- concat 所有 buffer 的 winbar format
+  local str = table.concat(str_list, ' ')
+
+  --- 添加 tabpagenr
+  local tabs = vim.api.nvim_list_tabpages()
+  if #tabs > 1 then
+    str = str .. '%=%#MyWinBarLineTab# ' .. vim.fn.tabpagenr() ..'/'.. #tabs .. ' '
+  end
+
+  return str
+end
 
 --- @param win_id integer
+--- @return string|nil winbar_str
 function M.winbar_format(win_id)
   local w = g.get_win(win_id)
   if not w then
@@ -57,7 +84,7 @@ function M.winbar_format(win_id)
   local bufnrs = w:list_bufs()
   local uni_bufnames = uniqie_bufnames(bufnrs)
 
-  --- @type string[]
+  --- @type WinbarFormatterItemComponents[]
   local fmt_items = {}
   for i, path_list in ipairs(uni_bufnames) do
     local bufnr = bufnrs[i]
@@ -67,19 +94,10 @@ function M.winbar_format(win_id)
     end
 
     local fmt_item = wb_fmt_item.new(win_id, bufnr, i, path_list, b:diagnostic())
-    table.insert(fmt_items, fmt_item:format())
+    table.insert(fmt_items, fmt_item:parse())
   end
 
-  --- concat 所有 buffer 的 winbar format
-  local str = table.concat(fmt_items, ' ')
-
-  --- 添加 tabpagenr
-  local tabs = vim.api.nvim_list_tabpages()
-  if #tabs > 1 then
-    str = str .. '%=%#MyWinBarLineTab# ' .. vim.fn.tabpagenr() ..'/'.. #tabs .. ' '
-  end
-
-  return str
+  return format_winbar_items(fmt_items)
 end
 
 

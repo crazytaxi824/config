@@ -41,61 +41,56 @@ function M.new(win_id, bufnr, index, path_list, diagnostic)
 end
 
 
---- @return string
-function M:format()
-  --- @type { str: string, hl_suffix: string }[]
+--- @alias WinbarFormatterItemComponents { str: string, hl: string, len: integer }[]
+
+--- @return WinbarFormatterItemComponents
+function M:parse()
+  --- @type WinbarFormatterItemComponents
   local components = {}
 
   --- indicator
-  if self.active then
-    table.insert(components, { str = sign_indicator, hl_suffix = 'Indicator' })
-  else
-    table.insert(components, { str = ' ', hl_suffix = 'Indicator' })
-  end
+  local indicator_str = self.active and sign_indicator or ' '
+  table.insert(components, { str = indicator_str, hl = 'Indicator', len = vim.fn.strdisplaywidth(indicator_str) })
 
   --- index
-  table.insert(components, { str = self.index .. '. ', hl_suffix = '' })
+  local idx_str = self.index .. '. '
+  table.insert(components, { str = idx_str, hl = '', len = vim.fn.strdisplaywidth(idx_str) })
 
   --- prefix
   if self.prefix then
-    table.insert(components, { str = self.prefix, hl_suffix = 'Prefix' })
+    table.insert(components, { str = self.prefix, hl = 'Prefix', len = vim.fn.strdisplaywidth(self.prefix) })
   end
 
   --- bufname
-  table.insert(components, { str = self.bufname .. ' ', hl_suffix = '' })
+  local bufname_str = self.bufname .. ' '
+  table.insert(components, { str = bufname_str, hl = '', len = vim.fn.strdisplaywidth(bufname_str) })
 
   --- diagnostic
   if self.diagnostic then
-    table.insert(components, { str = '('..self.diagnostic.count..') ', hl_suffix = 'Severity_'..self.diagnostic.severity })
+    local diag_str = '('..self.diagnostic.count..') '
+    table.insert(components, { str = diag_str, hl = 'Severity_'..self.diagnostic.severity, len = vim.fn.strdisplaywidth(diag_str) })
   end
 
   --- modified
   if vim.bo[self.bufnr].modified then
-    table.insert(components, { str = sign_modified .. ' ', hl_suffix = 'Modified'})
+    local modified_str = sign_modified .. ' '
+    table.insert(components, { str = modified_str, hl = 'Modified', len = vim.fn.strdisplaywidth(modified_str)})
   end
 
-
-  --- highlight prefix
+  --- update highlight prefix
   local hl_prefix_default = 'MyWinBarLineBuffer'
   local hl_prefix_selected = 'MyWinBarLineBufferSelected'
 
-  local str = ''
   for _, comp in ipairs(components) do
-    --- @type string
-    local hl = ''
-
     --- 如果是 active & in current window 则使用 Selected highlight
     if self.in_current_win and self.active then
-      hl = '%#' .. hl_prefix_selected .. comp.hl_suffix .. '#'
+      comp.hl = '%#' .. hl_prefix_selected .. comp.hl .. '#'
     else
-      hl = '%#' .. hl_prefix_default .. comp.hl_suffix .. '#'
+      comp.hl = '%#' .. hl_prefix_default .. comp.hl .. '#'
     end
-
-    str = str .. hl .. comp.str
   end
 
-  --- '%*' reset highlight
-  return str .. '%*'
+  return components
 end
 
 return M
