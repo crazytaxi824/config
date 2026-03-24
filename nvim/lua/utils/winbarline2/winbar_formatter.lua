@@ -49,17 +49,17 @@ local function uniqie_bufnames(bufnrs)
 end
 
 
---- @param fmt_items WinbarFormatterItemComponents[]
---- @return integer
-local function fmt_items_len(fmt_items)
-  local count = 0
+--- @param fmt_items WinbarFormatterItem[]
+--- @return WinbarFormatterItemComponents[], integer
+local function fmt_items_len(fmt_items, level)
+  local all_components = {}
+  local total_len = 0
   for _, item in ipairs(fmt_items) do
-    for _, comp in ipairs(item) do
-      count = count + comp.len
-    end
-    count = count + 1  -- 每个 item 后一个空格
+    local comps, len = item:parse(level)
+    total_len = total_len + len
+    table.insert(all_components, comps)
   end
-  return count
+  return all_components, total_len
 end
 
 
@@ -115,14 +115,11 @@ function M.winbar_format(win_id)
   --- @type WinbarFormatterItemComponents[]
   local components = {}
   for level = 5, 1, -1 do
-    for _, item in ipairs(fmt_items) do
-      local comp = item:parse(level)
-      table.insert(components, comp)
-    end
-    if fmt_items_len(components) < vim.api.nvim_win_get_config(win_id).width or level == 1 then
+    local comps, total_len = fmt_items_len(fmt_items, level)
+    if level == 1 or total_len < vim.api.nvim_win_get_config(win_id).width then
+      components = comps
       break
     end
-    components = {}
   end
 
   return format_winbar_items(components)

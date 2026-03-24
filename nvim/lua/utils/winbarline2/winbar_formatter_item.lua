@@ -43,11 +43,13 @@ end
 
 --- @alias WinbarFormatterItemComponents { str: string, hl: string, len: integer }[]
 
---- @param opts 5|4|3|2|1 -- level: 'full', 'init', 'base', 'short', 'none'
---- @return WinbarFormatterItemComponents
-function M:parse(opts)
+--- @param level 5|4|3|2|1 -- level: 'full', 'init', 'base', 'short', 'none'
+--- @return WinbarFormatterItemComponents  -- indicator, index, bufname, diagnostic, modified
+--- @return integer  -- total_len: including trailing space
+function M:parse(level)
   --- @type WinbarFormatterItemComponents
   local components = {}
+  local item_len = 1  -- 每个 item 后一个空格
 
   --- indicator
   local indicator_str = self.active and sign_indicator or ' '
@@ -58,11 +60,11 @@ function M:parse(opts)
   table.insert(components, { str = idx_str, hl = 'Index', len = vim.fn.strdisplaywidth(idx_str) })
 
   --- prefix
-  if self.prefix and opts > 3 then
+  if self.prefix and level > 3 then
     local prefix_str = ''
-    if opts == 5 then
+    if level == 5 then
       prefix_str = table.concat(self.prefix, '/') .. '/'
-    elseif opts == 4 then
+    elseif level == 4 then
       for _, path in ipairs(self.prefix) do
         local s = vim.fn.strcharlen(path) > 0 and vim.fn.strcharpart(path, 0, 1) or ''
         prefix_str = prefix_str .. s .. '/'
@@ -72,10 +74,10 @@ function M:parse(opts)
   end
 
   --- bufname
-  if opts > 2 or self.active then
+  if level > 2 or self.active then
     local bufname_str = self.bufname .. ' '
     table.insert(components, { str = bufname_str, hl = '', len = vim.fn.strdisplaywidth(bufname_str) })
-  elseif opts == 2 then
+  elseif level == 2 then
     local bufname_str = self.bufname:sub(1,3) .. ' '
     table.insert(components, { str = bufname_str, hl = '', len = vim.fn.strdisplaywidth(bufname_str) })
   else
@@ -84,7 +86,7 @@ function M:parse(opts)
   end
 
   --- diagnostic
-  if self.diagnostic and opts > 2 then
+  if self.diagnostic and level > 2 then
     local diag_str = '('..self.diagnostic.count..') '
     table.insert(components, { str = diag_str, hl = 'Severity_'..self.diagnostic.severity, len = vim.fn.strdisplaywidth(diag_str) })
   end
@@ -100,6 +102,7 @@ function M:parse(opts)
   local hl_prefix_selected = 'MyWinBarLineBufferSelected'
 
   for _, comp in ipairs(components) do
+    item_len = item_len + comp.len
     --- 如果是 active & in current window 则使用 Selected highlight
     if self.in_current_win and self.active then
       comp.hl = '%#' .. hl_prefix_selected .. comp.hl .. '#'
@@ -108,7 +111,7 @@ function M:parse(opts)
     end
   end
 
-  return components
+  return components, item_len
 end
 
 return M
