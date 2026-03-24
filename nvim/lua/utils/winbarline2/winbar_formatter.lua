@@ -55,7 +55,7 @@ local function fmt_items_len(fmt_items)
   local count = 0
   for _, item in ipairs(fmt_items) do
     for _, comp in ipairs(item) do
-      count = count + comp.len
+      count = count + comp.len + 1 -- 每个 buffer 后的空格
     end
   end
   return count
@@ -98,7 +98,7 @@ function M.winbar_format(win_id)
   local bufnrs = w:list_bufs()
   local uni_bufnames = uniqie_bufnames(bufnrs)
 
-  --- @type WinbarFormatterItemComponents[]
+  --- @type WinbarFormatterItem[]
   local fmt_items = {}
   for i, path_list in ipairs(uni_bufnames) do
     local bufnr = bufnrs[i]
@@ -108,10 +108,24 @@ function M.winbar_format(win_id)
     end
 
     local fmt_item = wb_fmt_item.new(win_id, bufnr, i, path_list, b:diagnostic())
-    table.insert(fmt_items, fmt_item:parse(4))
+    table.insert(fmt_items, fmt_item)
   end
 
-  return format_winbar_items(fmt_items)
+  --- @type WinbarFormatterItemComponents[]
+  local components = {}
+  for level = 5, 1, -1 do
+    for _, item in ipairs(fmt_items) do
+      local comp = item:parse(level)
+      table.insert(components, comp)
+    end
+    if fmt_items_len(components) < vim.api.nvim_win_get_config(win_id).width or level == 1 then
+      print(fmt_items_len(components), vim.api.nvim_win_get_config(win_id).width)
+      break
+    end
+    components = {}
+  end
+
+  return format_winbar_items(components)
 end
 
 
