@@ -24,7 +24,8 @@ local function bufname_mod(bufnr)
   if bt == "quickfix" then
     return "[List]"
   elseif bt == "nofile" then
-    return "[Scratch]"
+    local ft = vim.bo[bufnr].filetype
+    return ft ~= '' and '['..ft..']' or "[Scratch]"
   elseif bt == "terminal" then
     return "[Terminal]"
   elseif bt == "prompt" then
