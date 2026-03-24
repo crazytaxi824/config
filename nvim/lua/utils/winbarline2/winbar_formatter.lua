@@ -49,7 +49,7 @@ end
 
 --- @param win_id integer
 function M.winbar_format(win_id)
-  local w = g.wins[win_id]
+  local w = g.get_win(win_id)
   if not w then
     return
   end
@@ -61,7 +61,7 @@ function M.winbar_format(win_id)
   local fmt_items = {}
   for i, path_list in ipairs(uni_bufnames) do
     local bufnr = bufnrs[i]
-    local b = g.bufs[bufnr]
+    local b = g.get_buf(bufnr)
     if not b then
       error('buffer: ' .. bufnr .. ' is not cached')
     end

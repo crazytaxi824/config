@@ -1,6 +1,3 @@
-local g = require('utils.winbarline2.global')
-
-
 local sign_indicator = '▌'
 local sign_modified = '●'
 

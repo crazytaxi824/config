@@ -25,20 +25,20 @@ local function binding_win_buf(win_id, bufnr)
     error('win: ' .. win_id .. ', or bufnr: ' .. bufnr .. ' is not valid' )
   end
 
-  local win = g.wins[win_id]
+  local win = g.get_win(win_id)
   if win then
     win:append_buf(bufnr)
   else
     win = wb_win.new(win_id, bufnr)
-    g.wins[win_id] = win
+    g.set_win(win)
   end
 
-  local buf = g.bufs[bufnr]
+  local buf = g.get_buf(bufnr)
   if buf then
     buf:append_win(win_id)
   else
     buf = wb_buf.new(bufnr, win_id)
-    g.bufs[bufnr] = buf
+    g.set_buf(buf)
   end
 
   return win
@@ -71,7 +71,7 @@ vim.api.nvim_create_autocmd({"CursorMoved"}, {
     end
 
     --- window 中一定会显示一个 buffer
-    if not g.wins[curr_win] then
+    if not g.get_win(curr_win) then
       local w = binding_win_buf(curr_win, args.buf)
       w:set_winbar()
     end
@@ -82,7 +82,7 @@ vim.api.nvim_create_autocmd({"CursorMoved"}, {
 vim.api.nvim_create_autocmd({"BufDelete", "BufWipeout"}, {
   group = gid,
   callback = function(args)
-    local buf = g.bufs[args.buf]
+    local buf = g.get_buf(args.buf)
     if not buf then
       --- 有些 buffer 可能从没有 BufWinEnter, 例如 lsp 会自动加载 pkg 中的文件.
       return
@@ -90,7 +90,7 @@ vim.api.nvim_create_autocmd({"BufDelete", "BufWipeout"}, {
 
     --- delete buf from all wins
     for _, win_id in ipairs(buf:list_wins()) do
-      local w = g.wins[win_id]
+      local w = g.get_win(win_id)
       if w then
         w:remove_buf(args.buf)
         w:set_winbar()
@@ -98,7 +98,7 @@ vim.api.nvim_create_autocmd({"BufDelete", "BufWipeout"}, {
     end
 
     --- delete winbar_buf from cache
-    g.bufs[args.buf] = nil
+    g.delete_buf(args.buf)
   end
 })
 
@@ -111,22 +111,22 @@ vim.api.nvim_create_autocmd({"WinClosed"}, {
       error("win_id error: " .. args.match)
     end
 
-    local w = g.wins[win_id]
+    local w = g.get_win(win_id)
     if not w then
       return
     end
 
     --- 从每个 buf-window list 中删除 win
-    for _, buf in ipairs(w:list_bufs()) do
-      local b = g.bufs[buf]
+    for _, bufnr in ipairs(w:list_bufs()) do
+      local b = g.get_buf(bufnr)
       if not b then
-        error('buffer: '.. buf .. ' is not exist')
+        error('buffer: '.. bufnr .. ' is not exist')
       end
       b:remove_win(win_id)
     end
 
     --- delete winbar_win from cache
-    g.wins[win_id] = nil
+    g.delete_win(win_id)
   end
 })
 
@@ -139,14 +139,14 @@ vim.api.nvim_create_autocmd({
 }, {
   group = gid,
   callback = function(args)
-    local b = g.bufs[args.buf]
+    local b = g.get_buf(args.buf)
     if not b then
       --- 有些 buffer 可能从没有 BufWinEnter, 例如 lsp 会自动加载 pkg 中的文件.
       return
     end
 
     for _, win_id in ipairs(b:list_wins()) do
-      local w = g.wins[win_id]
+      local w = g.get_win(win_id)
       if w then
         w:set_winbar()
       end
@@ -164,7 +164,7 @@ vim.api.nvim_create_autocmd({"WinEnter"}, {
       return
     end
 
-    local cw = g.wins[curr_win]
+    local cw = g.get_win(curr_win)
     if cw then
       cw:set_winbar()
     end
@@ -173,7 +173,7 @@ vim.api.nvim_create_autocmd({"WinEnter"}, {
     local prev_winnr = vim.fn.winnr('#')
     if prev_winnr > 0 then
       local prev_win_id = vim.fn.win_getid(prev_winnr)
-      local pw = g.wins[prev_win_id]
+      local pw = g.get_win(prev_win_id)
       if pw then
         pw:set_winbar()
       end

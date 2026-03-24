@@ -14,20 +14,20 @@ function M.binding_win_buf(win_id, bufnr)
     error('win: ' .. win_id .. ', or bufnr: ' .. bufnr .. ' is not valid' )
   end
 
-  local win = g.wins[win_id]
+  local win = g.get_win(win_id)
   if win then
     win:append_buf(bufnr)
   else
     win = wb_win.new(win_id, bufnr)
-    g.wins[win_id] = win
+    g.set_win(win)
   end
 
-  local buf = g.bufs[bufnr]
+  local buf = g.get_buf(bufnr)
   if buf then
     buf:append_win(win_id)
   else
     buf = wb_buf.new(bufnr, win_id)
-    g.bufs[bufnr] = buf
+    g.set_buf(buf)
   end
 
   return win
@@ -39,7 +39,7 @@ end
 --- @param idx integer
 function M.goto(idx)
   local curr_win = vim.api.nvim_get_current_win()
-  local w = g.wins[curr_win]
+  local w = g.get_win(curr_win)
   if not w then
     return
   end
@@ -62,7 +62,7 @@ function M.cycle(move)
   local curr_win = vim.api.nvim_get_current_win()
   local curr_buf = vim.api.nvim_win_get_buf(curr_win)
 
-  local w = g.wins[curr_win]
+  local w = g.get_win(curr_win)
   if not w then
     return
   end
@@ -98,7 +98,7 @@ function M.delete_buffers(opt)
   local curr_win = vim.api.nvim_get_current_win()
   local curr_buf = vim.api.nvim_win_get_buf(curr_win)
 
-  local w = g.wins[curr_win]
+  local w = g.get_win(curr_win)
   if not w then
     return
   end
@@ -144,7 +144,7 @@ function M.delete_buffers(opt)
 
   --- 从 bufs 中删除 win
   for _, d_buf in ipairs(delete_bufs) do
-    local b = g.bufs[d_buf]
+    local b = g.get_buf(d_buf)
     if not b then
       error('buffer: '.. d_buf .. ' is not exist')
     end
@@ -164,7 +164,7 @@ function M.delete_current_buf()
     return
   end
 
-  local w = g.wins[curr_win]
+  local w = g.get_win(curr_win)
   if not w then
     --- floating window
     vim.api.nvim_win_close(curr_win, false)
@@ -214,7 +214,7 @@ function M.delete_current_buf()
   end
 
 
-  local b = g.bufs[curr_buf]
+  local b = g.get_buf(curr_buf)
   if not b then
     error("buffer: ".. curr_buf .. ' is not exist')
   end
