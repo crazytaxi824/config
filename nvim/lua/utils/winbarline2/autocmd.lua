@@ -1,5 +1,6 @@
 local g = require('utils.winbarline2.global')
-local wb_act = require('utils.winbarline2.winbar_actions')
+local wb_win = require("utils.winbarline2.winbar_win")
+local wb_buf = require("utils.winbarline2.winbar_buf")
 
 
 --- get current window id, floating window is excluded
@@ -16,6 +17,34 @@ local function get_current_normal_win()
 end
 
 
+---@param bufnr integer
+---@param win_id integer
+---@return WinbarLineWindow
+local function binding_win_buf(win_id, bufnr)
+  if not vim.api.nvim_buf_is_valid(bufnr) or not vim.api.nvim_win_is_valid(win_id) then
+    error('win: ' .. win_id .. ', or bufnr: ' .. bufnr .. ' is not valid' )
+  end
+
+  local win = g.wins[win_id]
+  if win then
+    win:append_buf(bufnr)
+  else
+    win = wb_win.new(win_id, bufnr)
+    g.wins[win_id] = win
+  end
+
+  local buf = g.bufs[bufnr]
+  if buf then
+    buf:append_win(win_id)
+  else
+    buf = wb_buf.new(bufnr, win_id)
+    g.bufs[bufnr] = buf
+  end
+
+  return win
+end
+
+
 --- autocmd ----------------------------------------------------------------------------------------
 local gid = vim.api.nvim_create_augroup('my_winbarline', { clear = true })
 
@@ -27,7 +56,7 @@ vim.api.nvim_create_autocmd({"BufWinEnter"}, {
       return
     end
 
-    local w = wb_act.binding_win_buf(curr_win, args.buf)
+    local w = binding_win_buf(curr_win, args.buf)
     w:set_winbar()
   end
 })
@@ -43,7 +72,7 @@ vim.api.nvim_create_autocmd({"CursorMoved"}, {
 
     --- window 中一定会显示一个 buffer
     if not g.wins[curr_win] then
-      local w = wb_act.binding_win_buf(curr_win, args.buf)
+      local w = binding_win_buf(curr_win, args.buf)
       w:set_winbar()
     end
   end
