@@ -135,7 +135,7 @@ vim.api.nvim_create_autocmd({"WinClosed"}, {
 vim.api.nvim_create_autocmd({
   "TextChanged", "TextChangedI", "TextChangedP",
   "BufWritePost", "FileChangedShellPost", "DiagnosticChanged",
-  "ModeChanged", "TabClosed",
+  "ModeChanged", "TabClosed", "WinResized",
 }, {
   group = gid,
   callback = function(args)
