@@ -183,7 +183,7 @@ function M:parse(level)
   end
 
   --- diagnostic
-  if self.diagnostic and level > 2 then
+  if self.diagnostic and (level > 2 or self.active) then
     local diag_str = '('..self.diagnostic.count..') '
     table.insert(components, { str = diag_str, hl = 'Severity_'..self.diagnostic.severity, len = vim.fn.strdisplaywidth(diag_str) })
   end
