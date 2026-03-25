@@ -1,3 +1,6 @@
+--- @alias WinbarFormatterItemComponents { str: string, hl: string, len: integer }[]
+
+
 local sign_indicator = '▌'
 local sign_modified = '●'
 
@@ -40,8 +43,42 @@ function M.new(win_id, bufnr, index, path_list, diagnostic)
   return self
 end
 
+--- @param charlen integer
+--- @param level 5|4|3|2|1 -- level: 'full', 'init', 'base', 'short', 'none'
+--- @return WinbarFormatterItemComponents  -- indicator, index, bufname, diagnostic, modified
+function M:partial(charlen, level)
+  local components, item_len = self:parse(level)
+  if charlen >= item_len then
+    return components
+  end
 
---- @alias WinbarFormatterItemComponents { str: string, hl: string, len: integer }[]
+  --- @type WinbarFormatterItemComponents
+  local partial_comps = {}
+  local remain_len = charlen
+  for _, comp in ipairs(components) do
+    if remain_len >= comp.len then
+      table.insert(partial_comps, comp)
+      remain_len = remain_len - comp.len
+    else
+      --- 按照整字读取, 避免读取半个 CJK 文字.
+      local remain_str = ''
+      local char_count = vim.fn.strcharlen(comp.str)
+      for i = 0, char_count-1, 1 do
+        local char = vim.fn.strcharpart(comp.str, i, 1)
+        local char_width = vim.fn.strdisplaywidth(char)
+        remain_len = remain_len - char_width
+        if remain_len < 0 then
+          table.insert(partial_comps, {str = remain_str, hl = comp.hl, len = vim.fn.strdisplaywidth(remain_str)})
+          break
+        else
+          remain_str = remain_str .. char
+        end
+      end
+    end
+  end
+  return partial_comps
+end
+
 
 --- @param level 5|4|3|2|1 -- level: 'full', 'init', 'base', 'short', 'none'
 --- @return WinbarFormatterItemComponents  -- indicator, index, bufname, diagnostic, modified
@@ -49,7 +86,7 @@ end
 function M:parse(level)
   --- @type WinbarFormatterItemComponents
   local components = {}
-  local item_len = 1  -- 每个 item 后一个空格
+  local item_len = 1  -- NOTE: 每个 item 后一个空格
 
   --- indicator
   local indicator_str = self.active and sign_indicator or ' '
@@ -66,6 +103,8 @@ function M:parse(level)
       prefix_str = table.concat(self.prefix, '/') .. '/'
     elseif level == 4 then
       for _, path in ipairs(self.prefix) do
+        --- NOTE: strcharlen('你好') = 2, strcharpart('你好', 0, 1) = '你', strdisplaywidth('你') = 2
+        --- 这是为了获取完整的 'CJK' 文字
         local s = vim.fn.strcharlen(path) > 0 and vim.fn.strcharpart(path, 0, 1) or ''
         prefix_str = prefix_str .. s .. '/'
       end
