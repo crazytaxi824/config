@@ -51,7 +51,7 @@ end
 
 
 --- @param fmt_items WinbarFormatterItem[]
---- @return WinbarFormatterItemComponents[], integer
+--- @return WinbarFormatterItemComponent[][], integer
 local function fmt_items_len(fmt_items, level)
   local all_components = {}
   local total_len = 0
@@ -64,7 +64,7 @@ local function fmt_items_len(fmt_items, level)
 end
 
 
---- @param fmt_items WinbarFormatterItemComponents[]
+--- @param fmt_items WinbarFormatterItemComponent[][]
 --- @return string
 local function format_winbar_items(fmt_items)
   local str_list = {}
@@ -113,7 +113,7 @@ function M.winbar_format(win_id)
     table.insert(fmt_items, fmt_item)
   end
 
-  --- @type WinbarFormatterItemComponents[]
+  --- @type WinbarFormatterItemComponent[][]
   local components = {}
   for level = 5, 1, -1 do
     local comps, total_len = fmt_items_len(fmt_items, level)

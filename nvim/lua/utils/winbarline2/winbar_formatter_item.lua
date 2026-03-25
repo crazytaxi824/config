@@ -1,4 +1,4 @@
---- @alias WinbarFormatterItemComponents { str: string, hl: string, len: integer }[]
+--- @alias WinbarFormatterItemComponent { str: string, hl: string, len: integer }
 
 
 local sign_indicator = '▌'
@@ -44,10 +44,10 @@ function M.new(win_id, bufnr, index, path_list, diagnostic)
 end
 
 --- 从 str 中按 display width 截取，suffix=true 从后往前
---- @param comp { str: string, hl: string, len: integer }
+--- @param comp WinbarFormatterItemComponent
 --- @param remain_len integer
 --- @param suffix boolean
---- @return { str: string, hl: string, len: integer }|nil -- 截取后的 comp
+--- @return WinbarFormatterItemComponent|nil -- 截取后的 comp
 --- @return integer  -- 消耗的 len
 local function partial_comp(comp, remain_len, suffix)
   local chars = {}
@@ -86,7 +86,7 @@ end
 --- @param charlen integer
 --- @param level 5|4|3|2|1 -- level: 'full', 'init', 'base', 'short', 'none'
 --- @param mode? 'prefix'|'suffix'
---- @return WinbarFormatterItemComponents  -- indicator, index, bufname, diagnostic, modified
+--- @return WinbarFormatterItemComponent[]  -- indicator, index, bufname, diagnostic, modified
 function M:partial(charlen, level, mode)
   mode = mode or 'prefix'
   local suffix = mode == 'suffix'
@@ -96,7 +96,7 @@ function M:partial(charlen, level, mode)
     return components
   end
 
-  --- @type WinbarFormatterItemComponents
+  --- @type WinbarFormatterItemComponent[]
   local partial_comps = {}
   local remain_len = charlen
 
@@ -139,10 +139,10 @@ end
 
 
 --- @param level 5|4|3|2|1 -- level: 'full', 'init', 'base', 'short', 'none'
---- @return WinbarFormatterItemComponents  -- indicator, index, bufname, diagnostic, modified
+--- @return WinbarFormatterItemComponent[]  -- indicator, index, bufname, diagnostic, modified
 --- @return integer  -- total_len: including trailing space
 function M:parse(level)
-  --- @type WinbarFormatterItemComponents
+  --- @type WinbarFormatterItemComponent[]
   local components = {}
   local item_len = 1  -- NOTE: 每个 item 后一个空格
 
