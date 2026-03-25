@@ -1,6 +1,6 @@
-local g = require('utils.winbarline2.global')
-local u = require('utils.winbarline2.utils')
-local wb_fmt_item = require('utils.winbarline2.winbar_formatter_item')
+local g = require('utils.winbarline.global')
+local u = require('utils.winbarline.utils')
+local wb_fmt_item = require('utils.winbarline.winbar_formatter_item')
 
 
 --- @class WinbarFormatter

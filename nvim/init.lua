@@ -35,7 +35,7 @@ __Debug_Neovim = {
 --- 读取设置: ~/.config/nvim/lua/xxx.lua
 require("core")  -- VVI: 必须放在最前面加载, 因为有全局函数需要被用到
 
-require('utils.winbarline2') -- my plugins
+require('utils.winbarline') -- my plugins
 require("plugins")  -- 加载 plugins 和 plugins' settings
 require("misc")  -- 其他设置
 

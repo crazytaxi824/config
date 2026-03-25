@@ -1,6 +1,6 @@
-local g = require('utils.winbarline2.global')
-local wb_win = require("utils.winbarline2.winbar_win")
-local wb_buf = require("utils.winbarline2.winbar_buf")
+local g = require('utils.winbarline.global')
+local wb_win = require("utils.winbarline.winbar_win")
+local wb_buf = require("utils.winbarline.winbar_buf")
 
 
 --- get current window id, floating window is excluded
