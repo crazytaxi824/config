@@ -64,49 +64,55 @@ function M:partial(charlen, level)
       remain_len = remain_len - comp.len
     else
       --- 按照整字读取, 避免读取半个 CJK 文字.
-      local remain_str = ''
+      local chars = {}
       local char_count = vim.fn.strcharlen(comp.str)
 
       for j = char_count-1, 0, -1 do
         local char = vim.fn.strcharpart(comp.str, j, 1)
         local char_width = vim.fn.strdisplaywidth(char)
 
-        remain_len = remain_len - char_width
-        if remain_len >= 0 then
-          remain_str = char .. remain_str
-        else
-          if remain_str ~= '' then
-            table.insert(partial_comps, 1, {str = remain_str, hl = comp.hl, len = vim.fn.strdisplaywidth(remain_str)})
-          end
+        if remain_len < char_width then
           break
         end
+
+        remain_len = remain_len - char_width
+        table.insert(chars, 1, char)
+      end
+
+      if #chars > 0 then
+        local remain_str = table.concat(chars)
+        table.insert(partial_comps, 1, {str = remain_str, hl = comp.hl, len = vim.fn.strdisplaywidth(remain_str)})
       end
     end
   end
 
-  -- for _, comp in ipairs(components) do
-  --   if remain_len >= comp.len then
-  --     table.insert(partial_comps, comp)
-  --     remain_len = remain_len - comp.len
-  --   else
-  --     --- 按照整字读取, 避免读取半个 CJK 文字.
-  --     local remain_str = ''
-  --     local char_count = vim.fn.strcharlen(comp.str)
-  --     for i = 0, char_count-1, 1 do
-  --       local char = vim.fn.strcharpart(comp.str, i, 1)
-  --       local char_width = vim.fn.strdisplaywidth(char)
-  --       remain_len = remain_len - char_width
-  --       if remain_len >= 0 then
-  --         remain_str = remain_str .. char
-  --       else
-  --         if remain_str ~= '' then
-  --           table.insert(partial_comps, {str = remain_str, hl = comp.hl, len = vim.fn.strdisplaywidth(remain_str)})
-  --         end
-  --         break
-  --       end
-  --     end
-  --   end
-  -- end
+  for _, comp in ipairs(components) do
+    if remain_len >= comp.len then
+      table.insert(partial_comps, comp)
+      remain_len = remain_len - comp.len
+    else
+      --- 按照整字读取, 避免读取半个 CJK 文字.
+      local chars = {}
+      local char_count = vim.fn.strcharlen(comp.str)
+
+      for i = 0, char_count-1, 1 do
+        local char = vim.fn.strcharpart(comp.str, i, 1)
+        local char_width = vim.fn.strdisplaywidth(char)
+
+        if remain_len < char_width then
+          break
+        end
+
+        remain_len = remain_len - char_width
+        table.insert(chars, char)
+      end
+
+      if #chars > 0 then
+        local remain_str = table.concat(chars)
+        table.insert(partial_comps, {str = remain_str, hl = comp.hl, len = vim.fn.strdisplaywidth(remain_str)})
+      end
+    end
+  end
 
   return partial_comps
 end
