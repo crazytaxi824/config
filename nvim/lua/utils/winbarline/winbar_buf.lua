@@ -26,12 +26,12 @@ function M:remove_win(win_id)
   self.win_dict[win_id] = nil
 end
 
---- @return integer[]  win_ids
+--- @return integer[] win_ids
 function M:list_wins()
   return vim.tbl_keys(self.win_dict)
 end
 
---- @return string  bufname
+--- @return string bufname
 function M:name()
   local bufname = vim.api.nvim_buf_get_name(self.bufnr)
   if bufname ~= '' then

@@ -8,6 +8,7 @@ local wb_fmt_item = require('utils.winbarline.winbar_formatter_item')
 --- @field tabnr integer
 local M = {}
 
+--- 返回 modified buffer name
 --- @return string
 local function bufname_mod(bufnr)
   local bufname = vim.api.nvim_buf_get_name(bufnr)
@@ -37,7 +38,8 @@ local function bufname_mod(bufnr)
   end
 end
 
-
+--- 如果有相同的 base name 则向上寻找直至 dir name 不同
+---
 --- @param bufnrs integer[]
 --- @return string[][]
 local function uniqie_bufnames(bufnrs)
@@ -49,10 +51,12 @@ local function uniqie_bufnames(bufnrs)
   return u.unique_short_paths(bufnames)
 end
 
-
+--- 将 items 转成 ordered components
+---
 --- @param fmt_items WinbarFormatterItem[]
---- @return WinbarFormatterItemComponent[][], integer
-local function fmt_items_len(fmt_items, level)
+--- @return WinbarFormatterItemComponent[][]
+--- @return integer total_len
+local function fmt_items_to_components(fmt_items, level)
   local all_components = {}
   local total_len = 0
   for _, item in ipairs(fmt_items) do
@@ -63,7 +67,8 @@ local function fmt_items_len(fmt_items, level)
   return all_components, total_len
 end
 
-
+--- format all items' components to winbar string
+---
 --- @param fmt_items WinbarFormatterItemComponent[][]
 --- @return string
 local function format_winbar_items(fmt_items)
@@ -89,6 +94,9 @@ local function format_winbar_items(fmt_items)
   return str
 end
 
+
+--- 获取 window 中的所有 buffer, format 成适合的 winbar string
+---
 --- @param win_id integer
 --- @return string|nil winbar_str
 function M.winbar_format(win_id)
@@ -116,7 +124,7 @@ function M.winbar_format(win_id)
   --- @type WinbarFormatterItemComponent[][]
   local components = {}
   for level = 5, 1, -1 do
-    local comps, total_len = fmt_items_len(fmt_items, level)
+    local comps, total_len = fmt_items_to_components(fmt_items, level)
     if level == 1 or total_len < vim.api.nvim_win_get_config(win_id).width then
       components = comps
       break

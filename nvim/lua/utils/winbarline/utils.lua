@@ -17,8 +17,9 @@ end
 
 --- 将路径分割为段列表（从后往前）
 --- "/a/b/c.lua" -> {"c.lua", "b", "a"}
----@param path string
----@return string[]
+---
+--- @param path string
+--- @return string[]
 local function split_path_reversed(path)
   local parts = {}
   for part in path:gmatch("[^/]+") do
