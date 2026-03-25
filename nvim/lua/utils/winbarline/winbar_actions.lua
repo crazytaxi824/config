@@ -113,26 +113,27 @@ function M.delete_buffers(opt)
   local new_win_bufs = {} --- @type integer[] 需要留下的 buffers
 
   if opt == 'left' then
-    for i, buf in ipairs(win_bufs) do
-      if i < idx then
-        table.insert(delete_bufs, buf)
+    for i, bufnr in ipairs(win_bufs) do
+      if i < idx and not vim.bo[bufnr].modified then
+        table.insert(delete_bufs, bufnr)
       else
-        table.insert(new_win_bufs, buf)
+        table.insert(new_win_bufs, bufnr)
       end
     end
   elseif opt == 'right' then
-    for i, buf in ipairs(win_bufs) do
-      if i <= idx then
-        table.insert(new_win_bufs, buf)
+    for i, bufnr in ipairs(win_bufs) do
+      if i <= idx and not vim.bo[bufnr].modified then
+        table.insert(new_win_bufs, bufnr)
       else
-        table.insert(delete_bufs, buf)
+        table.insert(delete_bufs, bufnr)
       end
     end
   elseif opt == 'others' then
-    new_win_bufs = { curr_buf }
-    for i, buf in ipairs(win_bufs) do
-      if i ~= idx then
-        table.insert(delete_bufs, buf)
+    for i, bufnr in ipairs(win_bufs) do
+      if i ~= idx and not vim.bo[bufnr].modified then
+        table.insert(delete_bufs, bufnr)
+      else
+        table.insert(new_win_bufs, bufnr)
       end
     end
   else
