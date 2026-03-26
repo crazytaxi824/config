@@ -136,6 +136,7 @@ vim.api.nvim_create_autocmd({
   "TextChanged", "TextChangedI", "TextChangedP",
   "BufWritePost", "FileChangedShellPost", "DiagnosticChanged",
   "ModeChanged", "TabClosed", "WinResized",
+  --- TODO: display rename 修改的 buffer in current window
 }, {
   group = gid,
   callback = function(args)

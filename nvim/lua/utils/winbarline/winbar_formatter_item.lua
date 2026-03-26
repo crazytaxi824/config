@@ -200,6 +200,7 @@ function M:parse(level)
     local bufname_str = self.basename .. ' '
     table.insert(components, { str = bufname_str, hl = '', len = vim.fn.strdisplaywidth(bufname_str) })
   elseif level == 2 then
+    --- TODO: change to strcharpart()
     local bufname_str = self.basename:sub(1,3) .. ' '
     table.insert(components, { str = bufname_str, hl = '', len = vim.fn.strdisplaywidth(bufname_str) })
   else
