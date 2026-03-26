@@ -76,7 +76,7 @@ local function format_winbar_items(fmt_items)
   for _, item in ipairs(fmt_items) do
     local str = ''
     for _, comp in ipairs(item) do
-      str = str .. comp.hl .. comp.str
+      str = str .. comp.hl .. comp.content
     end
     str = str .. '%*'  -- '%*' reset highligh>
     table.insert(str_list, str)
