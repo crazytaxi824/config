@@ -1,4 +1,13 @@
---- @alias WinbarFormatterItemComponent { str: string, hl: string, len: integer }
+--- @class WinbarFormatterItemComponent
+---
+--- winbar 需要显示的内容
+--- @field str string
+---
+--- winbar 显示内容的 highlight
+--- @field hl string
+---
+--- str 的 display width
+--- @field len integer
 
 
 local sign_indicator = '▌'
@@ -7,12 +16,23 @@ local sign_modified = '●'
 
 --- @class WinbarFormatterItem
 --- @field bufnr integer
+---
+--- display index in window
 --- @field index integer
+---
+--- filepath head/dir
 --- @field fp_prefix? string[]  -- filepath prefix
+---
+--- last part of filepath
 --- @field basename string
+---
+--- vim.diagnostic.count()
 --- @field diagnostic? { count: integer, severity: integer }
+---
+--- active buffer
+--- @field active boolean
+---
 --- @field in_current_win boolean
---- @field active boolean  -- active buffer
 local M = {}
 M.__index = M
 
@@ -30,6 +50,7 @@ function M.new(win_id, bufnr, index, path_list, diagnostic)
     prefix = table.move(path_list, 1, #path_list-1, 1, {})
   end
 
+  --- @type WinbarFormatterItem
   local self = setmetatable({
     bufnr = bufnr,
     index = index,
