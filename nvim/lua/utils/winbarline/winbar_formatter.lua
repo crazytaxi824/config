@@ -41,7 +41,7 @@ end
 --- 如果有相同的 base name 则向上寻找直至 dir name 不同
 ---
 --- @param bufnrs integer[]
---- @return string[][]
+--- @return string[][] fp_list
 local function uniqie_bufnames(bufnrs)
   local bufnames = {}  ---@type string[]
   for _, bufnr in ipairs(bufnrs) do
@@ -55,27 +55,27 @@ end
 ---
 --- @param fmt_items WinbarFormatterItem[]
 --- @return WinbarFormatterItemComponent[][]
---- @return integer total_len
+--- @return integer total_width
 local function fmt_items_to_components(fmt_items, level)
   local all_components = {}
-  local total_len = 0
+  local total_width = 0
   for _, item in ipairs(fmt_items) do
-    local comps, len = item:parse(level)
-    total_len = total_len + len
+    local comps, item_width = item:parse(level)
+    total_width = total_width + item_width
     table.insert(all_components, comps)
   end
-  return all_components, total_len
+  return all_components, total_width
 end
 
 --- format all items' components to winbar string
 ---
---- @param fmt_items WinbarFormatterItemComponent[][]
---- @return string
-local function format_winbar_items(fmt_items)
+--- @param fmt_comps_list WinbarFormatterItemComponent[][]
+--- @return string winbar_str
+local function format_winbar_components(fmt_comps_list)
   local str_list = {}
-  for _, item in ipairs(fmt_items) do
+  for _, comps in ipairs(fmt_comps_list) do
     local str = ''
-    for _, comp in ipairs(item) do
+    for _, comp in ipairs(comps) do
       str = str .. comp.hl .. comp.content
     end
     str = str .. '%*'  -- '%*' reset highligh>
@@ -124,14 +124,14 @@ function M.winbar_format(win_id)
   --- @type WinbarFormatterItemComponent[][]
   local components = {}
   for level = 5, 1, -1 do
-    local comps, total_len = fmt_items_to_components(fmt_items, level)
-    if level == 1 or total_len < vim.api.nvim_win_get_config(win_id).width then
+    local comps, total_width = fmt_items_to_components(fmt_items, level)
+    if level == 1 or total_width < vim.api.nvim_win_get_config(win_id).width then
       components = comps
       break
     end
   end
 
-  return format_winbar_items(components)
+  return format_winbar_components(components)
 end
 
 
