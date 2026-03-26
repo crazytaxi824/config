@@ -67,6 +67,18 @@ local function fmt_items_to_components(fmt_items, level)
   return all_components, total_width
 end
 
+
+--- 返回当前 tabpage info
+--- @return WinbarFormatterItemComponent|nil
+local function tabpage_component()
+  local tabs = vim.api.nvim_list_tabpages()
+  if #tabs > 1 then
+    local tab_str = ' ' .. vim.fn.tabpagenr() ..'/'.. #tabs .. ' '
+    return { content = tab_str, hl = '%=%#MyWinBarLineTab#', width = vim.fn.strdisplaywidth(tab_str) }
+  end
+end
+
+
 --- format all items' components to winbar string
 ---
 --- @param fmt_comps_list WinbarFormatterItemComponent[][]
@@ -99,6 +111,8 @@ end
 --- @param win_id integer
 --- @return string winbar_str
 local function format_winbar_items(fmt_items, win_id)
+  --- TODO: win width - tabpagenr width
+
   --- @type WinbarFormatterItemComponent[][]
   local components = {}
   for level = 5, 1, -1 do
