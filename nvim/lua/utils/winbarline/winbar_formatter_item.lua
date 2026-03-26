@@ -6,6 +6,7 @@
 --- winbar 显示内容的 highlight
 --- @field hl string
 ---
+--- -- TODO: 改成 width
 --- str 的 display width
 --- @field len integer
 
@@ -81,9 +82,11 @@ local function partial_comp(comp, remain_len, suffix)
     iter_start, iter_end, iter_step = 0, char_count-1, 1   -- 顺序
   end
 
-  --- CJK 文字占 1 个 len, 但是占 2 个 display width, 需要特殊处理
-  for j = iter_start, iter_end, iter_step do
-    local char = vim.fn.strcharpart(comp.str, j, 1)
+  for i = iter_start, iter_end, iter_step do
+    -- NOTE: 按照 CJK 获取 char, CJK 文字占 1 个 len, 但是占 2 个 display width, 需要特殊处理
+    -- string.sub('你好',1,1) 返回一个 byte
+    -- strcharpart('你好',1,1) 返回 "你"
+    local char = vim.fn.strcharpart(comp.str, i, 1)
     local char_width = vim.fn.strdisplaywidth(char)
 
     if remain_len < char_width then
