@@ -210,8 +210,30 @@ function M:parse(level)
   if level > 2 or self.active then
     bufname_str = self.basename .. ' '
   elseif level == 2 then
-    --- TODO: change to strcharpart()
-    bufname_str = self.basename:sub(1,3) .. ' '
+    local display_width = 4
+    local char_count = vim.fn.strcharlen(self.basename)
+    local exhaust = false  -- 是否完成 char 遍历
+
+    for i = 0, char_count-1, 1 do
+      local char = vim.fn.strcharpart(self.basename, i, 1)
+      local char_width = vim.fn.strdisplaywidth(char)
+
+      if display_width < char_width then
+        break
+      end
+
+      display_width = display_width - char_width
+      bufname_str = bufname_str .. char
+
+      --- 遍历完成, 说明文件名很短
+      exhaust = i == char_count-1
+    end
+
+    if exhaust then
+      bufname_str = bufname_str .. ' '
+    else
+      bufname_str = bufname_str .. ' '
+    end
   else
     bufname_str = ' '
   end
