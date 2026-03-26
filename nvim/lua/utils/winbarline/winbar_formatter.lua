@@ -107,8 +107,12 @@ end
 --- @param min_level 5|4|3|2|1 -- level: 'full', 'init', 'base', 'short', 'none'
 --- @return string winbar_str
 local function format_winbar_items(fmt_items, win_id, active_buf_idx, min_level)
-  local tab_comp = tabpage_component()
   local win_width = vim.api.nvim_win_get_config(win_id).width
+  if not win_width then
+    error("win_id: " .. win_id .. "do not have 'width'")
+  end
+
+  local tab_comp = tabpage_component()
   if tab_comp then
     win_width = win_width - vim.fn.strdisplaywidth(tab_comp.content)
   end
