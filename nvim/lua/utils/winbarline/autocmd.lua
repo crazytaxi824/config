@@ -161,6 +161,7 @@ vim.api.nvim_create_autocmd({
 
 
 --- 根据 window 变动更新 winbar
+--- WinEnter 主要为了切换 selected buffer highlight
 --- NOTE: 在 'WinResized' 事件中获取 window width 是准确的, 但是在 'WinEnter' 事件中获取的 window width 不准确.
 vim.api.nvim_create_autocmd({"WinEnter"}, {
   group = gid,
