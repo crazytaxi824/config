@@ -95,6 +95,24 @@ local function format_winbar_components(fmt_comps_list)
 end
 
 
+--- @param fmt_items WinbarFormatterItem[]
+--- @param win_id integer
+--- @return string winbar_str
+local function format_winbar_items(fmt_items, win_id)
+  --- @type WinbarFormatterItemComponent[][]
+  local components = {}
+  for level = 5, 1, -1 do
+    local comps, total_width = fmt_items_to_components(fmt_items, level)
+    if level == 1 or total_width < vim.api.nvim_win_get_config(win_id).width then
+      components = comps
+      break
+    end
+  end
+
+  return format_winbar_components(components)
+end
+
+
 --- 获取 window 中的所有 buffer, format 成适合的 winbar string
 ---
 --- @param win_id integer
@@ -121,17 +139,7 @@ function M.winbar_format(win_id)
     table.insert(fmt_items, fmt_item)
   end
 
-  --- @type WinbarFormatterItemComponent[][]
-  local components = {}
-  for level = 5, 1, -1 do
-    local comps, total_width = fmt_items_to_components(fmt_items, level)
-    if level == 1 or total_width < vim.api.nvim_win_get_config(win_id).width then
-      components = comps
-      break
-    end
-  end
-
-  return format_winbar_components(components)
+  return format_winbar_items(fmt_items, win_id)
 end
 
 
