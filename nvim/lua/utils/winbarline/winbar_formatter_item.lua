@@ -5,9 +5,6 @@
 ---
 --- winbar 显示内容的 highlight
 --- @field hl string
----
---- str 的 display width, vim.fn.strdisplaywidth()
---- @field width integer
 
 
 local sign_indicator = '▌'
@@ -146,15 +143,16 @@ function M:partial(width, level, mode)
   for i = iter_start, iter_end, iter_step do
     local comp = components[i]
 
-    if remain_width >= comp.width then
+    local comp_width = vim.fn.strdisplaywidth(comp.content)
+    if remain_width >= comp_width then
       --- remain width 超过整个 component 长度
       _insert(comp)
-      remain_width = remain_width - comp.width
+      remain_width = remain_width - comp_width
     else
       --- remain width 小于整个 component 长度
       local p_str = partial_str(comp.content, remain_width, suffix)
       if p_str then
-        _insert({content = p_str, hl = comp.hl, width = vim.fn.strdisplaywidth(p_str)})
+        _insert({content = p_str, hl = comp.hl })
       end
       break  -- remain width 耗尽，后续无需遍历
     end
@@ -175,12 +173,12 @@ function M:parse(level)
   --- indicator
   local indicator_str = self.active and sign_indicator or ' '
   --- @type WinbarFormatterItemComponent
-  local comp = { content = indicator_str, hl = 'Indicator', width = vim.fn.strdisplaywidth(indicator_str) }
+  local comp = { content = indicator_str, hl = 'Indicator' }
   table.insert(components, comp)
 
   --- index
   local idx_str = self.index .. ' '
-  comp = { content = idx_str, hl = 'Index', width = vim.fn.strdisplaywidth(idx_str) }
+  comp = { content = idx_str, hl = 'Index' }
   table.insert(components, comp)
 
   --- filepath prefix
@@ -197,7 +195,7 @@ function M:parse(level)
       end
     end
 
-    comp = { content = prefix_str, hl = 'Prefix', width = vim.fn.strdisplaywidth(prefix_str) }
+    comp = { content = prefix_str, hl = 'Prefix' }
     table.insert(components, comp)
   end
 
@@ -216,20 +214,20 @@ function M:parse(level)
   else
     bufname_str = ' '
   end
-  comp = { content = bufname_str, hl = '', width = vim.fn.strdisplaywidth(bufname_str) }
+  comp = { content = bufname_str, hl = '' }
   table.insert(components, comp)
 
   --- diagnostic
   if self.diagnostic and (level > 2 or self.active) then
     local diag_str = '('..self.diagnostic.count..') '
-    comp = { content = diag_str, hl = 'Severity_'..self.diagnostic.severity, width = vim.fn.strdisplaywidth(diag_str) }
+    comp = { content = diag_str, hl = 'Severity_'..self.diagnostic.severity }
     table.insert(components, comp)
   end
 
   --- modified
   if vim.bo[self.bufnr].modified then
     local modified_str = sign_modified .. ' '
-    comp = { content = modified_str, hl = 'Modified', width = vim.fn.strdisplaywidth(modified_str)}
+    comp = { content = modified_str, hl = 'Modified' }
     table.insert(components, comp)
   end
 
@@ -238,7 +236,7 @@ function M:parse(level)
   local hl_prefix_selected = 'MyWinBarLineBufferSelected'
 
   for _, c in ipairs(components) do
-    item_width = item_width + c.width
+    item_width = item_width + vim.fn.strdisplaywidth(c.content)
     --- 如果是 active & in current window 则使用 Selected highlight
     if self.in_current_win and self.active then
       c.hl = '%#' .. hl_prefix_selected .. c.hl .. '#'

@@ -74,7 +74,9 @@ local function tabpage_component()
   local tabs = vim.api.nvim_list_tabpages()
   if #tabs > 1 then
     local tab_str = ' ' .. vim.fn.tabpagenr() ..'/'.. #tabs .. ' '
-    return { content = tab_str, hl = '%=%#MyWinBarLineTab#', width = vim.fn.strdisplaywidth(tab_str) }
+    --- @type WinbarFormatterItemComponent
+    local tab_comp = { content = tab_str, hl = '%=%#MyWinBarLineTab#' }
+    return tab_comp
   end
 end
 
@@ -106,7 +108,7 @@ local function format_winbar_items(fmt_items, win_id)
   local tab_comp = tabpage_component()
   local win_width = vim.api.nvim_win_get_config(win_id).width
   if tab_comp then
-    win_width = win_width - tab_comp.width
+    win_width = win_width - vim.fn.strdisplaywidth(tab_comp.content)
   end
 
   --- @type WinbarFormatterItemComponent[][]
