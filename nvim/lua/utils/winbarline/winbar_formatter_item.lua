@@ -116,7 +116,7 @@ function M:partial(width, level, mode)
   mode = mode or 'prefix'
   local suffix = mode == 'suffix'
 
-  local components, item_width = self:parse(level)
+  local components, item_width = self:parse_item_to_components(level)
   if width >= item_width then
     return components
   end
@@ -165,7 +165,7 @@ end
 --- @param level 5|4|3|2|1 -- level: 'full', 'init', 'base', 'short', 'none'
 --- @return WinbarFormatterItemComponent[]  -- indicator, index, bufname, diagnostic, modified
 --- @return integer  -- item width: including a trailing space
-function M:parse(level)
+function M:parse_item_to_components(level)
   --- @type WinbarFormatterItemComponent[]
   local components = {}
   local item_width = 1  -- NOTE: 每个 item 后一个空格

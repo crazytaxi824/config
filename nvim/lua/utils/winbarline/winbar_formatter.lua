@@ -60,7 +60,7 @@ local function fmt_items_to_components(fmt_items, level)
   local all_components = {}
   local total_width = 0
   for _, item in ipairs(fmt_items) do
-    local comps, item_width = item:parse(level)
+    local comps, item_width = item:parse_item_to_components(level)
     total_width = total_width + item_width
     table.insert(all_components, comps)
   end
