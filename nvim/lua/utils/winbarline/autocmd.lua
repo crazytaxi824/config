@@ -48,6 +48,8 @@ end
 --- autocmd ----------------------------------------------------------------------------------------
 local gid = vim.api.nvim_create_augroup('my_winbarline', { clear = true })
 
+
+--- bind/unbind buffer & window 之间的关联
 vim.api.nvim_create_autocmd({"BufWinEnter"}, {
   group = gid,
   callback = function(args)
@@ -103,6 +105,7 @@ vim.api.nvim_create_autocmd({"BufDelete", "BufWipeout"}, {
 })
 
 --- 从 window 的 buffers 中清理 buffer-window list
+--- 'WinClosed' 包含了 'TabClosed' 情况
 vim.api.nvim_create_autocmd({"WinClosed"}, {
   group = gid,
   callback = function(args)
@@ -130,13 +133,14 @@ vim.api.nvim_create_autocmd({"WinClosed"}, {
   end
 })
 
---- buffer 相关事件, 影响多个 window, 如果 buffer 被加入到多个 window 中
---- ModeChanged 可以影响 terminal
+
+--- 更新 winbar 显示 -------------------------------------------------------------------------------
+--- 根据 buffer 变动更新 winbar 显示
+--- 如果 buffer 被加入到多个 window 中, 则影响多个 window
+--- 'ModeChanged' 可以影响 terminal
 vim.api.nvim_create_autocmd({
-  "TextChanged", "TextChangedI", "TextChangedP",
+  "BufModifiedSet", "ModeChanged",
   "BufWritePost", "FileChangedShellPost", "DiagnosticChanged",
-  "ModeChanged", "TabClosed", "WinResized",
-  --- TODO: display rename 修改的 buffer in current window
 }, {
   group = gid,
   callback = function(args)
@@ -155,7 +159,8 @@ vim.api.nvim_create_autocmd({
   end
 })
 
---- 更新相关 winbar
+
+--- 根据 window 变动更新 winbar
 vim.api.nvim_create_autocmd({"WinEnter"}, {
   group = gid,
   callback = function(args)
@@ -182,6 +187,19 @@ vim.api.nvim_create_autocmd({"WinEnter"}, {
   end
 })
 
+--- 根据 window 变动更新 winbar
+--- 'WinResized' 时需要更新所有正在显示的 (tab 中的) window, 因为 event 只会返回一个 window 的 id
+vim.api.nvim_create_autocmd({"WinResized"}, {
+  group = gid,
+  callback = function(args)
+    for _, win_id in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+      local w = g.get_win(win_id)
+      if w then
+        w:set_winbar()
+      end
+    end
+  end
+})
 
 
 --- debug ------------------------------------------------------------------------------------------
