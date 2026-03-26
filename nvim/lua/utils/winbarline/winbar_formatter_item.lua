@@ -53,23 +53,26 @@ local function partial_comp(comp, remain_len, suffix)
   local chars = {}
   local char_count = vim.fn.strcharlen(comp.str)
 
-  --- CJK 文字display width 占两个位置, 需要特殊处理.
+  local iter_start, iter_end, iter_step
   if suffix then
-    --- 倒序
-    for j = char_count - 1, 0, -1 do
-      local char = vim.fn.strcharpart(comp.str, j, 1)
-      local char_width = vim.fn.strdisplaywidth(char)
-      if remain_len < char_width then break end
-      remain_len = remain_len - char_width
-      table.insert(chars, 1, char)  -- 倒序插入
-    end
+    iter_start, iter_end, iter_step = char_count-1, 0, -1  -- 倒序
   else
-    --- 顺序
-    for j = 0, char_count - 1 do
-      local char = vim.fn.strcharpart(comp.str, j, 1)
-      local char_width = vim.fn.strdisplaywidth(char)
-      if remain_len < char_width then break end
-      remain_len = remain_len - char_width
+    iter_start, iter_end, iter_step = 0, char_count-1, 1   -- 顺序
+  end
+
+  --- CJK 文字占 1 个 len, 但是占 2 个 display width, 需要特殊处理
+  for j = iter_start, iter_end, iter_step do
+    local char = vim.fn.strcharpart(comp.str, j, 1)
+    local char_width = vim.fn.strdisplaywidth(char)
+
+    if remain_len < char_width then
+      break
+    end
+
+    remain_len = remain_len - char_width
+    if suffix then
+      table.insert(chars, 1, char)  -- 倒序插入
+    else
       table.insert(chars, char)
     end
   end
@@ -102,7 +105,7 @@ function M:partial(charlen, level, mode)
 
   local function _insert(comp)
     if suffix then
-      table.insert(partial_comps, 1, comp)
+      table.insert(partial_comps, 1, comp)  -- 倒序插入
     else
       table.insert(partial_comps, comp)
     end
@@ -110,11 +113,9 @@ function M:partial(charlen, level, mode)
 
   local iter_start, iter_end, iter_step
   if suffix then
-    --- 倒序
-    iter_start, iter_end, iter_step = #components, 1, -1
+    iter_start, iter_end, iter_step = #components, 1, -1  -- 倒序
   else
-    --- 顺序
-    iter_start, iter_end, iter_step = 1, #components, 1
+    iter_start, iter_end, iter_step = 1, #components, 1   -- 顺序
   end
 
   for i = iter_start, iter_end, iter_step do
