@@ -66,13 +66,16 @@ end
 
 --- 从 str 中按 display width 截取，suffix=true 从后往前
 --- @param comp WinbarFormatterItemComponent
---- @param remain_len integer
+--- @param width integer  remaining display width
 --- @param suffix boolean
 --- @return WinbarFormatterItemComponent|nil -- 截取后的 comp
---- @return integer  -- 消耗的 len
-local function partial_comp(comp, remain_len, suffix)
-  local chars = {}
+--- @return integer  -- 消耗的 width
+local function partial_comp(comp, width, suffix)
+  -- strcharlen('你好') = 2, 按照 char 计算
+  -- string.len('你好') = 6, 按照 byte 计算
+  -- strdisplaywidth('你好') = 4, 按照 display width 计算
   local char_count = vim.fn.strcharlen(comp.content)
+  local chars = {}
 
   local iter_start, iter_end, iter_step
   if suffix then
@@ -82,17 +85,17 @@ local function partial_comp(comp, remain_len, suffix)
   end
 
   for i = iter_start, iter_end, iter_step do
-    -- NOTE: 按照 CJK 获取 char, CJK 文字占 1 个 len, 但是占 2 个 display width, 需要特殊处理
-    -- string.sub('你好',1,1) 返回一个 byte
-    -- strcharpart('你好',1,1) 返回 "你"
+    -- NOTE: 按照 CJK 获取 char, CJK 文字占 1 个 charlen, 但是占 2 个 display width, 需要特殊处理
+    -- string.sub('你好', 1, 1), 按照 byte 返回
+    -- strcharpart('你好', 1, 1) = "你", 按照 char 返回
     local char = vim.fn.strcharpart(comp.content, i, 1)
     local char_width = vim.fn.strdisplaywidth(char)
 
-    if remain_len < char_width then
+    if width < char_width then
       break
     end
 
-    remain_len = remain_len - char_width
+    width = width - char_width
     if suffix then
       table.insert(chars, 1, char)  -- 倒序插入
     else
@@ -105,29 +108,29 @@ local function partial_comp(comp, remain_len, suffix)
   end
 
   local remain_str = table.concat(chars)
-  local used_len = comp.width - remain_len
+  local used_width = comp.width - width
 
   --- @type WinbarFormatterItemComponent
   local p_comp = { content = remain_str, hl = comp.hl, width = vim.fn.strdisplaywidth(remain_str) }
-  return p_comp, used_len
+  return p_comp, used_width
 end
 
---- @param charlen integer
+--- @param width integer
 --- @param level 5|4|3|2|1 -- level: 'full', 'init', 'base', 'short', 'none'
 --- @param mode? 'prefix'|'suffix'
 --- @return WinbarFormatterItemComponent[]  -- indicator, index, bufname, diagnostic, modified
-function M:partial(charlen, level, mode)
+function M:partial(width, level, mode)
   mode = mode or 'prefix'
   local suffix = mode == 'suffix'
 
-  local components, item_len = self:parse(level)
-  if charlen >= item_len then
+  local components, item_width = self:parse(level)
+  if width >= item_width then
     return components
   end
 
   --- @type WinbarFormatterItemComponent[]
   local partial_comps = {}
-  local remain_len = charlen
+  local remain_width = width
 
   local function _insert(comp)
     if suffix then
@@ -147,17 +150,17 @@ function M:partial(charlen, level, mode)
   for i = iter_start, iter_end, iter_step do
     local comp = components[i]
 
-    if remain_len >= comp.width then
-      --- remain_len 超过整个 component 长度
+    if remain_width >= comp.width then
+      --- remain width 超过整个 component 长度
       _insert(comp)
-      remain_len = remain_len - comp.width
+      remain_width = remain_width - comp.width
     else
-      --- remain_len 小于整个 component 长度
-      local result = partial_comp(comp, remain_len, suffix)
+      --- remain width 小于整个 component 长度
+      local result = partial_comp(comp, remain_width, suffix)
       if result then
         _insert(result)
       end
-      break  -- remain_len 耗尽，后续无需遍历
+      break  -- remain width 耗尽，后续无需遍历
     end
   end
 
@@ -167,11 +170,11 @@ end
 
 --- @param level 5|4|3|2|1 -- level: 'full', 'init', 'base', 'short', 'none'
 --- @return WinbarFormatterItemComponent[]  -- indicator, index, bufname, diagnostic, modified
---- @return integer  -- total_len: including trailing space
+--- @return integer  -- item width: including a trailing space
 function M:parse(level)
   --- @type WinbarFormatterItemComponent[]
   local components = {}
-  local item_len = 1  -- NOTE: 每个 item 后一个空格
+  local item_width = 1  -- NOTE: 每个 item 后一个空格
 
   --- indicator
   local indicator_str = self.active and sign_indicator or ' '
@@ -234,7 +237,7 @@ function M:parse(level)
   local hl_prefix_selected = 'MyWinBarLineBufferSelected'
 
   for _, c in ipairs(components) do
-    item_len = item_len + c.width
+    item_width = item_width + c.width
     --- 如果是 active & in current window 则使用 Selected highlight
     if self.in_current_win and self.active then
       c.hl = '%#' .. hl_prefix_selected .. c.hl .. '#'
@@ -243,7 +246,7 @@ function M:parse(level)
     end
   end
 
-  return components, item_len
+  return components, item_width
 end
 
 return M
