@@ -121,7 +121,7 @@ local function reduce_items_to_display(fmt_items, win_width, active_buf_idx, min
     table.insert(partial_items, 1, fmt_items[i])
     local _, p_width = fmt_items_to_components(partial_items, min_level)
 
-    --- win_width-4 是为了给 '<', '>' 留出位置
+    --- 'win_width - 4' 是为了给 '<', '>' 留出位置
     if p_width > win_width-4 then
       table.remove(partial_items, 1)  -- 移除第一个 item
       p_item_idx = i
@@ -136,7 +136,7 @@ local function reduce_items_to_display(fmt_items, win_width, active_buf_idx, min
       table.insert(partial_items, fmt_items[i])
       local _, p_width = fmt_items_to_components(partial_items, min_level)
 
-      --- win_width-4 是为了给 '<', '>' 留出位置
+      --- 'win_width - 4' 是为了给 '<', '>' 留出位置
       if p_width > win_width-4 then
         table.remove(partial_items, #partial_items)  -- 移除最后一个 item
         p_item_idx = i
@@ -187,7 +187,8 @@ local function format_winbar_items(fmt_items, win_id, active_buf_idx, min_level)
 
   local tab_comp = tabpage_component()
   if tab_comp then
-    win_width = win_width - vim.fn.strdisplaywidth(tab_comp.content) - 2  -- table.concat() 的空格
+    --- '-2': table.concat(components, ' ') 的空格 & 自己添加的一个空格
+    win_width = win_width - vim.fn.strdisplaywidth(tab_comp.content) - 2
   end
 
   --- @type WinbarFormatterItemComponent[][]
