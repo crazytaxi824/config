@@ -90,20 +90,12 @@ local function format_winbar_components(fmt_comps_list)
     for _, comp in ipairs(comps) do
       str = str .. comp.hl .. comp.content
     end
-    str = str .. '%*'  -- '%*' reset highligh>
+    str = str .. '%*'  -- '%*' reset highligh
     table.insert(str_list, str)
   end
 
   --- concat 所有 buffer 的 winbar format
-  local str = table.concat(str_list, ' ')
-
-  --- 添加 tabpagenr
-  local tabs = vim.api.nvim_list_tabpages()
-  if #tabs > 1 then
-    str = str .. '%=%#MyWinBarLineTab# ' .. vim.fn.tabpagenr() ..'/'.. #tabs .. ' '
-  end
-
-  return str
+  return table.concat(str_list, ' ')
 end
 
 
@@ -111,16 +103,25 @@ end
 --- @param win_id integer
 --- @return string winbar_str
 local function format_winbar_items(fmt_items, win_id)
-  --- TODO: win width - tabpagenr width
+  local tab_comp = tabpage_component()
+  local win_width = vim.api.nvim_win_get_config(win_id).width
+  if tab_comp then
+    win_width = win_width - tab_comp.width
+  end
 
   --- @type WinbarFormatterItemComponent[][]
   local components = {}
   for level = 5, 1, -1 do
     local comps, total_width = fmt_items_to_components(fmt_items, level)
-    if level == 1 or total_width < vim.api.nvim_win_get_config(win_id).width then
+    if level == 1 or total_width < win_width then
       components = comps
       break
     end
+  end
+
+  --- 添加 tabpagenr component
+  if tab_comp then
+    table.insert(components, { tab_comp })
   end
 
   return format_winbar_components(components)
