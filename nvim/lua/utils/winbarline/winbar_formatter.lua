@@ -201,6 +201,7 @@ local function format_winbar_items(fmt_items, win_id, active_buf_idx, min_level)
     end
   end
 
+  --- window width 不够, 只显示部分 items
   if vim.tbl_isempty(components) then
     components = reduce_items_to_display(fmt_items, win_width, active_buf_idx, min_level)
   end
