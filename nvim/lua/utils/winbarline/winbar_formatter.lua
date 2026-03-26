@@ -102,6 +102,79 @@ end
 
 
 --- @param fmt_items WinbarFormatterItem[]
+--- @param win_width integer
+--- @param active_buf_idx integer
+--- @param min_level 5|4|3|2|1 -- level: 'full', 'init', 'base', 'short', 'none'
+--- @return WinbarFormatterItemComponent[][]
+local function reduce_items_to_display(fmt_items, win_width, active_buf_idx, min_level)
+  --- @type WinbarFormatterItemComponent[][]
+  local components = {}
+
+  --- @type WinbarFormatterItem[]
+  local partial_items = {}
+
+  local p_item_idx
+  local full = false
+
+  --- 优先填充左侧
+  for i = active_buf_idx, 1, -1 do
+    table.insert(partial_items, 1, fmt_items[i])
+    local _, p_width = fmt_items_to_components(partial_items, min_level)
+
+    --- win_width-4 是为了给 '<', '>' 留出位置
+    if p_width > win_width-4 then
+      table.remove(partial_items, 1)  -- 移除第一个 item
+      p_item_idx = i
+      full = true
+      break
+    end
+  end
+
+  --- 填充右侧
+  if not full then
+    for i = active_buf_idx+1, #fmt_items, 1 do
+      table.insert(partial_items, fmt_items[i])
+      local _, p_width = fmt_items_to_components(partial_items, min_level)
+
+      --- win_width-4 是为了给 '<', '>' 留出位置
+      if p_width > win_width-4 then
+        table.remove(partial_items, #partial_items)  -- 移除最后一个 item
+        p_item_idx = i
+        full = true
+        break
+      end
+    end
+  end
+
+  local comps, comp_width = fmt_items_to_components(partial_items, min_level)
+  components = comps
+
+  --- 追加 <, > 显示
+  local remain_width
+  if p_item_idx < active_buf_idx then
+    if active_buf_idx < #fmt_items then
+      --- 左右都需要添加 '<', '>'
+      remain_width = win_width-4 - comp_width
+      table.insert(components, {{ content='>', hl='%*' }})
+    else
+      --- 只有左侧需要添加 '<'
+      remain_width = win_width-2 - comp_width
+    end
+
+    table.insert(components, 1, fmt_items[p_item_idx]:partial(remain_width, min_level, 'suffix'))
+    table.insert(components, 1, {{ content='<', hl='%*' }})
+  else
+    --- 只有右侧需要添加 '>'
+    remain_width = win_width-2 - comp_width
+    table.insert(components, fmt_items[p_item_idx]:partial(remain_width, min_level, 'prefix'))
+    table.insert(components, {{ content='>', hl='%*' }})
+  end
+
+  return components
+end
+
+
+--- @param fmt_items WinbarFormatterItem[]
 --- @param win_id integer
 --- @param active_buf_idx integer
 --- @param min_level 5|4|3|2|1 -- level: 'full', 'init', 'base', 'short', 'none'
@@ -128,65 +201,7 @@ local function format_winbar_items(fmt_items, win_id, active_buf_idx, min_level)
   end
 
   if vim.tbl_isempty(components) then
-    --- @type WinbarFormatterItem[]
-    local partial_items = {}
-
-    local p_item_idx
-    local full = false
-
-    --- 优先填充左侧
-    for i = active_buf_idx, 1, -1 do
-      table.insert(partial_items, 1, fmt_items[i])
-      local _, p_width = fmt_items_to_components(partial_items, min_level)
-
-      --- win_width-4 是为了给 '<', '>' 留出位置
-      if p_width > win_width-4 then
-        table.remove(partial_items, 1)  -- 移除第一个 item
-        p_item_idx = i
-        full = true
-        break
-      end
-    end
-
-    --- 填充右侧
-    if not full then
-      for i = active_buf_idx+1, #fmt_items, 1 do
-        table.insert(partial_items, fmt_items[i])
-        local _, p_width = fmt_items_to_components(partial_items, min_level)
-
-        --- win_width-4 是为了给 '<', '>' 留出位置
-        if p_width > win_width-4 then
-          table.remove(partial_items, #partial_items)  -- 移除最后一个 item
-          p_item_idx = i
-          full = true
-          break
-        end
-      end
-    end
-
-    local comps, comp_width = fmt_items_to_components(partial_items, min_level)
-    components = comps
-
-    --- 追加 <, > 显示
-    local remain_width
-    if p_item_idx < active_buf_idx then
-      if active_buf_idx < #fmt_items then
-        --- 左右都需要添加 '<', '>'
-        remain_width = win_width-4 - comp_width
-        table.insert(components, {{ content='>', hl='%*' }})
-      else
-        --- 只有左侧需要添加 '<'
-        remain_width = win_width-2 - comp_width
-      end
-
-      table.insert(components, 1, fmt_items[p_item_idx]:partial(remain_width, min_level, 'suffix'))
-      table.insert(components, 1, {{ content='<', hl='%*' }})
-    else
-      --- 只有右侧需要添加 '>'
-      remain_width = win_width-2 - comp_width
-      table.insert(components, fmt_items[p_item_idx]:partial(remain_width, min_level, 'prefix'))
-      table.insert(components, {{ content='>', hl='%*' }})
-    end
+    components = reduce_items_to_display(fmt_items, win_width, active_buf_idx, min_level)
   end
 
   --- 添加 tabpagenr component
@@ -230,7 +245,8 @@ function M.winbar_format(win_id)
     table.insert(fmt_items, fmt_item)
   end
 
-  return format_winbar_items(fmt_items, win_id, active_buf_idx, 4)
+  local min_level = 2
+  return format_winbar_items(fmt_items, win_id, active_buf_idx, min_level)
 end
 
 
