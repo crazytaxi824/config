@@ -113,9 +113,10 @@ local function format_winbar_items(fmt_items, win_id)
 
   --- @type WinbarFormatterItemComponent[][]
   local components = {}
-  for level = 5, 1, -1 do
+  local min_level = 1  -- 最小 format level
+  for level = 5, min_level, -1 do
     local comps, total_width = fmt_items_to_components(fmt_items, level)
-    if level == 1 or total_width < win_width then
+    if level == min_level or total_width < win_width then
       components = comps
       break
     end
