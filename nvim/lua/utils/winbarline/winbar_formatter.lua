@@ -103,8 +103,10 @@ end
 
 --- @param fmt_items WinbarFormatterItem[]
 --- @param win_id integer
+--- @param active_buf_idx integer
+--- @param min_level 5|4|3|2|1 -- level: 'full', 'init', 'base', 'short', 'none'
 --- @return string winbar_str
-local function format_winbar_items(fmt_items, win_id)
+local function format_winbar_items(fmt_items, win_id, active_buf_idx, min_level)
   local tab_comp = tabpage_component()
   local win_width = vim.api.nvim_win_get_config(win_id).width
   if tab_comp then
@@ -113,12 +115,73 @@ local function format_winbar_items(fmt_items, win_id)
 
   --- @type WinbarFormatterItemComponent[][]
   local components = {}
-  local min_level = 1  -- 最小 format level
   for level = 5, min_level, -1 do
     local comps, total_width = fmt_items_to_components(fmt_items, level)
-    if level == min_level or total_width < win_width then
+    if total_width < win_width then
       components = comps
       break
+    end
+  end
+
+  if vim.tbl_isempty(components) then
+    --- @type WinbarFormatterItem[]
+    local partial_items = {}
+
+    local p_item_idx
+    local full = false
+
+    --- 优先填充左侧
+    for i = active_buf_idx, 1, -1 do
+      table.insert(partial_items, 1, fmt_items[i])
+      local _, p_width = fmt_items_to_components(partial_items, min_level)
+
+      --- win_width-4 是为了给 '<', '>' 留出位置
+      if p_width > win_width-4 then
+        table.remove(partial_items, 1)  -- 移除第一个 item
+        p_item_idx = i
+        full = true
+        break
+      end
+    end
+
+    --- 填充右侧
+    if not full then
+      for i = active_buf_idx+1, #fmt_items, 1 do
+        table.insert(partial_items, fmt_items[i])
+        local _, p_width = fmt_items_to_components(partial_items, min_level)
+
+        --- win_width-4 是为了给 '<', '>' 留出位置
+        if p_width > win_width-4 then
+          table.remove(partial_items, #partial_items)  -- 移除最后一个 item
+          p_item_idx = i
+          full = true
+          break
+        end
+      end
+    end
+
+    local comps, comp_width = fmt_items_to_components(partial_items, min_level)
+    components = comps
+
+    --- 追加 <, > 显示
+    local remain_width
+    if p_item_idx < active_buf_idx then
+      if active_buf_idx < #fmt_items then
+        --- 左右都需要添加 '<', '>'
+        remain_width = win_width-4 - comp_width
+        table.insert(components, {{ content='>', hl='%*' }})
+      else
+        --- 只有左侧需要添加 '<'
+        remain_width = win_width-2 - comp_width
+      end
+
+      table.insert(components, 1, fmt_items[p_item_idx]:partial(remain_width, min_level, 'suffix'))
+      table.insert(components, 1, {{ content='<', hl='%*' }})
+    else
+      --- 只有右侧需要添加 '>'
+      remain_width = win_width-2 - comp_width
+      table.insert(components, fmt_items[p_item_idx]:partial(remain_width, min_level, 'prefix'))
+      table.insert(components, {{ content='>', hl='%*' }})
     end
   end
 
@@ -146,6 +209,8 @@ function M.winbar_format(win_id)
 
   --- @type WinbarFormatterItem[]
   local fmt_items = {}
+  local active_buf_idx
+
   for i, path_list in ipairs(uni_bufnames) do
     local bufnr = bufnrs[i]
     local b = g.get_buf(bufnr)
@@ -154,10 +219,14 @@ function M.winbar_format(win_id)
     end
 
     local fmt_item = wb_fmt_item.new(win_id, bufnr, i, path_list, b:diagnostic())
+    if fmt_item.active then
+      active_buf_idx = i
+    end
+
     table.insert(fmt_items, fmt_item)
   end
 
-  return format_winbar_items(fmt_items, win_id)
+  return format_winbar_items(fmt_items, win_id, active_buf_idx, 4)
 end
 
 
