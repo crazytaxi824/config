@@ -107,7 +107,10 @@ local function partial_comp(comp, remain_len, suffix)
 
   local remain_str = table.concat(chars)
   local used_len = comp.len - remain_len
-  return { str = remain_str, hl = comp.hl, len = vim.fn.strdisplaywidth(remain_str) }, used_len
+
+  --- @type WinbarFormatterItemComponent
+  local p_comp = { str = remain_str, hl = comp.hl, len = vim.fn.strdisplaywidth(remain_str) }
+  return p_comp, used_len
 end
 
 --- @param charlen integer
@@ -173,11 +176,15 @@ function M:parse(level)
 
   --- indicator
   local indicator_str = self.active and sign_indicator or ' '
-  table.insert(components, { str = indicator_str, hl = 'Indicator', len = vim.fn.strdisplaywidth(indicator_str) })
+  --- @type WinbarFormatterItemComponent
+  local comp = { str = indicator_str, hl = 'Indicator', len = vim.fn.strdisplaywidth(indicator_str) }
+  table.insert(components, comp)
 
   --- index
   local idx_str = self.index .. ' '
-  table.insert(components, { str = idx_str, hl = 'Index', len = vim.fn.strdisplaywidth(idx_str) })
+  --- @type WinbarFormatterItemComponent
+  comp = { str = idx_str, hl = 'Index', len = vim.fn.strdisplaywidth(idx_str) }
+  table.insert(components, comp)
 
   --- filepath prefix
   if self.fp_prefix and level > 3 then
@@ -192,45 +199,53 @@ function M:parse(level)
         prefix_str = prefix_str .. s .. '/'
       end
     end
-    table.insert(components, { str = prefix_str, hl = 'Prefix', len = vim.fn.strdisplaywidth(prefix_str) })
+
+    --- @type WinbarFormatterItemComponent
+    comp = { str = prefix_str, hl = 'Prefix', len = vim.fn.strdisplaywidth(prefix_str) }
+    table.insert(components, comp)
   end
 
   --- bufname
+  local bufname_str = ''
   if level > 2 or self.active then
-    local bufname_str = self.basename .. ' '
-    table.insert(components, { str = bufname_str, hl = '', len = vim.fn.strdisplaywidth(bufname_str) })
+    bufname_str = self.basename .. ' '
   elseif level == 2 then
     --- TODO: change to strcharpart()
-    local bufname_str = self.basename:sub(1,3) .. ' '
-    table.insert(components, { str = bufname_str, hl = '', len = vim.fn.strdisplaywidth(bufname_str) })
+    bufname_str = self.basename:sub(1,3) .. ' '
   else
-    local bufname_str = ' '
-    table.insert(components, { str = bufname_str, hl = '', len = vim.fn.strdisplaywidth(bufname_str) })
+    bufname_str = ' '
   end
+  --- @type WinbarFormatterItemComponent
+  comp = { str = bufname_str, hl = '', len = vim.fn.strdisplaywidth(bufname_str) }
+  table.insert(components, comp)
 
   --- diagnostic
   if self.diagnostic and (level > 2 or self.active) then
     local diag_str = '('..self.diagnostic.count..') '
-    table.insert(components, { str = diag_str, hl = 'Severity_'..self.diagnostic.severity, len = vim.fn.strdisplaywidth(diag_str) })
+    --- @type WinbarFormatterItemComponent
+    comp = { str = diag_str, hl = 'Severity_'..self.diagnostic.severity, len = vim.fn.strdisplaywidth(diag_str) }
+    table.insert(components, comp)
   end
 
   --- modified
   if vim.bo[self.bufnr].modified then
     local modified_str = sign_modified .. ' '
-    table.insert(components, { str = modified_str, hl = 'Modified', len = vim.fn.strdisplaywidth(modified_str)})
+    --- @type WinbarFormatterItemComponent
+    comp = { str = modified_str, hl = 'Modified', len = vim.fn.strdisplaywidth(modified_str)}
+    table.insert(components, comp)
   end
 
   --- update highlight prefix
   local hl_prefix_default = 'MyWinBarLineBuffer'
   local hl_prefix_selected = 'MyWinBarLineBufferSelected'
 
-  for _, comp in ipairs(components) do
-    item_len = item_len + comp.len
+  for _, c in ipairs(components) do
+    item_len = item_len + c.len
     --- 如果是 active & in current window 则使用 Selected highlight
     if self.in_current_win and self.active then
-      comp.hl = '%#' .. hl_prefix_selected .. comp.hl .. '#'
+      c.hl = '%#' .. hl_prefix_selected .. c.hl .. '#'
     else
-      comp.hl = '%#' .. hl_prefix_default .. comp.hl .. '#'
+      c.hl = '%#' .. hl_prefix_default .. c.hl .. '#'
     end
   end
 
