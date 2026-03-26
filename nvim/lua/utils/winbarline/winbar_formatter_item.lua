@@ -64,17 +64,17 @@ function M.new(win_id, bufnr, index, path_list, diagnostic)
   return self
 end
 
+
 --- 从 str 中按 display width 截取，suffix=true 从后往前
---- @param comp WinbarFormatterItemComponent
+--- @param str string
 --- @param width integer  remaining display width
---- @param suffix boolean
---- @return WinbarFormatterItemComponent|nil -- 截取后的 comp
---- @return integer  -- 消耗的 width
-local function partial_comp(comp, width, suffix)
+--- @param suffix boolean|nil
+--- @return string|nil partial_string
+local function partial_str(str, width, suffix)
   -- strcharlen('你好') = 2, 按照 char 计算
   -- string.len('你好') = 6, 按照 byte 计算
   -- strdisplaywidth('你好') = 4, 按照 display width 计算
-  local char_count = vim.fn.strcharlen(comp.content)
+  local char_count = vim.fn.strcharlen(str)
   local chars = {}
 
   local iter_start, iter_end, iter_step
@@ -88,7 +88,7 @@ local function partial_comp(comp, width, suffix)
     -- NOTE: 按照 CJK 获取 char, CJK 文字占 1 个 charlen, 但是占 2 个 display width, 需要特殊处理
     -- string.sub('你好', 1, 1), 按照 byte 返回
     -- strcharpart('你好', 1, 1) = "你", 按照 char 返回
-    local char = vim.fn.strcharpart(comp.content, i, 1)
+    local char = vim.fn.strcharpart(str, i, 1)
     local char_width = vim.fn.strdisplaywidth(char)
 
     if width < char_width then
@@ -104,16 +104,12 @@ local function partial_comp(comp, width, suffix)
   end
 
   if #chars == 0 then
-    return nil, 0
+    return nil
   end
 
-  local remain_str = table.concat(chars)
-  local used_width = comp.width - width
-
-  --- @type WinbarFormatterItemComponent
-  local p_comp = { content = remain_str, hl = comp.hl, width = vim.fn.strdisplaywidth(remain_str) }
-  return p_comp, used_width
+  return table.concat(chars)
 end
+
 
 --- @param width integer
 --- @param level 5|4|3|2|1 -- level: 'full', 'init', 'base', 'short', 'none'
@@ -156,9 +152,9 @@ function M:partial(width, level, mode)
       remain_width = remain_width - comp.width
     else
       --- remain width 小于整个 component 长度
-      local result = partial_comp(comp, remain_width, suffix)
-      if result then
-        _insert(result)
+      local p_str = partial_str(comp.content, remain_width, suffix)
+      if p_str then
+        _insert({content = p_str, hl = comp.hl, width = vim.fn.strdisplaywidth(p_str)})
       end
       break  -- remain width 耗尽，后续无需遍历
     end
