@@ -114,7 +114,7 @@ local function format_winbar_items(fmt_items, win_id, active_buf_idx, min_level)
 
   local tab_comp = tabpage_component()
   if tab_comp then
-    win_width = win_width - vim.fn.strdisplaywidth(tab_comp.content)
+    win_width = win_width - vim.fn.strdisplaywidth(tab_comp.content) - 2  -- table.concat() 的空格
   end
 
   --- @type WinbarFormatterItemComponent[][]
