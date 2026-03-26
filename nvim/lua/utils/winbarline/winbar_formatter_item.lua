@@ -8,11 +8,11 @@ local sign_modified = '●'
 --- @class WinbarFormatterItem
 --- @field bufnr integer
 --- @field index integer
---- @field prefix? string[]  -- filepath prefix
---- @field bufname string
+--- @field fp_prefix? string[]  -- filepath prefix
+--- @field basename string
 --- @field diagnostic? { count: integer, severity: integer }
 --- @field in_current_win boolean
---- @field active boolean
+--- @field active boolean  -- active buffer
 local M = {}
 M.__index = M
 
@@ -33,8 +33,8 @@ function M.new(win_id, bufnr, index, path_list, diagnostic)
   local self = setmetatable({
     bufnr = bufnr,
     index = index,
-    prefix = prefix,
-    bufname = path_list[#path_list],
+    fp_prefix = prefix,
+    basename = path_list[#path_list],
     diagnostic = diagnostic,
     in_current_win = win_id == vim.api.nvim_get_current_win(),
     active = bufnr == vim.api.nvim_win_get_buf(win_id),
@@ -156,12 +156,12 @@ function M:parse(level)
   table.insert(components, { str = idx_str, hl = 'Index', len = vim.fn.strdisplaywidth(idx_str) })
 
   --- filepath prefix
-  if self.prefix and level > 3 then
+  if self.fp_prefix and level > 3 then
     local prefix_str = ''
     if level == 5 then
-      prefix_str = table.concat(self.prefix, '/') .. '/'
+      prefix_str = table.concat(self.fp_prefix, '/') .. '/'
     elseif level == 4 then
-      for _, path in ipairs(self.prefix) do
+      for _, path in ipairs(self.fp_prefix) do
         --- NOTE: strcharlen('你好') = 2, strcharpart('你好', 0, 1) = '你', strdisplaywidth('你') = 2
         --- 这是为了获取完整的 'CJK' 文字
         local s = vim.fn.strcharlen(path) > 0 and vim.fn.strcharpart(path, 0, 1) or ''
@@ -173,10 +173,10 @@ function M:parse(level)
 
   --- bufname
   if level > 2 or self.active then
-    local bufname_str = self.bufname .. ' '
+    local bufname_str = self.basename .. ' '
     table.insert(components, { str = bufname_str, hl = '', len = vim.fn.strdisplaywidth(bufname_str) })
   elseif level == 2 then
-    local bufname_str = self.bufname:sub(1,3) .. ' '
+    local bufname_str = self.basename:sub(1,3) .. ' '
     table.insert(components, { str = bufname_str, hl = '', len = vim.fn.strdisplaywidth(bufname_str) })
   else
     local bufname_str = ' '
