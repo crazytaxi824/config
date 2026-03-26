@@ -161,6 +161,7 @@ vim.api.nvim_create_autocmd({
 
 
 --- 根据 window 变动更新 winbar
+--- NOTE: 在 'WinResized' 事件中获取 window width 是准确的, 但是在 'WinEnter' 事件中获取的 window width 不准确.
 vim.api.nvim_create_autocmd({"WinEnter"}, {
   group = gid,
   callback = function(args)
@@ -189,6 +190,7 @@ vim.api.nvim_create_autocmd({"WinEnter"}, {
 
 --- 根据 window 变动更新 winbar
 --- 'WinResized' 时需要更新所有正在显示的 (tab 中的) window, 因为 event 只会返回一个 window 的 id
+--- NOTE: 在 'WinResized' 事件中获取 window width 是准确的, 但是在 'WinEnter' 事件中获取的 window width 不准确.
 vim.api.nvim_create_autocmd({"WinResized"}, {
   group = gid,
   callback = function(args)
