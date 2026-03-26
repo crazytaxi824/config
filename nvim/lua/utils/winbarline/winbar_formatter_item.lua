@@ -8,7 +8,7 @@ local sign_modified = '●'
 --- @class WinbarFormatterItem
 --- @field bufnr integer
 --- @field index integer
---- @field prefix? string[]
+--- @field prefix? string[]  -- filepath prefix
 --- @field bufname string
 --- @field diagnostic? { count: integer, severity: integer }
 --- @field in_current_win boolean
@@ -155,7 +155,7 @@ function M:parse(level)
   local idx_str = self.index .. ' '
   table.insert(components, { str = idx_str, hl = 'Index', len = vim.fn.strdisplaywidth(idx_str) })
 
-  --- prefix
+  --- filepath prefix
   if self.prefix and level > 3 then
     local prefix_str = ''
     if level == 5 then
