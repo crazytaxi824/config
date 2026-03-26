@@ -209,10 +209,10 @@ function M:parse_item_to_components(level)
     if p_str == self.basename then
       bufname_str = bufname_str .. p_str .. ' '
     else
-      bufname_str = bufname_str .. p_str .. ' '
+      bufname_str = bufname_str .. p_str .. '… '
     end
   else
-    bufname_str = ' '
+    bufname_str = '… '
   end
   comp = { content = bufname_str, hl = '' }
   table.insert(components, comp)
