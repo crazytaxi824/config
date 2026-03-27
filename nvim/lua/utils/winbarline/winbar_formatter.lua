@@ -150,11 +150,14 @@ local function reduce_items_to_display(fmt_items, win_width, active_buf_idx, min
   local comps, comp_width = fmt_items_to_components(partial_items, min_level)
   components = comps
 
-  --- 追加 <, > 显示
+  --- 追加左右 '<', '>' 显示
   local remain_width = win_width - comp_width
   if p_item_idx < active_buf_idx then
+    --- 左侧 item 需要 partial suffix
+    table.insert(components, 1, {{ content='<', hl='%*' }})
+
     if active_buf_idx < #fmt_items then
-      --- 左右都需要添加 '<', '>'
+      --- active buffer 不是最后一个 buffer, 则左右都需要添加 '<', '>'
       remain_width = remain_width - 4
       table.insert(components, {{ content='>', hl='%*' }})
     else
@@ -162,22 +165,27 @@ local function reduce_items_to_display(fmt_items, win_width, active_buf_idx, min
       remain_width = remain_width - 2
     end
 
-    table.insert(components, 1, fmt_items[p_item_idx]:partial(remain_width, min_level, 'suffix'))
-    table.insert(components, 1, {{ content='<', hl='%*' }})
+    --- 插入在第二个位置
+    table.insert(components, 2, fmt_items[p_item_idx]:partial(remain_width, min_level, 'suffix'))
   elseif p_item_idx == active_buf_idx then
-    --- 说明 active item 就已经超过 window width 了
-    if p_item_idx ~= 1 then
-      --- 左侧需要添加 '<'
+    --- item 需要根据情况插入在 1 | 2 的位置
+    local insert_pos = 1
+
+    --- active buffer 已经超过 window width 了, 只能显示一个 buffer
+    if active_buf_idx ~= 1 then
+      --- active buffer 不是第一个 buffer, 则左侧需要添加 '<'
+      insert_pos = 2  -- item 需要插入在第 2 的位置上
       remain_width = remain_width - 2
       table.insert(components, 1, {{ content='<', hl='%*' }})
     end
-    if p_item_idx < #fmt_items then
-      --- 右侧需要添加 '>'
+    if active_buf_idx < #fmt_items then
+      --- active buffer 不是最后一个 buffer, 则右侧需要添加 '>'
       remain_width = remain_width - 2
       table.insert(components, {{ content='>', hl='%*' }})
     end
+
     --- 插入在中间
-    table.insert(components, 2, fmt_items[p_item_idx]:partial(remain_width, min_level, 'prefix'))
+    table.insert(components, insert_pos, fmt_items[p_item_idx]:partial(remain_width, min_level, 'prefix'))
   else
     --- 只有右侧需要添加 '>'
     remain_width = remain_width - 2
