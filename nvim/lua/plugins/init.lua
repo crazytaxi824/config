@@ -234,7 +234,7 @@ local plugins = {
   --- File explorer --------------------------------------------------------------------------------
   {
     "nvim-tree/nvim-tree.lua",
-    tag = "v1.15.0",
+    tag = "v1.16.0",
     config = function() require("plugins.settings.file_tree") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
 
@@ -342,7 +342,7 @@ local plugins = {
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {
     "lewis6991/gitsigns.nvim",
-    tag = "v2.0.0",
+    tag = "v2.1.0",
     config = function() require("plugins.settings.git_signs") end,
     dependencies = { "folke/trouble.nvim" },
 
@@ -469,10 +469,10 @@ local opts = {
 }
 
 --- NOTE: 用于批量检查 plugins 升级
-for _, p in ipairs(plugins) do
-  -- p.commit = nil
-  p.tag, p.version = nil, nil
-end
+-- for _, p in ipairs(plugins) do
+--   p.commit = nil
+--   p.tag, p.version = nil, nil
+-- end
 
 lazy.setup(plugins, opts)
 
