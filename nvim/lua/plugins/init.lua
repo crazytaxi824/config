@@ -120,7 +120,7 @@ local plugins = {
   --- Auto Completion ------------------------------------------------------------------------------
   {
     "hrsh7th/nvim-cmp",
-    commit = "da88697",
+    commit = "a1d5048",
     config = function() require("plugins.settings.cmp_completion") end,
     dependencies = {
       --- VVI: 只有 "cmp-nvim-lsp" 不需要在 "nvim-cmp" 之后加载, 其他 module 都需要在 "nvim-cmp" 之后再加载, 否则报错.
@@ -276,7 +276,7 @@ local plugins = {
   --- Debug tools 安装 -----------------------------------------------------------------------------
   {
     "mfussenegger/nvim-dap",  -- core debug tool
-    commit = "a9d8cb6",
+    commit = "2a8799a",
     config = function() require("plugins.settings.debug.nvim_dap") end,
 
     cmd = {'Debug', 'DapToggleBreakpoint', 'DapContinue'},
@@ -295,7 +295,7 @@ local plugins = {
   {
     "rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
     -- tag = "v4.0.0",
-    commit = "cf91d5e",
+    commit = "f5b6673",
     config = function() require("plugins.settings.debug.nvim_dapui") end,
     dependencies = {
       "mfussenegger/nvim-dap",
@@ -469,10 +469,10 @@ local opts = {
 }
 
 --- NOTE: 用于批量检查 plugins 升级
--- for _, p in ipairs(plugins) do
---   p.commit = nil
---   p.tag, p.version = nil, nil
--- end
+for _, p in ipairs(plugins) do
+  -- p.commit = nil
+  p.tag, p.version = nil, nil
+end
 
 lazy.setup(plugins, opts)
 
