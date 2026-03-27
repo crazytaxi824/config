@@ -57,6 +57,7 @@ end
 --- @return WinbarFormatterItemComponent[][]
 --- @return integer total_width
 local function fmt_items_to_components(fmt_items, level)
+  --- @type WinbarFormatterItemComponent[][]
   local all_components = {}
   local total_width = 0
   for _, item in ipairs(fmt_items) do
@@ -150,22 +151,36 @@ local function reduce_items_to_display(fmt_items, win_width, active_buf_idx, min
   components = comps
 
   --- 追加 <, > 显示
-  local remain_width
+  local remain_width = win_width - comp_width
   if p_item_idx < active_buf_idx then
     if active_buf_idx < #fmt_items then
       --- 左右都需要添加 '<', '>'
-      remain_width = win_width-4 - comp_width
+      remain_width = remain_width - 4
       table.insert(components, {{ content='>', hl='%*' }})
     else
       --- 只有左侧需要添加 '<'
-      remain_width = win_width-2 - comp_width
+      remain_width = remain_width - 2
     end
 
     table.insert(components, 1, fmt_items[p_item_idx]:partial(remain_width, min_level, 'suffix'))
     table.insert(components, 1, {{ content='<', hl='%*' }})
+  elseif p_item_idx == active_buf_idx then
+    --- 说明 active item 就已经超过 window width 了
+    if p_item_idx ~= 1 then
+      --- 左侧需要添加 '<'
+      remain_width = remain_width - 2
+      table.insert(components, 1, {{ content='<', hl='%*' }})
+    end
+    if p_item_idx < #fmt_items then
+      --- 右侧需要添加 '>'
+      remain_width = remain_width - 2
+      table.insert(components, {{ content='>', hl='%*' }})
+    end
+    --- 插入在中间
+    table.insert(components, 2, fmt_items[p_item_idx]:partial(remain_width, min_level, 'prefix'))
   else
     --- 只有右侧需要添加 '>'
-    remain_width = win_width-2 - comp_width
+    remain_width = remain_width - 2
     table.insert(components, fmt_items[p_item_idx]:partial(remain_width, min_level, 'prefix'))
     table.insert(components, {{ content='>', hl='%*' }})
   end
