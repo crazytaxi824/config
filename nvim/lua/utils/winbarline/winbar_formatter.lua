@@ -6,7 +6,7 @@ local wb_fmt_item = require('utils.winbarline.winbar_formatter_item')
 --- @class WinbarFormatter
 --- @field items WinbarFormatterItem[]
 --- @field tabnr integer
-local M = {}
+local WinbarFormatter = {}
 
 --- 返回 modified buffer name
 --- @return string
@@ -242,7 +242,7 @@ end
 ---
 --- @param win_id integer
 --- @return string|nil winbar_str
-function M.winbar_format(win_id)
+function WinbarFormatter.winbar_format(win_id)
   local w = g.get_win(win_id)
   if not w then
     return
@@ -275,4 +275,4 @@ function M.winbar_format(win_id)
 end
 
 
-return M
+return WinbarFormatter

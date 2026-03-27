@@ -1,38 +1,38 @@
 --- @class WinbarLineBuffer
 --- @field bufnr integer
 --- @field private win_dict table<integer, boolean>
-local M = {}
-M.__index = M
+local WinbarLineBuf = {}
+WinbarLineBuf.__index = WinbarLineBuf
 
 ---@param bufnr integer
 ---@param win_id integer
 ---@return WinbarLineBuffer
-function M.new(bufnr, win_id)
+function WinbarLineBuf.new(bufnr, win_id)
   --- @type WinbarLineBuffer
   local self = setmetatable({
     bufnr = bufnr,
     win_dict = { [win_id] = true },
-  }, M)
+  }, WinbarLineBuf)
   return self
 end
 
 ---@param win_id integer
-function M:append_win(win_id)
+function WinbarLineBuf:append_win(win_id)
   self.win_dict[win_id] = true
 end
 
 ---@param win_id integer
-function M:remove_win(win_id)
+function WinbarLineBuf:remove_win(win_id)
   self.win_dict[win_id] = nil
 end
 
 --- @return integer[] win_ids
-function M:list_wins()
+function WinbarLineBuf:list_wins()
   return vim.tbl_keys(self.win_dict)
 end
 
 --- @return string bufname
-function M:name()
+function WinbarLineBuf:name()
   local bufname = vim.api.nvim_buf_get_name(self.bufnr)
   if bufname ~= '' then
     return bufname
@@ -61,7 +61,7 @@ end
 
 --- 获取 diagnostic info
 --- @return {count: integer, severity: integer}|nil
-function M:diagnostic()
+function WinbarLineBuf:diagnostic()
   local diagnostics = vim.diagnostic.count(self.bufnr) or {}
   local diag_count = 0
   local severity = 9
@@ -78,4 +78,4 @@ function M:diagnostic()
   end
 end
 
-return M
+return WinbarLineBuf

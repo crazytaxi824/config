@@ -30,8 +30,8 @@ local sign_modified = '●'
 --- @field active boolean
 ---
 --- @field in_current_win boolean
-local M = {}
-M.__index = M
+local WinbarFomatterItem = {}
+WinbarFomatterItem.__index = WinbarFomatterItem
 
 --- @param win_id integer
 --- @param bufnr integer
@@ -39,7 +39,7 @@ M.__index = M
 --- @param path_list string[]
 --- @param diagnostic? { count: integer, severity: integer }
 --- @return WinbarFormatterItem
-function M.new(win_id, bufnr, index, path_list, diagnostic)
+function WinbarFomatterItem.new(win_id, bufnr, index, path_list, diagnostic)
   local prefix
   if #path_list < 1 then
     error(bufnr .. " path_list is empty")
@@ -56,7 +56,7 @@ function M.new(win_id, bufnr, index, path_list, diagnostic)
     diagnostic = diagnostic,
     in_current_win = win_id == vim.api.nvim_get_current_win(),
     active = bufnr == vim.api.nvim_win_get_buf(win_id),
-  }, M)
+  }, WinbarFomatterItem)
 
   return self
 end
@@ -112,7 +112,7 @@ end
 --- @param level 5|4|3|2|1 -- level: 'full', 'init', 'base', 'short', 'none'
 --- @param mode? 'prefix'|'suffix'
 --- @return WinbarFormatterItemComponent[]  -- indicator, index, bufname, diagnostic, modified
-function M:partial(width, level, mode)
+function WinbarFomatterItem:partial(width, level, mode)
   mode = mode or 'prefix'
   local suffix = mode == 'suffix'
 
@@ -165,7 +165,7 @@ end
 --- @param level 5|4|3|2|1 -- level: 'full', 'init', 'base', 'short', 'none'
 --- @return WinbarFormatterItemComponent[]  -- indicator, index, bufname, diagnostic, modified
 --- @return integer  -- item width: including a trailing space
-function M:parse_item_to_components(level)
+function WinbarFomatterItem:parse_item_to_components(level)
   --- @type WinbarFormatterItemComponent[]
   local components = {}
   local item_width = 1  -- NOTE: 每个 item 后一个空格
@@ -249,4 +249,4 @@ function M:parse_item_to_components(level)
   return components, item_width
 end
 
-return M
+return WinbarFomatterItem
