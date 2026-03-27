@@ -161,7 +161,7 @@ function M.delete_current_buf()
   local curr_buf = vim.api.nvim_win_get_buf(curr_win)
 
   if vim.bo[curr_buf].modified then
-    Notify("cannot delete modified buffer")
+    vim.notify("cannot delete modified buffer", vim.log.levels.WARN)
     return
   end
 
@@ -188,7 +188,7 @@ function M.delete_current_buf()
     end
 
     --- 如果 current window 是 neovim 中最后一个 buflisted window
-    Notify("Cannot delete last 'buflisted' 'normal' buffer", "WARN")
+    vim.notify("Cannot delete last 'buflisted' 'normal' buffer", vim.log.levels.WARN)
     return
   end
 
