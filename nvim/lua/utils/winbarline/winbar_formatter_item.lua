@@ -202,6 +202,7 @@ function M:parse_item_to_components(level)
   --- bufname
   local bufname_str = ''
   if level > 2 or self.active then
+    --- 如果是 active buffer 不要省略 basename
     bufname_str = self.basename .. ' '
   elseif level == 2 then
     local display_width = 4
