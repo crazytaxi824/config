@@ -60,11 +60,13 @@ local function fmt_items_to_components(fmt_items, level)
   --- @type WinbarFormatterItemComponent[][]
   local all_components = {}
   local total_width = 0
+
   for _, item in ipairs(fmt_items) do
     local comps, item_width = item:parse_item_to_components(level)
     total_width = total_width + item_width
     table.insert(all_components, comps)
   end
+
   return all_components, total_width
 end
 
@@ -113,37 +115,36 @@ local function reduce_items_to_display(fmt_items, win_width, active_buf_idx, min
 
   --- @type WinbarFormatterItem[]
   local partial_items = {}
-
-  local p_item_idx
-  local full = false
+  local p_width = 0
+  local p_item_idx  -- 需要计算 partial item 的 index
 
   --- 优先填充左侧
   for i = active_buf_idx, 1, -1 do
-    table.insert(partial_items, 1, fmt_items[i])
-    local _, p_width = fmt_items_to_components(partial_items, min_level)
+    local _, i_width = fmt_items[i]:parse_item_to_components(min_level)
+    p_width = p_width + i_width
 
     --- 'win_width - 4' 是为了给 '<', '>' 留出位置
-    if p_width > win_width-4 then
-      table.remove(partial_items, 1)  -- 移除第一个 item
+    if p_width > win_width - 4 then
       p_item_idx = i
-      full = true
       break
     end
+
+    table.insert(partial_items, 1, fmt_items[i])
   end
 
   --- 填充右侧
-  if not full then
+  if not p_item_idx then
     for i = active_buf_idx+1, #fmt_items, 1 do
-      table.insert(partial_items, fmt_items[i])
-      local _, p_width = fmt_items_to_components(partial_items, min_level)
+      local _, i_width = fmt_items[i]:parse_item_to_components(min_level)
+      p_width = p_width + i_width
 
       --- 'win_width - 4' 是为了给 '<', '>' 留出位置
-      if p_width > win_width-4 then
-        table.remove(partial_items, #partial_items)  -- 移除最后一个 item
+      if p_width > win_width - 4 then
         p_item_idx = i
-        full = true
         break
       end
+
+      table.insert(partial_items, fmt_items[i])
     end
   end
 
@@ -153,38 +154,36 @@ local function reduce_items_to_display(fmt_items, win_width, active_buf_idx, min
   --- 追加左右 '<', '>' 显示
   local remain_width = win_width - comp_width
   if p_item_idx < active_buf_idx then
-    --- 左侧 item 需要 partial suffix
+    --- 左侧 item 需要 partial suffix, 并添加 '<'
+    remain_width = remain_width - 2
     table.insert(components, 1, {{ content='<', hl='%*' }})
 
     if active_buf_idx < #fmt_items then
-      --- active buffer 不是最后一个 buffer, 则左右都需要添加 '<', '>'
-      remain_width = remain_width - 4
-      table.insert(components, {{ content='>', hl='%*' }})
-    else
-      --- 只有左侧需要添加 '<'
+      --- active buffer 不是最后一个 buffer, 右侧也需要添加 '>'
       remain_width = remain_width - 2
+      table.insert(components, {{ content='>', hl='%*' }})
     end
 
-    --- 插入在第二个位置
+    --- components 插入在第二个位置
     table.insert(components, 2, fmt_items[p_item_idx]:partial(remain_width, min_level, 'suffix'))
   elseif p_item_idx == active_buf_idx then
-    --- item 需要根据情况插入在 1 | 2 的位置
-    local insert_pos = 1
+    --- active buffer 已经超过 window width 了, 只能显示一个 buffer, 即 active buffer
+    local insert_pos = 1  -- item 需要根据情况插入在第 1 | 2 的位置
 
-    --- active buffer 已经超过 window width 了, 只能显示一个 buffer
-    if active_buf_idx ~= 1 then
+    if active_buf_idx > 1 then
       --- active buffer 不是第一个 buffer, 则左侧需要添加 '<'
       insert_pos = 2  -- item 需要插入在第 2 的位置上
       remain_width = remain_width - 2
       table.insert(components, 1, {{ content='<', hl='%*' }})
     end
+
     if active_buf_idx < #fmt_items then
       --- active buffer 不是最后一个 buffer, 则右侧需要添加 '>'
       remain_width = remain_width - 2
       table.insert(components, {{ content='>', hl='%*' }})
     end
 
-    --- 插入在中间
+    --- components 插入在中间
     table.insert(components, insert_pos, fmt_items[p_item_idx]:partial(remain_width, min_level, 'prefix'))
   else
     --- 只有右侧需要添加 '>'

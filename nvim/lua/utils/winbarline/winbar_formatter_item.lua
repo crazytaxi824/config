@@ -164,7 +164,7 @@ end
 
 --- @param level 5|4|3|2|1 -- level: 'full', 'init', 'base', 'short', 'none'
 --- @return WinbarFormatterItemComponent[]  -- indicator, index, bufname, diagnostic, modified
---- @return integer  -- item width: including a trailing space
+--- @return integer width -- item width: including a trailing space
 function WinbarFomatterItem:parse_item_to_components(level)
   --- @type WinbarFormatterItemComponent[]
   local components = {}
