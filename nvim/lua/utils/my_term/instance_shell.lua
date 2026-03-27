@@ -1,6 +1,6 @@
 local g = require('utils.my_term.deps.global')
 local t_act = require('utils.my_term.term_actions')
-local new_mt = require('utils.my_term.new_term')
+local mt = require('utils.my_term.myterm')
 
 
 --- source Python Virtual Environment
@@ -46,7 +46,7 @@ function M.open_shell_term()
   end
 
   --- terminal 没有被缓存则 M.new()
-  local t = new_mt._new(vim.v.count1, {
+  local t = mt.new(vim.v.count1, {
     after_run = function(_, term_bufnr)
       --- after_run 的时候 cursor 在 terminal window 中则执行 startinsert.
       if vim.api.nvim_win_get_buf(vim.api.nvim_get_current_win()) == term_bufnr then

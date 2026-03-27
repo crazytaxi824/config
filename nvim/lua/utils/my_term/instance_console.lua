@@ -1,5 +1,5 @@
 local g = require('utils.my_term.deps.global')
-local new_mt = require('utils.my_term.new_term')
+local mt = require('utils.my_term.myterm')
 local fp = require('utils.filepath')
 
 --- @type integer
@@ -39,7 +39,7 @@ local M = {}
 ---
 --- @return MyTerm
 M.console = function()
-  return new_mt._new(console_id, default_opts, 'force')
+  return mt.new(console_id, default_opts, 'force')
 end
 
 return M

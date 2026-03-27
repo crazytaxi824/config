@@ -16,14 +16,14 @@ function M.autocmd_callback(term, term_bufnr)
     buffer = term_bufnr,
     callback = function(params)
       if params.event == "BufWinEnter" then
-        local callbacks = term.on_open()
+        local callbacks = term:on_open()
         if callbacks then
           for _, on_open in ipairs(callbacks) do
             on_open(term, term_bufnr)
           end
         end
       elseif params.event == "BufWinLeave" then
-        local callbacks = term.on_close()
+        local callbacks = term:on_close()
         if callbacks then
           for _, on_close in ipairs(callbacks) do
             on_close(term, term_bufnr)

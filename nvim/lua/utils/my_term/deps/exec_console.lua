@@ -166,8 +166,8 @@ function M.console_exec(cmd, term, term_bufnr, term_win_id)
   end)
 
   local job_id = vim.fn.jobstart(cmd, {
-    cwd = term.cwd(),
-    env = term.env(),
+    cwd = term:cwd(),
+    env = term:env(),
 
     --- @param job_id integer
     --- @param data string[]  output
@@ -177,7 +177,7 @@ function M.console_exec(cmd, term, term_bufnr, term_win_id)
       utils.buf_scroll_bottom(term, term_bufnr)  --- auto_scroll option
 
       --- callback
-      local callbacks = term.on_stdout()
+      local callbacks = term:on_stdout()
       if callbacks then
         for _, on_stdout in ipairs(callbacks) do
           on_stdout(term, term_bufnr, job_id, data)
@@ -198,7 +198,7 @@ function M.console_exec(cmd, term, term_bufnr, term_win_id)
       utils.buf_scroll_bottom(term, term_bufnr)  --- auto_scroll option
 
       --- callback
-      local callbacks = term.on_stderr()
+      local callbacks = term:on_stderr()
       if callbacks then
         for _, on_stderr in ipairs(callbacks) do
           on_stderr(term, term_bufnr, job_id, data)
@@ -219,7 +219,7 @@ function M.console_exec(cmd, term, term_bufnr, term_win_id)
       utils.buf_scroll_bottom(term, term_bufnr)  --- auto_scroll option
 
       --- callback
-      local callbacks = term.on_exit()
+      local callbacks = term:on_exit()
       if callbacks then
         for _, on_exit in ipairs(callbacks) do
           on_exit(term, term_bufnr, job_id, exit_code)

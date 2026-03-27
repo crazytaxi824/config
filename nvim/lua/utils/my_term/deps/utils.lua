@@ -5,7 +5,7 @@ local M = {}
 --- @param term MyTerm
 --- @param term_bufnr integer
 function M.buf_scroll_bottom(term, term_bufnr)
-  if not term.auto_scroll() then
+  if not term:auto_scroll() then
     return
   end
 
