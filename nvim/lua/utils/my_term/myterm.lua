@@ -160,7 +160,8 @@ function MyTerm:update(new_opts, cb_mode)
   end
 end
 
-
+--- jobstart(cmd)
+---
 --- @param cmd? string|string[]
 function MyTerm:run(cmd)
   cmd = cmd or self._last_cmd
@@ -194,11 +195,13 @@ function MyTerm:run(cmd)
   g.set_TermPost(tp.id, tp)  -- cache MyTermPost
 end
 
+--- jobstop(job_id)
 function MyTerm:stop()
   local tp = g.get_TermPost(self.id)
   if tp then
     vim.fn.jobstop(tp.job_id)
   end
 end
+
 
 return MyTerm
