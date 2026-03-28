@@ -203,6 +203,10 @@ end
 --- @param min_level 5|4|3|2|1 -- level: 'full', 'init', 'base', 'short', 'none'
 --- @return string winbar_str
 local function format_winbar_items(fmt_items, win_id, active_buf_idx, min_level)
+  if vim.tbl_isempty(fmt_items) then
+    error("fmt_items is empty")
+  end
+
   local win_width = vim.api.nvim_win_get_config(win_id).width
   if not win_width then
     error("win_id: " .. win_id .. "do not have 'width'")
@@ -217,8 +221,8 @@ local function format_winbar_items(fmt_items, win_id, active_buf_idx, min_level)
   --- @type WinbarFormatterItemComponent[][]
   local components = {}
   for level = 5, min_level, -1 do
-    local comps, total_width = fmt_items_to_components(fmt_items, level)
-    if total_width < win_width then
+    local comps, comps_width = fmt_items_to_components(fmt_items, level)
+    if comps_width < win_width then
       components = comps
       break
     end
@@ -270,9 +274,11 @@ function WinbarFormatter.winbar_format(win_id)
     table.insert(fmt_items, fmt_item)
   end
 
-  --- FIXME: first time open window active_buf_idx is nil
-  if not active_buf_idx then
-    error('win_id: ' .. win_id .. ' active_buf_idx is nil')
+  --- no item display in window
+  if vim.tbl_isempty(fmt_items) then
+    --- win 被 global cache, 但是没有 buffer, 说明 buffer 被 bdelete/bwipeout 了
+    --- `:h help` 时出现该问题
+    return ''
   end
 
   local min_level = 2
