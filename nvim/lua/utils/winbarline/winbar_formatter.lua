@@ -115,41 +115,42 @@ local function reduce_items_to_display(fmt_items, win_width, active_buf_idx, min
 
   --- @type WinbarFormatterItem[]
   local partial_items = {}
-  local p_width = 0
   local p_item_idx  -- 需要计算 partial item 的 index
+  local comp_width = 0
 
   --- 优先填充左侧
   for i = active_buf_idx, 1, -1 do
-    local _, i_width = fmt_items[i]:parse_item_to_components(min_level)
-    p_width = p_width + i_width
+    local comp, i_width = fmt_items[i]:parse_item_to_components(min_level)
+    comp_width = comp_width + i_width
 
     --- 'win_width - 4' 是为了给 '<', '>' 留出位置
-    if p_width > win_width - 4 then
+    if comp_width > win_width - 4 then
+      comp_width = comp_width - i_width  -- 还原 width
       p_item_idx = i
       break
     end
 
     table.insert(partial_items, 1, fmt_items[i])
+    table.insert(components, 1, comp)
   end
 
   --- 填充右侧
   if not p_item_idx then
     for i = active_buf_idx+1, #fmt_items, 1 do
-      local _, i_width = fmt_items[i]:parse_item_to_components(min_level)
-      p_width = p_width + i_width
+      local comp, i_width = fmt_items[i]:parse_item_to_components(min_level)
+      comp_width = comp_width + i_width
 
       --- 'win_width - 4' 是为了给 '<', '>' 留出位置
-      if p_width > win_width - 4 then
+      if comp_width > win_width - 4 then
+        comp_width = comp_width - i_width  -- 还原 width
         p_item_idx = i
         break
       end
 
       table.insert(partial_items, fmt_items[i])
+      table.insert(components, comp)
     end
   end
-
-  local comps, comp_width = fmt_items_to_components(partial_items, min_level)
-  components = comps
 
   --- 追加左右 '<', '>' 显示
   local remain_width = win_width - comp_width
