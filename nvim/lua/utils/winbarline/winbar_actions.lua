@@ -248,7 +248,7 @@ function M.list_win_buffers()
     format_item = function(item)
       --- item is win_bufs index
       local bufnr = win_bufs[item]
-      local bufname = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(bufnr), ":~")
+      local bufname = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(bufnr), ":.")
       return bufname
     end,
   }, function(choice)
