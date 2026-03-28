@@ -11,7 +11,7 @@ local hl = {
   },
   tabnr = {
     ctermfg=Colors.black.c, fg=Colors.black.g,
-    ctermbg=Colors.yellow.c, bg=Colors.yellow.g,
+    ctermbg=35, bg='#00AF5F',
     bold = true,
   },
 
@@ -70,8 +70,6 @@ vim.api.nvim_set_hl(0, "MyWinBarLineBufferSeverity_3", vim.tbl_extend('force', h
 vim.api.nvim_set_hl(0, "MyWinBarLineBufferSeverity_4", vim.tbl_extend('force', hl.default, hl.diagnostic_hint))
 
 vim.api.nvim_set_hl(0, "MyWinBarLineTab", hl.tabnr)
-
-
 
 
 
