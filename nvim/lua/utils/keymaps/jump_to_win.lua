@@ -37,7 +37,7 @@ M.choose = function()
   end
 
   for i, win_id in ipairs(window_ids) do
-    local key = string.sub(win_marker,i,i)
+    local key = string.sub(win_marker, i, i)
     --- `:help 'statusline'`
     --- %=   Separation point between alignment sections.
     ---      Each section will be separated by an equal number of spaces.
