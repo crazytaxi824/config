@@ -152,7 +152,7 @@ function WinbarFomatterItem:partial(width, level, mode)
       --- remain width 小于整个 component 长度
       local p_str = partial_str(comp.content, remain_width, suffix)
       if p_str then
-        _insert({content = p_str, hl = comp.hl })
+        _insert({ content = p_str, hl = comp.hl })
       end
       break  -- remain width 耗尽，后续无需遍历
     end
