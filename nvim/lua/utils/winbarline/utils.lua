@@ -74,4 +74,26 @@ function M.unique_short_paths(paths)
   return results
 end
 
+
+--- @return integer TopRight_win_id
+function M:get_top_right_win()
+  local best_win
+  local best_col = -1
+  local best_row = math.huge
+
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    local pos = vim.api.nvim_win_get_position(win)  -- {row, col}
+    local row, col = pos[1], pos[2]
+
+    if col > best_col or (col == best_col and row < best_row) then
+      best_col = col
+      best_row = row
+      best_win = win
+    end
+  end
+
+  return best_win
+end
+
+
 return M
