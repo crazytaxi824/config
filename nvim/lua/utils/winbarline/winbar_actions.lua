@@ -45,13 +45,15 @@ function M.goto(idx)
   end
 
   local win_bufs = w:list_bufs()
-  local bufnr = win_bufs[idx]
-  if not bufnr then
+
+  --- index 超出范围
+  if idx < 1 or idx > #win_bufs then
     return
   end
 
+  local bufnr = win_bufs[idx]
   if not vim.api.nvim_buf_is_valid(bufnr) then
-    return
+    error('buffer is not valid')
   end
 
   vim.api.nvim_win_set_buf(curr_win, win_bufs[idx])
@@ -226,5 +228,40 @@ function M.delete_current_buf()
 
   w:set_winbar()
 end
+
+--- list current window 中所有 win_buffers
+function M.list_win_buffers()
+  local curr_win = vim.api.nvim_get_current_win()
+  local win = g.get_win(curr_win)
+  if not win then
+    return
+  end
+
+  local win_bufs = win:list_bufs()
+  if vim.tbl_isempty(win_bufs) then
+    return
+  end
+
+  --- 选择 buffer 进行跳转
+  vim.ui.select(vim.fn.range(1, #win_bufs), {
+    prompt = 'WinbarLine buffers',
+    format_item = function(item)
+      --- item is win_bufs index
+      local bufnr = win_bufs[item]
+      local bufname = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(bufnr), ":~")
+      return bufname
+    end,
+  }, function(choice)
+    --- choice is win_bufs index
+    if choice then
+      local bufnr = win_bufs[choice]
+      if not vim.api.nvim_buf_is_valid(bufnr) then
+        error('buffer is not valid')
+      end
+      vim.api.nvim_win_set_buf(curr_win, bufnr)
+    end
+  end)
+end
+
 
 return M
