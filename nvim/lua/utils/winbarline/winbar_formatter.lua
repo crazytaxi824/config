@@ -270,6 +270,11 @@ function WinbarFormatter.winbar_format(win_id)
     table.insert(fmt_items, fmt_item)
   end
 
+  --- FIXME: first time open window active_buf_idx is nil
+  if not active_buf_idx then
+    error('win_id: ' .. win_id .. ' active_buf_idx is nil')
+  end
+
   local min_level = 2
   return format_winbar_items(fmt_items, win_id, active_buf_idx, min_level)
 end

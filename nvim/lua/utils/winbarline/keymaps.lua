@@ -4,6 +4,7 @@ local wb_act = require('utils.winbarline.winbar_actions')
 --- set keymaps ------------------------------------------------------------------------------------
 local opt = { silent = true }
 local winbar_keymaps = {
+  --- TODO: list window all buffers
   {'n', '<leader>\\', function() wb_act.goto(vim.v.count1) end , opt, 'which_key_ignore'},
   {'n', '<S-D-[>', function() wb_act.cycle('prev') end, opt, 'buffer: go to Prev buffer'},
   {'n', '<S-D-]>', function() wb_act.cycle('next')  end, opt, 'buffer: go to Next buffer'},
