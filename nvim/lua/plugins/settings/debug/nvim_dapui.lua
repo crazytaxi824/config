@@ -40,7 +40,8 @@ dapui.setup({
   --- winbar
   controls = {
     --- NOTE: dapui controls enable 之后无法删除 [dap-repl] buffer.
-    enabled = true,
+    enabled = false,
+
     --- VVI: Display controls in this element
     element = "repl",  -- repl | watches | stacks | scopes | console
     icons = {
