@@ -16,16 +16,16 @@ require("core.fold")     -- lsp-fold & treesitter-fold autocmd
 require("core.terminal") -- terminal buffer 自动设置 nonumber signcolumn ...
 
 
---- for bufferline sort order, 用进入时间排序
-local bufvar = 'my_winenter_time'
-vim.api.nvim_create_autocmd({"BufNew", "BufReadPre"}, {
-  callback = function(args)
-    if not vim.b[args.buf][bufvar] then
-      --- 注意这是 Neovim 启动后的相对时间，不是 unix timestamp
-      vim.b[args.buf][bufvar] = vim.uv.now()
-    end
-  end
-})
+-- --- for bufferline sort order, 用进入时间排序
+-- local bufvar = 'my_winenter_time'
+-- vim.api.nvim_create_autocmd({"BufNew", "BufReadPre"}, {
+--   callback = function(args)
+--     if not vim.b[args.buf][bufvar] then
+--       --- 注意这是 Neovim 启动后的相对时间，不是 unix timestamp
+--       vim.b[args.buf][bufvar] = vim.uv.now()
+--     end
+--   end
+-- })
 
 
 
