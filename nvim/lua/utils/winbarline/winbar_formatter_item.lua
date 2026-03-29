@@ -7,6 +7,16 @@
 --- @field hl string
 
 
+--- @enum WinbarFormatterLevel
+local WinbarFormatterLevel = {
+  none = 1,    -- no bufname
+  minimal = 2, -- 4 display width bufname with '…'
+  base = 3,    -- basename of buffer
+  init = 4,    -- init prefix with basename
+  full = 5,    -- full prefix with basename
+}
+
+
 local sign_indicator = '▌'
 local sign_modified = '●'
 
@@ -109,7 +119,7 @@ end
 
 
 --- @param width integer
---- @param level 5|4|3|2|1 -- level: 'full', 'init', 'base', 'short', 'none'
+--- @param level WinbarFormatterLevel
 --- @param mode? 'prefix'|'suffix'
 --- @return WinbarFormatterItemComponent[]  -- indicator, index, bufname, diagnostic, modified
 function WinbarFomatterItem:partial(width, level, mode)
@@ -162,7 +172,7 @@ function WinbarFomatterItem:partial(width, level, mode)
 end
 
 
---- @param level 5|4|3|2|1 -- level: 'full', 'init', 'base', 'short', 'none'
+--- @param level WinbarFormatterLevel
 --- @return WinbarFormatterItemComponent[]  -- indicator, index, bufname, diagnostic, modified
 --- @return integer width -- item width: including a trailing space
 function WinbarFomatterItem:parse_item_to_components(level)
@@ -182,11 +192,11 @@ function WinbarFomatterItem:parse_item_to_components(level)
   table.insert(components, comp)
 
   --- filepath prefix
-  if self.fp_prefix and level > 3 then
+  if self.fp_prefix and level > WinbarFormatterLevel.base then
     local prefix_str = ''
-    if level == 5 then
+    if level == WinbarFormatterLevel.full then
       prefix_str = table.concat(self.fp_prefix, '/') .. '/'
-    elseif level == 4 then
+    elseif level == WinbarFormatterLevel.init then
       for _, path in ipairs(self.fp_prefix) do
         --- NOTE: strcharlen('你好') = 2, strcharpart('你好', 0, 1) = '你', strdisplaywidth('你') = 2
         --- 这是为了获取完整的 'CJK' 文字
@@ -201,10 +211,10 @@ function WinbarFomatterItem:parse_item_to_components(level)
 
   --- bufname
   local bufname_str = ''
-  if level > 2 or self.active then
+  if level > WinbarFormatterLevel.minimal or self.active then
     --- 如果是 active buffer 不要省略 basename
     bufname_str = self.basename .. ' '
-  elseif level == 2 then
+  elseif level == WinbarFormatterLevel.minimal then
     local display_width = 4
     local p_str = partial_str(self.basename, display_width)
     if p_str == self.basename then
@@ -219,7 +229,7 @@ function WinbarFomatterItem:parse_item_to_components(level)
   table.insert(components, comp)
 
   --- diagnostic
-  if self.diagnostic and (level > 2 or self.active) then
+  if self.diagnostic and (level > WinbarFormatterLevel.minimal or self.active) then
     local diag_str = '('..self.diagnostic.count..') '
     comp = { content = diag_str, hl = 'Severity_'..self.diagnostic.severity }
     table.insert(components, comp)

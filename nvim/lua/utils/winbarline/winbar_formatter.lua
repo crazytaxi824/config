@@ -56,6 +56,7 @@ end
 --- 将 items 转成 ordered components
 ---
 --- @param fmt_items WinbarFormatterItem[]
+--- @param level WinbarFormatterLevel
 --- @return WinbarFormatterItemComponent[][]
 --- @return integer total_width
 local function fmt_items_to_components(fmt_items, level)
@@ -109,7 +110,7 @@ end
 --- @param fmt_items WinbarFormatterItem[]
 --- @param win_width integer
 --- @param active_buf_idx integer
---- @param min_level 5|4|3|2|1 -- level: 'full', 'init', 'base', 'short', 'none'
+--- @param min_level WinbarFormatterLevel
 --- @return WinbarFormatterItemComponent[][]
 local function reduce_items_to_display(fmt_items, win_width, active_buf_idx, min_level)
   --- @type WinbarFormatterItemComponent[][]
@@ -202,7 +203,7 @@ end
 --- @param fmt_items WinbarFormatterItem[]
 --- @param win_id integer
 --- @param active_buf_idx integer
---- @param min_level 5|4|3|2|1 -- level: 'full', 'init', 'base', 'short', 'none'
+--- @param min_level WinbarFormatterLevel
 --- @return string winbar_str
 local function format_winbar_items(fmt_items, win_id, active_buf_idx, min_level)
   if vim.tbl_isempty(fmt_items) then
