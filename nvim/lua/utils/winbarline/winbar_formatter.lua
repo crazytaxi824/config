@@ -24,17 +24,7 @@ local function bufname_mod(bufnr)
   --- NOTE: buftype = 'terminal' 是锁死无法被修改的.
   local bt = vim.bo[bufnr].buftype
   if bt == "quickfix" then
-    --- TODO: 只运行一次
-    --- 区别 Quickfix | Location List
-    local all_wins = vim.api.nvim_list_wins()
-    for _, win_id in ipairs(all_wins) do
-      --- 获取指定 win_id 的 loclist
-      local loclist = vim.fn.getloclist(win_id, { all = 0 })
-      if loclist.qfbufnr == bufnr then
-        return "[Location List]"
-      end
-    end
-    return "[Quickfix List]"
+    return "[List]"
   elseif bt == "nofile" then
     local ft = vim.bo[bufnr].filetype
     return ft ~= '' and '['..ft..']' or "[Scratch]"
