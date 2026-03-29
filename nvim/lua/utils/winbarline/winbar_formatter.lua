@@ -21,7 +21,7 @@ local function bufname_mod(bufnr)
     return "[Command Line]"
   end
 
-  --- NOTE: buftype = 'quickfix'|'terminal' 是锁死无法被修改的
+  --- NOTE: buftype = 'terminal' 是锁死无法被修改的.
   local bt = vim.bo[bufnr].buftype
   if bt == "quickfix" then
     --- 区别 Quickfix | Location List
