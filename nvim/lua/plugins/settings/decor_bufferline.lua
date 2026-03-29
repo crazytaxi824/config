@@ -302,8 +302,8 @@ local function bufferline_del_current_buffer()
   end
 
   --- multi listed buffer & multi listed window
-  local wins = vim.api.nvim_list_wins()
-  for _, win_id in ipairs(wins) do
+  local all_wins = vim.api.nvim_list_wins()
+  for _, win_id in ipairs(all_wins) do
     local buf = vim.api.nvim_win_get_buf(win_id)
     if win_id ~= current_win and buf ~= current_bufnr and vim.bo[buf].buflisted then
       vim.cmd.bdelete(current_bufnr)

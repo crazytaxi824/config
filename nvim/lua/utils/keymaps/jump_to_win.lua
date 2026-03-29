@@ -27,16 +27,16 @@ M.choose = function()
   local win_map = {}  -- cache window id map
   local win_marker = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ"  -- 窗口标识.
 
-  local window_ids = vim.api.nvim_tabpage_list_wins(0)
-  if #window_ids < 2 then
+  local tab_wins = vim.api.nvim_tabpage_list_wins(0)
+  if #tab_wins < 2 then
     vim.notify("There is only 1 window to choose.")
     return
-  elseif #window_ids > #win_marker then
+  elseif #tab_wins > #win_marker then
     Notify("There are too many windows, (> #win_marker)", "WARN")
     return
   end
 
-  for i, win_id in ipairs(window_ids) do
+  for i, win_id in ipairs(tab_wins) do
     local key = string.sub(win_marker, i, i)
     --- `:help 'statusline'`
     --- %=   Separation point between alignment sections.
