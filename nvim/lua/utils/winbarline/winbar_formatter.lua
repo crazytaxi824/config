@@ -24,6 +24,7 @@ local function bufname_mod(bufnr)
   --- NOTE: buftype = 'terminal' 是锁死无法被修改的.
   local bt = vim.bo[bufnr].buftype
   if bt == "quickfix" then
+    --- TODO: 只运行一次
     --- 区别 Quickfix | Location List
     local all_wins = vim.api.nvim_list_wins()
     for _, win_id in ipairs(all_wins) do
