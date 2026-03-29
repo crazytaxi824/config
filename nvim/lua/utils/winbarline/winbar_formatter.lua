@@ -23,7 +23,15 @@ local function bufname_mod(bufnr)
 
   local bt = vim.bo[bufnr].buftype
   if bt == "quickfix" then
-    return "[List]"
+    --- 区别 Quickfix | Location List
+    local all_wins = vim.api.nvim_list_wins()
+    for _, win_id in ipairs(all_wins) do
+      local loclist = vim.fn.getloclist(win_id, { all = 0 })
+      if loclist.qfbufnr == bufnr then
+        return "[Location List]"
+      end
+    end
+    return "[Quickfix List]"
   elseif bt == "nofile" then
     local ft = vim.bo[bufnr].filetype
     return ft ~= '' and '['..ft..']' or "[Scratch]"

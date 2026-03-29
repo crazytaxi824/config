@@ -31,34 +31,6 @@ function WinbarLineBuf:list_wins()
   return vim.tbl_keys(self.win_dict)
 end
 
---- @return string bufname
-function WinbarLineBuf:name()
-  local bufname = vim.api.nvim_buf_get_name(self.bufnr)
-  if bufname ~= '' then
-    return bufname
-  end
-
-  --- 以下是特殊情况
-  if vim.fn.getcmdwintype() ~= '' then
-    return "[Command Line]"
-  end
-
-  local bt = vim.bo[self.bufnr].buftype
-  if bt == "quickfix" then
-    return "[List]"
-  elseif bt == "nofile" then
-    return "[Scratch]"
-  elseif bt == "terminal" then
-    return "[Terminal]"
-  elseif bt == "prompt" then
-    return "[Prompt]"
-  elseif bt == "help" then
-    return "[Help]"
-  else
-    return "[No Name]"  -- buftype == ''
-  end
-end
-
 --- 获取 diagnostic info
 --- @return {count: integer, severity: integer}|nil
 function WinbarLineBuf:diagnostic()
