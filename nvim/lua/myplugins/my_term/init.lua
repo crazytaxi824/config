@@ -1,8 +1,8 @@
-local g = require('utils.my_term.deps.global')
-local t_win = require('utils.my_term.deps.term_win')
-local t_act = require('utils.my_term.term_actions')
-local shell_term = require("utils.my_term.instance_shell")
-local console = require('utils.my_term.instance_console')
+local g = require('myplugins.my_term.deps.global')
+local t_win = require('myplugins.my_term.deps.term_win')
+local t_act = require('myplugins.my_term.term_actions')
+local shell_term = require("myplugins.my_term.instance_shell")
+local console = require('myplugins.my_term.instance_console')
 
 
 local M = {}

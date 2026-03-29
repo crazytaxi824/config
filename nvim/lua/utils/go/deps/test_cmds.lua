@@ -5,7 +5,7 @@ local M = {}
 --- @param term_opts MyTermOpts
 function M.go_test(cmd, term_opts)
   --- my_term 执行 command
-  local t = require('utils.my_term').console()
+  local t = require('myplugins.my_term').console()
   t:update(term_opts)
   t:stop()
   t:run(cmd)

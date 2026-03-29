@@ -1,5 +1,5 @@
-local g = require('utils.my_term.deps.global')
-local t_act = require('utils.my_term.term_actions')
+local g = require('myplugins.my_term.deps.global')
+local t_act = require('myplugins.my_term.term_actions')
 
 --- close all other terms except term_id
 ---

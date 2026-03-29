@@ -1,7 +1,7 @@
 --- 全局 keymap 设置
 
 local key_fn = require('utils.keymaps')
-local mt = require('utils.my_term')  -- my_term terminal
+local mt = require('myplugins.my_term')  -- my_term terminal
 
 --- DOCS ------------------------------------------------------------------------------------------- {{{
 --- vim.keymap.set() & vim.keymap.del()

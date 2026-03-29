@@ -1,5 +1,5 @@
-local g = require('utils.my_term.deps.global')
-local mt = require('utils.my_term.myterm')
+local g = require('myplugins.my_term.deps.global')
+local mt = require('myplugins.my_term.myterm')
 local fp = require('utils.filepath')
 
 --- @type integer

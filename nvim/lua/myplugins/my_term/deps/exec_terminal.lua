@@ -1,4 +1,4 @@
-local utils = require('utils.my_term.deps.utils')
+local utils = require('myplugins.my_term.deps.utils')
 
 
 local M = {}

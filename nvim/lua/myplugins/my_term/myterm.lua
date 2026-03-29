@@ -1,10 +1,10 @@
-local g = require('utils.my_term.deps.global')
-local console = require('utils.my_term.deps.exec_console')
-local terminal = require('utils.my_term.deps.exec_terminal')
-local cb = require('utils.my_term.deps.autocmd_callback')
-local t_win = require('utils.my_term.deps.term_win')
-local t_act = require('utils.my_term.term_actions')
-local t_key  = require('utils.my_term.term_keymaps')
+local g = require('myplugins.my_term.deps.global')
+local console = require('myplugins.my_term.deps.exec_console')
+local terminal = require('myplugins.my_term.deps.exec_terminal')
+local cb = require('myplugins.my_term.deps.autocmd_callback')
+local t_win = require('myplugins.my_term.deps.term_win')
+local t_act = require('myplugins.my_term.term_actions')
+local t_key  = require('myplugins.my_term.term_keymaps')
 
 
 --- @class MyTerm
@@ -191,7 +191,7 @@ function MyTerm:run(cmd)
   cb.autocmd_jobstop(self, term_bufnr, job_id)
 
   --- VVI(require module): 延迟 require() 防止循环引用
-  local tp = require('utils.my_term.myterm_post').from(self, term_bufnr, job_id)
+  local tp = require('myplugins.my_term.myterm_post').from(self, term_bufnr, job_id)
   g.set_TermPost(tp.id, tp)  -- cache MyTermPost
 end
 

@@ -1,5 +1,5 @@
-local g = require('utils.my_term.deps.global')
-local t_win = require('utils.my_term.deps.term_win')
+local g = require('myplugins.my_term.deps.global')
+local t_win = require('myplugins.my_term.deps.term_win')
 
 
 local M = {}
@@ -68,7 +68,7 @@ function M.wipeout(term_id)
   --- VVI: 保险起见先 jobstop() 再 wipeout buffer, 否则 job 可能还在继续执行.
   vim.fn.jobstop(tp.job_id)
 
-  --- require('utils.my_term.deps.autocmd_callback').autocmd_jobstop()
+  --- require('myplugins.my_term.deps.autocmd_callback').autocmd_jobstop()
   --- buffer 被 wipeout 的时候自动 jobstop(), 同时 remove terminal object from cache.
   if vim.api.nvim_buf_is_valid(tp.bufnr) then
     vim.api.nvim_buf_delete(tp.bufnr, {force=true})  -- :bwipeout

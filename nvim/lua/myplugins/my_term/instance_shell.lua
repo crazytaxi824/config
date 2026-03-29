@@ -1,6 +1,6 @@
-local g = require('utils.my_term.deps.global')
-local t_act = require('utils.my_term.term_actions')
-local mt = require('utils.my_term.myterm')
+local g = require('myplugins.my_term.deps.global')
+local t_act = require('myplugins.my_term.term_actions')
+local mt = require('myplugins.my_term.myterm')
 
 
 --- source Python Virtual Environment

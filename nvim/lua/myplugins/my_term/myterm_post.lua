@@ -2,7 +2,7 @@
 --- @class MyTermPost: MyTerm
 --- @field bufnr integer
 --- @field job_id integer
-local MyTermPost = setmetatable({}, { __index = require("utils.my_term.myterm") })  -- 继承 MyTerm
+local MyTermPost = setmetatable({}, { __index = require("myplugins.my_term.myterm") })  -- 继承 MyTerm
 MyTermPost.__index = MyTermPost
 
 

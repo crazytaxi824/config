@@ -1,5 +1,5 @@
-local g = require('utils.my_term.deps.global')
-local cb = require('utils.my_term.deps.autocmd_callback')
+local g = require('myplugins.my_term.deps.global')
+local cb = require('myplugins.my_term.deps.autocmd_callback')
 
 
 local M = {}
