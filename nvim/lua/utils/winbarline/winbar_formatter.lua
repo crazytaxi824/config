@@ -28,6 +28,7 @@ local function bufname_mod(bufnr)
     --- 区别 Quickfix | Location List
     local all_wins = vim.api.nvim_list_wins()
     for _, win_id in ipairs(all_wins) do
+      --- 获取指定 win_id 的 loclist
       local loclist = vim.fn.getloclist(win_id, { all = 0 })
       if loclist.qfbufnr == bufnr then
         return "[Location List]"
