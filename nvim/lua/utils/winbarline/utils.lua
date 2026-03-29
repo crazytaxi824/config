@@ -30,8 +30,8 @@ local function split_path_reversed(path)
 end
 
 --- 获取多个路径各自的最短唯一显示名
----@param paths string[]
----@return string[][]
+--- @param paths string[]  -- multi buffer's filepath
+--- @return string[][]  -- multi buffers' split filepath list
 function M.unique_short_paths(paths)
   local all_parts = {}
   for _, path in ipairs(paths) do
