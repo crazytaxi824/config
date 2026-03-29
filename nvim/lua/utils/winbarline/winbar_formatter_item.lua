@@ -17,8 +17,10 @@ local WinbarFormatterLevel = {
 }
 
 
-local sign_indicator = '▌'
-local sign_modified = '●'
+local wb_sign = {
+  indicator = '▌',
+  modified = '●',
+}
 
 
 --- @class WinbarFormatterItem
@@ -181,7 +183,7 @@ function WinbarFomatterItem:parse_item_to_components(level)
   local item_width = 1  -- NOTE: 每个 item 后一个空格
 
   --- indicator
-  local indicator_str = self.active and sign_indicator or ' '
+  local indicator_str = self.active and wb_sign.indicator or ' '
   --- @type WinbarFormatterItemComponent
   local comp = { content = indicator_str, hl = 'Indicator' }
   table.insert(components, comp)
@@ -237,7 +239,7 @@ function WinbarFomatterItem:parse_item_to_components(level)
 
   --- modified
   if vim.bo[self.bufnr].modified then
-    local modified_str = sign_modified .. ' '
+    local modified_str = wb_sign.modified .. ' '
     comp = { content = modified_str, hl = 'Modified' }
     table.insert(components, comp)
   end
