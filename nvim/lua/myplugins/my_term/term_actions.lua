@@ -1,81 +1,57 @@
 local g = require('myplugins.my_term.deps.global')
-local t_win = require('myplugins.my_term.deps.term_win')
 
 
 local M = {}
 
---- open terminal window
----
---- @param term_id integer
---- @return integer|nil win_id
-function M.open_win(term_id)
-  local tp = g.get_TermPost(term_id)
-  if not tp then
-    return
-  end
+--- close all my_term windows
+function M.close_all()
+  g.range_TermPost(function(term_post)
+    term_post:close_win()
+  end)
+end
 
-  local term_win = vim.fn.bufwinid(tp.bufnr)
-  if term_win > 0 then
-    --- 如果有 window 正在显示该 term buffer, 则跳转到该 window.
-    if vim.fn.win_gotoid(term_win) == 0 then
-      error('vim cannot win_gotoid(' .. term_win .. ')')
+--- open all terms which are cached in global_my_term_cache and bufnr is valid.
+function M.open_all()
+  g.range_TermPost(function(term_post)
+    if vim.fn.bufwinid(term_post.bufnr) < 0 then
+      term_post:open_win()
     end
-
-    return term_win
-  else
-    --- 如果没有任何 window 显示该 terminal 则创建一个新的 window, 然后加载该 buffer.
-    return t_win.create_term_win(tp.bufnr)
-  end
+  end)
 end
 
---- close all windows which displays this term buffer.
----
---- @param term_id integer
-function M.close_win(term_id)
-  local tp = g.get_TermPost(term_id)
-  if not tp then
+--- jobstop(job_id) & :bwipeout all terminal buffers
+function M.wipeout_all()
+  g.range_TermPost(function(term_post)
+    if vim.api.nvim_buf_is_valid(term_post.bufnr) then
+      term_post:wipeout()
+    end
+  end)
+end
+
+--- close all first, then open all
+function M.toggle_all()
+  --- 获取所有的 my_term windows
+  local open_winid_list= {}
+
+  g.range_TermPost(function(term_post)
+    if vim.api.nvim_buf_is_valid(term_post.bufnr) then
+      for _, w in ipairs(vim.fn.win_findbuf(term_post.bufnr)) do
+        table.insert(open_winid_list, w)
+      end
+    end
+  end)
+
+  --- 如果有任何 my_term window 是打开的状态, 则全部关闭.
+  if not vim.tbl_isempty(open_winid_list) then
+    for _, win_id in ipairs(open_winid_list) do
+      vim.api.nvim_win_close(win_id, true)
+    end
     return
   end
 
-  for _, w in ipairs(vim.fn.win_findbuf(tp.bufnr)) do
-    vim.api.nvim_win_close(w, true)
-  end
+  --- 如果所有 my_term window 都是关闭状态, 则 open_all()
+  M.open_all()
 end
 
---- 检查 terminal 运行情况.
----
---- @param term_id integer
---- @return integer|nil job_status
-function M.job_status(term_id)
-  local tp = g.get_TermPost(term_id)
-  if not tp then
-    return
-  end
-
-  --- `:help jobwait()`
-  return vim.fn.jobwait({tp.job_id}, 0)[1]
-end
-
---- wipeout term buffer and jobstop(job_id)
----
---- @param term_id integer
-function M.wipeout(term_id)
-  local tp = g.get_TermPost(term_id)
-  if not tp then
-    return
-  end
-
-  --- VVI: 保险起见先 jobstop() 再 wipeout buffer, 否则 job 可能还在继续执行.
-  vim.fn.jobstop(tp.job_id)
-
-  --- require('myplugins.my_term.deps.autocmd_callback').autocmd_jobstop()
-  --- buffer 被 wipeout 的时候自动 jobstop(), 同时 remove terminal object from cache.
-  if vim.api.nvim_buf_is_valid(tp.bufnr) then
-    vim.api.nvim_buf_delete(tp.bufnr, {force=true})  -- :bwipeout
-  end
-
-  --- remove from cache
-  g.delete_TermPost(term_id)
-end
 
 return M
