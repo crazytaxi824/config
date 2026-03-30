@@ -57,11 +57,12 @@ local function current_node()
     return
   end
 
-  local cursor_line = vim.api.nvim_win_get_cursor(0)[1]  -- {line, col}, (1,0)-indexed
+  local cursor_lnum = vim.api.nvim_win_get_cursor(0)[1]  -- {lnum, col}, (1,0)-indexed
 
   for index in ipairs(root_children) do
-    local node_line = root_children[index]:start()  -- {line, col, bytes}, 0-indexed
-    if cursor_line <= node_line then
+    local node_lnum = root_children[index]:start() + 1  -- {lnum, col, bytes}, all 0-indexed
+
+    if cursor_lnum < node_lnum then
       if index <= 1 then
         --- cursor above first named Node
         return
@@ -70,7 +71,7 @@ local function current_node()
       return {
         index = index-1,
         root_nodes = root_children,
-        cursor_lnum = cursor_line,
+        cursor_lnum = cursor_lnum,
       }
     end
   end
@@ -79,7 +80,7 @@ local function current_node()
   return {
     index = #root_children,
     root_nodes = root_children,
-    cursor_lnum = cursor_line,
+    cursor_lnum = cursor_lnum,
   }
 end
 
@@ -90,8 +91,8 @@ M.goto_prev = function()
     return
   end
 
-  --- NOTE: cursor line < first non comment node 的情况下 result.current = nil.
-  local current_node_first_lnum = c_node.root_nodes[c_node.index]:start() +1
+  --- NOTE: cursor lnum < first non comment node 的情况下 result.current = nil.
+  local current_node_first_lnum = c_node.root_nodes[c_node.index]:start() +1  -- {lnum, col, bytes}, all 0-indexed
 
   --- cursor 在 current_node 第一行.
   if c_node.cursor_lnum == current_node_first_lnum then
@@ -122,10 +123,10 @@ M.goto_next = function()
     local next_node_lnum = next_node:start() +1
     vim.api.nvim_win_set_cursor(0, {next_node_lnum, 0})
   else
-    local current_node_last_line = c_node.root_nodes[c_node.index]:end_() +1
-    if c_node.cursor_lnum < current_node_last_line then
+    local current_node_last_lnum = c_node.root_nodes[c_node.index]:end_() +1
+    if c_node.cursor_lnum < current_node_last_lnum then
       --- jump to last node's last line
-      vim.api.nvim_win_set_cursor(0, {current_node_last_line, 0})
+      vim.api.nvim_win_set_cursor(0, {current_node_last_lnum, 0})
     else
       --- NOTE: cursor_line >= last node's last line 的情况.
       vim.notify("it's last node in this buffer", vim.log.levels.INFO)
