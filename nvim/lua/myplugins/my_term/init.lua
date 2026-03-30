@@ -66,4 +66,21 @@ function M.toggle_all()
   M.open_all()
 end
 
+
+function M:default_keymaps()
+  local opt = { silent = true }
+  local keymaps = {
+    --- NOTE: terminal key mapping 在其他 plugin 中也有设置.
+    {'n', '<leader>tt', function() self.open_shell_term() end, opt, "open/new Terminal #(1~999)"},
+    {'n', '<leader>ta', function() self.toggle_all() end,  opt, "toggle All Terminals windows"},
+    {'n', '<leader>tC', function() self.close_all() end,   opt, "close All Terminals windows"},
+    {'n', '<leader>tO', function() self.open_all() end,    opt, "open All Terminals windows"},
+    {'n', '<leader>tW', function() self.wipeout_all() end, opt, "wipeout All Terminals"},
+    -- {'n', '<leader>tW', function() key_fn.wipe_all_term_bufs() end, opt, "wipeout All Terminals"},  -- alternative
+  }
+  require('utils.keymaps').set(keymaps, {
+    { "<leader>t", group = "my_term" },
+  })
+end
+
 return M
