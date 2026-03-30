@@ -26,6 +26,6 @@ end getBatteryInfo
 set {batteryLevel, chargingStatus} to getBatteryInfo()
 
 -- 如果电池低于 n% 且未在充电，发送通知
-if batteryLevel ≤ 45 and chargingStatus is not "charging" then
+if batteryLevel ≤ 35 and chargingStatus is not "charging" then
 	display notification "当前电池电量：" & batteryLevel & "%，请及时充电！" with title "⚠️ 电池电量低" sound name "Glass"
 end if
