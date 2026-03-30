@@ -1,6 +1,5 @@
 local g = require('myplugins.my_term.deps.global')
 local t_win = require('myplugins.my_term.deps.term_win')
-local t_act = require('myplugins.my_term.term_actions')
 local shell_term = require("myplugins.my_term.instance_shell")
 local console = require('myplugins.my_term.instance_console')
 
@@ -16,7 +15,7 @@ M.console = console.console
 --- close all my_term windows
 function M.close_all()
   g.range_TermPost(function(term_post)
-    t_act.close_win(term_post.id)
+    term_post:close_win()
   end)
 end
 
@@ -36,7 +35,7 @@ end
 function M.wipeout_all()
   g.range_TermPost(function(term_post)
     if vim.api.nvim_buf_is_valid(term_post.bufnr) then
-      t_act.wipeout(term_post.id)
+      term_post:wipeout()
     end
   end)
 end

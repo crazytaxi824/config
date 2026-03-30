@@ -3,7 +3,6 @@ local console = require('myplugins.my_term.deps.exec_console')
 local terminal = require('myplugins.my_term.deps.exec_terminal')
 local cb = require('myplugins.my_term.deps.autocmd_callback')
 local t_win = require('myplugins.my_term.deps.term_win')
-local t_act = require('myplugins.my_term.term_actions')
 local t_key  = require('myplugins.my_term.term_keymaps')
 
 
@@ -170,13 +169,15 @@ function MyTerm:run(cmd)
     return
   end
 
-  --- cache last cmd
-  self._last_cmd = cmd
-
-  if t_act.job_status(self.id) == -1 then
+  --- 检查 job 是否正在运行
+  local tp = g.get_TermPost(self.id)
+  if tp and tp:job_status() == -1 then
     Notify("job_id is still running, please use `term:stop()` or `CTRL-C` first.", "WARN", {title="my_term"})
     return
   end
+
+  --- cache last cmd
+  self._last_cmd = cmd
 
   --- 创建并进入 term window & buffer
   local term_bufnr, term_win_id = t_win.set_myterm_current_win(self)

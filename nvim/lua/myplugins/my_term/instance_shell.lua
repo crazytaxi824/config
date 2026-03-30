@@ -1,5 +1,4 @@
 local g = require('myplugins.my_term.deps.global')
-local t_act = require('myplugins.my_term.term_actions')
 local mt = require('myplugins.my_term.myterm')
 
 
@@ -39,7 +38,7 @@ function M.open_shell_term()
   local tp = g.get_TermPost(vim.v.count1)
   if tp then
     --- open & enter window
-    if not t_act.open_win(tp.id) then
+    if not tp:open_win() then
       error('cached my_term has No bufnr')
     end
     return
