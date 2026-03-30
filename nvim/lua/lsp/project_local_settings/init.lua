@@ -49,6 +49,16 @@ local function read_local_settings(json_file)
 
   local lines = vim.fn.readfile(local_settings_filepath)
 
+  --- TODO: neovim 0.12 feat: 6b4ec2264e1d stdlib: vim.json.decode() can allow comments #37795
+  if vim.fn.has("nvim-0.12") == 1 then
+    local json_content = table.concat(lines, "\n")
+    local ok, result = pcall(vim.json.decode, json_content, { skip_comments = true })
+    if ok then
+      return result -- json 不为空, 需要 reload lsp settings
+    end
+    return nil -- json 格式错误, 不需要 reload lsp settings
+  end
+
   --- 移除 jsonc 中的 comments, 全部转成 ""
   local strip_lines = {}
 
