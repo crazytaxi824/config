@@ -8,7 +8,8 @@ local function find_ts_root_node()
   --- "lang", default filetype.
   local tsparser_status_ok, tsparser = pcall(vim.treesitter.get_parser)
   if not tsparser_status_ok then
-    error(vim.inspect(tsparser))
+    --- no parser for current buffer
+    return
   end
 
   if not tsparser then
