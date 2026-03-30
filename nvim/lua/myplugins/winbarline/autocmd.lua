@@ -1,6 +1,6 @@
-local g = require('utils.winbarline.global')
-local wb_win = require("utils.winbarline.winbar_win")
-local wb_buf = require("utils.winbarline.winbar_buf")
+local g = require('myplugins.winbarline.global')
+local wb_win = require("myplugins.winbarline.winbar_win")
+local wb_buf = require("myplugins.winbarline.winbar_buf")
 
 
 --- get current window id, floating window is excluded

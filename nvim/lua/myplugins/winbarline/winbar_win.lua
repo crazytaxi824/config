@@ -1,5 +1,5 @@
-local u = require('utils.winbarline.utils')
-local wb_fmt = require('utils.winbarline.winbar_formatter')
+local u = require('myplugins.winbarline.utils')
+local wb_fmt = require('myplugins.winbarline.winbar_formatter')
 
 
 --- @class WinbarLineWindow

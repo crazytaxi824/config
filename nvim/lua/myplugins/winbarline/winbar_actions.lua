@@ -1,7 +1,7 @@
-local wb_win = require("utils.winbarline.winbar_win")
-local wb_buf = require("utils.winbarline.winbar_buf")
-local g = require('utils.winbarline.global')
-local u = require('utils.winbarline.utils')
+local wb_win = require("myplugins.winbarline.winbar_win")
+local wb_buf = require("myplugins.winbarline.winbar_buf")
+local g = require('myplugins.winbarline.global')
+local u = require('myplugins.winbarline.utils')
 
 
 local M = {}
