@@ -8,7 +8,6 @@ local M = {}
 --- HACK 中用到的 modules, 大多 overwrite 源代码 --------------------------------------------------- {{{
 local function check_module()
   local require_list = {
-    "bufferline.state",
     "nvim-treesitter.parsers",
     "telescope.make_entry",
   }
