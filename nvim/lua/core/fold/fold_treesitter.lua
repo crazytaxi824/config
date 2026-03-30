@@ -16,8 +16,9 @@ M.set_fold = function(bufnr, win_id)
   end
 
   --- treesitter 是否有对应的 parser.
-  local status_ok, lang_tree = pcall(vim.treesitter.get_parser, bufnr)
-  if not status_ok then
+  --- TODO: nvim-0.12 get_parser() 返回 nil 而不是 error
+  local lang_tree = vim.treesitter.get_parser(bufnr)
+  if not lang_tree then
     return
   end
 
