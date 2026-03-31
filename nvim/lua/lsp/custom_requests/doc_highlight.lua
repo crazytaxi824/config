@@ -120,6 +120,21 @@ M.setup = function (client, bufnr)
     desc = "LSP: documentHighlight",
   })
 
+  --- cursor 离开 documentHighlight word 时清除 references highlight
+  vim.api.nvim_create_autocmd({'CursorMovedI', 'CursorMoved'}, {
+    group = group_id,
+    buffer = bufnr,  -- 对指定 buffer 有效
+    callback = function(params)
+      if last_results.bufnr and last_results.bufnr == bufnr
+        and last_results.refs and #last_results.refs > 0
+        and not cursor_inside_range(last_results.refs)
+      then
+        vim.lsp.util.buf_clear_references(bufnr)
+      end
+    end,
+    desc = "LSP: clear highlight when cursor move out of word",
+  })
+
   --- cursor 离开 window 时清除 references highlight
   vim.api.nvim_create_autocmd({'WinLeave'}, {
     group = group_id,
