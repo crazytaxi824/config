@@ -42,6 +42,7 @@ vim.api.nvim_create_autocmd("FileType", {
       return
     end
 
+    --- buffer 没有对应 installed parser 则提醒安装
     local available_parsers = ts.get_available()
     if vim.tbl_contains(available_parsers, lang) then
       Notify("run `:TSInstall " .. lang .. "` to install parser", "INFO", {title = "treesitter install"})
