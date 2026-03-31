@@ -85,7 +85,7 @@ local plugins = {
   --- but if you want to extend a query use the `after/queries/` directory.
   {
     "nvim-treesitter/nvim-treesitter",
-    branch = "main",  -- 'master' branch is locked for backward compatibility.
+    branch = "main",  -- NOTE: 'master' branch is locked for backward compatibility.
     config = function() require("plugins.settings.treesitter") end,
     -- build = ':TSUpdate',
     lazy = false,
@@ -104,7 +104,6 @@ local plugins = {
   --   "windwp/nvim-ts-autotag",  -- auto close tag <div></div>
   --   commit = "8e1c0a3",
   --   config = function() require("plugins.settings.treesitter_autotag") end,
-  --   dependencies = { "nvim-treesitter/nvim-treesitter" },
   --
   --   event = "InsertEnter",
   -- },
@@ -113,7 +112,6 @@ local plugins = {
     "lukas-reineke/indent-blankline.nvim",
     tag = "v3.9.1",
     config = function() require("plugins.settings.indentline") end,  -- setup() 设置 use_treesitter = true
-    -- dependencies = {"nvim-treesitter/nvim-treesitter"},  -- for setup({scope})
 
     event = "VeryLazy",
   },
