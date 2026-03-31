@@ -60,7 +60,8 @@ vim.api.nvim_create_autocmd({"BufWinEnter"}, {
 
     local w = binding_win_buf(curr_win, args.buf)
     w:set_winbar()
-  end
+  end,
+  desc = "winbarline: binding window and buffer"
 })
 
 --- split window 中不会触发 BufWinEnter, 所以利用 CursorMoved 来解决.
@@ -77,7 +78,8 @@ vim.api.nvim_create_autocmd({"CursorMoved"}, {
       local w = binding_win_buf(curr_win, args.buf)
       w:set_winbar()
     end
-  end
+  end,
+  desc = "winbarline: solve split window cannot binding window and buffer"
 })
 
 --- buffer 所在的 windows 中清理 window-buffer list
@@ -101,7 +103,8 @@ vim.api.nvim_create_autocmd({"BufDelete", "BufWipeout"}, {
 
     --- delete winbar_buf from cache
     g.delete_buf(args.buf)
-  end
+  end,
+  desc = "winbarline: remove buffer from all windows"
 })
 
 --- 从 window 的 buffers 中清理 buffer-window list
@@ -130,7 +133,8 @@ vim.api.nvim_create_autocmd({"WinClosed"}, {
 
     --- delete winbar_win from cache
     g.delete_win(win_id)
-  end
+  end,
+  desc = "winbarline: remove window from all buffers"
 })
 
 
@@ -156,7 +160,8 @@ vim.api.nvim_create_autocmd({
         w:set_winbar()
       end
     end
-  end
+  end,
+  desc = "winbarline: buffer modified status"
 })
 
 
@@ -186,7 +191,8 @@ vim.api.nvim_create_autocmd({"WinEnter"}, {
         pw:set_winbar()
       end
     end
-  end
+  end,
+  desc = "winbarline: redraw selected buffer"
 })
 
 --- 根据 window 变动更新 winbar
@@ -201,7 +207,8 @@ vim.api.nvim_create_autocmd({"WinResized"}, {
         w:set_winbar()
       end
     end
-  end
+  end,
+  desc = "winbarline: redraw buffers"
 })
 
 
