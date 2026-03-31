@@ -87,32 +87,33 @@ local plugins = {
     "nvim-treesitter/nvim-treesitter",
     branch = "main",  -- 'master' branch is locked for backward compatibility.
     config = function() require("plugins.settings.treesitter") end,
+    -- build = ':TSUpdate',
+    lazy = false,
   },
 
   --- 第一方 module 插件 ---
   {
     "nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
     config = function() require("plugins.settings.treesitter_ctx") end,
-    dependencies = { "nvim-treesitter/nvim-treesitter" },
 
     event = "VeryLazy",
   },
 
-  --- 第三方 plugin 需要用到 tree-sitter ---
-  {
-    "windwp/nvim-ts-autotag",  -- auto close tag <div></div>
-    commit = "8e1c0a3",
-    config = function() require("plugins.settings.treesitter_autotag") end,
-    dependencies = { "nvim-treesitter/nvim-treesitter" },
-
-    event = "InsertEnter",
-  },
+  -- --- 第三方 plugin 需要用到 tree-sitter ---
+  -- {
+  --   "windwp/nvim-ts-autotag",  -- auto close tag <div></div>
+  --   commit = "8e1c0a3",
+  --   config = function() require("plugins.settings.treesitter_autotag") end,
+  --   dependencies = { "nvim-treesitter/nvim-treesitter" },
+  --
+  --   event = "InsertEnter",
+  -- },
 
   {
     "lukas-reineke/indent-blankline.nvim",
     tag = "v3.9.1",
     config = function() require("plugins.settings.indentline") end,  -- setup() 设置 use_treesitter = true
-    dependencies = {"nvim-treesitter/nvim-treesitter"},  -- for setup({scope})
+    -- dependencies = {"nvim-treesitter/nvim-treesitter"},  -- for setup({scope})
 
     event = "VeryLazy",
   },
