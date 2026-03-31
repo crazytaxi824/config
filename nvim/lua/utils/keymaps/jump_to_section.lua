@@ -7,7 +7,6 @@ local function find_ts_root_node()
   --- vim.treesitter.get_parser(bufnr, lang)
   --- "bufnr", 0 current buffer
   --- "lang", default filetype.
-  --- TODO: nvim-0.12 get_parser() 返回 nil 而不是 error
   local tsparser = vim.treesitter.get_parser()
   if not tsparser then
     error("treesitter parser is missing")
