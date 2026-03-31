@@ -99,14 +99,14 @@ local plugins = {
     event = "VeryLazy",
   },
 
-  -- --- 第三方 plugin 需要用到 tree-sitter ---
-  -- {
-  --   "windwp/nvim-ts-autotag",  -- auto close tag <div></div>
-  --   commit = "8e1c0a3",
-  --   config = function() require("plugins.settings.treesitter_autotag") end,
-  --
-  --   event = "InsertEnter",
-  -- },
+  --- 第三方 plugin 需要用到 tree-sitter ---
+  {
+    "windwp/nvim-ts-autotag",  -- auto close tag <div></div>
+    commit = "8e1c0a3",
+    config = function() require("plugins.settings.treesitter_autotag") end,
+
+    event = "InsertEnter",
+  },
 
   {
     "lukas-reineke/indent-blankline.nvim",
