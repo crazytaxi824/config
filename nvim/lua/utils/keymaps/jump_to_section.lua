@@ -46,87 +46,67 @@ local function ts_root_children()
 end
 
 --- 当前 cursor 所在 root's Child Node
---- @return { index: integer, root_nodes: TSNode[], cursor_lnum: integer }|nil
-local function current_node()
-  local root_children = ts_root_children()
-  if not root_children then
-    return
-  end
-
+--- @param root_children TSNode[]
+--- @return { index: integer, cursor_lnum: integer, node_start_lnum: integer }
+local function current_node(root_children)
   local cursor_lnum = vim.api.nvim_win_get_cursor(0)[1]  -- {lnum, col}, (1,0)-indexed
 
-  for index in ipairs(root_children) do
-    local node_lnum = root_children[index]:start() + 1  -- {lnum, col, bytes}, all 0-indexed
+  for i = #root_children, 1, -1 do
+    local node_lnum = root_children[i]:start() + 1  -- {lnum, col, bytes}, all 0-indexed
 
-    if cursor_lnum < node_lnum then
-      if index <= 1 then
-        --- cursor above first named Node
-        return
-      end
-
+    if cursor_lnum >= node_lnum then
       return {
-        index = index-1,
-        root_nodes = root_children,
+        index = i,
         cursor_lnum = cursor_lnum,
+        node_start_lnum = node_lnum,
       }
     end
   end
 
-  -- cursor at last node
+  -- cursor above first node
   return {
-    index = #root_children,
-    root_nodes = root_children,
+    index = 0,
     cursor_lnum = cursor_lnum,
+    node_start_lnum = 1,
   }
 end
 
 --- jump_to_prev_section
 M.goto_prev = function()
-  local c_node = current_node()
-  if not c_node then
+  local root_children = ts_root_children()
+  if not root_children then
     return
   end
 
-  --- NOTE: cursor lnum < first non comment node 的情况下 result.current = nil.
-  local current_node_first_lnum = c_node.root_nodes[c_node.index]:start() +1  -- {lnum, col, bytes}, all 0-indexed
+  local c_node = current_node(root_children)
 
-  --- cursor 在 current_node 第一行.
-  if c_node.cursor_lnum == current_node_first_lnum then
-    local prev_node = c_node.root_nodes[c_node.index-1]
-    if prev_node then
-      local prev_node_lnum = prev_node:start() +1
-      vim.api.nvim_win_set_cursor(0, {prev_node_lnum, 0})
-    else
-      --- 自己是 first node's first line 的情况
-      vim.notify("it's first node in this buffer", vim.log.levels.INFO)
-    end
+  if c_node.index < 1 or (c_node.index == 1 and c_node.cursor_lnum == c_node.node_start_lnum) then
+    vim.api.nvim_win_set_cursor(0, {1, 0})
+  elseif c_node.cursor_lnum ~= c_node.node_start_lnum then
+    vim.api.nvim_win_set_cursor(0, {c_node.node_start_lnum, 0})
   else
-    --- jump to cursor current node first line.
-    vim.api.nvim_win_set_cursor(0, {current_node_first_lnum, 0})
+    local prev_node = root_children[c_node.index-1]
+    local prev_node_lnum = prev_node:start() + 1
+    vim.api.nvim_win_set_cursor(0, {prev_node_lnum, 0})
   end
 end
 
 --- jump_to_next_section
 M.goto_next = function()
-  local c_node = current_node()
-  if not c_node then
+  local root_children = ts_root_children()
+  if not root_children then
     return
   end
 
-  local next_node = c_node.root_nodes[c_node.index+1]
+  local c_node = current_node(root_children)
 
+  local next_node = root_children[c_node.index+1]
   if next_node then
     local next_node_lnum = next_node:start() +1
     vim.api.nvim_win_set_cursor(0, {next_node_lnum, 0})
   else
-    local current_node_last_lnum = c_node.root_nodes[c_node.index]:end_() +1
-    if c_node.cursor_lnum < current_node_last_lnum then
-      --- jump to last node's last line
-      vim.api.nvim_win_set_cursor(0, {current_node_last_lnum, 0})
-    else
-      --- NOTE: cursor_line >= last node's last line 的情况.
-      vim.notify("it's last node in this buffer", vim.log.levels.INFO)
-    end
+    local last_lnum = vim.api.nvim_buf_line_count(0)
+    vim.api.nvim_win_set_cursor(0, {last_lnum, 0})
   end
 end
 
