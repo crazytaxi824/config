@@ -1,12 +1,12 @@
 ; extends
 ;;; `:help treesitter-predicates`
 
-; VVI: @comment.warning, (|xxx|) @constant, ":" @punctuation.delimiter.comment
+; `VVI`: @comment.warning, `()` @punctuation.bracket.comment , (`xxx`) @constant, `:` @punctuation.delimiter.comment
 ; VVI(message): comment
 ((tag
   (name) @comment.warning @nospell
-  ("(" @punctuation.bracket.comment (user) @constant ")" @punctuation.bracket.comment)?
-  ":" @punctuation.delimiter.comment)
+  ("(" @punctuation.bracket (user) @constant ")" @punctuation.bracket)?
+  ":" @punctuation.delimiter)
   (#any-of? @comment.warning "VVI" "DEPRECATED"))
 
 ; VVI 加入到 @comment.warning

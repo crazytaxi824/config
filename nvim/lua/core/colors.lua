@@ -316,17 +316,19 @@ Highlights = {
   SpellLocal = {},  -- clear highlight
 
   --- treesitter 颜色设置 --------------------------------------------------------------------------
+  --- NOTE: treesitter highlight 命名规则: @[type].[name].[filetype]
   --- comment
   ['@comment.error'] = {link = 'ErrorMsg'},  -- FIXME, BUG, ERROR
-  ['@comment.warning'] = { link = "WarningMsg" },  -- HACK, WARN, WARNING, VVI, FIX
+  ['@comment.warning'] = { link = "WarningMsg" },  -- HACK, WARN, WARNING, FIX
   ['@comment.note'] = { link = "SpecialComment" }, -- XXX, NOTE, DOCS, TEST, INFO
   ['@comment.todo'] = { link = "Todo" },           -- TODO
+  ['@punctuation.bracket.comment'] = { link = "Constant" },
   ['@punctuation.delimiter.comment'] = { link = "Comment" },
 
   --- url: http://www.abc.com
   ['@string.special.url'] = { link = "Underlined" },  -- url
 
-  --- markdown / markdown_inline
+  --- markdown | markdown_inline
   --- # titles
   ["@markup.heading.1.markdown"] = {fg=Colors.green.g, underline=true, bold=true},
   ["@markup.heading.2.markdown"] = {fg=Colors.yellow.g, underline=true, bold=true},
