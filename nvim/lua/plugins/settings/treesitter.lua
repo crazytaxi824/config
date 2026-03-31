@@ -38,6 +38,7 @@ vim.api.nvim_create_autocmd("FileType", {
     --- buffer 已经有 parser 了
     local parser = vim.treesitter.get_parser(params.buf)
     if parser and parser:lang() == lang then
+      vim.treesitter.start()  -- NOTE: enable Highlight
       return
     end
 
@@ -46,7 +47,7 @@ vim.api.nvim_create_autocmd("FileType", {
       Notify("run `:TSInstall " .. lang .. "` to install parser", "INFO", {title = "treesitter install"})
     end
   end,
-  desc = "treesitter: Check treesitter parser for filetypes"
+  desc = "treesitter: enable Highlight & check treesitter parser for filetypes"
 })
 
 
