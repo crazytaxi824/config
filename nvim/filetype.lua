@@ -2,7 +2,7 @@
 --- extension, filename, pattern
 vim.filetype.add({
   extension = {
-    -- json = "json5",  -- 将 json 文件看作 json5
+    json = "jsonc",  -- 将 json 文件看作 jsonc
   },
   filename = {
     ["go.mod"] = "gomod",

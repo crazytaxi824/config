@@ -55,7 +55,7 @@ v0.10.0_beta for neovim v0.10.0
 │   └── user      <- 其他配置文件位置, settings, color, plugin.setup()
 ├── plugin
 │   └── packer_compiled.lua  <- packer 插件管理自动生成的文件.
-├── filetype.lua  <- filetype 设置文件, eg: json -> json5
+├── filetype.lua  <- filetype 设置文件, eg: json -> jsonc
 ├── init.lua      <- 主入口
 ...
 ```
