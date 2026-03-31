@@ -85,7 +85,7 @@ local plugins = {
   --- but if you want to extend a query use the `after/queries/` directory.
   {
     "nvim-treesitter/nvim-treesitter",
-    -- commit = "d22166e",
+    branch = "main",  -- 'master' branch is locked for backward compatibility.
     config = function() require("plugins.settings.treesitter") end,
   },
 
