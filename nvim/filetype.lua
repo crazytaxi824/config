@@ -2,8 +2,7 @@
 --- extension, filename, pattern
 vim.filetype.add({
   extension = {
-    json = "jsonc",
-    sh = "sh",  -- shell 文件. 如果没有这个定义, #!/bin/zsh 等文件的 filetype 会变成 zsh.
+    -- json = "json5",  -- 将 json 文件看作 json5
   },
   filename = {
     ["go.mod"] = "gomod",

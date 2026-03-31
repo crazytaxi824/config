@@ -262,7 +262,7 @@ vim.opt.wrap = false  -- wrap(默认) - 超出屏幕则(软)换行. 即行号不
 --- prettier 支持的文件, 默认都是使用 2 个 space 来 indent.
 --- 同时 shiftwidth 会影响 indent line 画线的宽度.
 vim.api.nvim_create_autocmd('FileType', {
-  pattern = {'json','jsonc','javascript','javascriptreact','typescript','typescriptreact',
+  pattern = {'json','jsonc','json5','javascript','javascriptreact','typescript','typescriptreact',
     'vue','svelte','html','css','less','scss','graphql','yaml','lua'},
   callback = function(params)
     local tab_w = 2
