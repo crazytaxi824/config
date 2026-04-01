@@ -39,6 +39,9 @@
 --- }}}
 
 --- VVI: alacritty color based on sRGB, alacritty 颜色对应, 表示 0-15 系统颜色.
+
+--- c: "cterm", g: "gui"
+--- @type table<string, { c: integer, g: string }>
 Colors = {
   white   = {c=251, g='#C0C0C0'},  -- foreground, text
   black   = {c=233, g='#121212'},  -- black background
@@ -75,6 +78,7 @@ Colors = {
 }
 
 --- highlight api 设置: vim.api.nvim_set_hl(0, '@property', { ctermfg = 81 })
+--- @type table<string, vim.api.keyset.highlight>
 Highlights = {
   --- editor ---------------------------------------------------------------------------------------
   --- window background color
@@ -436,6 +440,34 @@ Highlights = {
 --- nvim_set_hl()
 for hl_group, hl_val in pairs(Highlights) do
   vim.api.nvim_set_hl(0, hl_group, hl_val)
+end
+
+--- debug color ------------------------------------------------------------------------------------
+
+--- @param color_name string
+function Get_highlight_color(color_name)
+  local match_names = {}
+  for name, _ in pairs(Colors) do
+    if name:match(color_name) then
+      table.insert(match_names, name)
+    end
+  end
+
+  if vim.tbl_isempty(match_names) then
+    return
+  end
+
+  for _, c_name in ipairs(match_names) do
+    local color = Colors[c_name]
+
+    for hl_name, hl_val in pairs(Highlights) do
+      if hl_val.ctermfg == color.c or hl_val.fg == color.g or hl_val.foreground == color.g then
+        print(hl_name .. ' : { fg =', c_name .. ' }')
+      elseif hl_val.ctermbg == color.c or hl_val.bg == color.g or hl_val.background == color.g then
+        print(hl_name .. ' : { bg =', c_name .. ' }')
+      end
+    end
+  end
 end
 
 
