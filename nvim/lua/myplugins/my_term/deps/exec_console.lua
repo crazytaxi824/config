@@ -16,13 +16,26 @@ vim.api.nvim_set_hl(0, "my_output_stdout", {ctermfg=Colors.blue.c, fg=Colors.blu
 vim.api.nvim_set_hl(0, "my_output_stderr", {ctermfg=Colors.red.c, fg=Colors.red.g})
 vim.api.nvim_set_hl(0, "my_output_eof", {ctermfg=Colors.g238.c, fg=Colors.g238.g})
 
+
+--- modifiable 包装
+---
+--- @param bufnr integer
+--- @param start_lnum integer
+--- @param end_lnum integer
+--- @param data string[]
+local function buf_set_lines(bufnr, start_lnum, end_lnum, data)
+  vim.bo[bufnr].modifiable = true
+  vim.api.nvim_buf_set_lines(bufnr, start_lnum, end_lnum, false, data)
+  vim.bo[bufnr].modifiable = false
+end
+
 --- 强制结束 job
 ---
 --- @param term_bufnr integer
 --- @param job_id integer
 local function stop_job(term_bufnr, job_id)
   if vim.fn.jobstop(job_id) == 1 then
-    vim.api.nvim_buf_set_lines(term_bufnr, -1, -1, true, {"^C"})
+    buf_set_lines(term_bufnr, -1, -1, { "^C" })
   end
 end
 
@@ -78,13 +91,10 @@ local function set_buf_line_output(bufnr, data, hl)
   end
 
   --- append output {data} to buffer
-  vim.api.nvim_buf_set_lines(bufnr, -1, -1, true, data)
+  buf_set_lines(bufnr, -1, -1, data)
 
   --- highlight lines
   vim.hl.range(bufnr, ns, hl, {hl_start_lnum, 0}, {vim.api.nvim_buf_line_count(bufnr)-1, -1})
-
-  --- set nomodified
-  vim.api.nvim_set_option_value('modified', false, { scope='local', buf=bufnr })
 end
 
 --- job done 后处理: 在最后一行显示 [Process exited 'exit_code']
@@ -94,7 +104,8 @@ end
 --- @param exit_code integer
 local function set_buf_line_exit(bufnr, job_id, exit_code)
   local hl_start_lnum = vim.api.nvim_buf_line_count(bufnr)
-  vim.api.nvim_buf_set_lines(bufnr, -1, -1, true, {"[EOF]", "[Process (job: " .. job_id .. ") has exited: " .. exit_code .. "]"})
+
+  buf_set_lines(bufnr, -1, -1, {"[EOF]", "[Process (job: " .. job_id .. ") has exited: " .. exit_code .. "]"})
 
   --- highlight
   vim.hl.range(bufnr, ns, "my_output_eof", {hl_start_lnum, 0}, {hl_start_lnum, -1})
@@ -103,9 +114,6 @@ local function set_buf_line_exit(bufnr, job_id, exit_code)
   else
     vim.hl.range(bufnr, ns, "my_output_sys_error", {hl_start_lnum+1, 0}, {hl_start_lnum+1, -1})
   end
-
-  --- set nomodified
-  vim.api.nvim_set_option_value('modified', false, { scope='local', buf=bufnr })
 end
 
 --- print cmd, job info
@@ -114,23 +122,23 @@ end
 --- @param term_bufnr integer
 --- @param job_id integer
 local function print_job_info(cmd, term_bufnr, job_id)
-  local lines = {}  ---@type string[]
+  local data = {}  ---@type string[]
 
   if type(cmd) == "string" then
-    table.insert(lines, cmd)
+    table.insert(data, cmd)
   elseif type(cmd) == "table" then
-    table.insert(lines, table.concat(cmd, ' '))
+    table.insert(data, table.concat(cmd, ' '))
   else
     error("term.cmd is not string|string[]")
   end
 
   --- process, job info
   local job_info = "[Process: " .. vim.fn.jobpid(job_id) .. " (job: " .. job_id .. ") starts]"
-  table.insert(lines, job_info)
+  table.insert(data, job_info)
 
   --- highlight
-  vim.api.nvim_buf_set_lines(term_bufnr, 0, -1, true, lines)  -- clear buffer text & print cmd
-  vim.hl.range(term_bufnr, ns, "my_output_sys", {0, 0}, {#lines-1, -1}) -- highlight cmd
+  buf_set_lines(term_bufnr, 0, -1, data)
+  vim.hl.range(term_bufnr, ns, "my_output_sys", {0, 0}, {#data-1, -1}) -- highlight cmd
 end
 
 --- 后台执行 jobstart(cmd), 将 output 手动写入 buffer. (buftype = 'nofile')
@@ -150,21 +158,13 @@ function M.console_exec(cmd, term, term_bufnr, term_win_id)
   vim.api.nvim_buf_set_name(term_bufnr, "term://#my_term#console#" .. term.id)
 
   --- setlocal opts
+  vim.bo[term_bufnr].undolevels = -1  -- disable undo
+  vim.bo[term_bufnr].modifiable = false
   vim.api.nvim_set_option_value('wrap', true, { scope='local', win=term_win_id })
   vim.api.nvim_set_option_value('relativenumber', false, { scope='local', win=term_win_id })
   vim.api.nvim_set_option_value('signcolumn', 'no', { scope='local', win=term_win_id })
 
-  --- VVI: "prompt" 不能通过 insert mode 修改内容, 只能用 nvim_buf_set_lines() 修改内容.
-  vim.api.nvim_set_option_value('buftype', 'prompt', { scope='local', buf=term_bufnr })
-
-  --- 处理 prompt input
-  vim.fn.prompt_setprompt(term_bufnr, "> ")
-  vim.fn.prompt_setcallback(term_bufnr, function(input)
-    if input == 'exit' then
-      vim.api.nvim_buf_delete(term_bufnr, {force = true})  --- :bwipeout
-    end
-  end)
-
+  --- jobstart()
   local job_id = vim.fn.jobstart(cmd, {
     cwd = term:cwd(),
     env = term:env(),
