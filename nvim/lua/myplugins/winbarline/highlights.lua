@@ -43,7 +43,7 @@ local hl = {
     bold = true,
   },
   diagnostic_hint = {
-    ctermfg=Colors.hint_grey.c, fg=Colors.hint_grey.g,
+    ctermfg=Colors.grey_hint.c, fg=Colors.grey_hint.g,
     bold = true,
   },
 }

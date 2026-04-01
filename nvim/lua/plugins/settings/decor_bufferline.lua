@@ -155,17 +155,17 @@ local buf_highlights = {
     italic = false,
   },
   hint_diagnostic = {
-    ctermfg=Colors.hint_grey.c, fg=Colors.hint_grey.g,
+    ctermfg=Colors.grey_hint.c, fg=Colors.grey_hint.g,
     ctermbg=Colors.g236.c, bg=Colors.g236.g,
     bold = true,
   },
   hint_diagnostic_visible = {
-    ctermfg=Colors.hint_grey.c, fg=Colors.hint_grey.g,
+    ctermfg=Colors.grey_hint.c, fg=Colors.grey_hint.g,
     ctermbg=Colors.black.c, bg=Colors.black.g,
     bold = true,
   },
   hint_diagnostic_selected = {
-    ctermfg=Colors.hint_grey.c, fg=Colors.hint_grey.g,
+    ctermfg=Colors.grey_hint.c, fg=Colors.grey_hint.g,
     ctermbg=Colors.black.c, bg=Colors.black.g,
     bold = true,
     italic = false,

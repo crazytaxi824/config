@@ -38,28 +38,25 @@
 ---
 --- }}}
 
---- VVI: alacritty color based on sRGB
+--- VVI: alacritty color based on sRGB, alacritty 颜色对应, 表示 0-15 系统颜色.
 Colors = {
-  --- NOTE: alacritty 颜色对应, 表示 0-15 系统颜色.
-  white = {c=251, g='#C0C0C0'},   -- foreground, text
-  black = {c=233, g='#121212'},   -- black background
-  red   = {c=167, g='#F85249'},   -- error message
-  green = {c=42,  g='#00D787'},   -- markdown title
-  yellow = {c=220, g='#FFD800'},  -- Search, lualine: Insert Mode background && tabline: tab seleced background
-  blue  = {c=75, g='#4FC1FF'},    -- info message
-  magenta = {c=213, g='#FF87FF'}, -- IncSearch, return, if, else, break, package, import
-  cyan  = {c=81, g='#9CDCFE'},    -- VVI: one of vim's main color. SpecialChar, Underlined, Label ...
-  orange = {c=208, g='#CCA700'},  -- warning message
-  hint_grey = {c=244, g='#808080'},  -- hint message
-  purple = {c=170, g='#D75FD7'},
+  white   = {c=251, g='#C0C0C0'},  -- foreground, text
+  black   = {c=233, g='#121212'},  -- black background
+  cyan    = {c=81,  g='#9CDCFE'},  -- VVI: one of vim's main color. SpecialChar, Underlined, Label ...
+  yellow  = {c=220, g='#FFD800'},  -- Search, lualine: Insert Mode background && tabline: tab seleced background
+  magenta = {c=213, g='#FF87FF'},  -- IncSearch, return, if, else, break, package, import
+  red     = {c=167, g='#F85249'},  -- error message
+  orange  = {c=208, g='#CCA700'},  -- warning message
+  blue    = {c=75,  g='#4FC1FF'},  -- info message, constant ...
+  grey_hint = {c=244, g='#808080'},  -- hint message
+  green   = {c=42,  g='#00D787'},  -- OK message, markdown title
 
-  --- 常用颜色,
-  blue_boolean  = {c=74, g='#569CD6'},   -- Boolean, Special
-  gold_fn     = {c=78, g='#DCDCAA'},   -- 78|85, func, function_call, method, method_call ... | bufferline, lualine
-  green_type    = {c=79, g='#4EC9B0'},   -- type, 数据类型
-
-  --- dark color use for background
-  red_bg = {c=52, g='#66201D'},  --- #4E201E, #72201D
+  --- 其他常用颜色
+  blue_boolean = {c=74,  g='#569CD6'},  -- Keyword, Boolean, Special ...
+  green_type   = {c=79,  g='#4EC9B0'},  -- type, 数据类型
+  gold_fn      = {c=78,  g='#DCDCAA'},  -- 78|85, func, function_call, method, method_call ... | bufferline, lualine
+  red_bg       = {c=52,  g='#66201D'},  -- 作为 background 使用的红色. '#4E201E', '#72201D'
+  purple       = {c=170, g='#D75FD7'},
 
   --- grayscale 颜色
   g234 = {c=234, g='#1C1C1C'},
@@ -232,7 +229,7 @@ Highlights = {
   --- DiagnosticUnderlineXXX - code 中显示错误的位置.
   --- 以上 highlight 默认 link to DiagnosticXXX.
   DiagnosticOk    = {ctermfg=Colors.green.c, fg=Colors.green.g},
-  DiagnosticHint  = {ctermfg=Colors.hint_grey.c, fg=Colors.hint_grey.g},
+  DiagnosticHint  = {ctermfg=Colors.grey_hint.c, fg=Colors.grey_hint.g},
   DiagnosticInfo  = {ctermfg=Colors.blue.c, fg=Colors.blue.g},
   DiagnosticWarn  = {ctermfg=Colors.orange.c, fg=Colors.orange.g},
   DiagnosticError = {ctermfg=Colors.red.c, fg=Colors.red.g},
@@ -244,7 +241,7 @@ Highlights = {
   },
   DiagnosticUnderlineHint = {
     -- ctermfg=Colors.hint_grey.c, fg=Colors.hint_grey.g,
-    sp=Colors.hint_grey.g, undercurl=true,
+    sp=Colors.grey_hint.g, undercurl=true,
   },
   DiagnosticUnderlineInfo = {
     -- ctermfg=Colors.blue.c, fg=Colors.blue.g,
@@ -319,7 +316,7 @@ Highlights = {
   --- NOTE: treesitter highlight 命名规则: @[type].[name].[filetype]
   --- comment
   ['@comment.error'] = {link = 'ErrorMsg'},  -- FIXME, BUG, ERROR
-  ['@comment.warning'] = { link = "WarningMsg" },  -- HACK, WARN, WARNING, FIX
+  ['@comment.warning'] = { ctermfg=Colors.orange.c, fg=Colors.orange.g, reverse = true },  -- HACK, WARN, WARNING, FIX
   ['@comment.note'] = { link = "SpecialComment" }, -- XXX, NOTE, DOCS, TEST, INFO
   ['@comment.todo'] = { link = "Todo" },           -- TODO
   ['@punctuation.bracket.comment'] = { link = "Constant" },
