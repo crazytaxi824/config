@@ -53,7 +53,7 @@ local function markdown_create_table(arglist)  -- args: 创建一个 row * col �
 
   --- 输出整个 table
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-  vim.api.nvim_buf_set_lines(0, line, line, true, result)
+  vim.api.nvim_buf_set_lines(0, line, line, false, result)
 end
 
 --- 设置 command
