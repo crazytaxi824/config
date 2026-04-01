@@ -5,37 +5,96 @@ local health = vim.health
 
 local M = {}
 
---- HACK 中用到的 modules, 大多 overwrite 源代码 --------------------------------------------------- {{{
-local function check_module()
-  local require_list = {
-    "nvim-treesitter.parsers",
-    "telescope.make_entry",
-  }
+local mason_record = [[
+  bash-language-server
+  buf
+  css-lsp
+  delve
+  eslint-lsp
+  gdtoolkit
+  goimports
+  goimports-reviser
+  golangci-lint
+  gomodifytags
+  gopls
+  gotests
+  html-lsp
+  impl
+  json-lsp
+  lua-language-server
+  prettier
+  pyright
+  ruff
+  shfmt
+  sql-formatter
+  sqls
+  stylua
+  typescript-language-server
+]]
 
-  local err_list = {}
-  for _, req in ipairs(require_list) do
-    local status_ok, _ = pcall(require, req)
-    if status_ok then
-      health.ok('require("' .. req .. '") Success')
-    else
-      table.insert(err_list, req)
-      health.error('require("' .. req .. '") Failed')
+local function check_mason_tools()
+  --- 分析 mason_record string
+  --- @type string[]
+  local lines = vim.split(mason_record, "\n", { plain = true, trimempty = true })
+
+  --- @type string[]
+  local mason_tools = vim.tbl_map(vim.trim, lines)
+
+  local pkgs = require("mason-registry").get_installed_packages()
+  local t = vim.tbl_filter(function(elem)
+    for _, pkg in ipairs(pkgs) do
+      if elem == pkg.name then
+        health.ok(elem)
+        return false
+      end
     end
-  end
+    return true
+  end, mason_tools)
 
-  if #err_list > 0 then
-    return err_list
+  for _, tool in ipairs(t) do
+    health.error(tool)
   end
 end
 
-local funcs_list = {
-  'require("lspconfig.configs")',
-  'vim.lsp.buf_request',
 
-  'require("cmp").core',
+--- check command line tools ----------------------------------------------------------------------- {{{
+
+--- @type table<string, { cmd: string, install?: string, mason?: string }>
+local cmd_tools = {
+  go = { cmd = "go", install = "https://go.dev" },
+  graphviz = { cmd = "dot", install = "brew info graphviz" },
+  ripgrep =  { cmd = "rg",  install = "brew info ripgrep" },
+  fd =       { cmd = "fd",  install = "brew info fd" },
+}
+
+--- @param tools table<string, { cmd: string, install?: string, mason?: string }>
+local function check_cmd_tools(tools)
+  for name, tool in pairs(tools) do
+    if vim.fn.executable(tool.cmd) == 1 then
+      health.ok(name)
+    else
+      local errmsg = { name .. ':' }
+      if tool.install then
+        table.insert(errmsg, '  - `' .. tool.install .. '`')
+      end
+      if tool.mason then
+        table.insert(errmsg, '  - `:MasonInstall ' .. tool.mason .. '`')
+      end
+      health.error(table.concat(errmsg, '\n'))
+    end
+  end
+end
+
+-- }}}
+
+--- HACK 中用到的 modules & functions, 大多 overwrite 源代码 --------------------------------------- {{{
+
+---@type string[]
+local funcs_list = {
+  'require("cmp").core.reset',
   'require("luasnip").unlink_current',
-  'require("telescope.finders").new_table',
   'require("telescope.pickers").new',
+  'require("telescope.finders").new_table',
   'require("telescope.make_entry").gen_from_vimgrep',
   'require("telescope.config").values.grep_previewer',
   'require("telescope.config").values.generic_sorter',
@@ -59,80 +118,6 @@ end
 
 -- }}}
 
---- check command line tools ----------------------------------------------------------------------- {{{
-local cmd_tools = {
-  go = {cmd="go", install="https://go.dev/"},
-  delve = {cmd="dlv", install="go install github.com/go-delve/delve/cmd/dlv@latest", mason="delve"},
-  impl = {cmd="impl", install="go install github.com/josharian/impl@latest", mason="impl"},
-  gotests = {cmd="gotests", install="go install github.com/cweill/gotests/gotests@latest", mason="gotests"},
-  gomodifytags = {cmd="gomodifytags", install="go install github.com/fatih/gomodifytags@latest", mason="gomodifytags"},
-  ["golangci-lint"] = {cmd="golangci-lint", install="go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest", mason="golangci-lint"},
-  graphviz = {cmd="dot", install="brew info graphviz"},
-
-  wc = { cmd = "wc", install="system builtin" },  -- word, line, byte count of files
-
-  --- telescope deps
-  fd = {cmd="fd",  install="brew info fd"},
-  ripgrep = {cmd="rg",  install="brew info ripgrep"},
-}
-
-local function check_cmd_tools(tools)
-  for name, tool in pairs(tools) do
-    if vim.fn.executable(tool.cmd) == 1 then
-      health.ok(name)
-    else
-      local errmsg = {name .. ':'}
-      if tool.install then
-        table.insert(errmsg, '  - `' .. tool.install .. '`')
-      end
-      if tool.mason then
-        table.insert(errmsg, '  - `:MasonInstall ' .. tool.mason .. '`')
-      end
-      health.error(table.concat(errmsg, '\n'))
-    end
-  end
-end
-
-local mason_tools = {
-  "bash-language-server",
-  "buf",
-  "css-lsp",
-  "eslint-lsp",
-  -- "gdtoolkit",  -- GDScript
-  "goimports",
-  "goimports-reviser",
-  "html-lsp",
-  "json-lsp",
-  "lua-language-server",
-  "prettier",
-  "pyright",
-  "ruff",
-  "shfmt",
-  -- "sql-formatter",
-  -- "sqls",  -- sql lsp
-  "stylua",
-  "typescript-language-server",
-}
-
-local function check_mason_tools()
-  local pkgs = require("mason-registry").get_installed_packages()
-  local t = vim.tbl_filter(function(elem)
-    for _, pkg in ipairs(pkgs) do
-      if elem == pkg.name then
-        health.ok(elem)
-        return false
-      end
-    end
-    return true
-  end, mason_tools)
-
-  for _, tool in ipairs(t) do
-    health.error(tool)
-  end
-end
-
--- }}}
-
 M.check = function()
   --- command line tools
   health.start("check command line tools")
@@ -146,14 +131,6 @@ M.check = function()
   --- mason tools
   health.start("check mason tools")
   check_mason_tools()
-
-  --- module availability check
-  health.start("check HACK modules availability")
-  local errs = check_module()
-  if errs then
-    health.warn('function check aborts due to error in module check.')
-    return
-  end
 
   --- funciton availability check
   health.start("check HACK functions availability")
