@@ -43,38 +43,38 @@
 --- c: "cterm", g: "gui"
 --- @type table<string, { c: integer, g: string }>
 Colors = {
-  white   = {c=251, g='#C0C0C0'},  -- foreground, text
-  black   = {c=233, g='#121212'},  -- black background
-  cyan    = {c=81,  g='#9CDCFE'},  -- VVI: one of vim's main color. SpecialChar, Underlined, Label ...
-  yellow  = {c=220, g='#FFD800'},  -- Search, lualine: Insert Mode background && tabline: tab seleced background
-  magenta = {c=213, g='#FF87FF'},  -- IncSearch, return, if, else, break, package, import
-  red     = {c=167, g='#F85249'},  -- error message
-  orange  = {c=208, g='#CCA700'},  -- warning message
-  blue    = {c=75,  g='#4FC1FF'},  -- info message, constant ...
-  grey_hint = {c=244, g='#808080'},  -- hint message
-  green   = {c=42,  g='#00D787'},  -- OK message, markdown title
+  white   = { c=251, g='#C0C0C0' },  -- foreground, text
+  black   = { c=233, g='#121212' },  -- black background
+  cyan    = { c=81,  g='#9CDCFE' },  -- VVI: one of vim's main color. SpecialChar, Underlined, Label ...
+  yellow  = { c=220, g='#FFD800' },  -- Search, lualine: Insert Mode background && tabline: tab seleced background
+  magenta = { c=213, g='#FF87FF' },  -- IncSearch, return, if, else, break, package, import
+  red     = { c=167, g='#F85249' },  -- error message
+  orange  = { c=208, g='#CCA700' },  -- warning message
+  blue    = { c=75,  g='#4FC1FF' },  -- info message, constant ...
+  grey_hint = {c=244,g='#808080' },  -- hint message
+  green   = { c=42,  g='#00D787' },  -- OK message, markdown title
 
   --- 其他常用颜色
-  blue_boolean = {c=74,  g='#569CD6'},  -- Keyword, Boolean, Special ...
-  green_type   = {c=79,  g='#4EC9B0'},  -- type, 数据类型
-  gold_fn      = {c=78,  g='#DCDCAA'},  -- 78|85, func, function_call, method, method_call ... | bufferline, lualine
-  red_bg       = {c=52,  g='#66201D'},  -- 作为 background 使用的红色. '#4E201E', '#72201D'
-  purple       = {c=170, g='#D75FD7'},
+  blue_boolean = { c=74,  g='#569CD6' },  -- Keyword, Boolean, Special ...
+  green_type   = { c=79,  g='#4EC9B0' },  -- type, 数据类型
+  gold_fn      = { c=78,  g='#DCDCAA' },  -- 78|85, func, function_call, method, method_call ... | bufferline, lualine
+  red_bg       = { c=52,  g='#66201D' },  -- 作为 background 使用的红色. '#4E201E', '#72201D'
+  purple       = { c=170, g='#D75FD7' },
 
   --- grayscale 颜色
-  g234 = {c=234, g='#1C1C1C'},
-  g235 = {c=235, g='#262626'},
-  g236 = {c=236, g='#303030'},
-  g237 = {c=237, g='#3A3A3A'},
-  g238 = {c=238, g='#444444'},
-  g239 = {c=239, g='#4E4E4E'},
-  g240 = {c=240, g='#585858'},
-  g241 = {c=241, g='#626262'},
-  g242 = {c=242, g='#6C6C6C'},
-  g243 = {c=243, g='#767676'},
-  g244 = {c=244, g='#808080'},
-  g245 = {c=245, g='#8A8A8A'},
-  g246 = {c=246, g='#949494'},
+  g234 = { c=234, g='#1C1C1C' },
+  g235 = { c=235, g='#262626' },
+  g236 = { c=236, g='#303030' },
+  g237 = { c=237, g='#3A3A3A' },
+  g238 = { c=238, g='#444444' },
+  g239 = { c=239, g='#4E4E4E' },
+  g240 = { c=240, g='#585858' },
+  g241 = { c=241, g='#626262' },
+  g242 = { c=242, g='#6C6C6C' },
+  g243 = { c=243, g='#767676' },
+  g244 = { c=244, g='#808080' },
+  g245 = { c=245, g='#8A8A8A' },
+  g246 = { c=246, g='#949494' },
 }
 
 --- highlight api 设置: vim.api.nvim_set_hl(0, '@property', { ctermfg = 81 })
@@ -82,52 +82,49 @@ Colors = {
 Highlights = {
   --- editor ---------------------------------------------------------------------------------------
   --- window background color
-  Normal = {ctermfg=Colors.white.c, fg=Colors.white.g},
+  Normal = { ctermfg=Colors.white.c, fg=Colors.white.g },
   --- non-focus window background color
-  NormalNC = {link="Normal"},
+  NormalNC = { link="Normal" },
   --- Visual mode seleced text color
-  Visual = {ctermbg=24, bg='#264F78'},
+  Visual = { ctermbg=24, bg='#264F78' },
 
   --- VVI: Pmenu & FloatBorder 背景色需要设置为相同, 影响很多窗口的颜色.
   --- Completion Menu & Floating Window 颜色
-  Pmenu = {
-    -- ctermfg=Colors.white.c, fg=Colors.white.g,
-    ctermbg=Colors.g235.c, bg=Colors.g235.g,
-  },
-  --- Completion Menu 选中项颜色
+  Pmenu = { ctermbg=Colors.g235.c, bg=Colors.g235.g },
+  --- Completion Menu 选中的 item 的颜色
   PmenuSel = {
     ctermbg=Colors.g238.c, bg='#03395E',
     bold=true, underline=true,
   },
-  --- Completion Menu scroll bar 背景色
-  PmenuSbar = {ctermbg=Colors.black.c, bg=Colors.black.g},
-  --- Completion Menu scroll bar 滚动条颜色
-  PmenuThumb = {ctermbg=Colors.g240.c, bg=Colors.g240.g},
+  --- Completion Menu scroll bar 背景色, bg 一般和 Pmenu bg 相同
+  PmenuSbar = { link = "Pmenu" },
+  --- Completion Menu scroll bar 滚动条颜色, bg 颜色是 scroll bar 的颜色
+  PmenuThumb = { ctermbg=Colors.g240.c, bg=Colors.g240.g },
   --- NormalFloat 默认 link to Pmenu
-  NormalFloat = {link="Pmenu"},
+  NormalFloat = { link="Pmenu" },
   --- Floating Window border fg 颜色需要和 Pmenu 的 bg 颜色相同. border = {"▄","▄","▄","█","▀","▀","▀","█"}
-  FloatBorder = {ctermfg=Colors.g235.c, fg=Colors.g235.g},
+  FloatBorder = { ctermfg=Colors.g235.c, fg=Colors.g235.g },
 
   --- 注释颜色
-  Comment = {ctermfg=65, fg='#6A9955'},
+  Comment = { ctermfg=65, fg='#6A9955' },
   --- 影响 listchars indentLine 颜色
-  NonText = {ctermfg=Colors.g238.c, fg=Colors.g238.g},  -- "eol", "extends", "precedes"
+  NonText = { ctermfg=Colors.g238.c, fg=Colors.g238.g },  -- "eol", "extends", "precedes"
   SpecialKey = { link = "NonText" },  -- "nbsp", "tab" and "trail"
   --- window 之间的分隔线颜色
-  WinSeparator = {ctermfg=Colors.g240.c, fg=Colors.g240.g},
-  VertSplit = {link = 'WinSeparator'},
+  WinSeparator = { ctermfg=Colors.g240.c, fg=Colors.g240.g },
+  VertSplit = { link = 'WinSeparator' },
   --- 括号匹配颜色
   MatchParen = {
     ctermfg=Colors.yellow.c, fg=Colors.yellow.g,
     bold=true, underline=true,
   },
   --- url, filepath 样式
-  Underlined = {underline=true},
+  Underlined = { underline=true },
 
   --- 行号颜色
-  LineNr = {ctermfg=Colors.g240.c, fg=Colors.g240.g},
+  LineNr = { ctermfg=Colors.g240.c, fg=Colors.g240.g },
   --- 光标所在行颜色
-  CursorLine = {ctermbg=Colors.g236.c, bg=Colors.g236.g},
+  CursorLine = { ctermbg=Colors.g236.c, bg=Colors.g236.g },
   --- 光标所在行号的颜色
   CursorLineNr = {
     ctermfg=Colors.yellow.c, fg=Colors.yellow.g,
@@ -136,7 +133,7 @@ Highlights = {
   --- 相当于 hi clear SignColumn, 默认有 bg 颜色.
   SignColumn = {},
   --- textwidth column 颜色
-  ColorColumn = {ctermbg=Colors.g234.c, bg=Colors.g234.g},
+  ColorColumn = { ctermbg=Colors.g234.c, bg=Colors.g234.g },
   --- Quick Fix 选中行颜色
   QuickFixLine = {
     ctermfg=Colors.blue_boolean.c, fg=Colors.blue_boolean.g,
@@ -192,37 +189,37 @@ Highlights = {
 
   --- 基础颜色 -------------------------------------------------------------------------------------
   --- VVI: 最主要的颜色
-  Keyword = {ctermfg=Colors.blue_boolean.c, fg=Colors.blue_boolean.g},
+  Keyword = { ctermfg=Colors.blue_boolean.c, fg=Colors.blue_boolean.g },
   --- func <Function> {}, 定义 & call func 都使用该颜色
-  Function = {ctermfg=Colors.gold_fn.c, fg=Colors.gold_fn.g},
+  Function = { ctermfg=Colors.gold_fn.c, fg=Colors.gold_fn.g },
   --- type <Type> struct
-  Type = {ctermfg=Colors.green_type.c, fg=Colors.green_type.g},
+  Type = { ctermfg=Colors.green_type.c, fg=Colors.green_type.g },
   --- property & parameter
-  Identifier = {link = "Normal"},
+  Identifier = { link = "Normal" },
   --- 常量颜色. eg: const <Constant> = "foo"
-  Constant= {ctermfg=Colors.blue.c, fg=Colors.blue.g},
+  Constant= { ctermfg=Colors.blue.c, fg=Colors.blue.g },
   --Structure = {link = "Type"},  -- 默认 link to Type
 
   --- if, switch, case ...
-  Conditional = {ctermfg=Colors.magenta.c, fg=Colors.magenta.g},
-  Repeat    = {link = "Conditional"}, -- for range
-  Statement = {link = "Conditional"}, -- syntax 中 'package' & 'import' 关键字
-  Include   = {link = "Conditional"}, -- treesitter 中 'package', 'import', 'from' ... 关键字
+  Conditional = { ctermfg=Colors.magenta.c, fg=Colors.magenta.g },
+  Repeat    = { link = "Conditional" },  -- for range
+  Statement = { link = "Conditional" },  -- syntax 中 'package' & 'import' 关键字
+  Include   = { link = "Conditional" },  -- treesitter 中 'package', 'import', 'from' ... 关键字
 
-  String = {ctermfg=173, fg='#CE9178'},
-  Character = {link = "String"},
+  String = { ctermfg=173, fg='#CE9178' },
+  Character = { link = "String" },
 
-  Number = {ctermfg=151, fg='#B5CEA8'}, -- 100, int, uint ...
-  Float  = {link = "Number"}, -- 10.02 float64, float32
+  Number = { ctermfg=151, fg='#B5CEA8' },  -- 100, int, uint ...
+  Float  = { link = "Number" },  -- 10.02 float64, float32
 
   --- true / false
-  Boolean = {ctermfg=Colors.blue_boolean.c, fg=Colors.blue_boolean.g},
-  Special = {link = "Boolean"},  -- console.log(`${ ... }`)
+  Boolean = { ctermfg=Colors.blue_boolean.c, fg=Colors.blue_boolean.g },
+  Special = { link = "Boolean" },  -- console.log(`${ ... }`)
   --SpecialChar = { link = "Special" },  -- format verbs %v %d ...
   PreProc = { link = "Boolean" },  -- checkhealth
 
-  Delimiter = {link = "Normal"},  -- 符号颜色, [] () {} ; : ...
-  Operator  = {link = "Normal"},  -- = != == > < ...
+  Delimiter = { link = "Normal" },  -- 符号颜色, [] () {} ; : ...
+  Operator  = { link = "Normal" },  -- = != == > < ...
 
   --- diagnostics 颜色设置 -------------------------------------------------------------------------
   --- NOTE:
@@ -260,14 +257,14 @@ Highlights = {
     sp=Colors.red.g, undercurl=true, bold=true,
   },
 
-  DiagnosticUnnecessary = {link = "DiagnosticUnderlineHint"},
-  DiagnosticDeprecated = {link = "DiagnosticUnderlineHint"},
+  DiagnosticUnnecessary = { link = "DiagnosticUnderlineHint" },
+  DiagnosticDeprecated = { link = "DiagnosticUnderlineHint" },
 
   --- LSP 相关颜色 ---------------------------------------------------------------------------------
   --- vim.lsp.buf.document_highlight() 颜色, 类似 Same_ID
-  LspReferenceText  = {ctermbg=Colors.g238.c, bg=Colors.g238.g},
-  LspReferenceRead  = {link = 'LspReferenceText'},
-  LspReferenceWrite = {link = 'LspReferenceText'},
+  LspReferenceText  = { ctermbg=Colors.g238.c, bg=Colors.g238.g },
+  LspReferenceRead  = { link = 'LspReferenceText' },
+  LspReferenceWrite = { link = 'LspReferenceText' },
 
   --- diff 颜色 ------------------------------------------------------------------------------------
   DiffAdd = {
@@ -289,9 +286,9 @@ Highlights = {
   --- diff mode 下, 会自动设置:
   --- `set foldcolumn=2`, 在 foldcolumn 显示在 SignColumn 前面.
   --- `set foldmethod=diff`
-  Folded = {ctermfg=67, fg='#5F87AF'}, -- 折叠行文字颜色
-  FoldColumn = {ctermfg=Colors.green.c, fg=Colors.green.g}, -- foldcolumn 中 + - | 的颜色
-  CursorLineFold = {link = "FoldColumn"},  -- cursor 所在行 foldcolumn 中 + - | 号颜色
+  Folded = { ctermfg=67, fg='#5F87AF' }, -- 折叠行文字颜色
+  FoldColumn = { ctermfg=Colors.green.c, fg=Colors.green.g }, -- foldcolumn 中 + - | 的颜色
+  CursorLineFold = { link = "FoldColumn" },  -- cursor 所在行 foldcolumn 中 + - | 号颜色
 
   --- 其他常用颜色 ---------------------------------------------------------------------------------
   --- markdown title
@@ -300,9 +297,9 @@ Highlights = {
     bold=true,
   },
   --- `set conceallevel?`, markdown list, code block ...
-  Conceal = {ctermfg=Colors.g246.c, fg=Colors.g246.g},
+  Conceal = { ctermfg=Colors.g246.c, fg=Colors.g246.g },
   --- json: key color; markdown: code block language(```go)
-  Label = {ctermfg=Colors.cyan.c, fg=Colors.cyan.g},
+  Label = { ctermfg=Colors.cyan.c, fg=Colors.cyan.g },
 
   SpellBad = {
     ctermfg=Colors.red.c, fg=Colors.red.g,
@@ -319,7 +316,7 @@ Highlights = {
   --- treesitter 颜色设置 --------------------------------------------------------------------------
   --- NOTE: treesitter highlight 命名规则: @[type].[name].[filetype]
   --- comment
-  ['@comment.error'] = {link = 'ErrorMsg'},  -- FIXME, BUG, ERROR
+  ['@comment.error'] = { link = 'ErrorMsg' },  -- FIXME, BUG, ERROR
   ['@comment.warning'] = { ctermfg=Colors.orange.c, fg=Colors.orange.g, reverse = true },  -- HACK, WARN, WARNING, FIX
   ['@comment.note'] = { link = "SpecialComment" }, -- XXX, NOTE, DOCS, TEST, INFO
   ['@comment.todo'] = { link = "Todo" },           -- TODO
@@ -331,12 +328,12 @@ Highlights = {
 
   --- markdown | markdown_inline
   --- # titles
-  ["@markup.heading.1.markdown"] = {fg=Colors.green.g, underline=true, bold=true},
-  ["@markup.heading.2.markdown"] = {fg=Colors.yellow.g, underline=true, bold=true},
-  ["@markup.heading.3.markdown"] = {fg=Colors.orange.g, bold=true},
-  ["@markup.heading.4.markdown"] = {fg=Colors.blue.g, bold=true},
-  ["@markup.heading.5.markdown"] = {fg=Colors.magenta.g, bold=true},
-  ["@markup.heading.6.markdown"] = {fg=Colors.purple.g, bold=true},
+  ["@markup.heading.1.markdown"] = { fg=Colors.green.g,   bold=true, underline=true },
+  ["@markup.heading.2.markdown"] = { fg=Colors.yellow.g,  bold=true, underline=true },
+  ["@markup.heading.3.markdown"] = { fg=Colors.orange.g,  bold=true },
+  ["@markup.heading.4.markdown"] = { fg=Colors.blue.g,    bold=true },
+  ["@markup.heading.5.markdown"] = { fg=Colors.magenta.g, bold=true },
+  ["@markup.heading.6.markdown"] = { fg=Colors.purple.g,  bold=true },
 
   ['@markup.strong'] = { bold = true }, -- markdown, **bold**
   ['@markup.italic'] = { italic = true },  -- markdown, *italic*, _italic_
