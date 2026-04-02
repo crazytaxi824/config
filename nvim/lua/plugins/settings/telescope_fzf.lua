@@ -219,6 +219,7 @@ telescope.setup {
     },
 
     --- https://github.com/nvim-telescope/telescope-ui-select.nvim
+    --- NOTE: set neovim `vim.ui.select` to telescope
     ["ui-select"] = {
       themes.get_dropdown(dropdown_opts),
     },
