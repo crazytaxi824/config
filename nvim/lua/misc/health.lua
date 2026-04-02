@@ -29,6 +29,7 @@ local mason_record = [[
   sql-formatter
   sqls
   stylua
+  tree-sitter-cli
   typescript-language-server
 ]]
 
