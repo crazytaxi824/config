@@ -86,6 +86,7 @@ local plugins = {
   {
     "nvim-treesitter/nvim-treesitter",
     branch = "main",  -- NOTE: 'master' branch is locked for backward compatibility.
+    commit = "c82bf96",
     config = function() require("plugins.settings.treesitter") end,
     -- build = ':TSUpdate',
     lazy = false,
@@ -275,7 +276,7 @@ local plugins = {
   --- Debug tools 安装 -----------------------------------------------------------------------------
   {
     "mfussenegger/nvim-dap",  -- core debug tool
-    commit = "2a8799a",
+    commit = "4f5deb1",
     config = function() require("plugins.settings.debug.nvim_dap") end,
 
     cmd = {'Debug', 'DapToggleBreakpoint', 'DapContinue'},
