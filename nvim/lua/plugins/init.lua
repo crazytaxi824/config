@@ -86,7 +86,7 @@ local plugins = {
   {
     "nvim-treesitter/nvim-treesitter",
     branch = "main",  -- NOTE: 'master' branch is locked for backward compatibility.
-    commit = "539abf6",
+    commit = "4916d65",
     config = function() require("plugins.settings.treesitter") end,
     -- build = ':TSUpdate',
     lazy = false,
@@ -267,7 +267,7 @@ local plugins = {
 
   {
     "nvim-lualine/lualine.nvim",  -- `:help 'statusline'`
-    commit = "47f91c4",
+    commit = "74114f0",
     config = function() require("plugins.settings.decor_lualine") end,
 
     event = "VeryLazy",
@@ -294,8 +294,7 @@ local plugins = {
 
   {
     "rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
-    -- tag = "v4.0.0",
-    commit = "f5b6673",
+    commit = "d9770a5",
     config = function() require("plugins.settings.debug.nvim_dapui") end,
     dependencies = {
       "mfussenegger/nvim-dap",
