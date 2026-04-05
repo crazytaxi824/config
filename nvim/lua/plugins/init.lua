@@ -86,7 +86,6 @@ local plugins = {
   {
     "nvim-treesitter/nvim-treesitter",
     branch = "main",  -- NOTE: 'master' branch is locked for backward compatibility.
-    commit = "4916d65",
     config = function() require("plugins.settings.treesitter") end,
     -- build = ':TSUpdate',
     lazy = false,
