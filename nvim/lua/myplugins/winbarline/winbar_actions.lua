@@ -195,27 +195,33 @@ function M.delete_current_buf()
   end
 
   --- 如果有多个 buffer, 则跳到另一个 buffer, 然后删除当前 buffer
-  local idx = u.list_index_value(win_bufs, curr_buf)
-  if not idx then
-    error("current buffer is not register to current  window")
-  end
-
-  if idx == 1 then
-    local next = idx < #win_bufs and idx+1 or 1
-    if vim.api.nvim_buf_is_valid(win_bufs[next]) then
-      vim.api.nvim_win_set_buf(curr_win, win_bufs[next])
-    else
-      error('buffer is not valid')
-    end
+  local prev_bufnr = vim.fn.bufnr('#')
+  if prev_bufnr > 0 and vim.list_contains(win_bufs, prev_bufnr) then
+    --- '#' buffer 在当前 window buffers list 中
+    vim.api.nvim_win_set_buf(curr_win, prev_bufnr)
   else
-    local prev = idx > 1 and idx-1 or #win_bufs
-    if vim.api.nvim_buf_is_valid(win_bufs[prev]) then
-      vim.api.nvim_win_set_buf(curr_win, win_bufs[prev])
+    --- '#' buffer 不在当前 window buffers list 中
+    local idx = u.list_index_value(win_bufs, curr_buf)
+    if not idx then
+      error("current buffer is not register to current  window")
+    end
+
+    if idx == 1 then
+      local next = idx < #win_bufs and idx+1 or 1
+      if vim.api.nvim_buf_is_valid(win_bufs[next]) then
+        vim.api.nvim_win_set_buf(curr_win, win_bufs[next])
+      else
+        error('buffer is not valid')
+      end
     else
-      error('buffer is not valid')
+      local prev = idx > 1 and idx-1 or #win_bufs
+      if vim.api.nvim_buf_is_valid(win_bufs[prev]) then
+        vim.api.nvim_win_set_buf(curr_win, win_bufs[prev])
+      else
+        error('buffer is not valid')
+      end
     end
   end
-
 
   local b = g.get_buf(curr_buf)
   if not b then
