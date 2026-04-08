@@ -25,9 +25,6 @@ notify.setup({
     --- set Notify content markdown syntax. 主要是为了 highlight.
     local bufnr = vim.api.nvim_win_get_buf(win_id)
     vim.bo[bufnr].filetype = "markdown"
-
-    --- set keymap to close window
-    vim.keymap.set('n', 'q', '<cmd>q<CR>', { buffer=bufnr, desc="close window" })
   end,
 
   timeout = 3000,     -- Default timeout for notifications
