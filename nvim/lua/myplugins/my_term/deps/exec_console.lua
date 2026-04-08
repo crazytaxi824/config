@@ -103,6 +103,10 @@ end
 --- @param job_id integer
 --- @param exit_code integer
 local function set_buf_line_exit(bufnr, job_id, exit_code)
+  if not vim.api.nvim_buf_is_valid(bufnr) then
+    return
+  end
+
   local hl_start_lnum = vim.api.nvim_buf_line_count(bufnr)
 
   buf_set_lines(bufnr, -1, -1, {"[EOF]", "[Process (job: " .. job_id .. ") has exited: " .. exit_code .. "]"})
