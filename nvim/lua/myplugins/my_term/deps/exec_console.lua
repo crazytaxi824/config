@@ -158,9 +158,9 @@ function M.console_exec(cmd, term, term_bufnr, term_win_id)
     error("MyTerm win_id and bufnr do not match")
   end
 
-  --- FIX: bufname 如果是 term://xxx 则在 bdelete 之后会被锁定为 nomodifiable
   --- set bufname
-  vim.api.nvim_buf_set_name(term_bufnr, "term://#my_term#console#" .. term.id)
+  --- VVI: bufname 如果是 term://xxx 则在 bdelete 之后会被锁定为 nomodifiable
+  vim.api.nvim_buf_set_name(term_bufnr, "console://console#" .. term.id)
 
   --- setlocal opts
   vim.bo[term_bufnr].undolevels = -1  -- disable undo
