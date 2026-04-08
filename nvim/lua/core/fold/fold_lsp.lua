@@ -15,8 +15,9 @@ M.set_fold = function(bufnr, win_id)
     return
   end
 
-  vim.api.nvim_set_option_value('foldexpr', M.foldexpr_str, { scope = 'local', win = win_id })
-  vim.api.nvim_set_option_value('foldmethod', 'expr', { scope = 'local', win = win_id })
+  local opts = { scope = 'local', win = win_id }
+  vim.api.nvim_set_option_value('foldexpr', M.foldexpr_str, opts)
+  vim.api.nvim_set_option_value('foldmethod', 'expr', opts)
 end
 
 return M

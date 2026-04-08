@@ -252,7 +252,7 @@ vim.api.nvim_create_autocmd("User", {
     vim.keymap.set({'n', 'i'}, '<C-l>', function()
       --- toggle `set wrap`
       if vim.api.nvim_win_is_valid(preview_winid) then
-        vim.api.nvim_set_option_value('wrap', not vim.wo[preview_winid].wrap, {scope='local', win=preview_winid})
+        vim.api.nvim_set_option_value('wrap', not vim.wo[preview_winid].wrap, { scope='local', win=preview_winid })
       end
     end,
     {

@@ -42,11 +42,9 @@ M.choose = function()
     --- %=   Separation point between alignment sections.
     ---      Each section will be separated by an equal number of spaces.
     --- %#   use %#HLname# for highlight group HLname.
-    vim.api.nvim_set_option_value(
-      'statusline',
-      '%#' .. my_win_picker .. '#%=%#' .. my_win_picker .. '#' .. key .. '%=',
-      {scope='local', win=win_id}
-    )
+    --- %*   clear highlight
+    local stl_str = '%#' .. my_win_picker .. '#%=' .. key .. '%=%*'
+    vim.api.nvim_set_option_value('statusline', stl_str, { scope='local', win=win_id })
 
     --- cache win_map
     win_map[key] = win_id

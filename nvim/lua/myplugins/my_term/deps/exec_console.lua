@@ -160,9 +160,11 @@ function M.console_exec(cmd, term, term_bufnr, term_win_id)
   --- setlocal opts
   vim.bo[term_bufnr].undolevels = -1  -- disable undo
   vim.bo[term_bufnr].modifiable = false
-  vim.api.nvim_set_option_value('wrap', true, { scope='local', win=term_win_id })
-  vim.api.nvim_set_option_value('relativenumber', false, { scope='local', win=term_win_id })
-  vim.api.nvim_set_option_value('signcolumn', 'no', { scope='local', win=term_win_id })
+
+  local opts = { scope='local', win=term_win_id }
+  vim.api.nvim_set_option_value('wrap', true, opts)
+  vim.api.nvim_set_option_value('relativenumber', false, opts)
+  vim.api.nvim_set_option_value('signcolumn', 'no', opts)
 
   --- jobstart()
   local job_id = vim.fn.jobstart(cmd, {
