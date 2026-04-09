@@ -6,33 +6,6 @@ local u = require('myplugins.winbarline.utils')
 
 local M = {}
 
----@param bufnr integer
----@param win_id integer
----@return WinbarLineWindow
-function M.binding_win_buf(win_id, bufnr)
-  if not vim.api.nvim_buf_is_valid(bufnr) or not vim.api.nvim_win_is_valid(win_id) then
-    error('win: ' .. win_id .. ', or bufnr: ' .. bufnr .. ' is not valid' )
-  end
-
-  local win = g.get_win(win_id)
-  if win then
-    win:append_buf(bufnr)
-  else
-    win = wb_win.new(win_id, bufnr)
-    g.set_win(win)
-  end
-
-  local buf = g.get_buf(bufnr)
-  if buf then
-    buf:append_win(win_id)
-  else
-    buf = wb_buf.new(bufnr, win_id)
-    g.set_buf(buf)
-  end
-
-  return win
-end
-
 
 --- 相当于 :[N]buf
 ---
@@ -58,6 +31,7 @@ function M.goto(idx)
 
   vim.api.nvim_win_set_buf(curr_win, win_bufs[idx])
 end
+
 
 --- @param move 'next'|'prev'
 function M.cycle(move)
