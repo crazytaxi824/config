@@ -37,7 +37,7 @@ local plugins = {
   --- Performence & Functions ----------------------------------------------------------------------
   {
     "nvim-lua/plenary.nvim",
-    commit = "b9fd522",
+    commit = "74b06c6",
     priority = 1000,  -- 只在 lazy=false 的情况下有效. 影响加载顺序, 默认值为 50.
   },
 
@@ -213,7 +213,7 @@ local plugins = {
   --- "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
-    commit = "c9317c2",
+    commit = "7f9301e",
     config = function() require("lsp.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -233,7 +233,7 @@ local plugins = {
   --- File explorer --------------------------------------------------------------------------------
   {
     "nvim-tree/nvim-tree.lua",
-    tag = "v1.16.0",
+    tag = "v1.17.0",
     config = function() require("plugins.settings.file_tree") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
 
@@ -266,7 +266,7 @@ local plugins = {
 
   {
     "nvim-lualine/lualine.nvim",  -- `:help 'statusline'`
-    commit = "74114f0",
+    commit = "f5d2a85",
     config = function() require("plugins.settings.decor_lualine") end,
 
     event = "VeryLazy",
@@ -275,7 +275,7 @@ local plugins = {
   --- Debug tools 安装 -----------------------------------------------------------------------------
   {
     "mfussenegger/nvim-dap",  -- core debug tool
-    commit = "4f5deb1",
+    commit = "45a69eb",
     config = function() require("plugins.settings.debug.nvim_dap") end,
 
     cmd = {'Debug', 'DapToggleBreakpoint', 'DapContinue'},
@@ -293,7 +293,7 @@ local plugins = {
 
   {
     "rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
-    commit = "d9770a5",
+    commit = "1a66cab",
     config = function() require("plugins.settings.debug.nvim_dapui") end,
     dependencies = {
       "mfussenegger/nvim-dap",
