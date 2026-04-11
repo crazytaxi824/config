@@ -42,7 +42,8 @@
 ---   FileType 在 buffer 第一次加载到 window 中的时候触发; `:bdelete` 后再次加载 buffer 的情况下也会触发.
 ---   BufEnter 每次 buffer 切换的时候. FileType 触发的情况 & hidden -> display 的时候.
 
-local autocmd_id
+--- @type integer|nil
+local augroup_id
 
 local vim_events = { "VimEnter", "VimLeave", "VimLeavePre", "VimResized", "VimResume", "VimSuspend" }
 
@@ -84,9 +85,9 @@ local function debug_autocmd(e)
   end
 
   if e.args == "off" then
-    if autocmd_id then
-      vim.api.nvim_del_autocmd(autocmd_id)
-      autocmd_id = nil
+    if augroup_id then
+      vim.api.nvim_del_augroup_by_id(augroup_id)
+      augroup_id = nil
     end
     vim.notify("debug autocmd events: Disabled")
     return
@@ -136,7 +137,9 @@ local function debug_autocmd(e)
     end
   end
 
-  autocmd_id = vim.api.nvim_create_autocmd(events, {
+  augroup_id = vim.api.nvim_create_augroup('my_autocmd_debug', { clear = true })
+  vim.api.nvim_create_autocmd(events, {
+    group = augroup_id,
     pattern = {"*"},
     callback = function(params)
       local curr = {
@@ -169,6 +172,9 @@ end,
   nargs = "*",
   bang=true,
   bar=true,
-  desc = 'toggle autocmd debug function, print all events.'
+  desc = 'toggle autocmd debug function, print all events.',
+  complete = function()
+    return { 'buf', 'win', 'cursor', 'vim', 'lsp', 'tab', 'term', 'cmd', 'all', 'off' }
+  end,
 })
 
