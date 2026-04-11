@@ -97,6 +97,26 @@ local function floating_win_trash_buffer()
 end
 --- }}}
 
+--- open_in_finder ------------------------------------------------------------- {{{
+local function open_in_finder()
+  --- `:help nvim_tree.api.Node`
+  local node = require("nvim-tree.api").tree.get_node_under_cursor()
+  if not node then
+    return
+  end
+
+  local os_uname = vim.uv.os_uname()
+
+  --- Mac 中 `open -R file` 表示从 finder 打开
+  if os_uname and os_uname.sysname == "Darwin" then
+    vim.system({"open", "-R", node.absolute_path})
+    return
+  end
+
+  --- 其他系统用 default setting
+  vim.ui.open(node.absolute_path)
+end
+--- }}}
 
 --- nvim-tree buffer keymaps ---------------------------------------------------
 --- only works within "NvimTree_X" buffer.
@@ -110,7 +130,6 @@ local function nt_buffer_keymaps(bufnr)
     { "e",           nt_api.node.open.edit,   "Open" },
     { "<C-v>",       nt_api.node.open.vertical,     "Open vsplit" },  -- vsplit edit
     { "<C-x>",       nt_api.node.open.horizontal,   "Open split" },
-    { "<C-o>",       nt_api.node.run.system,   "show file in finder" },
 
     { "<F8>",        nt_api.node.navigate.diagnostics.next,  "Next Diagnostic Item" },  -- next diagnostics item
     { "<D-F8>",      nt_api.node.navigate.diagnostics.prev,  "Prev Diagnostic Item" },  -- previous diagnostics item
@@ -127,6 +146,7 @@ local function nt_buffer_keymaps(bufnr)
 
     { "a",           nt_api.fs.create,   "Create File" },
     -- { "D",           nt_api.fs.remove,   "Remove File" },  -- `rm file`, 无法将其移动到 Trash Bin
+    -- { "D",           floating_win_trash_buffer,    "Trash File" },   -- `trash file`, 将文件移动到 Trash Bin, 可以还原
     { "D",           nt_api.fs.trash,    "Trash File" },   -- `trash file`, 将文件移动到 Trash Bin, 可以还原
     { "R",           nt_api.fs.rename_full,   "Full Rename" },  -- 类似 `$ mv foo bar`
     { "y",           nt_api.fs.copy.absolute_path,   "Copy Absolute Path" },
@@ -137,7 +157,7 @@ local function nt_buffer_keymaps(bufnr)
     { "M",           nt_api.marks.clear,    "Clear All Marks" },
 
     --- 自定义功能
-    -- { "D",           floating_win_trash_buffer,    "Trash File" },   -- `trash file`, 将文件移动到 Trash Bin, 可以还原
+    { "<C-o>",       open_in_finder,  "show file in finder" },
     {  "<leader>o",  back_to_pwd,     "back to Original pwd" },
     {  "<leader>c",  compare_two_marked_files,   "compare two marked files" },
   }
@@ -157,28 +177,10 @@ end
 --- }}}
 
 --- `:help nvim-tree-setup` ------------------------------------------------------------------------
---- system_open config --------------------------------------------------------- {{{
-local function system_open_cfg()
-  local os_uname = vim.uv.os_uname()
-
-  --- Mac 中 `open -R file` 表示从 finder 打开
-  if os_uname and os_uname.sysname == "Darwin" then
-    return {
-      cmd = "open",
-      args = {"-R"},
-    }
-  end
-
-  --- 其他系统用 default setting
-  return nil
-end
---- }}}
-
 local config = {
   --- NOTE: on_attach 主要是设置 keymaps 的.
   --- ":help nvim-tree.on_attach" & ":help nvim-tree-mappings"
   on_attach = nt_buffer_keymaps,  -- 设置 keymaps
-  system_open = system_open_cfg(), -- 影响 nvim_tree.api.node.run.system()
 
   auto_reload_on_write = true, -- NOTE: `:w` 时刷新 nvim-tree.
   sync_root_with_cwd = false,  -- Changes the tree root directory on `DirChanged` and refreshes the tree.
