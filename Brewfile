@@ -21,12 +21,9 @@ brew "git-delta" # git diff 工具
 brew "lazygit"   # git cui 工具, 还有 "gitui"
 
 # terminal tools
-brew "yazi"  # rust file explorer
 brew "tree"
 brew "htop"  # cui top
-#brew "ranger" # terminal file explorer 文件管理器
-#brew "viu"   # terminal 图片显示工具
-#brew "w3m"   # terminal 访问网页工具
+brew "yazi"  # rust file explorer, 支持 Kitty Graphics 协议
 
 # editor
 brew "neovim"
