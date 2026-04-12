@@ -213,7 +213,7 @@ local plugins = {
   --- "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
-    commit = "7f9301e",
+    commit = "899e93f",
     config = function() require("lsp.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -266,7 +266,7 @@ local plugins = {
 
   {
     "nvim-lualine/lualine.nvim",  -- `:help 'statusline'`
-    commit = "f5d2a85",
+    commit = "a905eee",
     config = function() require("plugins.settings.decor_lualine") end,
 
     event = "VeryLazy",
