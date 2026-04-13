@@ -143,10 +143,11 @@ local keymaps = {
   {'n', '<D-r>', '<C-r>', opt, 'do: redo'},
   {'i', '<D-r>', '<C-o><C-r>', opt, 'do: redo'},
 
-  --- `gc` & `gcc` is remap by default.
-  {'n', '<D-/>', 'gcc', {remap=true}, 'Comment current line'},
-  {'i', '<D-/>', '<C-o>gcc', {remap=true}, 'Comment current line'},
-  {'v', '<D-/>', 'gc', {remap=true}, 'Comment Visual selected'},
+  --- VVI: `gc` & `gcc` is {remap} by default.
+  {'n', '<D-/>', 'gcc', { remap = true }, 'Comment current line'},
+  {'i', '<D-/>', '<C-o>gcc', { remap = true }, 'Comment current line'},
+  {'v', '<D-/>', 'gc', { remap = true }, 'Comment Visual selected'},
+  {'n', 'gc', '<Nop>', opt, 'Toggle Comment'},  -- NOTE: 'gc{motion}' Overlapping with 'gcc'
 
   --- <leader> -------------------------------------------------------------------------------------
   --- copy / paste
@@ -240,9 +241,6 @@ local keymaps = {
   --- 使用 `fg %1` 恢复 job,
   --- 或者 `kill %1` 终止 job (不推荐, 会留下 .swp 文件).
   {{'n','v'}, '<C-z>', function() end, opt, 'which_key_ignore'},
-
-  --- BUG: nvim v0.11.0. 'gc' Overlapping with 'gcc'
-  {'n', 'gc', '<Nop>', opt, 'Toggle Comment'},
 
   --- <F1> :help help, 避免误操作.
   {{'n','i'}, '<F1>', function() end, opt, 'which_key_ignore'},
