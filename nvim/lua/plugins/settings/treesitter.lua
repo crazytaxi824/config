@@ -23,7 +23,7 @@ local auto_install_langs = {
 }
 
 vim.schedule(function ()
-  ts.install(auto_install_langs)
+  ts.install(auto_install_langs, { max_jobs = 1 })
 end)
 
 
