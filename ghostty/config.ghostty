@@ -19,7 +19,7 @@ adjust-cell-width = 1
 
 # options ------------------------------------------------------------------------------------------
 fullscreen = non-native-visible-menu
-# quit-after-last-window-closed=true
+quit-after-last-window-closed=true
 
 # color --------------------------------------------------------------------------------------------
 background = #0f151e
@@ -58,9 +58,15 @@ keybind = super+f=start_search
 keybind = performable:escape=end_search
 
 # <Ctrl-Left/Right/Up/Down> 被 MacOS 系统占用了, 所以这里使用 Option 代替. 这些设置不止是用在 vim/nvim 中.
-# Option-Left/Right -> Ctrl-Left/Right  (backward-word)
+# Option-Left/Right -> Ctrl-Left/Right  (forward/backward-word)
 keybind = alt+arrow_left=text:\x1b[1;5D
 keybind = alt+arrow_right=text:\x1b[1;5C
+
+# <pageup>, <pagedown>, <home>, <end>
+keybind = super+arrow_up=text:\x1b[5~
+keybind = super+arrow_down=text:\x1b[6~
+keybind = super+arrow_left=text:\x1b[H
+keybind = super+arrow_right=text:\x1b[F
 
 
 
