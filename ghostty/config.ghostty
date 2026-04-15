@@ -2,8 +2,9 @@
 font-size = 14.5
 
 # `$ ghostty +list-fonts`
-font-family = "JetBrainsMono Nerd Font Mono"
-# fallback font
+font-family = "FiraCode Nerd Font Mono"
+font-family = "Menlo"
+# font-family = "JetBrainsMono Nerd Font Mono"
 font-family = "Sarasa Mono SC"
 
 font-style = Regular
