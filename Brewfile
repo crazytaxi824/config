@@ -90,8 +90,12 @@ cask "redis-insight"  # official redis client
 cask "obsidian" # markdown 编辑软件
 #cask "typora"   # markdown 编辑软件
 
+# 常用字体
+cask "font-jetbrains-mono-nerd-font"  # code 字体, 有 bold-italic 字体
+# cask "font-fira-code-nerd-font"     # code 字体, 没有 bold-italic 字体
+cask "font-sarasa-gothic"  # 中文等宽 bold italic 字体
+
 # 个人工具
-cask "font-fira-code-nerd-font"  # alacritty font
 cask "squirrel-app"   # RIME 输入法客户端
 cask "appcleaner" # app 卸载工具
 cask "pearcleaner"  # 开源清理工具, 类似 CleanMyMac, app-cleaner
