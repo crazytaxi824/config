@@ -1,0 +1,66 @@
+# font
+font-size = 14.5
+
+# `$ ghostty +list-fonts`
+font-family = "JetBrainsMono Nerd Font Mono"
+# fallback font
+font-family = "Sarasa Mono SC"
+
+font-style = Regular
+font-style-bold = Bold
+font-style-italic = Italic
+font-style-bold-italic = Bold Italic
+
+# 排版 ---------------------------------------------------------------------------------------------
+# 按百分比增加行高, █
+adjust-cell-height = 20%
+# 增加字符宽度, px
+adjust-cell-width = 1
+
+# options ------------------------------------------------------------------------------------------
+fullscreen = non-native-visible-menu
+# quit-after-last-window-closed=true
+
+# color --------------------------------------------------------------------------------------------
+background = #0f151e
+foreground = #c5c8c6
+background-opacity = 0.96
+
+palette = 0=#1c1c1c
+palette = 1=#d75f5f
+palette = 2=#00d787
+palette = 3=#d7ff5f
+palette = 4=#5fAfff
+palette = 5=#ff87ff
+palette = 6=#5fd7ff
+palette = 7=#c6c6c6
+
+palette = 8=#303030
+palette = 9=#d75f5f
+palette = 10=#00d787
+palette = 11=#d7ff5f
+palette = 12=#5fAfff
+palette = 13=#ff87ff
+palette = 14=#5fd7ff
+palette = 15=#eeeeee
+
+# keybinding ---------------------------------------------------------------------------------------
+# `$ ghostty +list-keybinds --default`
+# 清除所有默认 keybind
+keybind = clear
+
+keybind = super+shift+alt+r=reload_config
+keybind = super+c=copy_to_clipboard:mixed
+keybind = super+v=paste_from_clipboard
+keybind = super+n=new_window
+keybind = super+f=start_search
+# performable: 只在 search 的状态下才会 end_search
+keybind = performable:escape=end_search
+
+# <Ctrl-Left/Right/Up/Down> 被 MacOS 系统占用了, 所以这里使用 Option 代替. 这些设置不止是用在 vim/nvim 中.
+# Option-Left/Right -> Ctrl-Left/Right  (backward-word)
+keybind = alt+arrow_left=text:\x1b[1;5D
+keybind = alt+arrow_right=text:\x1b[1;5C
+
+
+
