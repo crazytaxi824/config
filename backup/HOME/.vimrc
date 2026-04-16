@@ -2,6 +2,13 @@ vim9script
 
 # NOTE: this is VIM 9.1 settings
 
+#set term=xterm-256color
+
+# 防止颜色被不认识的 term 矫正, eg: xterm-ghostty
+if $TERM_PROGRAM == "ghostty"
+  g:loaded_colorresp = 1
+endif
+
 # set option 在 vim9script 中可以使用
 # - &option (:set - setglobal & setlocal)
 # - &g:option (:setglobal - global only)
@@ -25,7 +32,6 @@ vim9script
 g:mapleader = '\'  # 或者 "\\", single quote 内没有 escape
 
 # mouse
-#set term=xterm-256color
 set mouse=a
 
 # 必须先加载 colorscheme, 否则以后的 highlight 设置可能无效.
@@ -130,11 +136,5 @@ set cursorlineopt=number,screenline
 set colorcolumn=+1  # highlight column after 'textwidth'
 #set signcolumn=yes  # sign
 
-# plugins ----------------------------------------------------------------------------------------
-source ~/.vim/statusline.vim
-source ~/.vim/keymaps.vim
-source ~/.vim/tabline.vim
-source ~/.vim/format.vim
-source ~/.vim/undo.vim
-source ~/.vim/terminal.vim
-source ~/.vim/highlights.vim
+
+

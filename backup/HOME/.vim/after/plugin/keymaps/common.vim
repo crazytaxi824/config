@@ -24,16 +24,5 @@ vnoremap <C-z> <Nop>
 nnoremap <F1> <Nop>
 inoremap <F1> <Nop>
 
-# source -------------------------------------------------------------------------------------------
-source ~/.vim/keymaps/buffer.vim
-source ~/.vim/keymaps/cursor_move.vim
-source ~/.vim/keymaps/terminal.vim
-source ~/.vim/keymaps/help.vim
-source ~/.vim/keymaps/completion.vim
-source ~/.vim/keymaps/spell.vim
-source ~/.vim/keymaps/autopairs.vim
-source ~/.vim/keymaps/comments.vim
-source ~/.vim/keymaps/file_explorer.vim
-
 
 
