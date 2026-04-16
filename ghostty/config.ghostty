@@ -1,11 +1,16 @@
 # font
 font-size = 14.5
 
-# `$ ghostty +list-fonts`
+# `$ ghostty +list-fonts`, 多个 font-family 按顺序 fallback
 font-family = "FiraCode Nerd Font Mono"
-font-family = "Menlo"
 # font-family = "JetBrainsMono Nerd Font Mono"
-font-family = "Sarasa Mono SC"
+font-family = "Menlo"
+
+# Simplified Chinese, Traditional Chinese, Hong Kong Traditional Chinese
+# Term: 转为 terminal 优化的等宽字, Slab: ()英文字符)衬线, Fixed: 无 Ligatures (连字)
+font-family = "Sarasa Term Slab SC"
+font-family = "Sarasa Term Slab TC"
+font-family = "Sarasa Term Slab HC"
 
 font-style = Regular
 font-style-bold = Bold
@@ -13,10 +18,25 @@ font-style-italic = Italic
 font-style-bold-italic = Bold Italic
 
 # 排版 ---------------------------------------------------------------------------------------------
-# 按百分比增加行高, █
-adjust-cell-height = 20%
-# 增加字符宽度, px
-adjust-cell-width = 1
+# 增加行高, 按百分比或者(px), █
+adjust-cell-height = 18%
+
+# 增加字符宽度
+# adjust-cell-width = 1
+
+# 垂直调整文字在行间距中的位置
+# adjust-font-baseline = -5
+
+# 下划线, 上划线, strike 在行间距中的位置
+adjust-underline-position = 20%
+adjust-strikethrough-position = -15%
+# adjust-overline-position
+
+adjust-cursor-thickness = 1
+
+# invert cursor color ------------------------------------------------------------------------------
+cursor-color = cell-foreground
+cursor-text = cell-background
 
 # options ------------------------------------------------------------------------------------------
 fullscreen = non-native-visible-menu
@@ -66,8 +86,8 @@ keybind = alt+arrow_right=text:\x1b[1;5C
 # <pageup>, <pagedown>, <home>, <end>
 keybind = super+arrow_up=text:\x1b[5~
 keybind = super+arrow_down=text:\x1b[6~
-keybind = super+arrow_left=text:\x1b[H
-keybind = super+arrow_right=text:\x1b[F
+keybind = super+arrow_left=text:\x1bOH
+keybind = super+arrow_right=text:\x1bOF
 
 
 
