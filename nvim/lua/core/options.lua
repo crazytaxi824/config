@@ -298,6 +298,11 @@ vim.g.markdown_folding = 1
 --vim.g.mapleader = '\\'  -- 设置 <leader>, 默认值是 \
 vim.opt.mouse = 'a'  -- allow the mouse to be used in neovim, `:help mouse`
 
+--- cursor blink for ghostty, Ghostty 在启动时会自动设置 TERM_PROGRAM 为 ghostty.
+if os.getenv("TERM_PROGRAM") == 'ghostty' then
+  vim.opt.guicursor = "n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20,a:blinkwait700-blinkoff400-blinkon250"
+end
+
 --- VVI: 使用 term gui
 vim.opt.termguicolors = true
 
