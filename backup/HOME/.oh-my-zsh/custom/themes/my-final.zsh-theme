@@ -12,11 +12,9 @@
 #   %B / %b       - bold 字体开始/结束
 #
 # Glyphs
-# 字体默认带 \uE0A0 ~ \uE0B3 只有 Fira Code. 如果使用其他字体无法显示.
-# https://fonts.google.com/?preview.text=%EE%82%B0&preview.text_type=custom&query=fira
-#   echo "\uE0A0"  # 
+#   echo "\uE0A0"  #  
 #   echo "\uE0A1"  # 
-#   echo "\uE0A2"  # 
+#   echo "\uE0A2"  #   󰌾   
 #   echo "\uE0B0"  # 
 #   echo "\uE0B1"  # 
 #   echo "\uE0B2"  # 
@@ -83,9 +81,9 @@ function my_git_info() {
   local dirty=$(parse_git_dirty)
   # 当前 branch 如果是 master 或者 main, 显示高亮黄色警告.
   if [[ ( $current_branch == master || $current_branch == main ) && $dirty == $ZSH_THEME_GIT_PROMPT_DIRTY ]]; then
-    ZSH_THEME_GIT_PROMPT_PREFIX="%K{196}%F{15} %B " # 红底白字, 粗体
+    ZSH_THEME_GIT_PROMPT_PREFIX="%K{196}%F{15} %B󰌾 " # 红底白字, 粗体
   elif [[ ( $current_branch == master || $current_branch == main ) && $dirty != $ZSH_THEME_GIT_PROMPT_DIRTY ]]; then
-    ZSH_THEME_GIT_PROMPT_PREFIX="%K{214}%F{234} %B%b " # 橙底黑字
+    ZSH_THEME_GIT_PROMPT_PREFIX="%K{214}%F{234} %B󰌾%b " # 橙底黑字
   # 判断 git 当前是 dirty 还是 clean.
   elif [[ $dirty == $ZSH_THEME_GIT_PROMPT_DIRTY ]]; then
     ZSH_THEME_GIT_PROMPT_PREFIX="%K{221}%F{234} %B%b " # 黄底黑字
