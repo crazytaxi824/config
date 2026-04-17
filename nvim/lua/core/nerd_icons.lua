@@ -1,10 +1,10 @@
 --- NOTE: 这里主要是为了统一 icon 风格.
 Nerd_icons = {
   diag = {
-    hint  = "󱩎",  -- ⚐ ⚑ 󰛨
-    info  = "",  -- 𝖎    
-    warn  = "",  -- ⚠️  
-    error = "",  -- ❌✕✖︎✗✘⛌
+    hint  = "󰛩",  -- ⚐ ⚑ 󰛨 󰛩
+    info  = "",  -- 𝖎     
+    warn  = "",  --  
+    error = "",  -- ✕ ✖︎ ✗ ✘ ⛌ 
   },
   arrows = {
     up    = '↑',
@@ -26,12 +26,12 @@ Nerd_icons = {
   -- border = {"┌","─","┐","│","┘","─","└","│"},  -- "Box Drawings Light"
   -- border = {"╭","─","╮","│","╯","─","╰","│"},  -- "Box Drawings Light Arc"
   separator = '┃',  -- 用于 fillchars, bufferline offsets.separator
-  tick  = '✓',  -- ✓✔︎  
-  cross = '⛌', -- ❌✕✖︎✗✘⛌ 
-  star  = '★',
+  tick  = '✓',  -- ✓ ✔︎  
+  cross = '⛌',  -- ✕ ✖︎ ✗ ✘ ⛌ 
+  star  = '',  -- 󰓎    ★
   modified = '●',
   h_dot = '○',
-  lock  = '',
-  ellipsis = '', -- … 
-  h_circle = "◌", --  
+  lock  = '󰌾',  --   󰌾   
+  ellipsis = '',  -- … 
+  h_circle = "◌",  --  
 }

@@ -23,7 +23,7 @@ local glyphs = {
     staged    = "M",
     unmerged  = "U",
     renamed   = "R",
-    untracked = "?",  -- ★ untracked = new file.
+    untracked = "?",  -- untracked = new file.
     deleted   = "D",
     ignored   = "◌",  --  ◌
   },
