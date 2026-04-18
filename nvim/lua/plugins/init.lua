@@ -102,7 +102,7 @@ local plugins = {
   --- 第三方 plugin 需要用到 tree-sitter ---
   {
     "windwp/nvim-ts-autotag",  -- auto close tag <div></div>
-    commit = "8e1c0a3",
+    commit = "88c1453",
     config = function() require("plugins.settings.treesitter_autotag") end,
 
     event = "InsertEnter",
