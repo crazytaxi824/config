@@ -2,31 +2,30 @@ vim9script
 
 # NOTE: this is VIM 9.1 settings
 
+# set option 在 vim9script 中可以使用
+# - &option (:set option)
+# - &g:option (:setglobal option - global only)
+# - &l:option (:setlocal option - to buffer or window) 自动选择是 buffer-local, window-local
 #set term=xterm-256color
 
 # 防止颜色被不认识的 term 矫正, eg: xterm-ghostty
 if $TERM_PROGRAM == "ghostty"
-  g:loaded_colorresp = 1
+	g:loaded_colorresp = 1
 endif
 
-# set option 在 vim9script 中可以使用
-# - &option (:set - setglobal & setlocal)
-# - &g:option (:setglobal - global only)
-# - &b:option (类似 vim.bo.opt)
-# - &w:option (类似 vim.wo.opt)
-# - &l:option (:setlocal - to buffer or window) 相当于自动选择是 buffer-local  还是 window-local
-
-# cursor shape `:help terminal-output-codes`
+# cursor blink `:help terminal-output-codes`
 #  - 0, 1 or none    blinking block cursor
 #  - 2               block cursor
 #  - 3               blinking underline cursor
 #  - 4               underline cursor
 #  - 5               blinking vertical bar cursor
 #  - 6               vertical bar cursor
-&t_SI = "\e[6 q"  # Insert Mode
-&t_SR = "\e[4 q"  # Replace Mode
-&t_EI = "\e[2 q"  # everything else
-&t_kB = "\e[Z"    # 启用按键 <S-Tab>
+&t_SI = "\e[5 q"   # Insert Mode: 竖线闪烁
+&t_SR = "\e[3 q"   # Replace Mode: 下划线闪烁
+&t_EI = "\e[1 q"   # everything else: 块状闪烁
+
+# `:help terminal-key-codes`
+&t_kB = "\e[Z"  # 启用按键 <S-Tab>
 
 # 设置 <leader>
 g:mapleader = '\'  # 或者 "\\", single quote 内没有 escape
