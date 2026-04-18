@@ -1,7 +1,9 @@
-# font
-font-size = 14.5
+# https://ghostty.org/docs/config/reference
+# `$ ghostty +show-config --default`
 
+# font ---------------------------------------------------------------------------------------------
 # `$ ghostty +list-fonts`, 多个 font-family 按顺序 fallback
+
 font-family = "FiraCode Nerd Font Mono"
 # font-family = "JetBrainsMono Nerd Font Mono"
 font-family = "Menlo"
@@ -17,15 +19,20 @@ font-style-bold = Bold
 font-style-italic = Italic
 font-style-bold-italic = Bold Italic
 
+# 调整 font thicken 粗细(0~255), size 大小
+font-thicken = true
+font-thicken-strength = 200
+font-size = 14.5
+
 # 排版 ---------------------------------------------------------------------------------------------
-# 增加行高, 按百分比或者(px), █
+# 增加行高, 按百分比(N%) 或者(Npx), █
 adjust-cell-height = 18%
 
 # 增加字符宽度
 # adjust-cell-width = 1
 
 # 垂直调整文字在行间距中的位置
-# adjust-font-baseline = -5
+# adjust-font-baseline
 
 # 下划线, 上划线, strike 在行间距中的位置
 adjust-underline-position = 20%
@@ -34,9 +41,13 @@ adjust-strikethrough-position = -15%
 
 adjust-cursor-thickness = 1
 
-# invert cursor color ------------------------------------------------------------------------------
+# cursor -------------------------------------------------------------------------------------------
+# cursor color
 cursor-color = cell-foreground
 cursor-text = cell-background
+
+# cursor blink
+cursor-style-blink = true
 
 # options ------------------------------------------------------------------------------------------
 fullscreen = non-native-visible-menu
@@ -67,6 +78,7 @@ palette = 15=#eeeeee
 
 # keybinding ---------------------------------------------------------------------------------------
 # `$ ghostty +list-keybinds --default`
+
 # 清除所有默认 keybind
 keybind = clear
 
