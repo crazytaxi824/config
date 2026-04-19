@@ -8,10 +8,12 @@ vim9script
 # - &l:option (:setlocal option - to buffer or window) 自动选择是 buffer-local, window-local
 #set term=xterm-256color
 
-# 防止颜色被不认识的 term 矫正, eg: xterm-ghostty
-if $TERM_PROGRAM == "ghostty"
-	g:loaded_colorresp = 1
-endif
+# VVI: highlight color, 加载顺序很重要.
+g:loaded_colorresp = 1  # 全局开关 (防止某些终端在初始化时重置颜色), eg: xterm-ghostty
+set notermguicolors  # 使用 256-color (必须在 colorscheme 之前设置)
+colorscheme default  # 必须在自定义 highlight 之前设置, 否则会覆盖自定义 highlight.
+syntax on   # syntax highlight, 自动调用 filetype on, filetype plugin on 和 filetype indent on
+# 自定义 highlight 必须放在后面设置.
 
 # cursor blink `:help terminal-output-codes`
 #  - 0, 1 or none    blinking block cursor
@@ -32,16 +34,6 @@ g:mapleader = '\'  # 或者 "\\", single quote 内没有 escape
 
 # mouse
 set mouse=a
-
-# 必须先加载 colorscheme, 否则以后的 highlight 设置可能无效.
-colorscheme default
-
-# VVI
-filetype on # filetype detection on
-syntax on   # syntax highlight
-
-set notermguicolors  # 在 VIM 中不使用, 如果要使用的话用 Neovim.
-set nowrap
 
 # tabstop / shiftwidth 相关设置
 const tab_width = 4
@@ -83,6 +75,7 @@ set scrolloff=4
 set sidescrolloff=6
 set display=lastline
 set shortmess=ltToOCF
+set nowrap
 
 # ins-completion-menu
 set completeopt=menuone,noinsert
