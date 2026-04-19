@@ -1,4 +1,5 @@
 --- 全局 color 设置
+--- ctermfg/ctermbg 0-15 xterm 颜色(alacritty, ghostty 中设置的颜色)
 --- NOTE ------------------------------------------------------------------------------------------- {{{
 --- 注意: 自定义 color 放在最后，用来 override 之前插件定义的颜色.
 ---   ':hi'                查看所有 color scheme
@@ -38,7 +39,8 @@
 ---
 --- }}}
 
---- VVI: alacritty color based on sRGB, alacritty 颜色对应, 表示 0-15 系统颜色.
+--- VVI: colorscheme 必须在 自定义 highlights 之前设置.
+vim.cmd.colorscheme('default')
 
 --- c: "cterm", g: "gui"
 --- @type table<string, { c: integer, g: string }>
