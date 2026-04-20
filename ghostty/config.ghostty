@@ -8,8 +8,14 @@ font-family = "FiraCode Nerd Font Mono"
 # font-family = "JetBrainsMono Nerd Font Mono"
 font-family = "Menlo"
 
-# Simplified Chinese, Traditional Chinese, Hong Kong Traditional Chinese
-# Term: 转为 terminal 优化的等宽字, Slab: ()英文字符)衬线, Fixed: 无 Ligatures (连字)
+# Simplified Chinese (SC), Traditional Chinese (TC), Hong Kong Traditional Chinese (HC)
+# Slab: (英文字符)衬线, Fixed: 无 Ligatures (连体字符)
+#
+# Term vs Mono 都是等宽字符, 区别是:
+# | 字体 |  核心定义 |  宽度比例 (英文:中文)  | 使用场景 |
+# | ---- | --------- | ---------------------- | -------- |
+# | Sarasa Mono | 标准等宽 | 1 : 2            | 绝大多数代码编辑器 VS Code, JetBrains |
+# | Sarasa Term | 终端等宽 | 1 : 2 (严格对齐) | 终端模拟器 Ghostty, Alacritty, iTerm2 |
 font-family = "Sarasa Term Slab SC"
 font-family = "Sarasa Term Slab TC"
 font-family = "Sarasa Term Slab HC"
@@ -23,6 +29,14 @@ font-style-bold-italic = Bold Italic
 font-thicken = true
 font-thicken-strength = 200
 font-size = 14.5
+
+# 开启编程连体字，关闭不必要的装饰性连体
+# calt: "!=", "==", "->", ">=", "<=", "www" ...
+# liga: "ff" 两个 f 的横杠连在一起 ...
+# dlig: "No" 变为 N^o ...
+font-feature = +calt
+font-feature = -liga
+font-feature = -dlig
 
 # 排版 ---------------------------------------------------------------------------------------------
 # 增加行高, 按百分比(N%) 或者(Npx), █
