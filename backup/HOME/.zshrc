@@ -15,129 +15,129 @@ export LANG=en_US.UTF-8 # 设置了 LANG, 但是没有设置 LC_ALL 的情况下
 export EDITOR=nvim
 export VISUAL=$EDITOR
 
-# --- [ oh my zsh ] -------------------------------------------------------------------------------- {{{
-# NOTE: ohmyzsh #12257 #12328 async problem.
-# https://github.com/ohmyzsh/ohmyzsh/issues/12328
-# set before `source oh-my-zsh.sh`
-zstyle ':omz:alpha:lib:git' async-prompt no
-# zstyle ':omz:alpha:lib:git' async-prompt force
-
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
-
-# Path to your oh-my-zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
-
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time oh-my-zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="my-final"  # based on "gnzh"
-
-# Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in $ZSH/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
-
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion.
-# Case-sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
-
-# Uncomment one of the following lines to change the auto-update behavior
-# zstyle ':omz:update' mode disabled  # disable automatic updates
-# zstyle ':omz:update' mode auto      # update automatically without asking
-# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
-
-# Uncomment the following line to change how often to auto-update (in days).
-# zstyle ':omz:update' frequency 13
-
-# Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS="true"
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# You can also set it to another string to have that shown instead of the default red dots.
-# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
-# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
-# COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-# Which plugins would you like to load?
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(
-	extract  # 一个命令解压所有类型的文件. 命令为 `x`, eg: 'x <filepath>'
-	z
-	wd  # 给常用文件夹做标记
-	safe-paste  # Preventing any code from actually running while pasting.
-
-	# 以下第三方插件需要手动安装.
-	zsh-syntax-highlighting  # https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/INSTALL.md
-	zsh-autosuggestions      # https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md
-)
-
-# NOTE: zsh-autosuggestions plugin 设置
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=242"  # inline 代码提示的颜色. 默认是 8, bold black 颜色.
-
-# oh my zsh 最后一行
-source $ZSH/oh-my-zsh.sh
-
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
+# # --- [ oh my zsh ] -------------------------------------------------------------------------------- {{{
+# # NOTE: ohmyzsh #12257 #12328 async problem.
+# # https://github.com/ohmyzsh/ohmyzsh/issues/12328
+# # set before `source oh-my-zsh.sh`
+# zstyle ':omz:alpha:lib:git' async-prompt no
+# # zstyle ':omz:alpha:lib:git' async-prompt force
 #
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
+# # If you come from bash you might have to change your $PATH.
+# # export PATH=$HOME/bin:/usr/local/bin:$PATH
 #
-# }}}
+# # Path to your oh-my-zsh installation.
+# export ZSH="$HOME/.oh-my-zsh"
+#
+# # Set name of the theme to load --- if set to "random", it will
+# # load a random theme each time oh-my-zsh is loaded, in which case,
+# # to know which specific one was loaded, run: echo $RANDOM_THEME
+# # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
+# ZSH_THEME="my-final"  # based on "gnzh"
+#
+# # Set list of themes to pick from when loading at random
+# # Setting this variable when ZSH_THEME=random will cause zsh to load
+# # a theme from this variable instead of looking in $ZSH/themes/
+# # If set to an empty array, this variable will have no effect.
+# # ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
+#
+# # Uncomment the following line to use case-sensitive completion.
+# # CASE_SENSITIVE="true"
+#
+# # Uncomment the following line to use hyphen-insensitive completion.
+# # Case-sensitive completion must be off. _ and - will be interchangeable.
+# # HYPHEN_INSENSITIVE="true"
+#
+# # Uncomment one of the following lines to change the auto-update behavior
+# # zstyle ':omz:update' mode disabled  # disable automatic updates
+# # zstyle ':omz:update' mode auto      # update automatically without asking
+# # zstyle ':omz:update' mode reminder  # just remind me to update when it's time
+#
+# # Uncomment the following line to change how often to auto-update (in days).
+# # zstyle ':omz:update' frequency 13
+#
+# # Uncomment the following line if pasting URLs and other text is messed up.
+# # DISABLE_MAGIC_FUNCTIONS="true"
+#
+# # Uncomment the following line to disable colors in ls.
+# # DISABLE_LS_COLORS="true"
+#
+# # Uncomment the following line to disable auto-setting terminal title.
+# # DISABLE_AUTO_TITLE="true"
+#
+# # Uncomment the following line to enable command auto-correction.
+# # ENABLE_CORRECTION="true"
+#
+# # Uncomment the following line to display red dots whilst waiting for completion.
+# # You can also set it to another string to have that shown instead of the default red dots.
+# # e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
+# # Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
+# # COMPLETION_WAITING_DOTS="true"
+#
+# # Uncomment the following line if you want to disable marking untracked files
+# # under VCS as dirty. This makes repository status check for large repositories
+# # much, much faster.
+# # DISABLE_UNTRACKED_FILES_DIRTY="true"
+#
+# # Uncomment the following line if you want to change the command execution time
+# # stamp shown in the history command output.
+# # You can set one of the optional three formats:
+# # "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# # or set a custom format using the strftime function format specifications,
+# # see 'man strftime' for details.
+# # HIST_STAMPS="mm/dd/yyyy"
+#
+# # Would you like to use another custom folder than $ZSH/custom?
+# # ZSH_CUSTOM=/path/to/new-custom-folder
+#
+# # Which plugins would you like to load?
+# # Standard plugins can be found in $ZSH/plugins/
+# # Custom plugins may be added to $ZSH_CUSTOM/plugins/
+# # Example format: plugins=(rails git textmate ruby lighthouse)
+# # Add wisely, as too many plugins slow down shell startup.
+# plugins=(
+# 	extract  # 一个命令解压所有类型的文件. 命令为 `x`, eg: 'x <filepath>'
+# 	z
+# 	wd  # 给常用文件夹做标记
+# 	safe-paste  # Preventing any code from actually running while pasting.
+#
+# 	# 以下第三方插件需要手动安装.
+# 	zsh-syntax-highlighting  # https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/INSTALL.md
+# 	zsh-autosuggestions      # https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md
+# )
+#
+# # NOTE: zsh-autosuggestions plugin 设置
+# ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=242"  # inline 代码提示的颜色. 默认是 8, bold black 颜色.
+#
+# # oh my zsh 最后一行
+# source $ZSH/oh-my-zsh.sh
+#
+# # User configuration
+#
+# # export MANPATH="/usr/local/man:$MANPATH"
+#
+# # You may need to manually set your language environment
+# # export LANG=en_US.UTF-8
+#
+# # Preferred editor for local and remote sessions
+# # if [[ -n $SSH_CONNECTION ]]; then
+# #   export EDITOR='vim'
+# # else
+# #   export EDITOR='mvim'
+# # fi
+#
+# # Compilation flags
+# # export ARCHFLAGS="-arch x86_64"
+#
+# # Set personal aliases, overriding those provided by oh-my-zsh libs,
+# # plugins, and themes. Aliases can be placed here, though oh-my-zsh
+# # users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# # For a full list of active aliases, run `alias`.
+# #
+# # Example aliases
+# # alias zshconfig="mate ~/.zshrc"
+# # alias ohmyzsh="mate ~/.oh-my-zsh"
+# #
+# # }}}
 
 # 自定义颜色显示, 覆盖 ohmyzsh 默认设置. 需要放到 ohmyzsh 后面.
 # --- [ COLOR 设置 ] ------------------------------------------------------------------------------- {{{
@@ -145,24 +145,18 @@ source $ZSH/oh-my-zsh.sh
 
 # --- LSCOLORS 设置 --------------------------------------------------------------------------------
 # https://www.cyberciti.biz/faq/apple-mac-osx-terminal-color-ls-output-option/
-#export LSCOLORS=Gxfxcxdxbxegedabagacad  # 默认值是 'Gxfxcxdxbxegedabagacad'
+export LSCOLORS=Gxfxcxdxbxegedabagacad  # 默认值是 'Gxfxcxdxbxegedabagacad'
 
 # --- LS_COLORS 设置 -------------------------------------------------------------------------------
 # 注意: 这里设置 LS_COLORS 主要是给 `ohmyzsh`, `fd` 和 `tree` 显示颜色用. Macos 系统不会用到这个设置.
-#
 # 使用 16 color 设置 LS_COLORS, 但是因为有些颜色 vim 无法识别可能导致有很大偏差.
-#export LS_COLORS='rs=0:di=01;36:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43:'  # 主要设置
+export LS_COLORS='rs=0:di=01;36:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43:'
 
 # 使用 256 color 设置 LS_COLORS, 和上面的 16 color 使用最相近的颜色.
 # 这里主要是为了 vim 中的 fzf.vim 能够使用指定颜色.
-#LS_COLORS='rs=0:di=01;38;5;81:ln=38;5;207:so=38;5;42:pi=38;5;191:ex=38;5;167:bd=38;5;75;48;5;81:cd=38;5;75;48;5;191:su=30;48;5;167:sg=30;48;5;81:tw=30;48;5;42:ow=30;48;5;191'  # 主要设置
-#LS_COLORS="$LS_COLORS:*.go=38;5;72:*.ts=38;5;72:*.tsx=38;5;72:*.py=38;5;72:*.js=38;5;72:*.jsx=38;5;72"   # 根据文件类型设置.
+# LS_COLORS='rs=0:di=01;38;5;81:ln=38;5;207:so=38;5;42:pi=38;5;191:ex=38;5;167:bd=38;5;75;48;5;81:cd=38;5;75;48;5;191:su=30;48;5;167:sg=30;48;5;81:tw=30;48;5;42:ow=30;48;5;191'  # 主要设置
+# LS_COLORS="$LS_COLORS:*.go=38;5;72:*.ts=38;5;72:*.tsx=38;5;72:*.py=38;5;72:*.js=38;5;72:*.jsx=38;5;72"   # 根据文件类型设置.
 #export LS_COLORS="$LS_COLORS:*.bak=38;5;242:*.gitignore=38;5;242:*.editorconfig=38;5;242"   # 根据文件类型设置.
-
-# 以下设置是给 oh-my-zsh 代码提示颜色用
-#zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}"
-#autoload -Uz compinit
-#compinit
 
 # --- man 命令颜色设置 -----------------------------------------------------------------------------
 export LESS_TERMCAP_md=$(printf "\e[1;32m")    # md      bold      start bold
@@ -185,6 +179,32 @@ export HOMEBREW_NO_INSTALL_CLEANUP=true
 # `brew bundle check`, `brew bundle cleanup`, `brew bundle list` ...
 export HOMEBREW_BUNDLE_FILE=$HOME/.config/Brewfile  # 默认在 ~/.Brewfile
 #export HOMEBREW_BUNDLE_NO_LOCK=1  # disable Brewfile.lock.json
+# }}}
+
+# --- antidote plugins manager --------------------------------------------------------------------- {{{
+# antidote 安装地址
+ANTIDOTE_DIR="$(brew --prefix antidote)/share/antidote"
+
+zsh_plugins_txt="$HOME/.zsh_plugins.txt"      # antidote 配置文件
+zsh_plugins_static="$HOME/.zsh_plugins.zsh"   # antidote 生成的静态文件
+
+# 初始化 Antidote
+if [[ -f "$ANTIDOTE_DIR/antidote.zsh" ]]; then
+	source "$ANTIDOTE_DIR/antidote.zsh"
+
+	# 如果静态脚本不存在，或配置文件有更新，则重新编译
+	if [[ ! "$zsh_plugins_static" -nt "$zsh_plugins_txt" ]]; then
+		antidote bundle < "$zsh_plugins_txt" > "$zsh_plugins_static"
+	fi
+	source "$zsh_plugins_static"
+fi
+
+# zsh-completions 配置
+autoload -Uz compinit && compinit
+
+# zsh-autosuggestions inline 代码提示的颜色. 默认是 8, bold black 颜色
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=240"
+
 # }}}
 
 # go / py / ruby / node / :Mason ...
@@ -688,6 +708,11 @@ alias rm="echo '\e[33muse \"trash\" instead\e[0m'; #ignore_rest_cmd"
 # NOTE: trash cmd is available in Macos
 # alias trash="zsh $HOME/.config/.my_shell_functions/trash.sh"
 
+### ls
+alias ls='ls -G'
+alias la='ls -aG'
+alias ll='ls -lFG'
+
 ### open/edit file
 alias e="vimExistFile --"   # edit file, vimExistFile() 函数定义在下面.
 
@@ -705,11 +730,27 @@ alias checkBrewDependency="bash $HOME/.config/.my_shell_functions/brew_dep_check
 # }}}
 
 # --- [ keybindings ] ------------------------------------------------------------------------------ {{{
-# `bindkey -M main`   # 查看所有快捷键
-# `bindkey "^k" kill-line`       # 设置快捷键, CTRL-k
-# `bindkey "^[f" forward-word`   # ESC-f, 先按 ESC 再按 f.
-# `bindkey "^[b" backward-word`  # ESC-b, 先按 ESC 再按 b.
+# `$ bindkey -M main`   # 查看所有快捷键
+# `$ zle -la`  # list 所有 bindkey actions
 #
+# bindkey "^k" kill-line       # 设置快捷键, CTRL-k
+# bindkey "\x1b[1;2C" vi-forward-word    # shift-right
+# bindkey "\x1b[1;2D" vi-backward-word   # shift-left
+bindkey "^[[1;5C" vi-forward-word       # option-right
+bindkey "^[[1;5D" vi-backward-word      # option-left
+bindkey "^[^?" vi-backward-kill-word    # option-delete
+
+# 1. 加载前缀搜索模块
+autoload -U up-line-or-beginning-search
+autoload -U down-line-or-beginning-search
+
+# 2. 将它们定义为可用的小部件 (Widgets)
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+
+bindkey "^[[A" up-line-or-beginning-search
+bindkey "^[[B" down-line-or-beginning-search
+
 # }}}
 
 # --- [ others ] ----------------------------------------------------------------------------------- {{{
@@ -753,6 +794,10 @@ function Fd() {
 }
 
 # }}}
+
+# starship 加载
+# export STARSHIP_CONFIG=~/.config/starship.toml
+eval "$(starship init zsh)"
 
 
 

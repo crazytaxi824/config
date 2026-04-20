@@ -1,0 +1,68 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# 禁止在提示符后换行
+add_newline = false
+
+format = """
+$username\
+$hostname\
+$git_branch\
+$git_status\
+$directory\
+$fill\
+$status\
+$cmd_duration\
+$line_break\
+$character\
+"""
+
+[fill]
+symbol = " " # 使用空格填充，将后面的内容推向右侧
+
+[username]
+# 设置为 true 会让用户名始终显示
+show_always = true
+style_user = "fg:215 bg:237"
+style_root = "fg:black bg:red bold"  # root 用户时的特殊颜色
+format = "[ $user ]($style)"  # 动态加载 user, root style
+
+[hostname]
+ssh_only = true  # 只在远程时显示 hostname
+ssh_symbol = "🌐"
+style = "fg:black bg:purple bold"
+format = "[ $ssh_symbol $hostname ]($style)"
+
+[git_branch]
+symbol = ""
+style = "fg:236 bg:35 bold"
+format = '[ $symbol $branch ]($style)'
+
+[git_status]
+style = "fg:236 bg:35 bold"
+format = "[$all_status$ahead_behind ]($style)"
+deleted = "✕"
+conflicted = ""
+
+[directory]
+style = "fg:251 bg:25 bold"
+format = "[ $path ]($style)"
+truncation_length = 99
+truncate_to_repo = false
+truncation_symbol = "…/"
+
+[status]
+disabled = false
+symbol = "err:"     # 区分普通错误和信号(Signal)
+success_symbol = ""  # error_code=0 时不显示
+format = "[ $symbol $int ]($style)"
+
+# 执行时间显示 (如果命令运行超过 2 秒则显示)
+[cmd_duration]
+min_time = 100
+style = "fg:240"
+format = "[\\($duration\\)]($style)"
+
+# 替换默认的字符图标
+[character]
+success_symbol = "[\\$](fg:252)"
+error_symbol = "[\\$](fg:252)"

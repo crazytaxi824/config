@@ -12,6 +12,7 @@
 !/backup
 !/myservice
 !/.my_shell_functions
+!/starship.toml
 
 # exclude folder, and then ignore 'file' & 'sub-folder' inside the folder.
 !/nvim
