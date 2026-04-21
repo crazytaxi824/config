@@ -27,11 +27,12 @@ symbol = " " # 使用空格填充，将后面的内容推向右侧
 # 设置为 true 会让用户名始终显示
 show_always = true
 style_user = "fg:orange bg:grey_bg"
-style_root = "fg:255 bg:red_bg bold"  # root 用户时的特殊颜色
-format = "[ $user ]($style)"  # 动态加载 user, root style
+style_root = "fg:255 bg:red_bg bold"
+format = "[ $user ]($style)"
 
 [hostname]
-ssh_only = true  # 只在远程时显示 hostname
+# 只在远程时显示 hostname
+ssh_only = true
 ssh_symbol = "🌐"
 style = "fg:black bg:magenta_bg bold"
 format = "[ $ssh_symbol $hostname ]($style)"
@@ -43,6 +44,32 @@ disabled = true
 [git_status]
 disabled = true
 
+[custom.git_branch]
+# bg: \e[48;5;xxxm
+# fg: \e[38;5;xxxm
+# bold: \e[1;xx;xx;xxxm
+command = """
+branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+dirty=$(git status --porcelain 2>/dev/null | grep -q . && echo 1)
+if [[ "$branch" =~ ^(main|master)$ ]]; then
+	if [ "$dirty" = "1" ]; then
+		printf "\e[48;5;196m\e[1;38;5;255m %s \e[0m" "󰌾 $branch "
+	else
+		printf "\e[48;5;208m\e[1;38;5;232m %s \e[0m" "󰌾 $branch"
+	fi
+else
+	if [ "$dirty" = "1" ]; then
+		printf "\e[48;5;3m\e[1;38;5;235m %s \e[0m" " $branch "
+	else
+		printf "\e[48;5;35m\e[1;38;5;235m %s \e[0m" " $branch"
+	fi
+fi
+"""
+# 当前文件在 git 内的情况下才会触发后续任务
+when = 'git rev-parse --is-inside-work-tree 2>/dev/null'
+# 不需要 (style), 由 printf 控制颜色
+format = "$output"
+
 [directory]
 style = "fg:white bg:blue_bg bold"
 format = "[ $path ]($style)"
@@ -52,8 +79,8 @@ truncation_symbol = "…/"
 
 [status]
 disabled = false
-symbol = "err:"     # 区分普通错误和信号(Signal)
-success_symbol = ""  # error_code=0 时不显示
+symbol = "err:"
+success_symbol = ""
 style = "fg:red bold"
 format = "[ $symbol $int ]($style)"
 
@@ -68,30 +95,10 @@ format = "[\\($duration\\)]($style)"
 success_symbol = "[\\$](fg:white)"
 error_symbol = "[\\$](fg:white)"
 
-[custom.git_branch]
-command = """
-branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
-if [[ "$branch" =~ ^(main|master)$ ]]; then
-	if git status --porcelain 2>/dev/null | grep -q .; then
-		printf "\e[48;5;196m\e[1;38;5;251m %s \e[0m" "󰌾 $branch "
-	else
-		printf "\e[48;5;208m\e[1;38;5;236m %s \e[0m" "󰌾 $branch"
-	fi
-else
-	if git status --porcelain 2>/dev/null | grep -q .; then
-		printf "\e[48;5;3m\e[1;38;5;236m %s \e[0m" " $branch "
-	else
-		printf "\e[48;5;35m\e[1;38;5;236m %s \e[0m" " $branch"
-	fi
-fi
-"""
-when = 'git rev-parse --is-inside-work-tree 2>/dev/null'
-format = "$output"  # 不需要 (style), 由 printf 控制
-
 # colors
 [palettes.my_colors]
-white = "251"
-black = "236"
+white = "252"
+black = "235"
 red_bg = "196"
 magenta_bg = "5"
 green_bg = "35"
