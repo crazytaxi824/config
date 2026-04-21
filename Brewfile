@@ -9,6 +9,8 @@
 tap "gittower/tap"
 
 ### `brew install` ---------------------------------------------------------------------------------
+brew "antidote" # zsh plugins manager
+brew "starship" # terminal prompt style
 brew "fzf"
 brew "fd"      # rust find
 brew "bat"     # rust cat
@@ -72,7 +74,8 @@ brew "yt-dlp"  # fork youtube-dl
 
 ### `brew install --cask` --------------------------------------------------------------------------
 # 开发工具
-cask "alacritty"
+cask "ghostty"
+#cask "alacritty"
 #cask "iterm2"
 cask "raycast"  # alfred 替代
 cask "visual-studio-code" # vscode
@@ -91,8 +94,8 @@ cask "obsidian" # markdown 编辑软件
 #cask "typora"   # markdown 编辑软件
 
 # 常用字体
-cask "font-jetbrains-mono-nerd-font"  # code 字体, 有 bold-italic 字体
 cask "font-fira-code-nerd-font"       # code 字体, 没有 bold-italic 字体
+#cask "font-jetbrains-mono-nerd-font"  # code 字体, 有 bold-italic 字体
 cask "font-sarasa-gothic"  # 中文等宽 bold italic 字体
 
 # 个人工具
@@ -103,7 +106,6 @@ cask "keepassxc"  # keepass 客户端, 密码管理工具, eg: "macpass", "authp
 cask "keka"  # 压缩工具
 cask "the-unarchiver"  # 解压工具
 cask "keycastr"  # 按键输入显示工具
-cask "aldente"  # 电池充电 80% 工具
 cask "stats"  # apple silicon CPU/GPU/TEMP 实时监控
 #cask "lulu"  # 防火墙
 #cask "openvpn-connect"
