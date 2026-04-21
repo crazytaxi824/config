@@ -3,6 +3,9 @@
 # 禁止在提示符后换行
 add_newline = false
 
+# 使用自定义 colors
+palette = 'my_colors'
+
 format = """
 $username\
 ${custom.git_branch_main}\
@@ -24,31 +27,25 @@ symbol = " " # 使用空格填充，将后面的内容推向右侧
 [username]
 # 设置为 true 会让用户名始终显示
 show_always = true
-style_user = "fg:215 bg:237"
-style_root = "fg:black bg:red bold"  # root 用户时的特殊颜色
+style_user = "fg:orange bg:grey_bg"
+style_root = "fg:black bg:red_bg bold"  # root 用户时的特殊颜色
 format = "[ $user ]($style)"  # 动态加载 user, root style
 
 [hostname]
 ssh_only = true  # 只在远程时显示 hostname
 ssh_symbol = "🌐"
-style = "fg:black bg:purple bold"
+style = "fg:black bg:magenta_bg bold"
 format = "[ $ssh_symbol $hostname ]($style)"
 
 [git_branch]
-disabled = true
 # symbol = ""
-# style = "fg:236 bg:35 bold"
-# format = '[ $symbol $branch ]($style)'
+disabled = true
 
 [git_status]
 disabled = true
-# style = "fg:236 bg:35 bold"
-# format = "[$all_status$ahead_behind ]($style)"
-# deleted = "✕"
-# conflicted = ""
 
 [directory]
-style = "fg:251 bg:25 bold"
+style = "fg:white bg:blue_bg bold"
 format = "[ $path ]($style)"
 truncation_length = 99
 truncate_to_repo = false
@@ -58,29 +55,44 @@ truncation_symbol = "…/"
 disabled = false
 symbol = "err:"     # 区分普通错误和信号(Signal)
 success_symbol = ""  # error_code=0 时不显示
+style = "fg:red bold"
 format = "[ $symbol $int ]($style)"
 
 # 执行时间显示 (如果命令运行超过 2 秒则显示)
 [cmd_duration]
-min_time = 100
-style = "fg:240"
+min_time = 2_000
+style = "fg:grey"
 format = "[\\($duration\\)]($style)"
 
 # 替换默认的字符图标
 [character]
-success_symbol = "[\\$](fg:252)"
-error_symbol = "[\\$](fg:252)"
+success_symbol = "[\\$](fg:white)"
+error_symbol = "[\\$](fg:white)"
 
 [custom.git_branch_main]
 command = "git rev-parse --abbrev-ref HEAD"
 when = 'git rev-parse --is-inside-work-tree 2>/dev/null && git rev-parse --abbrev-ref HEAD | grep -qE "^(main|master)$"'
-format = "[  $output ]($style)"
-style = "bold fg:#ffffff bg:#ff5555"
+format = "[ 󰌾 $output ]($style)"
+style = "fg:black bg:orange_bg bold"
 
 [custom.git_branch_other]
 command = "git rev-parse --abbrev-ref HEAD"
 when = 'git rev-parse --is-inside-work-tree 2>/dev/null && git rev-parse --abbrev-ref HEAD | grep -qvE "^(main|master)$"'
 format = "[  $output ]($style)"
-style = "bold fg:#000000 bg:#50fa7b"
+style = "fg:black bg:green_bg bold"
+
+
+[palettes.my_colors]
+white = "251"
+black = "236"
+red_bg = "196"
+magenta_bg = "5"
+green_bg = "35"
+blue_bg = "25"
+orange    = "215"
+orange_bg = "208"
+grey    = "240"
+grey_bg = "237"
+
 
 
