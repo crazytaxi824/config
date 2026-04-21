@@ -217,8 +217,9 @@ local keymaps = {
   --- hi Normal ctermbg=234 | hi Normal ctermbg=NONE 切换 bg 颜色
   {'n', '<leader>C', function() key_fn.toggle_comments_color() end, opt, 'change Comments color'},
 
-  --- NOTE: <D-k> 被用于 system shortcut
+  --- NOTE: <D-k> 可能会被用于 system shortcut
   {'n', '<C-k>', '<cmd>mes clear<CR>', opt, 'message clear'},
+  {'n', '<D-k>', '<cmd>mes clear<CR>', opt, 'message clear'},
 
   --- move ) ] } to end of line/word, like autopairs FastWrap
   {'i', '<D-e>', function() key_fn.move_char.move_bracket('$') end, opt, 'move next char to end of line' },
