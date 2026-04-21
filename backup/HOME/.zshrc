@@ -607,8 +607,9 @@ alias checkBrewDependency="bash $HOME/.config/.my_shell_functions/brew_dep_check
 # }}}
 
 # --- [ keybindings ] ------------------------------------------------------------------------------ {{{
-# `$ bindkey -M main`   # 查看所有快捷键
-# `$ zle -la`  # list 所有 bindkey actions
+# `$ cat -v`  查看组合键发送的 CSI (Sequence)
+# `$ bindkey -M main`  查看所有快捷键
+# `$ zle -la`  列出所有 bindkey actions
 #
 # bindkey "^k" kill-line       # 设置快捷键, CTRL-k
 # bindkey "\x1b[1;2C" vi-forward-word    # shift-right
@@ -625,6 +626,7 @@ autoload -U down-line-or-beginning-search
 zle -N up-line-or-beginning-search
 zle -N down-line-or-beginning-search
 
+# 绑定搜索模块, `^[[A` - UP, `^[[B` - Down, `^[[C` - Right, `^[[D` - Left
 bindkey "^[[A" up-line-or-beginning-search
 bindkey "^[[B" down-line-or-beginning-search
 
@@ -672,7 +674,7 @@ function Fd() {
 
 # }}}
 
-# starship 加载
+# starship 加载 ------------------------------------------------------------------------------------
 # export STARSHIP_CONFIG=~/.config/starship.toml  # 配置文件位置
 eval "$(starship init zsh)"
 
