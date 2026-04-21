@@ -9,6 +9,7 @@
 # exclude folder
 !/alacritty
 !/ghostty
+!/yazi
 !/backup
 !/myservice
 !/.my_shell_functions

@@ -1,0 +1,17 @@
+# https://github.com/sxyazi/yazi/blob/main/yazi-config/preset/yazi-default.toml
+# https://github.com/sxyazi/yazi/blob/main/yazi-config/preset/keymap-default.toml
+
+[plugin]
+# prepend_previewers: 这个指令会将你的规则插入到 Yazi 默认规则的 最前面
+prepend_previewers = [
+	# --- 根据文件名后缀 ---
+    { name = "*.pages",     run = "noop" },
+    { name = "*.numbers",   run = "noop" },
+    { name = "*.key",       run = "noop" },
+
+	# --- 根据文件类型 ---
+    { mime = "application/zip", run = 'noop' },
+    { mime = "application/pdf", run = 'noop' },
+    { mime = "audio/*",         run = 'noop' },
+    { mime = "video/*",         run = 'noop' },
+]
