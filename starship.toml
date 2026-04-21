@@ -24,7 +24,7 @@ $character\
 [fill]
 symbol = " " # 使用空格填充，将后面的内容推向右侧
 
-# warning: red bg
+# WARN(user): red bg
 [username]
 # 设置为 true 会让用户名始终显示
 show_always = true
@@ -32,7 +32,7 @@ style_user = "fg:orange bg:grey_bg"
 style_root = "fg:black bg:red_bg bold"  # root 用户时的特殊颜色
 format = "[ $user ]($style)"  # 动态加载 user, root style
 
-# warning: magenta bg
+# WARN(remote host): magenta bg
 [hostname]
 ssh_only = true  # 只在远程时显示 hostname
 ssh_symbol = "🌐"
@@ -71,7 +71,7 @@ format = "[\\($duration\\)]($style)"
 success_symbol = "[\\$](fg:white)"
 error_symbol = "[\\$](fg:white)"
 
-# warning: orange bg
+# WARN(git branch): orange bg
 [custom.git_branch_main]
 command = """
 branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
