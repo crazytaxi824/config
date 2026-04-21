@@ -38,7 +38,7 @@ M.visual_selected = function(trim)
     v_selected = table.concat(lines, '')
   end
 
-  vim.notify(v_selected)
+  vim.notify('try open file: "'..v_selected..'"')
 
   return v_selected
 end
