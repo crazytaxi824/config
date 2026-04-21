@@ -1,0 +1,9 @@
+# default blue 颜色太亮无法作为 bg 颜色
+
+[tabs]
+active   = { bg = "26", bold = true }
+inactive = { fg = "26", bg = "gray" }
+
+[mode]
+normal_main = { bg = "26", bold = true }
+normal_alt  = { fg = "26", bg = "gray" }
