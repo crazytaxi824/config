@@ -24,6 +24,7 @@ $character\
 [fill]
 symbol = " " # 使用空格填充，将后面的内容推向右侧
 
+# warning: red bg
 [username]
 # 设置为 true 会让用户名始终显示
 show_always = true
@@ -31,6 +32,7 @@ style_user = "fg:orange bg:grey_bg"
 style_root = "fg:black bg:red_bg bold"  # root 用户时的特殊颜色
 format = "[ $user ]($style)"  # 动态加载 user, root style
 
+# warning: magenta bg
 [hostname]
 ssh_only = true  # 只在远程时显示 hostname
 ssh_symbol = "🌐"
@@ -69,19 +71,34 @@ format = "[\\($duration\\)]($style)"
 success_symbol = "[\\$](fg:white)"
 error_symbol = "[\\$](fg:white)"
 
+# warning: orange bg
 [custom.git_branch_main]
-command = "git rev-parse --abbrev-ref HEAD"
+command = """
+branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+if git status --porcelain 2>/dev/null | grep -q .; then
+	echo "$branch "
+else
+	echo "$branch"
+fi
+"""
 when = 'git rev-parse --is-inside-work-tree 2>/dev/null && git rev-parse --abbrev-ref HEAD | grep -qE "^(main|master)$"'
 format = "[ 󰌾 $output ]($style)"
 style = "fg:black bg:orange_bg bold"
 
 [custom.git_branch_other]
-command = "git rev-parse --abbrev-ref HEAD"
+command = """
+branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+if git status --porcelain 2>/dev/null | grep -q .; then
+	echo "$branch "
+else
+	echo "$branch"
+fi
+"""
 when = 'git rev-parse --is-inside-work-tree 2>/dev/null && git rev-parse --abbrev-ref HEAD | grep -qvE "^(main|master)$"'
 format = "[  $output ]($style)"
 style = "fg:black bg:green_bg bold"
 
-
+# colors
 [palettes.my_colors]
 white = "251"
 black = "236"
