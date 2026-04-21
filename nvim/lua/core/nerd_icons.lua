@@ -4,7 +4,7 @@ Nerd_icons = {
     hint  = "󰛩",  -- ⚐ ⚑ 󰛨 󰛩
     info  = "",  -- 𝖎     
     warn  = "",  --  
-    error = "",  -- ✕ ✖︎ ✗ ✘ ⛌ 
+    error = "",  --  ✕ ✖︎ ✗ ✘  
   },
   arrows = {
     up    = '↑',
@@ -27,11 +27,10 @@ Nerd_icons = {
   -- border = {"╭","─","╮","│","╯","─","╰","│"},  -- "Box Drawings Light Arc"
   separator = '┃',  -- 用于 fillchars, bufferline offsets.separator
   tick  = '✓',  -- ✓ ✔︎  
-  cross = '⛌',  -- ✕ ✖︎ ✗ ✘ ⛌ 
+  cross = '',  --  ✕ ✖︎ ✗ ✘  
   star  = '',  -- 󰓎    ★
-  modified = '●',
-  h_dot = '○',
+  dot = '●',  --   ○ ◌
+  dot_h = '',
   lock  = '󰌾',  --   󰌾   
   ellipsis = '',  -- … 
-  h_circle = "◌",  --  
 }

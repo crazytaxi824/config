@@ -19,7 +19,7 @@ local WinbarFormatterLevel = {
 
 local wb_sign = {
   indicator = '▌',
-  modified = '●',
+  modified = Nerd_icons.dot,
 }
 
 

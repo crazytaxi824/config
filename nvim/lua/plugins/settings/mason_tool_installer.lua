@@ -42,7 +42,7 @@ mason.setup {
     icons = {
       package_installed = Nerd_icons.tick,
       package_pending = Nerd_icons.arrows.right,
-      package_uninstalled = Nerd_icons.cross,
+      package_uninstalled = Nerd_icons.dot_h,
     },
 
     keymaps = {

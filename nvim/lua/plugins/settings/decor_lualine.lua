@@ -240,7 +240,7 @@ lualine.setup {
                   -- 3: Absolute path, with tilde as the home directory '~'
                   -- 4: Filename and parent dir, with tilde as the home directory
         symbols = {
-          modified = Nerd_icons.modified, -- Text to show when the file is modified.
+          modified = Nerd_icons.dot, -- Text to show when the file is modified.
           readonly = Nerd_icons.lock,     -- Text to show when the file is non-modifiable or readonly.
           unnamed  = '[No Name]', -- Text to show for unnamed buffers.
         },
@@ -345,7 +345,7 @@ lualine.setup {
         'filename',
         path = 0,
         symbols = {
-          modified = Nerd_icons.modified, -- Text to show when the file is modified.
+          modified = Nerd_icons.dot, -- Text to show when the file is modified.
           readonly = Nerd_icons.lock,     -- Text to show when the file is non-modifiable or readonly.
           unnamed  = '[No Name]', -- Text to show for unnamed buffers.
         },
