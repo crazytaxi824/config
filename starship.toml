@@ -8,8 +8,7 @@ palette = 'my_colors'
 
 format = """
 $username\
-${custom.git_branch_main}\
-${custom.git_branch_other}\
+${custom.git_branch}\
 $hostname\
 $git_branch\
 $git_status\
@@ -24,15 +23,13 @@ $character\
 [fill]
 symbol = " " # 使用空格填充，将后面的内容推向右侧
 
-# WARN(user): red bg
 [username]
 # 设置为 true 会让用户名始终显示
 show_always = true
 style_user = "fg:orange bg:grey_bg"
-style_root = "fg:black bg:red_bg bold"  # root 用户时的特殊颜色
+style_root = "fg:255 bg:red_bg bold"  # root 用户时的特殊颜色
 format = "[ $user ]($style)"  # 动态加载 user, root style
 
-# WARN(remote host): magenta bg
 [hostname]
 ssh_only = true  # 只在远程时显示 hostname
 ssh_symbol = "🌐"
@@ -71,32 +68,25 @@ format = "[\\($duration\\)]($style)"
 success_symbol = "[\\$](fg:white)"
 error_symbol = "[\\$](fg:white)"
 
-# WARN(git branch): orange bg
-[custom.git_branch_main]
+[custom.git_branch]
 command = """
 branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
-if git status --porcelain 2>/dev/null | grep -q .; then
-	echo "$branch "
+if [[ "$branch" =~ ^(main|master)$ ]]; then
+	if git status --porcelain 2>/dev/null | grep -q .; then
+		printf "\e[48;5;196m\e[1;38;5;251m %s \e[0m" "󰌾 $branch "
+	else
+		printf "\e[48;5;208m\e[1;38;5;236m %s \e[0m" "󰌾 $branch"
+	fi
 else
-	echo "$branch"
+	if git status --porcelain 2>/dev/null | grep -q .; then
+		printf "\e[48;5;3m\e[1;38;5;236m %s \e[0m" " $branch "
+	else
+		printf "\e[48;5;35m\e[1;38;5;236m %s \e[0m" " $branch"
+	fi
 fi
 """
-when = 'git rev-parse --is-inside-work-tree 2>/dev/null && git rev-parse --abbrev-ref HEAD | grep -qE "^(main|master)$"'
-format = "[ 󰌾 $output ]($style)"
-style = "fg:black bg:orange_bg bold"
-
-[custom.git_branch_other]
-command = """
-branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
-if git status --porcelain 2>/dev/null | grep -q .; then
-	echo "$branch "
-else
-	echo "$branch"
-fi
-"""
-when = 'git rev-parse --is-inside-work-tree 2>/dev/null && git rev-parse --abbrev-ref HEAD | grep -qvE "^(main|master)$"'
-format = "[  $output ]($style)"
-style = "fg:black bg:green_bg bold"
+when = 'git rev-parse --is-inside-work-tree 2>/dev/null'
+format = "$output"  # 不需要 (style), 由 printf 控制
 
 # colors
 [palettes.my_colors]
