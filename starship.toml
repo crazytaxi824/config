@@ -59,7 +59,7 @@ if [[ "$branch" =~ ^(main|master)$ ]]; then
 	fi
 else
 	if [ "$dirty" = "1" ]; then
-		printf "\e[48;5;3m\e[1;38;5;235m %s \e[0m" " $branch "
+		printf "\e[48;5;228m\e[1;38;5;235m %s \e[0m" " $branch "
 	else
 		printf "\e[48;5;35m\e[1;38;5;235m %s \e[0m" " $branch"
 	fi
@@ -100,7 +100,7 @@ error_symbol = "[\\$](fg:white)"
 white = "252"
 black = "235"
 red_bg = "196"
-magenta_bg = "5"
+magenta_bg = "213"
 green_bg = "35"
 blue_bg = "25"
 orange    = "215"
