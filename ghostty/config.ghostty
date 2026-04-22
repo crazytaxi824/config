@@ -86,6 +86,14 @@ background = #0f151e
 foreground = #c5c8c6
 background-opacity = 0.96
 
+# 0 (black)   = 234 = #1c1c1c
+# 1 (red)     = 167 = #d75f5f   可执行文件 (executable file)
+# 2 (green)   = 42  = #00d787   套接字 (Socket)
+# 3 (yellow)  = 191 = #d7ff5f   管道 (Pipe/FIFO)
+# 4 (blue)    = 75  = #5fAfff   特殊文件 /dev/null, /dev/tty, /dev/disk0, /dev/sda ...
+# 5 (magenta) = 213 = #ff87ff   符号链接 (soft link, `ln -s file_orig file_new`)
+# 6 (cyan)    = 81  = #5fd7ff   文件夹 (directory)
+# 7 (white)   = 251 = #c6c6c6
 palette = 0=#1c1c1c
 palette = 1=#d75f5f
 palette = 2=#00d787
@@ -95,6 +103,7 @@ palette = 5=#ff87ff
 palette = 6=#5fd7ff
 palette = 7=#c6c6c6
 
+# bright: black ~ white
 palette = 8=#303030
 palette = 9=#d75f5f
 palette = 10=#00d787
