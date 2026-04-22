@@ -90,7 +90,7 @@ if [[ -f "$ANTIDOTE_DIR/antidote.zsh" ]]; then
 	source "$zsh_plugins_static"
 fi
 
-# zsh-completions 配置
+# 加载 zsh-completions 后再使用
 autoload -Uz compinit && compinit
 
 # zsh-autosuggestions inline 代码提示的颜色. 默认是 8, bold black 颜色
@@ -513,7 +513,6 @@ function backupConfigFiles() {
 	do
 		# 创建子文件夹
 		# 'mkdir -p' 如果文件夹不存在则创建, 递归创建所有文件夹.
-		mkdir -p $backup_folder/HOME/.oh-my-zsh/custom   # ~/, ~/.oh-my-zsh/custom/theme/
 		mkdir -p $backup_folder/HOME/.ssh      # ~/.ssh/
 		mkdir -p $backup_folder/HOME/Library/Application\ Support/lazygit   # ~/Library/Application\ Support/lazygit/
 
@@ -684,9 +683,13 @@ function Fd() {
 
 # }}}
 
-# starship 加载 ------------------------------------------------------------------------------------
+# --- starship 加载 --------------------------------------------------------------------------------
 # export STARSHIP_CONFIG=~/.config/starship.toml  # 配置文件位置
 eval "$(starship init zsh)"
+
+# --- zoxide ---------------------------------------------------------------------------------------
+# NOTE: 在运行 compinit 命令之后再加载 zoxide
+# eval "$(zoxide init zsh)"
 
 
 
