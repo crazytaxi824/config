@@ -1,5 +1,6 @@
-# default blue 颜色太亮无法作为 bg 颜色
+# https://github.com/sxyazi/yazi/blob/main/yazi-config/preset/theme-dark.toml
 
+# default blue 颜色太亮无法作为 bg 颜色
 [tabs]
 active   = { bg = "26", bold = true }
 inactive = { fg = "26", bg = "gray" }
