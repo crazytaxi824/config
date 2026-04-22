@@ -4,19 +4,15 @@
 unset LC_ALL  # 清除 LC_ALL 设置
 export LANG=en_US.UTF-8 # 设置了 LANG, 但是没有设置 LC_ALL 的情况下, 其他 LC_* 默认等于 LANG, 但可以单独设置其他 LC_*.
 
-# 很多工具的 config 文件保存地址, eg: Neovim, Lazygit, Yazi ...
+# 很多工具的 config 文件保存地址, eg: Ghostty, Neovim, Lazygit, Yazi ...
 export XDG_CONFIG_HOME="$HOME/.config"
 
 # NOTE: 手动安装 https://github.com/neovim/neovim/releases/
-# Run: `xattr -c ./nvim-macos-arm64.tar.gz` (to avoid "unknown developer" warning)
-# Extract: `tar xzvf nvim-macos-arm64.tar.gz`
+# Run: `$ xattr -c ./nvim-macos-arm64.tar.gz` (to avoid "unknown developer" warning)
+# Extract: `$ tar xzvf nvim-macos-arm64.tar.gz`
 # export PATH=$HOME/nvim-macos-arm64/bin:$PATH
-
-# $VISUAL is a more capable and interactive preference over $EDITOR.
-#  - EDITOR editor should be able to work without use of "advanced" terminal functionality.
-#  - VISUAL editor could be a full screen editor as vi or emacs.
-export EDITOR=nvim
-export VISUAL=$EDITOR
+export EDITOR=nvim  # EDITOR editor should be able to work without use of "advanced" terminal functionality.
+export VISUAL=$EDITOR  # VISUAL editor could be a full screen editor as vi or emacs.
 
 # 自定义颜色显示, 覆盖 ohmyzsh 默认设置. 需要放到 ohmyzsh 后面.
 # --- [ LSCOLORS 设置 ] ---------------------------------------------------------------------------- {{{
