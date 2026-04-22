@@ -345,9 +345,9 @@ lualine.setup {
         'filename',
         path = 0,
         symbols = {
-          modified = Nerd_icons.dot, -- Text to show when the file is modified.
-          readonly = Nerd_icons.lock,     -- Text to show when the file is non-modifiable or readonly.
-          unnamed  = '[No Name]', -- Text to show for unnamed buffers.
+          modified = Nerd_icons.dot,  -- Text to show when the file is modified.
+          readonly = Nerd_icons.lock, -- Text to show when the file is non-modifiable or readonly.
+          unnamed  = '[No Name]',     -- Text to show for unnamed buffers.
         },
         color = function()
           if vim.bo.modified and vim.bo.readonly then  -- 对 readonly 文件做出修改
