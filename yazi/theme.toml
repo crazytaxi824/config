@@ -8,3 +8,25 @@ inactive = { fg = "26", bg = "gray" }
 [mode]
 normal_main = { bg = "26", bold = true }
 normal_alt  = { fg = "26", bg = "gray" }
+
+[filetype]
+rules = [
+	# 根据文件类型指定颜色
+	# { mime = "image/*", fg = "yellow" },
+	# { mime = "{audio,video}/*", fg = "magenta" },
+
+	# fallback settings
+	# "*/" : all directories
+	{ url = "*/", fg = "cyan", bold = true },
+
+	# "*" : all files
+	{ url = "*", is = "hidden", fg = "242" },
+	{ url = "*", is = "link",   fg = "magenta" },  # Symbolic link
+	{ url = "*", is = "orphan", fg = "magenta" },  # Orphan symbolic link
+	{ url = "*", is = "exec",   fg = "red" },
+	{ url = "*", is = "fifo",   fg = "yellow" },  # pipe
+	{ url = "*", is = "char",   fg = "blue" },
+	{ url = "*", is = "block",  fg = "blue" },
+	{ url = "*", is = "sock",   fg = "green" },
+	{ url = "*", is = "sticky", fg = "black", bg = "green" },
+]
