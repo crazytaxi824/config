@@ -16,16 +16,27 @@ export EDITOR=nvim
 export VISUAL=$EDITOR
 
 # 自定义颜色显示, 覆盖 ohmyzsh 默认设置. 需要放到 ohmyzsh 后面.
-# --- [ COLOR 设置 ] ------------------------------------------------------------------------------- {{{
+# --- [ LSCOLORS 设置 ] ---------------------------------------------------------------------------- {{{
 # *** 注意: macos 使用 LSCOLORS, linux 使用 LS_COLORS
 
 # --- LSCOLORS 设置 --------------------------------------------------------------------------------
 # https://www.cyberciti.biz/faq/apple-mac-osx-terminal-color-ls-output-option/
+# a / A : black   / bold
+# b / B : red     / bold
+# c / C : green   / bold
+# d / D : yellow  / bold
+# e / E : blue    / bold
+# f / F : magenta / bold
+# g / G : cyan    / bold
+# h / H : white   / bold
+# x : 终端默认颜色
 export LSCOLORS=Gxfxcxdxbxegedabagacad  # 默认值是 'Gxfxcxdxbxegedabagacad'
 
 # --- LS_COLORS 设置 -------------------------------------------------------------------------------
 # 注意: 这里设置 LS_COLORS 主要是给 `ohmyzsh`, `fd` 和 `tree` 显示颜色用. Macos 系统不会用到这个设置.
 # 使用 16 color 设置 LS_COLORS, 但是因为有些颜色 vim 无法识别可能导致有很大偏差.
+# fg: (30 black, 31 red, 32 green, 33 yellow, 34 blue, 35 magenta, 36 cyan, 37 white)
+# bg: (40 black, 41 red, 42 green, 43 yellow, 44 blue, 45 magenta, 46 cyan, 47 white)
 export LS_COLORS='rs=0:di=01;36:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43:'
 
 # 使用 256 color 设置 LS_COLORS, 和上面的 16 color 使用最相近的颜色.
