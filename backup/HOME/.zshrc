@@ -4,6 +4,9 @@
 unset LC_ALL  # 清除 LC_ALL 设置
 export LANG=en_US.UTF-8 # 设置了 LANG, 但是没有设置 LC_ALL 的情况下, 其他 LC_* 默认等于 LANG, 但可以单独设置其他 LC_*.
 
+# 很多工具的 config 文件保存地址, eg: Neovim, Lazygit, Yazi ...
+export XDG_CONFIG_HOME="$HOME/.config"
+
 # NOTE: 手动安装 https://github.com/neovim/neovim/releases/
 # Run: `xattr -c ./nvim-macos-arm64.tar.gz` (to avoid "unknown developer" warning)
 # Extract: `tar xzvf nvim-macos-arm64.tar.gz`
@@ -73,8 +76,8 @@ export HOMEBREW_BUNDLE_FILE=$HOME/.config/Brewfile  # 默认在 ~/.Brewfile
 # antidote 安装地址
 ANTIDOTE_DIR="$(brew --prefix antidote)/share/antidote"
 
-zsh_plugins_txt="$HOME/.zsh_plugins.txt"      # antidote 配置文件
-zsh_plugins_static="$HOME/.zsh_plugins.zsh"   # antidote 生成的静态文件
+zsh_plugins_txt="$XDG_CONFIG_HOME/antidote/zsh_plugins.txt"      # antidote 配置文件
+zsh_plugins_static="$HOME/.antidote_plugins.zsh"   # antidote 生成的静态文件
 
 # 初始化 Antidote
 if [[ -f "$ANTIDOTE_DIR/antidote.zsh" ]]; then
@@ -518,8 +521,7 @@ function backupConfigFiles() {
 		cp $HOME/.zprofile $backup_folder/HOME/
 		cp $HOME/.zshrc $backup_folder/HOME/
 
-		# oh-my-zsh custom themes
-		cp -r $HOME/.oh-my-zsh/custom/themes $backup_folder/HOME/.oh-my-zsh/custom/
+		# mfaerevaag/wd.git  plugin backup
 		cp $HOME/.warprc $backup_folder/HOME/   # oh-my-zsh plugin `wd` config file
 
 		# ~/.ssh/config
@@ -539,9 +541,6 @@ function backupConfigFiles() {
 
 		# tmux
 		cp $HOME/.tmux.conf $backup_folder/HOME/
-
-		# lazygit ~/Library/Application Support/lazygit/config.yml
-		cp $HOME/Library/Application\ Support/lazygit/config.yml $backup_folder/HOME/Library/Application\ Support/lazygit
 	done
 
 	echo -e "\e[32mBackup Done! Happy Coding!\e[0m"
