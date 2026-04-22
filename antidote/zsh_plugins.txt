@@ -1,0 +1,14 @@
+# 补全库 (提供比原生 Zsh 更多的命令补全)
+git@github.com:zsh-users/zsh-completions.git
+
+# 自动建议 (基于历史记录灰色提示)
+git@github.com:zsh-users/zsh-autosuggestions.git
+
+# 语法高亮 (必须放在最后，否则无法对前面插件生成的命令着色)
+git@github.com:zsh-users/zsh-syntax-highlighting.git
+
+# 目录书签功能
+git@github.com:mfaerevaag/wd.git
+
+# 快速跳转 (可以使用 zoxide 替代)
+git@github.com:rupa/z.git
