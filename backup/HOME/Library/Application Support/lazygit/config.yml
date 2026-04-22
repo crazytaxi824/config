@@ -19,7 +19,7 @@ gui:
       - bold
     optionsTextColor: # 最下方跨键键提示文字颜色.
       - blue
-    selectedLineBgColor: # 左侧菜单中 cursor line bg 颜色.
+    selectedLineBgColor: # 左侧菜单中 cursor line bg 颜色, 239
       - '#4E4E4E'
     cherryPickedCommitFgColor: # Commits window 中使用 cherry pick 的文字颜色.
       - magenta
