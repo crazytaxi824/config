@@ -85,7 +85,7 @@ if [[ -f "$ANTIDOTE_DIR/antidote.zsh" ]]; then
 	source "$zsh_plugins_static"
 fi
 
-# 加载 zsh-completions 后再使用
+# VVI: 加载 zsh-completions 后再使用 `compinit`
 autoload -Uz compinit && compinit
 
 # zsh-autosuggestions inline 代码提示的颜色. 默认是 8, bold black 颜色
@@ -583,6 +583,9 @@ function vimExistFile() {
 
 # }}}
 
+### open/edit file
+alias e="vimExistFile --"   # edit file, vimExistFile() 函数定义在下面.
+
 # NOTE: stop using 'rm'
 #alias rm="rm -i"  # prompt every time when 'rm file/dir'
 alias rm="echo '\e[33muse \"trash\" instead\e[0m'; #ignore_rest_cmd"
@@ -594,8 +597,27 @@ alias ls='ls -G'
 alias la='ls -aG'
 alias ll='ls -lFG'
 
-### open/edit file
-alias e="vimExistFile --"   # edit file, vimExistFile() 函数定义在下面.
+### du file size
+alias lldu="du -shc ./.* ./*"
+
+### lazygit
+# brew info lazygit; https://github.com/jesseduffield/lazygit
+# brew info git-delta; https://github.com/dandavison/delta
+alias lg=$(brew --prefix)/bin/lazygit
+
+### delta, 需要安装 'brew info git-delta'
+### 放在 oh-my-zsh 后面是为了覆盖已提供的 diff() 函数.
+### NOTE: 这里不适用 alias 主要是因为 auto-completion.
+function diff() {
+	$(brew --prefix)/bin/delta --dark --line-numbers --side-by-side \
+		--syntax-theme=none --line-numbers-minus-style=196 "$@"
+}
+
+### 使用方法 `Fd foo /path`, eg: `Fd minecraft /`
+### 查找文件同时显示大小.
+function Fd() {
+	fd --hidden --no-ignore --color="never" -E="/System/" -E=".git/" -E=".Trash/" "$@" | xargs -I {} du -sh "{}"
+}
 
 # 检查 terminal 是否支持 256-color
 # 256color [fg | bg | all]
@@ -604,6 +626,10 @@ alias 256color="bash $HOME/.config/.my_shell_functions/256color.sh"
 
 # 检查 brew dependency 属于哪个包.
 alias checkBrewDependency="bash $HOME/.config/.my_shell_functions/brew_dep_check.sh"
+
+### alias 快速设置本地 time zone
+# alias setny='sudo systemsetup -settimezone America/New_York'
+# alias setsy='sudo systemsetup -settimezone Australia/Sydney'
 
 # NOTE: DEBUG 用, my test functions
 #source $HOME/.config/.my_shell_functions/zshrc_custom_functions
@@ -636,7 +662,7 @@ bindkey "^[[B" down-line-or-beginning-search
 
 # }}}
 
-# --- [ others ] ----------------------------------------------------------------------------------- {{{
+# --- [ other settings ] --------------------------------------------------------------------------- {{{
 ### bat 主题颜色, 'bat --list-themes' 查看 theme 样式.
 # "base16" 使用 0-15 color 兼容性好.
 # "ansi" 只使用 0-7 color, 兼容性最好.
@@ -649,32 +675,6 @@ export BAT_THEME="Dracula"
 export SSLKEYLOGFILE=/tmp/sslkey.log  # /tmp 文件夹会被系统自动清理.
 alias firefox='open -n /Applications/Firefox.app'
 alias chrome='open -n /Applications/Google\ Chrome.app'
-
-### du file size
-alias lldu="du -shc ./.* ./*"
-
-### alias 快速设置本地 time zone
-alias setny='sudo systemsetup -settimezone America/New_York'
-alias setsy='sudo systemsetup -settimezone Australia/Sydney'
-
-### lazygit
-# brew info lazygit; https://github.com/jesseduffield/lazygit
-# brew info git-delta; https://github.com/dandavison/delta
-alias lg=$(brew --prefix)/bin/lazygit
-
-### delta, 需要安装 'brew info git-delta'
-### 放在 oh-my-zsh 后面是为了覆盖已提供的 diff() 函数.
-### NOTE: 这里不适用 alias 主要是因为 auto-completion.
-function diff() {
-	$(brew --prefix)/bin/delta --dark --line-numbers --side-by-side \
-		--syntax-theme=none --line-numbers-minus-style=196 "$@"
-}
-
-### 使用方法 `Fd foo /path`, eg: `Fd minecraft /`
-### 查找文件同时显示大小.
-function Fd() {
-	fd --hidden --no-ignore --color="never" -E="/System/" -E=".git/" -E=".Trash/" "$@" | xargs -I {} du -sh "{}"
-}
 
 # }}}
 
