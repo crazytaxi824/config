@@ -62,7 +62,7 @@ export HOMEBREW_NO_INSTALL_CLEANUP=true
 
 # `brew bundle --help` Install and upgrade (by default) all dependencies from the Brewfile.
 # `brew bundle check`, `brew bundle cleanup`, `brew bundle list` ...
-export HOMEBREW_BUNDLE_FILE=$HOME/.config/Brewfile  # 默认在 ~/.Brewfile
+export HOMEBREW_BUNDLE_FILE=$XDG_CONFIG_HOME/Brewfile    # 默认在 ~/.Brewfile
 #export HOMEBREW_BUNDLE_NO_LOCK=1  # disable Brewfile.lock.json
 # }}}
 
