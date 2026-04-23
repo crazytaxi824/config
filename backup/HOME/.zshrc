@@ -129,7 +129,7 @@ export LDFLAGS="-L/opt/homebrew/opt/node@24/lib"
 export CPPFLAGS="-I/opt/homebrew/opt/node@24/include"
 # }}}
 
-# --= [ Godot ] ---------------------------------------------------------------- {{{
+# --- [ Godot ] ---------------------------------------------------------------- {{{
 export PATH="/Applications/Godot.app/Contents/MacOS:$PATH"
 # }}}
 
@@ -586,12 +586,6 @@ function vimExistFile() {
 ### open/edit file
 alias e="vimExistFile --"   # edit file, vimExistFile() 函数定义在下面.
 
-# NOTE: stop using 'rm'
-#alias rm="rm -i"  # prompt every time when 'rm file/dir'
-alias rm="echo '\e[33muse \"trash\" instead\e[0m'; #ignore_rest_cmd"
-# NOTE: trash cmd is available in Macos
-# alias trash="zsh $HOME/.config/.my_shell_functions/trash.sh"
-
 ### ls
 alias ls='ls -G'
 alias la='ls -aG'
@@ -604,6 +598,16 @@ alias lldu="du -shc ./.* ./*"
 # brew info lazygit; https://github.com/jesseduffield/lazygit
 # brew info git-delta; https://github.com/dandavison/delta
 alias lg=$(brew --prefix)/bin/lazygit
+
+### alias 快速设置本地 time zone
+# alias setny='sudo systemsetup -settimezone America/New_York'
+# alias setsy='sudo systemsetup -settimezone Australia/Sydney'
+
+# NOTE: stop using 'rm'
+function rm() {
+	echo '\e[33muse "trash" instead\e[0m'
+	return 2   # exit code
+}
 
 ### delta, 需要安装 'brew info git-delta'
 ### 放在 oh-my-zsh 后面是为了覆盖已提供的 diff() 函数.
@@ -619,20 +623,10 @@ function Fd() {
 	fd --hidden --no-ignore --color="never" -E="/System/" -E=".git/" -E=".Trash/" "$@" | xargs -I {} du -sh "{}"
 }
 
-# 检查 terminal 是否支持 256-color
-# 256color [fg | bg | all]
-# 256color 可以直接 sh / bash 执行, 语法兼容.
-alias 256color="bash $HOME/.config/.my_shell_functions/256color.sh"
-
-# 检查 brew dependency 属于哪个包.
-alias checkBrewDependency="bash $HOME/.config/.my_shell_functions/brew_dep_check.sh"
-
-### alias 快速设置本地 time zone
-# alias setny='sudo systemsetup -settimezone America/New_York'
-# alias setsy='sudo systemsetup -settimezone Australia/Sydney'
-
-# NOTE: DEBUG 用, my test functions
-#source $HOME/.config/.my_shell_functions/zshrc_custom_functions
+# 加载自定义 zsh 函数
+fpath=(~/.config/.my_zsh_funcs $fpath)
+autoload -Uz 256color   # 在 terminal 中展示 256 色
+autoload -Uz check_brew_dep  # brew dependency 属于哪个包
 
 # }}}
 
