@@ -15,6 +15,7 @@ export EDITOR=nvim  # EDITOR editor should be able to work without use of "advan
 export VISUAL=$EDITOR  # VISUAL editor could be a full screen editor as vi or emacs.
 
 source "$HOME/.config/zsh_config/env.zsh"
+source "$HOME/.config/zsh_config/options.zsh"
 source "$HOME/.config/zsh_config/plugins.zsh"
 source "$HOME/.config/zsh_config/funcs.zsh"
 source "$HOME/.config/zsh_config/aliases.zsh"
