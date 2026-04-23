@@ -154,96 +154,98 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=240"
 #    --preview-window 'right,70%,border-left,+50/2'   preview-window 在右侧占 70%, 左边框, 将第 50 行放到屏幕中间.
 # }}}
 
-# NOTE: Set up fzf key bindings and fuzzy completion.
+# Set up fzf key bindings and fuzzy completion.
 # VVI: 必须放在 `compinit` 之后
 eval "$(fzf --zsh)"
 
 # FZF_DEFAULT_COMMAND & FZF_DEFAULT_OPTS ---------------------------------------
-# -E='**/.*/**' 显示所有隐藏文件夹, 但 exclude 隐藏文件夹中的文件.
-fzf_def_cmd="fd --color=always --follow --hidden --no-ignore \
-	-E='.DS_Store' -E='.git' -E='*.swp' -E='**/.*/**' -E='**/node_modules/**' -E='**/coverage/**' \
-	-E='**/vendor/**' -E='**/dist/**' -E='**/out/**'"
+() {
+	# -E='**/.*/**' 显示所有隐藏文件夹, 但 exclude 隐藏文件夹中的文件.
+	local fzf_cmd="fd --color=always --follow --hidden --no-ignore \
+		-E='.DS_Store' -E='.git' -E='*.swp' -E='**/.*/**' -E='**/node_modules/**' -E='**/coverage/**' \
+		-E='**/vendor/**' -E='**/dist/**' -E='**/out/**'"
 
-# 'fzf' 文件搜索设置
-export FZF_DEFAULT_COMMAND="$fzf_def_cmd"
+	# 'fzf' 文件搜索设置
+	export FZF_DEFAULT_COMMAND="$fzf_cmd"
 
-# NOTE: The $'…' quoting syntax, which expands ANSI-C backslash-escaped characters in the text between the single quotes, is supported (see ANSI-C Quoting).
-FZF_DEFAULT_OPTS=$'--header="<C-e>:Edit; <C-o>:Sys-Open; <Tab>:Select; <S-Tab>:Preview-win\n<C-l>:Line-wrap; <C-a>:Select-ALL; <C-d>:Deselect-ALL\n<C-k>:Raw; <C-n>:Next-match; <C-p>:Prev-match"'
+	# NOTE: The $'…' quoting syntax, which expands ANSI-C backslash-escaped characters in the text between
+	# the single quotes, is supported (see ANSI-C Quoting).
+	local fzf_header=$'--header="<C-e>:Edit; <C-o>:Sys-Open; <Tab>:Select; <S-Tab>:Preview-win\n'
+	fzf_header=$fzf_header$'<C-l>:Line-wrap; <C-a>:Select-ALL; <C-d>:Deselect-ALL\n'
+	fzf_header=$fzf_header$'<C-k>:Raw; <C-n>:Next-match; <C-p>:Prev-match"'
+	
+	local fzf_opts=" --height=80% --ansi --multi --layout=reverse --border --scrollbar='▌▐' \
+		--marker='✔' --pointer='▸' --info='inline-right' --gutter=' ' --gutter-raw='▎' \
+		--color='dark,hl:191:reverse,hl+:191:reverse,fg+:underline,bg+:238:bold,border:240' \
+		--color='scrollbar:240,pointer:191,marker:191,gutter:191,header:71:italic:underline' \
+		--preview='([[ -d {} ]] && (tree -NC -L 1 {})) || ([[ -f {} ]] && (bat --color=always --style=numbers {}))' \
+		--preview-window='right,60%,border-left'"
 
-# btab=<Shift-Tab>
-# Vim: Warning: Output not to a terminal. 解决方法: `vim/nvim "filepath" > /dev/tty`
-export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS" --height=80% --ansi --multi --layout=reverse --border --scrollbar='▌▐' \
-	--marker='✔' --pointer='▸' --info='inline-right' --gutter=' ' --gutter-raw='▎' \
-	--color='dark,hl:191:reverse,hl+:191:reverse,fg+:underline,bg+:238:bold,border:240' \
-	--color='scrollbar:240,pointer:191,marker:191,gutter:191,header:71:italic:underline' \
-	--preview='([[ -d {} ]] && (tree -NC -L 1 {})) || ([[ -f {} ]] && (bat --color=always --style=numbers {}))' \
-	--preview-window='right,60%,border-left' \
-	--bind='btab:change-preview-window(top,70%,border-bottom|hidden|)' \
-	--bind='ctrl-l:toggle-preview-wrap+toggle-wrap' \
-	--bind='ctrl-k:toggle-raw' \
-	--bind='shift-up:half-page-up,shift-down:half-page-down' \
-	--bind='pgup:preview-half-page-up,pgdn:preview-half-page-down' \
-	--bind='ctrl-a:select-all,ctrl-d:deselect-all' \
-	--bind='ctrl-e:become($EDITOR \"+lua FZF_selected([[{+f}]])\" > /dev/tty)' \
-	--bind='ctrl-o:execute(open -R {})'"
+	local fzf_keybind=" --bind='btab:change-preview-window(top,70%,border-bottom|hidden|)' \
+		--bind='ctrl-l:toggle-preview-wrap+toggle-wrap' \
+		--bind='ctrl-k:toggle-raw' \
+		--bind='shift-up:half-page-up,shift-down:half-page-down' \
+		--bind='pgup:preview-half-page-up,pgdn:preview-half-page-down' \
+		--bind='ctrl-a:select-all,ctrl-d:deselect-all' \
+		--bind='ctrl-e:become($EDITOR \"+lua FZF_selected([[{+f}]])\" > /dev/tty)' \
+		--bind='ctrl-o:execute(open -R {})'"
 
-# FZF_CTRL_T_COMMAND & FZF_CTRL_T_OPTS -----------------------------------------
-# NOTE: 需要先设置 key bindings 和 fuzzy completion.
-export FZF_CTRL_T_COMMAND="$fzf_def_cmd --type=directory"
+	export FZF_DEFAULT_OPTS="$fzf_header $fzf_opts $fzf_keybind"
 
-# Ctrl+T 快捷键 options 设置. 这里会继承 default 设置, 只需要覆盖设置.
-export FZF_CTRL_T_OPTS="--bind='start:unbind(ctrl-e)+unbind(ctrl-o)' \
-	--header='# Dirs only, <Enter>:accept; <S-Tab>:Preview-win; <Tab>:Select; <C-a>:Toggle-All-Selected'"
+	# FZF_CTRL_T_COMMAND & FZF_CTRL_T_OPTS -----------------------------------------
+	export FZF_CTRL_T_COMMAND="$fzf_cmd --type=directory"
 
-# FZF_CTRL_R_OPTS, Ctrl+R 不能设置 Command. ------------------------------------
-# NOTE: Ctrl+R 不能设置 Command.
-# NOTE: CTRL+R 强制 --no-multi 禁止 <tab> multi select.
-export FZF_CTRL_R_OPTS="--bind='start:unbind(ctrl-e)+unbind(ctrl-o)' \
-	--height=24 --preview-window=hidden \
-	--header='# Command history, <Enter>:accept; <Esc>:cancel'"
+	# Ctrl+T 快捷键 options 设置. 这里会继承 default 设置, 只需要覆盖设置.
+	export FZF_CTRL_T_OPTS="--bind='start:unbind(ctrl-e)+unbind(ctrl-o)'"
 
-# fzf auto completion 的设置 --------------------------------------------------
-# NOTE: fzf 的 auto completion 是智能触发的. 使用不同的前置命令会得到不同的结果.
-#   - '$ vim **<tab>' 这里会触发文件(filepath)查找命令;
-#   - '$ cd **<tab>' 会触发文件夹(dir)查找命令.
-# 使用 '\\<tab>' 触发 fzf. 默认值是 '**<tab>'.
-export FZF_COMPLETION_TRIGGER='\\'
+	# FZF_CTRL_R_OPTS, Ctrl+R 不能设置 Command. ------------------------------------
+	# NOTE: Ctrl+R 不能设置 Command.
+	# NOTE: CTRL+R 强制 --no-multi 禁止 <tab> multi select.
+	export FZF_CTRL_R_OPTS="--bind='start:unbind(ctrl-e)+unbind(ctrl-o)' \
+		--preview-window=hidden \
+		--header='<Enter>:accept; <Esc>:cancel'"
 
-# 这里会继承 default 设置, 需要 unbind.
-export FZF_COMPLETION_OPTS="--bind='start:unbind(ctrl-e)+unbind(ctrl-o)'"
+	# fzf auto completion 的设置 --------------------------------------------------
+	# NOTE: fzf 的 auto completion 是智能触发的. 使用不同的前置命令会得到不同的结果.
+	#   - '$ vim **<tab>' 这里会触发文件(filepath)查找命令;
+	#   - '$ cd **<tab>' 会触发文件夹(dir)查找命令.
+	# 使用 '\\<tab>' 触发 fzf. 默认值是 '**<tab>'.
+	export FZF_COMPLETION_TRIGGER='\\'
 
-# fzf advance settings ---------------------------------------------------------
-# VVI: 必须放在 `eval "$(fzf --zsh)"` 之后
-# 定义 fzf autocomplete 文件路径(filepath)的 command.
-# eg: 'vim **<tab>'; '$ vim src/**<tab>'; '$ cat ~/**<tab>'
-_fzf_compgen_path() {
-	# find "$1" -type f
-	# "$1" 代表输入的前置路径, eg: "cat src/**<tab>" 从 src/ 开始搜索.
-	# "." 表示名字匹配
-	eval "$fzf_def_cmd --type=file . $1"
+	# 这里会继承 default 设置, 需要 unbind.
+	export FZF_COMPLETION_OPTS="--bind='start:unbind(ctrl-e)+unbind(ctrl-o)' \
+		--header='<Enter>:accept; <Esc>:cancel'"
+
+	# 让文件路径补全带颜色
+	_fzf_compgen_path() {
+		fd --color=always --follow --hidden --no-ignore \
+			-E='.DS_Store' -E='.git' -E='*.swp' -E='**/.*/**' -E='**/node_modules/**' -E='**/coverage/**' \
+			-E='**/vendor/**' -E='**/dist/**' -E='**/out/**' . "$1"
+	}
+
+	# 让目录补全带颜色
+	_fzf_compgen_dir() {
+		fd --color=always --follow --hidden --no-ignore --type=directory \
+			-E='.DS_Store' -E='.git' -E='*.swp' -E='**/.*/**' -E='**/node_modules/**' -E='**/coverage/**' \
+			-E='**/vendor/**' -E='**/dist/**' -E='**/out/**' . "$1"
+	}
+
+	# Advanced customization of fzf options via _fzf_comprun function ---------- {{{
+	# - The first argument to the function is the name of the command.
+	# - You should make sure to pass the rest of the arguments to fzf.
+	# _fzf_comprun() {
+	#   local command=$1
+	#   shift
+	#
+	#   case "$command" in
+	#     cd)           fzf --preview 'tree -C {} | head -200'   "$@" ;;
+	#     export|unset) fzf --preview "eval 'echo \$'{}"         "$@" ;;
+	#     ssh)          fzf --preview 'dig {}'                   "$@" ;;
+	#     *)            fzf --preview 'bat -n --color=always {}' "$@" ;;
+	#   esac
+	# }
+	# }}}
 }
-
-# 定义 fzf autocomplete 文件夹路径(dir)的时候的 command. "$1" 代表输入的前置路径.
-# eg: '$ cd **<tab>'; 'cd ~/**<tab>'
-_fzf_compgen_dir() {
-	# find "$1" -type d
-	eval "$fzf_def_cmd --type=directory . $1"
-}
-
-# Advanced customization of fzf options via _fzf_comprun function
-# - The first argument to the function is the name of the command.
-# - You should make sure to pass the rest of the arguments to fzf.
-# _fzf_comprun() {
-#   local command=$1
-#   shift
-#
-#   case "$command" in
-#     cd)           fzf --preview 'tree -C {} | head -200'   "$@" ;;
-#     export|unset) fzf --preview "eval 'echo \$'{}"         "$@" ;;
-#     ssh)          fzf --preview 'dig {}'                   "$@" ;;
-#     *)            fzf --preview 'bat -n --color=always {}' "$@" ;;
-#   esac
-# }
 
 # ---[ bat ] ---------------------------------------------------------------------------------------
 ### bat 主题颜色, 'bat --list-themes' 查看 theme 样式.
