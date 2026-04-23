@@ -1,0 +1,40 @@
+# vim: ft=zsh
+
+# 'vim --'   Arguments after this will be handled as a file name.
+#            This can be used to edit a filename that starts with a '-'.
+#            默认 '--' 后的所有 args 都会被认为是 file. eg: vim -- foo.sh -n, 'foo.sh' & '-n' 会被当成两个文件.
+# 使用方法:
+#	`vimExistFile file`                # 一般用法不检查文件是否存在.
+#   `vimExistFile -- file`             # 检查 file 是否存在.
+#   `vimExistFile +[num] -- file`      # 检查 file 是否存在. 同时传入 flags.
+#   `vimExistFile +{command} -- file`  # 同上
+local dashdash=0         # 1 = using '--'
+local notexistfiles=''   # 不存在的文件, 报错用.
+local notexistmark=0     # 1 = 有不存在的文件; 0 = 文件都存在
+
+# 遍历所有 args 查看是否有 '--', 如果有则将 '--' 后面不存在的文件存入 notexistfiles.
+local arg  # 防止 for 循环中的变量变成 global variable.
+for arg in "$@"
+do
+	if (( $dashdash )) && [[ ! -f $arg ]] && [[ ! -d $arg ]]; then
+		# '--' 后的所有 args 都会被认为是 file.
+		notexistfiles+="'$arg' "   # concat string
+		notexistmark=1
+	fi
+
+	if [[ $arg == '--' ]]; then
+		dashdash=1
+	fi
+done
+
+# 如果 notexistmark 是 true, 则中止操作.
+if  (( notexistmark )); then
+	echo "no such file or directory: \e[33m$notexistfiles\e[0m"
+	return 2  # return error code
+fi
+
+# 执行, 这里不能使用 eval 因为文件名里面的空格都被 escape 了.
+$EDITOR "$@"
+
+
+

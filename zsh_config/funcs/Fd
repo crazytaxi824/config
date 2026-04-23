@@ -1,0 +1,5 @@
+# vim: ft=zsh
+
+# 使用方法 `Fd foo /path`, eg: `Fd minecraft /`
+# 查找文件同时显示大小.
+fd --hidden --no-ignore --color="never" -E="/System/" -E=".git/" -E=".Trash/" "$@" | xargs -I {} du -sh "{}"

@@ -1,0 +1,72 @@
+# vim: ft=zsh
+
+# `cp -r src dst/`   注意 src 后面没有 /   copy src 整个文件夹到 dst 文件夹内, 结果: dst/src/...
+# `cp -r src/ dst/`  注意 src 后面有 /     copy src 内所有 file/dir 到 dst 内, 包括隐藏文件.
+# `cp -r src/* dst/` 注意 src 后面有 /*    copy src 内 file/dir 到 dst 内, 不包括隐藏文件.
+#
+# 多个备份文件夹地址
+# ~/Library/Mobile\ Documents/com~apple~CloudDocs/myautobak  # icloud drive 文件夹
+# 不能用单/双引号 '~/xxx' "~/xxx", 否则无法解析 ~/ 路径.
+local backup_folder_list=(
+	$HOME/.config/backup
+)
+
+# mark 是否有备份文件夹不存在
+local backupFoldersExist=true
+
+# for 循环
+local backup_folder
+for backup_folder in $backup_folder_list
+do
+	# 判断备份文件夹是否存在
+	if [[ -d $backup_folder ]]; then
+		echo -e "\e[32m - $backup_folder ✔\e[0m"
+	else
+		echo -e "\e[31m - $backup_folder ✗\e[0m"
+		backupFoldersExist=false
+	fi
+done
+
+if [[ $backupFoldersExist == false ]]; then
+	echo -e "\e[31m请手动创建 Backup 文件夹, Backup Canceled!\e[0m"
+	return 2
+fi
+
+# copy files
+for backup_folder in $backup_folder_list
+do
+	# 创建子文件夹
+	# 'mkdir -p' 如果文件夹不存在则创建, 递归创建所有文件夹.
+	mkdir -p $backup_folder/HOME/.ssh      # ~/.ssh/
+	mkdir -p $backup_folder/HOME/Library/Application\ Support/lazygit   # ~/Library/Application\ Support/lazygit/
+
+	# zprofile & zshrc
+	cp $HOME/.zprofile $backup_folder/HOME/
+	cp $HOME/.zshrc $backup_folder/HOME/
+
+	# mfaerevaag/wd.git  plugin backup
+	cp $HOME/.warprc $backup_folder/HOME/   # oh-my-zsh plugin `wd` config file
+
+	# ~/.ssh/config
+	cp $HOME/.ssh/config $backup_folder/HOME/.ssh/
+
+	# git setting
+	# NOTE: '~/.gitconfig' is a private file, SHOULD NOT be uploaded to internet.
+	cp $HOME/.gitconfig_ext $backup_folder/HOME/
+	cp $HOME/.gitconfig_tools $backup_folder/HOME/
+	cp $HOME/.gitconfig_delta $backup_folder/HOME/
+	cp $HOME/.gitmessage $backup_folder/HOME/
+	cp $HOME/.gitignore_global $backup_folder/HOME/
+
+	# vimrc
+	cp $HOME/.vimrc $backup_folder/HOME/
+	cp -r $HOME/.vim $backup_folder/HOME/
+
+	# tmux
+	cp $HOME/.tmux.conf $backup_folder/HOME/
+done
+
+echo -e "\e[32mBackup Done! Happy Coding!\e[0m"
+
+
+

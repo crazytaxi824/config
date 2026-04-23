@@ -1,0 +1,98 @@
+# vim: ft=zsh
+
+# --- [ rg vim/nvim 使用说明 ] ------------------------------------------------- {{{
+# 需要安装 ripgrep, fzf, bat, nvim - 'brew install rg fzf bat nvim' 命令行工具
+#
+# --- [ rg flags ] -------------------------------------------------------------
+# 'man rg' 查看命令行工具使用方法
+#   -l  --files-with-matches     只打印文件名.
+#   -H  --with-filename          在行内显示 filepath
+#   --vimgrep                    行内显示 line numbers and column numbers
+#
+#
+#   -L  --follow     软链接文件
+#   -.  --hidden     搜索隐藏文件和文件夹.
+#   -U  --multiline  多行查找, 配合 --multiline-dotall 一起使用.
+#
+#   -g    include/exclude files
+#         -g 'xxx' include filepath
+#         -g '!xxx' exclude filepath
+#         -g 'src/**' 表示只搜索 'src/' 文件夹
+#
+#   --no-ignore    不要忽略 .gitignore 排除的文件
+#                  默认不搜索 '.gitignore' 忽略的文件(夹), 但是必须是在 `git init` 之后.
+#                  如果只有 '.gitignore' 而没有 `git init` 则, 则搜索不会忽略 '.gitignore' 忽略的文件.
+#
+#   -P  --pcre2    允许 rg 使用更复杂的 regexp 表达式, eg: '^\s(?!//)' 排除 // 开头的行.
+#                  但是需要 rg 在编译时启用该选项, 否则使用时报错.
+#
+#   -i  --ignore-case   忽略大小写.
+#   -e  --regexp        正则匹配查找内容.
+#   -w  --word-regexp   匹配整个单词.
+#   --                  -- 后不能再设置其他 flag. eg: `rg -- "foo" -g "bar.md"` 这是错误的.
+#
+#   -color          auto(default), never, always
+#   -colors         {type}:{attribute}:{value}
+#                   style:      path 文件路径, line 行号, column 列号, match 匹配到的字符.
+#                   attribute:  fg, bg, style 三种属性.
+#                       style 有 nobold, bold, nointense, intense, nounderline or underline.
+#                       fg / bg 设置 fg:yellow - 16 color, fg:x - 256 color, fg:x,x,x - 24bit color.
+#                   eg: rg --colors="path:fg:4" --colors="match:fg:5" --colors="match:style:underline"
+#
+#   -C3             只显示前后3行内容.
+#   -o              只显示匹配的部分内容, 不显示整行内容
+#   --trim          不显示内容前后的空白
+#
+#   --sort=path     结果排序, 默认 'none'.
+#
+# rg 指定文件后不会显示文件(名)路径, 所以 fzf 中 preview 中不会显示文件名.
+#
+# --- [ vim flags ] ------------------------------------------------------------
+# 'man vim'
+#   vim +10 -- file                      # 打开文件时 cursor 移动到第 10 行.
+#   vim '+call cursor(10,6)' -- file     # 打开文件时执行 :call cursor(ln,col), 即 cursor 移动到指定 line, column.
+#
+# }}}
+# NOTE: Rg 使用方法
+# 查找文件中同一行内同时包括 'Foo.*Bar'
+# 每个文件不只会出现一次, 如果一个文件中有多行都能匹配上则会出现多次.
+#
+# 例子: 如果要使用正则表达式, 则需要使用 '' OR "" OR \(escape), 否则报错 zsh: no matches found.
+#   Rg foo\ bar == Rg 'foo bar' == Rg "foo bar" == Rg foo\ bar ./         # 在当前文件夹搜索
+#   Rg 'foo.*bar' == Rg "foo.*bar" == Rg foo.\*bar == Rg 'foo.*bar' ./    # 同上
+#
+# 搜索指定文件(夹)
+#   Rg 'foo bar'  ./src/main.go    # 在 main.go 文件中搜索 'foo bar'
+#   Rg 'foo bar'  ./src            # 在 src 文件夹下搜索 'foo bar'
+#   Rg 'foo.*bar' ./src ./tmp      # 在 ./src 和 ./tmp 两个文件夹下搜索 'foo.*bar'
+#
+# 搜索条件: -w -i -s ...
+#   Rg -w 'foo'   # 匹配整个单词, 而不是部分匹配. 类似 '\bWord\b'
+#   Rg -i 'foo'   # ignore case
+#   Rg -s 'foo'   # case sensitive
+#   Rg -S 'foo'   # --smart-case, 如果全小写则 ignore case, 如果有大写字母则 case sensitive.
+#
+#   Rg -wi 'foo' ./
+#   Rg -ws 'foo' ./src
+#   Rg -wS 'foo' ./src /tmp
+
+
+
+# NOTE: fzf 的设置会从 FZF_DEFAULT_OPTS 继承过来, 这里不需要重复设置.
+# --no-multi 表示不能使用 <tab> 多选, 这里可以覆盖 fzf default 设置.
+# --delimiter=':' 意思是使用 ':' 分隔 string 结果.
+# {}    代表当前行的 string.
+# {1}   filepath. 是按照 --delimiter 分隔后的 str[0], --delimiter 默认是空格.
+# {2}   line_num
+# {3}   column
+# --preview-window '+50/2'   将第 50 行放到 preview window 中间.
+# --preview-window 'right,70%,border-left,+50/2'   preview-window 在右侧占 70%, 左边框, 将第 50 行放到屏幕中间.
+
+# NOTE: command 中不要插入注释, 否则报错.
+rg --colors="path:fg:81" --colors="line:fg:241" --colors="column:fg:241" \
+	--colors="match:fg:207" --colors="match:style:nobold" --colors="match:style:underline" \
+	--color=always --sort=path --follow --crlf --vimgrep --trim --smart-case "$@" | \
+fzf --delimiter=':' \
+	--preview "bat --color=always --style=numbers --highlight-line={2} {1}" \
+	--preview-window '+{2}/2' \
+	--bind "ctrl-o:execute(open -R {1})"
