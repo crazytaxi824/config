@@ -1,22 +1,10 @@
-# '/*' 排除当前文件夹下所有文件(夹); '*' 排除所有文件(夹)以及递归文件(夹), 不要使用 '*'.
-/*
+# 在任何路径下都忽略以下文件
 .netrwhist
+Brewfile.lock*
+todo*
 
-# exclude file
-!/.gitignore
-!/Brewfile
-
-# exclude folder
-!/alacritty
-!/ghostty
-!/lazygit
-!/antidote
-!/yazi
-!/backup
-!/myservice
-!/.my_shell_functions
-!/starship.toml
-
-# exclude folder, and then ignore 'file' & 'sub-folder' inside the folder.
-!/nvim
-/nvim/todo*
+# 忽略相对于 .gitignore 目录下的文件
+/raycast
+/wireshark
+/github-copilot
+/htop
