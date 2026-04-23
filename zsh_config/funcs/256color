@@ -19,6 +19,7 @@ function fgSystem() {
 
 # 232 ~ 255 color
 function fgGrayscale() {
+	local color
 	for ((color = 232; color < 244; color++)); do
 		printf "\e[38;5;%dm %d " $color $color
 	done
@@ -32,6 +33,11 @@ function fgGrayscale() {
 
 # cube text color
 function fgCube() {
+	local line
+	local cube
+	local cell
+	local cell_color
+
 	for ((line = 0; line < 6; line++)); do
 		for ((cube = 0; cube < 3; cube++)); do # 每行 3 个 cube.
 			for ((cell = 0; cell < 6; cell++)); do
@@ -100,6 +106,9 @@ function bgSystem() {
 }
 
 function bgGrayscale() {
+	local line
+	local color
+
 	for ((line = 0; line < 2; line++)); do
 		for ((color = 232; color < 244; color++)); do # from 0 to 255 step 1
 			if ((line == 0)); then
@@ -125,6 +134,11 @@ function bgGrayscale() {
 }
 
 function bgCube() {
+	local line
+	local cube
+	local cell
+	local cell_color
+
 	for ((line = 0; line < 12; line++)); do # 12 行, 双数行 color code, 单数行空格.
 		for ((cube = 0; cube < 3; cube++)); do # 每行 3 个 cube.
 			for ((cell = 0; cell < 6; cell++)); do
