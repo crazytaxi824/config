@@ -1,20 +1,24 @@
 # --- [ antidote ] plugins manager -----------------------------------------------------------------
-# antidote 安装地址
-ANTIDOTE_DIR="$(brew --prefix antidote)/share/antidote"
+# `$ antidote update` 更新插件
+() {
+	# antidote 安装地址
+	ANTIDOTE_DIR="$(brew --prefix antidote)/share/antidote"
 
-zsh_plugins_txt="$XDG_CONFIG_HOME/antidote/zsh_plugins.txt"   # antidote 配置文件
-zsh_plugins_static="$HOME/.antidote_plugins.zsh"   # antidote 生成的静态文件
+	local zsh_plugins_txt="$XDG_CONFIG_HOME/antidote/zsh_plugins.txt"   # antidote 配置文件
+	local zsh_plugins_static="$HOME/.antidote_plugins.zsh"   # antidote 生成的静态文件
 
-# 初始化 Antidote
-if [[ -f "$ANTIDOTE_DIR/antidote.zsh" ]]; then
-	source "$ANTIDOTE_DIR/antidote.zsh"
+	# 初始化 Antidote
+	if [[ -f "$ANTIDOTE_DIR/antidote.zsh" ]]; then
+		source "$ANTIDOTE_DIR/antidote.zsh"
 
-	# 如果静态脚本不存在，或配置文件有更新，则重新编译
-	if [[ ! "$zsh_plugins_static" -nt "$zsh_plugins_txt" ]]; then
-		antidote bundle < "$zsh_plugins_txt" > "$zsh_plugins_static"
+		# 如果静态脚本不存在，或配置文件有更新，则重新编译
+		if [[ ! "$zsh_plugins_static" -nt "$zsh_plugins_txt" ]]; then
+			antidote bundle < "$zsh_plugins_txt" > "$zsh_plugins_static"
+		fi
+
+		source "$zsh_plugins_static"
 	fi
-	source "$zsh_plugins_static"
-fi
+}
 
 # VVI: 加载 zsh-completions 后再使用 `compinit`
 autoload -Uz compinit && compinit
