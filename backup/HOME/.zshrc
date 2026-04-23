@@ -1,10 +1,10 @@
 ### UTF-8, `locale` 查看 LC_* 设置.
-# NOTE: MacOS 中最好不要设置 LC_ALL. It breaks on some version of MacOS.
+# VVI: MacOS 中最好不要设置 LC_ALL. It breaks on some version of MacOS.
 # 设置了 LC_ALL 后, 其他 LC_* 强制等于 LC_ALL, 单独设置其他 LC_* 无效.
 unset LC_ALL  # 清除 LC_ALL 设置
 export LANG=en_US.UTF-8 # 设置了 LANG, 但是没有设置 LC_ALL 的情况下, 其他 LC_* 默认等于 LANG, 但可以单独设置其他 LC_*.
 
-# 很多工具的 config 文件保存地址, eg: Ghostty, Neovim, Lazygit, Yazi ...
+# VVI: 很多工具的 config 文件保存地址, eg: Ghostty, Neovim, Lazygit, Yazi ...
 export XDG_CONFIG_HOME="$HOME/.config"
 
 # NOTE: 手动安装 https://github.com/neovim/neovim/releases/
@@ -18,7 +18,7 @@ export VISUAL=$EDITOR  # VISUAL editor could be a full screen editor as vi or em
 # --- [ LSCOLORS 设置 ] ---------------------------------------------------------------------------- {{{
 # *** 注意: macos 使用 LSCOLORS, linux 使用 LS_COLORS
 
-# --- LSCOLORS 设置 --------------------------------------------------------------------------------
+# --- LSCOLORS 设置 ------------------------------------------------------------
 # https://www.cyberciti.biz/faq/apple-mac-osx-terminal-color-ls-output-option/
 # a / A : black   / bold
 # b / B : red     / bold
@@ -31,27 +31,26 @@ export VISUAL=$EDITOR  # VISUAL editor could be a full screen editor as vi or em
 # x : 终端默认颜色
 export LSCOLORS=Gxfxcxdxbxegedabagacad  # 默认值是 'Gxfxcxdxbxegedabagacad'
 
-# --- LS_COLORS 设置 -------------------------------------------------------------------------------
-# 注意: 这里设置 LS_COLORS 主要是给 `ohmyzsh`, `fd` 和 `tree` 显示颜色用. Macos 系统不会用到这个设置.
+# --- LS_COLORS 设置 -----------------------------------------------------------
+# 注意: 这里设置 LS_COLORS 主要是给 `fzf`, `fd`, `tree`, `ohmyzsh` 显示颜色用. Macos 系统不会用到这个设置.
 # 使用 16 color 设置 LS_COLORS, 但是因为有些颜色 vim 无法识别可能导致有很大偏差.
 # fg: (30 black, 31 red, 32 green, 33 yellow, 34 blue, 35 magenta, 36 cyan, 37 white)
 # bg: (40 black, 41 red, 42 green, 43 yellow, 44 blue, 45 magenta, 46 cyan, 47 white)
 export LS_COLORS='rs=0:di=01;36:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43:'
 
 # 使用 256 color 设置 LS_COLORS, 和上面的 16 color 使用最相近的颜色.
-# 这里主要是为了 vim 中的 fzf.vim 能够使用指定颜色.
-# LS_COLORS='rs=0:di=01;38;5;81:ln=38;5;207:so=38;5;42:pi=38;5;191:ex=38;5;167:bd=38;5;75;48;5;81:cd=38;5;75;48;5;191:su=30;48;5;167:sg=30;48;5;81:tw=30;48;5;42:ow=30;48;5;191'  # 主要设置
+# LS_COLORS='rs=0:di=01;38;5;81:ln=38;5;207:so=38;5;42:pi=38;5;191:ex=38;5;167:bd=38;5;75;48;5;81:cd=38;5;75;48;5;191:su=30;48;5;167:sg=30;48;5;81:tw=30;48;5;42:ow=30;48;5;191'
 # LS_COLORS="$LS_COLORS:*.go=38;5;72:*.ts=38;5;72:*.tsx=38;5;72:*.py=38;5;72:*.js=38;5;72:*.jsx=38;5;72"   # 根据文件类型设置.
 #export LS_COLORS="$LS_COLORS:*.bak=38;5;242:*.gitignore=38;5;242:*.editorconfig=38;5;242"   # 根据文件类型设置.
 
-# --- man 命令颜色设置 -----------------------------------------------------------------------------
+# --- man 命令颜色设置 ---------------------------------------------------------
 export LESS_TERMCAP_md=$(printf "\e[1;32m")    # md      bold      start bold
 export LESS_TERMCAP_me=$(printf "\e[0m")       # me      sgr0      turn off bold, blink and underline
 export LESS_TERMCAP_so=$(printf "\e[30;43m")   # so      smso      start standout (eg: search result)
 export LESS_TERMCAP_se=$(printf "\e[0m")       # se      rmso      stop standout
 export LESS_TERMCAP_us=$(printf "\e[4;34m")    # us      smul      start underline
 export LESS_TERMCAP_ue=$(printf "\e[0m")       # ue      rmul      stop underline
-#export LESS_TERMCAP_mb=$(printf "\e[1;31m")   # mb      blink     start blink
+#export LESS_TERMCAP_mb=$(printf "\e[1;31m")   # mb      blink     start blink  遇到需要“闪烁”显示的内容时, 将其改为“加粗红色”显示
 
 # }}}
 
@@ -684,7 +683,7 @@ function Fd() {
 eval "$(starship init zsh)"
 
 # --- zoxide ---------------------------------------------------------------------------------------
-# NOTE: 在运行 compinit 命令之后再加载 zoxide
+# NOTE: 在运行 `compinit` 命令之后再加载 zoxide
 # eval "$(zoxide init zsh)"
 
 
