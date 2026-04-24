@@ -3,8 +3,8 @@ alias ls='ls -G'
 alias la='ls -aG'
 alias ll='ls -lFG'
 
-### du file size
-alias lldu='du -shc ./*'
+### du dir/files size, (N) 如果没找到，就自动消失，不传给 du.
+alias lldu='du -shc ./*(N) ./.*(N)'
 
 ### lazygit
 # brew info lazygit; https://github.com/jesseduffield/lazygit
