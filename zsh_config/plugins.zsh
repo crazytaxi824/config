@@ -2,20 +2,25 @@
 # `$ antidote update` 更新插件
 () {
 	# antidote 安装地址
-	ANTIDOTE_DIR="$(brew --prefix antidote)/share/antidote"
+	# local ANTIDOTE_DIR="$(brew --prefix antidote)/share/antidote"
+	local ANTIDOTE_DIR="/opt/homebrew/opt/antidote/share/antidote"   # 节省性能, 不用执行 (brew --prefix antidote)
 
 	local zsh_plugins_txt="$XDG_CONFIG_HOME/antidote/zsh_plugins.txt"   # antidote 配置文件
 	local zsh_plugins_static="$HOME/.antidote_plugins.zsh"   # antidote 生成的静态文件
 
-	# 初始化 Antidote
 	if [[ -f "$ANTIDOTE_DIR/antidote.zsh" ]]; then
-		source "$ANTIDOTE_DIR/antidote.zsh"
+		# 确保配置文件存在
+		[[ -f "$zsh_plugins_txt" ]] || touch "$zsh_plugins_txt"
 
-		# 如果静态脚本不存在，或配置文件有更新，则重新编译
-		if [[ ! "$zsh_plugins_static" -nt "$zsh_plugins_txt" ]]; then
-			antidote bundle < "$zsh_plugins_txt" > "$zsh_plugins_static"
+		if [[ ! -f "$zsh_plugins_static" || "$zsh_plugins_txt" -nt "$zsh_plugins_static" ]]; then
+			# 加载 antidote 命令
+            source "$ANTIDOTE_DIR/antidote.zsh"
+
+			# 生成静态 zsh 文件
+            antidote bundle < "$zsh_plugins_txt" > "$zsh_plugins_static"
 		fi
 
+		# 加载编译好的静态脚本
 		source "$zsh_plugins_static"
 	fi
 }
