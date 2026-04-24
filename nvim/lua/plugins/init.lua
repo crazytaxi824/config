@@ -213,7 +213,7 @@ local plugins = {
   --- "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
-    commit = "899e93f",
+    commit = "e135361",
     config = function() require("lsp.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -223,7 +223,7 @@ local plugins = {
   {
     "stevearc/conform.nvim",
     -- tag = "v9.1.0",
-    commit = "086a40d",
+    commit = "dca1a19",
     config = function() require("plugins.settings.formatter_conform") end,
 
     event = "BufWritePre",
