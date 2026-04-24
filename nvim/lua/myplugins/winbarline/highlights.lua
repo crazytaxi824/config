@@ -6,12 +6,12 @@ local hl = {
   },
   selected = {
     ctermfg=Colors.gold_fn.c, fg=Colors.gold_fn.g,
-    ctermbg=Colors.black.c, bg=Colors.black.g,
+    -- ctermbg=Colors.black.c, bg=Colors.black.g,
     bold = true,
   },
   tabnr = {
     ctermfg=Colors.black.c, fg=Colors.black.g,
-    ctermbg=35, bg='#00AF5F',
+    ctermbg=Colors.green_bg.c, bg=Colors.green_bg.g,
     bold = true,
   },
 

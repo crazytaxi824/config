@@ -59,8 +59,9 @@ Colors = {
   --- 其他常用颜色
   blue_boolean = { c=74,  g='#569CD6' },  -- Keyword, Boolean, Special ...
   green_type   = { c=79,  g='#4EC9B0' },  -- type, 数据类型
-  gold_fn      = { c=78,  g='#DCDCAA' },  -- 78|85, func, function_call, method, method_call ... | bufferline, lualine
+  green_bg     = { c=35,  g='#00AF5F' },  -- command mode bg color
   red_bg       = { c=52,  g='#66201D' },  -- 作为 background 使用的红色. '#4E201E', '#72201D'
+  gold_fn      = { c=78,  g='#DCDCAA' },  -- 78|85, func, function_call, method, method_call ... | bufferline, lualine
   purple       = { c=170, g='#D75FD7' },
 
   --- grayscale 颜色
