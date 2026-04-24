@@ -12,7 +12,6 @@ autoload -Uz backup_config
 autoload -Uz e
 autoload -Uz Rg
 autoload -Uz Fd
-autoload -Uz diff
 
 
 

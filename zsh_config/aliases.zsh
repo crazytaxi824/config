@@ -8,8 +8,11 @@ alias lldu='du -shc ./*(N) ./.*(N)'
 
 ### lazygit
 # brew info lazygit; https://github.com/jesseduffield/lazygit
-# brew info git-delta; https://github.com/dandavison/delta
 alias lg='lazygit'
+
+### delta
+# brew info git-delta; https://github.com/dandavison/delta
+alias diff='delta --dark --line-numbers --side-by-side --syntax-theme=none --line-numbers-minus-style=196 -- '
 
 ### alias 快速设置本地 time zone
 # alias setny='sudo systemsetup -settimezone America/New_York'
