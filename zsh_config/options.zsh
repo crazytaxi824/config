@@ -4,7 +4,7 @@ zmodload zsh/complist
 
 # 开启菜单选择：当补全候选多于 1 个时，按 Tab 进入选择模式
 zstyle ':completion:*' menu select
-zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}" # 补全列表显示颜色（与 ls 一致）
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"  # 补全列表显示颜色（与 ls 一致）
 
 # --- [ command history ] --------------------------------------------------------------------------
 # 内存中保存的历史命令条数

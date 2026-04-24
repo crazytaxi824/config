@@ -19,7 +19,7 @@ source "$HOME/.config/zsh_config/env.zsh"
 source "$HOME/.config/zsh_config/options.zsh"
 source "$HOME/.config/zsh_config/plugins.zsh"
 source "$HOME/.config/zsh_config/funcs.zsh"
-source "$HOME/.config/zsh_config/aliases.zsh"
+source "$HOME/.config/zsh_config/aliases.zsh"  # 优先级更高, 可以覆盖 funcs
 source "$HOME/.config/zsh_config/keybindings.zsh"
 
 
