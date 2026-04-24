@@ -14,6 +14,9 @@ alias lg='lazygit'
 # brew info git-delta; https://github.com/dandavison/delta
 alias diff='delta --dark --line-numbers --side-by-side --syntax-theme=none --line-numbers-minus-style=196 -- '
 
+### check brew dep
+alias check_brew_dep='brew uses --recursive --installed -- '
+
 ### alias 快速设置本地 time zone
 # alias setny='sudo systemsetup -settimezone America/New_York'
 # alias setsy='sudo systemsetup -settimezone Australia/Sydney'

@@ -232,3 +232,6 @@ case $1 in
 	echo "256color [fg | bg | all]"
 	;;
 esac
+
+
+

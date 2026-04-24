@@ -272,7 +272,7 @@ export BAT_THEME="Dracula"
 eval "$(starship init zsh)"
 
 # --- [ zoxide ] -----------------------------------------------------------------------------------
-# VVI: 在运行 `compinit` 命令之后再加载 zoxide
+# VVI: 必须放在 `compinit` 之后
 # eval "$(zoxide init zsh)"
 
 

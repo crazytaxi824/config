@@ -96,3 +96,6 @@ fzf --delimiter=':' \
 	--preview "bat --color=always --style=numbers --highlight-line={2} {1}" \
 	--preview-window '+{2}/2' \
 	--bind "ctrl-o:execute(open -R {1})"
+
+
+
