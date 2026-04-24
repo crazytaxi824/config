@@ -3,4 +3,4 @@
 # delta, 需要安装 'brew info git-delta'
 # 放在 oh-my-zsh 后面是为了覆盖已提供的 diff() 函数.
 # NOTE: 这里不适用 alias 主要是因为 auto-completion.
-$(brew --prefix)/bin/delta --dark --line-numbers --side-by-side --syntax-theme=none --line-numbers-minus-style=196 "$@"
+delta --dark --line-numbers --side-by-side --syntax-theme=none --line-numbers-minus-style=196 "$@"

@@ -4,12 +4,12 @@ alias la='ls -aG'
 alias ll='ls -lFG'
 
 ### du file size
-alias lldu="du -shc ./.* ./*"
+alias lldu='du -shc ./*'
 
 ### lazygit
 # brew info lazygit; https://github.com/jesseduffield/lazygit
 # brew info git-delta; https://github.com/dandavison/delta
-alias lg=$(brew --prefix)/bin/lazygit
+alias lg='lazygit'
 
 ### alias 快速设置本地 time zone
 # alias setny='sudo systemsetup -settimezone America/New_York'
