@@ -8,7 +8,7 @@
 	local zsh_plugins_txt="$XDG_CONFIG_HOME/antidote/zsh_plugins.txt"   # antidote 配置文件
 	local zsh_plugins_static="$HOME/.antidote_plugins.zsh"   # antidote 生成的静态文件
 
-	if [[ -f "$ANTIDOTE_DIR/functions/antidote" ]]; then
+	if [[ -f "$ANTIDOTE_DIR/functions/antidote" && -f "$ANTIDOTE_DIR/antidote.zsh" ]]; then
 		# Lazy-load antidote from its functions directory.
 		# NOTE: 这里使用 autoload 而没用 source $ANTIDOTE_DIR/antidote.zsh, 因为外部需要
 		# `antidote update` 命令来更新 plugins, 但又不用每次都 source zsh 文件, 节约性能.
