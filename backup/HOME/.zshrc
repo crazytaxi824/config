@@ -14,6 +14,7 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export EDITOR=nvim  # EDITOR editor should be able to work without use of "advanced" terminal functionality.
 export VISUAL=$EDITOR  # VISUAL editor could be a full screen editor as vi or emacs.
 
+# 加载顺序重要
 source "$HOME/.config/zsh_config/env.zsh"
 source "$HOME/.config/zsh_config/options.zsh"
 source "$HOME/.config/zsh_config/plugins.zsh"

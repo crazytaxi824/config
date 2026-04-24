@@ -6,8 +6,8 @@ function rm() {
 
 # 加载自定义 zsh 函数 ------------------------------------------------------------------------------
 fpath=(~/.config/zsh_config/funcs $fpath)
-autoload -Uz 256color   # 在 terminal 中展示 256 色
-autoload -Uz check_brew_dep  # brew dependency 属于哪个包
+autoload -Uz 256color
+autoload -Uz check_brew_dep
 autoload -Uz backup_config
 autoload -Uz e
 autoload -Uz Rg
