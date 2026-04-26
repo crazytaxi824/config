@@ -34,5 +34,9 @@ setopt HIST_IGNORE_ALL_DUPS
 # 记录命令执行的时间戳，配合 'history -E' 查看
 # setopt EXTENDED_HISTORY
 
+# --- [ others ] -----------------------------------------------------------------------------------
+# 开启交互式注释
+setopt interactivecomments
+
 
 
