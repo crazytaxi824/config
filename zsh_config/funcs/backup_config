@@ -38,7 +38,10 @@ do
 	# 创建子文件夹
 	# 'mkdir -p' 如果文件夹不存在则创建, 递归创建所有文件夹.
 	mkdir -p $backup_folder/HOME/.ssh      # ~/.ssh/
-	mkdir -p $backup_folder/HOME/Library/Application\ Support/lazygit   # ~/Library/Application\ Support/lazygit/
+
+	# ~/.ssh/config,
+	# VVI: ssh credentials 需要手动拷贝, 不能备份
+	cp $HOME/.ssh/config $backup_folder/HOME/.ssh/
 
 	# zprofile & zshrc
 	cp $HOME/.zprofile $backup_folder/HOME/
@@ -46,10 +49,6 @@ do
 
 	# mfaerevaag/wd.git  plugin backup
 	cp $HOME/.warprc $backup_folder/HOME/   # oh-my-zsh plugin `wd` config file
-
-	# ~/.ssh/config,
-	# VVI: ssh credentials 需要手动拷贝, 不能备份
-	cp $HOME/.ssh/config $backup_folder/HOME/.ssh/
 
 	# vimrc
 	cp $HOME/.vimrc $backup_folder/HOME/
