@@ -47,16 +47,9 @@ do
 	# mfaerevaag/wd.git  plugin backup
 	cp $HOME/.warprc $backup_folder/HOME/   # oh-my-zsh plugin `wd` config file
 
-	# ~/.ssh/config
+	# ~/.ssh/config,
+	# VVI: ssh credentials 需要手动拷贝, 不能备份
 	cp $HOME/.ssh/config $backup_folder/HOME/.ssh/
-
-	# git setting
-	# NOTE: '~/.gitconfig' is a private file, SHOULD NOT be uploaded to internet.
-	cp $HOME/.gitconfig_ext $backup_folder/HOME/
-	cp $HOME/.gitconfig_tools $backup_folder/HOME/
-	cp $HOME/.gitconfig_delta $backup_folder/HOME/
-	cp $HOME/.gitmessage $backup_folder/HOME/
-	cp $HOME/.gitignore_global $backup_folder/HOME/
 
 	# vimrc
 	cp $HOME/.vimrc $backup_folder/HOME/
