@@ -1,7 +1,9 @@
+# vim: ft=gitconfig
+
 # This file should be '~/.gitconfig'
 [core]
 	# Git will globally ignore files that are defined in this file.
-	excludesfile = ~/.gitignore_global
+	excludesfile = ~/.config/git_config/gitignore_global
 	# If true, then CJK chars will be displayed as Unicode. eg: cn, jp, kr ...
 	quotepath = off
 
@@ -11,15 +13,15 @@
 	# email = foo@bar.com
 
 [commit]
-	template = ~/.gitmessage
+	template = ~/.config/git_config/gitmessage
 
 # extend gitconfig file
 # No error will occur if any or all of these files do not exist.
 [include]
 	# other git settings
-	path = ~/.gitconfig_ext
+	path = ~/.config/git_config/gitconfig_ext
 	# neovim: difftool & mergetool
-	path = ~/.gitconfig_tools
+	path = ~/.config/git_config/gitconfig_tools
 	# delta: git diff
-	path = ~/.gitconfig_delta
+	path = ~/.config/git_config/gitconfig_delta
 

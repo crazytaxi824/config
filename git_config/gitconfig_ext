@@ -1,5 +1,4 @@
-# This is the config file, and a '#' or ';' character indicates a comment.
-# ; 或者 # 都表示注释.
+# vim: ft=gitconfig
 
 # change `git init` generated branch name. Default branch name is "master".
 [init]

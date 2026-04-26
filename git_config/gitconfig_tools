@@ -1,3 +1,5 @@
+# vim: ft=gitconfig
+
 # difftool neovim
 # git difftool 命令:
 # `git difftool master develop`  比较 master 分支和 develop 分支当前状态下的文件差异.

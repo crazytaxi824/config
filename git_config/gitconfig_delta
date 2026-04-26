@@ -1,3 +1,5 @@
+# vim: ft=gitconfig
+
 # delta diff tool
 # https://dandavison.github.io/delta/configuration.html
 [core]
