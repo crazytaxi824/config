@@ -231,6 +231,7 @@ eval "$(fzf --zsh)"
 	# NOTE: CTRL+R 强制 --no-multi 禁止 <tab> multi select.
 	export FZF_CTRL_R_OPTS="--no-multi --preview-window=hidden \
 		--bind='start:unbind(ctrl-e)+unbind(ctrl-o)+unbind(ctrl-a)+unbind(ctrl-d)+unbind(tab)' \
+		--bind='btab:toggle-preview' \
 		--bind='f1:preview(echo \"${(F)fzf_T_R_help_msg}\")'"
 
 	# fzf auto completion 的设置 -------------------------------------------------------------------
@@ -239,12 +240,9 @@ eval "$(fzf --zsh)"
 	#   - '$ cd **<tab>' 会触发文件夹(dir)查找命令.
 	# 使用 '\\<tab>' 触发 fzf. 默认值是 '**<tab>'.
 	export FZF_COMPLETION_TRIGGER='\\'
+	export FZF_COMPLETION_OPTS=$FZF_CTRL_T_OPTS
 
-	# 这里会继承 default 设置, 需要 unbind.
-	export FZF_COMPLETION_OPTS="--bind='start:unbind(ctrl-e)+unbind(ctrl-o)' \
-		--header='<Enter>:accept; <Esc>:cancel'"
-
-	# 让文件路径补全带颜色
+	# 让文件路径补全带颜色 -------------------------------------------------------------------------
 	_fzf_compgen_path() {
 		fd --color=always --follow --hidden --no-ignore \
 			-E='.DS_Store' -E='.git' -E='*.swp' -E='**/.*/**' -E='**/node_modules/**' -E='**/coverage/**' \
