@@ -182,29 +182,33 @@ eval "$(fzf --zsh)"
 	# 'fzf' 文件搜索设置
 	export FZF_DEFAULT_COMMAND="$fzf_cmd"
 
-	# NOTE: The $'…' quoting syntax, which expands ANSI-C backslash-escaped characters in the text between
-	# the single quotes, is supported (see ANSI-C Quoting).
-	local fzf_header=$'--header="<C-e>:Edit; <C-o>:Sys-Open; <Tab>:Select; <S-Tab>:Preview-win\n'
-	fzf_header=$fzf_header$'<C-l>:Line-wrap; <C-a>:Select-ALL; <C-d>:Deselect-ALL\n'
-	fzf_header=$fzf_header$'<C-k>:Raw; <C-n>:Next-match; <C-p>:Prev-match"'
+	local -a fzf_header=(
+		"<C-e>:Edit; <C-o>:Sys-Open; <Tab>:Select; <S-Tab>:Preview-win"
+		"<C-l>:Line-wrap; <C-a>:Select-ALL; <C-d>:Deselect-ALL"
+		"<C-k>:Toggle-Raw; <C-n>:Next-match; <C-p>:Prev-match"
+	)
 	
-	local fzf_opts=" --height=80% --ansi --multi --layout=reverse --border --scrollbar='▌▐' \
+	# ${(F)list}: use '\n' concat list
+	local fzf_opts="--header=\"${(F)fzf_header}\" \
+		--height=80% --ansi --multi --layout=reverse --border --scrollbar='▌▐' \
 		--marker='✔' --pointer='▸' --info='inline-right' --gutter=' ' --gutter-raw='▎' \
 		--color='dark,hl:191:reverse,hl+:191:reverse,fg+:underline,bg+:238:bold,border:240' \
 		--color='scrollbar:240,pointer:191,marker:191,gutter:191,header:71:italic:underline' \
 		--preview='([[ -d {} ]] && (tree -NC -L 1 {})) || ([[ -f {} ]] && (bat --color=always --style=numbers {}))' \
 		--preview-window='right,60%,border-left'"
 
-	local fzf_keybind=" --bind='btab:change-preview-window(top,70%,border-bottom|hidden|)' \
+	# btab: <Shift-Tab>
+	local fzf_keybind="--bind='btab:change-preview-window(top,70%,border-bottom|hidden|)' \
 		--bind='ctrl-l:toggle-preview-wrap+toggle-wrap' \
 		--bind='ctrl-k:toggle-raw' \
 		--bind='shift-up:half-page-up,shift-down:half-page-down' \
 		--bind='pgup:preview-half-page-up,pgdn:preview-half-page-down' \
 		--bind='ctrl-a:select-all,ctrl-d:deselect-all' \
-		--bind='ctrl-e:become($EDITOR \"+lua FZF_selected([[{+f}]])\" > /dev/tty)' \
+		--bind='ctrl-e:become(\"$EDITOR\" \"+lua FZF_selected([[{+f}]])\" > /dev/tty)' \
 		--bind='ctrl-o:execute(open -R {})'"
 
-	export FZF_DEFAULT_OPTS="$fzf_header $fzf_opts $fzf_keybind"
+	# NOTE: concat all options
+	export FZF_DEFAULT_OPTS="$fzf_opts $fzf_keybind"
 
 	# FZF_CTRL_T_COMMAND & FZF_CTRL_T_OPTS -----------------------------------------
 	export FZF_CTRL_T_COMMAND="$fzf_cmd --type=directory"
