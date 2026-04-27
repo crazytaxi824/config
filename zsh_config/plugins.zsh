@@ -22,7 +22,7 @@
 		# 生成静态 zsh 文件
 		# "$zsh_plugins_txt" -nt "$zsh_plugins_static" A 比 B 更新
 		if [[ ! -f "$zsh_plugins_static" || "$zsh_plugins_txt" -nt "$zsh_plugins_static" ]]; then
-            antidote bundle < "$zsh_plugins_txt" > "$zsh_plugins_static"
+			antidote bundle < "$zsh_plugins_txt" > "$zsh_plugins_static"
 		fi
 
 		# 加载编译好的静态脚本
@@ -182,14 +182,7 @@ eval "$(fzf --zsh)"
 	# 'fzf' 文件搜索设置
 	export FZF_DEFAULT_COMMAND="$fzf_cmd"
 
-	local -a fzf_header=(
-		"<C-e>:Edit; <C-o>:Sys-Open; <Tab>:Select; <S-Tab>:Preview-win"
-		"<C-l>:Line-wrap; <C-a>:Select-ALL; <C-d>:Deselect-ALL"
-		"<C-k>:Toggle-Raw; <C-n>:Next-match; <C-p>:Prev-match"
-	)
-	
-	# ${(F)list}: use '\n' concat list
-	local fzf_opts="--header=\"${(F)fzf_header}\" \
+	local fzf_opts="--header='<F1>: help' \
 		--height=80% --ansi --multi --layout=reverse --border --scrollbar='▌▐' \
 		--marker='✔' --pointer='▸' --info='inline-right' --gutter=' ' --gutter-raw='▎' \
 		--color='dark,hl:191:reverse,hl+:191:reverse,fg+:underline,bg+:238:bold,border:240' \
@@ -198,30 +191,63 @@ eval "$(fzf --zsh)"
 		--preview-window='right,60%,border-left'"
 
 	# btab: <Shift-Tab>
-	local fzf_keybind="--bind='btab:change-preview-window(top,70%,border-bottom|hidden|)' \
+	local fzf_keymaps="--bind='btab:change-preview-window(top,70%,border-bottom|hidden|)' \
 		--bind='ctrl-l:toggle-preview-wrap+toggle-wrap' \
 		--bind='ctrl-k:toggle-raw' \
 		--bind='shift-up:half-page-up,shift-down:half-page-down' \
 		--bind='pgup:preview-half-page-up,pgdn:preview-half-page-down' \
 		--bind='ctrl-a:select-all,ctrl-d:deselect-all' \
 		--bind='ctrl-e:become(\"$EDITOR\" \"+lua FZF_selected([[{+f}]])\" > /dev/tty)' \
-		--bind='ctrl-o:execute(open -R {})'"
+		--bind='ctrl-o:execute(open -R {})' \
+		--bind='start:unbind(ctrl-g)+unbind(ctrl-q)'"
+
+	local -a fzf_help_msg=(
+		"\e[33mKey maps:\e[0m"
+		""
+		"\e[33m<Enter>\e[0m       \t accept"
+		"\e[33m<ESC> <Ctrl-C>\e[0m\t abort"
+		""
+		"\e[33m<Ctrl-E>\e[0m      \t edit"
+		"\e[33m<Ctrl-O>\e[0m      \t open (in finder)"
+		""
+		"\e[33m<Ctrl-A>\e[0m      \t select all items"
+		"\e[33m<Ctrl-D>\e[0m      \t deselect all items"
+		"\e[33m<Tab>\e[0m         \t toggle select item"
+		""
+		"\e[33m<Ctrl-L>\e[0m      \t toggle wrap line (List + Preview window)"
+		"\e[33m<Shift-Tab>\e[0m   \t change Preview window layout"
+		""
+		"\e[33m<Shift-Up>\e[0m    \t List window (half)page-up"
+		"\e[33m<Shift-Down>\e[0m  \t List window (half)page-down"
+		"\e[33m<PageUp>\e[0m      \t Preview window (half)page-up"
+		"\e[33m<PageDown>\e[0m    \t Preview window (half)page-down"
+		""
+		"\e[33m<Ctrl-K>\e[0m      \t toggle Raw mode (no filter)"
+		"\e[33m<Ctrl-N>\e[0m      \t match next(down) useful in Raw mode"
+		"\e[33m<Ctrl-P>\e[0m      \t match prev(up) useful in Raw mode"
+		""
+		"more to see \e[33mman fzf\e[0m"
+	)
+
+	# ${(F)list}: use '\n' concat list
+	# 使用 bat 渲染 markdown 格式
+	local fzf_help="--bind='f1:preview(echo \"${(F)fzf_help_msg}\")'"
 
 	# NOTE: concat all options
-	export FZF_DEFAULT_OPTS="$fzf_opts $fzf_keybind"
+	export FZF_DEFAULT_OPTS="$fzf_opts $fzf_keymaps $fzf_help"
 
 	# FZF_CTRL_T_COMMAND & FZF_CTRL_T_OPTS -----------------------------------------
 	export FZF_CTRL_T_COMMAND="$fzf_cmd --type=directory"
 
 	# Ctrl+T 快捷键 options 设置. 这里会继承 default 设置, 只需要覆盖设置.
-	export FZF_CTRL_T_OPTS="--bind='start:unbind(ctrl-e)+unbind(ctrl-o)'"
+	export FZF_CTRL_T_OPTS="--no-multi \
+		--bind='start:unbind(ctrl-e)+unbind(ctrl-o)+unbind(ctrl-a)+unbind(ctrl-d)+unbind(tab)'"
 
 	# FZF_CTRL_R_OPTS, Ctrl+R 不能设置 Command. ------------------------------------
 	# NOTE: Ctrl+R 不能设置 Command.
 	# NOTE: CTRL+R 强制 --no-multi 禁止 <tab> multi select.
-	export FZF_CTRL_R_OPTS="--bind='start:unbind(ctrl-e)+unbind(ctrl-o)' \
-		--preview-window=hidden \
-		--header='<Enter>:accept; <Esc>:cancel'"
+	export FZF_CTRL_R_OPTS="--no-multi --preview-window=hidden \
+		--bind='start:unbind(ctrl-e)+unbind(ctrl-o)+unbind(ctrl-a)+unbind(ctrl-d)+unbind(tab)'"
 
 	# fzf auto completion 的设置 --------------------------------------------------
 	# NOTE: fzf 的 auto completion 是智能触发的. 使用不同的前置命令会得到不同的结果.
