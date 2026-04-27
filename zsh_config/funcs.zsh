@@ -16,7 +16,7 @@ function ssh-agent() {
 }
 
 # 加载自定义 zsh 函数 ------------------------------------------------------------------------------
-fpath=($HOME/.config/zsh_config/funcs $fpath)
+fpath=($XDG_CONFIG_HOME/zsh_config/funcs $fpath)
 autoload -Uz 256color
 autoload -Uz backup_config
 autoload -Uz e

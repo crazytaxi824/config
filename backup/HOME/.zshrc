@@ -15,12 +15,12 @@ export EDITOR=nvim  # EDITOR editor should be able to work without use of "advan
 export VISUAL=$EDITOR  # VISUAL editor could be a full screen editor as vi or emacs.
 
 # 加载顺序重要
-source "$HOME/.config/zsh_config/env.zsh"
-source "$HOME/.config/zsh_config/options.zsh"
-source "$HOME/.config/zsh_config/plugins.zsh"
-source "$HOME/.config/zsh_config/funcs.zsh"
-source "$HOME/.config/zsh_config/aliases.zsh"  # 优先级更高, 可以覆盖 funcs
-source "$HOME/.config/zsh_config/keybindings.zsh"
+source "$XDG_CONFIG_HOME/zsh_config/env.zsh"
+source "$XDG_CONFIG_HOME/zsh_config/options.zsh"
+source "$XDG_CONFIG_HOME/zsh_config/plugins.zsh"
+source "$XDG_CONFIG_HOME/zsh_config/funcs.zsh"
+source "$XDG_CONFIG_HOME/zsh_config/aliases.zsh"  # 优先级更高, 可以覆盖 funcs
+source "$XDG_CONFIG_HOME/zsh_config/keybindings.zsh"
 
 
 

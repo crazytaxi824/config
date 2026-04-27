@@ -8,7 +8,7 @@
 # ~/Library/Mobile\ Documents/com~apple~CloudDocs/myautobak  # icloud drive 文件夹
 # 不能用单/双引号 '~/xxx' "~/xxx", 否则无法解析 ~/ 路径.
 local backup_folder_list=(
-	$HOME/.config/backup
+	"$XDG_CONFIG_HOME/backup"
 )
 
 # mark 是否有备份文件夹不存在

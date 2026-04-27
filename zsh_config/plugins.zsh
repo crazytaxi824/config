@@ -38,7 +38,7 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=240"
 
 # --- [ fzf ] --------------------------------------------------------------------------------------
 # VVI: 必须放在 `compinit` 之后
-source "$HOME/.config/zsh_config/plugins/fzf.zsh"
+source "$XDG_CONFIG_HOME/zsh_config/plugins/fzf.zsh"
 
 # ---[ bat ] ---------------------------------------------------------------------------------------
 ### bat 主题颜色, 'bat --list-themes' 查看 theme 样式.
