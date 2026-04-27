@@ -182,6 +182,57 @@ eval "$(fzf --zsh)"
 	# 'fzf' 文件搜索设置
 	export FZF_DEFAULT_COMMAND="$fzf_cmd"
 
+	local -a km_header=(
+		"\e[1;33mKey maps:\e[0m"
+		""
+		"\e[32m<Enter>\e[0m       \t accept"
+		"\e[32m<ESC> <Ctrl-C>\e[0m\t abort"
+	)
+
+	local -a km_footer=(
+		""
+		"more to see \e[33mman fzf\e[0m"
+	)
+
+	# 不能再 R/T 模式下使用
+	local -a km_edit_multi=(
+		""
+		"\e[32m<Ctrl-E>\e[0m      \t edit"
+		"\e[32m<Ctrl-O>\e[0m      \t open (in finder)"
+		""
+		"\e[32m<Ctrl-A>\e[0m      \t select all items"
+		"\e[32m<Ctrl-D>\e[0m      \t deselect all items"
+		"\e[32m<Tab>\e[0m         \t toggle select item"
+	)
+
+	local -a km_common=(
+		""
+		"\e[32m<Ctrl-L>\e[0m      \t toggle wrap line (List + Preview window)"
+		"\e[32m<Shift-Tab>\e[0m   \t change Preview window layout"
+		""
+		"\e[32m<Shift-Up>\e[0m    \t List window (half)page-up"
+		"\e[32m<Shift-Down>\e[0m  \t List window (half)page-down"
+		"\e[32m<PageUp>\e[0m      \t Preview window (half)page-up"
+		"\e[32m<PageDown>\e[0m    \t Preview window (half)page-down"
+		""
+		"\e[32m<Ctrl-K>\e[0m      \t toggle Raw mode (no filter)"
+		"\e[32m<Ctrl-N>\e[0m      \t match next(down) useful in Raw mode"
+		"\e[32m<Ctrl-P>\e[0m      \t match prev(up) useful in Raw mode"
+	)
+
+	local -a fzf_help_msg=(
+		"${(F)km_header}"
+		"${(F)km_edit_multi}"
+		"${(F)km_common}"
+		"${(F)km_footer}"
+	)
+
+	local -a fzf_T_R_help_msg=(
+		"${(F)km_header}"
+		"${(F)km_common}"
+		"${(F)km_footer}"
+	)
+
 	local fzf_opts="--header='<F1>: help' \
 		--height=80% --ansi --multi --layout=reverse --border --scrollbar='▌▐' \
 		--marker='✔' --pointer='▸' --info='inline-right' --gutter=' ' --gutter-raw='▎' \
@@ -191,7 +242,9 @@ eval "$(fzf --zsh)"
 		--preview-window='right,60%,border-left'"
 
 	# btab: <Shift-Tab>
-	local fzf_keymaps="--bind='btab:change-preview-window(top,70%,border-bottom|hidden|)' \
+	# ${(F)list}: use '\n' concat list
+	local fzf_keymaps="--bind='start:unbind(ctrl-g)+unbind(ctrl-q)'
+		--bind='btab:change-preview-window(top,70%,border-bottom|hidden|)' \
 		--bind='ctrl-l:toggle-preview-wrap+toggle-wrap' \
 		--bind='ctrl-k:toggle-raw' \
 		--bind='shift-up:half-page-up,shift-down:half-page-down' \
@@ -199,55 +252,25 @@ eval "$(fzf --zsh)"
 		--bind='ctrl-a:select-all,ctrl-d:deselect-all' \
 		--bind='ctrl-e:become(\"$EDITOR\" \"+lua FZF_selected([[{+f}]])\" > /dev/tty)' \
 		--bind='ctrl-o:execute(open -R {})' \
-		--bind='start:unbind(ctrl-g)+unbind(ctrl-q)'"
-
-	local -a fzf_help_msg=(
-		"\e[33mKey maps:\e[0m"
-		""
-		"\e[33m<Enter>\e[0m       \t accept"
-		"\e[33m<ESC> <Ctrl-C>\e[0m\t abort"
-		""
-		"\e[33m<Ctrl-E>\e[0m      \t edit"
-		"\e[33m<Ctrl-O>\e[0m      \t open (in finder)"
-		""
-		"\e[33m<Ctrl-A>\e[0m      \t select all items"
-		"\e[33m<Ctrl-D>\e[0m      \t deselect all items"
-		"\e[33m<Tab>\e[0m         \t toggle select item"
-		""
-		"\e[33m<Ctrl-L>\e[0m      \t toggle wrap line (List + Preview window)"
-		"\e[33m<Shift-Tab>\e[0m   \t change Preview window layout"
-		""
-		"\e[33m<Shift-Up>\e[0m    \t List window (half)page-up"
-		"\e[33m<Shift-Down>\e[0m  \t List window (half)page-down"
-		"\e[33m<PageUp>\e[0m      \t Preview window (half)page-up"
-		"\e[33m<PageDown>\e[0m    \t Preview window (half)page-down"
-		""
-		"\e[33m<Ctrl-K>\e[0m      \t toggle Raw mode (no filter)"
-		"\e[33m<Ctrl-N>\e[0m      \t match next(down) useful in Raw mode"
-		"\e[33m<Ctrl-P>\e[0m      \t match prev(up) useful in Raw mode"
-		""
-		"more to see \e[33mman fzf\e[0m"
-	)
-
-	# ${(F)list}: use '\n' concat list
-	# 使用 bat 渲染 markdown 格式
-	local fzf_help="--bind='f1:preview(echo \"${(F)fzf_help_msg}\")'"
+		--bind='f1:preview(echo \"${(F)fzf_help_msg}\")'"
 
 	# NOTE: concat all options
-	export FZF_DEFAULT_OPTS="$fzf_opts $fzf_keymaps $fzf_help"
+	export FZF_DEFAULT_OPTS="$fzf_opts $fzf_keymaps"
 
 	# FZF_CTRL_T_COMMAND & FZF_CTRL_T_OPTS -----------------------------------------
 	export FZF_CTRL_T_COMMAND="$fzf_cmd --type=directory"
 
 	# Ctrl+T 快捷键 options 设置. 这里会继承 default 设置, 只需要覆盖设置.
 	export FZF_CTRL_T_OPTS="--no-multi \
-		--bind='start:unbind(ctrl-e)+unbind(ctrl-o)+unbind(ctrl-a)+unbind(ctrl-d)+unbind(tab)'"
+		--bind='start:unbind(ctrl-e)+unbind(ctrl-o)+unbind(ctrl-a)+unbind(ctrl-d)+unbind(tab)' \
+		--bind='f1:preview(echo \"${(F)fzf_T_R_help_msg}\")'"
 
 	# FZF_CTRL_R_OPTS, Ctrl+R 不能设置 Command. ------------------------------------
 	# NOTE: Ctrl+R 不能设置 Command.
 	# NOTE: CTRL+R 强制 --no-multi 禁止 <tab> multi select.
 	export FZF_CTRL_R_OPTS="--no-multi --preview-window=hidden \
-		--bind='start:unbind(ctrl-e)+unbind(ctrl-o)+unbind(ctrl-a)+unbind(ctrl-d)+unbind(tab)'"
+		--bind='start:unbind(ctrl-e)+unbind(ctrl-o)+unbind(ctrl-a)+unbind(ctrl-d)+unbind(tab)' \
+		--bind='f1:preview(echo \"${(F)fzf_T_R_help_msg}\")'"
 
 	# fzf auto completion 的设置 --------------------------------------------------
 	# NOTE: fzf 的 auto completion 是智能触发的. 使用不同的前置命令会得到不同的结果.
