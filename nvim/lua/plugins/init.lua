@@ -30,8 +30,7 @@ end
 local plugins = {
   {
     "folke/lazy.nvim",
-    -- version = "*",  -- 相当于 tag='stable'
-    tag = "v11.17.5",
+    version = "*",
   },
 
   --- Performence & Functions ----------------------------------------------------------------------
@@ -42,8 +41,8 @@ local plugins = {
   },
 
   {
-    "williamboman/mason.nvim",
-    tag = "v2.2.1",
+    "mason-org/mason.nvim",
+    version = "v2.*",
     -- build = ":MasonUpdate", -- :MasonUpdate updates All Registries, NOT packages.
     config = function() require("plugins.settings.mason_tool_installer") end,
 
@@ -55,7 +54,6 @@ local plugins = {
   {
     "rcarriga/nvim-notify",
     commit = "8701bec",
-    -- tag = "v3.15.0",
     config = function() require("plugins.settings.nvim_notify") end,
 
     event = "VeryLazy",
@@ -64,7 +62,6 @@ local plugins = {
   {
     "folke/which-key.nvim",
     commit = "3aab214",
-    -- tag = "v3.17.0",
     config = function() require("plugins.settings.which_key") end,
 
     event = "VeryLazy",
@@ -110,7 +107,7 @@ local plugins = {
 
   {
     "lukas-reineke/indent-blankline.nvim",
-    tag = "v3.9.1",
+    version = "*",
     config = function() require("plugins.settings.indentline") end,  -- setup() 设置 use_treesitter = true
 
     event = "VeryLazy",
@@ -213,7 +210,7 @@ local plugins = {
   --- "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
-    commit = "e135361",
+    commit = "241ff82",
     config = function() require("lsp.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -222,7 +219,6 @@ local plugins = {
 
   {
     "stevearc/conform.nvim",
-    -- tag = "v9.1.0",
     commit = "dca1a19",
     config = function() require("plugins.settings.formatter_conform") end,
 
@@ -233,7 +229,7 @@ local plugins = {
   --- File explorer --------------------------------------------------------------------------------
   {
     "nvim-tree/nvim-tree.lua",
-    tag = "v1.17.0",
+    version = "v1.*",
     config = function() require("plugins.settings.file_tree") end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
 
@@ -266,7 +262,7 @@ local plugins = {
 
   {
     "nvim-lualine/lualine.nvim",  -- `:help 'statusline'`
-    commit = "a905eee",
+    commit = "131a558",
     config = function() require("plugins.settings.decor_lualine") end,
 
     event = "VeryLazy",
@@ -286,7 +282,7 @@ local plugins = {
 
   {
     "nvim-neotest/nvim-nio",
-    tag = "v1.10.1",
+    version = "*",
 
     lazy = true,  -- nvim-dap-ui 加载时自动加载.
   },
@@ -308,7 +304,7 @@ local plugins = {
   --- telescope 的 preview syntax 默认使用的是 treesitter, 如果没有 treesitter 则使用 vim syntax highlights.
   {
     "nvim-telescope/telescope.nvim",
-    tag = "v0.2.1",  -- master branch is nightly version.
+    version = "v0.2.*",  -- master branch is nightly version.
     config = function() require("plugins.settings.telescope_fzf") end,
     dependencies = {
       "nvim-lua/plenary.nvim",
@@ -340,7 +336,7 @@ local plugins = {
   --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {
     "lewis6991/gitsigns.nvim",
-    tag = "v2.1.0",
+    version = "v2.*",
     config = function() require("plugins.settings.git_signs") end,
     dependencies = { "folke/trouble.nvim" },
 
@@ -368,7 +364,6 @@ local plugins = {
 
   {
     "folke/trouble.nvim",
-    -- tag = "v3.7.1",
     commit = "bd67efe",
     config = function() require("plugins.settings.trouble_list") end,
 
