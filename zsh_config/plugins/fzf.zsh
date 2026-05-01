@@ -194,11 +194,12 @@ eval "$(fzf --zsh)"
 		"${(F)km_footer}"
 	)
 
-	local fzf_opts="--header='<F1>: help' \
+	local fzf_opts="--footer-border=inline --bind 'focus:transform-footer:du -sh {} | cut -f1' \
+		--border-label=' <F1>: help ' --border-label-pos=-6:bottom \
 		--height=80% --ansi --multi --layout=reverse --border --scrollbar='▌▐' \
 		--marker='✔' --pointer='▸' --info='inline-right' --gutter=' ' --gutter-raw='▎' \
 		--color='dark,hl:191:reverse,hl+:191:reverse,fg+:underline,bg+:238:bold,border:240' \
-		--color='scrollbar:240,pointer:191,marker:191,gutter:191,header:71:italic:underline' \
+		--color='scrollbar:240,pointer:191,marker:191,gutter:191,header:71:bold,label:71:italic' \
 		--preview='([[ -d {} ]] && (tree -NC -L 1 {})) || ([[ -f {} ]] && (bat --color=always --style=numbers {}))' \
 		--preview-window='right,60%,border-left'"
 
