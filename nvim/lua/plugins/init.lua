@@ -1,5 +1,6 @@
 --- lazy 主要是一个 安装/管理插件. `:help lazy.nvim.txt`
 --- bootstrap -------------------------------------------------------------------------------------- {{{
+--- `:help lazy.nvim-🛠️-installation`
 local lazydir = vim.fn.stdpath("data") .. "/lazy"
 local lazypath = lazydir .. "/lazy.nvim"
 local lazyrepo = "https://github.com/folke/lazy.nvim.git"
