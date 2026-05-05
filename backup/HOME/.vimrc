@@ -10,7 +10,7 @@ vim9script
 
 # VVI: highlight color, 加载顺序很重要.
 g:loaded_colorresp = 1  # 全局开关 (防止某些终端在初始化时重置颜色), eg: xterm-ghostty
-set notermguicolors  # 使用 256-color (必须在 colorscheme 之前设置)
+set termguicolors  # 使用 256-color (必须在 colorscheme 之前设置)
 colorscheme default  # 必须在自定义 highlight 之前设置, 否则会覆盖自定义 highlight.
 syntax on   # syntax highlight, 自动调用 filetype on, filetype plugin on 和 filetype indent on
 # 自定义 highlight 必须放在后面设置.
