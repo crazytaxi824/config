@@ -307,12 +307,12 @@ Highlights = {
   SpellBad = {
     ctermfg=Colors.red.c, fg=Colors.red.g,
     ctermbg=52, bg='#890000',
-    bold=true, underline=true,
+    bold=true, strikethrough=true,
   },
   SpellCap = {
     ctermfg=Colors.orange.c, fg=Colors.orange.g,
     ctermbg=52, bg='#890000',
-    bold=true, underline=true,
+    bold=true, strikethrough=true,
   },
   SpellLocal = {},  -- clear highlight
 
