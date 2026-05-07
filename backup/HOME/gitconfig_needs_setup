@@ -3,9 +3,11 @@
 # This file should be '~/.gitconfig'
 [core]
 	# Git will globally ignore files that are defined in this file.
-	excludesfile = ~/.config/git_config/gitignore_global
+	excludesFile = ~/.config/git_config/gitignore_global
 	# If true, then CJK chars will be displayed as Unicode. eg: cn, jp, kr ...
-	quotepath = off
+	quotePath = off
+	# Mac(APFS)/Win(NTFS): case insensitive, Linux(ext4,XFS): case sensitive.
+	ignoreCase = true
 
 # NOTE: Only needs to setup [user] settings.
 [user]

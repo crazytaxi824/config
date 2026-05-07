@@ -9,7 +9,7 @@
 	diffFilter = delta --color-only
 
 [merge]
-	conflictstyle = diff3
+	conflictStyle = diff3
 
 [diff]
 	colorMoved = default

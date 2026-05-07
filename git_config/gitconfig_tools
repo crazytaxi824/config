@@ -36,7 +36,7 @@
 	# 也可以使用 `git mergetool --tool=nvimdiff` 来指定 mergetool.
 	tool = nvimdiff
 	# "diff3", adds a ||||||| marker and the original text before the ======= marker.
-	conflictstyle = diff3
+	conflictStyle = diff3
 
 # NOTE: 使用自定义 merge.tool=foo 时, 这里需要和自定义名字 [mergetool "foo"] 相同.
 # 自定义使用 foo 作为 `git mergetool ...` 时使用的命令.
