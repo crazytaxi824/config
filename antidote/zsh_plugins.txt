@@ -1,14 +1,23 @@
+# NOTE:
+# rupa/z  # 走 https 连接, 只能用于 public repo, 可能会触发访问速率限制
+# git@github.com:rupa/z.git  # 走 ssh 连接, 需要 SSH Key 进行身份验证, 如果 ssh 没有配置好则无法连接
+
 # 补全库 (提供比原生 Zsh 更多的命令补全)
-git@github.com:zsh-users/zsh-completions.git
+#git@github.com:zsh-users/zsh-completions.git
+zsh-users/zsh-completions
 
 # 自动建议 (基于 command 历史记录提示)
-git@github.com:zsh-users/zsh-autosuggestions.git
+#git@github.com:zsh-users/zsh-autosuggestions.git
+zsh-users/zsh-autosuggestions
 
 # 语法高亮 (VVI: 必须放在最后，否则无法对前面插件生成的命令着色)
-git@github.com:zsh-users/zsh-syntax-highlighting.git
+#git@github.com:zsh-users/zsh-syntax-highlighting.git
+zsh-users/zsh-syntax-highlighting
 
 # 目录书签功能
-git@github.com:mfaerevaag/wd.git
+#git@github.com:mfaerevaag/wd.git
+mfaerevaag/wd
 
 # 快速跳转 (可以使用 zoxide 替代)
-git@github.com:rupa/z.git
+#git@github.com:rupa/z.git
+rupa/z
