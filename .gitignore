@@ -1,6 +1,6 @@
 # 在任何路径下都忽略以下文件
 .netrwhist
-Brewfile.lock*
+brewfile.lock*
 todo*
 
 # 忽略相对于 .gitignore 目录下的文件
