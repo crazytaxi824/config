@@ -47,7 +47,7 @@ source "$XDG_CONFIG_HOME/zsh_config/plugins/fzf.zsh"
 export BAT_THEME="Dracula"
 
 # --- [ starship ] --------------------------------------------------------------------------------
-# export STARSHIP_CONFIG=~/.config/starship.toml  # 配置文件位置
+export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship.toml"  # 配置文件位置
 eval "$(starship init zsh)"
 
 # --- [ zoxide ] -----------------------------------------------------------------------------------
