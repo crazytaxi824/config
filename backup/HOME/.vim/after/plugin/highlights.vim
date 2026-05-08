@@ -1,5 +1,7 @@
 vim9script
 
+## NOTE: 必须先加载 colorscheme, 否则以下 highlight 设置可能无效.
+
 # CursorLine
 hi clear CursorLine
 hi CursorLine ctermbg=236 guibg=#303030
@@ -90,7 +92,6 @@ hi Comment ctermfg=65 guifg=#6A9955
 
 
 ## NOTE: 使用以下函数加载速度会变慢.
-## NOTE: 必须先加载 colorscheme, 否则以下 highlight 设置可能无效.
 #var colors = {
 #	white:   { c: '251', g: '#C0C0C0' },
 #	black:   { c: '233', g: '#121212' },
