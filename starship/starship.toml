@@ -1,4 +1,4 @@
-"$schema" = 'https://starship.rs/config-schema.json'
+#:schema https://starship.rs/config-schema.json
 
 # 禁止在提示符后换行
 add_newline = false
@@ -48,7 +48,7 @@ disabled = true
 # bg: \e[48;5;xxxm
 # fg: \e[38;5;xxxm
 # bold: \e[1;xx;xx;xxxm
-command = """
+command = '''
 branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
 dirty=$(git status --porcelain 2>/dev/null | grep -q . && echo 1)
 if [[ "$branch" =~ ^(main|master)$ ]]; then
@@ -64,7 +64,7 @@ else
 		printf "\e[48;5;35m\e[1;38;5;235m %s \e[0m" " $branch"
 	fi
 fi
-"""
+'''
 # 当前文件在 git 内的情况下才会触发后续任务
 when = 'git rev-parse --is-inside-work-tree 2>/dev/null'
 # 不需要 (style), 由 printf 控制颜色
