@@ -4,7 +4,7 @@
 add_newline = false
 
 # 使用自定义 colors
-palette = 'my_colors'
+palette = "my_colors"
 
 format = """
 $username\
@@ -21,7 +21,7 @@ $character\
 """
 
 [fill]
-symbol = " " # 使用空格填充，将后面的内容推向右侧
+symbol = " "  # 使用空格填充，将后面的内容推向右侧
 
 [username]
 # 设置为 true 会让用户名始终显示
@@ -66,7 +66,7 @@ else
 fi
 '''
 # 当前文件在 git 内的情况下才会触发后续任务
-when = 'git rev-parse --is-inside-work-tree 2>/dev/null'
+when = "git rev-parse --is-inside-work-tree 2>/dev/null"
 # 不需要 (style), 由 printf 控制颜色
 format = "$output"
 
@@ -103,10 +103,7 @@ red_bg = "196"
 magenta_bg = "213"
 green_bg = "35"
 blue_bg = "25"
-orange    = "215"
+orange = "215"
 orange_bg = "208"
-grey    = "240"
+grey = "240"
 grey_bg = "237"
-
-
-

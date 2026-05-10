@@ -22,7 +22,7 @@ local function format_by_ft()
     "javascript", "javascriptreact", "typescript", "typescriptreact",
     "vue", "css", "scss", "less", "html",
     "json", "jsonc", "json5", "graphql", "handlebars",
-    "yaml", "toml", "markdown", "markdown.mdx", -- NOTE: 这些最好不要自动 format.
+    "yaml", "markdown", "markdown.mdx",
   }
   for _, ft in ipairs(prettier_ft) do
     filetype_formatter[ft] = { "prettier" }
@@ -77,7 +77,7 @@ local function auto_format()
     pattern = {"*"},
     callback = function(params)
       --- NOTE: 以下文件类型不执行 auto format, 需要手动执行 :Format 命令
-      local exclude_auto_format_filtypes = { "markdown", "yaml", "lua" }
+      local exclude_auto_format_filtypes = { "markdown", "yaml", "lua", "toml" }
       if vim.tbl_contains(exclude_auto_format_filtypes, vim.bo[params.buf].filetype) then
         return
       end
