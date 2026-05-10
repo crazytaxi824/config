@@ -48,6 +48,10 @@ M.list = {
     cmd = "vscode-json-language-server",
     mason = "json-lsp",
   },
+  tombi = {
+    cmd = "tombi",
+    mason = "tombi",
+  },
   --- VVI: need `npm install eslint`, `npm init @eslint/config`. 会生成 "eslint.config.mjs" 配置文件.
   --- 没有 "eslint.config.mjs" 配置文件 eslint-lsp 无法找到 root, 因此无法启动.
   eslint = {

@@ -22,7 +22,7 @@ local function format_by_ft()
     "javascript", "javascriptreact", "typescript", "typescriptreact",
     "vue", "css", "scss", "less", "html",
     "json", "jsonc", "json5", "graphql", "handlebars",
-    "yaml", "markdown", "markdown.mdx", -- NOTE: 这些最好不要自动 format.
+    "yaml", "toml", "markdown", "markdown.mdx", -- NOTE: 这些最好不要自动 format.
   }
   for _, ft in ipairs(prettier_ft) do
     filetype_formatter[ft] = { "prettier" }
