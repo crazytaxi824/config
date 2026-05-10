@@ -17,7 +17,7 @@ local auto_install_langs = {
   "comment", "editorconfig",
   "latex", "mermaid",  -- for `markdown`
   "git_config", "git_rebase", "gitattributes", "gitcommit", "gitignore", "diff",  -- `git`
-  "json", "json5", "toml", "yaml", "csv", "xml", "regex", "proto", "dockerfile",  -- comment filetypes
+  "json", "json5", "toml", "yaml", "csv", "xml", "regex", "proto", "dockerfile",  -- common filetypes
   "ssh_config",
   "sql",
 }
