@@ -4,8 +4,11 @@
 ratio = [1, 3, 3]
 
 [preview]
-wrap = "yes"
+wrap = "no"
 tab_size = 4
+
+[input]
+cursor_blink = true
 
 [plugin]
 # prepend_previewers: 这个指令会将你的规则插入到 Yazi 默认规则的 最前面
