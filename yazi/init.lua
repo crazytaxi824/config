@@ -1,6 +1,11 @@
 -- https://yazi-rs.github.io/docs/tips/#symlink-in-status
 -- https://yazi-rs.github.io/docs/plugins/types
 
+-- quote filepath, avoid space in filepath
+local function shellescape(path)
+  return "'" .. path:gsub("'", "'\\''") .. "'"
+end
+
 -- Show symlink in status bar
 Status:children_add(function()
 	local h = cx.active.current.hovered
@@ -15,7 +20,7 @@ end, 3300, Status.LEFT)
 Status:children_add(function()
 	local h = cx.active.current.hovered
 	if h and not h.cha.is_dir then
-    local handle = io.popen("file -b --mime-type " .. tostring(h.url.path))
+    local handle = io.popen("file -b --mime-type " .. shellescape(tostring(h.url.path)))
     local result = handle:read("*l")
     handle:close()
 
