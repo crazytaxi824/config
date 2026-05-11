@@ -3,8 +3,9 @@
 --- 所有设置通过 vim.diagnostic.config() 函数加载.
 
 --- NOTE: test diagnostic sign
--- foo=1
 -- local function foo(a)
+--   f=1
+--   foo=1
 --   bar
 -- end
 
