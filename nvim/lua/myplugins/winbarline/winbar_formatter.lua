@@ -16,7 +16,8 @@ local function bufname_mod(bufnr)
     return bufname
   end
 
-  --- 以下是特殊情况
+  --- 特殊情况
+  --- command line window 中不能加载任何其他 buffer. `q:`, `q/`, `q?` ...
   if vim.fn.getcmdwintype() ~= '' then
     return "[Command Line]"
   end
