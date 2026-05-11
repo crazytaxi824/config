@@ -8,18 +8,18 @@ end
 
 -- Show symlink in status bar
 Status:children_add(function()
-	local h = cx.active.current.hovered
-	if h and h.link_to then
-		return " -> " .. tostring(h.link_to)
-	else
-		return ""
-	end
+  local h = cx.active.current.hovered
+  if h and h.link_to then
+    return " -> " .. tostring(h.link_to)
+  else
+    return ""
+  end
 end, 3300, Status.LEFT)
 
 -- Show `mime` in status bar
 Status:children_add(function()
-	local h = cx.active.current.hovered
-	if h and not h.cha.is_dir then
+  local h = cx.active.current.hovered
+  if h and not h.cha.is_dir then
     local handle = io.popen("file -b --mime-type " .. shellescape(tostring(h.url.path)))
     local result = handle:read("*l")
     handle:close()
@@ -27,9 +27,9 @@ Status:children_add(function()
     return ui.Line(
       ui.Span(string.format("[%s] ", result)):fg("blue")
     )
-	else
-		return ""
-	end
+  else
+    return ""
+  end
 end, 100, Status.RIGHT)
 
 

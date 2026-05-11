@@ -4,10 +4,16 @@
 [tabs]
 active   = { bg = "26", bold = true }
 inactive = { fg = "26", bg = "gray" }
+sep_inner = { open = "", close = "" }
+sep_outer = { open = "█", close = "█" }
 
 [mode]
 normal_main = { bg = "26", bold = true }
 normal_alt  = { fg = "26", bg = "gray" }
+
+[status]
+sep_left = { open = "", close = "" }
+sep_right = { open = "", close = "" }
 
 [filetype]
 rules = [
