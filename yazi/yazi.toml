@@ -1,12 +1,19 @@
 # https://github.com/sxyazi/yazi/blob/main/yazi-config/preset/yazi-default.toml
 
+[mgr]
+ratio = [1, 3, 3]
+
+[preview]
+wrap = "yes"
+tab_size = 4
+
 [plugin]
 # prepend_previewers: 这个指令会将你的规则插入到 Yazi 默认规则的 最前面
 prepend_previewers = [
 	# --- 根据文件名后缀 ---
-    { name = "*.pages",     run = "noop" },
-    { name = "*.numbers",   run = "noop" },
-    { name = "*.key",       run = "noop" },
+    { url = "*/", name = "*.pages",     run = "noop" },
+    { url = "*/", name = "*.numbers",   run = "noop" },
+    { url = "*/", name = "*.key",       run = "noop" },
 
 	# --- 根据文件类型 ---
     { mime = "application/zip", run = 'noop' },
