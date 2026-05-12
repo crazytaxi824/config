@@ -11,17 +11,17 @@ tab_size = 4
 cursor_blink = true
 
 [plugin]
-# prepend_previewers: 这个指令会将你的规则插入到 Yazi 默认规则的 最前面
+# prepend_previewers: 这个指令会将你的规则插入到 Yazi 默认规则的最前面
 prepend_previewers = [
 	# --- 根据文件名后缀 ---
 	# pages, numbers, key 文件都被识别成 `application/zip`
-	# { url = "*.pages",     run = "noop" },
-	# { url = "*.numbers",   run = "noop" },
-	# { url = "*.key",       run = "noop" },
+	# `noop` 是 builtin 函数, `no-preview` 是自定义函数
+	# { url = "*.{pages,numbers,key}",  run = "noop" },
+	{ url = "*.{pages,numbers,key}",  run = "no-preview" },
+	{ url = "*.{zip,tar,gtar,rar,7z,gz,xz,bz2,zst,tgz,txz,dmg}", run = "no-preview" },
 
 	# --- 根据文件类型 ---
-	{ mime = "application/zip", run = 'noop' },
-	{ mime = "application/pdf", run = 'noop' },
-	{ mime = "audio/*",         run = 'noop' },
-	{ mime = "video/*",         run = 'noop' },
+	{ mime = "application/pdf",  run = 'no-preview' },
+	{ mime = "audio/*",          run = 'no-preview' },
+	{ mime = "video/*",          run = 'no-preview' },
 ]
