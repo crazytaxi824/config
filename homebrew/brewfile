@@ -11,6 +11,7 @@ tap "gittower/tap"
 ### `brew install` ---------------------------------------------------------------------------------
 brew "antidote" # zsh plugins manager
 brew "starship" # terminal prompt style
+brew "zoxide"   # `z`
 brew "fzf"
 brew "fd"      # rust find
 brew "bat"     # rust cat

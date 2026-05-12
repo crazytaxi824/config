@@ -18,6 +18,6 @@ zsh-users/zsh-syntax-highlighting
 #git@github.com:mfaerevaag/wd.git
 mfaerevaag/wd
 
-# 快速跳转 (可以使用 zoxide 替代)
+# 快速跳转, 已使用 zoxide 替代
 #git@github.com:rupa/z.git
-rupa/z
+#rupa/z

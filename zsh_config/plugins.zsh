@@ -52,7 +52,7 @@ eval "$(starship init zsh)"
 
 # --- [ zoxide ] -----------------------------------------------------------------------------------
 # VVI: 必须放在 `compinit` 之后
-# eval "$(zoxide init zsh)"
+eval "$(zoxide init zsh)"
 
 
 
