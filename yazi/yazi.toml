@@ -14,9 +14,10 @@ cursor_blink = true
 # prepend_previewers: 这个指令会将你的规则插入到 Yazi 默认规则的 最前面
 prepend_previewers = [
 	# --- 根据文件名后缀 ---
-	{ url = "*/", name = "*.pages",     run = "noop" },
-	{ url = "*/", name = "*.numbers",   run = "noop" },
-	{ url = "*/", name = "*.key",       run = "noop" },
+	# pages, numbers, key 文件都被识别成 `application/zip`
+	# { url = "*.pages",     run = "noop" },
+	# { url = "*.numbers",   run = "noop" },
+	# { url = "*.key",       run = "noop" },
 
 	# --- 根据文件类型 ---
 	{ mime = "application/zip", run = 'noop' },
