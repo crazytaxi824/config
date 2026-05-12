@@ -10,9 +10,9 @@ tap "gittower/tap"
 
 ### `brew install` ---------------------------------------------------------------------------------
 brew "antidote" # zsh plugins manager
-brew "starship" # terminal prompt style
-brew "zoxide"   # `z`
-brew "fzf"
+brew "starship" # rust terminal prompt style
+brew "zoxide"   # rust `z`
+brew "fzf"     # golang
 brew "fd"      # rust find
 brew "bat"     # rust cat
 brew "ripgrep" # rust grep, `rg`
@@ -20,12 +20,12 @@ brew "ripgrep" # rust grep, `rg`
 # git
 brew "git"
 brew "git-flow-next" # brew tap gittower/tap, `$ git flow init`
-brew "git-delta" # git diff 工具
-brew "lazygit"   # git cui 工具, 还有 "gitui"
+brew "git-delta" # rust git diff 工具
+brew "lazygit"   # golang git cui 工具, 还有 "gitui"
 
 # terminal tools
 brew "tree"
-brew "htop"  # cui top
+brew "htop"  # C cui top
 brew "yazi"  # rust file explorer, 支持 Kitty Graphics 协议
 
 # editor
