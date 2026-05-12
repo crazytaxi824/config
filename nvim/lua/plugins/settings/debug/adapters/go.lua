@@ -70,7 +70,7 @@ dap.configurations.go = {
   --- vscode-go test project
   {
     name = "nvim-dap(vscode): Go Debug",
-    type = "go", -- VVI: dap.adapters.go 名字要对应
+    type = "go", -- VVI: dap.adapters.{go} 名字要对应
     request = "launch",
     showLog = false,
     dlvToolPath = vim.fn.exepath("dlv"), -- Adjust to where delve is installed

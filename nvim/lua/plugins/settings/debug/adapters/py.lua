@@ -58,7 +58,7 @@ dap.configurations.python = {
   {
     -- The first three options are required by nvim-dap
     name = "nvim-dap(debugpy): Python file",
-    type = "python", -- VVI: dap.adapters.python 名字要对应
+    type = "python", -- VVI: dap.adapters.{python} 名字要对应
     request = "launch",
 
     -- Options below are for debugpy, see https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings for supported options
