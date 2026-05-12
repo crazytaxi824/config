@@ -10,6 +10,9 @@ alias lldu='du -shc ./*(N) ./.*(N)'
 # brew info lazygit; https://github.com/jesseduffield/lazygit
 alias lg='lazygit'
 
+### yazi
+alias ya='yazi'
+
 ### delta
 # brew info git-delta; https://github.com/dandavison/delta
 alias diff='delta --dark --line-numbers --side-by-side --syntax-theme=none --line-numbers-minus-style=196 -- '
