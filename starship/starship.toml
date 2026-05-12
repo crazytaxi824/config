@@ -7,6 +7,7 @@ add_newline = false
 palette = "my_colors"
 
 format = """
+$python\
 $username\
 ${custom.git_branch}\
 $hostname\
@@ -22,6 +23,11 @@ $character\
 
 [fill]
 symbol = " "  # 使用空格填充，将后面的内容推向右侧
+
+[python]
+symbol = ''
+style = 'fg:yellow'
+format = '[( $symbol \($virtualenv\) )]($style)'
 
 [username]
 # 设置为 true 会让用户名始终显示
