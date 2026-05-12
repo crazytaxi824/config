@@ -10,6 +10,7 @@ local function python_env(term_id)
     upward = true,
     stop = vim.env.HOME,
     type = "file",
+    limit = 1,
   })
   if #py_venv < 1 then
     return

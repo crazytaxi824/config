@@ -1,12 +1,14 @@
 --- python3 ----------------------------------------------------------------------------------------
 
 --- check virtual environment
-local function venv()
+local function venv(filepath)
   --- 项目环境
   local py_paths = vim.fs.find({'.venv/bin/python3'}, {
+    path = vim.fs.dirname(filepath),
     upward = true,
     stop = vim.env.HOME,
     type = "file",
+    limit = 1,
   })
   if #py_paths < 1 then
     return
@@ -18,7 +20,7 @@ end
 ---
 --- @param filepath string
 local function py_run(filepath)
-  local py_path = venv()
+  local py_path = venv(filepath)
   if not py_path then
     Notify({
       "need to create python Virtual Environment first:",
@@ -38,7 +40,7 @@ end
 
 --- key mapping ------------------------------------------------------------------------------------
 --- run current_file ---
-vim.keymap.set('n', '<F5>', function() py_run(vim.fn.bufname()) end, {
+vim.keymap.set('n', '<F5>', function() py_run(vim.api.nvim_buf_get_name(0)) end, {
   buffer = 0,
   desc = "Fn 5: code: Run File",
 })

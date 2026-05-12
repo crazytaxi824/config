@@ -66,9 +66,11 @@ dap.configurations.python = {
     pythonPath = function()
       -- debugpy supports launching an application with a different interpreter then the one used to launch debugpy itself.
       local py_paths = vim.fs.find({'.venv/bin/python3'}, {
+        path = vim.fs.dirname(vim.api.nvim_buf_get_name(0)),
         upward = true,
         stop = vim.env.HOME,
         type = "file",
+        limit = 1,
       })
       if #py_paths < 1 then
         Notify({"'.venv/bin/python3' is missing"}, vim.log.levels.ERROR)

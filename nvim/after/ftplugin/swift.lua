@@ -32,7 +32,6 @@ local function swift_test_pkg()
     return
   end
 
-
   --- 判断 class 是否为 class .*: XCTestCase
   local lcontent = vim.api.nvim_get_current_line()  -- 获取当前行内容
   local test_class = lcontent:match("class%s+([%w_]+)%s*:%s*[%w_]+TestCase")
