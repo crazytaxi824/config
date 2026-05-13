@@ -85,7 +85,7 @@ local plugins = {
     "nvim-treesitter/nvim-treesitter",
     branch = "main",  -- NOTE: 'master' branch is locked for backward compatibility.
     config = function() require("plugins.settings.treesitter") end,
-    -- build = ':TSUpdate',
+
     lazy = false,
   },
 
@@ -211,7 +211,7 @@ local plugins = {
   --- "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
-    commit = "241ff82",
+    commit = "f9d557a",
     config = function() require("lsp.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -466,6 +466,7 @@ local opts = {
 -- for _, p in ipairs(plugins) do
 --   p.commit = nil
 --   p.tag, p.version = nil, nil
+--   p.lazy = false
 -- end
 
 lazy.setup(plugins, opts)
