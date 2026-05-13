@@ -1,4 +1,4 @@
-# --- [ keybindings ] ------------------------------------------------------------------------------
+# 在 command 中移动光标 ----------------------------------------------------------------------------
 # `$ cat -v`  查看组合键发送的 CSI (Sequence)
 # `$ bindkey -M main`  查看所有快捷键
 # `$ zle -la`  列出所有 bindkey actions
@@ -10,6 +10,8 @@ bindkey "^[[1;5C" vi-forward-word       # option-right
 bindkey "^[[1;5D" vi-backward-word      # option-left
 bindkey "^[^?" vi-backward-kill-word    # option-delete
 
+# 根据 prefix 提供 command histroy -----------------------------------------------------------------
+# eg: `git <Up>|<Down>`
 # 1. 加载前缀搜索模块
 autoload -U up-line-or-beginning-search
 autoload -U down-line-or-beginning-search
