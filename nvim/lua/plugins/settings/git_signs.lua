@@ -18,11 +18,12 @@ end
 local function gs_keymaps(bufnr)
   local opt = { silent = true, buffer=bufnr }
   local gitsigns_keymaps = {
-    {'n', '<leader>gn', function() git_signs.next_hunk() end, opt, "git: Jump to Next Hunk"},
-    {'n', '<leader>gp', function() git_signs.prev_hunk() end, opt, "git: Jump to Prev Hunk"},
+    {'n', '<leader>gn', function() git_signs.nav_hunk("next", {target="all"}) end, opt, "git: Jump to Next Hunk"},
+    {'n', '<leader>gp', function() git_signs.nav_hunk("prev", {target="all"}) end, opt, "git: Jump to Prev Hunk"},
     {'n', '<leader>gb', function() git_signs.blame_line{full=true} end, opt, "git: Blame"},
     {'n', '<leader>gB', function() git_signs.toggle_current_line_blame() end, opt, "git: Toggle Blame line"},
-    {'n', '<leader>gu', function() git_signs.reset_buffer_index() end, opt, "git: Unstage current buffer"},
+    {'n', '<leader>gR', function() git_signs.reset_buffer() end, opt, "git: Reset current buffer"},
+    {'n', '<leader>gs', function() git_signs.toggle_signs() end, opt, "git: Toggle sings"},
     {'n', '<leader>gg', function() gitsigns_hunk_actions() end, opt, "git: Actions for Hunk"},
     {'n', '<leader>gd', function() git_signs.preview_hunk_inline() end, opt, "git: Preview hunk"},
     {'n', '<leader>gf', function()
