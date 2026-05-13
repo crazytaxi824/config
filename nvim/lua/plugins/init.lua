@@ -3,6 +3,8 @@
 --- `:help lazy.nvim-🛠️-installation`
 local lazydir = vim.fn.stdpath("data") .. "/lazy"
 local lazypath = lazydir .. "/lazy.nvim"
+
+--- 以下代码直接使用的 `:help lazy.nvim-🛠️-installation-structured-setup` 文档中的代码
 local lazyrepo = "https://github.com/folke/lazy.nvim.git"
 if not vim.uv.fs_stat(lazypath) then
   local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
