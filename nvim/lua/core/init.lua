@@ -16,7 +16,7 @@ require("core.fold")     -- lsp-fold & treesitter-fold autocmd
 require("core.terminal") -- terminal buffer 自动设置 nonumber signcolumn ...
 
 
--- --- for bufferline sort order, 用进入时间排序
+-- --- for "akinsho/bufferline.nvim" sort order, 用进入时间排序
 -- local bufvar = 'my_winenter_time'
 -- vim.api.nvim_create_autocmd({"BufNew", "BufReadPre"}, {
 --   callback = function(args)
