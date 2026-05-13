@@ -53,6 +53,11 @@ eval "$(starship init zsh)"
 # --- [ zoxide ] -----------------------------------------------------------------------------------
 # VVI: 必须放在 `compinit` 之后
 eval "$(zoxide init zsh)"
+# 必须放在 eval "$(zoxide init zsh)" 后面, 避免 zoxide 自带 z 函数会在多个 path 之间循环跳转
+function z() {
+	local target=$(zoxide query "$@" 2>/dev/null)
+	cd "$target"
+}
 
 
 
