@@ -19,7 +19,7 @@ source "$XDG_CONFIG_HOME/zsh_config/env.zsh"
 source "$XDG_CONFIG_HOME/zsh_config/options.zsh"
 source "$XDG_CONFIG_HOME/zsh_config/plugins.zsh"
 source "$XDG_CONFIG_HOME/zsh_config/funcs.zsh"
-source "$XDG_CONFIG_HOME/zsh_config/aliases.zsh"  # 优先级更高, 可以覆盖 funcs
+source "$XDG_CONFIG_HOME/zsh_config/aliases.zsh"  # 在 funcs 后加载, 可以覆盖 funcs
 source "$XDG_CONFIG_HOME/zsh_config/keybindings.zsh"
 
 
