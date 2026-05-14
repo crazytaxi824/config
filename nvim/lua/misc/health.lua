@@ -32,6 +32,7 @@ local mason_record = [[
   tombi
   tree-sitter-cli
   typescript-language-server
+  yaml-language-server
 ]]
 
 local function check_mason_tools()

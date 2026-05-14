@@ -52,5 +52,27 @@ vim.api.nvim_create_autocmd({'BufWritePost'}, {
   desc = "reload local settings when '.nvim/lsp.json' changed",
 })
 
+--- schema for json, toml, yaml
+vim.api.nvim_create_user_command("Schema", function(params)
+  local ft = params.args:lower()
+  if ft == 'json' then
+    vim.notify('{ "$schema": "https://www.schemastore.org/xxx" }')
+  elseif ft == 'toml' then
+    vim.notify('# #:schema = "https://www.schemastore.org/xxx"')
+  elseif ft == 'yaml' then
+    vim.notify('# yaml-language-server: $schema=https://www.schemastore.org/xxx')
+  else
+    vim.notify("filetype: '" .. ft .. "' schema is not avaliable", vim.log.levels.WARN)
+  end
+end, {
+  nargs = 1,
+  bang = true,
+  bar = true,
+  desc = "Schema: modeline examples",
+  complete = function()
+    return { "json", "toml", "yaml" }
+  end,
+})
+
 
 
