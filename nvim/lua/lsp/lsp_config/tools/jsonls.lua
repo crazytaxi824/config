@@ -6,9 +6,34 @@ local schemas = {
       "tsconfig.json",
       "tsconfig.*.json",
     },
+    url = "https://www.schemastore.org/tsconfig.json",
+  },
+  {
+    description = "JavaScript configuration file",
+    fileMatch = {
+      "jsconfig.json",
+      "jsconfig.*.json",
+    },
     url = "https://json.schemastore.org/tsconfig.json",
   },
   {
+    description = "Python Project configuration file",
+    fileMatch = {
+      "pyproject.toml",
+      "pyproject.json",
+    },
+    url = "https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/pyproject.json",
+  },
+  {
+    description = "Lua configuration file",
+    fileMatch = {
+      ".luarc",
+      ".luarc.json",
+    },
+    url = "https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json",
+  },
+  {
+    -- javascript 工具, 用于管理包含多个软件包 (packages)
     description = "Lerna config",
     fileMatch = { "lerna.json" },
     url = "https://json.schemastore.org/lerna.json",
@@ -31,11 +56,6 @@ local schemas = {
     url = "https://json.schemastore.org/eslintrc.json",
   },
   {
-    description = "Bucklescript config",
-    fileMatch = { "bsconfig.json" },
-    url = "https://raw.githubusercontent.com/rescript-lang/rescript-compiler/8.2.0/docs/docson/build-schema.json",
-  },
-  {
     description = "Prettier config",
     fileMatch = {
       ".prettierrc",
@@ -45,11 +65,7 @@ local schemas = {
     url = "https://json.schemastore.org/prettierrc",
   },
   {
-    description = "Vercel Now config",
-    fileMatch = { "now.json" },
-    url = "https://json.schemastore.org/now",
-  },
-  {
+    -- for CSS/SCSS/Less
     description = "Stylelint config",
     fileMatch = {
       ".stylelintrc",
@@ -59,11 +75,7 @@ local schemas = {
     url = "https://json.schemastore.org/stylelintrc",
   },
   {
-    description = "A JSON schema for the ASP.NET LaunchSettings.json files",
-    fileMatch = { "launchsettings.json" },
-    url = "https://json.schemastore.org/launchsettings.json",
-  },
-  {
+    -- C++ 配置编译环境
     description = "Schema for CMake Presets",
     fileMatch = {
       "CMakePresets.json",
@@ -72,6 +84,7 @@ local schemas = {
     url = "https://raw.githubusercontent.com/Kitware/CMake/master/Help/manual/presets/schema.json",
   },
   {
+    -- Code Climate 是一个自动化的代码审查 (Code Review) 和质量分析平台
     description = "Configuration file as an alternative for configuring your repository in the settings page.",
     fileMatch = {
       ".codeclimate.json",
@@ -79,6 +92,7 @@ local schemas = {
     url = "https://json.schemastore.org/codeclimate.json",
   },
   {
+    -- for C/C++ compile
     description = "LLVM compilation database",
     fileMatch = {
       "compile_commands.json",
@@ -123,6 +137,7 @@ local schemas = {
       ".golangci.json",
     },
     url = "https://json.schemastore.org/golangci-lint.json",
+    -- url = "https://golangci-lint.run/jsonschema/golangci.jsonschema.json"  -- 官网地址
   },
   {
     description = "JSON schema for the JSON Feed format",
@@ -166,7 +181,8 @@ local schemas = {
 return {
   settings = {
     json = {
-      validate = { enable = true },  -- VVI: 开启 diagnostic, 默认不开启.
+      format = { enable = true },    -- 开启 auto format
+      validate = { enable = true },  -- 开启 diagnostic, 默认不开启.
       schemas = schemas,
     },
   }
