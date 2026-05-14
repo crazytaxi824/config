@@ -91,7 +91,7 @@ local M = {}
 function M.get_local_lsp_settings()
   local sf = read_local_settings(utils.lsp_file)
   if not sf then
-    error("project local '" .. utils.lsp_file .. "' format error")
+    Notify({"`" .. utils.lsp_file .. "` format error"}, vim.log.levels.ERROR, { title = "project_local_settings" })
     return nil
   end
   return parse_local_lsp_settings(sf)
@@ -101,7 +101,7 @@ end
 function M.get_local_linter_settings()
   local sf = read_local_settings(utils.linter_file)
   if not sf then
-    error("project local '" .. utils.linter_file .. "' format error")
+    Notify({"`" .. utils.linter_file .. "` format error"}, vim.log.levels.ERROR, { title = "project_local_settings" })
     return nil
   end
   return sf
