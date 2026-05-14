@@ -1,4 +1,4 @@
-#:schema https://starship.rs/config-schema.json
+# #:schema = "https://starship.rs/config-schema.json"
 
 # 禁止在提示符后换行
 add_newline = false
