@@ -274,6 +274,7 @@ local config = {
       "tsconfig.json", "jsconfig.json",  -- ts_ls config
       "pyproject.toml", "pyrightconfig.json", "ruff.toml",  -- python
       ".luarc.json", ".luarc.jsonc",  -- lua_ls config
+      ".tombi.toml", "tombi.toml",  -- tombi lsp for Toml
     },
     symlink_destination = true,  -- Whether to show the destination of the symlink.
   },
