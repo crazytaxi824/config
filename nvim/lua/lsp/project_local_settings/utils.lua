@@ -16,7 +16,7 @@ function M.find_local_settings_file(json_file)
   })
 
   if #local_settings_filepaths < 1 then
-    return nil -- json 为空, 或被删除, 需要 reload lsp settings
+    return nil -- 文件不存在
   end
 
   return vim.fs.abspath(local_settings_filepaths[1])

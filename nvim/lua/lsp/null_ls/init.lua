@@ -76,7 +76,9 @@ vim.api.nvim_create_autocmd({'BufWritePost'}, {
   callback = function(args)
     if vim.fs.abspath(args.file) == utils.find_local_settings_file(utils.linter_file) then
       local old = null_sources.exist_local_settings()
-      null_sources.reload_local_settings()
+      if not null_sources.reload_local_settings() then
+        return
+      end
       local new = null_sources.exist_local_settings()
 
       local tools = utils.find_diff_tool(old, new)

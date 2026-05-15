@@ -37,7 +37,13 @@ local M = {}
 
 --- 重新读取 project local settings 文件
 function M.reload_local_settings()
-  local_lsp_settings = project_local_settings.get_local_lsp_settings()
+  local settings = project_local_settings.get_local_lsp_settings()
+  if settings == nil then
+    return false
+  end
+
+  local_lsp_settings = settings
+  return true
 end
 
 --- 返回当前本地 lsp 设置

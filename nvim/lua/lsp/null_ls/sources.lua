@@ -93,7 +93,13 @@ M.code_actions = {
 
 --- 重新读取 project local settings 文件
 function M.reload_local_settings()
-  local_linter_settings = project_local_settings.get_local_linter_settings()
+  local settings = project_local_settings.get_local_linter_settings()
+  if settings == nil then
+    return false
+  end
+
+  local_linter_settings = settings
+  return true
 end
 
 --- 返回当前本地 linter 设置

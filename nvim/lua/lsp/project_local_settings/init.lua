@@ -32,11 +32,10 @@ local utils = require("lsp.project_local_settings.utils")
 
 --- read json file
 ---
---- 如果 return vim.empty_dict() 需要 reload lsp settings. 包含以下几种情况:
----   1. json 文件被删除
----   2. json 文件为空
----   3. json 文件为 {}
---- 如果 return nil 表示 json 格式错误, 则不要 reload lsp settings.
+--- 如果 return vim.empty_dict() 需要 tbl_deep_extend to default settings. 包含以下几种情况:
+---   1. json 文件不存在
+---   2. json 文件为空 ""
+--- 如果 return nil 表示 json 格式错误, 则不要 tbl_deep_extend to default settings.
 ---
 --- @param json_file string (file path)
 --- @return table|nil
@@ -44,17 +43,21 @@ local function read_local_settings(json_file)
   local local_settings_filepath = utils.find_local_settings_file(json_file)
 
   if not local_settings_filepath then
-    return vim.empty_dict() -- json 为空, 或被删除, 需要 reload lsp settings
+    return vim.empty_dict() -- file 不存在, 当作 {}, 需要 tbl_deep_extend to default settings
   end
 
   local lines = vim.fn.readfile(local_settings_filepath)
   local json_content = table.concat(lines, "\n")
 
+  if vim.trim(json_content) == "" then
+    return vim.empty_dict() -- file 为空, 当作 {}, 需要 tbl_deep_extend to default settings
+  end
+
   local ok, result = pcall(vim.json.decode, json_content, { skip_comments = true })
   if ok then
-    return result -- json 不为空, 需要 reload lsp settings
+    return result -- json 不为空, 需要 tbl_deep_extend to default settings
   end
-  return nil -- json 格式错误, 不需要 reload lsp settings
+  return nil -- json 格式错误, 不需要 tbl_deep_extend
 end
 
 --- 解析 lsp settings

@@ -42,7 +42,9 @@ vim.api.nvim_create_autocmd({'BufWritePost'}, {
   callback = function(args)
     if vim.fs.abspath(args.file) == utils.find_local_settings_file(utils.lsp_file) then
       local old = lsp_update_config.exist_local_settings()
-      lsp_update_config.reload_local_settings()
+      if not lsp_update_config.reload_local_settings() then
+        return
+      end
       local new = lsp_update_config.exist_local_settings()
 
       local tools = utils.find_diff_tool(old, new)
