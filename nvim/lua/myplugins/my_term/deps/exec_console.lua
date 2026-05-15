@@ -235,6 +235,10 @@ function M.console_exec(cmd, term, term_bufnr, term_win_id)
     end,
   })
 
+  if job_id <= 0 then
+    error("jobstart failed: " .. vim.inspect(cmd))
+  end
+
   --- print cmd, job info
   --- vim.fn.jobstart() 是异步函数, 所以 print_job_info() 会在 on_stdout, on_stderr 之前执行.
   print_job_info(cmd, term_bufnr, job_id)

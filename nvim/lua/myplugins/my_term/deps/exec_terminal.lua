@@ -27,7 +27,7 @@ function M.terminal_exec(cmd, term, term_bufnr, term_win_id)
   --- Otherwise a temporary scratch window (called the "autocmd window" for
   --- historical reasons) will be used.
   return vim.api.nvim_buf_call(term_bufnr, function()
-    return vim.fn.jobstart(cmd, {
+    local job_id = vim.fn.jobstart(cmd, {
       term = true,  -- VVI: 将 output 结果输出到 bufnr
       cwd = term:cwd(),
       env = term:env(),
@@ -90,6 +90,12 @@ function M.terminal_exec(cmd, term, term_bufnr, term_win_id)
         end
       end,
     })
+
+    if job_id <= 0 then
+      error("jobstart failed: " .. vim.inspect(cmd))
+    end
+
+    return job_id
   end)
 end
 
