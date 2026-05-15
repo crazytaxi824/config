@@ -33,8 +33,8 @@ function M.goto(idx)
 end
 
 
---- @param move 'next'|'prev'
-function M.cycle(move)
+--- @param direction 'next'|'prev'
+function M.cycle(direction)
   local curr_win = vim.api.nvim_get_current_win()
   local curr_buf = vim.api.nvim_win_get_buf(curr_win)
 
@@ -49,14 +49,14 @@ function M.cycle(move)
     error("current buffer is not register to current window")
   end
 
-  if move == 'next' then
+  if direction == 'next' then
     local next = idx < #win_bufs and idx+1 or 1
     if vim.api.nvim_buf_is_valid(win_bufs[next]) then
       vim.api.nvim_win_set_buf(curr_win, win_bufs[next])
     else
       error('buffer is not valid')
     end
-  elseif move == 'prev' then
+  elseif direction == 'prev' then
     local prev = idx > 1 and idx-1 or #win_bufs
     if vim.api.nvim_buf_is_valid(win_bufs[prev]) then
       vim.api.nvim_win_set_buf(curr_win, win_bufs[prev])
@@ -64,7 +64,7 @@ function M.cycle(move)
       error('buffer is not valid')
     end
   else
-    error('move error: ' .. move)
+    error('move error: ' .. direction)
   end
 end
 
@@ -177,7 +177,7 @@ function M.delete_current_buf()
     --- '#' buffer 不在当前 window buffers list 中
     local idx = u.list_index_value(win_bufs, curr_buf)
     if not idx then
-      error("current buffer is not register to current  window")
+      error("current buffer is not register to current window")
     end
 
     if idx == 1 then
