@@ -44,11 +44,17 @@ local function wipeout_others(term_id)
     return
   end
 
+  --- @type MyTermPost[]
+  local tps = {}
   g.range_TermPost(function(term_post)
     if term_post.bufnr ~= tp.bufnr then
-      term_post:wipeout()
+      table.insert(tps, term_post)
     end
   end)
+
+  for _, _tp in ipairs(tps) do
+    _tp:wipeout()
+  end
 end
 
 

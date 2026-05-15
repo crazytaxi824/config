@@ -21,11 +21,15 @@ end
 
 --- jobstop(job_id) & :bwipeout all terminal buffers
 function M.wipeout_all()
+  --- @type MyTermPost[]
+  local tps = {}
   g.range_TermPost(function(term_post)
-    if vim.api.nvim_buf_is_valid(term_post.bufnr) then
-      term_post:wipeout()
-    end
+    table.insert(tps, term_post)
   end)
+
+  for _, _tp in ipairs(tps) do
+    _tp:wipeout()
+  end
 end
 
 --- close all first, then open all
