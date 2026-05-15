@@ -6,7 +6,7 @@ local schemas = {
       "tsconfig.json",
       "tsconfig.*.json",
     },
-    url = "https://www.schemastore.org/tsconfig.json",
+    url = "https://json.schemastore.org/tsconfig.json",
   },
   {
     description = "JavaScript configuration file",
