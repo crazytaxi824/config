@@ -178,7 +178,7 @@ local plugins = {
     --- for placeholder transformation
     --- https://code.visualstudio.com/docs/editor/userdefinedsnippets#_variable-transforms
     build = "make install_jsregexp",
-    config = function() require("plugins.settings.luasnip_snippest") end,
+    config = function() require("plugins.settings.luasnip_snippets") end,
     dependencies = {"rafamadriz/friendly-snippets"},  -- snippets content
 
     lazy = true,  -- cmp_luasnip 加载时自动加载.
