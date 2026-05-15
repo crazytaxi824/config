@@ -73,8 +73,8 @@ local linter_gid = vim.api.nvim_create_augroup("my_reload_local_linter_settings"
 vim.api.nvim_create_autocmd({'BufWritePost'}, {
   group = linter_gid,
   pattern = { "**/" .. utils.linter_file },
-  callback = function(params)
-    if vim.fs.abspath(params.file) == utils.find_local_settings_file(utils.linter_file) then
+  callback = function(args)
+    if vim.fs.abspath(args.file) == utils.find_local_settings_file(utils.linter_file) then
       local old = null_sources.exist_local_settings()
       null_sources.reload_local_settings()
       local new = null_sources.exist_local_settings()

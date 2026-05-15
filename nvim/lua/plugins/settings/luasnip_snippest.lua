@@ -54,7 +54,7 @@ vim.api.nvim_create_autocmd("ModeChanged", {
   group = unlink_group,
   --pattern = {'s:n', 'i:*'},  -- NOTE: 如果从 'Select' -> 'Normal', 或者 'Insert' -> 'any' mode.
   pattern = {'*:n'},  -- any -> Normal mode
-  callback = function(params) leave_snippet(params.buf) end,
+  callback = function(args) leave_snippet(args.buf) end,
   desc = "HACK: unlink current snippet's session, exit current snippet jumplist",
 })
 

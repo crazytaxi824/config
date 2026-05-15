@@ -107,7 +107,7 @@ local function autocmd_jobstop(term_bufnr, job_id)
   vim.api.nvim_create_autocmd("BufWipeout", {
     group = group_id,
     buffer = term_bufnr,
-    callback = function(params)
+    callback = function(args)
       vim.fn.jobstop(job_id)
       vim.api.nvim_del_augroup_by_id(group_id)
     end,

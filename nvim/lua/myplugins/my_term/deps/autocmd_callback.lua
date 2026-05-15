@@ -14,15 +14,15 @@ function M.autocmd_callback(term, term_bufnr)
   vim.api.nvim_create_autocmd({"BufWinEnter", "BufWinLeave"}, {
     group = g_id,
     buffer = term_bufnr,
-    callback = function(params)
-      if params.event == "BufWinEnter" then
+    callback = function(args)
+      if args.event == "BufWinEnter" then
         local callbacks = term:on_open()
         if callbacks then
           for _, on_open in ipairs(callbacks) do
             on_open(term, term_bufnr)
           end
         end
-      elseif params.event == "BufWinLeave" then
+      elseif args.event == "BufWinLeave" then
         local callbacks = term:on_close()
         if callbacks then
           for _, on_close in ipairs(callbacks) do
@@ -38,10 +38,10 @@ function M.autocmd_callback(term, term_bufnr)
   vim.api.nvim_create_autocmd("WinClosed", {
     group = g_id,
     buffer = term_bufnr,
-    callback = function(params)
+    callback = function(args)
       --- persist window height
       --- NOTE: 在 WinClosed event 中, params.file & params.match 都是 win_id, 数据类型是 string.
-      local win_id = tonumber(params.match)
+      local win_id = tonumber(args.match)
       if win_id then
         g.win_height = vim.api.nvim_win_get_height(win_id)
       end
@@ -53,7 +53,7 @@ function M.autocmd_callback(term, term_bufnr)
   vim.api.nvim_create_autocmd("BufWipeout", {
     group = g_id,
     buffer = term_bufnr,
-    callback = function(params)
+    callback = function(args)
       vim.api.nvim_del_augroup_by_id(g_id)
     end,
     desc = "my_term: delete augroup by id",
@@ -70,7 +70,7 @@ function M.autocmd_jobstop(term, term_bufnr, job_id)
   vim.api.nvim_create_autocmd("BufWipeout", {
     group = g_id,
     buffer = term_bufnr,
-    callback = function(params)
+    callback = function(args)
       --- stop job in console_exec()
       vim.fn.jobstop(job_id)
 

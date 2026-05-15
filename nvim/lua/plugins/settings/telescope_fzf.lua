@@ -235,7 +235,7 @@ telescope.load_extension("ui-select")
 --- `:set wrap` for preview window --------------------------------------------- {{{
 vim.api.nvim_create_autocmd("User", {
   pattern = "TelescopePreviewerLoaded",
-  callback = function(params)
+  callback = function(args)
     --- NOTE: preview window 不会改变, 但是 preview bufnr 会改变,
     --- 在 cursor 指向不同 result item 的时候, preview bufnr 会改变.
     local preview_winid = vim.api.nvim_get_current_win()

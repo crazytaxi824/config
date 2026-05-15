@@ -46,10 +46,10 @@ end
 vim.api.nvim_create_autocmd("FileType", {
   group = vim.api.nvim_create_augroup("my_fold_ts", { clear = true }),
   pattern = "*",
-  callback = function(params)
-    for _, win_id in ipairs(vim.fn.win_findbuf(params.buf)) do
+  callback = function(args)
+    for _, win_id in ipairs(vim.fn.win_findbuf(args.buf)) do
       if is_fold_unset(win_id) then
-        apply_fold(expr_ts.set_fold, params.buf, win_id)
+        apply_fold(expr_ts.set_fold, args.buf, win_id)
       end
     end
   end,
@@ -61,15 +61,15 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("my_fold_lsp", { clear = true }),
   pattern = "*",
-  callback = function(params)
-    local client = vim.lsp.get_client_by_id(params.data.client_id)
-    if not client or not client:supports_method(ms.textDocument_foldingRange, params.buf) then
+  callback = function(args)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if not client or not client:supports_method(ms.textDocument_foldingRange, args.buf) then
       return
     end
 
-    for _, win_id in ipairs(vim.fn.win_findbuf(params.buf)) do
+    for _, win_id in ipairs(vim.fn.win_findbuf(args.buf)) do
       if is_fold_unset(win_id) then
-        apply_fold(expr_ts.set_fold, params.buf, win_id)
+        apply_fold(expr_ts.set_fold, args.buf, win_id)
       end
     end
   end,

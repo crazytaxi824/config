@@ -30,14 +30,14 @@ end)
 --- prompt before install missing parser for languages ---------------------------------------------
 vim.api.nvim_create_autocmd("FileType", {
   pattern = {"*"},
-  callback = function(params)
-    local lang = vim.treesitter.language.get_lang(params.match)
+  callback = function(args)
+    local lang = vim.treesitter.language.get_lang(args.match)
     if not lang then
       return
     end
 
     --- buffer 已经有 parser 了
-    local parser = vim.treesitter.get_parser(params.buf)
+    local parser = vim.treesitter.get_parser(args.buf)
     if parser and parser:lang() == lang then
       vim.treesitter.start()  -- NOTE: enable Highlight
       return

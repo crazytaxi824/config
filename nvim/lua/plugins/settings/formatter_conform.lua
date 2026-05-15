@@ -75,15 +75,15 @@ local function auto_format()
   vim.api.nvim_create_autocmd("BufWritePre", {
     group = g_id,
     pattern = {"*"},
-    callback = function(params)
+    callback = function(args)
       --- NOTE: 以下文件类型不执行 auto format, 需要手动执行 :Format 命令
       local exclude_auto_format_filtypes = { "markdown", "yaml", "lua", "toml" }
-      if vim.tbl_contains(exclude_auto_format_filtypes, vim.bo[params.buf].filetype) then
+      if vim.tbl_contains(exclude_auto_format_filtypes, vim.bo[args.buf].filetype) then
         return
       end
 
       conform.format({
-        bufnr = params.buf,
+        bufnr = args.buf,
         timeout_ms = 3000,
         lsp_format = "fallback", --- VVI: try fallback to lsp format if no formatter.
       })

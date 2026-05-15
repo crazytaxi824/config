@@ -19,15 +19,15 @@ vim.lsp.enable(vim.tbl_keys(lsp_servers_map))
 --- `set filetype=xxx` 时 detach previous LSP.
 vim.api.nvim_create_autocmd("FileType", {
   pattern = {"*"},
-  callback = function(params)
-    local lsp_clients = vim.lsp.get_clients({ bufnr = params.buf })
+  callback = function(args)
+    local lsp_clients = vim.lsp.get_clients({ bufnr = args.buf })
     for _, c in ipairs(lsp_clients) do
       --- `set filetype` 后, detach 所有不匹配该 buffer 新 filetype 的 lsp client.
       --- NOTE: 排除 null-ls
       if c.name ~= 'null-ls'
-        and not vim.tbl_contains(c.config['filetypes'], vim.bo[params.buf].filetype)
+        and not vim.tbl_contains(c.config['filetypes'], vim.bo[args.buf].filetype)
       then
-        vim.lsp.buf_detach_client(params.buf, c.id)
+        vim.lsp.buf_detach_client(args.buf, c.id)
       end
     end
   end,
@@ -39,8 +39,8 @@ local lsp_gid = vim.api.nvim_create_augroup("my_reload_local_lsp_settings", {cle
 vim.api.nvim_create_autocmd({'BufWritePost'}, {
   group = lsp_gid,
   pattern = { "**/" .. utils.lsp_file },
-  callback = function(params)
-    if vim.fs.abspath(params.file) == utils.find_local_settings_file(utils.lsp_file) then
+  callback = function(args)
+    if vim.fs.abspath(args.file) == utils.find_local_settings_file(utils.lsp_file) then
       local old = lsp_update_config.exist_local_settings()
       lsp_update_config.reload_local_settings()
       local new = lsp_update_config.exist_local_settings()

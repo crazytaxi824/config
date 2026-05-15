@@ -4,7 +4,7 @@
 --- jobstart(cmd, { term = true }) 时触发
 vim.api.nvim_create_autocmd('TermOpen', {
   pattern = {"*"},
-  callback = function(params)
+  callback = function(args)
     local win_id = vim.api.nvim_get_current_win()
     local scope={ scope='local', win=win_id }
 

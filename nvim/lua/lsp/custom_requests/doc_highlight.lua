@@ -103,7 +103,7 @@ M.setup = function (client, bufnr)
   vim.api.nvim_create_autocmd({"CursorHold", "CursorHoldI"}, {
     group = group_id,
     buffer = bufnr,  -- 对指定 buffer 有效
-    callback = function(params)
+    callback = function(args)
       if last_results.bufnr and last_results.bufnr == bufnr
         and last_results.refs and #last_results.refs > 0
         and cursor_inside_range(last_results.refs)
@@ -124,7 +124,7 @@ M.setup = function (client, bufnr)
   vim.api.nvim_create_autocmd({'CursorMovedI', 'CursorMoved'}, {
     group = group_id,
     buffer = bufnr,  -- 对指定 buffer 有效
-    callback = function(params)
+    callback = function(args)
       if last_results.bufnr and last_results.bufnr == bufnr
         and last_results.refs and #last_results.refs > 0
         and not cursor_inside_range(last_results.refs)
@@ -139,7 +139,7 @@ M.setup = function (client, bufnr)
   vim.api.nvim_create_autocmd({'WinLeave'}, {
     group = group_id,
     buffer = bufnr,  -- 对指定 buffer 有效
-    callback = function(params)
+    callback = function(args)
       last_results = {}
       vim.lsp.util.buf_clear_references(bufnr)
     end,
@@ -151,7 +151,7 @@ M.setup = function (client, bufnr)
   vim.api.nvim_create_autocmd({'LspDetach', 'BufDelete', 'BufWipeout'}, {
     group = group_id,
     buffer = bufnr,  -- 对指定 buffer 有效
-    callback = function(params)
+    callback = function(args)
       last_results = {}
       vim.lsp.util.buf_clear_references(bufnr)
       vim.api.nvim_del_augroup_by_id(group_id)

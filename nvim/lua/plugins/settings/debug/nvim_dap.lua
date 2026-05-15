@@ -287,8 +287,8 @@ end
 local fp = require("utils.filepath")
 vim.api.nvim_create_autocmd("FileType", {
   pattern = { "dap-repl" },
-  callback = function(params)
-    fp.setup(params.buf)
+  callback = function(args)
+    fp.setup(args.buf)
   end,
   desc = "dap: keymap for jump_to_file",
 })

@@ -141,13 +141,13 @@ local function debug_autocmd(e)
   vim.api.nvim_create_autocmd(events, {
     group = augroup_id,
     pattern = {"*"},
-    callback = function(params)
+    callback = function(args)
       local curr = {
         curr_win = vim.api.nvim_get_current_win(),
         curr_buf = vim.api.nvim_get_current_buf(),
       }
-      print(vim.json.encode(curr), vim.json.encode(params))
-      if params.event == "VimLeave" then
+      print(vim.json.encode(curr), vim.json.encode(args))
+      if args.event == "VimLeave" then
         vim.fn.getchar()  -- pause neovim before VimLeave
       end
     end,

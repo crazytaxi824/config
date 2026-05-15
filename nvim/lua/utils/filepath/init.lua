@@ -16,7 +16,7 @@ M.setup = function(bufnr)
   vim.api.nvim_create_autocmd({"CursorHold"}, {
     group = g_id,
     buffer = bufnr,
-    callback = function(params)
+    callback = function(args)
       fp_hl.highlight_filepath()
     end,
     desc = "highlight filepath under cursor",
@@ -26,7 +26,7 @@ M.setup = function(bufnr)
   vim.api.nvim_create_autocmd({"BufLeave"}, {
     group = g_id,
     buffer = bufnr,
-    callback = function(params)
+    callback = function(args)
       fp_hl.highlight_clear_cache()
     end,
     desc = "clear highlight when cursor leave buffer",
