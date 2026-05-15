@@ -98,10 +98,10 @@ function M.delete_buffers(opt)
     end
   elseif opt == 'right' then
     for i, bufnr in ipairs(win_bufs) do
-      if i <= idx and not vim.bo[bufnr].modified then
-        table.insert(new_win_bufs, bufnr)
-      else
+      if i > idx and not vim.bo[bufnr].modified then
         table.insert(delete_bufs, bufnr)
+      else
+        table.insert(new_win_bufs, bufnr)
       end
     end
   elseif opt == 'others' then
