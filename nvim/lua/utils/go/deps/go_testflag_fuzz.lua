@@ -33,15 +33,20 @@ local M = {
     fuzz1000x = { desc = 'fuzztime 1000x (times)', term_opts = gen_term_opts('1000x') },
 
     fuzz_input = {
-      desc = 'Input fuzztime: 15s|20m|1h20m30s (duration) | 1000x (times)',
+      desc = 'Input fuzztime: 1h20m30s (duration) | 1000x (times)',
 
       term_opts = function(opts)
-        local fuzz_time = '30s'  -- default value
-        vim.ui.input({prompt = 'Input -fuzztime: '}, function(input)
+        local fuzz_time  -- default value
+        vim.ui.input({prompt = 'Input -fuzztime (1h20m30s|1000x): '}, function(input)
           if input then
             fuzz_time = input
           end
         end)
+
+        --- input 如果取消, 则不继续运行 go_test(cmd, term_opts)
+        if not fuzz_time then
+          return nil, {}
+        end
 
         local cmd = vim.iter({go_test, '-fuzztime', fuzz_time, utils.mode_flags(opts)}):flatten():totable()
         return cmd, {

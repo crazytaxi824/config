@@ -6,7 +6,8 @@
 --- @field desc string
 ---
 --- 根据 GoTestOpts 生成 MyTermOpts 用于执行
---- @field term_opts fun(opts: GoTestOpts): string|string[], MyTermOpts
+--- 如果 cmd = nil 则不运行
+--- @field term_opts fun(opts: GoTestOpts): string|string[]|nil, MyTermOpts
 
 
 
