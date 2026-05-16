@@ -1,24 +1,24 @@
 vim9script
 
 hi clear TabLineFill
-hi TabLineSel ctermfg=78 ctermbg=233
+hi TabLineSel ctermfg=78 ctermbg=233 guifg=#DCDCAA guibg=#121212
 hi clear TabLine
-hi TabLine ctermfg=246 ctermbg=236
+hi TabLine ctermfg=246 ctermbg=236 guifg=#949494 guibg=#303030
 
 # 自定义 highlight
-hi Selected cterm=bold ctermbg=233 ctermfg=78
-hi SelectedReadOnly cterm=bold ctermbg=233 ctermfg=208
-hi SelectedModified cterm=bold ctermbg=233 ctermfg=81
-hi SelectedReadOnlyModified cterm=bold ctermbg=233 ctermfg=167
+hi Selected cterm=bold ctermbg=233 ctermfg=78 guibg=#121212 guifg=#DCDCAA gui=bold
+hi SelectedReadOnly cterm=bold ctermbg=233 ctermfg=208 guibg=#121212 guifg=#FF8700 gui=bold
+hi SelectedModified cterm=bold ctermbg=233 ctermfg=81 guibg=#121212 guifg=#00D7FF gui=bold
+hi SelectedReadOnlyModified cterm=bold ctermbg=233 ctermfg=167 guibg=#121212 guifg=#D75F5F gui=bold
 
-hi NotSelected ctermbg=236 ctermfg=246
-hi NotSelectedReadOnly ctermbg=236 ctermfg=246
-hi NotSelectedModified ctermbg=236 ctermfg=81
-hi NotSelectedReadOnlyModified cterm=bold ctermbg=167 ctermfg=233
+hi NotSelected ctermbg=236 ctermfg=246 guibg=#303030 guifg=#949494
+hi NotSelectedReadOnly ctermbg=236 ctermfg=246 guibg=#303030 guifg=#949494
+hi NotSelectedModified ctermbg=236 ctermfg=81 guibg=#303030 guifg=#00D7FF
+hi NotSelectedReadOnlyModified cterm=bold ctermbg=167 ctermfg=233 guibg=#D75F5F guifg=#121212 gui=bold
 
-hi myCurrentTab ctermfg=233 ctermbg=220
-hi myOtherTab ctermfg=220
-hi mySeparator ctermfg=246
+hi myCurrentTab ctermfg=233 ctermbg=220 guifg=#121212 guibg=#FFD700
+hi myOtherTab ctermfg=220 guifg=#FFD700
+hi mySeparator ctermfg=246 guifg=#949494
 
 var cached_list_buffer: list<number> = []
 def g:MyTabLine(): string
