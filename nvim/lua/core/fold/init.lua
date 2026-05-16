@@ -11,8 +11,7 @@ end
 
 --- 检查当前 window 是否正在使用 treesitter fold
 local function is_ts_fold(win_id)
-  return vim.wo[win_id].foldmethod == "expr"
-    and vim.wo[win_id].foldexpr == expr_ts.foldexpr_str
+  return vim.wo[win_id].foldmethod == "expr" and vim.wo[win_id].foldexpr == expr_ts.foldexpr_str
 end
 
 --- 在 buffer/window 上应用 fold 并重置 foldlevel
@@ -68,8 +67,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end
 
     for _, win_id in ipairs(vim.fn.win_findbuf(args.buf)) do
-      if is_fold_unset(win_id) then
-        apply_fold(expr_ts.set_fold, args.buf, win_id)
+      if is_fold_unset(win_id) or is_ts_fold(win_id) then
+        apply_fold(expr_lsp.set_fold, args.buf, win_id)
       end
     end
   end,
