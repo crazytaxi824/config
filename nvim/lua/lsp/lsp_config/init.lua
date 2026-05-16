@@ -34,7 +34,7 @@ vim.api.nvim_create_autocmd("FileType", {
   desc = "LSP: detach previous LSP when `set filetype=xxx`",
 })
 
---- reload local settings when ".nvim/lsp.json" changed
+--- restart lsp when ".nvim/lsp.json" changes
 local lsp_gid = vim.api.nvim_create_augroup("my_reload_local_lsp_settings", {clear=true})
 vim.api.nvim_create_autocmd({'BufWritePost'}, {
   group = lsp_gid,

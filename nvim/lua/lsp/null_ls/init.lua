@@ -68,7 +68,7 @@ null_ls.setup({
   -- end,
 })
 
---- reload local settings when ".nvim/linter.json" changed
+--- restart null-ls when ".nvim/linter.json" changes
 local linter_gid = vim.api.nvim_create_augroup("my_reload_local_linter_settings", {clear=true})
 vim.api.nvim_create_autocmd({'BufWritePost'}, {
   group = linter_gid,
