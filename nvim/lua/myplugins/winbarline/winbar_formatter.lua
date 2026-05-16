@@ -156,6 +156,10 @@ local function reduce_items_to_display(fmt_items, win_width, active_buf_idx, min
     end
   end
 
+  if not p_item_idx then
+    error("winbarline: window width is enough, should not need to use reduce_items_to_display()")
+  end
+
   --- 追加左右 '<', '>' 显示
   local remain_width = win_width - comp_width
   if p_item_idx < active_buf_idx then
