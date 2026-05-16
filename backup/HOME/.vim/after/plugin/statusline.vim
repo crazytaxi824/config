@@ -1,30 +1,30 @@
 vim9script
 
 # statusline 底部显示 mode() 和文件信息
-hi StatusLine ctermbg=233 ctermfg=233
-hi StatusLineNC ctermbg=233 ctermfg=233
-hi StatusLineTerm ctermbg=233 ctermfg=233
-hi StatusLineTermNC ctermbg=233 ctermfg=233
+hi StatusLine ctermbg=233 ctermfg=233 guifg=#121212 guibg=#121212
+hi StatusLineNC ctermbg=233 ctermfg=233 guifg=#121212 guibg=#121212
+hi StatusLineTerm ctermbg=233 ctermfg=233 guifg=#121212 guibg=#121212
+hi StatusLineTermNC ctermbg=233 ctermfg=233 guifg=#121212 guibg=#121212
 
 # 自定义 highlight
-hi myInsertMode ctermbg=81  ctermfg=233 cterm=bold
-hi myNormalMode ctermbg=220 ctermfg=233 cterm=bold
-hi myReplaceMode ctermbg=124 ctermfg=251 cterm=bold
-hi myVisualMode ctermbg=208 ctermfg=233 cterm=bold
-hi myCommandMode ctermbg=65 ctermfg=233 cterm=bold
-hi myNormalCommandB ctermbg=235 ctermfg=251
-hi myNormalCommandC ctermbg=233 ctermfg=78
-hi myInsertReplaceB ctermbg=20 ctermfg=251
-hi myInsertReplaceC ctermbg=17 ctermfg=78
-hi myVisualB ctermbg=202 ctermfg=233
-hi myVisualC ctermbg=52 ctermfg=78
-hi myInactive ctermbg=233 ctermfg=245
+hi myInsertMode ctermbg=81  ctermfg=233 cterm=bold guibg=#00D7FF guifg=#121212 gui=bold
+hi myNormalMode ctermbg=220 ctermfg=233 cterm=bold guibg=#FFD700 guifg=#121212 gui=bold
+hi myReplaceMode ctermbg=124 ctermfg=251 cterm=bold guibg=#AF0000 guifg=#C6C6C6 gui=bold
+hi myVisualMode ctermbg=208 ctermfg=233 cterm=bold guibg=#FF8700 guifg=#121212 gui=bold
+hi myCommandMode ctermbg=65 ctermfg=233 cterm=bold guibg=#00AF5F guifg=#121212 gui=bold
+hi myNormalCommandB ctermbg=235 ctermfg=251 guibg=#262626 guifg=#C6C6C6
+hi myNormalCommandC ctermbg=233 ctermfg=78 guibg=#121212 guifg=#DCDCAA
+hi myInsertReplaceB ctermbg=20 ctermfg=251 guibg=#0000D7 guifg=#C6C6C6
+hi myInsertReplaceC ctermbg=17 ctermfg=78 guibg=#00005F guifg=#DCDCAA
+hi myVisualB ctermbg=202 ctermfg=233 guibg=#FF5F00 guifg=#121212
+hi myVisualC ctermbg=52 ctermfg=78 guibg=#5F0000 guifg=#DCDCAA
+hi myInactive ctermbg=233 ctermfg=245 guibg=#121212 guifg=#8A8A8A
 
 # for mix indentation & trailing whitespace warning message
-hi myNormalMTC ctermbg=233 ctermfg=208 cterm=bold
-hi myInsertMTC ctermbg=17  ctermfg=208 cterm=bold
-hi myVisualMTC ctermbg=52  ctermfg=208 cterm=bold
-hi myInactiveMTC ctermbg=233 ctermfg=208 cterm=bold
+hi myNormalMTC ctermbg=233 ctermfg=208 cterm=bold guibg=#121212 guifg=#FF8700 gui=bold
+hi myInsertMTC ctermbg=17  ctermfg=208 cterm=bold guibg=#00005F guifg=#FF8700 gui=bold
+hi myVisualMTC ctermbg=52  ctermfg=208 cterm=bold guibg=#5F0000 guifg=#FF8700 gui=bold
+hi myInactiveMTC ctermbg=233 ctermfg=208 cterm=bold guibg=#121212 guifg=#FF8700 gui=bold
 
 # `:help mode()`
 const m = {
