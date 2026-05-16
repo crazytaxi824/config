@@ -227,7 +227,10 @@ lualine.setup {
       {
         trailing_whitespace_mixed_indent,
         color = {fg=lualine_colors.blue, gui='bold'},
-        cond = function() return vim.bo.filetype~='' and vim.bo.buftype=='' end,  -- normal buffer with a filetype
+        cond = function()
+          -- normal buffer with a filetype
+          return vim.bo.filetype ~= '' and vim.bo.buftype == '' and vim.api.nvim_buf_line_count(0) < 5000
+        end,
       },
     },
     lualine_x = {
