@@ -45,7 +45,7 @@ end
 ---
 --- @param bufnrs integer[]
 --- @return string[][] fp_list
-local function uniqie_bufnames(bufnrs)
+local function unique_bufnames(bufnrs)
   local bufnames = {}  ---@type string[]
   for _, bufnr in ipairs(bufnrs) do
     table.insert(bufnames, bufname_mod(bufnr))
@@ -261,7 +261,7 @@ function WinbarFormatter.winbar_format(win_id)
   end
 
   local bufnrs = w:list_bufs()
-  local uni_bufnames = uniqie_bufnames(bufnrs)
+  local uni_bufnames = unique_bufnames(bufnrs)
 
   --- @type WinbarFormatterItem[]
   local fmt_items = {}
