@@ -1,6 +1,6 @@
 # --- [ system ] -----------------------------------------------------------------------------------
 ### ls
-alias ls='ls -FG'
+alias ls='ls -G'
 alias la='ls -a'
 alias ll='ls -l'
 
@@ -24,6 +24,9 @@ alias diff='delta --dark --line-numbers --side-by-side --syntax-theme=none --lin
 ### homebrew
 # check brew dep
 alias check_brew_dep='brew uses --recursive --installed -- '
+
+### podman
+alias pd='podman'
 
 ### wireshark
 # firefox chrome ssl key 文件保存位置, 用于 wireshark 解密 https tls 数据.
