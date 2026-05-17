@@ -192,7 +192,7 @@ function MyTerm:run(cmd)
   cb.autocmd_jobstop(self, term_bufnr, job_id)
 
   --- VVI(require module): 延迟 require() 防止循环引用
-  local tp = require('myplugins.my_term.myterm_post').from(self, term_bufnr, job_id)
+  tp = require('myplugins.my_term.myterm_post').from(self, term_bufnr, job_id)
   g.set_TermPost(tp.id, tp)  -- cache MyTermPost
 end
 
