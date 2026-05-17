@@ -59,7 +59,8 @@ brew "wget"     # http(s) 下载工具
 #brew "curl"    # http(s) 请求工具, mac 自带.
 
 # 虚拟机
-brew "lima"  # golang Linux virtual machine, deps on "qemu | vz", https://github.com/Code-Hex/vz
+brew "podman"
+#brew "lima"  # golang Linux virtual machine, deps on "qemu | vz", https://github.com/Code-Hex/vz
 #brew "qemu"  # apple silicon emulator and virtualizer
 #cask "utm"  # Apple Virtualization.framework for ARM64 operating systems & QEMU for others
 #cask "vmware-fusion"  # Hypervisor 工具
@@ -69,6 +70,7 @@ brew "lima"  # golang Linux virtual machine, deps on "qemu | vz", https://github
 #brew "ca-certificates"
 
 # 其他工具
+brew "dua-cli" # disk 分析工具
 brew "ffmpeg"
 brew "yt-dlp"  # fork youtube-dl
 #brew "wimlib"  # 解决 FAT32 不能保存大于 4GB ios 文件的问题. 解决 FAT32 启动盘的制作问题.
