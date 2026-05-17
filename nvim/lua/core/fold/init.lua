@@ -14,15 +14,14 @@ local function is_ts_fold(win_id)
   return vim.wo[win_id].foldmethod == "expr" and vim.wo[win_id].foldexpr == expr_ts.foldexpr_str
 end
 
---- 在 buffer/window 上应用 fold 并重置 foldlevel
+--- 在 buffer/window 上应用 fold 并重置 foldlevel. `:help 'foldlevel'`, `:help fold-foldlevel`
 ---
----@param set_fold_fn fun(bufnr: integer, win_id: integer)
+---@param set_fold_fn fun(bufnr: integer, win_id: integer): boolean|nil
 ---@param bufnr integer
 ---@param win_id integer
----@param reset_level boolean?
-local function apply_fold(set_fold_fn, bufnr, win_id, reset_level)
-  set_fold_fn(bufnr, win_id)
-  if reset_level then
+---@param foldall boolean?
+local function apply_fold(set_fold_fn, bufnr, win_id, foldall)
+  if set_fold_fn(bufnr, win_id) and foldall then
     vim.api.nvim_set_option_value("foldlevel", 0, { scope = "local", win = win_id })
   end
 end
