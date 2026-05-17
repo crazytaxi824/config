@@ -3,16 +3,15 @@ local wb_win = require("myplugins.winbarline.winbar_win")
 local wb_buf = require("myplugins.winbarline.winbar_buf")
 
 
---- get current window id, floating window is excluded
+--- normal window, not floating window
 ---
---- @return integer|nil curr_win_id
-local function get_current_normal_win()
-  local curr_win = vim.api.nvim_get_current_win()
-
+--- @param win_id integer
+--- @return boolean|nil
+local function is_normal_win(win_id)
   --- floating window 不显示 WinBarLine
-  local win_cfg = vim.api.nvim_win_get_config(curr_win)
+  local win_cfg = vim.api.nvim_win_get_config(win_id)
   if win_cfg.relative == '' then
-    return curr_win
+    return true
   end
 end
 
@@ -53,8 +52,8 @@ local gid = vim.api.nvim_create_augroup('my_winbarline', { clear = true })
 vim.api.nvim_create_autocmd({"BufWinEnter"}, {
   group = gid,
   callback = function(args)
-    local curr_win = get_current_normal_win()
-    if not curr_win then
+    local curr_win = vim.api.nvim_get_current_win()
+    if not is_normal_win(curr_win) then
       return
     end
 
@@ -64,23 +63,6 @@ vim.api.nvim_create_autocmd({"BufWinEnter"}, {
   desc = "winbarline: binding window and buffer"
 })
 
---- split window 中不会触发 BufWinEnter, 所以利用 CursorMoved 来解决.
-vim.api.nvim_create_autocmd({"CursorMoved"}, {
-  group = gid,
-  callback = function(args)
-    local curr_win = get_current_normal_win()
-    if not curr_win then
-      return
-    end
-
-    --- window 中一定会显示一个 buffer
-    if not g.get_win(curr_win) then
-      local w = binding_win_buf(curr_win, args.buf)
-      w:set_winbar()
-    end
-  end,
-  desc = "winbarline: solve split window cannot binding window and buffer"
-})
 
 --- buffer 所在的 windows 中清理 window-buffer list
 vim.api.nvim_create_autocmd({"BufDelete", "BufWipeout"}, {
@@ -171,22 +153,19 @@ vim.api.nvim_create_autocmd({
 vim.api.nvim_create_autocmd({"WinEnter"}, {
   group = gid,
   callback = function(args)
-    --- 修改 current window 的 winbar
-    local curr_win = get_current_normal_win()
-    if not curr_win then
-      return
+    --- refresh current window active buffer
+    local curr_win = vim.api.nvim_get_current_win()
+    if is_normal_win(curr_win) then
+      local cw = g.get_win(curr_win)
+      if cw then
+        cw:set_winbar()
+      end
     end
 
-    local cw = g.get_win(curr_win)
-    if cw then
-      cw:set_winbar()
-    end
-
-    --- 修改 preview window 的 winbar
-    local prev_winnr = vim.fn.winnr('#')
-    if prev_winnr > 0 then
-      local prev_win_id = vim.fn.win_getid(prev_winnr)
-      local pw = g.get_win(prev_win_id)
+    --- refresh previous window active buffer
+    local prev_win = vim.fn.win_getid(vim.fn.winnr('#'))
+    if prev_win > 0 and is_normal_win(prev_win) then
+      local pw = g.get_win(prev_win)
       if pw then
         pw:set_winbar()
       end
@@ -204,6 +183,12 @@ vim.api.nvim_create_autocmd({"WinResized"}, {
     for _, win_id in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
       local w = g.get_win(win_id)
       if w then
+        w:set_winbar()
+      elseif is_normal_win(win_id) then
+        --- NOTE: split window 中不会触发 BufWinEnter, 所以利用 WinResized 来解决
+        --- WinResized 在 BufWinEnter 之后触发
+        --- window 中一定会显示一个 buffer
+        w = binding_win_buf(win_id, vim.api.nvim_win_get_buf(win_id))
         w:set_winbar()
       end
     end
