@@ -16,6 +16,16 @@ local function ts_run(filename)
     return
   end
 
+  --- NOTE: 不使用 type(cmd) == string 的方法
+  -- vim.fn.jobstart({ "tsc", "-p", "./tsconfig.json" }, {
+  --   on_exit = function(_, exitcode)
+  --     if exitcode == 0 then
+  --       local t = require('myplugins.my_term').console()
+  --       t:stop()
+  --       t:run({ "node", vim.fs.joinpath('dist', filename..'.js') })
+  --     end
+  --   end
+  -- })
   local t = require('myplugins.my_term').console()
   t:stop()
   t:run("tsc -p ./tsconfig.json && node dist/" .. vim.fn.shellescape(filename .. '.js'))

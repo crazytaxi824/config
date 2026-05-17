@@ -48,11 +48,12 @@ end
 
 --- @return integer|nil job_status
 function MyTermPost:job_status()
+  --- VVI: jobwait({job_id}, 0) 如果没有 0 则会同步阻塞整个 neovim
   return vim.fn.jobwait({self.job_id}, 0)[1]
 end
 
 function MyTermPost:wipeout()
-  --- VVI: 保险起见先 jobstop() 再 wipeout buffer, 否则 job 可能还在继续执行.
+  --- NOTE: 保险起见先 jobstop() 再 wipeout buffer, 否则 job 可能还在继续执行.
   vim.fn.jobstop(self.job_id)
 
   --- require('myplugins.my_term.deps.autocmd_callback').autocmd_jobstop()
