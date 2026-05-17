@@ -277,6 +277,10 @@ function WinbarFormatter.winbar_format(win_id)
     table.insert(fmt_items, fmt_item)
   end
 
+  if not active_buf_idx then
+    error("active buffer: nvim_win_get_buf(win) is not in win_bufs list")
+  end
+
   --- no item display in window
   if vim.tbl_isempty(fmt_items) then
     --- win 被 global cache, 但是没有 buffer, 说明 buffer 被 bdelete/bwipeout 了
