@@ -18,7 +18,7 @@ local function ts_run(filename)
 
   local t = require('myplugins.my_term').console()
   t:stop()
-  t:run("tsc -p ./tsconfig.json && node dist/" .. filename .. '.js')
+  t:run("tsc -p ./tsconfig.json && node dist/" .. vim.fn.shellescape(filename .. '.js'))
 end
 
 --- jest js_file -----------------------------------------------------------------------------------
@@ -43,9 +43,9 @@ local function ts_jest(filename, coverage)
 
   local cmd = ''
   if coverage then
-    cmd = "tsc -p ./tsconfig.json && jest --coverage dist/" .. filename ..'.js'
+    cmd = "tsc -p ./tsconfig.json && jest --coverage dist/" .. vim.fn.shellescape(filename ..'.js')
   else
-    cmd = "tsc -p ./tsconfig.json && jest dist/" .. filename ..'.js'
+    cmd = "tsc -p ./tsconfig.json && jest dist/" .. vim.fn.shellescape(filename ..'.js')
   end
 
   local t = require('myplugins.my_term').console()

@@ -35,7 +35,7 @@ local function py_run(filepath)
 
   local t = require('myplugins.my_term').console()
   t:stop()
-  t:run(py_path .. " -- " .. filepath)
+  t:run({ py_path, "--", filepath })
 end
 
 --- key mapping ------------------------------------------------------------------------------------

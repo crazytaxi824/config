@@ -6,7 +6,7 @@
 local function js_run(filepath)
   local t = require('myplugins.my_term').console()
   t:stop()
-  t:run({ "node", filepath })
+  t:run({ "node", "--", filepath })
 end
 
 --- keymap -----------------------------------------------------------------------------------------

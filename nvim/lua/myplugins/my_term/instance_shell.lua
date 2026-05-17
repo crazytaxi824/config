@@ -22,8 +22,8 @@ local function python_env(term_id)
     error("MyTermPost is not cached after run()")
   end
 
-  -- vim.fn.chansend(job_id, 'source ' .. py_venv[1] .. ' && clear\n')
-  vim.api.nvim_chan_send(tp.job_id, 'source ' .. py_venv[1] .. ' && clear\n')
+  -- vim.fn.chansend(job_id, 'source ' .. vim.fn.shellescape(py_venv[1]) .. ' && clear\n')
+  vim.api.nvim_chan_send(tp.job_id, 'source ' .. vim.fn.shellescape(py_venv[1]) .. ' && clear\n')
 end
 
 

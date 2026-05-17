@@ -4,19 +4,19 @@ local function swift_run_file()
 
   local t = require('myplugins.my_term').console()
   t:stop()
-  t:run("swift -- " .. file)
+  t:run({ "swift", "--", file })
 end
 
 local function swift_run_proj()
   local t = require('myplugins.my_term').console()
   t:stop()
-  t:run("swift run")
+  t:run({ "swift", "run" })
 end
 
 local function swift_test_all()
   local t = require('myplugins.my_term').console()
   t:stop()
-  t:run("swift test")
+  t:run({ "swift", "test" })
 end
 
 local function swift_test_pkg()
@@ -42,7 +42,7 @@ local function swift_test_pkg()
 
   local t = require('myplugins.my_term').console()
   t:stop()
-  t:run("swift test --filter " .. test_class)
+  t:run({ "swift", "test", "--filter ", test_class })
 end
 
 --- key mapping ------------------------------------------------------------------------------------
