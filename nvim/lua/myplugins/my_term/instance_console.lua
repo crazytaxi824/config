@@ -7,7 +7,6 @@ local console_id = 1001
 
 --- @type MyTermOpts
 local default_opts = {
-  id = console_id,
   auto_scroll = true,
   console_output = true,  -- 这里使用 console_exec()
   after_run = function(_, term_bufnr)
