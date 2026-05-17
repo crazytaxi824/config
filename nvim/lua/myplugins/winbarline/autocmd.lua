@@ -3,32 +3,25 @@ local wb_win = require("myplugins.winbarline.winbar_win")
 local wb_buf = require("myplugins.winbarline.winbar_buf")
 
 
---- normal window, not floating window
----
+--- @param bufnr integer
 --- @param win_id integer
---- @return boolean|nil
-local function is_normal_win(win_id)
-  --- floating window 不显示 WinBarLine
-  local win_cfg = vim.api.nvim_win_get_config(win_id)
-  if win_cfg.relative == '' then
-    return true
-  end
-end
-
-
----@param bufnr integer
----@param win_id integer
----@return WinbarLineWindow
+--- @return WinbarLineWindow|nil
 local function binding_win_buf(win_id, bufnr)
   if not vim.api.nvim_buf_is_valid(bufnr) or not vim.api.nvim_win_is_valid(win_id) then
     error('win: ' .. win_id .. ', or bufnr: ' .. bufnr .. ' is not valid' )
+  end
+
+  --- floating window 不显示 WinBarLine
+  local win_cfg = vim.api.nvim_win_get_config(win_id)
+  if win_cfg.relative ~= '' then
+    return
   end
 
   local win = g.get_win(win_id)
   if win then
     win:append_buf(bufnr)
   else
-    win = wb_win.new(win_id, bufnr)
+    win = wb_win.new(win_id, bufnr, win_cfg.width)
     g.set_win(win)
   end
 
@@ -53,12 +46,10 @@ vim.api.nvim_create_autocmd({"BufWinEnter"}, {
   group = gid,
   callback = function(args)
     local curr_win = vim.api.nvim_get_current_win()
-    if not is_normal_win(curr_win) then
-      return
-    end
-
     local w = binding_win_buf(curr_win, args.buf)
-    w:set_winbar()
+    if w then
+      w:set_winbar()
+    end
   end,
   desc = "winbarline: binding window and buffer"
 })
@@ -155,20 +146,16 @@ vim.api.nvim_create_autocmd({"WinEnter"}, {
   callback = function(args)
     --- refresh current window active buffer
     local curr_win = vim.api.nvim_get_current_win()
-    if is_normal_win(curr_win) then
-      local cw = g.get_win(curr_win)
-      if cw then
-        cw:set_winbar()
-      end
+    local cw = g.get_win(curr_win)
+    if cw then
+      cw:set_winbar()
     end
 
     --- refresh previous window active buffer
     local prev_win = vim.fn.win_getid(vim.fn.winnr('#'))
-    if prev_win > 0 and is_normal_win(prev_win) then
-      local pw = g.get_win(prev_win)
-      if pw then
-        pw:set_winbar()
-      end
+    local pw = g.get_win(prev_win)
+    if pw then
+      pw:set_winbar()
     end
   end,
   desc = "winbarline: redraw selected buffer"
@@ -183,13 +170,18 @@ vim.api.nvim_create_autocmd({"WinResized"}, {
     for _, win_id in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
       local w = g.get_win(win_id)
       if w then
-        w:set_winbar()
-      elseif is_normal_win(win_id) then
+        local win_width = vim.api.nvim_win_get_width(win_id)
+        if w.width ~= win_width then
+          w:set_winbar(win_width)
+        end
+      else
         --- NOTE: split window 中不会触发 BufWinEnter, 所以利用 WinResized 来解决
         --- WinResized 在 BufWinEnter 之后触发
         --- window 中一定会显示一个 buffer
         w = binding_win_buf(win_id, vim.api.nvim_win_get_buf(win_id))
-        w:set_winbar()
+        if w then
+          w:set_winbar()
+        end
       end
     end
   end,

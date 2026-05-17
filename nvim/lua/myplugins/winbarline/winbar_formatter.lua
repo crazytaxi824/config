@@ -206,18 +206,13 @@ end
 
 
 --- @param fmt_items WinbarFormatterItem[]
---- @param win_id integer
+--- @param win_width integer
 --- @param active_buf_idx integer
 --- @param min_level WinbarFormatterLevel
 --- @return string winbar_str
-local function format_winbar_items(fmt_items, win_id, active_buf_idx, min_level)
+local function format_winbar_items(fmt_items, win_width, active_buf_idx, min_level)
   if vim.tbl_isempty(fmt_items) then
     error("fmt_items is empty")
-  end
-
-  local win_width = vim.api.nvim_win_get_config(win_id).width
-  if not win_width then
-    error("win_id: " .. win_id .. "do not have 'width'")
   end
 
   local tab_comp = tabpage_component()
@@ -290,7 +285,7 @@ function WinbarFormatter.winbar_format(win_id)
   end
 
   local min_level = 2
-  return format_winbar_items(fmt_items, win_id, active_buf_idx, min_level)
+  return format_winbar_items(fmt_items, w.width, active_buf_idx, min_level)
 end
 
 
