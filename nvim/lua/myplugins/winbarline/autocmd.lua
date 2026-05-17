@@ -114,10 +114,11 @@ vim.api.nvim_create_autocmd({"WinClosed"}, {
 --- 更新 winbar 显示 -------------------------------------------------------------------------------
 --- 根据 buffer 变动更新 winbar 显示
 --- 如果 buffer 被加入到多个 window 中, 则影响多个 window
---- 'ModeChanged' 可以影响 terminal
+--- BufModifiedSet, BufWritePost 更新 modified indicator 状态
+--- DiagnosticChanged 更新 diagnostic number & level 状态
+--- FileChangedShellPost 外部程序对文件进行了改动, 更新 modified indicator 状态
 vim.api.nvim_create_autocmd({
-  "BufModifiedSet", "ModeChanged",
-  "BufWritePost", "FileChangedShellPost", "DiagnosticChanged",
+  "BufModifiedSet", "BufWritePost", "FileChangedShellPost", "DiagnosticChanged",
 }, {
   group = gid,
   callback = function(args)
@@ -161,8 +162,8 @@ vim.api.nvim_create_autocmd({"WinEnter"}, {
   desc = "winbarline: redraw selected buffer"
 })
 
---- 根据 window 变动更新 winbar
 --- 'WinResized' 时需要更新所有正在显示的 (tab 中的) window, 因为 event 只会返回一个 window 的 id
+--- 'WinResized' 在 BufWinEnter 之后触发.
 --- NOTE: 在 'WinResized' 事件中获取 window width 是准确的, 但是在 'WinEnter' 事件中获取的 window width 不准确.
 vim.api.nvim_create_autocmd({"WinResized"}, {
   group = gid,
@@ -170,6 +171,7 @@ vim.api.nvim_create_autocmd({"WinResized"}, {
     for _, win_id in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
       local w = g.get_win(win_id)
       if w then
+        --- window width 改变了才更新 winbar
         local win_width = vim.api.nvim_win_get_width(win_id)
         if w.width ~= win_width then
           w:set_winbar(win_width)
