@@ -1,8 +1,8 @@
 # --- [ system ] -----------------------------------------------------------------------------------
 ### ls
-alias ls='ls -G'
-alias la='ls -aG'
-alias ll='ls -lFG'
+alias ls='ls -FG'
+alias la='ls -a'
+alias ll='ls -l'
 
 ### du dir/files size, `(N)` 如果没找到，就自动消失，不传给 du.
 alias lldu='du -shc ./*(N) ./.*(N)'
