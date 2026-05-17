@@ -69,6 +69,9 @@ end
 --- @param data string[]
 --- @param hl string  highlight name `vim.hl.range()`
 local function set_buf_line_output(bufnr, data, hl)
+  --- 检查 buffer 是否存在, 避免 on_stdout, on_stderr, on_exit 异步执行完成后, buffer 已被销毁
+  if not vim.api.nvim_buf_is_valid(bufnr) then return end
+
   --- skip { "" } empty data.
   if #data == 1 and data[#data] == '' then
     return
