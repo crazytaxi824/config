@@ -8,6 +8,9 @@ vim9script
 # - &l:option (:setlocal option - to buffer or window) 自动选择是 buffer-local, window-local
 #set term=xterm-256color
 
+# 设置 Vim 内部使用的字符编码
+set encoding=utf-8
+
 # VVI: highlight color, 加载顺序很重要.
 g:loaded_colorresp = 1  # 全局开关 (防止某些终端在初始化时重置颜色), eg: xterm-ghostty
 set termguicolors  # 使用 256-color (必须在 colorscheme 之前设置)
