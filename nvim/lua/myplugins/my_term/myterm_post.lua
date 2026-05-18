@@ -42,7 +42,9 @@ end
 
 function MyTermPost:close_win()
   for _, w in ipairs(vim.fn.win_findbuf(self.bufnr)) do
-    vim.api.nvim_win_close(w, true)
+    if vim.api.nvim_win_is_valid(w) then
+      vim.api.nvim_win_close(w, true)
+    end
   end
 end
 
