@@ -10,7 +10,7 @@ return {
     Notify(
       {"'pyproject.toml' NOT found"},
       "WARN",
-      {title={"LSP", "ruff.lua"}, timeout = false}
+      {title={"LSP", "pyright.lua"}, timeout = false}
     )
   end,
 
