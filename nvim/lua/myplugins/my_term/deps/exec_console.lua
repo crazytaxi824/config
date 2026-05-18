@@ -192,11 +192,6 @@ function M.console_exec(cmd, term, term_bufnr, term_win_id)
         for _, on_stdout in ipairs(callbacks) do
           on_stdout(term, term_bufnr, job_id, data)
         end
-
-        --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
-        if not vim.api.nvim_buf_is_valid(term_bufnr) then
-          error("should not delete terminal buffer")
-        end
       end
     end,
 
@@ -212,11 +207,6 @@ function M.console_exec(cmd, term, term_bufnr, term_win_id)
       if callbacks then
         for _, on_stderr in ipairs(callbacks) do
           on_stderr(term, term_bufnr, job_id, data)
-        end
-
-        --- 防止 term buffer 在执行过程中被 wipeout 造成的 error.
-        if not vim.api.nvim_buf_is_valid(term_bufnr) then
-          error("should not delete terminal buffer")
         end
       end
     end,
