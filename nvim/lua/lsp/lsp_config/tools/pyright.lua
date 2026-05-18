@@ -14,6 +14,7 @@ return {
     )
   end,
 
+  --- NOTE: 这里的设置和 pyproject.toml 中的 [tool.pyright] venvPath & venv 设置只要有一个成功 pyright 就可以正常工作
   --- 自动探测 python venv 环境
   on_init = function(client)
     local workspace = client.config.root_dir
