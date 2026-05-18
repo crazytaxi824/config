@@ -26,7 +26,7 @@ local diagnostics_opts = {
   --- VVI: 耗资源, 每次运行 linter 前都要运行该函数, 不要进行复杂运算.
   runtime_condition = function(params)
     --- DO NOT lint readonly files, readonly 包括了 'go env GOROOT GOMODCACHE'
-    if vim.bo.readonly then
+    if vim.bo[params.bufnr].readonly then
       return false  -- false 不执行 lint
     end
     return true
