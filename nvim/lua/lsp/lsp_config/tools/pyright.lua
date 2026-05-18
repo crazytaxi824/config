@@ -12,5 +12,29 @@ return {
       "WARN",
       {title={"LSP", "ruff.lua"}, timeout = false}
     )
-  end
+  end,
+
+  --- 自动探测 python venv 环境
+  on_init = function(client)
+    local workspace = client.config.root_dir
+    if workspace then
+      --- .venv 在项目根目录
+      local venv_python = vim.fs.joinpath(workspace, ".venv/bin/python3")
+      if vim.fn.executable(venv_python) == 1 then
+        client.config.settings.python.pythonPath = venv_python
+      end
+    else
+      --- 向上查找 .venv
+      local py_paths = vim.fs.find({'.venv/bin/python3'}, {
+        upward = true,
+        stop = vim.env.HOME,
+        type = "file",
+        limit = 1,
+      })
+      if #py_paths < 1 then
+        return
+      end
+      client.config.settings.python.pythonPath = py_paths[1]
+    end
+  end,
 }
