@@ -187,11 +187,11 @@ function MyTerm:run(cmd)
   --- 快捷键设置: 在获取到 term.bufnr 和 term.id 之后运行
   t_key.set_buf_keymaps(self, term_bufnr)
 
+  --- buffer 被 wipeout 的时候自动 jobstop()
+  cb.autocmd_jobstop(self.id, term_bufnr)
+
   --- VVI(jobstart): 执行 cmd
   local job_id = myterm_exec(cmd, self, term_bufnr, term_win_id)
-
-  --- buffer 被 wipeout 的时候自动 jobstop()
-  cb.autocmd_jobstop(self, term_bufnr, job_id)
 
   --- VVI(require module): 延迟 require() 防止循环引用
   tp = require('myplugins.my_term.myterm_post').from(self, term_bufnr, job_id)
