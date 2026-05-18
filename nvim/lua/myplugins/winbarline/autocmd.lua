@@ -162,9 +162,9 @@ vim.api.nvim_create_autocmd({"WinEnter"}, {
   desc = "winbarline: redraw selected buffer"
 })
 
---- 'WinResized' 时需要更新所有正在显示的 (tab 中的) window, 因为 event 只会返回一个 window 的 id
---- 'WinResized' 在 BufWinEnter 之后触发.
---- NOTE: 在 'WinResized' 事件中获取 window width 是准确的, 但是在 'WinEnter' 事件中获取的 window width 不准确.
+--- 'WinResized' 时需要更新所有正在显示的 (tab 中的) winbar
+--- NOTE: WinNew -> WinEnter -> BufEnter -> BufWinEnter -> WinResized
+--- 所以 WinResized 时获取的 buffer 和 win width 都是准确的, WinNew/WinEnter 时获取的是临时的.
 vim.api.nvim_create_autocmd({"WinResized"}, {
   group = gid,
   callback = function(args)
