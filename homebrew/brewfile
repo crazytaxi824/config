@@ -60,7 +60,7 @@ brew "wget"     # http(s) 下载工具
 
 # 虚拟机
 brew "podman"
-#brew "lima"  # golang Linux virtual machine, deps on "qemu | vz", https://github.com/Code-Hex/vz
+brew "lima"  # golang Linux virtual machine, deps on "qemu | vz", https://github.com/Code-Hex/vz
 #brew "qemu"  # apple silicon emulator and virtualizer
 #cask "utm"  # Apple Virtualization.framework for ARM64 operating systems & QEMU for others
 #cask "vmware-fusion"  # Hypervisor 工具
