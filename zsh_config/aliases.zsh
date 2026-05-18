@@ -25,9 +25,6 @@ alias diff='delta --dark --line-numbers --side-by-side --syntax-theme=none --lin
 # check brew dep
 alias check_brew_dep='brew uses --recursive --installed -- '
 
-### podman
-alias pd='podman'
-
 ### wireshark
 # firefox chrome ssl key 文件保存位置, 用于 wireshark 解密 https tls 数据.
 # wireshark `设置 -> Protocols -> TLS -> (Pre)-Master-Secret log filename` 中
