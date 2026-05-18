@@ -52,6 +52,7 @@ function M.autocmd_callback(term, term_bufnr)
   --- auto delete augroup
   vim.api.nvim_create_autocmd("BufWipeout", {
     group = g_id,
+    once = true,
     buffer = term_bufnr,
     callback = function(args)
       vim.api.nvim_del_augroup_by_id(g_id)
@@ -68,6 +69,7 @@ function M.autocmd_jobstop(term_id, term_bufnr)
   local g_id = vim.api.nvim_create_augroup('my_term_post_' .. term_id, {clear=true})
   vim.api.nvim_create_autocmd("BufWipeout", {
     group = g_id,
+    once = true,
     buffer = term_bufnr,
     callback = function(args)
       local tp = g.get_TermPost(term_id)

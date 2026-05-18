@@ -150,6 +150,7 @@ M.setup = function (client, bufnr)
   --- buffer 被 delete 时清除 references highlight, 同时删除整个 augroup
   vim.api.nvim_create_autocmd({'LspDetach', 'BufDelete', 'BufWipeout'}, {
     group = group_id,
+    once = true,
     buffer = bufnr,  -- 对指定 buffer 有效
     callback = function(args)
       last_results = {}
