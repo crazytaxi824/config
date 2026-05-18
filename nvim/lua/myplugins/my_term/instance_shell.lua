@@ -67,7 +67,7 @@ function M.open_shell_term()
     end,
   })
 
-  t:run(vim.go.shell)  -- `:help 'shell'`, 相当于 os.getenv('SHELL'), vim.env.SHELL
+  t:run({ vim.go.shell })  -- `:help 'shell'`, 相当于 os.getenv('SHELL'), vim.env.SHELL
 end
 
 return M
