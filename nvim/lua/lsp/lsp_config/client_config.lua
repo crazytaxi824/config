@@ -53,9 +53,8 @@ M.capabilities.textDocument.foldingRange = {
 --- on_init() run before on_attach(), 可以通过打印看出先后顺序.
 ---
 --- @param client vim.lsp.Client
---- @param result lsp.InitializeResult
 --- @return boolean
-M.on_init = function(client, result)
+M.on_init = function(client)
   -- if client.server_capabilities then
   --   --- semantic token: https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide
   --   --- `:help vim.lsp.semantic_tokens.start()`
