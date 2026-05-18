@@ -2,7 +2,7 @@
 ### ls
 alias ls='ls -G'
 alias la='ls -a'
-alias ll='ls -l'
+alias ll='ls -alF'
 
 ### du dir/files size, `(N)` 如果没找到，就自动消失，不传给 du.
 alias lldu='du -shc ./*(N) ./.*(N)'
