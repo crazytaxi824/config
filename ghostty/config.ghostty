@@ -44,7 +44,7 @@ font-feature = -dlig
 
 # 排版 ---------------------------------------------------------------------------------------------
 # 增加行高, 按百分比(N%) 或者(Npx), █
-adjust-cell-height = 18%
+adjust-cell-height = 6
 
 # 增加字符宽度
 # adjust-cell-width = 1
@@ -52,12 +52,16 @@ adjust-cell-height = 18%
 # 垂直调整文字在行间距中的位置
 # adjust-font-baseline
 
-# 下划线, 上划线, strike 在行间距中的位置
+# 上划线, pos > (adjust-cell-height + font-size)/2 - 2
 adjust-underline-position = 20%
 adjust-underline-thickness = 1
+
+# 上划线, pos < (adjust-cell-height + font-size)/2 - 2
+adjust-overline-position = -7
+adjust-overline-thickness = 2
+
 adjust-strikethrough-position = -25%
 adjust-strikethrough-thickness = 1
-# adjust-overline-position
 
 adjust-cursor-thickness = 1
 
