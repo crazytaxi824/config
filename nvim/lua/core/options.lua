@@ -301,7 +301,7 @@ vim.opt.mouse = 'a'  -- allow the mouse to be used in neovim, `:help mouse`
 --- cursor blink, `:hi TermCursor` is reverse
 vim.opt.guicursor = "n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20,a:blinkwait700-blinkoff400-blinkon250-TermCursor"
 
---- VVI: 使用 term gui
+--- 使用 true color, `echo &term` 查看当前 $TERM, neovim 中已经没有 vim 中的 `set term?` option 了
 vim.opt.termguicolors = true
 
 --- 快捷键延迟时间设置 -----------------------------------------------------------------------------
