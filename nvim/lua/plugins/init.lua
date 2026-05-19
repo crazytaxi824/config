@@ -222,7 +222,7 @@ local plugins = {
 
   {
     "stevearc/conform.nvim",
-    commit = "dca1a19",
+    commit = "18aeab3",
     config = function() require("plugins.settings.formatter_conform") end,
 
     event = "BufWritePre",
