@@ -97,11 +97,6 @@ provision:
     if [ -n "$LIMA_CONF" ]; then
       echo -e "[Resolve]\nMulticastDNS=no\nLLMNR=no" > "$LIMA_CONF"
     fi
-    # 禁止所有网卡 -mDNS
-    IFACES=$(ip route show default | awk '/default/ {print $5}')
-    for IFACE in $IFACES; do
-      resolvectl mdns "$IFACE" no
-    done
     # 重启服务
     systemctl restart systemd-resolved
 
