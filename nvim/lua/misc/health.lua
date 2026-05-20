@@ -55,7 +55,11 @@ local function check_mason_tools()
   end, mason_tools)
 
   for _, tool in ipairs(t) do
-    health.error(tool)
+    if vim.fn.executable(tool) then
+      health.warn(tool, {"is not installed by Mason"})
+    else
+      health.error(tool)
+    end
   end
 end
 
