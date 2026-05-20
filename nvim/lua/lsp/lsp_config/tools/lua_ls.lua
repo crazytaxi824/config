@@ -1,4 +1,5 @@
 -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#lua_ls
+
 return {
   on_init = function(client)
     if client.workspace_folders then

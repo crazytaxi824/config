@@ -25,16 +25,17 @@ M.list = {
     install = "go install golang.org/x/tools/gopls@latest",
   },
   --- pyrightconfig.json: https://github.com/microsoft/pyright/blob/main/docs/configuration.md
-  --- pyproject.toml: https://github.com/microsoft/pyright/blob/main/docs/configuration.md#sample-pyprojecttoml-file
+  --- pyproject.toml [tool.pyright] : https://github.com/microsoft/pyright/blob/main/docs/configuration.md#sample-pyprojecttoml-file
   -- pyright = {
   --   cmd = "pyright-langserver",
   --   mason = "pyright",
   -- },
+  --- pyproject.toml [tool.basedpyright]: https://docs.basedpyright.com/latest/configuration/config-files/
   basedpyright = {
     cmd = "basedpyright-langserver",
     mason = "basedpyright",
   },
-  --- pyproject.toml & ruff.toml: https://docs.astral.sh/ruff/tutorial/#configuration
+  --- pyproject.toml [tool.ruff] & ruff.toml: https://docs.astral.sh/ruff/tutorial/#configuration
   --- 'ruff' can be used to replace Flake8, Black, isort, pydocstyle, pyupgrade, autoflake ...
   ruff = {
     cmd = "ruff",

@@ -1,3 +1,5 @@
+-- https://code.visualstudio.com/docs/languages/html
+
 --- 具体设置可以看 :Mason 中 "html-lsp" 的设置.
 return {
   settings = {

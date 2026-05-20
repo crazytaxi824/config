@@ -1,3 +1,5 @@
+-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#basedpyright
+
 --- 修改 lspconfig 中默认 root_dir 设置
 return {
   root_dir = function(bufnr, on_dir)
