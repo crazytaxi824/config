@@ -8,9 +8,9 @@ local ns = vim.api.nvim_create_namespace('my_term_output')
 
 --- cache console output
 --- TODO: 需要保存内容, 如果 scratch buffer 被 :bdelete, 则内容会被清空.
---- table<bufnr: {hl, data}>
---- @type table<integer, { hl: string, data: string[] }>
-M.cache = {}
+--- table<bufnr: { event: string, data: string[] }>
+--- @type table<integer, ConsoleCache[]>
+local cache = {}
 
 --- highlight
 vim.api.nvim_set_hl(0, "my_output_sys", {ctermfg=Colors.orange.c, fg=Colors.orange.g})
@@ -78,13 +78,13 @@ local function set_buf_line_output(bufnr, data, hl)
   --- 检查 buffer 是否存在, 避免 on_stdout, on_stderr, on_exit 异步执行完成后, buffer 已被销毁
   if not vim.api.nvim_buf_is_valid(bufnr) then return end
 
+  --- cache 开始进行 highlight 的 lnum
+  local start_lnum = vim.api.nvim_buf_line_count(bufnr)
+
   --- skip { "" } empty data.
   if #data == 1 and data[#data] == '' then
     return
   end
-
-  --- cache 开始进行 highlight 的 lnum
-  local start_lnum = vim.api.nvim_buf_line_count(bufnr)
 
   --- VVI: 处理 EOF, data 最后会多一行 empty line.
   --- `:help channel-callback`, `:help channel-lines`, 中说明: EOF is a single-item list: `['']`.
