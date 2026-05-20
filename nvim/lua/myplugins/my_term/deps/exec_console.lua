@@ -6,6 +6,12 @@ local M = {}
 --- namespace
 local ns = vim.api.nvim_create_namespace('my_term_output')
 
+--- cache console output
+--- TODO: 需要保存内容, 如果 scratch buffer 被 :bdelete, 则内容会被清空.
+--- table<bufnr: {hl, data}>
+--- @type table<integer, { hl: string, data: string[] }>
+M.cache = {}
+
 --- highlight
 vim.api.nvim_set_hl(0, "my_output_sys", {ctermfg=Colors.orange.c, fg=Colors.orange.g})
 vim.api.nvim_set_hl(0, "my_output_sys_error", {
@@ -78,7 +84,7 @@ local function set_buf_line_output(bufnr, data, hl)
   end
 
   --- cache 开始进行 highlight 的 lnum
-  local hl_start_lnum = vim.api.nvim_buf_line_count(bufnr)
+  local start_lnum = vim.api.nvim_buf_line_count(bufnr)
 
   --- VVI: 处理 EOF, data 最后会多一行 empty line.
   --- `:help channel-callback`, `:help channel-lines`, 中说明: EOF is a single-item list: `['']`.
@@ -87,17 +93,18 @@ local function set_buf_line_output(bufnr, data, hl)
   end
 
   --- VVI: deal with NUL bytes, replace 所有的 '\n'.
-  --- print('\0', '\x00'), log.Println(string(byte(0))) 是 <null> bytes.
+  --- lua print('\0', '\x00', string.char(0)), log.Println(string(byte(0))) 是 <null> bytes.
   --- byte(0) 本应该是 '\null' 但是只显示了第一个字符变成了 '\n', 导致 nvim_buf_set_lines() 以为是换行符而报错.
   for i, d in ipairs(data) do
-    data[i] = string.gsub(d, '\n', '\0')  -- 打印为 ^@
+    data[i] = string.gsub(d, '\n', string.char(0))  -- 打印为 ^@
   end
 
   --- append output {data} to buffer
   buf_set_lines(bufnr, -1, -1, data)
 
   --- highlight lines
-  vim.hl.range(bufnr, ns, hl, {hl_start_lnum, 0}, {vim.api.nvim_buf_line_count(bufnr)-1, -1})
+  local end_lnum = vim.api.nvim_buf_line_count(bufnr) - 1
+  vim.hl.range(bufnr, ns, hl, {start_lnum, 0}, {end_lnum, -1})
 end
 
 --- job done 后处理: 在最后一行显示 [Process exited 'exit_code']
@@ -110,16 +117,16 @@ local function set_buf_line_exit(bufnr, job_id, exit_code)
     return
   end
 
-  local hl_start_lnum = vim.api.nvim_buf_line_count(bufnr)
+  local start_lnum = vim.api.nvim_buf_line_count(bufnr)
 
   buf_set_lines(bufnr, -1, -1, {"[EOF]", "[Process (job: " .. job_id .. ") has exited: " .. exit_code .. "]"})
 
   --- highlight
-  vim.hl.range(bufnr, ns, "my_output_eof", {hl_start_lnum, 0}, {hl_start_lnum, -1})
+  vim.hl.range(bufnr, ns, "my_output_eof", {start_lnum, 0}, {start_lnum, -1})
   if exit_code == 0 then
-    vim.hl.range(bufnr, ns, "my_output_sys", {hl_start_lnum+1, 0}, {hl_start_lnum+1, -1})
+    vim.hl.range(bufnr, ns, "my_output_sys", {start_lnum+1, 0}, {start_lnum+1, -1})
   else
-    vim.hl.range(bufnr, ns, "my_output_sys_error", {hl_start_lnum+1, 0}, {hl_start_lnum+1, -1})
+    vim.hl.range(bufnr, ns, "my_output_sys_error", {start_lnum+1, 0}, {start_lnum+1, -1})
   end
 end
 
