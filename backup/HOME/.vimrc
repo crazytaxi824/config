@@ -11,7 +11,7 @@ vim9script
 # 设置 Vim 内部使用的字符编码, 中文不会显示乱码
 set encoding=utf-8
 
-# 设置为 xterm-256color 最保险
+# 设置为 xterm-256color 最保险, 防止登录 linux 终端后使用 vim 编辑器没有进入和退出机制
 set term=xterm-256color
 
 # VVI: highlight color, 加载顺序很重要.
