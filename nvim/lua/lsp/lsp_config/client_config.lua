@@ -25,7 +25,7 @@ if not status_ok then
   Notify({
     '"cmp_nvim_lsp" can NOT be loaded when setup lsp.capabilities.',
     'LSP Auto-Completion may NOT be able to use.',
-  }, 'INFO')
+  }, 'WARN')
 
   --- lspconfig default_config 中 capabilities 有默认设置.
   --- https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig/util.lua
@@ -33,7 +33,8 @@ if not status_ok then
 else
   --- "cmp_nvim_lsp" 存在的情况, 可以使用 lsp 功能, 也可以提供 lsp 代码补全.
   --- https://github.com/hrsh7th/cmp-nvim-lsp#setup
-  M.capabilities = cmp_nvim_lsp.default_capabilities()
+  local cmp_capabilities = cmp_nvim_lsp.default_capabilities()
+  M.capabilities = vim.tbl_deep_extend('force', vim.lsp.protocol.make_client_capabilities(), cmp_capabilities)
 end
 
 --- lsp_fold 设置
