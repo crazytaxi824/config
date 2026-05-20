@@ -6,6 +6,7 @@ local health = vim.health
 local M = {}
 
 local mason_record = [[
+  basedpyright
   bash-language-server
   buf
   css-lsp
@@ -23,7 +24,6 @@ local mason_record = [[
   json-lsp
   lua-language-server
   prettier
-  pyright
   ruff
   shfmt
   sql-formatter
