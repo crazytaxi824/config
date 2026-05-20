@@ -391,9 +391,8 @@ Highlights = {
   ['@my.import.underline'] = { link = "Underlined" },  -- go import list underline.
 
   --- semantic tokens ------------------------------------------------------------------------------
-  --- NOTE: `:help vim.highlight.priorities`
+  --- NOTE: `:help vim.hl.priorities`
   ['@lsp.type.comment'] = {},  -- clear highlight in order to use treesitter highlight.
-  ['@lsp.type.parameter'] = {},
 
   -- readonly = constant
   ['@lsp.mod.readonly'] = { link = "Constant" },
