@@ -57,6 +57,7 @@ Colors = {
   green   = { c=42,  g='#00D787' },  -- OK message, markdown title
 
   --- 其他常用颜色
+  --- VVI: Keyword 和 Boolean 最好是一样颜色, 省去很多麻烦
   blue_boolean = { c=74,  g='#569CD6' },  -- Keyword, Boolean, Special ...
   green_type   = { c=79,  g='#4EC9B0' },  -- type, 数据类型
   green_bg     = { c=35,  g='#00AF5F' },  -- command mode bg color
@@ -356,7 +357,6 @@ Highlights = {
   --- program language
   ['@type'] = { link = "Type" },
   ['@type.builtin'] = { link = "@type" },
-  ['@constructor'] = { link = "@type" },
 
   ['@function.builtin'] = { link = "Function" },  -- copy() delete() make()
 
@@ -378,8 +378,8 @@ Highlights = {
   ['@field'] = { link = "@property" },
   ['@parameter'] = { link = "@property" },
 
-  ['@tag'] = { link = "Type" },  -- jsx/tsx custom tags, <BrowserRouter> <ThemeProvider> <Link> <Button> ...
-  ['@tag.builtin'] = { link = "Boolean" },  -- html, <div> <h1> <p> <li> ...
+  ['@tag.javascript'] = { link = "@type.javascript" },  -- jsx/tsx custom tags, <BrowserRouter> <ThemeProvider> <Link> <Button> ...
+  -- ['@tag.builtin.javascript']  -- <div> <button> <body> <p> <nav> ...
   ['@tag.delimiter'] = { ctermfg=Colors.g244.c, fg=Colors.g244.g },  -- html <tag> <> 括号颜色
   ['@tag.attribute'] = { link = "@property" },  -- html, <... width=..., @tag.attribute=... >
   ['@punctuation.special'] = { link = 'Special' },  -- js, ts, console.log(`${ ... }`)
