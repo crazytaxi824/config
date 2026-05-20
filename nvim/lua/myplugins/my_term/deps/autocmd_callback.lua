@@ -10,7 +10,7 @@ local M = {}
 function M.autocmd_callback(term, term_bufnr)
   --- 关闭 terminal window 之后再打开时触发 BufWinEnter, 但不会触发 TermOpen.
   --- buffer 离开所有 window 才会触发 BufWinLeave.
-  local g_id = vim.api.nvim_create_augroup('my_term_bufnr_' .. term_bufnr, {clear=true})
+  local g_id = vim.api.nvim_create_augroup('my_term_#buf:' .. term_bufnr, {clear=true})
   vim.api.nvim_create_autocmd({"BufWinEnter", "BufWinLeave"}, {
     group = g_id,
     buffer = term_bufnr,
@@ -66,7 +66,7 @@ end
 --- @param term_id integer
 --- @param term_bufnr integer
 function M.autocmd_jobstop(term_id, term_bufnr)
-  local g_id = vim.api.nvim_create_augroup('my_term_post_' .. term_id, {clear=true})
+  local g_id = vim.api.nvim_create_augroup('my_term_#id:' .. term_id, {clear=true})
   vim.api.nvim_create_autocmd("BufWipeout", {
     group = g_id,
     once = true,
