@@ -19,7 +19,7 @@ local M = {}
 --- @param lsp_req_pos_char integer  char_pos 是指行内第几个字符, \t 算一个字符.
 --- @return table
 local function calculate_offset(lsp_req_pos_line, lsp_req_pos_char)
-  local cursor_line, cursor_col = unpack(vim.api.nvim_win_get_cursor(0))  -- (1,0)-based index
+  local cursor_line, cursor_col = unpack(vim.api.nvim_win_get_cursor(0))  -- (1,0)-based byte index
 
   --- VVI: offset 中 \t 占4个字符位置, 而在 getpos() 和 node:start() 中只占1个字符.
   --- strdisplaywidth() 会计算实际显示宽度, \t 会被计算在显示宽度之内.

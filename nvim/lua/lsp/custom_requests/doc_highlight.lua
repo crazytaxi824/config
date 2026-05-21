@@ -35,9 +35,8 @@ local M = {}
 --- @param refs lsp.DocumentHighlight[]
 --- @return boolean|nil inside
 local function cursor_inside_range(refs)
-  --- getcharpos(): 1-based index
-  local cur_pos = vim.fn.getcharpos('.')
-  local cur_line, cur_col = cur_pos[2]-1, cur_pos[3]-1
+  local cur_pos = vim.fn.getcharpos('.')  -- 1-based character index
+  local cur_line, cur_col = cur_pos[2]-1, cur_pos[3]-1  -- change to 0-based index
 
   --- result.range: 0-based index
   for _, ref in ipairs(refs) do

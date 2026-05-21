@@ -47,7 +47,7 @@ end
 --- @param root_children TSNode[]
 --- @return { index: integer, cursor_lnum: integer, node_start_lnum: integer }
 local function current_node(root_children)
-  local cursor_lnum = vim.api.nvim_win_get_cursor(0)[1]  -- {lnum, col}, (1,0)-based index
+  local cursor_lnum = vim.api.nvim_win_get_cursor(0)[1]  -- {lnum, col}, (1,0)-based byte index
 
   for i = #root_children, 1, -1 do
     local node_lnum = root_children[i]:start() + 1  -- {lnum, col, bytes}, all 0-based index
