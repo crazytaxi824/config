@@ -100,7 +100,8 @@ provision:
     # 重启服务
     systemctl restart systemd-resolved
 
-# 使用白名单机制
+
+# guest 端口自动转发到 host
 # lima port-forward 使用的是优先匹配机制, 规则是: 按顺序匹配，命中第一条就停止
 # "guestIP" omitempty 默认为 "127.0.0.1"
 portForwards:
