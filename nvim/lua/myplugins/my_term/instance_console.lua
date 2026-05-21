@@ -9,7 +9,7 @@ local console_id = 1001
 local default_opts = {
   auto_scroll = true,
   console_output = true,  -- 这里使用 console_exec()
-  after_run = function(_, term_bufnr)
+  before_run = function(_, term_bufnr)
     --- set highlight filepath & jump to filepath functions
     fp.setup(term_bufnr)
   end,

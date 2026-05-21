@@ -41,15 +41,6 @@ local function myterm_exec(cmd, term, term_bufnr, term_win_id)
     job_id = terminal.terminal_exec(cmd, term, term_bufnr, term_win_id)
   end
 
-  --- executed after jobstart(). Have 'term.bufnr' and 'term.job_id' ...
-  --- 和 on_exit 的区别是不用等到 jobdone.
-  callbacks = term:after_run()
-  if callbacks then
-    for _, after_run in ipairs(callbacks) do
-      after_run(term, term_bufnr, job_id)
-    end
-  end
-
   return job_id
 end
 
@@ -111,10 +102,6 @@ function MyTerm:console_output() return self._opts.console_output end
 --- term:run() 时触发. before jobstart().
 --- @return MyTermCallback[]|nil
 function MyTerm:before_run() return self._opts.before_run end
-
---- term:run() 时触发. 在 jobstart() 之后马上执行, 和 on_exit 的区别是不用等到 jobdone.
---- @return MyTermCBWithJob[]|nil
-function MyTerm:after_run() return self._opts.after_run end
 
 --- BufWinEnter. NOTE: 每次 term:// buffer 被 win 显示的时候都会触发, 同一个 buffer 被多个窗口显示时也会触发.
 --- @return MyTermCallback[]|nil
@@ -188,7 +175,7 @@ function MyTerm:run(cmd)
   --- buffer 被 wipeout 的时候自动 jobstop()
   cb.autocmd_jobstop(self.id, term_bufnr)
 
-  --- 在 pcall 中执行, 如果 before_run, after_run, jobstart 报错的话会清除创建的 scatch buffer
+  --- 在 pcall 中执行, 如果 before_run, jobstart 报错的话会清除创建的 scatch buffer
   local ok, result = pcall(function()
     return myterm_exec(cmd, self, term_bufnr, term_win_id)
   end)
