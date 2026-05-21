@@ -25,6 +25,11 @@ function M.autocmd_callback(term, term_bufnr)
       elseif args.event == "BufWinLeave" then
         local callbacks = term:on_close()
         if callbacks then
+          --- persist window height
+          local win_id = vim.api.nvim_get_current_win()
+          g.win_height = vim.api.nvim_win_get_height(win_id)
+
+          --- on_close callbacks
           for _, on_close in ipairs(callbacks) do
             on_close(term, term_bufnr)
           end
@@ -32,18 +37,6 @@ function M.autocmd_callback(term, term_bufnr)
       end
     end,
     desc = "my_term: on_open() & on_close() callback",
-  })
-
-  --- 全局保存 my_term window height
-  vim.api.nvim_create_autocmd("BufWinLeave", {
-    group = g_id,
-    buffer = term_bufnr,
-    callback = function(args)
-      --- persist window height
-      local win_id = vim.api.nvim_get_current_win()
-      g.win_height = vim.api.nvim_win_get_height(win_id)
-    end,
-    desc = "my_term: persist window height",
   })
 
   --- auto delete augroup
