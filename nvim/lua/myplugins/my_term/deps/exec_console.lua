@@ -24,9 +24,9 @@ vim.api.nvim_set_hl(0, "my_output_eof", {ctermfg=Colors.g238.c, fg=Colors.g238.g
 local function buf_append_data(bufnr, data, hl, write_to_lastline)
   -- if #data == 0 then return end  --- 保险起见
 
-  local last_lnum = vim.api.nvim_buf_line_count(bufnr)
-  local last_line = vim.api.nvim_buf_get_lines(bufnr, -2, -1, true)[1]
-  local last_col = vim.str_utfindex(last_line, vim.o.encoding)
+  local last_lnum = vim.api.nvim_buf_line_count(bufnr)  -- 获取 buffer line count
+  local last_line = vim.api.nvim_buf_get_lines(bufnr, -2, -1, true)[1]  -- 获取最后一行的内容
+  local last_col = vim.str_utfindex(last_line, vim.o.encoding) -- 获取最后一行内容的 utf-8 的长度, 而不是 byte 长度
 
   if write_to_lastline then
     --- 从最后一行的最后一个 col 开始写
@@ -35,7 +35,7 @@ local function buf_append_data(bufnr, data, hl, write_to_lastline)
     vim.bo[bufnr].modifiable = false
 
     --- highlight
-    local start_lnum = last_lnum - 1  -- 0-indexed
+    local start_lnum = last_lnum - 1  -- 0-based index
     local end_lnum = start_lnum + #data - 1  -- 从第 2 行开始写, 写 3 行应该是到第 5 行最后结束
     vim.hl.range(bufnr, ns, hl, { start_lnum, last_col }, { end_lnum, -1 })
   else
