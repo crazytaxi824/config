@@ -31,9 +31,8 @@ local function ts_root_children()
   local child_without_comment = {}  -- cache named child without comment.
 
   local child_count = root:named_child_count()
-  --- 0-index named_child()
   for i = 0, child_count-1, 1 do
-    local child = root:named_child(i)
+    local child = root:named_child(i)  -- named_child() 0-based index
     if child and child:type() ~= "comment" then
       table.insert(child_without_comment, child)
     end
@@ -48,10 +47,10 @@ end
 --- @param root_children TSNode[]
 --- @return { index: integer, cursor_lnum: integer, node_start_lnum: integer }
 local function current_node(root_children)
-  local cursor_lnum = vim.api.nvim_win_get_cursor(0)[1]  -- {lnum, col}, (1,0)-indexed
+  local cursor_lnum = vim.api.nvim_win_get_cursor(0)[1]  -- {lnum, col}, (1,0)-based index
 
   for i = #root_children, 1, -1 do
-    local node_lnum = root_children[i]:start() + 1  -- {lnum, col, bytes}, all 0-indexed
+    local node_lnum = root_children[i]:start() + 1  -- {lnum, col, bytes}, all 0-based index
 
     if cursor_lnum >= node_lnum then
       return {
