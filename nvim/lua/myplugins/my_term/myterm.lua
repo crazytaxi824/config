@@ -182,15 +182,19 @@ function MyTerm:run(cmd)
   --- 创建并进入 term window & buffer
   local term_bufnr, term_win_id = t_win.set_myterm_current_win(self)
 
+  --- 设置 buffer-local 快捷键: 在获取到 term.bufnr 和 term.id 之后运行
+  t_key.set_buf_keymaps(self, term_bufnr)
+
+  --- buffer 被 wipeout 的时候自动 jobstop()
+  cb.autocmd_jobstop(self.id, term_bufnr)
+
   --- 在 pcall 中执行, 如果 before_run, after_run, jobstart 报错的话会清除创建的 scatch buffer
   local ok, result = pcall(function()
-    t_key.set_buf_keymaps(self, term_bufnr)  --- 快捷键设置: 在获取到 term.bufnr 和 term.id 之后运行
-    cb.autocmd_jobstop(self.id, term_bufnr)  --- buffer 被 wipeout 的时候自动 jobstop()
-    return myterm_exec(cmd, self, term_bufnr, term_win_id)  --- jobstart(cmd)
+    return myterm_exec(cmd, self, term_bufnr, term_win_id)
   end)
 
   if not ok then
-    --- 清理刚创建的 scatch buffer
+    --- 如果报错, 则清理刚创建的 scatch buffer
     if vim.api.nvim_buf_is_valid(term_bufnr) then
       vim.api.nvim_buf_delete(term_bufnr, { force = true })
     end
