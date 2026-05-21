@@ -13,8 +13,8 @@ local lualine_colors = {
   gold = Colors.gold_fn.g,  -- filename saved
   cyan = Colors.cyan.g,   -- filename modified
 
-  grey = Colors.g236.g,  -- section_b
-  light_grey = Colors.g245.g, -- inactive, hint
+  grey_b = Colors.g238.g,  -- section_b
+  grey_fg = Colors.g245.g, -- fg color: inactive, hint
 
   red = Colors.red.g,  -- error, readonly
   orange = Colors.orange.g, -- warn, readonly file, trailing_whitespace && mixed_indent
@@ -26,36 +26,36 @@ local lualine_colors = {
 local my_theme = {
   normal = {
     a = { fg = lualine_colors.black, bg = lualine_colors.yellow, gui = "bold" },
-    b = { fg = lualine_colors.white, bg = lualine_colors.grey },
+    b = { fg = lualine_colors.white, bg = lualine_colors.grey_b },
     c = { fg = lualine_colors.gold, bg = lualine_colors.black },
   },
 
   --- 其他模式如果缺省设置, 则继承 normal 的设置
   insert = {
-    a = { fg = lualine_colors.black, bg = 45, gui = 'bold' },
-    b = { fg = lualine_colors.white, bg = 20 },
-    c = { fg = lualine_colors.white, bg = 17 },
+    a = { fg = lualine_colors.black, bg = "#00D7FF", gui = 'bold' },
+    b = { fg = lualine_colors.white, bg = "#0000D7" },
+    c = { fg = lualine_colors.white, bg = "#00005F" },
   },
   replace = {
-    a = { fg = lualine_colors.white, bg = 124, gui = 'bold' },
-    b = { fg = lualine_colors.white, bg = 20 },
-    c = { fg = lualine_colors.white, bg = 17 },
+    a = { fg = lualine_colors.white, bg = "#AF0000", gui = 'bold' },
+    b = { fg = lualine_colors.white, bg = "#0000D7" },
+    c = { fg = lualine_colors.white, bg = "#00005F" },
   },
   visual = {
     a = { fg = lualine_colors.black, bg = lualine_colors.orange, gui = 'bold' },
-    b = { fg = lualine_colors.black, bg = 202 },
-    c = { fg = lualine_colors.white, bg = 52 },
+    b = { fg = lualine_colors.black, bg = "#D75F00" },
+    c = { fg = lualine_colors.white, bg = "#5F0000" },
   },
   command = {
     a = { fg = lualine_colors.black, bg = lualine_colors.green, gui = 'bold' },
-    b = { fg = lualine_colors.white, bg = lualine_colors.grey },
+    b = { fg = lualine_colors.white, bg = lualine_colors.grey_b },
     c = { fg = lualine_colors.white, bg = lualine_colors.black },
   },
 
   inactive = {
-    a = { fg = lualine_colors.gold, bg = lualine_colors.grey },
+    a = { fg = lualine_colors.gold, bg = lualine_colors.grey_b },
     b = { fg = lualine_colors.white, bg = lualine_colors.black },
-    c = { fg = lualine_colors.light_grey, bg = lualine_colors.black },
+    c = { fg = lualine_colors.grey_fg, bg = lualine_colors.black },
   },
 }
 --- }}}
@@ -205,7 +205,7 @@ lualine.setup {
         color = function()
           --- 如果是 edit 没有 .git 的文件, 这里的函数不会运行.
           if vim.b[bufvar_branch] and (vim.b[bufvar_branch] == 'main' or vim.b[bufvar_branch] == 'master') then
-            return { bg = 160, gui = 'bold' }
+            return { bg = "#D70000", gui = 'bold' }
           end
           --- NOTE: return nil 时使用 theme 的默认颜色.
         end,
@@ -221,7 +221,7 @@ lualine.setup {
           error = {fg=lualine_colors.red, gui='bold'},        -- Changes diagnostics' error color.
           warn  = {fg=lualine_colors.orange, gui='bold'},     -- Changes diagnostics' warn color.
           info  = {fg=lualine_colors.blue, gui='bold'},       -- Changes diagnostics' info color.
-          hint  = {fg=lualine_colors.light_grey, gui='bold'}, -- Changes diagnostics' hint color.
+          hint  = {fg=lualine_colors.grey_fg, gui='bold'}, -- Changes diagnostics' hint color.
         },
       },
       {
@@ -334,7 +334,7 @@ lualine.setup {
           error = {fg=lualine_colors.red, gui='bold'},        -- Changes diagnostics' error color.
           warn  = {fg=lualine_colors.orange, gui='bold'},     -- Changes diagnostics' warn color.
           info  = {fg=lualine_colors.blue, gui='bold'},       -- Changes diagnostics' info color.
-          hint  = {fg=lualine_colors.light_grey, gui='bold'}, -- Changes diagnostics' hint color.
+          hint  = {fg=lualine_colors.grey_fg, gui='bold'}, -- Changes diagnostics' hint color.
         },
       },
       {
@@ -361,8 +361,8 @@ lualine.setup {
             return {fg = lualine_colors.orange, gui='bold'}
           end
 
-          -- BUG: 必须设置 bg color, 否则会随 Insert Mode 改变 filename bg color
-          return {fg = lualine_colors.light_grey, bg = my_theme.inactive.c.bg}
+          -- NOTE: 必须设置 bg color, 否则会随 Insert Mode 改变 filename bg color
+          return {fg = lualine_colors.grey_fg, bg = my_theme.inactive.c.bg}
         end,
       },
     },

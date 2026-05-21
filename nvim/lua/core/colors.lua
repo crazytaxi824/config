@@ -51,7 +51,7 @@ Colors = {
   yellow  = { c=220, g='#FFD800' },  -- Search, lualine: Insert Mode background && tabline: tab seleced background
   magenta = { c=213, g='#FF87FF' },  -- IncSearch, return, if, else, break, package, import
   red     = { c=167, g='#F85249' },  -- error message
-  orange  = { c=208, g='#CCA700' },  -- warning message
+  orange  = { c=208, g='#FFA000' },  -- warning message
   blue    = { c=75,  g='#4FC1FF' },  -- info message, constant ...
   grey_hint = {c=244,g='#808080' },  -- hint message
   green   = { c=42,  g='#00D787' },  -- OK message, markdown title
