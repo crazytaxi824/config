@@ -182,16 +182,24 @@ function MyTerm:run(cmd)
   --- 创建并进入 term window & buffer
   local term_bufnr, term_win_id = t_win.set_myterm_current_win(self)
 
-  --- 快捷键设置: 在获取到 term.bufnr 和 term.id 之后运行
-  t_key.set_buf_keymaps(self, term_bufnr)
+  --- 在 pcall 中执行, 如果 before_run, after_run, jobstart 报错的话会清除创建的 scatch buffer
+  local ok, result = pcall(function()
+    t_key.set_buf_keymaps(self, term_bufnr)  --- 快捷键设置: 在获取到 term.bufnr 和 term.id 之后运行
+    cb.autocmd_jobstop(self.id, term_bufnr)  --- buffer 被 wipeout 的时候自动 jobstop()
+    return myterm_exec(cmd, self, term_bufnr, term_win_id)  --- jobstart(cmd)
+  end)
 
-  --- buffer 被 wipeout 的时候自动 jobstop()
-  cb.autocmd_jobstop(self.id, term_bufnr)
-
-  --- VVI(jobstart): 执行 cmd
-  local job_id = myterm_exec(cmd, self, term_bufnr, term_win_id)
+  if not ok then
+    --- 清理刚创建的 scatch buffer
+    if vim.api.nvim_buf_is_valid(term_bufnr) then
+      vim.api.nvim_buf_delete(term_bufnr, { force = true })
+    end
+    --- 再次抛出 pcall 捕获的错误
+    error(result)
+  end
 
   --- VVI(require module): 延迟 require() 防止循环引用
+  local job_id = result
   tp = require('myplugins.my_term.myterm_post').from(self, term_bufnr, job_id)
   g.set_TermPost(tp.id, tp)  -- cache MyTermPost
 end
