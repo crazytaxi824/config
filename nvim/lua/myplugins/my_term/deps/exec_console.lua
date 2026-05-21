@@ -22,7 +22,7 @@ vim.api.nvim_set_hl(0, "my_output_eof", {ctermfg=Colors.g238.c, fg=Colors.g238.g
 --- @param hl string  -- highlight name `vim.hl.range()`
 --- @param write_to_lastline? boolean  -- 从最后一行的最后一个 col 开始 write data, 否则 write to next line
 local function buf_append_data(bufnr, data, hl, write_to_lastline)
-  if #data == 0 then return end
+  -- if #data == 0 then return end  --- 保险起见
 
   local last_lnum = vim.api.nvim_buf_line_count(bufnr)
   local last_line = vim.api.nvim_buf_get_lines(bufnr, -2, -1, true)[1]
