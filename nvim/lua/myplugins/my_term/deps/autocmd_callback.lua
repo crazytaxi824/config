@@ -35,16 +35,13 @@ function M.autocmd_callback(term, term_bufnr)
   })
 
   --- 全局保存 my_term window height
-  vim.api.nvim_create_autocmd("WinClosed", {
+  vim.api.nvim_create_autocmd("BufWinLeave", {
     group = g_id,
     buffer = term_bufnr,
     callback = function(args)
       --- persist window height
-      --- NOTE: 在 WinClosed event 中, params.file & params.match 都是 win_id, 数据类型是 string.
-      local win_id = tonumber(args.match)
-      if win_id then
-        g.win_height = vim.api.nvim_win_get_height(win_id)
-      end
+      local win_id = vim.api.nvim_get_current_win()
+      g.win_height = vim.api.nvim_win_get_height(win_id)
     end,
     desc = "my_term: persist window height",
   })
