@@ -26,7 +26,7 @@ local function buf_append_data(bufnr, data, hl, write_to_lastline)
 
   local last_lnum = vim.api.nvim_buf_line_count(bufnr)  -- 获取 buffer line count
   local last_line = vim.api.nvim_buf_get_lines(bufnr, -2, -1, true)[1]  -- 获取最后一行的内容
-  local last_col = vim.str_utfindex(last_line, vim.o.encoding) -- 获取最后一行内容的 utf-8 的长度, 而不是 byte 长度
+  local last_col = string.len(last_line) -- 获取最后一行内容的的长度, vim.hl.range() 0-based byte index
 
   if write_to_lastline then
     --- 从最后一行的最后一个 col 开始写
