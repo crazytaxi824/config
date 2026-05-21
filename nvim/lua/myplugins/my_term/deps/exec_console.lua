@@ -62,12 +62,6 @@ local function set_buf_line_output(bufnr, data, hl, write_to_lastline)
     return false
   end
 
-  --- cache 开始进行 highlight 的 lnum
-  local start_lnum = vim.api.nvim_buf_line_count(bufnr)
-  if write_to_lastline then
-    start_lnum = start_lnum - 1
-  end
-
   --- VVI: `:help channel-callback`, `:help channel-lines`, 中说明: EOF is a single-item list: `['']`.
   --- 如果 data 为: { "foo", "bar" }, 说明本行未结束, 需要在本行后面继续写入以后的内容. eg: fmt.Print()
   --- 如果 data 为: { "foo", "bar", "" }, 说明本行已结束, 需要换行写入以后的内容.  eg: fmt.Println()
@@ -126,6 +120,7 @@ local function print_job_info(cmd, term_bufnr, job_id)
 
   if type(cmd) == "string" then
     table.insert(data, cmd)
+    table.insert(data, "[type(cmd) is string, may need to vim.fn.shellescape(filepath)]")
   elseif type(cmd) == "table" then
     table.insert(data, table.concat(cmd, ' '))
   else

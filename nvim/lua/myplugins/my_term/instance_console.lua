@@ -10,10 +10,8 @@ local default_opts = {
   auto_scroll = true,
   console_output = true,  -- 这里使用 console_exec()
   after_run = function(_, term_bufnr)
-    --- highlight filepath & jump to filepath
-    if term_bufnr then
-      fp.setup(term_bufnr)
-    end
+    --- set highlight filepath & jump to filepath functions
+    fp.setup(term_bufnr)
   end,
 }
 

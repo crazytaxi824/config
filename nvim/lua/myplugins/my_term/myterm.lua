@@ -167,8 +167,6 @@ function MyTerm:run(cmd)
   if not cmd then
     vim.notify("no 'cmd' for my_term", vim.log.levels.WARN)
     return
-  elseif type(cmd) == 'string' then
-    vim.notify("myterm:run() -> jobstart() `cmd` is string: '".. cmd .."', may need vim.fn.shellescape(filepath)", vim.log.levels.WARN)
   end
 
   --- 检查 job 是否正在运行
