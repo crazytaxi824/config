@@ -24,10 +24,11 @@ vim.api.nvim_set_hl(0, "my_output_eof", {ctermfg=Colors.g238.c, fg=Colors.g238.g
 local function buf_append_data(bufnr, data, hl, write_to_lastline)
   --- 保险起见
   -- if #data == 0 then return end
-  vim.bo[bufnr].modifiable = true
   if vim.api.nvim_get_current_buf() == bufnr then
     vim.cmd.stopinsert()
   end
+  vim.bo[bufnr].modifiable = true
+  vim.bo[bufnr].buftype = 'nofile'  -- scratch buffer default buftype
 
   local last_lnum = vim.api.nvim_buf_line_count(bufnr)  -- 获取 buffer line count
   local last_line = vim.api.nvim_buf_get_lines(bufnr, -2, -1, true)[1]  -- 获取最后一行的内容
@@ -51,9 +52,22 @@ local function buf_append_data(bufnr, data, hl, write_to_lastline)
     vim.hl.range(bufnr, ns, hl, { start_lnum, 0 }, { end_lnum, -1 })
   end
 
-  --- BUG: work around prompt bug after nvim_buf_set_lines()
-  --- https://github.com/neovim/neovim/issues/36983
+  --- workaround: 在 prompt buffer 中 nvim_buf_set_lines() 的 data 都会被认为是 prompt 输入
   vim.bo[bufnr].buftype = 'prompt'
+end
+
+--- 设置 prompt buffer options
+local function set_prompt_buffer_opts(bufnr)
+  vim.fn.prompt_setprompt(bufnr, "console > ")
+  vim.fn.prompt_setcallback(bufnr, function(input)
+    if input == 'exit' then
+      if vim.api.nvim_buf_is_valid(bufnr) then
+        vim.api.nvim_buf_delete(bufnr, { force=true })
+      end
+    else
+      print(input) -- TODO: nvim_chan_send() to running job
+    end
+  end)
 end
 
 --- @param bufnr integer
@@ -185,24 +199,14 @@ function M.console_exec(cmd, term, term_bufnr, term_win_id)
   --- VVI: bufname 如果是 term://xxx 则在 bdelete 之后会被锁定为 nomodifiable
   vim.api.nvim_buf_set_name(term_bufnr, "console://console#" .. term.id)
 
+  --- prompt buffer opts
+  set_prompt_buffer_opts(term_bufnr)
+
   --- setlocal win-local opts
   local opts = { scope='local', win=term_win_id }
   vim.api.nvim_set_option_value('wrap', true, opts)
   vim.api.nvim_set_option_value('relativenumber', false, opts)
   vim.api.nvim_set_option_value('signcolumn', 'no', opts)
-
-  --- setlocal buf-local opts
-  vim.fn.prompt_setprompt(term_bufnr, "console > ")  -- BUG: 必须放在 buftype=prompt 之前执行, 否则会强行打印出来
-  vim.bo[term_bufnr].buftype = 'prompt'
-  vim.fn.prompt_setcallback(term_bufnr, function(input)
-    if input == 'exit' then
-      if vim.api.nvim_buf_is_valid(term_bufnr) then
-        vim.api.nvim_buf_delete(term_bufnr, { force=true })
-      end
-    else
-      print(input) -- TODO: nvim_chan_send() to running job
-    end
-  end)
 
   --- on_stderr, on_stdout 中的 data line 是否完整
   local incomplete = false
