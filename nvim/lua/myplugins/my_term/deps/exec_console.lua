@@ -98,9 +98,8 @@ end
 --- job done 后处理: 在最后一行显示 [Process exited 'exit_code']
 ---
 --- @param bufnr integer
---- @param job_id integer
 --- @param exit_code integer
-local function set_buf_line_exit(bufnr, job_id, exit_code)
+local function set_buf_line_exit(bufnr, exit_code)
   if not vim.api.nvim_buf_is_valid(bufnr) then
     return
   end
@@ -253,8 +252,8 @@ function M.console_exec(cmd, term, term_bufnr, term_win_id)
     --- @param exit_code integer
     --- @param event string  'exit'
     on_exit = function(job_id, exit_code, event)
-      --- write [exit_code] to buffer
-      set_buf_line_exit(term_bufnr, job_id, exit_code)
+      --- write [exit_code] to when job stopped
+      set_buf_line_exit(term_bufnr, exit_code)
 
       --- auto_scroll option
       utils.buf_scroll_bottom(term, term_bufnr)
