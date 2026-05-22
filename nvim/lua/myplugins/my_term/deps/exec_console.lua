@@ -22,7 +22,10 @@ vim.api.nvim_set_hl(0, "my_output_eof", {ctermfg=Colors.g238.c, fg=Colors.g238.g
 --- @param hl string  -- highlight name `vim.hl.range()`
 --- @param write_to_lastline? boolean  -- 从最后一行的最后一个 col 开始 write data, 否则 write to next line
 local function buf_append_data(bufnr, data, hl, write_to_lastline)
-  -- if #data == 0 then return end  --- 保险起见
+  --- 保险起见
+  -- if #data == 0 then return end
+  vim.cmd.stopinsert()
+  vim.bo[bufnr].modifiable = true
 
   local last_lnum = vim.api.nvim_buf_line_count(bufnr)  -- 获取 buffer line count
   local last_line = vim.api.nvim_buf_get_lines(bufnr, -2, -1, true)[1]  -- 获取最后一行的内容
@@ -30,9 +33,7 @@ local function buf_append_data(bufnr, data, hl, write_to_lastline)
 
   if write_to_lastline then
     --- 从最后一行的最后一个 col 开始写
-    vim.bo[bufnr].modifiable = true
     vim.api.nvim_buf_set_text(bufnr, -1, -1, -1, -1, data)
-    vim.bo[bufnr].modifiable = false
 
     --- highlight
     local start_lnum = last_lnum - 1  -- 0-based index
@@ -40,15 +41,17 @@ local function buf_append_data(bufnr, data, hl, write_to_lastline)
     vim.hl.range(bufnr, ns, hl, { start_lnum, last_col }, { end_lnum, -1 })
   else
     --- 从最后一行的下一行开始写
-    vim.bo[bufnr].modifiable = true
     vim.api.nvim_buf_set_lines(bufnr, -1, -1, false, data)
-    vim.bo[bufnr].modifiable = false
 
     --- highlight
     local start_lnum = last_lnum  -- 从最后一行的下一行开始 highlight
     local end_lnum = start_lnum + #data - 1  -- 从第 2 行开始写, 写 3 行应该是到第 5 行最后结束
     vim.hl.range(bufnr, ns, hl, { start_lnum, 0 }, { end_lnum, -1 })
   end
+
+  --- BUG: work around prompt bug after nvim_buf_set_lines()
+  --- https://github.com/neovim/neovim/issues/36983
+  vim.bo[bufnr].buftype = 'prompt'
 end
 
 --- @param bufnr integer
@@ -181,14 +184,24 @@ function M.console_exec(cmd, term, term_bufnr, term_win_id)
   --- VVI: bufname 如果是 term://xxx 则在 bdelete 之后会被锁定为 nomodifiable
   vim.api.nvim_buf_set_name(term_bufnr, "console://console#" .. term.id)
 
-  --- setlocal opts
-  vim.bo[term_bufnr].undolevels = -1  -- disable undo
-  vim.bo[term_bufnr].modifiable = false
-
+  --- setlocal win-local opts
   local opts = { scope='local', win=term_win_id }
   vim.api.nvim_set_option_value('wrap', true, opts)
   vim.api.nvim_set_option_value('relativenumber', false, opts)
   vim.api.nvim_set_option_value('signcolumn', 'no', opts)
+
+  --- setlocal buf-local opts
+  vim.bo[term_bufnr].buftype = 'prompt'
+  vim.fn.prompt_setprompt(term_bufnr, "console > ")
+  vim.fn.prompt_setcallback(term_bufnr, function(input)
+    if input == 'exit' then
+      if vim.api.nvim_buf_is_valid(term_bufnr) then
+        vim.api.nvim_buf_delete(term_bufnr, { force=true })
+      end
+    else
+      print(input)
+    end
+  end)
 
   --- on_stderr, on_stdout 中的 data line 是否完整
   local incomplete = false
