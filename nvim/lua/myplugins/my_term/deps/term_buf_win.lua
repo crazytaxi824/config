@@ -92,27 +92,11 @@ local function reuse_term_win_set_buf(new_term_bufnr, old_term_bufnr)
   return term_win > 0 and term_win or nil
 end
 
-
---- 1. 创建一个 term buffer, `vim.api.nvim_create_buf()`
---- 2. 创建/重用一个 window, `vim.api.nvim_open_win()`
---- 3. 进入该 window, `vim.fn.win_gotoid()`, `vim.api.nvim_open_win()`
---- 4. 显示刚创建的 term buffer, `vim.api.nvim_win_set_buf()`, `vim.api.nvim_open_win()`
----
---- 运行过 jobstart() 的 buffer 不能再次运行 jobstart() 了. Can only call this function in an unmodified buffer.
---- 需要删除旧的 bufnr 然后重新创建一个新的 scratch bufnr 给 jobstart() 使用. 但是在删除旧 buffer 之前可以 re-use
---- 旧 buffer 的 window, 避免重新创建新的 window, 关闭旧的 window 造成的闪烁.
+--- 创建一个 scratch buffer for console / terminal
 ---
 --- @param term MyTerm
 --- @return integer bufnr
---- @return integer win_id
-function M.set_myterm_current_win(term)
-  --- DOCS: `:help nvim_buf_call()`, If the current
-  --- window already shows "buffer", the window is not switched. If a window
-  --- inside the current tabpage (including a float) already shows the buffer,
-  --- then one of those windows will be set as current window temporarily.
-  --- Otherwise a temporary scratch window (called the "autocmd window" for
-  --- historical reasons) will be used.
-
+local function create_myterm_buffer(term)
   --- 每次运行 jobstart() 之前, 先创建一个新的 scratch buffer 给 terminal.
   local term_bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
 
@@ -128,6 +112,26 @@ function M.set_myterm_current_win(term)
 
   --- 设置 buffer-local 快捷键: 在获取到 term.bufnr 和 term.id 之后运行
   t_key.set_buf_keymaps(term, term_bufnr)
+
+  return term_bufnr
+end
+
+
+--- 1. 创建一个 term buffer, `vim.api.nvim_create_buf()`
+--- 2. 创建/重用一个 window, `vim.api.nvim_open_win()`
+--- 3. 进入该 window, `vim.fn.win_gotoid()`, `vim.api.nvim_open_win()`
+--- 4. 显示刚创建的 term buffer, `vim.api.nvim_win_set_buf()`, `vim.api.nvim_open_win()`
+---
+--- 运行过 jobstart() 的 buffer 不能再次运行 jobstart() 了. Can only call this function in an unmodified buffer.
+--- 需要删除旧的 bufnr 然后重新创建一个新的 scratch bufnr 给 jobstart() 使用. 但是在删除旧 buffer 之前可以 re-use
+--- 旧 buffer 的 window, 避免重新创建新的 window, 关闭旧的 window 造成的闪烁.
+---
+--- @param term MyTerm
+--- @return integer bufnr
+--- @return integer win_id
+function M.set_myterm_current_win(term)
+  --- 每次运行 jobstart() 之前, 先创建一个新的 scratch buffer 给 terminal.
+  local term_bufnr = create_myterm_buffer(term)
 
   --- 判断 term_id 是否已经 run(), 是否可以 re-use window
   local term_win_id
