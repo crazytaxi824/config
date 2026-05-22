@@ -198,7 +198,7 @@ function M.console_exec(cmd, term, term_bufnr, term_win_id)
         vim.api.nvim_buf_delete(term_bufnr, { force=true })
       end
     else
-      print(input)
+      print(input) -- TODO: nvim_chan_send() to running job
     end
   end)
 
