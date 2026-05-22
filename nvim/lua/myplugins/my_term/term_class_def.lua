@@ -22,14 +22,14 @@
 
 --- @class MyTermOptsCallbacks
 ---
---- term:run() 时触发. before jobstart().
---- @field before_run? MyTermCallback
----
 --- BufWinEnter. NOTE: 每次 term:// buffer 被 win 显示的时候都会触发, 同一个 buffer 被多个窗口显示时也会触发.
 --- @field on_open?    MyTermCallback
 ---
 --- BufWinLeave. NOTE: BufWinLeave 只会在 buffer 离开最后一个 win 的时候触发.
 --- @field on_close?   MyTermCallback
+---
+--- term:run() 时触发. before jobstart().
+--- @field on_init? MyTermCallback
 ---
 --- jobstart() 中 callback 函数
 --- @field on_stdout? MyTermOnOutput
@@ -44,14 +44,14 @@
 
 --- @class MyTermOptsCallbackList
 ---
---- term:run() 时触发. before jobstart().
---- @field before_run? MyTermCallback[]
----
 --- BufWinEnter. NOTE: 每次 term:// buffer 被 win 显示的时候都会触发, 同一个 buffer 被多个窗口显示时也会触发.
 --- @field on_open?    MyTermCallback[]
 ---
 --- BufWinLeave. NOTE: BufWinLeave 只会在 buffer 离开最后一个 win 的时候触发.
 --- @field on_close?   MyTermCallback[]
+---
+--- term:run() 时触发. before jobstart().
+--- @field on_init? MyTermCallback[]
 ---
 --- jobstart() 中 callback 函数
 --- @field on_stdout? MyTermOnOutput[]

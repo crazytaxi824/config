@@ -26,10 +26,10 @@ MyTerm.__index = MyTerm
 --- @return integer job_id
 local function myterm_exec(cmd, term, term_bufnr, term_win_id)
   --- executed before jobstart(). DO NOT have 'term.bufnr' and 'term.job_id' ...
-  local callbacks = term:before_run()
+  local callbacks = term:on_init()
   if callbacks then
-    for _, before_run in ipairs(callbacks) do
-      before_run(term, term_bufnr)
+    for _, on_init in ipairs(callbacks) do
+      on_init(term, term_bufnr)
     end
   end
 
@@ -101,7 +101,7 @@ function MyTerm:console_output() return self._opts.console_output end
 
 --- term:run() 时触发. before jobstart().
 --- @return MyTermCallback[]|nil
-function MyTerm:before_run() return self._opts.before_run end
+function MyTerm:on_init() return self._opts.on_init end
 
 --- BufWinEnter. NOTE: 每次 term:// buffer 被 win 显示的时候都会触发, 同一个 buffer 被多个窗口显示时也会触发.
 --- @return MyTermCallback[]|nil
@@ -175,7 +175,7 @@ function MyTerm:run(cmd)
   --- buffer 被 wipeout 的时候自动 jobstop()
   cb.autocmd_jobstop(self.id, term_bufnr)
 
-  --- 在 pcall 中执行, 如果 before_run, jobstart 报错的话会清除创建的 scatch buffer
+  --- 在 pcall 中执行, 如果 on_init, jobstart 报错的话会清除创建的 scatch buffer
   local ok, result = pcall(function()
     return myterm_exec(cmd, self, term_bufnr, term_win_id)
   end)
