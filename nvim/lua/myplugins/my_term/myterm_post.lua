@@ -1,5 +1,5 @@
 local g = require('myplugins.my_term.deps.global')
-local t_win = require('myplugins.my_term.deps.term_win')
+local t_win = require('myplugins.my_term.deps.term_buf_win')
 
 
 --- 继承 MyTerm

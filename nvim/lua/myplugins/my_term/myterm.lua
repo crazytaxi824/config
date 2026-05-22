@@ -2,7 +2,7 @@ local g = require('myplugins.my_term.deps.global')
 local console = require('myplugins.my_term.deps.exec_console')
 local terminal = require('myplugins.my_term.deps.exec_terminal')
 local cb = require('myplugins.my_term.deps.autocmd_callback')
-local t_win = require('myplugins.my_term.deps.term_win')
+local t_win = require('myplugins.my_term.deps.term_buf_win')
 local t_key  = require('myplugins.my_term.term_keymaps')
 
 
