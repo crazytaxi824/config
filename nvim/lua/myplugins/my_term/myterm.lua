@@ -25,6 +25,14 @@ MyTerm.__index = MyTerm
 --- @param term_win_id integer
 --- @return integer job_id
 local function myterm_exec(cmd, term, term_bufnr, term_win_id)
+  if not vim.api.nvim_buf_is_valid(term_bufnr) then
+    error("term_bufnr is not valid, bufnr: " .. term_bufnr)
+  end
+
+  if not vim.api.nvim_win_is_valid(term_win_id) then
+    error("term_win is not valid, win: " .. term_win_id)
+  end
+
   --- executed before jobstart(). DO NOT have 'term.bufnr' and 'term.job_id' ...
   local callbacks = term:on_init()
   if callbacks then
