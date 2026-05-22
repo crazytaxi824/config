@@ -117,8 +117,6 @@ local function reduce_items_to_display(fmt_items, win_width, active_buf_idx, min
   --- @type WinbarFormatterItemComponent[][]
   local components = {}
 
-  --- @type WinbarFormatterItem[]
-  local partial_items = {}
   local p_item_idx  -- 需要计算 partial item 的 index
   local comp_width = 0
 
@@ -134,7 +132,6 @@ local function reduce_items_to_display(fmt_items, win_width, active_buf_idx, min
       break
     end
 
-    table.insert(partial_items, 1, fmt_items[i])
     table.insert(components, 1, comp)
   end
 
@@ -151,7 +148,6 @@ local function reduce_items_to_display(fmt_items, win_width, active_buf_idx, min
         break
       end
 
-      table.insert(partial_items, fmt_items[i])
       table.insert(components, comp)
     end
   end
@@ -211,14 +207,15 @@ end
 --- @param min_level WinbarFormatterLevel
 --- @return string winbar_str
 local function format_winbar_items(fmt_items, win_width, active_buf_idx, min_level)
-  if vim.tbl_isempty(fmt_items) then
-    error("fmt_items is empty")
-  end
-
   local tab_comp = tabpage_component()
   if tab_comp then
     --- '-1': table.concat(components, ' ') 前的 n 个空格
     win_width = win_width - vim.fn.strdisplaywidth(tab_comp.content) - 1
+  end
+
+  --- 兜底效果
+  if win_width <= 4 then
+    return '<...'
   end
 
   --- @type WinbarFormatterItemComponent[][]
@@ -252,10 +249,15 @@ end
 function WinbarFormatter.winbar_format(win_id)
   local w = g.get_win(win_id)
   if not w then
+    vim.notify(string.format("win(%d) is not cached in WinBarLine", win_id), vim.log.levels.ERROR)
     return
   end
 
   local bufnrs = w:list_bufs()
+  if #bufnrs <= 0 then
+    return
+  end
+
   local uni_bufnames = unique_bufnames(bufnrs)
 
   --- @type WinbarFormatterItem[]
@@ -277,11 +279,10 @@ function WinbarFormatter.winbar_format(win_id)
     table.insert(fmt_items, fmt_item)
   end
 
-  --- no item display in window
-  if vim.tbl_isempty(fmt_items) then
-    --- win 被 global cache, 但是没有 buffer, 说明 buffer 被 bdelete/bwipeout 了
-    --- `:h help` 时出现该问题
-    return ''
+  --- no item display in window 或者 win 中没有 active buffer
+  --- NOTE: `:h help` 时出现该问题
+  if vim.tbl_isempty(fmt_items) or not active_buf_idx then
+    return
   end
 
   local min_level = 2

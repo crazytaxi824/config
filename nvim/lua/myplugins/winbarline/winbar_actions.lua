@@ -149,9 +149,13 @@ function M.delete_current_buf()
   end
 
   local win_bufs = w:list_bufs()
-  if #win_bufs <= 1 then
+  if #win_bufs < 1 then
+    vim.notify(string.format("current_win(%d) has no buffer", curr_win), vim.log.levels.ERROR)
+    return
+  elseif #win_bufs == 1 then
     if win_bufs[1] ~= curr_buf then
-      error("win_bufs records error")
+      vim.notify("win_bufs records error", vim.log.levels.ERROR)
+      return
     end
 
     --- 如果 neovim 中有另一个 buflisted & buftype == '' 的 window 则 close window

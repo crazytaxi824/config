@@ -40,6 +40,15 @@ end
 
 --- @return integer[] bufnrs
 function WinbarLineWin:list_bufs()
+  --- @type integer[]
+  local valid_bufs = {}
+  for _, bufnr in ipairs(self.buf_list) do
+    if vim.api.nvim_buf_is_valid(bufnr) then
+      table.insert(valid_bufs, bufnr)
+    end
+  end
+
+  self.buf_list = valid_bufs
   return self.buf_list
 end
 
@@ -62,10 +71,8 @@ function WinbarLineWin:set_winbar(win_width)
   end
 
   --- 先 update window width, 再 format winbar string
-  local winbar_str = wb_fmt.winbar_format(self.win_id)
-  if winbar_str then
-    vim.api.nvim_set_option_value('winbar', winbar_str, { scope='local', win=self.win_id })
-  end
+  local winbar_str = wb_fmt.winbar_format(self.win_id) or ''
+  vim.api.nvim_set_option_value('winbar', winbar_str, { scope='local', win=self.win_id })
 end
 
 return WinbarLineWin

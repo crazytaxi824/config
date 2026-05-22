@@ -113,7 +113,7 @@ local function partial_str(str, width, suffix)
   end
 
   if #chars == 0 then
-    return nil
+    return
   end
 
   return table.concat(chars)
@@ -238,7 +238,7 @@ function WinbarFomatterItem:parse_item_to_components(level)
   end
 
   --- modified
-  if vim.bo[self.bufnr].modified then
+  if vim.api.nvim_buf_is_valid(self.bufnr) and vim.bo[self.bufnr].modified then
     local modified_str = wb_sign.modified .. ' '
     comp = { content = modified_str, hl = 'Modified' }
     table.insert(components, comp)
