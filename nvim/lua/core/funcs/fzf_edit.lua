@@ -58,7 +58,7 @@ function FZF_selected(fzf_file)
   --- 直接打开第一个 file
   vim.cmd.edit(fp_qf_list[1].filename)
   local win_id = vim.api.nvim_get_current_win()
-  vim.api.nvim_win_set_cursor(win_id, {fp_qf_list[1].lnum, fp_qf_list[1].col-1})  -- {1,0}-based byte index
+  vim.api.nvim_win_set_cursor(win_id, {fp_qf_list[1].lnum, fp_qf_list[1].col-1})  -- (1,0)-indexed
 
   --- 如果有多个 file, 则放入 quickfix list.
   if #fp_qf_list > 1 then
