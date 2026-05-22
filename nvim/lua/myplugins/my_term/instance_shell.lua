@@ -6,6 +6,10 @@ local mt = require('myplugins.my_term.myterm')
 ---
 --- @param term_id integer
 local function python_env(term_id)
+  --- 返回 MyTermPost.job_id
+  local tp = g.get_TermPost(term_id)
+  if not tp then return end
+
   local py_venv = vim.fs.find({ '.venv/bin/activate' }, {
     upward = true,
     stop = vim.env.HOME,
@@ -16,12 +20,8 @@ local function python_env(term_id)
     return
   end
 
-  --- 返回 MyTermPost.job_id
-  local tp = g.get_TermPost(term_id)
-  if tp then
-    -- vim.fn.chansend(job_id, 'source ' .. vim.fn.shellescape(py_venv[1]) .. ' && clear\n')
-    vim.api.nvim_chan_send(tp.job_id, 'source ' .. vim.fn.shellescape(py_venv[1]) .. ' && clear\n')
-  end
+  -- vim.fn.chansend(job_id, 'source ' .. vim.fn.shellescape(py_venv[1]) .. ' && clear\n')
+  vim.api.nvim_chan_send(tp.job_id, 'source ' .. vim.fn.shellescape(py_venv[1]) .. ' && clear\n')
 end
 
 
