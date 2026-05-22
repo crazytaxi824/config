@@ -50,7 +50,7 @@ end
 --- @return integer win_id
 function M.create_term_win(bufnr)
   if not vim.api.nvim_buf_is_valid(bufnr) then
-    error("bufnr is not exist")
+    error("term_bufnr is not valid, bufnr: " .. bufnr)
   end
 
   local exist_term_win_id = find_last_myterm_win()
@@ -72,9 +72,9 @@ end
 --- @param new_term_bufnr integer
 --- @param old_term_bufnr integer
 --- @return integer|nil win_id
-local function reuse_term_win(new_term_bufnr, old_term_bufnr)
+local function reuse_term_win_set_buf(new_term_bufnr, old_term_bufnr)
   if not vim.api.nvim_buf_is_valid(new_term_bufnr) then
-    error("bufnr is not exist")
+    error("term_bufnr is not valid, bufnr: " .. new_term_bufnr)
   end
 
   local term_win = vim.fn.bufwinid(old_term_bufnr)
@@ -115,7 +115,7 @@ function M.set_myterm_current_win(term)
   --- 每次运行 jobstart() 之前, 先创建一个新的 scratch buffer 给 terminal.
   local term_bufnr = vim.api.nvim_create_buf(false, true)  -- nobuflisted scratch buffer
 
-  --- 设置 term buffer 属性, console, terminal 通用属性
+  --- set buffer-local opts, 这里必须是 console, terminal 通用属性
   vim.bo[term_bufnr].filetype = "my_term"
   vim.bo[term_bufnr].undolevels = -1  -- disable undo
   vim.bo[term_bufnr].swapfile = false  -- disable swapfile
@@ -123,25 +123,25 @@ function M.set_myterm_current_win(term)
   --- autocmd 放在这里运行主要是有两个限制条件:
   --- 1. 在获取到 terminal bufnr 之后运行, 为了在 autocmd 中使用 bufnr 作为触发条件.
   --- 2. 在 term window 打开并加载 term bufnr 之前运行, 为了触发 BufWinEnter event.
-  cb.autocmd_callback(term, term_bufnr)  -- TODO: 合并 autocmd_callback & autocmd_jobstop
+  cb.autocmd_callback(term, term_bufnr)
 
   --- 判断 term_id 是否已经 run(), 是否可以 re-use window
   local term_win_id
   local tp = g.get_TermPost(term.id)
   if tp then
-    --- enter existing window
-    term_win_id = reuse_term_win(term_bufnr, tp.bufnr)
+    --- using existing term window load new term buffer
+    term_win_id = reuse_term_win_set_buf(term_bufnr, tp.bufnr)
 
     --- 放在最后避免 :bwipeout bufnr 时关闭了 term_win
     vim.api.nvim_buf_delete(tp.bufnr, { force=true })  -- :bwipeout
   end
 
   if not term_win_id then
-    --- 创建一个 new window
+    --- 创建一个 new window load new term buffer
     term_win_id = M.create_term_win(term_bufnr)
   end
 
-  --- 设置 term win 属性
+  --- set win-local opts, 这里必须是 console, terminal 通用属性
   local scope = { scope = 'local', win = term_win_id }
   vim.api.nvim_set_option_value('sidescrolloff', 0, scope)
   vim.api.nvim_set_option_value('scrolloff', 0, scope)

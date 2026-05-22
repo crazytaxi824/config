@@ -39,35 +39,19 @@ function M.autocmd_callback(term, term_bufnr)
     desc = "my_term: on_open() & on_close() callback",
   })
 
-  --- auto delete augroup
+  --- buffer 被 wipeout 的时候自动 jobstop(), 同时 remove terminal object from my_term cache.
   vim.api.nvim_create_autocmd("BufWipeout", {
     group = g_id,
     once = true,
     buffer = term_bufnr,
     callback = function(args)
-      vim.api.nvim_del_augroup_by_id(g_id)
-    end,
-    desc = "my_term: delete augroup by id",
-  })
-end
-
---- buffer 被 wipeout 的时候自动 jobstop(), 同时 remove terminal object from my_term cache.
----
---- @param term_id integer
---- @param term_bufnr integer
-function M.autocmd_jobstop(term_id, term_bufnr)
-  local g_id = vim.api.nvim_create_augroup('my_term_#id:' .. term_id, {clear=true})
-  vim.api.nvim_create_autocmd("BufWipeout", {
-    group = g_id,
-    once = true,
-    buffer = term_bufnr,
-    callback = function(args)
-      local tp = g.get_TermPost(term_id)
+      local tp = g.get_TermPost(term.id)
       if tp then
         vim.fn.jobstop(tp.job_id)  --- stop job in console_exec()
-        g.delete_TermPost(term_id)  --- remove from cache
+        g.delete_TermPost(term.id)  --- remove from cache
       end
-      vim.api.nvim_del_augroup_by_id(g_id)  --- delete augroup
+
+      vim.api.nvim_del_augroup_by_id(g_id)
     end,
     desc = "my_term: jobstop() when buffer wipeout",
   })
