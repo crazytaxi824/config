@@ -190,8 +190,8 @@ function M.console_exec(cmd, term, term_bufnr, term_win_id)
   vim.api.nvim_set_option_value('signcolumn', 'no', opts)
 
   --- setlocal buf-local opts
+  vim.fn.prompt_setprompt(term_bufnr, "console > ")  -- BUG: 必须放在 buftype=prompt 之前执行, 否则会强行打印出来
   vim.bo[term_bufnr].buftype = 'prompt'
-  vim.fn.prompt_setprompt(term_bufnr, "console > ")
   vim.fn.prompt_setcallback(term_bufnr, function(input)
     if input == 'exit' then
       if vim.api.nvim_buf_is_valid(term_bufnr) then
