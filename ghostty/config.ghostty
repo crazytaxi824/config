@@ -77,6 +77,9 @@ cursor-style-blink = true
 fullscreen = non-native-visible-menu
 quit-after-last-window-closed=true
 
+# screen history 最大值, 可用于编辑 screen filepath, 默认 10000000 (10MB)
+scrollback-limit = 30000000
+
 # notification 系统提醒 ----------------------------------------------------------------------------
 # 只有在 Ghostty 处于后台（非焦点）时才发送通知
 # notify-on-command-finish = unfocused
