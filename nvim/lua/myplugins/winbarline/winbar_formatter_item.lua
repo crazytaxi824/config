@@ -218,7 +218,7 @@ function WinbarFomatterItem:parse_item_to_components(level)
     bufname_str = self.basename .. ' '
   elseif level == WinbarFormatterLevel.minimal then
     local display_width = 4
-    local p_str = partial_str(self.basename, display_width)
+    local p_str = partial_str(self.basename, display_width) or ''
     if p_str == self.basename then
       bufname_str = bufname_str .. p_str .. ' '
     else
