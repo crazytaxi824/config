@@ -128,7 +128,7 @@ palette = 15=#eeeeee
 # 清除所有默认 keybind
 keybind = clear
 
-keybind = super+shift+alt+r=reload_config
+keybind = super+alt+shift+r=reload_config
 keybind = super+c=copy_to_clipboard:mixed
 keybind = super+v=paste_from_clipboard
 keybind = super+n=new_window
@@ -148,6 +148,14 @@ keybind = super+arrow_up=text:\x1b[5~
 keybind = super+arrow_down=text:\x1b[6~
 keybind = super+arrow_left=text:\x1bOH
 keybind = super+arrow_right=text:\x1bOF
+
+# 使用 neovim 查看屏幕上的内容, 相当于 `nvim -R 'screen_filepath'`
+keybind = super+alt+shift+o=text:nvim -R '
+keybind = chain=write_screen_file:paste,plain
+keybind = chain=text:'\n
+
+# 粘贴 screen filepath 到当前编辑器
+keybind = super+alt+shift+p=write_screen_file:paste,plain
 
 
 
