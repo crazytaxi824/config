@@ -48,13 +48,13 @@ function M.open_shell_term()
   --- terminal 没有被缓存则 M.new()
   local t = mt.new(vim.v.count1, {
     on_init = function(term, term_bufnr)
-      --- on_init 的时候 cursor 在 terminal window 中则执行 startinsert.
-      if vim.api.nvim_win_get_buf(vim.api.nvim_get_current_win()) == term_bufnr then
-        vim.cmd.startinsert()
-      end
-
-      --- source Python Virtual Environment
       vim.schedule(function()
+        --- on_init 的时候 cursor 在 terminal window 中则执行 startinsert.
+        if vim.api.nvim_get_current_buf() == term_bufnr then
+          vim.cmd.startinsert()
+        end
+
+        --- source Python Virtual Environment
         python_env(term.id)
       end)
     end,
