@@ -24,8 +24,10 @@ vim.api.nvim_set_hl(0, "my_output_eof", {ctermfg=Colors.g238.c, fg=Colors.g238.g
 local function buf_append_data(bufnr, data, hl, write_to_lastline)
   --- 保险起见
   -- if #data == 0 then return end
-  vim.cmd.stopinsert()
   vim.bo[bufnr].modifiable = true
+  if vim.api.nvim_get_current_buf() == bufnr then
+    vim.cmd.stopinsert()
+  end
 
   local last_lnum = vim.api.nvim_buf_line_count(bufnr)  -- 获取 buffer line count
   local last_line = vim.api.nvim_buf_get_lines(bufnr, -2, -1, true)[1]  -- 获取最后一行的内容
