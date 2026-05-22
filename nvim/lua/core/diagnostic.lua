@@ -47,9 +47,7 @@ local config = {
 
   update_in_insert = false,  -- 输入过程中 diagnostic. true - 体验更好 | false - 节省资源
 
-  --- NOTE: `:help vim.diagnostic.config()` 中说明 float 设置使用的 `:help vim.diagnostic.open_float()`
-  --- 而 vim.diagnostic.open_float() 使用的是 `:help vim.lsp.util.open_floating_preview()` + 一些属性.
-  --- 而 vim.lsp.util.open_floating_preview() 使用的是 `:help nvim_open_win()` + 一些属性.
+  --- `:help vim.diagnostic.Opts.Float` extends `:help vim.lsp.util.open_floating_preview.Opts`
   float = {
     focusable = false,
     style = "minimal",
@@ -60,8 +58,7 @@ local config = {
     -- noautocmd = true,  -- float window 不加载 Buf* 相关 autocmd. VVI: 不要设置为 true.
     close_events = {"WinScrolled", "CursorMoved", "CursorMovedI", "InsertCharPre"},
 
-    --- BUG: 在文件第三行显示 error message 时会报错: 'height' key must be a positive Integer.
-    --- 但是在 `:help vim.diagnostic.Opts.Float` 文档中并没有说可以设置 anchor_bias.
+    -- BUG: Invalid 'height': expected positive Integer, 如果报错的 line 上方的高度不够就会报这个错误
     -- anchor_bias = 'above',
   },
 }

@@ -11,13 +11,8 @@ function M.buf_scroll_bottom(term, term_bufnr)
 
   local win_id = vim.fn.bufwinid(term_bufnr)
   if win_id > 0 then
-    vim.api.nvim_win_call(win_id, function()
-      --- 在 terminal insert mode ( mode()=='t' ) 时无法使用 `normal! G`. 在 terminal 模式下默认会滚动到最底部.
-      local info = vim.api.nvim_get_mode()
-      if info and (info.mode ~= "t") then
-        vim.cmd.normal({ args = {'G'}, bang=true })  -- ':normal! G'
-      end
-    end)
+    local last_lnum = vim.api.nvim_buf_line_count(term_bufnr)  -- 获取 buffer line count
+    vim.api.nvim_win_set_cursor(win_id, {last_lnum, 0})  -- (1,0)-indexed
   end
 end
 

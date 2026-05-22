@@ -1,5 +1,14 @@
 local utils = require('myplugins.my_term.deps.utils')
 
+--- BUG: set buftype='prompt' bug. go to last line & last char, then 'dd' delete whole line.
+-- function T()
+--   local buf = vim.api.nvim_create_buf(false, true)
+--   local curr_win = vim.api.nvim_get_current_win()
+--   vim.api.nvim_win_set_buf(curr_win, buf)
+--   vim.api.nvim_buf_set_lines(buf, -2, -1, false, {"omg", "fooabar"})
+--   vim.bo[buf].buftype = "prompt"
+--   vim.api.nvim_win_set_cursor(curr_win, {2, 2})
+-- end
 
 local M = {}
 
