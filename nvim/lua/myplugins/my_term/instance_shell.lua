@@ -20,8 +20,10 @@ local function python_env(term_id)
     return
   end
 
-  -- vim.fn.chansend(job_id, 'source ' .. vim.fn.shellescape(py_venv[1]) .. ' && clear\n')
-  vim.api.nvim_chan_send(tp.job_id, 'source ' .. vim.fn.shellescape(py_venv[1]) .. ' && clear\n')
+  --- NOTE: chansend 和 nvim_chan_send 是模拟键盘操作, 所以不能使用 shellescape(), 否则报错
+  local cmd = string.format("source %q && clear\n", py_venv[1])
+  -- vim.fn.chansend(job_id, cmd)
+  vim.api.nvim_chan_send(tp.job_id, cmd)
 end
 
 
