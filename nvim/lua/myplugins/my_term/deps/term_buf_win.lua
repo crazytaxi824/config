@@ -1,5 +1,6 @@
 local g = require('myplugins.my_term.deps.global')
 local cb = require('myplugins.my_term.deps.autocmd_callback')
+local t_key  = require('myplugins.my_term.term_keymaps')
 
 
 local M = {}
@@ -120,10 +121,13 @@ function M.set_myterm_current_win(term)
   vim.bo[term_bufnr].undolevels = -1  -- disable undo
   vim.bo[term_bufnr].swapfile = false  -- disable swapfile
 
-  --- autocmd 放在这里运行主要是有两个限制条件:
+  --- NOTE: autocmd 放在这里运行主要是有两个限制条件:
   --- 1. 在获取到 terminal bufnr 之后运行, 为了在 autocmd 中使用 bufnr 作为触发条件.
   --- 2. 在 term window 打开并加载 term bufnr 之前运行, 为了触发 BufWinEnter event.
   cb.autocmd_callback(term, term_bufnr)
+
+  --- 设置 buffer-local 快捷键: 在获取到 term.bufnr 和 term.id 之后运行
+  t_key.set_buf_keymaps(term, term_bufnr)
 
   --- 判断 term_id 是否已经 run(), 是否可以 re-use window
   local term_win_id

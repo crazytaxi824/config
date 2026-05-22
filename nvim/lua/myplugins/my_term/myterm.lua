@@ -1,9 +1,7 @@
 local g = require('myplugins.my_term.deps.global')
 local console = require('myplugins.my_term.deps.exec_console')
 local terminal = require('myplugins.my_term.deps.exec_terminal')
-local cb = require('myplugins.my_term.deps.autocmd_callback')
 local t_win = require('myplugins.my_term.deps.term_buf_win')
-local t_key  = require('myplugins.my_term.term_keymaps')
 
 
 --- @class MyTerm
@@ -176,9 +174,6 @@ function MyTerm:run(cmd)
 
   --- 创建并进入 term window & buffer
   local term_bufnr, term_win_id = t_win.set_myterm_current_win(self)
-
-  --- 设置 buffer-local 快捷键: 在获取到 term.bufnr 和 term.id 之后运行
-  t_key.set_buf_keymaps(self, term_bufnr)
 
   --- 在 pcall 中执行, 如果 on_init, jobstart 报错的话会清除创建的 scatch buffer
   local ok, result = pcall(function()
