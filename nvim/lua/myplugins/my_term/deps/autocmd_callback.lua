@@ -23,12 +23,12 @@ function M.autocmd_callback(term, term_bufnr)
           end
         end
       elseif args.event == "BufWinLeave" then
+        --- cache myterm window height
+        local win_id = vim.api.nvim_get_current_win()
+        g.win_height = vim.api.nvim_win_get_height(win_id)
+
         local callbacks = term:on_close()
         if callbacks then
-          --- persist window height
-          local win_id = vim.api.nvim_get_current_win()
-          g.win_height = vim.api.nvim_win_get_height(win_id)
-
           --- on_close callbacks
           for _, on_close in ipairs(callbacks) do
             on_close(term, term_bufnr)
