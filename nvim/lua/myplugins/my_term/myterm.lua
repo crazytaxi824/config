@@ -31,14 +31,6 @@ local function myterm_exec(cmd, term, term_bufnr, term_win_id)
     error("term_win is not valid, win: " .. term_win_id)
   end
 
-  --- executed before jobstart(). DO NOT have 'term.bufnr' and 'term.job_id' ...
-  local callbacks = term:on_init()
-  if callbacks then
-    for _, on_init in ipairs(callbacks) do
-      on_init(term, term_bufnr)
-    end
-  end
-
   --- VVI: 必须在 bufnr 被 window 显示之后运行. 避免 nvim_buf_call() 生成一个临时 autocmd window.
   local job_id
   if term:console_output() then
@@ -105,10 +97,6 @@ function MyTerm:auto_scroll() return self._opts.auto_scroll end
 --- @return boolean|nil
 function MyTerm:console_output() return self._opts.console_output end
 
---- term:run() 时触发. before jobstart().
---- @return MyTermCallback[]|nil
-function MyTerm:on_init() return self._opts.on_init end
-
 --- BufWinEnter. NOTE: 每次 term:// buffer 被 win 显示的时候都会触发, 同一个 buffer 被多个窗口显示时也会触发.
 --- @return MyTermCallback[]|nil
 function MyTerm:on_open() return self._opts.on_open end
@@ -116,6 +104,14 @@ function MyTerm:on_open() return self._opts.on_open end
 --- BufWinLeave. NOTE: BufWinLeave 只会在 buffer 离开最后一个 win 的时候触发.
 --- @return MyTermCallback[]|nil
 function MyTerm:on_close() return self._opts.on_close end
+
+--- before jobstart(), term:run() 时触发
+--- @return MyTermCallback[]|nil
+function MyTerm:on_init() return self._opts.on_init end
+
+--- after jobstart() is running successfully, doesn't matter job finishes or not
+--- @return MyTermCBwithJob[]|nil
+function MyTerm:on_start() return self._opts.on_start end
 
 --- jobstart() 中 callback 函数
 --- @return MyTermOnOutput[]|nil
@@ -177,6 +173,15 @@ function MyTerm:run(cmd)
 
   --- 在 pcall 中执行, 如果 on_init, jobstart 报错的话会清除创建的 scatch buffer
   local ok, result = pcall(function()
+    --- before jobstart(), term:run() 时触发
+    local callbacks = self:on_init()
+    if callbacks then
+      for _, on_init in ipairs(callbacks) do
+        on_init(self, term_bufnr)
+      end
+    end
+
+    --- execute jobstart(cmd)
     return myterm_exec(cmd, self, term_bufnr, term_win_id)
   end)
 
@@ -187,12 +192,21 @@ function MyTerm:run(cmd)
     end
     --- 再次抛出 pcall 捕获的错误
     error(result)
+    return
   end
 
   --- VVI(require module): 延迟 require(module) 防止 module 之间循环引用
   local job_id = result
   tp = require('myplugins.my_term.myterm_post').from(self, term_bufnr, job_id)
   g.set_TermPost(tp.id, tp)  -- cache MyTermPost
+
+  --- after jobstart() is running successfully, doesn't matter job finishes or not
+  local callbacks = self:on_start()
+  if callbacks then
+    for _, on_start in ipairs(callbacks) do
+      on_start(self, term_bufnr, job_id)
+    end
+  end
 end
 
 --- jobstop(job_id)

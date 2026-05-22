@@ -1,4 +1,5 @@
 --- @alias MyTermCallback fun(term: MyTerm, bufnr: integer)
+--- @alias MyTermCBwithJob fun(term: MyTerm, bufnr: integer, job_id: integer)
 --- @alias MyTermOnOutput fun(term: MyTerm, bufnr: integer, job_id: integer, data: string[])
 --- @alias MyTermOnExit fun(term: MyTerm, bufnr: integer, job_id: integer, exit_code: integer)
 
@@ -28,8 +29,11 @@
 --- BufWinLeave. NOTE: BufWinLeave 只会在 buffer 离开最后一个 win 的时候触发.
 --- @field on_close?   MyTermCallback
 ---
---- term:run() 时触发. before jobstart().
+--- before jobstart(), term:run() 时触发
 --- @field on_init? MyTermCallback
+---
+--- after jobstart() is running successfully, doesn't matter job finishes or not
+--- @field on_start? MyTermCBwithJob
 ---
 --- jobstart() 中 callback 函数
 --- @field on_stdout? MyTermOnOutput
@@ -50,8 +54,11 @@
 --- BufWinLeave. NOTE: BufWinLeave 只会在 buffer 离开最后一个 win 的时候触发.
 --- @field on_close?   MyTermCallback[]
 ---
---- term:run() 时触发. before jobstart().
+--- before jobstart(), term:run() 时触发
 --- @field on_init? MyTermCallback[]
+---
+--- after jobstart() is running successfully, doesn't matter job finishes or not
+--- @field on_start? MyTermCBwithJob[]
 ---
 --- jobstart() 中 callback 函数
 --- @field on_stdout? MyTermOnOutput[]
