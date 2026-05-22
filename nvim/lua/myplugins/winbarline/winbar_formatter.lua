@@ -80,7 +80,7 @@ end
 local function tabpage_component()
   local tabs = vim.api.nvim_list_tabpages()
   if #tabs > 1 then
-    local tab_str = ' ' .. vim.fn.tabpagenr() ..'/'.. #tabs .. ' '
+    local tab_str = string.format(' %d/%d ', vim.fn.tabpagenr(), #tabs)
     --- @type WinbarFormatterItemComponent
     local tab_comp = { content = tab_str, hl = '%=%#MyWinBarLineTab#' }
     return tab_comp
@@ -97,7 +97,7 @@ local function format_winbar_components(fmt_comps_list)
   for _, comps in ipairs(fmt_comps_list) do
     local str = ''
     for _, comp in ipairs(comps) do
-      str = str .. comp.hl .. comp.content
+      str = str .. comp.hl .. comp.content:gsub('%%', '%%%%')
     end
     str = str .. '%*'  -- '%*' reset highligh
     table.insert(str_list, str)
@@ -207,6 +207,9 @@ end
 --- @param min_level WinbarFormatterLevel
 --- @return string winbar_str
 local function format_winbar_items(fmt_items, win_width, active_buf_idx, min_level)
+  --- @type WinbarFormatterItemComponent[][]
+  local components = {}
+
   local tab_comp = tabpage_component()
   if tab_comp then
     --- '-1': table.concat(components, ' ') 前的 n 个空格
@@ -215,22 +218,20 @@ local function format_winbar_items(fmt_items, win_width, active_buf_idx, min_lev
 
   --- 兜底效果
   if win_width <= 4 then
-    return '<...'
-  end
-
-  --- @type WinbarFormatterItemComponent[][]
-  local components = {}
-  for level = 5, min_level, -1 do
-    local comps, comps_width = fmt_items_to_components(fmt_items, level)
-    if comps_width < win_width then
-      components = comps
-      break
+    components = {{{ content = '<...', hl='' }}}
+  else
+    for level = 5, min_level, -1 do
+      local comps, comps_width = fmt_items_to_components(fmt_items, level)
+      if comps_width < win_width then
+        components = comps
+        break
+      end
     end
-  end
 
-  --- window width 不够, 只显示部分 items
-  if vim.tbl_isempty(components) then
-    components = reduce_items_to_display(fmt_items, win_width, active_buf_idx, min_level)
+    --- window width 不够, 只显示部分 items
+    if vim.tbl_isempty(components) then
+      components = reduce_items_to_display(fmt_items, win_width, active_buf_idx, min_level)
+    end
   end
 
   --- 添加 tabpagenr component
@@ -268,7 +269,8 @@ function WinbarFormatter.winbar_format(win_id)
     local bufnr = bufnrs[i]
     local b = g.get_buf(bufnr)
     if not b then
-      error('buffer: ' .. bufnr .. ' is not cached')
+      vim.notify(string.format('buffer: %d is not cached', bufnr), vim.log.levels.ERROR)
+      return
     end
 
     local fmt_item = wb_fmt_item.new(win_id, bufnr, i, path_list, b:diagnostic())

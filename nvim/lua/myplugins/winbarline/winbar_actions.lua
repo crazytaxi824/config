@@ -24,7 +24,8 @@ function M.goto(idx)
 
   local bufnr = win_bufs[idx]
   if not vim.api.nvim_buf_is_valid(bufnr) then
-    error('buffer is not valid')
+    vim.notify('buffer is not valid', vim.log.levels.ERROR)
+    return
   end
 
   vim.api.nvim_win_set_buf(curr_win, win_bufs[idx])
@@ -62,7 +63,7 @@ function M.cycle(direction)
       error('buffer is not valid')
     end
   else
-    error('move error: ' .. direction)
+    error(string.format('move direction error: %s', direction))
   end
 end
 
@@ -80,7 +81,7 @@ function M.delete_buffers(opt)
   local win_bufs = w:list_bufs()
   local idx = u.list_index_value(win_bufs, curr_buf)
   if not idx then
-    error("current buffer is not in the win_bufs")
+    error("current buffer is not register to current window")
   end
 
   local delete_bufs = {}  --- @type integer[] 需要删除的 buffers
@@ -120,10 +121,11 @@ function M.delete_buffers(opt)
   --- 从 bufs 中删除 win
   for _, d_buf in ipairs(delete_bufs) do
     local b = g.get_buf(d_buf)
-    if not b then
-      error('buffer: '.. d_buf .. ' is not exist')
+    if b then
+      b:remove_win(curr_win)
+    else
+      vim.notify(string.format('buffer: %d is not exist', d_buf), vim.log.levels.ERROR)
     end
-    b:remove_win(curr_win)
   end
 
   w:set_winbar()
@@ -201,7 +203,7 @@ function M.delete_current_buf()
 
   local b = g.get_buf(curr_buf)
   if not b then
-    error("buffer: ".. curr_buf .. ' is not exist')
+    error(string.format("buffer: %d is not exist", curr_buf))
   end
 
   --- 相互 remove

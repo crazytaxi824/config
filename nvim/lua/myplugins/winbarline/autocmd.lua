@@ -98,10 +98,11 @@ vim.api.nvim_create_autocmd({"WinClosed"}, {
     --- 从每个 buf-window list 中删除 win
     for _, bufnr in ipairs(w:list_bufs()) do
       local b = g.get_buf(bufnr)
-      if not b then
-        error('buffer: '.. bufnr .. ' is not exist')
+      if b then
+        b:remove_win(win_id)
+      else
+        vim.notify(string.format('buffer: %d is not exist', bufnr), vim.log.levels.ERROR)
       end
-      b:remove_win(win_id)
     end
 
     --- delete winbar_win from cache
