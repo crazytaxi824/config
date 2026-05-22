@@ -189,7 +189,7 @@ function MyTerm:run(cmd)
     error(result)
   end
 
-  --- VVI(require module): 延迟 require() 防止循环引用
+  --- VVI(require module): 延迟 require(module) 防止 module 之间循环引用
   local job_id = result
   tp = require('myplugins.my_term.myterm_post').from(self, term_bufnr, job_id)
   g.set_TermPost(tp.id, tp)  -- cache MyTermPost

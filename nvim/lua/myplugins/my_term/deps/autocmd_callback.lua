@@ -64,15 +64,10 @@ function M.autocmd_jobstop(term_id, term_bufnr)
     callback = function(args)
       local tp = g.get_TermPost(term_id)
       if tp then
-        --- stop job in console_exec()
-        vim.fn.jobstop(tp.job_id)
-
-        --- remove from cache
-        g.delete_TermPost(term_id)
+        vim.fn.jobstop(tp.job_id)  --- stop job in console_exec()
+        g.delete_TermPost(term_id)  --- remove from cache
       end
-
-      --- delete augroup
-      vim.api.nvim_del_augroup_by_id(g_id)
+      vim.api.nvim_del_augroup_by_id(g_id)  --- delete augroup
     end,
     desc = "my_term: jobstop() when buffer wipeout",
   })
