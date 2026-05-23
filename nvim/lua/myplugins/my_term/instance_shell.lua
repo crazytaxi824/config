@@ -4,7 +4,7 @@ local mt = require('myplugins.my_term.myterm')
 
 --- source Python Virtual Environment
 ---
---- @param term_id integer
+---@param term_id integer
 local function python_env(term_id)
   --- 返回 MyTermPost.job_id
   local tp = g.get_TermPost(term_id)

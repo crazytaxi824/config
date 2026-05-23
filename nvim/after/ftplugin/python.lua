@@ -18,7 +18,7 @@ end
 
 --- file is absolut path
 ---
---- @param filepath string
+---@param filepath string
 local function py_run(filepath)
   local py_path = venv(filepath)
   if not py_path then

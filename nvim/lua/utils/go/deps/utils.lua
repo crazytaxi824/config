@@ -12,8 +12,8 @@ local test_patterns = {
 --- - `BenchmarkXxx(b *testing.B)`
 --- - `FuzzXxx(f *testing.F)`
 ---
---- @return string|nil func_name
---- @return 'run'|'bench'|'fuzz'|nil mode
+---@return string|nil func_name
+---@return 'run'|'bench'|'fuzz'|nil mode
 function M.get_exact_testfn_name()
   local lcontent = vim.api.nvim_get_current_line()
   --- NOTE: go test 函数不允许 func [T any]TestXxx(), 不允许有 type param.
@@ -32,8 +32,8 @@ end
 
 --- 返回 go test -run 使用的 regexp
 ---
---- @param mode 'run'|'bench'
---- @return string
+---@param mode 'run'|'bench'
+---@return string
 function M.get_testfn_name_regexp(mode)
   local map = {
     run   = '^Test.*',
@@ -49,8 +49,8 @@ end
 
 --- 根据 flags 返回 {cmd} args
 ---
---- @param opts GoTestOpts
---- @return string[] cmd_args
+---@param opts GoTestOpts
+---@return string[] cmd_args
 function M.mode_flags(opts)
   local scope = opts.go_list.ImportPath
   if opts.project then

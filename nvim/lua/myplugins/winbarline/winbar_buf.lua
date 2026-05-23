@@ -1,6 +1,6 @@
---- @class WinbarLineBuffer
---- @field bufnr integer
---- @field private win_dict table<integer, boolean>
+---@class WinbarLineBuffer
+---@field bufnr integer
+---@field private win_dict table<integer, boolean>
 local WinbarLineBuf = {}
 WinbarLineBuf.__index = WinbarLineBuf
 
@@ -8,7 +8,7 @@ WinbarLineBuf.__index = WinbarLineBuf
 ---@param win_id integer
 ---@return WinbarLineBuffer
 function WinbarLineBuf.new(bufnr, win_id)
-  --- @type WinbarLineBuffer
+  ---@type WinbarLineBuffer
   local self = setmetatable({
     bufnr = bufnr,
     win_dict = { [win_id] = true },
@@ -26,13 +26,13 @@ function WinbarLineBuf:remove_win(win_id)
   self.win_dict[win_id] = nil
 end
 
---- @return integer[] win_ids
+---@return integer[] win_ids
 function WinbarLineBuf:list_wins()
   return vim.tbl_keys(self.win_dict)
 end
 
 --- 获取 diagnostic info
---- @return {count: integer, severity: integer}|nil
+---@return {count: integer, severity: integer}|nil
 function WinbarLineBuf:diagnostic()
   local diagnostics = vim.diagnostic.count(self.bufnr) or {}
   local diag_count = 0

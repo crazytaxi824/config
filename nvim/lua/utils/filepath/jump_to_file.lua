@@ -6,8 +6,8 @@ local vs = require('utils.visual_selected')
 --- 在当前 tab 中选择合适的 window 用于显示文件
 --- 优先选择已显示目标文件的 window，其次选择第一个 listed buffer window
 ---
---- @param absolute_path string
---- @return integer|nil
+---@param absolute_path string
+---@return integer|nil
 local function find_win_to_jump(absolute_path)
   local display_win_id
 
@@ -34,9 +34,9 @@ end
 
 --- 跳转到 file
 ---
---- @param absolute_path string
---- @param lnum integer
---- @param col integer
+---@param absolute_path string
+---@param lnum integer
+---@param col integer
 local function jump_to_file(absolute_path, lnum, col)
   lnum = lnum or 1
   col = col or 1
@@ -58,7 +58,7 @@ end
 
 --- 跳转到 directory
 ---
---- @param dir string
+---@param dir string
 local function jump_to_dir(dir)
   --- NOTE: 新窗口中打开 dir, 因为 nvim-tree 设置 hijack_netrw=true & hijack_directories=true,
   --- 如果直接使用 `:edit dir` 会导致打开 dir 的窗口被关闭 (hijack).
@@ -68,7 +68,7 @@ end
 
 --- jump to file/directory
 ---
---- @param content string|nil filepath:{lnum}:{col}
+---@param content string|nil filepath:{lnum}:{col}
 local function jump(content)
   if not content then
     return

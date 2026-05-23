@@ -2,7 +2,7 @@ local g = require('myplugins.my_term.deps.global')
 
 --- close all other terms except term_id
 ---
---- @param term_id integer
+---@param term_id integer
 local function close_others(term_id)
   if not g.get_TermPost(term_id) then
     Notify('term: "' .. term_id .. '" is not exist', "WARN")
@@ -18,7 +18,7 @@ end
 
 --- wipeout term
 ---
---- @param term_id integer
+---@param term_id integer
 local function wipeout_term(term_id)
   local tp = g.get_TermPost(term_id)
   if not tp then
@@ -36,7 +36,7 @@ end
 
 --- wipeout all other terms except term_id
 ---
---- @param term_id integer
+---@param term_id integer
 local function wipeout_others(term_id)
   local tp = g.get_TermPost(term_id)
   if not tp then
@@ -44,7 +44,7 @@ local function wipeout_others(term_id)
     return
   end
 
-  --- @type MyTermPost[]
+  ---@type MyTermPost[]
   local tps = {}
   g.range_TermPost(function(term_post)
     if term_post.bufnr ~= tp.bufnr then
@@ -63,8 +63,8 @@ local M = {}
 
 --- set keymaps for my_term terminal & output-buffer.
 ---
---- @param term MyTerm
---- @param term_bufnr integer
+---@param term MyTerm
+---@param term_bufnr integer
 function M.set_buf_keymaps(term, term_bufnr)
   local opt = { buffer = term_bufnr, silent = true }
   local keys = {

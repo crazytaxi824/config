@@ -11,10 +11,10 @@ M.flags = { debounce_text_changes = 500 }   --- 默认 150.
 
 --- on_error() invoked when the client operation throws an error.
 ---
---- @param code integer
---- @param err string
+---@param code integer
+---@param err string
 M.on_error = function(code, err)
-  Notify(vim.inspect(vim.lsp.rpc.client_errors[code]), "ERROR", {title = "lspconfig/setup_opts.lua"})
+  Notify({vim.inspect(vim.lsp.rpc.client_errors[code], err}), "ERROR", {title = "lspconfig/setup_opts.lua"})
 end
 
 --- capabilities -----------------------------------------------------------------------------------
@@ -53,8 +53,8 @@ M.capabilities.textDocument.foldingRange = {
 
 --- on_init() run before on_attach(), 可以通过打印看出先后顺序.
 ---
---- @param client vim.lsp.Client
---- @return boolean
+---@param client vim.lsp.Client
+---@return boolean
 M.on_init = function(client)
   --- run after init_options, before on_attach() --------------------------------------------------- {{{
   -- if client.server_capabilities then
@@ -83,8 +83,8 @@ end
 --- on_attach - 加载 Key mapping & highlight 设置
 --- 这里传入的 client 是正在加载的 lsp_client, vim.print(client) 中可以看到 codeActionKind.
 ---
---- @param client vim.lsp.Client
---- @param bufnr integer
+---@param client vim.lsp.Client
+---@param bufnr integer
 M.on_attach = function(client, bufnr)
   --- 加载自定义设置 ---
   --- textDocument/documentHighlight, 显示 references

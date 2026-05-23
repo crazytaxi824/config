@@ -10,8 +10,8 @@ local local_lsp_settings = nil
 
 --- 获取全局和本地 lsp 设置
 ---
---- @param lsp_tool string (lsp_name)
---- @return table lsp_config
+---@param lsp_tool string (lsp_name)
+---@return table lsp_config
 local function load_lsp_configs(lsp_tool)
   --- 1. 如果文件存在, 则加载自定义设置, 如果没有自定义设置则加载默认设置.
   local status_ok, lsp_config = pcall(require, "lsp.lsp_config.tools." .. lsp_tool)
@@ -48,14 +48,14 @@ end
 
 --- 返回当前本地 lsp 设置
 ---
---- @return table|nil
+---@return table|nil
 function M.exist_local_settings()
   return local_lsp_settings
 end
 
 --- 设置单个 lsp
 ---
---- @param lsp_tool string
+---@param lsp_tool string
 function M.lspconfig_setup(lsp_tool)
   local lsp_config = vim.tbl_deep_extend('force', common_config, load_lsp_configs(lsp_tool))
   vim.lsp.config(lsp_tool, lsp_config)
@@ -63,7 +63,7 @@ end
 
 --- 重启 lsp
 ---
---- @param lsp_tools string[]
+---@param lsp_tools string[]
 function M.restart_lsps(lsp_tools)
   local tools = {}
 

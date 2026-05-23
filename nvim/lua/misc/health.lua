@@ -37,10 +37,10 @@ local mason_record = [[
 
 local function check_mason_tools()
   --- 分析 mason_record string
-  --- @type string[]
+  ---@type string[]
   local lines = vim.split(mason_record, "\n", { plain = true, trimempty = true })
 
-  --- @type string[]
+  ---@type string[]
   local mason_tools = vim.tbl_map(vim.trim, lines)
 
   local pkgs = require("mason-registry").get_installed_packages()
@@ -66,7 +66,7 @@ end
 
 --- check command line tools ----------------------------------------------------------------------- {{{
 
---- @type table<string, { cmd: string, install?: string, mason?: string }>
+---@type table<string, { cmd: string, install?: string, mason?: string }>
 local cmd_tools = {
   go = { cmd = "go", install = "https://go.dev" },
   graphviz = { cmd = "dot", install = "brew info graphviz" },
@@ -74,7 +74,7 @@ local cmd_tools = {
   fd =       { cmd = "fd",  install = "brew info fd" },
 }
 
---- @param tools table<string, { cmd: string, install?: string, mason?: string }>
+---@param tools table<string, { cmd: string, install?: string, mason?: string }>
 local function check_cmd_tools(tools)
   for name, tool in pairs(tools) do
     if vim.fn.executable(tool.cmd) == 1 then

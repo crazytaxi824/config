@@ -3,28 +3,28 @@ local t_win = require('myplugins.my_term.deps.term_buf_win')
 
 
 --- 继承 MyTerm
---- @class MyTermPost: MyTerm
---- @field bufnr integer
---- @field job_id integer
+---@class MyTermPost: MyTerm
+---@field bufnr integer
+---@field job_id integer
 local MyTermPost = setmetatable({}, { __index = require("myplugins.my_term.myterm") })  -- 继承 MyTerm
 MyTermPost.__index = MyTermPost
 
 
---- @param myterm MyTerm
---- @param bufnr integer
---- @param job_id integer
---- @return MyTermPost
+---@param myterm MyTerm
+---@param bufnr integer
+---@param job_id integer
+---@return MyTermPost
 function MyTermPost.from(myterm, bufnr, job_id)
-  --- @cast myterm MyTermPost
+  ---@cast myterm MyTermPost
   myterm.bufnr = bufnr
   myterm.job_id = job_id
 
-  --- @type MyTermPost
+  ---@type MyTermPost
   local self = setmetatable(myterm, MyTermPost)
   return self
 end
 
---- @return integer|nil win_id
+---@return integer|nil win_id
 function MyTermPost:open_win()
   local term_win = vim.fn.bufwinid(self.bufnr)
   if term_win > 0 then
@@ -48,7 +48,7 @@ function MyTermPost:close_win()
   end
 end
 
---- @return integer|nil job_status
+---@return integer|nil job_status
 function MyTermPost:job_status()
   --- VVI: jobwait({job_id}, 0) 如果没有 0 则会同步阻塞整个 neovim
   return vim.fn.jobwait({self.job_id}, 0)[1]

@@ -13,12 +13,12 @@ local M = {}
 
 --- 测试整个 project `go test run/bench ./...`
 ---
---- @param mode 'run'|'bench'
+---@param mode 'run'|'bench'
 M.go_test_proj = function(mode)
   --- 排序
   local select = vim.iter({go_none.list, go_cover.list}):flatten():totable()
 
-  --- @type table<string, GoTestFlag>
+  ---@type table<string, GoTestFlag>
   local test_flags = vim.tbl_deep_extend('force', go_none.flags, go_cover.flags)
 
   vim.ui.select(select, {
@@ -28,7 +28,7 @@ M.go_test_proj = function(mode)
     end
   }, function(choice)
     if choice then
-      --- @type GoTestOpts
+      ---@type GoTestOpts
       local opts = {
         testfn_name = utils.get_testfn_name_regexp(mode),
         go_list = go_list_module.go_list(),

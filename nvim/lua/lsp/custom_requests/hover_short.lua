@@ -15,9 +15,9 @@ local M = {}
 
 --- NOTE: 这里 row 和 char_pos 都是从 0 开始计算.
 ---
---- @param lsp_req_pos_line integer
---- @param lsp_req_pos_char integer  char_pos 是指行内第几个字符, \t 算一个字符.
---- @return table
+---@param lsp_req_pos_line integer
+---@param lsp_req_pos_char integer  -- char_pos 是指行内第几个字符, \t 算一个字符.
+---@return table
 local function calculate_offset(lsp_req_pos_line, lsp_req_pos_char)
   local cursor_line, cursor_col = unpack(vim.api.nvim_win_get_cursor(0))  -- (1,0)-indexed
 
@@ -46,9 +46,9 @@ end
 
 --- 计算 argument list 前面一个 node 的 start 位置.
 ---
---- @param row integer
---- @param col integer
---- @return table
+---@param row integer
+---@param col integer
+---@return table
 local function node_before_arguments(row, col)
   local node_before_args = vim.treesitter.get_node({pos={row, col}})
   if not node_before_args then
@@ -74,7 +74,7 @@ end
 --        func call 名字 -- call_expression.function.field
 -- }}}
 ---
---- @return table|nil
+---@return table|nil
 local function find_fn_call_before_cursor()
   --- 获取 node at cursor.
   local cur_line, cur_col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -111,8 +111,8 @@ end
 
 --- 创建 vim.lsp.buf_request_all(_, _, params, _) 中的 params
 ---
---- @param fn_node table
---- @return fun(client: vim.lsp.Client, bufnr: integer):table?
+---@param fn_node table
+---@return fun(client: vim.lsp.Client, bufnr: integer):table?
 local function client_positional_params(fn_node)
   local win = vim.api.nvim_get_current_win()
   return function(client)
@@ -153,7 +153,7 @@ function M.hover_short()
   end
 
   --- 1. NOTE: 修改 hover_short floating window 显示的位置.
-  --- @type vim.lsp.buf.hover.Opts
+  ---@type vim.lsp.buf.hover.Opts
   local config = {
     offset_x = fn_node.offset_x,
     offset_y = fn_node.offset_y,
@@ -176,7 +176,7 @@ function M.hover_short()
     end
 
     -- Filter errors from results
-    local results1 = {} --- @type table<integer,lsp.Hover>
+    local results1 = {}  ---@type table<integer,lsp.Hover>
     local empty_response = false
 
     for client_id, resp in pairs(results) do
@@ -224,7 +224,7 @@ function M.hover_short()
       return
     end
 
-    local contents = {} --- @type string[]
+    local contents = {}  ---@type string[]
 
     local nresults = #vim.tbl_keys(results1)
 

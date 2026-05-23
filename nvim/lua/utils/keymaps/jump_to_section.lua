@@ -2,7 +2,7 @@
 
 local M = {}
 
---- @return TSNode|nil
+---@return TSNode|nil
 local function find_ts_root_node()
   --- vim.treesitter.get_parser(bufnr, lang)
   --- "bufnr", 0 current buffer
@@ -20,14 +20,14 @@ local function find_ts_root_node()
 end
 
 --- 只返回 root's Children Nodes
---- @return TSNode[]|nil
+---@return TSNode[]|nil
 local function ts_root_children()
   local root = find_ts_root_node()
   if not root then
     return
   end
 
-  --- @type TSNode[]
+  ---@type TSNode[]
   local child_without_comment = {}  -- cache named child without comment.
 
   local child_count = root:named_child_count()
@@ -44,8 +44,8 @@ local function ts_root_children()
 end
 
 --- 当前 cursor 所在 root's Child Node
---- @param root_children TSNode[]
---- @return { index: integer, cursor_lnum: integer, node_start_lnum: integer }
+---@param root_children TSNode[]
+---@return { index: integer, cursor_lnum: integer, node_start_lnum: integer }
 local function current_node(root_children)
   local cursor_lnum = vim.api.nvim_win_get_cursor(0)[1]  -- {lnum, col}, (1,0)-indexed
 

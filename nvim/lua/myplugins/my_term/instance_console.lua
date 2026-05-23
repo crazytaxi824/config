@@ -2,10 +2,10 @@ local g = require('myplugins.my_term.deps.global')
 local mt = require('myplugins.my_term.myterm')
 local fp = require('utils.filepath')
 
---- @type integer
+---@type integer
 local console_id = 1001
 
---- @type MyTermOpts
+---@type MyTermOpts
 local default_opts = {
   auto_scroll = true,
   console_output = true,  -- 这里使用 console_exec()
@@ -34,7 +34,7 @@ local M = {}
 
 --- reset console terminal callbacks
 ---
---- @return MyTerm
+---@return MyTerm
 M.console = function()
   return mt.new(console_id, default_opts, 'force')
 end

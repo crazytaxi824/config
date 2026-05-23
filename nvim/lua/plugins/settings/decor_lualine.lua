@@ -75,7 +75,7 @@ end
 
 --- check Mixed-indent ---------------------------------------------------------
 local function check_mixed_indent()
-  --- @type integer lnum
+  ---@type integer lnum
   local indent_lnum
   if vim.bo.expandtab then
     --- using space as indent, find "\t" indent

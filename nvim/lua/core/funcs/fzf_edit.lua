@@ -7,8 +7,8 @@
 
 --- 获取 fzf 文件中 selected items
 ---
---- @param fzf_file string filepath
---- @return vim.quickfix.entry[]|nil
+---@param fzf_file string filepath
+---@return vim.quickfix.entry[]|nil
 local function parse_fzf_items(fzf_file)
   --- 获取文件内容, readfile() 会按照 '\n' 返回一个 list.
   local fzf_selected_items = vim.fn.readfile(fzf_file)
@@ -43,7 +43,7 @@ end
 
 --- 配合 fzf 用于 edit selected items
 ---
---- @param fzf_file string filepath
+---@param fzf_file string filepath
 function FZF_selected(fzf_file)
   if not vim.uv.fs_stat(fzf_file) then
     Notify({"fzf `{+f}` tmp file is NOT readable.", "path: `" .. fzf_file .. "`"}, "ERROR")

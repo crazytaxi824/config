@@ -1,13 +1,13 @@
---- @class WinbarFormatterItemComponent
+---@class WinbarFormatterItemComponent
 ---
 --- winbar 需要显示的内容
---- @field content string
+---@field content string
 ---
 --- winbar 显示内容的 highlight
---- @field hl string
+---@field hl string
 
 
---- @enum WinbarFormatterLevel
+---@enum WinbarFormatterLevel
 local WinbarFormatterLevel = {
   none = 1,    -- no bufname
   minimal = 2, -- 4 display width bufname with '…'
@@ -23,34 +23,34 @@ local wb_sign = {
 }
 
 
---- @class WinbarFormatterItem
---- @field bufnr integer
+---@class WinbarFormatterItem
+---@field bufnr integer
 ---
 --- display index in window
---- @field index integer
+---@field index integer
 ---
 --- filepath head/dir
---- @field fp_prefix? string[]  -- filepath prefix
+---@field fp_prefix? string[]  -- filepath prefix
 ---
 --- last part of filepath
---- @field basename string
+---@field basename string
 ---
 --- vim.diagnostic.count()
---- @field diagnostic? { count: integer, severity: integer }
+---@field diagnostic? { count: integer, severity: integer }
 ---
 --- active buffer
---- @field active boolean
+---@field active boolean
 ---
---- @field in_current_win boolean
+---@field in_current_win boolean
 local WinbarFomatterItem = {}
 WinbarFomatterItem.__index = WinbarFomatterItem
 
---- @param win_id integer
---- @param bufnr integer
---- @param index integer
---- @param path_list string[]  -- filepath list, eg: a/b/c -> ["a", "b", "c"]
---- @param diagnostic? { count: integer, severity: integer }
---- @return WinbarFormatterItem
+---@param win_id integer
+---@param bufnr integer
+---@param index integer
+---@param path_list string[]  -- filepath list, eg: a/b/c -> ["a", "b", "c"]
+---@param diagnostic? { count: integer, severity: integer }
+---@return WinbarFormatterItem
 function WinbarFomatterItem.new(win_id, bufnr, index, path_list, diagnostic)
   local prefix
   if #path_list < 1 then
@@ -59,7 +59,7 @@ function WinbarFomatterItem.new(win_id, bufnr, index, path_list, diagnostic)
     prefix = table.move(path_list, 1, #path_list-1, 1, {})
   end
 
-  --- @type WinbarFormatterItem
+  ---@type WinbarFormatterItem
   local self = setmetatable({
     bufnr = bufnr,
     index = index,
@@ -75,10 +75,10 @@ end
 
 
 --- 从 str 中按 display width 截取，suffix=true 从后往前
---- @param str string
---- @param width integer  remaining display width
---- @param suffix boolean|nil
---- @return string|nil partial_string
+---@param str string
+---@param width integer  remaining display width
+---@param suffix boolean|nil
+---@return string|nil partial_string
 local function partial_str(str, width, suffix)
   -- strcharlen('你好') = 2, 按照 char 计算
   -- string.len('你好') = 6, 按照 byte 计算
@@ -120,10 +120,10 @@ local function partial_str(str, width, suffix)
 end
 
 
---- @param width integer
---- @param level WinbarFormatterLevel
---- @param mode? 'prefix'|'suffix'
---- @return WinbarFormatterItemComponent[]  -- indicator, index, bufname, diagnostic, modified
+---@param width integer
+---@param level WinbarFormatterLevel
+---@param mode? 'prefix'|'suffix'
+---@return WinbarFormatterItemComponent[]  -- indicator, index, bufname, diagnostic, modified
 function WinbarFomatterItem:partial(width, level, mode)
   mode = mode or 'prefix'
   local suffix = mode == 'suffix'
@@ -133,7 +133,7 @@ function WinbarFomatterItem:partial(width, level, mode)
     return components
   end
 
-  --- @type WinbarFormatterItemComponent[]
+  ---@type WinbarFormatterItemComponent[]
   local partial_comps = {}
   local remain_width = width
 
@@ -174,17 +174,17 @@ function WinbarFomatterItem:partial(width, level, mode)
 end
 
 
---- @param level WinbarFormatterLevel
---- @return WinbarFormatterItemComponent[]  -- indicator, index, bufname, diagnostic, modified
---- @return integer width -- item width: including a trailing space
+---@param level WinbarFormatterLevel
+---@return WinbarFormatterItemComponent[]  -- indicator, index, bufname, diagnostic, modified
+---@return integer width -- item width: including a trailing space
 function WinbarFomatterItem:parse_item_to_components(level)
-  --- @type WinbarFormatterItemComponent[]
+  ---@type WinbarFormatterItemComponent[]
   local components = {}
   local item_width = 1  -- NOTE: 每个 item 后一个空格
 
   --- indicator
   local indicator_str = self.active and wb_sign.indicator or ' '
-  --- @type WinbarFormatterItemComponent
+  ---@type WinbarFormatterItemComponent
   local comp = { content = indicator_str, hl = 'Indicator' }
   table.insert(components, comp)
 

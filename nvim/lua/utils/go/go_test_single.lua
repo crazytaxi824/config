@@ -15,7 +15,7 @@ local M = {}
 
 --- `go test run/bench=^TEST_Func_Name$ ImportPath`
 ---
---- @param profile? 'profile' `go test pprof`
+---@param profile? 'profile' `go test pprof`
 function M.go_test_single_func(profile)
   --- 判断当前文件是否 _test.go
   if not string.match(vim.fn.bufname(), "_test%.go$") then
@@ -29,7 +29,7 @@ function M.go_test_single_func(profile)
     return
   end
 
-  --- @type GoTestOpts
+  ---@type GoTestOpts
   local opts = {
     testfn_name = '^'..testfn_name..'$',
     mode = mode,
@@ -49,7 +49,7 @@ function M.go_test_single_func(profile)
     --- 排序
     local select = vim.iter({go_pprof.list, go_cover.list}):flatten():totable()
 
-    --- @type table<string, GoTestFlag>
+    ---@type table<string, GoTestFlag>
     local test_flags = vim.tbl_deep_extend('force', go_pprof.flags, go_cover.flags)
 
     vim.ui.select(select, {
@@ -73,7 +73,7 @@ function M.go_test_single_func(profile)
   if mode == 'fuzz' then
     local select = go_fuzz.list
 
-    --- @type table<string, GoTestFlag>
+    ---@type table<string, GoTestFlag>
     local test_flags = go_fuzz.flags
 
     vim.ui.select(select, {

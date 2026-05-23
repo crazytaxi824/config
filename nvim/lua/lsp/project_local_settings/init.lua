@@ -37,8 +37,8 @@ local utils = require("lsp.project_local_settings.utils")
 ---   2. json 文件为空 ""
 --- 如果 return nil 表示 json 格式错误, 则不要 tbl_deep_extend to default settings.
 ---
---- @param json_file string (file path)
---- @return table|nil
+---@param json_file string  -- (file path)
+---@return table|nil
 local function read_local_settings(json_file)
   local local_settings_filepath = utils.find_local_settings_file(json_file)
 
@@ -64,8 +64,8 @@ end
 ---
 --- { pyright:python = { ... } } 转成 { pyright = python = { ... } }
 ---
---- @param settings table
---- @return table|nil
+---@param settings table
+---@return table|nil
 local function parse_local_lsp_settings(settings)
   if vim.tbl_isempty(settings) then
     return vim.empty_dict() -- json 为空, 或被删除, 需要 reload lsp settings

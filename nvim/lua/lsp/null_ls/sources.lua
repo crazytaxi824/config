@@ -104,14 +104,14 @@ end
 
 --- 返回当前本地 linter 设置
 ---
---- @return table|nil
+---@return table|nil
 function M.exist_local_settings()
   return local_linter_settings
 end
 
 --- 返回一个 list sources
 ---
---- @return table
+---@return table
 function M.sources()
   local sources_list = {}
   vim.list_extend(sources_list, vim.tbl_values(M.linter))

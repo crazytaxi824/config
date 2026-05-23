@@ -3,9 +3,9 @@ local wb_win = require("myplugins.winbarline.winbar_win")
 local wb_buf = require("myplugins.winbarline.winbar_buf")
 
 
---- @param bufnr integer
---- @param win_id integer
---- @return WinbarLineWindow|nil
+---@param bufnr integer
+---@param win_id integer
+---@return WinbarLineWindow|nil
 local function binding_win_buf(win_id, bufnr)
   if not vim.api.nvim_buf_is_valid(bufnr) or not vim.api.nvim_win_is_valid(win_id) then
     error('win: ' .. win_id .. ', or bufnr: ' .. bufnr .. ' is not valid' )

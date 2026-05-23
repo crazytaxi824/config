@@ -8,7 +8,7 @@ local M = {
 
 --- 给 bufnr 设置 filepath highlight
 ---
---- @param bufnr integer
+---@param bufnr integer
 M.setup = function(bufnr)
   local g_id = vim.api.nvim_create_augroup('my_filepath_highlight_' .. bufnr, {clear=true})
 

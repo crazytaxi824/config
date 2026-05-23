@@ -5,8 +5,8 @@ local M = {}
 
 --- autocmd 根据 events 执行 on_open(), on_close()
 ---
---- @param term MyTerm
---- @param term_bufnr integer
+---@param term MyTerm
+---@param term_bufnr integer
 function M.autocmd_callback(term, term_bufnr)
   --- 关闭 terminal window 之后再打开时触发 BufWinEnter, 但不会触发 TermOpen.
   --- buffer 离开所有 window 才会触发 BufWinLeave.

@@ -21,7 +21,7 @@ end
 
 --- jobstop(job_id) & :bwipeout all terminal buffers
 function M.wipeout_all()
-  --- @type MyTermPost[]
+  ---@type MyTermPost[]
   local tps = {}
   g.range_TermPost(function(term_post)
     table.insert(tps, term_post)

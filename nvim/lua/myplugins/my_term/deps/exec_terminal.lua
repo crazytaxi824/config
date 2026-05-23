@@ -6,11 +6,11 @@ local M = {}
 --- 在 buffer 中执行 jobstart(cmd). (buftype = 'terminal')
 --- 主要区别是 `:help jobstart-options` { term = true } 将当前 buffer 转成 terminal buffer 用于显示 output.
 ---
---- @param cmd string|string[]
---- @param term MyTerm
---- @param term_bufnr integer
---- @param term_win_id integer
---- @return integer job_id
+---@param cmd string|string[]
+---@param term MyTerm
+---@param term_bufnr integer
+---@param term_win_id integer
+---@return integer job_id
 function M.terminal_exec(cmd, term, term_bufnr, term_win_id)
   if vim.api.nvim_win_get_buf(term_win_id) ~= term_bufnr then
     error("MyTerm win_id and bufnr do not match")
@@ -32,9 +32,9 @@ function M.terminal_exec(cmd, term, term_bufnr, term_win_id)
       cwd = term:cwd(),
       env = term:env(),
 
-      --- @param job_id integer
-      --- @param data string[]  output
-      --- @param event string  'stdout'
+      ---@param job_id integer
+      ---@param data string[]  output
+      ---@param event string  'stdout'
       on_stdout = function(job_id, data, event)  -- event 是 'stdout'
         --- auto_scroll option
         utils.buf_scroll_bottom(term, term_bufnr)
@@ -48,9 +48,9 @@ function M.terminal_exec(cmd, term, term_bufnr, term_win_id)
         end
       end,
 
-      --- @param job_id integer
-      --- @param data string[]  err_msg
-      --- @param event string  'stderr'
+      ---@param job_id integer
+      ---@param data string[]  err_msg
+      ---@param event string  'stderr'
       on_stderr = function(job_id, data, event)  -- event 是 'stderr'
         --- auto_scroll option
         utils.buf_scroll_bottom(term, term_bufnr)
@@ -64,9 +64,9 @@ function M.terminal_exec(cmd, term, term_bufnr, term_win_id)
         end
       end,
 
-      --- @param job_id integer
-      --- @param exit_code integer
-      --- @param event string  'exit'
+      ---@param job_id integer
+      ---@param exit_code integer
+      ---@param event string  'exit'
       on_exit = function(job_id, exit_code, event)  -- event 是 'exit'
         --- auto_scroll option
         utils.buf_scroll_bottom(term, term_bufnr)

@@ -1,31 +1,31 @@
---- @class HighLightPos
+---@class HighLightPos
 ---
 --- uv.fs_stat.result.type
---- @field type 'file'|'directory'
+---@field type 'file'|'directory'
 ---
 --- filepath
---- @field original_fp string
+---@field original_fp string
 ---
 --- absolute_filepath `vim.fs.abspath()`
---- @field absolute_fp string
+---@field absolute_fp string
 ---
 --- highlight start column `vim.hl.range()`
---- @field hl_start_col integer
+---@field hl_start_col integer
 ---
 --- highlight end column `vim.hl.range()`
---- @field hl_end_col integer
+---@field hl_end_col integer
 ---
 --- highlight line number (start & end same line) `vim.hl.range()`
---- @field hl_lnum integer
+---@field hl_lnum integer
 
 
 local M = {}
 
 --- index elem of a list
 ---
---- @param list string[]
---- @param v string
---- @return integer|nil
+---@param list string[]
+---@param v string
+---@return integer|nil
 local function index_of(list, v)
   for index, value in ipairs(list) do
     if value == v then
@@ -36,8 +36,8 @@ end
 
 --- clear { '`', '"', "'", '(', '[', '{', '<'}
 ---
---- @param str string
---- @return string
+---@param str string
+---@return string
 local function clear_brackets(str)
   local start_brackets = { '`', '"', "'", '(', '[', '{', '<'}
   local end_brackets   = { '`', '"', "'", ')', ']', '}', '>'}
@@ -52,8 +52,8 @@ end
 
 --- 去掉所有常用符号
 ---
---- @param str string
---- @return string
+---@param str string
+---@return string
 local function normalize_str(str)
   str = str:match('(.-)[,;!?]*$') or str  -- 去掉结尾的 , ; ! ? 符号
   str = clear_brackets(str)  -- 去掉第外层 () [] <> {} ...
@@ -64,8 +64,8 @@ end
 
 --- 从 str 中获取 filepath or dir, eg: /a/b/c:12:3
 ---
---- @param str string
---- @return table|nil
+---@param str string
+---@return table|nil
 local function filepath_with_lnum_col(str)
   -- str:gsub(str, '%z', '󰟢')  -- lua 中 %z 表示 Null(\0)
 
@@ -104,9 +104,9 @@ end
 
 --- 分析 filepath
 ---
---- @param str string
---- @param need_hl string|boolean|nil (标记: 是否计算 highlight lnum, start_col, end_col)
---- @return table|nil
+---@param str string
+---@param need_hl string|boolean|nil (标记: 是否计算 highlight lnum, start_col, end_col)
+---@return table|nil
 local function filepath_from_str(str, need_hl)
   --- <>, (), [], ..., file://(...)
   local tmp = normalize_str(str)
@@ -140,15 +140,15 @@ end
 --- hl 不存在则只需要分析 absolute filepath 可用于 jump to path, 不需要分析 highlight start_col & end_col.
 --- hl 存在则使用 string.find() & nvim_buf_add_highlight() 可用于 highlight.
 ---
---- @param content string
---- @return table|nil
+---@param content string
+---@return table|nil
 M.parse_content = function(content)
   return filepath_from_str(content)
 end
 
 --- 获取所有需要 highlight 的 filepaths
 ---
---- @return {bufnr: integer, pos: HighLightPos[]}|nil hl_params
+---@return {bufnr: integer, pos: HighLightPos[]}|nil hl_params
 M.parse_current_line = function()
   local lcontent = string.gsub(vim.api.nvim_get_current_line(), '\t', ' ')  --- VVI: replace '\t' with ' '
   local lnum = vim.fn.line('.')
@@ -157,7 +157,7 @@ M.parse_current_line = function()
   --- { bufnr, pos=[] }
   local rs = {
     bufnr = vim.api.nvim_get_current_buf(),
-    pos = {}, --- @type HighLightPos[]
+    pos = {},  ---@type HighLightPos[]
   }
 
   local pos = 0
@@ -165,7 +165,7 @@ M.parse_current_line = function()
     if #value ~= 0 then
       local r = filepath_from_str(value, 'hl')
       if r then
-        --- @type HighLightPos
+        ---@type HighLightPos
         local hl_pos = {
           type         = r.type,
           hl_lnum      = lnum -1,

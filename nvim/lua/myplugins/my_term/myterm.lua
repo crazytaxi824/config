@@ -4,24 +4,24 @@ local terminal = require('myplugins.my_term.deps.exec_terminal')
 local t_win = require('myplugins.my_term.deps.term_buf_win')
 
 
---- @class MyTerm
+---@class MyTerm
 ---
 --- VVI: 保证每个 id 只和一个 bufnr 对应. id 一旦设置应该无法改变.
---- @field id integer @readonly
+---@field id integer @readonly
 ---
---- @field private _opts MyTermInternalOpts @readonly
---- @field private _last_cmd? string|string[] @readonly
+---@field private _opts MyTermInternalOpts @readonly
+---@field private _last_cmd? string|string[] @readonly
 local MyTerm = {}
 MyTerm.__index = MyTerm
 
 
 --- jobstart(cmd, opts), 给 my_term.job_id 赋值.
 ---
---- @param cmd string|string[]
---- @param term MyTerm
---- @param term_bufnr integer
---- @param term_win_id integer
---- @return integer job_id
+---@param cmd string|string[]
+---@param term MyTerm
+---@param term_bufnr integer
+---@param term_win_id integer
+---@return integer job_id
 local function myterm_exec(cmd, term, term_bufnr, term_win_id)
   if not vim.api.nvim_buf_is_valid(term_bufnr) then
     error("term_bufnr is not valid, bufnr: " .. term_bufnr)
@@ -44,8 +44,8 @@ end
 
 --- MyTermOpts -> MyTermInternalOpts
 ---
---- @param opts any
---- @return MyTermInternalOpts
+---@param opts any
+---@return MyTermInternalOpts
 local function init_opts(opts)
   local internal = {}
   for key, value in pairs(opts) do
@@ -59,10 +59,10 @@ local function init_opts(opts)
 end
 
 
---- @param id integer
---- @param opts MyTermOpts
---- @param force? 'force'
---- @return MyTerm
+---@param id integer
+---@param opts MyTermOpts
+---@param force? 'force'
+---@return MyTerm
 function MyTerm.new(id, opts, force)
   if not force then
     --- NOTE: terminal 已经存在, 无法使用相同 id 创建新的 terminal.
@@ -71,7 +71,7 @@ function MyTerm.new(id, opts, force)
     end
   end
 
-  --- @type MyTerm
+  ---@type MyTerm
   local self = setmetatable({
     id = id,
     _opts = init_opts(opts),
@@ -82,54 +82,54 @@ end
 
 
 --- `:help jobstart-options` cwd
---- @return string|nil
+---@return string|nil
 function MyTerm:cwd() return self._opts.cwd end
 
 --- `:help jobstart-options` cwd
---- @return string|nil
+---@return string|nil
 function MyTerm:env() return self._opts.env end
 
 --- `true`: 在 console 中执行; `false`: 在 terminal 中执行
---- @return boolean|nil
+---@return boolean|nil
 function MyTerm:auto_scroll() return self._opts.auto_scroll end
 
 --- `true`: 在 console 中执行; `false`: 在 terminal 中执行.
---- @return boolean|nil
+---@return boolean|nil
 function MyTerm:console_output() return self._opts.console_output end
 
 --- BufWinEnter. NOTE: 每次 term:// buffer 被 win 显示的时候都会触发, 同一个 buffer 被多个窗口显示时也会触发.
---- @return MyTermCallback[]|nil
+---@return MyTermCallback[]|nil
 function MyTerm:on_open() return self._opts.on_open end
 
 --- BufWinLeave. NOTE: BufWinLeave 只会在 buffer 离开最后一个 win 的时候触发.
---- @return MyTermCallback[]|nil
+---@return MyTermCallback[]|nil
 function MyTerm:on_close() return self._opts.on_close end
 
 --- before jobstart(), term:run() 时触发
---- @return MyTermCallback[]|nil
+---@return MyTermCallback[]|nil
 function MyTerm:on_init() return self._opts.on_init end
 
 --- after jobstart() is running successfully, doesn't matter job finishes or not
---- @return MyTermCBwithJob[]|nil
+---@return MyTermCBwithJob[]|nil
 function MyTerm:on_start() return self._opts.on_start end
 
 --- jobstart() 中 callback 函数
---- @return MyTermOnOutput[]|nil
+---@return MyTermOnOutput[]|nil
 function MyTerm:on_stdout() return self._opts.on_stdout end
 
 --- jobstart() 中 callback 函数
---- @return MyTermOnOutput[]|nil
+---@return MyTermOnOutput[]|nil
 function MyTerm:on_stderr() return self._opts.on_stderr end
 
 --- jobstart() 中 callback 函数
---- @return MyTermOnExit[]|nil
+---@return MyTermOnExit[]|nil
 function MyTerm:on_exit() return self._opts.on_exit end
 
 
 --- update MyTerm options
 ---
---- @param new_opts MyTermOpts
---- @param cb_mode? 'append'|'replace'
+---@param new_opts MyTermOpts
+---@param cb_mode? 'append'|'replace'
 function MyTerm:update(new_opts, cb_mode)
   cb_mode = cb_mode or 'append'
 
@@ -150,7 +150,7 @@ end
 
 --- jobstart(cmd)
 ---
---- @param cmd? string|string[]
+---@param cmd? string|string[]
 function MyTerm:run(cmd)
   cmd = cmd or self._last_cmd
   if not cmd then

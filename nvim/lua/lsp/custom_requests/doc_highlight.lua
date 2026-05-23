@@ -24,7 +24,7 @@
 local ms = vim.lsp.protocol.Methods
 
 --- cache last documentHighlight references
---- @type {bufnr: integer, refs: lsp.DocumentHighlight[]}
+---@type {bufnr: integer, refs: lsp.DocumentHighlight[]}
 local last_results = {}
 
 
@@ -32,8 +32,8 @@ local M = {}
 
 --- 判断当前 cursor 是否仍然在 range 之内
 ---
---- @param refs lsp.DocumentHighlight[]
---- @return boolean|nil inside
+---@param refs lsp.DocumentHighlight[]
+---@return boolean|nil inside
 local function cursor_inside_range(refs)
   local cur_pos = vim.fn.getcharpos('.')  -- 1-based character index
   local cur_line, cur_col = cur_pos[2]-1, cur_pos[3]-1  -- change to 0-based index
@@ -50,8 +50,8 @@ end
 
 --- 创建 vim.lsp.buf_request_all(_, _, params, _) 中的 params
 ---
---- @param params? table
---- @return fun(client: vim.lsp.Client, bufnr: integer):table?
+---@param params? table
+---@return fun(client: vim.lsp.Client, bufnr: integer):table?
 local function client_positional_params(params)
   local win = vim.api.nvim_get_current_win()
   return function(client)
@@ -65,8 +65,8 @@ end
 ---
 --- 创建 vim.lsp.buf_request_all(_, _, _, handler) 中的 handler
 ---
---- @param results table<integer,{err: lsp.ResponseError?, result: any}>
---- @param ctx lsp.HandlerContext
+---@param results table<integer,{err: lsp.ResponseError?, result: any}>
+---@param ctx lsp.HandlerContext
 local function doc_highlight_handler(results, ctx)
   local bufnr = assert(ctx.bufnr)
   if vim.api.nvim_get_current_buf() ~= bufnr then
@@ -74,7 +74,7 @@ local function doc_highlight_handler(results, ctx)
     return
   end
 
-  --- @type lsp.DocumentHighlight[]
+  ---@type lsp.DocumentHighlight[]
   local cache = {}
 
   for client_id, resp in pairs(results) do

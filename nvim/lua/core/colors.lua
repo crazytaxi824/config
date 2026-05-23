@@ -43,7 +43,7 @@
 vim.cmd.colorscheme('default')
 
 --- c: "cterm", g: "gui"
---- @type table<string, { c: integer, g: string }>
+---@type table<string, { c: integer, g: string }>
 Colors = {
   white   = { c=251, g='#C0C0C0' },  -- foreground, text
   black   = { c=233, g='#121212' },  -- black background
@@ -82,7 +82,7 @@ Colors = {
 }
 
 --- highlight api 设置: vim.api.nvim_set_hl(0, '@property', { ctermfg = 81 })
---- @type table<string, vim.api.keyset.highlight>
+---@type table<string, vim.api.keyset.highlight>
 Highlights = {
   --- editor ---------------------------------------------------------------------------------------
   --- window background color
@@ -443,7 +443,7 @@ end
 
 --- debug color ------------------------------------------------------------------------------------
 
---- @param color_name string
+---@param color_name string
 function Get_highlight_color(color_name)
   local match_names = {}
   for name, _ in pairs(Colors) do

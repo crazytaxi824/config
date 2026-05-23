@@ -2,10 +2,10 @@ local u = require('myplugins.winbarline.utils')
 local wb_fmt = require('myplugins.winbarline.winbar_formatter')
 
 
---- @class WinbarLineWindow
---- @field win_id integer
---- @field width integer
---- @field private buf_list integer[]  -- 需要排序
+---@class WinbarLineWindow
+---@field win_id integer
+---@field width integer
+---@field private buf_list integer[]  -- 需要排序
 local WinbarLineWin = {}
 WinbarLineWin.__index = WinbarLineWin
 
@@ -14,7 +14,7 @@ WinbarLineWin.__index = WinbarLineWin
 ---@param win_width integer
 ---@return WinbarLineWindow
 function WinbarLineWin.new(win_id, bufnr, win_width)
-  --- @type WinbarLineWindow
+  ---@type WinbarLineWindow
   local self = setmetatable({
     win_id = win_id,
     buf_list = { bufnr },
@@ -38,9 +38,9 @@ function WinbarLineWin:remove_buf(bufnr)
   end
 end
 
---- @return integer[] bufnrs
+---@return integer[] bufnrs
 function WinbarLineWin:list_bufs()
-  --- @type integer[]
+  ---@type integer[]
   local valid_bufs = {}
   for _, bufnr in ipairs(self.buf_list) do
     if vim.api.nvim_buf_is_valid(bufnr) then
@@ -52,14 +52,14 @@ function WinbarLineWin:list_bufs()
   return self.buf_list
 end
 
---- @param bufnrs integer[]
+---@param bufnrs integer[]
 function WinbarLineWin:set_bufs(bufnrs)
   self.buf_list = bufnrs
 end
 
 --- set winbar for this window
 ---
---- @param win_width? integer  -- update win_width if needed
+---@param win_width? integer  -- update win_width if needed
 function WinbarLineWin:set_winbar(win_width)
   if not vim.api.nvim_win_is_valid(self.win_id) then
     return

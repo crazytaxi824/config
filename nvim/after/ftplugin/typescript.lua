@@ -7,7 +7,7 @@
 ---       src/ 文件夹是 tsconfig.json 中 "include" 定义的.
 ---       所以运行时 pwd 必须是在 tsconfig 所在文件夹, 即 project root 文件夹.
 ---
---- @param filename string
+---@param filename string
 local function ts_run(filename)
   --- check tsconfig.json file
   local pwd = vim.uv.cwd()
@@ -35,8 +35,8 @@ end
 
 --- jest 进行 test
 ---
---- @param filename string
---- @param coverage string|boolean|nil  标记: 是否使用 `--coverage`
+---@param filename string
+---@param coverage string|boolean|nil  标记: 是否使用 `--coverage`
 local function ts_jest(filename, coverage)
   --- check xxx.test.js file
   if not string.match(filename, ".*%.test$") then

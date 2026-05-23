@@ -4,8 +4,8 @@ local M = {}
 
 --- 获取 visual selected string
 ---
---- @param trim boolean|nil (trim spaces)
---- @return string|nil selected_str
+---@param trim boolean|nil (trim spaces)
+---@return string|nil selected_str
 M.visual_selected = function(trim)
   --- NOTE: getpos("'<") 和 getpos("'>") 必须在 normal 模式执行,
   --- 即: <C-c> 从 visual mode 退出后再执行以下函数.

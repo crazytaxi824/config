@@ -5,7 +5,7 @@ local parser = require('utils.filepath.parser')
 local M = {}
 
 --- current highlight buffer
---- @type integer|nil
+---@type integer|nil
 local cache_hl_bufnr
 
 --- namespace

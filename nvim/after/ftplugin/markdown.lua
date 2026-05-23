@@ -1,6 +1,6 @@
 --- 创建 markdown table
 ---
---- @param arglist string[]
+---@param arglist string[]
 local function markdown_create_table(arglist)  -- args: 创建一个 row * col 的表.
   if vim.bo.readonly then
     Notify("this is a readonly file","ERROR")

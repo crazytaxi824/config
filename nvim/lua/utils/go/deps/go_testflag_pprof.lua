@@ -25,9 +25,9 @@ local go_test = {'go', 'test', '-count=1', '-v'}
 --- `$ go help testflag`
 --- go test -cpuprofile cpu.out, -memprofile mem.out, -mutexprofile mutex.out, -blockprofile block.out, -trace trace.out
 ---
---- @param dir string  pprof_dir
---- @param flag string 'mem'|'cpu'|'mutex'|'block'|'trace'
---- @return string[]  extra_args
+---@param dir string  pprof_dir
+---@param flag string 'mem'|'cpu'|'mutex'|'block'|'trace'
+---@return string[]  extra_args
 local function gen_extra_args(dir, flag)
   local extra_args = { '-' .. flag .. 'profile', flag .. '.out' }
   if flag == 'trace' then
@@ -50,10 +50,10 @@ end
 
 --- 在指定 bufnr 中执行 jobstart(cmd), 但该 buffer 不显示在任何 window 中. (类似后台运行)
 ---
---- @param cmd string[]
---- @param term_bufnr integer  attach to this buffer
---- @param flag string  'cpu'|'mem'|'mutex'|...
---- @return integer job_id
+---@param cmd string[]
+---@param term_bufnr integer  attach to this buffer
+---@param flag string  'cpu'|'mem'|'mutex'|...
+---@return integer job_id
 local function job_exec(cmd, term_bufnr, flag)
   --- VVI: 这里使用 scratch buffer 来执行 jobstart():
   ---   1. 为了避免创建新的一个 window.
@@ -66,24 +66,24 @@ local function job_exec(cmd, term_bufnr, flag)
 
       --- print http address for Serving web UI
       ---
-      --- @param job_id integer
-      --- @param data string[]
+      ---@param job_id integer
+      ---@param data string[]
       on_stdout = function(job_id, data)
         vim.notify("[" .. flag .. "]: " .. table.concat(data,"\n"), vim.log.levels.INFO)
       end,
 
       --- print error message
       ---
-      --- @param job_id integer
-      --- @param data string[]
+      ---@param job_id integer
+      ---@param data string[]
       on_stderr = function(job_id, data)
         vim.notify("[" .. flag .. "]: " .. table.concat(data,"\n"), vim.log.levels.ERROR)
       end,
 
       --- :bwipeout bufnr when jobdone
       ---
-      --- @param job_id integer
-      --- @param exit_code integer
+      ---@param job_id integer
+      ---@param exit_code integer
       on_exit = function(job_id, exit_code)
         if vim.api.nvim_buf_is_valid(scratch_bufnr) then
           vim.api.nvim_buf_delete(scratch_bufnr, {force=true})  -- :bwipeout
@@ -97,8 +97,8 @@ end
 
 --- autocmd: 在 bufnr 被 wipeout 的时候 jobstop() 所有 jobs attched to bufnr.
 ---
---- @param term_bufnr integer
---- @param job_id integer
+---@param term_bufnr integer
+---@param job_id integer
 local function autocmd_jobstop(term_bufnr, job_id)
   --- jobstop() all jobs after this buffer removed.
   --- NOTE: 这里使用 group_id 是为了避免多次重复设置同一个 autocmd.
@@ -118,9 +118,9 @@ end
 
 --- go tool pprof hook
 ---
---- @param opts GoTestOpts
---- @param dir string  pprof_dir
---- @return MyTermOnExit
+---@param opts GoTestOpts
+---@param dir string  pprof_dir
+---@return MyTermOnExit
 local function on_exit(opts, dir)
   local pprof_filepath = vim.fs.joinpath(dir, opts.flag .. '.out')
 
@@ -140,8 +140,8 @@ local function on_exit(opts, dir)
   end
 end
 
---- @param dir string  pprof_dir
---- @return fun(opts: GoTestOpts): string[], MyTermOpts
+---@param dir string  pprof_dir
+---@return fun(opts: GoTestOpts): string[], MyTermOpts
 local function gen_term_opts(dir)
   --- mkdir when module required, NOTE: will run only once.
   if not vim.uv.fs_stat(dir) then
@@ -152,7 +152,7 @@ local function gen_term_opts(dir)
   end
 
   return function(opts)
-    --- @type string[]
+    ---@type string[]
     local cmd = vim.iter({go_test, gen_extra_args(dir, opts.flag), utils.mode_flags(opts)}):flatten():totable()
     return cmd, {
       cwd = opts.go_list.Root,
@@ -162,7 +162,7 @@ local function gen_term_opts(dir)
 end
 
 
---- @type GoTestFlagDict
+---@type GoTestFlagDict
 local M = {
   list = { "cpu", "mem", "mutex", "block", "trace" },
 

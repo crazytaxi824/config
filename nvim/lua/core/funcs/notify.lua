@@ -1,7 +1,7 @@
 --- 将 log lvl string 转成 integer
 ---
---- @param lvl? string|integer  "TRACE"-0, "DEBUG"-1, "INFO"-2, "WARN"-3, "ERROR"-4, "OFF"-5
---- @return integer
+---@param lvl? string|integer  -- "TRACE"-0, "DEBUG"-1, "INFO"-2, "WARN"-3, "ERROR"-4, "OFF"-5
+---@return integer
 local function log_level(lvl)
   if type(lvl) == 'string' then
     lvl = string.upper(lvl)
@@ -28,10 +28,10 @@ end
 
 --- 使用 nvim-notify 插件
 ---
---- @param msg string|string[]
---- @param lvl integer
---- @param opt? {title: string|string[], timeout: number|boolean}  `:help notify.Options`
---- @return boolean
+---@param msg string|string[]
+---@param lvl integer
+---@param opt? {title: string|string[], timeout: number|boolean}  -- `:help notify.Options`
+---@return boolean
 local function nvim_notify(msg, lvl, opt)
   local notify_status_ok, notify = pcall(require, "notify")
   if not notify_status_ok then
@@ -65,9 +65,9 @@ end
 
 --- 提醒使用 notify 插件或者 vim.notify() 函数
 ---
---- @param msg string|string[]
---- @param lvl? string|integer  "TRACE"-0, "DEBUG"-1, "INFO"-2, "WARN"-3, "ERROR"-4, "OFF"-5
---- @param opt? {title: string|string[], timeout: number|boolean}  `:help notify.Options`
+---@param msg string|string[]
+---@param lvl? string|integer  -- "TRACE"-0, "DEBUG"-1, "INFO"-2, "WARN"-3, "ERROR"-4, "OFF"-5
+---@param opt? {title: string|string[], timeout: number|boolean}  -- `:help notify.Options`
 function Notify(msg, lvl, opt)
   local log_lvl = log_level(lvl)
 

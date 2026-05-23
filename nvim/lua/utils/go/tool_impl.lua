@@ -11,9 +11,9 @@
 --- 从 type IFoo[K string, V int, R any, T interface{ int | int64 }, N Bar[M], M int] interface {}
 --- 中获取 IFoo[K,V,R,T,N,M]
 ---
---- @param line string
---- @return string|nil iface_name
---- @return string iface_type
+---@param line string
+---@return string|nil iface_name
+---@return string iface_type
 local function get_iface_name_type(line)
   -- 核心模式串说明：
   -- [%w_]+   匹配字母或数字 IFoo
@@ -51,7 +51,7 @@ local M = {}
 --- `impl -dir src Cat IAnimal`
 --- 实现 interface, 需要获取 `<cword>` (光标在 interface 名上)
 ---
---- @param params string
+---@param params string
 function M.go_impl(params)
   if vim.bo.readonly then
     Notify("this is a readonly file","ERROR")

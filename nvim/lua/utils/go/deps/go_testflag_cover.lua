@@ -17,9 +17,9 @@ local go_test = {'go', 'test', '-count=1', '-v'}
 
 --- `go tool cover` hook
 ---
---- @param cover_out string (filepath)
---- @param cover_html string (filepath)
---- @return MyTermOnExit
+---@param cover_out string (filepath)
+---@param cover_html string (filepath)
+---@return MyTermOnExit
 local function on_exit(cover_out, cover_html)
   return function()
     --- convert cover.out -> cover.html
@@ -34,7 +34,7 @@ local function on_exit(cover_out, cover_html)
 end
 
 
---- @type GoTestFlagDict
+---@type GoTestFlagDict
 local M = {
   list = {"cover", "coverprofile"},
 
@@ -43,7 +43,7 @@ local M = {
       desc = 'Coverage print on screen',
 
       term_opts = function(opts)
-        --- @type string[]
+        ---@type string[]
         local cmd = vim.iter({go_test, '-cover', utils.mode_flags(opts)}):flatten():totable()
         return cmd, {
           cwd = opts.go_list.Root,
@@ -72,7 +72,7 @@ local M = {
         local cover_out = coverage_dir .. cover_filename .. '_cover.out'
         local cover_html = coverage_dir .. cover_filename .. '_cover.html'
 
-        --- @type string[]
+        ---@type string[]
         local cmd = vim.iter({go_test, '-coverprofile', cover_out, utils.mode_flags(opts)}):flatten():totable()
         return cmd, {
           cwd = opts.go_list.Root,

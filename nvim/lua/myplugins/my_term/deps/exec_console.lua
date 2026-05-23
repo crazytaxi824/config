@@ -26,10 +26,10 @@ vim.api.nvim_set_hl(0, "my_output_stderr", {ctermfg=Colors.red.c, fg=Colors.red.
 vim.api.nvim_set_hl(0, "my_output_eof", {ctermfg=Colors.g238.c, fg=Colors.g238.g})
 
 
---- @param bufnr integer
---- @param data string[]
---- @param hl string  -- highlight name `vim.hl.range()`
---- @param write_to_lastline? boolean  -- 从最后一行的最后一个 col 开始 write data, 否则 write to next line
+---@param bufnr integer
+---@param data string[]
+---@param hl string  -- highlight name `vim.hl.range()`
+---@param write_to_lastline? boolean  -- 从最后一行的最后一个 col 开始 write data, 否则 write to next line
 local function buf_append_data(bufnr, data, hl, write_to_lastline)
   --- 保险起见
   -- if #data == 0 then return end
@@ -79,11 +79,11 @@ local function set_prompt_buffer_opts(bufnr)
   end)
 end
 
---- @param bufnr integer
---- @param data string[]
---- @param hl string  -- highlight name `vim.hl.range()`
---- @param write_to_lastline? boolean  -- 从最后一行的最后一个 col 开始 write data, 否则 write to next line
---- @return boolean  -- incomplete data
+---@param bufnr integer
+---@param data string[]
+---@param hl string  -- highlight name `vim.hl.range()`
+---@param write_to_lastline? boolean  -- 从最后一行的最后一个 col 开始 write data, 否则 write to next line
+---@return boolean  -- incomplete data
 local function set_buf_line_output(bufnr, data, hl, write_to_lastline)
   --- 检查 buffer 是否存在, 避免 on_stdout, on_stderr, on_exit 异步执行完成后, buffer 已被销毁
   if not vim.api.nvim_buf_is_valid(bufnr) or not data then
@@ -95,7 +95,7 @@ local function set_buf_line_output(bufnr, data, hl, write_to_lastline)
   --- 如果 data 为: { "foo", "bar", "" }, 说明本行已结束, 需要换行写入以后的内容.  eg: fmt.Println()
   --- 如果 data 为: { "" }, 说明整个输出结束. stdout, stderr 会分别输出一个 {""} 表示结束.
   ---
-  --- @type boolean
+  ---@type boolean
   local next_incomplete
 
   if data[#data] == "" then
@@ -122,8 +122,8 @@ end
 
 --- job done 后处理: 在最后一行显示 [Process exited 'exit_code']
 ---
---- @param bufnr integer
---- @param exit_code integer
+---@param bufnr integer
+---@param exit_code integer
 local function set_buf_line_exit(bufnr, exit_code)
   if not vim.api.nvim_buf_is_valid(bufnr) then
     return
@@ -139,9 +139,9 @@ end
 
 --- print cmd, job info
 ---
---- @param cmd string|string[]
---- @param term_bufnr integer
---- @param job_id integer
+---@param cmd string|string[]
+---@param term_bufnr integer
+---@param job_id integer
 local function print_job_info(cmd, term_bufnr, job_id)
   local data = {}  ---@type string[]
 
@@ -164,8 +164,8 @@ end
 
 --- 强制结束 job
 ---
---- @param bufnr integer
---- @param job_id integer
+---@param bufnr integer
+---@param job_id integer
 local function stop_job(bufnr, job_id)
   if vim.fn.jobstop(job_id) == 1 then
     buf_append_data(bufnr, { "^C signal: interrupt" }, "my_output_sys" )
@@ -174,8 +174,8 @@ end
 
 --- CTRL-C send interrupt signal to output-buffer ONLY. terminal already has this.
 ---
---- @param term_bufnr integer
---- @param job_id integer
+---@param term_bufnr integer
+---@param job_id integer
 local function set_console_keymaps(term_bufnr, job_id)
   local opt = { buffer = term_bufnr, silent = true }
   local keys = {
@@ -194,11 +194,11 @@ end
 --- 后台执行 jobstart(cmd), 将 output 手动写入 buffer. (buftype = 'nofile')
 --- 主要区别是 `:help jobstart-options` { term = nil|false } 在后台运行, 结果需要手动输出.
 ---
---- @param cmd string|string[]
---- @param term MyTerm
---- @param term_bufnr integer
---- @param term_win_id integer
---- @return integer job_id
+---@param cmd string|string[]
+---@param term MyTerm
+---@param term_bufnr integer
+---@param term_win_id integer
+---@return integer job_id
 function M.console_exec(cmd, term, term_bufnr, term_win_id)
   if vim.api.nvim_win_get_buf(term_win_id) ~= term_bufnr then
     error("MyTerm win_id and bufnr do not match")
@@ -225,9 +225,9 @@ function M.console_exec(cmd, term, term_bufnr, term_win_id)
     cwd = term:cwd(),
     env = term:env(),
 
-    --- @param job_id integer
-    --- @param data string[]  output
-    --- @param event string  'stdout'
+    ---@param job_id integer
+    ---@param data string[]  output
+    ---@param event string  'stdout'
     on_stdout = function(job_id, data, event)  -- NOTE: for fmt.Println()
       --- write output to buffer
       incomplete = set_buf_line_output(term_bufnr, data, "my_output_stdout", incomplete)
@@ -244,9 +244,9 @@ function M.console_exec(cmd, term, term_bufnr, term_win_id)
       end
     end,
 
-    --- @param job_id integer
-    --- @param data string[]  err_msg
-    --- @param event string  'stderr'
+    ---@param job_id integer
+    ---@param data string[]  err_msg
+    ---@param event string  'stderr'
     on_stderr = function(job_id, data, event)  -- NOTE: for log.Println()
       --- write error to buffer
       incomplete = set_buf_line_output(term_bufnr, data, "my_output_stderr", incomplete)
@@ -263,9 +263,9 @@ function M.console_exec(cmd, term, term_bufnr, term_win_id)
       end
     end,
 
-    --- @param job_id integer
-    --- @param exit_code integer
-    --- @param event string  'exit'
+    ---@param job_id integer
+    ---@param exit_code integer
+    ---@param event string  'exit'
     on_exit = function(job_id, exit_code, event)
       --- write [exit_code] to when job stopped
       set_buf_line_exit(term_bufnr, exit_code)

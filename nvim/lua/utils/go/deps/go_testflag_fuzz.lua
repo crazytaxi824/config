@@ -8,11 +8,11 @@ local utils = require("utils.go.deps.utils")
 --- go test cmd
 local go_test = {'go', 'test', '-count=1', '-v'}
 
---- @param fuzztime string
---- @return fun(opts: GoTestOpts): string[], MyTermOpts
+---@param fuzztime string
+---@return fun(opts: GoTestOpts): string[], MyTermOpts
 local function gen_term_opts(fuzztime)
   return function(opts)
-    --- @type string[]
+    ---@type string[]
     local cmd = vim.iter({go_test, '-fuzztime', fuzztime, utils.mode_flags(opts)}):flatten():totable()
     return cmd, {
       cwd = opts.go_list.Root,
@@ -21,7 +21,7 @@ local function gen_term_opts(fuzztime)
 end
 
 
---- @type GoTestFlagDict
+---@type GoTestFlagDict
 local M = {
   list = { 'fuzz30s', 'fuzz60s', 'fuzz5m', 'fuzz10m', 'fuzz1000x', 'fuzz_input' },
 
@@ -48,7 +48,7 @@ local M = {
           return nil, {}
         end
 
-        --- @type string[]
+        ---@type string[]
         local cmd = vim.iter({go_test, '-fuzztime', fuzz_time, utils.mode_flags(opts)}):flatten():totable()
         return cmd, {
           cwd = opts.go_list.Root,

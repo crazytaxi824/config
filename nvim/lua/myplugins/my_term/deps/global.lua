@@ -5,36 +5,36 @@ local M = {}
 M.win_height = math.ceil(vim.o.lines/4)
 
 --- cache all my_term object
---- @type table<integer, MyTermPost>
+---@type table<integer, MyTermPost>
 local global_my_term_cache = {}
 
 
 --- 根据 id 返回 MyTermPost
 ---
---- @param term_id integer
---- @return MyTermPost|nil
+---@param term_id integer
+---@return MyTermPost|nil
 function M.get_TermPost(term_id)
   return global_my_term_cache[term_id]
 end
 
 --- 缓存 MyTermPost
 ---
---- @param term_id integer
---- @param termpost MyTermPost
+---@param term_id integer
+---@param termpost MyTermPost
 function M.set_TermPost(term_id, termpost)
   global_my_term_cache[term_id] = termpost
 end
 
 --- 删除 MyTermPost
 ---
---- @param term_id any
+---@param term_id any
 function M.delete_TermPost(term_id)
   global_my_term_cache[term_id] = nil
 end
 
 --- for range MyTermPost dict
 ---
---- @param callback fun(term_post: MyTermPost): boolean|nil
+---@param callback fun(term_post: MyTermPost): boolean|nil
 function M.range_TermPost(callback)
   for term_id, term_post in pairs(global_my_term_cache) do
     if callback(term_post) == false then

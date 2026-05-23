@@ -2,10 +2,10 @@ local M = {}
 
 --- 找出 value 在 list 中的 index
 ---
---- @generic T
---- @param list T[]
---- @param val T
---- @return integer|nil
+---@generic T
+---@param list T[]
+---@param val T
+---@return integer|nil
 function M.list_index_value(list, val)
   for i, v in ipairs(list) do
     if v == val then
@@ -18,8 +18,8 @@ end
 --- 将路径分割为段列表（从后往前）
 --- "/a/b/c.lua" -> {"c.lua", "b", "a"}
 ---
---- @param path string
---- @return string[]
+---@param path string
+---@return string[]
 local function split_path_reversed(path)
   local parts = {}
   for part in path:gmatch("[^/]+") do
@@ -30,8 +30,8 @@ local function split_path_reversed(path)
 end
 
 --- 获取多个路径各自的最短唯一显示名
---- @param paths string[]  -- multi buffer's filepath
---- @return string[][]  -- multi buffers' split filepath list
+---@param paths string[]  -- multi buffer's filepath
+---@return string[][]  -- multi buffers' split filepath list
 function M.unique_short_paths(paths)
   local all_parts = {}
   for _, path in ipairs(paths) do
@@ -75,7 +75,7 @@ function M.unique_short_paths(paths)
 end
 
 
---- @return integer TopRight_win_id
+---@return integer TopRight_win_id
 function M:get_top_right_win()
   local best_win
   local best_col = -1

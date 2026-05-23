@@ -1,18 +1,18 @@
---- javascript -------------------------------------------------------------------------------------
+-- javascript --------------------------------------------------------------------------------------
 
---- `node file.js`
----
---- @param filepath string
+-- `node file.js`
+--
+---@param filepath string
 local function js_run(filepath)
   local t = require('myplugins.my_term').console()
   t:stop()
   t:run({ "node", "--", filepath })
 end
 
---- keymap -----------------------------------------------------------------------------------------
+-- keymap ------------------------------------------------------------------------------------------
 local opt = { buffer = 0 }
 local js_keymaps = {
-  --- run current_file ---
+  -- run current_file --
   {'n', '<F5>', function() js_run(vim.fn.bufname()) end, opt, "Fn 5: code: Run File"},
 }
 

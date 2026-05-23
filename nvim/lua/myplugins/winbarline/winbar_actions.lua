@@ -7,7 +7,7 @@ local M = {}
 
 --- 相当于 :[N]buf
 ---
---- @param idx integer
+---@param idx integer
 function M.goto(idx)
   local curr_win = vim.api.nvim_get_current_win()
   local w = g.get_win(curr_win)
@@ -32,7 +32,7 @@ function M.goto(idx)
 end
 
 
---- @param direction 'next'|'prev'
+---@param direction 'next'|'prev'
 function M.cycle(direction)
   local curr_win = vim.api.nvim_get_current_win()
   local curr_buf = vim.api.nvim_win_get_buf(curr_win)
@@ -68,7 +68,7 @@ function M.cycle(direction)
 end
 
 
---- @param opt 'left'|'right'|'others'
+---@param opt 'left'|'right'|'others'
 function M.delete_buffers(opt)
   local curr_win = vim.api.nvim_get_current_win()
   local curr_buf = vim.api.nvim_win_get_buf(curr_win)
@@ -84,8 +84,8 @@ function M.delete_buffers(opt)
     error("current buffer is not register to current window")
   end
 
-  local delete_bufs = {}  --- @type integer[] 需要删除的 buffers
-  local new_win_bufs = {} --- @type integer[] 需要留下的 buffers
+  local delete_bufs = {}   ---@type integer[] 需要删除的 buffers
+  local new_win_bufs = {}  ---@type integer[] 需要留下的 buffers
 
   if opt == 'left' then
     for i, bufnr in ipairs(win_bufs) do

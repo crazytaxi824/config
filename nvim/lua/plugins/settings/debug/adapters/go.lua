@@ -8,7 +8,7 @@ local utils = require("utils.go.deps.utils")
 
 --- cache golang vscode extension filepath
 ---
---- @type string|nil
+---@type string|nil
 local cache_vscode_debug_path
 
 --- NOTE: Debug adapters & configurations settings
@@ -16,7 +16,7 @@ local cache_vscode_debug_path
 --- 插件 https://github.com/golang/vscode-go
 --- 使用 vscode 插件运行 debug, vscode extension 位置 "~/.vscode/extensions/golang.go-0.46.1/dist/debugAdapter.js"
 ---
---- @return string[] filepath
+---@return string[] filepath
 local function find_vscode_extension()
   return vim.fs.find(function(name, path)
     return name == 'debugAdapter.js' and path:match('~/%.vscode/extensions/golang.*/dist')

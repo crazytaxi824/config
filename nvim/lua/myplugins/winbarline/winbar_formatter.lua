@@ -3,13 +3,13 @@ local u = require('myplugins.winbarline.utils')
 local wb_fmt_item = require('myplugins.winbarline.winbar_formatter_item')
 
 
---- @class WinbarFormatter
---- @field items WinbarFormatterItem[]
---- @field tabnr integer
+---@class WinbarFormatter
+---@field items WinbarFormatterItem[]
+---@field tabnr integer
 local WinbarFormatter = {}
 
 --- 返回 modified buffer name
---- @return string
+---@return string
 local function bufname_mod(bufnr)
   local bufname = vim.api.nvim_buf_get_name(bufnr)
   if bufname ~= '' then
@@ -43,8 +43,8 @@ end
 
 --- 如果有相同的 base name 则向上寻找直至 dir name 不同
 ---
---- @param bufnrs integer[]
---- @return string[][] fp_list
+---@param bufnrs integer[]
+---@return string[][] fp_list
 local function unique_bufnames(bufnrs)
   local bufnames = {}  ---@type string[]
   for _, bufnr in ipairs(bufnrs) do
@@ -56,12 +56,12 @@ end
 
 --- 将 items 转成 ordered components
 ---
---- @param fmt_items WinbarFormatterItem[]
---- @param level WinbarFormatterLevel
---- @return WinbarFormatterItemComponent[][]
---- @return integer total_width
+---@param fmt_items WinbarFormatterItem[]
+---@param level WinbarFormatterLevel
+---@return WinbarFormatterItemComponent[][]
+---@return integer total_width
 local function fmt_items_to_components(fmt_items, level)
-  --- @type WinbarFormatterItemComponent[][]
+  ---@type WinbarFormatterItemComponent[][]
   local all_components = {}
   local total_width = 0
 
@@ -76,12 +76,12 @@ end
 
 
 --- 返回当前 tabpage info
---- @return WinbarFormatterItemComponent|nil
+---@return WinbarFormatterItemComponent|nil
 local function tabpage_component()
   local tabs = vim.api.nvim_list_tabpages()
   if #tabs > 1 then
     local tab_str = string.format(' %d/%d ', vim.fn.tabpagenr(), #tabs)
-    --- @type WinbarFormatterItemComponent
+    ---@type WinbarFormatterItemComponent
     local tab_comp = { content = tab_str, hl = '%=%#MyWinBarLineTab#' }
     return tab_comp
   end
@@ -90,8 +90,8 @@ end
 
 --- format all items' components to winbar string
 ---
---- @param fmt_comps_list WinbarFormatterItemComponent[][]
---- @return string winbar_str
+---@param fmt_comps_list WinbarFormatterItemComponent[][]
+---@return string winbar_str
 local function format_winbar_components(fmt_comps_list)
   local str_list = {}
   for _, comps in ipairs(fmt_comps_list) do
@@ -108,13 +108,13 @@ local function format_winbar_components(fmt_comps_list)
 end
 
 
---- @param fmt_items WinbarFormatterItem[]
---- @param win_width integer
---- @param active_buf_idx integer
---- @param min_level WinbarFormatterLevel
---- @return WinbarFormatterItemComponent[][]
+---@param fmt_items WinbarFormatterItem[]
+---@param win_width integer
+---@param active_buf_idx integer
+---@param min_level WinbarFormatterLevel
+---@return WinbarFormatterItemComponent[][]
 local function reduce_items_to_display(fmt_items, win_width, active_buf_idx, min_level)
-  --- @type WinbarFormatterItemComponent[][]
+  ---@type WinbarFormatterItemComponent[][]
   local components = {}
 
   local p_item_idx  -- 需要计算 partial item 的 index
@@ -201,13 +201,13 @@ local function reduce_items_to_display(fmt_items, win_width, active_buf_idx, min
 end
 
 
---- @param fmt_items WinbarFormatterItem[]
---- @param win_width integer
---- @param active_buf_idx integer
---- @param min_level WinbarFormatterLevel
---- @return string winbar_str
+---@param fmt_items WinbarFormatterItem[]
+---@param win_width integer
+---@param active_buf_idx integer
+---@param min_level WinbarFormatterLevel
+---@return string winbar_str
 local function format_winbar_items(fmt_items, win_width, active_buf_idx, min_level)
-  --- @type WinbarFormatterItemComponent[][]
+  ---@type WinbarFormatterItemComponent[][]
   local components = {}
 
   local tab_comp = tabpage_component()
@@ -245,8 +245,8 @@ end
 
 --- 获取 window 中的所有 buffer, format 成适合的 winbar string
 ---
---- @param win_id integer
---- @return string|nil winbar_str
+---@param win_id integer
+---@return string|nil winbar_str
 function WinbarFormatter.winbar_format(win_id)
   local w = g.get_win(win_id)
   if not w then
@@ -261,7 +261,7 @@ function WinbarFormatter.winbar_format(win_id)
 
   local uni_bufnames = unique_bufnames(bufnrs)
 
-  --- @type WinbarFormatterItem[]
+  ---@type WinbarFormatterItem[]
   local fmt_items = {}
   local active_buf_idx
 
