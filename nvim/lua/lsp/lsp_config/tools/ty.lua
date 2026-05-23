@@ -2,7 +2,7 @@
 
 return {
   root_dir = function(bufnr, on_dir)
-    local root = vim.fs.root(bufnr, 'pyproject.toml')
+    local root = vim.fs.root(bufnr, { 'pyproject.toml', 'ty.toml' })
     if root then
       on_dir(root)
       return
@@ -29,12 +29,9 @@ return {
           ["respect-type-ignore-comments"] = false
         },
         -- environment = {
-        --   python = ".venv"
+        --   python = ".venv"  -- 自动查找
         -- },
       },
     },
-    -- python = {
-    --   pythonPath = ...
-    -- },
   },
 }

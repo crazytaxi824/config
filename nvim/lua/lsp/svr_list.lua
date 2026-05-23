@@ -35,6 +35,7 @@ M.list = {
   --   cmd = "basedpyright-langserver",
   --   mason = "basedpyright",
   -- },
+  --- ty.toml [tool.ty.analysis]: https://docs.astral.sh/ty/reference/configuration/#rules
   ty = {
     cmd = "ty",
     mason = "ty",
