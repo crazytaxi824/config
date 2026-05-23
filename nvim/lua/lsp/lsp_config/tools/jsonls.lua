@@ -1,4 +1,5 @@
 --- https://www.schemastore.org
+
 local schemas = {
   {
     description = "TypeScript compiler configuration file",

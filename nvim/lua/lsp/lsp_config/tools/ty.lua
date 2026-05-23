@@ -1,4 +1,4 @@
--- https://docs.astral.sh/ty/
+-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#ty
 
 return {
   root_dir = function(bufnr, on_dir)
@@ -18,9 +18,10 @@ return {
     )
   end,
 
-  -- https://docs.astral.sh/ty/reference/configuration/
+  -- https://docs.astral.sh/ty/reference/editor-settings/#configuration
   settings = {
     ty = {
+      -- https://docs.astral.sh/ty/reference/configuration/
       configuration = {
         -- https://docs.astral.sh/ty/reference/configuration/#rules
         rules = {

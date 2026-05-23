@@ -35,15 +35,16 @@ M.list = {
   --   cmd = "basedpyright-langserver",
   --   mason = "basedpyright",
   -- },
-  --- ty.toml [tool.ty.analysis]: https://docs.astral.sh/ty/reference/configuration/#rules
-  -- ty = {
-  --   cmd = "ty",
-  --   mason = "ty",
-  -- },
-  pyrefly = {
-    cmd = "pyrefly",
-    mason = "pyrefly",
+  --- ty.toml [tool.ty.analysis]: https://docs.astral.sh/ty/reference/configuration/
+  ty = {
+    cmd = "ty",
+    mason = "ty",
   },
+  -- pyrefly.toml [tool.pyrefly]: https://pyrefly.org/en/docs/configuration/
+  -- pyrefly = {
+  --   cmd = "pyrefly",
+  --   mason = "pyrefly",
+  -- },
   --- pyproject.toml [tool.ruff] & ruff.toml: https://docs.astral.sh/ruff/tutorial/#configuration
   --- 'ruff' can be used to replace Flake8, Black, isort, pydocstyle, pyupgrade, autoflake ...
   ruff = {
