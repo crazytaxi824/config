@@ -97,8 +97,8 @@ Highlights = {
   Pmenu = { ctermbg=Colors.g235.c, bg=Colors.g235.g },
   -- Completion Menu 选中的 item 的颜色
   PmenuSel = {
-    ctermbg=Colors.g238.c, bg='#03395E',
-    bold=true, underline=true,
+    ctermbg=Colors.g238.c, bg='#04395E',
+    bold=true,
   },
   -- Completion Menu scroll bar 背景色, bg 一般和 Pmenu bg 相同
   PmenuSbar = { link = "Pmenu" },

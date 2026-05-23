@@ -22,7 +22,7 @@ local kind_icon_txt = {  -------------------------------------------------------
   Property = "property",
   Class = "class",  -- golang 中 type MyInt int/map/... 的 kind 是 Class
   Struct = "struct",  -- golang 中 type Persion struct{} 的 kind 是 Struct
-  Interface = "iface",  -- golang 中 type Constraint interface{} 的 kind 是 Interface
+  Interface = "iface",  -- golang 中 type Constrain interface{} 的 kind 是 Interface
   TypeParameter = "t-param",
   Unit = "unit",
   Value = "value",
@@ -227,31 +227,31 @@ vim.api.nvim_set_hl(0, 'CmpItemAbbrMatch', {ctermfg=Colors.magenta.c, fg=Colors.
 vim.api.nvim_set_hl(0, 'CmpItemAbbrMatchFuzzy', {ctermfg=Colors.magenta.c, fg=Colors.magenta.g})
 
 -- [lsp], [buff], [path], [snip] icon 颜色
-vim.api.nvim_set_hl(0, 'CmpItemMenu', {ctermfg=Colors.g240.c, fg=Colors.g240.g})
+vim.api.nvim_set_hl(0, 'CmpItemMenu', {ctermfg=Colors.g242.c, fg=Colors.g242.g})
 
 -- VVI: CmpItemKindXXX 默认颜色, 如果没有单独设置 CmpItemKindXXX 颜色则会使用该颜色.
 vim.api.nvim_set_hl(0, 'CmpItemKindDefault', {ctermfg=Colors.g246.c, fg=Colors.g246.g})
 
-vim.api.nvim_set_hl(0, 'CmpItemKindInterface', {link = 'Type'})
-vim.api.nvim_set_hl(0, 'CmpItemKindClass',     {link = 'Type'})
-vim.api.nvim_set_hl(0, 'CmpItemKindStruct',    {link = 'Type'})
-vim.api.nvim_set_hl(0, 'CmpItemKindTypeParameter', {link = 'Type'})
-vim.api.nvim_set_hl(0, 'CmpItemKindFunction',    {link = 'Function'})
-vim.api.nvim_set_hl(0, 'CmpItemKindMethod',      {link = 'Function'})
-vim.api.nvim_set_hl(0, 'CmpItemKindConstructor', {link = 'Function'})
-vim.api.nvim_set_hl(0, 'CmpItemKindKeyword' , {link = 'Keyword'})
-vim.api.nvim_set_hl(0, 'CmpItemKindVariable', {link = 'Keyword'})
-vim.api.nvim_set_hl(0, 'CmpItemKindConstant', {link = 'Keyword'})
-vim.api.nvim_set_hl(0, 'CmpItemKindEnum',     {link = 'Keyword'})
-vim.api.nvim_set_hl(0, 'CmpItemKindModule',   {link = 'String'})
+vim.api.nvim_set_hl(0, 'CmpItemKindKeyword', {link = '@keyword'})
+vim.api.nvim_set_hl(0, 'CmpItemKindModule',  {link = '@module'})
+vim.api.nvim_set_hl(0, 'CmpItemKindInterface',     {link = '@type'})
+vim.api.nvim_set_hl(0, 'CmpItemKindClass',         {link = '@type'})
+vim.api.nvim_set_hl(0, 'CmpItemKindStruct',        {link = '@type'})
+vim.api.nvim_set_hl(0, 'CmpItemKindTypeParameter', {link = '@type'})
+vim.api.nvim_set_hl(0, 'CmpItemKindFunction',    {link = '@function'})
+vim.api.nvim_set_hl(0, 'CmpItemKindMethod',      {link = '@function'})
+vim.api.nvim_set_hl(0, 'CmpItemKindConstructor', {link = '@function'})
+vim.api.nvim_set_hl(0, 'CmpItemKindEnum',     {link = '@variable'})
+vim.api.nvim_set_hl(0, 'CmpItemKindVariable', {link = '@variable'})
+vim.api.nvim_set_hl(0, 'CmpItemKindConstant', {link = '@constant'})
 
 -- blue
-vim.api.nvim_set_hl(0, 'CmpItemKindSnippet', {ctermfg=Colors.blue_boolean.c, fg=Colors.blue_boolean.g})
-vim.api.nvim_set_hl(0, 'CmpItemKindFile',    {ctermfg=Colors.blue_boolean.c, fg=Colors.blue_boolean.g})
-vim.api.nvim_set_hl(0, 'CmpItemKindFolder',  {ctermfg=Colors.blue_boolean.c, fg=Colors.blue_boolean.g, bold = true})
+vim.api.nvim_set_hl(0, 'CmpItemKindSnippet', {link = 'WarningMsg'})
+vim.api.nvim_set_hl(0, 'CmpItemKindFile',    {link = 'Normal'})
+vim.api.nvim_set_hl(0, 'CmpItemKindFolder',  {link = 'Directory'})
 
 -- grey, 弃用的 suggestion.
-vim.api.nvim_set_hl(0, 'CmpItemAbbrDeprecated',  {ctermfg=Colors.g242.c, fg=Colors.g242.g, underline = true})
+vim.api.nvim_set_hl(0, 'CmpItemAbbrDeprecated',  {ctermfg=Colors.g242.c, fg=Colors.g242.g, strikethrough = true})
 
 -- }}}
 
