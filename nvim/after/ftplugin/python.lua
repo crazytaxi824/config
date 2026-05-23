@@ -29,9 +29,9 @@ local function py_run(filepath)
     return
   end
 
-  --- 先相对 HOME, 再相对 cwd. 不在当前 cwd 目录下的文件不会显示绝对路径.
-  py_path = vim.fn.fnamemodify(py_path, ':~:.')
-  filepath = vim.fn.fnamemodify(filepath, ':~:.')
+  --- 相对 cwd. 不在当前 cwd 目录下的文件会显示绝对路径
+  py_path = vim.fn.fnamemodify(py_path, ':.')
+  filepath = vim.fn.fnamemodify(filepath, ':.')
 
   local t = require('myplugins.my_term').console()
   t:stop()
