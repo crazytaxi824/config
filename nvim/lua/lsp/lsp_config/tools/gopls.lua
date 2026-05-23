@@ -42,9 +42,14 @@ return {
     )
   end,
 
+  init_options = {
+    semanticTokens = true,  -- 默认 false.
+  },
+
   settings = {
     gopls = {
-      semanticTokens = true,  -- 默认 false.
+      --- NOTE: semantic tokens setting: gopls < v0.22: in settings, >= v0.22: in init_options
+      semanticTokens = true,  -- 默认 false
       -- semanticTokenTypes = {  -- allows disabling types
       --   string = false,
       --   number = false,

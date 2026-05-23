@@ -56,6 +56,7 @@ M.capabilities.textDocument.foldingRange = {
 --- @param client vim.lsp.Client
 --- @return boolean
 M.on_init = function(client)
+  --- run after init_options, before on_attach() --------------------------------------------------- {{{
   -- if client.server_capabilities then
   --   --- semantic token: https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide
   --   --- `:help vim.lsp.semantic_tokens.start()`
@@ -64,6 +65,11 @@ M.on_init = function(client)
   --   --- DEBUG: lsp-fold 设置
   --   client.server_capabilities.foldingRangeProvider = nil
   -- end
+
+  -- if client.config then
+  --   vim.print(client.config.init_options)
+  -- end
+  --- }}}
 
   --- DEBUG: 用
   if __Debug_Neovim.lsp then
