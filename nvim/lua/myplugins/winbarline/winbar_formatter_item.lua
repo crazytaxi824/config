@@ -1,9 +1,9 @@
 ---@class WinbarFormatterItemComponent
----
---- winbar 需要显示的内容
+--
+-- winbar 需要显示的内容
 ---@field content string
----
---- winbar 显示内容的 highlight
+--
+-- winbar 显示内容的 highlight
 ---@field hl string
 
 
@@ -25,22 +25,22 @@ local wb_sign = {
 
 ---@class WinbarFormatterItem
 ---@field bufnr integer
----
---- display index in window
+--
+-- display index in window
 ---@field index integer
----
---- filepath head/dir
+--
+-- filepath head/dir
 ---@field fp_prefix? string[]  -- filepath prefix
----
---- last part of filepath
+--
+-- last part of filepath
 ---@field basename string
----
---- vim.diagnostic.count()
+--
+-- vim.diagnostic.count()
 ---@field diagnostic? { count: integer, severity: integer }
----
---- active buffer
+--
+-- active buffer
 ---@field active boolean
----
+--
 ---@field in_current_win boolean
 local WinbarFomatterItem = {}
 WinbarFomatterItem.__index = WinbarFomatterItem
@@ -74,7 +74,7 @@ function WinbarFomatterItem.new(win_id, bufnr, index, path_list, diagnostic)
 end
 
 
---- 从 str 中按 display width 截取，suffix=true 从后往前
+-- 从 str 中按 display width 截取，suffix=true 从后往前
 ---@param str string
 ---@param width integer  remaining display width
 ---@param suffix boolean|nil
@@ -157,11 +157,11 @@ function WinbarFomatterItem:partial(width, level, mode)
 
     local comp_width = vim.fn.strdisplaywidth(comp.content)
     if remain_width >= comp_width then
-      --- remain width 超过整个 component 长度
+      -- remain width 超过整个 component 长度
       _insert(comp)
       remain_width = remain_width - comp_width
     else
-      --- remain width 小于整个 component 长度
+      -- remain width 小于整个 component 长度
       local p_str = partial_str(comp.content, remain_width, suffix)
       if p_str then
         _insert({ content = p_str, hl = comp.hl })
@@ -182,26 +182,26 @@ function WinbarFomatterItem:parse_item_to_components(level)
   local components = {}
   local item_width = 1  -- NOTE: 每个 item 后一个空格
 
-  --- indicator
+  -- indicator
   local indicator_str = self.active and wb_sign.indicator or ' '
   ---@type WinbarFormatterItemComponent
   local comp = { content = indicator_str, hl = 'Indicator' }
   table.insert(components, comp)
 
-  --- index
+  -- index
   local idx_str = self.index .. ' '
   comp = { content = idx_str, hl = 'Index' }
   table.insert(components, comp)
 
-  --- filepath prefix
+  -- filepath prefix
   if self.fp_prefix and level > WinbarFormatterLevel.base then
     local prefix_str = ''
     if level == WinbarFormatterLevel.full then
       prefix_str = table.concat(self.fp_prefix, '/') .. '/'
     elseif level == WinbarFormatterLevel.init then
       for _, path in ipairs(self.fp_prefix) do
-        --- NOTE: strcharlen('你好') = 2, strcharpart('你好', 0, 1) = '你', strdisplaywidth('你') = 2
-        --- 这是为了获取完整的 'CJK' 文字
+        -- NOTE: strcharlen('你好') = 2, strcharpart('你好', 0, 1) = '你', strdisplaywidth('你') = 2
+        -- 这是为了获取完整的 'CJK' 文字
         local s = vim.fn.strcharlen(path) > 0 and vim.fn.strcharpart(path, 0, 1) or ''
         prefix_str = prefix_str .. s .. '/'
       end
@@ -211,10 +211,10 @@ function WinbarFomatterItem:parse_item_to_components(level)
     table.insert(components, comp)
   end
 
-  --- bufname
+  -- bufname
   local bufname_str = ''
   if level > WinbarFormatterLevel.minimal or self.active then
-    --- 如果是 active buffer 不要省略 basename
+    -- 如果是 active buffer 不要省略 basename
     bufname_str = self.basename .. ' '
   elseif level == WinbarFormatterLevel.minimal then
     local display_width = 4
@@ -230,27 +230,27 @@ function WinbarFomatterItem:parse_item_to_components(level)
   comp = { content = bufname_str, hl = '' }
   table.insert(components, comp)
 
-  --- diagnostic
+  -- diagnostic
   if self.diagnostic and (level > WinbarFormatterLevel.minimal or self.active) then
     local diag_str = '('..self.diagnostic.count..') '
     comp = { content = diag_str, hl = 'Severity_'..self.diagnostic.severity }
     table.insert(components, comp)
   end
 
-  --- modified
+  -- modified
   if vim.api.nvim_buf_is_valid(self.bufnr) and vim.bo[self.bufnr].modified then
     local modified_str = wb_sign.modified .. ' '
     comp = { content = modified_str, hl = 'Modified' }
     table.insert(components, comp)
   end
 
-  --- update highlight prefix
+  -- update highlight prefix
   local hl_prefix_default = 'MyWinBarLineBuffer'
   local hl_prefix_selected = 'MyWinBarLineBufferSelected'
 
   for _, c in ipairs(components) do
     item_width = item_width + vim.fn.strdisplaywidth(c.content)
-    --- 如果是 active & in current window 则使用 Selected highlight
+    -- 如果是 active & in current window 则使用 Selected highlight
     if self.in_current_win and self.active then
       c.hl = '%#' .. hl_prefix_selected .. c.hl .. '#'
     else

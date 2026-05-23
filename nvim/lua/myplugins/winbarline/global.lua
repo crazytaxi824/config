@@ -51,7 +51,7 @@ function M.delete_buf(bufnr)
   bufs[bufnr] = nil
 end
 
---- debug ------------------------------------------------------------------------------------------
+-- debug ------------------------------------------------------------------------------------------
 function M:debug()
   for win_id, w in pairs(wins) do
     print('win:', win_id, vim.inspect(w:list_bufs()))

@@ -5,8 +5,8 @@ local u = require('myplugins.winbarline.utils')
 local M = {}
 
 
---- 相当于 :[N]buf
----
+-- 相当于 :[N]buf
+--
 ---@param idx integer
 function M.goto(idx)
   local curr_win = vim.api.nvim_get_current_win()
@@ -17,7 +17,7 @@ function M.goto(idx)
 
   local win_bufs = w:list_bufs()
 
-  --- index 超出范围
+  -- index 超出范围
   if idx < 1 or idx > #win_bufs then
     return
   end
@@ -115,10 +115,10 @@ function M.delete_buffers(opt)
     error('opt value error: ' .. opt)
   end
 
-  --- 从 win 中删除不需要的 buffers
+  -- 从 win 中删除不需要的 buffers
   w:set_bufs(new_win_bufs)
 
-  --- 从 bufs 中删除 win
+  -- 从 bufs 中删除 win
   for _, d_buf in ipairs(delete_bufs) do
     local b = g.get_buf(d_buf)
     if b then
@@ -143,7 +143,7 @@ function M.delete_current_buf()
 
   local w = g.get_win(curr_win)
   if not w then
-    --- floating window
+    -- floating window
     vim.api.nvim_win_close(curr_win, false)
     return
   end
@@ -158,7 +158,7 @@ function M.delete_current_buf()
       return
     end
 
-    --- 如果 neovim 中有另一个 buflisted & buftype == '' 的 window 则 close window
+    -- 如果 neovim 中有另一个 buflisted & buftype == '' 的 window 则 close window
     for _, win in ipairs(vim.api.nvim_list_wins()) do
       local buf = vim.api.nvim_win_get_buf(win)
       if win ~= curr_win and vim.bo[buf].buflisted and vim.bo[buf].buftype == '' then
@@ -167,18 +167,18 @@ function M.delete_current_buf()
       end
     end
 
-    --- 如果 current window 是 neovim 中最后一个 buflisted window
+    -- 如果 current window 是 neovim 中最后一个 buflisted window
     vim.notify("Cannot delete last 'buflisted' 'normal' buffer", vim.log.levels.WARN)
     return
   end
 
-  --- 如果有多个 buffer, 则跳到另一个 buffer, 然后删除当前 buffer
+  -- 如果有多个 buffer, 则跳到另一个 buffer, 然后删除当前 buffer
   local prev_bufnr = vim.fn.bufnr('#')
   if prev_bufnr > 0 and vim.list_contains(win_bufs, prev_bufnr) then
-    --- '#' buffer 在当前 window buffers list 中
+    -- '#' buffer 在当前 window buffers list 中
     vim.api.nvim_win_set_buf(curr_win, prev_bufnr)
   else
-    --- '#' buffer 不在当前 window buffers list 中
+    -- '#' buffer 不在当前 window buffers list 中
     local idx = u.list_index_value(win_bufs, curr_buf)
     if not idx then
       error("current buffer is not register to current window")
@@ -206,14 +206,14 @@ function M.delete_current_buf()
     error(string.format("buffer: %d is not exist", curr_buf))
   end
 
-  --- 相互 remove
+  -- 相互 remove
   b:remove_win(curr_win)
   w:remove_buf(curr_buf)
 
   w:set_winbar()
 end
 
---- list current window 中所有 win_buffers
+-- list current window 中所有 win_buffers
 function M.list_win_buffers()
   local curr_win = vim.api.nvim_get_current_win()
   local win = g.get_win(curr_win)
@@ -226,16 +226,16 @@ function M.list_win_buffers()
     return
   end
 
-  --- 选择 buffer 进行跳转
+  -- 选择 buffer 进行跳转
   vim.ui.select(vim.fn.range(1, #win_bufs), {
     prompt = 'WinbarLine buffers',
     format_item = function(item)
-      --- item is win_bufs index
+      -- item is win_bufs index
       local bufnr = win_bufs[item]
       return vim.fn.fnamemodify(vim.api.nvim_buf_get_name(bufnr), ":~:.")
     end,
   }, function(choice)
-    --- choice is win_bufs index
+    -- choice is win_bufs index
     if choice then
       local bufnr = win_bufs[choice]
       if not vim.api.nvim_buf_is_valid(bufnr) then

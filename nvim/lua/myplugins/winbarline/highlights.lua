@@ -1,5 +1,5 @@
 local hl = {
-  --- base color
+  -- base color
   default = {
     ctermfg=Colors.g246.c, fg=Colors.g246.g,
     ctermbg=Colors.g236.c, bg=Colors.g236.g,
@@ -15,7 +15,7 @@ local hl = {
     bold = true,
   },
 
-  --- override base color
+  -- override base color
   index = {
     ctermfg=Colors.white.c, fg=Colors.white.g,
   },

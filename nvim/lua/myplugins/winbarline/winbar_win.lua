@@ -57,20 +57,20 @@ function WinbarLineWin:set_bufs(bufnrs)
   self.buf_list = bufnrs
 end
 
---- set winbar for this window
----
+-- set winbar for this window
+--
 ---@param win_width? integer  -- update win_width if needed
 function WinbarLineWin:set_winbar(win_width)
   if not vim.api.nvim_win_is_valid(self.win_id) then
     return
   end
 
-  --- update window width
+  -- update window width
   if win_width then
     self.width = win_width
   end
 
-  --- 先 update window width, 再 format winbar string
+  -- 先 update window width, 再 format winbar string
   local winbar_str = wb_fmt.winbar_format(self.win_id) or ''
   vim.api.nvim_set_option_value('winbar', winbar_str, { scope='local', win=self.win_id })
 end
