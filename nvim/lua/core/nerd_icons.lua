@@ -1,4 +1,4 @@
---- NOTE: 这里主要是为了统一 icon 风格.
+-- NOTE: 这里主要是为了统一 icon 风格.
 Nerd_icons = {
   diag = {
     hint  = "󰛩",  -- ⚐ ⚑ 󰛨 󰛩

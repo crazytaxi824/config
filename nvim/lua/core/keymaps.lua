@@ -1,141 +1,141 @@
---- 全局 keymap 设置
+-- 全局 keymap 设置
 
 local key_fn = require('utils.keymaps')
 
---- DOCS ------------------------------------------------------------------------------------------- {{{
---- vim.keymap.set() & vim.keymap.del()
---- vim.api.nvim_set_keymap() & vim.api.nvim_del_keymap()
---- vim.api.nvim_buf_set_keymap() & vim.api.nvim_buf_del_keymap()
---- vim.keymap.set({'n','i'}, ...) 可以同时设置多个 Mode, vim.api.nvim_(buf)_set_keymap('n', ...) 每次只能设置一个模式.
---- <S-F12> 在 neovim 中是 <F24>, <C-F12> 是 <F36>, <C-S-F12> 是 <F48>. 其他组合键都可以通过 insert 模式打印出来.
----
----  `:help map-table`
----           Mode  | Norm | Ins | Cmd | Vis | Sel | Opr | Term | Lang | ~
----  Command        +------+-----+-----+-----+-----+-----+------+------+ ~
----  [nore]map      | yes  |  -  |  -  | yes | yes | yes |  -   |  -   |
----  n[nore]map     | yes  |  -  |  -  |  -  |  -  |  -  |  -   |  -   |
----  [nore]map!     |  -   | yes | yes |  -  |  -  |  -  |  -   |  -   |
----  i[nore]map     |  -   | yes |  -  |  -  |  -  |  -  |  -   |  -   |
----  c[nore]map     |  -   |  -  | yes |  -  |  -  |  -  |  -   |  -   |
----  v[nore]map     |  -   |  -  |  -  | yes | yes |  -  |  -   |  -   |
----  x[nore]map     |  -   |  -  |  -  | yes |  -  |  -  |  -   |  -   |
----  s[nore]map     |  -   |  -  |  -  |  -  | yes |  -  |  -   |  -   |
----  o[nore]map     |  -   |  -  |  -  |  -  |  -  | yes |  -   |  -   |
----  t[nore]map     |  -   |  -  |  -  |  -  |  -  |  -  | yes  |  -   |
----  l[nore]map     |  -   | yes | yes |  -  |  -  |  -  |  -   | yes  |
----
---- 常用组合键前缀:
----   - <leader>
----   - g
----   - z
----   - i_CTRL-R | c_CTRL-R  NOTE: 在 insert/command 模式下 paste register 到 file/command line.
----                          eg: insert/command 模式下输入 <CTRL-R>0 相当于 normal 模式下 "0p
----                          后面接 = 可以填入 expr. eg: insert/command 模式下输入 <CTRL-R>=100-80, 得到 20.
----   - "        - registers. 可以用在 y,p,d,x 等复制/剪切/粘贴功能上. eg: "*y
----   - @        - execute content of register, like macro.
----   - ` 和 '   - marks
----   - [ | ]  - navigation in file
----
---- 常用固定组合键:
----   - i_CTRL-X_CTRL-O  - omni completion
----   - i_CTRL-O  - 用于在 insert mode 中执行一个 command 然后回到 insert mode.
----   - i_CTRL-C | v_CTRL-C  - insert/visual 退回到 normal mode.
----   - v_CTRL-G  - 切换 visual/select mode, select mode 是 visual 的一个子模式, 多用于代码补全的默认值.
---- }}}
+-- DOCS ------------------------------------------------------------------------------------------- {{{
+-- vim.keymap.set() & vim.keymap.del()
+-- vim.api.nvim_set_keymap() & vim.api.nvim_del_keymap()
+-- vim.api.nvim_buf_set_keymap() & vim.api.nvim_buf_del_keymap()
+-- vim.keymap.set({'n','i'}, ...) 可以同时设置多个 Mode, vim.api.nvim_(buf)_set_keymap('n', ...) 每次只能设置一个模式.
+-- <S-F12> 在 neovim 中是 <F24>, <C-F12> 是 <F36>, <C-S-F12> 是 <F48>. 其他组合键都可以通过 insert 模式打印出来.
+--
+--  `:help map-table`
+--           Mode  | Norm | Ins | Cmd | Vis | Sel | Opr | Term | Lang | ~
+--  Command        +------+-----+-----+-----+-----+-----+------+------+ ~
+--  [nore]map      | yes  |  -  |  -  | yes | yes | yes |  -   |  -   |
+--  n[nore]map     | yes  |  -  |  -  |  -  |  -  |  -  |  -   |  -   |
+--  [nore]map!     |  -   | yes | yes |  -  |  -  |  -  |  -   |  -   |
+--  i[nore]map     |  -   | yes |  -  |  -  |  -  |  -  |  -   |  -   |
+--  c[nore]map     |  -   |  -  | yes |  -  |  -  |  -  |  -   |  -   |
+--  v[nore]map     |  -   |  -  |  -  | yes | yes |  -  |  -   |  -   |
+--  x[nore]map     |  -   |  -  |  -  | yes |  -  |  -  |  -   |  -   |
+--  s[nore]map     |  -   |  -  |  -  |  -  | yes |  -  |  -   |  -   |
+--  o[nore]map     |  -   |  -  |  -  |  -  |  -  | yes |  -   |  -   |
+--  t[nore]map     |  -   |  -  |  -  |  -  |  -  |  -  | yes  |  -   |
+--  l[nore]map     |  -   | yes | yes |  -  |  -  |  -  |  -   | yes  |
+--
+-- 常用组合键前缀:
+--   - <leader>
+--   - g
+--   - z
+--   - i_CTRL-R | c_CTRL-R  NOTE: 在 insert/command 模式下 paste register 到 file/command line.
+--                          eg: insert/command 模式下输入 <CTRL-R>0 相当于 normal 模式下 "0p
+--                          后面接 = 可以填入 expr. eg: insert/command 模式下输入 <CTRL-R>=100-80, 得到 20.
+--   - "        - registers. 可以用在 y,p,d,x 等复制/剪切/粘贴功能上. eg: "*y
+--   - @        - execute content of register, like macro.
+--   - ` 和 '   - marks
+--   - [ | ]  - navigation in file
+--
+-- 常用固定组合键:
+--   - i_CTRL-X_CTRL-O  - omni completion
+--   - i_CTRL-O  - 用于在 insert mode 中执行一个 command 然后回到 insert mode.
+--   - i_CTRL-C | v_CTRL-C  - insert/visual 退回到 normal mode.
+--   - v_CTRL-G  - 切换 visual/select mode, select mode 是 visual 的一个子模式, 多用于代码补全的默认值.
+-- }}}
 
---- vim.keymap.set() - option `:help :map-arguments`
---- { remap = false } (default), { noremap = true }
---- { nowait = true },
---- { silent = true },
---- { buffer = number }, -- 如果设置了 buffer 相当于 nvim_buf_set_keymap(), 0 - current buffer
---- { script = true },
---- { expr = true },
---- { unique = true }, define a new mapping or abbreviation, the command will fail if the mapping or abbreviation already exists.
---- { desc = "key_description" }  -- 会影响 which-key 显示.
+-- vim.keymap.set() - option `:help :map-arguments`
+-- { remap = false } (default), { noremap = true }
+-- { nowait = true },
+-- { silent = true },
+-- { buffer = number }, -- 如果设置了 buffer 相当于 nvim_buf_set_keymap(), 0 - current buffer
+-- { script = true },
+-- { expr = true },
+-- { unique = true }, define a new mapping or abbreviation, the command will fail if the mapping or abbreviation already exists.
+-- { desc = "key_description" }  -- 会影响 which-key 显示.
 local opt = { silent = true }
 
---- `:help map-table`, `:help key-notation`
---- { mode, key, remap, opt, description } - description for 'which-key'
+-- `:help map-table`, `:help key-notation`
+-- { mode, key, remap, opt, description } - description for 'which-key'
 local keymaps = {
-  --- VVI: <ESC> 退出 Ternimal (Insert) Mode 进入 (Terminal) Normal 模式.
+  -- VVI: <ESC> 退出 Ternimal (Insert) Mode 进入 (Terminal) Normal 模式.
   {'t', '<ESC>', '<C-\\><C-n>', opt, "Ternimal: Normal Mode"},
 
-  --- VVI: <ESC> close popup window & nohlsearch
+  -- VVI: <ESC> close popup window & nohlsearch
   {'n', '<ESC>', function()
-    --- nohlsearch
+    -- nohlsearch
     if vim.v.hlsearch == 1 then
       vim.cmd.nohlsearch()
       return
     end
 
-    --- close all popup windows
+    -- close all popup windows
     if key_fn.close_popup_wins() then
       return
     end
 
-    --- default <ESC> function
+    -- default <ESC> function
     -- local esc = vim.api.nvim_replace_termcodes('<ESC>', true, false, true)
     -- vim.api.nvim_feedkeys(esc, 'n', false)
     vim.fn.feedkeys("\\<ESC>", 'n')
   end, opt, "which_key_ignore"},
 
-  --- common use -----------------------------------------------------------------------------------
-  --- `:help registers`
+  -- common use -----------------------------------------------------------------------------------
+  -- `:help registers`
   {'n', 'D', '"_dd', opt, "delete line No Copy"},
   {'x', 'D', '"_x',  opt, "delete line No Copy"},
 
-  --- move cursor ----------------------------------------------------------------------------------
-  --- NOTE: alacritty 中重新 map 了一些组合键:
-  --- <Command-Up>    = <PageUp>;   <Shift-Command-Up>    != <S-PageUp>
-  --- <Command-Down>  = <PageDown>; <Shift-Command-Down>  != <S-PageDown>
-  --- <Command-Left>  = <Home>;     <Shift-Command-Left>  != <S-Home>
-  --- <Command-Right> = <End>;      <Shift-Command-Right> != <S-End>
-  --- <PageUp> / <PageDown> / <Home> / <End> 在 mac 中的默认快捷键是 <fn-Up/Down/Left/Right>,
+  -- move cursor ----------------------------------------------------------------------------------
+  -- NOTE: alacritty 中重新 map 了一些组合键:
+  -- <Command-Up>    = <PageUp>;   <Shift-Command-Up>    != <S-PageUp>
+  -- <Command-Down>  = <PageDown>; <Shift-Command-Down>  != <S-PageDown>
+  -- <Command-Left>  = <Home>;     <Shift-Command-Left>  != <S-Home>
+  -- <Command-Right> = <End>;      <Shift-Command-Right> != <S-End>
+  -- <PageUp> / <PageDown> / <Home> / <End> 在 mac 中的默认快捷键是 <fn-Up/Down/Left/Right>,
   {{'n','i','v'}, '<PageUp>', function() key_fn.page.up() end, opt, 'which_key_ignore'},
   {{'n','i','v'}, '<PageDown>', function() key_fn.page.down() end, opt, 'which_key_ignore'},
   {{'n','i','v'}, '<D-Up>', function() key_fn.page.up() end, opt, 'which_key_ignore'}, -- Alacritty: <D-Up> = <PageUp>, 该设置主要是备用.
   {{'n','i','v'}, '<D-Down>', function() key_fn.page.down() end, opt, 'which_key_ignore'}, -- Alacritty: <D-Down> = <PageDown>, 该设置主要是备用.
 
-  --- NOTE: vim 中 <S-Up> / <S-Down> 默认和 <PageUp> / <PageDown> 作用相同.
+  -- NOTE: vim 中 <S-Up> / <S-Down> 默认和 <PageUp> / <PageDown> 作用相同.
   {{'n','i','v'}, '<S-Up>', function() key_fn.shift.up() end, opt, 'which_key_ignore'},
   {{'n','i','v'}, '<S-Down>', function() key_fn.shift.down() end, opt, 'which_key_ignore'},
 
-  --- <Home> 模拟 vscode 行为
+  -- <Home> 模拟 vscode 行为
   {{'n','i','v'}, '<Home>', function() key_fn.home.nowrap() end, opt, 'which_key_ignore'},
   {{'n','i','v'}, '<D-Left>', function() key_fn.home.nowrap() end, opt, 'which_key_ignore'}, -- Alacritty: <D-Left> = <Home>, 该设置主要是备用.
   {{'n','i','v'}, '<S-D-Left>', function() key_fn.home.wrap() end, opt, 'which_key_ignore'}, -- <S-D-Left> 并不等于 <S-Home>, <S-Home> 需要使用组合键 Shift-Fn-Left.
-  --- <End> 使用默认行为
+  -- <End> 使用默认行为
   {{'n', 'v'}, '<D-Right>', '$', opt, 'which_key_ignore'},  -- Alacritty: <D-Right> = <End>, 该设置主要是备用.
   {'i', '<D-Right>', '<C-o>$', opt, 'which_key_ignore'},  -- Alacritty: <D-Right> = <End>, 该设置主要是备用.
   {{'n', 'v'}, '<S-D-Right>', 'g$', opt, 'which_key_ignore'}, -- <S-D-Right> 并不等于 <S-End>, <S-End> 需要使用组合键 Shift-Fn-Right.
   {'i', '<S-D-Right>', '<C-o>g$', opt, 'which_key_ignore'}, -- <S-D-Right> 并不等于 <S-End>, <S-End> 需要使用组合键 Shift-Fn-Right.
 
-  --- Alacritty setting: <D-Left> = <Home>; <D-Right> = <End>
-  --- <S-D-Left> 并不等于 <S-Home>, <S-Home> 需要使用组合键 Shift-Fn-Left.
+  -- Alacritty setting: <D-Left> = <Home>; <D-Right> = <End>
+  -- <S-D-Left> 并不等于 <S-Home>, <S-Home> 需要使用组合键 Shift-Fn-Left.
   {{'n','v'}, '<S-Home>', '12zh', opt, 'screen: scroll left'},
   {'i', '<S-Home>', '<C-o>12zh', opt, 'screen: scroll left'},
-  --- <S-D-Right> 并不等于 <S-End>, <S-End> 需要使用组合键 Shift-Fn-Right.
+  -- <S-D-Right> 并不等于 <S-End>, <S-End> 需要使用组合键 Shift-Fn-Right.
   {{'n','v'}, '<S-End>', '12zl', opt, 'screen: scroll right'},
   {'i', '<S-End>', '<C-o>12zl', opt, 'screen: scroll right'},
 
-  --- NOTE: <Ctrl-Up/Down/Left/Right> 被 mac 系统占用, 无法直接使用.
+  -- NOTE: <Ctrl-Up/Down/Left/Right> 被 mac 系统占用, 无法直接使用.
   {{'n','v'}, '<M-Up>', '3<C-y>', opt, 'screen: scroll Upwards'},
   {'i', '<M-Up>', '<C-o>3<C-y>', opt, 'screen: scroll Upwards'},
   {{'n','v'}, '<M-Down>', '3<C-e>', opt, 'screen: scroll Downwards'},
   {'i', '<M-Down>', '<C-o>3<C-e>', opt, 'screen: scroll Downwards'},
 
-  --- <Tab> key
+  -- <Tab> key
   {'n', '<Tab>', '<C-w><C-w>', opt, 'which_key_ignore'},  -- 切换到另一个窗口.
 
-  --- tabline
+  -- tabline
   {'n', '<S-D-->', '<cmd>tabp<CR>', opt, 'tab: previous'},
   {'n', '<S-D-=>', '<cmd>tabn<CR>', opt, 'tab: next'},
 
-  --- save/write file
+  -- save/write file
   {'n', '<D-s>', function() key_fn.save_file() end, opt, 'which_key_ignore'},
   {{'v', 'i'}, '<D-s>', '<C-c><cmd>lua require("utils.keymaps").save_file()<CR>', opt, 'which_key_ignore'},
 
-  --- undo / redo
+  -- undo / redo
   {'n', '<D-z>', 'u', opt, 'do: undo'},
   {'i', '<D-z>', '<C-o>u', opt, 'do: undo'},
   {'n', '<S-D-z>', '<C-r>', opt, 'which_key_ignore'},  -- redo
@@ -143,25 +143,25 @@ local keymaps = {
   {'n', '<D-r>', '<C-r>', opt, 'do: redo'},
   {'i', '<D-r>', '<C-o><C-r>', opt, 'do: redo'},
 
-  --- VVI: `gc` & `gcc` is {remap} by default.
+  -- VVI: `gc` & `gcc` is {remap} by default.
   {'n', '<D-/>', 'gcc', { remap = true }, 'Comment current line'},
   {'i', '<D-/>', '<C-o>gcc', { remap = true }, 'Comment current line'},
   {'v', '<D-/>', 'gc', { remap = true }, 'Comment Visual selected'},
   {'n', 'gc', '<Nop>', opt, 'Toggle Comment'},  -- NOTE: 'gc{motion}' Overlapping with 'gcc'
 
-  --- <leader> -------------------------------------------------------------------------------------
-  --- copy / paste
-  --- 如果是 linux server 系统, 则没有系统级 clipboard, 则无法使用该 copy 方式.
-  --- 在没有 cilpboard 的情况下如果想要粘贴 register 中的内容到 command line,
-  --- 需要使用 |:<CTRL-R> {register}|. `:help c_CTRL-R`.
+  -- <leader> -------------------------------------------------------------------------------------
+  -- copy / paste
+  -- 如果是 linux server 系统, 则没有系统级 clipboard, 则无法使用该 copy 方式.
+  -- 在没有 cilpboard 的情况下如果想要粘贴 register 中的内容到 command line,
+  -- 需要使用 |:<CTRL-R> {register}|. `:help c_CTRL-R`.
   {'x', '<leader>y', '"*y', opt, 'Copy to system clipboard'},
 
-  --- fold code, 这里是模拟 vscode keymaps.
+  -- fold code, 这里是模拟 vscode keymaps.
   {'n', '<leader>kj', 'zR', opt, "Open all folds"},
   {'n', '<leader>k0', 'zM', opt, "Close all folds"},
   {'n', '<leader>k1', 'zMzO', opt, "Context Focus & Close other folds"},
 
-  --- <leader> keymaps 默认会显示在 which-key list 中, 所以需要使用 'which_key_ignore' 阻止显示
+  -- <leader> keymaps 默认会显示在 which-key list 中, 所以需要使用 'which_key_ignore' 阻止显示
   {'n', '<leader>"', 'viw<C-c>`>a"<C-c>`<i"<C-c>', opt, 'which_key_ignore'},
   {'n', "<leader>'", "viw<C-c>`>a'<C-c>`<i'<C-c>", opt, 'which_key_ignore'},
   {'n', '<leader>`', 'viw<C-c>`>a`<C-c>`<i`<C-c>', opt, 'which_key_ignore'},
@@ -192,40 +192,40 @@ local keymaps = {
   {'x', '<leader>>', '<C-c>`>a><C-c>`<i<<C-c>v`><right><right>', opt, 'which_key_ignore'},
   {'x', '<leader><lt>', '<C-c>`>a><C-c>`<lt>i<lt><C-c>v`><right><right>', opt, 'which_key_ignore'},  -- '<' 使用 <lt> 代替.
 
-  --- 关闭所有其他 buffers
+  -- 关闭所有其他 buffers
   --{'n', '<leader>Da', function() key_fn.close_other_bufs() end, opt, 'buffer: Close All Other Buffers'},
   --{'n', '<leader>d', 'bdelete', opt, 'buf: Close Current Buffer'},
 
-  --- Window 控制
+  -- Window 控制
   {'n', '<D-w>', "<C-w>", opt, 'win: command replace <C-w>'},
   {'n', '<leader>w', function() key_fn.win_choose() end, opt, 'win: Jump to Window'},  -- 跳转到指定 window
   {'n', '<leader>W', '<cmd>only!<CR>', opt, 'win: Close All Other Windows'},  -- 关闭所有其他窗口, 快捷键 <C-w><C-o>
 
 
-  --- 其他 -----------------------------------------------------------------------------------------
-  --- filepath jump to file, {'n', 'i'} 被 lspconfig keymaps 使用.
+  -- 其他 -----------------------------------------------------------------------------------------
+  -- filepath jump to file, {'n', 'i'} 被 lspconfig keymaps 使用.
   {'x', '<S-CR>', '<C-c><cmd>lua require("utils.filepath").v_jump()<CR>', opt, 'filepath: Jump to file'},
 
-  --- 利用 treesitter 跳转到 prev/next root node.
+  -- 利用 treesitter 跳转到 prev/next root node.
   {{'n','v'}, '[[', function() key_fn.section.goto_prev() end, opt, 'Jump to Prev Section'},
   {{'n','v'}, ']]', function() key_fn.section.goto_next() end, opt, 'Jump to Next Section'},
 
-  --- 切换 buffer, 目前使用 bufferline 进行 buffer 切换, 如果不使用 bufferline.nvim 则使用以下设置.
+  -- 切换 buffer, 目前使用 bufferline 进行 buffer 切换, 如果不使用 bufferline.nvim 则使用以下设置.
   --{'n', '<lt>', '<cmd>bprevious<CR>', opt, 'go to previous buffer'},
   --{'n', '>', '<cmd>bnext<CR>', opt, 'go to next buffer'},
 
-  --- hi Normal ctermbg=234 | hi Normal ctermbg=NONE 切换 bg 颜色
+  -- hi Normal ctermbg=234 | hi Normal ctermbg=NONE 切换 bg 颜色
   {'n', '<leader>C', function() key_fn.toggle_comments_color() end, opt, 'change Comments color'},
 
-  --- NOTE: <D-k> 可能会被用于 system shortcut
+  -- NOTE: <D-k> 可能会被用于 system shortcut
   {'n', '<C-k>', '<cmd>mes clear<CR>', opt, 'message clear'},
   {'n', '<D-k>', '<cmd>mes clear<CR>', opt, 'message clear'},
 
-  --- move ) ] } to end of line/word, like autopairs FastWrap
+  -- move ) ] } to end of line/word, like autopairs FastWrap
   {'i', '<D-e>', function() key_fn.move_char.move_bracket('$') end, opt, 'move next char to end of line' },
   {'i', '<D-E>', function() key_fn.move_char.move_bracket('e') end, opt, 'move next char to end of <word>' },
 
-  --- TEST: alacritty settings window.option_as_alt 设置 Option 当做 ALT key 使用.
+  -- TEST: alacritty settings window.option_as_alt 设置 Option 当做 ALT key 使用.
   -- {'n', '<D-o>', function() print("<D-o>") end, opt, 'Test: Cmd/Super-o'},
   -- {'n', '<D-O>', function() print("<D-S-o>") end, opt, 'Test: Cmd/Super-Shift-O'},
   -- {'n', '<S-C-CR>', function() print("<S-C-CR>") end, opt, 'Test: Shift-Contrl-Enter'},
@@ -236,28 +236,28 @@ local keymaps = {
   -- {'n', '<C-D-CR>', function() print("<C-D-CR>") end, opt, 'Test: Ctrl-Cmd/Super-Enter'},
   {{'n', 'l', 'v', 'o', 't'}, '<C-D-M>', function() print(vim.fn.mode()) end, opt, 'mode()'},
 
-  --- VVI: <Nop> do nothing ------------------------------------------------------------------------
-  --- <Ctrl-Z> 是危险操作. 意思是 :stop. Suspend vim, 退出到 terminal 界面, 但保留 job.
-  --- 需要使用 `jobs -l` 列出 Suspended 列表,
-  --- 使用 `fg %1` 恢复 job,
-  --- 或者 `kill %1` 终止 job (不推荐, 会留下 .swp 文件).
+  -- VVI: <Nop> do nothing ------------------------------------------------------------------------
+  -- <Ctrl-Z> 是危险操作. 意思是 :stop. Suspend vim, 退出到 terminal 界面, 但保留 job.
+  -- 需要使用 `jobs -l` 列出 Suspended 列表,
+  -- 使用 `fg %1` 恢复 job,
+  -- 或者 `kill %1` 终止 job (不推荐, 会留下 .swp 文件).
   {{'n','v'}, '<C-z>', function() end, opt, 'which_key_ignore'},
 
-  --- <F1> :help help, 避免误操作.
+  -- <F1> :help help, 避免误操作.
   {{'n','i'}, '<F1>', function() end, opt, 'which_key_ignore'},
 
-  --- ":help t", 使用 fF 更容易. t 用作 terminal.
+  -- ":help t", 使用 fF 更容易. t 用作 terminal.
   {'n', 't', function() end, opt, 'which_key_ignore'},
   {'n', 'T', function() end, opt, 'which_key_ignore'},
 }
 
---- 这里是设置所有 key mapping 的地方 --------------------------------------------------------------
+-- 这里是设置所有 key mapping 的地方 --------------------------------------------------------------
 key_fn.set(keymaps, {
   { "<leader>D", group = "Buffers Close" },
   { "<leader>k", group = "Fold" },
   { "<leader>c", group = "Code" },
 
-  --- for key desc only
+  -- for key desc only
   { "<leader>", group = "<leader>" },
   { "[", group = "Section Jump Prev" },
   { "]", group = "Section Jump Next" },
@@ -267,7 +267,7 @@ key_fn.set(keymaps, {
   { "&", desc = "repeat last ':s' replace command" },  -- `:help &-default`
   { "<C-L>", desc = "nohlsearch | diffupdate" },  -- `:help CTRL-L-default`
 
-  --- which-key hidden default keymaps
+  -- which-key hidden default keymaps
   { "H", hidden = true },  -- To line from top of window
   { "L", hidden = true },  -- To line from bottom of window
   { "M", hidden = true },  -- To Middle line of window

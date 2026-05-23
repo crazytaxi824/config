@@ -1,24 +1,24 @@
---- vim Diagnostic 设置
---- 这里的设置都是和 neovim 编辑器显示效果相关的设置.
---- 所有设置通过 vim.diagnostic.config() 函数加载.
+-- vim Diagnostic 设置
+-- 这里的设置都是和 neovim 编辑器显示效果相关的设置.
+-- 所有设置通过 vim.diagnostic.config() 函数加载.
 
---- NOTE: test diagnostic sign
+-- NOTE: test diagnostic sign
 -- local function foo(a)
 --   f=1
 --   foo=1
 --   bar
 -- end
 
---- Highlights
+-- Highlights
 vim.api.nvim_set_hl(0, 'my_diagnostic_linehl', {
   -- ctermfg=Colors.cyan.c, fg=Colors.cyan.g,
   ctermbg=Colors.red_bg.c, bg=Colors.red_bg.g,
 })
 
---- `:help vim.diagnostic.config()`
---- `:help vim.diagnostic.Opts`
+-- `:help vim.diagnostic.config()`
+-- `:help vim.diagnostic.Opts`
 local config = {
-  --- `:help diagnostic-signs`
+  -- `:help diagnostic-signs`
   signs = {
     text = {
       [vim.diagnostic.severity.ERROR] = Nerd_icons.diag.error,
@@ -47,7 +47,7 @@ local config = {
 
   update_in_insert = false,  -- 输入过程中 diagnostic. true - 体验更好 | false - 节省资源
 
-  --- `:help vim.diagnostic.Opts.Float` extends `:help vim.lsp.util.open_floating_preview.Opts`
+  -- `:help vim.diagnostic.Opts.Float` extends `:help vim.lsp.util.open_floating_preview.Opts`
   float = {
     focusable = false,
     style = "minimal",
@@ -63,7 +63,7 @@ local config = {
   },
 }
 
---- VVI: 这里是加载配置的地方
+-- VVI: 这里是加载配置的地方
 vim.diagnostic.config(config)
 
 
