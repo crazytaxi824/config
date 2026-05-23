@@ -23,7 +23,7 @@
 -- `$ nvim --clean src/main.go`   -- 不加载任何 plugins
 -------------------------------------+----------------------------------+------------------------------------
 
---- for Debugging Neovim plugins. `:LspInfo`, `:LspLog`
+-- for Debugging Neovim plugins. `:LspInfo`, `:LspLog`
 __Debug_Neovim = {
   lsp = false,  -- vim.lsp DEBUG, Notify msg.
   null_ls = false,  -- null-ls DEBUG, `:NullLsLog` & golangci-lint Notify msg.
@@ -32,7 +32,7 @@ __Debug_Neovim = {
   autocmd = false,  -- debug_autocmd.lua
 }
 
---- 读取设置: ~/.config/nvim/lua/xxx.lua
+-- 读取设置: ~/.config/nvim/lua/xxx.lua
 require("core")  -- VVI: 必须放在最前面加载, 因为有全局函数需要被用到
 
 require("myplugins")
