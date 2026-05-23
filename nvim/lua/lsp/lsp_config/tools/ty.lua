@@ -8,10 +8,13 @@ return {
       return
     end
 
+    --- fallback
+    on_dir(vim.uv.cwd())
+
     Notify(
-      {"'pyproject.toml' NOT found"},
+      {"ty root dir NOT found"},
       "WARN",
-      {title={"LSP", "basedpyright.lua"}, timeout = false}
+      { title={"LSP", "ty.lua"}, timeout=3 }
     )
   end,
 

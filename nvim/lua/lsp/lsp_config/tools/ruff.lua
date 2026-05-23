@@ -9,10 +9,13 @@ return {
       return
     end
 
+    --- fallback
+    on_dir(vim.uv.cwd())
+
     Notify(
-      {"'pyproject.toml', 'ruff.toml', '.ruff.toml' NOT found"},
+      {"ruff root dir NOT found"},
       "WARN",
-      {title={"LSP", "ruff.lua"}, timeout = false}
+      { title={"LSP", "ruff.lua"}, timeout=3 }
     )
   end
 }

@@ -9,10 +9,13 @@ return {
       return
     end
 
+    --- fallback
+    on_dir(vim.uv.cwd())
+
     Notify(
-      {"'pyproject.toml' NOT found"},
+      {"pyright root dir NOT found"},
       "WARN",
-      {title={"LSP", "pyright.lua"}, timeout = false}
+      { title={"LSP", "pyright.lua"}, timeout=3 }
     )
   end,
 
@@ -40,4 +43,18 @@ return {
       client.config.settings.python.pythonPath = py_paths[1]
     end
   end,
+
+  --- https://github.com/microsoft/pyright/blob/main/docs/settings.md
+  settings = {
+    python = {
+      --- NOTE: pythonPath & venvPath 不会自动寻找, 所以在 on_init() 中设置
+      -- pythonPath =
+      -- venvPath =
+      analysis = {
+        typeCheckingMode = "standard",   -- "off", "basic", "standard", "strict"
+        autoSearchPaths = true,
+        diagnosticMode = "openFilesOnly",
+      },
+    },
+  },
 }
