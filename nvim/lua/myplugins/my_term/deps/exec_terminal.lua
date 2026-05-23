@@ -33,8 +33,8 @@ function M.terminal_exec(cmd, term, term_bufnr, term_win_id)
       env = term:env(),
 
       ---@param job_id integer
-      ---@param data string[]  output
-      ---@param event string  'stdout'
+      ---@param data string[]  lines table(list)
+      ---@param event string   'stdout'
       on_stdout = function(job_id, data, event)  -- event 是 'stdout'
         -- auto_scroll option
         utils.buf_scroll_bottom(term, term_bufnr)
@@ -49,8 +49,8 @@ function M.terminal_exec(cmd, term, term_bufnr, term_win_id)
       end,
 
       ---@param job_id integer
-      ---@param data string[]  err_msg
-      ---@param event string  'stderr'
+      ---@param data string[]  lines table(list)
+      ---@param event string   'stderr'
       on_stderr = function(job_id, data, event)  -- event 是 'stderr'
         -- auto_scroll option
         utils.buf_scroll_bottom(term, term_bufnr)

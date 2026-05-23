@@ -37,7 +37,7 @@ local utils = require("lsp.project_local_settings.utils")
 --   2. json 文件为空 ""
 -- 如果 return nil 表示 json 格式错误, 则不要 tbl_deep_extend to default settings.
 --
----@param json_file string  -- (file path)
+---@param json_file string  filepath
 ---@return table|nil
 local function read_local_settings(json_file)
   local local_settings_filepath = utils.find_local_settings_file(json_file)

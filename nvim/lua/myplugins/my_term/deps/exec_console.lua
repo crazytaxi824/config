@@ -81,9 +81,9 @@ end
 
 ---@param bufnr integer
 ---@param data string[]
----@param hl string  -- highlight name `vim.hl.range()`
----@param write_to_lastline? boolean  -- 从最后一行的最后一个 col 开始 write data, 否则 write to next line
----@return boolean  -- incomplete data
+---@param hl string  highlight name `vim.hl.range()`
+---@param write_to_lastline? boolean  从最后一行的最后一个 col 开始 write data, 否则 write to next line
+---@return boolean incomplete data incomplete
 local function set_buf_line_output(bufnr, data, hl, write_to_lastline)
   -- 检查 buffer 是否存在, 避免 on_stdout, on_stderr, on_exit 异步执行完成后, buffer 已被销毁
   if not vim.api.nvim_buf_is_valid(bufnr) or not data then
@@ -226,8 +226,8 @@ function M.console_exec(cmd, term, term_bufnr, term_win_id)
     env = term:env(),
 
     ---@param job_id integer
-    ---@param data string[]  output
-    ---@param event string  'stdout'
+    ---@param data string[]  lines table(list)
+    ---@param event string   'stdout'
     on_stdout = function(job_id, data, event)  -- NOTE: for fmt.Println()
       -- write output to buffer
       incomplete = set_buf_line_output(term_bufnr, data, "my_output_stdout", incomplete)
@@ -245,7 +245,7 @@ function M.console_exec(cmd, term, term_bufnr, term_win_id)
     end,
 
     ---@param job_id integer
-    ---@param data string[]  err_msg
+    ---@param data string[]  lines table(list)
     ---@param event string  'stderr'
     on_stderr = function(job_id, data, event)  -- NOTE: for log.Println()
       -- write error to buffer
