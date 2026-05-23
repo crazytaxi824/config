@@ -2,6 +2,7 @@
 .netrwhist
 brewfile.lock*
 todo*
+tmp_*
 
 # 忽略相对于 .gitignore 目录下的文件
 /raycast
