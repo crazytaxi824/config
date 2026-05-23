@@ -82,13 +82,20 @@ containerd:
 ssh:
   overVsock: false
 
+# `$ limactl network list`
+# networks: "host", "bridge", "user-v2" 的 gateway 和 mask 定义在 ~/.lima/_config/networks.yaml
 networks:
+# 使用 macOS Virtualization.Framework 的 NAT 模式
 - vzNAT: true
-# 如果需要 vm 间可以互相访问使用 user-v2
-# - lima: "user-v2"
+# "bridge": 虚拟一个新的机器, 虚拟机会直接向路由器 DHCP 服务器申请 IP. 虚拟机 <-> 局域网: 相互访问无限制
+# "user-v2": 外部物理网络根本不知道它的存在. 虚拟机 -> 外部: 通过宿主机 NAT; 外部 -> 虚拟机: port-forward
+# "host": 和宿主机公用 ports, 如果 :80 端口被占用, 其他 vm 无法再使用 :80 端口
+# 如果需要 vm 间可以互相访问使用 "user-v2" 的解析 vm: "lima-NAME.internal"; 宿主机: "host.lima.internal"
+- lima: "user-v2"
 
 # FIX: 禁止 mDNS 占用 5353 UDP
 provision:
+# mode system 是 root user
 - mode: "system"
   script: |
     #!/bin/bash
