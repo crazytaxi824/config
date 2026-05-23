@@ -30,7 +30,7 @@ end
 --
 ---@param msg string|string[]
 ---@param lvl integer
----@param opt? {title: string|string[], timeout: number|boolean}  -- `:help notify.Options`
+---@param opt? {title: string|string[], timeout: number|boolean}  `:help notify.Options`
 ---@return boolean
 local function nvim_notify(msg, lvl, opt)
   local notify_status_ok, notify = pcall(require, "notify")
@@ -67,7 +67,7 @@ end
 --
 ---@param msg string|string[]
 ---@param lvl? string|integer  "TRACE"-0, "DEBUG"-1, "INFO"-2, "WARN"-3, "ERROR"-4, "OFF"-5
----@param opt? {title: string|string[], timeout: number|boolean}  -- `:help notify.Options`
+---@param opt? {title: string|string[], timeout: number|boolean}  `:help notify.Options`
 function Notify(msg, lvl, opt)
   local log_lvl = log_level(lvl)
 

@@ -5,7 +5,7 @@ local wb_fmt = require('myplugins.winbarline.winbar_formatter')
 ---@class WinbarLineWindow
 ---@field win_id integer
 ---@field width integer
----@field private buf_list integer[]  -- 需要排序
+---@field private buf_list integer[]  需要排序
 local WinbarLineWin = {}
 WinbarLineWin.__index = WinbarLineWin
 

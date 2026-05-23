@@ -29,8 +29,8 @@ local wb_sign = {
 -- display index in window
 ---@field index integer
 --
--- filepath head/dir
----@field fp_prefix? string[]  -- filepath prefix
+-- filepath prefix: head/dir
+---@field fp_prefix? string[]
 --
 -- last part of filepath
 ---@field basename string
