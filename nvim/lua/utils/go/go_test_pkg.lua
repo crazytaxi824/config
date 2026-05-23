@@ -1,4 +1,4 @@
---- `go test run/bench ImportPath`, test 单独的 package.
+-- `go test run/bench ImportPath`, test 单独的 package.
 
 local go_none = require("utils.go.deps.go_testflag_none")
 local go_pprof = require("utils.go.deps.go_testflag_pprof")
@@ -11,17 +11,17 @@ local utils = require("utils.go.deps.utils")
 
 local M = {}
 
---- 测试 package `go test run/bench ImportPath`
----
+-- 测试 package `go test run/bench ImportPath`
+--
 ---@param mode 'run'|'bench'
 M.go_test_pkg = function(mode)
-  --- 排序
+  -- 排序
   local select = vim.iter({go_none.list, go_pprof.list, go_cover.list}):flatten():totable()
 
   ---@type table<string, GoTestFlag>
   local test_flags = vim.tbl_deep_extend('force', go_none.flags, go_pprof.flags, go_cover.flags)
 
-  --- VVI: 异步函数, 必须在回调函数中运行 go test
+  -- VVI: 异步函数, 必须在回调函数中运行 go test
   vim.ui.select(select, {
     prompt = 'choose go test flag:',
     format_item = function(item)
@@ -37,7 +37,7 @@ M.go_test_pkg = function(mode)
         flag = choice,
       }
 
-      --- 运行 `go test`
+      -- 运行 `go test`
       local cmd, myterm_opts = test_flags[choice].term_opts(opts)
       test_cmds.go_test(cmd, myterm_opts)
     end

@@ -8,7 +8,7 @@ local tool_impl         = require("utils.go.tool_impl")
 
 
 local M = {
-  --- methods
+  -- methods
   run = go_run.go_run,
 
   test = {

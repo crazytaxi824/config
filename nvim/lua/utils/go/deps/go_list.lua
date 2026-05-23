@@ -1,14 +1,14 @@
---- go list -json 用于获取 ImportPath, Root, (pkg)Name, Imports, Deps ... 等数据.
+-- go list -json 用于获取 ImportPath, Root, (pkg)Name, Imports, Deps ... 等数据.
 
 local M = {}
 
---- `go list -json` 内容分析
----
+-- `go list -json` 内容分析
+--
 ---@param cwd? string (directory, nil: 则使用当前 buffer 的 dir)
 ---@return table
 function M.go_list(cwd)
   local result = vim.system({'go', 'list', '-json'}, {
-    --- cwd 可以是 relative path 或者是 absolute path.
+    -- cwd 可以是 relative path 或者是 absolute path.
     cwd = cwd or vim.fs.dirname(vim.api.nvim_buf_get_name(0)),
     text = true,
   }):wait()
@@ -16,7 +16,7 @@ function M.go_list(cwd)
     error(result.stderr ~= '' and result.stderr or result.code)
   end
 
-  --- 如果不合法会 error()
+  -- 如果不合法会 error()
   return vim.json.decode(result.stdout)
 end
 

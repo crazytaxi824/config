@@ -1,11 +1,11 @@
---- `go test -v -fuzztime 15s -run ^$ -fuzz "^FuzzFoo$" local/src/color`
----
---- NOTE: fuzz 只能用于 single_fn, 一次 fuzz 多个函数会报错: FAIL: testing: will not fuzz, -fuzz matches more than one fuzz test
+-- `go test -v -fuzztime 15s -run ^$ -fuzz "^FuzzFoo$" local/src/color`
+--
+-- NOTE: fuzz 只能用于 single_fn, 一次 fuzz 多个函数会报错: FAIL: testing: will not fuzz, -fuzz matches more than one fuzz test
 
 local utils = require("utils.go.deps.utils")
 
 
---- go test cmd
+-- go test cmd
 local go_test = {'go', 'test', '-count=1', '-v'}
 
 ---@param fuzztime string
@@ -43,7 +43,7 @@ local M = {
           end
         end)
 
-        --- input 如果取消, 则不继续运行 go_test(cmd, term_opts)
+        -- input 如果取消, 则不继续运行 go_test(cmd, term_opts)
         if not fuzz_time then
           return nil, {}
         end

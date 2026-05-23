@@ -1,9 +1,9 @@
---- `go test -v -run/-bench "..." local/src/color`
+-- `go test -v -run/-bench "..." local/src/color`
 
 local utils = require("utils.go.deps.utils")
 
 
---- go test cmd
+-- go test cmd
 local go_test = {'go', 'test', '-count=1', '-v'}
 
 

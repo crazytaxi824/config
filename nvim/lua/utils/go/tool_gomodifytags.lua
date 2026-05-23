@@ -1,63 +1,63 @@
---- 使用 gomodifytags 给 struct 添加/移除 tags
---- 操作方法 --------------------------------------------------------------------------------------- {{{
---- cursor 在 struct 的 {} 内, 使用以下 Command
----   :GoTagAdd json,xml            -- 默认: snakecase. use '-add-tags'
----   :GoTagAdd json,xml camelcase  -- camelcase. use '-add-tags' & '-transform'
----   :GoTagAdd json=string,xml=bar    -- use '-add-tags' & '-add-options'
----   :GoTagAdd json=string,json=bar   -- NOTE: add multi-options to a Single tag. use '-add-tags' & '-add-options'
----
----   :GoTagRemove           -- remove all tags and their options. use '-clear-tags'
----   :GoTagRemove json,xml  -- remove specified tags and it's options. use '-remove-tags''
----
----   :GoTagOptionsRemove   -- Clear all tag options. use '-clear-options'
----   :GoTagOptionsRemove json=foo,xml=bar  -- remove specified tags and it's options. use '-remove-options'
----
----   :GoTagAddAllStruct     -- add tags to all struct in this file.
----   :GoTagRemoveAllStruct  -- remove tags to all struct in this file.
----   :GoTagOptionsRemoveAllStruct  -- remove tag's options to all struct in this file.
----
---- 命令行工具使用: `gomodifytags --help`
---- silent execute "!gomodifytags -file src/main.go -offset 219 -add-tags json,xml -add-options json=omitempty,xml=omitempty -transform snakecase -skip-unexported"
---- silent execute "!gomodifytags -file src/main.go -offset 219 -clear-tags"  -- 删除所有 tag
---- silent execute "!gomodifytags -file src/main.go -offset 219 -clear-options"  -- 删除所有 tag 的所有 options
---- silent execute "!gomodifytags -file src/main.go -offset 219 -remove-tags json"  -- 删除指定 tag
---- silent execute "!gomodifytags -file src/main.go -offset 219 -remove-options json=omitempty"  -- 删除指定 tag 的指定 option.
----
---- 可选填项:
----   -file       filepath
----   -add-tags / -add-options
----   -remove-tags / -remove-options
----   -clear-tags / -clear-options
----   -offset     n (num, byte offset) VVI: 主要利用这个功能实现, vim.fn.line2byte() 获取 offset
----   -all        本文件中的所有 struct. NOTE: 使用该参数不需要设置 -offset
----   -transform  snakecase(*) | camelcase | lispcase | pascalcase | titlecase | keep
----   -sort       按照 tags 首字母排序
----   -override   覆盖更改
----   -quiet      不打印运行结果
----   -w          保存文件(外部修改文件)
----
---- }}}
+-- 使用 gomodifytags 给 struct 添加/移除 tags
+-- 操作方法 --------------------------------------------------------------------------------------- {{{
+-- cursor 在 struct 的 {} 内, 使用以下 Command
+--   :GoTagAdd json,xml            -- 默认: snakecase. use '-add-tags'
+--   :GoTagAdd json,xml camelcase  -- camelcase. use '-add-tags' & '-transform'
+--   :GoTagAdd json=string,xml=bar    -- use '-add-tags' & '-add-options'
+--   :GoTagAdd json=string,json=bar   -- NOTE: add multi-options to a Single tag. use '-add-tags' & '-add-options'
+--
+--   :GoTagRemove           -- remove all tags and their options. use '-clear-tags'
+--   :GoTagRemove json,xml  -- remove specified tags and it's options. use '-remove-tags''
+--
+--   :GoTagOptionsRemove   -- Clear all tag options. use '-clear-options'
+--   :GoTagOptionsRemove json=foo,xml=bar  -- remove specified tags and it's options. use '-remove-options'
+--
+--   :GoTagAddAllStruct     -- add tags to all struct in this file.
+--   :GoTagRemoveAllStruct  -- remove tags to all struct in this file.
+--   :GoTagOptionsRemoveAllStruct  -- remove tag's options to all struct in this file.
+--
+-- 命令行工具使用: `gomodifytags --help`
+-- silent execute "!gomodifytags -file src/main.go -offset 219 -add-tags json,xml -add-options json=omitempty,xml=omitempty -transform snakecase -skip-unexported"
+-- silent execute "!gomodifytags -file src/main.go -offset 219 -clear-tags"  -- 删除所有 tag
+-- silent execute "!gomodifytags -file src/main.go -offset 219 -clear-options"  -- 删除所有 tag 的所有 options
+-- silent execute "!gomodifytags -file src/main.go -offset 219 -remove-tags json"  -- 删除指定 tag
+-- silent execute "!gomodifytags -file src/main.go -offset 219 -remove-options json=omitempty"  -- 删除指定 tag 的指定 option.
+--
+-- 可选填项:
+--   -file       filepath
+--   -add-tags / -add-options
+--   -remove-tags / -remove-options
+--   -clear-tags / -clear-options
+--   -offset     n (num, byte offset) VVI: 主要利用这个功能实现, vim.fn.line2byte() 获取 offset
+--   -all        本文件中的所有 struct. NOTE: 使用该参数不需要设置 -offset
+--   -transform  snakecase(*) | camelcase | lispcase | pascalcase | titlecase | keep
+--   -sort       按照 tags 首字母排序
+--   -override   覆盖更改
+--   -quiet      不打印运行结果
+--   -w          保存文件(外部修改文件)
+--
+-- }}}
 
---- 重写整个 buffer 的内容
----
+-- 重写整个 buffer 的内容
+--
 ---@param data string
 ---@param bufnr? integer
 local function rewrite_buffer(data, bufnr)
-  --- split string
+  -- split string
   local lines = vim.split(data, "\n", { trimempty=false })
 
-  --- 从 0 ~ -1 行, 重写整个 buffer
-  --- bufnr = 0, 表示当前 buffer
+  -- 从 0 ~ -1 行, 重写整个 buffer
+  -- bufnr = 0, 表示当前 buffer
   vim.api.nvim_buf_set_lines(bufnr or 0, 0, -1, false, lines)
 end
 
 local M = {}
 
---- ADD Tags and Options --------------------------------------------------------------------------- {{{
+-- ADD Tags and Options --------------------------------------------------------------------------- {{{
 
---- arglist[1] is tag options. could be 'json', 'json=foo', 'json=foo,xml', 'json=foo,json=fuz,xml=bar'
---- arglist[2] = <可为空>|snakecase|camelcase|...
----
+-- arglist[1] is tag options. could be 'json', 'json=foo', 'json=foo,xml', 'json=foo,json=fuz,xml=bar'
+-- arglist[2] = <可为空>|snakecase|camelcase|...
+--
 ---@param arglist string[] ({ "json,xml" "camelcase" } | { "json=string,xml=bar" "camelcase" })
 ---@param go_add_tags_cmd string ("GoTagAdd"|"GoTagAddAllStruct")
 ---@param offset? integer (vim.fn.line2byte(vim.fn.line('.')))
@@ -90,7 +90,7 @@ function M.go_add_tags_and_opts(arglist, go_add_tags_cmd, offset)
     return
   end
 
-  --- parse tag name and tag options from arglist[1].
+  -- parse tag name and tag options from arglist[1].
   local tag_list = {}
   local opt_list = {}
   for _, tag_opt in ipairs(vim.split(vim.trim(arglist[1]), ',', {trimempty=false})) do
@@ -150,38 +150,38 @@ function M.go_add_tags_and_opts(arglist, go_add_tags_cmd, offset)
     "-override",
   }
 
-  --- -offset / -all
+  -- -offset / -all
   if offset then
     table.insert(sh_cmd, "-offset="..offset)
   else
     table.insert(sh_cmd, "-all")
   end
 
-  --- -add-options
+  -- -add-options
   if #opt_list > 0 then
     table.insert(sh_cmd, "-add-options="..table.concat(opt_list,','))
   end
 
-  --- print cmd
+  -- print cmd
   vim.notify(table.concat(sh_cmd, ' '), vim.log.levels.INFO)
 
-  --- 执行 cmd
+  -- 执行 cmd
   local result = vim.system(sh_cmd, { text = true }):wait()
   if result.code ~= 0 then
     Notify(vim.trim(result.stderr), "ERROR")
     return
   end
 
-  --- 重写整个 buffer
+  -- 重写整个 buffer
   rewrite_buffer(vim.trim(result.stdout))
 end
---- }}}
+-- }}}
 
---- Remove Tags and Options ------------------------------------------------------------------------ {{{
+-- Remove Tags and Options ------------------------------------------------------------------------ {{{
 
---- if no args,  remove all tags, use '-clear-tags'
---- if has args, remove specified tags, use '-remove-tags'
----
+-- if no args,  remove all tags, use '-clear-tags'
+-- if has args, remove specified tags, use '-remove-tags'
+--
 ---@param arglist string[] ({} | {"json,xml"})
 ---@param go_remove_tags_cmd string ("GoTagRemove")
 ---@param offset? integer (vim.fn.line2byte(vim.fn.line('.')))
@@ -215,40 +215,40 @@ function M.go_remove_tags(arglist, go_remove_tags_cmd, offset)
     "-file", fp,
   }
 
-  --- -offset / -all
+  -- -offset / -all
   if offset then
     table.insert(sh_cmd, "-offset=" .. offset)
   else
     table.insert(sh_cmd, "-all")
   end
 
-  --- -clear-tags / -remove-tags
+  -- -clear-tags / -remove-tags
   if #arglist == 0 then
     table.insert(sh_cmd, "-clear-tags")
   else
     table.insert(sh_cmd, "-remove-tags=" .. arglist[1])
   end
 
-  --- print cmd
+  -- print cmd
   vim.notify(table.concat(sh_cmd, ' '), vim.log.levels.INFO)
 
-  --- 执行 cmd
+  -- 执行 cmd
   local result = vim.system(sh_cmd, { text = true }):wait()
   if result.code ~= 0 then
     Notify(vim.trim(result.stderr), "WARN")
     return
   end
 
-  --- 重写整个 buffer
+  -- 重写整个 buffer
   rewrite_buffer(vim.trim(result.stdout))
 end
---- }}}
+-- }}}
 
---- Remove Tag's Options --------------------------------------------------------------------------- {{{
+-- Remove Tag's Options --------------------------------------------------------------------------- {{{
 
---- if no args,  remove all tags' options, use '-clear-options'
---- if has args, remove specified tag's options, use '-remove-options'
----
+-- if no args,  remove all tags' options, use '-clear-options'
+-- if has args, remove specified tag's options, use '-remove-options'
+--
 ---@param arglist string[] ({} | {"json=foo,xml=bar"})
 ---@param go_remove_tag_opts_cmd string ("GoTagOptionsRemove")
 ---@param offset? integer (vim.fn.line2byte(vim.fn.line('.')))
@@ -282,33 +282,33 @@ function M.go_remove_tags_opts(arglist, go_remove_tag_opts_cmd, offset)
     "-file", fp,
   }
 
-  --- -offset / -all
+  -- -offset / -all
   if offset then
     table.insert(sh_cmd, "-offset=" .. offset)
   else
     table.insert(sh_cmd, "-all")
   end
 
-  --- -clear-options / -remove-options
+  -- -clear-options / -remove-options
   if #arglist == 0 then
     table.insert(sh_cmd, "-clear-options")
   else
     table.insert(sh_cmd, "-remove-options=" .. arglist[1])
   end
 
-  --- print cmd
+  -- print cmd
   vim.notify(table.concat(sh_cmd, ' '), vim.log.levels.INFO)
 
-  --- 执行 cmd
+  -- 执行 cmd
   local result = vim.system(sh_cmd, { text = true }):wait()
   if result.code ~= 0 then
     Notify(vim.trim(result.stderr), "WARN")
     return
   end
 
-  --- 重写整个 buffer
+  -- 重写整个 buffer
   rewrite_buffer(vim.trim(result.stdout))
 end
---- }}}
+-- }}}
 
 return M
