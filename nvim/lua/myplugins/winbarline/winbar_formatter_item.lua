@@ -48,7 +48,7 @@ WinbarFomatterItem.__index = WinbarFomatterItem
 ---@param win_id integer
 ---@param bufnr integer
 ---@param index integer
----@param path_list string[]  -- filepath list, eg: a/b/c -> ["a", "b", "c"]
+---@param path_list string[]  filepath list, eg: a/b/c -> ["a", "b", "c"]
 ---@param diagnostic? { count: integer, severity: integer }
 ---@return WinbarFormatterItem
 function WinbarFomatterItem.new(win_id, bufnr, index, path_list, diagnostic)
@@ -123,7 +123,7 @@ end
 ---@param width integer
 ---@param level WinbarFormatterLevel
 ---@param mode? 'prefix'|'suffix'
----@return WinbarFormatterItemComponent[]  -- indicator, index, bufname, diagnostic, modified
+---@return WinbarFormatterItemComponent[]
 function WinbarFomatterItem:partial(width, level, mode)
   mode = mode or 'prefix'
   local suffix = mode == 'suffix'
@@ -175,8 +175,8 @@ end
 
 
 ---@param level WinbarFormatterLevel
----@return WinbarFormatterItemComponent[]  -- indicator, index, bufname, diagnostic, modified
----@return integer width -- item width: including a trailing space
+---@return WinbarFormatterItemComponent[]
+---@return integer width  item width: including a trailing space
 function WinbarFomatterItem:parse_item_to_components(level)
   ---@type WinbarFormatterItemComponent[]
   local components = {}

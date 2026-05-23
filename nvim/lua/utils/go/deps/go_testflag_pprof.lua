@@ -26,8 +26,8 @@ local go_test = {'go', 'test', '-count=1', '-v'}
 -- go test -cpuprofile cpu.out, -memprofile mem.out, -mutexprofile mutex.out, -blockprofile block.out, -trace trace.out
 --
 ---@param dir string  pprof_dir
----@param flag string 'mem'|'cpu'|'mutex'|'block'|'trace'
----@return string[]  extra_args
+---@param flag string  'mem'|'cpu'|'mutex'|'block'|'trace'
+---@return string[] extra_args
 local function gen_extra_args(dir, flag)
   local extra_args = { '-' .. flag .. 'profile', flag .. '.out' }
   if flag == 'trace' then

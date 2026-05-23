@@ -59,7 +59,7 @@ end
 
 -- set winbar for this window
 --
----@param win_width? integer  -- update win_width if needed
+---@param win_width? integer  update win_width if needed
 function WinbarLineWin:set_winbar(win_width)
   if not vim.api.nvim_win_is_valid(self.win_id) then
     return

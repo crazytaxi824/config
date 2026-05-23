@@ -28,8 +28,8 @@ vim.api.nvim_set_hl(0, "my_output_eof", {ctermfg=Colors.g238.c, fg=Colors.g238.g
 
 ---@param bufnr integer
 ---@param data string[]
----@param hl string  -- highlight name `vim.hl.range()`
----@param write_to_lastline? boolean  -- 从最后一行的最后一个 col 开始 write data, 否则 write to next line
+---@param hl string  highlight name `vim.hl.range()`
+---@param write_to_lastline? boolean  从最后一行的最后一个 col 开始 write data, 否则 write to next line
 local function buf_append_data(bufnr, data, hl, write_to_lastline)
   -- 保险起见
   -- if #data == 0 then return end
@@ -83,7 +83,7 @@ end
 ---@param data string[]
 ---@param hl string  highlight name `vim.hl.range()`
 ---@param write_to_lastline? boolean  从最后一行的最后一个 col 开始 write data, 否则 write to next line
----@return boolean incomplete data incomplete
+---@return boolean incomplete  data incomplete
 local function set_buf_line_output(bufnr, data, hl, write_to_lastline)
   -- 检查 buffer 是否存在, 避免 on_stdout, on_stderr, on_exit 异步执行完成后, buffer 已被销毁
   if not vim.api.nvim_buf_is_valid(bufnr) or not data then
