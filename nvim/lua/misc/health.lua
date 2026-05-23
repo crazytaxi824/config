@@ -1,6 +1,6 @@
---- 自定义 health check
+-- 自定义 health check
 
---- require vim.health. `:help health-dev`
+-- require vim.health. `:help health-dev`
 local health = vim.health
 
 local M = {}
@@ -36,7 +36,7 @@ local mason_record = [[
 ]]
 
 local function check_mason_tools()
-  --- 分析 mason_record string
+  -- 分析 mason_record string
   ---@type string[]
   local lines = vim.split(mason_record, "\n", { plain = true, trimempty = true })
 
@@ -64,7 +64,7 @@ local function check_mason_tools()
 end
 
 
---- check command line tools ----------------------------------------------------------------------- {{{
+-- check command line tools ----------------------------------------------------------------------- {{{
 
 ---@type table<string, { cmd: string, install?: string, mason?: string }>
 local cmd_tools = {
@@ -94,7 +94,7 @@ end
 
 -- }}}
 
---- HACK 中用到的 modules & functions, 大多 overwrite 源代码 --------------------------------------- {{{
+-- HACK 中用到的 modules & functions, 大多 overwrite 源代码 --------------------------------------- {{{
 
 ---@type string[]
 local funcs_list = {
@@ -109,7 +109,7 @@ local funcs_list = {
 
 local function check_plugin_funcs()
   for _, fn_str in ipairs(funcs_list) do
-    --- 使用loadstring (Lua 5.1) 或 load (Lua 5.2及更高版本) 函数将表达式编译成函数
+    -- 使用loadstring (Lua 5.1) 或 load (Lua 5.2及更高版本) 函数将表达式编译成函数
     local fn, err = load("return " .. fn_str)
     if err then
       health.error(fn_str .. ' is not Exist. Error: ' .. err)
@@ -126,20 +126,20 @@ end
 -- }}}
 
 M.check = function()
-  --- command line tools
+  -- command line tools
   health.start("check command line tools")
   check_cmd_tools(cmd_tools)
 
-  --- lsp tools
+  -- lsp tools
   local lsp_servers_map = require('lsp.svr_list').list
   health.start("check LSP tools")
   check_cmd_tools(lsp_servers_map)
 
-  --- mason tools
+  -- mason tools
   health.start("check mason tools")
   check_mason_tools()
 
-  --- funciton availability check
+  -- funciton availability check
   health.start("check HACK functions availability")
   check_plugin_funcs()
 end
