@@ -1,29 +1,29 @@
---- 设置 lsp config
+-- 设置 lsp config
 local lsp_update_config = require("lsp.lsp_config.update_config")
 local utils = require("lsp.project_local_settings.utils")
 
---- 获取 lsp 列表
+-- 获取 lsp 列表
 local lsp_servers_map = require('lsp.svr_list').list
 
---- 读取 & cache local_settings files
+-- 读取 & cache local_settings files
 lsp_update_config.reload_local_settings()
 
---- setup 所有 lsp config
+-- setup 所有 lsp config
 for lsp_tool, _ in pairs(lsp_servers_map) do
   lsp_update_config.lspconfig_setup(lsp_tool)
 end
 
---- 启动所有 lsp
+-- 启动所有 lsp
 vim.lsp.enable(vim.tbl_keys(lsp_servers_map))
 
---- `set filetype=xxx` 时 detach previous LSP.
+-- `set filetype=xxx` 时 detach previous LSP.
 vim.api.nvim_create_autocmd("FileType", {
   pattern = {"*"},
   callback = function(args)
     local lsp_clients = vim.lsp.get_clients({ bufnr = args.buf })
     for _, c in ipairs(lsp_clients) do
-      --- `set filetype` 后, detach 所有不匹配该 buffer 新 filetype 的 lsp client.
-      --- NOTE: 排除 null-ls
+      -- `set filetype` 后, detach 所有不匹配该 buffer 新 filetype 的 lsp client.
+      -- NOTE: 排除 null-ls
       if c.name ~= 'null-ls'
         and not vim.tbl_contains(c.config['filetypes'] or {}, vim.bo[args.buf].filetype)
       then
@@ -34,7 +34,7 @@ vim.api.nvim_create_autocmd("FileType", {
   desc = "LSP: detach previous LSP when `set filetype=xxx`",
 })
 
---- restart lsp when ".nvim/lsp.json" changes
+-- restart lsp when ".nvim/lsp.json" changes
 local lsp_gid = vim.api.nvim_create_augroup("my_reload_local_lsp_settings", {clear=true})
 vim.api.nvim_create_autocmd({'BufWritePost'}, {
   group = lsp_gid,
@@ -54,7 +54,7 @@ vim.api.nvim_create_autocmd({'BufWritePost'}, {
   desc = "reload local settings when '.nvim/lsp.json' changed",
 })
 
---- schema for json, toml, yaml
+-- schema for json, toml, yaml
 vim.api.nvim_create_user_command("Schema", function(params)
   local ft = params.args:lower()
   if ft == 'json' then

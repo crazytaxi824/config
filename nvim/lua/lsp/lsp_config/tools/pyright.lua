@@ -1,6 +1,6 @@
 -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#pyright
 
---- 修改 lspconfig 中默认 root_dir 设置
+-- 修改 lspconfig 中默认 root_dir 设置
 return {
   root_dir = function(bufnr, on_dir)
     local root = vim.fs.root(bufnr, 'pyproject.toml')
@@ -9,7 +9,7 @@ return {
       return
     end
 
-    --- fallback
+    -- fallback
     on_dir(vim.uv.cwd())
 
     Notify(
@@ -19,18 +19,18 @@ return {
     )
   end,
 
-  --- NOTE: 这里的设置和 pyproject.toml 中的 [tool.pyright] venvPath & venv 设置只要有一个成功 pyright 就可以正常工作
-  --- 自动探测 python venv 环境
+  -- NOTE: 这里的设置和 pyproject.toml 中的 [tool.pyright] venvPath & venv 设置只要有一个成功 pyright 就可以正常工作
+  -- 自动探测 python venv 环境
   on_init = function(client)
     local workspace = client.config.root_dir
     if workspace then
-      --- .venv 在项目根目录
+      -- .venv 在项目根目录
       local venv_python = vim.fs.joinpath(workspace, ".venv/bin/python3")
       if vim.fn.executable(venv_python) == 1 then
         client.config.settings.python.pythonPath = venv_python
       end
     else
-      --- 向上查找 .venv
+      -- 向上查找 .venv
       local py_paths = vim.fs.find({'.venv/bin/python3'}, {
         upward = true,
         stop = vim.env.HOME,
@@ -44,10 +44,10 @@ return {
     end
   end,
 
-  --- https://github.com/microsoft/pyright/blob/main/docs/settings.md
+  -- https://github.com/microsoft/pyright/blob/main/docs/settings.md
   settings = {
     python = {
-      --- NOTE: pythonPath & venvPath 不会自动寻找, 所以在 on_init() 中设置
+      -- NOTE: pythonPath & venvPath 不会自动寻找, 所以在 on_init() 中设置
       -- pythonPath =
       -- venvPath =
       analysis = {

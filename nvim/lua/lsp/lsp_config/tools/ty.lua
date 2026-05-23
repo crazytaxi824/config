@@ -8,7 +8,7 @@ return {
       return
     end
 
-    --- fallback
+    -- fallback
     on_dir(vim.uv.cwd())
 
     Notify(

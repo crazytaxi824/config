@@ -8,7 +8,7 @@ return {
       return
     end
 
-    --- fallback
+    -- fallback
     on_dir(vim.uv.cwd())
 
     Notify(
@@ -18,7 +18,7 @@ return {
     )
   end,
 
-  --- NOTE: pyrefly 不认 settings 设置, 必须在 pyproject.toml [tool.pyrefly] 或者 pyrefly.toml 中设置
-  --- https://pyrefly.org/en/docs/configuration/
+  -- NOTE: pyrefly 不认 settings 设置, 必须在 pyproject.toml [tool.pyrefly] 或者 pyrefly.toml 中设置
+  -- https://pyrefly.org/en/docs/configuration/
 }
 

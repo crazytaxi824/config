@@ -1,44 +1,44 @@
---- null-ls 提供的各种 builtin tools 的加载和设置
---- https://github.com/nvimtools/none-ls.nvim/blob/main/doc/MAIN.md  -- runtime_condition function 中的 params
---- https://github.com/nvimtools/none-ls.nvim/blob/main/doc/CONFIG.md    -- setup 设置
---- https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTINS.md  -- formatter & linter 列表
---- https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTIN_CONFIG.md  -- with() 设置
---- https://github.com/nvimtools/none-ls.nvim/blob/main/doc/HELPERS.md -- $FILENAME, $DIRNAME, $ROOT ...
+-- null-ls 提供的各种 builtin tools 的加载和设置
+-- https://github.com/nvimtools/none-ls.nvim/blob/main/doc/MAIN.md  -- runtime_condition function 中的 params
+-- https://github.com/nvimtools/none-ls.nvim/blob/main/doc/CONFIG.md    -- setup 设置
+-- https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTINS.md  -- formatter & linter 列表
+-- https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTIN_CONFIG.md  -- with() 设置
+-- https://github.com/nvimtools/none-ls.nvim/blob/main/doc/HELPERS.md -- $FILENAME, $DIRNAME, $ROOT ...
 
 local null_ls_status_ok, null_ls = pcall(require, "null-ls")
 if not null_ls_status_ok then
   return
 end
 
---- 加载 local settings
+-- 加载 local settings
 local project_local_settings = require("lsp.project_local_settings")
 
---- cache local linter settings
+-- cache local linter settings
 local local_linter_settings = nil
 
---- diagnostics_opts 用于下面的 sources diagnostics 设置 --- {{{
---- https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTIN_CONFIG.md
+-- diagnostics_opts 用于下面的 sources diagnostics 设置 -- {{{
+-- https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTIN_CONFIG.md
 local diagnostics_opts = {
   --method = null_ls.methods.DIAGNOSTICS_ON_SAVE,  -- `lua vim.print(require('null-ls').methods)`
   --timeout = 3000,  -- 单独给 linter 设置超时时间. 全局设置了 default_timeout.
   --diagnostics_format = "#{m} [null-ls:#{s}]",  -- 单独给 linter 设置 diagnostics_format.
 
-  --- VVI: 耗资源, 每次运行 linter 前都要运行该函数, 不要进行复杂运算.
+  -- VVI: 耗资源, 每次运行 linter 前都要运行该函数, 不要进行复杂运算.
   runtime_condition = function(params)
-    --- DO NOT lint readonly files, readonly 包括了 'go env GOROOT GOMODCACHE'
+    -- DO NOT lint readonly files, readonly 包括了 'go env GOROOT GOMODCACHE'
     if vim.bo[params.bufnr].readonly then
       return false  -- false 不执行 lint
     end
     return true
   end,
 
-  --- NOTE: Post Hook, 会导致 diagnostics_format 设置失效. 可以单独给 linter 设置 post hook.
-  --- This option is not compatible with 'diagnostics_format'.
+  -- NOTE: Post Hook, 会导致 diagnostics_format 设置失效. 可以单独给 linter 设置 post hook.
+  -- This option is not compatible with 'diagnostics_format'.
   -- diagnostics_postprocess = function(diagnostic, opts)
-  --   --- 会导致所有 error msg 都是设置的 severity level, ERROR(1) | WARN(2) | INFO(3) | HINT(4)
+  --   -- 会导致所有 error msg 都是设置的 severity level, ERROR(1) | WARN(2) | INFO(3) | HINT(4)
   --   -- diagnostic.severity = vim.diagnostic.severity.WARN
   --
-  --   --- 相当于重新设置 diagnostics_format.
+  --   -- 相当于重新设置 diagnostics_format.
   --   -- diagnostic.message = diagnostic.message .. ' [null-ls]'
   -- end,
 }
@@ -46,22 +46,22 @@ local diagnostics_opts = {
 
 local M = {}
 
---- linter (diagnostics) tools
+-- linter (diagnostics) tools
 local diagnostics = null_ls.builtins.diagnostics
 M.linter = {
-  --- go:golangci-lint 配置文件位置自动查找 ---------------------------------- {{{
-  --- DOCS: https://golangci-lint.run/usage/configuration/#linters-configuration
-  --- golangci-lint 会自动寻找 '.golangci.yml', '.golangci.yaml', '.golangci.toml', '.golangci.json'.
-  --- GolangCI-Lint also searches for config files in all directories from the directory of
-  --- the first analyzed path up to the root.
-  --- }}}
+  -- go:golangci-lint 配置文件位置自动查找 ---------------------------------- {{{
+  -- DOCS: https://golangci-lint.run/usage/configuration/#linters-configuration
+  -- golangci-lint 会自动寻找 '.golangci.yml', '.golangci.yaml', '.golangci.toml', '.golangci.json'.
+  -- GolangCI-Lint also searches for config files in all directories from the directory of
+  -- the first analyzed path up to the root.
+  -- }}}
   golangci_lint = function()
     local global_settings = require("lsp.null_ls.tools.golangci_lint")
 
-    --- 加载 global_settings & opts
+    -- 加载 global_settings & opts
     local opts = vim.tbl_deep_extend('force', diagnostics_opts, global_settings)
 
-    --- 加载 project_local_settings
+    -- 加载 project_local_settings
     if local_linter_settings and local_linter_settings["golangci_lint"] then
       opts = vim.tbl_deep_extend('force', opts, local_linter_settings["golangci_lint"])
     end
@@ -69,29 +69,29 @@ M.linter = {
     return diagnostics.golangci_lint.with(opts)
   end,
 
-  --- protobuf: buf
-  --- NOTE: 同一个工具可能有好几种不同的用途, 需要分开设置, eg: `buf`
-  --- - null_ls.builtins.diagnostics.buf  linter protobuf
-  --- - null_ls.builtins.formatting.buf   format protobuf
+  -- protobuf: buf
+  -- NOTE: 同一个工具可能有好几种不同的用途, 需要分开设置, eg: `buf`
+  -- - null_ls.builtins.diagnostics.buf  linter protobuf
+  -- - null_ls.builtins.formatting.buf   format protobuf
   diagnostics.buf.with(diagnostics_opts),
 
-  --- gdscript: gdlint
+  -- gdscript: gdlint
   diagnostics.gdlint,
 
-  --- python: using 'ruff' lsp instead
+  -- python: using 'ruff' lsp instead
 }
 
---- code_actions tools
+-- code_actions tools
 local code_actions = null_ls.builtins.code_actions
 M.code_actions = {
-  --- go json tags
+  -- go json tags
   code_actions.gomodifytags,
 
-  --- BUG: cwd 必须在 bufnr 所在文件夹下才能使用.
+  -- BUG: cwd 必须在 bufnr 所在文件夹下才能使用.
   --code_actions.impl,
 }
 
---- 重新读取 project local settings 文件
+-- 重新读取 project local settings 文件
 function M.reload_local_settings()
   local settings = project_local_settings.get_local_linter_settings()
   if settings == nil then
@@ -102,15 +102,15 @@ function M.reload_local_settings()
   return true
 end
 
---- 返回当前本地 linter 设置
----
+-- 返回当前本地 linter 设置
+--
 ---@return table|nil
 function M.exist_local_settings()
   return local_linter_settings
 end
 
---- 返回一个 list sources
----
+-- 返回一个 list sources
+--
 ---@return table
 function M.sources()
   local sources_list = {}
@@ -119,7 +119,7 @@ function M.sources()
   return sources_list
 end
 
---- 重启 linters
+-- 重启 linters
 function M.restart_linters(linter_tools)
   local tools = {}
   for _, linter_tool in ipairs(linter_tools) do

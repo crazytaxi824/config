@@ -3,50 +3,50 @@ if not null_ls_status_ok then
   return
 end
 
---- 获取 sources
+-- 获取 sources
 local null_sources = require("lsp.null_ls.sources")
 local utils = require("lsp.project_local_settings.utils")
 
---- 读取 & cache local_settings files
+-- 读取 & cache local_settings files
 null_sources.reload_local_settings()
 
---- null-ls setup() 在这里加载上面设置的 formatting & linter ---------------------------------------
---- https://github.com/nvimtools/none-ls.nvim/blob/main/doc/CONFIG.md
+-- null-ls setup() 在这里加载上面设置的 formatting & linter ---------------------------------------
+-- https://github.com/nvimtools/none-ls.nvim/blob/main/doc/CONFIG.md
 null_ls.setup({
-  --- VVI: 设置 linter / formatter / code actions
+  -- VVI: 设置 linter / formatter / code actions
   sources = null_sources.sources(),
 
-  --- PROBLEM: null-ls 的 root_dir 只会运行一次. 而 lspconfig 的 root_dir 在每次打开 buffer 时都会执行.
-  --- Q: 为什么要在每次执行 linter 时单独获取 pwd 路径?
-  --- A: 因为 nvim 可能会在多个项目文件之间跳转, 每个项目有自己单独的 root.
-  --- 默认值: root_dir = require("null-ls.utils").root_pattern(".null-ls-root", "Makefile", ".git")
+  -- PROBLEM: null-ls 的 root_dir 只会运行一次. 而 lspconfig 的 root_dir 在每次打开 buffer 时都会执行.
+  -- Q: 为什么要在每次执行 linter 时单独获取 pwd 路径?
+  -- A: 因为 nvim 可能会在多个项目文件之间跳转, 每个项目有自己单独的 root.
+  -- 默认值: root_dir = require("null-ls.utils").root_pattern(".null-ls-root", "Makefile", ".git")
   --root_dir = function(params) return vim.uv.cwd() end,
 
-  --- 如果 error msg 没有特别指明 severity level, 则会使用下面的设置.
+  -- 如果 error msg 没有特别指明 severity level, 则会使用下面的设置.
   fallback_severity = vim.diagnostic.severity.WARN,
 
-  --- NOTE: 非常耗资源, 调试完后设置为 false.
-  --- is the same as setting log.level to "trace" 记录 log, `:NullLsLog` 打印 log.
+  -- NOTE: 非常耗资源, 调试完后设置为 false.
+  -- is the same as setting log.level to "trace" 记录 log, `:NullLsLog` 打印 log.
   debug = __Debug_Neovim.null_ls,
 
-  --- log 输出到 stdpath('cache') .. '/null-ls.log', 目前无法修改.
+  -- log 输出到 stdpath('cache') .. '/null-ls.log', 目前无法修改.
   log_level = 'warn',  -- "error", "warn"(*), "info", "debug", "trace"
 
-  --- 一边输入一边检查. false: 节省资源.
+  -- 一边输入一边检查. false: 节省资源.
   update_in_insert = false,
 
-  --- 两次请求的时间超过该设置才会向 null-ls 发送请求. 如果两次请求的时间小于该设置则不发送请求.
-  --- NOTE: 这里相当于是 null-ls 的 "flags = {debounce_text_changes = xxx}" 设置.
+  -- 两次请求的时间超过该设置才会向 null-ls 发送请求. 如果两次请求的时间小于该设置则不发送请求.
+  -- NOTE: 这里相当于是 null-ls 的 "flags = {debounce_text_changes = xxx}" 设置.
   debounce = 500,  -- 默认 250.
 
-  --- lint 超时时间, 30s. 默认为 5000, 5s.
+  -- lint 超时时间, 30s. 默认为 5000, 5s.
   default_timeout = 30000,
 
-  --- 错误信息显示格式. #{m} - err_msg; #{s} - source_name; #{c} - err_code
+  -- 错误信息显示格式. #{m} - err_msg; #{s} - source_name; #{c} - err_code
   diagnostics_format = "#{m} [null-ls]",
 
-  --- 以下callback 都是 DEBUG: 用
-  --- keymaps ---
+  -- 以下callback 都是 DEBUG: 用
+  -- keymaps --
   on_attach = function(client, bufnr)
     require("lsp.lsp_keymaps").diagnostic_keymaps(bufnr)
 
@@ -56,19 +56,19 @@ null_ls.setup({
   end,
 
   on_init = function(client, init_result)
-    --- DEBUG: 用
+    -- DEBUG: 用
     if __Debug_Neovim.null_ls then
       Notify("LSP Server init: " .. client.name, "DEBUG", {title="Null-ls"})
     end
   end,
 
-  --- null-ls 退出的时候触发, 每次退出 vim 时也会触发.
+  -- null-ls 退出的时候触发, 每次退出 vim 时也会触发.
   -- on_exit = function()
   --   Notify("Null-ls on_exit() event.", "warn", {title = "Null-ls"})
   -- end,
 })
 
---- restart null-ls when ".nvim/linter.json" changes
+-- restart null-ls when ".nvim/linter.json" changes
 local linter_gid = vim.api.nvim_create_augroup("my_reload_local_linter_settings", {clear=true})
 vim.api.nvim_create_autocmd({'BufWritePost'}, {
   group = linter_gid,

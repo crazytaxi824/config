@@ -1,38 +1,38 @@
---- 自定义 hover_short handler 用于在写代码的过程中可以迅速查看方法中的参数类型, 而不用移动光标或退出 insert mode.
---- 实现方法: 获取光标所在 method/func 的名字, 简化 "textDocument/hover" 返回内容.
---- 根据 vim.lsp.buf.hover() 方法修改. https://github.com/neovim/neovim/blob/master/runtime/lua/vim/lsp/buf.lua
---- 主要修改部分:
----   1. vim.lsp.util.make_position_params() 获取 cursor position. 通过 treesitter 找到 cursor
----      前面的 function node 的 position,  位置发送给 lsp server.
----   2. 将上述 func_position 通过 vim.lsp.buf_request_all("textDocument/hover", func_position) 向 lsp server 发送请求.
----   3. 修改 lsp server 返回的内容用于 floating window 显示: 只保留 lsp server 返回内容的第一行.
----   4. 修改 floating window 的位置.
+-- 自定义 hover_short handler 用于在写代码的过程中可以迅速查看方法中的参数类型, 而不用移动光标或退出 insert mode.
+-- 实现方法: 获取光标所在 method/func 的名字, 简化 "textDocument/hover" 返回内容.
+-- 根据 vim.lsp.buf.hover() 方法修改. https://github.com/neovim/neovim/blob/master/runtime/lua/vim/lsp/buf.lua
+-- 主要修改部分:
+--   1. vim.lsp.util.make_position_params() 获取 cursor position. 通过 treesitter 找到 cursor
+--      前面的 function node 的 position,  位置发送给 lsp server.
+--   2. 将上述 func_position 通过 vim.lsp.buf_request_all("textDocument/hover", func_position) 向 lsp server 发送请求.
+--   3. 修改 lsp server 返回的内容用于 floating window 显示: 只保留 lsp server 返回内容的第一行.
+--   4. 修改 floating window 的位置.
 
 local ms = vim.lsp.protocol.Methods
 local hover_ns = vim.api.nvim_create_namespace('nvim.lsp.hover_range')
 
 local M = {}
 
---- NOTE: 这里 row 和 char_pos 都是从 0 开始计算.
----
+-- NOTE: 这里 row 和 char_pos 都是从 0 开始计算.
+--
 ---@param lsp_req_pos_line integer
 ---@param lsp_req_pos_char integer  -- char_pos 是指行内第几个字符, \t 算一个字符.
 ---@return table
 local function calculate_offset(lsp_req_pos_line, lsp_req_pos_char)
   local cursor_line, cursor_col = unpack(vim.api.nvim_win_get_cursor(0))  -- (1,0)-indexed
 
-  --- VVI: offset 中 \t 占4个字符位置, 而在 getpos() 和 node:start() 中只占1个字符.
-  --- strdisplaywidth() 会计算实际显示宽度, \t 会被计算在显示宽度之内.
-  --- node 行 virtual column 位置.
+  -- VVI: offset 中 \t 占4个字符位置, 而在 getpos() 和 node:start() 中只占1个字符.
+  -- strdisplaywidth() 会计算实际显示宽度, \t 会被计算在显示宽度之内.
+  -- node 行 virtual column 位置.
   local node_display_width = vim.fn.strdisplaywidth(
     string.sub(vim.fn.getline(lsp_req_pos_line+1), 0, lsp_req_pos_char)
   )
-  --- cursor 行 virtual column 位置.
+  -- cursor 行 virtual column 位置.
   local cursor_display_width = vim.fn.strdisplaywidth(
     string.sub(vim.fn.getline(cursor_line), 0, cursor_col)
   )
 
-  --- 计算 open_floating_preview() 横向/纵向偏移量
+  -- 计算 open_floating_preview() 横向/纵向偏移量
   local offset_x = node_display_width - cursor_display_width
   local offset_y = lsp_req_pos_line - cursor_line +1
 
@@ -44,8 +44,8 @@ local function calculate_offset(lsp_req_pos_line, lsp_req_pos_char)
   }
 end
 
---- 计算 argument list 前面一个 node 的 start 位置.
----
+-- 计算 argument list 前面一个 node 的 start 位置.
+--
 ---@param row integer
 ---@param col integer
 ---@return table
@@ -59,7 +59,7 @@ local function node_before_arguments(row, col)
   return calculate_offset(row, col)
 end
 
---- NOTE: 使用 nvim-treesitter 寻找 cursor 前最近的 function call() 的位置 ----- {{{
+-- NOTE: 使用 nvim-treesitter 寻找 cursor 前最近的 function call() 的位置 ----- {{{
 -- `:help treesitter`
 --    node:start()  -- start pos, return [row, (col), totalbytes]
 --    node:end_()   -- end pos
@@ -73,34 +73,34 @@ end
 --        argument_list  -- func call '(xxx)' 中的所有内容, 包括括号 ().
 --        func call 名字 -- call_expression.function.field
 -- }}}
----
+--
 ---@return table|nil
 local function find_fn_call_before_cursor()
-  --- 获取 node at cursor.
+  -- 获取 node at cursor.
   local cur_line, cur_col = unpack(vim.api.nvim_win_get_cursor(0))
   local node = vim.treesitter.get_node({pos={cur_line-1, cur_col}})
 
-  --- 向上(parent)寻找 'argument_list' / 'arguments' node.
-  --- eg: fn("bar") 中 `("bar")` 属于 arguments, 包括括号.
-  --- NOTE: 'go, py' use 'argument_list'; 'js, ts, lua' use 'arguments'.
+  -- 向上(parent)寻找 'argument_list' / 'arguments' node.
+  -- eg: fn("bar") 中 `("bar")` 属于 arguments, 包括括号.
+  -- NOTE: 'go, py' use 'argument_list'; 'js, ts, lua' use 'arguments'.
   local args_type_name = {'argument_list', 'arguments'}
 
   while node do
     if vim.tbl_contains(args_type_name, node:type()) then
-      --- 判断 arguments/argument_list 前一个 node 是否 type_arguments(generic type param)
+      -- 判断 arguments/argument_list 前一个 node 是否 type_arguments(generic type param)
       local prev_node = node:prev_named_sibling()
       if not prev_node then
         error('debug: arguments|argument_list missing previous named sibling node.')
       end
 
       if prev_node:type() == 'type_arguments' then
-        --- 如果是 type_arguments 则返回 type_arguments node 前一个字符位置.
+        -- 如果是 type_arguments 则返回 type_arguments node 前一个字符位置.
         local row, col, _ = prev_node:start()
         return node_before_arguments(row, col-1)
       end
 
-      --- 如果前面不是 type_arguments 则返回本身 node 的前一个字符位置.
-      --- argument_list start position 即 '(' 的位置. row, col 都是从 0 开始计算位置.
+      -- 如果前面不是 type_arguments 则返回本身 node 的前一个字符位置.
+      -- argument_list start position 即 '(' 的位置. row, col 都是从 0 开始计算位置.
       local row, col, _ = node:start()
       return node_before_arguments(row, col-1)
     end
@@ -109,14 +109,14 @@ local function find_fn_call_before_cursor()
   end
 end
 
---- 创建 vim.lsp.buf_request_all(_, _, params, _) 中的 params
----
+-- 创建 vim.lsp.buf_request_all(_, _, params, _) 中的 params
+--
 ---@param fn_node table
 ---@return fun(client: vim.lsp.Client, bufnr: integer):table?
 local function client_positional_params(fn_node)
   local win = vim.api.nvim_get_current_win()
   return function(client)
-    --- 1. 修改 position 为 cursor position 前面的 func_position.
+    -- 1. 修改 position 为 cursor position 前面的 func_position.
     local ret = vim.lsp.util.make_position_params(win, client.offset_encoding)
     ret = vim.tbl_deep_extend('force', ret, {
       position = {
@@ -128,10 +128,10 @@ local function client_positional_params(fn_node)
   end
 end
 
---- cache hover winid
+-- cache hover winid
 local hover_winid
 
---- toggle hover window
+-- toggle hover window
 function M.toggle_hover_short()
   if hover_winid and vim.api.nvim_win_is_valid(hover_winid) then
     vim.api.nvim_win_close(hover_winid, true)
@@ -141,18 +141,18 @@ function M.toggle_hover_short()
   end
 end
 
---- VVI: 以下代码大多从源代码中复制 ----------------------------------------------------------------
+-- VVI: 以下代码大多从源代码中复制 ----------------------------------------------------------------
 
---- 根据 https://github.com/neovim/neovim/blob/master/runtime/lua/vim/lsp/buf.lua 中 M.hover(config) 函数修改
----
---- 只获取 textDocument/hover 中 signature 部分
+-- 根据 https://github.com/neovim/neovim/blob/master/runtime/lua/vim/lsp/buf.lua 中 M.hover(config) 函数修改
+--
+-- 只获取 textDocument/hover 中 signature 部分
 function M.hover_short()
   local fn_node = find_fn_call_before_cursor()
   if not fn_node then  -- 如果 cursor 不在 'arguments' 内, 则结束.
     return
   end
 
-  --- 1. NOTE: 修改 hover_short floating window 显示的位置.
+  -- 1. NOTE: 修改 hover_short floating window 显示的位置.
   ---@type vim.lsp.buf.hover.Opts
   local config = {
     offset_x = fn_node.offset_x,
@@ -167,7 +167,7 @@ function M.hover_short()
     focus_id = ms.textDocument_hover  -- 'textDocument' request
   }
 
-  --- 发送请求到 lsp server
+  -- 发送请求到 lsp server
   vim.lsp.buf_request_all(0, ms.textDocument_hover, client_positional_params(fn_node), function(results, ctx)
     local bufnr = assert(ctx.bufnr)
     if vim.api.nvim_get_current_buf() ~= bufnr then
@@ -230,7 +230,7 @@ function M.hover_short()
 
     local format = 'markdown'
 
-    --- results1: { client_id1 = {}, client_id2 = {} ... }
+    -- results1: { client_id1 = {}, client_id2 = {} ... }
     for client_id, result in pairs(results1) do
       local client = assert(vim.lsp.get_client_by_id(client_id))
       if nresults > 1 then
@@ -251,8 +251,8 @@ function M.hover_short()
           contents[#contents + 1] = '```'
         end
       else
-        --- 2. NOTE: 修改 lsp server 返回的内容用于 floating window 显示: 只保留 lsp server 返回内容的第一行.
-        --- 寻找 "```" end line, 忽略后面的所有内容.
+        -- 2. NOTE: 修改 lsp server 返回的内容用于 floating window 显示: 只保留 lsp server 返回内容的第一行.
+        -- 寻找 "```" end line, 忽略后面的所有内容.
         local tmp = {}
         for _, line in ipairs(vim.lsp.util.convert_input_to_markdown_lines(result.contents)) do
           table.insert(tmp, line)
@@ -292,7 +292,7 @@ function M.hover_short()
       return
     end
 
-    --- 3. NOTE: 修改为手动 toggle hover_short window
+    -- 3. NOTE: 修改为手动 toggle hover_short window
     _, hover_winid = vim.lsp.util.open_floating_preview(contents, format, config)
 
     vim.api.nvim_create_autocmd('WinClosed', {

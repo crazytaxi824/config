@@ -3,8 +3,8 @@ local M = {}
 M.lsp_file = ".nvim/lsp.json"
 M.linter_file = ".nvim/linter.json"
 
---- 查找 ".nvim/lsp.json" 和 ".nvim/linter.json"
----
+-- 查找 ".nvim/lsp.json" 和 ".nvim/linter.json"
+--
 ---@param json_file string
 ---@return string|nil
 function M.find_local_settings_file(json_file)
@@ -22,8 +22,8 @@ function M.find_local_settings_file(json_file)
   return vim.fs.abspath(local_settings_filepaths[1])
 end
 
---- 两个 table 中内容不相同的 key list
----
+-- 两个 table 中内容不相同的 key list
+--
 ---@param t1 table|nil
 ---@param t2 table|nil
 ---@return string[]

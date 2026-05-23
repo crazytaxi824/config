@@ -1,31 +1,31 @@
---- 加载 local settings
+-- 加载 local settings
 local project_local_settings = require("lsp.project_local_settings")
 local common_config = require("lsp.lsp_config.client_config")
 
---- 获取 lsp 列表
+-- 获取 lsp 列表
 local lsp_servers_map = require('lsp.svr_list').list
 
---- cache local lsp settings
+-- cache local lsp settings
 local local_lsp_settings = nil
 
---- 获取全局和本地 lsp 设置
----
+-- 获取全局和本地 lsp 设置
+--
 ---@param lsp_tool string (lsp_name)
 ---@return table lsp_config
 local function load_lsp_configs(lsp_tool)
-  --- 1. 如果文件存在, 则加载自定义设置, 如果没有自定义设置则加载默认设置.
+  -- 1. 如果文件存在, 则加载自定义设置, 如果没有自定义设置则加载默认设置.
   local status_ok, lsp_config = pcall(require, "lsp.lsp_config.tools." .. lsp_tool)
   if not status_ok then
     lsp_config = {}
   end
 
-  --- 2. 加载项目本地设置, 覆盖 global settings.
+  -- 2. 加载项目本地设置, 覆盖 global settings.
   local local_settings = nil
   if local_lsp_settings and local_lsp_settings[lsp_tool] then
     local_settings = local_lsp_settings[lsp_tool]
   end
 
-  --- 3. merge settings
+  -- 3. merge settings
   if local_settings then
     return vim.tbl_deep_extend('force', lsp_config, {settings = local_settings})
   end
@@ -35,7 +35,7 @@ end
 
 local M = {}
 
---- 重新读取 project local settings 文件
+-- 重新读取 project local settings 文件
 function M.reload_local_settings()
   local settings = project_local_settings.get_local_lsp_settings()
   if settings == nil then
@@ -46,23 +46,23 @@ function M.reload_local_settings()
   return true
 end
 
---- 返回当前本地 lsp 设置
----
+-- 返回当前本地 lsp 设置
+--
 ---@return table|nil
 function M.exist_local_settings()
   return local_lsp_settings
 end
 
---- 设置单个 lsp
----
+-- 设置单个 lsp
+--
 ---@param lsp_tool string
 function M.lspconfig_setup(lsp_tool)
   local lsp_config = vim.tbl_deep_extend('force', common_config, load_lsp_configs(lsp_tool))
   vim.lsp.config(lsp_tool, lsp_config)
 end
 
---- 重启 lsp
----
+-- 重启 lsp
+--
 ---@param lsp_tools string[]
 function M.restart_lsps(lsp_tools)
   local tools = {}
@@ -74,7 +74,7 @@ function M.restart_lsps(lsp_tools)
     end
   end
 
-  --- restart lsps
+  -- restart lsps
   if #tools > 0 then
     vim.lsp.enable(tools, false)
     vim.lsp.enable(tools)

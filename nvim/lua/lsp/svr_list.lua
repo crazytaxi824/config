@@ -1,7 +1,7 @@
---- 以下命令行工具可以通过 mason.nvim 安装, 也可以通过 brew 安装到 $PATH 中.
---- filetypes: 可以通过 `:LspInfo` 查看. 用于 autocmd.
---- lspconfig <-> mason: https://github.com/williamboman/mason-lspconfig.nvim/blob/main/doc/server-mapping.md
---- lspconfig config: https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
+-- 以下命令行工具可以通过 mason.nvim 安装, 也可以通过 brew 安装到 $PATH 中.
+-- filetypes: 可以通过 `:LspInfo` 查看. 用于 autocmd.
+-- lspconfig <-> mason: https://github.com/williamboman/mason-lspconfig.nvim/blob/main/doc/server-mapping.md
+-- lspconfig config: https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
 
 local M = {}
 
@@ -24,18 +24,18 @@ M.list = {
     mason = "gopls",
     install = "go install golang.org/x/tools/gopls@latest",
   },
-  --- pyrightconfig.json: https://github.com/microsoft/pyright/blob/main/docs/configuration.md
-  --- pyproject.toml [tool.pyright] : https://github.com/microsoft/pyright/blob/main/docs/configuration.md#sample-pyprojecttoml-file
+  -- pyrightconfig.json: https://github.com/microsoft/pyright/blob/main/docs/configuration.md
+  -- pyproject.toml [tool.pyright] : https://github.com/microsoft/pyright/blob/main/docs/configuration.md#sample-pyprojecttoml-file
   -- pyright = {
   --   cmd = "pyright-langserver",
   --   mason = "pyright",
   -- },
-  --- pyproject.toml [tool.basedpyright]: https://docs.basedpyright.com/latest/configuration/config-files/
+  -- pyproject.toml [tool.basedpyright]: https://docs.basedpyright.com/latest/configuration/config-files/
   -- basedpyright = {
   --   cmd = "basedpyright-langserver",
   --   mason = "basedpyright",
   -- },
-  --- ty.toml [tool.ty.analysis]: https://docs.astral.sh/ty/reference/configuration/
+  -- ty.toml [tool.ty.analysis]: https://docs.astral.sh/ty/reference/configuration/
   ty = {
     cmd = "ty",
     mason = "ty",
@@ -45,8 +45,8 @@ M.list = {
   --   cmd = "pyrefly",
   --   mason = "pyrefly",
   -- },
-  --- pyproject.toml [tool.ruff] & ruff.toml: https://docs.astral.sh/ruff/tutorial/#configuration
-  --- 'ruff' can be used to replace Flake8, Black, isort, pydocstyle, pyupgrade, autoflake ...
+  -- pyproject.toml [tool.ruff] & ruff.toml: https://docs.astral.sh/ruff/tutorial/#configuration
+  -- 'ruff' can be used to replace Flake8, Black, isort, pydocstyle, pyupgrade, autoflake ...
   ruff = {
     cmd = "ruff",
     mason = "ruff",
@@ -71,8 +71,8 @@ M.list = {
     cmd = "yaml-language-server",
     mason = "yaml-language-server",
   },
-  --- VVI: need `npm install eslint`, `npm init @eslint/config`. 会生成 "eslint.config.mjs" 配置文件.
-  --- 没有 "eslint.config.mjs" 配置文件 eslint-lsp 无法找到 root, 因此无法启动.
+  -- VVI: need `npm install eslint`, `npm init @eslint/config`. 会生成 "eslint.config.mjs" 配置文件.
+  -- 没有 "eslint.config.mjs" 配置文件 eslint-lsp 无法找到 root, 因此无法启动.
   eslint = {
     cmd = "vscode-eslint-language-server",
     mason = "eslint-lsp",

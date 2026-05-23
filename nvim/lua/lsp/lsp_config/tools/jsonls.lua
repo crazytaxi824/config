@@ -1,4 +1,4 @@
---- https://www.schemastore.org
+-- https://www.schemastore.org
 
 local schemas = {
   {
