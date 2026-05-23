@@ -6,7 +6,6 @@ local health = vim.health
 local M = {}
 
 local mason_record = [[
-  basedpyright
   bash-language-server
   buf
   css-lsp
@@ -31,6 +30,7 @@ local mason_record = [[
   stylua
   tombi
   tree-sitter-cli
+  ty
   typescript-language-server
   yaml-language-server
 ]]

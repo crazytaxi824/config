@@ -31,9 +31,13 @@ M.list = {
   --   mason = "pyright",
   -- },
   --- pyproject.toml [tool.basedpyright]: https://docs.basedpyright.com/latest/configuration/config-files/
-  basedpyright = {
-    cmd = "basedpyright-langserver",
-    mason = "basedpyright",
+  -- basedpyright = {
+  --   cmd = "basedpyright-langserver",
+  --   mason = "basedpyright",
+  -- },
+  ty = {
+    cmd = "ty",
+    mason = "ty",
   },
   --- pyproject.toml [tool.ruff] & ruff.toml: https://docs.astral.sh/ruff/tutorial/#configuration
   --- 'ruff' can be used to replace Flake8, Black, isort, pydocstyle, pyupgrade, autoflake ...
