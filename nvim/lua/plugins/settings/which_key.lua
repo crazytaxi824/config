@@ -3,7 +3,7 @@ if not status_ok then
   return
 end
 
---- fn key icons ----------------------------------------------------------------------------------- {{{
+-- fn key icons ----------------------------------------------------------------------------------- {{{
 local fn_key_icons = {
   F1  = "F1",
   F2  = "F2",
@@ -70,11 +70,11 @@ local fn_key_icons = {
   F59 = "󰘵 F11",
   F60 = "󰘵 F12",
 }
---- }}}
+-- }}}
 
---- setup ------------------------------------------------------------------------------------------
---- `:help which-key.nvim.txt`
---- `:help which-key.nvim-which-key-configuration`
+-- setup ------------------------------------------------------------------------------------------
+-- `:help which-key.nvim.txt`
+-- `:help which-key.nvim-which-key-configuration`
 which_key.setup({
   plugins = {
     marks = true,     -- shows a list of your marks on ' and `
@@ -83,10 +83,10 @@ which_key.setup({
       enabled = false,  -- z= select spelling suggestions, NOTE: 目前使用的 telescope
       --suggestions = 20, -- how many suggestions should be shown in the list?
     },
-    --- the presets plugin, adds help for a bunch of default keybindings in Neovim,
-    --- No actual key bindings are created.
-    --- presets 是 which-key 预设好的 keymap. 虽然和系统快捷键功能一样,
-    --- 但是进行了二次绑定, 所以会覆盖 keymaps.lua 中的设置.
+    -- the presets plugin, adds help for a bunch of default keybindings in Neovim,
+    -- No actual key bindings are created.
+    -- presets 是 which-key 预设好的 keymap. 虽然和系统快捷键功能一样,
+    -- 但是进行了二次绑定, 所以会覆盖 keymaps.lua 中的设置.
     presets = {
       operators = false,  -- 不显示 'c', 'd', 'r', 'y', 'v', '<', '>'  ...
       -- motions = true,   -- 'g', 例如: 'gg', 'ge' ...
@@ -98,9 +98,9 @@ which_key.setup({
     },
   },
 
-  --- `:help which-key.nvim-which-key-triggers`
-  --- `:help operator`
-  --- `:help map-table`
+  -- `:help which-key.nvim-which-key-triggers`
+  -- `:help operator`
+  -- `:help map-table`
   triggers = {
     -- { "<auto>", mode = "nixsotc" },  -- default
     { "<auto>", mode = "niso" },
@@ -125,21 +125,21 @@ which_key.setup({
 
   sort = { "group", "mod", "desc", "alphanum" },
 
-  --- disable the WhichKey popup for certain buf types and file types.
-  --- Disabled by deafult for Telescope
+  -- disable the WhichKey popup for certain buf types and file types.
+  -- Disabled by deafult for Telescope
   disable = {
-    --- disable buftypes
+    -- disable buftypes
     bt = {},
-    --- 这里 filetypes 主要是全屏的 floating window
+    -- 这里 filetypes 主要是全屏的 floating window
     -- ft = { "NvimTree", "TelescopePrompt", "mason", "packer", "lazy", "null-ls-info", "lspinfo" },
   },
 })
 
---- VVI: mark which key is loaded. vim.cmd('doautocmd User LoadedWhichKey')
+-- VVI: mark which key is loaded. vim.cmd('doautocmd User LoadedWhichKey')
 vim.api.nvim_exec_autocmds("User", { pattern = { "LoadedWhichKey" }})
 
---- highlight --------------------------------------------------------------------------------------
---- WhichKeyFloat && WhichKeyBorder 可以设置
+-- highlight --------------------------------------------------------------------------------------
+-- WhichKeyFloat && WhichKeyBorder 可以设置
 vim.api.nvim_set_hl(0, 'WhichKeyDesc', {ctermfg=Colors.cyan.c, fg=Colors.cyan.g})
 
 

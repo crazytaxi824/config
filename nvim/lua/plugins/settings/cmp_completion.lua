@@ -3,15 +3,15 @@ if not cmp_status_ok then
   return
 end
 
---- load "L3MON4D3/LuaSnip"
+-- load "L3MON4D3/LuaSnip"
 local snip_status_ok, luasnip = pcall(require, "luasnip")
 if not snip_status_ok then
   return
 end
 
---- "hrsh7th/nvim-cmp" 主要设置 --------------------------------------------------------------------
---- https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#completionItemKind
---- https://github.com/hrsh7th/nvim-cmp/blob/main/lua/cmp/types/lsp.lua#L177
+-- "hrsh7th/nvim-cmp" 主要设置 --------------------------------------------------------------------
+-- https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#completionItemKind
+-- https://github.com/hrsh7th/nvim-cmp/blob/main/lua/cmp/types/lsp.lua#L177
 local kind_icon_txt = {  --------------------------------------------------------------------------- {{{
   Text = "txt",
   Module = "module",     -- import
@@ -39,17 +39,17 @@ local kind_icon_txt = {  -------------------------------------------------------
   Event = "event",
   Operator = "operator",
 }
---- }}}
+-- }}}
 
---- 默认设置: https://github.com/hrsh7th/nvim-cmp/blob/main/lua/cmp/config/default.lua
---- DOCS: `:help nvim-cmp`
+-- 默认设置: https://github.com/hrsh7th/nvim-cmp/blob/main/lua/cmp/config/default.lua
+-- DOCS: `:help nvim-cmp`
 cmp.setup {
   preselect = cmp.PreselectMode.None,  -- cmp.PreselectMode.None | cmp.PreselectMode.Item
 
   -- performance = {
-  --   debounce = 120,  --- 停止输入文字的时间超过该数值, 则向 sources 请求更新 completion Item. 默认 60.
-  --   throttle = 60,   --- 停止输入文字的时间超过该数值, 则匹配和过滤本地已获取的 completion Item. 默认 30.
-  --   fetching_timeout = 200,  --- 默认 200.
+  --   debounce = 120,  -- 停止输入文字的时间超过该数值, 则向 sources 请求更新 completion Item. 默认 60.
+  --   throttle = 60,   -- 停止输入文字的时间超过该数值, 则匹配和过滤本地已获取的 completion Item. 默认 30.
+  --   fetching_timeout = 200,  -- 默认 200.
   -- },
 
   snippet = {  -- 给 "saadparwaiz1/cmp_luasnip" 设置 snippet
@@ -62,18 +62,18 @@ cmp.setup {
   },
 
   sources = {
-    --- `:help cmp-config.sources`. 其他设置: group_index, max_item_count, priority ...
-    --- 显示 group 1 的时候不会显示 group 2 的内容; 显示 group 2 的时候不会显示 group 1 的内容.
+    -- `:help cmp-config.sources`. 其他设置: group_index, max_item_count, priority ...
+    -- 显示 group 1 的时候不会显示 group 2 的内容; 显示 group 2 的时候不会显示 group 1 的内容.
     { name = "luasnip", max_item_count = 3, priority = 999 }, -- "saadparwaiz1/cmp_luasnip" -> "L3MON4D3/LuaSnip"
     { name = "nvim_lsp" },  -- "hrsh7th/cmp-nvim-lsp"
     { name = "buffer", max_item_count = 3 }, -- "hrsh7th/cmp-buffer", 最多显示 n 条.
     { name = "path" },  -- "hrsh7th/cmp-path"
-    --- NOTE: other snippets engine -------------------------------------------- {{{
+    -- NOTE: other snippets engine -------------------------------------------- {{{
     --{ name = 'vsnip' },      -- For vsnip users      -- "hrsh7th/vim-vsnip" vim-script
     --{ name = 'luasnip' },    -- For luasnip users    -- "L3MON4D3/LuaSnip" lua
     --{ name = 'snippy' },     -- For snippy users     -- "dcampos/nvim-snippy" lua
     --{ name = 'ultisnips' },  -- For ultisnips users  -- "SirVer/ultisnips" python
-    --- }}}
+    -- }}}
   },
 
   window = {
@@ -88,14 +88,14 @@ cmp.setup {
     },
   },
 
-  --- completion 菜单显示
+  -- completion 菜单显示
   formatting = {
-    --- show the `~` expandable indicator in cmp's floating window. eg: 'fmtp~  [snip]'
+    -- show the `~` expandable indicator in cmp's floating window. eg: 'fmtp~  [snip]'
     expandable_indicator = true,
 
-    --- abbr: suggestion
-    --- kind: function, method, module...
-    --- menu: [LSP], [Buffer]...
+    -- abbr: suggestion
+    -- kind: function, method, module...
+    -- menu: [LSP], [Buffer]...
     fields = { "abbr", "kind", "menu" },
 
     format = function(entry, vim_item)
@@ -106,9 +106,9 @@ cmp.setup {
         --vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind)  -- 使用图标和 kind_name
       end
 
-      --- 不显示 menu
+      -- 不显示 menu
       -- vim_item.menu = " "
-      --- 如果需要显示 menu 使用以下设置.
+      -- 如果需要显示 menu 使用以下设置.
       vim_item.menu = ({
         luasnip  = " [Snip]",
         nvim_lsp = " [LSP]",
@@ -125,16 +125,16 @@ cmp.setup {
     native_menu = false, -- disable it. 影响 cmdline auto completion.
   },
 
-  --- DOCS: key mapping, `:help cmp-mapping`, mode = { `i` = insert mode(default), `c` = command mode, `s` = select mode }
-  --- command mode 主要用于 : / ? search; select mode 主要用于 snippet.
+  -- DOCS: key mapping, `:help cmp-mapping`, mode = { `i` = insert mode(default), `c` = command mode, `s` = select mode }
+  -- command mode 主要用于 : / ? search; select mode 主要用于 snippet.
   mapping = {
-    --- 当使用 select_prev/next_item() 的时候. abort() 关闭代码提示窗, 同时回到代码之前的状态;
-    --- cmp.mapping.close() 也可以关闭代码提示窗口, 但是会保持代码现在的状态.
-    --- 当使用 select_prev_item({behavior=cmp.SelectBehavior}) 的时候, abort() & close() 效果相同.
+    -- 当使用 select_prev/next_item() 的时候. abort() 关闭代码提示窗, 同时回到代码之前的状态;
+    -- cmp.mapping.close() 也可以关闭代码提示窗口, 但是会保持代码现在的状态.
+    -- 当使用 select_prev_item({behavior=cmp.SelectBehavior}) 的时候, abort() & close() 效果相同.
     ["<ESC>"] = cmp.mapping.abort(),  -- omit mode means insert mode only.
     ["<C-e>"] = cmp.mapping(cmp.mapping.abort(), { "i", "c", "s" }),
 
-    --- 如果 backspace 过程中删除了关键 char - "." 则 reset, 用于修复 snip 和 buff 无法显示的问题.
+    -- 如果 backspace 过程中删除了关键 char - "." 则 reset, 用于修复 snip 和 buff 无法显示的问题.
     ["<BS>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
         local row, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -148,7 +148,7 @@ cmp.setup {
       fallback()  -- 执行快捷键原本的功能
     end),
 
-    --- SelectBehavior: 选择 item 的时候不会将内容填到行内.
+    -- SelectBehavior: 选择 item 的时候不会将内容填到行内.
     ["<Up>"] = cmp.mapping(cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior, count = 1 }),  { "i", "c", "s" }),
     ["<Down>"] = cmp.mapping(cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior, count = 1 }),{ "i", "c", "s" }),
 
@@ -158,28 +158,28 @@ cmp.setup {
     ["<PageUp>"]   = cmp.mapping(cmp.mapping.scroll_docs(-3)),
     ["<PageDown>"] = cmp.mapping(cmp.mapping.scroll_docs(3)),
 
-    --- Accept currently selected item. If none selected, `select` first item.
-    --- Set `select` to `false` to only confirm explicitly selected items.
-    --- VVI: needed <CR> map to confirm() to enable 'autopairs'
+    -- Accept currently selected item. If none selected, `select` first item.
+    -- Set `select` to `false` to only confirm explicitly selected items.
+    -- VVI: needed <CR> map to confirm() to enable 'autopairs'
     ["<CR>"] = cmp.mapping({
       i = cmp.mapping.confirm({ select = true }),  -- true: 如果没有选中 item, 则选中第一个 item.
       c = cmp.mapping.confirm({ select = false }), -- false: 如果没有选中 item 则直接执行.
     }),
 
     ["<C-Space>"] = cmp.mapping(function(fallback)
-      --- HACK: :reset() cmp cache. fix: [snip] and [buff] missing when delete dot(.) char.
+      -- HACK: :reset() cmp cache. fix: [snip] and [buff] missing when delete dot(.) char.
       cmp.core:reset()
       cmp.complete()
     end, { "i", "c", "s" }),  -- 手动触发 completion window.
 
-    --- <Tab> 不同情况下触发不同行为.
+    -- <Tab> 不同情况下触发不同行为.
     ["<Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.confirm({ select = true })  -- 确认选择
       elseif luasnip.expand_or_locally_jumpable() then
-        --- expand    指展开 snippest, eg: fmtp -> fmt.Println(|)
-        --- jumpable  指有可以 jump 的 node, eg: ${1}
-        --- locally_jumpable  same as jumpable, except it ignored if the cursor is not inside the current snippet.
+        -- expand    指展开 snippest, eg: fmtp -> fmt.Println(|)
+        -- jumpable  指有可以 jump 的 node, eg: ${1}
+        -- locally_jumpable  same as jumpable, except it ignored if the cursor is not inside the current snippet.
         luasnip.expand_or_jump()  -- 展开 snippet OR 跳转到下一个 jumpable node
       else
         --cmp.complete()  -- 手动触发 completion menu.
@@ -197,7 +197,7 @@ cmp.setup {
   },
 }
 
---- command line completion, 设置
+-- command line completion, 设置
 -- Use buffer source for `/` and `?` (cmp.setup() 中 `native_menu` 必须为 false).
 cmp.setup.cmdline({ '/', '?' }, {
   -- enabled = false,
@@ -219,17 +219,17 @@ cmp.setup.cmdline(':', {
   matching = { disallow_symbol_nonprefix_matching = false }
 })
 
---- Cmp completion menu color ---------------------------------------------------------------------- {{{
---- https://github.com/hrsh7th/nvim-cmp/wiki/Menu-Appearance
+-- Cmp completion menu color ---------------------------------------------------------------------- {{{
+-- https://github.com/hrsh7th/nvim-cmp/wiki/Menu-Appearance
 
---- 匹配文字的颜色
+-- 匹配文字的颜色
 vim.api.nvim_set_hl(0, 'CmpItemAbbrMatch', {ctermfg=Colors.magenta.c, fg=Colors.magenta.g})
 vim.api.nvim_set_hl(0, 'CmpItemAbbrMatchFuzzy', {ctermfg=Colors.magenta.c, fg=Colors.magenta.g})
 
---- [lsp], [buff], [path], [snip] icon 颜色
+-- [lsp], [buff], [path], [snip] icon 颜色
 vim.api.nvim_set_hl(0, 'CmpItemMenu', {ctermfg=Colors.g240.c, fg=Colors.g240.g})
 
---- VVI: CmpItemKindXXX 默认颜色, 如果没有单独设置 CmpItemKindXXX 颜色则会使用该颜色.
+-- VVI: CmpItemKindXXX 默认颜色, 如果没有单独设置 CmpItemKindXXX 颜色则会使用该颜色.
 vim.api.nvim_set_hl(0, 'CmpItemKindDefault', {ctermfg=Colors.g246.c, fg=Colors.g246.g})
 
 vim.api.nvim_set_hl(0, 'CmpItemKindInterface', {link = 'Type'})
@@ -250,9 +250,9 @@ vim.api.nvim_set_hl(0, 'CmpItemKindSnippet', {ctermfg=Colors.blue_boolean.c, fg=
 vim.api.nvim_set_hl(0, 'CmpItemKindFile',    {ctermfg=Colors.blue_boolean.c, fg=Colors.blue_boolean.g})
 vim.api.nvim_set_hl(0, 'CmpItemKindFolder',  {ctermfg=Colors.blue_boolean.c, fg=Colors.blue_boolean.g, bold = true})
 
---- grey, 弃用的 suggestion.
+-- grey, 弃用的 suggestion.
 vim.api.nvim_set_hl(0, 'CmpItemAbbrDeprecated',  {ctermfg=Colors.g242.c, fg=Colors.g242.g, underline = true})
 
---- }}}
+-- }}}
 
 

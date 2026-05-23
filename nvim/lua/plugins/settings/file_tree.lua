@@ -3,13 +3,13 @@ if not status_ok then
   return
 end
 
---- VVI: for "nvim-tree.lua", `:help nvim-tree-netrw`
---- keep using |netrw| without its file browser features.
---- 将以下设置放入 init.lua 会导致 BUG: `:echo v:errmsg`, E216: No such group or event: FileExplorer *
+-- VVI: for "nvim-tree.lua", `:help nvim-tree-netrw`
+-- keep using |netrw| without its file browser features.
+-- 将以下设置放入 init.lua 会导致 BUG: `:echo v:errmsg`, E216: No such group or event: FileExplorer *
 --vim.g.loaded_netrw = 1
 --vim.g.loaded_netrwPlugin = 1
 
---- file/dir icons --------------------------------------------------------------------------------- {{{
+-- file/dir icons --------------------------------------------------------------------------------- {{{
 local nt_indent_line = {
   edge   = Nerd_icons.indent.edge .. " ",
   item   = Nerd_icons.indent.item .. " ",
@@ -36,10 +36,10 @@ local diagnostics_icons = {
   error   = Nerd_icons.diag.error,
 }
 
---- }}}
+-- }}}
 
---- nvim-tree keymaps ------------------------------------------------------------------------------ {{{
---- compare two marked files, using `:vert diffsplit <filename>` --------------- {{{
+-- nvim-tree keymaps ------------------------------------------------------------------------------ {{{
+-- compare two marked files, using `:vert diffsplit <filename>` --------------- {{{
 local function compare_two_marked_files()
   local marks_list = require("nvim-tree.api").marks.list()  -- 获取 mark 的 nodes
   if #marks_list ~= 2 then
@@ -50,25 +50,25 @@ local function compare_two_marked_files()
   vim.cmd.tabnew(marks_list[1].absolute_path)  -- open new tab for compare
   vim.cmd.diffsplit({ args = {marks_list[2].absolute_path}, mods = {vertical=true} }) -- compare file
 end
---- }}}
+-- }}}
 
---- go back to pwd ------------------------------------------------------------- {{{
+-- go back to pwd ------------------------------------------------------------- {{{
 local pwd = vim.uv.cwd()  -- cache pwd
 local function back_to_pwd()
   require("nvim-tree.api").tree.change_root(pwd)
 end
---- }}}
+-- }}}
 
---- trash_buffer --------------------------------------------------------------- {{{
+-- trash_buffer --------------------------------------------------------------- {{{
 
---- BUG: FIXME: fix(#3187): prevent closing the last non-floating window when deleting files
+-- BUG: FIXME: fix(#3187): prevent closing the last non-floating window when deleting files
 local function floating_win_trash_buffer()
   local nt_api = require("nvim-tree.api")
 
-  --- 获取光标指向的 nvim-tree Node
+  -- 获取光标指向的 nvim-tree Node
   local node = nt_api.tree.get_node_under_cursor()
 
-  --- 如果 node (filepath) 没有被显示, 则返回 -1, 可以直接 trash()
+  -- 如果 node (filepath) 没有被显示, 则返回 -1, 可以直接 trash()
   local bufnr_under_cursor = vim.fn.bufnr(node.absolute_path)
   if bufnr_under_cursor > 0 then
     local listed_buffers = vim.fn.getbufinfo({ buflisted = 1 })
@@ -82,12 +82,12 @@ local function floating_win_trash_buffer()
       end
     end
 
-    --- 如果 target_bufnr 不存在则创建一个新的 listed buffer
+    -- 如果 target_bufnr 不存在则创建一个新的 listed buffer
     if not target_bufnr then
-      target_bufnr = vim.api.nvim_create_buf(true, false)  --- 创建一个 listed buffer
+      target_bufnr = vim.api.nvim_create_buf(true, false)  -- 创建一个 listed buffer
     end
 
-    --- 获取正在显示 bufnr_under_cursor 的所有 windows
+    -- 获取正在显示 bufnr_under_cursor 的所有 windows
     for _, win_id in ipairs(vim.fn.win_findbuf(bufnr_under_cursor)) do
       vim.api.nvim_win_set_buf(win_id, target_bufnr)
     end
@@ -95,11 +95,11 @@ local function floating_win_trash_buffer()
 
   nt_api.fs.trash(node)
 end
---- }}}
+-- }}}
 
---- open_in_finder ------------------------------------------------------------- {{{
+-- open_in_finder ------------------------------------------------------------- {{{
 local function open_in_finder()
-  --- `:help nvim_tree.api.Node`
+  -- `:help nvim_tree.api.Node`
   local node = require("nvim-tree.api").tree.get_node_under_cursor()
   if not node then
     return
@@ -107,20 +107,20 @@ local function open_in_finder()
 
   local os_uname = vim.uv.os_uname()
 
-  --- Mac 中 `open -R file` 表示从 finder 打开
+  -- Mac 中 `open -R file` 表示从 finder 打开
   if os_uname and os_uname.sysname == "Darwin" then
     vim.system({"open", "-R", node.absolute_path})
     return
   end
 
-  --- 其他系统用 default setting
+  -- 其他系统用 default setting
   vim.ui.open(node.absolute_path)
 end
---- }}}
+-- }}}
 
---- nvim-tree buffer keymaps ---------------------------------------------------
---- only works within "NvimTree_X" buffer.
---- ":help nvim-tree-mappings-default"
+-- nvim-tree buffer keymaps ---------------------------------------------------
+-- only works within "NvimTree_X" buffer.
+-- ":help nvim-tree-mappings-default"
 
 local function nt_buffer_keymaps(bufnr)
   local nt_api = require("nvim-tree.api")
@@ -156,7 +156,7 @@ local function nt_buffer_keymaps(bufnr)
     { "m",           nt_api.marks.toggle,   "Toggle Mark" },
     { "M",           nt_api.marks.clear,    "Clear All Marks" },
 
-    --- 自定义功能
+    -- 自定义功能
     { "<C-o>",       open_in_finder,  "show file in finder" },
     {  "<leader>o",  back_to_pwd,     "back to Original pwd" },
     {  "<leader>c",  compare_two_marked_files,   "compare two marked files" },
@@ -174,49 +174,49 @@ local function nt_buffer_keymaps(bufnr)
   end
 end
 
---- }}}
+-- }}}
 
---- `:help nvim-tree-setup` ------------------------------------------------------------------------
+-- `:help nvim-tree-setup` ------------------------------------------------------------------------
 local config = {
-  --- NOTE: on_attach 主要是设置 keymaps 的.
-  --- ":help nvim-tree.on_attach" & ":help nvim-tree-mappings"
+  -- NOTE: on_attach 主要是设置 keymaps 的.
+  -- ":help nvim-tree.on_attach" & ":help nvim-tree-mappings"
   on_attach = nt_buffer_keymaps,  -- 设置 keymaps
 
   auto_reload_on_write = true, -- NOTE: `:w` 时刷新 nvim-tree.
   sync_root_with_cwd = false,  -- Changes the tree root directory on `DirChanged` and refreshes the tree.
 
-  --- VVI: Don't change these settings ----------------------------------------- {{{
-  --- DOCS: `:help nvim-tree-netrw`, netrw: vim's builtin file explorer.
+  -- VVI: Don't change these settings ----------------------------------------- {{{
+  -- DOCS: `:help nvim-tree-netrw`, netrw: vim's builtin file explorer.
   --disable_netrw = false,  -- completely disable netrw. VVI: 不要设为 true, 否则 netrw 的所有功能都无法使用.
 
-  --- NOTE: 是否显示 netrw file-explorer 内容. `:e dir` 时, 默认会显示 netrw file-explorer 内容.
-  ---   true  - `:e dir` 时, 当前 window 中不显示 netrw file-explorer 内容;
-  ---   false - `:e dir` 时, 当前 window 中显示 netrw file-explorer 内容.
-  --- 配合 hijack_directories 使用.
+  -- NOTE: 是否显示 netrw file-explorer 内容. `:e dir` 时, 默认会显示 netrw file-explorer 内容.
+  --   true  - `:e dir` 时, 当前 window 中不显示 netrw file-explorer 内容;
+  --   false - `:e dir` 时, 当前 window 中显示 netrw file-explorer 内容.
+  -- 配合 hijack_directories 使用.
   --hijack_netrw = true,
 
-  --- NOTE: hijacks new directory buffers when they are opened.
-  --- 如果 `hijack_netrw` & `disable_netrw` 都是 false, 则 `hijack_directories` 的设置无效.
-  ---   true  - `:e dir` 时, 在 nvim_tree 窗口打开 dir;
-  ---   false - `:e dir` 时, 当前 window 中显示空文件.
+  -- NOTE: hijacks new directory buffers when they are opened.
+  -- 如果 `hijack_netrw` & `disable_netrw` 都是 false, 则 `hijack_directories` 的设置无效.
+  --   true  - `:e dir` 时, 在 nvim_tree 窗口打开 dir;
+  --   false - `:e dir` 时, 当前 window 中显示空文件.
   --hijack_directories = {
-  --  --- NOTE: 和 auto close the tab/vim when nvim-tree is the last window 一起使用时, 会导致 nvim 退出.
+  --  -- NOTE: 和 auto close the tab/vim when nvim-tree is the last window 一起使用时, 会导致 nvim 退出.
   --  enable = true,
-  --  --- hijack_directories 时自动打开 nvim-tree open().
+  --  -- hijack_directories 时自动打开 nvim-tree open().
   --  auto_open = true,
   --},
 
-  --- keeps the cursor on the first letter of the filename
+  -- keeps the cursor on the first letter of the filename
   --hijack_cursor = false,
 
-  --- Opens in place of the unnamed buffer if it's empty. 默认 false.
+  -- Opens in place of the unnamed buffer if it's empty. 默认 false.
   --hijack_unnamed_buffer_when_opening = false,
-  --- }}}
+  -- }}}
 
   view = {
-    --- BUG: 在 float mode 下 fs.trash 当前 buffer 会报错.
+    -- BUG: 在 float mode 下 fs.trash 当前 buffer 会报错.
     float = {
-      enable = false,  --- true: floating window | false: split window
+      enable = false,  -- true: floating window | false: split window
       open_win_config = {
         relative = "editor",
         border = {"","","","█","▀","▀","▀","█"},
@@ -280,7 +280,7 @@ local config = {
   },
 
   update_focused_file = {
-    --- 可以使用 `:NvimTreeFindFile!`
+    -- 可以使用 `:NvimTreeFindFile!`
     enable = false,  -- `:e file` 时, 更新 tree, 展开文件夹直到找到该文件.
     update_root = false,  -- VVI: Update the root directory of the tree if
                           -- the file is not under current root directory.
@@ -296,7 +296,7 @@ local config = {
     timeout = 400,  -- Kills the git process after some time if it takes too long.
   },
 
-  diagnostics = {  --- VVI: 显示 vim diagnostics (Hint|Info|Warn|Error) 需要设置 vim.signcolumn='yes'
+  diagnostics = {  -- VVI: 显示 vim diagnostics (Hint|Info|Warn|Error) 需要设置 vim.signcolumn='yes'
     enable = true,
     show_on_dirs = true,  -- 在文件所属的 dir name 前也显示 sign.
     show_on_open_dirs = false,  -- 打开的文件夹上不显示 sign.
@@ -327,7 +327,7 @@ local config = {
       quit_on_open = true,  -- VVI: 打开文件后自动关闭 Nvimtree
       resize_window = true,  -- VVI: 重新渲染 nvimtree 窗口大小.
 
-      --- 有多个 win 的情况下, 在 nvim-tree 中打开文件时需要选择 window.
+      -- 有多个 win 的情况下, 在 nvim-tree 中打开文件时需要选择 window.
       window_picker = {
         enable = true,  -- false: 总在 vsplit 窗口中打开新文件.
         chars = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ",  -- 多选窗口的标识.
@@ -354,7 +354,7 @@ local config = {
     },
   },
 
-  --- 日志 ---
+  -- 日志 --
   log = {
     enable = false,
     truncate = false,
@@ -371,7 +371,7 @@ local config = {
 
 nvim_tree.setup(config)
 
---- `:help nvim-tree-highlight` -------------------------------------------------------------------- {{{
+-- `:help nvim-tree-highlight` -------------------------------------------------------------------- {{{
 vim.api.nvim_set_hl(0, 'NvimTreeNormalNC', {link="NormalNC"})  -- non-foucs nvim-tree window color
 vim.api.nvim_set_hl(0, 'NvimTreeRootFolder', {ctermfg=Colors.cyan.c, fg=Colors.cyan.g})  -- non-foucs nvim-tree window color
 
@@ -382,22 +382,22 @@ vim.api.nvim_set_hl(0, 'NvimTreeSymlink', {ctermfg=Colors.magenta.c, fg=Colors.m
 vim.api.nvim_set_hl(0, 'NvimTreeExecFile', {ctermfg=Colors.red.c, fg=Colors.red.g}) -- 可执行文件, red
 vim.api.nvim_set_hl(0, 'NvimTreeSpecialFile', {ctermfg=Colors.orange.c, fg=Colors.orange.g})  -- 自定义 Sepcial 文件, orange
 
---- window_picker color
+-- window_picker color
 vim.api.nvim_set_hl(0, 'NvimTreeWindowPicker', {
   ctermfg=Colors.black.c, fg=Colors.black.g,
   ctermbg=Colors.magenta.c, bg=Colors.magenta.g,
   bold=true,
 })
 
---- bookmark color
+-- bookmark color
 vim.api.nvim_set_hl(0, 'NvimTreeBookmarkIcon', {ctermfg=Colors.magenta.c, fg=Colors.magenta.g})  -- icon color
 vim.api.nvim_set_hl(0, 'NvimTreeBookmarkHL', {  -- filename color
   ctermfg=Colors.black.c, fg=Colors.black.g,
   ctermbg=Colors.magenta.c, bg=Colors.magenta.g,
 })
 
---- nvim-tree Git color, 需要开启 highlight_git=true, render={git={enable=true}}
---- 这里设置了 git icon color
+-- nvim-tree Git color, 需要开启 highlight_git=true, render={git={enable=true}}
+-- 这里设置了 git icon color
 vim.api.nvim_set_hl(0, 'NvimTreeGitDirtyIcon',   {ctermfg=Colors.red.c, fg=Colors.red.g})
 vim.api.nvim_set_hl(0, 'NvimTreeGitStagedIcon',  {ctermfg=Colors.green.c, fg=Colors.green.g})
 vim.api.nvim_set_hl(0, 'NvimTreeGitMergeIcon',   {ctermfg=Colors.purple.c, fg=Colors.purple.g})
@@ -406,16 +406,16 @@ vim.api.nvim_set_hl(0, 'NvimTreeGitNewIcon',     {ctermfg=Colors.red.c, fg=Color
 vim.api.nvim_set_hl(0, 'NvimTreeGitDeletedIcon', {ctermfg=Colors.red.c, fg=Colors.red.g})
 vim.api.nvim_set_hl(0, 'NvimTreeGitIgnoredIcon', {ctermfg=Colors.g244.c, fg=Colors.g244.g})
 
---- }}}
+-- }}}
 
---- autocmd ---------------------------------------------------------------------------------------- {{{
---- automatically close the tab/vim when nvim-tree is the last window in the tab.
+-- autocmd ---------------------------------------------------------------------------------------- {{{
+-- automatically close the tab/vim when nvim-tree is the last window in the tab.
 --vim.cmd [[au BufEnter * ++nested if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpagenr() | quit | endif]]
---- }}}
+-- }}}
 
---- Event Hooks, `:help nvim-tree-events` ---------------------------------------------------------- {{{
---- FolderCreated 在创建 folder 和 file 时都会触发.
---- FileCreated 只在创建 file 时会触发.
+-- Event Hooks, `:help nvim-tree-events` ---------------------------------------------------------- {{{
+-- FolderCreated 在创建 folder 和 file 时都会触发.
+-- FileCreated 只在创建 file 时会触发.
 -- local Event = nt_api.events.Event
 -- nt_api.events.subscribe(Event.FolderCreated, function(data)
 --   vim.print('folder add:', data)
@@ -437,7 +437,7 @@ vim.api.nvim_set_hl(0, 'NvimTreeGitIgnoredIcon', {ctermfg=Colors.g244.c, fg=Colo
 --   local wins = vim.api.nvim_tabpage_list_wins(vim.api.nvim_get_current_tabpage())
 --   for _, win in ipairs(wins) do
 --     local bufnr = vim.api.nvim_win_get_buf(win)
---     local fp = vim.fs.abspath(vim.api.nvim_buf_get_name(bufnr))  --- get absolute_path
+--     local fp = vim.fs.abspath(vim.api.nvim_buf_get_name(bufnr))  -- get absolute_path
 --     if fp == data.fname then
 --       vim.print("delete ", bufnr)
 --       vim.api.nvim_buf_delete(bufnr, {force=true})  -- :bwipeout
@@ -448,7 +448,7 @@ vim.api.nvim_set_hl(0, 'NvimTreeGitIgnoredIcon', {ctermfg=Colors.g244.c, fg=Colo
 -- nt_api.events.subscribe(Event.FileRemoved, function(data)
 --   vim.print('file remove:', data)
 -- end)
---- }}}
+-- }}}
 
 
 

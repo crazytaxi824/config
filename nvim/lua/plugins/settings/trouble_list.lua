@@ -17,7 +17,7 @@ trouble.setup({
   },
 })
 
---- keymaps ----------------------------------------------------------------------------------------
+-- keymaps ----------------------------------------------------------------------------------------
 local opts = { silent=true }
 local tree_keymaps = {
   {'n', '<leader>:',  '<cmd>Trouble symbols toggle focus=false<cr>', opts, 'Symbols (Trouble)'},

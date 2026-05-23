@@ -4,20 +4,20 @@ if not status_ok then
 end
 
 local function format_by_ft()
-  --- map { filetype = { formatters ... }}
+  -- map { filetype = { formatters ... }}
   local filetype_formatter = {
-    --- VVI: conform will run multiple formatters sequentially
+    -- VVI: conform will run multiple formatters sequentially
     go = { "goimports", "goimports-reviser" },
-    --- VVI: Use a sub-list to run only the first available formatter
+    -- VVI: Use a sub-list to run only the first available formatter
     sql = { "sql_formatter", "sqlfmt", "sqruff", "sqlfluff", stop_after_first = true },
 
     sh = { "shfmt" },
     proto = { "buf" },
     lua = { "stylua" },
-    --["*"] = { "codespell" }, --- all filetypes
+    --["*"] = { "codespell" }, -- all filetypes
   }
 
-  --- all prettier filetypes
+  -- all prettier filetypes
   local prettier_ft = {
     "javascript", "javascriptreact", "typescript", "typescriptreact",
     "vue", "css", "scss", "less", "html",
@@ -28,7 +28,7 @@ local function format_by_ft()
     filetype_formatter[ft] = { "prettier" }
   end
 
-  ---  for Godot's gdscript
+  --  for Godot's gdscript
   local gd_ft = { 'gd', 'gdscript', 'gdscript3' }
   for _, ft in ipairs(gd_ft) do
     filetype_formatter[ft] = { "gdformat" }  -- mason: gdtoolkit
@@ -38,25 +38,25 @@ local function format_by_ft()
 end
 
 conform.setup({
-  --- DOCS: list of https://github.com/stevearc/conform.nvim#formatters
+  -- DOCS: list of https://github.com/stevearc/conform.nvim#formatters
   formatters_by_ft = format_by_ft(),
 
-  --- code 语法错误会被 log, 而不是 log conform 内部错误.
+  -- code 语法错误会被 log, 而不是 log conform 内部错误.
   log_level = vim.log.levels.OFF,
 
-  --- code 语法错误时在 command area 打印错误内容.
+  -- code 语法错误时在 command area 打印错误内容.
   notify_on_error = false,
 
-  --- VVI: 不要设置, 否则会覆盖以下 autocmd conform.format({...})
+  -- VVI: 不要设置, 否则会覆盖以下 autocmd conform.format({...})
   -- format_on_save = {
-  --   --- These options will be passed to conform.format()
+  --   -- These options will be passed to conform.format()
   --   timeout_ms = 500,
   --   lsp_format = "fallback",
   -- },
 })
 
---- Custome formatter ------------------------------------------------------------------------------
---- 修改 default formatter, 也可以用于定义自定义 formatter.
+-- Custome formatter ------------------------------------------------------------------------------
+-- 修改 default formatter, 也可以用于定义自定义 formatter.
 conform.formatters.prettier = function(bufnr)
   return {
     prepend_args = {
@@ -69,14 +69,14 @@ conform.formatters.prettier = function(bufnr)
   }
 end
 
---- auto format ------------------------------------------------------------------------------------
+-- auto format ------------------------------------------------------------------------------------
 local function auto_format()
   local g_id = vim.api.nvim_create_augroup('my_auto_format', {clear=true})
   vim.api.nvim_create_autocmd("BufWritePre", {
     group = g_id,
     pattern = {"*"},
     callback = function(args)
-      --- NOTE: 以下文件类型不执行 auto format, 需要手动执行 :Format 命令
+      -- NOTE: 以下文件类型不执行 auto format, 需要手动执行 :Format 命令
       local exclude_auto_format_filtypes = { "markdown", "yaml", "lua", "toml" }
       if vim.tbl_contains(exclude_auto_format_filtypes, vim.bo[args.buf].filetype) then
         return
@@ -85,7 +85,7 @@ local function auto_format()
       conform.format({
         bufnr = args.buf,
         timeout_ms = 3000,
-        lsp_format = "fallback", --- VVI: try fallback to lsp format if no formatter.
+        lsp_format = "fallback", -- VVI: try fallback to lsp format if no formatter.
       })
     end,
     desc = "conform: format file while saving",
@@ -93,22 +93,22 @@ local function auto_format()
   return g_id
 end
 
---- enable auto_format by default.
+-- enable auto_format by default.
 local autoformat_group_id = auto_format()
 
---- user command -----------------------------------------------------------------------------------
---- 手动 format file
+-- user command -----------------------------------------------------------------------------------
+-- 手动 format file
 vim.api.nvim_create_user_command("Format", function()
   conform.format({
     timeout_ms = 3000,
-    lsp_format = "fallback", --- VVI: try fallback to lsp format if no formatter.
+    lsp_format = "fallback", -- VVI: try fallback to lsp format if no formatter.
   }, function(err, did_edit)
     if err then
       error(err)
     end
 
     if did_edit then
-      vim.cmd.write()  --- save file after format
+      vim.cmd.write()  -- save file after format
     end
   end)
 end, { bang = true, bar = true })

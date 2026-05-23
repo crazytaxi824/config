@@ -1,13 +1,13 @@
---- DOCS:
---- mason.nvim 是一个 tools 安装 & 管理插件. 用于下载 lsp/formatter/linter/dap-debug 工具, eg: gopls, prettier, delve
---- 这些工具可以不通过 mason 安装, 可以手动安装在 $PATH 中. eg: `brew install xxx`
---- 可以使用 require("mason-registry").is_installed("json-lsp") 来判断工具是否被 mason 安装.
---- require("mason-registry").get_installed_packages()
+-- DOCS:
+-- mason.nvim 是一个 tools 安装 & 管理插件. 用于下载 lsp/formatter/linter/dap-debug 工具, eg: gopls, prettier, delve
+-- 这些工具可以不通过 mason 安装, 可以手动安装在 $PATH 中. eg: `brew install xxx`
+-- 可以使用 require("mason-registry").is_installed("json-lsp") 来判断工具是否被 mason 安装.
+-- require("mason-registry").get_installed_packages()
 
---- mason 安装 LSP 时使用的名字和 "nvim-lspconfig" setup() 的名字有区别.
---- mason 安装的 tools 的名字可能和命令行工具的名字也不一样. eg: "delve" 的命令行工具文件名是 "dlv"
---- 名字的对应 https://github.com/williamboman/mason-lspconfig.nvim/blob/main/doc/server-mapping.md
---- mason-lspconfig 对应文件 https://github.com/williamboman/mason-lspconfig.nvim/blob/main/lua/mason-lspconfig/mappings/server.lua
+-- mason 安装 LSP 时使用的名字和 "nvim-lspconfig" setup() 的名字有区别.
+-- mason 安装的 tools 的名字可能和命令行工具的名字也不一样. eg: "delve" 的命令行工具文件名是 "dlv"
+-- 名字的对应 https://github.com/williamboman/mason-lspconfig.nvim/blob/main/doc/server-mapping.md
+-- mason-lspconfig 对应文件 https://github.com/williamboman/mason-lspconfig.nvim/blob/main/lua/mason-lspconfig/mappings/server.lua
 ---+-----------------------------+--------------------------------------------+------------------------------------------------+
 ---| cmd_line_tool Name          |  Mason Name                                | "neovim/nvim-lspconfig" setup() Name           |
 ---+-----------------------------+--------------------------------------------+------------------------------------------------+
@@ -25,13 +25,13 @@ if not mason_ok then
 end
 
 mason.setup {
-  --- NOTE: LSP server 下载位置默认在 "~/.local/share/nvim/mason/"
+  -- NOTE: LSP server 下载位置默认在 "~/.local/share/nvim/mason/"
   install_root_dir = vim.fn.stdpath("data") .. "/mason_tools",
 
-  --- Where Mason should put its bin location in your PATH. Can be one of:
-  --- - "prepend" (default, Mason's bin location is put first in PATH), 优先找到 Mason 的命令行工具.
-  --- - "append" (Mason's bin location is put at the end of PATH)
-  --- - "skip" (doesn't modify PATH)
+  -- Where Mason should put its bin location in your PATH. Can be one of:
+  -- - "prepend" (default, Mason's bin location is put first in PATH), 优先找到 Mason 的命令行工具.
+  -- - "append" (Mason's bin location is put at the end of PATH)
+  -- - "skip" (doesn't modify PATH)
   PATH = "prepend",
 
   max_concurrent_installers = 4,  -- 并发安装数量.
@@ -60,7 +60,7 @@ mason.setup {
   log_level = vim.log.levels.WARN,  -- 影响 `:MasonLog`
 }
 
---- NOTE: 必须在 mason.setup() 之后才能获取到 pkgs
+-- NOTE: 必须在 mason.setup() 之后才能获取到 pkgs
 -- local reg = require("mason-registry")
 -- for _, pkg in ipairs(reg.get_installed_package_names()) do
 --   print(pkg)

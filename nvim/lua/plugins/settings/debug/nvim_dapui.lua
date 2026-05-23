@@ -3,7 +3,7 @@ if not dapui_status_ok then
   return
 end
 
---- `:help dapui.setup()`
+-- `:help dapui.setup()`
 dapui.setup({
   mappings = {
     expand = {"<CR>", "<2-LeftMouse>"}, -- Use a table to apply multiple mappings
@@ -18,7 +18,7 @@ dapui.setup({
   layouts = {
     {
       elements = {
-        --- NOTE: 顺序有影响.
+        -- NOTE: 顺序有影响.
         "scopes",
         "watches",
         { id = "breakpoints", size = 0.3 },  -- Elements can be strings or table with id and size keys.
@@ -37,12 +37,12 @@ dapui.setup({
     },
   },
 
-  --- winbar
+  -- winbar
   controls = {
-    --- NOTE: dapui controls enable 之后无法删除 [dap-repl] buffer.
+    -- NOTE: dapui controls enable 之后无法删除 [dap-repl] buffer.
     enabled = false,
 
-    --- VVI: Display controls in this element
+    -- VVI: Display controls in this element
     element = "repl",  -- repl | watches | stacks | scopes | console
     icons = {
       play      = " (󰘴 F5)",  -- ▶️ 
@@ -53,7 +53,7 @@ dapui.setup({
       step_into = "󰆹 (F11)",  -- ⇩↧⊻
       step_out  = "󰆸 (󰘶 F11)",   -- ⇧↥⊼
 
-      --- 不常用
+      -- 不常用
       disconnect = "",
       pause = "",
       step_back = "",
@@ -73,20 +73,20 @@ dapui.setup({
   },
 })
 
---- keymaps ----------------------------------------------------------------------------------------
---- dap-ui 可用方法, `:help nvim-dap-ui` --------------------------------------- {{{
---- debug window 控制.
----   dapui.open()
----   dapui.close()
----   dapui.toggle()
---- 在 float window 中显示 element. eg: scopes, watches, breakpoints, stacks, repl
----   dapui.float_element({elem_name}, {settings})
---- 获取 var value under cursor. {expr} = nil 时, 使用 <cword>.
----   dapui.eval({expr}, {settings})
---- }}}
+-- keymaps ----------------------------------------------------------------------------------------
+-- dap-ui 可用方法, `:help nvim-dap-ui` --------------------------------------- {{{
+-- debug window 控制.
+--   dapui.open()
+--   dapui.close()
+--   dapui.toggle()
+-- 在 float window 中显示 element. eg: scopes, watches, breakpoints, stacks, repl
+--   dapui.float_element({elem_name}, {settings})
+-- 获取 var value under cursor. {expr} = nil 时, 使用 <cword>.
+--   dapui.eval({expr}, {settings})
+-- }}}
 local opt = { silent = true }
 local debug_keymaps = {
-  --- NOTE: 这里是 dapui 的方法 eval(), {enter=true}进入 float window.
+  -- NOTE: 这里是 dapui 的方法 eval(), {enter=true}进入 float window.
   {'n', '<leader>cc', function() dapui.eval(nil, {enter=true}) end, opt, 'debug: Popup Value under cursor'},
 }
 require('utils.keymaps').set(debug_keymaps)

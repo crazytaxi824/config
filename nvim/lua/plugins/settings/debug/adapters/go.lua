@@ -1,4 +1,4 @@
---- `:help dap-adapter`
+-- `:help dap-adapter`
 local dap_status_ok, dap = pcall(require, "dap")
 if not dap_status_ok then
   return
@@ -6,16 +6,16 @@ end
 
 local utils = require("utils.go.deps.utils")
 
---- cache golang vscode extension filepath
----
+-- cache golang vscode extension filepath
+--
 ---@type string|nil
 local cache_vscode_debug_path
 
---- NOTE: Debug adapters & configurations settings
---- https://codeberg.org/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#go
---- 插件 https://github.com/golang/vscode-go
---- 使用 vscode 插件运行 debug, vscode extension 位置 "~/.vscode/extensions/golang.go-0.46.1/dist/debugAdapter.js"
----
+-- NOTE: Debug adapters & configurations settings
+-- https://codeberg.org/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#go
+-- 插件 https://github.com/golang/vscode-go
+-- 使用 vscode 插件运行 debug, vscode extension 位置 "~/.vscode/extensions/golang.go-0.46.1/dist/debugAdapter.js"
+--
 ---@return string[] filepath
 local function find_vscode_extension()
   return vim.fs.find(function(name, path)
@@ -53,21 +53,21 @@ dap.adapters.go = function(callback, config)
 end
 
 
---- https://github.com/go-delve/delve/blob/master/Documentation/usage/dlv_dap.md
---- Some variables are supported --- {{{
----   "${port}": nvim-dap resolves a free port.
----   "${file}": Active filename
----   "${fileBasename}": The current file's basename
----   "${fileBasenameNoExtension}": The current file's basename without extension
----   "${fileDirname}": The current file's dirname
----   "${fileExtname}": The current file's extension
----   "${relativeFile}": The current file relative to |getcwd()|
----   "${relativeFileDirname}": The current file's dirname relative to |getcwd()|
----   "${workspaceFolder}": The current working directory of Neovim
----   "${workspaceFolderBasename}": The name of the folder opened in Neovim
---- }}}
+-- https://github.com/go-delve/delve/blob/master/Documentation/usage/dlv_dap.md
+-- Some variables are supported -- {{{
+--   "${port}": nvim-dap resolves a free port.
+--   "${file}": Active filename
+--   "${fileBasename}": The current file's basename
+--   "${fileBasenameNoExtension}": The current file's basename without extension
+--   "${fileDirname}": The current file's dirname
+--   "${fileExtname}": The current file's extension
+--   "${relativeFile}": The current file relative to |getcwd()|
+--   "${relativeFileDirname}": The current file's dirname relative to |getcwd()|
+--   "${workspaceFolder}": The current working directory of Neovim
+--   "${workspaceFolderBasename}": The name of the folder opened in Neovim
+-- }}}
 dap.configurations.go = {
-  --- vscode-go test project
+  -- vscode-go test project
   {
     name = "nvim-dap(vscode): Go Debug",
     type = "go", -- VVI: dap.adapters.{go} 名字要对应
@@ -78,7 +78,7 @@ dap.configurations.go = {
     program = "${file}",
   },
 
-  --- test function
+  -- test function
   {
     name = "nvim-dap(vscode): Go Debug test (func)",
     type = "go",
@@ -89,10 +89,10 @@ dap.configurations.go = {
     program = "${fileDirname}",
 
     args = function()
-      --- 判断当前函数是否 TestXXX. 如果是, 则获取 test function name.
+      -- 判断当前函数是否 TestXXX. 如果是, 则获取 test function name.
       local testfn_name, mode = utils.get_exact_testfn_name()
       if not testfn_name or not mode then
-        --- default setting
+        -- default setting
         return { "-test.v", "-test.run", "^" .. vim.fn.expand('<cword>') .. "$" }
       end
 
@@ -107,9 +107,9 @@ dap.configurations.go = {
         }
       elseif mode == 'fuzz' then
         local fp = vim.fs.dirname(vim.api.nvim_buf_get_name(0))
-        local testdata = vim.fs.joinpath(fp, "testdata", "fuzz")  --- fuzz test data dir
-        --- debug fuzz 函数时, 只运行 Seed Corpus (f.Add 的数据) 和 testdata 里的失败案例.
-        --- 所以需要给 -run, -fuzz 都设置函数名.
+        local testdata = vim.fs.joinpath(fp, "testdata", "fuzz")  -- fuzz test data dir
+        -- debug fuzz 函数时, 只运行 Seed Corpus (f.Add 的数据) 和 testdata 里的失败案例.
+        -- 所以需要给 -run, -fuzz 都设置函数名.
         return {
           "-test.v",
           "-test.run", "^$",
@@ -123,7 +123,7 @@ dap.configurations.go = {
     end
   },
 
-  --- test run packages
+  -- test run packages
   {
     name = "nvim-dap(vscode): Go Debug test run (pkg)",
     type = "go",

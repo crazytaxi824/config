@@ -3,15 +3,15 @@ if not nv_ts_status_ok then
   return
 end
 
---- `:help nvim-treesitter-api`
+-- `:help nvim-treesitter-api`
 ts.setup({
   -- Directory to install parsers and queries. (prepended to `runtimepath`)
   -- install_dir = vim.fn.stdpath('data') .. '/site'
 })
 
---- DOCS: 安装 parser
---- `:TSInstall all` 安装所有 langs 的 parser
---- `:TSInstall stable` 安装所有 stable parser
+-- DOCS: 安装 parser
+-- `:TSInstall all` 安装所有 langs 的 parser
+-- `:TSInstall stable` 安装所有 stable parser
 local auto_install_langs = {
   "lua", "query", "c", "vim", "vimdoc", "markdown", "markdown_inline",  -- up to data Highlight
   "comment", "editorconfig",
@@ -27,7 +27,7 @@ vim.schedule(function ()
 end)
 
 
---- prompt before install missing parser for languages ---------------------------------------------
+-- prompt before install missing parser for languages ---------------------------------------------
 vim.api.nvim_create_autocmd("FileType", {
   pattern = {"*"},
   callback = function(args)
@@ -36,14 +36,14 @@ vim.api.nvim_create_autocmd("FileType", {
       return
     end
 
-    --- buffer 已经有 parser 了
+    -- buffer 已经有 parser 了
     local parser = vim.treesitter.get_parser(args.buf)
     if parser and parser:lang() == lang then
       vim.treesitter.start()  -- NOTE: enable Highlight
       return
     end
 
-    --- buffer 没有对应 installed parser 则提醒安装
+    -- buffer 没有对应 installed parser 则提醒安装
     local available_parsers = ts.get_available()
     if vim.tbl_contains(available_parsers, lang) then
       Notify("run `:TSInstall " .. lang .. "` to install parser", "INFO", {title = "treesitter install"})

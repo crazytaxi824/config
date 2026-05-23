@@ -1,4 +1,4 @@
---- https://github.com/jellydn/lazy-nvim-ide/blob/main/lua/plugins/extras/copilot-chat-v2.lua
+-- https://github.com/jellydn/lazy-nvim-ide/blob/main/lua/plugins/extras/copilot-chat-v2.lua
 
 local chat_ok, chat = pcall(require, "CopilotChat")
 if not chat_ok then
@@ -10,12 +10,12 @@ if not chat_select_ok then
   return
 end
 
---- `:help CopilotChat-prompts`
+-- `:help CopilotChat-prompts`
 local prompts = {
-  --- VVI: 所有自定义的 prompts 都会自动创建一个 command, eg: "Foo" -> "CopilotChatFoo"
+  -- VVI: 所有自定义的 prompts 都会自动创建一个 command, eg: "Foo" -> "CopilotChatFoo"
   -- Foo = "Foo",
 
-  --- Code related prompts
+  -- Code related prompts
   -- Explain = "Please explain how the following code works.",
   Explain = {
     prompt = "Please explain how the following code works.",
@@ -46,7 +46,7 @@ local prompts = {
   -- SwaggerApiDocs = "Please provide documentation for the following API using Swagger.",
   -- SwaggerJsDocs = "Please write JSDoc for the following API using Swagger.",
 
-  --- Text related prompts
+  -- Text related prompts
   Summarize = "Please summarize the following text.",
   Correct = "Please correct any grammar and spelling errors in the following text.",
   Improve = "Please improve the grammar and wording of the following text.",
@@ -93,8 +93,8 @@ chat.setup {
   },
 }
 
---- commands ---------------------------------------------------------------------------------------
---- Open new window, chat for visual selected
+-- commands ---------------------------------------------------------------------------------------
+-- Open new window, chat for visual selected
 vim.api.nvim_create_user_command("CopilotChatVisual", function(args)
   chat.ask(args.args, { selection = select.visual })
 end, { nargs = "*", range = true })
@@ -113,21 +113,21 @@ vim.api.nvim_create_user_command("CopilotChatInline", function(args)
   })
 end, { nargs = "*", range = true })
 
---- keymaps ----------------------------------------------------------------------------------------
+-- keymaps ----------------------------------------------------------------------------------------
 local opt = { silent = true }
 local ai_keymaps = {
   { {"n", "x"}, "<leader>aa", "<cmd>CopilotChatToggle<CR>", opt, "CopilotChat - Toggle V-split" },
 
-  --- Show prompts actions with telescope
-  --- `:help CopilotChat-contexts`
+  -- Show prompts actions with telescope
+  -- `:help CopilotChat-contexts`
   { "n", "<leader>ap", function() chat.select_prompt({context={"buffer"}}) end, opt, "CopilotChat - Prompt actions"},
   { "x", "<leader>ap", function() chat.select_prompt() end, opt, "CopilotChat - Prompt actions"},
 
-  --- Chat with Copilot in visual mode
+  -- Chat with Copilot in visual mode
   { "x", "<leader>av", ":CopilotChatVisual ", nil, "CopilotChat - Open in V-split"},
   { "x", "<leader>ax", ":CopilotChatInline ", nil, "CopilotChat - Inline chat"},
 
-  --- System functions
+  -- System functions
   { "n", "<leader>am", "<cmd>CopilotChatCommit<CR>", opt, "CopilotChat - Generate commit messages"},  -- Generate commit message based on the git diff
   { "n", "<leader>al", "<cmd>CopilotChatReset<CR>", opt, "CopilotChat - Clear buffer and history" },
   { "n", "<leader>a?", "<cmd>CopilotChatModels<CR>", opt, "CopilotChat - Select Models" },

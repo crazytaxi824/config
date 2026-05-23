@@ -15,7 +15,7 @@ local actions_layout = require("telescope.actions.layout")
 local actions_state = require("telescope.actions.state")
 local transform_mod = require('telescope.actions.mt').transform_mod
 
---- custom dropdown theme layout
+-- custom dropdown theme layout
 local dropdown_opts = {
   layout_config = {
     height = 0.7,
@@ -23,12 +23,12 @@ local dropdown_opts = {
   },
 }
 
---- custom actions --------------------------------------------------------------------------------- {{{
---- 多选的情况下 send_selected_to_qflist; 没有任何选择的情况下 edit 光标所在行的 file.
+-- custom actions --------------------------------------------------------------------------------- {{{
+-- 多选的情况下 send_selected_to_qflist; 没有任何选择的情况下 edit 光标所在行的 file.
 local my_action = transform_mod({
   edit_or_qf = function(prompt_bufnr)
-    --- 参考 https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/actions/init.lua
-    --- 中 send_selected_to_qf 函数设置.
+    -- 参考 https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/actions/init.lua
+    -- 中 send_selected_to_qf 函数设置.
     local picker = actions_state.get_current_picker(prompt_bufnr)
     local selected_items = picker:get_multi_selection()
 
@@ -45,7 +45,7 @@ local my_action = transform_mod({
     if entry.path or entry.filename then
       local absolute_fp = entry.path or entry.filename
 
-      --- Mac 中 `open -R file` 表示从 finder 打开
+      -- Mac 中 `open -R file` 表示从 finder 打开
       local os_uname = vim.uv.os_uname()
       if os_uname and os_uname.sysname == "Darwin" then
         vim.ui.open(absolute_fp, {cmd = {"open", "-R"}})
@@ -56,12 +56,12 @@ local my_action = transform_mod({
   end
 })
 
---- }}}
+-- }}}
 
---- `:help telescope.setup()`
+-- `:help telescope.setup()`
 telescope.setup {
   defaults = {
-    --- VVI: 这里必须使用占 2 格的 icon, 否则渲染会出 bug.
+    -- VVI: 这里必须使用占 2 格的 icon, 否则渲染会出 bug.
     prompt_prefix = "> ",
     selection_caret = Nerd_icons.arrows.right .. ' ',
     multi_icon = Nerd_icons.tick,
@@ -69,7 +69,7 @@ telescope.setup {
     --wrap_results = true,  -- result window `set wrap`
     --results_title = false,  -- result window 不显示 title.
 
-    --- `:help telescope.defaults.layout_config`
+    -- `:help telescope.defaults.layout_config`
     layout_config = {
       center = {
         height = 0.8,
@@ -94,7 +94,7 @@ telescope.setup {
     cycle_layout_list = {"vertical", "horizontal", "center"},  -- NOTE: 影响 actions_layout.cycle_layout_next() 显示顺序.
     sorting_strategy = "ascending",  -- ascending | descending(*) - descending 在 prompt_position = "bottom" 时候用.
 
-    --- rg defaults, `:help telescope.defaults.vimgrep_arguments`
+    -- rg defaults, `:help telescope.defaults.vimgrep_arguments`
     vimgrep_arguments = {
       "rg",
       "--color=never",    -- VVI: 必须为 never
@@ -105,11 +105,11 @@ telescope.setup {
       "--smart-case",     -- 如果有大写则 case sensitive, 如果全小写则 ignore case.
     },
 
-    --- `:help telescope.defaults.mappings`         - 默认 key mapping 也能使用
-    --- `:help telescope.defaults.default_mappings` - 只使用自定义 key mapping
-    --- `:help telescope.actions`  -- 查看可用 actions
-    --- https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/mappings.lua
-    --- https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/actions/init.lua
+    -- `:help telescope.defaults.mappings`         - 默认 key mapping 也能使用
+    -- `:help telescope.defaults.default_mappings` - 只使用自定义 key mapping
+    -- `:help telescope.actions`  -- 查看可用 actions
+    -- https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/mappings.lua
+    -- https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/actions/init.lua
     mappings = {  -------------------------------------------------------------- {{{
       i = {
         ["<CR>"] = my_action.edit_or_qf,
@@ -133,16 +133,16 @@ telescope.setup {
         ["<S-Up>"] = actions.results_scrolling_up,
         ["<S-Down>"] = actions.results_scrolling_down,
 
-        --- move_selection_next 和 move_selection_worse 的区别:
-        --- next 移动到下一个结果; worse 移动到搜索排序的下一个结果.
-        --- worse 会根据 sorting_strategy = "ascending" / "descending" 改变方向, 而 next 不会.
+        -- move_selection_next 和 move_selection_worse 的区别:
+        -- next 移动到下一个结果; worse 移动到搜索排序的下一个结果.
+        -- worse 会根据 sorting_strategy = "ascending" / "descending" 改变方向, 而 next 不会.
         ["<Tab>"] = actions.toggle_selection + actions.move_selection_next,
         ["<S-Tab>"] = actions_layout.cycle_layout_next,  -- layout window
         --["<S-Tab>"] = actions.toggle_selection + actions.move_selection_previous,
         --["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
         --["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
 
-        --- NOTE: put all <tab> selected files to quickfix list.
+        -- NOTE: put all <tab> selected files to quickfix list.
         --["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
         --["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
         --["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
@@ -170,15 +170,15 @@ telescope.setup {
         ["<C-d>"] = false,
         ["<PageUp>"] = actions.preview_scrolling_up,
         ["<PageDown>"] = actions.preview_scrolling_down,
-        --- actions.preview_scrolling_left(), actions.preview_scrolling_right()
+        -- actions.preview_scrolling_left(), actions.preview_scrolling_right()
         ["<S-Up>"] = actions.results_scrolling_up,
         ["<S-Down>"] = actions.results_scrolling_down,
-        --- actions.results_scrolling_left(), actions.results_scrolling_right()
+        -- actions.results_scrolling_left(), actions.results_scrolling_right()
 
         ["<Tab>"] = actions.toggle_selection + actions.move_selection_next,
         ["<S-Tab>"] = actions_layout.cycle_layout_next,  -- layout window
 
-        --- NOTE: put all <tab> selected files to quickfix list.
+        -- NOTE: put all <tab> selected files to quickfix list.
         --["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
         --["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
         --["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
@@ -186,18 +186,18 @@ telescope.setup {
         ["?"] = actions.which_key, -- key help
       },
     },
-    --- }}}
+    -- }}}
   },
-  --- https://github.com/nvim-telescope/telescope.nvim/wiki/Configuration-Recipes#remove--from-fd-results
+  -- https://github.com/nvim-telescope/telescope.nvim/wiki/Configuration-Recipes#remove--from-fd-results
   pickers = {
-    --- `:help telescope.builtin`, 这里可以修改默认 picker 的属性
+    -- `:help telescope.builtin`, 这里可以修改默认 picker 的属性
     find_files = {
-      --- fd 使用说明 ---------------------------------------------------------- {{{
+      -- fd 使用说明 ---------------------------------------------------------- {{{
       -- NOTE: 这里没有使用 --type=f/d/l/..., 这里是参照 ~/.zshrc 中的 FZF_DEFAULT_COMMAND
       -- -E=.git                  不显示名为 .git 的文件(夹)
       -- -E=**/.*/**              显示隐藏文件夹, 但不列出其中的文件.
       -- -E=**/node_modules/**    显示 node_modules 文件夹, 但不列出其中的文件.
-      --- }}}
+      -- }}}
       find_command = {
         "fd",
         "--follow",  -- descend into symlinked directories.
@@ -210,7 +210,7 @@ telescope.setup {
     },
   },
   extensions = {
-    --- https://github.com/nvim-telescope/telescope-fzf-native.nvim
+    -- https://github.com/nvim-telescope/telescope-fzf-native.nvim
     fzf = {
       fuzzy = true,                    -- false will only do exact matching
       override_generic_sorter = true,  -- override the generic sorter
@@ -218,29 +218,29 @@ telescope.setup {
       case_mode = "smart_case",        -- "ignore_case", "respect_case", "smart_case" (default)
     },
 
-    --- https://github.com/nvim-telescope/telescope-ui-select.nvim
-    --- NOTE: set neovim `vim.ui.select` to telescope
+    -- https://github.com/nvim-telescope/telescope-ui-select.nvim
+    -- NOTE: set neovim `vim.ui.select` to telescope
     ["ui-select"] = {
       themes.get_dropdown(dropdown_opts),
     },
   },
 }
 
---- VVI: load extension after setup(), 修改默认 vim.ui.select() 样式.
+-- VVI: load extension after setup(), 修改默认 vim.ui.select() 样式.
 telescope.load_extension('fzf')
 telescope.load_extension("ui-select")
 
---- keymap: toggle `set wrap` for filetype = TelescopePrompt only.
---- 打开 telescope 时, 设置快捷键用于显示超出 preview window 的内容 --------------------------------
---- `:set wrap` for preview window --------------------------------------------- {{{
+-- keymap: toggle `set wrap` for filetype = TelescopePrompt only.
+-- 打开 telescope 时, 设置快捷键用于显示超出 preview window 的内容 --------------------------------
+-- `:set wrap` for preview window --------------------------------------------- {{{
 vim.api.nvim_create_autocmd("User", {
   pattern = "TelescopePreviewerLoaded",
   callback = function(args)
-    --- NOTE: preview window 不会改变, 但是 preview bufnr 会改变,
-    --- 在 cursor 指向不同 result item 的时候, preview bufnr 会改变.
+    -- NOTE: preview window 不会改变, 但是 preview bufnr 会改变,
+    -- 在 cursor 指向不同 result item 的时候, preview bufnr 会改变.
     local preview_winid = vim.api.nvim_get_current_win()
 
-    --- find prompt_bufnr
+    -- find prompt_bufnr
     local prompt_bufnr
     for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
       if vim.bo[bufnr].filetype == 'TelescopePrompt' then
@@ -248,9 +248,9 @@ vim.api.nvim_create_autocmd("User", {
       end
     end
 
-    --- NOTE: 快捷键设置在 prompt bufnr 中, 因为其他 telescope window 通常不会 enter.
+    -- NOTE: 快捷键设置在 prompt bufnr 中, 因为其他 telescope window 通常不会 enter.
     vim.keymap.set({'n', 'i'}, '<C-l>', function()
-      --- toggle `set wrap`
+      -- toggle `set wrap`
       if vim.api.nvim_win_is_valid(preview_winid) then
         vim.api.nvim_set_option_value('wrap', not vim.wo[preview_winid].wrap, { scope='local', win=preview_winid })
       end
@@ -263,21 +263,21 @@ vim.api.nvim_create_autocmd("User", {
   end,
   desc = "set keymap of `:set wrap` for telescope preview window",
 })
---- }}}
+-- }}}
 
---- highlights -------------------------------------------------------------------------------------
+-- highlights -------------------------------------------------------------------------------------
 vim.api.nvim_set_hl(0, "TelescopeMatching", {reverse = true})
 
---- VVI: 自定义 picker -----------------------------------------------------------------------------
---- Rg command ----------------------------------------------------------------- {{{
---- 基于 telescope.builtin.grep_string() 修改
---- https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/builtin/__files.lua
+-- VVI: 自定义 picker -----------------------------------------------------------------------------
+-- Rg command ----------------------------------------------------------------- {{{
+-- 基于 telescope.builtin.grep_string() 修改
+-- https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/builtin/__files.lua
 local function my_rg_picker(additional_args)
-  --- args 是一个 cmd list, eg: {'rg', '-w', '-s', 'filepath'}
+  -- args 是一个 cmd list, eg: {'rg', '-w', '-s', 'filepath'}
   local args = vim.iter({conf.vimgrep_arguments, additional_args}):flatten():totable()
 
-  --- VVI: gen_from_vimgrep() 是 preview file 的必要设置.
-  --- opts 其他参数可以查看 `:help grep_string()`
+  -- VVI: gen_from_vimgrep() 是 preview file 的必要设置.
+  -- opts 其他参数可以查看 `:help grep_string()`
   local opts = { entry_maker = make_entry.gen_from_vimgrep() }
   pickers.new(opts, {
     prompt_title = ":Rg",
@@ -287,36 +287,36 @@ local function my_rg_picker(additional_args)
   }):find()
 end
 
---- Rg command 使用方法 -------------------------------------------------------- {{{
---- 例子: 如果要使用正则表达式, 则需要使用 '' OR "" OR \(escape), 否则报错 zsh: no matches found.
----   Rg foo\ bar == Rg 'foo bar' == Rg "foo bar" == Rg foo\ bar ./         # 在当前文件夹搜索
----   Rg 'foo.*bar' == Rg "foo.*bar" == Rg foo.\*bar == Rg 'foo.*bar' ./    # 同上
----
---- 搜索指定文件(夹)
----   Rg 'foo bar'  ./src/main.go    # 在 main.go 文件中搜索 'foo bar'
----   Rg 'foo bar'  ./src            # 在 src 文件夹下搜索 'foo bar'
----   Rg 'foo.*bar' ./src ./tmp      # 在 ./src 和 ./tmp 两个文件夹下搜索 'foo.*bar'
----
---- 搜索条件: -w -i -s ...
----   Rg -w 'foo'   # 匹配整个单词, 而不是部分匹配. 类似 '\bWord\b'
----   Rg -i 'foo'   # ignore case
----   Rg -s 'foo'   # case sensitive
----   Rg -S 'foo'   # --smart-case, 如果全小写则 ignore case, 如果有大写字母则 case sensitive.
----
----   Rg -wi 'foo' ./
----   Rg -ws 'foo' ./src
----   Rg -wS 'foo' ./src /tmp
---- }}}
+-- Rg command 使用方法 -------------------------------------------------------- {{{
+-- 例子: 如果要使用正则表达式, 则需要使用 '' OR "" OR \(escape), 否则报错 zsh: no matches found.
+--   Rg foo\ bar == Rg 'foo bar' == Rg "foo bar" == Rg foo\ bar ./         # 在当前文件夹搜索
+--   Rg 'foo.*bar' == Rg "foo.*bar" == Rg foo.\*bar == Rg 'foo.*bar' ./    # 同上
+--
+-- 搜索指定文件(夹)
+--   Rg 'foo bar'  ./src/main.go    # 在 main.go 文件中搜索 'foo bar'
+--   Rg 'foo bar'  ./src            # 在 src 文件夹下搜索 'foo bar'
+--   Rg 'foo.*bar' ./src ./tmp      # 在 ./src 和 ./tmp 两个文件夹下搜索 'foo.*bar'
+--
+-- 搜索条件: -w -i -s ...
+--   Rg -w 'foo'   # 匹配整个单词, 而不是部分匹配. 类似 '\bWord\b'
+--   Rg -i 'foo'   # ignore case
+--   Rg -s 'foo'   # case sensitive
+--   Rg -S 'foo'   # --smart-case, 如果全小写则 ignore case, 如果有大写字母则 case sensitive.
+--
+--   Rg -wi 'foo' ./
+--   Rg -ws 'foo' ./src
+--   Rg -wS 'foo' ./src /tmp
+-- }}}
 vim.api.nvim_create_user_command("Rg",
   function(params)
     my_rg_picker(params.fargs)
   end,
 {nargs="+"})
---- }}}
+-- }}}
 
---- list builtin pickers ------------------------------------------------------- {{{
---- 找出所有的 pickers: builtin & extension
---- https://github.com/keyvchan/telescope-find-pickers.nvim/blob/main/lua/telescope/_extensions/find_pickers/main.lua
+-- list builtin pickers ------------------------------------------------------- {{{
+-- 找出所有的 pickers: builtin & extension
+-- https://github.com/keyvchan/telescope-find-pickers.nvim/blob/main/lua/telescope/_extensions/find_pickers/main.lua
 local function my_list_builtin_pickers(opts)
   local opts_pickers = {
     bufnr = vim.api.nvim_get_current_buf(),
@@ -329,7 +329,7 @@ local function my_list_builtin_pickers(opts)
   end
   table.sort(result_table) -- sort result
 
-  --- 使用 telescope.load_extension("ui-select")
+  -- 使用 telescope.load_extension("ui-select")
   vim.ui.select(result_table, {
     prompt = 'Builtin Pickers',
     format_item = function(item)
@@ -358,16 +358,16 @@ local function my_list_builtin_pickers(opts)
   --     results = result_table,
   --   }),
   --   attach_mappings = function(prompt_bufnr, map)
-  --     --- 当用户按下回车键时的动作
+  --     -- 当用户按下回车键时的动作
   --     actions.select_default:replace(function()
-  --       --- 获取选中的 item
+  --       -- 获取选中的 item
   --       local selection = actions_state.get_selected_entry()
   --       local value = selection.value
   --
-  --       --- 关闭 telescope
+  --       -- 关闭 telescope
   --       actions.close(prompt_bufnr)
   --
-  --       --- 执行新的 picker
+  --       -- 执行新的 picker
   --       if builtin_pickers[value] ~= nil then
   --         builtin_pickers[value](opts_pickers)
   --       end
@@ -377,13 +377,13 @@ local function my_list_builtin_pickers(opts)
   --   sorter = conf.generic_sorter(opts),  -- VVI: 设置 sorter 后可以通过 fzf 输入框对 results 进行过滤.
   -- }):find()
 end
---- }}}
+-- }}}
 
---- keymaps ----------------------------------------------------------------------------------------
+-- keymaps ----------------------------------------------------------------------------------------
 local opt = { silent = true }
 local telescope_keymaps = {
-  --- Picker functions, https://github.com/nvim-telescope/telescope.nvim#pickers
-  --- 使用 `:Telescope` 列出所有 Picker
+  -- Picker functions, https://github.com/nvim-telescope/telescope.nvim#pickers
+  -- 使用 `:Telescope` 列出所有 Picker
   {'n', '<leader>ff', function() my_list_builtin_pickers() end, opt, 'telescope: list builtin pickers'},
   {'n', '<leader>fd', function() builtin.find_files() end, opt, 'telescope: fd'},
   {'n', '<leader>fh', function() builtin.help_tags() end, opt, 'telescope: Vim Help Doc'},

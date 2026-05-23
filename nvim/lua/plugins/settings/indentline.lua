@@ -1,14 +1,14 @@
---- NOTE: indent line 和 set list & set listchars 配合使用.
+-- NOTE: indent line 和 set list & set listchars 配合使用.
 
---- Use a protected call so we don't error out on first use
---- require("indent_blankline")  -- load v2.x
---- require("ibl")  -- load v3.x
+-- Use a protected call so we don't error out on first use
+-- require("indent_blankline")  -- load v2.x
+-- require("ibl")  -- load v3.x
 local status_ok, indent_blankline = pcall(require, "ibl")
 if not status_ok then
   return
 end
 
---- 设置 indent.char 颜色 --------------------------------------------------------------------------
+-- 设置 indent.char 颜色 --------------------------------------------------------------------------
 vim.api.nvim_set_hl(0, 'RainbowGrey',   {ctermfg=Colors.grey_hint.c, fg=Colors.grey_hint.g})
 vim.api.nvim_set_hl(0, 'RainbowRed',    {ctermfg=Colors.red.c, fg=Colors.red.g})
 vim.api.nvim_set_hl(0, 'RainbowYellow', {ctermfg=Colors.yellow.c, fg=Colors.yellow.g})
@@ -18,22 +18,22 @@ vim.api.nvim_set_hl(0, 'RainbowGreen',  {ctermfg=Colors.green.c, fg=Colors.green
 vim.api.nvim_set_hl(0, 'RainbowViolet', {ctermfg=Colors.magenta.c, fg=Colors.magenta.g})
 vim.api.nvim_set_hl(0, 'RainbowCyan',   {ctermfg=Colors.cyan.c, fg=Colors.cyan.g})
 
---- set list & set listchars, NOTE: 在 settings.lua 中设置.
+-- set list & set listchars, NOTE: 在 settings.lua 中设置.
 --vim.opt.list = true
 --vim.opt.listchars:append("space:⋅")
 --vim.opt.listchars:append("eol:󱞣")
 
---- `:help indent-blankline` -----------------------------------------------------------------------
+-- `:help indent-blankline` -----------------------------------------------------------------------
 indent_blankline.setup({
   enabled = true,  -- Enables or disables indent-blankline
 
-  --- `:help ibl.config.indent`
+  -- `:help ibl.config.indent`
   indent = {
     char = Nerd_icons.indent.edge,      -- space indent char
     tab_char = Nerd_icons.indent.edge,  -- tab indent char, 默认使用 `listchars.tab`
 
-    --- default highlight: `Whitespace`
-    -- highlight = {  -- colorful indent line.  --- {{{
+    -- default highlight: `Whitespace`
+    -- highlight = {  -- colorful indent line.  -- {{{
     --   'RainbowGrey',
     --   'RainbowRed',
     --   'RainbowYellow',
@@ -43,17 +43,17 @@ indent_blankline.setup({
     --   'RainbowViolet',
     --   'RainbowCyan',
     -- },
-    --- }}}
+    -- }}}
   },
 
-  --- `:help ibl.config.whitespace`
+  -- `:help ibl.config.whitespace`
   whitespace = {
     remove_blankline_trail = true,
-    -- highlight = "NonText",  --- `listchars.trail` ·· 点的颜色
+    -- highlight = "NonText",  -- `listchars.trail` ·· 点的颜色
   },
 
-  --- `:help ibl.config.scope`, cursor 所在位置的 treesitter node 显示 underline, 需要 treesitter.
-  --- NOTE: Scope requires treesitter to be set up.
+  -- `:help ibl.config.scope`, cursor 所在位置的 treesitter node 显示 underline, 需要 treesitter.
+  -- NOTE: Scope requires treesitter to be set up.
   scope = {
     enabled = true,
     show_start = false,  -- Underline first line of the scope. eg: "func Foo()"

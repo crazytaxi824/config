@@ -6,7 +6,7 @@ end
 -- local max_ln = (vim.wo.scrolloff >= 6) and vim.wo.scrolloff or 6
 local max_ln = 3
 
---- https://github.com/nvim-treesitter/nvim-treesitter-context#configuration
+-- https://github.com/nvim-treesitter/nvim-treesitter-context#configuration
 ts_ctx.setup{
   enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
   max_lines = max_ln, -- How many lines the window should span. Values <= 0 mean no limit.
@@ -22,8 +22,8 @@ ts_ctx.setup{
   --separator = nil,  -- Separator between context and content. Should be a single character string, like '-'.
 }
 
---- highlight --------------------------------------------------------------------------------------
---- NOTE: 需要设置和 BufferLineBufferSelected 的 bg 颜色一致.
+-- highlight --------------------------------------------------------------------------------------
+-- NOTE: 需要设置和 BufferLineBufferSelected 的 bg 颜色一致.
 vim.api.nvim_set_hl(0, 'TreesitterContext', {ctermbg=Colors.black.c, bg=Colors.black.g})  -- 默认 link to NormalFloat
 vim.api.nvim_set_hl(0, 'TreesitterContextLineNumber', {ctermbg=Colors.black.c, bg=Colors.black.g}) -- 默认 link to LineNr
 
