@@ -18,7 +18,7 @@ local cache_vscode_debug_path
 ---
 --- @return string[] filepath
 local function find_vscode_extension()
-  return vim.fs.find(function (name, path)
+  return vim.fs.find(function(name, path)
     return name == 'debugAdapter.js' and path:match('~/%.vscode/extensions/golang.*/dist')
   end, {
     path = "~/.vscode/extensions",
