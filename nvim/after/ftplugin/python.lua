@@ -1,8 +1,8 @@
---- python3 ----------------------------------------------------------------------------------------
+-- python3 ----------------------------------------------------------------------------------------
 
---- check virtual environment
+-- check virtual environment
 local function venv(filepath)
-  --- 项目环境
+  -- 项目环境
   local py_paths = vim.fs.find({'.venv/bin/python3'}, {
     path = vim.fs.dirname(filepath),
     upward = true,
@@ -16,8 +16,8 @@ local function venv(filepath)
   return py_paths[1]
 end
 
---- file is absolut path
----
+-- file is absolut path
+--
 ---@param filepath string
 local function py_run(filepath)
   local py_path = venv(filepath)
@@ -29,7 +29,7 @@ local function py_run(filepath)
     return
   end
 
-  --- 相对 cwd. 不在当前 cwd 目录下的文件会显示绝对路径
+  -- 相对 cwd. 不在当前 cwd 目录下的文件会显示绝对路径
   py_path = vim.fn.fnamemodify(py_path, ':.')
   filepath = vim.fn.fnamemodify(filepath, ':.')
 
@@ -38,8 +38,8 @@ local function py_run(filepath)
   t:run({ py_path, "--", filepath })
 end
 
---- key mapping ------------------------------------------------------------------------------------
---- run current_file ---
+-- key mapping ------------------------------------------------------------------------------------
+-- run current_file ---
 vim.keymap.set('n', '<F5>', function() py_run(vim.api.nvim_buf_get_name(0)) end, {
   buffer = 0,
   desc = "Fn 5: code: Run File",

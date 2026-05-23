@@ -1,6 +1,6 @@
---- key mapping ------------------------------------------------------------------------------------ {{{
---- <F6> go test Run/Benchmark/Fuzz single function, No Prompt.
---- <S-F6> run test single function with options/flags
+-- key mapping ------------------------------------------------------------------------------------- {{{
+-- <F6> go test Run/Benchmark/Fuzz single function, No Prompt.
+-- <S-F6> run test single function with options/flags
 --   - go test Run Single function
 --      - pprof
 --      - trace
@@ -16,7 +16,7 @@
 --      - FuzzTime 6m
 --      - FuzzTime 10m
 --      - FuzzTime ?
---- }}}
+-- }}}
 local opt = { buffer = 0 }
 local go_keymaps = {
   {'n', '<F5>',  function() require("utils.go").run() end, opt, "Fn 5: code: Go Run"},  -- go run
@@ -26,7 +26,7 @@ local go_keymaps = {
 
 require('utils.keymaps').set(go_keymaps)
 
---- commands --------------------------------------------------------------------------------------- {{{
+-- commands ---------------------------------------------------------------------------------------- {{{
 -- - go test Run current Package
 --     - pprof
 --     - trace
@@ -39,9 +39,9 @@ require('utils.keymaps').set(go_keymaps)
 --     - coverage
 -- - go test Benchmark multiple packages (Project)
 --     - coverage
---- }}}
---- NOTE: 不能同时运行多个 fuzz test. Error: will not fuzz, -fuzz matches more than one fuzz test.
---- 所以这里没有设置 GoTestFuzzPackage / GoTestFuzzPorject, 使用 go_test_single_func() 来运行 Fuzz test.
+-- }}}
+-- NOTE: 不能同时运行多个 fuzz test. Error: will not fuzz, -fuzz matches more than one fuzz test.
+-- 所以这里没有设置 GoTestFuzzPackage / GoTestFuzzPorject, 使用 go_test_single_func() 来运行 Fuzz test.
 vim.api.nvim_buf_create_user_command(0, "GoTestPkgRun",       function() require("utils.go").test.pkg('run') end, {bang=true})
 vim.api.nvim_buf_create_user_command(0, "GoTestPkgBench",     function() require("utils.go").test.pkg('bench') end, {bang=true})
 vim.api.nvim_buf_create_user_command(0, "GoTestProjectRun",   function() require("utils.go").test.proj('run') end, {bang=true})

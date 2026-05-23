@@ -14,7 +14,7 @@ M.flags = { debounce_text_changes = 500 }   --- 默认 150.
 ---@param code integer
 ---@param err string
 M.on_error = function(code, err)
-  Notify({vim.inspect(vim.lsp.rpc.client_errors[code], err}), "ERROR", {title = "lspconfig/setup_opts.lua"})
+  Notify({vim.inspect(vim.lsp.rpc.client_errors[code]), err}, "ERROR", {title = "lspconfig/setup_opts.lua"})
 end
 
 --- capabilities -----------------------------------------------------------------------------------

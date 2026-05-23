@@ -1,5 +1,5 @@
 local function swift_run_file()
-  --- 相对 cwd. 不在当前 cwd 目录下的文件会显示绝对路径
+  -- 相对 cwd. 不在当前 cwd 目录下的文件会显示绝对路径
   local file = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ':.')
 
   local t = require('myplugins.my_term').console()
@@ -20,7 +20,7 @@ local function swift_test_all()
 end
 
 local function swift_test_pkg()
-  --- 是否在 Tests 文件夹中
+  -- 是否在 Tests 文件夹中
   local dir = vim.fs.find({'Tests'}, {
     upward = true,
     stop = vim.uv.cwd(),
@@ -32,7 +32,7 @@ local function swift_test_pkg()
     return
   end
 
-  --- 判断 class 是否为 class .*: XCTestCase
+  -- 判断 class 是否为 class .*: XCTestCase
   local lcontent = vim.api.nvim_get_current_line()  -- 获取当前行内容
   local test_class = lcontent:match("class%s+([%w_]+)%s*:%s*[%w_]+TestCase")
   if not test_class then
@@ -45,8 +45,8 @@ local function swift_test_pkg()
   t:run({ "swift", "test", "--filter ", test_class })
 end
 
---- key mapping ------------------------------------------------------------------------------------
---- run current_file ---
+-- key mapping ------------------------------------------------------------------------------------
+-- run current_file --
 local opt = { buffer = 0 }
 
 local swift_keymaps = {
