@@ -1,12 +1,12 @@
---- save file prompt
+-- save file prompt
 
 local M = {}
 
---- save buffer to file
+-- save buffer to file
 M.save = function()
   local fname = vim.api.nvim_buf_get_name(0)
   if fname == '' then
-    --- file not exist, prompt filename
+    -- file not exist, prompt filename
     local prompt = "save to filename: "
     vim.ui.input({ prompt = prompt }, function(filename)
       if not filename or filename == '' then

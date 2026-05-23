@@ -21,7 +21,7 @@ local M = {
   close_other_bufs = close_buf.delete_all_other_buffers,
   toggle_comments_color = toggle_comment.toggle_comment_color,
 
-  --- set & register keymap
+  -- set & register keymap
   set = set.keymap_set_and_register,
 }
 

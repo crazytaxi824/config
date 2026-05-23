@@ -1,25 +1,25 @@
---- [[, ]], jump to previous/next section
+-- [[, ]], jump to previous/next section
 
 local M = {}
 
 ---@return TSNode|nil
 local function find_ts_root_node()
-  --- vim.treesitter.get_parser(bufnr, lang)
-  --- "bufnr", 0 current buffer
-  --- "lang", default filetype.
+  -- vim.treesitter.get_parser(bufnr, lang)
+  -- "bufnr", 0 current buffer
+  -- "lang", default filetype.
   local tsparser = vim.treesitter.get_parser()
   if not tsparser then
     error("treesitter parser is missing")
   end
 
-  --- tsparser:parse() return a {table} of immutable trees
+  -- tsparser:parse() return a {table} of immutable trees
   local tstree = tsparser:parse()[1]
   if tstree then
     return tstree:root()
   end
 end
 
---- 只返回 root's Children Nodes
+-- 只返回 root's Children Nodes
 ---@return TSNode[]|nil
 local function ts_root_children()
   local root = find_ts_root_node()
@@ -43,7 +43,7 @@ local function ts_root_children()
   end
 end
 
---- 当前 cursor 所在 root's Child Node
+-- 当前 cursor 所在 root's Child Node
 ---@param root_children TSNode[]
 ---@return { index: integer, cursor_lnum: integer, node_start_lnum: integer }
 local function current_node(root_children)
@@ -69,7 +69,7 @@ local function current_node(root_children)
   }
 end
 
---- jump_to_prev_section
+-- jump_to_prev_section
 M.goto_prev = function()
   local root_children = ts_root_children()
   if not root_children then
@@ -89,7 +89,7 @@ M.goto_prev = function()
   end
 end
 
---- jump_to_next_section
+-- jump_to_next_section
 M.goto_next = function()
   local root_children = ts_root_children()
   if not root_children then

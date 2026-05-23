@@ -1,4 +1,4 @@
---- close all terminals' window; stop all terminals' job; wipeout all terminals' buffer.
+-- close all terminals' window; stop all terminals' job; wipeout all terminals' buffer.
 
 local M = {}
 

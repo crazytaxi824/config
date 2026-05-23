@@ -1,14 +1,14 @@
---- 获取 visual selected word.
+-- 获取 visual selected word.
 
 local M = {}
 
---- 获取 visual selected string
----
+-- 获取 visual selected string
+--
 ---@param trim boolean|nil (trim spaces)
 ---@return string|nil selected_str
 M.visual_selected = function(trim)
-  --- NOTE: getpos("'<") 和 getpos("'>") 必须在 normal 模式执行,
-  --- 即: <C-c> 从 visual mode 退出后再执行以下函数.
+  -- NOTE: getpos("'<") 和 getpos("'>") 必须在 normal 模式执行,
+  -- 即: <C-c> 从 visual mode 退出后再执行以下函数.
   local startpos = vim.fn.getpos("'<")  -- [bufnum, lnum, col, off]
   local endpos = vim.fn.getpos("'>")
 
@@ -19,13 +19,13 @@ M.visual_selected = function(trim)
 
   local v_selected = ''
   if startpos[2] == endpos[2] then
-    --- same line
+    -- same line
     v_selected = string.sub(vim.fn.getline("'<"), startpos[3], endpos[3])
     if trim then
       v_selected = vim.trim(v_selected)
     end
   else
-    --- multi-lines
+    -- multi-lines
     lines[1] = string.sub(lines[1], startpos[3])
     lines[#lines] = string.sub(lines[#lines], 0, endpos[3])
 
