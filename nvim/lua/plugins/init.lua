@@ -1,10 +1,10 @@
---- lazy 主要是一个 安装/管理插件. `:help lazy.nvim.txt`
---- bootstrap -------------------------------------------------------------------------------------- {{{
---- `:help lazy.nvim-🛠️-installation`
+-- lazy 主要是一个 安装/管理插件. `:help lazy.nvim.txt`
+-- bootstrap --------------------------------------------------------------------------------------- {{{
+-- `:help lazy.nvim-🛠️-installation`
 local lazydir = vim.fn.stdpath("data") .. "/lazy"
 local lazypath = lazydir .. "/lazy.nvim"
 
---- 以下代码直接使用的 `:help lazy.nvim-🛠️-installation-structured-setup` 文档中的代码
+-- 以下代码直接使用的 `:help lazy.nvim-🛠️-installation-structured-setup` 文档中的代码
 local lazyrepo = "https://github.com/folke/lazy.nvim.git"
 if not vim.uv.fs_stat(lazypath) then
   local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
@@ -18,25 +18,25 @@ if not vim.uv.fs_stat(lazypath) then
   end
 end
 vim.opt.rtp:prepend(lazypath)
---- }}}
+-- }}}
 
---- `nvim dir` 打开文件夹时直接加载 nvim-tree.lua, `nvim file` 打开 file 时不加载 nvim-tree.lua, 通过快捷键加载.
+-- `nvim dir` 打开文件夹时直接加载 nvim-tree.lua, `nvim file` 打开 file 时不加载 nvim-tree.lua, 通过快捷键加载.
 local isfile = true
 local finfo = vim.uv.fs_stat(vim.api.nvim_buf_get_name(0))
 if finfo and finfo.type == 'directory' then
   isfile = false
 end
 
---- `:help lazy.nvim`
---- https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/editor.lua
---- 如果插件被 require(xxx) or pcall(require, xxx) 会马上加载.
+-- `:help lazy.nvim`
+-- https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/editor.lua
+-- 如果插件被 require(xxx) or pcall(require, xxx) 会马上加载.
 local plugins = {
   {
     "folke/lazy.nvim",
     version = "*",
   },
 
-  --- Performence & Functions ----------------------------------------------------------------------
+  -- Performence & Functions -----------------------------------------------------------------------
   {
     "nvim-lua/plenary.nvim",
     commit = "74b06c6",
@@ -49,8 +49,8 @@ local plugins = {
     -- build = ":MasonUpdate", -- :MasonUpdate updates All Registries, NOT packages.
     config = function() require("plugins.settings.mason_tool_installer") end,
 
-    --- VVI: 需要在 $PATH 或者 vim.env.PATH 中加入 mason.setup({ "install_root_dir" }) 路径,
-    --- 否则不能延迟加载 mason, 需要设置下面的 priority.
+    -- VVI: 需要在 $PATH 或者 vim.env.PATH 中加入 mason.setup({ "install_root_dir" }) 路径,
+    -- 否则不能延迟加载 mason, 需要设置下面的 priority.
     priority = 999,
   },
 
@@ -70,19 +70,19 @@ local plugins = {
     event = "VeryLazy",
   },
 
-  --- Treesitter -----------------------------------------------------------------------------------
-  --- Commands for "nvim-treesitter/nvim-treesitter" --------------------------- {{{
-  --- `:help nvim-treesitter-commands`
-  --- `:TSInstallInfo`        -- List all installed languages
-  --- `:TSInstall {lang}`     -- Install languages
-  --- `:TSUninstall {lang}`   -- Uninstall languages
-  --- `:TSUpdate`             -- Update the installed languages
-  --- `:TSUpdateSync`         -- Update the installed languages synchronously
-  --- }}}
-  --- DOCS: https://github.com/nvim-treesitter/nvim-treesitter#adding-queries
-  --- All queries found in the runtime directories will be combined.
-  --- By convention, if you want to write a query, use the `queries/` directory,
-  --- but if you want to extend a query use the `after/queries/` directory.
+  -- Treesitter ------------------------------------------------------------------------------------
+  -- Commands for "nvim-treesitter/nvim-treesitter" ---------------------------- {{{
+  -- `:help nvim-treesitter-commands`
+  -- `:TSInstallInfo`        -- List all installed languages
+  -- `:TSInstall {lang}`     -- Install languages
+  -- `:TSUninstall {lang}`   -- Uninstall languages
+  -- `:TSUpdate`             -- Update the installed languages
+  -- `:TSUpdateSync`         -- Update the installed languages synchronously
+  -- }}}
+  -- DOCS: https://github.com/nvim-treesitter/nvim-treesitter#adding-queries
+  -- All queries found in the runtime directories will be combined.
+  -- By convention, if you want to write a query, use the `queries/` directory,
+  -- but if you want to extend a query use the `after/queries/` directory.
   {
     "nvim-treesitter/nvim-treesitter",
     branch = "main",  -- NOTE: 'master' branch is locked for backward compatibility.
@@ -91,7 +91,7 @@ local plugins = {
     lazy = false,
   },
 
-  --- 第一方 module 插件 ---
+  -- 第一方 module 插件 --
   {
     "nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
     config = function() require("plugins.settings.treesitter_ctx") end,
@@ -99,7 +99,7 @@ local plugins = {
     event = "VeryLazy",
   },
 
-  --- 第三方 plugin 需要用到 tree-sitter ---
+  -- 第三方 plugin 需要用到 tree-sitter --
   {
     "windwp/nvim-ts-autotag",  -- auto close tag <div></div>
     commit = "88c1453",
@@ -116,14 +116,14 @@ local plugins = {
     event = "VeryLazy",
   },
 
-  --- Auto Completion ------------------------------------------------------------------------------
+  -- Auto Completion -------------------------------------------------------------------------------
   {
     "hrsh7th/nvim-cmp",
     commit = "a1d5048",
     config = function() require("plugins.settings.cmp_completion") end,
     dependencies = {
-      --- VVI: 只有 "cmp-nvim-lsp" 不需要在 "nvim-cmp" 之后加载, 其他 module 都需要在 "nvim-cmp" 之后再加载, 否则报错.
-      --- cmp-buffer, cmp-path, cmp-cmdline 加载时会自动 require("nvim-cmp"), 导致 nvim-cmp 提前加载.
+      -- VVI: 只有 "cmp-nvim-lsp" 不需要在 "nvim-cmp" 之后加载, 其他 module 都需要在 "nvim-cmp" 之后再加载, 否则报错.
+      -- cmp-buffer, cmp-path, cmp-cmdline 加载时会自动 require("nvim-cmp"), 导致 nvim-cmp 提前加载.
       "hrsh7th/cmp-nvim-lsp",  -- lsp 提供的代码补全
       "hrsh7th/cmp-buffer",  -- 当前 buffer 中有的 word
       "hrsh7th/cmp-path",  -- filepath 补全
@@ -135,7 +135,7 @@ local plugins = {
     event = { "InsertEnter", "CmdlineEnter" },
   },
 
-  --- 以下是 "nvim-cmp" 的 module 插件, 在 nvim-cmp.setup() 中启用的插件.
+  -- 以下是 "nvim-cmp" 的 module 插件, 在 nvim-cmp.setup() 中启用的插件.
   {
     "hrsh7th/cmp-nvim-lsp",  -- LSP source for nvim-cmp
     commit = "cbc7b02",
@@ -175,8 +175,8 @@ local plugins = {
   {
     "L3MON4D3/LuaSnip", -- snippet engine, for "cmp_luasnip", 会创建几个 [Scratch] buffer
     version = "v2.*",
-    --- for placeholder transformation
-    --- https://code.visualstudio.com/docs/editor/userdefinedsnippets#_variable-transforms
+    -- for placeholder transformation
+    -- https://code.visualstudio.com/docs/editor/userdefinedsnippets#_variable-transforms
     build = "make install_jsregexp",
     config = function() require("plugins.settings.luasnip_snippets") end,
     dependencies = {"rafamadriz/friendly-snippets"},  -- snippets content
@@ -199,8 +199,8 @@ local plugins = {
     event = "InsertEnter",
   },
 
-  --- LSP ------------------------------------------------------------------------------------------
-  --- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
+  -- LSP -------------------------------------------------------------------------------------------
+  -- lspconfig && null-ls 两个插件是互相独立的 LSP client, 没有依赖关系.
   {
     "neovim/nvim-lspconfig",  -- 官方 LSP 引擎
     -- commit = "d88ae66",
@@ -210,7 +210,7 @@ local plugins = {
     },
   },
 
-  --- "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
+  -- "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
     commit = "f9d557a",
@@ -229,7 +229,7 @@ local plugins = {
     cmd = {"Format", "ToggleAutoFormat"}
   },
 
-  --- File explorer --------------------------------------------------------------------------------
+  -- File explorer ---------------------------------------------------------------------------------
   {
     "nvim-tree/nvim-tree.lua",
     version = "v1.*",
@@ -243,8 +243,8 @@ local plugins = {
       {'<S-Tab>', '<cmd>NvimTreeFindFile!<CR>', desc='filetree: jump to file' },
     },
 
-    --- `nvim dir` 打开文件夹时直接加载 nvim-tree.lua,
-    --- `nvim file` 打开 file 时不加载 nvim-tree.lua, 通过快捷键加载.
+    -- `nvim dir` 打开文件夹时直接加载 nvim-tree.lua,
+    -- `nvim file` 打开 file 时不加载 nvim-tree.lua, 通过快捷键加载.
     lazy = isfile,
   },
 
@@ -253,7 +253,7 @@ local plugins = {
     lazy = true, -- dep of nvim-tree & bufferline
   },
 
-  --- Buffer & Status Line -------------------------------------------------------------------------
+  -- Buffer & Status Line --------------------------------------------------------------------------
   -- {
   --   "akinsho/bufferline.nvim",  -- `:help 'tabline'`
   --   tag = "v4.9.1",
@@ -271,7 +271,7 @@ local plugins = {
     event = "VeryLazy",
   },
 
-  --- Debug tools 安装 -----------------------------------------------------------------------------
+  -- Debug tools 安装 ------------------------------------------------------------------------------
   {
     "mfussenegger/nvim-dap",  -- core debug tool
     commit = "5317715",
@@ -302,9 +302,9 @@ local plugins = {
     lazy = true,  -- nvim-dap config 文件中 require dapui.
   },
 
-  --- Useful Tools ---------------------------------------------------------------------------------
-  --- 依赖 rg fd, 但不依赖 fzf. 没有 fzf 命令行工具也可以运行.
-  --- telescope 的 preview syntax 默认使用的是 treesitter, 如果没有 treesitter 则使用 vim syntax highlights.
+  -- Useful Tools ----------------------------------------------------------------------------------
+  -- 依赖 rg fd, 但不依赖 fzf. 没有 fzf 命令行工具也可以运行.
+  -- telescope 的 preview syntax 默认使用的是 treesitter, 如果没有 treesitter 则使用 vim syntax highlights.
   {
     "nvim-telescope/telescope.nvim",
     version = "v0.2.*",  -- master branch is nightly version.
@@ -333,26 +333,26 @@ local plugins = {
     lazy = true,  -- telescope 加载时自动加载.
   },
 
-  --- Git
-  --- NOTE: gitsigns 会检查 "trouble.nvim" 是否安装, 如果有安装则:
-  --- `:Gitsigns setqflist/seqloclist` will open Trouble instead of quickfix or location list windows.
-  --- https://github.com/lewis6991/gitsigns.nvim#troublenvim
+  -- Git
+  -- NOTE: gitsigns 会检查 "trouble.nvim" 是否安装, 如果有安装则:
+  -- `:Gitsigns setqflist/seqloclist` will open Trouble instead of quickfix or location list windows.
+  -- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {
     "lewis6991/gitsigns.nvim",
     version = "v2.*",
     config = function() require("plugins.settings.git_signs") end,
     dependencies = { "folke/trouble.nvim" },
 
-    --- `nvim dir` 启动时直接打开 dir 时可能会造成 gitsigns 报错.
-    --- 根据测试情况选择 VeryLazy 或者 BufReadPre, BufNewFile ...
+    -- `nvim dir` 启动时直接打开 dir 时可能会造成 gitsigns 报错.
+    -- 根据测试情况选择 VeryLazy 或者 BufReadPre, BufNewFile ...
     event = "VeryLazy",
   },
 
-  --- markdown, VVI: 安装 preview 插件后需要一段时间来执行 vim.fn["mkdp#util#install"]() 如果无法运行可以重装该插件.
+  -- markdown, VVI: 安装 preview 插件后需要一段时间来执行 vim.fn["mkdp#util#install"]() 如果无法运行可以重装该插件.
   {
     "iamcco/markdown-preview.nvim",
     commit = "a923f5f",
-    --- VVI: 每次 Update 后需要重新执行 `lua vim.fn["mkdp#util#install"]()` or `call mkdp#util#install()`
+    -- VVI: 每次 Update 后需要重新执行 `lua vim.fn["mkdp#util#install"]()` or `call mkdp#util#install()`
     build = function() vim.fn["mkdp#util#install"]() end,
     config = function()
       local css_path = vim.fn.stdpath("config") .. "/lua/plugins/settings/my_markdown.css"
@@ -361,7 +361,7 @@ local plugins = {
       end
     end,
 
-    --- NOTE: 无法使用 cmd = { "MarkdownPreview", "MarkdownPreviewStop", "MarkdownPreviewToggle" }, 作为加载条件.
+    -- NOTE: 无法使用 cmd = { "MarkdownPreview", "MarkdownPreviewStop", "MarkdownPreviewToggle" }, 作为加载条件.
     ft = {"markdown"},  -- markdown-preview 加载时间 < 1ms
   },
 
@@ -373,16 +373,16 @@ local plugins = {
     event = "VeryLazy",
   },
 
-  --- AI ----------------------------------------------------------------------- {{{
-  --- https://docs.github.com/en/copilot/getting-started-with-github-copilot
+  -- AI ------------------------------------------------------------------------ {{{
+  -- https://docs.github.com/en/copilot/getting-started-with-github-copilot
   -- {
   --   "github/copilot.vim",
-  --   config = function()  --- {{{
-  --     --- VVI: `:help g:copilot_node_command`, using node@18 or above.
-  --     --- 安装指定的 nodejs 版本. `brew install node@20`
+  --   config = function()  -- {{{
+  --     -- VVI: `:help g:copilot_node_command`, using node@18 or above.
+  --     -- 安装指定的 nodejs 版本. `brew install node@20`
   --     local node_path = "/opt/homebrew/opt/node@20/bin/node"
   --
-  --     --- check node cmd existence
+  --     -- check node cmd existence
   --     if not vim.uv.fs_stat(node_path) then
   --       Notify({"'" .. node_path .. "' is NOT Exist."}, "WARN", {title = "github/copilot", timeout = false})
   --       return
@@ -395,7 +395,7 @@ local plugins = {
   --   cmd = { "Copilot" },  -- `:Copilot setup`, `:Copilot enable`, `:help copilot` 查看可用命令.
   -- },
 
-  --- https://github.com/jellydn/lazy-nvim-ide/blob/main/lua/plugins/extras/copilot-chat-v2.lua
+  -- https://github.com/jellydn/lazy-nvim-ide/blob/main/lua/plugins/extras/copilot-chat-v2.lua
   -- {
   --   "CopilotC-Nvim/CopilotChat.nvim",
   --   -- tag = "v4.3.1",
@@ -409,9 +409,9 @@ local plugins = {
   --
   --   cmd = { "CopilotChat" },
   -- },
-  --- }}}
+  -- }}}
 
-  --- recommanded plugins ------------------------------------------------------ {{{
+  -- recommanded plugins ------------------------------------------------------- {{{
   -- {
   --   "ibhagwan/fzf-lua",
   --   dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -422,7 +422,7 @@ local plugins = {
   --         -- ["--header"] = "ABC",
   --       },
   --     })
-  --     --- change default UI `:help vim.ui.select`
+  --     -- change default UI `:help vim.ui.select`
   --     require('fzf-lua').register_ui_select()
   --   end,
   -- },
@@ -438,10 +438,10 @@ local plugins = {
   --{"ahmedkhalf/project.nvim"},  -- project manager
 
   --{"p00f/nvim-ts-rainbow"},  -- rainbow 括号颜色, treesitter 插件. NOTE: 严重拖慢文件打开速度.
-  --- }}}
+  -- }}}
 }
 
---- lazy.nvim settings
+-- lazy.nvim settings
 local lazy = require('lazy')
 local opts = {
   root = lazydir, -- directory where plugins will be installed
@@ -464,7 +464,7 @@ local opts = {
   },
 }
 
---- NOTE: 用于批量检查 plugins 升级
+-- NOTE: 用于批量检查 plugins 升级
 -- for _, p in ipairs(plugins) do
 --   p.commit = nil
 --   p.tag, p.version = nil, nil
