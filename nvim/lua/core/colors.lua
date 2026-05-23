@@ -202,7 +202,7 @@ Highlights = {
   Identifier = { link = "Normal" },
   -- 常量颜色. eg: const <Constant> = "foo"
   Constant= { ctermfg=Colors.blue.c, fg=Colors.blue.g },
-  --Structure = {link = "Type"},  -- 默认 link to Type
+  --Structure = { link = "Type" },  -- 默认 link to Type
 
   -- if, switch, case ...
   Conditional = { ctermfg=Colors.magenta.c, fg=Colors.magenta.g },
