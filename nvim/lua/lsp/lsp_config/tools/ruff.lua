@@ -17,5 +17,22 @@ return {
       "WARN",
       { title={"LSP", "ruff.lua"}, timeout=3 }
     )
-  end
+  end,
+
+  -- https://docs.astral.sh/ruff/editors/setup/#neovim
+  -- https://docs.astral.sh/ruff/editors/settings/#configuration
+  -- NOTE: 必须放在 init_options 中
+  init_options = {
+    settings = {
+      -- https://docs.astral.sh/ruff/configuration/
+      -- 以下设置也可以放在 pyproject.toml [tool.ruff] 中
+      configuration = {
+        ["line-length"] = 79,
+        lint = {
+          -- https://docs.astral.sh/ruff/rules/#rules
+          ["extend-select"] = {"E501"},  -- add "line too long"
+        },
+      },
+    },
+  },
 }
