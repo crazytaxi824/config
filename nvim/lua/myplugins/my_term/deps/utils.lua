@@ -1,7 +1,7 @@
 local M = {}
 
---- 自动滚动页面到底部
----
+-- 自动滚动页面到底部
+--
 ---@param term MyTerm
 ---@param term_bufnr integer
 function M.buf_scroll_bottom(term, term_bufnr)

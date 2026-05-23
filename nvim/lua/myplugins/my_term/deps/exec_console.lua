@@ -1,6 +1,6 @@
 local utils = require('myplugins.my_term.deps.utils')
 
---- BUG: set buftype='prompt' bug. go to last line & last char, then 'dd' delete whole line.
+-- BUG: set buftype='prompt' bug. go to last line & last char, then 'dd' delete whole line.
 -- function T()
 --   local buf = vim.api.nvim_create_buf(false, true)
 --   local curr_win = vim.api.nvim_get_current_win()
@@ -12,10 +12,10 @@ local utils = require('myplugins.my_term.deps.utils')
 
 local M = {}
 
---- namespace
+-- namespace
 local ns = vim.api.nvim_create_namespace('my_term_output')
 
---- highlight
+-- highlight
 vim.api.nvim_set_hl(0, "my_output_sys", {ctermfg=Colors.orange.c, fg=Colors.orange.g})
 vim.api.nvim_set_hl(0, "my_output_sys_error", {
   ctermfg=Colors.black.c, fg=Colors.black.g,
@@ -31,7 +31,7 @@ vim.api.nvim_set_hl(0, "my_output_eof", {ctermfg=Colors.g238.c, fg=Colors.g238.g
 ---@param hl string  -- highlight name `vim.hl.range()`
 ---@param write_to_lastline? boolean  -- 从最后一行的最后一个 col 开始 write data, 否则 write to next line
 local function buf_append_data(bufnr, data, hl, write_to_lastline)
-  --- 保险起见
+  -- 保险起见
   -- if #data == 0 then return end
   if vim.api.nvim_get_current_buf() == bufnr then
     vim.cmd.stopinsert()
@@ -44,28 +44,28 @@ local function buf_append_data(bufnr, data, hl, write_to_lastline)
   local last_col = string.len(last_line) -- 获取最后一行内容的的长度, vim.hl.range() 0-based byte index
 
   if write_to_lastline then
-    --- 从最后一行的最后一个 col 开始写
+    -- 从最后一行的最后一个 col 开始写
     vim.api.nvim_buf_set_text(bufnr, -1, -1, -1, -1, data)
 
-    --- highlight
+    -- highlight
     local start_lnum = last_lnum - 1  -- 0-based index
     local end_lnum = start_lnum + #data - 1  -- 从第 2 行开始写, 写 3 行应该是到第 5 行最后结束
     vim.hl.range(bufnr, ns, hl, { start_lnum, last_col }, { end_lnum, -1 })
   else
-    --- 从最后一行的下一行开始写
+    -- 从最后一行的下一行开始写
     vim.api.nvim_buf_set_lines(bufnr, -1, -1, false, data)
 
-    --- highlight
+    -- highlight
     local start_lnum = last_lnum  -- 从最后一行的下一行开始 highlight
     local end_lnum = start_lnum + #data - 1  -- 从第 2 行开始写, 写 3 行应该是到第 5 行最后结束
     vim.hl.range(bufnr, ns, hl, { start_lnum, 0 }, { end_lnum, -1 })
   end
 
-  --- workaround: 在 prompt buffer 中 nvim_buf_set_lines() 的 data 都会被认为是 prompt 输入
+  -- workaround: 在 prompt buffer 中 nvim_buf_set_lines() 的 data 都会被认为是 prompt 输入
   vim.bo[bufnr].buftype = 'prompt'
 end
 
---- 设置 prompt buffer options
+-- 设置 prompt buffer options
 local function set_prompt_buffer_opts(bufnr)
   vim.fn.prompt_setprompt(bufnr, "console > ")
   vim.fn.prompt_setcallback(bufnr, function(input)
@@ -85,16 +85,16 @@ end
 ---@param write_to_lastline? boolean  -- 从最后一行的最后一个 col 开始 write data, 否则 write to next line
 ---@return boolean  -- incomplete data
 local function set_buf_line_output(bufnr, data, hl, write_to_lastline)
-  --- 检查 buffer 是否存在, 避免 on_stdout, on_stderr, on_exit 异步执行完成后, buffer 已被销毁
+  -- 检查 buffer 是否存在, 避免 on_stdout, on_stderr, on_exit 异步执行完成后, buffer 已被销毁
   if not vim.api.nvim_buf_is_valid(bufnr) or not data then
     return false
   end
 
-  --- VVI: `:help channel-callback`, `:help channel-lines`, 中说明: EOF is a single-item list: `['']`.
-  --- 如果 data 为: { "foo", "bar" }, 说明本行未结束, 需要在本行后面继续写入以后的内容. eg: fmt.Print()
-  --- 如果 data 为: { "foo", "bar", "" }, 说明本行已结束, 需要换行写入以后的内容.  eg: fmt.Println()
-  --- 如果 data 为: { "" }, 说明整个输出结束. stdout, stderr 会分别输出一个 {""} 表示结束.
-  ---
+  -- VVI: `:help channel-callback`, `:help channel-lines`, 中说明: EOF is a single-item list: `['']`.
+  -- 如果 data 为: { "foo", "bar" }, 说明本行未结束, 需要在本行后面继续写入以后的内容. eg: fmt.Print()
+  -- 如果 data 为: { "foo", "bar", "" }, 说明本行已结束, 需要换行写入以后的内容.  eg: fmt.Println()
+  -- 如果 data 为: { "" }, 说明整个输出结束. stdout, stderr 会分别输出一个 {""} 表示结束.
+  --
   ---@type boolean
   local next_incomplete
 
@@ -105,11 +105,11 @@ local function set_buf_line_output(bufnr, data, hl, write_to_lastline)
     next_incomplete = true
   end
 
-  --- 如果这里的 data 为 {} 空 list, 说明 stdout/stderr 已经完全结束了
+  -- 如果这里的 data 为 {} 空 list, 说明 stdout/stderr 已经完全结束了
   if #data > 0 then
-    --- VVI: deal with NUL bytes, replace 所有的 '\n'.
-    --- lua print('\0', '\x00', string.char(0)), log.Println(string(byte(0))) 是 <null> bytes.
-    --- byte(0) 本应该是 '\null' 但是只显示了第一个字符变成了 '\n', 导致 nvim_buf_set_lines() 以为是换行符而报错.
+    -- VVI: deal with NUL bytes, replace 所有的 '\n'.
+    -- lua print('\0', '\x00', string.char(0)), log.Println(string(byte(0))) 是 <null> bytes.
+    -- byte(0) 本应该是 '\null' 但是只显示了第一个字符变成了 '\n', 导致 nvim_buf_set_lines() 以为是换行符而报错.
     for i = 1, #data do
       data[i] = data[i]:gsub('\n', string.char(0))
     end
@@ -120,8 +120,8 @@ local function set_buf_line_output(bufnr, data, hl, write_to_lastline)
   return next_incomplete
 end
 
---- job done 后处理: 在最后一行显示 [Process exited 'exit_code']
----
+-- job done 后处理: 在最后一行显示 [Process exited 'exit_code']
+--
 ---@param bufnr integer
 ---@param exit_code integer
 local function set_buf_line_exit(bufnr, exit_code)
@@ -137,8 +137,8 @@ local function set_buf_line_exit(bufnr, exit_code)
   end
 end
 
---- print cmd, job info
----
+-- print cmd, job info
+--
 ---@param cmd string|string[]
 ---@param term_bufnr integer
 ---@param job_id integer
@@ -154,16 +154,16 @@ local function print_job_info(cmd, term_bufnr, job_id)
     error("term.cmd is not string|string[]")
   end
 
-  --- process, job info
+  -- process, job info
   local job_info = "[Process: " .. vim.fn.jobpid(job_id) .. " (job: " .. job_id .. ") starts]"
   table.insert(data, job_info)
 
-  --- highlight
+  -- highlight
   buf_append_data(term_bufnr, data, "my_output_sys", true)
 end
 
---- 强制结束 job
----
+-- 强制结束 job
+--
 ---@param bufnr integer
 ---@param job_id integer
 local function stop_job(bufnr, job_id)
@@ -172,8 +172,8 @@ local function stop_job(bufnr, job_id)
   end
 end
 
---- CTRL-C send interrupt signal to output-buffer ONLY. terminal already has this.
----
+-- CTRL-C send interrupt signal to output-buffer ONLY. terminal already has this.
+--
 ---@param term_bufnr integer
 ---@param job_id integer
 local function set_console_keymaps(term_bufnr, job_id)
@@ -191,9 +191,9 @@ local function set_console_keymaps(term_bufnr, job_id)
   require('utils.keymaps').set(keys)
 end
 
---- 后台执行 jobstart(cmd), 将 output 手动写入 buffer. (buftype = 'nofile')
---- 主要区别是 `:help jobstart-options` { term = nil|false } 在后台运行, 结果需要手动输出.
----
+-- 后台执行 jobstart(cmd), 将 output 手动写入 buffer. (buftype = 'nofile')
+-- 主要区别是 `:help jobstart-options` { term = nil|false } 在后台运行, 结果需要手动输出.
+--
 ---@param cmd string|string[]
 ---@param term MyTerm
 ---@param term_bufnr integer
@@ -204,23 +204,23 @@ function M.console_exec(cmd, term, term_bufnr, term_win_id)
     error("MyTerm win_id and bufnr do not match")
   end
 
-  --- set bufname
-  --- VVI: bufname 如果是 term://xxx 则在 bdelete 之后会被锁定为 nomodifiable
+  -- set bufname
+  -- VVI: bufname 如果是 term://xxx 则在 bdelete 之后会被锁定为 nomodifiable
   vim.api.nvim_buf_set_name(term_bufnr, "console://console#" .. term.id)
 
-  --- prompt buffer opts
+  -- prompt buffer opts
   set_prompt_buffer_opts(term_bufnr)
 
-  --- setlocal win-local opts
+  -- setlocal win-local opts
   local opts = { scope='local', win=term_win_id }
   vim.api.nvim_set_option_value('wrap', true, opts)
   vim.api.nvim_set_option_value('relativenumber', false, opts)
   vim.api.nvim_set_option_value('signcolumn', 'no', opts)
 
-  --- on_stderr, on_stdout 中的 data line 是否完整
+  -- on_stderr, on_stdout 中的 data line 是否完整
   local incomplete = false
 
-  --- jobstart()
+  -- jobstart()
   local job_id = vim.fn.jobstart(cmd, {
     cwd = term:cwd(),
     env = term:env(),
@@ -229,13 +229,13 @@ function M.console_exec(cmd, term, term_bufnr, term_win_id)
     ---@param data string[]  output
     ---@param event string  'stdout'
     on_stdout = function(job_id, data, event)  -- NOTE: for fmt.Println()
-      --- write output to buffer
+      -- write output to buffer
       incomplete = set_buf_line_output(term_bufnr, data, "my_output_stdout", incomplete)
 
-      --- auto_scroll option
+      -- auto_scroll option
       utils.buf_scroll_bottom(term, term_bufnr)
 
-      --- callback
+      -- callback
       local callbacks = term:on_stdout()
       if callbacks then
         for _, on_stdout in ipairs(callbacks) do
@@ -248,13 +248,13 @@ function M.console_exec(cmd, term, term_bufnr, term_win_id)
     ---@param data string[]  err_msg
     ---@param event string  'stderr'
     on_stderr = function(job_id, data, event)  -- NOTE: for log.Println()
-      --- write error to buffer
+      -- write error to buffer
       incomplete = set_buf_line_output(term_bufnr, data, "my_output_stderr", incomplete)
 
-      --- auto_scroll option
+      -- auto_scroll option
       utils.buf_scroll_bottom(term, term_bufnr)
 
-      --- callback
+      -- callback
       local callbacks = term:on_stderr()
       if callbacks then
         for _, on_stderr in ipairs(callbacks) do
@@ -267,13 +267,13 @@ function M.console_exec(cmd, term, term_bufnr, term_win_id)
     ---@param exit_code integer
     ---@param event string  'exit'
     on_exit = function(job_id, exit_code, event)
-      --- write [exit_code] to when job stopped
+      -- write [exit_code] to when job stopped
       set_buf_line_exit(term_bufnr, exit_code)
 
-      --- auto_scroll option
+      -- auto_scroll option
       utils.buf_scroll_bottom(term, term_bufnr)
 
-      --- callback
+      -- callback
       local callbacks = term:on_exit()
       if callbacks then
         for _, on_exit in ipairs(callbacks) do
@@ -287,11 +287,11 @@ function M.console_exec(cmd, term, term_bufnr, term_win_id)
     error("jobstart failed: " .. vim.inspect(cmd))
   end
 
-  --- print cmd, job info
-  --- vim.fn.jobstart() 是异步函数, 所以 print_job_info() 会在 on_stdout, on_stderr 之前执行.
+  -- print cmd, job info
+  -- vim.fn.jobstart() 是异步函数, 所以 print_job_info() 会在 on_stdout, on_stderr 之前执行.
   print_job_info(cmd, term_bufnr, job_id)
 
-  --- keymap
+  -- keymap
   set_console_keymaps(term_bufnr, job_id)
 
   return job_id

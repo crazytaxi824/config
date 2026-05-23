@@ -1,7 +1,7 @@
 local g = require('myplugins.my_term.deps.global')
 
---- close all other terms except term_id
----
+-- close all other terms except term_id
+--
 ---@param term_id integer
 local function close_others(term_id)
   if not g.get_TermPost(term_id) then
@@ -16,8 +16,8 @@ local function close_others(term_id)
   end)
 end
 
---- wipeout term
----
+-- wipeout term
+--
 ---@param term_id integer
 local function wipeout_term(term_id)
   local tp = g.get_TermPost(term_id)
@@ -34,8 +34,8 @@ local function wipeout_term(term_id)
   tp:wipeout()
 end
 
---- wipeout all other terms except term_id
----
+-- wipeout all other terms except term_id
+--
 ---@param term_id integer
 local function wipeout_others(term_id)
   local tp = g.get_TermPost(term_id)
@@ -58,11 +58,11 @@ local function wipeout_others(term_id)
 end
 
 
---- keymaps: for terminal buffer only --------------------------------------------------------------
+-- keymaps: for terminal buffer only --------------------------------------------------------------
 local M = {}
 
---- set keymaps for my_term terminal & output-buffer.
----
+-- set keymaps for my_term terminal & output-buffer.
+--
 ---@param term MyTerm
 ---@param term_bufnr integer
 function M.set_buf_keymaps(term, term_bufnr)

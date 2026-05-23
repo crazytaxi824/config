@@ -10,13 +10,13 @@ local default_opts = {
   auto_scroll = true,
   console_output = true,  -- 这里使用 console_exec()
   on_init = function(_, term_bufnr)
-    --- set highlight filepath & jump to filepath functions
+    -- set highlight filepath & jump to filepath functions
     fp.setup(term_bufnr)
   end,
 }
 
 
---- keymaps ----------------------------------------------------------------------------------------
+-- keymaps ----------------------------------------------------------------------------------------
 local opt = { silent = true }
 local my_term_keymaps = {
   {'n', '<D-F5>', function()
@@ -29,11 +29,11 @@ local my_term_keymaps = {
 require('utils.keymaps').set(my_term_keymaps)
 
 
---- execute terminals: run cmd
+-- execute terminals: run cmd
 local M = {}
 
---- reset console terminal callbacks
----
+-- reset console terminal callbacks
+--
 ---@return MyTerm
 M.console = function()
   return mt.new(console_id, default_opts, 'force')

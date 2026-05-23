@@ -2,14 +2,14 @@ local t_act = require('myplugins.my_term.term_actions')
 local shell_term = require("myplugins.my_term.instance_shell")
 
 
---- global keymaps ---------------------------------------------------------------------------------
+-- global keymaps ---------------------------------------------------------------------------------
 local M = {}
 
 
 function M.setup()
   local opt = { silent = true }
   local keymaps = {
-    --- NOTE: terminal key mapping 在其他 plugin 中也有设置.
+    -- NOTE: terminal key mapping 在其他 plugin 中也有设置.
     {'n', '<leader>tt', function() shell_term.open_shell_term() end, opt, "open/new Terminal #(1~999)"},
     {'n', '<leader>ta', function() t_act.toggle_all() end,  opt, "toggle All Terminals windows"},
     {'n', '<leader>tC', function() t_act.close_all() end,   opt, "close All Terminals windows"},

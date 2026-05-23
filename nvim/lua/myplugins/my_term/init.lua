@@ -4,7 +4,7 @@ local setup = require('myplugins.my_term.setup')
 
 local M = {}
 
---- return console terminal
+-- console terminal
 M.console = console.console
 
 M.setup = setup.setup

@@ -3,14 +3,14 @@ local g = require('myplugins.my_term.deps.global')
 
 local M = {}
 
---- close all my_term windows
+-- close all my_term windows
 function M.close_all()
   g.range_TermPost(function(term_post)
     term_post:close_win()
   end)
 end
 
---- open all terms which are cached in global_my_term_cache and bufnr is valid.
+-- open all terms which are cached in global_my_term_cache and bufnr is valid.
 function M.open_all()
   g.range_TermPost(function(term_post)
     if vim.fn.bufwinid(term_post.bufnr) < 0 then
@@ -19,7 +19,7 @@ function M.open_all()
   end)
 end
 
---- jobstop(job_id) & :bwipeout all terminal buffers
+-- jobstop(job_id) & :bwipeout all terminal buffers
 function M.wipeout_all()
   ---@type MyTermPost[]
   local tps = {}
@@ -32,9 +32,9 @@ function M.wipeout_all()
   end
 end
 
---- close all first, then open all
+-- close all first, then open all
 function M.toggle_all()
-  --- 获取所有的 my_term windows
+  -- 获取所有的 my_term windows
   local open_winid_list= {}
 
   g.range_TermPost(function(term_post)
@@ -45,7 +45,7 @@ function M.toggle_all()
     end
   end)
 
-  --- 如果有任何 my_term window 是打开的状态, 则全部关闭.
+  -- 如果有任何 my_term window 是打开的状态, 则全部关闭.
   if not vim.tbl_isempty(open_winid_list) then
     for _, win_id in ipairs(open_winid_list) do
       vim.api.nvim_win_close(win_id, true)
@@ -53,7 +53,7 @@ function M.toggle_all()
     return
   end
 
-  --- 如果所有 my_term window 都是关闭状态, 则 open_all()
+  -- 如果所有 my_term window 都是关闭状态, 则 open_all()
   M.open_all()
 end
 
