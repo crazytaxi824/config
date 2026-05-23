@@ -6,13 +6,13 @@ local M = {
   v_jump = fp_jump.v_jump_selected,
 }
 
---- 给 bufnr 设置 filepath highlight
----
+-- 给 bufnr 设置 filepath highlight
+--
 ---@param bufnr integer
 M.setup = function(bufnr)
   local g_id = vim.api.nvim_create_augroup('my_filepath_highlight_' .. bufnr, {clear=true})
 
-  --- autocmd highlight filepath under cursor
+  -- autocmd highlight filepath under cursor
   vim.api.nvim_create_autocmd({"CursorHold"}, {
     group = g_id,
     buffer = bufnr,
@@ -22,7 +22,7 @@ M.setup = function(bufnr)
     desc = "highlight filepath under cursor",
   })
 
-  --- clear highlight when cursor leave buffer.
+  -- clear highlight when cursor leave buffer.
   vim.api.nvim_create_autocmd({"BufLeave"}, {
     group = g_id,
     buffer = bufnr,
@@ -32,7 +32,7 @@ M.setup = function(bufnr)
     desc = "clear highlight when cursor leave buffer",
   })
 
-  --- set keymap jump to file/dir
+  -- set keymap jump to file/dir
   local opts = { buffer = bufnr, silent = true, desc = "filepath: Jump to file" }
   vim.keymap.set('n', '<S-CR>', function() fp_jump.n_jump_cWORD() end, opts)
 end
