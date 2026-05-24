@@ -17,11 +17,17 @@ local go_test = {'go', 'test', '-count=1', '-v'}
 
 -- `go tool cover` hook
 --
+---@param cmd string[]
 ---@param cover_out string (filepath)
 ---@param cover_html string (filepath)
 ---@return MyTermOnExit
-local function on_exit(cover_out, cover_html)
-  return function()
+local function on_exit(cmd, cover_out, cover_html)
+  return function(_, _, _, exit_code)
+    if exit_code ~= 0 then
+      vim.notify(string.format("cmd '%s' failed, on_exit() will not run", table.concat(cmd,' ')), vim.log.levels.ERROR)
+      return
+    end
+
     -- convert cover.out -> cover.html
     local result = vim.system({'go', 'tool', 'cover', '-html', cover_out, '-o', cover_html}, {text = true,}):wait()
     if result.code ~= 0 then
@@ -76,7 +82,7 @@ local M = {
         local cmd = vim.iter({go_test, '-coverprofile', cover_out, utils.mode_flags(opts)}):flatten():totable()
         return cmd, {
           cwd = opts.go_list.Root,
-          on_exit = on_exit(cover_out, cover_html),
+          on_exit = on_exit(cmd, cover_out, cover_html),
         }
       end
     },
