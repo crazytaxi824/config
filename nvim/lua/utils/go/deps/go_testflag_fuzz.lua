@@ -36,20 +36,13 @@ local M = {
       desc = 'Input fuzztime: 1h20m30s (duration) | 1000x (times)',
 
       term_opts = function(opts)
-        local fuzz_time  -- default value
-        vim.ui.input({prompt = 'Input -fuzztime (1h20m30s|1000x): '}, function(input)
-          if input then
-            fuzz_time = input
-          end
-        end)
-
-        -- input 如果取消, 则不继续运行 go_test(cmd, term_opts)
-        if not fuzz_time then
-          return nil, {}
+        -- VVI: 这里不能使用 vim.ui.input(), 因为是异步函数. vim.fn.input() 是同步函数.
+        local fuzz_time = vim.fn.input('Input -fuzztime (1h20m30s|1000x): ')
+        if fuzz_time == '' then
+          return nil, {}  -- cmd 为 nil, go_test() 不会执行
         end
 
-        ---@type string[]
-        local cmd = vim.iter({go_test, '-fuzztime', fuzz_time, utils.mode_flags(opts)}):flatten():totable()
+        local cmd = vim.iter({ go_test, '-fuzztime', fuzz_time, utils.mode_flags(opts) }):flatten():totable()
         return cmd, {
           cwd = opts.go_list.Root,
         }
