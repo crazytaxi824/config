@@ -16,7 +16,7 @@ local M = {}
 
 -- 生成函数的 test function, 需要获取 `<cword>` (光标在 interface 名上)
 function M.gotests_cmd_tool()
-  local fp = vim.fn.bufname()  -- current filepath
+  local fp = vim.api.nvim_buf_get_name(0)  -- current filepath
   local func = vim.fn.expand('<cword>')
 
   -- `gotests -w -only Foo /xxx/src/foo.go`

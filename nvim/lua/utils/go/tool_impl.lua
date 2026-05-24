@@ -45,6 +45,26 @@ local function get_iface_name_type(line)
   return name, ""
 end
 
+-- 向 buffer 的最后写入内容
+--
+---@param data string
+---@param bufnr? integer
+local function append_data(data, bufnr)
+  -- split string
+  local lines = vim.split(data, "\n", { trimempty=false })
+
+  -- 删除 data 最后的空行
+  while #lines > 0 and lines[#lines] == '' do
+    table.remove(lines, #lines)
+  end
+
+  -- 最前面插入一个空行
+  table.insert(lines, 1, "")
+
+  -- 从 -1 ~ -1 行, append lines
+  vim.api.nvim_buf_set_lines(bufnr or 0, -1, -1, false, lines)
+end
+
 
 local M = {}
 
@@ -85,15 +105,13 @@ function M.go_impl(params)
     error(result.stderr ~= '' and result.stderr or result.code)
   end
 
-  -- 删除 result 最后的空行.
-  local content = vim.split(result.stdout, '\n', {trimempty=true})
-  table.insert(content, 1, "")  -- 最前面插入一个空行
-
-  -- append 写入当前文件
-  vim.api.nvim_buf_set_lines(0, -1, -1, false, content)
+  -- 写入 data
+  append_data(result.stdout)
 
   -- ':normal! G'
-  vim.cmd.normal({ args = {'G'}, bang=true })
+  local last_line = vim.api.nvim_buf_line_count(0)
+  local curr_win = vim.api.nvim_get_current_win()
+  vim.api.nvim_win_set_cursor(curr_win, {last_line, 0})
 end
 
 return M

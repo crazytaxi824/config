@@ -46,6 +46,11 @@ local function rewrite_buffer(data, bufnr)
   -- split string
   local lines = vim.split(data, "\n", { trimempty=false })
 
+  -- 删除 data 最后的空行
+  while #lines > 0 and lines[#lines] == '' do
+    table.remove(lines, #lines)
+  end
+
   -- 从 0 ~ -1 行, 重写整个 buffer
   -- bufnr = 0, 表示当前 buffer
   vim.api.nvim_buf_set_lines(bufnr or 0, 0, -1, false, lines)
@@ -63,7 +68,12 @@ local M = {}
 ---@param offset? integer  vim.fn.line2byte(vim.fn.line('.'))
 function M.go_add_tags_and_opts(arglist, go_add_tags_cmd, offset)
   if vim.bo.readonly then
-    Notify("cannot add tags to readonly file","ERROR")
+    vim.notify("cannot add tags to readonly file", vim.log.levels.ERROR)
+    return
+  end
+
+  if vim.bo.modified then
+    vim.notify("current buffer is modified", vim.log.levels.WARN)
     return
   end
 
@@ -84,7 +94,7 @@ function M.go_add_tags_and_opts(arglist, go_add_tags_cmd, offset)
     return
   end
 
-  local fp = vim.fn.bufname()  -- current filepath
+  local fp = vim.api.nvim_buf_get_name(0)  -- current filepath
   if fp == "" then
     Notify("filepath/bufname is empty", "ERROR")
     return
@@ -141,6 +151,7 @@ function M.go_add_tags_and_opts(arglist, go_add_tags_cmd, offset)
     return
   end
 
+  ---@type string[]
   local sh_cmd = {
     "gomodifytags",
     "-file", fp,
@@ -173,7 +184,7 @@ function M.go_add_tags_and_opts(arglist, go_add_tags_cmd, offset)
   end
 
   -- 重写整个 buffer
-  rewrite_buffer(vim.trim(result.stdout))
+  rewrite_buffer(result.stdout)
 end
 -- }}}
 
