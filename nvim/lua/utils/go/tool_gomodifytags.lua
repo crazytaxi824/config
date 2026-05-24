@@ -96,7 +96,7 @@ function M.go_add_tags_and_opts(arglist, go_add_tags_cmd, offset)
 
   local fp = vim.api.nvim_buf_get_name(0)  -- current filepath
   if fp == "" then
-    Notify("filepath/bufname is empty", "ERROR")
+    Notify("filepath is empty", "ERROR")
     return
   end
 
@@ -202,6 +202,11 @@ function M.go_remove_tags(arglist, go_remove_tags_cmd, offset)
     return
   end
 
+  if vim.bo.modified then
+    vim.notify("current buffer is modified", vim.log.levels.WARN)
+    return
+  end
+
   if #arglist > 1 then
     Notify(
       {
@@ -215,9 +220,9 @@ function M.go_remove_tags(arglist, go_remove_tags_cmd, offset)
     return
   end
 
-  local fp = vim.fn.bufname()  -- current filepath
+  local fp = vim.api.nvim_buf_get_name(0)  -- current filepath
   if fp == "" then
-    Notify("filepath/bufname is empty", "ERROR")
+    Notify("filepath is empty", "ERROR")
     return
   end
 
@@ -251,7 +256,7 @@ function M.go_remove_tags(arglist, go_remove_tags_cmd, offset)
   end
 
   -- 重写整个 buffer
-  rewrite_buffer(vim.trim(result.stdout))
+  rewrite_buffer(result.stdout)
 end
 -- }}}
 
@@ -269,6 +274,11 @@ function M.go_remove_tags_opts(arglist, go_remove_tag_opts_cmd, offset)
     return
   end
 
+  if vim.bo.modified then
+    vim.notify("current buffer is modified", vim.log.levels.WARN)
+    return
+  end
+
   if #arglist > 1 then
     Notify(
       {
@@ -282,9 +292,9 @@ function M.go_remove_tags_opts(arglist, go_remove_tag_opts_cmd, offset)
     return
   end
 
-  local fp = vim.fn.bufname()  -- current filepath
+  local fp = vim.api.nvim_buf_get_name(0)  -- current filepath
   if fp == "" then
-    Notify("filepath/bufname is empty", "ERROR")
+    Notify("filepath is empty", "ERROR")
     return
   end
 
@@ -318,7 +328,7 @@ function M.go_remove_tags_opts(arglist, go_remove_tag_opts_cmd, offset)
   end
 
   -- 重写整个 buffer
-  rewrite_buffer(vim.trim(result.stdout))
+  rewrite_buffer(result.stdout)
 end
 -- }}}
 
