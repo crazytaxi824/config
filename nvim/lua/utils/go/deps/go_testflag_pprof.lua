@@ -131,7 +131,12 @@ local function on_exit(opts, dir)
   end
 
   -- VVI: return a callback function for jobstart(cmd, { on_exit = function(term) })
-  return function(_, bufnr)
+  return function(myterm, bufnr, job_id, exit_code)
+    if exit_code ~= 0 then
+      vim.notify(string.format("cmd '%s' failed, on_exit() will not run", table.concat(cmd,' ')), vim.log.levels.ERROR)
+      return
+    end
+
     -- run `go tool pprof/trace ...` in background
     local bg_job_id = job_exec(cmd, bufnr, opts.flag)
 
