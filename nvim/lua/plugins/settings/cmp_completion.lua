@@ -224,6 +224,12 @@ cmp.setup.cmdline({ '/', '?' }, {
   sources = {
     { name = 'buffer' }
   },
+  window = {
+    completion = {
+      col_offset = -1,  -- Offsets the completion window relative to the cursor
+      scrollbar = true,  -- true: 需要时显示 scrollbar; false: 永远不显示 scrollbar.
+    },
+  },
 })
 
 -- Use cmdline & path source for ':' (cmp.setup() 中 `native_menu` 必须为 false).
@@ -235,7 +241,17 @@ cmp.setup.cmdline(':', {
   }, {
     { name = 'cmdline' }
   }),
-  matching = { disallow_symbol_nonprefix_matching = false }
+  window = {
+    completion = {
+      col_offset = 1,  -- Offsets the completion window relative to the cursor
+      side_padding = 1,  -- left padding only
+      scrollbar = true,  -- true: 需要时显示 scrollbar; false: 永远不显示 scrollbar.
+    },
+  },
+  formatting = {
+    fields = { "abbr" },
+  },
+  matching = { disallow_symbol_nonprefix_matching = false },
 })
 
 -- Cmp completion menu color ----------------------------------------------------------------------- {{{
