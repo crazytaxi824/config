@@ -9,7 +9,6 @@
 --   4. 修改 floating window 的位置.
 
 local ms = vim.lsp.protocol.Methods
-local hover_ns = vim.api.nvim_create_namespace('nvim.lsp.hover_range')
 
 local M = {}
 
@@ -109,25 +108,6 @@ local function find_fn_call_before_cursor()
   end
 end
 
--- 创建 vim.lsp.buf_request_all(_, _, params, _) 中的 params
---
----@param fn_node table
----@return fun(client: vim.lsp.Client, bufnr: integer):table?
-local function client_positional_params(fn_node)
-  local win = vim.api.nvim_get_current_win()
-  return function(client)
-    -- 1. 修改 position 为 cursor position 前面的 func_position.
-    local ret = vim.lsp.util.make_position_params(win, client.offset_encoding)
-    ret = vim.tbl_deep_extend('force', ret, {
-      position = {
-        line = fn_node.lsp_req_pos_line,       -- line 从 0 开始计算.
-        character = fn_node.lsp_req_pos_char,  -- char 从 0 开始计算.
-      }
-    })
-    return ret
-  end
-end
-
 -- cache hover winid
 local hover_winid
 
@@ -137,52 +117,117 @@ function M.toggle_hover_short()
     vim.api.nvim_win_close(hover_winid, true)
     hover_winid = nil
   else
-    M.hover_short()
+    local fn_node = find_fn_call_before_cursor()
+    if not fn_node then  -- 如果 cursor 不在 'arguments' 内, 则结束.
+      return
+    end
+
+    -- NOTE: 修改 position 为 cursor position 前面的 func_position
+    local pos_params = {
+      position = {
+        line = fn_node.lsp_req_pos_line,       -- line 从 0 开始计算.
+        character = fn_node.lsp_req_pos_char,  -- char 从 0 开始计算.
+      }
+    }
+
+    -- NOTE: 生成 config, 修改 hover_short floating window 显示的位置
+    ---@type vim.lsp.buf.hover.Opts
+    local config = {
+      offset_x = fn_node.offset_x,
+      offset_y = fn_node.offset_y,
+      focusable = false,
+      border = Nerd_icons.border,
+      anchor_bias = 'above',
+      max_width = math.floor(vim.go.columns * 0.8),
+      close_events = { "WinScrolled" },
+      silent = true,  -- 有些 linter 类型的 lsp 不返回任何 result, 导致 handler 报错.
+    }
+
+    M.hover_short(config, pos_params)
   end
 end
 
 -- VVI: 以下代码大多从源代码中复制 ----------------------------------------------------------------
-
 -- 根据 https://github.com/neovim/neovim/blob/master/runtime/lua/vim/lsp/buf.lua 中 M.hover(config) 函数修改
---
--- 只获取 textDocument/hover 中 signature 部分
-function M.hover_short()
-  local fn_node = find_fn_call_before_cursor()
-  if not fn_node then  -- 如果 cursor 不在 'arguments' 内, 则结束.
-    return
+
+local api = vim.api
+local lsp = vim.lsp
+local validate = vim.validate
+
+--- @param params? table
+--- @return fun(client: vim.lsp.Client): lsp.TextDocumentPositionParams
+local function client_positional_params(params)
+  local win = api.nvim_get_current_win()
+  return function(client)
+    local ret = lsp.util.make_position_params(win, client.offset_encoding)
+    if params then
+      ret = vim.tbl_extend('force', ret, params)
+    end
+    return ret
+  end
+end
+
+local hover_ns = api.nvim_create_namespace('nvim.lsp.hover_range')
+
+--- Returns false if the LSP response is stale and should be discarded.
+--- @param ctx lsp.HandlerContext
+--- @return boolean
+local function ctx_is_valid(ctx)
+  local bufnr = ctx.bufnr
+  if
+    not bufnr
+    or not api.nvim_buf_is_valid(bufnr)
+    or api.nvim_get_current_buf() ~= bufnr
+    or vim.lsp.util.buf_versions[bufnr] ~= ctx.version
+  then
+    return false
+  end
+  ---@type lsp.Position?
+  local p = ctx.params and ctx.params.position
+  if not p then
+    return true
   end
 
-  -- 1. NOTE: 修改 hover_short floating window 显示的位置.
-  ---@type vim.lsp.buf.hover.Opts
-  local config = {
-    offset_x = fn_node.offset_x,
-    offset_y = fn_node.offset_y,
-    focusable = false,
-    border = Nerd_icons.border,
-    anchor_bias = 'above',
-    max_width = math.floor(vim.go.columns * 0.8),
-    close_events = {"WinScrolled"},
-    silent = true,  -- 有些 linter 类型的 lsp 不返回任何 result, 导致 handler 报错.
+  local c = lsp.get_client_by_id(ctx.client_id)
+  local enc = c and c.offset_encoding
+  if not enc then
+    return false
+  end
 
-    focus_id = ms.textDocument_hover  -- 'textDocument' request
-  }
+  -- >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  -- 不要检查 cursor postion
+  -- local cur_pos = vim.pos.cursor(bufnr, api.nvim_win_get_cursor(0))
+  -- local pos = vim.pos.lsp(bufnr, p, enc)
+  -- return cur_pos == pos
+  return true
+  -- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+end
 
-  -- 发送请求到 lsp server
-  vim.lsp.buf_request_all(0, ms.textDocument_hover, client_positional_params(fn_node), function(results, ctx)
-    local bufnr = assert(ctx.bufnr)
-    if vim.api.nvim_get_current_buf() ~= bufnr then
-      -- Ignore result since buffer changed. This happens for slow language servers.
-      return
+-- 只获取 textDocument/hover 中 signature 部分
+function M.hover_short(config, pos_params)
+  validate('config', config, 'table', true)
+
+  config = config or {}
+  config.focus_id = 'textDocument/hover'
+
+  -- >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  -- 向 client_positional_params() 传入 params
+  lsp.buf_request_all(0, ms.textDocument_hover, client_positional_params(pos_params), function(results, ctx)
+  -- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    local bufnr = ctx.bufnr
+    if not bufnr or not ctx_is_valid(ctx) then
+      return -- Ignore result if context changed. Can happen for slow LS.
     end
 
     -- Filter errors from results
-    local results1 = {}  ---@type table<integer,lsp.Hover>
+    local results1 = {} --- @type table<integer,lsp.Hover>
+    local nresults = 0
     local empty_response = false
 
     for client_id, resp in pairs(results) do
       local err, result = resp.err, resp.result
       if err then
-        vim.lsp.log.error(err.code, err.message)
+        lsp.log.error(err.code, err.message)
       elseif result and result.contents then
         -- Make sure the response is not empty
         -- Five response shapes:
@@ -191,29 +236,29 @@ function M.hover_short()
         -- - MarkedString-pair: { language="c", value="doc" }
         -- - MarkedString[]-string: { "doc1", ... }
         -- - MarkedString[]-pair: { { language="c", value="doc1" }, ... }
-        if
-          (
-            type(result.contents) == 'table'
-            and #(
-                vim.tbl_get(result.contents, 'value') -- MarkupContent or MarkedString-pair
-                or vim.tbl_get(result.contents, 1, 'value') -- MarkedString[]-pair
-                or result.contents[1] -- MarkedString[]-string
-                or ''
-              )
-              > 0
+        local valid = false
+        if type(result.contents) == 'table' then
+          local value_len = #(
+            vim.tbl_get(result.contents, 'value') -- MarkupContent or MarkedString-pair
+            or vim.tbl_get(result.contents, 1, 'value') -- MarkedString[]-pair
+            or result.contents[1] -- MarkedString[]-string
+            or ''
           )
-          or (
-            type(result.contents) == 'string' and #result.contents > 0 -- MarkedString-string
-          )
-        then
+          valid = value_len > 0
+        elseif type(result.contents) == 'string' then
+          valid = #result.contents > 0
+        end
+
+        if valid then
           results1[client_id] = result
+          nresults = nresults + 1
         else
           empty_response = true
         end
       end
     end
 
-    if vim.tbl_isempty(results1) then
+    if nresults == 0 then
       if config.silent ~= true then
         if empty_response then
           vim.notify('Empty hover response', vim.log.levels.INFO)
@@ -224,25 +269,25 @@ function M.hover_short()
       return
     end
 
-    local contents = {}  ---@type string[]
-
-    local nresults = #vim.tbl_keys(results1)
-
-    local format = 'markdown'
+    local contents = {} --- @type string[]
+    local MarkupKind = lsp.protocol.MarkupKind
+    local format = MarkupKind.Markdown
 
     -- results1: { client_id1 = {}, client_id2 = {} ... }
     for client_id, result in pairs(results1) do
-      local client = assert(vim.lsp.get_client_by_id(client_id))
+      local client = assert(lsp.get_client_by_id(client_id))
       if nresults > 1 then
         -- Show client name if there are multiple clients
         contents[#contents + 1] = string.format('# %s', client.name)
       end
-      if type(result.contents) == 'table' and result.contents.kind == 'plaintext' then
-        if #results1 == 1 then
-          format = 'plaintext'
+
+      if type(result.contents) == 'table' and result.contents.kind == MarkupKind.PlainText then
+        if nresults == 1 then
+          -- Only one client: use PlainText format
+          format = MarkupKind.PlainText
           contents = vim.split(result.contents.value or '', '\n', { trimempty = true })
         else
-          -- Surround plaintext with ``` to get correct formatting
+          -- Multiple clients: surround plaintext with ``` to get correct formatting
           contents[#contents + 1] = '```'
           vim.list_extend(
             contents,
@@ -251,8 +296,9 @@ function M.hover_short()
           contents[#contents + 1] = '```'
         end
       else
-        -- 2. NOTE: 修改 lsp server 返回的内容用于 floating window 显示: 只保留 lsp server 返回内容的第一行.
-        -- 寻找 "```" end line, 忽略后面的所有内容.
+        -- >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        -- 修改 lsp server 返回的内容用于 floating window 显示: 只保留 lsp server 返回内容的第一行.
+        -- 寻找 "```" end line, 忽略后面的所有内容
         local tmp = {}
         for _, line in ipairs(vim.lsp.util.convert_input_to_markdown_lines(result.contents)) do
           table.insert(tmp, line)
@@ -260,41 +306,34 @@ function M.hover_short()
             break
           end
         end
+        -- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         vim.list_extend(contents, tmp)
       end
-
-      local range = result.range
-      if range then
-        local start = range.start
-        local end_ = range['end']
-        local start_idx = vim.lsp.util._get_line_byte_from_position(bufnr, start, client.offset_encoding)
-        local end_idx = vim.lsp.util._get_line_byte_from_position(bufnr, end_, client.offset_encoding)
+      if result.range then
+        local range = vim.range.lsp(bufnr, result.range, client.offset_encoding)
 
         vim.hl.range(
           bufnr,
           hover_ns,
           'LspReferenceTarget',
-          { start.line, start_idx },
-          { end_.line, end_idx },
+          { range.start_row, range.start_col },
+          { range.end_row, range.end_col },
           { priority = vim.hl.priorities.user }
         )
       end
       contents[#contents + 1] = '---'
     end
 
-    -- Remove last linebreak ('---')
-    contents[#contents] = nil
-
-    if vim.tbl_isempty(contents) then
-      if config.silent ~= true then
-        vim.notify('No information available')
-      end
-      return
+    -- Remove last linebreak ('---') if contents is not empty
+    if #contents > 0 then
+      contents[#contents] = nil
     end
 
-    -- 3. NOTE: 修改为手动 toggle hover_short window
-    _, hover_winid = vim.lsp.util.open_floating_preview(contents, format, config)
+    -- >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    -- cache win_id
+    _, hover_winid = lsp.util.open_floating_preview(contents, format, config)
 
+    -- 简化 nvim_buf_clear_namespace
     vim.api.nvim_create_autocmd('WinClosed', {
       pattern = tostring(hover_winid),
       once = true,
@@ -303,6 +342,7 @@ function M.hover_short()
         return true
       end,
     })
+    -- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
   end)
 end
 

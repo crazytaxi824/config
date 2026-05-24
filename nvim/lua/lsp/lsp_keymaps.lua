@@ -19,7 +19,7 @@ local hover_opts = {
 
   -- events, to trigger close floating window
   -- https://github.com/neovim/neovim/blob/master/runtime/lua/vim/lsp/util.lua
-  close_events = {"WinScrolled"},  -- 默认 {"CursorMoved", "CursorMovedI", "InsertCharPre"}
+  close_events = { "WinScrolled" },  -- 默认 { "CursorMoved", "CursorMovedI", "InsertCharPre" }
 
   -- 有些 linter 类型的 lsp 不返回任何 result, 导致 handler 报错.
   silent = true,

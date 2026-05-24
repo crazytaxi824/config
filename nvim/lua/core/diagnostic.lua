@@ -56,7 +56,7 @@ local config = {
     header = "",
     prefix = "",
     -- noautocmd = true,  -- float window 不加载 Buf* 相关 autocmd. VVI: 不要设置为 true.
-    close_events = {"WinScrolled", "CursorMoved", "CursorMovedI", "InsertCharPre"},
+    close_events = { "WinScrolled", "CursorMoved", "CursorMovedI", "InsertCharPre" },
 
     -- BUG: Invalid 'height': expected positive Integer, 如果报错的 line 上方的高度不够就会报这个错误
     -- anchor_bias = 'above',
