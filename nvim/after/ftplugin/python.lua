@@ -4,7 +4,7 @@
 local function venv(filepath)
   -- 项目环境
   local py_paths = vim.fs.find({'.venv/bin/python3'}, {
-    path = vim.fs.dirname(filepath),
+    path = vim.fs.dirname(vim.fs.abspath(filepath)),
     upward = true,
     stop = vim.env.HOME,
     type = "file",
@@ -33,6 +33,7 @@ local function py_run(filepath)
   py_path = vim.fn.fnamemodify(py_path, ':.')
   filepath = vim.fn.fnamemodify(filepath, ':.')
 
+  -- jogstart()
   local t = require('myplugins.my_term').console()
   t:stop()
   t:run({ py_path, "--", filepath })

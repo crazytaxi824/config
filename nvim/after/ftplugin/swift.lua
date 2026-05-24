@@ -1,6 +1,6 @@
 local function swift_run_file()
   -- 相对 cwd. 不在当前 cwd 目录下的文件会显示绝对路径
-  local file = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ':.')
+  local file = vim.fn.bufname()
 
   local t = require('myplugins.my_term').console()
   t:stop()
