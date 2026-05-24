@@ -146,7 +146,7 @@ cmp.setup {
 
   -- DOCS: key mapping, `:help cmp-mapping`, mode = { `i` = insert mode(default), `c` = command mode, `s` = select mode }
   -- command mode 主要用于 : / ? search; select mode 主要用于 snippet.
-  mapping = {  -- {{{
+  mapping = {  ------------------------------------------------------------------------------------- {{{
     -- 当使用 select_prev/next_item() 的时候. abort() 关闭代码提示窗, 同时回到代码之前的状态;
     -- cmp.mapping.close() 也可以关闭代码提示窗口, 但是会保持代码现在的状态.
     -- 当使用 select_prev_item({behavior=cmp.SelectBehavior}) 的时候, abort() & close() 效果相同.
@@ -223,7 +223,7 @@ cmp.setup.cmdline({ '/', '?' }, {
   -- mapping = cmp.mapping.preset.cmdline(),
   sources = {
     { name = 'buffer' }
-  }
+  },
 })
 
 -- Use cmdline & path source for ':' (cmp.setup() 中 `native_menu` 必须为 false).
