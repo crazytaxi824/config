@@ -90,12 +90,8 @@ vim.api.nvim_create_autocmd({'LspAttach'}, {
     lsp_keymaps.diagnostic_keymaps(args.buf)
     lsp_keymaps.textDocument_keymaps(args.buf)
 
-    -- documentHighlight setup, 如果有多个 lsp 都支持 documentHighlight 则只使用其中一个, 减少运算
-    local cs = vim.lsp.get_clients({
-      bufnr = args.buf,
-      method = "textDocument/documentHighlight",
-    })
-    if #cs <= 1 and client:supports_method(ms.textDocument_documentHighlight, args.buf) then
+    -- documentHighlight setup
+    if client:supports_method(ms.textDocument_documentHighlight, args.buf) then
       require("lsp.custom_requests.doc_highlight").setup(client, args.buf)
     end
   end,

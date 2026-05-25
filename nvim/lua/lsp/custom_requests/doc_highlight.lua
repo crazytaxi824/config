@@ -196,8 +196,8 @@ M.setup = function(client, bufnr)
       last_results = {}
 
       -- send 'textDocument/documentHighlight' request. 重新渲染 highlight
-      -- vim.lsp.buf_request_all(bufnr, ms.textDocument_documentHighlight, client_positional_params(), doc_hl_multi_handler)
-      client_request_doc_hl(client, bufnr)  -- single client documentHighlight
+      vim.lsp.buf_request_all(bufnr, ms.textDocument_documentHighlight, client_positional_params(), doc_hl_multi_handler)
+      -- client_request_doc_hl(client, bufnr)  -- single client documentHighlight
     end,
     desc = "LSP: documentHighlight",
   })
@@ -238,16 +238,34 @@ M.setup = function(client, bufnr)
     desc = "LSP: clear highlight when leave window",
   })
 
-  -- bdelete buffer 的时会触发 LspDetach
+  -- 所有支持 document_highlight 的 lsp 都退出了, 则禁止发送请求
+  vim.api.nvim_create_autocmd({'LspDetach'}, {
+    group = group_id,
+    buffer = bufnr,  -- 对指定 buffer 有效
+    callback = function(args)
+      local clients = vim.lsp.get_clients({
+        bufnr = args.buf,
+        method = ms.textDocument_documentHighlight,
+      })
+      if #clients <= 1 then
+        vim.lsp.util.buf_clear_references(bufnr)
+        vim.api.nvim_del_augroup_by_id(group_id)
+        last_results = {}
+      end
+    end,
+    desc = "LSP: delete documentHighlight augroup",
+  })
+
+  -- 保底操作: bdelete buffer 的时会触发 LspDetach
   -- buffer 被 delete 时清除 references highlight, 同时删除整个 augroup
-  vim.api.nvim_create_autocmd({'LspDetach', 'BufDelete', 'BufWipeout'}, {
+  vim.api.nvim_create_autocmd({'BufDelete', 'BufWipeout'}, {
     group = group_id,
     once = true,
     buffer = bufnr,  -- 对指定 buffer 有效
     callback = function(args)
-      last_results = {}
       vim.lsp.util.buf_clear_references(bufnr)
       vim.api.nvim_del_augroup_by_id(group_id)
+      last_results = {}
     end,
     desc = "LSP: delete documentHighlight augroup",
   })
