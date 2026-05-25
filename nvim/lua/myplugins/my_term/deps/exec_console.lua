@@ -16,21 +16,20 @@ local M = {}
 local ns = vim.api.nvim_create_namespace('my_term_output')
 
 -- highlight
-vim.api.nvim_set_hl(0, "my_output_sys", {ctermfg=Colors.orange.c, fg=Colors.orange.g})
+vim.api.nvim_set_hl(0, "my_output_sys", { ctermfg=Colors.orange.c, fg=Colors.orange.g })
 vim.api.nvim_set_hl(0, "my_output_sys_error", {
   ctermfg=Colors.black.c, fg=Colors.black.g,
   ctermbg=Colors.red.c, bg=Colors.red.g,
 })
-vim.api.nvim_set_hl(0, "my_output_stdout", {ctermfg=Colors.blue.c, fg=Colors.blue.g})
-vim.api.nvim_set_hl(0, "my_output_stderr", {ctermfg=Colors.red.c, fg=Colors.red.g})
-vim.api.nvim_set_hl(0, "my_output_eof", {ctermfg=Colors.g238.c, fg=Colors.g238.g})
+vim.api.nvim_set_hl(0, "my_output_stdout", { ctermfg=Colors.blue.c, fg=Colors.blue.g })
+vim.api.nvim_set_hl(0, "my_output_stderr", { ctermfg=Colors.red.c, fg=Colors.red.g })
+vim.api.nvim_set_hl(0, "my_output_eof", { ctermfg=Colors.g238.c, fg=Colors.g238.g })
 
 
+-- 在写入 data 之前和之后, 需要修改 buffer 属性
 ---@param bufnr integer
----@param data string[]
----@param hl string  highlight name `vim.hl.range()`
----@param write_to_lastline? boolean  从最后一行的最后一个 col 开始 write data, 否则 write to next line
-local function buf_append_data(bufnr, data, hl, write_to_lastline)
+---@param callback function()
+local function buf_prepare_for_data(bufnr, callback)
   -- 保险起见
   -- if #data == 0 then return end
   if vim.api.nvim_get_current_buf() == bufnr then
@@ -39,30 +38,42 @@ local function buf_append_data(bufnr, data, hl, write_to_lastline)
   vim.bo[bufnr].modifiable = true
   vim.bo[bufnr].buftype = 'nofile'  -- scratch buffer default buftype
 
+  -- 写入数据
+  callback()
+
+  -- workaround: 在 prompt buffer 中 nvim_buf_set_lines() 的 data 都会被认为是 prompt 输入
+  vim.bo[bufnr].buftype = 'prompt'
+end
+
+
+---@param bufnr integer
+---@param data string[]
+---@param hl string  highlight name `vim.hl.range()`
+---@param write_to_lastline? boolean  从最后一行的最后一个 col 开始 write data, 否则 write to next line
+local function buf_append_data(bufnr, data, hl, write_to_lastline)
   local last_lnum = vim.api.nvim_buf_line_count(bufnr)  -- 获取 buffer line count
   local last_line = vim.api.nvim_buf_get_lines(bufnr, -2, -1, true)[1]  -- 获取最后一行的内容
   local last_col = string.len(last_line) -- 获取最后一行内容的的长度, vim.hl.range() 0-based byte index
 
-  if write_to_lastline then
-    -- 从最后一行的最后一个 col 开始写
-    vim.api.nvim_buf_set_text(bufnr, -1, -1, -1, -1, data)
+  buf_prepare_for_data(bufnr, function()
+    if write_to_lastline then
+      -- 从最后一行的最后一个 col 开始写
+      vim.api.nvim_buf_set_text(bufnr, -1, -1, -1, -1, data)
 
-    -- highlight
-    local start_lnum = last_lnum - 1  -- 0-based index
-    local end_lnum = start_lnum + #data - 1  -- 从第 2 行开始写, 写 3 行应该是到第 5 行最后结束
-    vim.hl.range(bufnr, ns, hl, { start_lnum, last_col }, { end_lnum, -1 })
-  else
-    -- 从最后一行的下一行开始写
-    vim.api.nvim_buf_set_lines(bufnr, -1, -1, false, data)
+      -- highlight
+      local start_lnum = last_lnum - 1  -- 0-based index
+      local end_lnum = start_lnum + #data - 1  -- 从第 2 行开始写, 写 3 行应该是到第 5 行最后结束
+      vim.hl.range(bufnr, ns, hl, { start_lnum, last_col }, { end_lnum, -1 })
+    else
+      -- 从最后一行的下一行开始写
+      vim.api.nvim_buf_set_lines(bufnr, -1, -1, false, data)
 
-    -- highlight
-    local start_lnum = last_lnum  -- 从最后一行的下一行开始 highlight
-    local end_lnum = start_lnum + #data - 1  -- 从第 2 行开始写, 写 3 行应该是到第 5 行最后结束
-    vim.hl.range(bufnr, ns, hl, { start_lnum, 0 }, { end_lnum, -1 })
-  end
-
-  -- workaround: 在 prompt buffer 中 nvim_buf_set_lines() 的 data 都会被认为是 prompt 输入
-  vim.bo[bufnr].buftype = 'prompt'
+      -- highlight
+      local start_lnum = last_lnum  -- 从最后一行的下一行开始 highlight
+      local end_lnum = start_lnum + #data - 1  -- 从第 2 行开始写, 写 3 行应该是到第 5 行最后结束
+      vim.hl.range(bufnr, ns, hl, { start_lnum, 0 }, { end_lnum, -1 })
+    end
+  end)
 end
 
 -- 设置 prompt buffer options
@@ -120,7 +131,7 @@ local function set_buf_line_output(bufnr, data, hl, write_to_lastline)
   return next_incomplete
 end
 
--- job done 后处理: 在最后一行显示 [Process exited 'exit_code']
+-- job done 后处理: 在最后一行用 virt text 显示 [Process exited 'exit_code']
 --
 ---@param bufnr integer
 ---@param exit_code integer
@@ -129,12 +140,23 @@ local function set_buf_line_exit(bufnr, exit_code)
     return
   end
 
-  local data = { "[Process exited " .. exit_code .. "]" }
-  if exit_code == 0 then
-    buf_append_data(bufnr, data, "my_output_sys")
-  else
-    buf_append_data(bufnr, data, "my_output_sys_error")
-  end
+  -- HACK: 占位行, 使用一个空格可以防止 prompt 在 start insert 时直接从本行直接开始写入.
+  vim.api.nvim_buf_set_lines(bufnr, -1, -1, false, { " " })
+
+  local last_lnum = vim.api.nvim_buf_line_count(bufnr) - 1
+  local v_text = "[Process exited " .. exit_code .. "]"
+  local hl = exit_code == 0 and "my_output_sys" or "my_output_sys_error"
+
+  buf_prepare_for_data(bufnr, function()
+    -- 写入 virt_text
+    vim.api.nvim_buf_set_extmark(bufnr, ns, last_lnum, 0, {
+      virt_text = {
+        { v_text, hl },
+      },
+      virt_text_pos = "overlay",  -- 覆盖上面 nvim_buf_set_lines 写入的 {" "}
+      hl_mode = "combine",
+    })
+  end)
 end
 
 -- print cmd, job info
