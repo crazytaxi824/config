@@ -23,8 +23,11 @@
 
 local ms = vim.lsp.protocol.Methods
 
+
+---@alias DocHighlightGroup { refs: lsp.DocumentHighlight[], offset_encoding?: string }
+
 -- cache last documentHighlight references
----@type { bufnr: integer, groups: { refs: lsp.DocumentHighlight[], offset_encoding?: string }[] }
+---@type { bufnr: integer, groups: DocHighlightGroup[] }
 local last_results = {}
 
 
@@ -103,35 +106,37 @@ end
 
 -- https://github.com/neovim/neovim/blob/master/runtime/lua/vim/lsp/buf.lua
 -- 根据 M.hover(config) 函数中 vim.lsp.buf_request_all(_, _, _, handler) 中的 handler 修改
+-- NOTE: for vim.lsp.buf_request_all(), 向 all lsp 发送 document_highlight 请求
 ---@type lsp.MultiHandler
 ---@param results table<integer, { err: lsp.ResponseError?, result: lsp.DocumentHighlight[] }>
 ---@param ctx lsp.HandlerContext
-local function doc_highlight_handler(results, ctx)
+local function doc_hl_multi_handler(results, ctx)
   local bufnr = assert(ctx.bufnr)
   if vim.api.nvim_get_current_buf() ~= bufnr then
     -- Ignore result since buffer changed. This happens for slow language servers.
     return
   end
 
-  ---@type { refs: lsp.DocumentHighlight[], offset_encoding?: string }[]
+  ---@type DocHighlightGroup[]
   local groups = {}
 
   for client_id, resp in pairs(results) do
-    local refs = resp.result or {}
+    local result = resp.result or {}
     local err = resp.err
 
     if err then
       vim.lsp.log.error(err.code, err.message)
-    elseif refs then
+    elseif result then
       local client = assert(vim.lsp.get_client_by_id(client_id))
 
-      ---@type { refs: lsp.DocumentHighlight[], offset_encoding?: string }
+      ---@type DocHighlightGroup
       local group = {}
-      group.refs = refs
+      group.refs = result
       group.offset_encoding = client.offset_encoding
       table.insert(groups, group)
 
-      vim.lsp.util.buf_highlight_references(bufnr, refs, client.offset_encoding)  -- NOTE: highlight references
+      -- highlight result
+      vim.lsp.util.buf_highlight_references(bufnr, result, client.offset_encoding)
     end
   end
 
@@ -139,11 +144,39 @@ local function doc_highlight_handler(results, ctx)
   last_results = { bufnr=bufnr, groups=groups }
 end
 
+--- NOTE: 向 single lsp 发送 document_highlight 请求
+---@param client vim.lsp.Client
+---@param bufnr integer
+local function client_request_doc_hl(client, bufnr)
+  local win = vim.api.nvim_get_current_win()
+  local ret = vim.lsp.util.make_position_params(win, client.offset_encoding)
+  client:request(ms.textDocument_documentHighlight, ret, function(err, result, context, config)
+    ---@type DocHighlightGroup[]
+    local groups = {}
+
+    if err then
+      vim.lsp.log.error(err.code, err.message)
+    elseif result then
+      ---@type DocHighlightGroup
+      local group = {}
+      group.refs = result
+      group.offset_encoding = client.offset_encoding
+      table.insert(groups, group)
+
+      -- highlight result
+      vim.lsp.util.buf_highlight_references(bufnr, result, client.offset_encoding)
+    end
+
+    -- 刷新 cache 内容
+    last_results = { bufnr=bufnr, groups=groups }
+  end, bufnr)
+end
+
 ---@param client vim.lsp.Client
 ---@param bufnr integer
 M.setup = function(client, bufnr)
   -- VVI: 这里必须使用 augroup, 否则在 `:LspRestart` 的情况下会叠加多个 autocmd.
-  local group_id = vim.api.nvim_create_augroup("my_documentHighlight_#buf:"..bufnr, {clear=true})
+  local group_id = vim.api.nvim_create_augroup("my_documentHighlight_#buf:"..bufnr, { clear=true })
 
   -- CursorHold 时, 如果没有超出 range 则不发送 documentHighlight 请求,
   -- 如果超出 range 则重新发送 documentHighlight 并 highlight references
@@ -163,7 +196,8 @@ M.setup = function(client, bufnr)
       last_results = {}
 
       -- send 'textDocument/documentHighlight' request. 重新渲染 highlight
-      vim.lsp.buf_request_all(bufnr, ms.textDocument_documentHighlight, client_positional_params(), doc_highlight_handler)
+      -- vim.lsp.buf_request_all(bufnr, ms.textDocument_documentHighlight, client_positional_params(), doc_hl_multi_handler)
+      client_request_doc_hl(client, bufnr)  -- single client documentHighlight
     end,
     desc = "LSP: documentHighlight",
   })
