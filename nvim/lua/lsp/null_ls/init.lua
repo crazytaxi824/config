@@ -45,16 +45,9 @@ null_ls.setup({
   -- 错误信息显示格式. #{m} - err_msg; #{s} - source_name; #{c} - err_code
   diagnostics_format = "#{m} [null-ls]",
 
-  -- 以下callback 都是 DEBUG: 用
-  -- keymaps --
-  on_attach = function(client, bufnr)
-    require("lsp.lsp_keymaps").diagnostic_keymaps(bufnr)
+  -- DOCS: `:help vim.lsp.ClientConfig` 适用于以下设置 -------------------------
 
-    if __Debug_Neovim.null_ls then
-      Notify("LSP Server attach: " .. client.name, "DEBUG", {title="Null-ls"})
-    end
-  end,
-
+  ---@type fun(client: vim.lsp.Client, init_result: lsp.InitializeResult)
   on_init = function(client, init_result)
     -- DEBUG: 用
     if __Debug_Neovim.null_ls then
@@ -62,9 +55,18 @@ null_ls.setup({
     end
   end,
 
+  ---@type fun(client: vim.lsp.Client, bufnr: integer)
+  on_attach = function(client, bufnr)
+    if __Debug_Neovim.null_ls then
+      Notify("LSP Server attach: " .. client.name, "DEBUG", {title="Null-ls"})
+    end
+  end,
+
   -- null-ls 退出的时候触发, 每次退出 vim 时也会触发.
-  -- on_exit = function()
-  --   Notify("Null-ls on_exit() event.", "warn", {title = "Null-ls"})
+  -- ---@type fun(code: integer, signal: integer, client_id: integer)
+  -- on_exit = function(code, signal, client_id)
+  --   local msg = string.format("'null-ls' (id=%d) is stopped due to signal(%d) with exit code(%d)", client_id, signal, code)
+  --   vim.notify(msg, vim.log.levels.WARN)
   -- end,
 })
 

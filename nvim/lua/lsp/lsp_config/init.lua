@@ -1,6 +1,8 @@
 -- 设置 lsp config
 local lsp_update_config = require("lsp.lsp_config.update_config")
 local utils = require("lsp.project_local_settings.utils")
+local lsp_keymaps = require("lsp.lsp_keymaps")
+local ms = vim.lsp.protocol.Methods
 
 -- 获取 lsp 列表
 local lsp_servers_map = require('lsp.svr_list').list
@@ -74,6 +76,26 @@ end, {
   complete = function()
     return { "json", "toml", "yaml" }
   end,
+})
+
+
+vim.api.nvim_create_autocmd({'LspAttach'}, {
+  callback = function(args)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if not client then
+      return
+    end
+
+    -- documentHighlight setup
+    if client:supports_method(ms.textDocument_documentHighlight, args.buf) then
+      require("lsp.custom_requests.doc_highlight").setup(client, args.buf)
+    end
+
+    -- keymap setup
+    lsp_keymaps.diagnostic_keymaps(args.buf)
+    lsp_keymaps.textDocument_keymaps(args.buf)
+  end,
+  desc = "LSP: set lsp keymaps",
 })
 
 

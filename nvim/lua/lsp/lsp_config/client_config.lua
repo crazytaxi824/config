@@ -1,8 +1,6 @@
 -- NOTE: lsp 设置: https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
 -- DOCS: `:help vim.lsp.ClientConfig`
 
-local ms = vim.lsp.protocol.Methods
-
 local M = {}
 
 -- 停止输入文字的时间超过该数值, 则向 lsp server 发送请求.
@@ -53,8 +51,7 @@ M.capabilities.textDocument.foldingRange = {
 
 -- on_init() run before on_attach(), 可以通过打印看出先后顺序.
 --
----@param client vim.lsp.Client
----@return boolean
+---@type fun(client: vim.lsp.Client, init_result: lsp.InitializeResult)
 M.on_init = function(client)
   -- run after init_options, before on_attach() --------------------------------------------------- {{{
   -- if client.server_capabilities then
@@ -75,32 +72,32 @@ M.on_init = function(client)
   if __Debug_Neovim.lsp then
     Notify("LSP Server init: " .. client.name, "DEBUG", {title="LSP"})
   end
-
-  -- VVI: 如果 return false 则 LSP 不启动.
-  return true
 end
 
 -- on_attach - 加载 Key mapping & highlight 设置
 -- 这里传入的 client 是正在加载的 lsp_client, vim.print(client) 中可以看到 codeActionKind.
 --
----@param client vim.lsp.Client
----@param bufnr integer
+---@type fun(client: vim.lsp.Client, bufnr: integer)
 M.on_attach = function(client, bufnr)
   -- 加载自定义设置 --
   -- textDocument/documentHighlight, 显示 references
-  if client:supports_method(ms.textDocument_documentHighlight, bufnr) then
-    require("lsp.custom_requests.doc_highlight").setup(client, bufnr)
-  end
-
-  -- keymaps --
-  local lsp_keymaps = require("lsp.lsp_keymaps")
-  lsp_keymaps.textDocument_keymaps(bufnr)
-  lsp_keymaps.diagnostic_keymaps(bufnr)
+  -- if client:supports_method(ms.textDocument_documentHighlight, bufnr) then
+  --   require("lsp.custom_requests.doc_highlight").setup(client, bufnr)
+  -- end
 
   -- DEBUG: 用
   if __Debug_Neovim.lsp then
     Notify("LSP Server attach: " .. client.name .. " - bufnr(" .. bufnr .. ")", "DEBUG", {title="LSP"})
   end
 end
+
+-- ---@type fun(code: integer, signal: integer, client_id: integer)
+-- M.on_exit = vim.schedule_wrap(function(code, signal, client_id)
+--   local client = vim.lsp.get_client_by_id(client_id)
+--   local client_name = client and client.name or 'lsp'
+--   local msg = string.format("'%s' (id=%d) is stopped due to signal(%d) with exit code(%d)",
+--       client_name, client_id, signal, code)
+--   vim.notify(msg, vim.log.levels.WARN)
+-- end)
 
 return M

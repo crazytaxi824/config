@@ -57,7 +57,30 @@ end
 --
 ---@param lsp_tool string
 function M.lspconfig_setup(lsp_tool)
-  local lsp_config = vim.tbl_deep_extend('force', common_config, load_lsp_configs(lsp_tool))
+  local lsp_tool_conf = load_lsp_configs(lsp_tool)
+
+  local cache_fns = {
+    ---@type fun(client: vim.lsp.Client, init_result: lsp.InitializeResult)[]
+    on_init = { common_config.on_init },
+
+    ---@type fun(code: integer, signal: integer, client_id: integer)[]
+    on_exit = { common_config.on_exit },
+
+    ---@type fun(client: vim.lsp.Client, bufnr: integer)[]
+    on_attach = { common_config.on_attach },
+  }
+
+  -- cache functions
+  for fn_key, _ in pairs(cache_fns) do
+    table.insert(cache_fns[fn_key], lsp_tool_conf[fn_key])
+  end
+
+  -- 将 function list 赋值
+  local lsp_config = vim.tbl_deep_extend('force', common_config, lsp_tool_conf)
+  for fn_key, _ in pairs(cache_fns) do
+    lsp_config[fn_key] = cache_fns[fn_key]
+  end
+
   vim.lsp.config(lsp_tool, lsp_config)
 end
 
