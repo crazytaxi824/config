@@ -103,7 +103,7 @@ end
 
 -- https://github.com/neovim/neovim/blob/master/runtime/lua/vim/lsp/buf.lua
 -- 根据 M.hover(config) 函数中 vim.lsp.buf_request_all(_, _, _, handler) 中的 handler 修改
---
+---@type lsp.MultiHandler
 ---@param results table<integer, { err: lsp.ResponseError?, result: lsp.DocumentHighlight[] }>
 ---@param ctx lsp.HandlerContext
 local function doc_highlight_handler(results, ctx)
@@ -117,8 +117,9 @@ local function doc_highlight_handler(results, ctx)
   local groups = {}
 
   for client_id, resp in pairs(results) do
-    local err = resp.err
     local refs = resp.result or {}
+    local err = resp.err
+
     if err then
       vim.lsp.log.error(err.code, err.message)
     elseif refs then
@@ -134,7 +135,7 @@ local function doc_highlight_handler(results, ctx)
     end
   end
 
-  --- 刷新 cache 内容
+  -- 刷新 cache 内容
   last_results = { bufnr=bufnr, groups=groups }
 end
 

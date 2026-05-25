@@ -296,6 +296,7 @@ function M.hover_short(config, pos_params)
           contents[#contents + 1] = '```'
         end
       else
+        -- 这里是 MarkupKind.Markdown format
         -- >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         -- 修改 lsp server 返回的内容用于 floating window 显示: 只保留 lsp server 返回内容的第一行.
         -- 寻找 "```" end line, 忽略后面的所有内容

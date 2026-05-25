@@ -41,7 +41,7 @@ local kind_text_icon = {  ------------------------------------------------------
   File        = { text="/file~", icon="" },
   Snippet     = { text="snip",   icon="" },
 
-  --- 不常用
+  -- 不常用
   TypeParameter = { text="tparam", icon="" },  -- "type"
   Color         = { text="color",  icon="󱥚" },  -- 
   Reference     = { text="ref",    icon="" },  -- 󰌹  
@@ -296,7 +296,7 @@ vim.api.nvim_set_hl(0, 'CmpItemKindColor',   { link = 'Conditional' })  -- magen
 -- grey, 弃用的 suggestion.
 vim.api.nvim_set_hl(0, 'CmpItemAbbrDeprecated',  { ctermfg=Colors.g242.c, fg=Colors.g242.g, strikethrough = true })
 
---- Icon highlights links to Kind, eg: 'CmpItemKindClass' -> 'CmpItemKindClassIcon'
+-- Icon highlights links to Kind, eg: 'CmpItemKindClass' -> 'CmpItemKindClassIcon'
 for name, _ in pairs(vim.lsp.protocol.CompletionItemKind) do
   local kind_hl_name = 'CmpItemKind' .. name
   local icon_hl_name = kind_hl_name .. "Icon"
