@@ -70,12 +70,8 @@ local function filepath_with_lnum_col(str)
   -- str:gsub(str, '%z', '󰟢')  -- lua 中 %z 表示 Null(\0)
 
   -- split filename:lnum:col
-  local splits = vim.split(str, ':', {trimempty=true})
-
-  -- 判断所有字符是否都是 file name character. `:help \f`
-  -- 使用 pcall() 防止 str 中含有 Null(\0) 等 blob chars.
-  local ok, fname = pcall(vim.fn.matchstr, splits[1], '\\f\\+')
-  if not ok or splits[1] ~= fname then
+  local splits = vim.split(str, ':', { trimempty=false })
+  if not splits[1] then
     return
   end
 
@@ -93,13 +89,14 @@ local function filepath_with_lnum_col(str)
 
   -- file
   if finfo.type == 'file' then
-    r.lnum = tonumber(splits[2])
+    r.lnum = tonumber(splits[2])  -- tonumber(nil) = nil
     r.col = tonumber(splits[3])
-  elseif finfo.type ~= 'directory' then
-    return
+    return r
+  elseif finfo.type == 'directory' then
+    return r
   end
 
-  return r
+  vim.notify(string.format("try open file: '%s', it is not a file or dir", r.absolute_fp), vim.log.levels.INFO)
 end
 
 -- 分析 filepath
@@ -150,15 +147,16 @@ end
 --
 ---@return {bufnr: integer, pos: HighLightPos[]}|nil hl_params
 M.parse_current_line = function()
-  local lcontent = string.gsub(vim.api.nvim_get_current_line(), '\t', ' ')  -- VVI: replace '\t' with ' '
-  local lnum = vim.fn.line('.')
-  local lsplits = vim.split(lcontent, ' ', {trimempty=false})
-
-  -- { bufnr, pos=[] }
+  ---@type { bufnr: integer, pos: HighLightPos[] }
   local rs = {
     bufnr = vim.api.nvim_get_current_buf(),
-    pos = {},  ---@type HighLightPos[]
+    pos = {},
   }
+
+  local lnum = vim.api.nvim_win_get_cursor(0)[1]  -- vim.fn.line('.')
+
+  -- 根据 \t 或者 ' ' 进行 split
+  local lsplits = vim.split(vim.api.nvim_get_current_line(), '[ \t]+', { trimempty=true })
 
   local pos = 0
   for _, value in ipairs(lsplits) do
@@ -168,7 +166,7 @@ M.parse_current_line = function()
         ---@type HighLightPos
         local hl_pos = {
           type         = r.type,
-          hl_lnum      = lnum -1,
+          hl_lnum      = lnum -1,  -- vim.hl.range 中 lnum 是 0-indexed
           hl_start_col = pos + r.i -1,
           hl_end_col   = pos + r.j,
           original_fp  = r.original_fp,

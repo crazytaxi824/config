@@ -35,8 +35,8 @@ end
 -- 跳转到 file
 --
 ---@param absolute_path string
----@param lnum integer
----@param col integer
+---@param lnum? integer
+---@param col? integer
 local function jump_to_file(absolute_path, lnum, col)
   lnum = lnum or 1
   col = col or 1
@@ -90,12 +90,45 @@ local function jump(content)
   Notify('cannot open: "' .. content .. '"', "INFO", {timeout = 1500})
 end
 
+-- visual selected content, 不需要 parse
+---@param v_selected? string filepath:{lnum}:{col}
+local function v_jump(v_selected)
+  if not v_selected then
+    return
+  end
+
+  local splits = vim.split(v_selected, ':', { trimempty = false })
+  if not splits[1] then
+    return
+  end
+
+  local abs_path = vim.fs.abspath(splits[1])
+  local lnum = tonumber(splits[2])  -- tonumber(nil) = nil
+  local col = tonumber(splits[2])
+
+  local finfo = vim.uv.fs_stat(abs_path)
+  if not finfo then
+    vim.notify(string.format("try open file: '%s', it is not a file or dir", v_selected), vim.log.levels.INFO)
+    return
+  end
+
+  if finfo.type == 'file' then
+    jump_to_file(abs_path, lnum, col)
+    return
+  elseif finfo.type == 'directory' then
+    jump_to_dir(abs_path)
+    return
+  end
+
+  vim.notify(string.format("try open file: '%s', it is not a file or dir", v_selected), vim.log.levels.INFO)
+end
+
 local M = {}
 
 -- jump to <cword>
 M.n_jump_cWORD = function() jump(vim.fn.expand('<cWORD>')) end
 
 -- jump to VISUAL selected content
-M.v_jump_selected = function() jump(vs.visual_selected(true)) end
+M.v_jump_selected = function() v_jump(vs.visual_selected(false)) end
 
 return M

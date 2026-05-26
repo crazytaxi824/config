@@ -33,7 +33,7 @@ local function hl_filepath_in_current_line()
   -- highlight
   for _, pos in ipairs(rs.pos) do
     -- highlight filepath
-    vim.hl.range(rs.bufnr, ns, "my_filepath_underline", {pos.hl_lnum, pos.hl_start_col}, {pos.hl_lnum, pos.hl_end_col})
+    vim.hl.range(rs.bufnr, ns, "my_filepath_underline", { pos.hl_lnum, pos.hl_start_col }, { pos.hl_lnum, pos.hl_end_col })
   end
 
   cache_hl_bufnr = rs.bufnr  -- cache bufnr
