@@ -284,11 +284,10 @@ end
 -- }}}
 
 -- keymaps: jump_to_file in dap-repl window -------------------------------------------------------
-local fp = require("utils.filepath")
 vim.api.nvim_create_autocmd("FileType", {
   pattern = { "dap-repl" },
   callback = function(args)
-    fp.setup(args.buf)
+    require("utils.filepath").setup(args.buf)
   end,
   desc = "dap: keymap for jump_to_file",
 })
