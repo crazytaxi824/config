@@ -32,6 +32,17 @@ M.setup = function(bufnr)
     desc = "clear highlight when cursor leave buffer",
   })
 
+  vim.api.nvim_create_autocmd("BufWipeout", {
+    group = g_id,
+    buffer = bufnr,
+    once = true,
+    callback = function()
+      fp_hl.highlight_clear_cache()
+      vim.api.nvim_del_augroup_by_id(g_id)
+    end,
+    desc = "delete filepath highlight group",
+  })
+
   -- set keymap jump to file/dir
   local opts = { buffer = bufnr, silent = true, desc = "filepath: Jump to file" }
   vim.keymap.set('n', '<S-CR>', function() fp_jump.n_jump_cWORD() end, opts)
