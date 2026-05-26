@@ -123,11 +123,12 @@ local function filepath_from_str(str, need_hl)
       end
     end
 
-    -- 1: 从第一个 char 还是匹配
+    -- 1: 从第一个 char 开始匹配
     -- true: plain=true, 关闭正则匹配, 避免 'pattern' 被解析为 Lua pattern
     r.i, r.j = string.find(str, pat_plain, 1, true)
     if not r.i or not r.j then
-      error("string find error")
+      vim.notify("string find error", vim.log.levels.WARN)
+      return
     end
   end
 
