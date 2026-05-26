@@ -47,7 +47,7 @@ local function jump_to_file(absolute_path, lnum, col)
   -- 进入 window
   if display_win_id and vim.fn.win_gotoid(display_win_id) == 1 then
     -- 如果 win_id 可以跳转, 则直接在该 window 中打开文件.
-    vim.cmd.edit(absolute_path)
+    vim.cmd.edit({ args = { absolute_path } })
     vim.api.nvim_win_set_cursor(display_win_id, {lnum, col-1})
   else
     -- 如果 win_id 不能跳转, 则在 terminal 正上方创建一个新的 window 用于显示 log filepath
@@ -63,7 +63,7 @@ local function jump_to_dir(dir)
   -- NOTE: 新窗口中打开 dir, 因为 nvim-tree 设置 hijack_netrw=true & hijack_directories=true,
   -- 如果直接使用 `:edit dir` 会导致打开 dir 的窗口被关闭 (hijack).
   -- 如果 hijack_netrw=false & hijack_directories=false, 则这里可以使用 `:tabnew dir`
-  vim.cmd.new(dir)
+  vim.cmd.new({ args = { dir } })
 end
 
 -- jump to file/directory
