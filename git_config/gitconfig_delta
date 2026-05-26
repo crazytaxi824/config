@@ -20,7 +20,7 @@
 	line-numbers = true  # Display line numbers.
 	### delta --no-gitconfig BUG: https://github.com/dandavison/delta/issues/1271
 	# side-by-side = true  # Display diffs in side-by-side.
-	# max-line-length = 80  # chars 超过该值会被丢弃.
+	max-line-length = 512  # chars 超过该值会被丢弃. 防止超长 js line 导致程序崩溃.
 	
 	### The width of underline/overline decorations.
 	### variable: to the end of the text only
