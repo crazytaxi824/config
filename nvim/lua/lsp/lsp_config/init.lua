@@ -37,7 +37,8 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 -- restart lsp when ".nvim/lsp.json" changes
-local lsp_gid = vim.api.nvim_create_augroup("my_reload_local_lsp_settings", {clear=true})
+local lsp_gid = vim.api.nvim_create_augroup("my_lsp_settings", {clear=true})
+-- reload local lsp settings
 vim.api.nvim_create_autocmd({'BufWritePost'}, {
   group = lsp_gid,
   pattern = { "**/" .. utils.lsp_file },
@@ -55,6 +56,28 @@ vim.api.nvim_create_autocmd({'BufWritePost'}, {
   end,
   desc = "reload local settings when '.nvim/lsp.json' changed",
 })
+
+
+vim.api.nvim_create_autocmd({'LspAttach'}, {
+  group = lsp_gid,
+  callback = function(args)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if not client then
+      return
+    end
+
+    -- keymap setup
+    lsp_keymaps.diagnostic_keymaps(args.buf)
+    lsp_keymaps.textDocument_keymaps(args.buf)
+
+    -- documentHighlight setup
+    if client:supports_method(ms.textDocument_documentHighlight, args.buf) then
+      require("lsp.custom_requests.doc_highlight").setup(client, args.buf)
+    end
+  end,
+  desc = "LSP: set lsp keymaps",
+})
+
 
 -- schema for json, toml, yaml
 vim.api.nvim_create_user_command("Schema", function(params)
@@ -76,26 +99,6 @@ end, {
   complete = function()
     return { "json", "toml", "yaml" }
   end,
-})
-
-
-vim.api.nvim_create_autocmd({'LspAttach'}, {
-  callback = function(args)
-    local client = vim.lsp.get_client_by_id(args.data.client_id)
-    if not client then
-      return
-    end
-
-    -- keymap setup
-    lsp_keymaps.diagnostic_keymaps(args.buf)
-    lsp_keymaps.textDocument_keymaps(args.buf)
-
-    -- documentHighlight setup
-    if client:supports_method(ms.textDocument_documentHighlight, args.buf) then
-      require("lsp.custom_requests.doc_highlight").setup(client, args.buf)
-    end
-  end,
-  desc = "LSP: set lsp keymaps",
 })
 
 
