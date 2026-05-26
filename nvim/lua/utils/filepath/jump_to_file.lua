@@ -104,7 +104,7 @@ local function v_jump(v_selected)
 
   local abs_path = vim.fs.abspath(splits[1])
   local lnum = tonumber(splits[2])  -- tonumber(nil) = nil
-  local col = tonumber(splits[2])
+  local col = tonumber(splits[3])
 
   local finfo = vim.uv.fs_stat(abs_path)
   if not finfo then
