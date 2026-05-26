@@ -147,16 +147,16 @@ end
 --
 ---@return {bufnr: integer, pos: HighLightPos[]}|nil hl_params
 M.parse_current_line = function()
+  -- VVI: 下面的处理方式是为了在后面能准确的计算 hl_start_col, hl_end_col
+  local lcontent = string.gsub(vim.api.nvim_get_current_line(), '\t', ' ')  -- replace '\t' with ' ', 不会改变 col
+  local lnum = vim.api.nvim_win_get_cursor(0)[1]  -- vim.fn.line('.')
+  local lsplits = vim.split(lcontent, ' ', {trimempty=false})
+
   ---@type { bufnr: integer, pos: HighLightPos[] }
   local rs = {
     bufnr = vim.api.nvim_get_current_buf(),
     pos = {},
   }
-
-  local lnum = vim.api.nvim_win_get_cursor(0)[1]  -- vim.fn.line('.')
-
-  -- 根据 \t 或者 ' ' 进行 split
-  local lsplits = vim.split(vim.api.nvim_get_current_line(), '[ \t]+', { trimempty=true })
 
   local pos = 0
   for _, value in ipairs(lsplits) do
@@ -177,7 +177,7 @@ M.parse_current_line = function()
       end
     end
 
-    pos = #value+pos+1 -- NOTE: move pos
+    pos = pos + #value + 1 -- NOTE: move pos
   end
 
   if #rs.pos > 0 then
