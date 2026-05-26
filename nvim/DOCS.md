@@ -24,15 +24,24 @@ v0.10.0_beta for neovim v0.10.0
 
 2. `after/ftplugin`, `after/syntax`, `ftplugin` 和 `syntax` 作用几乎一样, 却别在于:
 
-   - `after/ftplugin` 是针对文件的 filetype, 而 `after/syntax` 是针对文件的 syntax. eg: json 文件 filetype 是 json, 而 syntax 可以为 jsonc.
+- `after/ftplugin` 是针对文件的 filetype, 而 `after/syntax` 是针对文件的 syntax. eg: json 文件 filetype 是 json, 而 syntax 可以为 jsonc.
 
-   - `after/ftplugin` 在 `after/syntax` 之前加载.
+- `after/ftplugin` 在 `after/syntax` 之前加载.
+
+3. 加载顺序: `:set runtimepath?`, neovim 会在 runtimepath 下寻找 `plugin/`, `ftplugin/` ... 自动加载,
+   如果文件夹是其他名字则不会自动加载.
+
+- `plugin/`  自动加载所有内容
+
+- `ftplugin/`  相当于 autocmd FileType pattern="..." 时加载
+
 
 ```
 ~/.config/nvim/
 ├── after
-│   ├── ftplugin  <- 根据 filetype 加载.
-│   └── plugin
+│   ├── ftplugin  <- 根据 filetype 加载
+│   ├── plugin    <- 加载所有内容
+│   └── queries   <- tree-sitter 高亮时加载 `highlights.scm`, fold 时加载 `folds.scm`, indent 时加载 `indents.scm`
 ├── lua
 │   └── user      <- 其他配置文件位置, settings, color, plugin.setup()
 ├── plugin
