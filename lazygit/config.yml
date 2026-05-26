@@ -37,36 +37,20 @@ git:
   # 需要安装 brew install git-delta; https://github.com/dandavison/delta
   pagers:
     - colorArg: always
-      # delta commands
-      # --dark/--light: use dark/light theme for delta diff.
-      # --no-gitconfig: Do not read any settings from git config.
-      # --line-numbers: Display line numbers.
-      # --syntax-theme: diff text block syntax highlight. `delta --list-syntax-themes`
       pager: delta --dark --tabs=4 --paging=never
-      ### syntax-theme 开启
-      # syntax color:	# syntax 表示 text fg 使用 syntax-theme highlight. 如果 syntax-theme=none, 则会使用 white/normal 作为 fg 颜色.
-      # pager: delta --dark --line-numbers --paging=never --syntax-theme='Visual Studio Dark+'
-      #   \--file-style='75' --file-decoration-style='75 ol'
-      #   \--line-numbers-minus-style='#D75F5F' --minus-style='241 "#300000"' --minus-emph-style='246 "#803030"'
-      #   \--line-numbers-plus-style='#008700' --plus-style='syntax "#001C00"' --plus-emph-style='255 "#005A00"'
-      ### 256-color - 没有 gui 的 linux server 环境用
-      # pager: delta --dark --line-numbers --paging=never --syntax-theme=none
-      #   \--file-style='75' --file-decoration-style='75 ol'
-      #   \--line-numbers-minus-style='167' --minus-style='241 52' --minus-emph-style='246 167'
-      #   \--line-numbers-plus-style='28' --plus-style='251 22' --plus-emph-style='255 28'
 
   # Branchs window (window No.3) 右侧显示的 commit tree.
   # DOC: git log format 配置: https://www.git-scm.com/docs/git-log#Documentation/git-log.txt-emnem
-  # 最后的换行是为了让每一个 commit 都占2行位置. 如果不换行则有些占一行，有些占两行.
   # 显示 current branch git log
   # %C(auto) - 继承 .gitconfig color 设置.
-  #branchLogCmd: git log --graph {{branchName}} --format=format:'%C(42)%h%C(reset) -%C(207)%d%C(reset) %C(251)%s%C(reset) %C(243)(%ar)%C(reset)%n'' '
-  branchLogCmd: git log --graph --color=always --format=format:'%C(auto)%h -%d %s %C(243)(%ar)%C(reset)%n'' ' {{branchName}} --
+  # branchLogCmd: git log --graph --color=always --format=format:'%C(auto)%h -%d %s %C(243)(%ar)%C(reset)%n'' ' {{branchName}} --
+  branchLogCmd: git log --color=always --date=format:'%d-%b-%Y %H:%M:%S' --graph --all --format=format:'%C(auto)%h - %C(74)%ad %C(243)(%ar) %C(173)- %an%w(80, 0, 4)%C(auto)%+D%n%C(auto)%s%n'
+  allBranchesLogCmds:
+    - git log --color=always --date=format:'%d-%b-%Y %H:%M:%S' --graph --all --format=format:'%C(auto)%h - %C(74)%ad %C(243)(%ar) %C(173)- %an%w(80, 0, 4)%C(auto)%+D%n%C(auto)%B'
+
   # If not "none", lazygit will automatically forward branches to their upstream after fetching.
   # Possible values: 'none' | 'onlyMainBranches' | 'allBranches'
   autoForwardBranches: none
-  allBranchesLogCmds:
-    - git log --color=always --date=format:'%d-%b-%Y %H:%M:%S' --graph --all --format=format:'%C(auto)%h -%d %C(74)%ad %C(243)(%ar) %C(173)- %an%n%w(80, 4, 4)%C(auto)%B'
 
 # 刷新状态
 refresher:
