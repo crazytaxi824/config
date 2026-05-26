@@ -22,22 +22,26 @@
 	# if color.branch color.diff color.grep color.advice color.interactive color.remote ... unset,
 	# then the value of color.ui is used (`auto` by default)
 	ui = auto
+
 [color "diff"]
-	commit = 191        # commit header, eg: commit abcdefg...xyz
-	meta = bold ul 251  # metainformation, eg: file name
+	meta = bold ul white  # metainformation, eg: file name
+	commit = yellow     # commit header, eg: commit abcdefg...xyz
 	#frag = 234 191     # hunk header, eg: @@ -1,45 +1,50 @@
-	context = 248       # unchanged text
-	old = 241 "#300000" # - removed lines, 默认为 red
-	new = 42            # + added lines, 默认为 green
-	oldMoved = bold 213 # line moved to a new place
-	newMoved = bold 81  # line moved to a new place
+	context = 246       # unchanged text
+	old = 242 "#300000" # - removed lines, 默认为 red
+	new = green         # + added lines, 默认为 green
+	oldMoved = magenta  # line moved to a new place
+	newMoved = cyan     # line moved to a new place
+
 [color "decorate"]
-	HEAD = bold 207    # HEAD
-	branch = bold 42   # local branch
-	remoteBranch = bold 167
-	tag = bold 191
+	HEAD = bold magenta   # eg: HEAD
+	branch = bold green   # eg: main, master, develop ...
+	remoteBranch = bold red  # eg: origin/main, origin/develop ...
+	tag = bold yellow  # eg: v1.0.1
 	#stash = bold 75
-[color "branch"]  # `git branch` or `git branch --remote` 可查看 branch list
-	current = bold 42
-	local = 251
-	remote = 167
+
+[color "branch"]
+	# `git branch` or `git branch --remote` 可查看 branch list
+	current = bold green
+	local = white
+	remote = red
