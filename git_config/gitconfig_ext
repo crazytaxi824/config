@@ -29,10 +29,10 @@
 	newMoved = cyan     # line moved to a new place
 
 [color "decorate"]
-	HEAD = bold magenta   # eg: HEAD
+	HEAD = bold cyan   # eg: HEAD
 	branch = bold green   # eg: main, master, develop ...
 	remoteBranch = bold red  # eg: origin/main, origin/develop ...
-	tag = bold yellow  # eg: v1.0.1
+	tag = bold magenta  # eg: v1.0.1
 	#stash = bold 75
 
 [color "branch"]
