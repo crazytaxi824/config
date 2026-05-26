@@ -1,6 +1,5 @@
 local g = require('myplugins.my_term.deps.global')
 local mt = require('myplugins.my_term.myterm')
-local fp = require('utils.filepath')
 
 ---@type integer
 local console_id = 1001
@@ -11,7 +10,7 @@ local default_opts = {
   console_output = true,  -- 这里使用 console_exec()
   on_init = function(_, term_bufnr)
     -- set highlight filepath & jump to filepath functions
-    fp.setup(term_bufnr)
+    require('utils.filepath').auto_hl_current_line(term_bufnr)
   end,
 }
 

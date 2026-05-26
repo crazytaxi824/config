@@ -70,20 +70,20 @@ end
 --
 ---@param content string|nil filepath:{lnum}:{col}
 local function jump(content)
-  if not content then
+  if not content or content == "" then
     return
   end
 
-  local r = parser.parse_content(content)
-  if not r then
+  local fp_props = parser.parse_fp_current_line(content)
+  if not fp_props then
     return
   end
 
-  if r.type == 'file' then
-    jump_to_file(r.absolute_fp, r.lnum, r.col)
+  if fp_props.type == 'file' then
+    jump_to_file(fp_props.absolute_fp, fp_props.lnum, fp_props.col)
     return
-  elseif r.type == 'directory' then
-    jump_to_dir(r.absolute_fp)
+  elseif fp_props.type == 'directory' then
+    jump_to_dir(fp_props.absolute_fp)
     return
   end
 
@@ -93,7 +93,7 @@ end
 -- visual selected content, 不需要 parse
 ---@param v_selected? string filepath:{lnum}:{col}
 local function v_jump(v_selected)
-  if not v_selected then
+  if not v_selected or v_selected == "" then
     return
   end
 

@@ -25,18 +25,18 @@ end
 
 -- 检查一整行内所有 valide filepath, 然后 highlight.
 local function hl_filepath_in_current_line()
-  local rs = parser.parse_current_line()
-  if not rs then
+  local buf_hl_pos = parser.parse_hl_current_line()
+  if not buf_hl_pos then
     return
   end
 
   -- highlight
-  for _, pos in ipairs(rs.pos) do
+  for _, pos in ipairs(buf_hl_pos.pos) do
     -- highlight filepath
-    vim.hl.range(rs.bufnr, ns, "my_filepath_underline", { pos.hl_lnum, pos.hl_start_col }, { pos.hl_lnum, pos.hl_end_col })
+    vim.hl.range(buf_hl_pos.bufnr, ns, "my_filepath_underline", { pos.hl_lnum, pos.hl_start_col }, { pos.hl_lnum, pos.hl_end_col })
   end
 
-  cache_hl_bufnr = rs.bufnr  -- cache bufnr
+  cache_hl_bufnr = buf_hl_pos.bufnr  -- cache bufnr
 end
 
 -- NOTE: matchadd() 每次执行只能作用在 current window 上. 所有在该 window 打开的 buffer 都会收到影响.

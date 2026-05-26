@@ -9,7 +9,7 @@ local M = {
 -- 给 bufnr 设置 filepath highlight
 --
 ---@param bufnr integer
-M.setup = function(bufnr)
+M.auto_hl_current_line = function(bufnr)
   local g_id = vim.api.nvim_create_augroup('my_filepath_highlight_' .. bufnr, {clear=true})
 
   -- autocmd highlight filepath under cursor
