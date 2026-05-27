@@ -128,7 +128,8 @@ local function find_filepath_pos(ori_str, fp_props)
 
   local start_col, end_col = string.find(ori_str, fp_lnum_col, 1, true)
   if not start_col then
-    error(string.format("filepath parse error: ori_str: '%s' fp_lnum_col: '%s'", ori_str, fp_lnum_col))
+    vim.notify(string.format("filepath parse error: ori_str: '%s' fp_lnum_col: '%s'", ori_str, fp_lnum_col), vim.log.levels.ERROR)
+    return
   end
 
   return start_col-1, end_col
