@@ -33,47 +33,10 @@
 
 local M = {}
 
--- clear { '`', '"', "'", '(', '[', '{', '<'}
--- 如果 first_char 是 bracket & left bracket count > right bracket count 删除 left bracket
---
 ---@param str string
----@return string
-local function smart_remove_left_brackets(str)
-  local bracket_pairs = {
-    ['{'] = '}',
-    ['['] = ']',
-    ['('] = ')',
-    ['<'] = '>',
-    ['`'] = '`',
-    ['"'] = '"',
-    ["'"] = "'",
-  }
-
-  while true do
-    local first = str:sub(1, 1)
-    local right = bracket_pairs[first]
-
-    if not right then break end
-
-    local left_count  = select(2, str:gsub(vim.pesc(first), ''))
-    local right_count = select(2, str:gsub(vim.pesc(right), ''))
-
-    if left_count > right_count then
-      str = str:sub(2)
-    else
-      break
-    end
-  end
-
-  return str
-end
-
-
--- 从 str 中获取 filepath or dir, eg: /a/b/c:12:3
---
----@param str string
----@return FilePathProperty|nil
-local function filepath_with_lnum_col(str)
+---@return string prefix  file://, url:// ...
+---@return string rest  potential filepath
+local function trim_brackets(str)
   local sep = '://'
   local prefix = ""
   local rest = ""
@@ -87,8 +50,20 @@ local function filepath_with_lnum_col(str)
     rest = str
   end
 
-  rest = rest:match('(.-)[%p%)%]%}>]*$')  -- remove trailing { . , : / ? ! - " ' ` } ] ) > } ...
-  rest = smart_remove_left_brackets(rest) -- 按照 pair remove left brackets
+  -- remove heading  { { [ ( < ' " ` } ...
+  -- remove trailing { . , : / ? ! - " ' ` } ] ) > } ...
+  rest = rest:match('^["\'`%(%[%{<]*(.-)[%p%)%]%}>]*$')
+
+  return prefix, rest
+end
+
+
+-- 从 str 中获取 filepath or dir, eg: /a/b/c:12:3
+--
+---@param str string
+---@return FilePathProperty|nil
+local function filepath_with_lnum_col(str)
+  local prefix, rest = trim_brackets(str)
 
   -- split filename:lnum:col
   -- NOTE: 这里不能使用 {trimempty=true}, 否则 highlight pos 位置计算会出错.
