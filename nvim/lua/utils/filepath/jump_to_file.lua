@@ -70,7 +70,7 @@ end
 --
 ---@param content string|nil filepath:{lnum}:{col}
 local function jump(content)
-  if not content or content == "" then
+  if not content or vim.trim(content) == "" then
     return
   end
 
@@ -93,7 +93,7 @@ end
 -- visual selected content, 不需要 parse
 ---@param v_selected? string filepath:{lnum}:{col}
 local function v_jump(v_selected)
-  if not v_selected or v_selected == "" then
+  if not v_selected or vim.trim(v_selected) == "" then
     return
   end
 
