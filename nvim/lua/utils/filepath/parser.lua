@@ -35,26 +35,33 @@ local M = {}
 
 ---@param str string
 ---@return string prefix  file://, url:// ...
----@return string rest  potential filepath
+---@return string data  potential filepath
 local function trim_brackets(str)
   local sep = '://'
   local prefix = ""
-  local rest = ""
+  local data = ""
+
+  -- NOTE: 根据 RFC 3986, URI 的结构是: scheme ":" hier-part [ "?" query ] [ "#" fragment ]
+  -- string 出现多个 "scheme://" 的情况下, 第二个 sheme:// 是 data
+  -- scheme1://scheme2://xxx 不是一个合法的嵌套结构
+  -- 第二个 scheme2:// 只是路径中的普通字符, 并没有"双层 scheme"的语义
   local idx = string.find(str, sep, 1, true)
   if idx then
     prefix = string.sub(str, 1, idx - 1)
-    rest = string.sub(str, idx + #sep)
+    local rest = string.sub(str, idx + #sep)
 
-    prefix = prefix:match('([%w]+)$')  -- 获取 (file):// (url):// ...
+    -- 获取 (file):// (url):// ...
+    prefix = prefix:match('([%w]+)$')
+
+    -- remove trailing { . , : / ? ! - " ' ` } ] ) > } ...
+    data = rest:match('(.-)[%p%)%]%}>]*$')
   else
-    rest = str
+    -- remove heading  { { [ ( < ' " ` } ...
+    -- remove trailing { . , : / ? ! - " ' ` } ] ) > } ...
+    data = str:match('^["\'`%(%[%{<]*(.-)[%p%)%]%}>]*$')
   end
 
-  -- remove heading  { { [ ( < ' " ` } ...
-  -- remove trailing { . , : / ? ! - " ' ` } ] ) > } ...
-  rest = rest:match('^["\'`%(%[%{<]*(.-)[%p%)%]%}>]*$')
-
-  return prefix, rest
+  return prefix, data
 end
 
 
@@ -63,11 +70,11 @@ end
 ---@param str string
 ---@return FilePathProperty|nil
 local function filepath_with_lnum_col(str)
-  local prefix, rest = trim_brackets(str)
+  local prefix, data = trim_brackets(str)
 
   -- split filename:lnum:col
   -- NOTE: 这里不能使用 {trimempty=true}, 否则 highlight pos 位置计算会出错.
-  local splits = vim.split(rest, ':', { trimempty=false })
+  local splits = vim.split(data, ':', { trimempty=false })
   if not splits[1] or splits[1] == "" then
     return
   end
@@ -138,8 +145,12 @@ end
 -- 获取所有需要 highlight 的 filepaths
 ---@return {bufnr: integer, pos: FilePathHighLightPos[]}|nil hl_params
 M.parse_hl_current_line = function()
-  local bufnr = vim.api.nvim_get_current_buf()
   local line = vim.api.nvim_get_current_line()
+  if vim.trim(line) == '' then
+    return
+  end
+
+  local bufnr = vim.api.nvim_get_current_buf()
   local lnum = vim.api.nvim_win_get_cursor(0)[1]  -- vim.fn.line('.')
 
   ---@type { bufnr: integer, pos: FilePathHighLightPos[] }
