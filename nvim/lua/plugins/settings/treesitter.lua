@@ -10,7 +10,7 @@ ts.setup({
 })
 
 
--- DOCS: 自动安装 parser
+-- 自动安装 parser
 -- `:TSInstall all` 安装所有 langs 的 parser
 -- `:TSInstall stable` 安装所有 stable parser
 -- local auto_install_langs = {
@@ -24,6 +24,11 @@ ts.setup({
 -- }
 --
 -- vim.schedule(function ()
+--   -- VVI: 必须先安装 tree-sitter-cli, nvim-treesitter 才能 install languages.
+--   if vim.fn.executable("tree-sitter") ~= 1 then
+--     vim.notify("need to install 'tree-sitter-cli' before nvim-treesitter install languages", vim.log.levels.WARN)
+--     return
+--   end
 --   ts.install(auto_install_langs, { max_jobs = 4 })
 -- end)
 
@@ -40,7 +45,7 @@ vim.api.nvim_create_autocmd("FileType", {
     -- buffer 已经有 parser 了
     local parser = vim.treesitter.get_parser(args.buf)
     if parser and parser:lang() == lang then
-      vim.treesitter.start()  -- NOTE: enable Highlight
+      vim.treesitter.start()  -- enable Highlight
       return
     end
 
