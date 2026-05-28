@@ -13,7 +13,7 @@ M.save = function()
         return
       end
 
-      vim.cmd.write(filename) -- write file
+      vim.cmd.write({ args = { filename }}) -- write file
     end)
   else
     vim.cmd.update()
