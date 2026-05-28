@@ -62,7 +62,7 @@ memory: "4GiB"
 disk: "100GiB"
 
 vmType: "vz"
-# NOTE: 开启 rosetta in vz
+# NOTE: 开启 rosetta in vz. 需要使用 x86 container 的时候开启
 # vmOpts:
 #   vz:
 #     rosetta:
