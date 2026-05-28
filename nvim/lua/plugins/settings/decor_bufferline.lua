@@ -290,7 +290,7 @@ local function bufferline_del_current_buffer()
 
   -- current buffer is not listed buffer
   if not vim.bo[current_bufnr].buflisted then
-    vim.cmd.bdelete(current_bufnr)
+    vim.cmd.bdelete({ args = { current_bufnr }})
     return
   end
 
@@ -306,7 +306,7 @@ local function bufferline_del_current_buffer()
   for _, win_id in ipairs(all_wins) do
     local buf = vim.api.nvim_win_get_buf(win_id)
     if win_id ~= current_win and buf ~= current_bufnr and vim.bo[buf].buflisted then
-      vim.cmd.bdelete(current_bufnr)
+      vim.cmd.bdelete({ args = { current_bufnr }})
       return
     end
   end
@@ -331,7 +331,7 @@ local function bufferline_del_current_buffer()
     bufferline.cycle(-1)  -- 跳转到 prev buffer
   end
 
-  vim.cmd.bdelete(current_bufnr)
+  vim.cmd.bdelete({ args = { current_bufnr }})
 end
 
 -- 删除指定 buffer
@@ -348,7 +348,7 @@ local function bufferline_del_buffer_by_bufnr(bufnr)
     bufferline_del_current_buffer()
   else
     -- 如果关闭的不是当前 buffer, 则直接删除.
-    vim.cmd.bdelete({ args = {bufnr}, bang=true})  -- `:bdelete! bufnr`
+    vim.cmd.bdelete({ args = { bufnr }, bang=true})  -- `:bdelete! bufnr`
   end
 end
 
