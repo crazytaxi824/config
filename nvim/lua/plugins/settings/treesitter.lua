@@ -6,25 +6,26 @@ end
 -- `:help nvim-treesitter-api`
 ts.setup({
   -- Directory to install parsers and queries. (prepended to `runtimepath`)
-  -- install_dir = vim.fn.stdpath('data') .. '/site'
+  -- install_dir = vim.fs.joinpath(vim.fn.stdpath('data'), 'site')
 })
 
--- DOCS: 安装 parser
+
+-- DOCS: 自动安装 parser
 -- `:TSInstall all` 安装所有 langs 的 parser
 -- `:TSInstall stable` 安装所有 stable parser
-local auto_install_langs = {
-  "lua", "query", "c", "vim", "vimdoc", "markdown", "markdown_inline",  -- up to data Highlight
-  "comment", "editorconfig",
-  "latex", "mermaid",  -- for `markdown`
-  "git_config", "git_rebase", "gitattributes", "gitcommit", "gitignore", "diff",  -- `git`
-  "json", "json5", "toml", "yaml", "csv", "xml", "regex", "proto", "dockerfile",  -- common filetypes
-  "ssh_config",
-  "sql",
-}
-
-vim.schedule(function ()
-  ts.install(auto_install_langs, { max_jobs = 1 })
-end)
+-- local auto_install_langs = {
+--   "lua", "query", "c", "vim", "vimdoc", "markdown", "markdown_inline",  -- up to data Highlight
+--   "comment", "editorconfig",
+--   "latex", "mermaid",  -- for `markdown`
+--   "git_config", "git_rebase", "gitattributes", "gitignore", "diff",  -- `git`
+--   "json", "json5", "toml", "yaml", "csv", "xml", "regex", "proto", "dockerfile",  -- common filetypes
+--   "ssh_config",
+--   "sql",
+-- }
+--
+-- vim.schedule(function ()
+--   ts.install(auto_install_langs, { max_jobs = 4 })
+-- end)
 
 
 -- prompt before install missing parser for languages ---------------------------------------------
