@@ -56,7 +56,7 @@ function FZF_selected(fzf_file)
   end
 
   -- 直接打开第一个 file
-  vim.cmd.edit(fp_qf_list[1].filename)
+  vim.cmd.edit({ args = { fp_qf_list[1].filename }})
   local win_id = vim.api.nvim_get_current_win()
   vim.api.nvim_win_set_cursor(win_id, {fp_qf_list[1].lnum, fp_qf_list[1].col-1})  -- (1,0)-indexed
 

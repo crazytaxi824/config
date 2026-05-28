@@ -39,7 +39,7 @@ function M.gotests_cmd_tool()
   -- 执行完成后打开 <filepath>_test.go file.
   local test_fp = vim.fn.fnamemodify(fp, ':r') .. '_test.go'
   if vim.uv.fs_stat(test_fp) then
-    vim.cmd.edit(test_fp)
+    vim.cmd.edit({ args = { test_fp }})
   end
 end
 
