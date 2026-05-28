@@ -166,15 +166,16 @@ M.parse_hl_current_line = function()
     if fp_props then
       -- position of the partial string
       local ps, pe = find_filepath_pos(partial_str, fp_props)
+      if ps and pe then
+        ---@type FilePathHighLightPos
+        local hl_pos = {
+          hl_lnum      = lnum -1,  -- vim.hl.range 中 lnum 是 0-indexed
+          hl_start_col = start_col + ps -1,
+          hl_end_col   = start_col + pe -1,
+        }
 
-      ---@type FilePathHighLightPos
-      local hl_pos = {
-        hl_lnum      = lnum -1,  -- vim.hl.range 中 lnum 是 0-indexed
-        hl_start_col = start_col + ps -1,
-        hl_end_col   = start_col + pe -1,
-      }
-
-      table.insert(buf_hl_pos.pos, hl_pos)
+        table.insert(buf_hl_pos.pos, hl_pos)
+      end
     end
   end
 
