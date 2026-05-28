@@ -66,7 +66,7 @@ end
 
 -- check command line tools ----------------------------------------------------------------------- {{{
 
----@type table<string, { cmd: string, install?: string, mason?: string }>
+---@type table<string, ToolProps>
 local cmd_tools = {
   go = { cmd = "go", install = "https://go.dev" },
   graphviz = { cmd = "dot", install = "brew info graphviz" },
@@ -74,20 +74,44 @@ local cmd_tools = {
   fd =       { cmd = "fd",  install = "brew info fd" },
 }
 
----@param tools table<string, { cmd: string, install?: string, mason?: string }>
+
+-- print error message
+---@param name string
+---@param tool ToolProps
+local function tool_error_msg(name, tool)
+  local errmsg = { name .. ':' }
+  if tool.install then
+    table.insert(errmsg, '  - `' .. tool.install .. '`')
+  end
+  if tool.mason then
+    table.insert(errmsg, '  - `:MasonInstall ' .. tool.mason .. '`')
+  end
+  health.error(table.concat(errmsg, '\n'))
+end
+
+
+---@param tools table<string, ToolProps>
 local function check_cmd_tools(tools)
   for name, tool in pairs(tools) do
-    if vim.fn.executable(tool.cmd) == 1 then
-      health.ok(name)
+    local tool_cmd = tool.cmd
+    if type(tool_cmd) == "string" then
+      if vim.fn.executable(tool_cmd) == 1 then
+        health.ok(name)
+      else
+        tool_error_msg(name, tool)
+      end
     else
-      local errmsg = { name .. ':' }
-      if tool.install then
-        table.insert(errmsg, '  - `' .. tool.install .. '`')
+      local installed = false
+      for _, cmd in ipairs(tool_cmd) do
+        if vim.fn.executable(cmd) == 1 then
+          installed = true
+          break
+        end
       end
-      if tool.mason then
-        table.insert(errmsg, '  - `:MasonInstall ' .. tool.mason .. '`')
+
+      if not installed then
+        tool_error_msg(name, tool)
       end
-      health.error(table.concat(errmsg, '\n'))
     end
   end
 end

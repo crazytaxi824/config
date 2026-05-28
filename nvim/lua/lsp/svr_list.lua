@@ -5,7 +5,11 @@
 
 local M = {}
 
----@type table<string, { cmd: string, install?: string, mason?: string }>
+
+---@alias ToolProps { cmd: string|string[], install?: string, mason?: string }
+
+
+---@type table<string, ToolProps>
 M.list = {
   lua_ls = {
     cmd = "lua-language-server",
