@@ -85,6 +85,8 @@ keybinding:
   # commit (window No.4 - commit, reflog)
   commits:
     revertCommit: <disabled> # use 'revert commit' carefully. no confirm required.
+    moveDownCommit: <ctrl+j>
+    moveUpCommit: <ctrl+k>
     # viewResetOptions: <disabled> # 默认为 'g', 这里是为了避免按键冲突
   # stash (window No.5)
   stash:

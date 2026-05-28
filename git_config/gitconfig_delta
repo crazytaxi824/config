@@ -41,7 +41,7 @@
 	### syntax 表示 text fg 使用 syntax-theme highlight.
 	### 如果 syntax-theme 设置为 none, 则会使用 white/normal 作为 fg 颜色.
 	minus-style = 242 "#300000"
-	minus-emph-style = 246 "#803030"
+	minus-emph-style = 243 "#803030"
 	line-numbers-minus-style = red
 	plus-style = green
 	plus-emph-style = 233 green
