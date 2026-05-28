@@ -199,7 +199,7 @@ telescope.setup {
       -- -E=**/node_modules/**    显示 node_modules 文件夹, 但不列出其中的文件.
       -- }}}
       find_command = {
-        "fd",
+        vim.fn.executable('fd') == 1 and 'fd' or 'fdfind',  -- linux 中叫作 fdfind
         "--follow",  -- descend into symlinked directories.
         "--type=file", "--type=symlink",  -- 不显示 directory | executable.
         -- NOTE: 这里不搜索隐藏文件, 也不显示被 .gitignore 忽略的文件
