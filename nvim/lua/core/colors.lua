@@ -40,7 +40,7 @@
 -- }}}
 
 -- VVI: colorscheme 必须在 自定义 highlights 之前设置.
-vim.cmd.colorscheme('default')
+vim.cmd.colorscheme({ args = { 'default' }})
 
 -- c: "cterm", g: "gui"
 ---@type table<string, { c: integer, g: string }>

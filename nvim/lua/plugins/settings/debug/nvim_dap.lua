@@ -57,7 +57,7 @@ local function open_new_tab_for_debug()
   end
 
   -- if debug tab NOT exist, open a new tab for debug.
-  vim.cmd.tabnew(vim.api.nvim_buf_get_name(0))
+  vim.cmd.tabnew({ args = { vim.api.nvim_buf_get_name(0) }})
 
   -- 标记该 tab.
   vim.t[tabvar_dap] = vim.api.nvim_get_current_win()
@@ -85,7 +85,7 @@ local function close_debug_tab()
   for _, tab_id in pairs(tab_list) do
     if vim.t[tab_id][tabvar_dap] then
       -- NOTE: `:tabclose tabnr` NOT tab_id
-      vim.cmd.tabclose(vim.api.nvim_tabpage_get_number(tab_id))
+      vim.cmd.tabclose({ args = { vim.api.nvim_tabpage_get_number(tab_id) }})
     end
   end
 end
