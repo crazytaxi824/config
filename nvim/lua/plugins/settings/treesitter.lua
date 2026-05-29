@@ -34,25 +34,35 @@ ts.setup({
 
 
 -- prompt before install missing parser for languages ---------------------------------------------
+
+---@type string[]
+local available = {}
+
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = {"*"},
   callback = function(args)
     local lang = vim.treesitter.language.get_lang(args.match)
     if not lang then
       return
     end
 
-    -- buffer 已经有 parser 了
+    -- VVI: enable Highlight, `:help vim.treesitter.start()`
     local parser = vim.treesitter.get_parser(args.buf)
     if parser and parser:lang() == lang then
-      vim.treesitter.start()  -- enable Highlight
-      return
+      vim.treesitter.start()
     end
 
-    -- buffer 没有对应 installed parser 则提醒安装
-    local available_parsers = ts.get_available()
-    if vim.tbl_contains(available_parsers, lang) then
-      Notify("run `:TSInstall " .. lang .. "` to install parser", "INFO", {title = "treesitter install"})
+    -- 提醒安装对应的 nvim-treesitter parser
+    local installed = ts.get_installed()
+    if vim.tbl_isempty(available) then available = ts.get_available() end
+
+    if not vim.tbl_contains(installed, lang) and vim.tbl_contains(available, lang) then
+      -- VVI: 必须先安装 tree-sitter-cli, nvim-treesitter 才能 install languages.
+      if vim.fn.executable("tree-sitter") == 0 then
+        vim.notify("need to install 'tree-sitter-cli' before nvim-treesitter install languages", vim.log.levels.WARN)
+        return
+      end
+
+      vim.notify(string.format("run `:TSInstall %s` to install parser", lang), vim.log.levels.WARN)
     end
   end,
   desc = "treesitter: enable Highlight & check treesitter parser for filetypes"
