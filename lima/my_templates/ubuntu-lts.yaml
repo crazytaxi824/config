@@ -126,7 +126,7 @@ portForwards:
 # mode = system, boot 是 root user
 provision:
 # FIX: 禁止 mDNS 占用 5353 UDP
-- mode: "boot"
+- mode: "system"
   script: |
     #!/bin/bash
     # boot 时, 禁止 global -mDNS, `$ resolvectl status`, `$ sudo lsof -i :5353`. 文件名可能不同, 需要 find
@@ -134,6 +134,8 @@ provision:
     if [ -n "$LIMA_CONF" ]; then
       echo -e "[Resolve]\nMulticastDNS=no\nLLMNR=no" > "$LIMA_CONF"
     fi
+    # 重启服务
+    systemctl restart systemd-resolved
 
 # user 初始化设置
 - mode: "user"
