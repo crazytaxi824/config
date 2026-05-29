@@ -45,10 +45,13 @@ vim.api.nvim_create_autocmd("FileType", {
       return
     end
 
-    -- VVI: enable Highlight, `:help vim.treesitter.start()`
+    -- `:help nvim-treesitter-quickstart`, `:help vim.treesitter.start()`
     local parser = vim.treesitter.get_parser(args.buf)
     if parser and parser:lang() == lang then
-      vim.treesitter.start()
+      vim.treesitter.start()  -- VVI: enable Highlight
+      -- vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+      -- vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+      -- vim.wo.foldmethod = 'expr'
     end
 
     -- 提醒安装对应的 nvim-treesitter parser
