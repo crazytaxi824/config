@@ -7,6 +7,7 @@ local lazypath = lazydir .. "/lazy.nvim"
 -- 以下代码直接使用的 `:help lazy.nvim-🛠️-installation-structured-setup` 文档中的代码
 local lazyrepo = "https://github.com/folke/lazy.nvim.git"
 if not vim.uv.fs_stat(lazypath) then
+  vim.notify("lazy.nvim installation starting ...", vim.log.levels.INFO)
   local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
   if vim.v.shell_error ~= 0 then
     vim.api.nvim_echo({
@@ -16,9 +17,18 @@ if not vim.uv.fs_stat(lazypath) then
     vim.fn.getchar()
     os.exit(1)
   end
+  vim.notify("lazy.nvim installation success!", vim.log.levels.INFO)
+
+  -- 检查 plugins 所需的命令行工具套件 make gcc ...
+  require("lua.plugins.cmdline_tools_check")
 end
 vim.opt.rtp:prepend(lazypath)
 -- }}}
+
+local lazy_status_ok, lazy = pcall(require, 'lazy')
+if not lazy_status_ok then
+  return
+end
 
 -- `nvim dir` 打开文件夹时直接加载 nvim-tree.lua, `nvim file` 打开 file 时不加载 nvim-tree.lua, 通过快捷键加载.
 local isfile = true
@@ -353,7 +363,11 @@ local plugins = {
     "iamcco/markdown-preview.nvim",
     commit = "a923f5f",
     -- VVI: 每次 Update 后需要重新执行 `lua vim.fn["mkdp#util#install"]()` or `call mkdp#util#install()`
-    build = function() vim.fn["mkdp#util#install"]() end,
+    build = function()
+      -- 先 load 才能执行下面的 install()
+      lazy.load({ plugins = { "markdown-preview.nvim" }})
+      vim.fn["mkdp#util#install"]()
+    end,
     config = function()
       local css_path = vim.fn.stdpath("config") .. "/lua/plugins/settings/my_markdown.css"
       if vim.uv.fs_stat(css_path) then
@@ -442,7 +456,6 @@ local plugins = {
 }
 
 -- lazy.nvim settings
-local lazy = require('lazy')
 local opts = {
   root = lazydir, -- directory where plugins will be installed
   lockfile = vim.fn.stdpath("config") .. "/lazy-lock.json", -- lockfile generated after running update.
