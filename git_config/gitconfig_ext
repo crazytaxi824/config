@@ -8,8 +8,10 @@
 [alias]
 	# https://www.git-scm.com/docs/git-log#Documentation/git-log.txt-emnem
 	# https://devhints.io/git-log-format
-	tree  = log --color=always --date=format:'%d-%b-%Y %H:%M:%S' --graph --all --format=format:'%C(auto)%h - %C(blue)%ad %C(243)(%ar) %C(173)- %an%w(120, 0, 4)%C(auto)%+D%n%C(auto)%s%n'
-	vtree = log --color=always --date=format:'%d-%b-%Y %H:%M:%S' --graph --all --format=format:'%C(auto)%h - %C(blue)%ad %C(243)(%ar) %C(173)- %an%w(120, 0, 4)%C(auto)%+D%n%C(auto)%B'
+	tree  = log --color=always --graph --all --date=format:'%d-%b-%Y %H:%M:%S' \
+		--format='%C(auto)%h - %C(blue)%ad %C(240)(%ar)%w(120, 0, 4)%C(auto)%+D%n%C(auto)%s%n'
+	vtree = log --color=always --graph --all --date=format:'%d-%b-%Y %H:%M:%S' \
+		--format='%C(auto)%h - %C(blue)%ad %C(240)(%ar) %C(173)- %an%w(120, 0, 4)%C(auto)%+D%n%C(auto)%B'
 
 # https://git-scm.com/docs/git-config#Documentation/git-config.txt-coloradvice
 # color value 为 style ... fg bg, bold ul 234 191 意思是 bold, underline, fg=234, bg=191
