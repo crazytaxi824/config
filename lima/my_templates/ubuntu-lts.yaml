@@ -93,56 +93,6 @@ networks:
 # 如果需要 vm 间可以互相访问使用 "user-v2" 的解析 vm: "lima-NAME.internal"; 宿主机: "host.lima.internal"
 - lima: "user-v2"
 
-# FIX: 禁止 mDNS 占用 5353 UDP
-provision:
-# mode system 是 root user
-- mode: "system"
-  script: |
-    #!/bin/bash
-    # 禁止 global -mDNS, `$ resolvectl status`, `$ sudo lsof -i :5353`. 文件名可能不同
-    LIMA_CONF=$(find /etc/systemd/resolved.conf.d/ -type f -name "*mdns*.conf" 2>/dev/null | head -n 1)
-    if [ -n "$LIMA_CONF" ]; then
-      echo -e "[Resolve]\nMulticastDNS=no\nLLMNR=no" > "$LIMA_CONF"
-    fi
-    # 重启服务
-    systemctl restart systemd-resolved
-
-    # 写入 ~/.bashrc
-    cat <<EOF >> ~/.bashrc
-    # --- User config ----------------------------------------------------------------------------------
-    export TERM=xterm-256color
-    export EDITOR="vim"
-    export VISUAL="$EDITOR"
-    export PS1="\[\e[1;30;41m\][\u@\h]\[\e[0m\] \[\e[1;36m\]\w\[\e[0m\] \\$ "
-    export LS_COLORS='rs=0:di=01;36:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43:'
-    EOF
-
-    # 写入 ~/.vimrc
-    cat <<EOF >> ~/.vimrc
-    vim9script
-    set encoding=utf-8
-    set term=xterm-256color
-    EOF
-
-- mode: "user"
-  script: |
-    #!/bin/bash
-    # 写入 ~/.bashrc
-    cat <<EOF >> ~/.bashrc
-    # --- User config ----------------------------------------------------------------------------------
-    export TERM=xterm-256color
-    export EDITOR="vim"
-    export VISUAL="$EDITOR"
-    export PS1="[\[\e[0;32m\]\u\[\e[2;37m\]@\[\e[0;32m\]\h\[\e[0m\]] \[\e[1;36m\]\w\[\e[0m\] \\$ "
-    export LS_COLORS='rs=0:di=01;36:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43:'
-    EOF
-
-    # 写入 ~/.vimrc
-    cat <<EOF >> ~/.vimrc
-    vim9script
-    set encoding=utf-8
-    set term=xterm-256color
-    EOF
 
 # guest 端口自动转发到 host
 # lima port-forward 使用的是优先匹配机制, 规则是: 按顺序匹配，命中第一条就停止
@@ -171,4 +121,48 @@ portForwards:
   guestPortRange: [1, 65535]
   proto: any
   ignore: true
+
+
+# mode = system, boot 是 root user
+provision:
+# FIX: 禁止 mDNS 占用 5353 UDP
+- mode: "boot"
+  script: |
+    #!/bin/bash
+    # boot 时, 禁止 global -mDNS, `$ resolvectl status`, `$ sudo lsof -i :5353`. 文件名可能不同, 需要 find
+    LIMA_CONF=$(find /etc/systemd/resolved.conf.d/ -type f -name "*mdns*.conf" 2>/dev/null | head -n 1)
+    if [ -n "$LIMA_CONF" ]; then
+      echo -e "[Resolve]\nMulticastDNS=no\nLLMNR=no" > "$LIMA_CONF"
+    fi
+
+# user 初始化设置
+- mode: "user"
+  script: |
+    #!/bin/bash
+    # 定义一个标记文件路径
+    FLAG_FILE="/var/lib/lima_init_user"
+    if [[ -f "$FLAG_FILE" ]]; then
+      exit 0
+    fi
+
+    # 写入 ~/.bashrc
+    cat <<EOF >> ~/.bashrc
+
+    # --- User config ----------------------------------------------------------------------------------
+    export TERM=xterm-256color
+    export EDITOR="vim"
+    export VISUAL="\$EDITOR"
+    export PS1="[\[\e[0;32m\]\u\[\e[2;37m\]@\[\e[0;32m\]\h\[\e[0m\]] \[\e[1;36m\]\w\[\e[0m\] \\$ "
+    export LS_COLORS='rs=0:di=01;36:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43:'
+    EOF
+
+    # 写入 ~/.vimrc
+    echo -e "vim9script" >> ~/.vimrc
+    echo -e "set encoding=utf-8" >> ~/.vimrc
+    echo -e "set term=xterm-256color" >> ~/.vimrc
+    echo -e "set number" >> ~/.vimrc
+    echo -e "set relativenumber" >> ~/.vimrc
+
+    # 创建标记文件
+    sudo touch "$FLAG_FILE"
 
