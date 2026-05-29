@@ -4,10 +4,32 @@ if not cmp_status_ok then
 end
 
 -- load "L3MON4D3/LuaSnip"
-local snip_status_ok, luasnip = pcall(require, "luasnip")
-if not snip_status_ok then
-  return
+local _, luasnip = pcall(require, "luasnip")
+
+
+-- `:help cmp-config.sources`. 其他设置: group_index, max_item_count, priority ...
+-- 显示 group 1 的时候不会显示 group 2 的内容; 显示 group 2 的时候不会显示 group 1 的内容.
+local function sources()
+  local sl = {
+    { name = "nvim_lsp" },  -- "hrsh7th/cmp-nvim-lsp"
+    { name = "path" },  -- "hrsh7th/cmp-path"
+    { name = "buffer", max_item_count = 3 }, -- "hrsh7th/cmp-buffer", 最多显示 n 条.
+  }
+
+  -- "saadparwaiz1/cmp_luasnip" -> "L3MON4D3/LuaSnip"
+  -- NOTE: other snippets engine -------------------------------------------- {{{
+  --{ name = 'vsnip' },      -- For vsnip users      -- "hrsh7th/vim-vsnip" vim-script
+  --{ name = 'luasnip' },    -- For luasnip users    -- "L3MON4D3/LuaSnip" lua
+  --{ name = 'snippy' },     -- For snippy users     -- "dcampos/nvim-snippy" lua
+  --{ name = 'ultisnips' },  -- For ultisnips users  -- "SirVer/ultisnips" python
+  -- }}}
+  if luasnip then
+    table.insert(sl, { name = "luasnip", max_item_count = 3, priority = 999 })
+  end
+
+  return sl
 end
+
 
 -- NOTE: 快速调节 cmp 显示效果
 local cmp_opts = {
@@ -63,29 +85,14 @@ cmp.setup {
   --   fetching_timeout = 200,  -- 默认 200.
   -- },
 
-  snippet = {  -- 给 "saadparwaiz1/cmp_luasnip" 设置 snippet
-    expand = function(args)
-      luasnip.lsp_expand(args.body) -- For "L3MON4D3/LuaSnip" users.
-      --require('snippy').expand_snippet(args.body) -- For `snippy` users.
-      --vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-      --vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
-    end,
-  },
+  -- 给 "saadparwaiz1/cmp_luasnip" 设置 snippet
+  -- snippet = {
+  --   expand = function(args)
+  --   end,
+  -- },
 
-  sources = {
-    -- `:help cmp-config.sources`. 其他设置: group_index, max_item_count, priority ...
-    -- 显示 group 1 的时候不会显示 group 2 的内容; 显示 group 2 的时候不会显示 group 1 的内容.
-    { name = "luasnip", max_item_count = 3, priority = 999 }, -- "saadparwaiz1/cmp_luasnip" -> "L3MON4D3/LuaSnip"
-    { name = "nvim_lsp" },  -- "hrsh7th/cmp-nvim-lsp"
-    { name = "buffer", max_item_count = 3 }, -- "hrsh7th/cmp-buffer", 最多显示 n 条.
-    { name = "path" },  -- "hrsh7th/cmp-path"
-    -- NOTE: other snippets engine -------------------------------------------- {{{
-    --{ name = 'vsnip' },      -- For vsnip users      -- "hrsh7th/vim-vsnip" vim-script
-    --{ name = 'luasnip' },    -- For luasnip users    -- "L3MON4D3/LuaSnip" lua
-    --{ name = 'snippy' },     -- For snippy users     -- "dcampos/nvim-snippy" lua
-    --{ name = 'ultisnips' },  -- For ultisnips users  -- "SirVer/ultisnips" python
-    -- }}}
-  },
+  -- `:help cmp-config.sources`. 其他设置: group_index, max_item_count, priority ...
+  sources = sources(),
 
   window = {
     completion = {
@@ -195,7 +202,7 @@ cmp.setup {
     ["<Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.confirm({ select = true })  -- 确认选择
-      elseif luasnip.expand_or_locally_jumpable() then
+      elseif luasnip and luasnip.expand_or_locally_jumpable() then
         -- expand    指展开 snippest, eg: fmtp -> fmt.Println(|)
         -- jumpable  指有可以 jump 的 node, eg: ${1}
         -- locally_jumpable  same as jumpable, except it ignored if the cursor is not inside the current snippet.
@@ -207,7 +214,7 @@ cmp.setup {
     end, { "i", "c", "s" }),
 
     ["<S-Tab>"] = cmp.mapping(function(fallback)
-      if luasnip.locally_jumpable(-1) then  -- 如果存在 previous jumpable node
+      if luasnip and luasnip.locally_jumpable(-1) then  -- 如果存在 previous jumpable node
         luasnip.jump(-1)  -- 跳转到 previous jumpable node
       else
         fallback()  -- 执行快捷键原本的功能
