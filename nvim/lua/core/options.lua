@@ -305,10 +305,14 @@ vim.opt.guicursor = "n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20,a:blinkwait700-bl
 vim.opt.termguicolors = true
 
 -- 快捷键延迟时间设置 -----------------------------------------------------------------------------
-vim.opt.timeout = true    -- 组合键延迟开启.
-vim.opt.timeoutlen = 600  -- 组合键延迟时间, 默认1000ms. eg: <leader>w, <C-W><C-O>...
+-- <leader>XX 组合键延迟开启(默认 true)
+--vim.opt.timeout = true
 
-vim.opt.ttimeout = false  -- <ESC> (\x1b) 组合键是否开启.
+-- <ESC> (\x1b) 组合键延迟是否开启(默认 true), 不关闭没有实质影响.
+-- VVI: 设置为 'false' 在 ubuntu 中会引起严重错误: Freeze, Deadlock, Hang ...
+--vim.opt.ttimeout = false
+
+vim.opt.timeoutlen = 600  -- 组合键延迟时间, 默认1000ms. eg: <leader>w, <C-W><C-O>...
 vim.opt.ttimeoutlen = 50  -- <ESC> 延迟时间, 默认 50ms.  <ESC> 的主要作用是切换模式.
                           -- <ESC> 是发送 ^[ 相当于是 <C-[> 组合键.
                           -- ttimeoutlen>0 的情况下, 其他模式转成 normal 模式需要 <ESC><ESC> 两次, 或者等待延迟结束;
