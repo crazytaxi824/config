@@ -450,8 +450,6 @@ vim.api.nvim_create_autocmd("BufReadPre", {
   desc = "setlocal foldmethod = 'marker'",
 })
 
-vim.cmd([[au Filetype vim,zsh,yaml setlocal foldmethod=marker foldlevel=0]])
-
 -- `:help *ft-markdown-plugin`, 设置 markdown folding
 vim.g.markdown_folding = 1
 vim.cmd([[au Filetype markdown setlocal foldlevel=999]])
