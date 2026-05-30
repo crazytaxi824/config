@@ -75,7 +75,7 @@ M.linter = {
   -- - null_ls.builtins.formatting.buf   format protobuf
   diagnostics.buf.with(diagnostics_opts),
 
-  -- gdscript: gdlint
+  -- NOTE: "gdtoolkit". 如果系统 python 升级了软链接会断开, 需要用 mason 重新安装
   diagnostics.gdlint,
 
   -- python: using 'ruff' lsp instead
