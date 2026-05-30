@@ -66,6 +66,13 @@ vim.api.nvim_create_autocmd({'LspAttach'}, {
       return
     end
 
+    -- set foldexpr, foldmethod
+    for _, win_id in ipairs(vim.fn.win_findbuf(args.buf)) do
+      if vim.wo[win_id].foldmethod ~= 'marker' then
+        require("core.fold.fold_lsp").set_fold(args.buf, win_id)
+      end
+    end
+
     -- keymap setup
     lsp_keymaps.diagnostic_keymaps(args.buf)
     lsp_keymaps.textDocument_keymaps(args.buf)

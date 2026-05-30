@@ -12,8 +12,8 @@ require("core.diagnostic")
 require("core.lsp")  -- 加载 vim.lsp 相关设置. 不是 lspconfig 插件设置.
 
 -- VVI: 以下使用 autocmd 设置相关 options, 需要放在 "core.options" 后加载.
-require("core.fold")     -- lsp-fold & treesitter-fold autocmd
 require("core.terminal") -- terminal buffer 自动设置 nonumber signcolumn ...
+-- require("core.fold")  -- 在 lspconfig 中设置了 lsp-fold
 
 
 -- -- for "akinsho/bufferline.nvim" sort order, 用进入时间排序
