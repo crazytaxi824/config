@@ -47,10 +47,6 @@ export HOMEBREW_BUNDLE_FILE="$XDG_CONFIG_HOME/homebrew/brewfile"    # 默认在 
 #export HOMEBREW_BUNDLE_NO_LOCK=1  # disable brewfile.lock.json
 
 # --- [ Tools PATH ] -------------------------------------------------------------------------------
-# --- [ neovim tools ] ---
-# mason tool path = `vim.fn.stdpath("data") .. "/mason_tools"`
-export PATH="$PATH:$HOME/.local/share/nvim/mason_tools/bin"
-
 # --- [ golang ] ---
 ### `go env` 查看
 #export GOROOT="/usr/local/go"
@@ -67,18 +63,28 @@ export GO111MODULE=on  # on | off | auto
 #export PATH="/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin"
 #export PATH="/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:$GOBIN"
 
-# --- [ python ] ---
-# 安装 `$ brew install uv`
-# uv 默认全局虚拟环境是 ~/.venv/, 如果没有则使用 `cd; uv venv`. 在没有 source 其他虚拟环境的时候默认使用这个环境.
-export PATH="$HOME/.venv/bin:$PATH"
-
 # --- [ node@24 ] ---
 export PATH="/opt/homebrew/opt/node@24/bin:$PATH"
 export LDFLAGS="-L/opt/homebrew/opt/node@24/lib"
 export CPPFLAGS="-I/opt/homebrew/opt/node@24/include"
 
+# --- [ python ] ---
+# 安装 `$ brew install uv`
+# uv 默认全局虚拟环境是 ~/.venv/, 如果没有则使用 `cd; uv venv`. 在没有 source 其他虚拟环境的时候默认使用这个环境.
+if [[ -x "$HOME/.venv/bin/python3" ]]; then
+	export PATH="$HOME/.venv/bin:$PATH"
+fi
+
 # --- [ Godot ] ---
-export PATH="/Applications/Godot.app/Contents/MacOS:$PATH"
+if [[ -x "/Applications/Godot.app/Contents/MacOS/Godot" ]]; then
+	export PATH="$PATH:/Applications/Godot.app/Contents/MacOS"
+fi
+
+# --- [ neovim tools ] ---
+# mason tool path = `vim.fn.stdpath("data") .. "/mason_tools"`
+if [[ -d "$HOME/.local/share/nvim/mason_tools/bin" ]]; then
+	export PATH="$PATH:$HOME/.local/share/nvim/mason_tools/bin"
+fi
 
 
 

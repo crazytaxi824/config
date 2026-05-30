@@ -25,5 +25,10 @@ source "$XDG_CONFIG_HOME/zsh_config/keybindings.zsh"
 # 加载临时 config 文件, 主要用于 local use
 [ -f "$XDG_CONFIG_HOME/zsh_config/tmp_config.zsh" ] && source "$XDG_CONFIG_HOME/zsh_config/tmp_config.zsh"
 
+# NOTE: 安全清洗开头 {:}, 结尾 {:}, 以及中间连续的多个冒号 {::}
+# zsh 专用函数 typeset -U 表示 unique 可以去重
+typeset -U path PATH
+path=($path)
+
 
 
