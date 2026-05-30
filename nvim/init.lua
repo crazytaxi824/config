@@ -28,8 +28,9 @@ __Debug_Neovim = {
   autocmd = false,  -- debug_autocmd.lua
 }
 
--- 读取设置: ~/.config/nvim/lua/xxx.lua
-require("core")  -- VVI: 必须放在最前面加载, 因为有全局函数需要被用到
+
+require("global")  -- VVI: 必须放在最前面加载, 因为有全局函数需要被用到
+require("core")    -- set options, keymaps ...
 
 require("myplugins")
 require("plugins")  -- 加载 plugins 和 plugins' settings

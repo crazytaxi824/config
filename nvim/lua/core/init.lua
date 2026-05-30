@@ -2,8 +2,7 @@
 require("core.funcs.fzf_edit")  -- 用于编辑 fzf multi selected item
 require("core.funcs.notify")    -- Notify() 函数
 
-require("core.colors")  -- 有全局变量 "Colors", 很多 plugins 需要用到
-require("core.nerd_icons")  -- nerd fonts icons
+require("core.highlights")
 
 require("core.options")  -- vimrc 设置
 require("core.keymaps")
