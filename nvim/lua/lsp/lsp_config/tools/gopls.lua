@@ -7,6 +7,7 @@
 -- 使用 workspace 'go.work' 的情况下, `:LspLog` 打印错误 `go mod tidy` Error.
 -- "finding module for package xxx: cannot find module providing package xxx: module lookup disabled by GOPROXY=off"
 
+---@type vim.lsp.Config
 return {
   --cmd = { "gopls" },
   --filetypes = { "go", "gomod", "gowork", "gotmpl" },
@@ -14,6 +15,7 @@ return {
   -- NOTE: lspconfig.util.root_pattern() 只能在这里使用, 不能在 project_lsp_config 中使用.
   -- project_lsp_config 中设置 root_dir 直接使用 string. eg: root_dir = "/a/b/c"; root_dir = vim.uv.cwd().
   -- 设置参考 https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig/server_configurations/gopls.lua
+  ---@type fun(bufnr: integer, on_dir:fun(root_dir?:string))
   root_dir = function(bufnr, on_dir)  -- fname == :echo expand('%:p') 当前文件绝对路径.
     -- FIXED: https://github.com/neovim/nvim-lspconfig/issues/2285
     -- 修复 lsp goto_definition 出现的问题. eg: golang 中 goto_definition 后, 因源文件的 root_dir/workspace 不同,

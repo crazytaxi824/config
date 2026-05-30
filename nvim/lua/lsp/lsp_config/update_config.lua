@@ -59,15 +59,19 @@ end
 function M.lspconfig_setup(lsp_tool)
   local lsp_tool_conf = load_lsp_configs(lsp_tool)
 
+  local on_init = common_config.on_init  ---@cast on_init fun(client: vim.lsp.Client, init_result: lsp.InitializeResult)?
+  local on_exit = common_config.on_exit  ---@cast on_exit fun(code: integer, signal: integer, client_id: integer)?
+  local on_attach = common_config.on_attach  ---@cast on_attach fun(client: vim.lsp.Client, bufnr: integer)?
+
   local cache_fns = {
     ---@type fun(client: vim.lsp.Client, init_result: lsp.InitializeResult)[]
-    on_init = { common_config.on_init },
+    on_init = { on_init },
 
     ---@type fun(code: integer, signal: integer, client_id: integer)[]
-    on_exit = { common_config.on_exit },
+    on_exit = { on_exit },
 
     ---@type fun(client: vim.lsp.Client, bufnr: integer)[]
-    on_attach = { common_config.on_attach },
+    on_attach = { on_attach },
   }
 
   -- cache functions
@@ -76,6 +80,7 @@ function M.lspconfig_setup(lsp_tool)
   end
 
   -- 将 function list 赋值
+  -- VVI: common_config 是一个 package 不能直接赋值, 否则会改变后续 lsp 的设置
   local lsp_config = vim.tbl_deep_extend('force', common_config, lsp_tool_conf)
   for fn_key, _ in pairs(cache_fns) do
     lsp_config[fn_key] = cache_fns[fn_key]
@@ -88,6 +93,7 @@ end
 --
 ---@param lsp_tools string[]
 function M.restart_lsps(lsp_tools)
+  ---@type string[]
   local tools = {}
 
   for _, lsp_tool in ipairs(lsp_tools) do

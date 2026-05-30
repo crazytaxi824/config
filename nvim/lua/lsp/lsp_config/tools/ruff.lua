@@ -1,6 +1,6 @@
 -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#ruff
 
--- 修改 lspconfig 中默认 root_dir 设置
+---@type vim.lsp.Config
 return {
   root_dir = function(bufnr, on_dir)
     local root = vim.fs.root(bufnr, {'pyproject.toml', 'ruff.toml', '.ruff.toml'})

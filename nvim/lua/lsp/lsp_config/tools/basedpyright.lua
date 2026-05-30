@@ -1,7 +1,8 @@
 -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#basedpyright
 
--- 修改 lspconfig 中默认 root_dir 设置
+---@type vim.lsp.Config
 return {
+  ---@type fun(bufnr: integer, on_dir:fun(root_dir?:string))
   root_dir = function(bufnr, on_dir)
     local root = vim.fs.root(bufnr, 'pyproject.toml')
     if root then

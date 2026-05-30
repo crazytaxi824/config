@@ -10,7 +10,7 @@ return {
       end
     end
 
-    -- 2. 没有 .luarc.json 的情况下向 settings 中插入设置.
+    -- VVI: 这里的 client.config.settings 就是下面设置的 settings = {...}
     client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
       runtime = {
         version = 'LuaJIT'
@@ -36,7 +36,7 @@ return {
 
   -- 这里是在有 .luarc.json 的情况下不设置任何属性.
   settings = {
-  -- lua_ls settings: https://github.com/LuaLS/lua-language-server/wiki/Settings
+    -- lua_ls settings: https://github.com/LuaLS/lua-language-server/wiki/Settings
     Lua = {
       -- lua_ls diagnostics: https://luals.github.io/wiki/diagnostics/
       diagnostics = {

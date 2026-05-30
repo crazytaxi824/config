@@ -1,5 +1,6 @@
 -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#ty
 
+---@type vim.lsp.Config
 return {
   root_dir = function(bufnr, on_dir)
     local root = vim.fs.root(bufnr, { 'pyproject.toml', 'ty.toml' })

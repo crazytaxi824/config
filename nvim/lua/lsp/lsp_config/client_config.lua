@@ -1,19 +1,13 @@
 -- NOTE: lsp 设置: https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
--- DOCS: `:help vim.lsp.ClientConfig`
+-- DOCS: `:help vim.lsp.ClientConfig`, `:help vim.lsp.Config`
+-- vim.lsp.Config 继承自 vim.lsp.ClientConfig
 
+---@type vim.lsp.Config
 local M = {}
 
 -- 停止输入文字的时间超过该数值, 则向 lsp server 发送请求.
 -- 如果 "diagnostic.config({update_in_insert = false})", 则该设置应该不生效.
 M.flags = { debounce_text_changes = 500 }   -- 默认 150.
-
--- on_error() invoked when the client operation throws an error.
---
----@param code integer
----@param err string
-M.on_error = function(code, err)
-  Notify({vim.inspect(vim.lsp.rpc.client_errors[code]), err}, "ERROR", {title = "lspconfig/setup_opts.lua"})
-end
 
 -- capabilities -----------------------------------------------------------------------------------
 -- VVI: lspconfig 必须在 cmp_nvim_lsp 之后加载, 否则可能无法提供代码补全.
@@ -43,15 +37,13 @@ M.capabilities.textDocument.foldingRange = {
   lineFoldingOnly = true
 }
 
--- before_init() can be used to debug lsp configs. ------------------------------------------------
+-- before_init() can be used to debug lsp configs
 -- M.before_init = function(initialize_params, config)
 --   vim.print(initialize_params)
 --   vim.print(config)
 -- end
 
 -- on_init() run before on_attach(), 可以通过打印看出先后顺序.
---
----@type fun(client: vim.lsp.Client, init_result: lsp.InitializeResult)
 M.on_init = function(client)
   -- run after init_options, before on_attach() --------------------------------------------------- {{{
   -- if client.server_capabilities then
@@ -74,10 +66,8 @@ M.on_init = function(client)
   end
 end
 
--- on_attach - 加载 Key mapping & highlight 设置
+-- on_attach() 加载 Key mapping & highlight 设置
 -- 这里传入的 client 是正在加载的 lsp_client, vim.print(client) 中可以看到 codeActionKind.
---
----@type fun(client: vim.lsp.Client, bufnr: integer)
 M.on_attach = function(client, bufnr)
   -- 加载自定义设置 --
   -- textDocument/documentHighlight, 显示 references
@@ -91,7 +81,12 @@ M.on_attach = function(client, bufnr)
   end
 end
 
--- ---@type fun(code: integer, signal: integer, client_id: integer)
+-- 提示错误
+M.on_error = function(code, err)
+  Notify({vim.inspect(vim.lsp.rpc.client_errors[code]), err}, "ERROR", {title = "lspconfig/setup_opts.lua"})
+end
+
+-- 每次 stop/restart lsp 的时候都会执行
 -- M.on_exit = vim.schedule_wrap(function(code, signal, client_id)
 --   local client = vim.lsp.get_client_by_id(client_id)
 --   local client_name = client and client.name or 'lsp'

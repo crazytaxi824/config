@@ -1,7 +1,7 @@
 -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#pyright
 
--- 修改 lspconfig 中默认 root_dir 设置
 return {
+  ---@type fun(bufnr: integer, on_dir:fun(root_dir?:string))
   root_dir = function(bufnr, on_dir)
     local root = vim.fs.root(bufnr, 'pyproject.toml')
     if root then
@@ -23,11 +23,12 @@ return {
   -- 自动探测 python venv 环境
   on_init = function(client)
     local workspace = client.config.root_dir
+    local venv_python
     if workspace then
       -- .venv 在项目根目录
-      local venv_python = vim.fs.joinpath(workspace, ".venv/bin/python3")
-      if vim.fn.executable(venv_python) == 1 then
-        client.config.settings.python.pythonPath = venv_python
+      local py = vim.fs.joinpath(workspace, ".venv/bin/python3")
+      if vim.fn.executable(py) == 1 then
+        venv_python = py
       end
     else
       -- 向上查找 .venv
@@ -37,10 +38,14 @@ return {
         type = "file",
         limit = 1,
       })
-      if #py_paths < 1 then
-        return
+      if #py_paths >= 1 then
+        venv_python = py_paths[1]
       end
-      client.config.settings.python.pythonPath = py_paths[1]
+    end
+
+    -- VVI: 这里的 client.config.settings 就是下面设置的 settings = {...}
+    if venv_python then
+      client.config.settings.python.pythonPath = venv_python
     end
   end,
 
@@ -48,8 +53,8 @@ return {
   settings = {
     python = {
       -- NOTE: pythonPath & venvPath 不会自动寻找, 所以在 on_init() 中设置
-      -- pythonPath =
-      -- venvPath =
+      -- pythonPath = ...
+      -- venvPath = ...
       analysis = {
         typeCheckingMode = "standard",   -- "off", "basic", "standard", "strict"
         autoSearchPaths = true,

@@ -1,5 +1,6 @@
 -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#sourcekit
 
+---@type vim.lsp.Config
 return {
   -- `swift package init --type executable`, 会创建 Package.swift, Sources/, Tests/ 文件
   root_dir = function(bufnr, on_dir)
