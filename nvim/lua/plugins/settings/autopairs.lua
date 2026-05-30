@@ -42,8 +42,10 @@ autopairs.setup {
 -- }}}
 local Rule = require('nvim-autopairs.rule')
 local cond = require('nvim-autopairs.conds')
+
 -- 从规则中排除指定 filetype
 autopairs.get_rule('`'):with_pair(cond.not_filetypes({"markdown"}))  -- exclude filetype 'markdown' for rule ``
+
 -- 给指定 filetype 添加规则
 autopairs.add_rule(Rule('$','$',{"tex", "latex", "markdown"}))
 autopairs.add_rule(Rule('$$','$$',{"tex", "markdown"}))
