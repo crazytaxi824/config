@@ -405,7 +405,7 @@ end
 -- debug color ------------------------------------------------------------------------------------
 
 -- 返回使用 color name 的 Highlight Groups
----@param color_name string
+---@param color_name string  name of color: "blue"|"red"|"magenta"...
 __Debug.ColorGetHighlights = function(color_name)
   local match_names = {}
   for name, _ in pairs(Colors) do
@@ -423,9 +423,9 @@ __Debug.ColorGetHighlights = function(color_name)
 
     for hl_name, hl_val in pairs(Highlights) do
       if hl_val.ctermfg == color.c or hl_val.fg == color.g or hl_val.foreground == color.g then
-        print(hl_name .. ' : { fg =', c_name .. ' }')
+        vim.notify(string.format("%s : { fg = %s }", hl_name, c_name), vim.log.levels.INFO)
       elseif hl_val.ctermbg == color.c or hl_val.bg == color.g or hl_val.background == color.g then
-        print(hl_name .. ' : { bg =', c_name .. ' }')
+        vim.notify(string.format("%s : { bg = %s }", hl_name, c_name), vim.log.levels.INFO)
       end
     end
   end
