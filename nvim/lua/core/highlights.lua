@@ -406,7 +406,7 @@ end
 
 -- 返回使用 color name 的 Highlight Groups
 ---@param color_name string
-__Debug.Get_highlight_color = function(color_name)
+__Debug.ColorGetHighlights = function(color_name)
   local match_names = {}
   for name, _ in pairs(Colors) do
     if name:match(color_name) then

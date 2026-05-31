@@ -20,7 +20,6 @@
 -------------------------------------+----------------------------------+------------------------------------
 
 -- for Debugging Neovim plugins. `:LspInfo`, `:LspLog`
----@type table<string, function|boolean>
 __Debug = {
   lsp = false,  -- vim.lsp DEBUG, Notify msg.
   null_ls = false,  -- null-ls DEBUG, `:NullLsLog` & golangci-lint Notify msg.

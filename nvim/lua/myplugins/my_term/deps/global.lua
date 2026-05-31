@@ -44,7 +44,7 @@ function M.range_TermPost(callback)
 end
 
 -- debug ------------------------------------------------------------------------------------------
-__Debug.Get_all_myterms = function()
+__Debug.GetAllMyTerms = function()
   vim.print(global_my_term_cache)
 end
 
