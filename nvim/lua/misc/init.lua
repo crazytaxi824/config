@@ -1,5 +1,4 @@
 require("misc.debug_autocmd")
-require("misc.debug_functions")
 require("misc.debug_treesitter")
 
 require("misc.del_marks")
