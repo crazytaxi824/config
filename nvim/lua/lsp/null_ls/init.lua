@@ -27,7 +27,7 @@ null_ls.setup({
 
   -- NOTE: 非常耗资源, 调试完后设置为 false.
   -- is the same as setting log.level to "trace" 记录 log, `:NullLsLog` 打印 log.
-  debug = __Debug.null_ls,
+  debug = __Debug._null_ls,
 
   -- log 输出到 stdpath('cache') .. '/null-ls.log', 目前无法修改.
   log_level = 'warn',  -- "error", "warn"(*), "info", "debug", "trace"
@@ -50,14 +50,14 @@ null_ls.setup({
   ---@type fun(client: vim.lsp.Client, init_result: lsp.InitializeResult)
   on_init = function(client, init_result)
     -- DEBUG: 用
-    if __Debug.null_ls then
+    if __Debug._null_ls then
       Notify("LSP Server init: " .. client.name, "DEBUG", {title="Null-ls"})
     end
   end,
 
   ---@type fun(client: vim.lsp.Client, bufnr: integer)
   on_attach = function(client, bufnr)
-    if __Debug.null_ls then
+    if __Debug._null_ls then
       Notify("LSP Server attach: " .. client.name, "DEBUG", {title="Null-ls"})
     end
   end,

@@ -77,7 +77,7 @@ local term_events = { "TermOpen", "TermClose", "TermEnter", "TermLeave", "TermRe
 
 
 ---@param events string[]
-local function debug_autocmd(events)
+__Debug.Autocmd = function(events)
   if vim.list_contains(events, "off") then
     if augroup_id then
       vim.api.nvim_del_augroup_by_id(augroup_id)
@@ -158,28 +158,55 @@ local function debug_autocmd(events)
   vim.notify("debug autocmd events: Enabled")
 end
 
+
+-- 启动时开启
+if __Debug._startup_autocmd then
+  __Debug.Autocmd({ 'vim', 'win', 'buf', 'lsp' })
+end
+
+
+-- Debug Command -----------------------------------------------------------------------------------
+
 -- `:AutocmdDebug all`, `:AutocmdDebug off`
 -- `:AutocmdDebug buf`, `:AutocmdDebug buf win lsp`, ...
-local user_cmd_name = "DebugAutocmd"
-vim.api.nvim_create_user_command(user_cmd_name, function(params)
+vim.api.nvim_create_user_command("DebugAutocmd", function(params)
   -- params.args: string
   -- params.fargs: list
-  debug_autocmd(params.fargs)
+  __Debug.Autocmd(params.fargs)
 end,
 {
   nargs = "*",
-  bang=true,
-  bar=true,
-  desc = 'toggle autocmd debug function, print all events.',
-  complete = function()
-    return { 'buf', 'win', 'cursor', 'vim', 'lsp', 'tab', 'term', 'cmd', 'all', 'off' }
+  bang = true,
+  bar = true,
+  desc = 'autocmd events order',
+  complete = function(ArgLead, CmdLine, CursorPos)
+    local line_to_cursor = CmdLine:sub(1, CursorPos)
+    local words = vim.split(line_to_cursor, "%s+")
+    if words[#words] == "" then
+        table.remove(words, #words)
+    end
+
+    local current_arg_index = #words - 1
+    if ArgLead == "" then
+        current_arg_index = current_arg_index + 1
+    end
+
+    if current_arg_index > 1 then
+      local first_arg = words[2]
+      -- second+ args
+      if first_arg == "all" or first_arg == "off" then
+        -- 如果 first arg 是 all, off 则没有其他的 args
+        return {}
+      else
+        -- 如果 first arg 不是 all, off 则返回其他的 args
+        return { 'buf', 'win', 'cursor', 'vim', 'lsp', 'tab', 'term', 'cmd' }
+      end
+    else
+      -- first arg
+      return { 'buf', 'win', 'cursor', 'vim', 'lsp', 'tab', 'term', 'cmd', 'all', 'off' }
+    end
   end,
 })
-
--- 启动时开启
-if __Debug.autocmd then
-  vim.cmd[user_cmd_name]({ args = { 'vim', 'win', 'buf', 'lsp' }})
-end
 
 
 

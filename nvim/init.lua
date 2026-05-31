@@ -21,22 +21,11 @@
 
 -- for Debugging Neovim plugins. `:LspInfo`, `:LspLog`
 __Debug = {
-  lsp = false,  -- vim.lsp DEBUG, Notify msg.
-  null_ls = false,  -- null-ls DEBUG, `:NullLsLog` & golangci-lint Notify msg.
-  luasnip = false,  -- LuaSnip DEBUG, stdpath('log') .. '/luasnip.log' set_loglevel().
-  dap_debug = false,  -- `:help dap.set_log_level()`
-  autocmd = false,  -- debug_autocmd.lua
-
-  ---@param self table<string, function|boolean>
-  list_funcs = function(self)
-    local funcs = {}  ---@type string[]
-    for key, value in pairs(self) do
-      if type(value) == "function" and key ~= "list_funcs" then
-        table.insert(funcs, key)
-      end
-    end
-    vim.print(funcs)
-  end
+  _lsp = false,  -- vim.lsp DEBUG, Notify msg.
+  _null_ls = false,  -- null-ls DEBUG, `:NullLsLog` & golangci-lint Notify msg.
+  _luasnip = false,  -- LuaSnip DEBUG, stdpath('log') .. '/luasnip.log' set_loglevel().
+  _dap_debug = false,  -- `:help dap.set_log_level()`
+  _startup_autocmd = false,  -- debug_autocmd.lua
 }
 
 

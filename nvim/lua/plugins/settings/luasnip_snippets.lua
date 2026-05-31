@@ -30,7 +30,7 @@ require("luasnip.loaders.from_vscode").lazy_load({
 })
 
 -- luasnip log level
-if __Debug.luasnip then
+if __Debug._luasnip then
   luasnip.log.set_loglevel('debug')  -- "error"|"warn"(*)|"info"|"debug"
 end
 

@@ -61,7 +61,7 @@ M.on_init = function(client)
   -- }}}
 
   -- DEBUG: 用
-  if __Debug.lsp then
+  if __Debug._lsp then
     Notify("LSP Server init: " .. client.name, "DEBUG", {title="LSP"})
   end
 end
@@ -76,7 +76,7 @@ M.on_attach = function(client, bufnr)
   -- end
 
   -- DEBUG: 用
-  if __Debug.lsp then
+  if __Debug._lsp then
     Notify("LSP Server attach: " .. client.name .. " - bufnr(" .. bufnr .. ")", "DEBUG", {title="LSP"})
   end
 end
