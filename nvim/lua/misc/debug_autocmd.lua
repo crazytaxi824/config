@@ -157,7 +157,7 @@ local function debug_autocmd(e)
 end
 
 -- 启动时开启
-if __Debug_Neovim.autocmd then
+if __Debug.autocmd then
   debug_autocmd({ fargs = { 'vim', 'win', 'buf' } })
 end
 

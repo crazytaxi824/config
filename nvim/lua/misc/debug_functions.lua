@@ -1,5 +1,6 @@
 -- list all LSP clients' info
-function Get_LSP_Client_info_By_bufnr(bufnr)
+---@param bufnr integer
+__Debug.Get_LSP_Client_info_By_bufnr = function(bufnr)
   local clients
   if bufnr then
     clients = vim.tbl_values(vim.lsp.get_clients({bufnr = bufnr}))
@@ -11,7 +12,7 @@ function Get_LSP_Client_info_By_bufnr(bufnr)
 end
 
 -- list all background jobs(channels)
-function Get_all_jobs()
+__Debug.Get_all_jobs = function()
   vim.print(vim.api.nvim_list_chans())
 end
 

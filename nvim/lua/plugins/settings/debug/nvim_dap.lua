@@ -25,7 +25,7 @@ if not dap_status_ok then
 end
 
 -- Defaults to `INFO`, 打印到 'stdpath('cache') .. dap.log'
-if __Debug_Neovim.dap_debug then
+if __Debug.dap_debug then
   dap.set_log_level("DEBUG")
 else
   dap.set_log_level("ERROR")
