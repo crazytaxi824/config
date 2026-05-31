@@ -52,7 +52,7 @@ function M.delete_buf(bufnr)
 end
 
 -- debug ------------------------------------------------------------------------------------------
-function M:debug()
+__Debug.WinbarLine = function()
   for win_id, w in pairs(wins) do
     print('win:', win_id, vim.inspect(w:list_bufs()))
   end

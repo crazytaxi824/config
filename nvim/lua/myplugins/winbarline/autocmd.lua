@@ -192,7 +192,4 @@ vim.api.nvim_create_autocmd({"WinResized"}, {
 })
 
 
--- debug ------------------------------------------------------------------------------------------
-vim.api.nvim_create_user_command("DebugWinbarLine", function()
-  g:debug()
-end, {})
+
