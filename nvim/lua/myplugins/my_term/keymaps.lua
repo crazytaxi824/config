@@ -6,7 +6,7 @@ local shell_term = require("myplugins.my_term.instance_shell")
 local M = {}
 
 
-function M.setup()
+function M.set()
   local opt = { silent = true }
   local keymaps = {
     -- NOTE: terminal key mapping 在其他 plugin 中也有设置.

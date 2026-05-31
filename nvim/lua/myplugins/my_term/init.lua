@@ -1,5 +1,5 @@
 local console = require('myplugins.my_term.instance_console')
-local setup = require('myplugins.my_term.setup')
+local keymaps = require('myplugins.my_term.keymaps')
 
 
 local M = {}
@@ -7,6 +7,8 @@ local M = {}
 -- console terminal
 M.console = console.console
 
-M.setup = setup.setup
+M.setup = function()
+  keymaps.set()
+end
 
 return M

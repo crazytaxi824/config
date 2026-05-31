@@ -3,7 +3,7 @@ local wb_act = require('myplugins.winbarline.winbar_actions')
 
 local M = {}
 
-function M.setup()
+function M.set()
   local opt = { silent = true }
   local winbar_keymaps = {
     {'n', '<S-D-[>', function() wb_act.cycle('prev') end, opt, 'buffer: go to Prev buffer'},
