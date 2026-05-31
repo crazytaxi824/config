@@ -63,10 +63,7 @@ local buf_events = {
   "FileWriteCmd", "FileWritePost", "FileWritePre",
 }
 
-local cmd_events = {
-  "CmdUndefined", "CmdlineChanged", "CmdlineEnter", "CmdlineLeave",
-  "CmdwinEnter", "CmdwinLeave",
-}
+local cmd_events = { "CmdUndefined", "CmdlineChanged", "CmdlineEnter", "CmdlineLeave", "CmdwinEnter", "CmdwinLeave" }
 
 local cursor_events = { "CursorHold", "CursorHoldI", "CursorMoved", "CursorMovedI", "CursorMovedC" }
 
@@ -78,23 +75,22 @@ local tab_events = { "TabEnter", "TabLeave", "TabNew", "TabNewEntered", "TabClos
 
 local term_events = { "TermOpen", "TermClose", "TermEnter", "TermLeave", "TermRequest", "TermResponse" }
 
-local function debug_autocmd(e)
-  if e.args == "" then
-    vim.notify(e.name .. " need args: buf, win, cursor, vim, lsp, tab, term, cmd || all, off", vim.log.levels.WARN)
-    return
-  end
 
-  if e.args == "off" then
+---@param params vim.api.keyset.create_user_command.command_args
+local function debug_autocmd(params)
+  if params.args == "off" then
     if augroup_id then
       vim.api.nvim_del_augroup_by_id(augroup_id)
       augroup_id = nil
     end
+
     vim.notify("debug autocmd events: Disabled")
     return
   end
 
+  ---@type string[]
   local events = {}
-  if e.args == "all" then
+  if params.args == "all" then
     vim.list_extend(events, buf_events)
     vim.list_extend(events, win_events)
     vim.list_extend(events, term_events)
@@ -104,39 +100,45 @@ local function debug_autocmd(e)
     vim.list_extend(events, tab_events)
     vim.list_extend(events, cmd_events)
   else
-    if vim.list_contains(e.fargs, "buf") or vim.list_contains(e.fargs, "buffer") or vim.list_contains(e.fargs, "file") then
+    if vim.list_contains(params.fargs, "buf") or vim.list_contains(params.fargs, "buffer") or vim.list_contains(params.fargs, "file") then
       vim.list_extend(events, buf_events)
     end
 
-    if vim.list_contains(e.fargs, "win") or vim.list_contains(e.fargs, "window") then
+    if vim.list_contains(params.fargs, "win") or vim.list_contains(params.fargs, "window") then
       vim.list_extend(events, win_events)
     end
 
-    if vim.list_contains(e.fargs, "term") or vim.list_contains(e.fargs, "terminal") then
+    if vim.list_contains(params.fargs, "term") or vim.list_contains(params.fargs, "terminal") then
       vim.list_extend(events, term_events)
     end
 
-    if vim.list_contains(e.fargs, "cmd") or vim.list_contains(e.fargs, "command") then
+    if vim.list_contains(params.fargs, "cmd") or vim.list_contains(params.fargs, "command") then
       vim.list_extend(events, cmd_events)
     end
 
-    if vim.list_contains(e.fargs, "vim") then
+    if vim.list_contains(params.fargs, "vim") then
       vim.list_extend(events, vim_events)
     end
 
-    if vim.list_contains(e.fargs, "cursor") then
+    if vim.list_contains(params.fargs, "cursor") then
       vim.list_extend(events, cursor_events)
     end
 
-    if vim.list_contains(e.fargs, "lsp") then
+    if vim.list_contains(params.fargs, "lsp") then
       vim.list_extend(events, lsp_events)
     end
 
-    if vim.list_contains(e.fargs, "tab") then
+    if vim.list_contains(params.fargs, "tab") then
       vim.list_extend(events, tab_events)
     end
   end
 
+  if vim.tbl_isempty(events) then
+    vim.notify("command ':" .. params.name .. "' need args: buf, win, cursor, vim, lsp, tab, term, cmd || all, off", vim.log.levels.WARN)
+    return
+  end
+
+  -- 开启 autocmd
   augroup_id = vim.api.nvim_create_augroup('my_autocmd_debug', { clear = true })
   vim.api.nvim_create_autocmd(events, {
     group = augroup_id,
@@ -156,14 +158,10 @@ local function debug_autocmd(e)
   vim.notify("debug autocmd events: Enabled")
 end
 
--- 启动时开启
-if __Debug.autocmd then
-  debug_autocmd({ fargs = { 'vim', 'win', 'buf' } })
-end
-
 -- `:AutocmdDebug all`, `:AutocmdDebug off`
 -- `:AutocmdDebug buf`, `:AutocmdDebug buf win lsp`, ...
-vim.api.nvim_create_user_command("DebugAutocmd", function(params)
+local user_cmd_name = "DebugAutocmd"
+vim.api.nvim_create_user_command(user_cmd_name, function(params)
   -- params.args: string
   -- params.fargs: list
   debug_autocmd(params)
@@ -177,4 +175,11 @@ end,
     return { 'buf', 'win', 'cursor', 'vim', 'lsp', 'tab', 'term', 'cmd', 'all', 'off' }
   end,
 })
+
+-- 启动时开启
+if __Debug.autocmd then
+  vim.cmd[user_cmd_name]({ args = { 'vim', 'win', 'buf', 'lsp' }})
+end
+
+
 
