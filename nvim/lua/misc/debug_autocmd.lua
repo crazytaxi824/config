@@ -76,9 +76,9 @@ local tab_events = { "TabEnter", "TabLeave", "TabNew", "TabNewEntered", "TabClos
 local term_events = { "TermOpen", "TermClose", "TermEnter", "TermLeave", "TermRequest", "TermResponse" }
 
 
----@param params vim.api.keyset.create_user_command.command_args
-local function debug_autocmd(params)
-  if params.args == "off" then
+---@param events string[]
+local function debug_autocmd(events)
+  if vim.list_contains(events, "off") then
     if augroup_id then
       vim.api.nvim_del_augroup_by_id(augroup_id)
       augroup_id = nil
@@ -89,58 +89,58 @@ local function debug_autocmd(params)
   end
 
   ---@type string[]
-  local events = {}
-  if params.args == "all" then
-    vim.list_extend(events, buf_events)
-    vim.list_extend(events, win_events)
-    vim.list_extend(events, term_events)
-    vim.list_extend(events, vim_events)
-    vim.list_extend(events, cursor_events)
-    vim.list_extend(events, lsp_events)
-    vim.list_extend(events, tab_events)
-    vim.list_extend(events, cmd_events)
+  local valid_events = {}
+  if vim.list_contains(events, "all") then
+    vim.list_extend(valid_events, buf_events)
+    vim.list_extend(valid_events, win_events)
+    vim.list_extend(valid_events, term_events)
+    vim.list_extend(valid_events, vim_events)
+    vim.list_extend(valid_events, cursor_events)
+    vim.list_extend(valid_events, lsp_events)
+    vim.list_extend(valid_events, tab_events)
+    vim.list_extend(valid_events, cmd_events)
   else
-    if vim.list_contains(params.fargs, "buf") or vim.list_contains(params.fargs, "buffer") or vim.list_contains(params.fargs, "file") then
-      vim.list_extend(events, buf_events)
+    if vim.list_contains(events, "buf") or vim.list_contains(events, "buffer") or vim.list_contains(events, "file") then
+      vim.list_extend(valid_events, buf_events)
     end
 
-    if vim.list_contains(params.fargs, "win") or vim.list_contains(params.fargs, "window") then
-      vim.list_extend(events, win_events)
+    if vim.list_contains(events, "win") or vim.list_contains(events, "window") then
+      vim.list_extend(valid_events, win_events)
     end
 
-    if vim.list_contains(params.fargs, "term") or vim.list_contains(params.fargs, "terminal") then
-      vim.list_extend(events, term_events)
+    if vim.list_contains(events, "term") or vim.list_contains(events, "terminal") then
+      vim.list_extend(valid_events, term_events)
     end
 
-    if vim.list_contains(params.fargs, "cmd") or vim.list_contains(params.fargs, "command") then
-      vim.list_extend(events, cmd_events)
+    if vim.list_contains(events, "cmd") or vim.list_contains(events, "command") then
+      vim.list_extend(valid_events, cmd_events)
     end
 
-    if vim.list_contains(params.fargs, "vim") then
-      vim.list_extend(events, vim_events)
+    if vim.list_contains(events, "vim") then
+      vim.list_extend(valid_events, vim_events)
     end
 
-    if vim.list_contains(params.fargs, "cursor") then
-      vim.list_extend(events, cursor_events)
+    if vim.list_contains(events, "cursor") then
+      vim.list_extend(valid_events, cursor_events)
     end
 
-    if vim.list_contains(params.fargs, "lsp") then
-      vim.list_extend(events, lsp_events)
+    if vim.list_contains(events, "lsp") then
+      vim.list_extend(valid_events, lsp_events)
     end
 
-    if vim.list_contains(params.fargs, "tab") then
-      vim.list_extend(events, tab_events)
+    if vim.list_contains(events, "tab") then
+      vim.list_extend(valid_events, tab_events)
     end
   end
 
-  if vim.tbl_isempty(events) then
-    vim.notify("command ':" .. params.name .. "' need args: buf, win, cursor, vim, lsp, tab, term, cmd || all, off", vim.log.levels.WARN)
+  if vim.tbl_isempty(valid_events) then
+    vim.notify("command args: buf, win, cursor, vim, lsp, tab, term, cmd || all, off", vim.log.levels.WARN)
     return
   end
 
   -- 开启 autocmd
   augroup_id = vim.api.nvim_create_augroup('my_autocmd_debug', { clear = true })
-  vim.api.nvim_create_autocmd(events, {
+  vim.api.nvim_create_autocmd(valid_events, {
     group = augroup_id,
     pattern = {"*"},
     callback = function(args)
@@ -164,7 +164,7 @@ local user_cmd_name = "DebugAutocmd"
 vim.api.nvim_create_user_command(user_cmd_name, function(params)
   -- params.args: string
   -- params.fargs: list
-  debug_autocmd(params)
+  debug_autocmd(params.fargs)
 end,
 {
   nargs = "*",
