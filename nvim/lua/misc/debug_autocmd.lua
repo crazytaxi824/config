@@ -171,21 +171,25 @@ end
 -- `:AutocmdDebug buf`, `:AutocmdDebug buf win lsp`, ...
 vim.api.nvim_create_user_command("DebugAutocmd", function(params)
   -- params.args: string
-  -- params.fargs: list
+  -- params.fargs: string[]
   __Debug.Autocmd(params.fargs)
 end,
 {
-  nargs = "*",
+  nargs = "+",
   bang = true,
   bar = true,
   desc = 'autocmd events order',
   complete = function(ArgLead, CmdLine, CursorPos)
     local line_to_cursor = CmdLine:sub(1, CursorPos)
+
+    -- words[1] 是 command 本身, eg: "DebugAutocmd"
     local words = vim.split(line_to_cursor, "%s+")
     if words[#words] == "" then
-        table.remove(words, #words)
+      -- 如果刚敲了空格, 末尾会 split 出一个 "", 需要去掉
+      table.remove(words, #words)
     end
 
+    -- 当前正在输入第几个 args
     local current_arg_index = #words - 1
     if ArgLead == "" then
         current_arg_index = current_arg_index + 1

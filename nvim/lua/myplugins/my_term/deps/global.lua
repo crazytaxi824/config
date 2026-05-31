@@ -48,4 +48,18 @@ __Debug.GetAllMyTerms = function()
   vim.print(global_my_term_cache)
 end
 
+
+vim.api.nvim_create_user_command("DebugGetAllMyTerms", function()
+  -- params.args: string
+  -- params.fargs: string[]
+  __Debug.GetAllMyTerms()
+end,
+{
+  nargs = 0,
+  bang = true,
+  bar = true,
+  desc = 'show all cached MyTerm',
+})
+
+
 return M

@@ -36,4 +36,17 @@ __Debug.GetTSNodeAtCursor = function()
 end
 
 
+vim.api.nvim_create_user_command("DebugGetTSNodeAtCursor", function()
+  -- params.args: string
+  -- params.fargs: string[]
+  __Debug.GetTSNodeAtCursor()
+end,
+{
+  nargs = 0,
+  bang = true,
+  bar = true,
+  desc = 'get treesitter-node `TSNode` at cursor',
+})
+
+
 

@@ -402,7 +402,7 @@ for hl_group, hl_val in pairs(Highlights) do
   vim.api.nvim_set_hl(0, hl_group, hl_val)
 end
 
--- debug color ------------------------------------------------------------------------------------
+-- debug -------------------------------------------------------------------------------------------
 
 -- 返回使用 color name 的 Highlight Groups
 ---@param color_name string  name of color: "blue"|"red"|"magenta"...
@@ -430,6 +430,22 @@ __Debug.ColorGetHighlights = function(color_name)
     end
   end
 end
+
+
+vim.api.nvim_create_user_command("DebugColorGetHighlights", function(params)
+  -- params.args: string
+  -- params.fargs: string[]
+  __Debug.ColorGetHighlights(params.args)
+end,
+{
+  nargs = 1,
+  bang = true,
+  bar = true,
+  desc = 'get highlight groups that using color_name',
+  complete = function()
+    return vim.tbl_keys(Colors)
+  end,
+})
 
 
 

@@ -63,4 +63,17 @@ __Debug.WinbarLine = function()
 end
 
 
+vim.api.nvim_create_user_command("DebugWinbarLine", function()
+  -- params.args: string
+  -- params.fargs: string[]
+  __Debug.WinbarLine()
+end,
+{
+  nargs = 0,
+  bang = true,
+  bar = true,
+  desc = 'show WinbarLine cached wins and bufs',
+})
+
+
 return M
