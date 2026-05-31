@@ -170,21 +170,12 @@ vim.api.nvim_create_autocmd({"WinResized"}, {
   group = gid,
   callback = function(args)
     for _, win_id in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
-      local w = g.get_win(win_id)
+      -- NOTE: split window 中不会触发 BufWinEnter, 所以利用 WinResized 来解决
+      -- WinResized 在 BufWinEnter 之后触发
+      -- window 中一定会显示一个 buffer
+      local w = binding_win_buf(win_id, vim.api.nvim_win_get_buf(win_id))
       if w then
-        -- window width 改变了才更新 winbar
-        local win_width = vim.api.nvim_win_get_width(win_id)
-        if w.width ~= win_width then
-          w:set_winbar(win_width)
-        end
-      else
-        -- NOTE: split window 中不会触发 BufWinEnter, 所以利用 WinResized 来解决
-        -- WinResized 在 BufWinEnter 之后触发
-        -- window 中一定会显示一个 buffer
-        w = binding_win_buf(win_id, vim.api.nvim_win_get_buf(win_id))
-        if w then
-          w:set_winbar()
-        end
+        w:set_winbar()
       end
     end
   end,
