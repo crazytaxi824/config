@@ -40,6 +40,7 @@ export LESS_TERMCAP_ue=$(printf "\e[0m")       # ue      rmul      stop underlin
 # VVI: 必须 `echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile`  # for apple silicon installation.
 # 不要每次安装/更新软件时自动清理, 可以使用 `brew cleanup` 手动清理.
 export HOMEBREW_NO_INSTALL_CLEANUP=true
+export HOMEBREW_REQUIRE_TAP_TRUST=true
 
 # `brew bundle --help` Install and upgrade (by default) all dependencies from the Brewfile.
 # `brew bundle check`, `brew bundle cleanup`, `brew bundle list` ...
