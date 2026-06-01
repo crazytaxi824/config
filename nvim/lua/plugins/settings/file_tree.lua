@@ -155,6 +155,7 @@ local function nt_buffer_keymaps(bufnr)
     { "<leader>gf",  nt_api.tree.toggle_git_clean_filter,   "Toggle Git Status Changed" },  -- toggle show git_status changed files ONLY
     { "<S-CR>",      nt_api.tree.change_root_to_node,   "cd" },  -- `cd` in the directory under the cursor
     { "q",           nt_api.tree.close,          "Close" },  -- close nvim-tree window
+    { "<ESC>",       nt_api.tree.close,          "Close" },  -- close nvim-tree window
     { "?",           nt_api.tree.toggle_help,    "Help" },
 
     { "a",           nt_api.fs.create,      "Create File" },
@@ -338,7 +339,7 @@ local config = {
       exclude = { "node_modules", ".mypy_cache", ".git" },  -- NOTE: 排除 expand dir
     },
     open_file = {
-      quit_on_open = true,  -- VVI: 打开文件后自动关闭 Nvimtree
+      quit_on_open = false,  -- VVI: 打开文件后自动关闭 Nvimtree
       resize_window = true,  -- VVI: 重新渲染 nvimtree 窗口大小.
 
       -- 有多个 win 的情况下, 在 nvim-tree 中打开文件时需要选择 window.
