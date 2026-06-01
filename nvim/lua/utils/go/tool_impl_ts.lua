@@ -17,11 +17,13 @@ local function ts_get_iface_name_type()
     return
   end
 
+  -- 确认 interface 而不是 struct
   if next:type() == 'interface_type' then
     return iface_name, typ_params
   end
 
   if next:type() == 'type_parameter_list' then
+    -- 确认 interface 而不是 struct
     local interface_typ = next:next_sibling()  -- has to be 'interface_type'
     if not interface_typ or interface_typ:type() ~= 'interface_type' then
       return
