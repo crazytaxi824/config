@@ -40,7 +40,6 @@ end
 -- autocmd ----------------------------------------------------------------------------------------
 local gid = vim.api.nvim_create_augroup('my_winbarline', { clear = true })
 
-
 -- bind/unbind buffer & window 之间的关联
 vim.api.nvim_create_autocmd({"BufWinEnter"}, {
   group = gid,
@@ -142,7 +141,7 @@ vim.api.nvim_create_autocmd({
 
 -- 根据 window 变动更新 winbar
 -- WinEnter 主要为了切换 selected buffer highlight
--- NOTE: 在 'WinResized' 事件中获取 window width 是准确的, 但是在 'WinEnter' 事件中获取的 window width 不准确.
+-- NOTE: 在 WinEnter 时获取的 buffer 和 window width 都是不准确的. 需要在 "WinResized" 中获取
 vim.api.nvim_create_autocmd({"WinEnter"}, {
   group = gid,
   callback = function(args)
@@ -163,6 +162,7 @@ vim.api.nvim_create_autocmd({"WinEnter"}, {
   desc = "winbarline: redraw selected buffer"
 })
 
+
 -- 'WinResized' 时需要更新所有正在显示的 (tab 中的) winbar
 -- NOTE: WinNew -> WinEnter -> BufEnter -> BufWinEnter -> WinResized
 -- 所以 WinResized 时获取的 buffer 和 win width 都是准确的, WinNew/WinEnter 时获取的是临时的.
@@ -170,8 +170,8 @@ vim.api.nvim_create_autocmd({"WinResized"}, {
   group = gid,
   callback = function(args)
     for _, win_id in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
-      -- NOTE: split window 中不会触发 BufWinEnter, 所以利用 WinResized 来解决
-      -- WinResized 在 BufWinEnter 之后触发
+      -- NOTE: split window 中不会触发 BufWinEnter, 所以利用 WinResized 来解决.
+      -- NOTE: "a buffer with read errors" 时所有的 buf events 都不会被触发, eg: [Permission Denied], LSP error ...
       -- window 中一定会显示一个 buffer
       local w = binding_win_buf(win_id, vim.api.nvim_win_get_buf(win_id))
       if w then
