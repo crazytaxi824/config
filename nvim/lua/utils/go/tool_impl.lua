@@ -95,11 +95,11 @@ function M.go_impl(params)
   end
 
   -- 打印 cmd
-  local sh_cmd_print = {'impl', '-dir', dir,'"'..params..iface_type..'"', '"'..iface_name..iface_type..'"'}
-  vim.notify(table.concat(sh_cmd_print, ' '), vim.log.levels.INFO)
+  local sh_cmd_print = string.format('impl -dir %s "%s" "%s"', dir, params, iface_name..iface_type)
+  vim.notify(sh_cmd_print, vim.log.levels.INFO)
 
   -- 执行 shell cmd
-  local sh_cmd = {'impl', '-dir', dir, params..iface_type, iface_name..iface_type}
+  local sh_cmd = {'impl', '-dir', dir, params, iface_name..iface_type}
   local result = vim.system(sh_cmd, { text = true }):wait()
   if result.code ~= 0 then
     error(result.stderr ~= '' and result.stderr or result.code)
