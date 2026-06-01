@@ -52,16 +52,16 @@ adjust-cell-height = 6
 # 垂直调整文字在行间距中的位置
 # adjust-font-baseline
 
-# 上划线, pos > (adjust-cell-height + font-size)/2 - 2
-adjust-underline-position = 20%
-adjust-underline-thickness = 1
+# 上划线, position >= math.floor(adjust-cell-height + font-size)/2 - 3
+adjust-underline-position = 6
+# adjust-underline-thickness = 1
 
-# 上划线, pos < (adjust-cell-height + font-size)/2 - 2
-adjust-overline-position = -7
+# 上划线, |position| <= math.floor(adjust-cell-height + font-size)/2 - 3
+adjust-overline-position = -6
 adjust-overline-thickness = 1
 
 adjust-strikethrough-position = -25%
-adjust-strikethrough-thickness = 1
+# adjust-strikethrough-thickness = 1
 
 adjust-cursor-thickness = 1
 
