@@ -8,9 +8,15 @@ macos-icon = blueprint
 # font ---------------------------------------------------------------------------------------------
 # `$ ghostty +list-fonts`, 多个 font-family 按顺序 fallback
 
+# main code font
 font-family = "FiraCode Nerd Font Mono"
 # font-family = "JetBrainsMono Nerd Font Mono"
+
+# Menlo 等宽字体, for: italic, italic bold ...
 font-family = "Menlo"
+
+# for icons: ⭐️ ✅ ❌
+font-family = "Apple Color Emoji"
 
 # Simplified Chinese (SC), Traditional Chinese (TC), Hong Kong Traditional Chinese (HC)
 # Slab: (英文字符)衬线, Fixed: 无 Ligatures (连体字符)
