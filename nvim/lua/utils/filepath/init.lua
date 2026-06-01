@@ -1,15 +1,15 @@
-local fp_hl = require('utils.filepath.highlight')
-local fp_jump = require('utils.filepath.jump_to_file')
-
 local M = {
-  n_jump = fp_jump.n_jump_cWORD,
-  v_jump = fp_jump.v_jump_selected,
+  n_jump = require('utils.filepath.jump_to_file').n_jump_cWORD,
+  v_jump = require('utils.filepath.jump_to_file').v_jump_selected,
 }
 
 -- 给 bufnr 设置 filepath highlight
 --
 ---@param bufnr integer
 M.auto_hl_current_line = function(bufnr)
+  local fp_hl = require('utils.filepath.highlight')
+  local fp_jump = require('utils.filepath.jump_to_file')
+
   local g_id = vim.api.nvim_create_augroup('my_filepath_highlight_' .. bufnr, {clear=true})
 
   -- autocmd highlight filepath under cursor
