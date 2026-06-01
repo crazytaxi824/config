@@ -1,5 +1,7 @@
 local g = require('myplugins.winbarline.global')
 local u = require('myplugins.winbarline.utils')
+local wb_win = require("myplugins.winbarline.winbar_win")
+local wb_buf = require("myplugins.winbarline.winbar_buf")
 
 
 local M = {}
@@ -246,5 +248,37 @@ function M.list_win_buffers()
   end)
 end
 
+---@param bufnr integer
+---@param win_id integer
+---@return WinbarLineWindow|nil
+function M.binding_win_buf(win_id, bufnr)
+  if not vim.api.nvim_buf_is_valid(bufnr) or not vim.api.nvim_win_is_valid(win_id) then
+    error('win: ' .. win_id .. ', or bufnr: ' .. bufnr .. ' is not valid' )
+  end
+
+  -- floating window 不显示 WinBarLine
+  local win_cfg = vim.api.nvim_win_get_config(win_id)
+  if win_cfg.relative ~= '' then
+    return
+  end
+
+  local win = g.get_win(win_id)
+  if win then
+    win:append_buf(bufnr)
+  else
+    win = wb_win.new(win_id, bufnr, win_cfg.width)
+    g.set_win(win)
+  end
+
+  local buf = g.get_buf(bufnr)
+  if buf then
+    buf:append_win(win_id)
+  else
+    buf = wb_buf.new(bufnr, win_id)
+    g.set_buf(buf)
+  end
+
+  return win
+end
 
 return M

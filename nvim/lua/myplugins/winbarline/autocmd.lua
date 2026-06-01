@@ -1,40 +1,5 @@
 local g = require('myplugins.winbarline.global')
-local wb_win = require("myplugins.winbarline.winbar_win")
-local wb_buf = require("myplugins.winbarline.winbar_buf")
-
-
----@param bufnr integer
----@param win_id integer
----@return WinbarLineWindow|nil
-local function binding_win_buf(win_id, bufnr)
-  if not vim.api.nvim_buf_is_valid(bufnr) or not vim.api.nvim_win_is_valid(win_id) then
-    error('win: ' .. win_id .. ', or bufnr: ' .. bufnr .. ' is not valid' )
-  end
-
-  -- floating window 不显示 WinBarLine
-  local win_cfg = vim.api.nvim_win_get_config(win_id)
-  if win_cfg.relative ~= '' then
-    return
-  end
-
-  local win = g.get_win(win_id)
-  if win then
-    win:append_buf(bufnr)
-  else
-    win = wb_win.new(win_id, bufnr, win_cfg.width)
-    g.set_win(win)
-  end
-
-  local buf = g.get_buf(bufnr)
-  if buf then
-    buf:append_win(win_id)
-  else
-    buf = wb_buf.new(bufnr, win_id)
-    g.set_buf(buf)
-  end
-
-  return win
-end
+local wb_act = require('myplugins.winbarline.winbar_actions')
 
 
 -- autocmd ----------------------------------------------------------------------------------------
@@ -45,7 +10,7 @@ vim.api.nvim_create_autocmd({"BufWinEnter"}, {
   group = gid,
   callback = function(args)
     local curr_win = vim.api.nvim_get_current_win()
-    local w = binding_win_buf(curr_win, args.buf)
+    local w = wb_act.binding_win_buf(curr_win, args.buf)
     if w then
       w:set_winbar()
     end
@@ -173,7 +138,7 @@ vim.api.nvim_create_autocmd({"WinResized"}, {
       -- NOTE: split window 中不会触发 BufWinEnter, 所以利用 WinResized 来解决.
       -- NOTE: "a buffer with read errors" 时所有的 buf events 都不会被触发, eg: [Permission Denied], LSP error ...
       -- window 中一定会显示一个 buffer
-      local w = binding_win_buf(win_id, vim.api.nvim_win_get_buf(win_id))
+      local w = wb_act.binding_win_buf(win_id, vim.api.nvim_win_get_buf(win_id))
       if w then
         w:set_winbar()
       end
