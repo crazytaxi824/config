@@ -220,7 +220,6 @@ local plugins = {
     },
   },
 
-  -- "jose-elias-alvarez/null-ls.nvim",  -- Archived!!!
   {
     "nvimtools/none-ls.nvim",
     commit = "f9d557a",

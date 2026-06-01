@@ -1,5 +1,5 @@
 -- 在 null-ls 中设置 golangci-lint
--- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/HELPERS.md
+-- https://github.com/nvimtools/none-ls.nvim/blob/main/doc/HELPERS.md
 
 local log = require("null-ls.logger")
 local c = require("null-ls.config")
@@ -21,7 +21,7 @@ return {
     local golangci_args = {
       "run",
 
-      -- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/HELPERS.md#args
+      -- https://github.com/nvimtools/none-ls.nvim/blob/main/doc/HELPERS.md#args
       -- NOTE: 不能使用 $FILENAME lint 单个文件. 会导致其他 package 中定义的 var 无法被 golangci 找到.
       -- 如果缺省该设置则会 lint 整个 project.
       "$DIRNAME",
