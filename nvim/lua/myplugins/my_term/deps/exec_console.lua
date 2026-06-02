@@ -200,7 +200,7 @@ end
 ---@param job_id integer
 local function set_console_keymaps(term_bufnr, job_id)
   local opt = { buffer = term_bufnr, silent = true }
-  local keys = {
+  local keymaps = {
     {'n', '<C-c>', function() stop_job(term_bufnr, job_id) end, opt, "my_term: jobstop()"},
     {'i', '<C-c>', function() stop_job(term_bufnr, job_id) end, opt, "my_term: jobstop()"},
     {'n', '<C-l>', function()
@@ -210,7 +210,7 @@ local function set_console_keymaps(term_bufnr, job_id)
       end
     end, opt, "my_term: toggle wrap" },
   }
-  require('utils.keymaps').set(keys)
+  require('utils.keymaps').set(keymaps)
 end
 
 -- 后台执行 jobstart(cmd), 将 output 手动写入 buffer. (buftype = 'nofile')

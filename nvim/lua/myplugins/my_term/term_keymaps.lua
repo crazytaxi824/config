@@ -67,12 +67,12 @@ local M = {}
 ---@param term_bufnr integer
 function M.set_buf_keymaps(term, term_bufnr)
   local opt = { buffer = term_bufnr, silent = true }
-  local keys = {
+  local keymaps = {
     {'n', '<leader>tc', function() close_others(term.id) end,   opt, 'my_term: close other my_terms windows'},
     {'n', '<leader>tw', function() wipeout_others(term.id) end, opt, 'my_term: wipeout other my_terms'},
     {'n', 'Q', function() wipeout_term(term.id) end, opt, 'my_term: wipeout current my_term'},
   }
-  require('utils.keymaps').set(keys)
+  require('utils.keymaps').set(keymaps)
 end
 
 return M

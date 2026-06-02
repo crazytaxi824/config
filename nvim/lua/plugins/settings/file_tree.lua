@@ -138,7 +138,7 @@ end
 local function nt_buffer_keymaps(bufnr)
   local nt_api = require("nvim-tree.api")
 
-  local keys = {
+  local keymaps = {
     { "<CR>",        nt_api.node.open.edit,   "Open" },
     { "e",           nt_api.node.open.edit,   "Open" },
     { "<C-v>",       nt_api.node.open.vertical,     "Open vsplit" },  -- vsplit edit
@@ -184,7 +184,7 @@ local function nt_buffer_keymaps(bufnr)
     return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, silent = true, nowait = true }
   end
 
-  for _, keymap in ipairs(keys) do
+  for _, keymap in ipairs(keymaps) do
     vim.keymap.set('n', keymap[1], keymap[2], opt(keymap[3]))
   end
 end
