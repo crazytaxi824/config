@@ -1,4 +1,4 @@
--- 使用 gomodifytags 给 struct 添加/移除 tags ------------------------------------------------------
+-- 使用 gomodifytags 给 struct 添加/移除 tags ------------------------------------------------------ {{{
 -- 操作方法: cursor 在 struct 的 {} 内, 使用以下 Command
 --   :GoTagAdd json,xml            -- 默认: snakecase. use '-add-tags'
 --   :GoTagAdd json,xml camelcase  -- camelcase. use '-add-tags' & '-transform'
@@ -34,6 +34,7 @@
 --   -override   覆盖更改
 --   -quiet      不打印运行结果
 --   -w          保存文件(外部修改文件)
+-- }}}
 
 -- ADD Tags and Options ----------------------------------------------------------------------------
 -- NOTE: *.go 被重新加载时, 本文件会被重新读取. 会造成重复设置 command, 所以必须使用 `command!`
