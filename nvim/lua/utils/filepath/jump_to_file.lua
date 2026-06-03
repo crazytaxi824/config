@@ -68,13 +68,18 @@ end
 
 -- jump to file/directory
 --
----@param content string|nil filepath:{lnum}:{col}
+---@param content? string filepath:{lnum}:{col}
 local function jump(content)
   if not content or vim.trim(content) == "" then
     return
   end
 
-  local fp_props = parser.parse_fp_current_line(content)
+  local char_count = vim.fn.strchars(content)
+  if char_count > 512 then
+    return
+  end
+
+  local fp_props = parser.parse_fp_from_str(content)
   if not fp_props then
     return
   end
@@ -90,10 +95,15 @@ local function jump(content)
   Notify('cannot open: "' .. content .. '"', "INFO", {timeout = 1500})
 end
 
--- visual selected content, 不需要 parse
----@param v_selected? string filepath:{lnum}:{col}
+-- visual selected content
+---@param v_selected? string  必须是 exact {filepath}:{lnum}:{col}
 local function v_jump(v_selected)
   if not v_selected or vim.trim(v_selected) == "" then
+    return
+  end
+
+  local char_count = vim.fn.strchars(v_selected)
+  if char_count > 512 then
     return
   end
 

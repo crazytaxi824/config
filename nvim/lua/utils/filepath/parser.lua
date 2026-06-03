@@ -106,16 +106,6 @@ local function filepath_with_lnum_col(str)
 end
 
 
--- hl 不存在则只需要分析 absolute filepath 可用于 jump to path, 不需要分析 highlight start_col & end_col.
--- hl 存在则使用 string.find() & nvim_buf_add_highlight() 可用于 highlight.
---
----@param str string
----@return FilePathProperty|nil
-M.parse_fp_current_line = function(str)
-  -- 如果 trimmed 不是一个 filepath, 则返回 nil
-  return filepath_with_lnum_col(str)
-end
-
 ---@param ori_str string
 ---@param fp_props FilePathProperty
 ---@return integer|nil start_col
@@ -142,6 +132,16 @@ local function find_filepath_pos(ori_str, fp_props)
   return start_col-1, end_col
 end
 
+
+-- hl 不存在则只需要分析 absolute filepath 可用于 jump to path, 不需要分析 highlight start_col & end_col.
+-- hl 存在则使用 string.find() & nvim_buf_add_highlight() 可用于 highlight.
+--
+---@param str string
+---@return FilePathProperty|nil
+M.parse_fp_from_str = function(str)
+  return filepath_with_lnum_col(str)
+end
+
 -- 获取所有需要 highlight 的 filepaths
 ---@return {bufnr: integer, pos: FilePathHighLightPos[]}|nil hl_params
 M.parse_hl_current_line = function()
@@ -149,6 +149,9 @@ M.parse_hl_current_line = function()
   if vim.trim(line) == '' then
     return
   end
+
+  -- 防止 js 文件太长造成卡顿
+  line = vim.fn.strcharpart(line, 0, 512)
 
   local bufnr = vim.api.nvim_get_current_buf()
   local lnum = vim.api.nvim_win_get_cursor(0)[1]  -- vim.fn.line('.')
