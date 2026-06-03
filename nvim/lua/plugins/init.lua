@@ -222,7 +222,7 @@ local plugins = {
 
   {
     "nvimtools/none-ls.nvim",
-    commit = "f9d557a",
+    commit = "01f8e62",
     config = function() require("lsp.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -274,7 +274,7 @@ local plugins = {
 
   {
     "nvim-lualine/lualine.nvim",  -- `:help 'statusline'`
-    commit = "131a558",
+    commit = "221ce6b",
     config = function() require("plugins.settings.decor_lualine") end,
 
     event = "VeryLazy",
