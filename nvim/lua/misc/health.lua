@@ -70,10 +70,10 @@ end
 
 ---@type table<string, ToolProps>
 local cmd_tools = {
-  go = { cmd = "go", install = "https://go.dev" },
+  go       = { cmd = "go", install = "https://go.dev" },
+  fd       = { cmd = { "fd", "fdfind" },  install = "brew info fd" },
   graphviz = { cmd = "dot", install = "brew info graphviz" },
-  ripgrep =  { cmd = "rg",  install = "brew info ripgrep" },
-  fd =       { cmd = "fd",  install = "brew info fd" },
+  ripgrep  = { cmd = "rg",  install = "brew info ripgrep" },
 }
 
 
