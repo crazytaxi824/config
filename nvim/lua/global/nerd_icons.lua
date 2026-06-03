@@ -3,8 +3,8 @@ Nerd_icons = {
   diag = {
     hint  = "󰛩",  -- ⚐ ⚑ 󰛨 󰛩
     info  = "",  -- 𝖎     
-    warn  = "",  --  
-    error = "",  --  ✕ ✖︎ ✗ ✘  
+    warn  = "",  --  
+    error = "",  --  ✕ ✖︎ ✗ ✘  
   },
   arrows = {
     up    = '↑',
@@ -22,6 +22,15 @@ Nerd_icons = {
     item   = "├",
     corner = "└",
   },
+  git = {
+    unstaged  = "", --  
+    staged    = "󰄵", --  󰄵
+    unmerged  = "", --  
+    renamed   = "", -- 
+    untracked = "", --   untracked = new file.
+    deleted   = "", -- 
+    ignored   = "◌",  --  ◌
+  },
   border = {"▄","▄","▄","█","▀","▀","▀","█"},  -- `:h nvim_open_win()`
   -- border = {"┌","─","┐","│","┘","─","└","│"},  -- "Box Drawings Light"
   -- border = {"╭","─","╮","│","╯","─","╰","│"},  -- "Box Drawings Light Arc"
@@ -29,8 +38,8 @@ Nerd_icons = {
   tick  = '✓',  -- ✓ ✔︎  
   cross = '',  --  ✕ ✖︎ ✗ ✘  
   star  = '',  -- 󰓎    ★
-  dot = '●',  --   ○ ◌
-  dot_h = '',
+  dot = '●',  --   ○ ◌ ●
+  dot_h = '○',
   lock  = '󰌾',  --   󰌾   
   ellipsis = '',  -- … 
 }

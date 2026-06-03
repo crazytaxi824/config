@@ -44,8 +44,8 @@ local cmp_opts = {
 
 ---@type table<string, { text:string, icon:string }>
 local kind_text_icon = {  ------------------------------------------------------------------------------ {{{
-  Keyword     = { text="keywd",  icon="" },  -- 
-  Text        = { text="text",   icon="󰊄" },  --   󰊄  
+  Keyword     = { text="keywd",  icon="" },  --  
+  Text        = { text="text",   icon="" },  --   󰊄  
   Module      = { text="module", icon="" },  -- 󰮄 , eg: import [module]
   Method      = { text="method", icon="󰊕" },  -- 󰆧
   Function    = { text="func",   icon="󰊕" },
@@ -68,7 +68,7 @@ local kind_text_icon = {  ------------------------------------------------------
   Color         = { text="color",  icon="󱥚" },  -- 
   Reference     = { text="ref",    icon="" },  -- 󰌹  
   Event         = { text="event",  icon="" },
-  Operator      = { text="op",     icon="󰾞" },  -- 󱓉
+  Operator      = { text="op",     icon="󱓉" },  -- 󱓉 󰾞
   Unit          = { text="unit",   icon="󰺾" },  -- 󰺾   󰳂, eg: css 中(长度, 时间 ...)单位, eg: px, rem, ms
   Value         = { text="value",  icon="󰎠" },  -- 󰎠    󰗀, eg: yaml schema, css 中提供的可选值
 }
