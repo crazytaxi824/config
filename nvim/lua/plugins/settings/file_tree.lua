@@ -261,7 +261,7 @@ local config = {
       --icons = nt_indent_line,  -- 和自定义 indent 一样, 如果以后出现变化可以调整.
     },
     icons = {
-      git_placement = "after",  -- 'before' (filename) | 'after' | 'signcolumn' (vim.signcolumn='yes')
+      git_placement = "right_align",  -- `:help nvim_tree.config.renderer.icons.placement`
       symlink_arrow = ' ' .. Nerd_icons.arrows.right .. ' ',  -- old_name ⟶ new_name, 这个不是显示在 filename/dir 之前的 icon.
       show = {
         file = true,  -- 显示 file icon, `nvim-web-devicons` will be used if available.
