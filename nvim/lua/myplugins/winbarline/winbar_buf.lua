@@ -32,7 +32,7 @@ function WinbarLineBuf:list_wins()
 end
 
 -- 获取 diagnostic info
----@return {count: integer, severity: integer}|nil
+---@return { count: integer, severity: integer }|nil
 function WinbarLineBuf:diagnostic()
   local diagnostics = vim.diagnostic.count(self.bufnr) or {}
   local diag_count = 0

@@ -197,8 +197,13 @@ lualine.setup {
     lualine_c = {
       {
         'diagnostics',
-        symbols = {error = 'E:', warn = 'W:', info = 'I:', hint = 'H:'},
         update_in_insert = false, -- Update diagnostics in insert mode.
+        symbols = {
+          error = Nerd_icons.diag[vim.diagnostic.severity.ERROR] .. ' ',
+          warn  = Nerd_icons.diag[vim.diagnostic.severity.WARN] .. ' ',
+          info  = Nerd_icons.diag[vim.diagnostic.severity.INFO] .. ' ',
+          hint  = Nerd_icons.diag[vim.diagnostic.severity.HINT] .. ' ',
+        },
         diagnostics_color = {
           --error = 'ErrorMsg',  -- 也可以使用 highlight group.
           error = vim.tbl_extend('force', Highlights.DiagnosticError, { gui='bold' }),
@@ -309,9 +314,13 @@ lualine.setup {
     lualine_c = {
       {
         'diagnostics',
-        icons_enabled = true,
-        icon = { Nerd_icons.diag.warn, color={ fg = Colors.orange.g, gui = 'bold' }},
-        symbols = { error = 'E:', warn = 'W:', info = 'I:', hint = 'H:' },
+        update_in_insert = false, -- Update diagnostics in insert mode.
+        symbols = {
+          error = Nerd_icons.diag[vim.diagnostic.severity.ERROR] .. ' ',
+          warn  = Nerd_icons.diag[vim.diagnostic.severity.WARN] .. ' ',
+          info  = Nerd_icons.diag[vim.diagnostic.severity.INFO] .. ' ',
+          hint  = Nerd_icons.diag[vim.diagnostic.severity.HINT] .. ' ',
+        },
         diagnostics_color = {
           --error = 'ErrorMsg',  -- 也可以使用 highlight group.
           error = vim.tbl_extend('force', Highlights.DiagnosticError, { gui='bold' }),

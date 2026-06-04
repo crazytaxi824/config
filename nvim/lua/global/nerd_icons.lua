@@ -2,10 +2,13 @@
 -- NerdFont: nf-cod-xxx, nf-md-xxx, nd-fa-xxx, nd-oct-xxx(special icons)
 Nerd_icons = {
   diag = {
-    hint  = "󰛩",  -- 󰛩 󰛨 ⚐ ⚑  -- NerdFont: lightbulb, flag
-    info  = "󰋽",  -- 󰋽   󰋼 
-    warn  = "",  --  
+    -- "", "", "", "󰛨",
+    "", "", "󰋽", "󰛩",
+
     error = "",  --    󰅙 󰅚
+    warn  = "",  --  
+    info  = "󰋽",  -- 󰋽   󰋼 
+    hint  = "󰛩",  -- 󰛩 󰛨 ⚐ ⚑  -- NerdFont: lightbulb, flag
   },
   arrows = {
     up    = '↑',  --     󰁝 󰛃  󰳡 󰳢  󰁣 󰁢
