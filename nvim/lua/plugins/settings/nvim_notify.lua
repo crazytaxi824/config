@@ -43,9 +43,9 @@ notify.setup({
 
   -- Icons for the different levels
   icons = {
-    ERROR = Nerd_icons.diag.error,
-    WARN  = Nerd_icons.diag.warn,
-    INFO  = Nerd_icons.diag.info,
+    ERROR = Nerd_icons.diag[vim.diagnostic.severity.ERROR],
+    WARN  = Nerd_icons.diag[vim.diagnostic.severity.WARN],
+    INFO  = Nerd_icons.diag[vim.diagnostic.severity.INFO],
     DEBUG = "",  --  
     TRACE = "󰷺",  -- 󰷺
   },

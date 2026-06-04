@@ -5,10 +5,10 @@ Nerd_icons = {
     -- "", "", "", "󰛨",
     "", "", "󰋽", "󰛩",
 
-    error = "",  --    󰅙 󰅚
-    warn  = "",  --  
-    info  = "󰋽",  -- 󰋽   󰋼 
-    hint  = "󰛩",  -- 󰛩 󰛨 ⚐ ⚑  -- NerdFont: lightbulb, flag
+    --    󰅙 󰅚
+    --  
+    -- 󰋽   󰋼 
+    -- 󰛩 󰛨 ⚐ ⚑  -- NerdFont: lightbulb, flag
   },
   arrows = {
     up    = '↑',  --     󰁝 󰛃  󰳡 󰳢  󰁣 󰁢

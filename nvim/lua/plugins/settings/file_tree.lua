@@ -24,10 +24,10 @@ local glyphs = {
 }
 
 local diagnostics_icons = {
-  hint    = Nerd_icons.diag.hint,
-  info    = Nerd_icons.diag.info,
-  warning = Nerd_icons.diag.warn,
-  error   = Nerd_icons.diag.error,
+  error   = Nerd_icons.diag[vim.diagnostic.severity.ERROR],
+  warning = Nerd_icons.diag[vim.diagnostic.severity.WARN],
+  info    = Nerd_icons.diag[vim.diagnostic.severity.INFO],
+  hint    = Nerd_icons.diag[vim.diagnostic.severity.HINT],
 }
 
 -- }}}

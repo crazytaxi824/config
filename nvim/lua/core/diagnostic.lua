@@ -11,21 +11,14 @@
 
 -- Highlights
 vim.api.nvim_set_hl(0, 'my_diagnostic_linehl', {
-  -- ctermfg=Colors.cyan.c, fg=Colors.cyan.g,
   ctermbg=Colors.red_bg.c, bg=Colors.red_bg.g,
 })
 
 -- `:help vim.diagnostic.config()`
--- `:help vim.diagnostic.Opts`
+-- `:help diagnostic-signs`
 local config = {
-  -- `:help diagnostic-signs`
   signs = {
-    text = {
-      [vim.diagnostic.severity.ERROR] = Nerd_icons.diag.error,
-      [vim.diagnostic.severity.WARN]  = Nerd_icons.diag.warn,
-      [vim.diagnostic.severity.INFO]  = Nerd_icons.diag.info,
-      [vim.diagnostic.severity.HINT]  = Nerd_icons.diag.hint,
-    },
+    text = Nerd_icons.diag,
     -- linehl = {
     --   [vim.diagnostic.severity.ERROR] = 'my_diagnostic_linehl',
     --   [vim.diagnostic.severity.WARN]  = 'my_diagnostic_linehl',
