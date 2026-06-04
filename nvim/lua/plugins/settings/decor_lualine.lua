@@ -4,58 +4,41 @@ if not lualine_status_ok then
 end
 
 -- 自定义 theme ----------------------------------------------------------------------------------- {{{
--- https://github.com/nvim-lualine/lualine.nvim/blob/master/lua/lualine/themes/gruvbox_light.lua
-local lualine_colors = {
-  black = Colors.black.g,
-  white = Colors.white.g,
-
-  yellow = Colors.yellow.g,
-  gold = Colors.gold_fn.g,  -- filename saved
-  cyan = Colors.cyan.g,   -- filename modified
-
-  grey_b = Colors.g238.g,  -- section_b
-  grey_fg = Colors.g245.g, -- fg color: inactive, hint
-
-  red = Colors.red.g,  -- readonly modified
-  orange = Colors.orange.g, -- readonly file, trailing_whitespace && mixed_indent
-  blue = Colors.blue.g,  -- trailing_whitespace_mixed_indent
-  green = Colors.green_bg.g,  -- Command mode
-}
-
--- airline 颜色设置 https://github.com/vim-airline/vim-airline/blob/master/autoload/airline/themes/dark.vim
+-- 设置方法: https://github.com/nvim-lualine/lualine.nvim/blob/master/lua/lualine/themes/gruvbox_light.lua
+-- airline 颜色: https://github.com/vim-airline/vim-airline/blob/master/autoload/airline/themes/dark.vim
 local my_theme = {
   normal = {
-    a = { fg = lualine_colors.black, bg = lualine_colors.yellow, gui = "bold" },
-    b = { fg = lualine_colors.white, bg = lualine_colors.grey_b },
-    c = { fg = lualine_colors.gold, bg = lualine_colors.black },
+    a = { fg = Colors.black.g, bg = Colors.yellow.g, gui = "bold" },
+    b = { fg = Colors.white.g, bg = Colors.g238.g },
+    c = { fg = Colors.gold_fn.g, bg = Colors.black.g },
   },
 
   -- 其他模式如果缺省设置, 则继承 normal 的设置
   insert = {
-    a = { fg = lualine_colors.black, bg = "#00D7FF", gui = 'bold' },
-    b = { fg = lualine_colors.white, bg = "#0000D7" },
-    c = { fg = lualine_colors.white, bg = "#00005F" },
+    a = { fg = Colors.black.g, bg = "#00D7FF", gui = 'bold' },
+    b = { fg = Colors.white.g, bg = "#0000D7" },
+    c = { fg = Colors.white.g, bg = "#00005F" },
   },
   replace = {
-    a = { fg = lualine_colors.white, bg = "#AF0000", gui = 'bold' },
-    b = { fg = lualine_colors.white, bg = "#0000D7" },
-    c = { fg = lualine_colors.white, bg = "#00005F" },
+    a = { fg = Colors.white.g, bg = "#AF0000", gui = 'bold' },
+    b = { fg = Colors.white.g, bg = "#0000D7" },
+    c = { fg = Colors.white.g, bg = "#00005F" },
   },
   visual = {
-    a = { fg = lualine_colors.black, bg = lualine_colors.orange, gui = 'bold' },
-    b = { fg = lualine_colors.black, bg = "#D75F00" },
-    c = { fg = lualine_colors.white, bg = "#5F0000" },
+    a = { fg = Colors.black.g, bg = Colors.orange.g, gui = 'bold' },
+    b = { fg = Colors.black.g, bg = "#D75F00" },
+    c = { fg = Colors.white.g, bg = "#5F0000" },
   },
   command = {
-    a = { fg = lualine_colors.black, bg = lualine_colors.green, gui = 'bold' },
-    b = { fg = lualine_colors.white, bg = lualine_colors.grey_b },
-    c = { fg = lualine_colors.white, bg = lualine_colors.black },
+    a = { fg = Colors.black.g, bg = Colors.green_bg.g, gui = 'bold' },
+    b = { fg = Colors.white.g, bg = Colors.g238.g },
+    c = { fg = Colors.white.g, bg = Colors.black.g },
   },
 
   inactive = {
-    a = { fg = lualine_colors.gold, bg = lualine_colors.grey_b },
-    b = { fg = lualine_colors.white, bg = lualine_colors.black },
-    c = { fg = lualine_colors.grey_fg, bg = lualine_colors.black },
+    a = { fg = Colors.gold_fn.g, bg = Colors.g238.g },
+    b = { fg = Colors.white.g, bg = Colors.black.g },
+    c = { fg = Colors.g245.g,  bg = Colors.black.g },
   },
 }
 -- }}}
@@ -226,7 +209,7 @@ lualine.setup {
       },
       {
         trailing_whitespace_mixed_indent,
-        color = {fg=lualine_colors.blue, gui='bold'},
+        color = { fg=Colors.blue.g, gui='bold' },
         cond = function()
           -- normal buffer with a filetype
           return vim.bo.filetype ~= '' and vim.bo.buftype == '' and vim.api.nvim_buf_line_count(0) < 5000
@@ -256,13 +239,13 @@ lualine.setup {
         end,
         color = function()
           if vim.bo.modified and vim.bo.readonly then  -- 对 readonly 文件做出修改
-            return {fg = lualine_colors.white, bg = lualine_colors.red, gui='bold'}
+            return { fg = Colors.white.g, bg = Colors.red.g, gui='bold' }
           elseif vim.bo.modified then  -- 修改后未保存的文件
-            return {fg = lualine_colors.cyan, gui='bold'}
+            return { fg = Colors.cyan.g, gui='bold' }
           elseif vim.bo.readonly then  -- readonly 文件
-            return {fg = lualine_colors.orange, gui='bold'}
+            return { fg = Colors.orange.g, gui='bold' }
           end
-          return {fg = lualine_colors.gold} -- 其他情况
+          return { fg = Colors.gold_fn.g } -- 其他情况
         end,
 
         -- number of clicks incase of multipl8 clicks
@@ -327,8 +310,8 @@ lualine.setup {
       {
         'diagnostics',
         icons_enabled = true,
-        icon = {Nerd_icons.diag.warn, color={fg = lualine_colors.orange, gui = 'bold'}},
-        symbols = {error = 'E:', warn = 'W:', info = 'I:', hint = 'H:'},
+        icon = { Nerd_icons.diag.warn, color={ fg = Colors.orange.g, gui = 'bold' }},
+        symbols = { error = 'E:', warn = 'W:', info = 'I:', hint = 'H:' },
         diagnostics_color = {
           --error = 'ErrorMsg',  -- 也可以使用 highlight group.
           error = vim.tbl_extend('force', Highlights.DiagnosticError, { gui='bold' }),
@@ -339,7 +322,7 @@ lualine.setup {
       },
       {
         trailing_whitespace_mixed_indent,
-        color = {fg=lualine_colors.blue, gui='bold'},
+        color = { fg=Colors.blue.g, gui='bold' },
         cond = function() return vim.bo.filetype~='' and vim.bo.buftype=='' end,  -- normal buffer with a filetype
       },
     },
@@ -354,15 +337,15 @@ lualine.setup {
         },
         color = function()
           if vim.bo.modified and vim.bo.readonly then  -- 对 readonly 文件做出修改
-            return {fg = lualine_colors.white, bg = lualine_colors.red, gui='bold'}
+            return { fg = Colors.white.g, bg = Colors.red.g, gui='bold' }
           elseif vim.bo.modified then  -- 修改后未保存的文件
-            return {fg = lualine_colors.cyan, gui='bold'}
+            return { fg = Colors.cyan.g, gui='bold' }
           elseif vim.bo.readonly then  -- readonly 文件
-            return {fg = lualine_colors.orange, gui='bold'}
+            return { fg = Colors.orange.g, gui='bold' }
           end
 
           -- NOTE: 必须设置 bg color, 否则会随 Insert Mode 改变 filename bg color
-          return {fg = lualine_colors.grey_fg, bg = my_theme.inactive.c.bg}
+          return { fg = Colors.g245.g, bg = my_theme.inactive.c.bg }
         end,
       },
     },
