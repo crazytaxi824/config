@@ -232,9 +232,8 @@ function WinbarFomatterItem:parse_item_to_components(level)
 
   -- diagnostic
   if self.diagnostic and (level > WinbarFormatterLevel.minimal or self.active) then
-    -- TODO
-    -- local diag_str = '('..self.diagnostic.count..') '
-    local diag_str = Nerd_icons.diag[self.diagnostic.severity] .. ' '
+    -- local diag_str = '('..self.diagnostic.count..') '  -- 显示错误数量
+    local diag_str = Nerd_icons.diag[self.diagnostic.severity] .. ' '  -- 只显示错误类型
     comp = { content = diag_str, hl = 'Severity_'..self.diagnostic.severity }
     table.insert(components, comp)
   end

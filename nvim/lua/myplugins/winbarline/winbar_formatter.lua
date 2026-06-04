@@ -268,17 +268,17 @@ function WinbarFormatter.winbar_format(win_id)
   for i, path_list in ipairs(uni_bufnames) do
     local bufnr = bufnrs[i]
     local b = g.get_buf(bufnr)
-    if not b then
-      vim.notify(string.format('buffer: %d is not cached', bufnr), vim.log.levels.ERROR)
-      return
-    end
+    if b then
+      local fmt_item = wb_fmt_item.new(win_id, bufnr, i, path_list, b:diagnostic())
+      if fmt_item.active then
+        active_buf_idx = i
+      end
 
-    local fmt_item = wb_fmt_item.new(win_id, bufnr, i, path_list, b:diagnostic())
-    if fmt_item.active then
-      active_buf_idx = i
+      table.insert(fmt_items, fmt_item)
+    else
+      -- buf 没有被 cache, 该问题不应该出现
+      vim.notify(string.format('buffer: %d is not cached', bufnr), vim.log.levels.WARN)
     end
-
-    table.insert(fmt_items, fmt_item)
   end
 
   -- no item display in window 或者 win 中没有 active buffer
