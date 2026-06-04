@@ -38,41 +38,6 @@ local cmp_opts = {
 }
 
 -- "hrsh7th/nvim-cmp" 主要设置 --------------------------------------------------------------------
--- https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#completionItemKind
--- https://github.com/hrsh7th/nvim-cmp/blob/main/lua/cmp/types/lsp.lua#L177
--- `:lua vim.print(vim.lsp.protocol.CompletionItemKind)`
-
----@type table<string, { text:string, icon:string }>
-local kind_text_icon = {  ------------------------------------------------------------------------------ {{{
-  Keyword     = { text="keywd",  icon="" },  --  
-  Text        = { text="text",   icon="" },  --   󰊄  
-  Module      = { text="module", icon="" },  -- 󰮄 , eg: import [module]
-  Method      = { text="method", icon="󰊕" },  -- 󰆧
-  Function    = { text="func",   icon="󰊕" },
-  Constructor = { text="constr", icon="󰊕" },
-  Variable    = { text="var",    icon="󰫧" },
-  Constant    = { text="const",  icon="󰫧" },
-  Class       = { text="class",  icon="" },  -- NOTE: golang 只有 "Type" 没有 "Class", eg: int; typescript 只有 "Class" 没有 "Type"
-  Struct      = { text="struct", icon="" },  -- , typescript 没有 "Struct"
-  Interface   = { text="iface",  icon="" },  -- 󰡀 󱘖 󰴽 󰌹 󱐥
-  Field       = { text="field",  icon="" },
-  Property    = { text="prop",   icon="" },
-  Enum        = { text="enum",   icon="󰨾" },  -- 󰝖 󰨾 󰅪
-  EnumMember  = { text="enum",   icon="󰨾" },
-  Folder      = { text="/dir~",  icon="" },
-  File        = { text="/file~", icon="" },
-  Snippet     = { text="snip",   icon="" },
-
-  -- 不常用
-  TypeParameter = { text="tparam", icon="" },  -- "type"
-  Color         = { text="color",  icon="󱥚" },  -- 
-  Reference     = { text="ref",    icon="" },  -- 󰌹  
-  Event         = { text="event",  icon="" },
-  Operator      = { text="op",     icon="󱓉" },  -- 󱓉 󰾞
-  Unit          = { text="unit",   icon="󰺾" },  -- 󰺾   󰳂, eg: css 中(长度, 时间 ...)单位, eg: px, rem, ms
-  Value         = { text="value",  icon="󰎠" },  -- 󰎠    󰗀, eg: yaml schema, css 中提供的可选值
-}
--- }}}
 
 -- 默认设置: https://github.com/hrsh7th/nvim-cmp/blob/main/lua/cmp/config/default.lua
 -- DOCS: `:help nvim-cmp`
@@ -119,11 +84,16 @@ cmp.setup {
     fields = cmp_opts.format_full and { "icon", "abbr", "kind", "menu" } or { "icon", "abbr", "menu" },
 
     format = function(entry, vim_item)
+      -- https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#completionItemKind
+      -- https://github.com/hrsh7th/nvim-cmp/blob/main/lua/cmp/types/lsp.lua#L177
+      -- `:lua vim.print(vim.lsp.protocol.CompletionItemKind)`
+      local cmp_kind = Nerd_icons.cmp_kind
+
       -- add icons
       if cmp_opts.icon_color_reverse then
-        vim_item.icon = string.format(' %s ', kind_text_icon[vim_item.kind].icon or '?')  -- width=3: col_offset=-3, side_padding=0
+        vim_item.icon = string.format(' %s ', cmp_kind[vim_item.kind].icon or '?')  -- width=3: col_offset=-3, side_padding=0
       else
-        vim_item.icon = string.format('%s', kind_text_icon[vim_item.kind].icon or '?')  -- width=1: col_offset=-2, side_padding=1
+        vim_item.icon = string.format('%s', cmp_kind[vim_item.kind].icon or '?')  -- width=1: col_offset=-2, side_padding=1
       end
 
       -- NOTE: 对 Class 特殊处理, typescript 中没有 "Type", golang 中没有 "Class".
@@ -131,7 +101,7 @@ cmp.setup {
       if vim.tbl_contains(langs_no_class, vim.bo.filetype) and vim_item.kind == 'Class' then
         vim_item.kind = string.format('%s', 'type')
       else
-        vim_item.kind = string.format('%s', kind_text_icon[vim_item.kind].text)
+        vim_item.kind = string.format('%s', cmp_kind[vim_item.kind].text)
       end
 
       -- vim_item.menu = " "  -- 不显示 menu
@@ -269,7 +239,7 @@ vim.api.nvim_set_hl(0, 'CmpItemAbbrMatch', { ctermfg=Colors.magenta.c, fg=Colors
 vim.api.nvim_set_hl(0, 'CmpItemAbbrMatchFuzzy', { link = "CmpItemAbbrMatch" })
 
 -- [lsp], [buff], [path], [snip] icon 颜色
-vim.api.nvim_set_hl(0, 'CmpItemMenu', { ctermfg=Colors.g239.c, fg=Colors.g239.g })
+vim.api.nvim_set_hl(0, 'CmpItemMenu', { ctermfg=Colors.g242.c, fg=Colors.g242.g })
 
 -- VVI: CmpItemKindXXX 默认颜色, 如果没有单独设置 CmpItemKindXXX 颜色则会使用该颜色.
 vim.api.nvim_set_hl(0, 'CmpItemKindDefault', { ctermfg=Colors.g245.c, fg=Colors.g245.g })

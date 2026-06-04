@@ -415,11 +415,11 @@ bufferline.setup({
 
     -- buffer close icon
     show_buffer_close_icons = true,
-    buffer_close_icon = Nerd_icons.cross,
+    buffer_close_icon = Nerd_icons.close,
 
     -- tab close icon. 无法自定义 tab close command, 所以不使用.
     show_close_icon = false,
-    close_icon = Nerd_icons.cross,
+    close_icon = Nerd_icons.close,
 
     -- modified but not saved buffer icon
     modified_icon = Nerd_icons.dot,

@@ -40,7 +40,7 @@ mason.setup {
     check_outdated_packages_on_open = true,  -- 打开面板时检查 outdated lsp
     border = {"","▄","","","","▀","",""},  -- 默认为: 'none'
     icons = {
-      package_installed = Nerd_icons.tick,
+      package_installed = Nerd_icons.check,
       package_pending = Nerd_icons.arrows.right,
       package_uninstalled = Nerd_icons.dot_h,
     },
