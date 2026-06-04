@@ -16,9 +16,9 @@ local lualine_colors = {
   grey_b = Colors.g238.g,  -- section_b
   grey_fg = Colors.g245.g, -- fg color: inactive, hint
 
-  red = Colors.red.g,  -- error, readonly
-  orange = Colors.orange.g, -- warn, readonly file, trailing_whitespace && mixed_indent
-  blue = Colors.blue.g,  -- info background
+  red = Colors.red.g,  -- readonly modified
+  orange = Colors.orange.g, -- readonly file, trailing_whitespace && mixed_indent
+  blue = Colors.blue.g,  -- trailing_whitespace_mixed_indent
   green = Colors.green_bg.g,  -- Command mode
 }
 
