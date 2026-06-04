@@ -45,9 +45,9 @@ notify.setup({
   icons = {
     ERROR = Nerd_icons.diag.error,
     WARN  = Nerd_icons.diag.warn,
-    INFO  = Nerd_icons.diag.hint,
+    INFO  = Nerd_icons.diag.info,
     DEBUG = "",  --  
-    TRACE = "◍",
+    TRACE = "󰷺",  -- 󰷺
   },
 })
 
@@ -59,32 +59,32 @@ notify.setup({
 
 -- 颜色只对 notify 有用 ---------------------------------------------------------------------------
 -- border 颜色
-vim.api.nvim_set_hl(0, 'NotifyERRORBorder', {ctermfg=Colors.red.c, fg=Colors.red.g})
-vim.api.nvim_set_hl(0, 'NotifyWARNBorder',  {ctermfg=Colors.orange.c, fg=Colors.orange.g}) -- orange
-vim.api.nvim_set_hl(0, 'NotifyINFOBorder',  {ctermfg=Colors.blue.c, fg=Colors.blue.g})  -- blue
-vim.api.nvim_set_hl(0, 'NotifyDEBUGBorder', {ctermfg=Colors.g246.c, fg=Colors.g246.g}) -- grey
-vim.api.nvim_set_hl(0, 'NotifyTRACEBorder', {ctermfg=Colors.g240.c, fg=Colors.g240.g}) -- grey
+vim.api.nvim_set_hl(0, 'NotifyERRORBorder', { link = 'DiagnosticError' })
+vim.api.nvim_set_hl(0, 'NotifyWARNBorder',  { link = 'DiagnosticWarn' })
+vim.api.nvim_set_hl(0, 'NotifyINFOBorder',  { link = 'DiagnosticInfo' })
+vim.api.nvim_set_hl(0, 'NotifyDEBUGBorder', { link = 'DiagnosticHint' })
+vim.api.nvim_set_hl(0, 'NotifyTRACEBorder', { link = 'DiagnosticHint' })
 
 -- Title 颜色
-vim.api.nvim_set_hl(0, 'NotifyERRORTitle', {ctermfg=Colors.red.c, fg=Colors.red.g})
-vim.api.nvim_set_hl(0, 'NotifyWARNTitle',  {ctermfg=Colors.orange.c, fg=Colors.orange.g}) -- orange
-vim.api.nvim_set_hl(0, 'NotifyINFOTitle',  {ctermfg=Colors.blue.c, fg=Colors.blue.g})  -- blue
-vim.api.nvim_set_hl(0, 'NotifyDEBUGTitle', {ctermfg=Colors.g246.c, fg=Colors.g246.g}) -- grey
-vim.api.nvim_set_hl(0, 'NotifyTRACETitle', {ctermfg=Colors.g240.c, fg=Colors.g240.g}) -- grey
+vim.api.nvim_set_hl(0, 'NotifyERRORTitle', { link = 'DiagnosticError' })
+vim.api.nvim_set_hl(0, 'NotifyWARNTitle',  { link = 'DiagnosticWarn' })
+vim.api.nvim_set_hl(0, 'NotifyINFOTitle',  { link = 'DiagnosticInfo' })
+vim.api.nvim_set_hl(0, 'NotifyDEBUGTitle', { link = 'DiagnosticHint' })
+vim.api.nvim_set_hl(0, 'NotifyTRACETitle', { link = 'DiagnosticHint' })
 
 -- icon 颜色, NOTE: 没用到
-vim.api.nvim_set_hl(0, 'NotifyERRORIcon', {ctermfg=Colors.red.c, fg=Colors.red.g})
-vim.api.nvim_set_hl(0, 'NotifyWARNIcon',  {ctermfg=Colors.orange.c, fg=Colors.orange.g}) -- orange
-vim.api.nvim_set_hl(0, 'NotifyINFOIcon',  {ctermfg=Colors.blue.c, fg=Colors.blue.g})  -- blue
-vim.api.nvim_set_hl(0, 'NotifyDEBUGIcon', {ctermfg=Colors.g246.c, fg=Colors.g246.g}) -- grey
-vim.api.nvim_set_hl(0, 'NotifyTRACEIcon', {ctermfg=Colors.g240.c, fg=Colors.g240.g}) -- grey
+vim.api.nvim_set_hl(0, 'NotifyERRORIcon', { link = 'DiagnosticError' })
+vim.api.nvim_set_hl(0, 'NotifyWARNIcon',  { link = 'DiagnosticWarn' })
+vim.api.nvim_set_hl(0, 'NotifyINFOIcon',  { link = 'DiagnosticInfo' })
+vim.api.nvim_set_hl(0, 'NotifyDEBUGIcon', { link = 'DiagnosticHint' })
+vim.api.nvim_set_hl(0, 'NotifyTRACEIcon', { link = 'DiagnosticHint' })
 
 -- message 内容颜色, 包括背景颜色.
-vim.api.nvim_set_hl(0, 'NotifyERRORBody', {link = 'Normal'})
-vim.api.nvim_set_hl(0, 'NotifyWARNBody',  {link = 'Normal'})
-vim.api.nvim_set_hl(0, 'NotifyINFOBody',  {link = 'Normal'})
-vim.api.nvim_set_hl(0, 'NotifyDEBUGBody', {link = 'Normal'})
-vim.api.nvim_set_hl(0, 'NotifyTRACEBody', {link = 'Normal'})
+vim.api.nvim_set_hl(0, 'NotifyERRORBody', { link = 'Normal' })
+vim.api.nvim_set_hl(0, 'NotifyWARNBody',  { link = 'Normal' })
+vim.api.nvim_set_hl(0, 'NotifyINFOBody',  { link = 'Normal' })
+vim.api.nvim_set_hl(0, 'NotifyDEBUGBody', { link = 'DiagnosticHint' })
+vim.api.nvim_set_hl(0, 'NotifyTRACEBody', { link = 'DiagnosticHint' })
 
 
 

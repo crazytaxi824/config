@@ -194,11 +194,11 @@ Highlights = {
   -- DiagnosticVirtualText - virtual_text 显示的颜色.
   -- DiagnosticUnderlineXXX - code 中显示错误的位置.
   -- 以上 highlight 默认 link to DiagnosticXXX.
-  DiagnosticOk    = {ctermfg=Colors.green.c, fg=Colors.green.g},
-  DiagnosticHint  = {ctermfg=Colors.grey_hint.c, fg=Colors.grey_hint.g},
-  DiagnosticInfo  = {ctermfg=Colors.blue.c, fg=Colors.blue.g},
-  DiagnosticWarn  = {ctermfg=Colors.orange.c, fg=Colors.orange.g},
-  DiagnosticError = {ctermfg=Colors.red.c, fg=Colors.red.g},
+  DiagnosticOk    = { ctermfg=Colors.green.c, fg=Colors.green.g },
+  DiagnosticHint  = { ctermfg=Colors.grey_hint.c, fg=Colors.grey_hint.g },
+  DiagnosticInfo  = { ctermfg=Colors.blue.c, fg=Colors.blue.g },
+  DiagnosticWarn  = { ctermfg=Colors.orange.c, fg=Colors.orange.g },
+  DiagnosticError = { ctermfg=Colors.red.c, fg=Colors.red.g },
 
   -- NOTE: `:help undercurl` sp(guisp) color 改变 undercurl, underline, underdashed ... 颜色.
   DiagnosticUnderlineOk = {
@@ -391,8 +391,8 @@ Highlights = {
 
   -- 设置 syntax 颜色是为了让 treesitter lazy render 的时候不至于颜色差距太大.
   -- set vim-syntax color to match treesitter color
-  typescriptMember = { link = '@property' },
   typescriptInterfaceName = { link = 'Type' },
+  typescriptMember = { link = '@property' },
   typescriptExport = { link = 'Keyword' },
   typescriptImport = { link = 'Conditional' },
 }

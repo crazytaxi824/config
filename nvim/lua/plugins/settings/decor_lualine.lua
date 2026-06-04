@@ -218,10 +218,10 @@ lualine.setup {
         update_in_insert = false, -- Update diagnostics in insert mode.
         diagnostics_color = {
           --error = 'ErrorMsg',  -- 也可以使用 highlight group.
-          error = {fg=lualine_colors.red, gui='bold'},        -- Changes diagnostics' error color.
-          warn  = {fg=lualine_colors.orange, gui='bold'},     -- Changes diagnostics' warn color.
-          info  = {fg=lualine_colors.blue, gui='bold'},       -- Changes diagnostics' info color.
-          hint  = {fg=lualine_colors.grey_fg, gui='bold'}, -- Changes diagnostics' hint color.
+          error = vim.tbl_extend('force', Highlights.DiagnosticError, { gui='bold' }),
+          warn  = vim.tbl_extend('force', Highlights.DiagnosticWarn,  { gui='bold' }),
+          info  = vim.tbl_extend('force', Highlights.DiagnosticInfo,  { gui='bold' }),
+          hint  = vim.tbl_extend('force', Highlights.DiagnosticHint,  { gui='bold' }),
         },
       },
       {
@@ -331,10 +331,10 @@ lualine.setup {
         symbols = {error = 'E:', warn = 'W:', info = 'I:', hint = 'H:'},
         diagnostics_color = {
           --error = 'ErrorMsg',  -- 也可以使用 highlight group.
-          error = {fg=lualine_colors.red, gui='bold'},        -- Changes diagnostics' error color.
-          warn  = {fg=lualine_colors.orange, gui='bold'},     -- Changes diagnostics' warn color.
-          info  = {fg=lualine_colors.blue, gui='bold'},       -- Changes diagnostics' info color.
-          hint  = {fg=lualine_colors.grey_fg, gui='bold'}, -- Changes diagnostics' hint color.
+          error = vim.tbl_extend('force', Highlights.DiagnosticError, { gui='bold' }),
+          warn  = vim.tbl_extend('force', Highlights.DiagnosticWarn,  { gui='bold' }),
+          info  = vim.tbl_extend('force', Highlights.DiagnosticInfo,  { gui='bold' }),
+          hint  = vim.tbl_extend('force', Highlights.DiagnosticHint,  { gui='bold' }),
         },
       },
       {
