@@ -16,14 +16,14 @@ local M = {}
 local ns = vim.api.nvim_create_namespace('my_term_output')
 
 -- highlight
-vim.api.nvim_set_hl(0, "my_output_sys", { ctermfg=Colors.orange.c, fg=Colors.orange.g })
+vim.api.nvim_set_hl(0, "my_output_stdout", { link="DiagnosticInfo" })
+vim.api.nvim_set_hl(0, "my_output_stderr", { link="DiagnosticError" })
+vim.api.nvim_set_hl(0, "my_output_eof", { link="DiagnosticHint" })
+vim.api.nvim_set_hl(0, "my_output_sys", { link="DiagnosticWarn" })
 vim.api.nvim_set_hl(0, "my_output_sys_error", {
   ctermfg=Colors.black.c, fg=Colors.black.g,
   ctermbg=Colors.red.c, bg=Colors.red.g,
 })
-vim.api.nvim_set_hl(0, "my_output_stdout", { ctermfg=Colors.blue.c, fg=Colors.blue.g })
-vim.api.nvim_set_hl(0, "my_output_stderr", { ctermfg=Colors.red.c, fg=Colors.red.g })
-vim.api.nvim_set_hl(0, "my_output_eof", { ctermfg=Colors.g238.c, fg=Colors.g238.g })
 
 
 -- 在写入 data 之前和之后, 需要修改 buffer 属性
