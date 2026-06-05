@@ -163,11 +163,10 @@ Highlights = {
   -- property & parameter
   Identifier = { link = "Normal" },
   -- 常量颜色. eg: const <Constant> = "foo"
-  Constant= { ctermfg=Colors.blue_info.c, fg=Colors.blue_info.g },
+  Constant= { ctermfg=75, fg='#4FC1FF' },
   --Structure = { link = "Type" },  -- 默认 link to Type
 
-  -- if, switch, case ...
-  Conditional = { ctermfg=Colors.magenta.c, fg=Colors.magenta.g },
+  Conditional = { ctermfg=Colors.magenta.c, fg=Colors.magenta.g }, -- if, switch, case ...
   Repeat    = { link = "Conditional" },  -- for range
   Statement = { link = "Conditional" },  -- syntax 中 'package' & 'import' 关键字
   Include   = { link = "Conditional" },  -- treesitter 中 'package', 'import', 'from' ... 关键字

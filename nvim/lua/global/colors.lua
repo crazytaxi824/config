@@ -7,15 +7,15 @@ Colors = {
   yellow  = { c=220, g='#FFD800' },  -- Search, lualine: Insert Mode background && tabline: tab seleced background
   magenta = { c=213, g='#FF87FF' },  -- IncSearch, return, if, else, break, package, import
 
-  red_error   = { c=167, g='#F85249' },  -- error message
-  orange_warn = { c=208, g='#FFA000' },  -- warning message
-  blue_info   = { c=75,  g='#4FC1FF' },  -- info message, constant ...
-  grey_hint   = { c=244, g='#808080' },  -- hint message
-  green_ok    = { c=42,  g='#00D787' },  -- OK message, markdown title
+  red_error   = { c=167, g='#F85249' },  -- Error message
+  orange_warn = { c=208, g='#FFA000' },  -- Warning message
+  blue_info   = { c=75,  g='#4FC1FF' },  -- Info message
+  grey_hint   = { c=244, g='#808080' },  -- Hint message
+  green_ok    = { c=42,  g='#00D787' },  -- OK message
 
   -- VVI: Keyword 和 Boolean 最好是一样颜色, 省去很多麻烦
   blue_boolean = { c=74,  g='#569CD6' },  -- Keyword, Boolean, Special ...
-  green_type   = { c=79,  g='#4EC9B0' },  -- type, 数据类型
+  green_type   = { c=79,  g='#4EC9B0' },  -- Type, 数据类型
   green_bg     = { c=35,  g='#00AF5F' },  -- command mode bg color
   red_bg       = { c=52,  g='#66201D' },  -- 作为 background 使用的红色. '#4E201E', '#72201D'
   gold_fn      = { c=78,  g='#DCDCAA' },  -- 78|85, func, function_call, method, method_call ... | bufferline, lualine
