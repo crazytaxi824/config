@@ -55,7 +55,7 @@ Highlights = {
 
   -- VVI: Pmenu & FloatBorder 背景色需要设置为相同, 影响很多窗口的颜色.
   -- Completion Menu & Floating Window 颜色
-  Pmenu = { ctermbg=Colors.g235.c, bg='#202020' },
+  Pmenu = { ctermbg=Colors.g235.c, bg=Colors.g235.g },
   -- Completion Menu 选中的 item 的颜色
   PmenuSel = {
     ctermbg=Colors.g238.c, bg='#04395E',
@@ -348,9 +348,6 @@ Highlights = {
 
   ['@character.printf'] = { link = "Special" },  -- 'printf' 是一个独立的 treesitter query
   ['@string.escape'] = {ctermfg=180, fg='#D7BA7D'},  -- \n \t ...
-
-  -- custom highlight
-  ['@my.import.underline'] = { link = "Underlined" },  -- go import list underline.
 
   -- LSP semantic tokens ---------------------------------------------------------------------------
   -- NOTE: `:help vim.hl.priorities`
