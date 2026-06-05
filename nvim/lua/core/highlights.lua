@@ -70,6 +70,13 @@ Highlights = {
   -- Floating Window border fg 颜色需要和 Pmenu 的 bg 颜色相同. border = {"▄","▄","▄","█","▀","▀","▀","█"}
   FloatBorder = { ctermfg=Colors.g235.c, fg=Colors.g235.g },
 
+  -- Command Mode 自动补全 Completion 选中的 item 颜色
+  WildMenu = {
+    ctermfg=Colors.black.c, fg=Colors.black.g,
+    ctermbg=Colors.blue_info.c,  bg=Colors.blue_info.g,
+    bold=true,
+  },
+
   -- 注释颜色
   Comment = { ctermfg=65, fg='#6A9955' },
   -- 影响 listchars indentLine 颜色
@@ -140,12 +147,6 @@ Highlights = {
     ctermbg=63,  bg='#5F5FFF',
   },
 
-  -- command 模式自动补全
-  WildMenu = {
-    ctermfg=Colors.black.c, fg=Colors.black.g,
-    ctermbg=Colors.blue_info.c,  bg=Colors.blue_info.g,
-    bold=true,
-  },
   -- for bufferline 在 nvim-tree 显示 "File Explorer"
   Directory = {
     ctermfg=Colors.cyan.c, fg=Colors.cyan.g,
