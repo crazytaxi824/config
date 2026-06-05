@@ -22,7 +22,7 @@ vim.api.nvim_set_hl(0, "my_output_eof", { link="DiagnosticHint" })
 vim.api.nvim_set_hl(0, "my_output_sys", { link="DiagnosticWarn" })
 vim.api.nvim_set_hl(0, "my_output_sys_error", {
   ctermfg=Colors.black.c, fg=Colors.black.g,
-  ctermbg=Colors.red.c, bg=Colors.red.g,
+  ctermbg=Colors.red_error.c, bg=Colors.red_error.g,
 })
 
 

@@ -82,14 +82,14 @@ git_signs.setup({
 
 -- highlights ------------------------------------------------------------------------------------- {{{
 -- `:help gitsigns-highlight-groups`
-vim.api.nvim_set_hl(0, 'GitSignsAdd',    {ctermfg=Colors.green.c, fg=Colors.green.g})
+vim.api.nvim_set_hl(0, 'GitSignsAdd',    {ctermfg=Colors.green_ok.c, fg=Colors.green_ok.g})
 vim.api.nvim_set_hl(0, 'GitSignsChange', {ctermfg=Colors.magenta.c, fg=Colors.magenta.g})
-vim.api.nvim_set_hl(0, 'GitSignsDelete', {ctermfg=Colors.red.c, fg=Colors.red.g})
+vim.api.nvim_set_hl(0, 'GitSignsDelete', {ctermfg=Colors.red_error.c, fg=Colors.red_error.g})
 
 -- inline/virtual_text 中 highlight 添加/修改/删除的字符
 vim.api.nvim_set_hl(0, 'GitSignsAddInline',    {
   ctermfg=Colors.black.c, fg=Colors.black.g,
-  ctermbg=Colors.green.c, bg=Colors.green.g,
+  ctermbg=Colors.green_ok.c, bg=Colors.green_ok.g,
 })
 vim.api.nvim_set_hl(0, 'GitSignsChangeInline', {
   ctermfg=Colors.black.c, fg=Colors.black.g,
@@ -97,11 +97,11 @@ vim.api.nvim_set_hl(0, 'GitSignsChangeInline', {
 })
 vim.api.nvim_set_hl(0, 'GitSignsDeleteInline', {
   ctermfg=Colors.white.c, fg=Colors.white.g,
-  ctermbg=Colors.red.c, bg=Colors.red.g,
+  ctermbg=Colors.red_error.c, bg=Colors.red_error.g,
 })
 
 -- prev_hunk() 时, 文字颜色. preview hunk 没有 'GitSignsChangePreview' 设置.
-vim.api.nvim_set_hl(0, 'GitSignsAddPreview',    {ctermfg=Colors.green.c, fg=Colors.green.g})
+vim.api.nvim_set_hl(0, 'GitSignsAddPreview',    {ctermfg=Colors.green_ok.c, fg=Colors.green_ok.g})
 vim.api.nvim_set_hl(0, 'GitSignsDeletePreview', {ctermfg=Colors.g240.c, fg=Colors.g240.g})
 
 -- word_diff() 时, 通过 virtual_text 显示 deleted/changed 行的文字颜色

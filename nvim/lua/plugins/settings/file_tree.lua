@@ -386,8 +386,8 @@ vim.api.nvim_set_hl(0, 'NvimTreeOpenedHL', {underline=true})   -- 已经打开�
 vim.api.nvim_set_hl(0, 'NvimTreeIndentMarker', {ctermfg=Colors.g238.c, fg=Colors.g238.g}) -- └ │ 颜色
 
 vim.api.nvim_set_hl(0, 'NvimTreeSymlink', {ctermfg=Colors.magenta.c, fg=Colors.magenta.g}) -- 链接文件, magenta
-vim.api.nvim_set_hl(0, 'NvimTreeExecFile', {ctermfg=Colors.red.c, fg=Colors.red.g}) -- 可执行文件, red
-vim.api.nvim_set_hl(0, 'NvimTreeSpecialFile', {ctermfg=Colors.orange.c, fg=Colors.orange.g})  -- 自定义 Sepcial 文件, orange
+vim.api.nvim_set_hl(0, 'NvimTreeExecFile', {ctermfg=Colors.red_error.c, fg=Colors.red_error.g}) -- 可执行文件, red
+vim.api.nvim_set_hl(0, 'NvimTreeSpecialFile', {ctermfg=Colors.orange_warn.c, fg=Colors.orange_warn.g})  -- 自定义 Sepcial 文件, orange
 
 -- window_picker color
 vim.api.nvim_set_hl(0, 'NvimTreeWindowPicker', {
@@ -405,12 +405,12 @@ vim.api.nvim_set_hl(0, 'NvimTreeBookmarkHL', {  -- filename color
 
 -- nvim-tree Git color, 需要开启 highlight_git=true, render={git={enable=true}}
 -- 这里设置了 git icon color
-vim.api.nvim_set_hl(0, 'NvimTreeGitDirtyIcon',   {ctermfg=Colors.red.c, fg=Colors.red.g})
-vim.api.nvim_set_hl(0, 'NvimTreeGitStagedIcon',  {ctermfg=Colors.green.c, fg=Colors.green.g})
+vim.api.nvim_set_hl(0, 'NvimTreeGitDirtyIcon',   {ctermfg=Colors.red_error.c, fg=Colors.red_error.g})
+vim.api.nvim_set_hl(0, 'NvimTreeGitStagedIcon',  {ctermfg=Colors.green_ok.c, fg=Colors.green_ok.g})
 vim.api.nvim_set_hl(0, 'NvimTreeGitMergeIcon',   {ctermfg=Colors.purple.c, fg=Colors.purple.g})
 vim.api.nvim_set_hl(0, 'NvimTreeGitRenamedIcon', {ctermfg=Colors.purple.c, fg=Colors.purple.g})
-vim.api.nvim_set_hl(0, 'NvimTreeGitNewIcon',     {ctermfg=Colors.red.c, fg=Colors.red.g})
-vim.api.nvim_set_hl(0, 'NvimTreeGitDeletedIcon', {ctermfg=Colors.red.c, fg=Colors.red.g})
+vim.api.nvim_set_hl(0, 'NvimTreeGitNewIcon',     {ctermfg=Colors.red_error.c, fg=Colors.red_error.g})
+vim.api.nvim_set_hl(0, 'NvimTreeGitDeletedIcon', {ctermfg=Colors.red_error.c, fg=Colors.red_error.g})
 vim.api.nvim_set_hl(0, 'NvimTreeGitIgnoredIcon', {ctermfg=Colors.g244.c, fg=Colors.g244.g})
 
 -- }}}

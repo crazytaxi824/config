@@ -25,7 +25,7 @@ local my_theme = {
     c = { fg = Colors.white.g, bg = "#00005F" },
   },
   visual = {
-    a = { fg = Colors.black.g, bg = Colors.orange.g, gui = 'bold' },
+    a = { fg = Colors.black.g, bg = Colors.orange_warn.g, gui = 'bold' },
     b = { fg = Colors.black.g, bg = "#D75F00" },
     c = { fg = Colors.white.g, bg = "#5F0000" },
   },
@@ -214,7 +214,7 @@ lualine.setup {
       },
       {
         trailing_whitespace_mixed_indent,
-        color = { fg=Colors.blue.g, gui='bold' },
+        color = { fg=Colors.orange_warn.g, gui='bold' },
         cond = function()
           -- normal buffer with a filetype
           return vim.bo.filetype ~= '' and vim.bo.buftype == '' and vim.api.nvim_buf_line_count(0) < 5000
@@ -244,11 +244,11 @@ lualine.setup {
         end,
         color = function()
           if vim.bo.modified and vim.bo.readonly then  -- 对 readonly 文件做出修改
-            return { fg = Colors.white.g, bg = Colors.red.g, gui='bold' }
+            return { fg = Colors.white.g, bg = Colors.red_error.g, gui='bold' }
           elseif vim.bo.modified then  -- 修改后未保存的文件
             return { fg = Colors.cyan.g, gui='bold' }
           elseif vim.bo.readonly then  -- readonly 文件
-            return { fg = Colors.orange.g, gui='bold' }
+            return { fg = Colors.orange_warn.g, gui='bold' }
           end
           return { fg = Colors.gold_fn.g } -- 其他情况
         end,
@@ -331,7 +331,7 @@ lualine.setup {
       },
       {
         trailing_whitespace_mixed_indent,
-        color = { fg=Colors.blue.g, gui='bold' },
+        color = { fg=Colors.orange_warn.g, gui='bold' },
         cond = function() return vim.bo.filetype~='' and vim.bo.buftype=='' end,  -- normal buffer with a filetype
       },
     },
@@ -346,11 +346,11 @@ lualine.setup {
         },
         color = function()
           if vim.bo.modified and vim.bo.readonly then  -- 对 readonly 文件做出修改
-            return { fg = Colors.white.g, bg = Colors.red.g, gui='bold' }
+            return { fg = Colors.white.g, bg = Colors.red_error.g, gui='bold' }
           elseif vim.bo.modified then  -- 修改后未保存的文件
             return { fg = Colors.cyan.g, gui='bold' }
           elseif vim.bo.readonly then  -- readonly 文件
-            return { fg = Colors.orange.g, gui='bold' }
+            return { fg = Colors.orange_warn.g, gui='bold' }
           end
 
           -- NOTE: 必须设置 bg color, 否则会随 Insert Mode 改变 filename bg color

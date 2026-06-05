@@ -121,12 +121,12 @@ Highlights = {
   -- echoerr 颜色
   ErrorMsg = {
     ctermfg=255, fg='#FFFFFF',
-    ctermbg=Colors.red.c, bg=Colors.red.g,
+    ctermbg=Colors.red_error.c, bg=Colors.red_error.g,
   },
   -- echohl WarningMsg | echo "Don't panic!" | echohl None 颜色
   WarningMsg = {
     -- ctermfg=Colors.black.c,  fg=Colors.black.g,
-    ctermfg=Colors.orange.c, fg=Colors.orange.g,
+    ctermfg=Colors.orange_warn.c, fg=Colors.orange_warn.g,
   },
 
   -- TODO 颜色
@@ -143,7 +143,7 @@ Highlights = {
   -- command 模式自动补全
   WildMenu = {
     ctermfg=Colors.black.c, fg=Colors.black.g,
-    ctermbg=Colors.blue.c,  bg=Colors.blue.g,
+    ctermbg=Colors.blue_info.c,  bg=Colors.blue_info.g,
     bold=true,
   },
   -- for bufferline 在 nvim-tree 显示 "File Explorer"
@@ -162,7 +162,7 @@ Highlights = {
   -- property & parameter
   Identifier = { link = "Normal" },
   -- 常量颜色. eg: const <Constant> = "foo"
-  Constant= { ctermfg=Colors.blue.c, fg=Colors.blue.g },
+  Constant= { ctermfg=Colors.blue_info.c, fg=Colors.blue_info.g },
   --Structure = { link = "Type" },  -- 默认 link to Type
 
   -- if, switch, case ...
@@ -194,16 +194,16 @@ Highlights = {
   -- DiagnosticVirtualText - virtual_text 显示的颜色.
   -- DiagnosticUnderlineXXX - code 中显示错误的位置.
   -- 以上 highlight 默认 link to DiagnosticXXX.
-  DiagnosticOk    = { ctermfg=Colors.green.c, fg=Colors.green.g },
+  DiagnosticOk    = { ctermfg=Colors.green_ok.c, fg=Colors.green_ok.g },
   DiagnosticHint  = { ctermfg=Colors.grey_hint.c, fg=Colors.grey_hint.g },
-  DiagnosticInfo  = { ctermfg=Colors.blue.c, fg=Colors.blue.g },
-  DiagnosticWarn  = { ctermfg=Colors.orange.c, fg=Colors.orange.g },
-  DiagnosticError = { ctermfg=Colors.red.c, fg=Colors.red.g },
+  DiagnosticInfo  = { ctermfg=Colors.blue_info.c, fg=Colors.blue_info.g },
+  DiagnosticWarn  = { ctermfg=Colors.orange_warn.c, fg=Colors.orange_warn.g },
+  DiagnosticError = { ctermfg=Colors.red_error.c, fg=Colors.red_error.g },
 
   -- NOTE: `:help undercurl` sp(guisp) color 改变 undercurl, underline, underdashed ... 颜色.
   DiagnosticUnderlineOk = {
     -- ctermfg=Colors.green.c, fg=Colors.green.g,
-    sp=Colors.green.g, underline=true,
+    sp=Colors.green_ok.g, underline=true,
   },
   DiagnosticUnderlineHint = {
     -- ctermfg=Colors.hint_grey.c, fg=Colors.hint_grey.g,
@@ -211,15 +211,15 @@ Highlights = {
   },
   DiagnosticUnderlineInfo = {
     -- ctermfg=Colors.blue.c, fg=Colors.blue.g,
-    sp=Colors.blue.g, undercurl=true,
+    sp=Colors.blue_info.g, undercurl=true,
   },
   DiagnosticUnderlineWarn = {
     -- ctermfg=Colors.orange.c, fg=Colors.orange.g,
-    sp=Colors.orange.g, undercurl=true,
+    sp=Colors.orange_warn.g, undercurl=true,
   },
   DiagnosticUnderlineError = {
-    ctermfg=Colors.red.c, fg=Colors.red.g,
-    sp=Colors.red.g, undercurl=true, bold=true,
+    ctermfg=Colors.red_error.c, fg=Colors.red_error.g,
+    sp=Colors.red_error.g, undercurl=true, bold=true,
   },
 
   DiagnosticUnnecessary = { link = "DiagnosticUnderlineHint" },
@@ -234,7 +234,7 @@ Highlights = {
   -- diff 颜色 ------------------------------------------------------------------------------------
   DiffAdd = {
     ctermfg=Colors.white.c, fg=Colors.white.g,
-    ctermbg=Colors.green.c, bg='#4C5B2D',
+    ctermbg=Colors.green_ok.c, bg='#4C5B2D',
   },
   DiffDelete = {
     ctermfg=Colors.white.c,
@@ -252,13 +252,13 @@ Highlights = {
   -- `set foldcolumn=2`, 在 foldcolumn 显示在 SignColumn 前面.
   -- `set foldmethod=diff`
   Folded = { ctermfg=67, fg='#5F87AF' }, -- 折叠行文字颜色
-  FoldColumn = { ctermfg=Colors.green.c, fg=Colors.green.g }, -- foldcolumn 中 + - | 的颜色
+  FoldColumn = { ctermfg=Colors.green_ok.c, fg=Colors.green_ok.g }, -- foldcolumn 中 + - | 的颜色
   CursorLineFold = { link = "FoldColumn" },  -- cursor 所在行 foldcolumn 中 + - | 号颜色
 
   -- 其他常用颜色 ---------------------------------------------------------------------------------
   -- markdown title
   Title = {
-    ctermfg=Colors.green.c, fg=Colors.green.g,
+    ctermfg=Colors.green_ok.c, fg=Colors.green_ok.g,
     bold=true,
   },
   -- `set conceallevel?`, markdown list, code block ...
@@ -267,12 +267,12 @@ Highlights = {
   Label = { ctermfg=Colors.cyan.c, fg=Colors.cyan.g },
 
   SpellBad = {
-    ctermfg=Colors.red.c, fg=Colors.red.g,
+    ctermfg=Colors.red_error.c, fg=Colors.red_error.g,
     ctermbg=52, bg='#890000',
     bold=true, strikethrough=true,
   },
   SpellCap = {
-    ctermfg=Colors.orange.c, fg=Colors.orange.g,
+    ctermfg=Colors.orange_warn.c, fg=Colors.orange_warn.g,
     ctermbg=52, bg='#890000',
     bold=true, strikethrough=true,
   },
@@ -282,7 +282,7 @@ Highlights = {
   -- NOTE: treesitter highlight 命名规则: @[type].[name].[filetype]
   -- comment
   ['@comment.error'] = { link = 'ErrorMsg' },  -- FIXME, BUG, ERROR
-  ['@comment.warning'] = { ctermfg=Colors.orange.c, fg=Colors.orange.g, reverse = true },  -- HACK, WARN, WARNING, FIX
+  ['@comment.warning'] = { ctermfg=Colors.orange_warn.c, fg=Colors.orange_warn.g, reverse = true },  -- HACK, WARN, WARNING, FIX
   ['@comment.note'] = { link = "SpecialComment" }, -- XXX, NOTE, DOCS, TEST, INFO
   ['@comment.todo'] = { link = "Todo" },           -- TODO
   ['@punctuation.bracket.comment'] = { link = "Constant" },
@@ -293,10 +293,10 @@ Highlights = {
 
   -- markdown | markdown_inline
   -- # titles
-  ["@markup.heading.1.markdown"] = { fg=Colors.green.g,   bold=true, underline=true },
+  ["@markup.heading.1.markdown"] = { fg=Colors.green_ok.g,   bold=true, underline=true },
   ["@markup.heading.2.markdown"] = { fg=Colors.yellow.g,  bold=true, underline=true },
-  ["@markup.heading.3.markdown"] = { fg=Colors.orange.g,  bold=true },
-  ["@markup.heading.4.markdown"] = { fg=Colors.blue.g,    bold=true },
+  ["@markup.heading.3.markdown"] = { fg=Colors.orange_warn.g,  bold=true },
+  ["@markup.heading.4.markdown"] = { fg=Colors.blue_info.g,    bold=true },
   ["@markup.heading.5.markdown"] = { fg=Colors.magenta.g, bold=true },
   ["@markup.heading.6.markdown"] = { fg=Colors.purple.g,  bold=true },
 

@@ -6,11 +6,12 @@ Colors = {
   cyan    = { c=81,  g='#9CDCFE' },  -- VVI: one of vim's main color. SpecialChar, Underlined, Label ...
   yellow  = { c=220, g='#FFD800' },  -- Search, lualine: Insert Mode background && tabline: tab seleced background
   magenta = { c=213, g='#FF87FF' },  -- IncSearch, return, if, else, break, package, import
-  red     = { c=167, g='#F85249' },  -- error message
-  orange  = { c=208, g='#FFA000' },  -- warning message
-  blue    = { c=75,  g='#4FC1FF' },  -- info message, constant ...
-  grey_hint = {c=244,g='#808080' },  -- hint message
-  green   = { c=42,  g='#00D787' },  -- OK message, markdown title
+
+  red_error   = { c=167, g='#F85249' },  -- error message
+  orange_warn = { c=208, g='#FFA000' },  -- warning message
+  blue_info   = { c=75,  g='#4FC1FF' },  -- info message, constant ...
+  grey_hint   = { c=244, g='#808080' },  -- hint message
+  green_ok    = { c=42,  g='#00D787' },  -- OK message, markdown title
 
   -- 其他常用颜色
   -- VVI: Keyword 和 Boolean 最好是一样颜色, 省去很多麻烦
