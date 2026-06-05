@@ -13,13 +13,14 @@ Colors = {
   grey_hint   = { c=244, g='#808080' },  -- Hint message
   green_ok    = { c=42,  g='#00D787' },  -- OK message
 
-  -- VVI: Keyword 和 Boolean 最好是一样颜色, 省去很多麻烦
-  blue_boolean = { c=74,  g='#569CD6' },  -- Keyword, Boolean, Special ...
-  green_type   = { c=79,  g='#4EC9B0' },  -- Type, 数据类型
-  green_bg     = { c=35,  g='#00AF5F' },  -- command mode bg color
-  red_bg       = { c=52,  g='#66201D' },  -- 作为 background 使用的红色. '#4E201E', '#72201D'
-  gold_fn      = { c=78,  g='#DCDCAA' },  -- 78|85, func, function_call, method, method_call ... | bufferline, lualine
-  purple       = { c=170, g='#D75FD7' },
+  magenta_keywd = { c=176, g='#C586C0' },  -- Keyword
+  blue_boolean  = { c=75,  g='#4FC1FF' },  -- Boolean, Constant  VVI: 设置为相同的颜色可以避免很多问题
+  blue_special  = { c=74,  g='#569CD6' },  -- Special
+  green_type    = { c=79,  g='#4EC9B0' },  -- Type, 数据类型
+  green_bg      = { c=35,  g='#00AF5F' },  -- command mode bg color
+  red_bg        = { c=52,  g='#66201D' },  -- 作为 background 使用的红色. '#4E201E', '#72201D'
+  gold_fn       = { c=78,  g='#DCDCAA' },  -- 78|85, func, function_call, method, method_call ... | bufferline, lualine
+  purple        = { c=170, g='#D75FD7' },
 
   -- grayscale 颜色
   g234 = { c=234, g='#1C1C1C' },
