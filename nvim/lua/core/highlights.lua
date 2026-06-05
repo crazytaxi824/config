@@ -322,12 +322,12 @@ Highlights = {
 
   ['@function.builtin'] = { link = "Function" },  -- copy() delete() make()
 
-  ['@keyword.conditional'] = { link = "Conditional" },
-  ['@keyword.repeat'] = { link = "Conditional" },
-  ['@keyword.return'] = { link = "Conditional" },
-  ['@keyword.exception'] = { link = "Conditional" },  -- try catch throw
-  ['@keyword.coroutine'] = { link = "Conditional" },  -- await
-  ['@keyword.import'] = { link = "Conditional" },  -- import export
+  -- ['@keyword.conditional'] = { link = "Conditional" },  -- if else
+  -- ['@keyword.repeat'] = { link = "Conditional" },  -- for range, while
+  -- ['@keyword.return'] = { link = "Conditional" },  -- return
+  -- ['@keyword.exception'] = { link = "Conditional" },  -- try catch throw
+  -- ['@keyword.coroutine'] = { link = "Conditional" },  -- await
+  -- ['@keyword.import'] = { link = "Conditional" },  -- import, export
 
   ['@constant'] = { link = "Constant" },  -- constant name
   ['@constant.builtin'] = { link = "Boolean" },  -- null | undefined
@@ -352,7 +352,7 @@ Highlights = {
   -- custom highlight
   ['@my.import.underline'] = { link = "Underlined" },  -- go import list underline.
 
-  -- semantic tokens ------------------------------------------------------------------------------
+  -- LSP semantic tokens ---------------------------------------------------------------------------
   -- NOTE: `:help vim.hl.priorities`
   ['@lsp.type.comment'] = {},  -- clear highlight in order to use treesitter highlight.
 
@@ -363,7 +363,7 @@ Highlights = {
   ['@lsp.typemod.function'] = { link = "Function" },
   ['@lsp.typemod.string.format'] = { link = "Boolean" },  -- fmt "%s" 颜色
 
-  -- NOTE: 以下设置是为了配合 lazy load plugins ---------------------------------------------------
+  -- NOTE: 以下设置是为了配合 lazy load plugins ----------------------------------------------------
   -- 以下颜色为了 lazy load lualine
   -- 无法使用 lualine 的情况下 StatusLine 颜色, eg: tagbar 有自己设置的 ':set statusline?' 颜色不受 lualine 控制.
   -- active
