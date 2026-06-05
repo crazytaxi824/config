@@ -13,7 +13,6 @@ Colors = {
   grey_hint   = { c=244, g='#808080' },  -- hint message
   green_ok    = { c=42,  g='#00D787' },  -- OK message, markdown title
 
-  -- 其他常用颜色
   -- VVI: Keyword 和 Boolean 最好是一样颜色, 省去很多麻烦
   blue_boolean = { c=74,  g='#569CD6' },  -- Keyword, Boolean, Special ...
   green_type   = { c=79,  g='#4EC9B0' },  -- type, 数据类型

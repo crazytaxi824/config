@@ -106,10 +106,10 @@ cmp.setup {
 
       -- vim_item.menu = " "  -- 不显示 menu
       vim_item.menu = ({
-        luasnip  = "[snip]",
-        nvim_lsp = "[lsp~]",  -- 󰒍 
-        buffer   = "[buff]",  -- 
-        path     = "[path]",
+        luasnip  = "      [snip]",
+        nvim_lsp = "      [lsp~]",  -- 󰒍 
+        buffer   = "      [buff]",  -- 
+        path     = "      [path]",
       })[entry.source.name]
 
       return vim_item

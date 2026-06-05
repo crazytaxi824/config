@@ -55,7 +55,7 @@ Highlights = {
 
   -- VVI: Pmenu & FloatBorder 背景色需要设置为相同, 影响很多窗口的颜色.
   -- Completion Menu & Floating Window 颜色
-  Pmenu = { ctermbg=Colors.g235.c, bg=Colors.g235.g },
+  Pmenu = { ctermbg=Colors.g235.c, bg='#202020' },
   -- Completion Menu 选中的 item 的颜色
   PmenuSel = {
     ctermbg=Colors.g238.c, bg='#04395E',
