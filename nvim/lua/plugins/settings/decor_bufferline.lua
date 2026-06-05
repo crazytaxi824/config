@@ -5,84 +5,49 @@ end
 
 -- highlight 设置 --------------------------------------------------------------------------------- {{{
 -- 默认设置 `:help bufferline-highlights`
+local bg = {
+  color   = { ctermbg=Colors.g236.c, bg=Colors.g236.g },
+  visible = { ctermbg=Colors.black.c, bg=Colors.black.g },
+  tab     = { ctermbg=Colors.yellow.c, bg=Colors.yellow.g },
+}
+
 local buf_highlights = {
   -- fill 整个 bufferline banner 的背景色, NOTE: 如果需要透明, 则不要设置.
   --fill = { ctermbg = colors.fill_bg },  -- hi TabLineFill
 
-  background = {  -- 默认设置, 其他设置缺省的时候使用该设置.
-    ctermfg=Colors.g246.c, fg=Colors.g246.g,
-    ctermbg=Colors.g236.c, bg=Colors.g236.g,
-  },
-  buffer_visible = {  -- cursor 在别的 window 时, buffer filename 颜色.
-    ctermbg=Colors.black.c, bg=Colors.black.g
-  },
-  buffer_selected = {
+  -- 默认设置, 其他设置缺省的时候使用该设置.
+  background = vim.tbl_extend('force', bg.color, { ctermfg=Colors.g246.c, fg=Colors.g246.g }),
+  -- cursor 在别的 window 时, buffer filename 颜色.
+  buffer_visible = bg.visible,
+  buffer_selected = vim.tbl_extend('force', bg.visible, {
     ctermfg=Colors.gold_fn.c, fg=Colors.gold_fn.g,
-    ctermbg=Colors.black.c, bg=Colors.black.g,
     bold = true,
     italic = false,  -- 默认设置中是 buffer_selected.italic = true.
-  },
+  }),
 
-  close_button = {
-    ctermfg=Colors.g246.c, fg=Colors.g246.g,
-    ctermbg=Colors.g236.c, bg=Colors.g236.g,
-  },
-  close_button_visible = {
-    ctermfg=Colors.g246.c, fg=Colors.g246.g,
-    ctermbg=Colors.black.c, bg=Colors.black.g,
-  },
-  close_button_selected = {
-    ctermfg=Colors.g246.c, fg=Colors.g246.g,
-    ctermbg=Colors.black.c, bg=Colors.black.g,
-  },
+  close_button = vim.tbl_extend('force', bg.color, { ctermfg=Colors.g246.c, fg=Colors.g246.g }),
+  close_button_visible  = vim.tbl_extend('force', bg.visible, { ctermfg=Colors.g246.c, fg=Colors.g246.g }),
+  close_button_selected = vim.tbl_extend('force', bg.visible, { ctermfg=Colors.g246.c, fg=Colors.g246.g }),
 
   -- duplicate 默认是 italic.
   -- 这里是指相同文件名的 prefix 部分. eg: prefix1/abc.txt && prefix2/abc.txt
-  duplicate = {
-    ctermfg=Colors.g244.c, fg=Colors.g244.g,
-    ctermbg=Colors.g236.c, bg=Colors.g236.g,
-    italic = true,
-  },
-  duplicate_visible = {
-    ctermfg=Colors.g244.c, fg=Colors.g244.g,
-    ctermbg=Colors.black.c, bg=Colors.black.g,
-    italic = true,
-  },
-  duplicate_selected = {
-    ctermfg=Colors.g244.c, fg=Colors.g244.g,
-    ctermbg=Colors.black.c, bg=Colors.black.g,
-    italic = true,
-  },
+  duplicate = vim.tbl_extend('force', bg.color, { ctermfg=Colors.g244.c, fg=Colors.g244.g, italic = true }),
+  duplicate_visible  = vim.tbl_extend('force', bg.visible, { ctermfg=Colors.g244.c, fg=Colors.g244.g, italic = true }),
+  duplicate_selected = vim.tbl_extend('force', bg.visible, { ctermfg=Colors.g244.c, fg=Colors.g244.g, italic = true }),
 
   -- NOTE: indicator - 当前正在显示的 buffer. ▎
-  indicator_visible = {  -- background 颜色需要和 buffer_visible bg 相同
-    ctermfg=Colors.cyan.c, fg=Colors.cyan.g,
-    ctermbg=Colors.black.c, bg=Colors.black.g,
-  },
-  indicator_selected = {  -- background 颜色需要和 buffer_selected bg 相同
-    ctermfg=Colors.cyan.c, fg=Colors.cyan.g,
-    ctermbg=Colors.black.c, bg=Colors.black.g,
-  },
+  -- background 颜色需要和 buffer_visible bg 相同
+  indicator_visible = vim.tbl_extend('force', bg.visible, { ctermfg=Colors.cyan.c, fg=Colors.cyan.g }),
+  -- background 颜色需要和 buffer_selected bg 相同
+  indicator_selected = vim.tbl_extend('force', bg.visible, { ctermfg=Colors.cyan.c, fg=Colors.cyan.g }),
 
   -- 右上角 tab 颜色, 1 | 2 | 3 |
-  tab_selected = {
-    ctermfg=Colors.black.c, fg=Colors.black.g,
-    ctermbg=Colors.yellow.c, bg=Colors.yellow.g,
-  },
+  tab_selected = vim.tbl_extend('force', bg.tab, { ctermfg=Colors.black.c, fg=Colors.black.g }),
 
   -- ONLY the modified_icon color. ●
-  modified = {
-    ctermfg=Colors.cyan.c, fg=Colors.cyan.g,
-    ctermbg=Colors.g236.c, bg=Colors.g236.g,
-  },
-  modified_visible = {
-    ctermfg=Colors.cyan.c, fg=Colors.cyan.g,
-    ctermbg=Colors.black.c, bg=Colors.black.g,
-  },
-  modified_selected = {
-    ctermfg=Colors.cyan.c, fg=Colors.cyan.g,
-    ctermbg=Colors.black.c, bg=Colors.black.g,
-  },
+  modified = vim.tbl_extend('force', bg.color, { ctermfg=Colors.cyan.c, fg=Colors.cyan.g }),
+  modified_visible  = vim.tbl_extend('force', bg.visible, { ctermfg=Colors.cyan.c, fg=Colors.cyan.g }),
+  modified_selected = vim.tbl_extend('force', bg.visible, { ctermfg=Colors.cyan.c, fg=Colors.cyan.g }),
 
   -- NOTE: separator 颜色 -------------------------------------------------------------------------
   -- "separator" 为 buffer 之间分隔线颜色, 样式可以使用 setup() 中 separator_style 设置.
@@ -93,83 +58,34 @@ local buf_highlights = {
   -- separator_selected = {},  -- NOTE: 好像没有任何作用
 
   -- tab_separator 为 tab 之间分隔线颜色, 样式不能自定义
-  tab_separator = {  -- tab 之间分隔线的颜色.
-    ctermfg=Colors.g234.c, fg=Colors.g234.g,
-  },
-  tab_separator_selected = {  -- selected tab 后面一个分隔线'▕'的颜色. 最好和 tab_sel_bg 颜色相同.
-    ctermfg=Colors.yellow.c, fg=Colors.yellow.g,
-    ctermbg=Colors.yellow.c, bg=Colors.yellow.g,
-  },
+  -- tab 之间分隔线的颜色.
+  tab_separator = { ctermfg=Colors.g234.c, fg=Colors.g234.g },
+  -- selected tab 后面一个分隔线'▕'的颜色. 最好和 tab_sel_bg 颜色相同.
+  tab_separator_selected = vim.tbl_extend('force', bg.tab, { ctermfg=Colors.yellow.c, fg=Colors.yellow.g }),
 
   -- "offset_separator" 为 File Explorer 和 bufferline 之间的 separator
   offset_separator = { link = 'WinSeparator' },
 
   -- error, warning, info, hint 颜色 --------------------------------------------------------------
   -- NOTE: 这里只是 diagnostic 部分的颜色显示, 不包括 buffer_num && buffer_name 颜色. eg: (1)
-  error_diagnostic = {           -- hi BufferLineErrorDiagnostic
-    ctermfg=Colors.red.c, fg=Colors.red.g,
-    ctermbg=Colors.g236.c, bg=Colors.g236.g,
-    bold = true,
-  },
-  error_diagnostic_visible = {   -- hi BufferLineErrorDiagnosticVisible
-    ctermfg=Colors.red.c, fg=Colors.red.g,
-    ctermbg=Colors.black.c, bg=Colors.black.g,
-    bold = true,
-  },
-  error_diagnostic_selected = {  -- hi BufferLineErrorDiagnosticSelected
-    ctermfg=Colors.red.c, fg=Colors.red.g,
-    ctermbg=Colors.black.c, bg=Colors.black.g,
-    bold = true,
-    italic = false,
-  },
-  warning_diagnostic = {
-    ctermfg=Colors.orange.c, fg=Colors.orange.g,
-    ctermbg=Colors.g236.c, bg=Colors.g236.g,
-    bold = true,
-  },
-  warning_diagnostic_visible = {
-    ctermfg=Colors.orange.c, fg=Colors.orange.g,
-    ctermbg=Colors.black.c, bg=Colors.black.g,
-    bold = true,
-  },
-  warning_diagnostic_selected = {
-    ctermfg=Colors.orange.c, fg=Colors.orange.g,
-    ctermbg=Colors.black.c, bg=Colors.black.g,
-    bold = true,
-    italic = false,
-  },
-  info_diagnostic = {
-    ctermfg=Colors.blue.c, fg=Colors.blue.g,
-    ctermbg=Colors.g236.c, bg=Colors.g236.g,
-    bold = true,
-  },
-  info_diagnostic_visible = {
-    ctermfg=Colors.blue.c, fg=Colors.blue.g,
-    ctermbg=Colors.black.c, bg=Colors.black.g,
-    bold = true,
-  },
-  info_diagnostic_selected = {
-    ctermfg=Colors.blue.c, fg=Colors.blue.g,
-    ctermbg=Colors.black.c, bg=Colors.black.g,
-    bold = true,
-    italic = false,
-  },
-  hint_diagnostic = {
-    ctermfg=Colors.grey_hint.c, fg=Colors.grey_hint.g,
-    ctermbg=Colors.g236.c, bg=Colors.g236.g,
-    bold = true,
-  },
-  hint_diagnostic_visible = {
-    ctermfg=Colors.grey_hint.c, fg=Colors.grey_hint.g,
-    ctermbg=Colors.black.c, bg=Colors.black.g,
-    bold = true,
-  },
-  hint_diagnostic_selected = {
-    ctermfg=Colors.grey_hint.c, fg=Colors.grey_hint.g,
-    ctermbg=Colors.black.c, bg=Colors.black.g,
-    bold = true,
-    italic = false,
-  },
+  -- hi BufferLineErrorDiagnostic
+  error_diagnostic = vim.tbl_extend('force', bg.color, Highlights.DiagnosticError, { bold = true }),
+  -- hi BufferLineErrorDiagnosticVisible
+  error_diagnostic_visible = vim.tbl_extend('force', bg.visible, Highlights.DiagnosticError, { bold = true }),
+  -- hi BufferLineErrorDiagnosticSelected
+  error_diagnostic_selected = vim.tbl_extend('force', bg.visible, Highlights.DiagnosticError, { bold = true, italic = false }),
+
+  warning_diagnostic = vim.tbl_extend('force', bg.color, Highlights.DiagnosticWarn, { bold = true }),
+  warning_diagnostic_visible = vim.tbl_extend('force', bg.visible, Highlights.DiagnosticWarn, { bold = true }),
+  warning_diagnostic_selected = vim.tbl_extend('force', bg.visible, Highlights.DiagnosticWarn, { bold = true, italic = false }),
+
+  info_diagnostic = vim.tbl_extend('force', bg.color, Highlights.DiagnosticInfo, { bold = true }),
+  info_diagnostic_visible = vim.tbl_extend('force', bg.visible, Highlights.DiagnosticInfo, { bold = true }),
+  info_diagnostic_selected = vim.tbl_extend('force', bg.visible, Highlights.DiagnosticInfo, { bold = true, italic = false }),
+
+  hint_diagnostic = vim.tbl_extend('force', bg.color, Highlights.DiagnosticHint, { bold = true }),
+  hint_diagnostic_visible = vim.tbl_extend('force', bg.visible, Highlights.DiagnosticHint, { bold = true }),
+  hint_diagnostic_selected = vim.tbl_extend('force', bg.visible, Highlights.DiagnosticHint, { bold = true, italic = false }),
 }
 
 -- numbers 和 buffer 颜色相同,
@@ -193,8 +109,8 @@ buf_highlights.hint = buf_highlights.background
 buf_highlights.hint_visible = buf_highlights.buffer_visible
 buf_highlights.hint_selected = buf_highlights.buffer_selected
 
--- for 'offsets' config.
-vim.api.nvim_set_hl(0, 'NvimTreeFileExplorer', vim.tbl_deep_extend('force', Highlights.Directory, {
+-- for 'offsets' config. 'NvimTreeFileExplorer' color
+vim.api.nvim_set_hl(0, 'NvimTreeFileExplorer', vim.tbl_extend('force', Highlights.Directory, {
   ctermbg=Colors.g235.c, bg=Colors.g235.g, underline=true,
 }))
 
