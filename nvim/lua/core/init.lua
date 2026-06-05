@@ -3,6 +3,7 @@ require("core.funcs.fzf_edit")  -- 用于编辑 fzf multi selected item
 require("core.funcs.notify")    -- Notify() 函数
 
 require("core.highlights")
+require("core.treesitter_queries")
 
 require("core.options")  -- vimrc 设置
 require("core.keymaps")
