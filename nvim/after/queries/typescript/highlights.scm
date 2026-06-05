@@ -9,7 +9,7 @@
 ;(variable_declarator value: (new_expression constructor: ((identifier) @type )))
 
 ;;; 'this' keyword
-((this) @keyword)
+(member_expression object: (this) @keyword)
 
-;;; 'super'
-((super) @keyword)
+;;; 'super' keyword
+(member_expression object: (super) @keyword)
