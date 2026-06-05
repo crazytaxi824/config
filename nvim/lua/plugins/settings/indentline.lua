@@ -9,14 +9,14 @@ if not status_ok then
 end
 
 -- 设置 indent.char 颜色 --------------------------------------------------------------------------
-vim.api.nvim_set_hl(0, 'RainbowGrey',   {ctermfg=Colors.grey_hint.c, fg=Colors.grey_hint.g})
-vim.api.nvim_set_hl(0, 'RainbowRed',    {ctermfg=Colors.red.c, fg=Colors.red.g})
-vim.api.nvim_set_hl(0, 'RainbowYellow', {ctermfg=Colors.yellow.c, fg=Colors.yellow.g})
-vim.api.nvim_set_hl(0, 'RainbowBlue',   {ctermfg=Colors.blue.c, fg=Colors.blue.g})
-vim.api.nvim_set_hl(0, 'RainbowOrange', {ctermfg=Colors.orange.c, fg=Colors.orange.g})
-vim.api.nvim_set_hl(0, 'RainbowGreen',  {ctermfg=Colors.green.c, fg=Colors.green.g})
-vim.api.nvim_set_hl(0, 'RainbowViolet', {ctermfg=Colors.magenta.c, fg=Colors.magenta.g})
-vim.api.nvim_set_hl(0, 'RainbowCyan',   {ctermfg=Colors.cyan.c, fg=Colors.cyan.g})
+vim.api.nvim_set_hl(0, 'RainbowGrey',   { ctermfg=Colors.grey_hint.c, fg=Colors.grey_hint.g })
+vim.api.nvim_set_hl(0, 'RainbowRed',    { ctermfg=Colors.red.c, fg=Colors.red.g })
+vim.api.nvim_set_hl(0, 'RainbowYellow', { ctermfg=Colors.yellow.c, fg=Colors.yellow.g })
+vim.api.nvim_set_hl(0, 'RainbowBlue',   { ctermfg=Colors.blue.c, fg=Colors.blue.g })
+vim.api.nvim_set_hl(0, 'RainbowOrange', { ctermfg=Colors.orange.c, fg=Colors.orange.g })
+vim.api.nvim_set_hl(0, 'RainbowGreen',  { ctermfg=Colors.green.c, fg=Colors.green.g })
+vim.api.nvim_set_hl(0, 'RainbowViolet', { ctermfg=Colors.magenta.c, fg=Colors.magenta.g })
+vim.api.nvim_set_hl(0, 'RainbowCyan',   { ctermfg=Colors.cyan.c, fg=Colors.cyan.g })
 
 -- set list & set listchars, NOTE: 在 settings.lua 中设置.
 --vim.opt.list = true
