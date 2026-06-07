@@ -74,8 +74,8 @@ local function jump(content)
     return
   end
 
-  local char_count = vim.fn.strchars(content)
-  if char_count > 512 then
+  -- 防止内容太长造成卡顿
+  if #content > 512 then
     return
   end
 
@@ -102,8 +102,8 @@ local function v_jump(v_selected)
     return
   end
 
-  local char_count = vim.fn.strchars(v_selected)
-  if char_count > 512 then
+  -- 防止内容太长造成卡顿
+  if #v_selected > 512 then
     return
   end
 

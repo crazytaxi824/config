@@ -150,8 +150,10 @@ M.parse_hl_current_line = function()
     return
   end
 
-  -- 防止 js 文件太长造成卡顿
-  line = vim.fn.strcharpart(line, 0, 512)
+  -- 防止 line 太长造成卡顿, eg: javascript 单行内容
+  if #line > 512 then
+    return
+  end
 
   local bufnr = vim.api.nvim_get_current_buf()
   local lnum = vim.api.nvim_win_get_cursor(0)[1]  -- vim.fn.line('.')
