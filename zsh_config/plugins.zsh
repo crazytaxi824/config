@@ -31,7 +31,22 @@
 }
 
 # VVI: 加载 zsh-completions 后再使用 `compinit`
-autoload -Uz compinit && compinit
+autoload -Uz compinit
+autoload -Uz zrecompile
+() {
+	# 检查 .zcompdump 是否存在，且它的最后修改时间是否在 n 小时以内
+	local dump=(~/.zcompdump(N.mh-12))
+	if [[ -f ~/.zcompdump ]] && (( $#dump )); then
+		# 缓存很新，开启 -C 参数盲读，不作任何磁盘扫描 (实现终端秒开)
+		compinit -C
+	else
+		echo "zrecompile -p ~/.zcompdump"
+		# 缓存不存在或超时未更新，执行常规扫描并静默生成/更新缓存
+		compinit
+		# 可选：将文本缓存自动编译为二进制 .zwc 文件，下一次读取速度再翻倍
+		zrecompile -p ~/.zcompdump >/dev/null 2>&1
+	fi
+}
 
 # zsh-autosuggestions inline 代码提示的颜色. 默认是 8, bold black 颜色
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=240"
