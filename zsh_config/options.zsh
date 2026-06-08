@@ -23,7 +23,7 @@ setopt HIST_IGNORE_ALL_DUPS  # 任何命令只被记录一次
 # 返回 1 时不记录, 返回 0 或者 nil 则记录到 $HISTFILE or ~/.zsh_history
 function zshaddhistory() {
 	# "$1" 是完整命令行
-	local cmd=$(echo "$1" | awk '{print $1}')
+	local cmd=${1%% *}
 
 	# 如果 command 不存在则不要记录
 	if [[ -z $(command -v "$cmd") ]]; then

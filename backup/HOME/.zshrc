@@ -17,10 +17,10 @@ export VISUAL=$EDITOR  # VISUAL editor could be a full screen editor as vi or em
 # 加载顺序重要
 source "$XDG_CONFIG_HOME/zsh_config/env.zsh"
 source "$XDG_CONFIG_HOME/zsh_config/options.zsh"
-source "$XDG_CONFIG_HOME/zsh_config/plugins.zsh"
 source "$XDG_CONFIG_HOME/zsh_config/funcs.zsh"
 source "$XDG_CONFIG_HOME/zsh_config/aliases.zsh"  # 在 funcs 后加载, 可以覆盖 funcs
 source "$XDG_CONFIG_HOME/zsh_config/keybindings.zsh"
+source "$XDG_CONFIG_HOME/zsh_config/plugins.zsh"  # compinit 放在最后执行
 
 # 加载临时 config 文件, 主要用于 local use
 [ -f "$XDG_CONFIG_HOME/zsh_config/tmp_config.zsh" ] && source "$XDG_CONFIG_HOME/zsh_config/tmp_config.zsh"
