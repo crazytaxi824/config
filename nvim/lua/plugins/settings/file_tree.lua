@@ -139,8 +139,10 @@ local function nt_buffer_keymaps(bufnr)
     { "<F8>",        nt_api.node.navigate.diagnostics.next,  "Next Diagnostic Item" },  -- next diagnostics item
     { "<D-F8>",      nt_api.node.navigate.diagnostics.prev,  "Prev Diagnostic Item" },  -- previous diagnostics item
 
-    { "E",           nt_api.tree.collapse_all,   "Collapse All" },  -- vscode 自定义按键为 cmd+E
-    { "W",           nt_api.tree.expand_all,     "Expand All" },
+    { "zc",  nt_api.node.navigate.parent_close,  "Close current Folder" },
+    { "zM",          nt_api.tree.collapse_all,   "Collapse All" },
+    { "zR",          nt_api.tree.expand_all,     "Expand All" },
+
     { "r",           nt_api.tree.reload,         "Refresh" },
     { "H",           nt_api.tree.toggle_hidden_filter,      "Toggle Hidden Files" },  -- 隐藏文件
     { "<leader>gi",  nt_api.tree.toggle_gitignore_filter,   "Toggle Git Ignored" },   -- toggle show git ignored files

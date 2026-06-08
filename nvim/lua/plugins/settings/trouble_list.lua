@@ -20,7 +20,6 @@ trouble.setup({
 -- keymaps ----------------------------------------------------------------------------------------
 local opts = { silent=true }
 local tree_keymaps = {
-  {'n', '<leader>:',  '<cmd>Trouble symbols toggle focus=false<cr>', opts, 'Symbols (Trouble)'},
   {'n', '<leader>xx', '<cmd>Trouble diagnostics toggle<cr>', opts, 'Diagnostics (Trouble)'},
   {'n', '<leader>xX', '<cmd>Trouble diagnostics toggle filter.buf=0<cr>', opts, 'Buffer Diagnostics (Trouble)'},
   {'n', '<leader>xL', '<cmd>Trouble loclist toggle<cr>', opts, 'Location List (Trouble)'},
