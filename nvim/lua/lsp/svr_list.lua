@@ -30,25 +30,40 @@ M.list = {
   },
   -- pyrightconfig.json: https://github.com/microsoft/pyright/blob/main/docs/configuration.md
   -- pyproject.toml [tool.pyright] : https://github.com/microsoft/pyright/blob/main/docs/configuration.md#sample-pyprojecttoml-file
+  -- 无 semantic token, 微软开发, TS 语言编写
   -- pyright = {
   --   cmd = "pyright-langserver",
   --   mason = "pyright",
   -- },
   -- pyproject.toml [tool.basedpyright]: https://docs.basedpyright.com/latest/configuration/config-files/
+  -- 在 pyright 基础上加入了 semantic token, 社区维护, TS 语言编写
+  -- 开销: 最大
+  -- 无注释代码类型推断: 低, 大量 Unknown/Any
+  -- 泛型推断: 最高
   -- basedpyright = {
   --   cmd = "basedpyright-langserver",
   --   mason = "basedpyright",
   -- },
-  -- ty.toml [tool.ty.analysis]: https://docs.astral.sh/ty/reference/configuration/
-  ty = {
-    cmd = "ty",
-    mason = "ty",
-  },
   -- pyrefly.toml [tool.pyrefly]: https://pyrefly.org/en/docs/configuration/
+  -- Meta(facebook) 开发, Rust 语言编写
+  -- 开销: 比 ty 大 (CPU, MEM), 适合中大型项目
+  -- 类型推断: 激进隐式推断，对非注解代码友好
+  -- 无注释代码类型推断: 最高
+  -- 泛型推断: 高
   -- pyrefly = {
   --   cmd = "pyrefly",
   --   mason = "pyrefly",
   -- },
+  -- ty.toml [tool.ty.analysis]: https://docs.astral.sh/ty/reference/configuration/
+  -- Astral(OpenAI) 开发, Rust 语言编写
+  -- 开销: 最小, 适合中小型项目
+  -- 类型推断: 渐进保证，错误提示极其清晰, 配合自家的 uv ruff 工具链
+  -- 无注释代码类型推断: 中, 不激进推断
+  -- 泛型推断: 低
+  ty = {
+    cmd = "ty",
+    mason = "ty",
+  },
   -- pyproject.toml [tool.ruff] & ruff.toml: https://docs.astral.sh/ruff/tutorial/#configuration
   -- 'ruff' can be used to replace Flake8, Black, isort, pydocstyle, pyupgrade, autoflake ...
   ruff = {

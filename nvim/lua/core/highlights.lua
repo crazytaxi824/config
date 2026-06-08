@@ -287,9 +287,6 @@ Highlights['@comment.todo'] = { link = "Todo" }           -- TODO
 -- Highlights['@punctuation.delimiter.comment'] = { link = "@constant" }  -- :
 -- Highlights['@punctuation.bracket.comment'] = { link = "@constant" }  -- ()
 
--- url: http://www.abc.com
-Highlights['@string.special.url'] = { link = "Underlined" }  -- url
-
 -- markdown | markdown_inline
 -- # titles
 Highlights["@markup.heading.1.markdown"] = { fg=Colors.green_ok.g, bold=true, underline=true }
@@ -332,6 +329,7 @@ Highlights['@tag.javascript'] = { link = "@type.javascript" }  -- jsx/tsx custom
 Highlights['@tag.delimiter'] = { ctermfg=Colors.g244.c, fg=Colors.g244.g }  -- html <tag> <> 括号颜色
 Highlights['@tag.attribute'] = { link = "@property" }  -- html, <... width=..., @tag.attribute=... >
 
+Highlights['@string.special.url'] = { link = "Underlined" }  -- url: http://www.abc.com
 -- Highlights['@string.escape'] = { link="SpecialChar" }  -- printf "\n" "\t" ...
 
 -- LSP semantic tokens -----------------------------------------------------------------------------
