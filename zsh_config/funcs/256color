@@ -199,37 +199,37 @@ function bgCube() {
 # main function
 case $1 in
 "fg")
-	echo "System colors: 0~15 normal & bright colors"
+	print "System colors: 0~15 normal & bright colors"
 	fgSystem
-	echo "Grayscale ramp: 232~255"
+	print "Grayscale ramp: 232~255"
 	fgGrayscale
-	echo "Color cube, 6x6x6: 16~231"
+	print "Color cube, 6x6x6: 16~231"
 	fgCube
-	echo "The color palette is using 'sRGB' Hex value"
+	printf "\e[32m%s\e[0m\n" "The color palette is using 'sRGB' Hex value"
 	;;
 "bg")
-	echo "System colors: 0~15 normal & bright colors"
+	print "System colors: 0~15 normal & bright colors"
 	bgSystem
-	echo "Grayscale ramp: 232~255"
+	print "Grayscale ramp: 232~255"
 	bgGrayscale
-	echo "Color cube, 6x6x6: 16~231"
+	print "Color cube, 6x6x6: 16~231"
 	bgCube
-	echo "The color palette is using 'sRGB' Hex value"
+	printf "\e[32m%s\e[0m\n" "The color palette is using 'sRGB' Hex value"
 	;;
 "all")
-	echo "System colors: 0~15 normal & bright colors"
+	print "System colors: 0~15 normal & bright colors"
 	bgSystem
 	fgSystem
-	echo "Grayscale ramp: 232~255"
+	print "Grayscale ramp: 232~255"
 	bgGrayscale
 	fgGrayscale
-	echo "Color cube, 6x6x6: 16~231"
+	print "Color cube, 6x6x6: 16~231"
 	bgCube
 	fgCube
-	echo "The color palette is using 'sRGB' Hex value"
+	printf "\e[32m%s\e[0m\n" "The color palette is using 'sRGB' Hex value"
 	;;
 *)
-	echo "256color [fg | bg | all]"
+	print "256color [fg | bg | all]"
 	;;
 esac
 

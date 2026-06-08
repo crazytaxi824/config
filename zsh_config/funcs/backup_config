@@ -20,15 +20,15 @@ for backup_folder in $backup_folder_list
 do
 	# 判断备份文件夹是否存在
 	if [[ -d $backup_folder ]]; then
-		echo -e "\e[32m - $backup_folder ✔\e[0m"
+		printf "\e[32m - %s ✔\e[0m\n" "$backup_folder"
 	else
-		echo -e "\e[31m - $backup_folder ✗\e[0m"
+		printf "\e[31m - %s ✔\e[0m\n" "$backup_folder"
 		backupFoldersExist=false
 	fi
 done
 
 if [[ $backupFoldersExist == false ]]; then
-	echo -e "\e[31m请手动创建 Backup 文件夹, Backup Canceled!\e[0m"
+	printf "\e[31m%s\e[0m\n" '请手动创建 Backup 文件夹, Backup Canceled!'
 	return 2
 fi
 
@@ -58,7 +58,7 @@ do
 	cp $HOME/.tmux.conf $backup_folder/HOME/
 done
 
-echo -e "\e[32mBackup Done! Happy Coding!\e[0m"
+printf "\e[32m%s\e[0m\n" 'Backup Done! Happy Coding!'
 
 
 
