@@ -339,6 +339,7 @@ Highlights['@tag.attribute'] = { link = "@property" }  -- html, <... width=..., 
 Highlights['@lsp.type.comment'] = {}  -- clear highlight in order to use treesitter highlight.
 Highlights['@lsp.mod.readonly'] = { link = "Constant" }  -- readonly = constant
 Highlights['@lsp.mod.format'] = { link = "Boolean" }  -- fmt "%s" "%v" "%d" ...
+Highlights['@lsp.mod.documentation'] = { link = "Special" }  -- ---@class ---@param
 
 -- NOTE: 以下设置是为了配合 lazy load plugins ------------------------------------------------------
 -- 以下颜色为了 lazy load lualine
