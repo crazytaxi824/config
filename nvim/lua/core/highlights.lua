@@ -108,7 +108,7 @@ Highlights.SignColumn = {}
 Highlights.ColorColumn = { ctermbg=Colors.g234.c, bg=Colors.g234.g }
 -- Quick Fix 选中行颜色
 Highlights.QuickFixLine = {
-  ctermfg=Colors.blue_boolean.c, fg=Colors.blue_boolean.g,
+  ctermfg=Colors.blue_special.c, fg=Colors.blue_special.g,
   bold=true,
 }
 
@@ -170,9 +170,9 @@ Highlights.Number = { ctermfg=151, fg='#B5CEA8' }  -- 100, int, uint ...
 Highlights.Float  = { link = "Number" }  -- 10.02 float64, float32
 
 -- true / false
-Highlights.Boolean = { ctermfg=Colors.blue_boolean.c, fg=Colors.blue_boolean.g }
+Highlights.Boolean = { ctermfg=Colors.blue_special.c, fg=Colors.blue_special.g }
 -- 常量颜色. eg: const <Constant> = "foo"
-Highlights.Constant= { link = "Boolean" }
+Highlights.Constant= { ctermfg=Colors.blue_const.c, fg=Colors.blue_const.g }
 -- variable, property, parameter
 Highlights.Identifier = { ctermfg=Colors.cyan.c, fg=Colors.cyan.g }
 
@@ -338,7 +338,7 @@ Highlights['@tag.attribute'] = { link = "@property" }  -- html, <... width=..., 
 -- NOTE: `:help vim.hl.priorities`
 Highlights['@lsp.type.comment'] = {}  -- clear highlight in order to use treesitter highlight.
 Highlights['@lsp.mod.readonly'] = { link = "Constant" }  -- readonly = constant
-Highlights['@lsp.mod.format'] = { link = "Boolean" }  -- fmt "%s" "%v" "%d" ...
+Highlights['@lsp.mod.format'] = { link = "Special" }  -- fmt "%s" "%v" "%d" ...
 Highlights['@lsp.mod.documentation'] = { link = "Special" }  -- ---@class ---@param
 
 -- NOTE: 以下设置是为了配合 lazy load plugins ------------------------------------------------------
