@@ -152,6 +152,13 @@ end
 -- }}}
 
 M.check = function()
+  -- |xxx|: Underlined
+  -- {xxx}: cyan Identifier
+  -- `xxx`: blue Special
+  -- <xxx>: SpecialChar
+  health.start("vimdoc highlight, `eg`:")
+  health.ok("<SpecialChar>, `Special`, |Underlined|, {Identifier}")
+
   -- command line tools
   health.start("check command line tools")
   check_cmd_tools(cmd_tools)
