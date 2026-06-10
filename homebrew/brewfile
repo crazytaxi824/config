@@ -88,7 +88,7 @@ cask "obsidian" # markdown 编辑软件
 #cask "font-jetbrains-mono-nerd-font"  # code 字体, 有 bold-italic 字体
 #cask "font-symbols-only-nerd-font"    # nerdfont 只包含 glyphs
 cask "font-fira-code"
-cask "font-sarasa-gothic"  # CJK 等宽 bold italic 字体
+cask "font-sarasa-gothic"  # CJK 等宽 bold italic 字体, NOTE: 下载 v1.0.37, 否则很多 emoji 会被覆盖
 cask "font-plangothic"     # CJK 生僻字大全, 包含两个字体文件, 一个字体文件最多只能有 65535 个字
 
 # 个人工具
