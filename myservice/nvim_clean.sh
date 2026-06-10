@@ -12,7 +12,7 @@ function nvim_clean() {
 	# `grep [n]vim`          避免 grep 进程被杀. grep 进程中不会出现 nvim, 而是 [n]vim
 	# `awk -v self="$self"`  -v 赋值
 	# `awk $2 == 1`          父进程 ppid == 1 说明是 Orphan Processes
-	# `awk $3 ~ /^\?\??$/`   tty 正则匹配 `^?$` or `^??$`. linux 中是一个 ?, macos 中是 ??
+	# `awk $3 ~ /^\?\??$/`   没有被任何 tty 显示. 正则匹配 `^?$` or `^??$`. linux 中是一个 ?, macos 中是 ??
 	# `awk {print $1}`       只输出 pid list
 	local process=$(ps -eo pid=,ppid=,tty=,command= | grep '[n]vim' | awk -v self="$self" '$1 != self and $2 == 1 && $3 ~ /^\?\??$/')
 
