@@ -11,7 +11,8 @@ function M.set()
     {'n', '<S-D-w>', function()
       for _, win_id in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
         -- NOTE: split window 中不会触发 BufWinEnter, 所以利用 WinResized 来解决.
-        -- NOTE: "a buffer with read errors" 时所有的 buf events 都不会被触发, eg: [Permission Denied], LSP error ...
+        -- NOTE: "a buffer with read errors" 时所有的 buf events 都不会被触发, 同时会重置 setlocal winbar=''
+        -- eg: [Permission Denied], LSP error ...
         -- window 中一定会显示一个 buffer
         local w = wb_act.binding_win_buf(win_id, vim.api.nvim_win_get_buf(win_id))
         if w then
