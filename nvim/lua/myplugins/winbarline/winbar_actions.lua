@@ -130,7 +130,7 @@ function M.delete_buffers(opt)
     end
   end
 
-  w:set_winbar(true)
+  w:set_winbar('focused')
 end
 
 
@@ -212,7 +212,7 @@ function M.delete_current_buf()
   b:remove_win(curr_win)
   w:remove_buf(curr_buf)
 
-  w:set_winbar(true)
+  w:set_winbar('focused')
 end
 
 -- list current window 中所有 win_buffers

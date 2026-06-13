@@ -12,7 +12,7 @@ vim.api.nvim_create_autocmd({"BufEnter"}, {
     local curr_win = vim.api.nvim_get_current_win()
     local w = wb_act.binding_win_buf(curr_win, args.buf)
     if w then
-      w:set_winbar(true)
+      w:set_winbar('focused')
     end
   end,
   desc = "winbarline: binding window and buffer"
@@ -26,7 +26,7 @@ vim.api.nvim_create_autocmd('BufLeave', {
     local curr_win = vim.api.nvim_get_current_win()
     local w = g.get_win(curr_win)
     if w then
-      w:set_winbar(false)
+      w:set_winbar()
     end
   end,
   desc = "winbarline: redraw selected buffer"
@@ -48,7 +48,7 @@ vim.api.nvim_create_autocmd({"BufDelete", "BufWipeout"}, {
       local w = g.get_win(win_id)
       if w then
         w:remove_buf(args.buf)
-        w:set_winbar(w.win_id == vim.api.nvim_get_current_win())
+        w:set_winbar('auto')
       end
     end
 
@@ -110,7 +110,7 @@ vim.api.nvim_create_autocmd({
     for _, win_id in ipairs(b:list_wins()) do
       local w = g.get_win(win_id)
       if w then
-        w:set_winbar(w.win_id == vim.api.nvim_get_current_win())
+        w:set_winbar('auto')
       end
     end
   end,
@@ -155,7 +155,7 @@ vim.api.nvim_create_autocmd({"WinResized"}, {
       -- window 中一定会显示一个 buffer
       local w = wb_act.binding_win_buf(win_id, vim.api.nvim_win_get_buf(win_id))
       if w then
-        w:set_winbar(w.win_id == vim.api.nvim_get_current_win())
+        w:set_winbar('auto')
       end
     end
   end,
