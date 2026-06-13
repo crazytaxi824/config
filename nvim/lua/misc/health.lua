@@ -23,6 +23,7 @@ local mason_record = [[
   json-lsp
   lua-language-server
   prettier
+  pyrefly
   ruff
   shfmt
   sql-formatter
@@ -32,6 +33,7 @@ local mason_record = [[
   tree-sitter-cli
   ty
   typescript-language-server
+  uv
   yaml-language-server
 ]]
 
