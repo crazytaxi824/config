@@ -38,9 +38,7 @@ brew "pandoc"  # 文档格式转换工具, 支持 word, pdf, markdown ... 各种
 # code languages & tools
 #brew "go"   # 推荐使用 https://go.dev 中下载安装.
 brew "node@24"
-#brew "yarn"  # replace npm
 brew "python3"
-brew "uv"  # python tool
 
 brew "wget"     # http(s) 下载工具
 #brew "curl"    # http(s) 请求工具, mac 自带.
