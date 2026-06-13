@@ -6,7 +6,7 @@ local wb_act = require('myplugins.winbarline.winbar_actions')
 local gid = vim.api.nvim_create_augroup('my_winbarline', { clear = true })
 
 -- bind/unbind buffer & window 之间的关联
-vim.api.nvim_create_autocmd({"BufEnter"}, {
+vim.api.nvim_create_autocmd("BufEnter", {
   group = gid,
   callback = function(args)
     local curr_win = vim.api.nvim_get_current_win()
@@ -19,17 +19,18 @@ vim.api.nvim_create_autocmd({"BufEnter"}, {
 })
 
 
-vim.api.nvim_create_autocmd('BufLeave', {
+-- WinLeave 主要为了切换 selected buffer highlight
+vim.api.nvim_create_autocmd("WinLeave", {
   group = gid,
   callback = function(args)
-    -- refresh current window active buffer
     local curr_win = vim.api.nvim_get_current_win()
-    local w = g.get_win(curr_win)
+    local w = wb_act.binding_win_buf(curr_win, args.buf)
     if w then
+      -- WinLeave, BufLeave 时不是 focused window
       w:set_winbar()
     end
   end,
-  desc = "winbarline: redraw selected buffer"
+  desc = "winbarline: binding window and buffer"
 })
 
 
@@ -116,30 +117,6 @@ vim.api.nvim_create_autocmd({
   end,
   desc = "winbarline: buffer modified status"
 })
-
-
--- 根据 window 变动更新 winbar
--- WinEnter 主要为了切换 selected buffer highlight
--- NOTE: 在 WinEnter 时获取的 buffer 和 window width 都是不准确的. 需要在 "WinResized" 中获取
--- vim.api.nvim_create_autocmd({"WinEnter"}, {
---   group = gid,
---   callback = function(args)
---     -- refresh current window active buffer
---     -- local curr_win = vim.api.nvim_get_current_win()
---     -- local cw = g.get_win(curr_win)
---     -- if cw then
---     --   cw:set_winbar()
---     -- end
---
---     -- refresh previous window active buffer
---     local prev_win = vim.fn.win_getid(vim.fn.winnr('#'))
---     local pw = g.get_win(prev_win)
---     if pw then
---       pw:set_winbar(false)
---     end
---   end,
---   desc = "winbarline: redraw selected buffer"
--- })
 
 
 -- 'WinResized' 时需要更新所有正在显示的 (tab 中的) winbar

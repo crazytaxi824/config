@@ -333,7 +333,7 @@ local config = {
       exclude = { "node_modules", ".mypy_cache", ".git" },  -- NOTE: 排除 expand dir
     },
     open_file = {
-      quit_on_open = false,  -- VVI: 打开文件后自动关闭 Nvimtree
+      quit_on_open = true,  -- VVI: 打开文件后自动关闭 Nvimtree
       resize_window = true,  -- VVI: 重新渲染 nvimtree 窗口大小.
 
       -- 有多个 win 的情况下, 在 nvim-tree 中打开文件时需要选择 window.

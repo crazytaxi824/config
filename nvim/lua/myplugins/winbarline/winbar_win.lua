@@ -62,16 +62,14 @@ function WinbarLineWin:set_winbar(focused)
     return
   end
 
-  local f = false
-  if not focused then
-    f = false
-  elseif focused == 'focused' then
-    f = true
-  else
-    f = self.win_id == vim.api.nvim_get_current_win()
+  local focus = false
+  if focused == 'focused' then
+    focus = true
+  elseif focused == 'auto' then
+    focus = self.win_id == vim.api.nvim_get_current_win()
   end
 
-  local winbar_str = wb_fmt.winbar_format(self.win_id, f) or ''
+  local winbar_str = wb_fmt.winbar_format(self.win_id, focus) or ''
   vim.api.nvim_set_option_value('winbar', winbar_str, { scope='local', win=self.win_id })
 end
 
