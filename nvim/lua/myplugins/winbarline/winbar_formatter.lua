@@ -292,7 +292,7 @@ function WinbarFormatter.winbar_format(win_id, focused)
   end
 
   local min_level = 2
-  return format_winbar_items(fmt_items, w.width, active_buf_idx, min_level, focused)
+  return format_winbar_items(fmt_items, vim.api.nvim_win_get_width(w.win_id), active_buf_idx, min_level, focused)
 end
 
 

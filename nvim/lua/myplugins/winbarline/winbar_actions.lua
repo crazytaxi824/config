@@ -266,7 +266,7 @@ function M.binding_win_buf(win_id, bufnr)
   if win then
     win:append_buf(bufnr)
   else
-    win = wb_win.new(win_id, bufnr, win_cfg.width)
+    win = wb_win.new(win_id, bufnr)
     g.set_win(win)
   end
 

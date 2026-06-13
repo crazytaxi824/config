@@ -4,21 +4,18 @@ local wb_fmt = require('myplugins.winbarline.winbar_formatter')
 
 ---@class WinbarLineWindow
 ---@field win_id integer
----@field width integer
 ---@field private buf_list integer[]  需要排序
 local WinbarLineWin = {}
 WinbarLineWin.__index = WinbarLineWin
 
 ---@param bufnr integer
 ---@param win_id integer
----@param win_width integer
 ---@return WinbarLineWindow
-function WinbarLineWin.new(win_id, bufnr, win_width)
+function WinbarLineWin.new(win_id, bufnr)
   ---@type WinbarLineWindow
   local self = setmetatable({
     win_id = win_id,
     buf_list = { bufnr },
-    width = win_width,
   }, WinbarLineWin)
   return self
 end
