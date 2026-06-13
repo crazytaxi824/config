@@ -16,7 +16,7 @@ function M.set()
         -- window 中一定会显示一个 buffer
         local w = wb_act.binding_win_buf(win_id, vim.api.nvim_win_get_buf(win_id))
         if w then
-          w:set_winbar()
+          w:set_winbar(w.win_id == vim.api.nvim_get_current_win())
         end
       end
     end, opt, 'win: refresh all winbarline'},

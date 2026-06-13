@@ -40,8 +40,6 @@ local wb_sign = {
 --
 -- active buffer
 ---@field active boolean
---
----@field in_current_win boolean
 local WinbarFomatterItem = {}
 WinbarFomatterItem.__index = WinbarFomatterItem
 
@@ -66,7 +64,6 @@ function WinbarFomatterItem.new(win_id, bufnr, index, path_list, diagnostic)
     fp_prefix = prefix,
     basename = path_list[#path_list],
     diagnostic = diagnostic,
-    in_current_win = win_id == vim.api.nvim_get_current_win(),
     active = bufnr == vim.api.nvim_win_get_buf(win_id),
   }, WinbarFomatterItem)
 
@@ -122,13 +119,13 @@ end
 
 ---@param width integer
 ---@param level WinbarFormatterLevel
----@param mode? 'prefix'|'suffix'
+---@param mode 'prefix'|'suffix'
+---@param focused boolean
 ---@return WinbarFormatterItemComponent[]
-function WinbarFomatterItem:partial(width, level, mode)
-  mode = mode or 'prefix'
+function WinbarFomatterItem:partial(width, level, mode, focused)
   local suffix = mode == 'suffix'
 
-  local components, item_width = self:parse_item_to_components(level)
+  local components, item_width = self:parse_item_to_components(level, focused)
   if width >= item_width then
     return components
   end
@@ -175,9 +172,10 @@ end
 
 
 ---@param level WinbarFormatterLevel
+---@param focused boolean
 ---@return WinbarFormatterItemComponent[]
 ---@return integer width  item width: including a trailing space
-function WinbarFomatterItem:parse_item_to_components(level)
+function WinbarFomatterItem:parse_item_to_components(level, focused)
   ---@type WinbarFormatterItemComponent[]
   local components = {}
   local item_width = 1  -- NOTE: 每个 item 后一个空格
@@ -252,7 +250,7 @@ function WinbarFomatterItem:parse_item_to_components(level)
   for _, c in ipairs(components) do
     item_width = item_width + vim.fn.strdisplaywidth(c.content)
     -- 如果是 active & in current window 则使用 Selected highlight
-    if self.in_current_win and self.active then
+    if focused and self.active then
       c.hl = '%#' .. hl_prefix_selected .. c.hl .. '#'
     else
       c.hl = '%#' .. hl_prefix_default .. c.hl .. '#'
