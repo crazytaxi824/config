@@ -57,9 +57,15 @@ end
 -- set winbar for window
 --
 ---@param focused? 'focused'|'auto'
-function WinbarLineWin:set_winbar(focused)
+---@param debug_msg? string
+function WinbarLineWin:set_winbar(focused, debug_msg)
   if not vim.api.nvim_win_is_valid(self.win_id) then
     return
+  end
+
+  -- DEBUG
+  if debug_msg then
+    print(self.win_id, debug_msg)
   end
 
   local focus = false
