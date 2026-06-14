@@ -122,6 +122,7 @@ if vim.fn.has("nvim-0.13") == 1 then
 end
 
 vim.api.nvim_create_autocmd('OptionSet', {
+  group = gid,
   pattern = "modified",
   callback = function(args)
     -- opt 没有变的情况
