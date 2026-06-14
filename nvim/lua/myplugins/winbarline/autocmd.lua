@@ -35,7 +35,7 @@ vim.api.nvim_create_autocmd("WinLeave", {
 
 
 -- buffer 所在的 windows 中清理 window-buffer list
-vim.api.nvim_create_autocmd({"BufDelete", "BufWipeout"}, {
+vim.api.nvim_create_autocmd({"BufUnload", "BufDelete", "BufWipeout"}, {
   group = gid,
   callback = function(args)
     local buf = g.get_buf(args.buf)
@@ -164,7 +164,6 @@ vim.api.nvim_create_autocmd("DiagnosticChanged", {
         w:set_winbar_debounce('auto')
       end
     end
-
   end,
   desc = "winbarline: update buffer diagnostic status",
 })
