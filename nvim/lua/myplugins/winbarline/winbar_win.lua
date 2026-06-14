@@ -79,4 +79,30 @@ function WinbarLineWin:set_winbar(focused, debug_msg)
   vim.api.nvim_set_option_value('winbar', winbar_str, { scope='local', win=self.win_id })
 end
 
+-- debounce set winbar for window
+--
+---@param focused? 'focused'|'auto'
+---@param debug_msg? string
+WinbarLineWin.set_winbar_debounce = Debounce(function(self, focused, debug_msg)
+  if not vim.api.nvim_win_is_valid(self.win_id) then
+    return
+  end
+
+  -- DEBUG
+  if debug_msg then
+    print(self.win_id, debug_msg)
+  end
+
+  local focus = false
+  if focused == 'focused' then
+    focus = true
+  elseif focused == 'auto' then
+    focus = self.win_id == vim.api.nvim_get_current_win()
+  end
+
+  local winbar_str = wb_fmt.winbar_format(self.win_id, focus) or ''
+  vim.api.nvim_set_option_value('winbar', winbar_str, { scope='local', win=self.win_id })
+end, 500)  -- NOTE: 500ms 比较适中
+
+
 return WinbarLineWin

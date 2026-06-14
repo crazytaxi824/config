@@ -94,8 +94,9 @@ vim.api.nvim_create_autocmd({"WinClosed"}, {
 -- 更新 winbar 显示 -------------------------------------------------------------------------------
 -- 根据 buffer 变动更新 winbar 显示
 -- 如果 buffer 被加入到多个 window 中, 则影响多个 window
+
 ---@param bufnr integer
-local function update_modified_status(bufnr)
+local function buf_update_winbar(bufnr)
   local b = g.get_buf(bufnr)
   if not b then
     -- 有些 buffer 可能从没有 BufWinEnter, 例如 lsp 会自动加载 pkg 中的文件.
@@ -111,20 +112,15 @@ local function update_modified_status(bufnr)
   end
 end
 
--- BufWritePost 更新 modified indicator 状态
--- DiagnosticChanged 更新 diagnostic number & level 状态
--- FileChangedShellPost 外部程序对文件进行了改动, 更新 modified indicator 状态
-vim.api.nvim_create_autocmd({"BufWritePost", "FileChangedShellPost", "DiagnosticChanged"}, {
-  group = gid,
-  callback = function(args)
-    update_modified_status(args.buf)
-  end,
-  desc = "winbarline: update buffer modified status",
-})
 
 -- "BufModifiedSet" 更新 modified indicator 状态
 -- NOTE: v0.13+ 中 "BufModifiedSet" 被舍弃了, https://github.com/nvim-tree/nvim-tree.lua/issues/3324
 -- 在 v0.13+ 中只有输入第一个字符时才会触发一次 OptionSet modified. 后续继续输入字符, 不会重复触发.
+local update_events = {"BufWritePost", "FileChangedShellPost", "BufModifiedSet"}
+if vim.fn.has("nvim-0.13") == 1 then
+  update_events = {"BufWritePost", "FileChangedShellPost"}
+end
+
 vim.api.nvim_create_autocmd('OptionSet', {
   pattern = "modified",
   callback = function(args)
@@ -134,9 +130,43 @@ vim.api.nvim_create_autocmd('OptionSet', {
     end
 
     -- NOTE: OptionSet 中 args.buf 没有用
-    update_modified_status(vim.api.nvim_get_current_buf())
+    buf_update_winbar(vim.api.nvim_get_current_buf())
   end,
   desc = "winbarline: update buffer modified status",
+})
+
+-- BufWritePost 更新 modified indicator 状态
+-- DiagnosticChanged 更新 diagnostic number & level 状态
+-- FileChangedShellPost 外部程序对文件进行了改动, 更新 modified indicator 状态
+vim.api.nvim_create_autocmd(update_events, {
+  group = gid,
+  callback = function(args)
+    buf_update_winbar(args.buf)
+  end,
+  desc = "winbarline: update buffer modified status",
+})
+
+-- "DiagnosticChanged" 会多次触发
+-- 优化为: 使用防抖函数, 所有 diagnostic 执行完之后再更新整个 winbar 状态
+vim.api.nvim_create_autocmd("DiagnosticChanged", {
+  group = gid,
+  callback = function(args)
+    local b = g.get_buf(args.buf)
+    if not b then
+      -- 有些 buffer 可能从没有 BufWinEnter, 例如 lsp 会自动加载 pkg 中的文件.
+      return
+    end
+
+    -- 更新所有加载该 buffer 的 window winbarline
+    for _, win_id in ipairs(b:list_wins()) do
+      local w = g.get_win(win_id)
+      if w then
+        w:set_winbar_debounce('auto')
+      end
+    end
+
+  end,
+  desc = "winbarline: update buffer diagnostic status",
 })
 
 
