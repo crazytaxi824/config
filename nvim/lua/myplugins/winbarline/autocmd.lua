@@ -5,7 +5,9 @@ local wb_act = require('myplugins.winbarline.winbar_actions')
 -- autocmd ----------------------------------------------------------------------------------------
 local gid = vim.api.nvim_create_augroup('my_winbarline', { clear = true })
 
--- bind/unbind buffer & window 之间的关联
+-- bind buffer & window
+-- "BufEnter" event 在每次 cursor enter buffer(window) 时触发, 可以用于更新 selected buffer highlight
+-- nvim_win_set_buf() DOCS: As a side-effect, this executes |BufEnter| and |BufLeave|
 vim.api.nvim_create_autocmd("BufEnter", {
   group = gid,
   callback = function(args)
