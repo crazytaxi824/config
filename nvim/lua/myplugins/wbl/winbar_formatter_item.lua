@@ -9,8 +9,8 @@
 
 ---@enum WinbarFormatterLevel
 local WinbarFormatterLevel = {
-  none = 1,    -- no bufname
-  minimal = 2, -- 4 display width bufname with '…'
+  none = 1,    -- only buf index, no bufname
+  minimal = 2, -- bufname with '…', (4 display-width)
   base = 3,    -- basename of buffer
   init = 4,    -- init prefix with basename
   full = 5,    -- full prefix with basename
