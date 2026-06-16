@@ -353,7 +353,7 @@ function WinbarFormatter.winbar_format(win_id, focused)
   local uni_bufnames = unique_bufnames(bufnrs)
 
   ---@type WinbarFormatterItem[]
-  local fmt_items = {}
+  local items = {}
   local active_buf_idx
 
   for i, path_list in ipairs(uni_bufnames) do
@@ -364,7 +364,7 @@ function WinbarFormatter.winbar_format(win_id, focused)
         active_buf_idx = i
       end
 
-      table.insert(fmt_items, item)
+      table.insert(items, item)
     else
       -- buf 没有被 cache, 该问题不应该出现
       vim.notify(string.format('buffer: %d is not cached', bufnr), vim.log.levels.WARN)
@@ -373,13 +373,13 @@ function WinbarFormatter.winbar_format(win_id, focused)
 
   -- no item display in window 或者 win 中没有 active buffer
   -- NOTE: `:h help` 时出现该问题
-  if vim.tbl_isempty(fmt_items) or not active_buf_idx then
+  if vim.tbl_isempty(items) or not active_buf_idx then
     return
   end
 
   -- TODO: refactor format_winbar_items()
-  local min_level = 2
-  return format_winbar_items(fmt_items, vim.api.nvim_win_get_width(win_id), active_buf_idx, min_level, focused)
+  local min_level = 4
+  return format_winbar_items(items, vim.api.nvim_win_get_width(win_id), active_buf_idx, min_level, focused)
 end
 
 
