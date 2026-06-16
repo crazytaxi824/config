@@ -46,7 +46,7 @@ WinbarFomatterItem.__index = WinbarFomatterItem
 ---@param win_id integer
 ---@param bufnr integer
 ---@param index integer
----@param path_list string[]  filepath list, eg: a/b/c -> ["a", "b", "c"]
+---@param path_list string[]  filepath list, eg: a/b/c.lua -> ["a", "b", "c.lua"]
 ---@param diagnostic? { count: integer, severity: integer }
 ---@return WinbarFormatterItem
 function WinbarFomatterItem.new(win_id, bufnr, index, path_list, diagnostic)

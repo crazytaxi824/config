@@ -123,7 +123,7 @@ end
 -- 如果有相同的 base name 则向上寻找直至 dir name 不同
 --
 ---@param bufnrs integer[]
----@return string[][] fp_list
+---@return string[][] fp_list  -- {{ "prefix1", "prefix2" ... "filename1" }, { "prefix1", "prefix2" ... "filename2" }}
 local function unique_bufnames(bufnrs)
   local bufnames = {}  ---@type string[]
   for _, bufnr in ipairs(bufnrs) do
@@ -331,10 +331,6 @@ end
 ---@param focused boolean
 ---@return string|nil winbar_str
 function WinbarFormatter.winbar_format(win_id, focused)
-  if not bimap.win_is_valid(win_id) then
-    return
-  end
-
   local bufnrs = bimap.win_get_buf_list(win_id)
   if not bufnrs or #bufnrs <= 0 then
     return
@@ -349,12 +345,12 @@ function WinbarFormatter.winbar_format(win_id, focused)
   for i, path_list in ipairs(uni_bufnames) do
     local bufnr = bufnrs[i]
     if bimap.buf_is_valid(bufnr) then
-      local fmt_item = fmt_item.new(win_id, bufnr, i, path_list, buf_diagnostic(bufnr))
-      if fmt_item.active then
+      local item = fmt_item.new(win_id, bufnr, i, path_list, buf_diagnostic(bufnr))
+      if item.active then
         active_buf_idx = i
       end
 
-      table.insert(fmt_items, fmt_item)
+      table.insert(fmt_items, item)
     else
       -- buf 没有被 cache, 该问题不应该出现
       vim.notify(string.format('buffer: %d is not cached', bufnr), vim.log.levels.WARN)
