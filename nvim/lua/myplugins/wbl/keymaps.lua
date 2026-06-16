@@ -68,7 +68,8 @@ local function delete_buffers(opt)
 
   local idx = bimap.win_index_buf(curr_win, curr_buf)
   if not idx then
-    error("current buffer is not register to current window")
+    vim.notify("current buffer is not register to current window", vim.log.levels.ERROR)
+    return
   end
 
   -- VVI: 必须倒序 unbind, 否则会造成 w.buf_list 删除不正确
@@ -145,7 +146,8 @@ local function delete_current_buf()
     -- '#' buffer 不在当前 window buffers list 中
     local idx = bimap.win_index_buf(curr_win, curr_buf)
     if not idx then
-      error("current buffer is not register to current window")
+      vim.notify("current buffer is not register to current window", vim.log.levels.ERROR)
+      return
     end
 
     if idx == 1 then
@@ -177,6 +179,9 @@ local function list_win_buffers()
     format_item = function(item)
       -- item is win_bufs index
       local bufnr = win_bufs[item]
+      if not vim.api.nvim_buf_is_valid(bufnr) then
+        return '[Invalid Buffer]'
+      end
       return vim.fn.fnamemodify(vim.api.nvim_buf_get_name(bufnr), ":~:.")
     end,
   }, function(choice)
@@ -184,7 +189,8 @@ local function list_win_buffers()
     if choice then
       local bufnr = win_bufs[choice]
       if not vim.api.nvim_buf_is_valid(bufnr) then
-        error('buffer is not valid')
+        vim.notify('buffer is not valid', vim.log.levels.ERROR)
+        return
       end
       vim.api.nvim_win_set_buf(curr_win, bufnr)
     end
