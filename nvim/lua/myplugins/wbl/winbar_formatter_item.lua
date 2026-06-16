@@ -7,16 +7,6 @@
 ---@field hl string
 
 
----@enum WinbarFormatterLevel
-local WinbarFormatterLevel = {
-  none = 1,    -- only buf index, no bufname
-  minimal = 2, -- bufname with '…', (4 display-width)
-  base = 3,    -- basename of buffer
-  init = 4,    -- init prefix with basename
-  full = 5,    -- full prefix with basename
-}
-
-
 local wb_sign = {
   indicator = '▌',
   modified = Nerd_icons.dot,
@@ -118,14 +108,13 @@ end
 
 
 ---@param width integer
----@param level WinbarFormatterLevel
 ---@param mode 'prefix'|'suffix'
 ---@param focused boolean
 ---@return WinbarFormatterItemComponent[]
-function WinbarFomatterItem:partial(width, level, mode, focused)
+function WinbarFomatterItem:partial(width, mode, focused)
   local suffix = mode == 'suffix'
 
-  local components, item_width = self:parse_item_to_components(level, focused)
+  local components, item_width = self:parse_item_to_components(focused)
   if width >= item_width then
     return components
   end
@@ -171,11 +160,10 @@ function WinbarFomatterItem:partial(width, level, mode, focused)
 end
 
 
----@param level WinbarFormatterLevel
 ---@param focused boolean
 ---@return WinbarFormatterItemComponent[]
 ---@return integer width  item width: including a trailing space
-function WinbarFomatterItem:parse_item_to_components(level, focused)
+function WinbarFomatterItem:parse_item_to_components(focused)
   ---@type WinbarFormatterItemComponent[]
   local components = {}
   local item_width = 1  -- NOTE: 每个 item 后一个空格
@@ -192,44 +180,19 @@ function WinbarFomatterItem:parse_item_to_components(level, focused)
   table.insert(components, comp)
 
   -- filepath prefix
-  if self.fp_prefix and level > WinbarFormatterLevel.base then
-    local prefix_str = ''
-    if level == WinbarFormatterLevel.full then
-      prefix_str = table.concat(self.fp_prefix, '/') .. '/'
-    elseif level == WinbarFormatterLevel.init then
-      for _, path in ipairs(self.fp_prefix) do
-        -- NOTE: strcharlen('你好') = 2, strcharpart('你好', 0, 1) = '你', strdisplaywidth('你') = 2
-        -- 这是为了获取完整的 'CJK' 文字
-        local s = vim.fn.strcharlen(path) > 0 and vim.fn.strcharpart(path, 0, 1) or ''
-        prefix_str = prefix_str .. s .. '/'
-      end
-    end
-
+  if self.fp_prefix then
+    local prefix_str = table.concat(self.fp_prefix, '/') .. '/'
     comp = { content = prefix_str, hl = 'Prefix' }
     table.insert(components, comp)
   end
 
   -- bufname
-  local bufname_str = ''
-  if level > WinbarFormatterLevel.minimal or self.active then
-    -- 如果是 active buffer 不要省略 basename
-    bufname_str = self.basename .. ' '
-  elseif level == WinbarFormatterLevel.minimal then
-    local display_width = 4
-    local p_str = partial_str(self.basename, display_width) or ''
-    if p_str == self.basename then
-      bufname_str = bufname_str .. p_str .. ' '
-    else
-      bufname_str = bufname_str .. p_str .. '… '
-    end
-  else
-    bufname_str = '… '
-  end
+  local bufname_str = self.basename .. ' '
   comp = { content = bufname_str, hl = '' }
   table.insert(components, comp)
 
   -- diagnostic
-  if self.diagnostic and (level > WinbarFormatterLevel.minimal or self.active) then
+  if self.diagnostic then
     -- local diag_str = '('..self.diagnostic.count..') '  -- 显示错误数量
     local diag_str = Nerd_icons.diag[self.diagnostic.severity] .. ' '  -- 只显示错误类型
     comp = { content = diag_str, hl = 'Severity_'..self.diagnostic.severity }

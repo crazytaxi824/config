@@ -1,4 +1,4 @@
-local fmt_item = require('myplugins.wbl.winbar_formatter_item')
+local fmter_item = require('myplugins.wbl.winbar_formatter_item')
 local bimap = require('myplugins.wbl.bimap')
 
 
@@ -150,17 +150,16 @@ end
 -- 将 items 转成 ordered components
 --
 ---@param fmt_items WinbarFormatterItem[]
----@param level WinbarFormatterLevel
 ---@param focused boolean
 ---@return WinbarFormatterItemComponent[][]
 ---@return integer total_width
-local function fmt_items_to_components(fmt_items, level, focused)
+local function fmt_items_to_components(fmt_items, focused)
   ---@type WinbarFormatterItemComponent[][]
   local all_components = {}
   local total_width = 0
 
   for _, item in ipairs(fmt_items) do
-    local comps, item_width = item:parse_item_to_components(level, focused)
+    local comps, item_width = item:parse_item_to_components(focused)
     total_width = total_width + item_width
     table.insert(all_components, comps)
   end
@@ -205,10 +204,9 @@ end
 ---@param fmt_items WinbarFormatterItem[]
 ---@param win_width integer
 ---@param active_buf_idx integer
----@param min_level WinbarFormatterLevel
 ---@param focused boolean
 ---@return WinbarFormatterItemComponent[][]
-local function reduce_items_to_display(fmt_items, win_width, active_buf_idx, min_level, focused)
+local function reduce_items_to_display(fmt_items, win_width, active_buf_idx, focused)
   ---@type WinbarFormatterItemComponent[][]
   local components = {}
 
@@ -217,7 +215,7 @@ local function reduce_items_to_display(fmt_items, win_width, active_buf_idx, min
 
   -- 优先填充左侧
   for i = active_buf_idx, 1, -1 do
-    local comp, i_width = fmt_items[i]:parse_item_to_components(min_level, focused)
+    local comp, i_width = fmt_items[i]:parse_item_to_components(focused)
     comp_width = comp_width + i_width
 
     -- 'win_width - 4' 是为了给 '<', '>' 留出位置
@@ -233,7 +231,7 @@ local function reduce_items_to_display(fmt_items, win_width, active_buf_idx, min
   -- 填充右侧
   if not p_item_idx then
     for i = active_buf_idx+1, #fmt_items, 1 do
-      local comp, i_width = fmt_items[i]:parse_item_to_components(min_level, focused)
+      local comp, i_width = fmt_items[i]:parse_item_to_components(focused)
       comp_width = comp_width + i_width
 
       -- 'win_width - 4' 是为了给 '<', '>' 留出位置
@@ -265,7 +263,7 @@ local function reduce_items_to_display(fmt_items, win_width, active_buf_idx, min
     end
 
     -- components 插入在第二个位置
-    table.insert(components, 2, fmt_items[p_item_idx]:partial(remain_width, min_level, 'suffix', focused))
+    table.insert(components, 2, fmt_items[p_item_idx]:partial(remain_width, 'suffix', focused))
   elseif p_item_idx == active_buf_idx then
     -- active buffer 已经超过 window width 了, 只能显示一个 buffer, 即 active buffer
     local insert_pos = 1  -- item 需要根据情况插入在第 1 | 2 的位置
@@ -284,11 +282,11 @@ local function reduce_items_to_display(fmt_items, win_width, active_buf_idx, min
     end
 
     -- components 插入在中间
-    table.insert(components, insert_pos, fmt_items[p_item_idx]:partial(remain_width, min_level, 'prefix', focused))
+    table.insert(components, insert_pos, fmt_items[p_item_idx]:partial(remain_width, 'prefix', focused))
   else
     -- 只有右侧需要添加 '>'
     remain_width = remain_width - 2
-    table.insert(components, fmt_items[p_item_idx]:partial(remain_width, min_level, 'prefix', focused))
+    table.insert(components, fmt_items[p_item_idx]:partial(remain_width, 'prefix', focused))
     table.insert(components, {{ content='>', hl='%*' }})
   end
 
@@ -299,10 +297,9 @@ end
 ---@param fmt_items WinbarFormatterItem[]
 ---@param win_width integer
 ---@param active_buf_idx integer
----@param min_level WinbarFormatterLevel
 ---@param focused boolean
 ---@return string winbar_str
-local function format_winbar_items(fmt_items, win_width, active_buf_idx, min_level, focused)
+local function format_winbar_items(fmt_items, win_width, active_buf_idx, focused)
   ---@type WinbarFormatterItemComponent[][]
   local components = {}
 
@@ -316,17 +313,14 @@ local function format_winbar_items(fmt_items, win_width, active_buf_idx, min_lev
   if win_width <= 4 then
     components = {{{ content = '<...', hl='' }}}
   else
-    for level = 5, min_level, -1 do
-      local comps, comps_width = fmt_items_to_components(fmt_items, level, focused)
-      if comps_width < win_width then
-        components = comps
-        break
-      end
+    local comps, comps_width = fmt_items_to_components(fmt_items, focused)
+    if comps_width < win_width then
+      components = comps
     end
 
     -- window width 不够, 只显示部分 items
     if vim.tbl_isempty(components) then
-      components = reduce_items_to_display(fmt_items, win_width, active_buf_idx, min_level, focused)
+      components = reduce_items_to_display(fmt_items, win_width, active_buf_idx, focused)
     end
   end
 
@@ -359,7 +353,7 @@ function WinbarFormatter.winbar_format(win_id, focused)
   for i, path_list in ipairs(uni_bufnames) do
     local bufnr = bufnrs[i]
     if bimap.buf_is_valid(bufnr) then
-      local item = fmt_item.new(win_id, bufnr, i, path_list, buf_diagnostic(bufnr))
+      local item = fmter_item.new(win_id, bufnr, i, path_list, buf_diagnostic(bufnr))
       if item.active then
         active_buf_idx = i
       end
@@ -377,9 +371,7 @@ function WinbarFormatter.winbar_format(win_id, focused)
     return
   end
 
-  -- TODO: refactor format_winbar_items()
-  local min_level = 4
-  return format_winbar_items(items, vim.api.nvim_win_get_width(win_id), active_buf_idx, min_level, focused)
+  return format_winbar_items(items, vim.api.nvim_win_get_width(win_id), active_buf_idx, focused)
 end
 
 
