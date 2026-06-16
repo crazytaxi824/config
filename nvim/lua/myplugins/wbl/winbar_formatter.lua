@@ -32,36 +32,50 @@ local function unique_short_paths(paths)
     all_parts[#all_parts + 1] = split_path_reversed(path)
   end
 
-  local results = {}
+  local n = #all_parts
+  -- 预先计算每条路径需要的最大深度，避免重复对比
+  local max_depths = {}
+  for i = 1, n do
+    max_depths[i] = 1
+  end
 
-  for i, parts_a in ipairs(all_parts) do
-    local max_depth = 1
-
-    for j, parts_b in ipairs(all_parts) do
-      if i ~= j then
-        local max_len = math.max(#parts_a, #parts_b)
-        for k = 1, max_len do
-          if parts_a[k] ~= parts_b[k] then
-            if k > max_depth then
-              max_depth = k
-            end
-            break
-          end
+  -- 只遍历上三角 (i < j)，同时更新 i 和 j 的 max_depth
+  for i = 1, n - 1 do
+    local parts_a = all_parts[i]
+    for j = i + 1, n do
+      local parts_b = all_parts[j]
+      local max_len = math.max(#parts_a, #parts_b)
+      for k = 1, max_len do
+        if parts_a[k] ~= parts_b[k] then
+          if k > max_depths[i] then max_depths[i] = k end
+          if k > max_depths[j] then max_depths[j] = k end
+          break
         end
       end
     end
+  end
 
-    -- 直接返回 slice，从 max_depth 到 1（正向顺序）
+  local results = {}
+  for i, parts_a in ipairs(all_parts) do
+    local max_depth = max_depths[i]
     local result = {}
-    for k = math.min(max_depth, #parts_a), 1, -1 do
-      result[#result + 1] = parts_a[k]
+    local actual_depth = math.min(max_depth, #parts_a)
+
+    if actual_depth < 3 then
+      for k = actual_depth, 1, -1 do
+        -- 逆向读取 elem, 按顺序写入
+        result[#result + 1] = parts_a[k]
+      end
+    else
+      -- 保留最深的一段(倒数第一 filename)、"..."、最近的一段(prefix1)
+      result[#result + 1] = parts_a[actual_depth]
+      result[#result + 1] = ""
+      result[#result + 1] = parts_a[1]
     end
 
-    -- 如果需要的深度超过实际段数，说明路径更短，在最前面补 ""
     if max_depth > #parts_a then
       table.insert(result, 1, "")
     end
-
     results[#results + 1] = result
   end
 
@@ -363,6 +377,7 @@ function WinbarFormatter.winbar_format(win_id, focused)
     return
   end
 
+  -- TODO: refactor format_winbar_items()
   local min_level = 2
   return format_winbar_items(fmt_items, vim.api.nvim_win_get_width(win_id), active_buf_idx, min_level, focused)
 end
