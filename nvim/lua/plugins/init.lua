@@ -20,7 +20,7 @@ if not vim.uv.fs_stat(lazypath) then
   vim.notify("lazy.nvim installation success!", vim.log.levels.INFO)
 
   -- 检查 plugins 所需的命令行工具套件 make gcc ...
-  require("lua.plugins.cmdline_tools_check")
+  require("plugins.cmdline_tools_check")
 end
 vim.opt.rtp:prepend(lazypath)
 -- }}}

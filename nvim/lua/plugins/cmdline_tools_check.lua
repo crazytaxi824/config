@@ -1,5 +1,6 @@
 -- 检查是否有 'make' 的能力.
 local required_deps = { "make", "gcc", }
+local installed = true
 
 
 -- 专门用于获取 Linux 发行版 ID 的通用 Lua 函数
@@ -24,31 +25,37 @@ end
 
 for _, tool in ipairs(required_deps) do
   if vim.fn.executable(tool) == 0 then
-    if jit.os == 'OSX' then
-      vim.notify("run `$ xcode-select --install` to install cmdline tools in MacOS", vim.log.levels.WARN)
-    elseif jit.os == 'Linux' then
-      local distro = get_linux_distro()
-      local install_cmd = ""
+    installed = false
+    break
+  end
+end
 
-      -- 根据不同的发行版定制提示文本
-      if distro == "ubuntu" or distro == "debian" then
-        install_cmd = "sudo apt update && sudo apt install -y build-essential"
-      elseif distro == "centos" or distro == "rhel" or distro == "rocky" then
-        install_cmd = "sudo dnf group install -y development-tools"
-      elseif distro == "fedora" then
-        install_cmd = "sudo dnf group install -y development-tools"
-      elseif distro == "arch" or distro == "manjaro" then
-        install_cmd = "sudo pacman -S --needed base-devel"
-      else
-        install_cmd = "[please install make, gcc, unzip based on your system]"
-      end
 
-      vim.notify(string.format("run `$ %s` to install cmdline tools in %s", install_cmd, distro), vim.log.levels.WARN)
+if installed then
+  vim.notify("`make` & `gcc` are installed", vim.log.levels.INFO)
+else
+  if jit.os == 'OSX' then
+    vim.notify("run `$ xcode-select --install` to install cmdline tools in MacOS", vim.log.levels.WARN)
+  elseif jit.os == 'Linux' then
+    local distro = get_linux_distro()
+    local install_cmd = ""
+
+    -- 根据不同的发行版定制提示文本
+    if distro == "ubuntu" or distro == "debian" then
+      install_cmd = "sudo apt update && sudo apt install -y build-essential"
+    elseif distro == "centos" or distro == "rhel" or distro == "rocky" then
+      install_cmd = "sudo dnf group install -y development-tools"
+    elseif distro == "fedora" then
+      install_cmd = "sudo dnf group install -y development-tools"
+    elseif distro == "arch" or distro == "manjaro" then
+      install_cmd = "sudo pacman -S --needed base-devel"
     else
-      vim.notify(string.format("cmdline tool `make` is missing in %s", jit.os), vim.log.levels.WARN)
+      install_cmd = "[please install make, gcc, unzip based on your system]"
     end
 
-    break
+    vim.notify(string.format("run `$ %s` to install cmdline tools in %s", install_cmd, distro), vim.log.levels.WARN)
+  else
+    vim.notify(string.format("cmdline tool `make` is missing in %s", jit.os), vim.log.levels.WARN)
   end
 end
 
