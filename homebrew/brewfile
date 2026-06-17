@@ -48,8 +48,8 @@ brew "graphviz" # 图表绘制工具, 必要: go pprof 性能分析 https://gith
 
 # 虚拟机
 #brew "podman"
-#brew "container"  # v1.0.0 BUG: https://github.com/apple/container/issues/1671, 需要手动安装.
-brew "lima"  # golang Linux virtual machine, deps on "qemu | vz", https://github.com/Code-Hex/vz
+brew "container"  # apple/container 类似 podman, 但是更轻量化
+brew "lima"   # golang Linux virtual machine, deps on "qemu | vz", https://github.com/Code-Hex/vz
 #brew "qemu"  # apple silicon emulator and virtualizer
 #cask "utm"   # Apple Virtualization.framework for ARM64 operating systems & QEMU for others
 #cask "vmware-fusion"  # Hypervisor 工具
