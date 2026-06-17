@@ -1,4 +1,4 @@
-local fmter_item = require('myplugins.wbl.winbar_formatter_item')
+local fmter_item = require('myplugins.wbl.formatter_item')
 local bimap = require('myplugins.wbl.bimap')
 
 
