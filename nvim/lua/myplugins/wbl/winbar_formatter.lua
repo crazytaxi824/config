@@ -187,13 +187,15 @@ end
 ---@return string winbar_str
 local function format_winbar_components(fmt_comps_list)
   local str_list = {}
+
   for _, comps in ipairs(fmt_comps_list) do
-    local str = ''
+    local parts = {}
     for _, comp in ipairs(comps) do
-      str = str .. comp.hl .. comp.content:gsub('%%', '%%%%')
+      parts[#parts + 1] = comp.hl
+      parts[#parts + 1] = comp.content:gsub('%%', '%%%%')
     end
-    str = str .. '%*'  -- '%*' reset highligh
-    table.insert(str_list, str)
+    parts[#parts + 1] = '%*'
+    str_list[#str_list + 1] = table.concat(parts)
   end
 
   -- concat 所有 buffer 的 winbar format
@@ -314,7 +316,7 @@ local function format_winbar_items(fmt_items, win_width, active_buf_idx, focused
     components = {{{ content = '<...', hl='' }}}
   else
     local comps, comps_width = fmt_items_to_components(fmt_items, focused)
-    if comps_width < win_width then
+    if comps_width <= win_width then
       components = comps
     end
 

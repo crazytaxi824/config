@@ -30,8 +30,8 @@ local wb_sign = {
 --
 -- active buffer
 ---@field active boolean
-local WinbarFomatterItem = {}
-WinbarFomatterItem.__index = WinbarFomatterItem
+local WinbarFormatterItem = {}
+WinbarFormatterItem.__index = WinbarFormatterItem
 
 ---@param win_id integer
 ---@param bufnr integer
@@ -39,7 +39,7 @@ WinbarFomatterItem.__index = WinbarFomatterItem
 ---@param path_list string[]  filepath list, eg: a/b/c.lua -> ["a", "b", "c.lua"]
 ---@param diagnostic? { count: integer, severity: integer }
 ---@return WinbarFormatterItem
-function WinbarFomatterItem.new(win_id, bufnr, index, path_list, diagnostic)
+function WinbarFormatterItem.new(win_id, bufnr, index, path_list, diagnostic)
   local prefix
   if #path_list < 1 then
     error(bufnr .. " path_list is empty")
@@ -55,7 +55,7 @@ function WinbarFomatterItem.new(win_id, bufnr, index, path_list, diagnostic)
     basename = path_list[#path_list],
     diagnostic = diagnostic,
     active = bufnr == vim.api.nvim_win_get_buf(win_id),
-  }, WinbarFomatterItem)
+  }, WinbarFormatterItem)
 
   return self
 end
@@ -111,7 +111,7 @@ end
 ---@param mode 'prefix'|'suffix'
 ---@param focused boolean
 ---@return WinbarFormatterItemComponent[]
-function WinbarFomatterItem:partial(width, mode, focused)
+function WinbarFormatterItem:partial(width, mode, focused)
   local suffix = mode == 'suffix'
 
   local components, item_width = self:parse_item_to_components(focused)
@@ -163,7 +163,7 @@ end
 ---@param focused boolean
 ---@return WinbarFormatterItemComponent[]
 ---@return integer width  item width: including a trailing space
-function WinbarFomatterItem:parse_item_to_components(focused)
+function WinbarFormatterItem:parse_item_to_components(focused)
   ---@type WinbarFormatterItemComponent[]
   local components = {}
   local item_width = 1  -- NOTE: 每个 item 后一个空格
@@ -223,4 +223,4 @@ function WinbarFomatterItem:parse_item_to_components(focused)
   return components, item_width
 end
 
-return WinbarFomatterItem
+return WinbarFormatterItem

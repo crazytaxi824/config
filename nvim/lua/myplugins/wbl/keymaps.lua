@@ -72,21 +72,21 @@ local function delete_buffers(opt)
     return
   end
 
+  local function _should_delete(i)
+    if opt == 'left' then
+      return i < idx
+    elseif opt == 'right' then
+      return i > idx
+    end
+    -- 'others'
+    return i ~= idx
+  end
+
   -- VVI: 必须倒序 unbind, 否则会造成 w.buf_list 删除不正确
   for i = #win_bufs, 1, -1 do
     local bufnr = win_bufs[i]
-    if opt == 'left' then
-      if i < idx and not vim.bo[bufnr].modified then
-        bimap.unbind_buf_idx({ win_id=curr_win, buf_idx=i })
-      end
-    elseif opt == 'right' then
-      if i > idx and not vim.bo[bufnr].modified then
-        bimap.unbind_buf_idx({ win_id=curr_win, buf_idx=i })
-      end
-    else
-      if i ~= idx and not vim.bo[bufnr].modified then
-        bimap.unbind_buf_idx({ win_id=curr_win, buf_idx=i })
-      end
+    if _should_delete(i) and not vim.bo[bufnr].modified then
+      bimap.unbind_buf_idx({ win_id=curr_win, buf_idx=i })
     end
   end
 

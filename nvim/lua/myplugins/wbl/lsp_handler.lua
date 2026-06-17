@@ -5,19 +5,21 @@ local orig_handler = vim.lsp.handlers[ms.textDocument_rename]
 
 vim.lsp.handlers[ms.textDocument_rename] = function(err, result, ctx, config)
   if result then
+    -- NOTE: 使用 dict 去重
+    ---@type table<integer, boolean>
     local affected_bufs = {}
 
     -- 旧 lsp response 格式
     local changes = result.changes or {}
     for uri, _ in pairs(changes) do
-      table.insert(affected_bufs, vim.uri_to_bufnr(uri))
+      affected_bufs[vim.uri_to_bufnr(uri)] = true
     end
 
     -- 新 lsp response 格式
     local document_changes = result.documentChanges or {}
     for _, change in ipairs(document_changes) do
       if change.textDocument then
-        table.insert(affected_bufs, vim.uri_to_bufnr(change.textDocument.uri))
+        affected_bufs[vim.uri_to_bufnr(change.textDocument.uri)] = true
       end
     end
 
@@ -25,7 +27,7 @@ vim.lsp.handlers[ms.textDocument_rename] = function(err, result, ctx, config)
     local curr_win = vim.api.nvim_get_current_win()
     local curr_buf = vim.api.nvim_win_get_buf(curr_win)
 
-    for _, bufnr in ipairs(affected_bufs) do
+    for bufnr, _ in pairs(affected_bufs) do
       vim.api.nvim_win_set_buf(curr_win, bufnr)
     end
 
