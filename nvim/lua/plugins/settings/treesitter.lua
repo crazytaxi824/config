@@ -16,7 +16,7 @@ ts.setup({
 -- local auto_install_langs = {
 --   "lua", "query", "c", "vim", "vimdoc", "markdown", "markdown_inline",  -- up to data Highlight
 --   "comment", "editorconfig",
---   "latex", "mermaid",  -- for `markdown`
+--   -- "latex", "mermaid",  -- for `markdown`, NOTE: 需要 6GB Memory for latex
 --   "git_config", "git_rebase", "gitattributes", "gitignore", "diff",  -- `git`
 --   "json", "json5", "toml", "yaml", "csv", "xml", "regex", "proto", "dockerfile",  -- common filetypes
 --   "ssh_config",
