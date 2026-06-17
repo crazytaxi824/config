@@ -1,4 +1,4 @@
-local wb_fmt = require('myplugins.wbl.winbar_formatter')
+local fmter = require('myplugins.wbl.winbar_formatter')
 local bimap = require('myplugins.wbl.bimap')
 
 local M = {}
@@ -38,7 +38,7 @@ local function set_winbar(win_id, focused, debug_msg)
     focus = win_id == vim.api.nvim_get_current_win()
   end
 
-  local winbar_str = wb_fmt.winbar_format(win_id, focus) or ''
+  local winbar_str = fmter.winbar_format(win_id, focus) or ''
   vim.api.nvim_set_option_value('winbar', winbar_str, { scope='local', win=win_id })
 end
 
