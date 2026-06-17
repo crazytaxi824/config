@@ -1,3 +1,6 @@
+local bimap = require('myplugins.wbl.bimap')
+
+
 -- 将 lsp rename 时修改的 buffer 加载到 current window
 local ms = vim.lsp.protocol.Methods
 
@@ -25,18 +28,16 @@ vim.lsp.handlers[ms.textDocument_rename] = function(err, result, ctx, config)
 
     -- 加载相关 buffer 到当前 window
     local curr_win = vim.api.nvim_get_current_win()
-    local curr_buf = vim.api.nvim_win_get_buf(curr_win)
-
     for bufnr, _ in pairs(affected_bufs) do
-      vim.api.nvim_win_set_buf(curr_win, bufnr)
+      bimap.bind({ win_id=curr_win, bufnr=bufnr })
+      -- NOTE: 之后会被 BufModifiedSet event 更新 winbar
     end
-
-    -- 最后显示原 buffer
-    vim.api.nvim_win_set_buf(curr_win, curr_buf)
   end
 
   -- 继续执行原 handler
-  return orig_handler(err, result, ctx, config)
+  if orig_handler then
+    return orig_handler(err, result, ctx, config)
+  end
 end
 
 
