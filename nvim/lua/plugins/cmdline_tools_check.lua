@@ -34,9 +34,9 @@ for _, tool in ipairs(required_deps) do
       if distro == "ubuntu" or distro == "debian" then
         install_cmd = "sudo apt update && sudo apt install -y build-essential"
       elseif distro == "centos" or distro == "rhel" or distro == "rocky" then
-        install_cmd = "sudo dnf groupinstall -y \"Development Tools\""
+        install_cmd = "sudo dnf group install -y development-tools"
       elseif distro == "fedora" then
-        install_cmd = "sudo dnf groupinstall -y \"Development Tools\""
+        install_cmd = "sudo dnf group install -y development-tools"
       elseif distro == "arch" or distro == "manjaro" then
         install_cmd = "sudo pacman -S --needed base-devel"
       else

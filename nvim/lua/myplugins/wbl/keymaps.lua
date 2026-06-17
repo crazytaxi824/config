@@ -4,10 +4,10 @@ local bimap = require('myplugins.wbl.bimap')
 
 local M = {}
 
--- 相当于 :[N]buf
+-- 相当于 :[N]buf, goto 是 lua keyword
 --
 ---@param idx integer
-local function goto(idx)
+local function goto_(idx)
   local curr_win = vim.api.nvim_get_current_win()
   local win_bufs = bimap.win_get_buf_list(curr_win)
   if not win_bufs then
@@ -222,7 +222,7 @@ function M.set()
       if vim.v.count == 0 then
         list_win_buffers()
       else
-        goto(vim.v.count)
+        goto_(vim.v.count)
       end
     end , opt, 'win: show all buffers in current window'},
   }

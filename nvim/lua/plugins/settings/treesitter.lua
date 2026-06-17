@@ -9,10 +9,10 @@ ts.setup({
   -- install_dir = vim.fs.joinpath(vim.fn.stdpath('data'), 'site')
 })
 
-
--- 自动安装 parser
--- `:TSInstall all` 安装所有 langs 的 parser
--- `:TSInstall stable` 安装所有 stable parser
+-- -- VVI: 必须先安装 tree-sitter-cli, nvim-treesitter 才能 install languages.
+-- -- 自动安装 parser
+-- -- `:TSInstall all` 安装所有 langs 的 parser
+-- -- `:TSInstall stable` 安装所有 stable parser
 -- local auto_install_langs = {
 --   "lua", "query", "c", "vim", "vimdoc", "markdown", "markdown_inline",  -- up to data Highlight
 --   "comment", "editorconfig",
@@ -24,7 +24,6 @@ ts.setup({
 -- }
 --
 -- vim.schedule(function ()
---   -- VVI: 必须先安装 tree-sitter-cli, nvim-treesitter 才能 install languages.
 --   if vim.fn.executable("tree-sitter") ~= 1 then
 --     vim.notify("need to install 'tree-sitter-cli' before nvim-treesitter install languages", vim.log.levels.WARN)
 --     return
