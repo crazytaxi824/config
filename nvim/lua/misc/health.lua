@@ -73,7 +73,7 @@ end
 ---@type table<string, ToolProps>
 local cmd_tools = {
   go       = { cmd = "go", install = "https://go.dev" },
-  fd       = { cmd = { "fd", "fdfind" },  install = "brew info fd" },
+  fd       = { cmd = { "fd", "fdfind" },  install = "brew info fd; `Ubuntu/Fedora: fd-find`" },
   graphviz = { cmd = "dot", install = "brew info graphviz" },
   ripgrep  = { cmd = "rg",  install = "brew info ripgrep" },
 }
