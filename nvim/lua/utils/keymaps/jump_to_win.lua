@@ -43,7 +43,7 @@ M.choose = function()
     --      Each section will be separated by an equal number of spaces.
     -- %#   use %#HLname# for highlight group HLname.
     -- %*   clear highlight
-    local stl_str = '%#' .. my_win_picker .. '#%=' .. key .. '%=%*'
+    local stl_str = string.format("%%#%s#%%=%s%%=%%*", my_win_picker, key)
     vim.api.nvim_set_option_value('statusline', stl_str, { scope='local', win=win_id })
 
     -- cache win_map
@@ -54,7 +54,7 @@ M.choose = function()
   vim.cmd.redraw()
 
   -- prompt choose window
-  vim.api.nvim_echo({{"Choose window: ", "WarningMsg"}}, false, {})
+  vim.api.nvim_echo({{"Choose window: ", "Special"}}, false, {})
   local char = string.upper(get_user_input_char())  -- 这里返回的是 string 类型
 
   -- jump to window

@@ -81,7 +81,7 @@ local function parse_local_lsp_settings(settings)
     elseif #r == 2 then
       s = vim.tbl_deep_extend('force', s, {[r[1]] = {[r[2]] = value}})
     else
-      error("project local '" .. utils.lsp_file .. "' format error")
+      error(string.format("project local '%s' format error", utils.lsp_file))
       return nil
     end
   end

@@ -39,7 +39,7 @@ local function get_iface_name_type(line)
   end
 
   if #params > 0 then
-    return name, "[" .. table.concat(params, ",") .. "]"
+    return name, string.format('[%s]', table.concat(params, ','))
   end
 
   return name, ""

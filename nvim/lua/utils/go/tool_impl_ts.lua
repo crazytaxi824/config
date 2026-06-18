@@ -94,7 +94,7 @@ function M.go_impl(params)
 
   local iface_type = ""
   if iface_type_params and not vim.tbl_isempty(iface_type_params) then
-    iface_type = '[' .. table.concat(iface_type_params, ',') .. ']'
+    iface_type = string.format('[%s]', table.concat(iface_type_params, ','))
   end
 
   -- 打印 cmd
