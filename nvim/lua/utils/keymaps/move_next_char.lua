@@ -1,6 +1,7 @@
 local M = {}
 
 -- insert mode 下将光标后 ')' 移动到 line / word 后面
+---@param m '$'|'e'|'E'
 M.move_bracket = function(m)
   local chars = { ')', ']', '}', '>', '"', "'", '`' }
 
