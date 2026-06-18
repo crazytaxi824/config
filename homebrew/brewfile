@@ -37,7 +37,7 @@ brew "pandoc"  # 文档格式转换工具, 支持 word, pdf, markdown ... 各种
 
 # code languages & tools
 #brew "go"   # 推荐使用 https://go.dev 中下载安装.
-brew "node@24"
+brew "node@24"  # 需要使用到 vscode 插件, 最好和 vscode 内置 node 版本一致, `About Visual Studio Code` 查看 Node.js 版本
 brew "python3"
 
 brew "wget"     # http(s) 下载工具
