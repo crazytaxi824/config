@@ -46,7 +46,7 @@ end
 ---@param fzf_file string filepath
 function FZF_selected(fzf_file)
   if not vim.uv.fs_stat(fzf_file) then
-    Notify({"fzf `{+f}` tmp file is NOT readable.", "path: `" .. fzf_file .. "`"}, "ERROR")
+    Notify({"fzf `{+f}` tmp file is NOT readable.", string.format("path: `%s`", fzf_file)}, "ERROR")
     return
   end
 

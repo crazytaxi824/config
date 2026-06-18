@@ -69,7 +69,7 @@ local function job_exec(cmd, term_bufnr, flag)
       ---@param job_id integer
       ---@param data string[]
       on_stdout = function(job_id, data)
-        vim.notify("[" .. flag .. "]: " .. table.concat(data,"\n"), vim.log.levels.INFO)
+        vim.notify(string.format("[%s]: %s", flag, table.concat(data,"\n")), vim.log.levels.INFO)
       end,
 
       -- print error message
@@ -77,7 +77,7 @@ local function job_exec(cmd, term_bufnr, flag)
       ---@param job_id integer
       ---@param data string[]
       on_stderr = function(job_id, data)
-        vim.notify("[" .. flag .. "]: " .. table.concat(data,"\n"), vim.log.levels.ERROR)
+        vim.notify(string.format("[%s]: %s", flag, table.concat(data,"\n")), vim.log.levels.ERROR)
       end,
 
       -- :bwipeout bufnr when jobdone

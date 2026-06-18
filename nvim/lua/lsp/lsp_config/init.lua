@@ -96,7 +96,7 @@ vim.api.nvim_create_user_command("Schema", function(params)
   elseif ft == 'yaml' then
     vim.notify('# yaml-language-server: $schema=https://www.schemastore.org/xxx')
   else
-    vim.notify("filetype: '" .. ft .. "' schema is not avaliable", vim.log.levels.WARN)
+    vim.notify(string.format("filetype: '%s' schema is not avaliable", ft), vim.log.levels.WARN)
   end
 end, {
   nargs = 1,

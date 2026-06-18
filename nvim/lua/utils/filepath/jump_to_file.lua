@@ -92,7 +92,7 @@ local function jump(content)
     return
   end
 
-  Notify('cannot open: "' .. content .. '"', "INFO", {timeout = 1500})
+  Notify(string.format('cannot open: "%s"', content), "INFO", {timeout = 1500})
 end
 
 -- visual selected content

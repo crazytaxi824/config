@@ -283,7 +283,7 @@ local function load_bufnr_on_left_click(bufnr)
   for _, win_id in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
     -- 如果有任意 window 是 listed-buffer 则不允许加载指定 bufnr.
     if vim.bo[vim.api.nvim_win_get_buf(win_id)].buflisted then
-      Notify("Cannot load buffer {" .. bufnr .. "} in this window (unlisted-buffer)", "WARN")
+      Notify(string.format("Cannot load buffer (%d) in current window (unlisted-buffer)", bufnr), "WARN")
       return
     end
   end

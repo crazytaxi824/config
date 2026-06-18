@@ -396,7 +396,7 @@ local plugins = {
   --
   --     -- check node cmd existence
   --     if not vim.uv.fs_stat(node_path) then
-  --       Notify({"'" .. node_path .. "' is NOT Exist."}, "WARN", {title = "github/copilot", timeout = false})
+  --       Notify(string.format("'%s' is NOT Exist", node_path), "WARN", {title = "github/copilot", timeout = false})
   --       return
   --     end
   --

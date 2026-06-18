@@ -77,7 +77,7 @@ M.on_attach = function(client, bufnr)
 
   -- DEBUG: 用
   if __Debug._lsp then
-    Notify("LSP Server attach: " .. client.name .. " - bufnr(" .. bufnr .. ")", "DEBUG", {title="LSP"})
+    Notify(string.format("LSP Server attach (%s), bufnr (%d)", client.name, bufnr), "DEBUG", {title="LSP"})
   end
 end
 
