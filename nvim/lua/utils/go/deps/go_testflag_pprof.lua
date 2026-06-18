@@ -55,12 +55,7 @@ end
 ---@param flag string  'cpu'|'mem'|'mutex'|...
 ---@return integer job_id
 local function job_exec(cmd, term_bufnr, flag)
-  -- VVI: 这里使用 scratch buffer 来执行 jobstart():
-  --   1. 为了避免创建新的一个 window.
-  --   2. 方便使用 `:ls` 来查看未关闭的 job.
-  --   3. 同时也可以通过 `:[N]buf` 来查看 bg job 的输出内容.
-  local scratch_bufnr = vim.api.nvim_create_buf(false, true)
-  local bg_job_id = vim.api.nvim_buf_call(scratch_bufnr, function()
+  local bg_job_id = vim.api.nvim_buf_call(term_bufnr, function()
     return vim.fn.jobstart(cmd, {
       term = true, -- 将 scratch_bufnr 作为 terminal buffer
 
@@ -85,8 +80,8 @@ local function job_exec(cmd, term_bufnr, flag)
       ---@param job_id integer
       ---@param exit_code integer
       on_exit = function(job_id, exit_code)
-        if vim.api.nvim_buf_is_valid(scratch_bufnr) then
-          vim.api.nvim_buf_delete(scratch_bufnr, {force=true})  -- :bwipeout
+        if vim.api.nvim_buf_is_valid(term_bufnr) then
+          vim.api.nvim_buf_delete(term_bufnr, {force=true})  -- :bwipeout
         end
       end,
     })
@@ -138,7 +133,12 @@ local function on_exit(opts, dir)
     end
 
     -- run `go tool pprof/trace ...` in background
-    local bg_job_id = job_exec(cmd, bufnr, opts.flag)
+    -- VVI: 这里使用 scratch buffer 来执行 jobstart():
+    --   1. 为了避免创建新的一个 window.
+    --   2. 方便使用 `:ls` 来查看未关闭的 job.
+    --   3. 同时也可以通过 `:[N]buf` 来查看 bg job 的输出内容.
+    local scratch_bufnr = vim.api.nvim_create_buf(false, true)
+    local bg_job_id = job_exec(cmd, scratch_bufnr, opts.flag)
 
     -- autocmd: 在 bufnr 被 wipeout 的时候 jobstop()
     autocmd_jobstop(bufnr, bg_job_id)
