@@ -29,9 +29,11 @@ local go_test = {'go', 'test', '-count=1', '-v'}
 ---@param flag string  'mem'|'cpu'|'mutex'|'block'|'trace'
 ---@return string[] extra_args
 local function gen_extra_args(dir, flag)
-  local extra_args = { '-' .. flag .. 'profile', flag .. '.out' }
+  local extra_args
   if flag == 'trace' then
     extra_args = { '-trace', 'trace.out' }
+  else
+    extra_args = { string.format('-%sprofile', flag), string.format('%s.out', flag) }
   end
 
   return vim.list_extend({
@@ -98,7 +100,7 @@ local function autocmd_jobstop(term_bufnr, job_id)
   -- jobstop() all jobs after this buffer removed.
   -- NOTE: 这里使用 group_id 是为了避免多次重复设置同一个 autocmd.
   -- NOTE: 这里不能用 BufDelete, 因为 terminal 本来就不在 buflist 中, 所以不会触发 BufDelete.
-  local group_id = vim.api.nvim_create_augroup("my_term_bg_job_" .. term_bufnr .. "_" .. job_id, {clear = true})
+  local group_id = vim.api.nvim_create_augroup(string.format("my_term_%d_bg_job_%d", term_bufnr, job_id), {clear = true})
   vim.api.nvim_create_autocmd("BufWipeout", {
     group = group_id,
     once = true,
