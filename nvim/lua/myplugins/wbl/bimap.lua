@@ -146,7 +146,7 @@ function M.buf_get_win_dict(bufnr)
 end
 
 ---@param win_id integer
----@return integer[]|nil buf_list  affected bufs
+---@return integer[]|nil affected_buf_list
 function M.remove_win(win_id)
   local w = wins[win_id]  ---@type WBLWindow
   if not w then
@@ -169,7 +169,7 @@ function M.remove_win(win_id)
 end
 
 ---@param bufnr integer
----@return table<integer, boolean>|nil win_dict  affected wins
+---@return table<integer, boolean>|nil affected_win_dict
 function M.remove_buf(bufnr)
   local b = bufs[bufnr]   ---@type WBLBuffer
   if not b then

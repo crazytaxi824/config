@@ -1,6 +1,21 @@
 local wb_act = require('myplugins.wbl.actions')
 local bimap = require('myplugins.wbl.bimap')
 
+-- cache previous window id & tabpage
+local prev_win_id = -1
+local prev_tabpage = -1
+
+-- 更新整个 current tabpage windows
+local function update_current_tabpage_wins()
+  for _, win_id in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+    -- NOTE: split window 中不会触发 BufWinEnter, 所以利用 WinResized 来解决.
+    -- NOTE: "a buffer with read errors" 时所有的 buf events 都不会被触发, 同时会重置 setlocal winbar=''
+    -- eg: [Permission Denied], LSP error ...
+    -- window 中一定会显示一个 buffer
+    wb_act.binding_win_buf({ win_id=win_id, bufnr=vim.api.nvim_win_get_buf(win_id) })
+    wb_act.set_winbar(win_id, 'auto')
+  end
+end
 
 -- autocmd ----------------------------------------------------------------------------------------
 local gid = vim.api.nvim_create_augroup('my_winbarline', { clear = true })
@@ -12,8 +27,28 @@ vim.api.nvim_create_autocmd("BufEnter", {
   group = gid,
   callback = function(args)
     local curr_win = vim.api.nvim_get_current_win()
-    wb_act.binding_win_buf({ win_id=curr_win, bufnr=args.buf })
-    wb_act.set_winbar(curr_win, 'focused')
+    local curr_tabpage = vim.api.nvim_get_current_tabpage()
+
+    if prev_tabpage > 0 and prev_tabpage ~= curr_tabpage then
+      -- 从 another tabpage 跳转过来, prev_tabpage 可能已经关闭
+      -- 更新整个 current tabpage windows, 主要是为了显示 tabpage
+      update_current_tabpage_wins()
+    else
+      -- 从 current tabpage & another window 跳转过来, prev_win 可能已经关闭
+      -- 更新 previous winow
+      if vim.api.nvim_win_is_valid(prev_win_id) then
+        wb_act.binding_win_buf({ win_id=prev_win_id, bufnr=vim.api.nvim_win_get_buf(prev_win_id) })
+        wb_act.set_winbar(prev_win_id)
+      end
+
+      -- 更新 current window
+      wb_act.binding_win_buf({ win_id=curr_win, bufnr=args.buf })
+      wb_act.set_winbar(curr_win, 'focused')
+    end
+
+    -- NOTE: 重置 cache. 防止没有切换 window, 只是 `:e foo.txt` 加载文件时更新 previous window
+    prev_win_id = -1
+    prev_tabpage = -1
   end,
   desc = "winbarline: binding window and buffer"
 })
@@ -23,11 +58,10 @@ vim.api.nvim_create_autocmd("BufEnter", {
 vim.api.nvim_create_autocmd("WinLeave", {
   group = gid,
   callback = function(args)
-    local curr_win = vim.api.nvim_get_current_win()
-    wb_act.binding_win_buf({ win_id=curr_win, bufnr=args.buf })
-    wb_act.set_winbar(curr_win)
+    prev_win_id = vim.api.nvim_get_current_win()
+    prev_tabpage = vim.api.nvim_get_current_tabpage()
   end,
-  desc = "winbarline: binding window and buffer"
+  desc = "winbarline: cache win_id & tabpage when leave window"
 })
 
 
@@ -39,9 +73,9 @@ vim.api.nvim_create_autocmd({"BufUnload", "BufDelete", "BufWipeout"}, {
       return
     end
 
-    local win_dict = bimap.remove_buf(args.buf)
-    if win_dict then
-      for win_id, _ in pairs(win_dict) do
+    local affected_win_dict = bimap.remove_buf(args.buf)
+    if affected_win_dict then
+      for win_id, _ in pairs(affected_win_dict) do
         wb_act.set_winbar(win_id, 'auto')
       end
     end
@@ -142,16 +176,10 @@ vim.api.nvim_create_autocmd("DiagnosticChanged", {
 vim.api.nvim_create_autocmd({"WinResized"}, {
   group = gid,
   callback = function(args)
-    for _, win_id in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
-      -- NOTE: split window 中不会触发 BufWinEnter, 所以利用 WinResized 来解决.
-      -- NOTE: "a buffer with read errors" 时所有的 buf events 都不会被触发, 同时会重置 setlocal winbar=''
-      -- eg: [Permission Denied], LSP error ...
-      -- window 中一定会显示一个 buffer
-      wb_act.binding_win_buf({ win_id=win_id, bufnr=vim.api.nvim_win_get_buf(win_id) })
-      wb_act.set_winbar(win_id, 'auto')
-    end
+    -- 更新整个 current tabpage windows
+    update_current_tabpage_wins()
   end,
-  desc = "winbarline: redraw buffers"
+  desc = "winbarline: refresh all wins when window resized"
 })
 
 
