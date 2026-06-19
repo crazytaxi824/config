@@ -18,10 +18,11 @@ function M.binding_win_buf(opts)
   bimap.bind(opts)
 end
 
+
 ---@param win_id integer
 ---@param focused? 'focused'|'auto'
 ---@param debug_msg? string
-local function set_winbar(win_id, focused, debug_msg)
+function M.set_winbar(win_id, focused, debug_msg)
   if not vim.api.nvim_win_is_valid(win_id) then
     return
   end
@@ -41,11 +42,6 @@ local function set_winbar(win_id, focused, debug_msg)
   local winbar_str = fmter.winbar_format(win_id, focus) or ''
   vim.api.nvim_set_option_value('winbar', winbar_str, { scope='local', win=win_id })
 end
-
-M.set_winbar = set_winbar
-
--- debounce set winbar for window
-M.set_winbar_debounce = Debounce(set_winbar, 500)  -- NOTE: 500ms 比较适中
 
 
 return M

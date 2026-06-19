@@ -151,6 +151,7 @@ vim.api.nvim_create_autocmd('OptionSet', {
   desc = "winbarline: update buffer modified status",
 })
 
+
 -- BufWritePost 更新 modified indicator 状态
 -- DiagnosticChanged 更新 diagnostic number & level 状态
 -- FileChangedShellPost 外部程序对文件进行了改动, 更新 modified indicator 状态
@@ -162,8 +163,8 @@ vim.api.nvim_create_autocmd(update_events, {
   desc = "winbarline: update buffer modified status",
 })
 
--- "DiagnosticChanged" 会多次触发
--- 优化为: 使用防抖函数, 所有 diagnostic 执行完之后再更新整个 winbar 状态
+
+-- DiagnosticChanged 会多次触发，直接更新所有显示该 buffer 的窗口
 vim.api.nvim_create_autocmd("DiagnosticChanged", {
   group = gid,
   callback = function(args)
@@ -174,7 +175,7 @@ vim.api.nvim_create_autocmd("DiagnosticChanged", {
 
     -- 更新所有加载该 buffer 的 window winbarline
     for win_id, _ in pairs(win_dict) do
-      wb_act.set_winbar_debounce(win_id, 'auto')
+      wb_act.set_winbar(win_id, 'auto')
     end
   end,
   desc = "winbarline: update buffer diagnostic status",
