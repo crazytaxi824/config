@@ -31,7 +31,7 @@ function M.go_test_single_func(profile)
 
   ---@type GoTestOpts
   local opts = {
-    testfn_name = '^'..testfn_name..'$',
+    testfn_name = string.format('^%s$',testfn_name),
     mode = mode,
     flag = 'none',
     go_list = go_list_module.go_list(),

@@ -111,21 +111,21 @@ end
 ---@return integer|nil start_col
 ---@return integer|nil end_col
 local function find_filepath_pos(ori_str, fp_props)
-  local fp_lnum_col = fp_props.original_fp
+  local fp_with_lnum_col = fp_props.original_fp
   if fp_props.fp_prefix ~= '' then
-    fp_lnum_col = fp_props.fp_prefix .. '://' .. fp_lnum_col
+    fp_with_lnum_col = string.format('%s://%s', fp_props.fp_prefix, fp_props.original_fp)
   end
 
   if fp_props.lnum then
-    fp_lnum_col = string.format("%s:%d", fp_lnum_col, fp_props.lnum)
+    fp_with_lnum_col = string.format("%s:%d", fp_with_lnum_col, fp_props.lnum)
     if fp_props.col then
-      fp_lnum_col = string.format("%s:%d", fp_lnum_col, fp_props.col)
+      fp_with_lnum_col = string.format("%s:%d", fp_with_lnum_col, fp_props.col)
     end
   end
 
-  local start_col, end_col = string.find(ori_str, fp_lnum_col, 1, true)
+  local start_col, end_col = string.find(ori_str, fp_with_lnum_col, 1, true)
   if not start_col then
-    vim.notify(string.format("filepath parse error: ori_str: '%s' fp_lnum_col: '%s'", ori_str, fp_lnum_col), vim.log.levels.ERROR)
+    vim.notify(string.format("filepath parse error: ori_str: '%s' fp_lnum_col: '%s'", ori_str, fp_with_lnum_col), vim.log.levels.ERROR)
     return
   end
 

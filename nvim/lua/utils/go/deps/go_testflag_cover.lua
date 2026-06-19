@@ -75,8 +75,8 @@ local M = {
         -- NOTE: 如果是 `go test -coverprofile ./...` , go_list 中需要传递 project 属性, 用于指定文件名.
         -- 后半部分是将 filepath 中的 / 替换成 %.
         local cover_filename = opts.project or string.gsub(opts.go_list.ImportPath, '/', '%%')
-        local cover_out = coverage_dir .. cover_filename .. '_cover.out'
-        local cover_html = coverage_dir .. cover_filename .. '_cover.html'
+        local cover_out = vim.fs.joinpath(coverage_dir, cover_filename.. '_cover.out')
+        local cover_html = vim.fs.joinpath(coverage_dir, cover_filename .. '_cover.html')
 
         ---@type string[]
         local cmd = vim.iter({go_test, '-coverprofile', cover_out, utils.mode_flags(opts)}):flatten():totable()
