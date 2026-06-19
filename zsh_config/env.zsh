@@ -35,6 +35,12 @@ export LESS_TERMCAP_us=$(printf "\e[4;34m")    # us      smul      start underli
 export LESS_TERMCAP_ue=$(printf "\e[0m")       # ue      rmul      stop underline
 #export LESS_TERMCAP_mb=$(printf "\e[1;31m")   # mb      blink     start blink  遇到需要“闪烁”显示的内容时, 将其改为“加粗红色”显示
 
+# --- [ user bin ] ---------------------------------------------------------------------------------
+if [[ ! -d "$HOME/.local/bin" ]]; then
+	mkdir -p "$HOME/.local/bin"
+fi
+export PATH="$HOME/.local/bin:$PATH"
+
 # --- [ homebrew ] ---------------------------------------------------------------------------------
 # https://brew.sh/
 # VVI: 必须 `echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile`  # for apple silicon installation.
