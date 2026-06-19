@@ -58,13 +58,11 @@ function M.mode_flags(opts)
   end
 
   if opts.mode == 'run' then
-    return {'-run', opts.testfn_name, scope}
+    return { '-run', opts.testfn_name, scope }
   elseif opts.mode == 'bench' then
-    return {'-run', '^$', '-benchmem', '-bench', opts.testfn_name, scope}
-  elseif opts.mode == 'fuzz' then
-    return {'-run', '^$', '-fuzz', opts.testfn_name, scope}
+    return { '-run', '^$', '-benchmem', '-bench', opts.testfn_name, scope }
   else
-    error("mode can only be 'run' | 'bench' | 'fuzz'")
+    return { '-run', '^$', '-fuzz', opts.testfn_name, scope }
   end
 end
 

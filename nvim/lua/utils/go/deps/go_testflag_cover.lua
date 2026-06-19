@@ -42,7 +42,7 @@ end
 
 ---@type GoTestFlagDict
 local M = {
-  list = {"cover", "coverprofile"},
+  list = { "cover", "coverprofile" },
 
   flags = {
     cover = {
