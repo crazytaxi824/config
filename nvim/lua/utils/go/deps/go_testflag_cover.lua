@@ -42,6 +42,7 @@ end
 
 ---@type GoTestFlagDict
 local M = {
+  -- vim.ui.select() 排序用
   list = { "cover", "coverprofile" },
 
   flags = {

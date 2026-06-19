@@ -144,7 +144,7 @@ local function set_buf_line_exit(bufnr, exit_code)
   vim.api.nvim_buf_set_lines(bufnr, -1, -1, false, { " " })
 
   local last_lnum = vim.api.nvim_buf_line_count(bufnr) - 1
-  local v_text = "[Process exited " .. exit_code .. "]"
+  local v_text = string.format("[Process exited %s]", exit_code)
   local hl = exit_code == 0 and "my_output_sys" or "my_output_sys_error"
 
   buf_prepare_for_data(bufnr, function()
@@ -177,7 +177,7 @@ local function print_job_info(cmd, term_bufnr, job_id)
   end
 
   -- process, job info
-  local job_info = "[Process: " .. vim.fn.jobpid(job_id) .. " (job: " .. job_id .. ") starts]"
+  local job_info = string.format("[Process: %s (job: %s) starts]", vim.fn.jobpid(job_id), job_id)
   table.insert(data, job_info)
 
   -- highlight

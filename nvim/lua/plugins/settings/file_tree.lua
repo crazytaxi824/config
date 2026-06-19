@@ -264,7 +264,7 @@ local config = {
     },
     icons = {
       git_placement = "right_align",  -- `:help nvim_tree.config.renderer.icons.placement`
-      symlink_arrow = ' ' .. Nerd_icons.arrows.right .. ' ',  -- old_name ⟶ new_name, 这个不是显示在 filename/dir 之前的 icon.
+      symlink_arrow = string.format(' %s ', Nerd_icons.arrows.right),  -- old_name ⟶ new_name, 这个不是显示在 filename/dir 之前的 icon.
       show = {
         file = true,  -- 显示 file icon, `nvim-web-devicons` will be used if available.
         folder = true, -- 显示 folder icon

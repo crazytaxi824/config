@@ -23,6 +23,7 @@ end
 
 ---@type GoTestFlagDict
 local M = {
+  -- vim.ui.select() 排序用
   list = { 'fuzz30s', 'fuzz60s', 'fuzz5m', 'fuzz10m', 'fuzz1000x', 'fuzz_input' },
 
   flags = {

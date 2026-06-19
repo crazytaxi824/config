@@ -30,7 +30,7 @@ function MyTermPost:open_win()
   if term_win > 0 then
     -- 如果有 window 正在显示该 term buffer, 则跳转到该 window.
     if vim.fn.win_gotoid(term_win) == 0 then
-      error('vim cannot win_gotoid(' .. term_win .. ')')
+      error(string.format('vim cannot win_gotoid(%s)', term_win))
     end
 
     return term_win

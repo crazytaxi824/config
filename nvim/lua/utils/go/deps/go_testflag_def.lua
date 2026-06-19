@@ -29,7 +29,7 @@
 -- go test -run | -bench | -fuzz
 ---@field mode 'run' | 'bench' | 'fuzz'
 --
--- 'none' | 'cpu' | 'mem' | ...
+-- 'cpu' | 'mem' | ... | 'fuzz30s' | 'fuzz60s' | ... | 'none'
 ---@field flag string
 --
 -- `go list -json`

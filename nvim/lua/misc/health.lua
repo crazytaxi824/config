@@ -85,10 +85,10 @@ local cmd_tools = {
 local function tool_error_msg(name, tool)
   local errmsg = { name .. ':' }
   if tool.install then
-    table.insert(errmsg, '  - `' .. tool.install .. '`')
+    table.insert(errmsg, string.format('  - `%s`', tool.install))
   end
   if tool.mason then
-    table.insert(errmsg, '  - `:MasonInstall ' .. tool.mason .. '`')
+    table.insert(errmsg, string.format('  - `:MasonInstall %s`', tool.mason))
   end
   health.error(table.concat(errmsg, '\n'))
 end
@@ -140,7 +140,7 @@ local function check_plugin_funcs()
     -- 使用loadstring (Lua 5.1) 或 load (Lua 5.2及更高版本) 函数将表达式编译成函数
     local fn, err = load("return " .. fn_str)
     if err then
-      health.error(fn_str .. ' is not Exist. Error: ' .. err)
+      health.error(string.format('%s is not Exist. Error: %s', fn_str, err))
     end
 
     if fn and fn() ~= nil then

@@ -117,9 +117,9 @@ local function find_filepath_pos(ori_str, fp_props)
   end
 
   if fp_props.lnum then
-    fp_with_lnum_col = string.format("%s:%d", fp_with_lnum_col, fp_props.lnum)
+    fp_with_lnum_col = string.format("%s:%s", fp_with_lnum_col, fp_props.lnum)
     if fp_props.col then
-      fp_with_lnum_col = string.format("%s:%d", fp_with_lnum_col, fp_props.col)
+      fp_with_lnum_col = string.format("%s:%s", fp_with_lnum_col, fp_props.col)
     end
   end
 

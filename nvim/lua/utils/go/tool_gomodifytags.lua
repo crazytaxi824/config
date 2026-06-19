@@ -60,6 +60,23 @@ local M = {}
 
 -- ADD Tags and Options --------------------------------------------------------------------------- {{{
 
+---@param err_msg string
+---@param go_add_tags_cmd string  :GoTagAdd | :GoTagAddAllStruct
+local function cmd_example(err_msg, go_add_tags_cmd)
+  return {
+    err_msg,
+    "Command examples:",
+    string.format('  :%s json,xml', go_add_tags_cmd),
+    string.format('  :%s json,xml=foo', go_add_tags_cmd),
+    string.format('  :%s json,xml camelcase', go_add_tags_cmd),
+    string.format('  :%s json,xml=foo camelcase', go_add_tags_cmd),
+    string.format('  :%s json=omitempty,xml=foo', go_add_tags_cmd),
+    string.format('  :%s json=omitempty,xml=foo camelcase', go_add_tags_cmd),
+    "transform:",
+    "  snakecase(*) | camelcase | lispcase | pascalcase | titlecase | keep",
+  }
+end
+
 -- arglist[1] is tag options. could be 'json', 'json=foo', 'json=foo,xml', 'json=foo,json=fuz,xml=bar'
 -- arglist[2] = <可为空>|snakecase|camelcase|...
 --
@@ -79,16 +96,7 @@ function M.go_add_tags_and_opts(arglist, go_add_tags_cmd, offset)
 
   if #arglist > 2 then
     Notify(
-      {
-        "too many args.",
-        "Command examples:",
-        '  :' .. go_add_tags_cmd .. ' json,xml',
-        '  :' .. go_add_tags_cmd .. ' json,xml camelcase',
-        '  :' .. go_add_tags_cmd .. ' json=omitempty,xml=omitempty',
-        '  :' .. go_add_tags_cmd .. ' json=omitempty,xml=omitempty camelcase',
-        "transform:",
-        "  snakecase(*) | camelcase | lispcase | pascalcase | titlecase | keep",
-      },
+      cmd_example("too many args.", go_add_tags_cmd)
       "ERROR"
     )
     return
@@ -134,18 +142,7 @@ function M.go_add_tags_and_opts(arglist, go_add_tags_cmd, offset)
     transform = "keep"
   else
     Notify(
-      {
-        "transform error.",
-        "Command examples:",
-        '  :' .. go_add_tags_cmd .. ' json,xml',
-        '  :' .. go_add_tags_cmd .. ' json,xml camelcase',
-        '  :' .. go_add_tags_cmd .. ' json,xml=foo',
-        '  :' .. go_add_tags_cmd .. ' json,xml=foo camelcase',
-        '  :' .. go_add_tags_cmd .. ' json=omitempty,xml=foo',
-        '  :' .. go_add_tags_cmd .. ' json=omitempty,xml=foo camelcase',
-        "transform:",
-        "  snakecase(*) | camelcase | lispcase | pascalcase | titlecase | keep",
-      },
+      cmd_example("transform error.", go_add_tags_cmd)
       "ERROR"
     )
     return
@@ -212,8 +209,8 @@ function M.go_remove_tags(arglist, go_remove_tags_cmd, offset)
       {
         "too many args.",
         "Command examples:",
-        '  :' .. go_remove_tags_cmd,
-        '  :' .. go_remove_tags_cmd .. ' json,xml',
+        string.format('  :%s', go_remove_tags_cmd),
+        string.format('  :%s json,xml', go_remove_tags_cmd),
       },
       "ERROR"
     )
@@ -284,8 +281,8 @@ function M.go_remove_tags_opts(arglist, go_remove_tag_opts_cmd, offset)
       {
         "too many args.",
         "Command examples:",
-        '  :' .. go_remove_tag_opts_cmd,
-        '  :' .. go_remove_tag_opts_cmd .. ' json=foo,xml=bar',
+        string.format('  :%s', go_remove_tag_opts_cmd),
+        string.format('  :%s json=foo,xml=bar', go_remove_tag_opts_cmd),
       },
       "ERROR"
     )

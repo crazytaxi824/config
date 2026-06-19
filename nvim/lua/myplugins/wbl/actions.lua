@@ -6,7 +6,7 @@ local M = {}
 ---@param opts { win_id: integer, bufnr: integer }
 function M.binding_win_buf(opts)
   if not vim.api.nvim_buf_is_valid(opts.bufnr) or not vim.api.nvim_win_is_valid(opts.win_id) then
-    error(string.format("Invalid win: %d, or bufnr: %d", opts.win_id, opts.bufnr))
+    error(string.format("Invalid win(%s), or bufnr(%s)", opts.win_id, opts.bufnr))
   end
 
   -- floating window 不显示 WinBarLine

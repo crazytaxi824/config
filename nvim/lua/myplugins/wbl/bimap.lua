@@ -94,7 +94,7 @@ function M.unbind_buf_idx(opts)
 
   local b = bufs[bufnr]
   if not b then
-    vim.notify(string.format("bufnr(%d) is not cached in WinbarLine", bufnr), vim.log.levels.ERROR)
+    vim.notify(string.format("bufnr(%s) is not cached in WinbarLine", bufnr), vim.log.levels.ERROR)
     return
   end
 
@@ -159,7 +159,7 @@ function M.remove_win(win_id)
     if b then
       buf_remove_win(b, win_id)
     else
-      vim.notify(string.format("buffer:(%d) is not cached", bufnr), vim.log.levels.ERROR)
+      vim.notify(string.format("buffer:(%s) is not cached", bufnr), vim.log.levels.ERROR)
     end
   end
 
@@ -182,7 +182,7 @@ function M.remove_buf(bufnr)
     if w then
       win_remove_buf(w, bufnr)
     else
-      vim.notify(string.format("win:(%d) is not cached", win_id), vim.log.levels.ERROR)
+      vim.notify(string.format("win(%s) is not cached", win_id), vim.log.levels.ERROR)
     end
   end
 

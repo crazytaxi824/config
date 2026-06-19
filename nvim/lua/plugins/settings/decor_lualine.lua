@@ -86,7 +86,7 @@ local function trailing_whitespace_mixed_indent()
     local ts = check_trailing_whitespace()
 
     if mi ~= '' and ts ~= '' then
-      vim.b[bufvar_mi_ts] = mi..' '..ts
+      vim.b[bufvar_mi_ts] = string.format("%s %s", mi, ts)
     elseif mi == '' and ts == '' then
       vim.b[bufvar_mi_ts] = nil
     else
@@ -167,7 +167,7 @@ lualine.setup {
         fmt = function(str)
           -- 如果 window 小于 n 则, 只显示 mode 第一个字母.
           if str ~= '' and vim.api.nvim_win_get_width(0) <= 60 then
-            return string.sub(str,1,1) .. ' ' .. Nerd_icons.ellipsis
+            return string.format("%s%s", string.sub(str,1,1), '…')
           end
           return str
         end,
@@ -290,7 +290,7 @@ lualine.setup {
           elseif str == 'mac' then
             return "[CR]"
           end
-          return "[".. str .."]"
+          return string.format("[%s]", str)
         end
       },
     },

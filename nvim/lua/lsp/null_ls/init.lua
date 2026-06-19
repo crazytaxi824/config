@@ -65,7 +65,7 @@ null_ls.setup({
   -- null-ls 退出的时候触发, 每次退出 vim 时也会触发.
   -- ---@type fun(code: integer, signal: integer, client_id: integer)
   -- on_exit = function(code, signal, client_id)
-  --   local msg = string.format("'null-ls' (id=%d) is stopped due to signal(%d) with exit code(%d)", client_id, signal, code)
+  --   local msg = string.format("'null-ls' (id=%s) is stopped due to signal(%s) with exit code(%s)", client_id, signal, code)
   --   vim.notify(msg, vim.log.levels.WARN)
   -- end,
 })

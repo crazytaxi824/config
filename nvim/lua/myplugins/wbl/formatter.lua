@@ -122,7 +122,7 @@ local function bufname_mod(bufnr)
   elseif bt == "nofile" then
     -- return filetype
     local ft = vim.bo[bufnr].filetype
-    return ft ~= '' and '['..ft..']' or "[Scratch]"
+    return ft ~= '' and string.format('[%s]', ft) or "[Scratch]"
   elseif bt == "terminal" then
     return "[Terminal]"
   elseif bt == "prompt" then
@@ -173,7 +173,7 @@ end
 local function tabpage_component()
   local tabs = vim.api.nvim_list_tabpages()
   if #tabs > 1 then
-    local tab_str = string.format(' %d/%d ', vim.fn.tabpagenr(), #tabs)
+    local tab_str = string.format(' %s/%s ', vim.fn.tabpagenr(), #tabs)
     ---@type WinbarFormatterItemComponent
     local tab_comp = { content = tab_str, hl = '%=%#MyWinBarLineTab#' }
     return tab_comp
@@ -363,7 +363,7 @@ function WinbarFormatter.winbar_format(win_id, focused)
       table.insert(items, item)
     else
       -- buf 没有被 cache, 该问题不应该出现
-      vim.notify(string.format('buffer: %d is not cached', bufnr), vim.log.levels.WARN)
+      vim.notify(string.format('buffer(%s) is not cached', bufnr), vim.log.levels.WARN)
     end
   end
 

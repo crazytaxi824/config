@@ -93,16 +93,18 @@ dap.configurations.go = {
       local testfn_name, mode = utils.get_exact_testfn_name()
       if not testfn_name or not mode then
         -- default setting
-        return { "-test.v", "-test.run", "^" .. vim.fn.expand('<cword>') .. "$" }
+        return { "-test.v", "-test.run", string.format("^%s$", vim.fn.expand('<cword>')) }
       end
 
+      local regexp_testfn_name = string.format("^%s$", testfn_name)
+
       if mode == 'run' then
-        return { "-test.v", "-test.run", "^" .. testfn_name .. "$" }
+        return { "-test.v", "-test.run", regexp_testfn_name }
       elseif mode == 'bench' then
         return {
           "-test.v",
           "-test.run", "^$",
-          "-test.bench", "^" .. testfn_name .. "$",
+          "-test.bench", regexp_testfn_name,
           "-test.benchmem"
         }
       elseif mode == 'fuzz' then
@@ -113,7 +115,7 @@ dap.configurations.go = {
         return {
           "-test.v",
           "-test.run", "^$",
-          "-test.fuzz", "^" .. testfn_name .. "$",
+          "-test.fuzz", regexp_testfn_name,
           "-test.fuzzcachedir", testdata,  -- fuzzing input data, 必须要
           "-test.fuzztime", "15s",
         }

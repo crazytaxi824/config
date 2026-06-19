@@ -115,7 +115,7 @@ local function delete_current_buf()
   end
 
   if #win_bufs < 1 then
-    vim.notify(string.format("current_win(%d) has no buffer", curr_win), vim.log.levels.ERROR)
+    vim.notify(string.format("current_win(%s) has no buffer", curr_win), vim.log.levels.ERROR)
     return
   elseif #win_bufs == 1 then
     if win_bufs[1] ~= curr_buf then

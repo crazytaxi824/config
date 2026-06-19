@@ -193,7 +193,7 @@ function WinbarFormatterItem:parse_item_to_components(focused)
 
   -- diagnostic
   if self.diagnostic then
-    -- local diag_str = '('..self.diagnostic.count..') '  -- 显示错误数量
+    -- local diag_str = string.format('(%s)', self.diagnostic.count)  -- 显示错误数量
     local diag_str = Nerd_icons.diag[self.diagnostic.severity] .. ' '  -- 只显示错误类型
     comp = { content = diag_str, hl = 'Severity_'..self.diagnostic.severity }
     table.insert(components, comp)
@@ -214,9 +214,9 @@ function WinbarFormatterItem:parse_item_to_components(focused)
     item_width = item_width + vim.fn.strdisplaywidth(c.content)
     -- 如果是 active & in current window 则使用 Selected highlight
     if focused and self.active then
-      c.hl = '%#' .. hl_prefix_selected .. c.hl .. '#'
+      c.hl = string.format('%%#%s%s#', hl_prefix_selected, c.hl)
     else
-      c.hl = '%#' .. hl_prefix_default .. c.hl .. '#'
+      c.hl = string.format('%%#%s%s#', hl_prefix_default, c.hl)
     end
   end
 

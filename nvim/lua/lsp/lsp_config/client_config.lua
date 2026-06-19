@@ -77,7 +77,7 @@ M.on_attach = function(client, bufnr)
 
   -- DEBUG: 用
   if __Debug._lsp then
-    Notify(string.format("LSP Server attach (%s), bufnr (%d)", client.name, bufnr), "DEBUG", {title="LSP"})
+    Notify(string.format("LSP Server(%s) attach bufnr(%s)", client.name, bufnr), "DEBUG", {title="LSP"})
   end
 end
 
@@ -90,7 +90,7 @@ end
 -- M.on_exit = vim.schedule_wrap(function(code, signal, client_id)
 --   local client = vim.lsp.get_client_by_id(client_id)
 --   local client_name = client and client.name or 'lsp'
---   local msg = string.format("'%s' (id=%d) is stopped due to signal(%d) with exit code(%d)",
+--   local msg = string.format("'%s' (id=%s) is stopped due to signal(%s) with exit code(%s)",
 --       client_name, client_id, signal, code)
 --   vim.notify(msg, vim.log.levels.WARN)
 -- end)

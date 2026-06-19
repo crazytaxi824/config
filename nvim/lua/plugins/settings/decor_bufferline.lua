@@ -283,7 +283,7 @@ local function load_bufnr_on_left_click(bufnr)
   for _, win_id in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
     -- 如果有任意 window 是 listed-buffer 则不允许加载指定 bufnr.
     if vim.bo[vim.api.nvim_win_get_buf(win_id)].buflisted then
-      Notify(string.format("Cannot load buffer (%d) in current window (unlisted-buffer)", bufnr), "WARN")
+      Notify(string.format("Cannot load buffer(%s) in current window (unlisted-buffer)", bufnr), "WARN")
       return
     end
   end
@@ -380,7 +380,7 @@ bufferline.setup({
     diagnostics_update_in_insert = false,
     -- The diagnostics indicator can be set to nil to keep the buffer name highlight but delete the highlighting
     diagnostics_indicator = function(count, level, diagnostics_dict, context)
-      return "("..count..")"
+      return string.format("(%s)", count)
     end,
 
     -- ':help bufferline-configuration', 在 nvim-tree 上显示 "File Explorer"

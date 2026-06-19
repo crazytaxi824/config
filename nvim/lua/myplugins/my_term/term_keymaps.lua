@@ -5,7 +5,7 @@ local g = require('myplugins.my_term.deps.global')
 ---@param term_id integer
 local function close_others(term_id)
   if not g.get_TermPost(term_id) then
-    Notify(string.format('term (%d) is not exist', term_id), "WARN")
+    Notify(string.format('term(%s) is not exist', term_id), "WARN")
     return
   end
 
@@ -22,7 +22,7 @@ end
 local function wipeout_term(term_id)
   local tp = g.get_TermPost(term_id)
   if not tp then
-    Notify(string.format('term (%d) is not exist', term_id), "WARN")
+    Notify(string.format('term(%s) is not exist', term_id), "WARN")
     return
   end
 
@@ -40,7 +40,7 @@ end
 local function wipeout_others(term_id)
   local tp = g.get_TermPost(term_id)
   if not tp then
-    Notify(string.format('term (%d) is not exist', term_id), "WARN")
+    Notify(string.format('term(%s) is not exist', term_id), "WARN")
     return
   end
 

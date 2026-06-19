@@ -85,7 +85,7 @@ local function reuse_term_win_set_buf(new_term_bufnr, old_term_bufnr)
       -- 将 bufnr 加载到指定 win_id
       vim.api.nvim_win_set_buf(term_win, new_term_bufnr)
     else
-      error("term_win_id: " .. term_win .. " is not exist")
+      error(string.format("term_win_id(%s) is not exist", term_win))
     end
   end
 
