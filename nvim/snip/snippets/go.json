@@ -6,7 +6,7 @@
   },
   "if er short": {
     "prefix": "if-er=fn()",
-    "body": "if ${1:er} := ${2:fn()}; er != nil {\n\t${3:log.Println}($1)\n\treturn\n}}",
+    "body": "if ${1:er} := ${2:fn()}; er != nil {\n\t${3:log.Println}($1)\n\treturn\n}",
     "description": "Snippets for if-er short"
   },
   "fmt.Println()": {

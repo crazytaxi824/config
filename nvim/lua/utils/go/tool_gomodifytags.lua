@@ -95,10 +95,7 @@ function M.go_add_tags_and_opts(arglist, go_add_tags_cmd, offset)
   end
 
   if #arglist > 2 then
-    Notify(
-      cmd_example("too many args.", go_add_tags_cmd)
-      "ERROR"
-    )
+    Notify(cmd_example("too many args.", go_add_tags_cmd), "ERROR")
     return
   end
 
@@ -141,10 +138,7 @@ function M.go_add_tags_and_opts(arglist, go_add_tags_cmd, offset)
   elseif arglist[2] == 'k' or arglist[2] == 'keep' then  -- 和 field name 一样
     transform = "keep"
   else
-    Notify(
-      cmd_example("transform error.", go_add_tags_cmd)
-      "ERROR"
-    )
+    Notify(cmd_example("transform error.", go_add_tags_cmd), "ERROR")
     return
   end
 
@@ -195,7 +189,7 @@ end
 ---@param offset? integer  vim.fn.line2byte(vim.fn.line('.'))
 function M.go_remove_tags(arglist, go_remove_tags_cmd, offset)
   if vim.bo.readonly then
-    Notify("cannot remove tags from readonly file","ERROR")
+    Notify("cannot remove tags from readonly file", "ERROR")
     return
   end
 
@@ -267,7 +261,7 @@ end
 ---@param offset? integer  vim.fn.line2byte(vim.fn.line('.'))
 function M.go_remove_tags_opts(arglist, go_remove_tag_opts_cmd, offset)
   if vim.bo.readonly then
-    Notify("cannot remove tags's options from readonly file","ERROR")
+    Notify("cannot remove tags's options from readonly file", "ERROR")
     return
   end
 

@@ -67,7 +67,7 @@ function MyTerm.new(id, opts, force)
   if not force then
     -- NOTE: terminal 已经存在, 无法使用相同 id 创建新的 terminal.
     if g.get_TermPost(id) then
-      error(string('terminal id(%d) is already exist', id))
+      error(string.format('terminal id(%d) is already exist', id))
     end
   end
 

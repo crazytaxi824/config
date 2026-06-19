@@ -42,7 +42,7 @@ local function swift_test_pkg()
 
   local t = require('myplugins.my_term').console()
   t:stop()
-  t:run({ "swift", "test", "--filter ", test_class })
+  t:run({ "swift", "test", "--filter", test_class })
 end
 
 -- key mapping ------------------------------------------------------------------------------------

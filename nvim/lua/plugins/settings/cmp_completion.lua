@@ -138,6 +138,7 @@ cmp.setup {
         if col > 0 and line:sub(col, col) == '.' then
           fallback()  -- 执行快捷键原本的功能
           cmp.core:reset() -- HACK: :reset() cmp cache. fix: [snip] and [buff] missing when delete dot(.) char.
+          return
         end
       end
 
