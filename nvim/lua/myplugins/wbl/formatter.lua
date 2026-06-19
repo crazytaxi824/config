@@ -173,7 +173,7 @@ end
 local function tabpage_component()
   local tabs = vim.api.nvim_list_tabpages()
   if #tabs > 1 then
-    local tab_str = string.format(' %s/%s ', vim.fn.tabpagenr(), #tabs)
+    local tab_str = string.format(' %s ', vim.fn.tabpagenr())
     ---@type WinbarFormatterItemComponent
     local tab_comp = { content = tab_str, hl = '%=%#MyWinBarLineTab#' }
     return tab_comp
