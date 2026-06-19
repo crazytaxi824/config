@@ -13,7 +13,7 @@ local go_test = {'go', 'test', '-count=1', '-v'}
 local function gen_term_opts(fuzztime)
   return function(opts)
     ---@type string[]
-    local cmd = vim.iter({go_test, '-fuzztime', fuzztime, utils.mode_flags(opts)}):flatten():totable()
+    local cmd = vim.iter({go_test, '-fuzztime', fuzztime, utils.mode_args(opts)}):flatten():totable()
     return cmd, {
       cwd = opts.go_list.Root,
     }
@@ -42,7 +42,7 @@ local M = {
           return nil, {}  -- cmd 为 nil, go_test() 不会执行
         end
 
-        local cmd = vim.iter({ go_test, '-fuzztime', fuzz_time, utils.mode_flags(opts) }):flatten():totable()
+        local cmd = vim.iter({ go_test, '-fuzztime', fuzz_time, utils.mode_args(opts) }):flatten():totable()
         return cmd, {
           cwd = opts.go_list.Root,
         }

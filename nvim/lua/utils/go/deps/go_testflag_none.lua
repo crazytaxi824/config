@@ -17,7 +17,7 @@ local M = {
 
       term_opts = function(opts)
         ---@type string[]
-        local cmd = vim.iter({go_test, utils.mode_flags(opts)}):flatten():totable()
+        local cmd = vim.iter({go_test, utils.mode_args(opts)}):flatten():totable()
         return cmd, {
           cwd = opts.go_list.Root,
         }

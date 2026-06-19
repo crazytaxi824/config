@@ -160,7 +160,7 @@ local function gen_term_opts(dir)
 
   return function(opts)
     ---@type string[]
-    local cmd = vim.iter({go_test, gen_extra_args(dir, opts.flag), utils.mode_flags(opts)}):flatten():totable()
+    local cmd = vim.iter({go_test, gen_extra_args(dir, opts.flag), utils.mode_args(opts)}):flatten():totable()
     return cmd, {
       cwd = opts.go_list.Root,
       on_exit = on_exit(opts, dir),

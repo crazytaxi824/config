@@ -47,11 +47,11 @@ function M.get_testfn_name_regexp(mode)
   return result
 end
 
--- 根据 flags 返回 {cmd} args
+-- 根据 opts 返回 {cmd} args
 --
 ---@param opts GoTestOpts
 ---@return string[] cmd_args
-function M.mode_flags(opts)
+function M.mode_args(opts)
   local scope = opts.go_list.ImportPath
   if opts.project then
     scope = './...'  -- NOTE: './...' 意思是整个项目.
