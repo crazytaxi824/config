@@ -56,7 +56,7 @@ function FZF_selected(fzf_file)
   end
 
   -- 直接 :edit file (第一个)
-  vim.cmd.edit({ args = { fp_qf_list[1].filename }})
+  vim.cmd.edit({ args = { vim.fn.fnameescape(fp_qf_list[1].filename) }})
 
   -- 检查 lnum, col 的边界
   local bufnr = vim.api.nvim_get_current_buf()

@@ -76,7 +76,7 @@ local function jump_to_dir(dir)
   pcall(require, "nvim-tree")  -- 加载 nvim-tree.lua
 
   -- 在整个 editor 最左侧打开一个 window, nvim_open_win() 无法实现
-  vim.cmd("topleft vertical 36split " .. dir)
+  vim.cmd("topleft vertical 36split " .. vim.fn.fnameescape(dir))
 end
 
 -- jump to file/directory
