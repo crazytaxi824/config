@@ -35,25 +35,35 @@ end
 -- 跳转到 file
 --
 ---@param absolute_path string
----@param lnum? integer
----@param col? integer
+---@param lnum? integer  -- 1-based index
+---@param col? integer   -- 1-based index, 传入时是 1-based
 local function jump_to_file(absolute_path, lnum, col)
-  lnum = lnum or 1
-  col = col or 1
+  -- 加载文件但不显示在 window 中
+  -- 如果 filepath 不存在会创建一个新的 buffer 指向 filepath
+  -- 如果 filepath == '', 会创建一个 [No Name] buffer
+  local buf = vim.fn.bufadd(absolute_path)
+  vim.fn.bufload(buf)  -- 加载 buffer 内容
+  vim.bo[buf].buflisted = true  -- 设置为 buflisted
+  local lcount = vim.api.nvim_buf_line_count(buf)  -- line total count
 
-  -- 则选择合适的 window 显示文件.
-  local display_win_id = find_win_to_jump(absolute_path)
+  -- check range
+  lnum = math.max(1, math.min(lnum or 1, lcount))  -- 1-based index
+  col = math.max(1, col or 1)  -- 1-based index, col > max_col 不会报错
+
+  -- 选择合适的 window 显示文件
+  local win_id = find_win_to_jump(absolute_path)
 
   -- 进入 window
-  if display_win_id and vim.fn.win_gotoid(display_win_id) == 1 then
-    -- 如果 win_id 可以跳转, 则直接在该 window 中打开文件.
-    vim.cmd.edit({ args = { absolute_path } })
-    vim.api.nvim_win_set_cursor(display_win_id, {lnum, col-1})
+  if win_id and vim.fn.win_gotoid(win_id) == 1 then
+    -- 如果 win_id 可以跳转, 则直接在该 window 中打开 buffer
+    vim.api.nvim_win_set_buf(win_id, buf)
   else
-    -- 如果 win_id 不能跳转, 则在 terminal 正上方创建一个新的 window 用于显示 log filepath
-    vim.cmd.split({ mods = { split = 'leftabove' }, args = { absolute_path } })
-    vim.api.nvim_win_set_cursor(0, { lnum, col - 1 })
+    -- 如果 win_id 不能跳转, 则在 current window 上方创建一个新的 window 用于显示 buffer
+    win_id = vim.api.nvim_open_win(buf, true, { win = vim.api.nvim_get_current_win(), split = 'above' })
   end
+
+  -- nvim_win_set_cursor() 中 col 是 0-based index
+  vim.api.nvim_win_set_cursor(win_id, { lnum, col-1 })  -- move cursor
 end
 
 -- 跳转到 directory
@@ -63,7 +73,10 @@ local function jump_to_dir(dir)
   -- NOTE: 新窗口中打开 dir, 因为 nvim-tree 设置 hijack_netrw=true & hijack_directories=true,
   -- 如果直接使用 `:edit dir` 会导致打开 dir 的窗口被关闭 (hijack).
   -- 如果 hijack_netrw=false & hijack_directories=false, 则这里可以使用 `:tabnew dir`
-  vim.cmd.new({ args = { dir } })
+  pcall(require, "nvim-tree")  -- 加载 nvim-tree.lua
+
+  -- 在整个 editor 最左侧打开一个 window, nvim_open_win() 无法实现
+  vim.cmd("topleft vertical 36split " .. dir)
 end
 
 -- jump to file/directory

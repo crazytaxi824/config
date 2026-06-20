@@ -55,10 +55,19 @@ function FZF_selected(fzf_file)
     return
   end
 
-  -- 直接打开第一个 file
+  -- 直接 :edit file (第一个)
   vim.cmd.edit({ args = { fp_qf_list[1].filename }})
+
+  -- 检查 lnum, col 的边界
+  local bufnr = vim.api.nvim_get_current_buf()
+  local lcount = vim.api.nvim_buf_line_count(bufnr)
+
+  local lnum = math.max(1, math.min(fp_qf_list[1].lnum or 1, lcount))
+  local col = math.max(1, fp_qf_list[1].col or 1)
+
+  -- move cursor
   local win_id = vim.api.nvim_get_current_win()
-  vim.api.nvim_win_set_cursor(win_id, {fp_qf_list[1].lnum, fp_qf_list[1].col-1})  -- (1,0)-indexed
+  vim.api.nvim_win_set_cursor(win_id, { lnum, col-1 })  -- (1,0)-indexed
 
   -- 如果有多个 file, 则放入 quickfix list.
   if #fp_qf_list > 1 then
