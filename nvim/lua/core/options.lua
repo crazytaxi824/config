@@ -535,9 +535,11 @@ end, {bang=true, bar=true})
 -- 如果删除最后一个 buflisted window, 则在删除之前创建一个新的 window
 vim.api.nvim_create_autocmd({"ExitPre"}, {
   callback = function(args)
-    -- 如果是 :qa, :qa!, :xa, :xa! 则不做任何操作
-    local quit_cmd = vim.fn.histget("cmd", -1)
-    if vim.endswith(quit_cmd, "a") or vim.endswith(quit_cmd, "a!") then
+    local quit_cmd = vim.fn.histget("cmd", -1)  -- 获取最后一个 command
+    local full_cmd = vim.fn.fullcommand(quit_cmd)  -- 获取 fullcommand
+
+    -- 如果是 :qa, :qa!, :xa, :xa!, :wqa, :wqa! 则不做任何操作
+    if vim.endswith(full_cmd, "all") then
       return
     end
 
