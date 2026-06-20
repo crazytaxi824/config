@@ -1,5 +1,5 @@
 -- https://github.com/mfussenegger/nvim-dap
--- DOCS: repl / debug console command ------------------------------------------------------------- {{{
+-- DOCS: repl / debug console command -------------------------------------------------------------- {{{
 --    .exit               Closes the REPL
 --    .clear              clear dap-repl buffer 内容
 --    .c or .continue     Same as |dap.continue|
@@ -35,14 +35,14 @@ end
 require("plugins.settings.debug.adapters.go")
 require("plugins.settings.debug.adapters.py")
 
--- custom command for repl ------------------------------------------------------------------------
+-- custom command for repl -------------------------------------------------------------------------
 local repl = require('dap.repl')
 repl.commands = vim.tbl_deep_extend('force', repl.commands, {
   -- Add a new alias for the existing .exit command
   exit = {'.exit', '.q', '.quit'},
 })
 
--- functions -------------------------------------------------------------------------------------- {{{
+-- functions --------------------------------------------------------------------------------------- {{{
 -- NOTE: 通过 set/get tab var 来确定 debug_tab 是否存在.
 local tabvar_dap = "my_debug_tab_main_winid"
 
@@ -122,9 +122,10 @@ local function quit_debug()
     del_debug_keymaps()
   end)
 end
+-- }}}
 
--- keymaps ----------------------------------------------------------------------------------------
--- dap 可用方法, `:help dap-api` ---------------------------------------------- {{{
+-- keymaps ----------------------------------------------------------------------------------------- {{{
+-- dap 可用方法, `:help dap-api` ----------------------------------------------- {{{
 --   dap.run({config})
 --   dap.run_last()  -- NOTE: run_last() 时, 当前 ('%') buffer 必须是之前运行 debug 时的 buffer.
 --   dap.launch({adapter}, {config})
@@ -250,7 +251,7 @@ local function set_debug_keymaps()
 end
 -- }}}
 
--- 开启 new tab 进行 debug ------------------------------------------------------------------------
+-- 开启 new tab 进行 debug -------------------------------------------------------------------------
 -- https://github.com/rcarriga/nvim-dap-ui#usage & `:help dap-extensions`
 -- 启动 debug 之前先打开 new tab
 dap.listeners.before.event_initialized["foo"] = function()
@@ -262,11 +263,11 @@ end
 dap.listeners.after.event_initialized["foo"] = function()
   local dapui_status_ok, dapui = pcall(require, "dapui")
   if dapui_status_ok then
-    dapui.open() -- will open dap-ui layouts in new tab.
+    dapui.open()  -- will open dap-ui layouts in new tab.
   end
 end
 
--- other hook events ---------------------------------------------------------- {{{
+-- other hook events ----------------------------------------------------------- {{{
 -- debug job done 之前 close debug tab, dap-repl, dap-ui windows
 -- NOTE: 不要自动关闭, 使用自定义函数手动关闭.
 -- dap.listeners.before.event_terminated["foo"] = function()
@@ -283,7 +284,7 @@ end
 -- end
 -- }}}
 
--- keymaps: jump_to_file in dap-repl window -------------------------------------------------------
+-- keymaps: jump_to_file in dap-repl window --------------------------------------------------------
 vim.api.nvim_create_autocmd("FileType", {
   pattern = { "dap-repl" },
   callback = function(args)
@@ -295,7 +296,7 @@ vim.api.nvim_create_autocmd("FileType", {
 -- user command
 vim.api.nvim_create_user_command("Debug", "DapContinue", { bang = true, bar = true })
 
--- highlight && sign setting ---------------------------------------------------------------------- {{{
+-- highlight && sign setting ----------------------------------------------------------------------- {{{
 -- `:help dap.txt`, search:
 -- `DapBreakpoint` for breakpoints (default: `B`)
 -- `DapBreakpointCondition` for conditional breakpoints (default: `C`)
