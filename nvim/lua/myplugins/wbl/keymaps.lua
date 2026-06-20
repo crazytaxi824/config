@@ -209,8 +209,9 @@ function M.set()
         -- NOTE: "a buffer with read errors" 时所有的 buf events 都不会被触发, 同时会重置 setlocal winbar=''
         -- eg: [Permission Denied], LSP error ...
         -- window 中一定会显示一个 buffer
-        wb_act.binding_win_buf({ win_id=win_id, bufnr=vim.api.nvim_win_get_buf(win_id) })
-        wb_act.set_winbar(win_id, 'auto')
+        if wb_act.binding_win_buf({ win_id=win_id, bufnr=vim.api.nvim_win_get_buf(win_id) }) then
+          wb_act.set_winbar(win_id, 'auto')
+        end
       end
     end, opt, 'win: refresh all winbarline'},
 

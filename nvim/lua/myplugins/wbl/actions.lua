@@ -4,18 +4,21 @@ local bimap = require('myplugins.wbl.bimap')
 local M = {}
 
 ---@param opts { win_id: integer, bufnr: integer }
+---@return boolean success
 function M.binding_win_buf(opts)
   if not vim.api.nvim_buf_is_valid(opts.bufnr) or not vim.api.nvim_win_is_valid(opts.win_id) then
-    error(string.format("Invalid win(%s), or bufnr(%s)", opts.win_id, opts.bufnr))
+    vim.notify(string.format("Invalid win(%s), or bufnr(%s)", opts.win_id, opts.bufnr), vim.log.levels.WARN)
+    return false
   end
 
   -- floating window 不显示 WinBarLine
   local win_cfg = vim.api.nvim_win_get_config(opts.win_id)
   if win_cfg.relative ~= '' then
-    return
+    return false
   end
 
   bimap.bind(opts)
+  return true
 end
 
 

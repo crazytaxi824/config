@@ -12,8 +12,9 @@ local function update_current_tabpage_wins()
     -- NOTE: "a buffer with read errors" 时所有的后续 events 都不会被触发, 同时会重置 setlocal winbar=''
     -- eg: [Permission Denied], LSP error ...
     -- window 中一定会显示一个 buffer
-    wb_act.binding_win_buf({ win_id=win_id, bufnr=vim.api.nvim_win_get_buf(win_id) })
-    wb_act.set_winbar(win_id, 'auto')
+    if wb_act.binding_win_buf({ win_id=win_id, bufnr=vim.api.nvim_win_get_buf(win_id) }) then
+      wb_act.set_winbar(win_id, 'auto')
+    end
   end
 end
 
@@ -45,8 +46,9 @@ vim.api.nvim_create_autocmd("WinEnter", {
       -- 从 current tabpage & another window 跳转过来 (prev_win 可能已经关闭)
       -- 更新 previous winow
       if vim.api.nvim_win_is_valid(prev_win_id) then
-        wb_act.binding_win_buf({ win_id=prev_win_id, bufnr=vim.api.nvim_win_get_buf(prev_win_id) })
-        wb_act.set_winbar(prev_win_id)
+        if wb_act.binding_win_buf({ win_id=prev_win_id, bufnr=vim.api.nvim_win_get_buf(prev_win_id) }) then
+          wb_act.set_winbar(prev_win_id)
+        end
       end
 
       -- 更新 current window
@@ -69,8 +71,9 @@ vim.api.nvim_create_autocmd("BufEnter", {
   group = gid,
   callback = function(args)
     local curr_win = vim.api.nvim_get_current_win()
-    wb_act.binding_win_buf({ win_id=curr_win, bufnr=args.buf })
-    wb_act.set_winbar(curr_win, 'focused')
+    if wb_act.binding_win_buf({ win_id=curr_win, bufnr=args.buf }) then
+      wb_act.set_winbar(curr_win, 'focused')
+    end
   end,
   desc = "winbarline: binding current window and buffer"
 })
