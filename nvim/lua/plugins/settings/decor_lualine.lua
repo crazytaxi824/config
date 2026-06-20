@@ -116,6 +116,10 @@ local function my_progress()
   -- ▏ ▎ ▍ ▌ ▋ ▊ ▉ █
   return '%3p%%:𝌆 %L'
 end
+
+local function my_winid_bufnr()
+  return string.format("%s:%s", vim.api.nvim_get_current_win(), vim.api.nvim_get_current_buf())
+end
 -- }}}
 
 -- }}}
@@ -258,6 +262,7 @@ lualine.setup {
         -- modifiers pressed (s(shift)/c(ctrl)/a(alt)/m(meta)...)
         --on_click = function(number, mouse, modifiers) end,
       },
+      -- { my_winid_bufnr },
     },
     lualine_y = {
       {
@@ -357,6 +362,7 @@ lualine.setup {
           return { fg = Colors.g245.g, bg = my_theme.inactive.c.bg }
         end,
       },
+      -- { my_winid_bufnr },
     },
     lualine_y = {},
     lualine_z = {},
