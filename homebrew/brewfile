@@ -33,6 +33,7 @@ brew "neovim"
 #brew "vim"    # 自带 vim
 brew "tmux"
 brew "pandoc"  # 文档格式转换工具, 支持 word, pdf, markdown ... 各种格式
+brew "typst"   # pandoc --pdf-engine=typst, 支持 latex, 不支持 mermaid
 #brew "universal-ctags"  # 各种语言的 object 分析工具. vim/neovim tagbar 插件使用
 
 # code languages & tools
@@ -114,7 +115,7 @@ cask "iina"     # 视频播放器
 #cask "chatgpt"
 #cask "claude"
 #cask "trader-workstation"  # IBKR TWS
-#cask "basictex"  # 提供 pandoc --pdf-engine=xelatex
+#cask "basictex"  # 1GB, 提供 pandoc --pdf-engine=xelatex
 
 # 浏览器
 #cask "google-chrome"
