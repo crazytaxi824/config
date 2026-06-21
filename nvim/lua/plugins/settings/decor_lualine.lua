@@ -19,20 +19,11 @@ local my_theme = {
     b = { fg = Colors.white.g, bg = "#0000D7" },
     c = { fg = Colors.white.g, bg = "#00005F" },
   },
-  replace = {
-    a = { fg = Colors.white.g, bg = "#AF0000", gui = 'bold' },
-    b = { fg = Colors.white.g, bg = "#0000D7" },
-    c = { fg = Colors.white.g, bg = "#00005F" },
-  },
+
   visual = {
     a = { fg = Colors.black.g, bg = Colors.orange_warn.g, gui = 'bold' },
     b = { fg = Colors.black.g, bg = "#D75F00" },
     c = { fg = Colors.white.g, bg = "#5F0000" },
-  },
-  command = {
-    a = { fg = Colors.black.g, bg = Colors.green_bg.g, gui = 'bold' },
-    b = { fg = Colors.white.g, bg = Colors.g238.g },
-    c = { fg = Colors.white.g, bg = Colors.black.g },
   },
 
   inactive = {
@@ -41,6 +32,11 @@ local my_theme = {
     c = { fg = Colors.g245.g,  bg = Colors.black.g },
   },
 }
+
+-- command: normal; replace: insert
+my_theme.command = vim.tbl_deep_extend('force', my_theme.normal, { a = { bg = Colors.green_bg.g }})
+my_theme.replace = vim.tbl_deep_extend('force', my_theme.insert, { a = { bg = "#AF0000" }})
+
 -- }}}
 
 -- 自定义 components ------------------------------------------------------------------------------ {{{
@@ -118,7 +114,7 @@ local function my_progress()
 end
 
 local function my_winid_bufnr()
-  return string.format("%s:%s", vim.api.nvim_get_current_win(), vim.api.nvim_get_current_buf())
+  return string.format("%s(%s)", vim.api.nvim_get_current_win(), vim.api.nvim_get_current_buf())
 end
 -- }}}
 
@@ -199,6 +195,7 @@ lualine.setup {
       },
     },
     lualine_c = {
+      -- { my_winid_bufnr },
       {
         'diagnostics',
         update_in_insert = false, -- Update diagnostics in insert mode.
@@ -262,7 +259,6 @@ lualine.setup {
         -- modifiers pressed (s(shift)/c(ctrl)/a(alt)/m(meta)...)
         --on_click = function(number, mouse, modifiers) end,
       },
-      -- { my_winid_bufnr },
     },
     lualine_y = {
       {
@@ -317,6 +313,7 @@ lualine.setup {
     lualine_a = {},
     lualine_b = {},
     lualine_c = {
+      -- { my_winid_bufnr },
       {
         'diagnostics',
         update_in_insert = false, -- Update diagnostics in insert mode.
@@ -362,7 +359,6 @@ lualine.setup {
           return { fg = Colors.g245.g, bg = my_theme.inactive.c.bg }
         end,
       },
-      -- { my_winid_bufnr },
     },
     lualine_y = {},
     lualine_z = {},
