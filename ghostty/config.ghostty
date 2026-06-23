@@ -6,6 +6,10 @@
 # 可自定义 icon, https://noahskelton.github.io/ghostty-icons/
 macos-icon = blueprint
 
+# 使用 system clipboard (OSC 52)
+clipboard-read = allow
+clipboard-write = allow
+
 # font ---------------------------------------------------------------------------------------------
 # `$ ghostty +list-fonts`, 多个 font-family 按顺序 fallback
 
