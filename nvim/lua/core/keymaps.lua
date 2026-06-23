@@ -151,10 +151,11 @@ local keymaps = {
 
   -- <leader> -------------------------------------------------------------------------------------
   -- copy / paste
-  -- 如果是 linux server 系统, 则没有系统级 clipboard, 则无法使用该 copy 方式.
   -- 在没有 cilpboard 的情况下如果想要粘贴 register 中的内容到 command line,
   -- 需要使用 |:<CTRL-R> {register}|. `:help c_CTRL-R`.
-  {'x', '<leader>y', '"*y', opt, 'Copy to system clipboard'},
+  -- Windows & MacOS 没有 "Primary Selection", 所以这里使用 + 而不是 *
+  {'n', '<leader>y', '"+y', opt, 'Copy to system clipboard'},
+  {'x', '<leader>y', '"+y', opt, 'Copy to system clipboard'},
 
   -- fold code, 这里是模拟 vscode keymaps.
   {'n', '<leader>kj', 'zR', opt, "Open all folds"},
