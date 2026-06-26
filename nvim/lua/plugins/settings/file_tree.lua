@@ -185,7 +185,7 @@ end
 
 -- }}}
 
--- `:help nvim-tree-setup` -------------------------------------------------------------------------
+-- `:help nvim-tree-setup`
 local config = {
   -- NOTE: on_attach 主要是设置 keymaps 的.
   -- ":help nvim-tree.on_attach" & ":help nvim-tree-mappings"
@@ -223,8 +223,8 @@ local config = {
   -- }}}
 
   view = {
-    -- BUG: 在 float mode 下 fs.trash 当前 buffer 会报错.
-    float = {
+    -- BUG: 在 float mode 下 fs.trash 当前 buffer 会报错
+    float = {  --------------------------------------------- {{{
       enable = false,  -- true: floating window | false: split window
       open_win_config = {
         relative = "editor",
@@ -235,6 +235,8 @@ local config = {
         col = 0,
       },
     },
+    -- }}}
+
     side = "left", -- left / right
     width = 36,    -- OR "25%"
     preserve_window_proportions = true, -- VVI: 使用 split window 时, 缓存所有 window 的大小和位置.
@@ -291,9 +293,10 @@ local config = {
   update_focused_file = {
     -- 可以使用 `:NvimTreeFindFile!`
     enable = false,  -- `:e file` 时, 更新 tree, 展开文件夹直到找到该文件.
-    update_root = false,  -- VVI: Update the root directory of the tree if
-                          -- the file is not under current root directory.
-    ignore_list = {},
+    update_root = {
+      enable = false,
+      ignore_list = {},
+    },
   },
 
   git = {
