@@ -30,20 +30,16 @@ if not lazy_status_ok then
   return
 end
 
--- `nvim dir` 打开文件夹时直接加载 nvim-tree.lua, `nvim file` 打开 file 时不加载 nvim-tree.lua, 通过快捷键加载.
-local isfile = true
-local finfo = vim.uv.fs_stat(vim.api.nvim_buf_get_name(0))
-if finfo and finfo.type == 'directory' then
-  isfile = false
-end
 
--- `:help lazy.nvim`
+-- `:help lazy.nvim.txt`
 -- https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/editor.lua
 -- 如果插件被 require(xxx) or pcall(require, xxx) 会马上加载.
 local plugins = {
   {
     "folke/lazy.nvim",
     version = "*",
+
+    lazy = false,
   },
 
   -- Performence & Functions -----------------------------------------------------------------------
@@ -51,6 +47,8 @@ local plugins = {
     "nvim-lua/plenary.nvim",
     commit = "74b06c6",
     priority = 1000,  -- 只在 lazy=false 的情况下有效. 影响加载顺序, 默认值为 50.
+
+    lazy = false,
   },
 
   {
@@ -59,9 +57,11 @@ local plugins = {
     -- build = ":MasonUpdate", -- :MasonUpdate updates All Registries, NOT packages.
     config = function() require("plugins.settings.mason_tool_installer") end,
 
-    -- VVI: 需要在 $PATH 或者 vim.env.PATH 中加入 mason.setup({ "install_root_dir" }) 路径,
-    -- 否则不能延迟加载 mason, 需要设置下面的 priority.
+    -- VVI: 需要在 $PATH 或者 vim.env.PATH 中加入 mason.setup({ "install_root_dir" }) 路径
+    -- 不能延迟加载 mason, 需要设置下面的 priority.
     priority = 999,
+
+    lazy = false,
   },
 
   {
@@ -218,6 +218,8 @@ local plugins = {
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",  -- VVI: vim.lsp.enable() 必须在 cmp_nvim_lsp 之后加载, 否则无法提供代码补全
     },
+
+    lazy = false,
   },
 
   {
@@ -235,7 +237,7 @@ local plugins = {
     config = function() require("plugins.settings.formatter_conform") end,
 
     event = "BufWritePre",
-    cmd = {"Format", "ToggleAutoFormat"}
+    cmd = { "Format", "ToggleAutoFormat" }
   },
 
   -- File explorer ---------------------------------------------------------------------------------
@@ -247,17 +249,17 @@ local plugins = {
 
     -- VVI: 本文件最后设置: 在 `nvim dir` 直接打开文件夹的时直接加载 nvim-tree.lua.
     keys = {
-      { '<S-Tab>',     '<cmd>NvimTreeToggle<CR>',    desc='filetree: toggle' },
-      {'<leader><CR>', '<cmd>NvimTreeFindFile!<CR>', desc='filetree: jump to file' },
+      { '<S-Tab>',      '<cmd>NvimTreeToggle<CR>',    desc='filetree: toggle' },
+      { '<leader><CR>', '<cmd>NvimTreeFindFile!<CR>', desc='filetree: jump to file' },
     },
 
-    -- `nvim dir` 打开文件夹时直接加载 nvim-tree.lua,
-    -- `nvim file` 打开 file 时不加载 nvim-tree.lua, 通过快捷键加载.
-    lazy = isfile,
+    -- NOTE: 使用 event, cmd, ft, keys 的时候, lazy 默认为 true.
+    lazy = false,
   },
 
   {
     "nvim-tree/nvim-web-devicons",
+
     lazy = true, -- dep of nvim-tree & bufferline
   },
 
@@ -285,9 +287,9 @@ local plugins = {
     commit = "9e848e0",
     config = function() require("plugins.settings.debug.nvim_dap") end,
 
-    cmd = {'Debug', 'DapToggleBreakpoint', 'DapContinue'},
+    cmd = { 'Debug', 'DapToggleBreakpoint', 'DapContinue' },
     keys = {
-      {'<F9>', '<cmd>DapToggleBreakpoint<CR>', desc = "Fn 9: debug: Toggle Breakpoint"},
+      { '<F9>', '<cmd>DapToggleBreakpoint<CR>', desc = "Fn 9: debug: Toggle Breakpoint" },
     },
   },
 
@@ -360,12 +362,14 @@ local plugins = {
   {
     "iamcco/markdown-preview.nvim",
     commit = "a923f5f",
+
     -- VVI: 每次 Update 后需要重新执行 `lua vim.fn["mkdp#util#install"]()` or `call mkdp#util#install()`
     build = function()
       -- 先 load 才能执行下面的 install()
       lazy.load({ plugins = { "markdown-preview.nvim" }})
       vim.fn["mkdp#util#install"]()
     end,
+
     config = function()
       local css_path = vim.fn.stdpath("config") .. "/lua/plugins/settings/my_markdown.css"
       if vim.uv.fs_stat(css_path) then
