@@ -70,14 +70,30 @@ end
 --
 ---@param dir string
 local function jump_to_dir(dir)
-  -- NOTE: 新窗口中打开 dir, 因为 nvim-tree 设置 hijack_netrw=true & hijack_directories=true,
-  -- 如果直接使用 `:edit dir` 会导致打开 dir 的窗口被关闭 (hijack).
-  -- 如果 hijack_netrw=false & hijack_directories=false, 则这里可以使用 `:tabnew dir`
-  pcall(require, "nvim-tree")  -- 加载 nvim-tree.lua
+  -- 寻找 tabpage 中是否有显示 netrw 的 window.
+  local netrw_win = -1
+  for _, win_id in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+    local bufnr = vim.api.nvim_win_get_buf(win_id)
+    if vim.bo[bufnr].filetype == 'netrw' then
+      netrw_win = win_id
+      break
+    end
+  end
 
-  -- 在整个 editor 最左侧打开一个 window, nvim_open_win() 无法实现
-  -- vim.cmd("topleft 36vsplit " .. vim.fn.fnameescape(dir))
-  vim.cmd.vsplit({ mods={ split="topleft" }, range={ 36 }, args={ vim.fn.fnameescape(dir) }})
+  if vim.fn.win_gotoid(netrw_win) == 1 then
+    -- 进入 netrw_win, 然后 `:edit dir`
+    vim.cmd.edit({ args={ vim.fn.fnameescape(dir) }})
+  else
+    -- 在整个 editor 最左侧打开一个 window, nvim_open_win() 无法实现
+    -- vim.cmd("topleft 36vsplit " .. vim.fn.fnameescape(dir))
+    vim.cmd.vsplit({ mods={ split="topleft" }, range={ 36 }, args={ vim.fn.fnameescape(dir) }})
+  end
+
+  -- 如果使用 nvim-tree 插件则使用 change_root() 切换到 dir
+  local status_ok, nt_api = pcall(require, "nvim-tree.api")
+  if status_ok then
+    nt_api.tree.change_root(dir)
+  end
 end
 
 -- jump to file/directory
