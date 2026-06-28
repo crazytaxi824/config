@@ -6,6 +6,7 @@ export LANG=en_US.UTF-8 # 设置了 LANG, 但是没有设置 LC_ALL 的情况下
 
 # VVI: 很多工具的 config 文件保存地址, eg: Ghostty, Neovim, Lazygit, Yazi ...
 export XDG_CONFIG_HOME="$HOME/.config"
+[[ -d "$XDG_CONFIG_HOME" ]] || mkdir -p "$XDG_CONFIG_HOME"
 
 # NOTE: 手动安装 https://github.com/neovim/neovim/releases/
 # Run: `$ xattr -c ./nvim-macos-arm64.tar.gz` (to avoid "unknown developer" warning)

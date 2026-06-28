@@ -1,33 +1,78 @@
 # --- [ antidote ] plugins manager -----------------------------------------------------------------
+# https://antidote.sh/install, `Ultra high performance install`
 # `$ antidote update` 更新插件
 () {
-	# antidote 安装地址
-	# local ANTIDOTE_DIR="$(brew --prefix antidote)/share/antidote"
-	local ANTIDOTE_DIR="/opt/homebrew/opt/antidote/share/antidote"   # 节省性能, 不用执行 (brew --prefix antidote)
+	local antidote_install_dir=$(brew --prefix antidote 2>/dev/null)
+	if [[ -z "$antidote_install_dir" ]]; then
+		printf "\e[33m%s\e[0m\n" "antidote is not installed, 'brew install antidote'"
+		return 1
+	fi
 
-	local zsh_plugins_txt="$XDG_CONFIG_HOME/antidote/zsh_plugins.txt"   # antidote 配置文件
+	# antidote 安装地址
+	local ANTIDOTE_DIR="$antidote_install_dir/share/antidote"
+
+	# antidote 文件是否完整
+	if [[ ! -f "$ANTIDOTE_DIR/functions/antidote" || ! -f "$ANTIDOTE_DIR/antidote.zsh" ]]; then
+		printf "\e[1;31m%s\e[0m\n" "antidote components error"
+		return 1
+	fi
+
+	# 确保文件夹存在
+	local zsh_plugins_dir="$XDG_CONFIG_HOME/antidote"
+	[[ -d "$zsh_plugins_dir" ]] || mkdir -p "$zsh_plugins_dir"
+
+	local zsh_plugins_txt="$zsh_plugins_dir/zsh_plugins.txt"   # antidote 配置文件
 	local zsh_plugins_static="$HOME/.antidote_plugins.zsh"   # antidote 生成的静态文件
 
-	if [[ -f "$ANTIDOTE_DIR/functions/antidote" && -f "$ANTIDOTE_DIR/antidote.zsh" ]]; then
-		# Lazy-load antidote from its functions directory.
-		# NOTE: 这里使用 autoload 而没用 source $ANTIDOTE_DIR/antidote.zsh, 因为外部需要
-		# `antidote update` 命令来更新 plugins, 但又不用每次都 source zsh 文件, 节约性能.
-		fpath=($ANTIDOTE_DIR/functions $fpath)
-		autoload -Uz antidote
-		# source "$ANTIDOTE_DIR/antidote.zsh"
+	# 确保配置文件存在
+	[[ -f "$zsh_plugins_txt" ]] || touch "$zsh_plugins_txt"
 
-		# 确保配置文件存在
-		[[ -f "$zsh_plugins_txt" ]] || touch "$zsh_plugins_txt"
+	# Lazy-load antidote from its functions directory.
+	# NOTE: 这里使用 autoload 而没用 source $ANTIDOTE_DIR/antidote.zsh, 因为外部需要
+	# `antidote update` 命令来更新 plugins, 但又不用每次都 source zsh 文件, 节约性能.
+	fpath=($ANTIDOTE_DIR/functions $fpath)
+	autoload -Uz antidote
 
-		# 生成静态 zsh 文件
-		# "$zsh_plugins_txt" -nt "$zsh_plugins_static" A 比 B 更新
-		if [[ ! -f "$zsh_plugins_static" || "$zsh_plugins_txt" -nt "$zsh_plugins_static" ]]; then
-			antidote bundle < "$zsh_plugins_txt" > "$zsh_plugins_static"
+	# 自动更新 antidote update plugins -----------------------------------------
+	if [[ -f "$zsh_plugins_static" ]]; then
+		local last_timestamp
+
+		# Mac/BSD 用 -f '%m'; Linux/GNU 用 -c '%Y'
+		if last_timestamp=$(stat -f '%m' "$zsh_plugins_static" 2>/dev/null) ||
+		  last_timestamp=$(stat -c '%Y' "$zsh_plugins_static" 2>/dev/null); then
+			# `$EPOCHSECONDS` 只有 zsh 可以用, bash/sh 用不了; $(date +%s) sh/bash/zsh 都可以用
+			local current_timestamp=$EPOCHSECONDS
+			# local current_timestamp=$(date +%s)
+
+			if (( current_timestamp - last_timestamp > 7 * 86400 )); then
+				if read -q "?antidote update? [y/N] "; then
+					# 换行
+					echo
+					# 更新 antidote plugins
+					antidote update
+					# 利用 mtime 强制 antidote bundle 更新
+					touch "$zsh_plugins_txt"
+				else
+					printf "\n\e[33m%s\e[0m\n" "antidote update canceled"
+					# 利用 mtime 推迟下次 antidote update 检查
+					touch "$zsh_plugins_static"
+				fi
+			fi
 		fi
-
-		# 加载编译好的静态脚本
-		source "$zsh_plugins_static"
 	fi
+
+	# 生成静态 zsh 文件 --------------------------------------------------------
+	# -nt  "newer than"
+	if [[ ! "$zsh_plugins_static" -nt "$zsh_plugins_txt" ]]; then
+		# >|  强制覆盖 (Force Clobber)
+		antidote bundle < "$zsh_plugins_txt" >| "$zsh_plugins_static"
+	fi
+
+	# zsh-autosuggestions inline 代码提示的颜色. 默认是 8, bold black 颜色
+	ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=240"
+
+	# 加载编译好的静态脚本
+	source "$zsh_plugins_static"
 }
 
 # VVI: 加载 zsh-completions 后再使用 `compinit`
@@ -35,7 +80,7 @@ autoload -Uz compinit
 autoload -Uz zrecompile
 () {
 	# 检查 .zcompdump 是否存在，且它的最后修改时间是否在 n 小时以内
-    local dump=(~/.zcompdump(N.mh-12))
+	local dump=(~/.zcompdump(N.mh-12))
 	if (( $#dump )); then
 		# 缓存很新，开启 -C 参数盲读(读取 xxx.zwc 文件)，不作任何磁盘扫描 (实现终端秒开)
 		compinit -C -d ~/.zcompdump
@@ -49,9 +94,6 @@ autoload -Uz zrecompile
 		zrecompile -p ~/.zcompdump >/dev/null 2>&1
 	fi
 }
-
-# zsh-autosuggestions inline 代码提示的颜色. 默认是 8, bold black 颜色
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=240"
 
 # --- [ fzf ] --------------------------------------------------------------------------------------
 # VVI: 必须放在 `compinit` 之后
