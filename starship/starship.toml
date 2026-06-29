@@ -9,10 +9,8 @@ palette = "my_colors"
 format = """
 $python\
 $username\
-${custom.git_branch}\
 $hostname\
-$git_branch\
-$git_status\
+${custom.git_branch}\
 $directory\
 $fill\
 $status\
@@ -43,13 +41,16 @@ ssh_symbol = "🌐"
 style = "fg:black bg:magenta_bg bold"
 format = "[ $ssh_symbol $hostname ]($style)"
 
-[git_branch]
-# symbol = ""
-disabled = true
+# disable default git_branch
+# [git_branch]
+# # symbol = ""
+# disabled = true
 
-[git_status]
-disabled = true
+# disable default git_status
+# [git_status]
+# disabled = true
 
+# 自定义 git branch & status 显示
 [custom.git_branch]
 # bg: \e[48;5;xxxm
 # fg: \e[38;5;xxxm
@@ -83,6 +84,7 @@ truncation_length = 99
 truncate_to_repo = false
 truncation_symbol = "…/"
 
+# exit code
 [status]
 disabled = false
 symbol = "err:"
