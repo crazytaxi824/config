@@ -48,8 +48,7 @@ local function leave_snippet(bufnr)
   end
 end
 
-local unlink_group = vim.api.nvim_create_augroup( 'UnlinkSnipGroup', {clear = true})
-
+local unlink_group = vim.api.nvim_create_augroup( 'my_unlink_snippet_luasnip', {clear = true})
 vim.api.nvim_create_autocmd("ModeChanged", {
   group = unlink_group,
   --pattern = {'s:n', 'i:*'},  -- NOTE: 如果从 'Select' -> 'Normal', 或者 'Insert' -> 'any' mode.

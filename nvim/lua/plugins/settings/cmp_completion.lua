@@ -289,5 +289,18 @@ end
 
 -- }}}
 
+-- mode -> Normal 时, 终止 vim.snippet 的 jump()
+local unlink_group = vim.api.nvim_create_augroup( 'my_unlink_snippet_cmp', {clear = true})
+vim.api.nvim_create_autocmd("ModeChanged", {
+  group = unlink_group,
+  pattern = {'s:n'},  -- 'Select' -> 'Normal' mode
+  callback = function(args)
+    if vim.snippet.active() then
+      vim.snippet.stop()
+    end
+  end,
+  desc = "cmp: unlink/stop current snippet on ModeChanged",
+})
+
 
 
