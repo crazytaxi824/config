@@ -302,7 +302,7 @@ local plugins = {
 
   {
     "rcarriga/nvim-dap-ui",  -- ui for "nvim-dap"
-    commit = "1a66cab",
+    commit = "cc9dd33",
     config = function() require("plugins.settings.debug.nvim_dapui") end,
     dependencies = {
       "mfussenegger/nvim-dap",
@@ -317,7 +317,7 @@ local plugins = {
   -- telescope 的 preview syntax 默认使用的是 treesitter, 如果没有 treesitter 则使用 vim syntax highlights.
   {
     "nvim-telescope/telescope.nvim",
-    version = "v0.2.*",  -- master branch is nightly version.
+    version = "*",  -- master branch is nightly version.
     config = function() require("plugins.settings.telescope_fzf") end,
     dependencies = {
       "nvim-lua/plenary.nvim",
@@ -349,7 +349,8 @@ local plugins = {
   -- https://github.com/lewis6991/gitsigns.nvim#troublenvim
   {
     "lewis6991/gitsigns.nvim",
-    version = "v2.*",
+    -- version = "v2.*",
+    commit = "31d6fb2",
     config = function() require("plugins.settings.git_signs") end,
     dependencies = { "folke/trouble.nvim" },
 
