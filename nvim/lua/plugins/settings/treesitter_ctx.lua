@@ -8,24 +8,30 @@ local max_ln = 3
 
 -- https://github.com/nvim-treesitter/nvim-treesitter-context#configuration
 ts_ctx.setup{
-  enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
-  max_lines = max_ln, -- How many lines the window should span. Values <= 0 mean no limit.
-                 -- VVI: 会受到 set scrolloff 影响.
-  min_window_height = 0, -- Minimum editor window height to enable context. Values <= 0 mean no limit.
+  enable = true,
+
+  -- How many lines the window should span. Values <= 0 mean no limit.
+  -- Can be '<int>%' like '30%' - to specify percentage of win.height
+  -- VVI: 会受到 set scrolloff 影响.
+  max_lines = max_ln,
+
+  -- Minimum editor window height to enable context. Values <= 0 mean no limit.
+  min_window_height = 0,
+
   line_numbers = true,   -- show line numbers.
   trim_scope = 'outer',  -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
-
-  -- VVI: The options below are exposed but shouldn't require your attention,
-  --      you can safely ignore them.
-  --mode = 'cursor',  -- Line used to calculate context. Choices: 'cursor', 'topline'
-  --zindex = 20, -- The Z-index of the context window
-  --separator = nil,  -- Separator between context and content. Should be a single character string, like '-'.
 }
 
 -- highlight --------------------------------------------------------------------------------------
--- NOTE: 需要设置和 BufferLineBufferSelected 的 bg 颜色一致.
-vim.api.nvim_set_hl(0, 'TreesitterContext', {ctermbg=Colors.black.c, bg=Colors.black.g})  -- 默认 link to NormalFloat
-vim.api.nvim_set_hl(0, 'TreesitterContextLineNumber', {ctermbg=Colors.black.c, bg=Colors.black.g}) -- 默认 link to LineNr
+-- 默认 link to NormalFloat
+vim.api.nvim_set_hl(0, 'TreesitterContext', { ctermbg=Colors.black.c, bg=Colors.black.g })
+vim.api.nvim_set_hl(0, 'TreesitterContextBottom', { underline=true, sp=Colors.g243.g })
+
+-- 默认 link to LineNr
+vim.api.nvim_set_hl(0, 'TreesitterContextLineNumber', {
+  ctermfg=Colors.magenta_keywd.c, fg=Colors.magenta_keywd.g,
+  ctermbg=Colors.black.c, bg=Colors.black.g,
+})
 
 
 
