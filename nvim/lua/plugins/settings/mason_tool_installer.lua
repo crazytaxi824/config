@@ -36,6 +36,16 @@ mason.setup {
 
   max_concurrent_installers = 4,  -- 并发安装数量.
 
+  -- pip = {
+  --   install_args = {},
+  -- },
+
+  npm = {
+    -- VVI: 防止 npm 蠕虫感染
+    -- 禁止 npm install 时执行 package.json 中的 preinstall/postinstall shell 命令.
+    install_args = { "--ignore-scripts" },
+  },
+
   ui = {
     check_outdated_packages_on_open = true,  -- 打开面板时检查 outdated lsp
     border = {"","▄","","","","▀","",""},  -- 默认为: 'none'
