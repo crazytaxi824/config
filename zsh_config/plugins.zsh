@@ -1,5 +1,5 @@
 # --- [ antidote ] plugins manager -----------------------------------------------------------------
-# https://antidote.sh/install, `Ultra high performance install`
+# DOCS: https://antidote.sh/install, `Ultra high performance install`
 # `$ antidote update` 更新插件
 () {
 	local antidote_install_dir=$(brew --prefix antidote 2>/dev/null)
@@ -17,15 +17,15 @@
 		return 1
 	fi
 
-	# 确保文件夹存在
+	# 确保 antidote 配置文件(夹)存在
 	local zsh_plugins_dir="$XDG_CONFIG_HOME/antidote"
 	[[ -d "$zsh_plugins_dir" ]] || mkdir -p "$zsh_plugins_dir"
 
-	local zsh_plugins_txt="$zsh_plugins_dir/zsh_plugins.txt"   # antidote 配置文件
-	local zsh_plugins_static="$HOME/.antidote_plugins.zsh"   # antidote 生成的静态文件
-
-	# 确保配置文件存在
+	local zsh_plugins_txt="$zsh_plugins_dir/zsh_plugins.txt"
 	[[ -f "$zsh_plugins_txt" ]] || touch "$zsh_plugins_txt"
+
+	# antidote 生成的静态文件地址
+	local zsh_plugins_static="$HOME/.antidote_plugins.zsh"
 
 	# Lazy-load antidote from its functions directory.
 	# NOTE: 这里使用 autoload 而没用 source $ANTIDOTE_DIR/antidote.zsh, 因为外部需要
@@ -35,16 +35,16 @@
 
 	# 自动更新 antidote update plugins -----------------------------------------
 	if [[ -f "$zsh_plugins_static" ]]; then
-		local last_timestamp
+		local last_modify
 
 		# Mac/BSD 用 -f '%m'; Linux/GNU 用 -c '%Y'
-		if last_timestamp=$(stat -f '%m' "$zsh_plugins_static" 2>/dev/null) ||
-		  last_timestamp=$(stat -c '%Y' "$zsh_plugins_static" 2>/dev/null); then
-			# `$EPOCHSECONDS` 只有 zsh 可以用, bash/sh 用不了; $(date +%s) sh/bash/zsh 都可以用
-			local current_timestamp=$EPOCHSECONDS
-			# local current_timestamp=$(date +%s)
+		if last_modify=$(stat -f '%m' "$zsh_plugins_static" 2>/dev/null) ||
+		  last_modify=$(stat -c '%Y' "$zsh_plugins_static" 2>/dev/null); then
+			# time now
+			local time_now=$(date +%s)
 
-			if (( current_timestamp - last_timestamp > 7 * 86400 )); then
+			# N 秒后 update 一次
+			if (( time_now - last_modify > 7 * 86400 )); then
 				if read -q "?antidote update? [y/N] "; then
 					# 换行
 					echo
@@ -53,7 +53,7 @@
 					# 利用 mtime 强制 antidote bundle 更新
 					touch "$zsh_plugins_txt"
 				else
-					printf "\n\e[33m%s\e[0m\n" "antidote update canceled"
+					printf "\n\e[33m%s\e[0m\n" "antidote update cancelled"
 					# 利用 mtime 推迟下次 antidote update 检查
 					touch "$zsh_plugins_static"
 				fi
