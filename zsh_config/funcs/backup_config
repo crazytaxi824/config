@@ -28,7 +28,7 @@ do
 done
 
 if [[ $backupFoldersExist == false ]]; then
-	printf "\e[31m%s\e[0m\n" '请手动创建 Backup 文件夹, Backup Canceled!'
+	printf "\e[31m%s\e[0m\n" '请手动创建 Backup 文件夹, Backup Cancelled!'
 	return 2
 fi
 
