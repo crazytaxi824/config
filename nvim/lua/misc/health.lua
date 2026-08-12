@@ -47,7 +47,8 @@ local function check_mason_tools()
 
   local pkgs = require("mason-registry").get_installed_packages()
 
-  ---@type string[]  not installed by mason
+  -- not installed by Mason
+  ---@type string[]
   local t = vim.tbl_filter(function(elem)
     for _, pkg in ipairs(pkgs) do
       if elem == pkg.name then
@@ -58,6 +59,7 @@ local function check_mason_tools()
     return true
   end, mason_tools)
 
+  -- in $PATH
   for _, tool in ipairs(t) do
     if vim.fn.executable(tool) == 1 then
       health.warn(tool, { "is not installed by Mason" })
