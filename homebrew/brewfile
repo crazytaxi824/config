@@ -69,7 +69,7 @@ brew "ffmpeg"
 cask "ghostty"
 #cask "alacritty"
 cask "visual-studio-code"  # vscode
-#cask "postman"    # http(s) 测试工具
+#cask "bruno"      # http(s) 测试工具, postman 替代工具
 #cask "wireshark"  # http 请求分析工具
 
 # 数据库工具
