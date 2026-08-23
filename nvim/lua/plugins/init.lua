@@ -224,7 +224,7 @@ local plugins = {
 
   {
     "nvimtools/none-ls.nvim",
-    commit = "01f8e62",
+    commit = "c4b82bb",
     config = function() require("lsp.null_ls") end,
     dependencies = { "nvim-lua/plenary.nvim" },
 
@@ -233,7 +233,7 @@ local plugins = {
 
   {
     "stevearc/conform.nvim",
-    commit = "619363c",
+    commit = "016802d",
     config = function() require("plugins.settings.formatter_conform") end,
 
     event = "BufWritePre",
@@ -350,7 +350,7 @@ local plugins = {
   {
     "lewis6991/gitsigns.nvim",
     -- version = "v2.*",
-    commit = "31d6fb2",
+    commit = "5be654f",
     config = function() require("plugins.settings.git_signs") end,
     dependencies = { "folke/trouble.nvim" },
 
