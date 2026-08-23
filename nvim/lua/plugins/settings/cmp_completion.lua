@@ -131,19 +131,19 @@ cmp.setup {
     ["<C-e>"] = cmp.mapping(cmp.mapping.abort(), { "i", "c", "s" }),
 
     -- 如果 backspace 过程中删除了关键 char - "." 则 reset, 用于修复 snip 和 buff 无法显示的问题.
-    ["<BS>"] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-        local line = vim.api.nvim_get_current_line()
-        if col > 0 and line:sub(col, col) == '.' then
-          fallback()  -- 执行快捷键原本的功能
-          cmp.core:reset() -- HACK: :reset() cmp cache. fix: [snip] and [buff] missing when delete dot(.) char.
-          return
-        end
-      end
-
-      fallback()  -- 执行快捷键原本的功能
-    end),
+    -- ["<BS>"] = cmp.mapping(function(fallback)
+    --   if cmp.visible() then
+    --     local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+    --     local line = vim.api.nvim_get_current_line()
+    --     if col > 0 and line:sub(col, col) == '.' then
+    --       fallback()  -- 执行快捷键原本的功能
+    --       cmp.core:reset() -- HACK: :reset() cmp cache. fix: [snip] and [buff] missing when delete dot(.) char.
+    --       return
+    --     end
+    --   end
+    --
+    --   fallback()  -- 执行快捷键原本的功能
+    -- end),
 
     -- SelectBehavior: 选择 item 的时候不会将内容填到行内.
     ["<Up>"] = cmp.mapping(cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior, count = 1 }),  { "i", "c", "s" }),

@@ -129,7 +129,7 @@ local plugins = {
   -- Auto Completion -------------------------------------------------------------------------------
   {
     "hrsh7th/nvim-cmp",
-    commit = "a1d5048",
+    commit = "2ffe79f",
     config = function() require("plugins.settings.cmp_completion") end,
     dependencies = {
       -- VVI: 只有 "cmp-nvim-lsp" 不需要在 "nvim-cmp" 之后加载, 其他 module 都需要在 "nvim-cmp" 之后再加载, 否则报错.
