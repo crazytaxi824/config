@@ -35,7 +35,7 @@ local my_theme = {
 
 -- command: normal; replace: insert
 my_theme.command = vim.tbl_deep_extend('force', my_theme.normal, { a = { bg = Colors.green_bg.g }})
-my_theme.replace = vim.tbl_deep_extend('force', my_theme.insert, { a = { bg = "#AF0000" }})
+my_theme.replace = vim.tbl_deep_extend('force', my_theme.insert, { a = { bg = "#AF0000", fg = Colors.white.g }})
 
 -- }}}
 
