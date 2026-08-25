@@ -118,7 +118,6 @@ cask "iina"     # 视频播放器
 #cask "basictex"  # 1GB, 提供 pandoc --pdf-engine=xelatex
 
 # 浏览器
-#cask "google-chrome"
-#cask "microsoft-edge"
+#cask "brave-browser"   # chromium 内核: "google-chrome", "microsoft-edge"
 #cask "firefox"
 #cask "tor-browser"
