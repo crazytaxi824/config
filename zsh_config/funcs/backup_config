@@ -39,16 +39,16 @@ do
 	# 'mkdir -p' 如果文件夹不存在则创建, 递归创建所有文件夹.
 	mkdir -p $backup_folder/HOME/.ssh      # ~/.ssh/
 
-	# ~/.ssh/config,
-	# VVI: ssh credentials 需要手动拷贝, 不能备份
+	# ~/.ssh/config
+	# VVI: ssh private key 需要手动转移, 不能备份
 	cp $HOME/.ssh/config $backup_folder/HOME/.ssh/
 
 	# zprofile & zshrc
 	cp $HOME/.zprofile $backup_folder/HOME/
 	cp $HOME/.zshrc $backup_folder/HOME/
 
-	# mfaerevaag/wd.git  plugin backup
-	cp $HOME/.warprc $backup_folder/HOME/   # oh-my-zsh plugin `wd` config file
+	# mfaerevaag/wd.git
+	cp $HOME/.warprc $backup_folder/HOME/
 
 	# vimrc
 	cp $HOME/.vimrc $backup_folder/HOME/
