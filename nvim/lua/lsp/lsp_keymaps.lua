@@ -59,8 +59,8 @@ M.diagnostic_keymaps = function(bufnr)
     {"n", "<D-F8>", function() vim.diagnostic.jump({count=-1, float=true}) end, opts, "Fn 8: diagnostic: goto Prev Error"},
 
     -- 将 diagnostics error 放入 quickfix list.
-    -- 也可以使用 vim.diagnostic.setqflist({open = false}) 禁止打开 quickfix window
-    {"n", "<leader>q", function() vim.diagnostic.setqflist() end, opts, 'diagnostic: put errors into quickfix'},
+    -- 也可以使用 vim.diagnostic.setqflist({open = false}) 只设置不打开 quickfix window
+    --{"n", "<leader>cq", function() vim.diagnostic.setqflist() end, opts, 'diagnostic: put errors into quickfix'},
 
     -- code action, for lspconfig & null-ls.
     {"n", "<leader>ca", function() vim.lsp.buf.code_action() end, opts, 'LSP: Code Action'},
