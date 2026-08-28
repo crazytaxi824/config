@@ -36,13 +36,13 @@ mason.setup {
 
   max_concurrent_installers = 4,  -- 并发安装数量.
 
-  -- pip = {
-  --   install_args = {},
-  -- },
+  pip = {
+    -- VVI: 只允许安装 wheel, 防止供应链投毒.
+    install_args = { "--only-binary=:all:" },
+  },
 
   npm = {
-    -- VVI: 防止 npm 蠕虫感染
-    -- 禁止 npm install 时执行 package.json 中的 preinstall/postinstall shell 命令.
+    -- VVI: 禁止 npm install 时执行 package.json 中的 preinstall/postinstall shell 命令. 防止供应链投毒.
     install_args = { "--ignore-scripts" },
   },
 
