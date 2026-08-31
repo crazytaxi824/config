@@ -7,6 +7,7 @@ M.move_bracket = function(m)
 
   local line = vim.api.nvim_get_current_line()
   local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+  -- local curr_char = line:sub(col, col)
   local next_char = line:sub(col + 1, col + 1)
 
   if vim.tbl_contains(chars, next_char) then
