@@ -18,11 +18,10 @@ autopairs.setup {
   -- https://github.com/windwp/nvim-autopairs#default-values
   disable_filetype = { "TelescopePrompt", "spectre_panel" },  -- 指定文件中不使用 autopairs
   enable_check_bracket_line = false,  -- NOTE: 不好用. 同一行中如果有 ), 则在左边输入 ( 时, 不自动补充.
-  enable_bracket_in_quote = true,     -- false - 在 "" 中不自动补全 {} () []
+  enable_bracket_in_quote = true,     -- 在 "" 中也自动补全 {} () []
   enable_moveright = true,   -- 如果在 |) 输入 ), 不会键入一个新的 ), 而是将光标移动到 )|
-  enable_afterquote = true,  -- 如果在 |"xxx" 输入 (, 会自动在 "xxx"| 后补充 ).
-  ignored_next_char = "[%.]",  -- 如果光标后一位是 . 则不运行 autopairs
-                               -- VVI: 不要使用 [%S], 因为在 (|) 输入 ", 会被 [%S] 阻止.
+  enable_afterquote = false,  -- NOTE: 不好用. 如果在 |"xxx" 输入 (, 会自动在 "xxx"| 后补充 )
+  ignored_next_char = "[%.]",  -- 如果光标后一位匹配正则表达式, 则不 autopair.
 
   -- key mapping
   map_cr = true,  -- adding a newline when you press <cr> inside brackets
