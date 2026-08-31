@@ -202,7 +202,7 @@ local plugins = {
 
   {
     "windwp/nvim-autopairs",
-    commit = "7b9923a",
+    commit = "430522f",
     config = function() require("plugins.settings.autopairs") end,
     dependencies = {"hrsh7th/nvim-cmp"},  -- cmp.event:on() 设置.
 
