@@ -224,7 +224,8 @@ local keymaps = {
   {'n', '<C-k>', '<cmd>mes clear<CR>', opt, 'message clear'},
   {'n', '<D-k>', '<cmd>mes clear<CR>', opt, 'message clear'},
 
-  -- move ) ] } to end of line/word, like autopairs FastWrap
+  -- move (), [], {}, "", '' to begin/end of line/word, like autopairs FastWrap
+  -- VVI: <S-D-3>, <S-D-4>, <S-D-5> 属于 MacOS (截屏)快捷键.
   {'i', '<D-4>', function() key_fn.move_char.forward('$') end, opt, 'move next char to end of line' },
   {'i', '<D-e>', function() key_fn.move_char.forward('e') end, opt, 'move next char to end of <word>' },
   {'i', '<D-E>', function() key_fn.move_char.forward('E') end, opt, 'move next char to end of <WORD>' },
