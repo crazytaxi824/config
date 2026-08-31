@@ -225,8 +225,14 @@ local keymaps = {
   {'n', '<D-k>', '<cmd>mes clear<CR>', opt, 'message clear'},
 
   -- move ) ] } to end of line/word, like autopairs FastWrap
-  {'i', '<D-e>', function() key_fn.move_char.move_bracket('$') end, opt, 'move next char to end of line' },
-  {'i', '<D-E>', function() key_fn.move_char.move_bracket('e') end, opt, 'move next char to end of <word>' },
+  {'i', '<D-4>', function() key_fn.move_char.forward('$') end, opt, 'move next char to end of line' },
+  {'i', '<D-e>', function() key_fn.move_char.forward('e') end, opt, 'move next char to end of <word>' },
+  {'i', '<D-E>', function() key_fn.move_char.forward('E') end, opt, 'move next char to end of <WORD>' },
+
+  {'i', '<D-0>', function() key_fn.move_char.backward('0') end, opt, 'move next char to begin of line' },
+  {'i', '<D-6>', function() key_fn.move_char.backward('^') end, opt, 'move next char to begin of line' },
+  {'i', '<D-b>', function() key_fn.move_char.backward('b') end, opt, 'move next char to begin of <word>' },
+  {'i', '<D-B>', function() key_fn.move_char.backward('B') end, opt, 'move next char to begin of <WORD>' },
 
   -- TEST: alacritty settings window.option_as_alt 设置 Option 当做 ALT key 使用.
   -- {'n', '<D-o>', function() print("<D-o>") end, opt, 'Test: Cmd/Super-o'},
