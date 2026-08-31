@@ -3,7 +3,7 @@ local M = {
   page = require('utils.keymaps.page'),
   shift = require('utils.keymaps.shift'),
   section = require('utils.keymaps.jump_to_section'),
-  move_char = require('utils.keymaps.move_next_char'),
+  move_char = require('utils.keymaps.move_char'),
 
   close_popup_wins = require('utils.keymaps.close_all_popup_win').close_pop_wins,
   win_choose = require('utils.keymaps.jump_to_win').choose,
