@@ -3,6 +3,8 @@ if not status_ok then
   return
 end
 
+-- `:help nvim-ts-autotag-setup`
+-- VVI: `nvim-ts-autotag` will not work unless you have treesitter parsers (like `html`) installed
 autotag.setup({
   opts = {
     -- Defaults
@@ -17,3 +19,6 @@ autotag.setup({
     }
   }
 })
+
+
+

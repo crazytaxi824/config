@@ -39,6 +39,7 @@ local plugins = {
     "folke/lazy.nvim",
     version = "*",
 
+    -- NOTE: 使用 'event', 'cmd', 'ft', 'keys' 的时候, lazy 默认为 true.
     lazy = false,
   },
 
@@ -105,6 +106,7 @@ local plugins = {
   {
     "nvim-treesitter/nvim-treesitter-context",  -- 顶部显示 cursor 所在 function 的定义.
     config = function() require("plugins.settings.treesitter_ctx") end,
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
 
     event = "VeryLazy",
   },
@@ -114,6 +116,7 @@ local plugins = {
     "windwp/nvim-ts-autotag",  -- auto close tag <div></div>
     commit = "88c1453",
     config = function() require("plugins.settings.treesitter_autotag") end,
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
 
     event = "InsertEnter",
   },
@@ -122,6 +125,7 @@ local plugins = {
     "lukas-reineke/indent-blankline.nvim",
     version = "*",
     config = function() require("plugins.settings.indentline") end,  -- setup() 设置 use_treesitter = true
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
 
     event = "VeryLazy",
   },
@@ -150,7 +154,7 @@ local plugins = {
     "hrsh7th/cmp-nvim-lsp",  -- LSP source for nvim-cmp
     commit = "cbc7b02",
 
-    lazy = true,  -- nvim-lspconfig 加载时自动加载. VVI: 必须在 vim.lsp.enable() 之前加载, 否则无法提供代码补全
+    lazy = true,  -- nvim-lspconfig 加载时自动加载. VVI: 必须在 vim.lsp.enable() 之前加载, 否则无法提供代码补全.
   },
 
   {
@@ -204,7 +208,7 @@ local plugins = {
     "windwp/nvim-autopairs",
     commit = "430522f",
     config = function() require("plugins.settings.autopairs") end,
-    dependencies = {"hrsh7th/nvim-cmp"},  -- cmp.event:on() 设置.
+    dependencies = { "hrsh7th/nvim-cmp" },  -- cmp.event:on() 设置.
 
     event = "InsertEnter",
   },
@@ -216,7 +220,7 @@ local plugins = {
     -- commit = "d88ae66",
     config = function() require("lsp.lsp_config") end,
     dependencies = {
-      "hrsh7th/cmp-nvim-lsp",  -- VVI: vim.lsp.enable() 必须在 cmp_nvim_lsp 之后加载, 否则无法提供代码补全
+      "hrsh7th/cmp-nvim-lsp",  -- VVI: vim.lsp.enable() 必须在 cmp_nvim_lsp 之后加载, 否则无法提供代码补全.
     },
 
     lazy = false,
@@ -237,7 +241,7 @@ local plugins = {
     config = function() require("plugins.settings.formatter_conform") end,
 
     event = "BufWritePre",
-    cmd = { "Format", "ToggleAutoFormat" }
+    cmd = { "Format", "ToggleAutoFormat" },
   },
 
   -- File explorer ---------------------------------------------------------------------------------
@@ -253,7 +257,6 @@ local plugins = {
       { '<leader><CR>', '<cmd>NvimTreeFindFile!<CR>', desc='filetree: jump to file' },
     },
 
-    -- NOTE: 使用 event, cmd, ft, keys 的时候, lazy 默认为 true.
     lazy = false,
   },
 
@@ -379,7 +382,7 @@ local plugins = {
     end,
 
     -- NOTE: 无法使用 cmd = { "MarkdownPreview", "MarkdownPreviewStop", "MarkdownPreviewToggle" }, 作为加载条件.
-    ft = {"markdown"},  -- markdown-preview 加载时间 < 1ms
+    ft = { "markdown" },  -- markdown-preview 加载时间 < 1ms
   },
 
   {

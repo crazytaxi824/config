@@ -53,7 +53,7 @@ indent_blankline.setup({
   },
 
   -- `:help ibl.config.scope`, cursor 所在位置的 treesitter node 显示 underline, 需要 treesitter.
-  -- NOTE: Scope requires treesitter to be set up.
+  -- VVI: "Scope" requires treesitter to be set up.
   scope = {
     enabled = true,
     show_start = false,  -- Underline first line of the scope. eg: "func Foo()"
