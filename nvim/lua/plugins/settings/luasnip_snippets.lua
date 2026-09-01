@@ -29,6 +29,10 @@ require("luasnip.loaders.from_vscode").lazy_load({
   exclude = {"go"},  -- 排除 go, 使用自定义的 snippets
 })
 
+-- NOTE: 其他 snippet 引擎
+-- require("luasnip.loaders.from_snipmate").load({ include = { "c" } }) -- Load only snippets for c.
+-- require("luasnip.loaders.from_lua").load({ include = { "c" } })
+
 -- luasnip log level
 if __Debug._luasnip then
   luasnip.log.set_loglevel('debug')  -- "error"|"warn"(*)|"info"|"debug"
