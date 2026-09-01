@@ -95,7 +95,7 @@ local plugins = {
   -- but if you want to extend a query use the `after/queries/` directory.
   {
     "nvim-treesitter/nvim-treesitter",
-    branch = "main",  -- NOTE: 'master' branch is locked for backward compatibility.
+    branch = "main",  -- VVI: 'master' branch is locked for backward compatibility.
     config = function() require("plugins.settings.treesitter") end,
 
     lazy = false,
