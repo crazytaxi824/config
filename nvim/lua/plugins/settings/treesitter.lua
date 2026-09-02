@@ -17,13 +17,17 @@ ts.setup({
 --   -- overwrite neovim builtin Highlight
 --   "lua", "query", "c", "vim", "vimdoc", "markdown", "markdown_inline",
 --
+--   -- for coding languages
+--   "go", "python", "html", "css", "styled",
+--   "comment", "printf", "regex", "luadoc",
+--
 --   -- comment languages/filetypes
 --   "git_config", "gitattributes", "gitignore",
---   "comment", "diff", "editorconfig", "ssh_config", "sql",
---   "json", "json5", "toml", "yaml", "csv", "xml", "regex", "proto", "dockerfile",
+--   "diff", "editorconfig", "ssh_config", "sql",
+--   "json", "json5", "toml", "yaml", "csv", "xml", "proto", "dockerfile",
 --
 --   -- NOTE: 需要 6GB Memory to Compile
---   -- "latex", "mermaid", "gitcommit", "git_rebase",
+--   -- "latex", "gitcommit", "git_rebase",
 -- }
 --
 -- vim.schedule(function ()
