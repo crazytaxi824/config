@@ -58,8 +58,7 @@ local plugins = {
     -- build = ":MasonUpdate", -- :MasonUpdate updates All Registries, NOT packages.
     config = function() require("plugins.settings.mason_tool_installer") end,
 
-    -- VVI: 需要在 $PATH 或者 vim.env.PATH 中加入 mason.setup({ "install_root_dir" }) 路径
-    -- 不能延迟加载 mason, 需要设置下面的 priority.
+    -- VVI: 需要在 vim.env.PATH ($PATH) 中加入 mason.setup({ "install_root_dir" }) 路径
     priority = 999,
 
     lazy = false,
