@@ -42,17 +42,26 @@ local config = {
 
   -- `:help vim.diagnostic.Opts.Float` extends `:help vim.lsp.util.open_floating_preview.Opts`
   float = {
-    focusable = false,
-    style = "minimal",
-    border = Nerd_icons.border,
-    source = true,   -- diagnostic message 中带 linter 名字
     header = "",
-    prefix = "",
-    -- noautocmd = true,  -- float window 不加载 Buf* 相关 autocmd. VVI: 不要设置为 true.
-    close_events = { "WinScrolled", "CursorMoved", "CursorMovedI", "InsertCharPre" },
+    source = false,
+    -- prefix = "",
+    -- suffix = "",
+    format = function(diag)
+      for _, client in ipairs(vim.lsp.get_clients({ bufnr = diag.bufnr })) do
+        local ns = vim.lsp.diagnostic.get_namespace(client.id)
+        if ns == diag.namespace then
+          return string.format("[%s: %s] %s", client.name, diag.source, diag.message)
+        end
+      end
 
-    -- BUG: Invalid 'height': expected positive Integer, 如果报错的 line 上方的高度不够就会报这个错误
-    -- anchor_bias = 'above',
+      return string.format("[%s] %s", diag.source, diag.message)  -- 找不到 lsp client
+    end,
+
+    -- Extends: vim.lsp.util.open_floating_preview.Opts
+    focusable = false,
+    border = Nerd_icons.border,
+    close_events = { "WinScrolled", "CursorMoved", "CursorMovedI", "InsertCharPre" },
+    -- anchor_bias = 'above',  -- BUG: Invalid 'height': 如果报错的 line 上方的高度不够会报错
   },
 }
 
