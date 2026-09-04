@@ -36,6 +36,12 @@ mason.setup {
 
   max_concurrent_installers = 4,  -- 并发安装数量.
 
+  -- 使用 Socket.dev firewall
+  -- firewall = {
+  --   enabled = true,
+  --   auto_managed = true,  -- true: 使用 Mason 自己下载的 sfw | false: 使用 $PATH 中的 sfw
+  -- },
+
   pip = {
     -- VVI: 只允许安装 wheel, 防止供应链投毒.
     install_args = { "--only-binary=:all:" },
