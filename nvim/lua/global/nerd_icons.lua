@@ -66,7 +66,8 @@ Nerd_icons = {
     Event         = { text="event",  icon="" },  -- 󰃯   󰧓 󰸗
   },
 
-  border = {"▄","▄","▄","█","▀","▀","▀","█"},  -- `:h nvim_open_win()`
+  border = {"▗","▄","▖","▌","▘","▀","▝","▐"},  -- "Block Elements"
+  -- border = {"▄","▄","▄","█","▀","▀","▀","█"},  -- "Block Elements"
   -- border = {"┌","─","┐","│","┘","─","└","│"},  -- "Box Drawings Light"
   -- border = {"╭","─","╮","│","╯","─","╰","│"},  -- "Box Drawings Light Arc"
   separator = '┃',  -- 用于 fillchars, bufferline offsets.separator

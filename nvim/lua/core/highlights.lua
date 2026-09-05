@@ -67,7 +67,7 @@ Highlights.PmenuSbar = { link = "Pmenu" }
 Highlights.PmenuThumb = { ctermbg=Colors.g240.c, bg=Colors.g240.g }
 -- NormalFloat 默认 link to Pmenu
 Highlights.NormalFloat = { link="Pmenu" }
--- Floating Window border fg 颜色需要和 Pmenu 的 bg 颜色相同. border = {"▄","▄","▄","█","▀","▀","▀","█"}
+-- Floating Window border fg 颜色需要和 Pmenu 的 bg 颜色相同. "global.nerd_icons.border"
 Highlights.FloatBorder = { ctermfg=Highlights.Pmenu.ctermbg, fg=Highlights.Pmenu.bg }
 
 -- Command Mode 自动补全 Completion 选中的 item 颜色
