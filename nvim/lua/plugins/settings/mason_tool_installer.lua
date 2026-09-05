@@ -54,6 +54,9 @@ mason.setup {
   ui = {
     check_outdated_packages_on_open = true,  -- 打开面板时检查 outdated lsp
     border = Nerd_icons.border,
+    -- width = 0.6,
+    -- height = 0.75,
+
     icons = {
       package_installed = Nerd_icons.check,
       package_pending = Nerd_icons.arrows.right,

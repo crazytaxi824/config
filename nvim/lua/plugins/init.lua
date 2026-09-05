@@ -474,7 +474,7 @@ local opts = {
     missing = false, -- auto install missing plugins
   },
   ui = {
-    size = { width = 0.6, height = 0.75 },
+    -- size = { width = 0.6, height = 0.75 },  -- 尽量和 mason 设置相同
     border = Nerd_icons.border,
     icons = {
       list = { "" }
