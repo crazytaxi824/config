@@ -10,7 +10,7 @@ local hs = require("lsp.custom_requests.hover_short")
 
 local M = {}  -- module, 仅提供两个 keymaps 方法.
 
-local hover_opts = {
+local hover_cfg = {
   -- `:help vim.lsp.util.open_floating_preview.Opts`
   focusable = false,  -- false: 重复执行 vim.lsp.buf.hover() 时不会进入 floating window.
   border = Nerd_icons.border,
@@ -34,13 +34,13 @@ M.textDocument_keymaps = function(bufnr)
 
     -- NOTE: 连续两次 F4 会进入 floating window, q 退出 floating window.
     -- 如果在 handlers.lua 中 overwrite 设置 {focusable = false}, 则不会进入 floating window.
-    {"n", "<F4>", function() vim.lsp.buf.hover(hover_opts) end, opts, "LSP: Hover"},
-    {"i", "<F4>", function() vim.lsp.buf.hover(hover_opts) end, opts, "LSP: Hover"},
+    {"n", "<F4>", function() vim.lsp.buf.hover(hover_cfg) end, opts, "LSP: Hover"},
+    {"i", "<F4>", function() vim.lsp.buf.hover(hover_cfg) end, opts, "LSP: Hover"},
 
     -- NOTE: 自定义的 hover_short() request, 在 hover() 基础上只显示 function signature, 不显示 comments.
     -- 只有在 cursor inside 括号 Add(|) 中时才能使用, 主要是为了方便在使用函数的过程中查看函数的入参.
-    {"n", "<S-CR>", function() hs.toggle_hover_short() end, opts, "LSP: Hover_Short"},
-    {"i", "<S-CR>", function() hs.toggle_hover_short() end, opts, "LSP: Hover_Short"},
+    {"n", "<S-CR>", function() hs.toggle_hover_short(hover_cfg) end, opts, "LSP: Hover_Short"},
+    {"i", "<S-CR>", function() hs.toggle_hover_short(hover_cfg) end, opts, "LSP: Hover_Short"},
 
     {"n", "<F12>",   function() vim.lsp.buf.definition() end, opts, "LSP: Definition"},
     {"n", "<D-F12>", function() vim.lsp.buf.references() end, opts, "LSP: References"},

@@ -112,7 +112,8 @@ end
 local hover_winid
 
 -- toggle hover window
-function M.toggle_hover_short()
+---@param config vim.lsp.buf.hover.Opts
+function M.toggle_hover_short(config)
   if hover_winid and vim.api.nvim_win_is_valid(hover_winid) then
     vim.api.nvim_win_close(hover_winid, true)
     hover_winid = nil
@@ -130,18 +131,11 @@ function M.toggle_hover_short()
       }
     }
 
-    -- NOTE: 生成 config, 修改 hover_short floating window 显示的位置
-    ---@type vim.lsp.buf.hover.Opts
-    local config = {
+    -- NOTE: 生成 config, 指定 hover_short floating window 显示的位置
+    config = vim.tbl_deep_extend('force', config, {
       offset_x = fn_node.offset_x,
       offset_y = fn_node.offset_y,
-      focusable = false,
-      border = Nerd_icons.border,
-      anchor_bias = 'above',
-      max_width = math.floor(vim.go.columns * 0.8),
-      close_events = { "WinScrolled" },
-      silent = true,  -- 有些 linter 类型的 lsp 不返回任何 result, 导致 handler 报错.
-    }
+    })
 
     M.hover_short(config, pos_params)
   end
