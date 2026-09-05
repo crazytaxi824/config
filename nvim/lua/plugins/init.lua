@@ -475,7 +475,7 @@ local opts = {
   },
   ui = {
     size = { width = 0.6, height = 0.75 },
-    border = {"","▄","","","","▀","",""},
+    border = Nerd_icons.border,
     icons = {
       list = { "" }
     },
