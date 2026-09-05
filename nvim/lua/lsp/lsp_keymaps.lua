@@ -15,7 +15,7 @@ local hover_opts = {
   focusable = false,  -- false: 重复执行 vim.lsp.buf.hover() 时不会进入 floating window.
   border = Nerd_icons.border,
   anchor_bias = 'above',  -- popup window 优先向上弹出
-  max_width = math.floor(vim.go.columns * 0.8),
+  max_width = math.floor(vim.go.columns * 0.8),  -- 宽度为整个屏幕的 80%
 
   -- events, to trigger close floating window
   -- https://github.com/neovim/neovim/blob/master/runtime/lua/vim/lsp/util.lua
