@@ -6,8 +6,7 @@
 
 -- mason 安装 LSP 时使用的名字和 "nvim-lspconfig" setup() 的名字有区别.
 -- mason 安装的 tools 的名字可能和命令行工具的名字也不一样. eg: "delve" 的命令行工具文件名是 "dlv"
--- 名字的对应 https://github.com/williamboman/mason-lspconfig.nvim/blob/main/doc/server-mapping.md
--- mason-lspconfig 对应文件 https://github.com/williamboman/mason-lspconfig.nvim/blob/main/lua/mason-lspconfig/mappings/server.lua
+-- mason-lspconfig 对应名字 https://github.com/mason-org/mason-registry
 ---+-----------------------------+--------------------------------------------+------------------------------------------------+
 ---| cmd_line_tool Name          |  Mason Name                                | "neovim/nvim-lspconfig" setup() Name           |
 ---+-----------------------------+--------------------------------------------+------------------------------------------------+
@@ -15,7 +14,7 @@
 ---+-----------------------------+--------------------------------------------+------------------------------------------------+
 ---| vscode-json-language-server | `:MasonInstall json-lsp`                   | require("lspconfig")["jsonls"].setup(opts)     |
 ---+-----------------------------+--------------------------------------------+------------------------------------------------+
----| typescript-language-server  | `:MasonInstall typescript-language-server` | require("lspconfig")["tsserver"].setup(opts)   |
+---| vscode-html-language-server | `:MasonInstall html-lsp`                   | require("lspconfig")["html"].setup(opts)       |
 ---+-----------------------------+--------------------------------------------+------------------------------------------------+
 ---| dlv                         | `:MasonInstall delve`                      |                                                |
 ---+-----------------------------+--------------------------------------------+------------------------------------------------+

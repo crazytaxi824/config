@@ -1,6 +1,5 @@
 -- 以下命令行工具可以通过 mason.nvim 安装, 也可以通过 brew 安装到 $PATH 中.
--- filetypes: 可以通过 `:LspInfo` 查看. 用于 autocmd.
--- lspconfig <-> mason: https://github.com/williamboman/mason-lspconfig.nvim/blob/main/doc/server-mapping.md
+-- lspconfig <-> mason: https://github.com/mason-org/mason-registry
 -- lspconfig config: https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
 
 local M = {}
