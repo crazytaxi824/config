@@ -62,12 +62,6 @@ mason.setup {
     },
 
     keymaps = {
-      toggle_package_expand = "<CR>", -- expand a server in the UI
-      install_package = "i",          -- install a server
-      check_package_version = "c",    -- check LSP version under the cursor
-      check_outdated_packages = "C",  -- check all LSP version
-      update_package = "u",           -- reinstall/update a server
-      update_all_packages = "U",      -- update all installed servers
       uninstall_package = "D",        -- uninstall a lsp server
       toggle_help = "?",
     },
