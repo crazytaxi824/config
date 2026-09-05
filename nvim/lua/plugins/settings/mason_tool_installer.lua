@@ -36,7 +36,7 @@ mason.setup {
 
   max_concurrent_installers = 4,  -- 并发安装数量.
 
-  -- 使用 Socket.dev firewall
+  -- 使用 Socket.dev firewall, 防止依赖被投毒
   -- firewall = {
   --   enabled = true,
   --   auto_managed = true,  -- true: 使用 Mason 自己下载的 sfw | false: 使用 $PATH 中的 sfw
