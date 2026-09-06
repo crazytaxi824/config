@@ -66,12 +66,17 @@ dapui.setup({
   floating = {
     max_height = nil, -- These can be integers or a float between 0 and 1.
     max_width = nil, -- Floats will be treated as percentage of your screen.
-    border = "single", -- "single", "double", "rounded" NOTE: 这里的 boarder 颜色是 Normal, 而不是 FloatBorder
+    border = "single", -- "single", "double", "rounded"
     mappings = {
       close = { "q", "<Esc>" },
     },
   },
 })
+
+-- highlights
+-- NOTE: DapUIFloatBorder 默认颜色是 Normal, 而不是 FloatBorder
+vim.api.nvim_set_hl(0, "DapUIFloatBorder", { fg=Colors.cyan.g, ctermfg=Colors.cyan.c })
+-- vim.api.nvim_set_hl(0, "DapUIFloatNormal", {})
 
 -- keymaps ----------------------------------------------------------------------------------------
 -- dap-ui 可用方法, `:help nvim-dap-ui` --------------------------------------- {{{
