@@ -66,10 +66,15 @@ Nerd_icons = {
     Event         = { text="event",  icon="" },  -- 󰃯   󰧓 󰸗
   },
 
-  border = {"▗","▄","▖","▌","▘","▀","▝","▐"},  -- "Block Elements"
-  -- border = {"▄","▄","▄","█","▀","▀","▀","█"},  -- "Block Elements"
+  -- ▗▄▖  ▄▄▄  ┌─┐  ╭─╮  ╔═╗
+  -- ▐ ▌  █ █  │ │  │ │  ║ ║
+  -- ▝▀▘  ▀▀▀  └─┘  ╰─╯  ╚═╝
+  border = {"▗","▄","▖","▌","▘","▀","▝","▐"},  -- "Block Elements" half
+  -- border = {"▄","▄","▄","█","▀","▀","▀","█"},  -- "Block Elements" full
   -- border = {"┌","─","┐","│","┘","─","└","│"},  -- "Box Drawings Light"
   -- border = {"╭","─","╮","│","╯","─","╰","│"},  -- "Box Drawings Light Arc"
+  -- border = {"╔","═","╗","║","╝","═","╚","║"},  -- double box
+
   separator = '┃',  -- 用于 fillchars, bufferline offsets.separator
   check = '',  --   󰄬 ✓ ✔ 󰗠   󰄲 󰄵
   close = '✕',  --   󰅖 ✕ ✖ 󰅙   󰅗
