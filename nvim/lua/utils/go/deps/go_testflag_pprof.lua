@@ -31,8 +31,13 @@ local go_test = {'go', 'test', '-count=1', '-v'}
 local function gen_extra_args(dir, flag)
   local extra_args
   if flag == 'trace' then
+    -- -trace trace.out
     extra_args = { '-trace', 'trace.out' }
   else
+    -- -cpuprofile cpu.out
+    -- -memprofile mem.out
+    -- -mutexprofile mutex.out
+    -- -blockprofile block.out
     extra_args = { string.format('-%sprofile', flag), string.format('%s.out', flag) }
   end
 
