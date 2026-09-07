@@ -2,13 +2,13 @@
 -- NerdFont: nf-cod-xxx, nf-md-xxx, nd-fa-xxx, nd-oct-xxx(special icons)
 Nerd_icons = {
   diag = {
-    -- "", "", "", "󰛨",
-    "", "", "󰋽", "󰛩",
-
     --    󰅙 󰅚
     --  
     -- 󰋽   󰋼 
     -- 󰛩 󰛨 ⚐ ⚑  -- NerdFont: lightbulb, flag
+
+    -- "", "", "", "󰛨",
+    "", "", "󰋽", "󰛩",
   },
   arrows = {
     up    = '↑',  --     󰁝 󰛃  󰳡 󰳢  󰁣 󰁢
@@ -76,11 +76,14 @@ Nerd_icons = {
   -- border = {"╔","═","╗","║","╝","═","╚","║"},  -- double box
 
   separator = '┃',  -- 用于 fillchars, bufferline offsets.separator
-  check = '',  --   󰄬 ✓ ✔ 󰗠   󰄲 󰄵
-  close = '✕',  --   󰅖 ✕ ✖ 󰅙   󰅗
+  check = '',  -- ✓ ✔ ☑     │   󰄬 │ 󰗠   󰄲 󰄵
+  close = '✕',  -- ✕ ✖ ✗ ✘ ☒ │   󰅖 │ 󰅙   󰅗
   star  = '',  -- 󰓎    ★  
   dot   = '●',  -- ● ○ ◌   
   dot_h = '○',
   lock  = '󰌾',  --   󰌾   
   ellipsis = '',  -- … 
 }
+
+
+
