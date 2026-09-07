@@ -25,6 +25,7 @@ font-family = "Menlo"
 # for Emoji: ⭐️ ✅ ❌
 font-family = "Apple Color Emoji"
 
+# 可以显示中文: 粗体, 斜体, 粗斜体
 # Simplified Chinese (SC), Traditional Chinese (TC), Hong Kong Traditional Chinese (HC)
 # Slab: (英文字符)衬线, Fixed: 无 Ligatures (连体字符)
 #
