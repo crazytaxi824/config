@@ -107,7 +107,7 @@ scrollback-limit = 30000000
 # color --------------------------------------------------------------------------------------------
 background = #0f151e
 foreground = #c5c8c6
-background-opacity = 0.96
+#background-opacity = 0.96
 
 # 0 (black)   = 234 = #1c1c1c
 # 1 (red)     = 203 = #ff5f5f   可执行文件 (executable file)
