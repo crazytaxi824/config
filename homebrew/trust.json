@@ -1,8 +1,3 @@
 {
-  "trustedformulae": [
-    "gittower/tap/git-flow-next"
-  ],
-  "trustedcasks": [
-    "mylocal/repo/font-sarasa-gothic"
-  ]
+  "trustedformulae": ["gittower/tap/git-flow-next"]
 }
