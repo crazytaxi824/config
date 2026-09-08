@@ -47,7 +47,10 @@ vim.cmd.colorscheme({ args = { 'default' }})
 Highlights = {}
 -- editor ------------------------------------------------------------------------------------------
 -- window background color
-Highlights.Normal = { ctermfg=Colors.white.c, fg=Colors.white.g }
+Highlights.Normal = {
+  ctermfg=Colors.white.c, fg=Colors.white.g,
+  ctermbg=Colors.g234.c,  bg='#19191c',
+}
 -- non-focus window background color
 Highlights.NormalNC = { link="Normal" }
 -- Visual mode seleced text color
@@ -109,7 +112,7 @@ Highlights.CursorLineNr = {
 -- 相当于 hi clear SignColumn, 默认有 bg 颜色.
 Highlights.SignColumn = {}
 -- textwidth column 颜色
-Highlights.ColorColumn = { ctermbg=Colors.g234.c, bg=Colors.g234.g }
+Highlights.ColorColumn = { ctermbg=Colors.g235.c, bg=Colors.g235.g }
 -- Quick Fix 选中行颜色
 Highlights.QuickFixLine = {
   ctermfg=Colors.blue_special.c, fg=Colors.blue_special.g,
