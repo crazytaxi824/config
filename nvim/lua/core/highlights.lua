@@ -55,7 +55,7 @@ Highlights.Visual = { ctermbg=24, bg='#264F78' }
 
 -- VVI: Pmenu & FloatBorder 背景色需要设置为相同, 影响很多窗口的颜色.
 -- Completion Menu & Floating Window 颜色
-Highlights.Pmenu = { ctermbg=Colors.g235.c, bg=Colors.g235.g }
+Highlights.Pmenu = { ctermbg=Colors.g236.c, bg=Colors.g236.g }
 -- Completion Menu 选中的 item 的颜色
 Highlights.PmenuSel = {
   ctermbg=Colors.g238.c, bg='#04395E',
@@ -65,16 +65,14 @@ Highlights.PmenuSel = {
 Highlights.PmenuSbar = { link = "Pmenu" }
 -- Completion Menu scroll bar 滚动条颜色, bg 颜色是 scroll bar 的颜色
 Highlights.PmenuThumb = { ctermbg=Colors.g240.c, bg=Colors.g240.g }
--- NormalFloat 默认 link to Pmenu
-Highlights.NormalFloat = { link="Pmenu" }
 
-if Nerd_icons.border[2] == '▄' or Nerd_icons.border[6] == '▀' then
-  -- 如果 border 是 "Block Elements" 则 Floating Window border fg 颜色
-  -- 需要和 Pmenu 的 bg 颜色相同. Nerd_icons.border
-  Highlights.FloatBorder = { ctermfg=Highlights.Pmenu.ctermbg, fg=Highlights.Pmenu.bg }
-else
-  Highlights.FloatBorder = { ctermfg=Colors.cyan.c, fg=Colors.cyan.g }
-end
+-- NormalFloat 默认 link to Pmenu
+Highlights.NormalFloat = { ctermbg=Highlights.Pmenu.ctermbg, bg=Highlights.Pmenu.bg }
+Highlights.FloatBorder = { ctermfg=Highlights.NormalFloat.ctermbg, fg=Highlights.NormalFloat.bg }
+
+-- VVI: for `Nerd_icons.border`, FloatBorder with shade and without shade
+Highlights.FloatBorderN = { ctermfg=Highlights.NormalFloat.ctermbg, fg=Highlights.NormalFloat.bg }
+Highlights.FloatBorderS = { ctermfg=Highlights.NormalFloat.ctermbg, fg=Highlights.NormalFloat.bg, ctermbg=16, bg='#00001C' }
 
 -- Command Mode 自动补全 Completion 选中的 item 颜色
 Highlights.WildMenu = {
@@ -102,7 +100,7 @@ Highlights.Underlined = { underline=true }
 -- 行号颜色
 Highlights.LineNr = { ctermfg=Colors.g240.c, fg=Colors.g240.g }
 -- 光标所在行颜色
-Highlights.CursorLine = { ctermbg=Colors.g236.c, bg=Colors.g236.g }
+Highlights.CursorLine = { ctermbg=Colors.g235.c, bg=Colors.g235.g }
 -- 光标所在行号的颜色
 Highlights.CursorLineNr = {
   ctermfg=Colors.yellow.c, fg=Colors.yellow.g,

@@ -69,11 +69,22 @@ Nerd_icons = {
   -- ▗▄▖  ▄▄▄  ┌─┐  ╭─╮  ╔═╗
   -- ▐ ▌  █ █  │ │  │ │  ║ ║
   -- ▝▀▘  ▀▀▀  └─┘  ╰─╯  ╚═╝
-  border = {"▗","▄","▖","▌","▘","▀","▝","▐"},  -- "Block Elements" half
+  -- border = {"▗","▄","▖","▌","▘","▀","▝","▐"},  -- "Block Elements" half
   -- border = {"▄","▄","▄","█","▀","▀","▀","█"},  -- "Block Elements" full
   -- border = {"┌","─","┐","│","┘","─","└","│"},  -- "Box Drawings Light"
   -- border = {"╭","─","╮","│","╯","─","╰","│"},  -- "Box Drawings Light Arc"
   -- border = {"╔","═","╗","║","╝","═","╚","║"},  -- double box
+  border = {
+    -- FloatBorderN, FloatBorderS 必须在 `Highlights` 中定义
+    { "▗", "FloatBorderN" },
+    { "▄", "FloatBorderN" },
+    { "▖", "FloatBorderN" },
+    { "▌", "FloatBorderS" },
+    { "▘", "FloatBorderS" },
+    { "▀", "FloatBorderS" },
+    { "▝", "FloatBorderN" },
+    { "▐", "FloatBorderN" },
+  },
 
   separator = '┃',  -- 用于 fillchars, bufferline offsets.separator
   check = '',  -- ✓ ✔ ☑     │   󰄬 │ 󰗠   󰄲 󰄵
