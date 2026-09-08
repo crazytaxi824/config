@@ -25,7 +25,8 @@ local function gs_keymaps(bufnr)
     {'n', '<leader>gR', function() git_signs.reset_buffer() end, opt, "git: Reset current buffer"},
     {'n', '<leader>gs', function() git_signs.toggle_signs() end, opt, "git: Toggle sings"},
     {'n', '<leader>gg', function() gitsigns_hunk_actions() end, opt, "git: Actions for Hunk"},
-    {'n', '<leader>gd', function() git_signs.preview_hunk_inline() end, opt, "git: Preview hunk"},
+    {'n', '<leader>gd', function() git_signs.preview_hunk_inline() end, opt, "git: Preview hunk inline"},
+    {'n', '<leader>gD', function() git_signs.preview_hunk() end, opt, "git: Preview hunk"},
     {'n', '<leader>gf', function()
       vim.cmd.tabnew({ args = { vim.fn.fnameescape(vim.api.nvim_buf_get_name(0)) }})  -- open current file in new Tab.
       git_signs.diffthis('~')  -- diff this file with old comment.
