@@ -10,8 +10,8 @@ local hs = require("lsp.custom_requests.hover_short")
 
 local M = {}  -- module, 仅提供两个 keymaps 方法.
 
+---@type vim.lsp.buf.hover.Opts
 local hover_cfg = {
-  -- `:help vim.lsp.util.open_floating_preview.Opts`
   focusable = false,  -- false: 重复执行 vim.lsp.buf.hover() 时不会进入 floating window.
   border = Nerd_icons.border,
   anchor_bias = 'above',  -- popup window 优先向上弹出
