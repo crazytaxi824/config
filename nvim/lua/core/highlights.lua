@@ -184,8 +184,8 @@ Highlights.Special = { ctermfg=Colors.blue_special.c, fg=Colors.blue_special.g }
 Highlights.SpecialChar = { ctermfg=180, fg='#D7BA7D' }  -- format verbs %v %d \n \t...
 Highlights.PreProc = { link = "Keyword" }  -- package, import
 
-Highlights.Delimiter = { link = "Normal" }  -- 符号颜色, [] () {} ; : ...
-Highlights.Operator  = { link = "Normal" }  -- = != == > < ...
+Highlights.Delimiter = { ctermfg=Colors.white.c, fg=Colors.white.g }  -- 符号颜色, [] () {} ; : ...
+Highlights.Operator  = { ctermfg=Colors.white.c, fg=Colors.white.g }  -- = != == > < ...
 
 -- diagnostics 颜色设置 ----------------------------------------------------------------------------
 -- NOTE:
@@ -425,6 +425,19 @@ end,
   complete = function()
     return vim.tbl_keys(Colors)
   end,
+})
+
+-- list Pre-defined colors
+vim.api.nvim_create_user_command("DebugColorListNames", function(params)
+  for name, hex in pairs(vim.api.nvim_get_color_map()) do
+    print(string.format("%s -> #%06x", name, hex))
+  end
+end,
+{
+  nargs = 0,
+  bang = true,
+  bar = true,
+  desc = 'list all Pre-Defined Colors',
 })
 
 
