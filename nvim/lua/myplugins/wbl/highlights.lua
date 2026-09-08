@@ -1,13 +1,13 @@
 local hl = {
   -- base color
   default = {
-    ctermfg=Colors.g246.c, fg=Colors.g246.g,
-    ctermbg=Colors.g236.c, bg=Colors.g236.g,
+    ctermfg=Colors.g243.c, fg=Colors.g243.g,
+    ctermbg=Colors.black.c, bg=Colors.black.g,
   },
   selected = {
     ctermfg=Colors.gold_fn.c, fg=Colors.gold_fn.g,
-    -- ctermbg=Colors.black.c, bg=Colors.black.g,
-    bold = true,
+    ctermbg=Colors.g237.c, bg=Colors.g237.g,
+    -- bold = true,
   },
   tabnr = {
     ctermfg=Colors.black.c, fg=Colors.black.g,
@@ -21,14 +21,14 @@ local hl = {
   },
   prefix = {
     ctermfg=Colors.g241.c, fg=Colors.g241.g,
-    bold = false,
+    -- bold = false,
   },
   indicator = {
     ctermfg=Colors.cyan.c, fg=Colors.cyan.g,
   },
   modified = {
     ctermfg=Colors.cyan.c, fg=Colors.cyan.g,
-    bold = true,
+    -- bold = true,
   },
 
   diagnostic_error = vim.tbl_extend('force', Highlights.DiagnosticError, { bold=true }),

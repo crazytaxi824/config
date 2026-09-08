@@ -23,14 +23,16 @@ ts_ctx.setup{
 }
 
 -- highlight --------------------------------------------------------------------------------------
+local ctx_bg = Colors.g237  -- same as WinBarLine selected buffer bg
+
 -- 默认 link to NormalFloat
-vim.api.nvim_set_hl(0, 'TreesitterContext', { ctermbg=Colors.black.c, bg=Colors.black.g })
+vim.api.nvim_set_hl(0, 'TreesitterContext', { ctermbg=ctx_bg.c, bg=ctx_bg.g })
 vim.api.nvim_set_hl(0, 'TreesitterContextBottom', { underline=true, sp=Colors.g243.g })
 
 -- 默认 link to LineNr
 vim.api.nvim_set_hl(0, 'TreesitterContextLineNumber', {
   ctermfg=Colors.magenta_keywd.c, fg=Colors.magenta_keywd.g,
-  ctermbg=Colors.black.c, bg=Colors.black.g,
+  ctermbg=ctx_bg.c, bg=ctx_bg.g,
 })
 
 
