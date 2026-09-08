@@ -474,8 +474,12 @@ local opts = {
     missing = false, -- auto install missing plugins
   },
   ui = {
-    -- size = { width = 0.6, height = 0.75 },  -- 尽量和 mason 设置相同
     border = Nerd_icons.border,
+    backdrop = 100,  -- 会造成底层 window 颜色变深
+    size = {
+      width  = 0.6,  -- mason/lazy 尽量设置为相同
+      -- height = 0.75,
+    },
     icons = {
       list = { "" }
     },

@@ -70,7 +70,7 @@ Highlights.PmenuThumb = { ctermbg=Colors.g240.c, bg=Colors.g240.g }
 Highlights.NormalFloat = { ctermbg=Highlights.Pmenu.ctermbg, bg=Highlights.Pmenu.bg }
 Highlights.FloatBorder = { ctermfg=Highlights.NormalFloat.ctermbg, fg=Highlights.NormalFloat.bg }
 
--- VVI: for `Nerd_icons.border`, FloatBorder with shade and without shade
+-- VVI: for `Nerd_icons.border`, FloatBorder with shadow and without shadow
 Highlights.FloatBorderN = { ctermfg=Highlights.NormalFloat.ctermbg, fg=Highlights.NormalFloat.bg }
 Highlights.FloatBorderS = { ctermfg=Highlights.NormalFloat.ctermbg, fg=Highlights.NormalFloat.bg, ctermbg=16, bg='#00001C' }
 

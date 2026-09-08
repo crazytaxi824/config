@@ -54,7 +54,8 @@ mason.setup {
   ui = {
     check_outdated_packages_on_open = true,  -- 打开面板时检查 outdated lsp
     border = Nerd_icons.border,
-    -- width = 0.6,
+    backdrop = 100,  -- 会造成底层 window 颜色变深
+    width = 0.6,  -- mason/lazy 尽量设置为相同
     -- height = 0.75,
 
     icons = {
