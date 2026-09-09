@@ -349,7 +349,7 @@ vim.opt.sidescrolloff = 6  -- 和上面类似, 横向留空 n 列. NOTE: 配合 
 
 -- popup widnow 不要设置 scrolloff & sidescrolloff.
 -- `:help win_gettype()`, 'popup' window setlocal scrolloff=0 | sidescrolloff=0
-vim.api.nvim_create_autocmd('WinNew', {
+vim.api.nvim_create_autocmd('BufWinEnter', {
   pattern = {"*"},
   callback = function(args)
     -- WinNew 中获取的 current win 一定是刚创建的 win_id
