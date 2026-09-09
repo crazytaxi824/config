@@ -188,7 +188,7 @@ vim.api.nvim_create_autocmd("DiagnosticChanged", {
 -- 'WinResized' 时需要更新所有正在显示的 (tab 中的) winbar
 -- NOTE: WinNew -> WinEnter -> BufEnter -> BufWinEnter -> WinResized
 -- 所以 WinResized 时获取的 buffer 和 win width 都是准确的, WinNew/WinEnter 时获取的是临时的.
-vim.api.nvim_create_autocmd({"WinResized"}, {
+vim.api.nvim_create_autocmd("WinResized", {
   group = gid,
   callback = function(args)
     -- 更新整个 current tabpage windows
