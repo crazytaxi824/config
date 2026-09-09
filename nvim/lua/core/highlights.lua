@@ -49,7 +49,7 @@ Highlights = {}
 -- window background color
 Highlights.Normal = {
   ctermfg=Colors.white.c, fg=Colors.white.g,
-  ctermbg=Colors.g234.c,  bg='#19191c',
+  ctermbg=Colors.g234.c,  bg='#1c1c24',
 }
 -- non-focus window background color
 Highlights.NormalNC = { link="Normal" }
@@ -58,7 +58,7 @@ Highlights.Visual = { ctermbg=24, bg='#264F78' }
 
 -- VVI: Pmenu & FloatBorder 背景色需要设置为相同, 影响很多窗口的颜色.
 -- Completion Menu & Floating Window 颜色
-Highlights.Pmenu = { ctermbg=Colors.g236.c, bg=Colors.g236.g }
+Highlights.Pmenu = { ctermbg=Colors.g237.c, bg=Colors.g237.g }
 -- Completion Menu 选中的 item 的颜色
 Highlights.PmenuSel = {
   ctermbg=Colors.g238.c, bg='#04395E',

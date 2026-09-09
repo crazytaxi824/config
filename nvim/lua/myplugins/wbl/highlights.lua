@@ -1,8 +1,8 @@
 local hl = {
   -- base color
   default = {
-    ctermfg=Colors.g243.c, fg=Colors.g243.g,
-    ctermbg=Colors.black.c, bg=Colors.black.g,
+    ctermfg=Colors.g244.c, fg=Colors.g244.g,
+    -- ctermbg=Colors.black.c, bg=Colors.black.g,
   },
   selected = {
     ctermfg=Colors.gold_fn.c, fg=Colors.gold_fn.g,
@@ -20,7 +20,7 @@ local hl = {
     ctermfg=Colors.white.c, fg=Colors.white.g,
   },
   prefix = {
-    ctermfg=Colors.g241.c, fg=Colors.g241.g,
+    ctermfg=Colors.g240.c, fg=Colors.g240.g,
     -- bold = false,
   },
   indicator = {

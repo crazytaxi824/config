@@ -23,7 +23,7 @@ ts_ctx.setup{
 }
 
 -- highlight --------------------------------------------------------------------------------------
-local ctx_bg = Colors.g237  -- same as WinBarLine selected buffer bg
+local ctx_bg = Colors.g237  -- NOTE: same as WinBarLine selected buffer bg
 
 -- 默认 link to NormalFloat
 vim.api.nvim_set_hl(0, 'TreesitterContext', { ctermbg=ctx_bg.c, bg=ctx_bg.g })
