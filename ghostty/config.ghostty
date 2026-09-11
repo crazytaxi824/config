@@ -56,6 +56,14 @@ font-feature = +calt
 font-feature = -liga
 font-feature = -dlig
 
+# Emoji 不受 bold italic 影响, 都使用 Apple Color Emoji
+# ✅
+font-codepoint-map = U+2705=Apple Color Emoji
+# ⚠️
+font-codepoint-map = U+26A0=Apple Color Emoji
+# ❌
+font-codepoint-map = U+274C=Apple Color Emoji
+
 # 排版 ---------------------------------------------------------------------------------------------
 # 增加行高, 按百分比(N%) 或者(Npx), █
 adjust-cell-height = 6
