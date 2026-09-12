@@ -25,7 +25,7 @@ end
 
 mason.setup {
   -- NOTE: LSP server 下载位置默认在 "~/.local/share/nvim/mason/"
-  install_root_dir = vim.fn.stdpath("data") .. "/mason_tools",
+  install_root_dir = vim.fs.joinpath(vim.fn.stdpath("data"), "mason_tools"),
 
   -- Where Mason should put its bin location in your PATH. Can be one of:
   -- - "prepend" (default, Mason's bin location is put first in PATH), 优先找到 Mason 的命令行工具.
@@ -73,11 +73,59 @@ mason.setup {
   log_level = vim.log.levels.WARN,  -- 影响 `:MasonLog`
 }
 
--- NOTE: 必须在 mason.setup() 之后才能获取到 pkgs
--- local reg = require("mason-registry")
--- for _, pkg in ipairs(reg.get_installed_package_names()) do
---   print(pkg)
--- end
+local rec_fp = vim.fs.joinpath(vim.fn.stdpath("config"), 'mason-lock.json')
+vim.api.nvim_create_user_command("MasonRecords", function(params)
+  local registry = require("mason-registry")
+  local pkgs = registry.get_installed_packages()
+
+  ---@type { name:string, version:string }[]
+  local records = {}
+  for _, pkg in ipairs(pkgs) do
+    table.insert(records, { name=pkg.name, version=pkg:get_installed_version() })
+  end
+  local json = vim.json.encode(records, { indent = '  ' })
+  vim.fn.writefile(json, rec_fp)
+  vim.notify(string.format("save mason records to '%s'", rec_fp))
+end,
+{
+  nargs = 0,
+  bang = true,
+  bar = true,
+  desc = 'mason: Record version of installed tools',
+})
+
+vim.api.nvim_create_user_command("MasonSync", function(params)
+  local stat = vim.uv.fs_stat(rec_fp)
+  if not stat then
+    vim.notify(string.format("'%s' file is not available", rec_fp), vim.log.levels.WARN)
+    return
+  end
+
+  local lines = vim.fn.readfile(rec_fp)
+  local json_str = table.concat(lines, "")
+
+  local dec_ok, records = pcall(vim.json.decode, json_str)
+  if not dec_ok then
+    vim.notify("json decode error", vim.log.levels.WARN)
+    return
+  end
+
+  local registry = require("mason-registry")
+  for _, rec in ipairs(records) do
+    local pkg_ok, pkg = pcall(registry.get_package, rec.name)
+    if pkg_ok then
+      pkg:install({ version=rec.version })
+    else
+      vim.notify(string.format("'%s' is not available in mason", rec.name), vim.log.levels.WARN)
+    end
+  end
+end,
+{
+  nargs = 0,
+  bang = true,
+  bar = true,
+  desc = 'mason: Install tools with recorded versions',
+})
 
 
 
