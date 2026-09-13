@@ -388,7 +388,7 @@ local telescope_keymaps = {
   {'n', '<leader>ff', function() my_list_builtin_pickers() end, opt, 'telescope: list builtin pickers'},
   {'n', '<leader>fd', function() builtin.find_files() end, opt, 'telescope: fd'},
   {'n', '<leader>fh', function() builtin.help_tags() end, opt, 'telescope: Vim Help Doc'},
-  {'n', '<leader>fk', function() builtin.keymaps() end, opt, 'telescope: Keymap normal Mode'},
+  --{'n', '<leader>fk', function() builtin.keymaps() end, opt, 'telescope: List Keymaps'},
   {'n', '<leader>fc', function() builtin.commands() end, opt, 'telescope: All Commands'},
   {'n', '<leader>fl', function() builtin.highlights() end, opt, 'telescope: Search Highlight'},
   {'n', '<leader>f:', function() builtin.command_history(themes.get_dropdown(dropdown_opts)) end, opt, 'telescope: History Command'},
