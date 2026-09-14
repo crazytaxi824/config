@@ -25,29 +25,34 @@ end
 -- choose window to `win_gotoid()`
 M.choose = function()
   local win_map = {}  -- cache window id map
-  local win_marker = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ"  -- 窗口标识.
+  local win_marker = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ"  -- 窗口标识
+  local max_win_num = #win_marker
+  local win_marker_idx = 1
 
   local tab_wins = vim.api.nvim_tabpage_list_wins(0)
-  if #tab_wins < 2 then
-    vim.notify("There is only 1 window to choose.")
-    return
-  elseif #tab_wins > #win_marker then
-    Notify("There are too many windows, (> #win_marker)", "WARN")
-    return
-  end
+  for _, win_id in ipairs(tab_wins) do
+    -- too many windows
+    if win_marker_idx > max_win_num then
+      break
+    end
 
-  for i, win_id in ipairs(tab_wins) do
-    local key = string.sub(win_marker, i, i)
-    -- `:help 'statusline'`
-    -- %=   Separation point between alignment sections.
-    --      Each section will be separated by an equal number of spaces.
-    -- %#   use %#HLname# for highlight group HLname.
-    -- %*   clear highlight
-    local stl_str = string.format("%%#%s#%%=%s%%=%%*", my_win_picker, key)
-    vim.api.nvim_set_option_value('statusline', stl_str, { scope='local', win=win_id })
+    local win_cfg = vim.api.nvim_win_get_config(win_id)
 
-    -- cache win_map
-    win_map[key] = win_id
+    -- 如果是 normal window 或者 focusable float window 则加入 choose list
+    if win_cfg.relative == '' or win_cfg.focusable then
+      local key = string.sub(win_marker, win_marker_idx, win_marker_idx)
+      -- `:help 'statusline'`
+      -- %=   Separation point between alignment sections.
+      --      Each section will be separated by an equal number of spaces.
+      -- %#   use %#HLname# for highlight group HLname.
+      -- %*   clear highlight
+      local stl_str = string.format("%%#%s#%%=%s%%=%%*", my_win_picker, key)
+      vim.api.nvim_set_option_value('statusline', stl_str, { scope='local', win=win_id })
+      -- TODO: remove float window statusline
+
+      win_map[key] = win_id  -- cache win_map
+      win_marker_idx = win_marker_idx + 1
+    end
   end
 
   -- VVI: 刷新 statusline 显示.
@@ -61,10 +66,10 @@ M.choose = function()
   local win_jump_id = win_map[char]
   if win_jump_id then
     vim.fn.win_gotoid(win_jump_id)
+    vim.cmd.normal({ args = {':'}, bang=true })  -- clear command line prompt message
+  else
+    vim.notify(string.format("Can Not goto window (%s)", char), vim.log.levels.WARN)
   end
-
-  -- clear command line prompt message.
-  vim.cmd.normal({ args = {':'}, bang=true })
 end
 
 return M
