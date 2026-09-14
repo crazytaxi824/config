@@ -203,7 +203,7 @@ function M.set()
   local winbar_keymaps = {
     {'n', '<S-D-[>', function() cycle('prev') end, opt, 'buffer: go to Prev buffer'},
     {'n', '<S-D-]>', function() cycle('next')  end, opt, 'buffer: go to Next buffer'},
-    {'n', '<S-D-w>', function()
+    {'n', '<leader>wr', function()
       for _, win_id in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
         -- NOTE: split window 中不会触发 BufWinEnter, 所以利用 WinResized 来解决.
         -- NOTE: "a buffer with read errors" 时所有的 buf events 都不会被触发, 同时会重置 setlocal winbar=''
@@ -213,7 +213,7 @@ function M.set()
           wb_act.set_winbar(win_id, 'auto')
         end
       end
-    end, opt, 'win: refresh all winbarline'},
+    end, opt, 'win(winbarline): refresh all WinbarLine'},
 
     {'n', '<leader>d', function() delete_current_buf() end, opt, 'buffer: Close Current Buffer/Tab'},
     {'n', '<leader>D<Left>', function() delete_buffers('left') end, opt, 'buffer: Close Left Side Buffers'},

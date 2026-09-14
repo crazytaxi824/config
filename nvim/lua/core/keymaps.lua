@@ -201,8 +201,8 @@ local keymaps = {
 
   -- Window 控制
   {'n', '<D-w>', "<C-w>", opt, 'win: command replace <C-w>'},
-  {'n', '<leader>w', function() key_fn.win_choose() end, opt, 'win: Jump to Window'},  -- 跳转到指定 window
-  {'n', '<leader>W', '<cmd>only!<CR>', opt, 'win: Close All Other Windows'},  -- 关闭所有其他窗口, 快捷键 <C-w><C-o>
+  {'n', '<leader>ww', function() key_fn.win_choose() end, opt, 'win: Jump to Window'},  -- 跳转到指定 window
+  {'n', '<leader>wa', '<cmd>only!<CR>', opt, 'win: Close All Other Windows'},  -- 关闭所有其他窗口, 快捷键 <C-w><C-o>
 
 
   -- 其他 -----------------------------------------------------------------------------------------
@@ -244,7 +244,7 @@ local keymaps = {
   -- {'n', '<C-M-CR>', function() print("<C-M-CR>") end, opt, 'Test: Ctrl-Cmd/Super-Enter'},
   -- {'n', '<D-M-CR>', function() print("<D-M-CR>") end, opt, 'Test: Ctrl-Cmd/Super-Enter'},
   -- {'n', '<C-D-CR>', function() print("<C-D-CR>") end, opt, 'Test: Ctrl-Cmd/Super-Enter'},
-  {{'n', 'l', 'v', 'o', 't'}, '<C-D-M>', function() print(vim.fn.mode()) end, opt, 'mode()'},
+  {{'n', 'v', 'o', 't', 'l'}, '<C-D-M>', function() print(vim.fn.mode()) end, opt, 'mode()'},
 
   -- VVI: <Nop> do nothing ------------------------------------------------------------------------
   -- <Ctrl-Z> 是危险操作. 意思是 :stop. Suspend vim, 退出到 terminal 界面, 但保留 job.
@@ -263,9 +263,10 @@ local keymaps = {
 
 -- 这里是设置所有 key mapping 的地方 --------------------------------------------------------------
 key_fn.set(keymaps, {
-  { "<leader>D", group = "Buffers Close" },
+  { "<leader>D", group = "Buffers" },
   { "<leader>k", group = "Fold" },
   { "<leader>c", group = "Code" },
+  { "<leader>w", group = "Window" },
 
   -- for key desc only
   { "<leader>", group = "<leader>" },
