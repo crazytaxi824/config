@@ -244,7 +244,7 @@ local keymaps = {
   -- {'n', '<C-M-CR>', function() print("<C-M-CR>") end, opt, 'Test: Ctrl-Cmd/Super-Enter'},
   -- {'n', '<D-M-CR>', function() print("<D-M-CR>") end, opt, 'Test: Ctrl-Cmd/Super-Enter'},
   -- {'n', '<C-D-CR>', function() print("<C-D-CR>") end, opt, 'Test: Ctrl-Cmd/Super-Enter'},
-  {{'n', 'v', 'o', 't', 'l'}, '<C-D-M>', function() print(vim.fn.mode()) end, opt, 'mode()'},
+  {{'n', 'i', 'c', 'v', 't'}, '<C-S-D-m>', function() vim.notify(vim.fn.mode(), vim.log.levels.WARN) end, opt, 'mode()'},
 
   -- VVI: <Nop> do nothing ------------------------------------------------------------------------
   -- <Ctrl-Z> 是危险操作. 意思是 :stop. Suspend vim, 退出到 terminal 界面, 但保留 job.
