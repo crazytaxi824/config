@@ -79,10 +79,15 @@ vim.api.nvim_create_user_command("MasonMyRecords", function(params)
   local registry = require("mason-registry")
   local pkgs = registry.get_installed_packages()
 
-  ---@type { name:string, version:string }[]
+  ---@type { name:string, cmds:string[], version:string, lspconfig?:string }[]
   local records = {}
   for _, pkg in ipairs(pkgs) do
-    table.insert(records, { name=pkg.name, version=pkg:get_installed_version() })
+    table.insert(records, {
+      name = pkg.name,  -- mason name
+      lspconfig = pkg.spec.neovim and pkg.spec.neovim.lspconfig,  -- lspconfig name
+      cmds = vim.tbl_keys(pkg.spec.bin),
+      version = pkg:get_installed_version(),
+    })
   end
   local json = vim.json.encode(records, { indent = '  ' })
   vim.fn.writefile(json, Mason.lock_file)
