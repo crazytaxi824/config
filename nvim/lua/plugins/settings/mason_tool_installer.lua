@@ -73,8 +73,11 @@ mason.setup {
   log_level = vim.log.levels.WARN,  -- 影响 `:MasonLog`
 }
 
+-- user_command ------------------------------------------------------------------------------------
 local rec_fp = vim.fs.joinpath(vim.fn.stdpath("config"), 'mason-lock.json')
-vim.api.nvim_create_user_command("MasonRecords", function(params)
+
+-- 记录版本号
+vim.api.nvim_create_user_command("MasonMyRecords", function(params)
   local registry = require("mason-registry")
   local pkgs = registry.get_installed_packages()
 
@@ -94,7 +97,8 @@ end,
   desc = 'mason: Record version of installed tools',
 })
 
-vim.api.nvim_create_user_command("MasonSync", function(params)
+-- 安装指定版本
+vim.api.nvim_create_user_command("MasonMySync", function(params)
   local stat = vim.uv.fs_stat(rec_fp)
   if not stat then
     vim.notify(string.format("'%s' file is not available", rec_fp), vim.log.levels.WARN)
