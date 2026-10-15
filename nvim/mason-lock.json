@@ -1,10 +1,10 @@
 [
   {
-    "version": "5.6.0",
+    "version": "5.8.1",
     "name": "bash-language-server"
   },
   {
-    "version": "v1.73.0",
+    "version": "v1.74.0",
     "name": "buf"
   },
   {
@@ -24,7 +24,7 @@
     "name": "gdtoolkit"
   },
   {
-    "version": "v0.50.0",
+    "version": "v0.52.0",
     "name": "goimports"
   },
   {
@@ -32,7 +32,7 @@
     "name": "goimports-reviser"
   },
   {
-    "version": "v2.13.2",
+    "version": "v2.14.0",
     "name": "golangci-lint"
   },
   {
@@ -60,19 +60,19 @@
     "name": "json-lsp"
   },
   {
-    "version": "3.19.1",
+    "version": "3.19.2",
     "name": "lua-language-server"
   },
   {
-    "version": "3.9.6",
+    "version": "3.9.10",
     "name": "prettier"
   },
   {
-    "version": "1.3.0",
+    "version": "1.3.2",
     "name": "pyrefly"
   },
   {
-    "version": "0.16.7",
+    "version": "0.17.0",
     "name": "ruff"
   },
   {
@@ -80,7 +80,7 @@
     "name": "shfmt"
   },
   {
-    "version": "15.8.2",
+    "version": "15.9.0",
     "name": "sql-formatter"
   },
   {
@@ -88,31 +88,31 @@
     "name": "sqls"
   },
   {
-    "version": "v2.5.2",
+    "version": "v2.6.0",
     "name": "stylua"
   },
   {
-    "version": "v1.5.4",
+    "version": "v1.8.4",
     "name": "tombi"
   },
   {
-    "version": "v0.27.0",
+    "version": "v0.27.1",
     "name": "tree-sitter-cli"
   },
   {
-    "version": "0.0.80",
+    "version": "0.0.87",
     "name": "ty"
   },
   {
-    "version": "6.0.0",
+    "version": "6.0.2",
     "name": "typescript-language-server"
   },
   {
-    "version": "0.12.13",
+    "version": "0.13.1",
     "name": "uv"
   },
   {
-    "version": "1.24.0",
+    "version": "1.25.0",
     "name": "yaml-language-server"
   }
 ]
