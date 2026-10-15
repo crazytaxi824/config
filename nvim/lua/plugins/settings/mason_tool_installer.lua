@@ -25,7 +25,7 @@ end
 
 mason.setup {
   -- NOTE: LSP server 下载位置默认在 "~/.local/share/nvim/mason/"
-  install_root_dir = vim.fs.joinpath(vim.fn.stdpath("data"), "mason_tools"),
+  install_root_dir = Mason.install_dir,
 
   -- Where Mason should put its bin location in your PATH. Can be one of:
   -- - "prepend" (default, Mason's bin location is put first in PATH), 优先找到 Mason 的命令行工具.
@@ -74,8 +74,6 @@ mason.setup {
 }
 
 -- user_command ------------------------------------------------------------------------------------
-local rec_fp = vim.fs.joinpath(vim.fn.stdpath("config"), 'mason-lock.json')
-
 -- 记录版本号
 vim.api.nvim_create_user_command("MasonMyRecords", function(params)
   local registry = require("mason-registry")
@@ -87,8 +85,8 @@ vim.api.nvim_create_user_command("MasonMyRecords", function(params)
     table.insert(records, { name=pkg.name, version=pkg:get_installed_version() })
   end
   local json = vim.json.encode(records, { indent = '  ' })
-  vim.fn.writefile(json, rec_fp)
-  vim.notify(string.format("save mason records to '%s'", rec_fp))
+  vim.fn.writefile(json, Mason.lock_file)
+  vim.notify(string.format("save mason records to '%s'", Mason.lock_file))
 end,
 {
   nargs = 0,
@@ -99,13 +97,13 @@ end,
 
 -- 安装指定版本
 vim.api.nvim_create_user_command("MasonMySync", function(params)
-  local stat = vim.uv.fs_stat(rec_fp)
+  local stat = vim.uv.fs_stat(Mason.lock_file)
   if not stat then
-    vim.notify(string.format("'%s' file is not available", rec_fp), vim.log.levels.WARN)
+    vim.notify(string.format("'%s' file is not available", Mason.lock_file), vim.log.levels.WARN)
     return
   end
 
-  local lines = vim.fn.readfile(rec_fp)
+  local lines = vim.fn.readfile(Mason.lock_file)
   local json_str = table.concat(lines, "")
 
   local dec_ok, records = pcall(vim.json.decode, json_str)
