@@ -76,11 +76,8 @@ export LDFLAGS="-L/opt/homebrew/opt/node@24/lib"
 export CPPFLAGS="-I/opt/homebrew/opt/node@24/include"
 
 # --- [ python ] ---
-# 安装 `$ brew install uv`
-# uv 默认全局虚拟环境是 ~/.venv/, 如果没有则使用 `cd; uv venv`. 在没有 source 其他虚拟环境的时候默认使用这个环境.
-if [[ -x "$HOME/.venv/bin/python3" ]]; then
-	export PATH="$HOME/.venv/bin:$PATH"
-fi
+# `$ uv python install 3.14`  安装最新的 3.14.x 版本
+# `$ uv python upgrade 3.14`  升级到最新的 3.14.x 版本
 
 # --- [ Godot ] ---
 if [[ -x "/Applications/Godot.app/Contents/MacOS/Godot" ]]; then
