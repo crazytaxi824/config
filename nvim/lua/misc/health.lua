@@ -5,66 +5,46 @@ local health = vim.health
 
 local M = {}
 
-local mason_record = [[
-  bash-language-server
-  buf
-  css-lsp
-  delve
-  eslint-lsp
-  gdtoolkit
-  goimports
-  goimports-reviser
-  golangci-lint
-  gomodifytags
-  gopls
-  gotests
-  html-lsp
-  impl
-  json-lsp
-  lua-language-server
-  prettier
-  pyrefly
-  ruff
-  shfmt
-  sql-formatter
-  sqls
-  stylua
-  tombi
-  tree-sitter-cli
-  ty
-  typescript-language-server
-  uv
-  yaml-language-server
-]]
-
 local function check_mason_tools()
-  -- 分析 mason_record string
-  ---@type string[]
-  local lines = vim.split(mason_record, "\n", { plain = true, trimempty = true })
+  -- 分析 mason_record
+  local stat = vim.uv.fs_stat(Mason.lock_file)
+  if not stat then
+    health.error(Mason.lock_file, "file is not available")
+    return
+  end
 
-  ---@type string[]
-  local mason_tools = vim.tbl_map(vim.trim, lines)
+  local lines = vim.fn.readfile(Mason.lock_file)
+  local json_str = table.concat(lines, "")
 
-  local pkgs = require("mason-registry").get_installed_packages()
+  local dec_ok, mason_records = pcall(vim.json.decode, json_str)
+  if not dec_ok then
+    health.error(Mason.lock_file, "json decode error")
+    return
+  end
 
   -- not installed by Mason
-  ---@type string[]
-  local t = vim.tbl_filter(function(elem)
-    for _, pkg in ipairs(pkgs) do
-      if elem == pkg.name then
-        health.ok(elem)
-        return false
-      end
+  ---@type { name:string, cmds:string[], version:string, lspconfig?:string }[]
+  local not_installed = vim.tbl_filter(function(elem)
+    if require("mason-registry").is_installed(elem.name) then
+      health.ok(elem.name)
+      return false
     end
     return true
-  end, mason_tools)
+  end, mason_records)
 
   -- in $PATH
-  for _, tool in ipairs(t) do
-    if vim.fn.executable(tool) == 1 then
-      health.warn(tool, { "is not installed by Mason" })
+  for _, tool in ipairs(not_installed) do
+    local executable = false
+    for _, cmd in ipairs(tool.cmds) do
+      if vim.fn.executable(cmd) == 1 then
+        executable = true
+        break
+      end
+    end
+    if executable then
+      health.warn(tool.name, { "is not installed by Mason" })
     else
-      health.error(tool, { "is not installed" })
+      health.error(tool.name, { "is not installed" })
     end
   end
 end
