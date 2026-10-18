@@ -187,7 +187,8 @@ local plugins = {
 
   {
     "L3MON4D3/LuaSnip", -- snippet engine, for "cmp_luasnip", 会创建几个 [Scratch] buffer
-    version = "v2.*",
+    -- version = "v2.*",
+    commit = "0abc8f3",
     -- for placeholder transformation
     -- https://code.visualstudio.com/docs/editor/userdefinedsnippets#_variable-transforms
     build = "make install_jsregexp",
@@ -297,7 +298,8 @@ local plugins = {
 
   {
     "nvim-neotest/nvim-nio",
-    version = "*",
+    -- version = "*",
+    commit = "edcc181",
 
     lazy = true,  -- nvim-dap-ui 加载时自动加载.
   },
