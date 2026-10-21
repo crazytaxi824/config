@@ -22,8 +22,8 @@ alias ya='yazi'
 alias diff='delta --dark --line-numbers --side-by-side --syntax-theme=none --line-numbers-minus-style=196 -- '
 
 ### homebrew
-# check brew dep
-alias check_brew_dep='brew uses --recursive --installed -- '
+alias check_brew_deps='brew uses --recursive --installed -- '
+alias check_brew_tree='brew deps --tree $(brew leaves)'
 
 ### wireshark
 # firefox chrome ssl key 文件保存位置, 用于 wireshark 解密 https tls 数据.
