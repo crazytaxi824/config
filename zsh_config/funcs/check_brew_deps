@@ -1,0 +1,6 @@
+# vim: ft=zsh
+
+brew uses --recursive --installed -- "$@"
+
+
+

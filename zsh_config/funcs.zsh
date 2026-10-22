@@ -13,6 +13,8 @@ autoload -Uz e
 autoload -Uz Rg
 autoload -Uz Fd
 autoload -Uz check_brew_orphan
+autoload -Uz check_brew_tree
+autoload -Uz check_brew_deps
 
 
 

@@ -1,0 +1,6 @@
+# vim: ft=zsh
+
+brew deps --tree $(brew leaves)
+
+
+
