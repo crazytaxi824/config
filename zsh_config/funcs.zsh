@@ -12,6 +12,7 @@ autoload -Uz backup_config
 autoload -Uz e
 autoload -Uz Rg
 autoload -Uz Fd
+autoload -Uz check_brew_orphan
 
 
 

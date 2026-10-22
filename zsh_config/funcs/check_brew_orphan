@@ -1,0 +1,12 @@
+# vim: ft=zsh
+
+local -a leaves list deps diff
+leaves=( ${(f)"$(brew leaves)"} )
+list=( ${(f)"$(brew list --formula)"} )
+deps=( ${(f)"$(brew deps --formula --union $leaves)"} )
+diff=( ${list:|leaves} )
+diff=( ${diff:|deps} )
+printf "$diff"
+
+
+
