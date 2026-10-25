@@ -1,12 +1,19 @@
 # vim: ft=zsh
 
 local -a leaves list deps diff
-leaves=( ${(f)"$(brew leaves)"} )
+
+# sed 's|.*/||'   删除每一行中最后一个 / 及其之前的所有内容, 只保留最后一段.
+leaves=( ${(f)"$(brew leaves | sed 's|.*/||')"} )
 list=( ${(f)"$(brew list --formula)"} )
 deps=( ${(f)"$(brew deps --formula --union $leaves)"} )
+
+# ${list1:|list2}  差集：在 list1 中但不在 list2 中的元素.
+# ${list1:*list2}  交集: 同时存在于两个数组中的元素.
 diff=( ${list:|leaves} )
 diff=( ${diff:|deps} )
-printf "$diff"
+
+# print -l $diff
+printf "%s\n" "${diff[@]}"
 
 
 
