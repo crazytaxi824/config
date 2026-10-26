@@ -79,7 +79,7 @@ vim.api.nvim_create_user_command("MasonMyRecords", function(params)
   local registry = require("mason-registry")
   local pkgs = registry.get_installed_packages()
 
-  ---@type { name:string, cmds:string[], version:string, lspconfig?:string }[]
+  ---@type MyMasonTool[]
   local records = {}
   for _, pkg in ipairs(pkgs) do
     table.insert(records, {
@@ -89,7 +89,10 @@ vim.api.nvim_create_user_command("MasonMyRecords", function(params)
       version = pkg:get_installed_version(),
     })
   end
-  local json = vim.json.encode(records, { indent = '  ' })
+
+  -- sort_keys 保证 json 序列化顺序
+  local json = vim.json.encode(records, { indent='  ', sort_keys=true })
+
   vim.fn.writefile(json, Mason.lock_file)
   vim.notify(string.format("save mason records to '%s'", Mason.lock_file))
 end,

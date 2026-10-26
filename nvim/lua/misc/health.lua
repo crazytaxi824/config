@@ -5,6 +5,7 @@ local health = vim.health
 
 local M = {}
 
+-- 通过 mason-lock.json 文件检查 missing tools
 local function check_mason_tools()
   -- 分析 mason_record
   local stat = vim.uv.fs_stat(Mason.lock_file)
@@ -23,7 +24,7 @@ local function check_mason_tools()
   end
 
   -- not installed by Mason
-  ---@type { name:string, cmds:string[], version:string, lspconfig?:string }[]
+  ---@type MyMasonTool[]
   local not_installed = vim.tbl_filter(function(elem)
     if require("mason-registry").is_installed(elem.name) then
       health.ok(elem.name)
