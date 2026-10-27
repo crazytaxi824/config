@@ -7,6 +7,7 @@ end
 local max_ln = 3
 
 -- https://github.com/nvim-treesitter/nvim-treesitter-context#configuration
+-- `:help nvim-treesitter-context-config`
 ts_ctx.setup{
   enable = true,
 
@@ -16,10 +17,13 @@ ts_ctx.setup{
   max_lines = max_ln,
 
   -- Minimum editor window height to enable context. Values <= 0 mean no limit.
-  min_window_height = 0,
+  min_window_height = 10,
 
   line_numbers = true,   -- show line numbers.
   trim_scope = 'outer',  -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
+
+  -- (fun(buf: integer): boolean) return false to disable attaching.
+  on_attach = nil,
 }
 
 -- highlight --------------------------------------------------------------------------------------
@@ -27,7 +31,7 @@ local ctx_bg = Colors.g237  -- NOTE: same as WinBarLine selected buffer bg
 
 -- 默认 link to NormalFloat
 vim.api.nvim_set_hl(0, 'TreesitterContext', { ctermbg=ctx_bg.c, bg=ctx_bg.g })
-vim.api.nvim_set_hl(0, 'TreesitterContextBottom', { underline=true, sp=Colors.g243.g })
+-- vim.api.nvim_set_hl(0, 'TreesitterContextBottom', { underline=true, sp=Colors.g243.g })
 
 -- 默认 link to LineNr
 vim.api.nvim_set_hl(0, 'TreesitterContextLineNumber', {
