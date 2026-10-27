@@ -354,7 +354,7 @@ local plugins = {
   {
     "lewis6991/gitsigns.nvim",
     -- version = "v2.*",
-    commit = "aa6cc2d",
+    commit = "d4854fa",
     config = function() require("plugins.settings.git_signs") end,
     dependencies = { "folke/trouble.nvim" },
 
