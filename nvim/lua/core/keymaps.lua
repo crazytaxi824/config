@@ -263,7 +263,7 @@ local keymaps = {
 
 -- 这里是设置所有 key mapping 的地方 --------------------------------------------------------------
 key_fn.set(keymaps, {
-  { "<leader>D", group = "Buffers" },
+  { "<leader>D", group = "Buffer" },
   { "<leader>k", group = "Fold" },
   { "<leader>c", group = "Code" },
   { "<leader>w", group = "Window" },
