@@ -4,7 +4,7 @@
 # 启用 dock tile 功能才能修改 Icon
 # dock tile 功能包括 Icon, Badge, 进度条 ... 等功能
 # 可自定义 icon, https://noahskelton.github.io/ghostty-icons/
-macos-icon = blueprint
+#macos-icon = blueprint
 
 # 使用 system clipboard (OSC 52)
 clipboard-read = allow
