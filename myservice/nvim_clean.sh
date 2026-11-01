@@ -14,7 +14,7 @@ function nvim_clean() {
 	# `awk $2 == 1`          父进程 ppid == 1 说明是 Orphan Processes
 	# `awk $3 ~ /^\?\??$/`   没有被任何 tty 显示. 正则匹配 `^?$` or `^??$`. linux 中是一个 ?, macos 中是 ??
 	# `awk {print $1}`       只输出 pid list
-	local process=$(ps -eo pid=,ppid=,tty=,command= | grep '[n]vim' | awk -v self="$self" '$1 != self and $2 == 1 && $3 ~ /^\?\??$/')
+	local process=$(ps -eo pid=,ppid=,tty=,command= | grep '[n]vim' | awk -v self="$self" '$1 != self && $2 == 1 && $3 ~ /^\?\??$/')
 
 	# 只输出 pids
 	# xargs 将换行转成 list
