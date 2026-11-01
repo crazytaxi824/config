@@ -12,14 +12,14 @@
 	</array>
 
 	<!-- 每 20 分钟执行一次 -->
-    <key>StartInterval</key>
+	<key>StartInterval</key>
 	<integer>1200</integer>
 
 	<!-- 启动时立即执行一次 -->
 	<key>RunAtLoad</key>
 	<true/>
 
-    <key>StandardErrorPath</key>
-    <string>/tmp/my-service.log</string>
+	<key>StandardErrorPath</key>
+	<string>/tmp/myservice-batterycheck.log</string>
 </dict>
 </plist>

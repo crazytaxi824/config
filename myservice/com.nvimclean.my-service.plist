@@ -2,27 +2,27 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>Label</key>
-    <string>com.nvimclean.my-service</string>
+	<key>Label</key>
+	<string>com.nvimclean.my-service</string>
 	<key>ProgramArguments</key>
 
-    <array>
+	<array>
 		<string>/Users/ray/.config/myservice/nvim_clean.sh</string>
-    </array>
+	</array>
 
 	<!-- 每 n 秒执行一次 -->
-    <key>StartInterval</key>
+	<key>StartInterval</key>
 	<integer>600</integer>
 
 	<!-- 启动时立即执行一次 -->
-    <key>RunAtLoad</key>
-    <true/>
+	<key>RunAtLoad</key>
+	<true/>
 
 	<!-- 将内容写入文件中 -->
-    <key>StandardOutPath</key>
+	<key>StandardOutPath</key>
 	<string>/Users/ray/nvim_clean.log</string>
 
-    <key>StandardErrorPath</key>
-    <string>/tmp/my-service.log</string>
+	<key>StandardErrorPath</key>
+	<string>/tmp/myservice-nvimclean.log</string>
 </dict>
 </plist>

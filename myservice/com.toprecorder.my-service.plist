@@ -19,10 +19,10 @@
 	<true/>
 
 	<!-- 将内容写入文件中 -->
-    <key>StandardOutPath</key>
+	<key>StandardOutPath</key>
 	<string>/Users/ray/top_recorder.log</string>
 
-    <key>StandardErrorPath</key>
-    <string>/tmp/my-service.log</string>
+	<key>StandardErrorPath</key>
+	<string>/tmp/myservice-toprecorder.log</string>
 </dict>
 </plist>
