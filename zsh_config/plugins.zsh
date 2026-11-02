@@ -85,7 +85,7 @@ autoload -Uz zrecompile
 		# 缓存很新, 开启 -C 参数盲读(读取 xxx.zwc 文件), 不作任何磁盘扫描 (实现终端秒开)
 		compinit -C -d ~/.zcompdump
 	else
-		print "compinit && zrecompile -p ~/.zcompdump"
+		printf "\e[32m%s\e[0m\n" "compinit && zrecompile -p ~/.zcompdump"
 		# 缓存不存在或超时未更新, 执行常规扫描并静默生成/更新缓存
 		compinit -d ~/.zcompdump
 		# 强制更新 mtime
