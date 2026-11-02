@@ -9,7 +9,8 @@ local function find_ts_root_node()
   -- "lang", default filetype.
   local tsparser = vim.treesitter.get_parser()
   if not tsparser then
-    error("treesitter parser is missing")
+    -- error("treesitter parser is missing")
+    return
   end
 
   -- tsparser:parse() return a {table} of immutable trees
@@ -73,6 +74,8 @@ end
 M.goto_prev = function()
   local root_children = ts_root_children()
   if not root_children then
+    -- 返回默认设置, `:help [[`
+    vim.cmd.normal({ "[[", bang = true })
     return
   end
 
@@ -93,6 +96,8 @@ end
 M.goto_next = function()
   local root_children = ts_root_children()
   if not root_children then
+    -- 返回默认按键设置, `:help ]]`
+    vim.cmd.normal({ "]]", bang = true })
     return
   end
 
