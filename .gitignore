@@ -11,3 +11,4 @@ tmp_*
 /dlv
 /containers
 /mole
+/swiftpm
