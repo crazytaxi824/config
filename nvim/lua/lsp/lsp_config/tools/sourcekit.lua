@@ -17,10 +17,11 @@ return {
     )
   end,
 
+  -- xcode-select -p  显示当前正在使用的版本(路径)
   -- sudo xcode-select -s /Applications/Xcode.app/Contents/Developer  (XCode) has XCTest
-  -- sudo xcode-select -s /Library/Developer/CommandLineTools  (CommandLineTools)
+  -- sudo xcode-select -s /Library/Developer/CommandLineTools         (CommandLineTools)
   -- 使用 XCode.app 中的 sourcekit-lsp 时需要设置环境变量, 如果使用 CommandLineTools 可以直接注释掉.
-  cmd_env = {
-    DEVELOPER_DIR = "/Applications/Xcode.app/Contents/Developer"
-  },
+  -- cmd_env = {
+  --   DEVELOPER_DIR = "/Applications/Xcode.app/Contents/Developer"
+  -- },
 }
