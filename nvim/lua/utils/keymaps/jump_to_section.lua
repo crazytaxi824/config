@@ -39,7 +39,7 @@ local function ts_root_children()
     end
   end
 
-  if #child_without_comment>0 then
+  if #child_without_comment > 0 then
     return child_without_comment
   end
 end
@@ -51,13 +51,16 @@ local function current_node(root_children)
   local cursor_lnum = vim.api.nvim_win_get_cursor(0)[1]  -- {lnum, col}, (1,0)-indexed
 
   for i = #root_children, 1, -1 do
-    local node_lnum = root_children[i]:start() + 1  -- {lnum, col, bytes}, all 0-based index
+    -- { start_row, start_col, end_row, end_col }
+    -- start_row, end_row: (0-indexed)
+    local s_row, _, e_row, _ = vim.treesitter.get_node_range(root_children[i])
+    local s_lnum, e_lnum = s_row+1, e_row+1
 
-    if cursor_lnum >= node_lnum then
+    if cursor_lnum >= s_lnum then
       return {
         index = i,
         cursor_lnum = cursor_lnum,
-        node_start_lnum = node_lnum,
+        node_start_lnum = s_lnum,
       }
     end
   end
