@@ -132,7 +132,7 @@ local plugins = {
   -- Auto Completion -------------------------------------------------------------------------------
   {
     "hrsh7th/nvim-cmp",
-    commit = "2ffe79f",
+    commit = "fe29aba",
     config = function() require("plugins.settings.cmp_completion") end,
     dependencies = {
       -- VVI: 只有 "cmp-nvim-lsp" 不需要在 "nvim-cmp" 之后加载, 其他 module 都需要在 "nvim-cmp" 之后再加载, 否则报错.
@@ -151,7 +151,7 @@ local plugins = {
   -- 以下是 "nvim-cmp" 的 module 插件, 在 nvim-cmp.setup() 中启用的插件.
   {
     "hrsh7th/cmp-nvim-lsp",  -- LSP source for nvim-cmp
-    commit = "cbc7b02",
+    commit = "cd4ee08",
 
     lazy = true,  -- nvim-lspconfig 加载时自动加载. VVI: 必须在 vim.lsp.enable() 之前加载, 否则无法提供代码补全.
   },
@@ -354,7 +354,7 @@ local plugins = {
   {
     "lewis6991/gitsigns.nvim",
     -- version = "v2.*",
-    commit = "1e9d0fb",
+    commit = "ef707fb",
     config = function() require("plugins.settings.git_signs") end,
     dependencies = { "folke/trouble.nvim" },
 
