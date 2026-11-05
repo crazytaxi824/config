@@ -40,8 +40,8 @@
   },
   {
     "cmds": [
-      "gdlint",
-      "gdformat"
+      "gdformat",
+      "gdlint"
     ],
     "name": "gdtoolkit",
     "version": "4.5.0"
@@ -179,7 +179,7 @@
     ],
     "lspconfig": "tombi",
     "name": "tombi",
-    "version": "v1.9.8"
+    "version": "v1.10.0"
   },
   {
     "cmds": [
@@ -194,7 +194,7 @@
     ],
     "lspconfig": "ty",
     "name": "ty",
-    "version": "0.0.95"
+    "version": "0.0.97"
   },
   {
     "cmds": [
@@ -202,16 +202,16 @@
     ],
     "lspconfig": "ts_ls",
     "name": "typescript-language-server",
-    "version": "6.0.2"
+    "version": "6.0.3"
   },
   {
     "cmds": [
+      "uvw",
       "uv",
-      "uvx",
-      "uvw"
+      "uvx"
     ],
     "name": "uv",
-    "version": "0.13.6"
+    "version": "0.13.7"
   },
   {
     "cmds": [
