@@ -1,0 +1,45 @@
+# vim: ft=zsh
+emulate -L zsh
+setopt pipefail
+
+# create_container <name> 创建一个 container
+
+local name="${1:-}"
+if [[ -z "$name" ]]; then
+	printf 'Usage: create_container <name>\n' >&2
+	return 2
+fi
+
+# Check Apple container CLI
+if ! command -v container >/dev/null 2>&1; then
+	printf 'Error: Apple `container` CLI is not installed.\n' >&2
+	return 1
+fi
+
+# Check container system
+if ! container system status >/dev/null 2>&1; then
+	printf 'Error: `container system` is not running.\n' >&2
+	return 1
+fi
+
+# Check whether the named container exists
+if container inspect "$name" >/dev/null 2>&1; then
+	printf 'Container "%s" already exists.\n' "$name" >&2
+	return 0
+fi
+
+# Create container
+printf 'Creating container "%s"...\n' "$name"
+
+container run -it \
+	--name "$name" \
+	--cpus 4 \
+	--memory 6G \
+	--tmpfs /tmp \
+	--mount "type=bind,source=$HOME/mount,target=/root/mount" \
+	--workdir /root/mount \
+	fedora:latest \
+	/bin/bash
+
+
+
