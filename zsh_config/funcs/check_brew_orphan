@@ -1,4 +1,6 @@
 # vim: ft=zsh
+emulate -L zsh
+setopt pipefail
 
 local -a leaves list deps diff
 

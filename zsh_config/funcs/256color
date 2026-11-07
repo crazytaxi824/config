@@ -1,4 +1,6 @@
 # vim: ft=zsh
+emulate -L zsh
+setopt pipefail
 
 # printf(fg bg text), 模板可以多次替换.
 # printf "\e[38;5;%dm\e[48;5;%dm   %d   "   255 0 0 232 1 1 232 2 2 232 3 3 232 4 4 232 5 5 232 6 6 232 7 7

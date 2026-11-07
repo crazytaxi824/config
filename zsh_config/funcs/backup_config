@@ -1,4 +1,6 @@
 # vim: ft=zsh
+emulate -L zsh
+setopt pipefail
 
 # `cp -r src dst/`   注意 src 后面没有 /   copy src 整个文件夹到 dst 文件夹内, 结果: dst/src/...
 # `cp -r src/ dst/`  注意 src 后面有 /     copy src 内所有 file/dir 到 dst 内, 包括隐藏文件.

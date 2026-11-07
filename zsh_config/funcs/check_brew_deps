@@ -1,4 +1,6 @@
 # vim: ft=zsh
+emulate -L zsh
+setopt pipefail
 
 brew uses --recursive --installed -- "$@"
 

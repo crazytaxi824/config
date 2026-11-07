@@ -1,4 +1,6 @@
 # vim: ft=zsh
+emulate -L zsh
+setopt pipefail
 
 # 使用方法: `e file` 检查 file 是否存在
 
