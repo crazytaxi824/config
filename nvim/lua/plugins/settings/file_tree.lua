@@ -41,7 +41,7 @@ local function compare_two_marked_files()
     return
   end
 
-  vim.cmd.tabnew({ args = { vim.fn.fnameescape(marks_list[1].absolute_path) }})  -- open new tab for compare
+  vim.cmd.tabedit({ args = { vim.fn.fnameescape(marks_list[1].absolute_path) }})  -- open new tab for compare
   vim.cmd.diffsplit({ args = { vim.fn.fnameescape(marks_list[2].absolute_path) }, mods = { vertical=true }}) -- compare file
 end
 -- }}}
