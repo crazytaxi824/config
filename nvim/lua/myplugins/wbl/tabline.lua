@@ -1,10 +1,10 @@
 local M = {}
 
 
-local fill_bg = { underline = true, sp=Colors.g242.g }
+local fill_bg = { underline = true, sp=Colors.green_bg.g }
 local fill_fg = vim.tbl_extend('force', { fg=Colors.g242.g }, fill_bg)
-local sel_bg = vim.tbl_extend('force', { bg=Colors.g238.g }, fill_bg)
-local sel_fg = vim.tbl_extend('force', { fg=Colors.cyan.g, bold=true }, sel_bg)
+local sel_bg = vim.tbl_extend('force', { bg=Colors.green_bg.g }, fill_bg)
+local sel_fg = vim.tbl_extend('force', { fg=Colors.black.g, bold=true }, sel_bg)
 local sep = vim.tbl_extend('force', { fg=Colors.g240.g }, fill_bg)
 
 vim.api.nvim_set_hl(0, "TabLine", fill_fg)
