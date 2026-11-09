@@ -42,9 +42,6 @@ vim.api.nvim_create_autocmd("WinEnter", {
       -- 从 another tabpage 跳转过来 (prev_tabpage 可能已经关闭)
       -- 只更新 current window
       wb_act.set_winbar(curr_win, 'focused')
-
-      -- 更新整个 current tabpage windows, 主要是为了显示 tabpage
-      --update_current_tabpage_wins()
     else
       -- 从 current tabpage & another window 跳转过来 (prev_win 可能已经关闭)
       -- 1. 更新 previous winow
@@ -60,6 +57,8 @@ vim.api.nvim_create_autocmd("WinEnter", {
     end
 
     -- NOTE: 重置 cache. 防止没有切换 window, 只是 `:e foo.txt` 加载文件时更新 previous window
+    -- "WinLeave" 时设置 prev_win_id & prev_tabpage
+    -- "WinLeave" 在 "WinEnter" 前运行
     prev_win_id = -1
     prev_tabpage = -1
   end,
