@@ -9,11 +9,6 @@ local hl = {
     ctermbg=Colors.g237.c, bg=Colors.g237.g,
     -- bold = true,
   },
-  tabnr = {
-    ctermfg=Colors.black.c, fg=Colors.black.g,
-    ctermbg=Colors.green_bg.c, bg=Colors.green_bg.g,
-    bold = true,
-  },
 
   -- override base color
   index = {
@@ -57,8 +52,6 @@ vim.api.nvim_set_hl(0, "MyWinBarLineBufferSeverity_1", vim.tbl_extend('force', h
 vim.api.nvim_set_hl(0, "MyWinBarLineBufferSeverity_2", vim.tbl_extend('force', hl.default, hl.diagnostic_warn))
 vim.api.nvim_set_hl(0, "MyWinBarLineBufferSeverity_3", vim.tbl_extend('force', hl.default, hl.diagnostic_info))
 vim.api.nvim_set_hl(0, "MyWinBarLineBufferSeverity_4", vim.tbl_extend('force', hl.default, hl.diagnostic_hint))
-
-vim.api.nvim_set_hl(0, "MyWinBarLineTab", hl.tabnr)
 
 
 

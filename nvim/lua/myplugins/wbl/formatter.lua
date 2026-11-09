@@ -168,19 +168,6 @@ local function fmt_items_to_components(fmt_items, focused)
 end
 
 
--- 返回当前 tabpage info
----@return WinbarFormatterItemComponent|nil
-local function tabpage_component()
-  local tabs = vim.api.nvim_list_tabpages()
-  if #tabs > 1 then
-    local tab_str = string.format(' %s ', vim.fn.tabpagenr())
-    ---@type WinbarFormatterItemComponent
-    local tab_comp = { content = tab_str, hl = '%=%#MyWinBarLineTab#' }
-    return tab_comp
-  end
-end
-
-
 -- format all items' components to winbar string
 --
 ---@param fmt_comps_list WinbarFormatterItemComponent[][]
@@ -305,12 +292,6 @@ local function format_winbar_items(fmt_items, win_width, active_buf_idx, focused
   ---@type WinbarFormatterItemComponent[][]
   local components = {}
 
-  local tab_comp = tabpage_component()
-  if tab_comp then
-    -- '-1': table.concat(components, ' ') 前的 n 个空格
-    win_width = win_width - vim.fn.strdisplaywidth(tab_comp.content) - 1
-  end
-
   -- 兜底效果
   if win_width <= 4 then
     components = {{{ content = '<...', hl='' }}}
@@ -324,11 +305,6 @@ local function format_winbar_items(fmt_items, win_width, active_buf_idx, focused
     if vim.tbl_isempty(components) then
       components = reduce_items_to_display(fmt_items, win_width, active_buf_idx, focused)
     end
-  end
-
-  -- 添加 tabpagenr component
-  if tab_comp then
-    table.insert(components, { tab_comp })
   end
 
   return format_winbar_components(components)
