@@ -21,7 +21,7 @@ end
 -- autocmd ----------------------------------------------------------------------------------------
 local gid = vim.api.nvim_create_augroup('my_winbarline', { clear = true })
 
--- WinLeave 主要为了切换 selected buffer highlight
+
 vim.api.nvim_create_autocmd("WinLeave", {
   group = gid,
   callback = function(args)
@@ -40,18 +40,21 @@ vim.api.nvim_create_autocmd("WinEnter", {
 
     if prev_tabpage > 0 and prev_tabpage ~= curr_tabpage then
       -- 从 another tabpage 跳转过来 (prev_tabpage 可能已经关闭)
+      -- 只更新 current window
+      wb_act.set_winbar(curr_win, 'focused')
+
       -- 更新整个 current tabpage windows, 主要是为了显示 tabpage
-      update_current_tabpage_wins()
+      --update_current_tabpage_wins()
     else
       -- 从 current tabpage & another window 跳转过来 (prev_win 可能已经关闭)
-      -- 更新 previous winow
+      -- 1. 更新 previous winow
       if vim.api.nvim_win_is_valid(prev_win_id) then
         if wb_act.binding_win_buf({ win_id=prev_win_id, bufnr=vim.api.nvim_win_get_buf(prev_win_id) }) then
           wb_act.set_winbar(prev_win_id)
         end
       end
 
-      -- 更新 current window
+      -- 2. 更新 current window
       -- NOTE: DONOT binding_win_buf, WinEnter 中 args.buf 是 previous window 中的 buffer
       wb_act.set_winbar(curr_win, 'focused')
     end
