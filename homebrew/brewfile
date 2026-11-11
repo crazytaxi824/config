@@ -60,6 +60,7 @@ brew "lima"   # golang Linux virtual machine, deps on "qemu | vz", https://githu
 brew "dua-cli"  # disk 分析工具
 brew "yt-dlp"   # fork youtube-dl
 brew "ffmpeg"
+brew "mole"  # 清理工具
 #brew "wimlib"  # 解决 FAT32 不能保存大于 4GB ios 文件的问题. 解决 FAT32 启动盘的制作问题.
 #brew "rclone"   # ftp / sftp / webstorage ... 工具
 #brew "siege"    # http request 压力测试工具
@@ -92,10 +93,10 @@ cask "font-sarasa-gothic"  # CJK 等宽 bold italic 字体, NOTE: 下载 v1.0.37
 cask "font-plangothic"     # CJK 生僻字大全, 包含两个字体文件, 一个字体文件最多只能有 65535 个字
 
 # 个人工具
-cask "squirrel-app"   # RIME 输入法客户端
-cask "appcleaner" # app 卸载工具
+cask "squirrel-app" # RIME 输入法客户端
+cask "appcleaner"   # app 卸载工具
 cask "pearcleaner"  # 开源清理工具, 类似 CleanMyMac, app-cleaner
-cask "keepassxc"  # keepass 客户端, 密码管理工具, eg: "macpass", "authpass" ...
+cask "keepassxc"    # keepass 客户端, 密码管理工具, eg: "macpass", "authpass" ...
 cask "keka"   # 压缩/解压工具, 对现代压缩格式支持更友好, 包括镜像文件: .dmg .iso .wim
 #cask "the-unarchiver"  # 解压工具, 对旧格式支持更友好
 #cask "keycastr"  # 按键输入显示工具
@@ -105,10 +106,10 @@ cask "keka"   # 压缩/解压工具, 对现代压缩格式支持更友好, 包�
 #cask "mx-power-gadget"  # apple silicon P-core/E-core/GPU 实时监控
 
 # 其他个人 app
-cask "raycast"  # alfred 替代
+cask "tinycast" # raycast, alfred 替代
 cask "iina"     # 视频播放器
 #cask "telegram" # 加密聊天工具
-#cask "signal"  # 加密聊天工具
+#cask "signal"   # 加密聊天工具
 #cask "calibre"  # 电子书工具, epub, mobi ..., 网页下载更快.
 #cask "cloudflare-warp"  # VPN 类工具
 #cask "kindle-comic-converter"
